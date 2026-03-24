@@ -1,20 +1,25 @@
 -- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
 
+-- Generic Haskell
 import Data.List (nub, (\\))
 import Control.Lens (view)
-import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>))
+import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>)) -- FIXME
 
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
-
-import Drasil.Database (HasUID(..))
-import Drasil.DocumentLanguage.Units (toSentence)
-import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
-import Data.Drasil.Concepts.Math (unit_)
+-- Generic Drasil
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                              -- Vector - Name conflict (defined in file)
-import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
+import Drasil.Database (HasUID(..))
 import Utils.Drasil (mkTable)
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (symbol_, description, tOfSymb)
+import Drasil.Metadata.Concepts.Math (unit_)
+
+-- other docLang
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.DocumentLanguage.Units (toSentence) -- suspicious
+import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns

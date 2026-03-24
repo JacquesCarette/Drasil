@@ -2,19 +2,25 @@
 -- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
+-- General Haskell
 import Control.Lens ((^.))
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.Map as Map
 
+-- General Drasil
 import Drasil.Database (UID, HasUID(..))
 import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
 import Drasil.System (System, systemdb, traceLookup, refbyTable, traceTable)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (purpose, component, dependency,
   item, reference, traceyMatrix)
-import Drasil.DocumentLanguage.Definitions (helpToRefField, TraceViewCat)
 import Drasil.Sentence.Combinators (makeTMatrix, showingCxnBw)
+
+-- Other docLang
+import Drasil.DocumentLanguage.Definitions (helpToRefField, TraceViewCat)
 
 -- FIXME: Everything in this file needs to be re-written for readability.
 

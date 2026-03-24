@@ -2,15 +2,20 @@
 module Drasil.Sections.TableOfAbbAndAcronyms
   (tableAbbAccGen, tableAbbAccRef) where
 
+-- Generic Haskell
 import Control.Lens ((^.))
 import Data.Function (on)
 import Data.List (sortBy)
 
-import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
-import Drasil.Database (HasUID(..))
+-- Generic Drasil
 import Language.Drasil
+import Drasil.Database (HasUID(..))
 import Utils.Drasil (mkTable)
 
+-- Vocabulary
+import Drasil.Metadata.Documentation (abbreviation, fullForm, abbAcc)
+
+-- other docLang
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Helper function that gets the acronym out of an 'Idea'.

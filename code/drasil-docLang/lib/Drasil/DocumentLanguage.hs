@@ -7,12 +7,29 @@
 -- instead.
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
+-- General Haskell
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
 import qualified Data.Map as Map (keys)
+import qualified Data.Map.Strict as M
 
+-- General Drasil
+import Language.Drasil
+import Language.Drasil.Display (compsy)
+
+import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
+
+import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
+import Drasil.GetChunks (ccss, ccss')
+
+-- Vocabulary
+import Drasil.Metadata.Documentation as Doc (likelyChg, section_, software,
+  unlikelyChg)
+
+-- Other docLang
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -27,15 +44,6 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, extractDocBib)
 import Drasil.TraceTable (generateTraceMap)
-
-import Language.Drasil
-import Language.Drasil.Display (compsy)
-
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
-
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
-import Drasil.GetChunks (ccss, ccss')
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
@@ -64,11 +72,6 @@ import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-
-import Drasil.Metadata.Documentation as Doc (software)
-import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  unlikelyChg)
-import qualified Data.Map.Strict as M
 
 -- * Main Function
 

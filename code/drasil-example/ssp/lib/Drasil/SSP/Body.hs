@@ -148,8 +148,6 @@ abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- CIs
   map nw acronyms ++
-  -- ConceptChunks
-  nw progName :
   -- DefinedQuantityDicts
   map nw symbols
 

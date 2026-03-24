@@ -47,15 +47,15 @@
 </span><span id="line-42"></span><span id="mk"><span id="notes"><span id="rf"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">TheoryModel</span></span></span></span><span>
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasChunkRefs</span></span><span> </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-45"></span><span>  </span><span id="local-6989586621679134857"><span class="annot"><span class="annottext">chunkRefs :: TheoryModel -&gt; Set UID
-</span><a href="#local-6989586621679134857"><span class="hs-identifier hs-var hs-var hs-var hs-var">chunkRefs</span></a></span></span><span> </span><span id="local-6989586621679134859"><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134859"><span class="hs-identifier hs-var">tm'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Set UID] -&gt; Set UID
+</span><span id="line-45"></span><span>  </span><span id="local-6989586621679134927"><span class="annot"><span class="annottext">chunkRefs :: TheoryModel -&gt; Set UID
+</span><a href="#local-6989586621679134927"><span class="hs-identifier hs-var hs-var hs-var hs-var">chunkRefs</span></a></span></span><span> </span><span id="local-6989586621679134929"><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679134929"><span class="hs-identifier hs-var">tm'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Set UID] -&gt; Set UID
 forall a. Monoid a =&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">mconcat</span></span><span>
 </span><span id="line-46"></span><span>    </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; Set UID
 forall a. HasChunkRefs a =&gt; a -&gt; Set UID
 </span><span class="hs-identifier hs-var">chunkRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134859"><span class="hs-identifier hs-var">tm'</span></a></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679134929"><span class="hs-identifier hs-var">tm'</span></a></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 -&gt; Getting (ModelKind ModelExpr) TheoryModel (ModelKind ModelExpr)
 -&gt; ModelKind ModelExpr
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -66,11 +66,11 @@ Lens' TheoryModel (ModelKind ModelExpr)
 forall a. HasChunkRefs a =&gt; a -&gt; Set UID
 </span><span class="hs-identifier hs-var">chunkRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; ShortName
 </span><a href="Theory.Drasil.Theory.html#lb"><span class="hs-identifier hs-var">lb</span></a></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134859"><span class="hs-identifier hs-var">tm'</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679134929"><span class="hs-identifier hs-var">tm'</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-48"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Set UID
 forall a. HasChunkRefs a =&gt; a -&gt; Set UID
 </span><span class="hs-identifier hs-var">chunkRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134859"><span class="hs-identifier hs-var">tm'</span></a></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679134929"><span class="hs-identifier hs-var">tm'</span></a></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 -&gt; Getting [Sentence] TheoryModel [Sentence] -&gt; [Sentence]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [Sentence] TheoryModel [Sentence]
@@ -80,8 +80,8 @@ Lens' TheoryModel [Sentence]
 </span><span id="line-50"></span><span>  </span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="annot"><span class="hs-pragma hs-type">chunkRefs</span></span><span> </span><span class="hs-pragma">#-}</span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Finds the 'UID' of a 'TheoryModel'.</span></span><span>
-</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134869"><span class="annot"><span class="annottext">uid :: Getter TheoryModel UID
-</span><a href="#local-6989586621679134869"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
+</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134939"><span class="annot"><span class="annottext">uid :: Getter TheoryModel UID
+</span><a href="#local-6989586621679134939"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
 -&gt; TheoryModel -&gt; f TheoryModel
 Lens' TheoryModel (ModelKind ModelExpr)
 </span><a href="Theory.Drasil.Theory.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
@@ -97,8 +97,8 @@ forall c. HasUID c =&gt; Getter c UID
 Getter (ModelKind ModelExpr) UID
 </span><span class="hs-identifier hs-var">uid</span></span><span>
 </span><span id="line-54"></span><span class="annot"><span class="hs-comment">-- | Finds the term ('NP') of the 'TheoryModel'.</span></span><span>
-</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134885"><span class="annot"><span class="annottext">term :: Lens' TheoryModel NP
-</span><a href="#local-6989586621679134885"><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
+</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134955"><span class="annot"><span class="annottext">term :: Lens' TheoryModel NP
+</span><a href="#local-6989586621679134955"><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
 -&gt; TheoryModel -&gt; f TheoryModel
 Lens' TheoryModel (ModelKind ModelExpr)
 </span><a href="Theory.Drasil.Theory.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
@@ -113,8 +113,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 Lens' (ModelKind ModelExpr) NP
 </span><span class="hs-identifier hs-var">term</span></span><span>
 </span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Finds the idea of the 'ConceptChunk' contained in the 'TheoryModel'.</span></span><span>
-</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134897"><span class="annot"><span class="annottext">getA :: TheoryModel -&gt; Maybe String
-</span><a href="#local-6989586621679134897"><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; Maybe String
+</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134967"><span class="annot"><span class="annottext">getA :: TheoryModel -&gt; Maybe String
+</span><a href="#local-6989586621679134967"><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; Maybe String
 forall c. Idea c =&gt; c -&gt; Maybe String
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; Maybe String)
 -&gt; (TheoryModel -&gt; ModelKind ModelExpr)
@@ -128,8 +128,8 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 Lens' TheoryModel (ModelKind ModelExpr)
 </span><a href="Theory.Drasil.Theory.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span>
 </span><span id="line-58"></span><span class="annot"><span class="hs-comment">-- | Finds the definition of the 'ConceptChunk' contained in a 'TheoryModel'.</span></span><span>
-</span><span id="line-59"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134907"><span class="annot"><span class="annottext">defn :: Lens' TheoryModel Sentence
-</span><a href="#local-6989586621679134907"><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
+</span><span id="line-59"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134977"><span class="annot"><span class="annottext">defn :: Lens' TheoryModel Sentence
+</span><a href="#local-6989586621679134977"><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
 -&gt; TheoryModel -&gt; f TheoryModel
 Lens' TheoryModel (ModelKind ModelExpr)
 </span><a href="Theory.Drasil.Theory.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKind ModelExpr -&gt; f (ModelKind ModelExpr))
@@ -148,13 +148,13 @@ Lens' (ModelKind ModelExpr) Sentence
 </span><span id="line-60"></span><span class="hs-comment">{-- | Finds 'Reference's contained in the 'TheoryModel'.
 instance HasReference       TheoryModel where getReferences l = map ref $ rf l-}</span><span>
 </span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | Finds 'DecRef's contained in the 'TheoryModel'.</span></span><span>
-</span><span id="line-63"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDecRef</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134914"><span class="annot"><span class="annottext">getDecRefs :: Lens' TheoryModel [DecRef]
-</span><a href="#local-6989586621679134914"><span class="hs-identifier hs-var hs-var hs-var hs-var">getDecRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([DecRef] -&gt; f [DecRef]) -&gt; TheoryModel -&gt; f TheoryModel
+</span><span id="line-63"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDecRef</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134984"><span class="annot"><span class="annottext">getDecRefs :: Lens' TheoryModel [DecRef]
+</span><a href="#local-6989586621679134984"><span class="hs-identifier hs-var hs-var hs-var hs-var">getDecRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([DecRef] -&gt; f [DecRef]) -&gt; TheoryModel -&gt; f TheoryModel
 Lens' TheoryModel [DecRef]
 </span><a href="Theory.Drasil.Theory.html#rf"><span class="hs-identifier hs-var">rf</span></a></span><span>
 </span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.</span></span><span>
-</span><span id="line-65"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134923"><span class="annot"><span class="annottext">cdom :: TheoryModel -&gt; [UID]
-</span><a href="#local-6989586621679134923"><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; [UID]
+</span><span id="line-65"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134993"><span class="annot"><span class="annottext">cdom :: TheoryModel -&gt; [UID]
+</span><a href="#local-6989586621679134993"><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; [UID]
 forall c. ConceptDomain c =&gt; c -&gt; [UID]
 </span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; [UID])
 -&gt; (TheoryModel -&gt; ModelKind ModelExpr) -&gt; TheoryModel -&gt; [UID]
@@ -166,8 +166,8 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 Lens' TheoryModel (ModelKind ModelExpr)
 </span><a href="Theory.Drasil.Theory.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span>
 </span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Finds any additional notes for the 'TheoryModel'.</span></span><span>
-</span><span id="line-67"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134930"><span class="annot"><span class="annottext">getNotes :: Lens' TheoryModel [Sentence]
-</span><a href="#local-6989586621679134930"><span class="hs-identifier hs-var hs-var hs-var hs-var">getNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; f [Sentence]) -&gt; TheoryModel -&gt; f TheoryModel
+</span><span id="line-67"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679135000"><span class="annot"><span class="annottext">getNotes :: Lens' TheoryModel [Sentence]
+</span><a href="#local-6989586621679135000"><span class="hs-identifier hs-var hs-var hs-var hs-var">getNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; f [Sentence]) -&gt; TheoryModel -&gt; f TheoryModel
 Lens' TheoryModel [Sentence]
 </span><a href="Theory.Drasil.Theory.html#notes"><span class="hs-identifier hs-var">notes</span></a></span><span>
 </span><span id="line-68"></span><span>
@@ -176,31 +176,31 @@ Lens' TheoryModel [Sentence]
 </span><span id="line-71"></span><span class="hs-comment">--       a &quot;stacked model&quot; that allows for composing them.</span><span>
 </span><span id="line-72"></span><span>
 </span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- | Finds the 'ShortName' of the 'TheoryModel'.</span></span><span>
-</span><span id="line-74"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134935"><span class="annot"><span class="annottext">shortname :: TheoryModel -&gt; ShortName
-</span><a href="#local-6989586621679134935"><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; ShortName
+</span><span id="line-74"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679135005"><span class="annot"><span class="annottext">shortname :: TheoryModel -&gt; ShortName
+</span><a href="#local-6989586621679135005"><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; ShortName
 </span><a href="Theory.Drasil.Theory.html#lb"><span class="hs-identifier hs-var">lb</span></a></span><span>
 </span><span id="line-75"></span><span class="annot"><span class="hs-comment">-- | Finds the reference address of the 'TheoryModel'.</span></span><span>
-</span><span id="line-76"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134942"><span class="annot"><span class="annottext">getRefAdd :: TheoryModel -&gt; LblType
-</span><a href="#local-6989586621679134942"><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></a></span></span><span> </span><span id="local-6989586621679134944"><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134944"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
+</span><span id="line-76"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679135012"><span class="annot"><span class="annottext">getRefAdd :: TheoryModel -&gt; LblType
+</span><a href="#local-6989586621679135012"><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></a></span></span><span> </span><span id="local-6989586621679135014"><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679135014"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
 </span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; IRefProg
 </span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IRefProg) -&gt; String -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134944"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; String
+</span><a href="#local-6989586621679135014"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; String
 </span><a href="Theory.Drasil.Theory.html#ra"><span class="hs-identifier hs-var">ra</span></a></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134944"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679135014"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-77"></span><span class="annot"><span class="hs-comment">-- | Finds the idea of a 'TheoryModel' (abbreviation).</span></span><span>
-</span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134953"><span class="annot"><span class="annottext">abrv :: TheoryModel -&gt; String
+</span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679135023"><span class="annot"><span class="annottext">abrv :: TheoryModel -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">abrv</span></span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span>
-</span><span id="line-79"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679134955"><span class="annot"><span class="hs-identifier hs-type">Express</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679134965"><span class="annot"><span class="annottext">mexpress :: TheoryModel -&gt; NonEmpty ModelExpr
-</span><a href="#local-6989586621679134965"><span class="hs-identifier hs-var hs-var hs-var hs-var">mexpress</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; NonEmpty ModelExpr
+</span><span id="line-79"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679135025"><span class="annot"><span class="hs-identifier hs-type">Express</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679135035"><span class="annot"><span class="annottext">mexpress :: TheoryModel -&gt; NonEmpty ModelExpr
+</span><a href="#local-6989586621679135035"><span class="hs-identifier hs-var hs-var hs-var hs-var">mexpress</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; NonEmpty ModelExpr
 forall c. Express c =&gt; c -&gt; NonEmpty ModelExpr
 </span><span class="hs-identifier hs-var">mexpress</span></span><span> </span><span class="annot"><span class="annottext">(ModelKind ModelExpr -&gt; NonEmpty ModelExpr)
 -&gt; (TheoryModel -&gt; ModelKind ModelExpr)
@@ -216,22 +216,22 @@ Lens' TheoryModel (ModelKind ModelExpr)
 </span><a href="Theory.Drasil.Theory.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-80"></span><span class="annot"><span class="hs-comment">-- | Finds the reference address of a 'TheoryModel'.</span></span><span>
 </span><span id="line-81"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span> </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-82"></span><span>  </span><span id="local-6989586621679134975"><span class="annot"><span class="annottext">refAdd :: TheoryModel -&gt; String
-</span><a href="#local-6989586621679134975"><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; String
+</span><span id="line-82"></span><span>  </span><span id="local-6989586621679135045"><span class="annot"><span class="annottext">refAdd :: TheoryModel -&gt; String
+</span><a href="#local-6989586621679135045"><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; String
 </span><a href="Theory.Drasil.Theory.html#ra"><span class="hs-identifier hs-var">ra</span></a></span><span>
-</span><span id="line-83"></span><span>  </span><span id="local-6989586621679134979"><span class="annot"><span class="annottext">renderRef :: TheoryModel -&gt; LblType
-</span><a href="#local-6989586621679134979"><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></a></span></span><span> </span><span id="local-6989586621679134981"><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134981"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
+</span><span id="line-83"></span><span>  </span><span id="local-6989586621679135049"><span class="annot"><span class="annottext">renderRef :: TheoryModel -&gt; LblType
+</span><a href="#local-6989586621679135049"><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></a></span></span><span> </span><span id="local-6989586621679135051"><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679135051"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
 </span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; IRefProg
 </span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IRefProg) -&gt; String -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134981"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; String
+</span><a href="#local-6989586621679135051"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; String
 forall s. Referable s =&gt; s -&gt; String
 </span><span class="hs-identifier hs-var">refAdd</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
-</span><a href="#local-6989586621679134981"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679135051"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-84"></span><span>
 </span><span id="line-85"></span><span class="hs-comment">-- TODO: Theory Models should generally be using their own UID, instead of</span><span>
 </span><span id="line-86"></span><span class="hs-comment">--       having their UIDs derived by the model kind.</span><span>
@@ -243,8 +243,8 @@ forall s. Referable s =&gt; s -&gt; String
 </span><span id="line-92"></span><span class="annot"><a href="Theory.Drasil.Theory.html#tm"><span class="hs-identifier hs-type">tm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKind"><span class="hs-identifier hs-type">ModelKind</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DecRef</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span>
 </span><span id="line-93"></span><span id="tm"><span class="annot"><span class="annottext">tm :: ModelKind ModelExpr
 -&gt; [DecRef] -&gt; String -&gt; [Sentence] -&gt; TheoryModel
-</span><a href="Theory.Drasil.Theory.html#tm"><span class="hs-identifier hs-var hs-var">tm</span></a></span></span><span> </span><span id="local-6989586621679134982"><span class="annot"><span class="annottext">ModelKind ModelExpr
-</span><a href="#local-6989586621679134982"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Theory.Drasil.Theory.html#tm"><span class="hs-identifier hs-var hs-var">tm</span></a></span></span><span> </span><span id="local-6989586621679135052"><span class="annot"><span class="annottext">ModelKind ModelExpr
+</span><a href="#local-6989586621679135052"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; TheoryModel
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; [Sentence] -&gt; TheoryModel)
@@ -256,44 +256,44 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr -&gt; String
 forall a. HasUID a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">showUID</span></span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
-</span><a href="#local-6989586621679134982"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679135052"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; is empty&quot;</span></span><span>
-</span><span id="line-94"></span><span class="annot"><a href="Theory.Drasil.Theory.html#tm"><span class="hs-identifier hs-var">tm</span></a></span><span> </span><span id="local-6989586621679134984"><span class="annot"><span class="annottext">ModelKind ModelExpr
-</span><a href="#local-6989586621679134984"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679134985"><span class="annot"><span class="annottext">[DecRef]
-</span><a href="#local-6989586621679134985"><span class="hs-identifier hs-var">r</span></a></span></span><span>  </span><span id="local-6989586621679134986"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679134986"><span class="hs-identifier hs-var">lbe</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
+</span><span id="line-94"></span><span class="annot"><a href="Theory.Drasil.Theory.html#tm"><span class="hs-identifier hs-var">tm</span></a></span><span> </span><span id="local-6989586621679135054"><span class="annot"><span class="annottext">ModelKind ModelExpr
+</span><a href="#local-6989586621679135054"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679135055"><span class="annot"><span class="annottext">[DecRef]
+</span><a href="#local-6989586621679135055"><span class="hs-identifier hs-var">r</span></a></span></span><span>  </span><span id="local-6989586621679135056"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679135056"><span class="hs-identifier hs-var">lbe</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; [DecRef] -&gt; ShortName -&gt; String -&gt; [Sentence] -&gt; TheoryModel
 </span><a href="Theory.Drasil.Theory.html#TM"><span class="hs-identifier hs-var">TM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
-</span><a href="#local-6989586621679134984"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">[DecRef]
-</span><a href="#local-6989586621679134985"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679135054"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">[DecRef]
+</span><a href="#local-6989586621679135055"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679134986"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679135056"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679134986"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679135056"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="annot"><span class="hs-comment">-- | Constructor for theory models. Uses the shortname of the reference address.</span></span><span>
 </span><span id="line-97"></span><span class="annot"><a href="Theory.Drasil.Theory.html#tmNoRefs"><span class="hs-identifier hs-type">tmNoRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKind"><span class="hs-identifier hs-type">ModelKind</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.Theory.html#TheoryModel"><span class="hs-identifier hs-type">TheoryModel</span></a></span><span>
 </span><span id="line-98"></span><span id="tmNoRefs"><span class="annot"><span class="annottext">tmNoRefs :: ModelKind ModelExpr -&gt; String -&gt; [Sentence] -&gt; TheoryModel
-</span><a href="Theory.Drasil.Theory.html#tmNoRefs"><span class="hs-identifier hs-var hs-var">tmNoRefs</span></a></span></span><span> </span><span id="local-6989586621679134990"><span class="annot"><span class="annottext">ModelKind ModelExpr
-</span><a href="#local-6989586621679134990"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679134991"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679134991"><span class="hs-identifier hs-var">lbe</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
+</span><a href="Theory.Drasil.Theory.html#tmNoRefs"><span class="hs-identifier hs-var hs-var">tmNoRefs</span></a></span></span><span> </span><span id="local-6989586621679135060"><span class="annot"><span class="annottext">ModelKind ModelExpr
+</span><a href="#local-6989586621679135060"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679135061"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679135061"><span class="hs-identifier hs-var">lbe</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; [DecRef] -&gt; ShortName -&gt; String -&gt; [Sentence] -&gt; TheoryModel
 </span><a href="Theory.Drasil.Theory.html#TM"><span class="hs-identifier hs-var">TM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
-</span><a href="#local-6989586621679134990"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679135060"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679134991"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679135061"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679134991"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679135061"><span class="hs-identifier hs-var">lbe</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-99"></span></pre></body></html>

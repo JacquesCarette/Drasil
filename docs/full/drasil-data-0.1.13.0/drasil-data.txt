@@ -226,9 +226,6 @@ physicalProperty :: IdeaDict
 vavPlan :: IdeaDict
 uncertCol :: IdeaDict
 userInput :: IdeaDict
-
--- | Root SRS Domain.
-srsDom :: ConceptChunk
 goalStmtDom :: ConceptChunk
 assumpDom :: ConceptChunk
 reqDom :: ConceptChunk

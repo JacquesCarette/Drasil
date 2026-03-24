@@ -1,15 +1,18 @@
 -- | Defines concepts used in the field of math.
 module Data.Drasil.Concepts.Math where
 
+-- General Drasil
 import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
 import qualified Language.Drasil as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
+
+-- Othr Vocabulary
 import Drasil.Metadata.Domains (mathematics)
-import qualified Drasil.Metadata.Concepts.Math as Math (graph, unit_)
+import qualified Drasil.Metadata.Concepts.Math as Math (equation, graph, parameter, unit_)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
@@ -48,7 +51,7 @@ constraint   = dcc "mathConstraint" (cn' "constraint")              "A condition
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
 direction    = dcc "direction"    (cn' "direction")               "'which way' a vector points, extending from the tail to the tip"
-equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
+equation     = Math.equation
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
                                                                   "experience")
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
@@ -65,8 +68,7 @@ normal      = dcc "normal"       (cn' "normal" )                 "an object that
 number      = dcc "number"       (cn' "number")                  "a mathematical object used to count, measure, and label"
 orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
 origin      = dcc "origin"       (cn' "origin")                  "a fixed point of reference for the geometry of the surrounding space"
-parameter   = dcc "parameter"    (cn' "parameter")               "a quantity whose value is selected depending on particular circumstances"
---FIXME: Should "parameter" be in math?
+parameter   = Math.parameter --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")          "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
 posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a sequence or function that eventually exceeds any prescribed bound"

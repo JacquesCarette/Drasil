@@ -2,13 +2,20 @@
 -- First true example of a (small) recipe.
 module Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit', tunitNone, tuIntro, defaultTUI) where
 
+-- General Haskell
 import Control.Lens ((^.))
+
+-- General Drasil
 import Language.Drasil
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
-import Data.Drasil.Concepts.Documentation (symbol_, description, tOfUnit)
-import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
-import Data.Drasil.Concepts.Math (unit_)
 import Utils.Drasil (mkTable)
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (symbol_, description, tOfUnit)
+import Drasil.Metadata.Concepts.Math (unit_)
+
+-- Other docLang
+import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 -- | Creates the Table of Units with an "SI Name" column.
 tOfUnitSIName :: IsUnit s => [s] -> LabelledContent

@@ -3,30 +3,33 @@
 module Drasil.Sections.Introduction (orgSec, introductionSection,
   purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
 
+-- Generic Drasil
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
-  charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Drasil.DocumentLanguage.Core (IntroSub(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
-import Drasil.Sentence.Combinators (refineChain)
-import Drasil.Document.Contents (foldlSP, foldlSP_)
 
+-- Vocabulary
 import Drasil.Metadata.TheoryConcepts (inModel, thModel)
-import Drasil.Metadata.Documentation (requirement, srs)
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
+import Drasil.Metadata.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model,
-  organization, purpose, scope, section_, softwareDoc,
-  softwareVAV, theory, user, vavPlan, problem, problemIntro,
+  organization, purpose, requirement, scope, section_, softwareDoc,
+  softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
   information, systemConstraint, template)
 import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products
+
+-- Other docLang
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
+  charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
+import Drasil.DocumentLanguage.Definitions(Verbosity(..))
+import Drasil.DocumentLanguage.Core (IntroSub(..))
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
+import Drasil.Sentence.Combinators (refineChain)
+import Drasil.Document.Contents (foldlSP, foldlSP_)
 
 -----------------------
 --     Constants     --

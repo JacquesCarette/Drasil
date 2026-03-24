@@ -24,6 +24,7 @@ dependencies:
 - drasil-database
 - drasil-lang
 - drasil-metadata
+- drasil-printing
 - drasil-theory
 - drasil-utils
 - split
@@ -36,7 +37,22 @@ library:
   source-dirs: lib
   exposed-modules:
   - Language.Drasil.Printers
-  - Language.Drasil.Printing.Import
+  other-modules:
+  - Language.Drasil.Debug.Print
+  - Language.Drasil.HTML.CSS
+  - Language.Drasil.HTML.Helpers
+  - Language.Drasil.HTML.Monad
+  - Language.Drasil.HTML.Print
+  - Language.Drasil.JSON.Helpers
+  - Language.Drasil.JSON.Print
+  - Language.Drasil.Markdown.Config
+  - Language.Drasil.Markdown.CreateMd
+  - Language.Drasil.Markdown.Helpers
+  - Language.Drasil.Markdown.Print
+  - Language.Drasil.TeX.Helpers
+  - Language.Drasil.TeX.Monad
+  - Language.Drasil.TeX.Preamble
+  - Language.Drasil.TeX.Print
   when:
   - condition: false
     other-modules: Paths_drasil_printers

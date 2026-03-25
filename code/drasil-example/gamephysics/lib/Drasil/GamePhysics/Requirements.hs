@@ -48,12 +48,12 @@ requirementTemplate a b x z = foldlSent [S "Determine the", a `S.and_` b,
   S "over a period of", phrase QP.time, S "of the", x, z]
 
 -- | with added constraint
-requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
+requirementS :: (Idea a, Idea b) => a -> b -> Sentence -> Sentence
 requirementS a b = requirementTemplate (plural a) (plural b) (short twoD
   +:+ plural CP.rigidBody)
 
 -- | without added constraint
-requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
+requirementS' :: (Idea a, Idea b) => a -> b -> Sentence
 requirementS' a b = requirementS a b EmptyS
 
 -- some requirements look like they could be parametrized

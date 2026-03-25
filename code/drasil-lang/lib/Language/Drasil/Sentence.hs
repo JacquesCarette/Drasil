@@ -16,7 +16,7 @@ module Language.Drasil.Sentence (
 
 import Data.Char (toUpper)
 
-import Drasil.Database (HasChunkRefs(..), UID, IsChunk, UIDRef, hide, raw)
+import Drasil.Database (HasChunkRefs(..), UID, IsChunk, UIDRef, hide, raw, TypeableChunk)
 
 import Language.Drasil.Chunk.NamedIdea (Idea)
 import Language.Drasil.ExprClasses (Express(express))
@@ -59,7 +59,7 @@ infixr 5 :+:
 data Sentence where
   -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
   -- This allows Sentences to hold plural forms of 'NamedIdea's.
-  Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+  Ch    :: (TypeableChunk t, Idea t) => SentenceStyle -> TermCapitalization -> UIDRef t -> Sentence
   -- | A branch of Ch dedicated to SymbolStyle only.
   SyCh  :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => UIDRef t -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
@@ -102,7 +102,8 @@ instance Monoid Sentence where
   mempty = EmptyS
 
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
-sentencePlural, sentenceShort, sentenceTerm :: UID -> Sentence
+sentencePlural, sentenceShort, sentenceTerm
+  :: (IsChunk t, Idea t) => UIDRef t -> Sentence
 -- | Gets plural term of 'UID'.
 sentencePlural = Ch PluralTerm NoCap
 -- | Gets short form of 'UID'.

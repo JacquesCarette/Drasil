@@ -17,6 +17,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Drasil.Database (UID, HasUID(..), mkUid, showUID, HasChunkRefs(..))
 import Language.Drasil hiding (DefiningExpr)
+import Data.Typeable (Typeable)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
 --   the description, the defining (rhs) expression and the context domain(s).
@@ -72,11 +73,11 @@ instance HasChunkRefs (MultiDefn e) where
 
 instance HasUID           (MultiDefn e) where uid     = rUid
 instance HasSymbol        (MultiDefn e) where symbol  = symbol . (^. qd)
-instance NamedIdea        (MultiDefn e) where term    = qd . term
-instance Idea             (MultiDefn e) where getA    = getA . (^. qd)
+instance Typeable e => NamedIdea        (MultiDefn e) where term    = qd . term
+instance Typeable e => Idea             (MultiDefn e) where getA    = getA . (^. qd)
 instance HasSpace         (MultiDefn e) where typ     = qd . typ
 instance Definition       (MultiDefn e) where defn    = rDesc
-instance Quantity         (MultiDefn e)
+instance Typeable e => Quantity         (MultiDefn e)
 instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
 -- | The concept domain of a MultiDefn is the union of the concept domains of
 -- the underlying variants.
@@ -111,7 +112,7 @@ mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e
 mkDefiningExpr u = DefiningExpr (mkUid u)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr'.
-multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
+multiDefnGenQD :: Typeable e => MultiDefn e -> DefiningExpr e -> QDefinition e
 multiDefnGenQD md de =
   mkQDefSt
     (md ^. qd . uid)
@@ -123,7 +124,7 @@ multiDefnGenQD md de =
     (de ^. expr)
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr' (by 'UID').
-multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
+multiDefnGenQDByUID :: Typeable e => MultiDefn e -> UID -> QDefinition e
 multiDefnGenQDByUID md u
   | length matches == 1 = multiDefnGenQD md matched
   | otherwise           = error $

@@ -196,7 +196,7 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 {--INTRODUCTION--}
 
-startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
+startIntro :: (Idea n) => n -> Sentence -> CI -> Sentence
 startIntro prgm _ sysName = foldlSent [
   atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+
   S "itself" `S.and_` S "also potentially from the secondary" +:+

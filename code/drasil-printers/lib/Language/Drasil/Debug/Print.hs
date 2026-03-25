@@ -79,7 +79,7 @@ mkTableFromLenses pin _ ttle hsNEs =
 
     nestNum = 30
 
-openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
+openTerm :: Idea a => PrintingInformation -> (String, a -> Doc)
 openTerm pinfo = ("Term", sentenceDoc MultiLine . spec pinfo . phrase)
 
 openSymbol :: HasSymbol a => PrintingInformation -> (String, a -> Doc)

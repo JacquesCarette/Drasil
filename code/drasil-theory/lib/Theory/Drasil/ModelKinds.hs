@@ -27,6 +27,7 @@ import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.DifferentialModel (DifferentialModel)
 import Theory.Drasil.MultiDefn (MultiDefn)
+import Data.Typeable (Typeable)
 
 -- | Models can be of different kinds:
 --
@@ -65,59 +66,59 @@ mkUid' :: String -> UID
 mkUid' = modelNs . mkUid
 
 -- | Smart constructor for 'NewDEModel's
-newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
+newDEModel :: Typeable e => String -> NP -> DifferentialModel -> ModelKind e
 newDEModel u n dm = MK (NewDEModel dm) (mkUid' u) n
 
 -- | Smart constructor for 'NewDEModel's, deriving UID+Term from the 'DifferentialModel'
-newDEModel' :: DifferentialModel -> ModelKind e
+newDEModel' :: Typeable e => DifferentialModel -> ModelKind e
 newDEModel' dm = MK (NewDEModel dm) (modelNs $ dm ^. uid) (dm ^. term)
 
 -- | Smart constructor for 'DEModel's
-deModel :: String -> NP -> RelationConcept -> ModelKind e
+deModel :: Typeable e => String -> NP -> RelationConcept -> ModelKind e
 deModel u n rc = MK (DEModel rc) (mkUid' u) n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
-deModel' :: RelationConcept -> ModelKind e
+deModel' :: Typeable e => RelationConcept -> ModelKind e
 deModel' rc = MK (DEModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
-equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
+equationalConstraints :: Typeable e => String -> NP -> ConstraintSet e -> ModelKind e
 equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
-equationalConstraints' :: ConstraintSet e -> ModelKind e
+equationalConstraints' :: Typeable e => ConstraintSet e -> ModelKind e
 equationalConstraints' qs = MK (EquationalConstraints qs) (modelNs $ qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
-equationalModel :: String -> NP -> QDefinition e -> ModelKind e
+equationalModel :: Typeable e => String -> NP -> QDefinition e -> ModelKind e
 equationalModel u n qd = MK (EquationalModel qd) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
-equationalModel' :: QDefinition e -> ModelKind e
+equationalModel' :: Typeable e => QDefinition e -> ModelKind e
 equationalModel' qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
-equationalModelU :: String -> QDefinition e -> ModelKind e
+equationalModelU :: Typeable e => String -> QDefinition e -> ModelKind e
 equationalModelU u qd = MK (EquationalModel qd) (mkUid' u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
-equationalModelN :: NP -> QDefinition e -> ModelKind e
+equationalModelN :: Typeable e => NP -> QDefinition e -> ModelKind e
 equationalModelN n qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) n
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
+equationalRealm :: Typeable e => String -> NP -> MultiDefn e -> ModelKind e
 equationalRealm u n md = MK (EquationalRealm md) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
-equationalRealm' :: MultiDefn e -> ModelKind e
+equationalRealm' :: Typeable e => Typeable e => MultiDefn e -> ModelKind e
 equationalRealm' md = MK (EquationalRealm md) (modelNs $ md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealmU :: String -> MultiDefn e -> ModelKind e
+equationalRealmU :: Typeable e => String -> MultiDefn e -> ModelKind e
 equationalRealmU u md = MK (EquationalRealm md) (mkUid' u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
-equationalRealmN :: NP -> MultiDefn e -> ModelKind e
+equationalRealmN :: Typeable e => NP -> MultiDefn e -> ModelKind e
 equationalRealmN n md = MK (EquationalRealm md) (modelNs $ md ^. uid) n
 
 -- | Smart constructor for 'OthModel's
@@ -140,9 +141,9 @@ instance HasChunkRefs (ModelKinds e) where
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
-instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
+instance Typeable e => NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
 -- | Finds the idea of the 'ModelKinds'.
-instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
+instance Typeable e => Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
@@ -163,7 +164,7 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed
 -- OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
-instance HasChunkRefs (ModelKind e) where
+instance Typeable e => HasChunkRefs (ModelKind e) where
   chunkRefs mkd = mconcat
     [ chunkRefs (mkd ^. mk)
     , chunkRefs (mkd ^. mkTerm)
@@ -173,9 +174,9 @@ instance HasChunkRefs (ModelKind e) where
 -- | Finds the 'UID' of the 'ModelKind'.
 instance HasUID        (ModelKind e) where uid     = mkUID
 -- | Finds the term ('NP') of the 'ModelKind'.
-instance NamedIdea     (ModelKind e) where term    = mkTerm
+instance Typeable e => NamedIdea     (ModelKind e) where term    = mkTerm
 -- | Finds the idea of the 'ModelKind'.
-instance Idea          (ModelKind e) where getA    = getA . (^. mk)
+instance Typeable e => Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
 -- | Finds the domain of the 'ModelKind'.

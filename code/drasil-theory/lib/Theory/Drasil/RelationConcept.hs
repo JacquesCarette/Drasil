@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | For adding a relation (expression) to a concept.
-module Language.Drasil.Chunk.Relation (
+module Theory.Drasil.RelationConcept (
   -- * Chunk Type
   RelationConcept,
   -- * Constructors
@@ -10,12 +10,7 @@ import Control.Lens (makeLenses, (^.), view)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
-import Language.Drasil.Classes (Express(..),
-  ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
-import Language.Drasil.Sentence (Sentence)
+import Language.Drasil
 
 -- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
 --

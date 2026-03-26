@@ -10,7 +10,7 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (eqN, unwrap, substitute, follows, fromSources)
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
-  equationalModel, ModelKind, Derivation, mkDerivName)
+  equationalModel, ModelKind, Derivation, mkDerivName, RelationConcept, makeRC)
 import Utils.Drasil (weave)
 
 import Data.Drasil.Citations

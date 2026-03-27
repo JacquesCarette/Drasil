@@ -181,8 +181,7 @@ codeSpec si chs = CS {
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: S.System -> Choices -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._authors = as
-                    , S._inputs = ins
+oldcodeSpec sys@S.SI{ S._inputs = ins
                     , S._outputs = outs
                     , S._constraints = cs
                     , S._constants = cnsts
@@ -203,7 +202,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
-        _authors = as,
+        _authors = sys ^. authors,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,

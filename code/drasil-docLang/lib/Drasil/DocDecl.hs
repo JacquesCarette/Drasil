@@ -107,7 +107,7 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: System -> SRSDecl -> DocDesc
-mkDocDesc sys@SI{_systemdb = db} = map sec where
+mkDocDesc sys = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
@@ -147,4 +147,5 @@ mkDocDesc sys@SI{_systemdb = db} = map sec where
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll db
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid)
+    $ findAll $ sys ^. systemdb

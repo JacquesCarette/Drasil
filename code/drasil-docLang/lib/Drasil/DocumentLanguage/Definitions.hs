@@ -17,7 +17,7 @@ import Data.Maybe (mapMaybe)
 
 -- rest of Drasil
 import Drasil.Database (ChunkDB, UID, HasUID(..), find)
-import Drasil.System (System(_systemdb), systemdb, refbyLookup)
+import Drasil.System (System, systemdb, refbyLookup)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
@@ -155,7 +155,7 @@ buildDescription :: Verbosity -> InclUnits -> ModelExpr -> System -> [Contents] 
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
-  Enumeration . Definitions . descPairs u $ vars e $ _systemdb m) : cs
+  Enumeration . Definitions . descPairs u $ vars e $ m ^. systemdb) : cs
 
 -- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is
 -- included as the 'firstPair'' in ['Contents'] (independent of verbosity). The
@@ -165,7 +165,7 @@ buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> System ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
-  firstPair' u d : descPairs u (flip vars (_systemdb m) $
+  firstPair' u d : descPairs u (flip vars (m ^. systemdb) $
   either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.

@@ -9,6 +9,11 @@
 @package drasil-metadata
 @version 0.1.1.0
 
+
+-- | Defines concepts used in computing, to be used internally.
+module Drasil.Metadata.Concepts.Computation
+algorithm :: ConceptChunk
+
 module Drasil.Metadata.Concepts.Math
 equation :: ConceptChunk
 graph :: ConceptChunk
@@ -241,6 +246,34 @@ module Drasil.Metadata
 
 -- | Drasil's watermark for generated files.
 watermark :: String
+
+
+-- | Define people for use internally to Drasil. Used in authors and
+--   citations.
+module Drasil.Metadata.People
+spencerSmith :: Person
+nKoothoor :: Person
+dParnas :: Person
+pjAgerfalk :: Person
+pcClements :: Person
+lLai :: Person
+nKraiem :: Person
+jRalyte :: Person
+rKhedri :: Person
+
+
+-- | Defines citations used internally in Drasil.
+module Drasil.Metadata.Citations
+koothoor2013 :: Citation
+parnasClements1986 :: Citation
+smithEtAl2007 :: Citation
+smithLai2005 :: Citation
+smithKoothoor2016 :: Citation
+
+
+-- | Defines common software products for internal use
+module Drasil.Metadata.Software.Products
+sciCompS :: IdeaDict
 
 
 -- | Categories of software that Drasil can generate.

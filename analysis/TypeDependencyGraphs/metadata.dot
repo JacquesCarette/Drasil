@@ -1,5 +1,11 @@
 digraph alltypes {
+	subgraph computation {
+	}
 	subgraph math {
+	}
+	subgraph products {
+	}
+	subgraph citations {
 	}
 	subgraph documentation {
 	}
@@ -10,6 +16,8 @@ digraph alltypes {
 		DrasilMeta	[shape=oval, color=darkgreen, label="DrasilMeta"];
 		DrasilMeta -> String;
 		}
+	}
+	subgraph people {
 	}
 	subgraph supportedsoftware {
 	}

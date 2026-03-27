@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Define people for use internally to Drasil. Used in authors and citations.</span></span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Metadata.People</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Person</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">person</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">personWM</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="annot"><a href="Drasil.Metadata.People.html#spencerSmith"><span class="hs-identifier hs-type">spencerSmith</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#nKoothoor"><span class="hs-identifier hs-type">nKoothoor</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#dParnas"><span class="hs-identifier hs-type">dParnas</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#pjAgerfalk"><span class="hs-identifier hs-type">pjAgerfalk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#pcClements"><span class="hs-identifier hs-type">pcClements</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#lLai"><span class="hs-identifier hs-type">lLai</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#nKraiem"><span class="hs-identifier hs-type">nKraiem</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><a href="Drasil.Metadata.People.html#jRalyte"><span class="hs-identifier hs-type">jRalyte</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.People.html#rKhedri"><span class="hs-identifier hs-type">rKhedri</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Person</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span id="pjAgerfalk"><span class="annot"><span class="annottext">pjAgerfalk :: Person
+</span><a href="Drasil.Metadata.People.html#pjAgerfalk"><span class="hs-identifier hs-var hs-var">pjAgerfalk</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">person</span></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;PJ&quot;</span></span><span>                        </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Agerfalk&quot;</span></span><span>
+</span><span id="line-10"></span><span id="pcClements"><span class="annot"><span class="annottext">pcClements :: Person
+</span><a href="Drasil.Metadata.People.html#pcClements"><span class="hs-identifier hs-var hs-var">pcClements</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">personWM</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;P&quot;</span></span><span>         </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;C&quot;</span></span><span class="hs-special">]</span><span>           </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Clements&quot;</span></span><span> </span><span class="hs-comment">-- The Modular Structure of Complex Systems ICSE '84</span><span>
+</span><span id="line-11"></span><span id="nKoothoor"><span class="annot"><span class="annottext">nKoothoor :: Person
+</span><a href="Drasil.Metadata.People.html#nKoothoor"><span class="hs-identifier hs-var hs-var">nKoothoor</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">person</span></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Nirmitha&quot;</span></span><span>                  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Koothoor&quot;</span></span><span>
+</span><span id="line-12"></span><span id="nKraiem"><span class="annot"><span class="annottext">nKraiem :: Person
+</span><a href="Drasil.Metadata.People.html#nKraiem"><span class="hs-identifier hs-var hs-var">nKraiem</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">person</span></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;N&quot;</span></span><span>                         </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Kraiem&quot;</span></span><span>
+</span><span id="line-13"></span><span id="lLai"><span class="annot"><span class="annottext">lLai :: Person
+</span><a href="Drasil.Metadata.People.html#lLai"><span class="hs-identifier hs-var hs-var">lLai</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">person</span></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Lei&quot;</span></span><span>                       </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Lai&quot;</span></span><span>
+</span><span id="line-14"></span><span id="dParnas"><span class="annot"><span class="annottext">dParnas :: Person
+</span><a href="Drasil.Metadata.People.html#dParnas"><span class="hs-identifier hs-var hs-var">dParnas</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">personWM</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;David&quot;</span></span><span>     </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;L&quot;</span></span><span class="hs-special">]</span><span>           </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Parnas&quot;</span></span><span>
+</span><span id="line-15"></span><span id="jRalyte"><span class="annot"><span class="annottext">jRalyte :: Person
+</span><a href="Drasil.Metadata.People.html#jRalyte"><span class="hs-identifier hs-var hs-var">jRalyte</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">person</span></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;J&quot;</span></span><span>                         </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Ralyte&quot;</span></span><span>
+</span><span id="line-16"></span><span id="spencerSmith"><span class="annot"><span class="annottext">spencerSmith :: Person
+</span><a href="Drasil.Metadata.People.html#spencerSmith"><span class="hs-identifier hs-var hs-var">spencerSmith</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">personWM</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;W&quot;</span></span><span>         </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Spencer&quot;</span></span><span class="hs-special">]</span><span>     </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Smith&quot;</span></span><span>
+</span><span id="line-17"></span><span id="rKhedri"><span class="annot"><span class="annottext">rKhedri :: Person
+</span><a href="Drasil.Metadata.People.html#rKhedri"><span class="hs-identifier hs-var hs-var">rKhedri</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
+</span><span class="hs-identifier hs-var">person</span></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Ridha&quot;</span></span><span>                     </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Khedri&quot;</span></span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span></pre></body></html>

@@ -776,10 +776,14 @@ lang,lib/Language/Drasil/,WellTyped.hs,	,	,Typed
 	,	,	,	,	,RequiresChecking
 lang,lib/Language/,Drasil.hs,	,	,	
 	
+metadata,lib/Drasil/Metadata/Concepts/,Computation.hs,	,	,	
 metadata,lib/Drasil/Metadata/Concepts/,Math.hs,	,	,	
+metadata,lib/Drasil/Metadata/Software/,Products.hs,	,	,	
+metadata,lib/Drasil/Metadata/,Citations.hs,	,	,	
 metadata,lib/Drasil/Metadata/,Documentation.hs,	,	,	
 metadata,lib/Drasil/Metadata/,Domains.hs,	,	,	
 metadata,lib/Drasil/Metadata/,Drasil.hs,	,DrasilMeta,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
+metadata,lib/Drasil/Metadata/,People.hs,	,	,	
 metadata,lib/Drasil/Metadata/,SupportedSoftware.hs,	,	,	
 metadata,lib/Drasil/Metadata/,TheoryConcepts.hs,	,	,	
 metadata,lib/Drasil/Metadata/,TraceabilityGraphs.hs,NodeFamily,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	

@@ -12,228 +12,79 @@
 
 -- | Defines concepts used to create documentation.
 module Data.Drasil.Concepts.Documentation
+first :: IdeaDict
+label :: IdeaDict
+standard :: IdeaDict
+year :: IdeaDict
+physics :: IdeaDict
+literacy :: IdeaDict
+type_ :: IdeaDict
 
 -- | Collects all documentation-related named chunks (not concept-level
 --   yet).
 doccon :: [IdeaDict]
+source :: IdeaDict
+material_ :: IdeaDict
+second_ :: IdeaDict
+body :: IdeaDict
+constant :: IdeaDict
+game :: IdeaDict
+video :: IdeaDict
+open :: IdeaDict
+analysis :: IdeaDict
+aspect :: IdeaDict
+class_ :: IdeaDict
+company :: IdeaDict
+concept :: IdeaDict
+condition :: IdeaDict
+connection :: IdeaDict
+consumer :: IdeaDict
+coordinate :: IdeaDict
+coordinateSystem :: IdeaDict
+effect :: IdeaDict
+emphasis :: IdeaDict
+failure :: IdeaDict
+figure :: IdeaDict
+instance_ :: IdeaDict
+issue :: IdeaDict
+library :: IdeaDict
+loss :: IdeaDict
+mainIdea :: IdeaDict
+message :: IdeaDict
+method_ :: IdeaDict
+methAndAnls :: IdeaDict
+name_ :: IdeaDict
+notApp :: IdeaDict
+object :: IdeaDict
+physicalProperty :: IdeaDict
+physicalSim :: IdeaDict
+practice :: IdeaDict
+priority :: IdeaDict
+procedure :: IdeaDict
+procForAnls :: IdeaDict
+realtime :: IdeaDict
+response :: IdeaDict
+result :: IdeaDict
+reviewer :: IdeaDict
+safety :: IdeaDict
+safetyReq :: IdeaDict
+scenario :: IdeaDict
+scpOfTheProjS :: IdeaDict
+simulation :: IdeaDict
+softwareSys :: IdeaDict
+softwareVerif :: IdeaDict
+task :: IdeaDict
+uncertCol :: IdeaDict
+useCaseTable :: IdeaDict
+userInput :: IdeaDict
 
 -- | Collects all documentation-related common ideas (like a concept, but
 --   with no definition).
 doccon' :: [CI]
 
 -- | CI | | uid | term | abbreviation | ConceptDomain
-assumption :: CI
-desSpec :: CI
-goalStmt :: CI
 dataConst :: CI
-likelyChg :: CI
-learnObj :: CI
-unlikelyChg :: CI
-physSyst :: CI
-mg :: CI
-mis :: CI
-typUnc :: CI
-sec :: CI
-refBy :: CI
 refName :: CI
-requirement :: CI
-srs :: CI
-abbreviation :: IdeaDict
-acronym :: IdeaDict
-analysis :: IdeaDict
-appendix :: IdeaDict
-aspect :: IdeaDict
-body :: IdeaDict
-characteristic :: IdeaDict
-class_ :: IdeaDict
-client :: IdeaDict
-code :: IdeaDict
-column :: IdeaDict
-company :: IdeaDict
-component :: IdeaDict
-concept :: IdeaDict
-condition :: IdeaDict
-connection :: IdeaDict
-constant :: IdeaDict
-constraint :: IdeaDict
-consumer :: IdeaDict
-content :: IdeaDict
-context :: IdeaDict
-coordinate :: IdeaDict
-customer :: IdeaDict
-datum :: IdeaDict
-decision :: IdeaDict
-definition :: IdeaDict
-dependency :: IdeaDict
-description :: IdeaDict
-design :: IdeaDict
-document :: IdeaDict
-documentation :: IdeaDict
-effect :: IdeaDict
-element :: IdeaDict
-emphasis :: IdeaDict
-endUser :: IdeaDict
-environment :: IdeaDict
-example :: IdeaDict
-failure :: IdeaDict
-figure :: IdeaDict
-first :: IdeaDict
-form :: IdeaDict
-full :: IdeaDict
-functional :: IdeaDict
-game :: IdeaDict
-general :: IdeaDict
-goal :: IdeaDict
-guide :: IdeaDict
-implementation :: IdeaDict
-individual :: IdeaDict
-information :: IdeaDict
-interest :: IdeaDict
-interface :: IdeaDict
-input_ :: IdeaDict
-instance_ :: IdeaDict
-intReader :: IdeaDict
-introduction :: IdeaDict
-issue :: IdeaDict
-item :: IdeaDict
-loss :: IdeaDict
-label :: IdeaDict
-library :: IdeaDict
-limitation :: IdeaDict
-literacy :: IdeaDict
-material_ :: IdeaDict
-mainIdea :: IdeaDict
-message :: IdeaDict
-method_ :: IdeaDict
-module_ :: IdeaDict
-model :: IdeaDict
-name_ :: IdeaDict
-nonfunctional :: IdeaDict
-notApp :: IdeaDict
-object :: IdeaDict
-offShelf :: IdeaDict
-open :: IdeaDict
-organization :: IdeaDict
-output_ :: IdeaDict
-physics :: IdeaDict
-physical :: IdeaDict
-plan :: IdeaDict
-practice :: IdeaDict
-priority :: IdeaDict
-problem :: IdeaDict
-procedure :: IdeaDict
-product_ :: IdeaDict
-project :: IdeaDict
-property :: IdeaDict
-purpose :: IdeaDict
-quantity :: IdeaDict
-realtime :: IdeaDict
-review :: IdeaDict
-reference :: IdeaDict
-response :: IdeaDict
-result :: IdeaDict
-reviewer :: IdeaDict
-safety :: IdeaDict
-scope :: IdeaDict
-scpOfTheProjS :: IdeaDict
-second_ :: IdeaDict
-section_ :: IdeaDict
-scenario :: IdeaDict
-source :: IdeaDict
-simulation :: IdeaDict
-solution :: IdeaDict
-summary :: IdeaDict
-specific :: IdeaDict
-stakeholder :: IdeaDict
-standard :: IdeaDict
-statement :: IdeaDict
-symbol_ :: IdeaDict
-system :: IdeaDict
-table_ :: IdeaDict
-task :: IdeaDict
-template :: IdeaDict
-term_ :: IdeaDict
-terminology :: IdeaDict
-theory :: IdeaDict
-traceyGraph :: IdeaDict
-traceyMatrix :: IdeaDict
-type_ :: IdeaDict
-uncertainty :: IdeaDict
-user :: IdeaDict
-useCase :: IdeaDict
-validation :: IdeaDict
-value :: IdeaDict
-variable :: IdeaDict
-video :: IdeaDict
-verification :: IdeaDict
-year :: IdeaDict
-abbAcc :: IdeaDict
-caseProb :: IdeaDict
-charOfIR :: IdeaDict
-consVals :: IdeaDict
-corSol :: IdeaDict
-methAndAnls :: IdeaDict
-orgOfDoc :: IdeaDict
-procForAnls :: IdeaDict
-propOfCorSol :: IdeaDict
-prpsOfDoc :: IdeaDict
-refMat :: IdeaDict
-reqInput :: IdeaDict
-scpOfReq :: IdeaDict
-tAuxConsts :: IdeaDict
-tOfSymb :: IdeaDict
-tOfUnit :: IdeaDict
-termAndDef :: IdeaDict
-traceyMandG :: IdeaDict
-vav :: IdeaDict
-tOfCont :: IdeaDict
-scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
-designDoc :: IdeaDict
-fullForm :: IdeaDict
-generalSystemDescription :: IdeaDict
-moduleInterface :: IdeaDict
-indPRCase :: IdeaDict
-physicalConstraint :: IdeaDict
-physicalSystem :: IdeaDict
-problemDescription :: IdeaDict
-problemIntro :: IdeaDict
-prodUCTable :: IdeaDict
-specificsystemdescription :: IdeaDict
-systemdescription :: IdeaDict
-systemConstraint :: IdeaDict
-sysCont :: IdeaDict
-userCharacteristic :: IdeaDict
-coordinateSystem :: IdeaDict
-datumConstraint :: IdeaDict
-inDatumConstraint :: IdeaDict
-outDatumConstraint :: IdeaDict
-functionalRequirement :: IdeaDict
-nonfunctionalRequirement :: IdeaDict
-safetyReq :: IdeaDict
-software :: IdeaDict
-softwareConstraint :: IdeaDict
-softwareDoc :: IdeaDict
-softwareSys :: IdeaDict
-softwareVerif :: IdeaDict
-softwareVAV :: IdeaDict
-solutionCharSpec :: IdeaDict
-solutionCharacteristic :: IdeaDict
-offShelfSolution :: IdeaDict
-physicalSim :: IdeaDict
-productUC :: IdeaDict
-useCaseTable :: IdeaDict
-physicalProperty :: IdeaDict
-vavPlan :: IdeaDict
-uncertCol :: IdeaDict
-userInput :: IdeaDict
-goalStmtDom :: ConceptChunk
-assumpDom :: ConceptChunk
-reqDom :: ConceptChunk
-funcReqDom :: ConceptChunk
-nonFuncReqDom :: ConceptChunk
-chgProbDom :: ConceptChunk
-likeChgDom :: ConceptChunk
-unlikeChgDom :: ConceptChunk
 refByDom :: ConceptChunk
 refNameDom :: ConceptChunk
 
@@ -277,10 +128,7 @@ physics :: IdeaDict
 
 -- | Define people for use in Drasil. Used often in authors and citations.
 module Data.Drasil.People
-spencerSmith :: Person
 henryFrankis :: Person
-nKoothoor :: Person
-dParnas :: Person
 daAruliah :: Person
 gWilson :: Person
 cTitus :: Person
@@ -294,17 +142,12 @@ mdPlumblet :: Person
 bWaugh :: Person
 epWhite :: Person
 pWilson :: Person
-pcClements :: Person
 luthfi :: Person
 alex :: Person
 nikitha :: Person
 thulasi :: Person
 brooks :: Person
 mLightstone :: Person
-lLai :: Person
-pjAgerfalk :: Person
-nKraiem :: Person
-jRalyte :: Person
 jBueche :: Person
 fIncropera :: Person
 dDewitt :: Person
@@ -342,28 +185,22 @@ rcHibbeler :: Person
 olu :: Person
 rodPierce :: Person
 dong :: Person
-rKhedri :: Person
 wikiAuthors :: Person
 
 
 -- | Defines citations used in Drasil.
 module Data.Drasil.Citations
 campidelli :: Citation
-koothoor2013 :: Citation
 parnas1972 :: Citation
 parnasClements1984 :: Citation
-parnasClements1986 :: Citation
 rbrtsn2012 :: Citation
-smithLai2005 :: Citation
 lineSource :: Citation
 pointSource :: Citation
-smithEtAl2007 :: Citation
-smithKoothoor2016 :: Citation
 hibbeler2004 :: Citation
 dampingSource :: Citation
-accelerationWiki :: Citation
-velocityWiki :: Citation
 cartesianWiki :: Citation
+velocityWiki :: Citation
+accelerationWiki :: Citation
 laplaceWiki :: Citation
 pidWiki :: Citation
 jnlCGJ :: String
@@ -371,77 +208,77 @@ jnlCGJ :: String
 
 -- | Defines concepts used in the field of math.
 module Data.Drasil.Concepts.Math
+vector :: ConceptChunk
+negative :: ConceptChunk
+number :: ConceptChunk
+norm :: ConceptChunk
+matrix :: ConceptChunk
+constraint :: ConceptChunk
+component :: ConceptChunk
+centre :: ConceptChunk
+xComp :: ConceptChunk
+xDir :: ConceptChunk
+yComp :: ConceptChunk
+yDir :: ConceptChunk
+point :: ConceptChunk
+axis :: ConceptChunk
+cartesian :: ConceptChunk
 
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
-
--- | Collects all math-related common ideas (like a concept, but with no
---   definition).
-mathcon' :: [CI]
+area :: ConceptChunk
+diameter :: ConceptChunk
+euclidN :: ConceptChunk
+gradient :: ConceptChunk
+normalV :: ConceptChunk
+orient :: ConceptChunk
+perpV :: ConceptChunk
+pi_ :: ConceptChunk
+posInf :: ConceptChunk
+negInf :: ConceptChunk
+surArea :: ConceptChunk
+surface :: ConceptChunk
+unitV :: ConceptChunk
 amplitude :: ConceptChunk
 angle :: ConceptChunk
-area :: ConceptChunk
-axis :: ConceptChunk
 calculation :: ConceptChunk
-cartesian :: ConceptChunk
-centre :: ConceptChunk
 change :: ConceptChunk
-component :: ConceptChunk
-constraint :: ConceptChunk
-diameter :: ConceptChunk
 direction :: ConceptChunk
-equation :: ConceptChunk
-euclidN :: ConceptChunk
 euclidSpace :: ConceptChunk
-gradient :: ConceptChunk
-graph :: ConceptChunk
 laplaceTransform :: ConceptChunk
 law :: ConceptChunk
 line :: ConceptChunk
-matrix :: ConceptChunk
-norm :: ConceptChunk
 normal :: ConceptChunk
-normalV :: ConceptChunk
-number :: ConceptChunk
-orient :: ConceptChunk
 origin :: ConceptChunk
-parameter :: ConceptChunk
 perp :: ConceptChunk
-perpV :: ConceptChunk
-pi_ :: ConceptChunk
-negInf :: ConceptChunk
-posInf :: ConceptChunk
 positive :: ConceptChunk
-negative :: ConceptChunk
-point :: ConceptChunk
 probability :: ConceptChunk
 rOfChng :: ConceptChunk
 rate :: ConceptChunk
 rightHand :: ConceptChunk
 shape :: ConceptChunk
-surArea :: ConceptChunk
-surface :: ConceptChunk
-unitV :: ConceptChunk
-unit_ :: ConceptChunk
-vector :: ConceptChunk
 xAxis :: ConceptChunk
 xCoord :: ConceptChunk
-xComp :: ConceptChunk
-xDir :: ConceptChunk
 yAxis :: ConceptChunk
 yCoord :: ConceptChunk
-yComp :: ConceptChunk
-yDir :: ConceptChunk
 zAxis :: ConceptChunk
 zCoord :: ConceptChunk
 zComp :: ConceptChunk
 zDir :: ConceptChunk
 iAngle :: ConceptChunk
+
+-- | Collects all math-related common ideas (like a concept, but with no
+--   definition).
+mathcon' :: [CI]
 de :: CI
 leftSide :: CI
 ode :: CI
 pde :: CI
 rightSide :: CI
+equation :: ConceptChunk
+graph :: ConceptChunk
+parameter :: ConceptChunk
+unit_ :: ConceptChunk
 
 
 -- | Defines concepts used to describe physical properties.
@@ -492,27 +329,27 @@ physChem :: IdeaDict
 
 -- | Defines concepts used in computing.
 module Data.Drasil.Concepts.Computation
-algorithm :: ConceptChunk
+os :: CI
 absTolerance :: ConceptChunk
 relTolerance :: ConceptChunk
+dataStruct :: IdeaDict
+inParam :: IdeaDict
+computer :: IdeaDict
 modCalcDesc :: Sentence -> ConceptChunk
 
 -- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [IdeaDict]
 application :: IdeaDict
-computer :: IdeaDict
 structure :: IdeaDict
-os :: CI
-dataStruct :: IdeaDict
 dataType :: IdeaDict
 inDatum :: IdeaDict
 outDatum :: IdeaDict
-inParam :: IdeaDict
 inVar :: IdeaDict
 inValue :: IdeaDict
 inQty :: IdeaDict
 computerLiteracy :: IdeaDict
 computerApp :: IdeaDict
+algorithm :: ConceptChunk
 
 
 -- | Defines concepts used in the field of software.
@@ -630,11 +467,11 @@ piConst :: ConstQDef
 -- | Defines common software products.
 module Data.Drasil.Software.Products
 prodtcon :: [IdeaDict]
-matlab :: CI
-sciCompS :: IdeaDict
 videoGame :: IdeaDict
 openSource :: IdeaDict
 compPro :: IdeaDict
+matlab :: CI
+sciCompS :: IdeaDict
 
 
 -- | Defines units to describe physical properties.

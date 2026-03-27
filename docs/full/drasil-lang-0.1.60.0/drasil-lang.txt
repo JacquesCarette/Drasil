@@ -4560,29 +4560,6 @@ unit :: Unitary c => c -> UnitDefn
 unit_symb :: Unitary c => c -> USymb
 
 
--- | For adding a relation (expression) to a concept.
-module Language.Drasil.Chunk.Relation
-
--- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
---   (<a>ModelExpr</a>) attached.
---   
---   Ex. We can describe a pendulum arm and then apply an associated
---   equation so that we know its behaviour.
-data RelationConcept
-
--- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
---   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
-makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Relation.RelationConcept
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Relation.RelationConcept
-
-
 -- | Contains types that define quantities from concepts.
 module Language.Drasil.Chunk.DefinedQuantity
 
@@ -6159,17 +6136,6 @@ cw :: Concept c => c -> ConceptChunk
 --   Address (<a>String</a>), a definition (<a>Sentence</a>), a short name
 --   (<a>String</a>), and a domain (for explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-
--- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
---   (<a>ModelExpr</a>) attached.
---   
---   Ex. We can describe a pendulum arm and then apply an associated
---   equation so that we know its behaviour.
-data RelationConcept
-
--- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
---   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
-makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 data QDefinition e
 
 -- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>Space</a>),

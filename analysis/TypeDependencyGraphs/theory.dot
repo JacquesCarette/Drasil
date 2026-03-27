@@ -152,6 +152,13 @@ digraph alltypes {
 		MultiDefne -> NonEmptyDefiningExpre;
 		}
 	}
+	subgraph relationconcept {
+		subgraph relationconcept{
+		RelationConcept	[shape=oval, color=cyan3, label="RelationConcept"];
+		RelationConcept -> ConceptChunk;
+		RelationConcept -> ModelExpr;
+		}
+	}
 	subgraph teoryh {
 		subgraph theorymodel{
 		TheoryModel	[shape=oval, color=cyan3, label="TheoryModel"];

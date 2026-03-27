@@ -255,6 +255,29 @@ instance Language.Drasil.Classes.Definition (Theory.Drasil.MultiDefn.DefiningExp
 instance Drasil.Database.Chunk.HasChunkRefs (Theory.Drasil.MultiDefn.DefiningExpr e)
 
 
+-- | For adding a relation (expression) to a concept.
+module Theory.Drasil.RelationConcept
+
+-- | For a concept (<a>ConceptChunk</a>) that also has a <a>Relation</a>
+--   (<a>ModelExpr</a>) attached.
+--   
+--   Ex. We can describe a pendulum arm and then apply an associated
+--   equation so that we know its behaviour.
+data RelationConcept
+
+-- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
+--   (<a>Sentence</a>), definition (<a>Sentence</a>), and <a>Relation</a>.
+makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
+instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.RelationConcept.RelationConcept
+instance Drasil.Database.UID.HasUID Theory.Drasil.RelationConcept.RelationConcept
+instance GHC.Classes.Eq Theory.Drasil.RelationConcept.RelationConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.RelationConcept.RelationConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.RelationConcept.RelationConcept
+instance Language.Drasil.Classes.Definition Theory.Drasil.RelationConcept.RelationConcept
+instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.RelationConcept.RelationConcept
+instance Language.Drasil.ExprClasses.Express Theory.Drasil.RelationConcept.RelationConcept
+
+
 -- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds
 
@@ -722,6 +745,17 @@ qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> 
 
 -- | Grab all related <a>QDefinition</a>s from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
+
+-- | For a concept (<a>ConceptChunk</a>) that also has a <a>Relation</a>
+--   (<a>ModelExpr</a>) attached.
+--   
+--   Ex. We can describe a pendulum arm and then apply an associated
+--   equation so that we know its behaviour.
+data RelationConcept
+
+-- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
+--   (<a>Sentence</a>), definition (<a>Sentence</a>), and <a>Relation</a>.
+makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
 
 -- | A TheoryModel is a collection of:
 --   

@@ -980,7 +980,7 @@ gdefn :: Fields -> System -> GenDefn -> LabelledContent
 instanceModel :: Fields -> System -> InstanceModel -> LabelledContent
 
 -- | Create a theoretical model using a list of fields to be displayed, a
---   database of symbols, and a <a>RelationConcept</a> (called
+--   database of symbols, and a <tt>RelationConcept</tt> (called
 --   automatically by <tt>SCSSub</tt> program).
 tmodel :: Fields -> System -> TheoryModel -> LabelledContent
 

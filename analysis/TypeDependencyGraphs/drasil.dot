@@ -3232,13 +3232,6 @@ digraph alltypes {
 		IdeaDict -> MaybeString;
 		}
 	}
-	subgraph relation {
-		subgraph relationconcept{
-		RelationConcept	[shape=oval, color=cyan3, label="RelationConcept"];
-		RelationConcept -> ConceptChunk;
-		RelationConcept -> ModelExpr;
-		}
-	}
 	subgraph uncertainquantity {
 		subgraph uncertq{
 		UncertQ	[shape=oval, color=cyan3, label="UncertQ"];
@@ -4357,6 +4350,13 @@ digraph alltypes {
 		MultiDefne -> DefinedQuantityDict;
 		MultiDefne -> Sentence;
 		MultiDefne -> NonEmptyDefiningExpre;
+		}
+	}
+	subgraph relationconcept {
+		subgraph relationconcept{
+		RelationConcept	[shape=oval, color=cyan3, label="RelationConcept"];
+		RelationConcept -> ConceptChunk;
+		RelationConcept -> ModelExpr;
 		}
 	}
 	subgraph teoryh {

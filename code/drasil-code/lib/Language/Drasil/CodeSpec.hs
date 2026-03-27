@@ -96,57 +96,10 @@ makeLenses ''CodeSpec
 instance HasSystem CodeSpec where
   system :: Lens' CodeSpec S.System
   system = system'
-  background :: Lens' CodeSpec S.Background
-  background = system . S.background
-  purpose :: Lens' CodeSpec S.Purpose
-  purpose = system . S.purpose
-  scope :: Lens' CodeSpec S.Scope
-  scope = system . S.scope
-  motivation :: Lens' CodeSpec S.Motivation
-  motivation = system . S.motivation
 
 instance HasOldCodeSpec CodeSpec where
   oldCodeSpec :: Lens' CodeSpec OldCodeSpec
   oldCodeSpec = oldCode
-
-  pNameO :: Lens' CodeSpec Name
-  pNameO = oldCode . pNameO
-
-  authorsO :: Lens' CodeSpec People
-  authorsO = oldCode . authorsO
-
-  inputsO :: Lens' CodeSpec [Input]
-  inputsO = oldCode . inputsO
-
-  extInputsO :: Lens' CodeSpec [Input]
-  extInputsO = oldCode . extInputsO
-
-  derivedInputsO :: Lens' CodeSpec [Derived]
-  derivedInputsO = oldCode . derivedInputsO
-
-  outputsO :: Lens' CodeSpec [Output]
-  outputsO = oldCode . outputsO
-
-  configFilesO :: Lens' CodeSpec [RelativeFile]
-  configFilesO = oldCode . configFilesO
-
-  execOrderO :: Lens' CodeSpec [Def]
-  execOrderO = oldCode . execOrderO
-
-  cMapO :: Lens' CodeSpec ConstraintCEMap
-  cMapO = oldCode . cMapO
-
-  constantsO :: Lens' CodeSpec [Const]
-  constantsO = oldCode . constantsO
-
-  constMapO :: Lens' CodeSpec ConstantMap
-  constMapO = oldCode . constMapO
-
-  modsO :: Lens' CodeSpec [Mod]
-  modsO = oldCode . modsO
-
-  systemdbO :: Lens' CodeSpec ChunkDB
-  systemdbO = oldCode . systemdbO
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a

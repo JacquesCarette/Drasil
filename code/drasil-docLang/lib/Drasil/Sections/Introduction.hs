@@ -10,17 +10,17 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- Vocabulary
+import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
+  smithKoothoor2016, smithLai2005, koothoor2013)
+import Drasil.Metadata.Concepts.Computation (algorithm)
 import Drasil.Metadata.TheoryConcepts (inModel, thModel)
-import Data.Drasil.Concepts.Computation (algorithm)
 import Drasil.Metadata.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model,
   organization, purpose, requirement, scope, section_, softwareDoc,
   softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
   information, systemConstraint, template)
-import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
-  smithKoothoor2016, smithLai2005, koothoor2013)
-import Data.Drasil.Software.Products
+import Drasil.Metadata.Software.Products (sciCompS)
 
 -- Other docLang
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,

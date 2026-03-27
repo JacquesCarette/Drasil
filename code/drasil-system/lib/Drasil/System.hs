@@ -10,7 +10,7 @@ module Drasil.System (
   System(..), SystemKind(..),
   Purpose, Background, Scope, Motivation,
   -- ** Lenses
-  HasSystem(..),
+  HasSystem(..), HasSystemMeta(..),
   -- ** Functions
   whatsTheBigIdea, mkSystem,
   -- ** Hacks
@@ -47,16 +47,18 @@ data SystemKind =
   | Notebook
   | Website
 
--- | Probe what kind of 'System' one is. For example, does it represent a
--- (Problem) specification, runnable software, a 'notebook', or a website?
-whatsTheBigIdea :: System -> IdeaDict
-whatsTheBigIdea si = whatKind' (_kind si)
-  where
-    whatKind' :: SystemKind -> IdeaDict
-    whatKind' Specification = nw srs
-    whatKind' RunnableSoftware = runnableSoftware
-    whatKind' Notebook = nw notebook
-    whatKind' Website = website
+data SystemMeta = SystemMeta
+  { _sysName    :: CI -- FIXME: This should not be a CI.
+  , _kind       :: SystemKind
+  , _authors    :: People
+  , _purpose    :: Purpose
+  , _background :: Background
+  , _scope      :: Scope
+  , _motivation :: Motivation
+  , _systemdb   :: ChunkDB
+  }
+
+makeClassy ''SystemMeta
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -64,14 +66,8 @@ data System where
  SI :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  { _sysName      :: CI
+  { _meta         :: SystemMeta
   , _programName  :: String
-  , _kind         :: SystemKind
-  , _authors      :: People
-  , _purpose      :: Purpose
-  , _background   :: Background
-  , _scope        :: Scope
-  , _motivation   :: Motivation
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
@@ -80,7 +76,6 @@ data System where
   , _outputs      :: [i]
   , _constraints  :: [j]
   , _constants    :: [ConstQDef]
-  , _systemdb     :: ChunkDB
   -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
   , _refTable     :: M.Map UID Reference
   , _refbyTable   :: M.Map UID [UID]
@@ -88,6 +83,20 @@ data System where
   } -> System
 
 makeClassy ''System
+
+instance HasSystemMeta System where
+  systemMeta = meta
+
+-- | Probe what kind of 'System' one is. For example, does it represent a
+-- (Problem) specification, runnable software, a 'notebook', or a website?
+whatsTheBigIdea :: System -> IdeaDict
+whatsTheBigIdea si = whatKind' (si ^. meta . kind)
+  where
+    whatKind' :: SystemKind -> IdeaDict
+    whatKind' Specification = nw srs
+    whatKind' RunnableSoftware = runnableSoftware
+    whatKind' Notebook = nw notebook
+    whatKind' Website = website
 
 -- | Build a 'System'.
 mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
@@ -98,8 +107,8 @@ mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
     [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
-  = SI nm progName sk ppl prps bkgrd scp motive tms gds dds ims hs is js
-      cqds db refsMap mempty mempty
+  = SI (SystemMeta nm sk ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
+      cqds refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
     progName = toPlainName $ filter (not . isSpace) $ abrv nm

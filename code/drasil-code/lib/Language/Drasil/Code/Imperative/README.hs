@@ -8,9 +8,9 @@ import Prelude hiding ((<>))
 import Data.List.NonEmpty (nonEmpty, toList)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
+import Drasil.Artifacts (RelativeFile, relFileToStr)
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
-import Utils.Drasil (RelativeFile, relFileToStr)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Mod (Name, Version)

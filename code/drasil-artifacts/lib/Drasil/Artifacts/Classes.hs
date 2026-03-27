@@ -1,5 +1,5 @@
 {-# LANGUAGE FunctionalDependencies #-}
-module Utils.Drasil.TypeClasses (
+module Drasil.Artifacts.Classes (
   HasPathAndDoc(..)
 ) where
 

@@ -17,12 +17,12 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List.NonEmpty (toList)
 
+import Drasil.Artifacts (RelativeFile)
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType(..))
 import Language.Drasil (SimpleQDef, Sentence(..), Space, DefinedQuantityDict,
   foldlSent_, (+:+), (+:+.))
 import qualified Language.Drasil as S (Space(..))
-import Utils.Drasil (RelativeFile)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (odeInfoChunks)
 

@@ -4,10 +4,10 @@ import Data.List (intercalate)
 import System.IO (Handle, IOMode(WriteMode), openFile, hPutStrLn, hClose)
 import System.Directory (setCurrentDirectory)
 
+import Drasil.Artifacts (createDirIfMissing)
 import Drasil.Database (UID)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label, Colour)
-import Utils.Drasil (createDirIfMissing)
 
 -- | Creates the directory for output, gathers all individual graph output functions and calls them.
 outputDot :: FilePath -> GraphInfo -> IO ()

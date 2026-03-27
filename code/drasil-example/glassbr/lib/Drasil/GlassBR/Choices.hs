@@ -1,11 +1,11 @@
 module Drasil.GlassBR.Choices where
 
+import Drasil.Artifacts (RelativeFile, relativeFile)
 import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
   ConstantRepr(..), SoftwareDossierFile(..), Visibility(..), makeArchit,
   makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
-import Utils.Drasil (RelativeFile, relativeFile)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
 

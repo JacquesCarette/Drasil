@@ -1,11 +1,11 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleContexts #-}
 -- | Defines the underlying data types used in the package extension.
-module Utils.Drasil.FileData (FileAndContents(filePath, fileDoc),
+module Drasil.Artifacts.FileData (FileAndContents(filePath, fileDoc),
   fileAndContents, hasPathAndDocToFileAndContents) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
-import Utils.Drasil.TypeClasses (HasPathAndDoc(..))
+import Drasil.Artifacts.Classes (HasPathAndDoc(..))
 
 -- | The underlying data type for auxiliary files in all renderers.
 data FileAndContents = FileAndContents {filePath :: FilePath, fileDoc :: Doc}

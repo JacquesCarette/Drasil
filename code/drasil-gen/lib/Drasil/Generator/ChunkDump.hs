@@ -11,8 +11,8 @@ import System.IO (IOMode(WriteMode), openFile, hClose, hPutStrLn)
 import System.Environment (lookupEnv)
 import Text.PrettyPrint (render)
 
+import Drasil.Artifacts (createDirIfMissing)
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Utils.Drasil (createDirIfMissing)
 import Drasil.Database (dumpChunkDB)
 import Drasil.System (System, systemdb, traceTable, refbyTable)
 

@@ -21,6 +21,7 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - directory
+- drasil-artifacts
 - drasil-code
 - drasil-data
 - drasil-database
@@ -42,7 +43,7 @@ library:
 executables:
   glassbr:
     main: Main
-    source-dirs: app 
+    source-dirs: app
     ghc-options:
     - -threaded
     - -O2

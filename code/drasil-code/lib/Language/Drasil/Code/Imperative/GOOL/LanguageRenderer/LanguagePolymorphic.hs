@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Utils.Drasil.FileData (FileAndContents)
+import Drasil.Artifacts (FileAndContents)
 import Drasil.GOOL (ProgData)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)

@@ -3,21 +3,6 @@
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
-  initialState, ProgData(..), headers, sources, mainMod)
-import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
-import Drasil.GProc (ProcProg, unJLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
-
-import Language.Drasil.Code (ImplementationType(..), makeSds)
-import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
-  PackageData(..), pattern PackageData,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-
-import Utils.Drasil (createDirIfMissing, createFile)
-import qualified Utils.Drasil.FileData as F (FileAndContents(..),
-  hasPathAndDocToFileAndContents)
-
 import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
@@ -26,6 +11,18 @@ import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
+
+import Drasil.Artifacts (FileAndContents(..), hasPathAndDocToFileAndContents,
+  createDirIfMissing, createFile)
+import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
+  initialState, ProgData(..), headers, sources, mainMod)
+import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
+import Drasil.GProc (ProcProg, unJLC)
+import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
+import Language.Drasil.Code (ImplementationType(..), makeSds)
+import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
+  PackageData(..), pattern PackageData,
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
@@ -69,7 +66,7 @@ genCode files =
   createCodeFiles $ files >>= \(PackageData prog aux) ->
     let label = progName prog
         modCode = progMods prog <&> \modFileData ->
-          (label, F.hasPathAndDocToFileAndContents modFileData)
+          (label, hasPathAndDocToFileAndContents modFileData)
         auxCode = aux <&> (label,)
     in modCode ++ auxCode
 
@@ -103,7 +100,7 @@ jlClasses unRepr unRepr' = zipWith
 ------------------
 
 -- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [(Label, F.FileAndContents)] -> IO ()
+createCodeFiles :: [(Label, FileAndContents)] -> IO ()
 createCodeFiles = traverse_ $ \(name, file) -> do
-  let path = name </> F.filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
-  createFile path (render $ F.fileDoc file)
+  let path = name </> filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
+  createFile path (render $ fileDoc file)

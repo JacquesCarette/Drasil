@@ -1,23 +1,24 @@
-name:                drasil-gool
+name:                drasil-artifacts
 version:             0.1.1.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Brooks MacLachlan"
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - GOOL SubPackage
+synopsis:            A framework for code and document generation for scientific software - Utils SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
 - containers
+- directory
+- filepath
 - pretty
-- mtl
-- composition
-- drasil-utils
-- drasil-artifacts
 
 ghc-options:
 - -Wall
@@ -26,8 +27,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.GOOL
-  - Drasil.GProc
+  - Drasil.Artifacts
   when:
   - condition: false
-    other-modules: Paths_drasil_gool
+    other-modules: Paths_drasil_artifacts

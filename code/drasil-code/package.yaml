@@ -22,6 +22,7 @@ dependencies:
 - directory
 - filepath
 - split
+- drasil-artifacts
 - drasil-build
 - drasil-database
 - drasil-gool

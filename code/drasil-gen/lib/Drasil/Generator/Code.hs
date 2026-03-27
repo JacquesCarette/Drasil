@@ -13,6 +13,7 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 import System.Directory (getCurrentDirectory, setCurrentDirectory)
 
+import Drasil.Artifacts (createDirIfMissing)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))
@@ -27,7 +28,6 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (System, programName)
-import Utils.Drasil (createDirIfMissing)
 
 -- | Internal: Generate an ICO-style executable softifact.
 exportCode :: System -> Choices -> IO ()

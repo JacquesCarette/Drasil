@@ -6,7 +6,7 @@ module Drasil.Website.Example where
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (E)
-import Drasil.System (System(..), programName, sysName)
+import Drasil.System (System(..), programName, sysName, purpose)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Drasil.Generator (codedDirName, Format(..))
@@ -91,7 +91,7 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{systemE = si@SI{_purpose = purp}} = S (abrv $ si ^. sysName) +:+ S " - To" +:+. head purp
+    nameAndDesc E{systemE = si} = S (abrv $ si ^. sysName) +:+ S " - To" +:+ foldlSent (si ^. purpose)
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]

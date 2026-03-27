@@ -184,10 +184,10 @@ oldcodeSpec :: S.System -> Choices -> OldCodeSpec
 oldcodeSpec sys@S.SI{ S._inputs = ins
                     , S._outputs = outs
                     , S._constraints = cs
-                    , S._constants = cnsts
-                    , S._systemdb = db } chs =
+                    , S._constants = cnsts } chs =
   let ddefs = sys ^. dataDefns
       n = sys ^. programName
+      db = sys ^. systemdb
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)

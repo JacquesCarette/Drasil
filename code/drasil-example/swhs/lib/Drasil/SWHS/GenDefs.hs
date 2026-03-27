@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel', Derivation,
-  mkDerivName)
+  mkDerivName, RelationConcept, makeRC)
 import Utils.Drasil (weave)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,

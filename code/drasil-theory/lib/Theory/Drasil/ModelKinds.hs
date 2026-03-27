@@ -20,13 +20,14 @@ import Data.Maybe (mapMaybe)
 
 import Drasil.Database (UID, HasUID(..), mkUid, nsUid, HasChunkRefs(..))
 import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
-  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
+  ConceptDomain(..), Definition(..), Idea(..), Express(..),
   RequiresChecking(..), Space,
   HasSpace(typ), DefiningExpr(..))
 
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.DifferentialModel (DifferentialModel)
 import Theory.Drasil.MultiDefn (MultiDefn)
+import Theory.Drasil.RelationConcept (RelationConcept)
 
 -- | Models can be of different kinds:
 --

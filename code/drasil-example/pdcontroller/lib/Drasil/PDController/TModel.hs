@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
-import Theory.Drasil (TheoryModel, tm, othModel')
+import Theory.Drasil (TheoryModel, tm, othModel', RelationConcept, makeRC)
 
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts

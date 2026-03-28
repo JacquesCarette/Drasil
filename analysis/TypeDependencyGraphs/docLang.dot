@@ -117,6 +117,7 @@ digraph alltypes {
 		IntroSub -> IntroSub;
 		IntroSub -> CI;
 		IntroSub -> Section;
+		IntroSub -> Maybe;
 		}
 		subgraph stkhldrsub{
 		StkhldrSub	[shape=oval, color=darkviolet, label="StkhldrSub"];

@@ -154,6 +154,7 @@ SoftwareDossierSym	[shape=oval, color=pink, label="SoftwareDossierSym"];
 HasChoices	[shape=oval, color=pink, label="HasChoices"];
 RenderChoices	[shape=oval, color=pink, label="RenderChoices"];
 HasSystem	[shape=oval, color=pink, label="HasSystem"];
+HasSystemMeta	[shape=oval, color=pink, label="HasSystemMeta"];
 HasOldCodeSpec	[shape=oval, color=pink, label="HasOldCodeSpec"];
 HasChoices	[shape=oval, color=magenta, label="HasChoices"];
 SoftwareDossierSym	[shape=oval, color=magenta, label="SoftwareDossierSym"];
@@ -238,5 +239,6 @@ Logging -> RenderChoices;
 SoftwareDossierFile -> RenderChoices;
 ConstraintBehaviour -> RenderChoices;
 CodeSpec -> HasSystem;
+CodeSpec -> HasSystemMeta;
 CodeSpec -> HasOldCodeSpec;
 }

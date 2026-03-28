@@ -56,11 +56,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span class="hs-special">,</span><span>
 </span><span id="line-32"></span><span>      </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IChar</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-33"></span><span>      </span><span class="annot"><span class="annottext">CI -&gt; Section -&gt; Sentence -&gt; IntroSub
+</span><span id="line-33"></span><span>      </span><span class="annot"><span class="annottext">CI -&gt; Section -&gt; Maybe Sentence -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IOrgSec</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
-</span><span class="hs-identifier hs-var">SRS.inModel</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><span class="hs-identifier hs-var">EmptyS</span></span><span>
+</span><span class="hs-identifier hs-var">SRS.inModel</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Sentence
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-34"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">GSDSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">GSDSec</span></span><span> </span><span class="annot"><span class="annottext">(GSDSec -&gt; DocSection) -&gt; GSDSec -&gt; DocSection

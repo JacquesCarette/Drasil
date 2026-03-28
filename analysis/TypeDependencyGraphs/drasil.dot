@@ -1134,6 +1134,7 @@ digraph alltypes {
 		IntroSub -> IntroSub;
 		IntroSub -> CI;
 		IntroSub -> Section;
+		IntroSub -> Maybe;
 		}
 		subgraph stkhldrsub{
 		StkhldrSub	[shape=oval, color=darkviolet, label="StkhldrSub"];
@@ -4178,10 +4179,16 @@ digraph alltypes {
 	subgraph printers {
 	}
 	subgraph sytems {
-		subgraph systemkind{
-		SystemKind	[shape=oval, color=darkviolet, label="SystemKind"];
-		SystemKind -> System;
-		SystemKind -> IdeaDict;
+		subgraph systemmeta{
+		SystemMeta	[shape=oval, color=cyan3, label="SystemMeta"];
+		SystemMeta -> CI;
+		SystemMeta -> SystemKind;
+		SystemMeta -> People;
+		SystemMeta -> Purpose;
+		SystemMeta -> Background;
+		SystemMeta -> Scope;
+		SystemMeta -> Motivation;
+		SystemMeta -> ChunkDB;
 		}
 		subgraph system{
 		System	[shape=oval, color=darkviolet, label="System"];

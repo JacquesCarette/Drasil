@@ -1297,7 +1297,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Maybe Sentence -> IntroSub
 
 -- | Stakeholders section (wraps stakeholders subsections
 --   <a>StkhldrSub</a>).
@@ -1636,7 +1636,7 @@ module Drasil.Sections.Introduction
 --   up approach (<a>NamedIdea</a>), reference to that resource
 --   (<a>Section</a>), and any other relevant information
 --   (<a>Sentence</a>).
-orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
 
 -- | Constructor for the Introduction section. In order, the parameters
 --   are:
@@ -2094,7 +2094,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Maybe Sentence -> IntroSub
 
 -- | Lens (lookup) functions (currently for TSymb).
 data LFunc
@@ -2390,7 +2390,7 @@ data () => ChunkDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => System
-[SI] :: forall h i j. (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: forall h i j. (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => SystemMeta -> String -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 
 -- | A Software Requirements Specification Declaration is made up of all
 --   necessary sections (<a>DocSection</a>s).
@@ -2572,7 +2572,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Maybe Sentence -> IntroSub
 
 -- | Lens (lookup) functions (currently for TSymb).
 data LFunc

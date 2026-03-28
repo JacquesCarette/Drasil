@@ -17,7 +17,7 @@ module Drasil.System
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => CI -> String -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => SystemMeta -> String -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 
 -- | Enumeration of <i>kinds</i> of <a>System</a>s we can encode.
 data SystemKind
@@ -38,25 +38,28 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
-class HasSystem c_a8rW
-system :: HasSystem c_a8rW => Lens' c_a8rW System
-authors :: HasSystem c_a8rW => Lens' c_a8rW People
-background :: HasSystem c_a8rW => Lens' c_a8rW Background
-constants :: HasSystem c_a8rW => Lens' c_a8rW [ConstQDef]
-dataDefns :: HasSystem c_a8rW => Lens' c_a8rW [DataDefinition]
-genDefns :: HasSystem c_a8rW => Lens' c_a8rW [GenDefn]
-instModels :: HasSystem c_a8rW => Lens' c_a8rW [InstanceModel]
-kind :: HasSystem c_a8rW => Lens' c_a8rW SystemKind
-motivation :: HasSystem c_a8rW => Lens' c_a8rW Motivation
-programName :: HasSystem c_a8rW => Lens' c_a8rW String
-purpose :: HasSystem c_a8rW => Lens' c_a8rW Purpose
-refTable :: HasSystem c_a8rW => Lens' c_a8rW (Map UID Reference)
-refbyTable :: HasSystem c_a8rW => Lens' c_a8rW (Map UID [UID])
-scope :: HasSystem c_a8rW => Lens' c_a8rW Scope
-sysName :: HasSystem c_a8rW => Lens' c_a8rW CI
-systemdb :: HasSystem c_a8rW => Lens' c_a8rW ChunkDB
-theoryModels :: HasSystem c_a8rW => Lens' c_a8rW [TheoryModel]
-traceTable :: HasSystem c_a8rW => Lens' c_a8rW (Map UID [UID])
+class HasSystem c_a8xh
+system :: HasSystem c_a8xh => Lens' c_a8xh System
+constants :: HasSystem c_a8xh => Lens' c_a8xh [ConstQDef]
+dataDefns :: HasSystem c_a8xh => Lens' c_a8xh [DataDefinition]
+genDefns :: HasSystem c_a8xh => Lens' c_a8xh [GenDefn]
+instModels :: HasSystem c_a8xh => Lens' c_a8xh [InstanceModel]
+meta :: HasSystem c_a8xh => Lens' c_a8xh SystemMeta
+programName :: HasSystem c_a8xh => Lens' c_a8xh String
+refTable :: HasSystem c_a8xh => Lens' c_a8xh (Map UID Reference)
+refbyTable :: HasSystem c_a8xh => Lens' c_a8xh (Map UID [UID])
+theoryModels :: HasSystem c_a8xh => Lens' c_a8xh [TheoryModel]
+traceTable :: HasSystem c_a8xh => Lens' c_a8xh (Map UID [UID])
+class HasSystemMeta c_a7Z7
+systemMeta :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 SystemMeta
+authors :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 People
+background :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 Background
+kind :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 SystemKind
+motivation :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 Motivation
+purpose :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 Purpose
+scope :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 Scope
+sysName :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 CI
+systemdb :: HasSystemMeta c_a7Z7 => Lens' c_a7Z7 ChunkDB
 
 -- | Probe what kind of <a>System</a> one is. For example, does it
 --   represent a (Problem) specification, runnable software, a
@@ -72,3 +75,5 @@ refbyLookup :: UID -> System -> [UID]
 -- | Find what chunks a specific one references.
 traceLookup :: UID -> System -> [UID]
 instance Drasil.System.HasSystem Drasil.System.System
+instance Drasil.System.HasSystemMeta Drasil.System.System
+instance Drasil.System.HasSystemMeta Drasil.System.SystemMeta

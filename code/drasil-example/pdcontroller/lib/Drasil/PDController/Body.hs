@@ -93,9 +93,11 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
               S "must be tuned before the controller is ready for production"]
 
 background :: Sentence
-background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-              S "in a variety of applications such as thermostats, automobile",
-              S "cruise-control, etc"]
+background = foldlSent_ [
+  S "Automatic process control with a controller ("
+    :+: short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
+  S "in a variety of applications such as thermostats, automobile",
+  S "cruise-control, etc"]
 
 orgSecEnd :: Sentence
 orgSecEnd = foldlSent [

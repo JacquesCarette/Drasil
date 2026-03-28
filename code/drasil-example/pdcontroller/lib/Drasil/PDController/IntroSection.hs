@@ -8,17 +8,16 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.PDController.Concepts
 
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
-introPara
-  = foldlSent
-      [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-         S "in a variety of applications such as thermostats, automobile",
-         S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+.
-         S "must be tuned before the controller is ready for production",
-         S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
-         phrase secondOrderSystem,
-         S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
-         namedRef externalLinkRef (S "PD Controller"),
-         S "that can be used to tune the gain constants"]
+introPara = foldlSent [
+  S "Automatic process control with a controller (" :+:
+  short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
+  S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+.
+  S "must be tuned before the controller is ready for production",
+  S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
+  phrase secondOrderSystem,
+  S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
+  namedRef externalLinkRef (S "PD Controller"),
+  S "that can be used to tune the gain constants"]
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "PD_Controller_SRSLink"

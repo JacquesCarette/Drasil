@@ -3279,7 +3279,7 @@ person :: String -> String -> Person
 class HasName p
 
 -- | Gets the name of a <a>Person</a>. Adds a dot after any initials.
-name :: HasName n => n -> String
+fullName :: HasName n => n -> String
 
 -- | Constructor for a person using Eastern naming conventions. Used for a
 --   person with only a given name and surname. Arguments are in the order:

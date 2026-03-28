@@ -172,9 +172,10 @@ intReaderIntro progName assumed topic asset sectionRef =
       [] -> EmptyS
       _  -> S "It would be an asset to understand" +:+. foldlList Comma List asset
 
--- | Constructor for the Organization of the Document section. Parameters should be
--- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
--- and any other relevant information ('Sentence').
+-- | Constructor for the Organization of the Document section. Parameters should
+-- be an introduction ('Sentence'), a resource for a bottom up approach
+-- ('NamedIdea'), reference to that resource ('Section'), and any other relevant
+-- information ('Sentence').
 orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
 

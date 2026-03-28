@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil (IdeaDict, Sentence(S), Section, CI, Document(Notebook), BibRef,
   foldlList, SepType(Comma), FoldType(List), name, Contents(UlC), ulcc, RawContent(Bib))
-import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
+import Drasil.System (System, whatsTheBigIdea, sysName, authors)
 
 import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
@@ -17,9 +17,10 @@ import Drasil.ExtractLsnDesc (extractLsnPlanBib)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
-mkNb dd comb si@SI { _authors = authors } =
-  Notebook (whatsTheBigIdea si `comb` (si ^. sysName)) (foldlList Comma List $ map (S . name) authors) $
-  mkSections si dd
+mkNb dd comb si = Notebook nm as $ mkSections si dd
+  where
+    nm = whatsTheBigIdea si `comb` (si ^. sysName)
+    as = foldlList Comma List $ map (S . name) $ si ^. authors
 
 -- | Helper for creating the notebook sections.
 mkSections :: System -> LsnDesc -> [Section]

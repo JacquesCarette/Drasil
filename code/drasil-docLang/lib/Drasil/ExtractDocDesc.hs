@@ -16,7 +16,7 @@ import qualified Data.Set as S
 
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
-import Drasil.System (System, HasSystem(systemdb))
+import Drasil.System (System, systemdb)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.DocumentLanguage.Core hiding (System)

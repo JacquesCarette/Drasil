@@ -14,7 +14,7 @@ import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSystem(..), programName)
+import Drasil.System (HasSystem(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Utils.Drasil (subsetOf, RelativeFile)
 
@@ -96,57 +96,13 @@ makeLenses ''CodeSpec
 instance HasSystem CodeSpec where
   system :: Lens' CodeSpec S.System
   system = system'
-  background :: Lens' CodeSpec S.Background
-  background = system . S.background
-  purpose :: Lens' CodeSpec S.Purpose
-  purpose = system . S.purpose
-  scope :: Lens' CodeSpec S.Scope
-  scope = system . S.scope
-  motivation :: Lens' CodeSpec S.Motivation
-  motivation = system . S.motivation
+
+instance HasSystemMeta CodeSpec where
+  systemMeta = system' . systemMeta
 
 instance HasOldCodeSpec CodeSpec where
   oldCodeSpec :: Lens' CodeSpec OldCodeSpec
   oldCodeSpec = oldCode
-
-  pNameO :: Lens' CodeSpec Name
-  pNameO = oldCode . pNameO
-
-  authorsO :: Lens' CodeSpec People
-  authorsO = oldCode . authorsO
-
-  inputsO :: Lens' CodeSpec [Input]
-  inputsO = oldCode . inputsO
-
-  extInputsO :: Lens' CodeSpec [Input]
-  extInputsO = oldCode . extInputsO
-
-  derivedInputsO :: Lens' CodeSpec [Derived]
-  derivedInputsO = oldCode . derivedInputsO
-
-  outputsO :: Lens' CodeSpec [Output]
-  outputsO = oldCode . outputsO
-
-  configFilesO :: Lens' CodeSpec [RelativeFile]
-  configFilesO = oldCode . configFilesO
-
-  execOrderO :: Lens' CodeSpec [Def]
-  execOrderO = oldCode . execOrderO
-
-  cMapO :: Lens' CodeSpec ConstraintCEMap
-  cMapO = oldCode . cMapO
-
-  constantsO :: Lens' CodeSpec [Const]
-  constantsO = oldCode . constantsO
-
-  constMapO :: Lens' CodeSpec ConstantMap
-  constMapO = oldCode . constMapO
-
-  modsO :: Lens' CodeSpec [Mod]
-  modsO = oldCode . modsO
-
-  systemdbO :: Lens' CodeSpec ChunkDB
-  systemdbO = oldCode . systemdbO
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -181,8 +137,7 @@ codeSpec si chs = CS {
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: S.System -> Choices -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._authors = as
-                    , S._inputs = ins
+oldcodeSpec sys@S.SI{ S._inputs = ins
                     , S._outputs = outs
                     , S._constraints = cs
                     , S._constants = cnsts } chs =
@@ -203,7 +158,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
-        _authors = as,
+        _authors = sys ^. authors,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,

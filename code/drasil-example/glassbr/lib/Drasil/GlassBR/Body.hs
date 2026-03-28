@@ -71,11 +71,11 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
       [Client progName $ D.toSent (phraseNP (a_ company))
-        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
+        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (fullName mCampidelli),
       Cstmr progName],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
@@ -234,7 +234,7 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntroEnd :: Sentence
-orgOfDocIntroEnd = foldlSent_ [D.toSent (atStartNP' (the dataDefn)) `S.are`
+orgOfDocIntroEnd = foldlSent [D.toSent (atStartNP' (the dataDefn)) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}

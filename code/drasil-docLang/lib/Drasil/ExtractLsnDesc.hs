@@ -6,7 +6,7 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID)
 import Language.Drasil
-import Drasil.System (System, HasSystem (systemdb))
+import Drasil.System (System, systemdb)
 
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.DocumentLanguage.Notebook.Core

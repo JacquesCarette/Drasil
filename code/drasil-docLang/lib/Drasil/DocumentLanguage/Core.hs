@@ -113,7 +113,7 @@ data IntroSub where
   -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   -- | Organises the section.
-  IOrgSec  :: CI -> Section -> Sentence -> IntroSub
+  IOrgSec  :: CI -> Section -> Maybe Sentence -> IntroSub
 
 -- ** Stakeholders Section
 

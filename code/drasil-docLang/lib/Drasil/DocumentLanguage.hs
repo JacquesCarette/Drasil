@@ -22,7 +22,7 @@ import Language.Drasil.Display (compsy)
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
+import Drasil.System (System, whatsTheBigIdea, HasSystem(..), HasSystemMeta(..))
 import Drasil.GetChunks (ccss, ccss')
 
 -- Vocabulary
@@ -93,7 +93,7 @@ mkDoc si srsDecl headingComb =
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
       heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
-      authorsList = foldlList Comma List $ map (S . name) $ si ^. authors
+      authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
       sections' = mkSections si' dd' (Just refdCites)
@@ -211,21 +211,21 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: System -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef $ si ^. systemdb) l)
   where
-    mkSubRef :: System -> RefTab -> Section
-    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef SI {_systemdb = db} (TUnits' con f) =
+    mkSubRef :: ChunkDB -> RefTab -> Section
+    mkSubRef db TUnits = mkSubRef db $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef db (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    mkSubRef SI {_systemdb = cdb} (TSymb con) =
+    mkSubRef db (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) db))
                 atStart] []
-    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
+    mkSubRef db (TSymb' f con) =
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) db) f con
 
     mkSubRef _ (TAandA ideas) =
       SRS.tOfAbbAcc

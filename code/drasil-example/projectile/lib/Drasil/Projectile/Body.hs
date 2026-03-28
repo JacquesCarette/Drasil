@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Documentation (analysis, physics,
   problem, assumption, goalStmt, physSyst, sysCont, user, software,
   refBy, refName, typUnc, example, softwareSys, system, environment,
   product_, interface, condition, physical, datum, input_, softwareConstraint,
-  output_, endUser, requirement, srs)
+  output_, endUser, requirement, srs, likelyChg)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -294,4 +294,4 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, srs, refBy, refName, thModel, typUnc]
+  physSyst, requirement, srs, refBy, refName, thModel, typUnc, likelyChg]

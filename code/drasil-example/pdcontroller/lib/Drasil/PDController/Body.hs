@@ -46,12 +46,8 @@ mkSRS
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] [])
-            (S "The instance model referred as" +:+ refS imPD +:+
-               S "provides an"
-               +:+ titleize ode +:+ sParen (short ode)
-               +:+ S "that models the"
-               +:+ phrase pidC)],
+          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)
+         ],
      GSDSec $
        GSDProg
          [SysCntxt
@@ -100,6 +96,12 @@ background :: Sentence
 background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
               S "in a variety of applications such as thermostats, automobile",
               S "cruise-control, etc"]
+
+orgSecEnd :: Sentence
+orgSecEnd = foldlSent [
+    S "The instance model referred as", refS imPD, S "provides an",
+    titleize ode, sParen (short ode), S "that models the", phrase pidC
+  ]
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

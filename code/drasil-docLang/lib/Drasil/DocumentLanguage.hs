@@ -22,7 +22,7 @@ import Language.Drasil.Display (compsy)
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System (System, whatsTheBigIdea, HasSystem(..))
+import Drasil.System (System, whatsTheBigIdea, HasSystem(..), HasSystemMeta(..))
 import Drasil.GetChunks (ccss, ccss')
 
 -- Vocabulary

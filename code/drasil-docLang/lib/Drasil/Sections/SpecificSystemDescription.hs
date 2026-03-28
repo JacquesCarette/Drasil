@@ -40,12 +40,11 @@ import Drasil.Metadata.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, refBy, scope, sec,
-  section_, softwareConstraint, solutionCharacteristic, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+  problemDescription, propOfCorSol, purpose, quantity, refBy, requirement, scope,
+  sec, section_, softwareConstraint, solutionCharacteristic, specification,
+  symbol_, system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import Drasil.Metadata.Concepts.Math (equation, parameter)
 import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import Drasil.Metadata.Documentation (requirement, specification)
 
 -- other docLang
 import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)

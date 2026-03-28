@@ -93,7 +93,7 @@ mkDoc si srsDecl headingComb =
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
       heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
-      authorsList = foldlList Comma List $ map (S . name) $ si ^. authors
+      authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
       sections' = mkSections si' dd' (Just refdCites)

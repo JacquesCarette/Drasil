@@ -21,7 +21,6 @@ dependencies:
 - pretty
 - transformers
 - multiplate
-- drasil-data
 - drasil-database
 - drasil-lang
 - drasil-metadata

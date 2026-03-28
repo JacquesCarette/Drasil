@@ -7,6 +7,7 @@
 -- instead.
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
+-- General Haskell
 import Control.Lens ((^.), set)
 import Data.Either (rights)
 import Data.Function (on)
@@ -14,7 +15,26 @@ import Data.List (nub, sortBy, (\\))
 import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
+import qualified Data.Map.Strict as M
 
+-- General Drasil
+import Language.Drasil
+import Language.Drasil.Display (compsy)
+import Language.Drasil.Development (shortdep)
+
+import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
+  TermAbbr, shortForm, termResolve')
+
+import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
+import Drasil.GetChunks (ccss, ccss')
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (likelyChg, section_, software,
+  unlikelyChg, requirement, software, assumption, goalStmt, refBy, refName)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+
+-- Other docLang
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -29,16 +49,6 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec, extractDocBib)
 import Drasil.TraceTable (generateTraceMap)
-
-import Language.Drasil
-import Language.Drasil.Display (compsy)
-
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
-  TermAbbr, shortForm, termResolve')
-
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
-import Drasil.GetChunks (ccss, ccss')
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
@@ -67,13 +77,6 @@ import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-
-import Drasil.Metadata.Documentation (requirement, software)
-import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Documentation (likelyChg, section_, unlikelyChg, assumption, goalStmt, refName, refBy)
-import qualified Data.Map.Strict as M
-
-import Language.Drasil.Development (shortdep)
 
 -- * Main Function
 

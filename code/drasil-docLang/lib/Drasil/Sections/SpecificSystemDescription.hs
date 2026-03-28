@@ -22,30 +22,33 @@ module Drasil.Sections.SpecificSystemDescription (
   tmStub, ddStub, gdStub, imStub, pdStub
 ) where
 
+-- General Haskell
 import Control.Lens ((^.), over)
 import Data.Maybe
 
--- rest of Drasil
+-- General Drasil
 import Drasil.Database (UID, HasUID(..), showUID)
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
-  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
-  element, general, goalStmt, information, input_, limitation, model, output_,
-  physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, refBy, scope,
-  section_, softwareConstraint, solutionCharacteristic, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
-import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
-import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
-import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import Drasil.Metadata.Documentation (requirement, specification)
 import Drasil.System (System)
-import Language.Drasil hiding (variable)
+import Language.Drasil hiding (variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
+-- Vocabulary
+import Drasil.Metadata.Documentation (assumption, column, constraint,
+  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
+  element, general, goalStmt, information, input_, limitation, model, output_,
+  physical, physicalConstraint, physicalSystem, physSyst, problem,
+  problemDescription, propOfCorSol, purpose, quantity, refBy, scope, sec,
+  section_, softwareConstraint, solutionCharacteristic, symbol_,
+  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+import Drasil.Metadata.Concepts.Math (equation, parameter)
+import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
+import Drasil.Metadata.Documentation (requirement, specification)
+
+-- other docLang
+import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
@@ -118,7 +121,7 @@ goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP' (the inModel),
   S "that govern", short progName, S "are presented in the" +:+.
-  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec),
+  namedRef instModelSection (titleize inModel +:+ titleize sec),
   D.toSent $ atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
   S "and their derivation is also presented, so that the", plural inModel,

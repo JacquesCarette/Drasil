@@ -83,8 +83,6 @@ module Language.Drasil (
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
   , dcc, dccAWDS, dccA, dccWDS, cc', ccs, cw, cic
-  -- Language.Drasil.Chunk.Relation
-  , RelationConcept, makeRC
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
@@ -299,7 +297,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
   ucuc, ucw)

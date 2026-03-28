@@ -28,6 +28,8 @@ jobs:
             md:
               - code/stable/**/*.md
               - code/stable/**/book.toml
+            artifacts:
+              - 'code/stable/**/src/**'
 
       - name: "Update apt package list"
         run: |
@@ -62,7 +64,7 @@ jobs:
           stack-version: 'latest'
 
       - name: "Cache dependencies"
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5.0.4
         with:
           path: |
             ~/.stack
@@ -93,6 +95,7 @@ jobs:
         if: ${{ steps.changes.outputs.tex == 'true' }}
 
       - name: "Compile generated software artifacts"
+        if: ${{ steps.changes.outputs.artifacts == 'true' }}
         run: make gool
 
       - name: "Generate Haddock docs (as test)"

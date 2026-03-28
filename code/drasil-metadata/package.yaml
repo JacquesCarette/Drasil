@@ -29,10 +29,14 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Metadata
+  - Drasil.Metadata.Citations
+  - Drasil.Metadata.Concepts.Computation
   - Drasil.Metadata.Concepts.Math
   - Drasil.Metadata.Documentation
   - Drasil.Metadata.Domains
   - Drasil.Metadata.Drasil
+  - Drasil.Metadata.People
+  - Drasil.Metadata.Software.Products
   - Drasil.Metadata.SupportedSoftware
   - Drasil.Metadata.TheoryConcepts
   - Drasil.Metadata.TraceabilityGraphs

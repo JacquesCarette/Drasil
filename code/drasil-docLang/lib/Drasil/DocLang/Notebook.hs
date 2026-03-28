@@ -2,7 +2,7 @@ module Drasil.DocLang.Notebook where
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (caseProb,
+import qualified Drasil.Metadata.Documentation as Doc (caseProb,
   introduction, learnObj,
   prpsOfDoc, review, summary, example, appendix, reference)
 

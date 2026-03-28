@@ -5,29 +5,32 @@ module Drasil.Sections.Introduction (orgSec, introductionSection,
 
 import Data.Maybe (maybeToList)
 
+-- Generic Drasil
 import Language.Drasil hiding (organization)
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
-  charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
-import Drasil.DocumentLanguage.Core (IntroSub(..))
+import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+
+-- Vocabulary
+import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
+  smithKoothoor2016, smithLai2005, koothoor2013)
+import Drasil.Metadata.Concepts.Computation (algorithm)
+import Drasil.Metadata.TheoryConcepts (inModel, thModel)
+import Drasil.Metadata.Documentation (assumption, characteristic, decision,
+  definition, desSpec, design, designDoc, document, documentation, environment,
+  goal, goalStmt, implementation, information, intReader, model, organization,
+  problem, problemIntro, purpose, requirement, scope, section_, softwareDoc,
+  softwareVAV, srs, systemConstraint, template, theory, user, vavPlan)
+import Drasil.Metadata.Software.Products (sciCompS)
+
+-- Other docLang
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
+  charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
+import Drasil.DocumentLanguage.Core (IntroSub(..))
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.Sentence.Combinators (refineChain)
 import Drasil.Document.Contents (foldlSP, foldlSP_)
-
-import Drasil.Metadata.TheoryConcepts (inModel, thModel)
-import Drasil.Metadata.Documentation (requirement, srs)
-import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation (assumption, characteristic, decision,
-  definition, desSpec, design, designDoc, document, documentation, environment,
-  goal, goalStmt, implementation, information, intReader, model, organization,
-  problem, problemIntro, purpose, scope, section_, softwareDoc, softwareVAV,
-  systemConstraint, template, theory, user, vavPlan)
-import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
-  smithKoothoor2016, smithLai2005, koothoor2013)
-import Data.Drasil.Software.Products (sciCompS)
 
 -----------------------
 --     Constants     --

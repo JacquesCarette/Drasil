@@ -26,7 +26,7 @@ import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
   TermAbbr, shortForm, termResolve')
 
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
+import Drasil.System (System, whatsTheBigIdea, HasSystem(..))
 import Drasil.GetChunks (ccss, ccss')
 
 -- Vocabulary
@@ -230,29 +230,32 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: System -> DocDesc -> RefSec -> [Section] -> Section
-mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
   where
-    mkSubRef :: System -> RefTab -> Section
-    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef SI {_systemdb = db} (TUnits' con f) =
+    sysNameUID = si ^. sysName . uid
+    db = si ^. systemdb
+
+    mkSubRef :: RefTab -> Section
+    mkSubRef TUnits = mkSubRef $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    mkSubRef SI {_systemdb = cdb} (TSymb con) =
+    mkSubRef (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) db))
                 atStart] []
-    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
+    mkSubRef (TSymb' f con) =
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) db) f con
 
-    mkSubRef s@SI {_systemdb = cdb} TAandA =
+    mkSubRef TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations s renderedSecs cdb]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations sysNameUID renderedSecs db]
         []
 
-collectDocumentAbbreviations :: System -> [Section] -> ChunkDB -> [TermAbbr]
-collectDocumentAbbreviations s renderedSecs cdb =
+collectDocumentAbbreviations :: UID -> [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations sysNameUID renderedSecs cdb =
   filter (isJust . shortForm) allTerms
   where
     -- Terms found in the document using the list of `Sentence`s extracted from
@@ -263,7 +266,7 @@ collectDocumentAbbreviations s renderedSecs cdb =
     missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
       inModel, requirement, thModel, refName, refBy]
     -- Filter out the system name and duplicates
-    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ [s ^. sysName . uid]
+    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ [sysNameUID]
     allTerms = map (termResolve' cdb) filtered
 
 -- | Helper for creating the table of symbols.

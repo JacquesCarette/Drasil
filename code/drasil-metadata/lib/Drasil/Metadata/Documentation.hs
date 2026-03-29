@@ -17,7 +17,7 @@ module Drasil.Metadata.Documentation
   , physical, physSyst, physicalConstraint, physicalSystem, plan, product_
   , productUC, prodUCTable
   , problem, problemDescription, problemIntro, project, property, propOfCorSol
-  , prpsOfDoc, purpose, quantity, reference, refBy, refMat
+  , prpsOfDoc, purpose, quantity, reference, refBy, refName, refMat
   , requirement, reqDom, reqInput, review, scope, scpOfTheProj, scpOfReq, section_, sec
   , software, softwareConstraint, softwareDoc, softwareReq, softwareVAV
   , solution, solutionCharSpec
@@ -228,7 +228,7 @@ reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $
 unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")       EmptyS [chgProbDom]
 
 assumption, desSpec, goalStmt, learnObj, likelyChg, mg, mis, notebook, physSyst,
-  refBy, requirement, sec, srs, typUnc, unlikelyChg :: CI
+  refBy, refName, requirement, sec, srs, typUnc, unlikelyChg :: CI
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
 desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
 goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
@@ -239,6 +239,7 @@ mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ gu
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
 refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]

@@ -12,7 +12,7 @@ module Data.Drasil.Concepts.Documentation (
 import Language.Drasil hiding (organization, year, label, variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.Metadata.Domains (softEng, documentc)
+import Drasil.Metadata.Domains (softEng)
 import Drasil.Metadata.Documentation
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
@@ -55,7 +55,7 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
   likelyChg, learnObj, mg, mis, notebook, physSyst, refBy, requirement, srs,
   thModel, typUnc, unlikelyChg]
 
-dataConst, refName :: CI
+dataConst :: CI
 
 -- * Common Ideas
 
@@ -63,7 +63,6 @@ dataConst, refName :: CI
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
-refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 
 ---------------------------------------------------------------------
 

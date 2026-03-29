@@ -42,7 +42,7 @@ genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] ->
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map name (codeSpec g ^. authorsO )
+  let as = map fullName (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = OO.docMod desc watermark as (g ^. date)
@@ -179,7 +179,7 @@ genModuleWithImportsProc :: (ProcProg r) => Name -> Description -> [Import] ->
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map name (codeSpec g ^. authorsO )
+  let as = map fullName (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = Proc.docMod desc watermark as (g ^. date)
               | CommentFunc `elem` g ^. commented && not (null ms) = Proc.docMod "" watermark [] ""

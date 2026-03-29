@@ -75,7 +75,7 @@ mkSRS = [TableOfContents,
   StkhldrSec $
     StkhldrProg
       [Client progName $ D.toSent (phraseNP (a_ company))
-        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
+        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (fullName mCampidelli),
       Cstmr progName],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],

@@ -4,7 +4,7 @@ import Data.List (intercalate)
 import System.IO (Handle, IOMode(WriteMode), openFile, hPutStrLn, hClose)
 import System.Directory (setCurrentDirectory)
 
-import Drasil.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Drasil.Database (UID)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label, Colour)

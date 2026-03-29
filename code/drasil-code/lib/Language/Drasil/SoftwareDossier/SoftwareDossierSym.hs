@@ -14,7 +14,7 @@ module Language.Drasil.SoftwareDossier.SoftwareDossierSym (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Artifacts (FileAndContents(..), fileAndContents)
+import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents)
 import Drasil.GOOL (ProgData)
 import Language.Drasil.Printers (PrintingInformation)
 

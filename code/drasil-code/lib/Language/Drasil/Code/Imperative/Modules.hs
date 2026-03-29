@@ -20,7 +20,7 @@ import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 import Data.Deriving.Internal (interleave)
 
-import Drasil.Artifacts (FileAndContents)
+import Drasil.Build.Artifacts (FileAndContents)
 import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)

@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (render)
 
-import Drasil.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Language.Drasil (Stage(Equational), Document)
 import Language.Drasil.Printers (makeCSS, genHTML, defaultConfiguration, piSys)
 import Language.Drasil.Printing.Import (makeDocument)

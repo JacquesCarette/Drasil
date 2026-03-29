@@ -15,7 +15,7 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
 
 import Drasil.Shared.CodeType (CodeType)
 
-import Drasil.Artifacts (HasPathAndDoc(..))
+import Drasil.Build.Artifacts (HasPathAndDoc(..))
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 

@@ -10,7 +10,7 @@ import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
-import Drasil.Artifacts (FileAndContents)
+import Drasil.Build.Artifacts (FileAndContents)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 import Language.Drasil hiding (List)

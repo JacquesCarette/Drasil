@@ -13,7 +13,7 @@ import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
 
-import Drasil.Artifacts (FileAndContents(..), fileAndContents,
+import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents,
   hasPathAndDocToFileAndContents, createDirIfMissing, createFile)
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,

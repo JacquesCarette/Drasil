@@ -9,7 +9,7 @@ import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
-import Drasil.Artifacts (RelativeFile)
+import Drasil.Build.Artifacts (RelativeFile)
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)

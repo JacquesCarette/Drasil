@@ -13,7 +13,7 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 import System.Directory (getCurrentDirectory, setCurrentDirectory)
 
-import Drasil.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))

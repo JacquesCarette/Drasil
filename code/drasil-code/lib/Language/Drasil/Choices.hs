@@ -17,7 +17,7 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List.NonEmpty (toList)
 
-import Drasil.Artifacts (RelativeFile)
+import Drasil.Build.Artifacts (RelativeFile)
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType(..))
 import Language.Drasil (SimpleQDef, Sentence(..), Space, DefinedQuantityDict,

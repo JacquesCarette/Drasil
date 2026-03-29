@@ -12,7 +12,7 @@ import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.Artifacts (FileAndContents(..), hasPathAndDocToFileAndContents,
+import Drasil.Build.Artifacts (FileAndContents(..), hasPathAndDocToFileAndContents,
   createDirIfMissing, createFile)
 import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod)

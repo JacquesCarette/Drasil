@@ -9,7 +9,7 @@ import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
-import Drasil.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook),

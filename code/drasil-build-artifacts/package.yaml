@@ -1,4 +1,4 @@
-name:                drasil-artifacts
+name:                drasil-build-artifacts
 version:             0.1.1.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
@@ -27,7 +27,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Artifacts
+  - Drasil.Build.Artifacts
   when:
   - condition: false
     other-modules: Paths_drasil_artifacts

@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (render)
 
-import Drasil.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Language.Drasil (Stage(Equational))
 import qualified Language.Drasil.Sentence.Combinators as S

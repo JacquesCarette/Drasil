@@ -154,8 +154,8 @@ useCaseTable                 = compoundNC useCase table_
 userInput                    = compoundNC user input_
 
 -- * Domains
---
+
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
-  assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
+  assumpDom, chgProbDom, likeChgDom, unlikeChgDom]

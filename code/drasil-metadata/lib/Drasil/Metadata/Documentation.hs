@@ -11,7 +11,7 @@ module Drasil.Metadata.Documentation
   , implementation, inDatumConstraint, individual, indPRCase
   , information, input_, interface, interest, introduction, intReader, item
   , learnObj, likelyChg, likeChgDom, limitation, mg, mis, model, module_, moduleInterface
-  , nonfunctional, nonfunctionalRequirement, nonFuncReqDom, refByDom, refNameDom
+  , nonfunctional, nonfunctionalRequirement, nonFuncReqDom
   , notebook, offShelf, offShelfSolution, organization, orgOfDoc, output_
   , outDatumConstraint
   , physical, physSyst, physicalConstraint, physicalSystem, plan, product_
@@ -217,15 +217,13 @@ srsDom :: ConceptChunk
 srsDom = dcc "srsDom" (srs ^. term) "srs"
 
 assumpDom, chgProbDom, funcReqDom, goalStmtDom, likeChgDom,
-  nonFuncReqDom, refByDom, refNameDom, reqDom, unlikeChgDom :: ConceptChunk
+  nonFuncReqDom, reqDom, unlikeChgDom :: ConceptChunk
 assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")        EmptyS [srsDom]
 chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                              EmptyS [srsDom]
 funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")       EmptyS [reqDom]
 goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")       EmptyS [srsDom]
 likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")       EmptyS [chgProbDom]
 nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR")      EmptyS [reqDom]
-refByDom      = ccs (mkIdea "refByDom"      (refBy ^. term)                    $ Just "RefBy")    EmptyS [srsDom]
-refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $ Just "RefName")  EmptyS [srsDom]
 reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")        EmptyS [srsDom]
 unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")       EmptyS [chgProbDom]
 

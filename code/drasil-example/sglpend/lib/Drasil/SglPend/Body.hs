@@ -27,7 +27,7 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
 import qualified Drasil.DblPend.Body as DPD (tMods)
 import Drasil.DblPend.Concepts (concepts, rod)
 import Drasil.DblPend.Requirements (nonFuncReqs)
-import Drasil.DblPend.Unitals (acronyms)
+import Drasil.DblPend.Unitals (sharedAcronyms)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)
@@ -54,7 +54,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -115,7 +115,7 @@ conceptChunks =
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- CIs
-  nw progName : map nw acronyms ++
+  map nw sharedAcronyms ++
   -- QuantityDicts
   map nw symbols
 

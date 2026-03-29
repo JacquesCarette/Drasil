@@ -3,27 +3,33 @@
 module Drasil.DocumentLanguage.TraceabilityGraph
   (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
 
+-- Haskell stuff
+import Control.Lens ((^.))
 import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 
+-- General Drasil
 import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System (System, systemdb)
-import Control.Lens ((^.))
+import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
+
+-- Vocabulary (from Metadata)
+import Drasil.Metadata.Concepts.Math (graph)
+import Drasil.Metadata.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
+import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
+
+-- from docLang itself, i.e. other Document information
 import Drasil.DocumentLanguage.Definitions (TraceViewCat)
 import Drasil.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
+import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
-import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
-import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
-import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
 
 -- * Main Functions
 

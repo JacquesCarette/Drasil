@@ -1,14 +1,21 @@
 -- | Defines concepts used in the field of math.
-module Data.Drasil.Concepts.Math where
+module Data.Drasil.Concepts.Math (
+    module Data.Drasil.Concepts.Math
+  , module Drasil.Metadata.Concepts.Math
+  ) where
 
+-- General Drasil
 import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
 import qualified Language.Drasil as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
+
+-- Othr Vocabulary
 import Drasil.Metadata.Domains (mathematics)
+import Drasil.Metadata.Concepts.Math (equation, graph, parameter, unit_)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
@@ -25,9 +32,9 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 -- * Mathematical Concepts
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
-  direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV,
-  number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
-  rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
+  direction, euclidN, euclidSpace, gradient, laplaceTransform, law, line, matrix, norm, normal, normalV,
+  number, orient, origin, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
+  rOfChng, rate, rightHand, shape, surArea, surface, unitV, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
 amplitude   = dcc "amplitude"    (nounPhraseSP "amplitude")      "The peak deviation of a function from zero"
@@ -47,11 +54,9 @@ constraint   = dcc "mathConstraint" (cn' "constraint")              "A condition
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
 direction    = dcc "direction"    (cn' "direction")               "'which way' a vector points, extending from the tail to the tip"
-equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
                                                                   "experience")
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
-graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
 laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integral transform that converts a function of a real variable t " ++
                                                                      "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
@@ -64,8 +69,6 @@ normal      = dcc "normal"       (cn' "normal" )                 "an object that
 number      = dcc "number"       (cn' "number")                  "a mathematical object used to count, measure, and label"
 orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
 origin      = dcc "origin"       (cn' "origin")                  "a fixed point of reference for the geometry of the surrounding space"
-parameter   = dcc "parameter"    (cn' "parameter")               "a quantity whose value is selected depending on particular circumstances"
---FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")          "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
 posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a sequence or function that eventually exceeds any prescribed bound"
@@ -79,7 +82,6 @@ rate         = dcc "rate"         (cn' "rate")                   "Ratio that com
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen"
 shape        = dcc "shape"        (cn' "shape")                  "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                "The outer or topmost boundary of an object"
-unit_        = dcc "unit"         (cn' "unit")                   "Identity element"
 vector       = dcc "vector"       (cn' "vector")                 "Object with magnitude and direction"
 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :-: S "-axis") "the primary axis of a system of coordinates"

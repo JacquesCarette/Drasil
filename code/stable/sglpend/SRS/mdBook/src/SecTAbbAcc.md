@@ -15,7 +15,6 @@
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |
 |SRS         |Software Requirements Specification|
-|SglPend     |Single Pendulum                    |
 |TM          |Theoretical Model                  |
 |Uncert.     |Typical Uncertainty                |
 

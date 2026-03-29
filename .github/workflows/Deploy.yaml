@@ -1,0 +1,120 @@
+on:
+  push:
+    branches: main
+    paths: [code/**, .github/workflows/Deploy.yaml]
+  workflow_dispatch:
+name: Deploy
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+defaults:
+  run:
+    shell: bash
+    working-directory: code
+jobs:
+  deploy:
+    name: "Build, Test & Deploy"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: "Update apt package list"
+        run: |
+          sudo apt-get update
+
+      - name: "Install system requirements"
+        run: |
+          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex g++ default-jdk mono-devel inkscape
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          cargo install mdbook
+
+      - name: "Update PATH"
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: "Install Stack"
+        uses: haskell-actions/setup@v2
+        with:
+          enable-stack: true
+          stack-no-global: true
+          stack-version: 'latest'
+
+      - name: "Cache dependencies"
+        uses: actions/cache@v5.0.4
+        with:
+          path: |
+            ~/.stack
+            ~/.cabal/packages
+            ~/.cabal/store
+            code/.stack-work/
+            code/website/.stack-work/
+            ~/.local/bin/graphmod
+          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
+
+      - name: "Clean previous run"
+        run: make clean
+
+      - name: "Install dependencies"
+        run: make stackArgs="--no-terminal" deps
+
+      - name: "Build"
+        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
+
+      - name: "Test built artifacts against stable"
+        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
+
+      - name: "Compile GOOL examples"
+        run: make codegenTest
+
+      - name: "Compile generated TeX artifacts"
+        run: make -j tex SUMMARIZE_TEX=yes
+
+      - name: "Compile generated software artifacts"
+        run: make gool
+
+      - name: "Create Doxygen for generated software artifacts"
+        run: make doxygen
+
+      - name: "Generate Haddock docs (full + std)"
+        run: FULL=1 make docs
+
+      - name: "Generate module dependency graphs"
+        run: make graphs
+
+      - name: "Analyze Drasil code"
+        run: make analysis
+
+      - name: "Convert analysis graphs into dot and circo SVGs"
+        run: make convertAnalyzed
+
+      - name: "Build trace graphs"
+        run: make tracegraphs
+
+      - name: "Build mdBook Examples"
+        run: make mdbook_build
+
+      - name: "Extract HTML copies of Jupyter Notebooks"
+        run: |
+          pip install jupyterlab
+          make jupyter_html
+
+      - name: "Build website generator"
+        run: make website
+
+      - name: "Test Built Website against Stable Version"
+        run: make test_website NOISY=yes
+
+      - name: "Prepare full website deployment environment"
+        run: make deploy_lite
+
+      - name: "Deploy 🚀"
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
+        with:
+          git-config-name: ${{ secrets.BOT_NAME }}
+          git-config-email: ${{ secrets.BOT_EMAIL }}
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: gh-pages
+          folder: code/deploy
+          commit-message: "${{ secrets.BOT_NAME }} deploy of main@${{ github.sha }}"

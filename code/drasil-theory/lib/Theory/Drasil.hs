@@ -30,6 +30,8 @@ module Theory.Drasil (
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , qwUC, qwC, getEqModQdsFromIm
+  -- * Relation Concepts
+  , RelationConcept, makeRC
   -- * Theory Models
   , TheoryModel
   , tm, tmNoRefs
@@ -65,4 +67,5 @@ import Theory.Drasil.InstanceModel (InstanceModel,
 import Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
   mkDefiningExpr, mkMultiDefn,
   mkMultiDefnForQuant, multiDefnGenQD, multiDefnGenQDByUID)
+import Theory.Drasil.RelationConcept (RelationConcept, makeRC)
 import Theory.Drasil.Theory (tm, tmNoRefs, TheoryModel)

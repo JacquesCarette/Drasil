@@ -2,14 +2,19 @@
 -- | Standard code to make a table of contents.
 module Drasil.Sections.TableOfContents (toToC) where
 
-import qualified Data.Drasil.Concepts.Documentation as Doc
-import qualified Drasil.DocLang.SRS as SRS
-import Drasil.DocumentLanguage.Core
-import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Drasil.Metadata.Documentation (requirement)
+-- General Drasil
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
+
+-- Vocabulary
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (refMat, requirement, tOfCont)
+import qualified Drasil.Metadata.Documentation as Doc
+
+-- Other docLang
+import qualified Drasil.DocLang.SRS as SRS
+import Drasil.DocumentLanguage.Core
 
 {- Layout for Table of Contents in SRS documents:
 Table of Contents
@@ -84,12 +89,12 @@ mkHeaderItem' hdr itm = Nested hdr $ Bullet $ map (, Nothing) itm
 
 -- | Helper for creating the 'Table of Contents' section ToC entry
 mktToCSec :: ItemType
-mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' Doc.tOfCont
+mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' tOfCont
 
 -- | Helper for creating the 'Reference Material' section ToC entry
 mktRefSec :: RefSec -> ItemType
 mktRefSec (RefProg _ l) =
-  mkHeaderItem (namedRef SRS.refMatLabel $ titleize Doc.refMat) $ map mktSubRef l
+  mkHeaderItem (namedRef SRS.refMatLabel $ titleize refMat) $ map mktSubRef l
   where
     mktSubRef :: RefTab -> Sentence
     mktSubRef TUnits        = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit

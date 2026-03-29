@@ -3,30 +3,35 @@
 module Drasil.Sections.Introduction (orgSec, introductionSection,
   purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
 
-import Language.Drasil
+import Data.Maybe (maybeToList)
+
+-- Generic Drasil
+import Language.Drasil hiding (organization)
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Sentence.Combinators as S
+
+-- Vocabulary
+import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
+  smithKoothoor2016, smithLai2005, koothoor2013)
+import Drasil.Metadata.Concepts.Computation (algorithm)
+import Drasil.Metadata.TheoryConcepts (inModel, thModel)
+import Drasil.Metadata.Documentation (assumption, characteristic,
+  decision, definition, desSpec, design, designDoc, document, documentation,
+  environment, goal, goalStmt, implementation, intReader, model,
+  organization, purpose, requirement, scope, section_, softwareDoc,
+  softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
+  information, systemConstraint, template)
+import Drasil.Metadata.Software.Products (sciCompS)
+
+-- Other docLang
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
-import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.DocumentLanguage.Core (IntroSub(..))
-import qualified Language.Drasil.Development as D
-import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.Sentence.Combinators (refineChain)
 import Drasil.Document.Contents (foldlSP, foldlSP_)
-
-import Drasil.Metadata.TheoryConcepts (inModel, thModel)
-import Drasil.Metadata.Documentation (requirement, srs)
-import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
-  decision, definition, desSpec, design, designDoc, document, documentation,
-  environment, goal, goalStmt, implementation, intReader, model,
-  organization, purpose, scope, section_, softwareDoc,
-  softwareVAV, theory, user, vavPlan, problem, problemIntro,
-  information, systemConstraint, template)
-import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
-  smithKoothoor2016, smithLai2005, koothoor2013)
-import Data.Drasil.Software.Products
 
 -----------------------
 --     Constants     --
@@ -66,7 +71,7 @@ introSubToSentence :: IntroSub -> [Sentence]
 introSubToSentence (IPurpose _) = []  -- Purpose is already mentioned as "purpose of this document"
 introSubToSentence (IScope _)   = [S.the_ofThe (phrase scope) (plural requirement)]
 introSubToSentence IChar {} = [S.the_ofThe (plural characteristic) (phrase intReader)]
-introSubToSentence IOrgSec {} = [S.the_ofThe (phrase Doc.organization) (phrase document)]
+introSubToSentence IOrgSec {} = [S.the_ofThe (phrase organization) (phrase document)]
 
 -------------------------
 --                    --
@@ -168,32 +173,37 @@ intReaderIntro progName assumed topic asset sectionRef =
       [] -> EmptyS
       _  -> S "It would be an asset to understand" +:+. foldlList Comma List asset
 
--- | Constructor for the Organization of the Document section. Parameters should be
--- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
--- and any other relevant information ('Sentence').
-orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+-- | Constructor for the Organization of the Document section. Parameters should
+-- be an introduction ('Sentence'), a resource for a bottom up approach
+-- ('NamedIdea'), reference to that resource ('Section'), and any other relevant
+-- information ('Sentence').
+orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
 
--- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
--- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
--- and any other relevant information ('Sentence').
-orgIntro :: NamedIdea c => c -> Section -> Sentence -> [Contents]
-orgIntro bottom bottomSec trailingSentence = [foldlSP [
-  orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
-  foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
-  S "For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
-  S "trace back to find any additional information they require"],
-  folder [refineChain (zip [goalStmt, thModel, inModel]
-         [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]
+-- | Helper function that creates the introduction for the Organization of the
+-- Document section. Parameters should be an introduction ('Sentence'), a
+-- resource for a bottom up approach ('NamedIdea'), reference to that resource
+-- ('Section'), and any other relevant information ('Sentence').
+orgIntro :: NamedIdea c => c -> Section -> Maybe Sentence -> [Contents]
+orgIntro bottom bottomSec trailingSentence =
+  [ foldlSP [
+      orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
+      foldlList Comma List (map plural [nw goal, nw theory, nw definition, nw assumption]),
+      S "For readers that would like a more bottom up approach" `sC`
+      S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
+      S "trace back to find any additional information they require"
+    ]
+  , foldlSP_ (introS : maybeToList trailingSentence)
+  ]
   where
-    folder = case trailingSentence of
-      EmptyS -> foldlSP_
-      _      -> foldlSP
+    -- FIXME: The below abuses `SRS.goalStmt`, `SRS.thModel`, etc.
+    introS = refineChain (zip
+      [goalStmt, thModel, inModel]
+      [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []])
 
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent
-  [D.toSent $ atStartNP (the Doc.organization), S "of this", phrase document,
+  [D.toSent $ atStartNP (the organization), S "of this", phrase document,
   S "follows the", phrase template, S "for an", short srs, S "for",
   phrase sciCompS, S "proposed by", foldlList Comma List $
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

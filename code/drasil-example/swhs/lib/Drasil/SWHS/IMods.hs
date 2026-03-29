@@ -10,7 +10,7 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (eqN, unwrap, substitute, follows, fromSources)
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
-  equationalModel, ModelKind, Derivation, mkDerivName)
+  equationalModel, ModelKind, Derivation, mkDerivName, RelationConcept, makeRC)
 import Utils.Drasil (weave)
 
 import Data.Drasil.Citations
@@ -89,7 +89,7 @@ balWtrDesc = map foldlSent [
 -- type Derivation = [Sentence]
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+ S "balance on water")
-  (weave [eBalanceOnWtrDerivSentences, map eS eBalanceOnWtrDerivEqnsIM1])
+  (weave eBalanceOnWtrDerivSentences $ map eS eBalanceOnWtrDerivEqnsIM1)
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
@@ -203,7 +203,7 @@ balPCMNotes = map foldlSent [
 eBalanceOnPCMDeriv :: Derivation
 eBalanceOnPCMDeriv = mkDerivName (D.toSent (phraseNP (the energy)) +:+
   S "balance" `S.onThe` S "PCM during sensible heating phase")
-  (weave [eBalanceOnPCMDerivSentences, map eS eBalanceOnPCMDerivEqnsIM2]
+  (weave eBalanceOnPCMDerivSentences (map eS eBalanceOnPCMDerivEqnsIM2)
   ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
 
 eBalanceOnPCMDerivSentences :: [Sentence]

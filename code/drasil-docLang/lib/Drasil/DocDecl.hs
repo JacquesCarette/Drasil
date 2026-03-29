@@ -7,6 +7,19 @@
 
 module Drasil.DocDecl where
 
+-- Generic Haskell
+import Control.Lens((^.))
+
+-- Generic Drasil
+import Language.Drasil hiding (sec)
+import Drasil.Database (HasUID(..), findAll)
+import Drasil.System
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,
+  nonFuncReqDom, likeChgDom, unlikeChgDom)
+
+-- Other docLang
 import Drasil.DocumentLanguage.Core (DocDesc)
 import Drasil.DocumentLanguage.Definitions (Fields)
 import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
@@ -14,15 +27,6 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
-
-import Drasil.Database (HasUID(..), findAll)
-import Drasil.System
-import Language.Drasil hiding (sec)
-
-import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
-  nonFuncReqDom, likeChgDom, unlikeChgDom)
-
-import Control.Lens((^.))
 
 -- * Types
 
@@ -103,7 +107,7 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: System -> SRSDecl -> DocDesc
-mkDocDesc sys@SI{_systemdb = db} = map sec where
+mkDocDesc sys = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
@@ -143,4 +147,5 @@ mkDocDesc sys@SI{_systemdb = db} = map sec where
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll db
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid)
+    $ findAll $ sys ^. systemdb

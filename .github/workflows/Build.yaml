@@ -1,42 +1,25 @@
 on:
-  push:
-    paths: [code/**, .github/workflows/Build.yaml]
   pull_request:
     branches: main
     paths: [code/**, .github/workflows/Build.yaml]
   workflow_dispatch:
 name: Build
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 defaults:
   run:
     shell: bash
     working-directory: code
-env:
-  is_deployment: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
 jobs:
-  auto-cancel:
-    if: | 
-      github.event_name == 'pull_request'
-      || github.event_name == 'workflow_dispatch'
-      || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '[workflow-trigger]')))
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.13.0
-        with:
-          access_token: ${{ github.token }}
   build:
-    needs: auto-cancel
-    name: "Build & Deploy"
+    name: "Build & Test"
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
 
-      - name: "Update apt package list"
-        run: |
-          sudo apt-get update 
-
       - name: "Search changes for applicable tests"
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: changes
         with:
           filters: |
@@ -45,10 +28,25 @@ jobs:
             md:
               - code/stable/**/*.md
               - code/stable/**/book.toml
+            artifacts:
+              - 'code/stable/**/src/**'
 
-      - name: "Install system requirements"
+      - name: "Update apt package list"
         run: |
-          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+          sudo apt-get update
+
+      - name: "Install core system requirements"
+        run: |
+          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz g++ default-jdk mono-devel
+
+      - name: "Install TeX requirements"
+        if: ${{ steps.changes.outputs.tex == 'true' }}
+        run: |
+          sudo apt-get install -y --fix-missing fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex inkscape
+
+      - name: "Install mdBook"
+        if: ${{ steps.changes.outputs.md == 'true' }}
+        run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           cargo install mdbook
 
@@ -56,6 +54,7 @@ jobs:
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: "Install Stack"
         uses: haskell-actions/setup@v2
@@ -65,7 +64,7 @@ jobs:
           stack-version: 'latest'
 
       - name: "Cache dependencies"
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5.0.4
         with:
           path: |
             ~/.stack
@@ -93,62 +92,21 @@ jobs:
 
       - name: "Compile generated TeX artifacts"
         run: make -j tex SUMMARIZE_TEX=yes
-        if: ${{ steps.changes.outputs.tex == 'true' || fromJSON(env.is_deployment) }}
+        if: ${{ steps.changes.outputs.tex == 'true' }}
 
       - name: "Compile generated software artifacts"
+        if: ${{ steps.changes.outputs.artifacts == 'true' }}
         run: make gool
-
-      - name: "Create Doxygen for generated software artifacts"
-        run: make doxygen
 
       - name: "Generate Haddock docs (as test)"
         run: make docs
-        if: ${{ !fromJSON(env.is_deployment) }}
-
-      - name: "Generate Haddock docs (full + std)"
-        run: FULL=1 make docs
-        if: ${{ fromJSON(env.is_deployment) }}
-
-      - name: "Generate module dependency graphs"
-        run: make graphs
-
-      - name: "Analyze Drasil code"
-        run: make analysis
-
-      - name: "Convert analysis graphs into dot and circo SVGs" # only needed in deployments, not required for tests
-        run: make convertAnalyzed
-        if: ${{ fromJSON(env.is_deployment) }}
-
-      - name: "Build trace graphs" # only needed in deployments, not required for tests
-        run: make tracegraphs
-        if: ${{ fromJSON(env.is_deployment) }}
 
       - name: "Build mdBook Examples"
         run: make mdbook_build
-        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
-
-      - name: "Extract HTML copies of Jupyter Notebooks"
-        run: |
-          pip install jupyterlab
-          make jupyter_html
-        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
+        if: ${{ steps.changes.outputs.md == 'true' }}
 
       - name: "Build website generator"
         run: make website
 
       - name: "Test Built Website against Stable Version"
         run: make test_website NOISY=yes
-
-      - name: "Prepare full website deployment environment"
-        run: make deploy_lite
-
-      - name: "Deploy 🚀"
-        if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@v4.8.0
-        with:
-          git-config-name: ${{ secrets.BOT_NAME }}
-          git-config-email: ${{ secrets.BOT_EMAIL }}
-          token: ${{ secrets.BOT_TOKEN }}
-          branch: gh-pages
-          folder: code/deploy
-          commit-message: "${{ secrets.BOT_NAME }} deploy of main@${{ github.sha }}"

@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel', Derivation,
-  mkDerivName)
+  mkDerivName, RelationConcept, makeRC)
 import Utils.Drasil (weave)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
@@ -90,7 +90,7 @@ newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
 rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ D.toSent (phraseNP (rOfChng `of_` temp)))
-  (weave [rocTempSimpDerivSent s a, map eS rocTempSimpDerivEqns])
+  (weave (rocTempSimpDerivSent s a) $ map eS rocTempSimpDerivEqns)
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,

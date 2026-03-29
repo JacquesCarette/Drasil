@@ -12,25 +12,28 @@ module Drasil.Sections.Requirements (
   mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
-import Utils.Drasil (stringList, mkTable)
-
+-- Generic Haskell
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
 
+-- Generic Drasil
 import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
+import Utils.Drasil (stringList, mkTable)
 
-import Drasil.Metadata.Documentation (software)
-import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
+-- Vocabulary
+import Drasil.Metadata.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
-  symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
-import Data.Drasil.Concepts.Math (unit_)
+  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis,
+  likelyChg)
+import Drasil.Metadata.Concepts.Math (unit_)
 
+-- Other docLang
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
 import Drasil.Sentence.Combinators (addPercent)
@@ -96,7 +99,7 @@ nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 -- and a label ('String').
 mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
-  S "If a likely change is made" `S.toThe`
+  S "If a", phrase likelyChg, S "is made" `S.toThe`
   S "finished software, it will take at most", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"

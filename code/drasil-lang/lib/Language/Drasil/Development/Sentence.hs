@@ -13,7 +13,7 @@ module Language.Drasil.Development.Sentence (
   -- * Short Form (lowercase)
   short,
   -- * Introduce with Abbreviation
-  introduceAbb
+  introduceAbb, introduceAbbPlrl
 ) where
 
 import Control.Lens ((^.))
@@ -45,6 +45,10 @@ short c = sentenceShort (c ^. uid)
 -- | Introduce a noun phrase and its (parenthesized) abbreviation.
 introduceAbb :: Idea n => n -> S.Sentence
 introduceAbb n = phrase n +:+ sParen (short n)
+
+-- | Introduce a plural noun phrase and its (parenthesized) abbreviation.
+introduceAbbPlrl :: Idea n => n -> S.Sentence
+introduceAbbPlrl n = plural n +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a
 -- 'NamedIdea'.

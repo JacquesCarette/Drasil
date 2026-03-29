@@ -12,21 +12,25 @@ module Drasil.Sections.TraceabilityMandGs (
 import Control.Lens((^.))
 import Data.Foldable (foldl')
 
-import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
-import Drasil.DocumentLanguage.Definitions (TraceViewCat)
-import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
-  traceMReferrers, traceView, traceViewCC)
-import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
-  goalStmt, goalStmtDom, reqDom, item, section_, likelyChg,
-  unlikelyChg)
-import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Drasil.Metadata.Documentation (requirement)
+-- General Drasil
 import Drasil.Database (mkUid)
 import Drasil.System (System, HasSystem(..))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Sentence.Combinators as S
+--
+-- Vocabulary
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (assumption, assumpDom, chgProbDom,
+  goalStmt, goalStmtDom, reqDom, item, section_, requirement, likelyChg,
+  unlikelyChg)
+
+-- Other docLang functions
+import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
+import Drasil.DocumentLanguage.Definitions (TraceViewCat)
+import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
+  traceMReferrers, traceView, traceViewCC)
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
 generateTraceTable :: System -> LabelledContent

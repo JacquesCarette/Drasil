@@ -63,10 +63,10 @@ scipyCall info = externalLibCall [
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
       [matrix [initVal info], tInit info],
-    initSolListWithValFill (depVar info) (matrix [initVal info]),
+    initSolListWithValFill (solListVar info) (matrix [initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
     (libCallFill [basicArgFill (field r t $+ stepSize (odeOpts info))])
-    (depVar info)]]
+    (solListVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
         chooseMethod RK45 = (2, solveMethodFill)
@@ -193,7 +193,7 @@ osloCall info = externalLibCall [
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill
       [tInit info, tFinal info, stepSize $ odeOpts info]) :
-    populateSolListFill (depVar info))]
+    populateSolListFill (solListVar info))]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
         chooseMethod _ = error odeMethodUnavailable
@@ -338,9 +338,9 @@ apacheODECall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill (map (basicArgFill . ($ odeOpts info)) [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
-      customObjArgFill [pubStateVar $ depVar info] (implementationFill [
-        methodInfoFill [] [initSolListFromArrayFill $ depVar info], methodInfoFill []
-          [callStepFill $ libCallFill [], appendCurrSolFill $ depVar info]])],
+      customObjArgFill [pubStateVar $ solListVar info] (implementationFill [
+        methodInfoFill [] [initSolListFromArrayFill $ solListVar info], methodInfoFill []
+          [callStepFill $ libCallFill [], appendCurrSolFill $ solListVar info]])],
     callStepFill $ libCallFill $ customObjArgFill
       (map privStateVar $ otherVars info)
       (implementationFill [
@@ -351,7 +351,7 @@ apacheODECall info = externalLibCall [
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
       : map basicArgFill [tInit info, matrix [initVal info], tFinal info,
         matrix [initVal info]],
-    assignSolFromObjFill $ depVar info]]
+    assignSolFromObjFill $ solListVar info]]
   where chooseMethod Adams = 0
         chooseMethod RK45 = 1
         chooseMethod _ = error odeMethodUnavailable
@@ -499,10 +499,10 @@ odeintCall info = externalLibCall [
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [matrix [initVal info], tInit info, tFinal info,
       stepSize $ odeOpts info] ++ [
-    customObjArgFill [privStateVar $ depVar info] (customClassFill [
-      constructorInfoFill [unnamedParamFill $ depVar info]
-        [(depVar info, sy $ depVar info)] [],
-      methodInfoFill [] [appendCurrSolFill $ depVar info]])]]
+    customObjArgFill [privStateVar $ solListVar info] (customClassFill [
+      constructorInfoFill [unnamedParamFill $ solListVar info]
+        [(solListVar info, sy $ solListVar info)] [],
+      methodInfoFill [] [appendCurrSolFill $ solListVar info]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map
           basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
         chooseMethod Adams = (1, [callStepFill $ libCallFill []])
@@ -616,6 +616,16 @@ odeMethodUnavailable :: String
 odeMethodUnavailable = "Chosen ODE solving method is not available" ++
           " in chosen ODE solving library"
 
+-- | Solution list chunk constructor. Wraps the dependent variable's type in
+-- an extra 'Vect' so that the generated code declares a list-of-vectors
+-- (e.g. @vector<vector<double>>@) instead of a flat list.
+solListVar :: ODEInfo -> CodeVarChunk
+solListVar info = quantvar $ implVarAU' (show $ dv +++ "sol")
+  (compoundPhrase (dv ^. term) (nounPhraseSP "solution list"))
+  (S "list of solutions for" +:+ (dv ^. defn)) (getA dv)
+  (Vect (dv ^. typ)) (symbol dv Implementation) (getUnit dv)
+  where dv = depVar info
+
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVarAU' (show $ c +++ "d" )
@@ -674,4 +684,5 @@ odeInfoChunks info =
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv
+               , solListVar info
                ]

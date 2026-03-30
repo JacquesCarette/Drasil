@@ -7,10 +7,10 @@ import Control.Lens ((^.))
 import Control.Monad.State (get)
 import Data.List (nub, (\\), delete)
 import Data.Map (member, notMember)
-import qualified Data.Map as Map (lookup)
+import qualified Data.Map as Map (fromList, lookup)
 
 import Language.Drasil hiding (isIn)
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), UID)
 
 import Drasil.Code.CodeVar (CodeIdea(..), DefiningCodeExpr(..), CodeVarChunk)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
@@ -107,7 +107,18 @@ getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
   woName <- genICName WriteOutput
-  getParams woName In $ codeSpec g ^. outputsO
+  getParams woName In $ map (resolveOutputDefType g) (codeSpec g ^. outputsO)
+
+-- | Prefer the calculated definition's type when an output is produced by a
+-- generated definition (notably ODE outputs, whose solved result may have a
+-- different shape than the state vector used internally by the solver).
+resolveOutputDefType :: DrasilState -> CodeVarChunk -> CodeVarChunk
+resolveOutputDefType g out =
+  maybe out quantvar $
+    Map.lookup (out ^. uid) (Map.fromList defsByUID)
+  where
+    defsByUID :: [(UID, CodeDefinition)]
+    defsByUID = map (\d -> (d ^. uid, d)) (codeSpec g ^. execOrderO)
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.

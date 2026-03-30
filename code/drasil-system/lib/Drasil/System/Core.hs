@@ -16,16 +16,8 @@ type Scope = [Sentence]
 -- | Project Example motivation.
 type Motivation = [Sentence]
 
--- | Enumeration of /kinds/ of 'System's we can encode.
-data SystemKind =
-    Specification
-  | RunnableSoftware
-  | Notebook
-  | Website
-
 data SystemMeta = SystemMeta
   { _sysName    :: CI -- FIXME: This should not be a CI.
-  , _kind       :: SystemKind
   , _authors    :: People
   , _purpose    :: Purpose
   , _background :: Background

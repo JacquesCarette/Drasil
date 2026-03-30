@@ -23,42 +23,14 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Sentence, Concept,
+import Language.Drasil (Quantity, MayHaveUnit, Concept,
   Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata.SupportedSoftware (runnableSoftware, website)
 import Drasil.Metadata.Documentation (srs, notebook)
 import Utils.Drasil (toPlainName)
 
--- | Project Example purpose.
-type Purpose = [Sentence]
--- | Project Example background information, used in the 'What' section of
--- README.
-type Background = [Sentence]
--- | Project Example scope.
-type Scope = [Sentence]
--- | Project Example motivation.
-type Motivation = [Sentence]
-
--- | Enumeration of /kinds/ of 'System's we can encode.
-data SystemKind =
-    Specification
-  | RunnableSoftware
-  | Notebook
-  | Website
-
-data SystemMeta = SystemMeta
-  { _sysName    :: CI -- FIXME: This should not be a CI.
-  , _kind       :: SystemKind
-  , _authors    :: People
-  , _purpose    :: Purpose
-  , _background :: Background
-  , _scope      :: Scope
-  , _motivation :: Motivation
-  , _systemdb   :: ChunkDB
-  }
-
-makeClassy ''SystemMeta
+import Drasil.System.Core
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.

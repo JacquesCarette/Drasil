@@ -63,8 +63,8 @@ public class Calculations {
         T_W = new List<List<double>> {};
         foreach (SolPoint sp in points) {
             List<double> xTemp = new List<double>(0);
-            foreach (double xEl in sp.X) {
-                xTemp.Add(xEl);
+            for (int i = 0; i < 1; i += 1) {
+                xTemp.Add(sp.X[i]);
             }
             T_W.Add(xTemp);
         }

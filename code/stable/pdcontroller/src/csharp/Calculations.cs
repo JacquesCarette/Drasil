@@ -33,8 +33,8 @@ public class Calculations {
         y_t = new List<List<double>> {};
         foreach (SolPoint sp in points) {
             List<double> xTemp = new List<double>(0);
-            foreach (double xEl in sp.X) {
-                xTemp.Add(xEl);
+            for (int i = 0; i < 2; i += 1) {
+                xTemp.Add(sp.X[i]);
             }
             y_t.Add(xTemp);
         }

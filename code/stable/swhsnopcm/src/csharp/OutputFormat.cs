@@ -14,7 +14,7 @@ public class OutputFormat {
         \param E_W change in heat energy in the water (J)
         \param T_W temperature of the water (degreeC)
     */
-    public static void write_output(double E_W, List<double> T_W) {
+    public static void write_output(double E_W, List<List<double>> T_W) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("T_W = ");

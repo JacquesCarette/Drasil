@@ -13,7 +13,7 @@ public class OutputFormat {
     /** \brief Writes the output values to output.txt
         \param theta dependent variables (rad)
     */
-    public static void write_output(List<double> theta) {
+    public static void write_output(List<List<double>> theta) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("theta = ");

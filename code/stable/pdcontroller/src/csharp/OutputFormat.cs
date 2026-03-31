@@ -13,7 +13,7 @@ public class OutputFormat {
     /** \brief Writes the output values to output.txt
         \param y_t Process Variable
     */
-    public static void write_output(List<double> y_t) {
+    public static void write_output(List<List<double>> y_t) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("y_t = ");

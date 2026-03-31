@@ -17,7 +17,7 @@ public class OutputFormat {
     /** \brief Writes the output values to output.txt
         \param y_t Process Variable
     */
-    public static void write_output(ArrayList<Double> y_t) throws IOException {
+    public static void write_output(ArrayList<ArrayList<Double>> y_t) throws IOException {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("y_t = ");

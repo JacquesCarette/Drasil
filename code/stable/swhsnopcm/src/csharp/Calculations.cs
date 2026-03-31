@@ -48,8 +48,8 @@ public class Calculations {
         \param tau_W ODE parameter for water related to decay time (s)
         \return temperature of the water (degreeC)
     */
-    public static List<double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
-        List<double> T_W;
+    public static List<List<double>> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
+        List<List<double>> T_W;
         Func<double, Vector, Vector> f = (t, T_W_vec) => {
             return new Vector(-(1.0 / tau_W) * T_W_vec[0] + 1.0 / tau_W * T_C);
         };
@@ -60,9 +60,9 @@ public class Calculations {
         Vector initv = new Vector(new double[] {T_init});
         IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
         IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_final, t_step);
-        T_W = new List<double> {};
+        T_W = new List<List<double>> {};
         foreach (SolPoint sp in points) {
-            T_W.Add(sp.X[0]);
+            T_W.Add(sp.X);
         }
         
         return T_W;

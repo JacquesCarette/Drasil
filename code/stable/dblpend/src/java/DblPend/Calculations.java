@@ -19,8 +19,8 @@ public class Calculations {
         \param L_1 length of the first rod (m)
         \return dependent variables (rad)
     */
-    public static ArrayList<Double> func_theta(double m_1, double m_2, double L_2, double L_1) {
-        ArrayList<Double> theta;
+    public static ArrayList<ArrayList<Double>> func_theta(double m_1, double m_2, double L_2, double L_1) {
+        ArrayList<ArrayList<Double>> theta;
         ODEStepHandler stepHandler = new ODEStepHandler();
         ODE ode = new ODE(m_1, m_2, L_1, L_2);
         double[] curr_vals = {1.3463968515384828, 0.0, 2.356194490192345, 0.0};

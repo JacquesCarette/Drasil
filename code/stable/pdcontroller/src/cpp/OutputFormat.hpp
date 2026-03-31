@@ -17,6 +17,6 @@ using std::vector;
 /** \brief Writes the output values to output.txt
     \param y_t Process Variable
 */
-void write_output(vector<double> &y_t);
+void write_output(vector<vector<double>> &y_t);
 
 #endif

@@ -14,7 +14,7 @@ import org.apache.commons.math3.ode.sampling.StepInterpolator;
 /** \brief Class defining additional behaviour for each step of an ODE solution
 */
 public class ODEStepHandler implements StepHandler {
-    public ArrayList<Double> theta;
+    public ArrayList<ArrayList<Double>> theta;
     
     /** \brief initializes step handler with initial conditions
         \param t0 initial time for ODE solving
@@ -22,7 +22,7 @@ public class ODEStepHandler implements StepHandler {
         \param t current independent variable value in ODE solution
     */
     public void init(double t0, double[] y0, double t) {
-        theta = new ArrayList<Double>(Arrays.asList(y0[0]));
+        theta = new ArrayList<ArrayList<Double>>(Arrays.asList(y0));
     }
     
     /** \brief appends solution point at each ODE solution step
@@ -31,6 +31,6 @@ public class ODEStepHandler implements StepHandler {
     */
     public void handleStep(StepInterpolator interpolator, boolean isLast) {
         double[] curr = interpolator.getInterpolatedState();
-        theta.add(curr[0]);
+        theta.add(curr);
     }
 }

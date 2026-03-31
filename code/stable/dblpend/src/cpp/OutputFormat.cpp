@@ -9,7 +9,7 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-void write_output(vector<double> &theta) {
+void write_output(vector<vector<double>> &theta) {
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
     outputfile << "theta = ";

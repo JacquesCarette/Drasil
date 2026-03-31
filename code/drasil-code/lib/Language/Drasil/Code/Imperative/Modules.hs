@@ -22,7 +22,7 @@ import Data.Deriving.Internal (interleave)
 
 import Utils.Drasil.FileData (FileAndContents)
 import Drasil.Database (HasUID(..))
-import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ))
+import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ), Space(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
 import qualified Language.Drasil.Printing.Import as PI (codeExpr)
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
@@ -78,7 +78,6 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil (Space(..))
 
 type ConstraintCE = Constraint CodeExpr
 
@@ -1042,7 +1041,7 @@ genOutputFormatProc = do
   genOutput $ Map.lookup woName (eMap g)
 
 writeOutputValue :: (SharedProg r) => SValue r -> SValue r -> Space -> [MSStatement r]
-writeOutputValue out v = writeOutputValue' (1 :: Integer) v
+writeOutputValue out = writeOutputValue' (1 :: Integer)
   where
     writeOutputValue' n curr (Vect inner) =
       let idx = var ("list_i" ++ show n) int

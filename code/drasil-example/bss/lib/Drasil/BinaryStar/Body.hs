@@ -160,7 +160,7 @@ sysCtxUsrResp =
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp =
   [S "Detect data type mismatch, such as a string of characters" +:+
-     phrase input_ +:+. (S "instead of a floating point number"),
+     phrase input_ +:+. S "instead of a floating point number",
    S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
      D.toSent (pluralNP (physical `and_` softwareConstraint)),
    S "Calculate the required" +:+. plural output_]

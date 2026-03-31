@@ -18,10 +18,8 @@ import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   interface, output_, physical, software, sysCont, softwareConstraint,
   softwareSys, system, user, environment, product_, datum)
 import Data.Drasil.Concepts.Education (undergraduate, calculus)
-import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
-import Data.Drasil.Quantities.Physics (velocity, position, acceleration,
-  energy, force, gravitationalConst, time)
+import Data.Drasil.Quantities.Physics (energy, gravitationalConst)
 import Data.Drasil.Quantities.PhysicalProperties ()
 import Drasil.DocumentLanguage.TraceabilityGraph ()
 import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSPCol)

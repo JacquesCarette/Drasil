@@ -18,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "datafiles/bss/sampleInput.txt", ReadME],
+    [SampleInput "../../datafiles/bss/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   extLibs = [Math (makeODE [bssODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

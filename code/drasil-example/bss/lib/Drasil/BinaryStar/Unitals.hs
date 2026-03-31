@@ -12,9 +12,8 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   refBy, refName, requirement, srs, typUnc)
 import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, velocity,
-  acceleration, energy, gravitationalAccel, force, time)
+  acceleration, energy, force, time)
 import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.Concepts.Math (xDir, yDir)
 import Data.Drasil.Quantities.Physics (gravitationalConst, gravitationalConstValue)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SI_Units (metre, kilogram, second)

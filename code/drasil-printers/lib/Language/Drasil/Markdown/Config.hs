@@ -12,7 +12,7 @@ import Language.Drasil (Document(Document), LabelledContent(LblC, _ctype),
 import Drasil.Database.SearchTools (findAllLabelledContent)
 import Language.Drasil.Markdown.Print (pSpec)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
-import Language.Drasil.Printing.Import.Sentence (spec)
+import Language.Drasil.Printing.Import (spec)
 import Language.Drasil.Printing.LayoutObj (Filepath)
 
 -- | Prints the .toml config file for mdBook.

@@ -41,7 +41,6 @@ library:
   - Language.Drasil.Printing.Citation
   - Language.Drasil.Printing.Helpers
   - Language.Drasil.Printing.Import
-  - Language.Drasil.Printing.Import.Sentence
   - Language.Drasil.Printing.LayoutObj
   - Language.Drasil.Printing.PrintingInformation
   other-modules:
@@ -51,6 +50,7 @@ library:
   - Language.Drasil.Printing.Import.Helpers
   - Language.Drasil.Printing.Import.Literal
   - Language.Drasil.Printing.Import.ModelExpr
+  - Language.Drasil.Printing.Import.Sentence
   - Language.Drasil.Printing.Import.Space
   - Language.Drasil.Printing.Import.Symbol
   when:

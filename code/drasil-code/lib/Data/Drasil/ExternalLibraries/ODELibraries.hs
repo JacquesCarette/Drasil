@@ -279,9 +279,9 @@ populateSolListOslo arr el fld temp i =
     ([s], []) -> FAsg s (Matrix [[]])
     (_,_) -> error popErr),
   Statement (\cdchs es -> case (cdchs, es) of
-    ([s], [dim]) -> FForEach el (sy arr) [FMulti
+    ([s], [solDim]) -> FForEach el (sy arr) [FMulti
       [ FDecDef temp (Matrix [[]])
-      , FFor i (int 0) dim (int 1)
+      , FFor i (int 0) solDim (int 1)
         [FAppend (sy temp) (field el fld `idx` sy i)]
       , FAppend (sy s) (sy temp)
       ]]

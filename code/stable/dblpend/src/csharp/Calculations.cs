@@ -31,7 +31,11 @@ public class Calculations {
         IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, 20.0, 1.0e-3);
         theta = new List<List<double>> {};
         foreach (SolPoint sp in points) {
-            theta.Add(sp.X);
+            List<double> xTemp = new List<double>(0);
+            foreach (double xEl in sp.X) {
+                xTemp.Add(xEl);
+            }
+            theta.Add(xTemp);
         }
         
         return theta;

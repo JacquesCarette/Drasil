@@ -32,7 +32,11 @@ public class Calculations {
         IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
         y_t = new List<List<double>> {};
         foreach (SolPoint sp in points) {
-            y_t.Add(sp.X);
+            List<double> xTemp = new List<double>(0);
+            foreach (double xEl in sp.X) {
+                xTemp.Add(xEl);
+            }
+            y_t.Add(xTemp);
         }
         
         return y_t;

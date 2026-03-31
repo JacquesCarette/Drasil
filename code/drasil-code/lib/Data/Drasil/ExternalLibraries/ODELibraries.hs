@@ -186,7 +186,7 @@ oslo = externalLib [
     sol) [rk547m, gearBDF],
   mandatorySteps (callStep (libMethodWithResult osloImport sol
       solveFromToStep (map inlineArg [Real, Real, Real]) points) :
-    populateSolList points sp x)]
+    populateSolListOslo points sp x xTemp xEl)]
 
 osloCall :: ODEInfo -> ExternalLibraryCall
 osloCall info = externalLibCall [
@@ -219,10 +219,10 @@ osloImport = "Microsoft.Research.Oslo"
 
 -- | Collects variables needed for Oslo's ODEs as 'DefinedQuantityDict's.
 osloSymbols :: [DefinedQuantityDict]
-osloSymbols = map dqdWr [initv, opts, aTol, rTol, sol, points, sp, x] ++
+osloSymbols = map dqdWr [initv, opts, aTol, rTol, sol, points, sp, x, xTemp, xEl] ++
   map dqdWr [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
 
-initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
+initv, opts, aTol, rTol, sol, points, sp, x, xTemp, xEl :: CodeVarChunk
 initv = quantvar $ implVar "initv_oslo" (nounPhrase
   "vector containing the initial values of the dependent variables"
   "vectors containing the initial values of the dependent variables")
@@ -254,6 +254,35 @@ sp = quantvar $ implVar "sp_oslo" (nounPhrase "ODE solution point"
 x = quantvar $ implVar "X_oslo" (nounPhrase "dependent variable"
   "dependent variables") "the dependent variable"
   (Array Real) (label "X")
+xTemp = quantvar $ implVar "xTemp_oslo" (nounPhrase
+  "temporary list for converting Oslo Vector to list"
+  "temporary lists for converting Oslo Vector to list")
+  "the temporary list for converting an Oslo Vector to a list"
+  (Vect Real) (label "xTemp")
+xEl = quantvar $ implVar "xEl_oslo" (nounPhrase
+  "element of Oslo Vector during iteration"
+  "elements of Oslo Vector during iteration")
+  "the element of an Oslo Vector during iteration"
+  Real (label "xEl")
+
+-- | Oslo-specific version of 'populateSolList' that converts each
+-- @Oslo.Vector@ (@sp.X@) to a @List\<double\>@ before appending it to the
+-- solution list, because @Oslo.Vector@ cannot be implicitly converted to
+-- @List\<double\>@.
+populateSolListOslo :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
+                    -> CodeVarChunk -> CodeVarChunk -> [Step]
+populateSolListOslo arr el fld temp tempEl =
+  [Statement (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> FAsg s (Matrix [[]])
+    (_,_) -> error popErr),
+  Statement (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> FForEach el (sy arr) [FMulti
+      [ FDecDef temp (Matrix [[]])
+      , FForEach tempEl (field el fld) [FAppend (sy temp) (sy tempEl)]
+      , FAppend (sy s) (sy temp)
+      ]]
+    (_,_) -> error popErr)]
+  where popErr = "Fill for populateSolListOslo should provide one CodeChunk and no Exprs"
 
 fOslo, options, vector, rk547m, gearBDF, solveFromToStep :: CodeFuncChunk
 fOslo = quantfunc $ implVar "f_oslo" (nounPhrase

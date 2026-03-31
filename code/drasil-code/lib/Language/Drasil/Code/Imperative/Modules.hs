@@ -22,14 +22,14 @@ import Data.Deriving.Internal (interleave)
 
 import Utils.Drasil.FileData (FileAndContents)
 import Drasil.Database (HasUID(..))
-import Language.Drasil (Constraint(..), RealInterval(..))
+import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
 import qualified Language.Drasil.Printing.Import as PI (codeExpr)
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
   oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
-  BooleanExpression(..), StatementSym(..), AssignStatement(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
@@ -59,7 +59,7 @@ import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprProc,
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns,
-  getInputFormatOuts, getCalcParams, getOutputParams)
+  getInputFormatOuts, getCalcParams, getOutputParams, resolveOutputDefType)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName, getSoftwareDossierFiles, getSampleData,
   HasChoices(..))
@@ -78,6 +78,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
+import Language.Drasil (Space(..))
 
 type ConstraintCE = Constraint CodeExpr
 
@@ -616,11 +617,13 @@ genOutputFormat = do
             var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
+        let outs = map (resolveOutputDefType g) (codeSpec g ^. outputsO)
         outp <- mapM (\x -> do
           v <- mkVal x
-          return [ printFileStr v_outfile (codeName x ++ " = "),
-                   printFileLn v_outfile v
-                 ] ) (codeSpec g ^. outputsO)
+          return $
+            [printFileStr v_outfile (codeName x ++ " = ")]
+            ++ writeOutputValue v_outfile v (x ^. typ)
+            ++ [printFileStrLn v_outfile ""] ) outs
         desc <- woFuncDesc
         mthd <- publicFunc woName void desc (map pcAuto parms) Nothing
           [block $ [
@@ -1022,11 +1025,13 @@ genOutputFormatProc = do
             var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
+        let outs = map (resolveOutputDefType g) (codeSpec g ^. outputsO)
         outp <- mapM (\x -> do
           v <- mkValProc x
-          return [ printFileStr v_outfile (codeName x ++ " = "),
-                   printFileLn v_outfile v
-                 ] ) (codeSpec g ^. outputsO)
+          return $
+            [printFileStr v_outfile (codeName x ++ " = ")]
+            ++ writeOutputValue v_outfile v (x ^. typ)
+            ++ [printFileStrLn v_outfile ""] ) outs
         desc <- woFuncDesc
         mthd <- publicFuncProc woName void desc (map pcAuto parms) Nothing
           [block $ [
@@ -1035,3 +1040,19 @@ genOutputFormatProc = do
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
   genOutput $ Map.lookup woName (eMap g)
+
+writeOutputValue :: (SharedProg r) => SValue r -> SValue r -> Space -> [MSStatement r]
+writeOutputValue out v = writeOutputValue' (1 :: Integer) v
+  where
+    writeOutputValue' n curr (Vect inner) =
+      let idx = var ("list_i" ++ show n) int
+          vIdx = valueOf idx
+          elemAt = listAccess curr vIdx
+      in [ printFileStr out "["
+         , forRange idx (litInt 0) (listSize curr) (litInt 1) $ bodyStatements $
+             writeOutputValue' (n + 1) elemAt inner ++
+             [ifNoElse [(vIdx ?< (listSize curr #- litInt 1),
+               bodyStatements [printFileStr out ", "])]]
+         , printFileStr out "]"
+         ]
+    writeOutputValue' _ curr _ = [printFile out curr]

@@ -30,7 +30,7 @@ import Language.Drasil.Code.ExternalLibrary
 import Language.Drasil.Code.ExternalLibraryCall
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, mkODELibNoPath)
-import Language.Drasil.Mod (pubStateVar, privStateVar)
+import Language.Drasil.Mod (pubStateVar, privStateVar, FuncStmt(..))
 
 -- SciPy Library (Python)
 
@@ -53,7 +53,7 @@ scipyODE = externalLib [
       setInitVal [inlineArg Real, inlineArg Real],
     initSolListWithVal,
     solveAndPopulateWhile (libMethod scipyImport r successful []) r t
-      (libMethod scipyImport r integrateStep [inlineArg Real]) y]]
+      (libMethod scipyImport r integrateStep [inlineArg Real]) yList]]
 
 scipyCall :: ODEInfo -> ExternalLibraryCall
 scipyCall info = externalLibCall [
@@ -94,7 +94,7 @@ numpyArrayT = Actor "numpyArray"
 -- | Collects variables needed for SciPy's ODEs as 'DefinedQuantityDict's.
 scipyODESymbols :: [DefinedQuantityDict]
 scipyODESymbols = map dqdWr [mthdArg, atolArg, rtolArg]
-  ++ map dqdWr [r, t, y, xAxis, ut, transpose]
+  ++ map dqdWr [r, t, y, yList, xAxis, ut, transpose]
   ++ map dqdWr [f, odefunc, setIntegrator, setInitVal, successful, integrateStep,
   arange, odeintFunc]
 
@@ -112,10 +112,15 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "the relative tolerance for the ODE solution"
   Real (label "rtol")
 
-r, xAxis, ut, transpose :: CodeVarChunk
+r, yList, xAxis, ut, transpose :: CodeVarChunk
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects")
   "the ODE object"
   odeT (label "r")
+yList = quantvar $ implVar "ylist_scipy"
+  (nounPhrase "current ODE solution as a Python list"
+    "current ODE solutions as Python lists")
+  "the current ODE solution converted to a Python list"
+  (Array Real) (label "y.tolist()")
 xAxis = quantvar $ implVar "x_numpy" (nounPhrase "Numpy value" "Numpy value")
   "the x-axis Numpy value"
   (Array Real) (label "x_axis")
@@ -313,13 +318,13 @@ apacheODE = externalLib [
         stepHandler stepHandlerCtor (implementation sh [
           methodInfoNoReturn initMethod
             "initializes step handler with initial conditions"
-            (map lockedParam [t0, y0, t]) [initSolListFromArray y0],
+            (map lockedParam [t0, y0, t]) [initSolListFromArrayJava y0 y0List y0El],
           methodInfoNoReturn handleStep
             "appends solution point at each ODE solution step"
             (map lockedParam [interpolator, isLast])
             [callStep $ libMethodWithResult siImp interpolator getInterpState
               [] curr,
-            appendCurrSol (sy curr)]])],
+            appendCurrSolFromArrayJava (sy curr) currList currEl]])],
     callStep $ libMethod foiImp it integrate (customObjArg [apacheImport ++
       fode] "Class representing an ODE system" ode odeCtor (implementation fode
         [constructorInfo odeCtor [] [],
@@ -376,11 +381,12 @@ fode = "FirstOrderDifferentialEquations"
 -- | Collects variables needed for Apache's ODEs as 'DefinedQuantityDict's.
 apacheODESymbols :: [DefinedQuantityDict]
 apacheODESymbols = map dqdWr [it, currVals, stepHandler, t0, y0, interpolator,
-  isLast, curr, ode] ++ map dqdWr [adamsC, dp54C, stepHandlerCtor, addStepHandler,
+  isLast, curr, ode, y0List, y0El, currList, currEl] ++ map dqdWr [adamsC, dp54C, stepHandlerCtor, addStepHandler,
   initMethod, handleStep, getInterpState, integrate, odeCtor, getDimension,
   computeDerivatives]
 
-it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
+it, currVals, stepHandler, t0, y0, interpolator, isLast, curr, y0List, y0El,
+  currList, currEl :: CodeVarChunk
 it = quantvar $ implVar "it_apache" (nounPhrase "integrator for solving ODEs"
   "integrators for solving ODEs") "the integrator for solving ODEs"
   (Actor foi) (label "it")
@@ -411,6 +417,20 @@ curr = quantvar $ implVar "curr_apache" (nounPhrase
   "ODE solution array for current step" "ODE solution arrays for current step")
   "the ODE solution array for the current step"
   (Array Real) (label "curr")
+y0List = quantvar $ implVar "y0List_apache" (nounPhrase
+  "initial ODE solution list" "initial ODE solution lists")
+  "the initial ODE solution converted to a Java list"
+  (Vect Real) (label "y0List")
+y0El = quantvar $ implVar "y0El_apache" (nounPhrase
+  "initial ODE solution value" "initial ODE solution values")
+  "an initial ODE solution value" Real (label "y0El")
+currList = quantvar $ implVar "currList_apache" (nounPhrase
+  "current ODE solution list" "current ODE solution lists")
+  "the current ODE solution converted to a Java list"
+  (Vect Real) (label "currList")
+currEl = quantvar $ implVar "currEl_apache" (nounPhrase
+  "current ODE solution value" "current ODE solution values")
+  "a current ODE solution value" Real (label "currEl")
 
 adamsC, dp54C, stepHandlerCtor, addStepHandler, initMethod, handleStep,
   getInterpState, integrate, getDimension, computeDerivatives :: CodeFuncChunk
@@ -455,6 +475,25 @@ getDimension = quantfunc $ implVar "getDimension_apache" (nounPhrase
 computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
   "method encoding an ODE system" "methods encoding an ODE system")
   "the method encoding an ODE system" Void (label "computeDerivatives")
+
+initSolListFromArrayJava :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> Step
+initSolListFromArrayJava arr temp el = Statement (\cdchs es -> case (cdchs, es) of
+  ([s], []) -> FMulti
+    [ FAsg s (Matrix [[]])
+    , FDecDef temp (Matrix [[]])
+    , FForEach el (sy arr) [FAppend (sy temp) (sy el)]
+    , FAppend (sy s) (sy temp)
+    ]
+  _ -> error "Fill for initSolListFromArrayJava should provide one CodeChunk and no Exprs")
+
+appendCurrSolFromArrayJava :: CodeExpr -> CodeVarChunk -> CodeVarChunk -> Step
+appendCurrSolFromArrayJava arr temp el = Statement (\cdchs es -> case (cdchs, es) of
+  ([s], []) -> FMulti
+    [ FDecDef temp (Matrix [[]])
+    , FForEach el arr [FAppend (sy temp) (sy el)]
+    , FAppend (sy s) (sy temp)
+    ]
+  _ -> error "Fill for appendCurrSolFromArrayJava should provide one CodeChunk and no Exprs")
 
 -- odeint (C++)
 

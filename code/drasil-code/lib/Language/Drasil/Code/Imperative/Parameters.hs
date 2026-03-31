@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
   getInputFormatIns, getInputFormatOuts, getDerivedIns, getDerivedOuts,
-  getConstraintParams, getCalcParams, getOutputParams
+  getConstraintParams, getCalcParams, getOutputParams, resolveOutputDefType
 ) where
 
 import Control.Lens ((^.))

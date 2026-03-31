@@ -24,6 +24,6 @@ def func_y_t(K_d, K_p, r_t, t_sim, t_step):
     y_t = [[0.0, 0.0]]
     while r.successful() and r.t < t_sim:
         r.integrate(r.t + t_step)
-        y_t.append(r.y)
+        y_t.append(r.y.tolist())
     
     return y_t

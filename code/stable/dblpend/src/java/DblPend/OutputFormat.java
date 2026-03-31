@@ -21,7 +21,22 @@ public class OutputFormat {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("theta = ");
-        outputfile.println(theta);
+        outputfile.print("[");
+        for (int list_i1 = 0; list_i1 < theta.size(); list_i1 += 1) {
+            outputfile.print("[");
+            for (int list_i2 = 0; list_i2 < theta.get(list_i1).size(); list_i2 += 1) {
+                outputfile.print(theta.get(list_i1).get(list_i2));
+                if (list_i2 < theta.get(list_i1).size() - 1) {
+                    outputfile.print(", ");
+                }
+            }
+            outputfile.print("]");
+            if (list_i1 < theta.size() - 1) {
+                outputfile.print(", ");
+            }
+        }
+        outputfile.print("]");
+        outputfile.println("");
         outputfile.close();
     }
 }

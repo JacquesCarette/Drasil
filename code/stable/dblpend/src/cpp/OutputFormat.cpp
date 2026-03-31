@@ -14,13 +14,20 @@ void write_output(vector<vector<double>> &theta) {
     outputfile.open("output.txt", std::fstream::out);
     outputfile << "theta = ";
     outputfile << "[";
-    for (int list_i1 = 0; list_i1 < (int)(theta.size()) - 1; list_i1++) {
-        outputfile << theta.at(list_i1);
-        outputfile << ", ";
+    for (int list_i1 = 0; list_i1 < (int)(theta.size()); list_i1 += 1) {
+        outputfile << "[";
+        for (int list_i2 = 0; list_i2 < (int)(theta.at(list_i1).size()); list_i2 += 1) {
+            outputfile << theta.at(list_i1).at(list_i2);
+            if (list_i2 < (int)(theta.at(list_i1).size()) - 1) {
+                outputfile << ", ";
+            }
+        }
+        outputfile << "]";
+        if (list_i1 < (int)(theta.size()) - 1) {
+            outputfile << ", ";
+        }
     }
-    if ((int)(theta.size()) > 0) {
-        outputfile << theta.at((int)(theta.size()) - 1);
-    }
-    outputfile << "]" << std::endl;
+    outputfile << "]";
+    outputfile << "" << std::endl;
     outputfile.close();
 }

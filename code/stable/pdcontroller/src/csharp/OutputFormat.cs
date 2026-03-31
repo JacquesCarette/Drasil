@@ -18,14 +18,21 @@ public class OutputFormat {
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("y_t = ");
         outputfile.Write("[");
-        for (int list_i1 = 0; list_i1 < y_t.Count - 1; list_i1++) {
-            outputfile.Write(y_t[list_i1]);
-            outputfile.Write(", ");
+        for (int list_i1 = 0; list_i1 < y_t.Count; list_i1 += 1) {
+            outputfile.Write("[");
+            for (int list_i2 = 0; list_i2 < y_t[list_i1].Count; list_i2 += 1) {
+                outputfile.Write(y_t[list_i1][list_i2]);
+                if (list_i2 < y_t[list_i1].Count - 1) {
+                    outputfile.Write(", ");
+                }
+            }
+            outputfile.Write("]");
+            if (list_i1 < y_t.Count - 1) {
+                outputfile.Write(", ");
+            }
         }
-        if (y_t.Count > 0) {
-            outputfile.Write(y_t[y_t.Count - 1]);
-        }
-        outputfile.WriteLine("]");
+        outputfile.Write("]");
+        outputfile.WriteLine("");
         outputfile.Close();
     }
 }

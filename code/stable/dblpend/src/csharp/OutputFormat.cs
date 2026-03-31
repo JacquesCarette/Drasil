@@ -18,14 +18,21 @@ public class OutputFormat {
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("theta = ");
         outputfile.Write("[");
-        for (int list_i1 = 0; list_i1 < theta.Count - 1; list_i1++) {
-            outputfile.Write(theta[list_i1]);
-            outputfile.Write(", ");
+        for (int list_i1 = 0; list_i1 < theta.Count; list_i1 += 1) {
+            outputfile.Write("[");
+            for (int list_i2 = 0; list_i2 < theta[list_i1].Count; list_i2 += 1) {
+                outputfile.Write(theta[list_i1][list_i2]);
+                if (list_i2 < theta[list_i1].Count - 1) {
+                    outputfile.Write(", ");
+                }
+            }
+            outputfile.Write("]");
+            if (list_i1 < theta.Count - 1) {
+                outputfile.Write(", ");
+            }
         }
-        if (theta.Count > 0) {
-            outputfile.Write(theta[theta.Count - 1]);
-        }
-        outputfile.WriteLine("]");
+        outputfile.Write("]");
+        outputfile.WriteLine("");
         outputfile.Close();
     }
 }

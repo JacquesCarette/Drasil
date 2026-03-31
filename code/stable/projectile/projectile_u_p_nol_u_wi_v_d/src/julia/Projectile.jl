@@ -99,9 +99,11 @@ end
 function write_output(d_offset::Float64, t_flight::Float64)
     outputfile = open("output.txt", "w")
     print(outputfile, "d_offset = ")
-    println(outputfile, d_offset)
+    print(outputfile, d_offset)
+    println(outputfile, "")
     print(outputfile, "t_flight = ")
-    println(outputfile, t_flight)
+    print(outputfile, t_flight)
+    println(outputfile, "")
     close(outputfile)
 end
 

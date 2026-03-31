@@ -46,6 +46,6 @@ def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
     T_W = [[T_init]]
     while r.successful() and r.t < t_final:
         r.integrate(r.t + t_step)
-        T_W.append(r.y)
+        T_W.append(r.y.tolist())
     
     return T_W

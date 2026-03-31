@@ -113,9 +113,11 @@ public class Projectile {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("d_offset = ");
-        outputfile.WriteLine(d_offset);
+        outputfile.Write(d_offset);
+        outputfile.WriteLine("");
         outputfile.Write("t_flight = ");
-        outputfile.WriteLine(t_flight);
+        outputfile.Write(t_flight);
+        outputfile.WriteLine("");
         outputfile.Close();
     }
 }

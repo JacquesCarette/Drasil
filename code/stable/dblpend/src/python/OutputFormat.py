@@ -8,5 +8,16 @@
 def write_output(theta):
     outputfile = open("output.txt", "w")
     print("theta = ", end="", file=outputfile)
-    print(theta, file=outputfile)
+    print("[", end="", file=outputfile)
+    for list_i1 in range(0, len(theta), 1):
+        print("[", end="", file=outputfile)
+        for list_i2 in range(0, len(theta[list_i1]), 1):
+            print(theta[list_i1][list_i2], end="", file=outputfile)
+            if list_i2 < len(theta[list_i1]) - 1:
+                print(", ", end="", file=outputfile)
+        print("]", end="", file=outputfile)
+        if list_i1 < len(theta) - 1:
+            print(", ", end="", file=outputfile)
+    print("]", end="", file=outputfile)
+    print("", file=outputfile)
     outputfile.close()

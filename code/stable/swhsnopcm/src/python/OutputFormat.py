@@ -9,7 +9,19 @@
 def write_output(E_W, T_W):
     outputfile = open("output.txt", "w")
     print("T_W = ", end="", file=outputfile)
-    print(T_W, file=outputfile)
+    print("[", end="", file=outputfile)
+    for list_i1 in range(0, len(T_W), 1):
+        print("[", end="", file=outputfile)
+        for list_i2 in range(0, len(T_W[list_i1]), 1):
+            print(T_W[list_i1][list_i2], end="", file=outputfile)
+            if list_i2 < len(T_W[list_i1]) - 1:
+                print(", ", end="", file=outputfile)
+        print("]", end="", file=outputfile)
+        if list_i1 < len(T_W) - 1:
+            print(", ", end="", file=outputfile)
+    print("]", end="", file=outputfile)
+    print("", file=outputfile)
     print("E_W = ", end="", file=outputfile)
-    print(E_W, file=outputfile)
+    print(E_W, end="", file=outputfile)
+    print("", file=outputfile)
     outputfile.close()

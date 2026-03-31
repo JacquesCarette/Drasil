@@ -23,6 +23,6 @@ def func_theta(m_1, m_2, L_2, L_1):
     theta = [[1.3463968515384828, 0.0, 2.356194490192345, 0.0]]
     while r.successful() and r.t < 20.0:
         r.integrate(r.t + 1.0e-3)
-        theta.append(r.y)
+        theta.append(r.y.tolist())
     
     return theta

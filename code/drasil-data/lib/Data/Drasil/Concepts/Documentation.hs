@@ -9,8 +9,6 @@ module Data.Drasil.Concepts.Documentation (
   , module Data.Drasil.Concepts.Documentation
   ) where
 
-import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization, year, label, variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -158,11 +156,7 @@ userInput                    = compoundNC user input_
 
 -- * Domains
 
-refByDom, refNameDom :: ConceptChunk
-refByDom      = ccs (mkIdea "refByDom"      (refBy ^. term)                    $ Just "RefBy")    EmptyS [srsDom]
-refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $ Just "RefName")  EmptyS [srsDom]
-
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
-  assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
+  assumpDom, chgProbDom, likeChgDom, unlikeChgDom]

@@ -17,6 +17,6 @@ using std::vector;
 /** \brief Writes the output values to output.txt
     \param theta dependent variables (rad)
 */
-void write_output(vector<double> &theta);
+void write_output(vector<vector<double>> &theta);
 
 #endif

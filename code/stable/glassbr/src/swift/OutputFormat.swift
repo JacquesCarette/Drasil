@@ -110,6 +110,11 @@ func write_output(_ isSafePb: Bool, _ isSafeLR: Bool, _ P_b: Double, _ J: Double
     }
     do {
         try outputfile.write(contentsOf: Data(String(isSafePb).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("".utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -121,6 +126,11 @@ func write_output(_ isSafePb: Bool, _ isSafeLR: Bool, _ P_b: Double, _ J: Double
     }
     do {
         try outputfile.write(contentsOf: Data(String(isSafeLR).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("".utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -132,6 +142,11 @@ func write_output(_ isSafePb: Bool, _ isSafeLR: Bool, _ P_b: Double, _ J: Double
     }
     do {
         try outputfile.write(contentsOf: Data(String(P_b).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("".utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -143,6 +158,11 @@ func write_output(_ isSafePb: Bool, _ isSafeLR: Bool, _ P_b: Double, _ J: Double
     }
     do {
         try outputfile.write(contentsOf: Data(String(J).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("".utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."

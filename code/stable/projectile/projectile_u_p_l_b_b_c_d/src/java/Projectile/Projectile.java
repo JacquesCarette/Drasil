@@ -119,9 +119,11 @@ public class Projectile {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("d_offset = ");
-        outputfile.println(d_offset);
+        outputfile.print(d_offset);
+        outputfile.println("");
         outputfile.print("t_flight = ");
-        outputfile.println(t_flight);
+        outputfile.print(t_flight);
+        outputfile.println("");
         outputfile.close();
     }
 }

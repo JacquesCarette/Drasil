@@ -28,12 +28,16 @@ void write_output(bool isSafePb, bool isSafeLR, double P_b, double J) {
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
     outputfile << "isSafePb = ";
-    outputfile << isSafePb << std::endl;
+    outputfile << isSafePb;
+    outputfile << "" << std::endl;
     outputfile << "isSafeLR = ";
-    outputfile << isSafeLR << std::endl;
+    outputfile << isSafeLR;
+    outputfile << "" << std::endl;
     outputfile << "P_b = ";
-    outputfile << P_b << std::endl;
+    outputfile << P_b;
+    outputfile << "" << std::endl;
     outputfile << "J = ";
-    outputfile << J << std::endl;
+    outputfile << J;
+    outputfile << "" << std::endl;
     outputfile.close();
 }

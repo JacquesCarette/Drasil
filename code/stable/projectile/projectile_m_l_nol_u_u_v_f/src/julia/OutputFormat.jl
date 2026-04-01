@@ -13,9 +13,11 @@ module OutputFormat
 function write_output(d_offset::Float32, t_flight::Float32)
     outputfile = open("output.txt", "w")
     print(outputfile, "d_offset = ")
-    println(outputfile, d_offset)
+    print(outputfile, d_offset)
+    println(outputfile, "")
     print(outputfile, "t_flight = ")
-    println(outputfile, t_flight)
+    print(outputfile, t_flight)
+    println(outputfile, "")
     close(outputfile)
 end
 

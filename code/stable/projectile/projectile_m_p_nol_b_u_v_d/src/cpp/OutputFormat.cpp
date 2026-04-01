@@ -11,8 +11,10 @@ void write_output(double d_offset, double t_flight) {
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
     outputfile << "d_offset = ";
-    outputfile << d_offset << std::endl;
+    outputfile << d_offset;
+    outputfile << "" << std::endl;
     outputfile << "t_flight = ";
-    outputfile << t_flight << std::endl;
+    outputfile << t_flight;
+    outputfile << "" << std::endl;
     outputfile.close();
 }

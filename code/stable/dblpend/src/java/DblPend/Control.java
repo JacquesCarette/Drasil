@@ -27,7 +27,7 @@ public class Control {
         m_1 = (double)(outputs[2]);
         m_2 = (double)(outputs[3]);
         InputParameters.input_constraints(L_1, L_2, m_1, m_2);
-        ArrayList<Double> theta = Calculations.func_theta(m_1, m_2, L_2, L_1);
+        ArrayList<ArrayList<Double>> theta = Calculations.func_theta(m_1, m_2, L_2, L_1);
         OutputFormat.write_output(theta);
     }
 }

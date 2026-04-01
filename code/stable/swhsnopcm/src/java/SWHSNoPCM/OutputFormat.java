@@ -18,13 +18,29 @@ public class OutputFormat {
         \param E_W change in heat energy in the water (J)
         \param T_W temperature of the water (degreeC)
     */
-    public static void write_output(double E_W, ArrayList<Double> T_W) throws IOException {
+    public static void write_output(double E_W, ArrayList<ArrayList<Double>> T_W) throws IOException {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("T_W = ");
-        outputfile.println(T_W);
+        outputfile.print("[");
+        for (int list_i1 = 0; list_i1 < T_W.size(); list_i1 += 1) {
+            outputfile.print("[");
+            for (int list_i2 = 0; list_i2 < T_W.get(list_i1).size(); list_i2 += 1) {
+                outputfile.print(T_W.get(list_i1).get(list_i2));
+                if (list_i2 < T_W.get(list_i1).size() - 1) {
+                    outputfile.print(", ");
+                }
+            }
+            outputfile.print("]");
+            if (list_i1 < T_W.size() - 1) {
+                outputfile.print(", ");
+            }
+        }
+        outputfile.print("]");
+        outputfile.println("");
         outputfile.print("E_W = ");
-        outputfile.println(E_W);
+        outputfile.print(E_W);
+        outputfile.println("");
         outputfile.close();
     }
 }

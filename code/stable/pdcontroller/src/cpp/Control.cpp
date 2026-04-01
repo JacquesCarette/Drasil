@@ -28,7 +28,7 @@ int main(int argc, const char *argv[]) {
     double t_sim;
     get_input(filename, r_t, K_d, K_p, t_step, t_sim);
     input_constraints(r_t, K_d, K_p, t_step, t_sim);
-    vector<double> y_t = func_y_t(K_d, K_p, r_t, t_sim, t_step);
+    vector<vector<double>> y_t = func_y_t(K_d, K_p, r_t, t_sim, t_step);
     write_output(y_t);
     
     return 0;

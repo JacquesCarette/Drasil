@@ -24,6 +24,11 @@ func write_output(_ d_offset: Double, _ t_flight: Double) throws -> Void {
     }
     do {
         try outputfile.write(contentsOf: Data(String(d_offset).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("".utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -35,6 +40,11 @@ func write_output(_ d_offset: Double, _ t_flight: Double) throws -> Void {
     }
     do {
         try outputfile.write(contentsOf: Data(String(t_flight).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("".utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."

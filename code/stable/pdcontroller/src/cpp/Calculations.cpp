@@ -11,8 +11,8 @@
 
 using std::vector;
 
-vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
-    vector<double> y_t;
+vector<vector<double>> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+    vector<vector<double>> y_t;
     ODE ode = ODE(K_p, K_d, r_t);
     vector<double> currVals{0.0, 0.0};
     Populate pop = Populate(y_t);

@@ -14,21 +14,29 @@ public class OutputFormat {
         \param E_W change in heat energy in the water (J)
         \param T_W temperature of the water (degreeC)
     */
-    public static void write_output(double E_W, List<double> T_W) {
+    public static void write_output(double E_W, List<List<double>> T_W) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("T_W = ");
         outputfile.Write("[");
-        for (int list_i1 = 0; list_i1 < T_W.Count - 1; list_i1++) {
-            outputfile.Write(T_W[list_i1]);
-            outputfile.Write(", ");
+        for (int list_i1 = 0; list_i1 < T_W.Count; list_i1 += 1) {
+            outputfile.Write("[");
+            for (int list_i2 = 0; list_i2 < T_W[list_i1].Count; list_i2 += 1) {
+                outputfile.Write(T_W[list_i1][list_i2]);
+                if (list_i2 < T_W[list_i1].Count - 1) {
+                    outputfile.Write(", ");
+                }
+            }
+            outputfile.Write("]");
+            if (list_i1 < T_W.Count - 1) {
+                outputfile.Write(", ");
+            }
         }
-        if (T_W.Count > 0) {
-            outputfile.Write(T_W[T_W.Count - 1]);
-        }
-        outputfile.WriteLine("]");
+        outputfile.Write("]");
+        outputfile.WriteLine("");
         outputfile.Write("E_W = ");
-        outputfile.WriteLine(E_W);
+        outputfile.Write(E_W);
+        outputfile.WriteLine("");
         outputfile.Close();
     }
 }

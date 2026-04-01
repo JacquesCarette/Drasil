@@ -8,5 +8,16 @@
 def write_output(y_t):
     outputfile = open("output.txt", "w")
     print("y_t = ", end="", file=outputfile)
-    print(y_t, file=outputfile)
+    print("[", end="", file=outputfile)
+    for list_i1 in range(0, len(y_t), 1):
+        print("[", end="", file=outputfile)
+        for list_i2 in range(0, len(y_t[list_i1]), 1):
+            print(y_t[list_i1][list_i2], end="", file=outputfile)
+            if list_i2 < len(y_t[list_i1]) - 1:
+                print(", ", end="", file=outputfile)
+        print("]", end="", file=outputfile)
+        if list_i1 < len(y_t) - 1:
+            print(", ", end="", file=outputfile)
+    print("]", end="", file=outputfile)
+    print("", file=outputfile)
     outputfile.close()

@@ -22,8 +22,8 @@ double func_tau_W(double C_W, double h_C, double A_C, double m_W) {
     return m_W * C_W / (h_C * A_C);
 }
 
-vector<double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
-    vector<double> T_W;
+vector<vector<double>> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
+    vector<vector<double>> T_W;
     ODE ode = ODE(tau_W, T_C);
     vector<double> currVals{T_init};
     Populate pop = Populate(T_W);

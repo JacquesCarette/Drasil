@@ -142,7 +142,6 @@ lcvertNoTime :: LabelledContent
 eqnRefs :: [Reference]
 
 module Drasil.Projectile.Lesson.Review
-reviewContent :: [Contents]
 reviewSecs :: [Section]
 
 module Drasil.Projectile.Lesson.CaseProb

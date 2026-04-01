@@ -4178,24 +4178,16 @@ digraph alltypes {
 	}
 	subgraph printers {
 	}
-	subgraph sytems {
+	subgraph core {
 		subgraph systemmeta{
 		SystemMeta	[shape=oval, color=cyan3, label="SystemMeta"];
 		SystemMeta -> CI;
-		SystemMeta -> SystemKind;
 		SystemMeta -> People;
 		SystemMeta -> Purpose;
 		SystemMeta -> Background;
 		SystemMeta -> Scope;
 		SystemMeta -> Motivation;
 		SystemMeta -> ChunkDB;
-		}
-		subgraph system{
-		System	[shape=oval, color=darkviolet, label="System"];
-		System -> Quantity;
-		System -> h;
-		System -> MayHaveUnit;
-		System -> Concept;
 		}
 		subgraph purpose{
 		Purpose	[shape=oval, color=red2, label="Purpose"];
@@ -4213,6 +4205,20 @@ digraph alltypes {
 		Motivation	[shape=oval, color=red2, label="Motivation"];
 		Motivation -> Sentence;
 		}
+	}
+	subgraph oldsytems {
+		subgraph systemkind{
+		SystemKind	[shape=oval, color=darkviolet, label="SystemKind"];
+		}
+		subgraph system{
+		System	[shape=oval, color=darkviolet, label="System"];
+		System -> Quantity;
+		System -> h;
+		System -> MayHaveUnit;
+		System -> Concept;
+		}
+	}
+	subgraph sytems {
 	}
 	subgraph searctoolhs {
 		subgraph termabbr{

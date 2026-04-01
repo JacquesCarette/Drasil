@@ -166,6 +166,7 @@ purpose :: IdeaDict
 quantity :: IdeaDict
 reference :: IdeaDict
 refBy :: CI
+refName :: CI
 refMat :: IdeaDict
 requirement :: CI
 reqDom :: ConceptChunk

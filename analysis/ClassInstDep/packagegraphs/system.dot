@@ -1,6 +1,6 @@
 digraph system{
-SystemKind	[shape=oval, color=turquoise4, label="SystemKind"];
 SystemMeta	[shape=oval, color=turquoise4, label="SystemMeta"];
+SystemKind	[shape=oval, color=turquoise4, label="SystemKind"];
 System	[shape=oval, color=turquoise4, label="System"];
 HasSystemMeta	[shape=oval, color=pink, label="HasSystemMeta"];
 System -> HasSystemMeta;

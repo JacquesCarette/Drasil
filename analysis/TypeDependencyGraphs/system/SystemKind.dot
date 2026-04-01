@@ -1,0 +1,3 @@
+digraph systemkind{
+SystemKind	[shape=oval, color=darkviolet, label="SystemKind"];
+}

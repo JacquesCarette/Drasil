@@ -3111,9 +3111,6 @@ NoCap :: TermCapitalization
 -- | Capitalizes a Sentence.
 capSent :: Sentence -> Sentence
 
--- | Helper which creates a Header with size s of the <a>Sentence</a>.
-headSent :: Int -> Sentence -> Sentence
-
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence
 eS :: ModelExpr -> Sentence
@@ -6986,9 +6983,6 @@ RefNote :: String -> RefInfo
 
 -- | Capitalizes a Sentence.
 capSent :: Sentence -> Sentence
-
--- | Helper which creates a Header with size s of the <a>Sentence</a>.
-headSent :: Int -> Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (IsChunk t, Idea t, HasSpace t, HasSymbol t) => t -> Sentence

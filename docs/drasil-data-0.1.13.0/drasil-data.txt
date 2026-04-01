@@ -84,9 +84,6 @@ doccon' :: [CI]
 
 -- | CI | | uid | term | abbreviation | ConceptDomain
 dataConst :: CI
-refName :: CI
-refByDom :: ConceptChunk
-refNameDom :: ConceptChunk
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]

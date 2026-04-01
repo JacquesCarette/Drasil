@@ -9,15 +9,49 @@
 @package drasil-system
 @version 0.1.1.0
 
+module Drasil.System.Core
+
+-- | Project Example purpose.
+type Purpose = [Sentence]
+
+-- | Project Example background information, used in the <tt>What</tt>
+--   section of README.
+type Background = [Sentence]
+
+-- | Project Example scope.
+type Scope = [Sentence]
+
+-- | Project Example motivation.
+type Motivation = [Sentence]
+data SystemMeta
+SystemMeta :: CI -> People -> Purpose -> Background -> Scope -> Motivation -> ChunkDB -> SystemMeta
+[_sysName] :: SystemMeta -> CI
+[_authors] :: SystemMeta -> People
+[_purpose] :: SystemMeta -> Purpose
+[_background] :: SystemMeta -> Background
+[_scope] :: SystemMeta -> Scope
+[_motivation] :: SystemMeta -> Motivation
+[_systemdb] :: SystemMeta -> ChunkDB
+class HasSystemMeta c_a7LU
+systemMeta :: HasSystemMeta c_a7LU => Lens' c_a7LU SystemMeta
+authors :: HasSystemMeta c_a7LU => Lens' c_a7LU People
+background :: HasSystemMeta c_a7LU => Lens' c_a7LU Background
+motivation :: HasSystemMeta c_a7LU => Lens' c_a7LU Motivation
+purpose :: HasSystemMeta c_a7LU => Lens' c_a7LU Purpose
+scope :: HasSystemMeta c_a7LU => Lens' c_a7LU Scope
+sysName :: HasSystemMeta c_a7LU => Lens' c_a7LU CI
+systemdb :: HasSystemMeta c_a7LU => Lens' c_a7LU ChunkDB
+instance Drasil.System.Core.HasSystemMeta Drasil.System.Core.SystemMeta
+
 
 -- | Define types and functions related to creating a system information
 --   database.
-module Drasil.System
+module Drasil.System.OldSystem
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => SystemMeta -> String -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
+[SI] :: (Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => SystemMeta -> SystemKind -> String -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [h] -> [i] -> [j] -> [ConstQDef] -> Map UID Reference -> Map UID [UID] -> Map UID [UID] -> System
 
 -- | Enumeration of <i>kinds</i> of <a>System</a>s we can encode.
 data SystemKind
@@ -38,28 +72,28 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
-class HasSystem c_a8yA
-system :: HasSystem c_a8yA => Lens' c_a8yA System
-constants :: HasSystem c_a8yA => Lens' c_a8yA [ConstQDef]
-dataDefns :: HasSystem c_a8yA => Lens' c_a8yA [DataDefinition]
-genDefns :: HasSystem c_a8yA => Lens' c_a8yA [GenDefn]
-instModels :: HasSystem c_a8yA => Lens' c_a8yA [InstanceModel]
-meta :: HasSystem c_a8yA => Lens' c_a8yA SystemMeta
-programName :: HasSystem c_a8yA => Lens' c_a8yA String
-refTable :: HasSystem c_a8yA => Lens' c_a8yA (Map UID Reference)
-refbyTable :: HasSystem c_a8yA => Lens' c_a8yA (Map UID [UID])
-theoryModels :: HasSystem c_a8yA => Lens' c_a8yA [TheoryModel]
-traceTable :: HasSystem c_a8yA => Lens' c_a8yA (Map UID [UID])
-class HasSystemMeta c_a80U
-systemMeta :: HasSystemMeta c_a80U => Lens' c_a80U SystemMeta
-authors :: HasSystemMeta c_a80U => Lens' c_a80U People
-background :: HasSystemMeta c_a80U => Lens' c_a80U Background
-kind :: HasSystemMeta c_a80U => Lens' c_a80U SystemKind
-motivation :: HasSystemMeta c_a80U => Lens' c_a80U Motivation
-purpose :: HasSystemMeta c_a80U => Lens' c_a80U Purpose
-scope :: HasSystemMeta c_a80U => Lens' c_a80U Scope
-sysName :: HasSystemMeta c_a80U => Lens' c_a80U CI
-systemdb :: HasSystemMeta c_a80U => Lens' c_a80U ChunkDB
+class HasSystem c_a9qg
+system :: HasSystem c_a9qg => Lens' c_a9qg System
+constants :: HasSystem c_a9qg => Lens' c_a9qg [ConstQDef]
+dataDefns :: HasSystem c_a9qg => Lens' c_a9qg [DataDefinition]
+genDefns :: HasSystem c_a9qg => Lens' c_a9qg [GenDefn]
+instModels :: HasSystem c_a9qg => Lens' c_a9qg [InstanceModel]
+kind :: HasSystem c_a9qg => Lens' c_a9qg SystemKind
+meta :: HasSystem c_a9qg => Lens' c_a9qg SystemMeta
+programName :: HasSystem c_a9qg => Lens' c_a9qg String
+refTable :: HasSystem c_a9qg => Lens' c_a9qg (Map UID Reference)
+refbyTable :: HasSystem c_a9qg => Lens' c_a9qg (Map UID [UID])
+theoryModels :: HasSystem c_a9qg => Lens' c_a9qg [TheoryModel]
+traceTable :: HasSystem c_a9qg => Lens' c_a9qg (Map UID [UID])
+class HasSystemMeta c_a7LU
+systemMeta :: HasSystemMeta c_a7LU => Lens' c_a7LU SystemMeta
+authors :: HasSystemMeta c_a7LU => Lens' c_a7LU People
+background :: HasSystemMeta c_a7LU => Lens' c_a7LU Background
+motivation :: HasSystemMeta c_a7LU => Lens' c_a7LU Motivation
+purpose :: HasSystemMeta c_a7LU => Lens' c_a7LU Purpose
+scope :: HasSystemMeta c_a7LU => Lens' c_a7LU Scope
+sysName :: HasSystemMeta c_a7LU => Lens' c_a7LU CI
+systemdb :: HasSystemMeta c_a7LU => Lens' c_a7LU ChunkDB
 
 -- | Probe what kind of <a>System</a> one is. For example, does it
 --   represent a (Problem) specification, runnable software, a
@@ -74,6 +108,7 @@ refbyLookup :: UID -> System -> [UID]
 
 -- | Find what chunks a specific one references.
 traceLookup :: UID -> System -> [UID]
-instance Drasil.System.HasSystem Drasil.System.System
-instance Drasil.System.HasSystemMeta Drasil.System.System
-instance Drasil.System.HasSystemMeta Drasil.System.SystemMeta
+instance Drasil.System.OldSystem.HasSystem Drasil.System.OldSystem.System
+instance Drasil.System.Core.HasSystemMeta Drasil.System.OldSystem.System
+
+module Drasil.System

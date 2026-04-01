@@ -1,7 +1,6 @@
 digraph systemmeta{
 SystemMeta	[shape=oval, color=cyan3, label="SystemMeta"];
 SystemMeta -> CI;
-SystemMeta -> SystemKind;
 SystemMeta -> People;
 SystemMeta -> Purpose;
 SystemMeta -> Background;

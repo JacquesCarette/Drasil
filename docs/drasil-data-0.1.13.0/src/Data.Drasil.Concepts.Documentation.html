@@ -9,18 +9,16 @@
 </span><span id="line-9"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></a></span><span>
 </span><span id="line-10"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">organization</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">year</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-keyword">label</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">variable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sec</span></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata.Domains</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">softEng</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">documentc</span></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata.Documentation</span></span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata.TheoryConcepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">thModel</span></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="annot"><span class="hs-comment">-- | Collects all documentation-related named chunks (not concept-level yet).</span></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#doccon"><span class="hs-identifier hs-type">doccon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-23"></span><span id="doccon"><span class="annot"><span class="annottext">doccon :: [IdeaDict]
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">organization</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">year</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-keyword">label</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">variable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sec</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata.Domains</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">softEng</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata.Documentation</span></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.Metadata.TheoryConcepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">thModel</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Collects all documentation-related named chunks (not concept-level yet).</span></span><span>
+</span><span id="line-20"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#doccon"><span class="hs-identifier hs-type">doccon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span id="doccon"><span class="annot"><span class="annottext">doccon :: [IdeaDict]
 </span><a href="Data.Drasil.Concepts.Documentation.html#doccon"><span class="hs-identifier hs-var hs-var">doccon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">abbAcc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">abbreviation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -29,7 +27,7 @@
 </span><span class="hs-identifier hs-var">appendix</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#aspect"><span class="hs-identifier hs-var">aspect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-var">body</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">caseProb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">charOfIR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">characteristic</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -38,7 +36,7 @@
 </span><span class="hs-identifier hs-var">code</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">column</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#company"><span class="hs-identifier hs-var">company</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">component</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#concept"><span class="hs-identifier hs-var">concept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#condition"><span class="hs-identifier hs-var">condition</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -46,7 +44,7 @@
 </span><span class="hs-identifier hs-var">consVals</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier hs-var">constant</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">constraint</span></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#consumer"><span class="hs-identifier hs-var">consumer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">content</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">context</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -54,14 +52,14 @@
 </span><a href="Data.Drasil.Concepts.Documentation.html#coordinateSystem"><span class="hs-identifier hs-var">coordinateSystem</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">corSol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">customer</span></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">datum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">datumConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">decision</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">definition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-keyword hs-var">dependency</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">description</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">design</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">designDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">document</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -69,7 +67,7 @@
 </span><a href="Data.Drasil.Concepts.Documentation.html#effect"><span class="hs-identifier hs-var">effect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">element</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#emphasis"><span class="hs-identifier hs-var">emphasis</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">endUser</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">environment</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">example</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -78,19 +76,19 @@
 </span><a href="Data.Drasil.Concepts.Documentation.html#first"><span class="hs-identifier hs-var">first</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">form</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">full</span></span><span class="hs-special">,</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">fullForm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">functional</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">functionalRequirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#game"><span class="hs-identifier hs-var">game</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">general</span></span><span class="hs-special">,</span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">generalSystemDescription</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">goal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">guide</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">implementation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">indPRCase</span></span><span class="hs-special">,</span><span>
-</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">individual</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">information</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">input_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -98,7 +96,7 @@
 </span><span class="hs-identifier hs-var">intReader</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">interest</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">interface</span></span><span class="hs-special">,</span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">introduction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#issue"><span class="hs-identifier hs-var">issue</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -107,7 +105,7 @@
 </span><span class="hs-identifier hs-var">limitation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#literacy"><span class="hs-identifier hs-var">literacy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#loss"><span class="hs-identifier hs-var">loss</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#material_"><span class="hs-identifier hs-var">material_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#mainIdea"><span class="hs-identifier hs-var">mainIdea</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#message"><span class="hs-identifier hs-var">message</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -116,40 +114,40 @@
 </span><span class="hs-identifier hs-var">model</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">module_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#name_"><span class="hs-identifier hs-var">name_</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">nonfunctional</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">nonfunctionalRequirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#notApp"><span class="hs-identifier hs-var">notApp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#object"><span class="hs-identifier hs-var">object</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">offShelf</span></span><span class="hs-special">,</span><span>
-</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">offShelfSolution</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#open"><span class="hs-identifier hs-var">open</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">orgOfDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">organization</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physical</span></span><span class="hs-special">,</span><span>
-</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physicalConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalProperty"><span class="hs-identifier hs-var">physicalProperty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalSim"><span class="hs-identifier hs-var">physicalSim</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physicalSystem</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physics"><span class="hs-identifier hs-var">physics</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">plan</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#practice"><span class="hs-identifier hs-var">practice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#priority"><span class="hs-identifier hs-var">priority</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">problem</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">problemDescription</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">problemIntro</span></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#procedure"><span class="hs-identifier hs-var">procedure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">prodUCTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">productUC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">product_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">project</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#procForAnls"><span class="hs-identifier hs-var">procForAnls</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">propOfCorSol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">property</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">prpsOfDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -157,14 +155,14 @@
 </span><span class="hs-identifier hs-var">quantity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#realtime"><span class="hs-identifier hs-var">realtime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">review</span></span><span class="hs-special">,</span><span>
-</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">reference</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">refMat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">reqInput</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#response"><span class="hs-identifier hs-var">response</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#result"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#reviewer"><span class="hs-identifier hs-var">reviewer</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#safety"><span class="hs-identifier hs-var">safety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#safetyReq"><span class="hs-identifier hs-var">safetyReq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#scenario"><span class="hs-identifier hs-var">scenario</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -172,45 +170,45 @@
 </span><span class="hs-identifier hs-var">scpOfReq</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProjS"><span class="hs-identifier hs-var">scpOfTheProjS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#second_"><span class="hs-identifier hs-var">second_</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#simulation"><span class="hs-identifier hs-var">simulation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareDoc</span></span><span class="hs-special">,</span><span>
-</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareReq</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareSys"><span class="hs-identifier hs-var">softwareSys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareVAV</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareVerif"><span class="hs-identifier hs-var">softwareVerif</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">solution</span></span><span class="hs-special">,</span><span>
-</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">solutionCharSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">solutionCharacteristic</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">summary</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier hs-var">source</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">specific</span></span><span class="hs-special">,</span><span>
-</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">specification</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">specificsystemdescription</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">stakeholder</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#standard"><span class="hs-identifier hs-var">standard</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">statement</span></span><span class="hs-special">,</span><span>
-</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">systemConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">systemdescription</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">tAuxConsts</span></span><span class="hs-special">,</span><span>
-</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">tOfCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">tOfSymb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">tOfUnit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">inDatumConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">outDatumConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">table_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#task"><span class="hs-identifier hs-var">task</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">template</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">termAndDef</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -218,31 +216,31 @@
 </span><span class="hs-identifier hs-var">terminology</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">theory</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">traceyGraph</span></span><span class="hs-special">,</span><span>
-</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">traceyMandG</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">traceyMatrix</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#type_"><span class="hs-identifier hs-var">type_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#uncertCol"><span class="hs-identifier hs-var">uncertCol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">uncertainty</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">useCase</span></span><span class="hs-special">,</span><span>
-</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#useCaseTable"><span class="hs-identifier hs-var">useCaseTable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">userCharacteristic</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#userInput"><span class="hs-identifier hs-var">userInput</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">validation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span>
-</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">variable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">vav</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">vavPlan</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">verification</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#video"><span class="hs-identifier hs-var">video</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><span class="hs-comment">-- | Collects all documentation-related common ideas (like a concept, but with no definition).</span></span><span>
-</span><span id="line-55"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#doccon%27"><span class="hs-identifier hs-type">doccon'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
-</span><span id="line-56"></span><span id="doccon%27"><span class="annot"><span class="annottext">doccon' :: [CI]
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Collects all documentation-related common ideas (like a concept, but with no definition).</span></span><span>
+</span><span id="line-53"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#doccon%27"><span class="hs-identifier hs-type">doccon'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
+</span><span id="line-54"></span><span id="doccon%27"><span class="annot"><span class="annottext">doccon' :: [CI]
 </span><a href="Data.Drasil.Concepts.Documentation.html#doccon%27"><span class="hs-identifier hs-var hs-var">doccon'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#dataConst"><span class="hs-identifier hs-var">dataConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
@@ -251,7 +249,7 @@
 </span><span class="hs-identifier hs-var">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">goalStmt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">,</span><span>
-</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">likelyChg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">learnObj</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">mg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
@@ -261,19 +259,19 @@
 </span><span class="hs-identifier hs-var">refBy</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">srs</span></span><span class="hs-special">,</span><span>
-</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">typUnc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">unlikelyChg</span></span><span class="hs-special">]</span><span>
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#dataConst"><span class="hs-identifier hs-type">dataConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
 </span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#dataConst"><span class="hs-identifier hs-type">dataConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#refName"><span class="hs-identifier hs-type">refName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-60"></span><span class="annot"><span class="hs-comment">-- * Common Ideas</span></span><span>
 </span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- * Common Ideas</span></span><span>
-</span><span id="line-63"></span><span>
+</span><span id="line-62"></span><span class="hs-comment">------------------------------------------------------------------------------------------------------------------------------</span><span>
+</span><span id="line-63"></span><span class="annot"><span class="hs-comment">-- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain</span></span><span>
 </span><span id="line-64"></span><span class="hs-comment">------------------------------------------------------------------------------------------------------------------------------</span><span>
-</span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain</span></span><span>
-</span><span id="line-66"></span><span class="hs-comment">------------------------------------------------------------------------------------------------------------------------------</span><span>
-</span><span id="line-67"></span><span id="dataConst"><span class="annot"><span class="annottext">dataConst :: CI
+</span><span id="line-65"></span><span id="dataConst"><span class="annot"><span class="annottext">dataConst :: CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#dataConst"><span class="hs-identifier hs-var hs-var">dataConst</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
 </span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;dataConst&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -281,326 +279,318 @@
 </span><span class="hs-string">&quot;data constraint&quot;</span></span><span class="hs-special">)</span><span>                               </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;DC&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softEng</span></span><span class="hs-special">]</span><span>
-</span><span id="line-68"></span><span id="refName"><span class="annot"><span class="annottext">refName :: CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#refName"><span class="hs-identifier hs-var hs-var">refName</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
-</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;refName&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
-</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;reference name&quot;</span></span><span class="hs-special">)</span><span>                                </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Refname&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">documentc</span></span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span><span>
-</span><span id="line-70"></span><span class="hs-comment">---------------------------------------------------------------------</span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="hs-comment">-- concepts relating to the templates and their contents</span><span>
-</span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- * Named Chunks</span></span><span>
-</span><span id="line-74"></span><span class="annot"><span class="hs-comment">-- ** Basic Chunks</span></span><span>
-</span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#analysis"><span class="hs-identifier hs-type">analysis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#aspect"><span class="hs-identifier hs-type">aspect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-type">body</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#class_"><span class="hs-identifier hs-type">class_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#company"><span class="hs-identifier hs-type">company</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#concept"><span class="hs-identifier hs-type">concept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#condition"><span class="hs-identifier hs-type">condition</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#connection"><span class="hs-identifier hs-type">connection</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier hs-type">constant</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-77"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#consumer"><span class="hs-identifier hs-type">consumer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#coordinate"><span class="hs-identifier hs-type">coordinate</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#effect"><span class="hs-identifier hs-type">effect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#emphasis"><span class="hs-identifier hs-type">emphasis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#failure"><span class="hs-identifier hs-type">failure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#figure"><span class="hs-identifier hs-type">figure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#first"><span class="hs-identifier hs-type">first</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#game"><span class="hs-identifier hs-type">game</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-78"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#instance_"><span class="hs-identifier hs-type">instance_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#issue"><span class="hs-identifier hs-type">issue</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#label"><span class="hs-keyword hs-type">label</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#library"><span class="hs-identifier hs-type">library</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#literacy"><span class="hs-identifier hs-type">literacy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#loss"><span class="hs-identifier hs-type">loss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#material_"><span class="hs-identifier hs-type">material_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#mainIdea"><span class="hs-identifier hs-type">mainIdea</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#message"><span class="hs-identifier hs-type">message</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#method_"><span class="hs-identifier hs-type">method_</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-79"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#name_"><span class="hs-identifier hs-type">name_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#notApp"><span class="hs-identifier hs-type">notApp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#object"><span class="hs-identifier hs-type">object</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#open"><span class="hs-identifier hs-type">open</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-80"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physics"><span class="hs-identifier hs-type">physics</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#practice"><span class="hs-identifier hs-type">practice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#priority"><span class="hs-identifier hs-type">priority</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#procedure"><span class="hs-identifier hs-type">procedure</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-81"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#realtime"><span class="hs-identifier hs-type">realtime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#response"><span class="hs-identifier hs-type">response</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-82"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#result"><span class="hs-identifier hs-type">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#reviewer"><span class="hs-identifier hs-type">reviewer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#safety"><span class="hs-identifier hs-type">safety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProjS"><span class="hs-identifier hs-type">scpOfTheProjS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#second_"><span class="hs-identifier hs-type">second_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#scenario"><span class="hs-identifier hs-type">scenario</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier hs-type">source</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#simulation"><span class="hs-identifier hs-type">simulation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#standard"><span class="hs-identifier hs-type">standard</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#task"><span class="hs-identifier hs-type">task</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#type_"><span class="hs-identifier hs-type">type_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#video"><span class="hs-identifier hs-type">video</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#year"><span class="hs-identifier hs-type">year</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
-</span><span id="line-84"></span><span>
-</span><span id="line-85"></span><span id="analysis"><span class="annot"><span class="annottext">analysis :: IdeaDict
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span class="hs-comment">---------------------------------------------------------------------</span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- concepts relating to the templates and their contents</span><span>
+</span><span id="line-70"></span><span class="annot"><span class="hs-comment">-- * Named Chunks</span></span><span>
+</span><span id="line-71"></span><span class="annot"><span class="hs-comment">-- ** Basic Chunks</span></span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#analysis"><span class="hs-identifier hs-type">analysis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#aspect"><span class="hs-identifier hs-type">aspect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-type">body</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#class_"><span class="hs-identifier hs-type">class_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#company"><span class="hs-identifier hs-type">company</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#concept"><span class="hs-identifier hs-type">concept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#condition"><span class="hs-identifier hs-type">condition</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#connection"><span class="hs-identifier hs-type">connection</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier hs-type">constant</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-74"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#consumer"><span class="hs-identifier hs-type">consumer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#coordinate"><span class="hs-identifier hs-type">coordinate</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#effect"><span class="hs-identifier hs-type">effect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#emphasis"><span class="hs-identifier hs-type">emphasis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#failure"><span class="hs-identifier hs-type">failure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#figure"><span class="hs-identifier hs-type">figure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#first"><span class="hs-identifier hs-type">first</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#game"><span class="hs-identifier hs-type">game</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-75"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#instance_"><span class="hs-identifier hs-type">instance_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#issue"><span class="hs-identifier hs-type">issue</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#label"><span class="hs-keyword hs-type">label</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#library"><span class="hs-identifier hs-type">library</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#literacy"><span class="hs-identifier hs-type">literacy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#loss"><span class="hs-identifier hs-type">loss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#material_"><span class="hs-identifier hs-type">material_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#mainIdea"><span class="hs-identifier hs-type">mainIdea</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#message"><span class="hs-identifier hs-type">message</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#method_"><span class="hs-identifier hs-type">method_</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-76"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#name_"><span class="hs-identifier hs-type">name_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#notApp"><span class="hs-identifier hs-type">notApp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#object"><span class="hs-identifier hs-type">object</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#open"><span class="hs-identifier hs-type">open</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-77"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physics"><span class="hs-identifier hs-type">physics</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#practice"><span class="hs-identifier hs-type">practice</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#priority"><span class="hs-identifier hs-type">priority</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#procedure"><span class="hs-identifier hs-type">procedure</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-78"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#realtime"><span class="hs-identifier hs-type">realtime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#response"><span class="hs-identifier hs-type">response</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#result"><span class="hs-identifier hs-type">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#reviewer"><span class="hs-identifier hs-type">reviewer</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#safety"><span class="hs-identifier hs-type">safety</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProjS"><span class="hs-identifier hs-type">scpOfTheProjS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#second_"><span class="hs-identifier hs-type">second_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#scenario"><span class="hs-identifier hs-type">scenario</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier hs-type">source</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#simulation"><span class="hs-identifier hs-type">simulation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#standard"><span class="hs-identifier hs-type">standard</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#task"><span class="hs-identifier hs-type">task</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#type_"><span class="hs-identifier hs-type">type_</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#video"><span class="hs-identifier hs-type">video</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#year"><span class="hs-identifier hs-type">year</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="analysis"><span class="annot"><span class="annottext">analysis :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#analysis"><span class="hs-identifier hs-var hs-var">analysis</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;analysis&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIS</span></span><span>   </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;analysis&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-86"></span><span id="aspect"><span class="annot"><span class="annottext">aspect :: IdeaDict
+</span><span id="line-83"></span><span id="aspect"><span class="annot"><span class="annottext">aspect :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#aspect"><span class="hs-identifier hs-var hs-var">aspect</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;aspect&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;aspect&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span id="body"><span class="annot"><span class="annottext">body :: IdeaDict
+</span><span id="line-84"></span><span id="body"><span class="annot"><span class="annottext">body :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-var hs-var">body</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;body&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;body&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-88"></span><span id="class_"><span class="annot"><span class="annottext">class_ :: IdeaDict
+</span><span id="line-85"></span><span id="class_"><span class="annot"><span class="annottext">class_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#class_"><span class="hs-identifier hs-var hs-var">class_</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;class&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'''</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;class&quot;</span></span><span>              </span><span class="hs-special">)</span><span>
-</span><span id="line-89"></span><span id="company"><span class="annot"><span class="annottext">company :: IdeaDict
+</span><span id="line-86"></span><span id="company"><span class="annot"><span class="annottext">company :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#company"><span class="hs-identifier hs-var hs-var">company</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;company&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;company&quot;</span></span><span>            </span><span class="hs-special">)</span><span>
-</span><span id="line-90"></span><span id="concept"><span class="annot"><span class="annottext">concept :: IdeaDict
+</span><span id="line-87"></span><span id="concept"><span class="annot"><span class="annottext">concept :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#concept"><span class="hs-identifier hs-var hs-var">concept</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;concept&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;concept&quot;</span></span><span>            </span><span class="hs-special">)</span><span>
-</span><span id="line-91"></span><span id="condition"><span class="annot"><span class="annottext">condition :: IdeaDict
+</span><span id="line-88"></span><span id="condition"><span class="annot"><span class="annottext">condition :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#condition"><span class="hs-identifier hs-var hs-var">condition</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;condition&quot;</span></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;condition&quot;</span></span><span>          </span><span class="hs-special">)</span><span>
-</span><span id="line-92"></span><span id="connection"><span class="annot"><span class="annottext">connection :: IdeaDict
+</span><span id="line-89"></span><span id="connection"><span class="annot"><span class="annottext">connection :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#connection"><span class="hs-identifier hs-var hs-var">connection</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;connection&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;connection&quot;</span></span><span>         </span><span class="hs-special">)</span><span>
-</span><span id="line-93"></span><span id="constant"><span class="annot"><span class="annottext">constant :: IdeaDict
+</span><span id="line-90"></span><span id="constant"><span class="annot"><span class="annottext">constant :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier hs-var hs-var">constant</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constant&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constant&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-94"></span><span id="consumer"><span class="annot"><span class="annottext">consumer :: IdeaDict
+</span><span id="line-91"></span><span id="consumer"><span class="annot"><span class="annottext">consumer :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#consumer"><span class="hs-identifier hs-var hs-var">consumer</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;consumer&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;consumer&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span id="coordinate"><span class="annot"><span class="annottext">coordinate :: IdeaDict
+</span><span id="line-92"></span><span id="coordinate"><span class="annot"><span class="annottext">coordinate :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#coordinate"><span class="hs-identifier hs-var hs-var">coordinate</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;coordinate&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;coordinate&quot;</span></span><span>         </span><span class="hs-special">)</span><span>
-</span><span id="line-96"></span><span id="effect"><span class="annot"><span class="annottext">effect :: IdeaDict
+</span><span id="line-93"></span><span id="effect"><span class="annot"><span class="annottext">effect :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#effect"><span class="hs-identifier hs-var hs-var">effect</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;effect&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;effect&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-97"></span><span id="emphasis"><span class="annot"><span class="annottext">emphasis :: IdeaDict
+</span><span id="line-94"></span><span id="emphasis"><span class="annot"><span class="annottext">emphasis :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#emphasis"><span class="hs-identifier hs-var hs-var">emphasis</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;emphasis&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIS</span></span><span>   </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;emphasis&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-98"></span><span id="failure"><span class="annot"><span class="annottext">failure :: IdeaDict
+</span><span id="line-95"></span><span id="failure"><span class="annot"><span class="annottext">failure :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#failure"><span class="hs-identifier hs-var hs-var">failure</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;failure&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;failure&quot;</span></span><span>            </span><span class="hs-special">)</span><span>
-</span><span id="line-99"></span><span id="figure"><span class="annot"><span class="annottext">figure :: IdeaDict
+</span><span id="line-96"></span><span id="figure"><span class="annot"><span class="annottext">figure :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#figure"><span class="hs-identifier hs-var hs-var">figure</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;figure&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;figure&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-100"></span><span id="first"><span class="annot"><span class="annottext">first :: IdeaDict
+</span><span id="line-97"></span><span id="first"><span class="annot"><span class="annottext">first :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#first"><span class="hs-identifier hs-var hs-var">first</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;first&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;first&quot;</span></span><span>              </span><span class="hs-special">)</span><span> </span><span class="hs-comment">--Does it make sense for this to be here?</span><span>
-</span><span id="line-101"></span><span id="game"><span class="annot"><span class="annottext">game :: IdeaDict
+</span><span id="line-98"></span><span id="game"><span class="annot"><span class="annottext">game :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#game"><span class="hs-identifier hs-var hs-var">game</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;game&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;game&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-102"></span><span id="instance_"><span class="annot"><span class="annottext">instance_ :: IdeaDict
+</span><span id="line-99"></span><span id="instance_"><span class="annot"><span class="annottext">instance_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#instance_"><span class="hs-identifier hs-var hs-var">instance_</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;instance&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;instance&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-103"></span><span id="issue"><span class="annot"><span class="annottext">issue :: IdeaDict
+</span><span id="line-100"></span><span id="issue"><span class="annot"><span class="annottext">issue :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#issue"><span class="hs-identifier hs-var hs-var">issue</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;issue&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;issue&quot;</span></span><span>              </span><span class="hs-special">)</span><span>
-</span><span id="line-104"></span><span id="label"><span class="annot"><span class="annottext">label :: IdeaDict
+</span><span id="line-101"></span><span id="label"><span class="annot"><span class="annottext">label :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#label"><span class="hs-keyword hs-var hs-var">label</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;label&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;label&quot;</span></span><span>              </span><span class="hs-special">)</span><span>
-</span><span id="line-105"></span><span id="library"><span class="annot"><span class="annottext">library :: IdeaDict
+</span><span id="line-102"></span><span id="library"><span class="annot"><span class="annottext">library :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#library"><span class="hs-identifier hs-var hs-var">library</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;library&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;library&quot;</span></span><span>            </span><span class="hs-special">)</span><span>
-</span><span id="line-106"></span><span id="literacy"><span class="annot"><span class="annottext">literacy :: IdeaDict
+</span><span id="line-103"></span><span id="literacy"><span class="annot"><span class="annottext">literacy :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#literacy"><span class="hs-identifier hs-var hs-var">literacy</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;literacy&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;literacy&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-107"></span><span id="loss"><span class="annot"><span class="annottext">loss :: IdeaDict
+</span><span id="line-104"></span><span id="loss"><span class="annot"><span class="annottext">loss :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#loss"><span class="hs-identifier hs-var hs-var">loss</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;loss&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'''</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;loss&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-108"></span><span id="material_"><span class="annot"><span class="annottext">material_ :: IdeaDict
+</span><span id="line-105"></span><span id="material_"><span class="annot"><span class="annottext">material_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#material_"><span class="hs-identifier hs-var hs-var">material_</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;material&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;material&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-109"></span><span id="mainIdea"><span class="annot"><span class="annottext">mainIdea :: IdeaDict
+</span><span id="line-106"></span><span id="mainIdea"><span class="annot"><span class="annottext">mainIdea :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#mainIdea"><span class="hs-identifier hs-var hs-var">mainIdea</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;mainIdea&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;main idea&quot;</span></span><span>          </span><span class="hs-special">)</span><span>
-</span><span id="line-110"></span><span id="message"><span class="annot"><span class="annottext">message :: IdeaDict
+</span><span id="line-107"></span><span id="message"><span class="annot"><span class="annottext">message :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;message&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;message&quot;</span></span><span>            </span><span class="hs-special">)</span><span>
-</span><span id="line-111"></span><span id="method_"><span class="annot"><span class="annottext">method_ :: IdeaDict
+</span><span id="line-108"></span><span id="method_"><span class="annot"><span class="annottext">method_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#method_"><span class="hs-identifier hs-var hs-var">method_</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;method&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;method&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-112"></span><span id="name_"><span class="annot"><span class="annottext">name_ :: IdeaDict
+</span><span id="line-109"></span><span id="name_"><span class="annot"><span class="annottext">name_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#name_"><span class="hs-identifier hs-var hs-var">name_</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;name&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;name&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-113"></span><span id="object"><span class="annot"><span class="annottext">object :: IdeaDict
+</span><span id="line-110"></span><span id="object"><span class="annot"><span class="annottext">object :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#object"><span class="hs-identifier hs-var hs-var">object</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;object&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;object&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-114"></span><span id="open"><span class="annot"><span class="annottext">open :: IdeaDict
+</span><span id="line-111"></span><span id="open"><span class="annot"><span class="annottext">open :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#open"><span class="hs-identifier hs-var hs-var">open</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;open&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;open&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-115"></span><span id="physics"><span class="annot"><span class="annottext">physics :: IdeaDict
+</span><span id="line-112"></span><span id="physics"><span class="annot"><span class="annottext">physics :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physics"><span class="hs-identifier hs-var hs-var">physics</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;physics&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;physics&quot;</span></span><span>            </span><span class="hs-special">)</span><span>
-</span><span id="line-116"></span><span id="practice"><span class="annot"><span class="annottext">practice :: IdeaDict
+</span><span id="line-113"></span><span id="practice"><span class="annot"><span class="annottext">practice :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#practice"><span class="hs-identifier hs-var hs-var">practice</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;practice&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;practice&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-117"></span><span id="priority"><span class="annot"><span class="annottext">priority :: IdeaDict
+</span><span id="line-114"></span><span id="priority"><span class="annot"><span class="annottext">priority :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#priority"><span class="hs-identifier hs-var hs-var">priority</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;priority&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;priority&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-118"></span><span id="procedure"><span class="annot"><span class="annottext">procedure :: IdeaDict
+</span><span id="line-115"></span><span id="procedure"><span class="annot"><span class="annottext">procedure :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#procedure"><span class="hs-identifier hs-var hs-var">procedure</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;procedure&quot;</span></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;procedure&quot;</span></span><span>          </span><span class="hs-special">)</span><span>
-</span><span id="line-119"></span><span id="realtime"><span class="annot"><span class="annottext">realtime :: IdeaDict
+</span><span id="line-116"></span><span id="realtime"><span class="annot"><span class="annottext">realtime :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#realtime"><span class="hs-identifier hs-var hs-var">realtime</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;real-time&quot;</span></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;real-time&quot;</span></span><span>          </span><span class="hs-special">)</span><span>
-</span><span id="line-120"></span><span id="response"><span class="annot"><span class="annottext">response :: IdeaDict
+</span><span id="line-117"></span><span id="response"><span class="annot"><span class="annottext">response :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#response"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;response&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;response&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-121"></span><span id="result"><span class="annot"><span class="annottext">result :: IdeaDict
+</span><span id="line-118"></span><span id="result"><span class="annot"><span class="annottext">result :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#result"><span class="hs-identifier hs-var hs-var">result</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;result&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;result&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-122"></span><span id="reviewer"><span class="annot"><span class="annottext">reviewer :: IdeaDict
+</span><span id="line-119"></span><span id="reviewer"><span class="annot"><span class="annottext">reviewer :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#reviewer"><span class="hs-identifier hs-var hs-var">reviewer</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reviewer&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reviewer&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-123"></span><span id="safety"><span class="annot"><span class="annottext">safety :: IdeaDict
+</span><span id="line-120"></span><span id="safety"><span class="annot"><span class="annottext">safety :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#safety"><span class="hs-identifier hs-var hs-var">safety</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;safety&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cnIES</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;safety&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-124"></span><span id="second_"><span class="annot"><span class="annottext">second_ :: IdeaDict
+</span><span id="line-121"></span><span id="second_"><span class="annot"><span class="annottext">second_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#second_"><span class="hs-identifier hs-var hs-var">second_</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;second&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;second&quot;</span></span><span>             </span><span class="hs-special">)</span><span> </span><span class="hs-comment">--Does it make sense for this to be here?</span><span>
-</span><span id="line-125"></span><span id="scenario"><span class="annot"><span class="annottext">scenario :: IdeaDict
+</span><span id="line-122"></span><span id="scenario"><span class="annot"><span class="annottext">scenario :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#scenario"><span class="hs-identifier hs-var hs-var">scenario</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;scenario&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;scenario&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-126"></span><span id="source"><span class="annot"><span class="annottext">source :: IdeaDict
+</span><span id="line-123"></span><span id="source"><span class="annot"><span class="annottext">source :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier hs-var hs-var">source</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;source&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;source&quot;</span></span><span>             </span><span class="hs-special">)</span><span>
-</span><span id="line-127"></span><span id="simulation"><span class="annot"><span class="annottext">simulation :: IdeaDict
+</span><span id="line-124"></span><span id="simulation"><span class="annot"><span class="annottext">simulation :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#simulation"><span class="hs-identifier hs-var hs-var">simulation</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;simulation&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;simulation&quot;</span></span><span>         </span><span class="hs-special">)</span><span>
-</span><span id="line-128"></span><span id="standard"><span class="annot"><span class="annottext">standard :: IdeaDict
+</span><span id="line-125"></span><span id="standard"><span class="annot"><span class="annottext">standard :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#standard"><span class="hs-identifier hs-var hs-var">standard</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;standard&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;standard&quot;</span></span><span>           </span><span class="hs-special">)</span><span>
-</span><span id="line-129"></span><span id="task"><span class="annot"><span class="annottext">task :: IdeaDict
+</span><span id="line-126"></span><span id="task"><span class="annot"><span class="annottext">task :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#task"><span class="hs-identifier hs-var hs-var">task</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;task&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;task&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-130"></span><span id="type_"><span class="annot"><span class="annottext">type_ :: IdeaDict
+</span><span id="line-127"></span><span id="type_"><span class="annot"><span class="annottext">type_ :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#type_"><span class="hs-identifier hs-var hs-var">type_</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;type&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;type&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-131"></span><span id="video"><span class="annot"><span class="annottext">video :: IdeaDict
+</span><span id="line-128"></span><span id="video"><span class="annot"><span class="annottext">video :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#video"><span class="hs-identifier hs-var hs-var">video</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;video&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;video&quot;</span></span><span>              </span><span class="hs-special">)</span><span>
-</span><span id="line-132"></span><span id="year"><span class="annot"><span class="annottext">year :: IdeaDict
+</span><span id="line-129"></span><span id="year"><span class="annot"><span class="annottext">year :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#year"><span class="hs-identifier hs-var hs-var">year</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;year&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;year&quot;</span></span><span>               </span><span class="hs-special">)</span><span>
-</span><span id="line-133"></span><span id="scpOfTheProjS"><span class="annot"><span class="annottext">scpOfTheProjS :: IdeaDict
+</span><span id="line-130"></span><span id="scpOfTheProjS"><span class="annot"><span class="annottext">scpOfTheProjS :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProjS"><span class="hs-identifier hs-var hs-var">scpOfTheProjS</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;scpOfTheProj&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;scope of the project&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- temporary generated for test</span><span>
-</span><span id="line-134"></span><span>
-</span><span id="line-135"></span><span id="notApp"><span class="annot"><span class="annottext">notApp :: IdeaDict
+</span><span id="line-131"></span><span>
+</span><span id="line-132"></span><span id="notApp"><span class="annot"><span class="annottext">notApp :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#notApp"><span class="hs-identifier hs-var hs-var">notApp</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">mkIdea</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;notApp&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -609,10 +599,10 @@
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;N/A&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-136"></span><span>
-</span><span id="line-137"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#methAndAnls"><span class="hs-identifier hs-type">methAndAnls</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#procForAnls"><span class="hs-identifier hs-type">procForAnls</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
-</span><span id="line-138"></span><span>
-</span><span id="line-139"></span><span id="methAndAnls"><span class="annot"><span class="annottext">methAndAnls :: IdeaDict
+</span><span id="line-133"></span><span>
+</span><span id="line-134"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#methAndAnls"><span class="hs-identifier hs-type">methAndAnls</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#procForAnls"><span class="hs-identifier hs-type">procForAnls</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span id="methAndAnls"><span class="annot"><span class="annottext">methAndAnls :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#methAndAnls"><span class="hs-identifier hs-var hs-var">methAndAnls</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;methAndAnls&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
@@ -620,7 +610,7 @@ forall a. a -&gt; Maybe a
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#analysis"><span class="hs-identifier hs-var">analysis</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-140"></span><span id="procForAnls"><span class="annot"><span class="annottext">procForAnls :: IdeaDict
+</span><span id="line-137"></span><span id="procForAnls"><span class="annot"><span class="annottext">procForAnls :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#procForAnls"><span class="hs-identifier hs-var hs-var">procForAnls</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;procForAnls&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
@@ -628,118 +618,74 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`for`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#analysis"><span class="hs-identifier hs-var">analysis</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-141"></span><span>
-</span><span id="line-142"></span><span class="annot"><span class="hs-comment">-- ** Compound Chunks</span></span><span>
+</span><span id="line-138"></span><span>
+</span><span id="line-139"></span><span class="annot"><span class="hs-comment">-- ** Compound Chunks</span></span><span>
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#coordinateSystem"><span class="hs-identifier hs-type">coordinateSystem</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physicalSim"><span class="hs-identifier hs-type">physicalSim</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#useCaseTable"><span class="hs-identifier hs-type">useCaseTable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physicalProperty"><span class="hs-identifier hs-type">physicalProperty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#safetyReq"><span class="hs-identifier hs-type">safetyReq</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-142"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softwareSys"><span class="hs-identifier hs-type">softwareSys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softwareVerif"><span class="hs-identifier hs-type">softwareVerif</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#uncertCol"><span class="hs-identifier hs-type">uncertCol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#userInput"><span class="hs-identifier hs-type">userInput</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
 </span><span id="line-143"></span><span>
-</span><span id="line-144"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#coordinateSystem"><span class="hs-identifier hs-type">coordinateSystem</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physicalSim"><span class="hs-identifier hs-type">physicalSim</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#useCaseTable"><span class="hs-identifier hs-type">useCaseTable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#physicalProperty"><span class="hs-identifier hs-type">physicalProperty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#safetyReq"><span class="hs-identifier hs-type">safetyReq</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-145"></span><span>  </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softwareSys"><span class="hs-identifier hs-type">softwareSys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softwareVerif"><span class="hs-identifier hs-type">softwareVerif</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#uncertCol"><span class="hs-identifier hs-type">uncertCol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#userInput"><span class="hs-identifier hs-type">userInput</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
-</span><span id="line-146"></span><span>
-</span><span id="line-147"></span><span id="coordinateSystem"><span class="annot"><span class="annottext">coordinateSystem :: IdeaDict
+</span><span id="line-144"></span><span id="coordinateSystem"><span class="annot"><span class="annottext">coordinateSystem :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#coordinateSystem"><span class="hs-identifier hs-var hs-var">coordinateSystem</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#coordinate"><span class="hs-identifier hs-var">coordinate</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span>
-</span><span id="line-148"></span><span class="hs-comment">--inDatumConstraint            = compoundNC input_ datumConstraint -- may be used later, but they break stable for now</span><span>
-</span><span id="line-149"></span><span class="hs-comment">--outDatumConstraint           = compoundNC output_ datumConstraint</span><span>
-</span><span id="line-150"></span><span id="physicalProperty"><span class="annot"><span class="annottext">physicalProperty :: IdeaDict
+</span><span id="line-145"></span><span class="hs-comment">--inDatumConstraint            = compoundNC input_ datumConstraint -- may be used later, but they break stable for now</span><span>
+</span><span id="line-146"></span><span class="hs-comment">--outDatumConstraint           = compoundNC output_ datumConstraint</span><span>
+</span><span id="line-147"></span><span id="physicalProperty"><span class="annot"><span class="annottext">physicalProperty :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalProperty"><span class="hs-identifier hs-var hs-var">physicalProperty</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physical</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">property</span></span><span>
-</span><span id="line-151"></span><span id="physicalSim"><span class="annot"><span class="annottext">physicalSim :: IdeaDict
+</span><span id="line-148"></span><span id="physicalSim"><span class="annot"><span class="annottext">physicalSim :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalSim"><span class="hs-identifier hs-var hs-var">physicalSim</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physical</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#simulation"><span class="hs-identifier hs-var">simulation</span></a></span><span>
-</span><span id="line-152"></span><span id="safetyReq"><span class="annot"><span class="annottext">safetyReq :: IdeaDict
+</span><span id="line-149"></span><span id="safetyReq"><span class="annot"><span class="annottext">safetyReq :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#safetyReq"><span class="hs-identifier hs-var hs-var">safetyReq</span></a></span></span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; CI -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#safety"><span class="hs-identifier hs-var">safety</span></a></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">requirement</span></span><span>
-</span><span id="line-153"></span><span id="softwareSys"><span class="annot"><span class="annottext">softwareSys :: IdeaDict
+</span><span id="line-150"></span><span id="softwareSys"><span class="annot"><span class="annottext">softwareSys :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareSys"><span class="hs-identifier hs-var hs-var">softwareSys</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span>
-</span><span id="line-154"></span><span id="softwareVerif"><span class="annot"><span class="annottext">softwareVerif :: IdeaDict
+</span><span id="line-151"></span><span id="softwareVerif"><span class="annot"><span class="annottext">softwareVerif :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareVerif"><span class="hs-identifier hs-var hs-var">softwareVerif</span></a></span></span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">verification</span></span><span>
-</span><span id="line-155"></span><span id="uncertCol"><span class="annot"><span class="annottext">uncertCol :: IdeaDict
+</span><span id="line-152"></span><span id="uncertCol"><span class="annot"><span class="annottext">uncertCol :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#uncertCol"><span class="hs-identifier hs-var hs-var">uncertCol</span></a></span></span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">uncertainty</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">column</span></span><span>
-</span><span id="line-156"></span><span id="useCaseTable"><span class="annot"><span class="annottext">useCaseTable :: IdeaDict
+</span><span id="line-153"></span><span id="useCaseTable"><span class="annot"><span class="annottext">useCaseTable :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#useCaseTable"><span class="hs-identifier hs-var hs-var">useCaseTable</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">useCase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">table_</span></span><span>
-</span><span id="line-157"></span><span id="userInput"><span class="annot"><span class="annottext">userInput :: IdeaDict
+</span><span id="line-154"></span><span id="userInput"><span class="annot"><span class="annottext">userInput :: IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#userInput"><span class="hs-identifier hs-var hs-var">userInput</span></a></span></span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">input_</span></span><span>
-</span><span id="line-158"></span><span>
-</span><span id="line-159"></span><span class="annot"><span class="hs-comment">-- * Domains</span></span><span>
-</span><span id="line-160"></span><span>
-</span><span id="line-161"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#refByDom"><span class="hs-identifier hs-type">refByDom</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#refNameDom"><span class="hs-identifier hs-type">refNameDom</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-162"></span><span id="refByDom"><span class="annot"><span class="annottext">refByDom :: ConceptChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#refByDom"><span class="hs-identifier hs-var hs-var">refByDom</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; [ConceptChunk] -&gt; ConceptChunk
-forall c d.
-(Idea c, Concept d) =&gt;
-c -&gt; Sentence -&gt; [d] -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">ccs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">mkIdea</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;refByDom&quot;</span></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">refBy</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Getting NP CI NP -&gt; NP
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP CI NP
-forall c. NamedIdea c =&gt; Lens' c NP
-Lens' CI NP
-</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span>                    </span><span class="annot"><span class="annottext">(Maybe String -&gt; IdeaDict) -&gt; Maybe String -&gt; IdeaDict
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Maybe String
-forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;RefBy&quot;</span></span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">Sentence
-</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">srsDom</span></span><span class="hs-special">]</span><span>
-</span><span id="line-163"></span><span id="refNameDom"><span class="annot"><span class="annottext">refNameDom :: ConceptChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#refNameDom"><span class="hs-identifier hs-var hs-var">refNameDom</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; [ConceptChunk] -&gt; ConceptChunk
-forall c d.
-(Idea c, Concept d) =&gt;
-c -&gt; Sentence -&gt; [d] -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">ccs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">mkIdea</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;refNameDom&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.Concepts.Documentation.html#refName"><span class="hs-identifier hs-var">refName</span></a></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Getting NP CI NP -&gt; NP
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP CI NP
-forall c. NamedIdea c =&gt; Lens' c NP
-Lens' CI NP
-</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span>                  </span><span class="annot"><span class="annottext">(Maybe String -&gt; IdeaDict) -&gt; Maybe String -&gt; IdeaDict
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Maybe String
-forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;RefName&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">Sentence
-</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">srsDom</span></span><span class="hs-special">]</span><span>
-</span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span class="annot"><span class="hs-comment">-- | List of SRS-related concepts, including SRS.</span></span><span>
-</span><span id="line-166"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#srsDomains"><span class="hs-identifier hs-type">srsDomains</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-167"></span><span id="srsDomains"><span class="annot"><span class="annottext">srsDomains :: [ConceptChunk]
+</span><span id="line-155"></span><span>
+</span><span id="line-156"></span><span class="annot"><span class="hs-comment">-- * Domains</span></span><span>
+</span><span id="line-157"></span><span>
+</span><span id="line-158"></span><span class="annot"><span class="hs-comment">-- | List of SRS-related concepts, including SRS.</span></span><span>
+</span><span id="line-159"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#srsDomains"><span class="hs-identifier hs-type">srsDomains</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-160"></span><span id="srsDomains"><span class="annot"><span class="annottext">srsDomains :: [ConceptChunk]
 </span><a href="Data.Drasil.Concepts.Documentation.html#srsDomains"><span class="hs-identifier hs-var hs-var">srsDomains</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk
 forall c. Concept c =&gt; c -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cw</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -748,11 +694,9 @@ forall c. Concept c =&gt; c -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">reqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span class="hs-special">,</span><span>
-</span><span id="line-168"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-161"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">chgProbDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#refByDom"><span class="hs-identifier hs-var">refByDom</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#refNameDom"><span class="hs-identifier hs-var">refNameDom</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-169"></span></pre></body></html>
+</span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span class="hs-special">]</span><span>
+</span><span id="line-162"></span></pre></body></html>

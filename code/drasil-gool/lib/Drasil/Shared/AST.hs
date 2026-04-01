@@ -15,9 +15,9 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
 
 import Drasil.Shared.CodeType (CodeType)
 
+import Drasil.Build.Artifacts (HasPathAndDoc(..))
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
-import Utils.Drasil (HasPathAndDoc(..))
 
 -- For how statement endings are printed
 data Terminator = Semi | Empty

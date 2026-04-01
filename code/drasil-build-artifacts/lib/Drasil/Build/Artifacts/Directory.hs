@@ -1,4 +1,4 @@
-module Utils.Drasil.Directory (createDirIfMissing) where
+module Drasil.Build.Artifacts.Directory (createDirIfMissing) where
 
 import System.Directory (createDirectoryIfMissing, doesPathExist)
 

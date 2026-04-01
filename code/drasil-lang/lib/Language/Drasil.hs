@@ -167,7 +167,7 @@ module Language.Drasil (
   -- We also use 'NounPhrase's to record the proper pluralization and capitalization of terms.
 
   -- Language.Drasil.Sentence
-  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent, headSent
+  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
   , ch, eS, eS', sC, sDash, sParen
   -- Language.Drasil.Sentence.Generators
   , fromSource, fterms, getTandS, checkValidStr
@@ -313,7 +313,7 @@ import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
-  (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen)
+  (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
 import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))

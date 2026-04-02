@@ -24,7 +24,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 symbols :: [DefinedQuantityDict]
 symbols = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
   map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++
-  [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
+  [dqdWr modElas] ++ map dqdWr unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
   map dqdWr derivedInputDataConstraints
 

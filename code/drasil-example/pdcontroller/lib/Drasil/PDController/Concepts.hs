@@ -3,11 +3,12 @@ module Drasil.PDController.Concepts where
 import Language.Drasil
 
 acronyms :: [CI]
-acronyms = [pdControllerCI, proportionalCI, pidCI]
+acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]
 
-pdControllerCI, proportionalCI, pidCI :: CI
+pdControllerCI, proportionalCI, piCI, pidCI :: CI
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
+piCI            = commonIdeaWithDict "piCI"            (pn "proportional integral")            "PI"            []
 pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,

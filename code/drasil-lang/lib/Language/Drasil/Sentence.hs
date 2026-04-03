@@ -8,7 +8,7 @@ module Language.Drasil.Sentence (
   -- ** Context Types
   SentenceStyle(..), RefInfo(..), TermCapitalization(..),
   -- * Functions
-  (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
+  (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceTerm,
   sdep, shortdep, lnames, lnames'
@@ -147,10 +147,6 @@ capSent (S (s:ss)) = S (toUpper s : ss)
 --capSent (plural x) = atStart' x
 capSent (a :+: b)  = capSent a :+: b
 capSent x          = x
-
--- | Helper which creates a Header with size s of the 'Sentence'.
-headSent :: Int -> Sentence -> Sentence
-headSent s x = S (concat (replicate s "#")) :+: S " " :+: x
 
 -- | Helpers for extracting references -----------------------------------------
 

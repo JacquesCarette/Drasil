@@ -9,7 +9,7 @@ module Language.Drasil.Sentence.Fold (
   foldConstraints,
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSent, foldlSent_,
-  foldlSentCol, foldlsC, foldNums, numList
+  foldlSentCol, foldlsC, foldOpts, foldNums, numList
 ) where
 
 import Language.Drasil.Classes ( Express(express), Quantity )
@@ -48,6 +48,11 @@ foldlSentCol = foldle (+:+) (+:) EmptyS
 foldlsC :: [Sentence] -> Sentence
 foldlsC [] = EmptyS
 foldlsC xs = foldl1 sC xs
+
+-- | Folds a list of elements separated forward slashes ("/").
+foldOpts :: [Sentence] -> Sentence
+foldOpts [] = EmptyS
+foldOpts xs = foldl1 (\l r -> l :+: S "/" :+: r) xs
 
 -- | Type that helps determine enumeration method. Can use either numbers, uppercase letters, or lowercase letters.
 data EnumType = Numb   | Upper   | Lower

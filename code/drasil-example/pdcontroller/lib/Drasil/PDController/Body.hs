@@ -17,7 +17,8 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (pidC, concepts, defs, pidCI, proportionalCI, acronyms, pdControllerCI)
+import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs,
+  pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -41,7 +42,7 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
@@ -93,9 +94,9 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
 
 background :: Sentence
 background = foldlSent_ [
-  S "Automatic process control with a controller ("
-    :+: short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
-  S "in a variety of applications such as thermostats, automobile",
+  S "Automatic process control with a controller (" :+:
+  foldOpts (map short [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  S ") is used in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc"]
 
 orgSecEnd :: Sentence
@@ -109,7 +110,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw acronyms
+  nw progName : map nw acronyms ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

@@ -17,7 +17,8 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs, pdControllerCI, proportionalCI, pidCI)
+import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs,
+  pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -95,7 +96,7 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
 background :: Sentence
 background = foldlSent_ [
   S "Automatic process control with a controller ("
-    :+: short proportionalCI :+: S "/PI/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
+    :+: short proportionalCI :+: S "/" :+: short piCI :+: S "/" :+: short pdControllerCI :+: S "/" :+: short pidCI :+: S ") is used",
   S "in a variety of applications such as thermostats, automobile",
   S "cruise-control, etc"]
 
@@ -110,7 +111,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  map nw [progName, pdControllerCI, proportionalCI, pidCI] ++ map nw mathcon'
+  map nw [progName, pdControllerCI, proportionalCI, piCI, pidCI] ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

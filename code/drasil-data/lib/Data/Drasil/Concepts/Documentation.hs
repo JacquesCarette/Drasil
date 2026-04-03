@@ -9,12 +9,10 @@ module Data.Drasil.Concepts.Documentation (
   , module Data.Drasil.Concepts.Documentation
   ) where
 
-import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization, year, label, variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.Metadata.Domains (softEng, documentc)
+import Drasil.Metadata.Domains (softEng)
 import Drasil.Metadata.Documentation
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
@@ -57,7 +55,7 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
   likelyChg, learnObj, mg, mis, notebook, physSyst, refBy, requirement, srs,
   thModel, typUnc, unlikelyChg]
 
-dataConst, refName :: CI
+dataConst :: CI
 
 -- * Common Ideas
 
@@ -65,7 +63,6 @@ dataConst, refName :: CI
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
-refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 
 ---------------------------------------------------------------------
 
@@ -158,11 +155,7 @@ userInput                    = compoundNC user input_
 
 -- * Domains
 
-refByDom, refNameDom :: ConceptChunk
-refByDom      = ccs (mkIdea "refByDom"      (refBy ^. term)                    $ Just "RefBy")    EmptyS [srsDom]
-refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $ Just "RefName")  EmptyS [srsDom]
-
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
-  assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
+  assumpDom, chgProbDom, likeChgDom, unlikeChgDom]

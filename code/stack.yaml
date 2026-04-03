@@ -48,6 +48,7 @@ packages:
 - drasil-theory
 - drasil-database
 - drasil-printers
+- drasil-printing
 - drasil-gen
 - drasil-data
 - drasil-docLang

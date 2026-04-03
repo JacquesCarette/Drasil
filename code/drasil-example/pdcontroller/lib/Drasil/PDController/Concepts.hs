@@ -10,12 +10,13 @@ import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst,
   requirement, refBy, refName, srs, thModel, typUnc, pdControllerCI,
-  proportionalCI, pidCI, ode, likelyChg]
+  proportionalCI, piCI, pidCI, ode, likelyChg]
 
-pdControllerCI, proportionalCI, pidCI :: CI
+pdControllerCI, proportionalCI, piCI, pidCI :: CI
 
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
+piCI            = commonIdeaWithDict "piCI"            (pn "proportional integral")            "PI"            []
 pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,

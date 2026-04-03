@@ -29,23 +29,22 @@ import Data.Maybe
 -- General Drasil
 import Drasil.Database (UID, HasUID(..), showUID)
 import Drasil.System (System)
-import Language.Drasil hiding (variable)
+import Language.Drasil hiding (variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
 -- Vocabulary
-import Drasil.Metadata.Documentation as DCD (assumption, column, constraint,
+import Drasil.Metadata.Documentation (assumption, column, constraint,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
   element, general, goalStmt, information, input_, limitation, model, output_,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, refBy, scope, sec,
-  section_, softwareConstraint, solutionCharacteristic, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+  problemDescription, propOfCorSol, purpose, quantity, refBy, requirement, scope,
+  sec, section_, softwareConstraint, solutionCharacteristic, specification,
+  symbol_, system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import Drasil.Metadata.Concepts.Math (equation, parameter)
 import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import Drasil.Metadata.Documentation (requirement, specification)
 
 -- other docLang
 import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
@@ -121,7 +120,7 @@ goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP' (the inModel),
   S "that govern", short progName, S "are presented in the" +:+.
-  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec),
+  namedRef instModelSection (titleize inModel +:+ titleize sec),
   D.toSent $ atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
   S "and their derivation is also presented, so that the", plural inModel,
@@ -249,6 +248,7 @@ auxSpecSent :: Sentence
 auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
   namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_]
+  -- FIXME: inDataConstTbl is abused to get a table reference label.
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent

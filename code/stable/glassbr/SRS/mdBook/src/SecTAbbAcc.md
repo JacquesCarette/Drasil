@@ -9,6 +9,7 @@
 |AR          |Aspect Ratio                       |
 |DD          |Data Definition                    |
 |FT          |Fully Tempered                     |
+|GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |GTF         |Glass Type Factor                  |
 |HS          |Heat Strengthened                  |

@@ -38,7 +38,7 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
+import Drasil.SWHS.Concepts (coil, con, phaseChangeMaterial,
   phsChgMtrl, sWHT, tank, tankPCM, transient, water)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
@@ -92,13 +92,6 @@ symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
   insModel genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronymsFull ++
-  -- DefinedQuantityDicts
-  map nw symbols
-
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = externalLinkRef : uriReferences
@@ -108,7 +101,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA abbreviationsList],
+    TAandA ],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,

@@ -7,7 +7,8 @@ import Data.Maybe (maybeToList)
 
 -- Generic Drasil
 import Language.Drasil hiding (organization)
-import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
+import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -16,18 +17,16 @@ import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Drasil.Metadata.Concepts.Computation (algorithm)
 import Drasil.Metadata.TheoryConcepts (inModel, thModel)
-import Drasil.Metadata.Documentation (assumption, characteristic,
-  decision, definition, desSpec, design, designDoc, document, documentation,
-  environment, goal, goalStmt, implementation, intReader, model,
-  organization, purpose, requirement, scope, section_, softwareDoc,
-  softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
-  information, systemConstraint, template)
+import Drasil.Metadata.Documentation (assumption, characteristic, decision,
+  definition, desSpec, design, designDoc, document, documentation, environment,
+  goal, goalStmt, implementation, information, intReader, model, organization,
+  problem, problemIntro, purpose, requirement, scope, section_, softwareDoc,
+  softwareVAV, srs, systemConstraint, template, theory, user, vavPlan)
 import Drasil.Metadata.Software.Products (sciCompS)
 
 -- Other docLang
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Drasil.DocumentLanguage.Core (IntroSub(..))
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.Sentence.Combinators (refineChain)
@@ -57,8 +56,8 @@ developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
 
--- | 'Sentence' containing the subsections of the Introduction.
--- Takes a list of IntroSub and generates a sentence listing only the subsections that exist.
+-- | 'Sentence' containing the subsections of the Introduction. Takes a list of
+-- IntroSub and generates a sentence listing only the subsections that exist.
 introductionSubsections :: [IntroSub] -> Sentence
 introductionSubsections subs =
   let subDescriptions = concatMap introSubToSentence subs

@@ -17,7 +17,8 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs)
+import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs,
+  pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
@@ -41,13 +42,12 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)
-         ],
+          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)],
      GSDSec $
        GSDProg
          [SysCntxt
@@ -93,9 +93,11 @@ motivation = foldlSent_ [S "The gains of a controller in an application" +:+
               S "must be tuned before the controller is ready for production"]
 
 background :: Sentence
-background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
-              S "in a variety of applications such as thermostats, automobile",
-              S "cruise-control, etc"]
+background = foldlSent_ [
+  S "Automatic process control with a controller (" :+:
+  foldOpts (map short [proportionalCI, piCI, pdControllerCI, pidCI]) :+:
+  S ") is used in a variety of applications such as thermostats, automobile",
+  S "cruise-control, etc"]
 
 orgSecEnd :: Sentence
 orgSecEnd = foldlSent [
@@ -108,7 +110,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon'
+  nw progName : map nw acronyms ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -134,13 +136,6 @@ symbMap = withCommonKnowledge []
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- QuantityDicts
-  map nw symbols
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

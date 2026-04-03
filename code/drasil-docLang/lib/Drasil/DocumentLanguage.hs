@@ -9,25 +9,30 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
 -- General Haskell
 import Control.Lens ((^.), set)
+import Data.Either (rights)
 import Data.Function (on)
-import Data.List (nub, sortBy)
-import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
+import Data.List (nub, sortBy, (\\))
+import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
+import qualified Data.Set as Set
 import qualified Data.Map.Strict as M
 
 -- General Drasil
 import Language.Drasil
 import Language.Drasil.Display (compsy)
+import Language.Drasil.Development (shortdep)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
+import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
+  TermAbbr, shortForm, termResolve')
 
 import Drasil.System (System, whatsTheBigIdea, HasSystem(..), HasSystemMeta(..))
 import Drasil.GetChunks (ccss, ccss')
 
 -- Vocabulary
-import Drasil.Metadata.Documentation as Doc (likelyChg, section_, software,
-  unlikelyChg)
+import Drasil.Metadata.Documentation (likelyChg, section_, software,
+  unlikelyChg, requirement, software, assumption, goalStmt, refBy, refName)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 -- Other docLang
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
@@ -42,7 +47,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, extractDocBib)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec, extractDocBib)
 import Drasil.TraceTable (generateTraceMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -180,23 +185,37 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- | Helper for creating the different document sections.
 mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
-mkSections si dd mbib = map doit dd
+mkSections si dd mbib = map (either renderRefSec id) partialRender
   where
-    doit :: DocSection -> Section
-    doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
-    doit (IntroSec is)        = mkIntroSec si is
-    doit (StkhldrSec sts)     = mkStkhldrSec sts
-    doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib $ fromMaybe [] mbib
-    doit (GSDSec gs')         = mkGSDSec gs'
-    doit (ReqrmntSec r)       = mkReqrmntSec r
-    doit (LCsSec lc)          = mkLCsSec lc
-    doit (UCsSec ulcs)        = mkUCsSec ulcs
-    doit (TraceabilitySec t)  = mkTraceabilitySec t si
-    doit (AppndxSec a)        = mkAppndxSec a
-    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    delayRenderRefSec :: DocSection -> Either RefSec Section
+    delayRenderRefSec (RefSec rs) = Left rs
+    delayRenderRefSec x           = Right (render x)
+
+    partialRender :: [Either RefSec Section]
+    partialRender = map delayRenderRefSec dd
+
+    nonRefSecs :: [Section]
+    nonRefSecs = rights partialRender
+
+    renderRefSec :: RefSec -> Section
+    renderRefSec rs = mkRefSec si dd rs nonRefSecs
+
+    render :: DocSection -> Section
+    render TableOfContents      = mkToC dd
+    render (IntroSec is)        = mkIntroSec si is
+    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (SSDSec ss)          = mkSSDSec si ss
+    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render Bibliography         = mkBib $ fromMaybe [] mbib
+    render (GSDSec gs')         = mkGSDSec gs'
+    render (ReqrmntSec r)       = mkReqrmntSec r
+    render (LCsSec lc)          = mkLCsSec lc
+    render (UCsSec ulcs)        = mkUCsSec ulcs
+    render (TraceabilitySec t)  = mkTraceabilitySec t si
+    render (AppndxSec a)        = mkAppndxSec a
+    render (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    render (RefSec _)           = error
+      "mkSections passed `render` a `RefSec` in partial-render phase!"
 
 -- ** Table of Contents
 
@@ -210,27 +229,45 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef $ si ^. systemdb) l)
+mkRefSec :: System -> DocDesc -> RefSec -> [Section] -> Section
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
   where
-    mkSubRef :: ChunkDB -> RefTab -> Section
-    mkSubRef db TUnits = mkSubRef db $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef db (TUnits' con f) =
+    sysNameUID = si ^. sysName . uid
+    db = si ^. systemdb
+
+    mkSubRef :: RefTab -> Section
+    mkSubRef TUnits = mkSubRef $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    mkSubRef db (TSymb con) =
+    mkSubRef (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
                 (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) db))
                 atStart] []
-    mkSubRef db (TSymb' f con) =
+    mkSubRef (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) db) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations sysNameUID renderedSecs db]
         []
+
+collectDocumentAbbreviations :: UID -> [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations sysNameUID renderedSecs cdb =
+  filter (isJust . shortForm) allTerms
+  where
+    -- Terms found in the document using the list of `Sentence`s extracted from
+    -- the sections.
+    foundInDoc = concatMap (Set.toList . shortdep) $ concatMap getSec renderedSecs
+    -- Terms that could not be found in `Sentence`s, but are important to
+    -- include in the table of abbreviations and acronyms.
+    missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
+      inModel, requirement, thModel, refName, refBy]
+    -- Filter out the system name and duplicates
+    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ [sysNameUID]
+    allTerms = map (termResolve' cdb) filtered
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -347,19 +384,19 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs unlikelyChg  c : mkEnumSimpleD c) []
 
 -- | Intro paragraph for likely and unlikely changes
 introChgs :: Idea n => n -> [ConceptInstance] -> Contents
 introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
-introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
-  introduceAbbPlrl xs, S "to be made to the", phrase Doc.software]
+introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
+  introduceAbbPlrl xs, S "to be made to the", phrase software]
 
 -- ** Traceability
 

@@ -2,7 +2,9 @@
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (
-  getDocDesc, egetDocDesc, getSec,
+  getDocDesc, egetDocDesc,
+  sentencePlate,
+  getSec,
   extractDocBib
 ) where
 
@@ -18,9 +20,9 @@ import Drasil.System (System, systemdb)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.DocumentLanguage.Core hiding (System)
+import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->

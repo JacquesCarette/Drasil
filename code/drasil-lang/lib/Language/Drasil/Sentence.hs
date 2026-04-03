@@ -11,7 +11,7 @@ module Language.Drasil.Sentence (
   (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceTerm,
-  sdep, lnames, lnames'
+  sdep, shortdep, lnames, lnames'
 ) where
 
 import Data.Char (toUpper)
@@ -33,7 +33,7 @@ import qualified Data.Set as Set
 -- (can record whether something is in plural form, a singular term, or in short form).
 data SentenceStyle = PluralTerm
                    | TermStyle
-                   | ShortStyle
+                   | ShortStyle -- TODO: Short plural?
 
 -- | Used in 'Ch' constructor to determine the capitalization of a term.
 -- CapF is for capitalizing the first word from the 'UID' of the given term.
@@ -167,12 +167,35 @@ getUIDs (Quote a)           = getUIDs a
 getUIDs (E a)               = meDep a
 getUIDs EmptyS              = []
 
+-- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
+-- but doesn't go into expressions.
+getUIDshort :: Sentence -> [UID]
+getUIDshort (Ch ShortStyle _ a) = [a]
+getUIDshort (Ch TermStyle _ _)  = []
+getUIDshort (Ch PluralTerm _ _) = []
+getUIDshort SyCh {}             = []
+getUIDshort Sy {}               = []
+getUIDshort NP {}               = []
+getUIDshort S {}                = []
+getUIDshort Percent             = []
+getUIDshort P {}                = []
+getUIDshort Ref {}              = []
+getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
+getUIDshort (Quote a)           = getUIDshort a
+getUIDshort E {}                = []
+getUIDshort EmptyS              = []
+
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 -- | This is to collect /symbolic/ 'UID's that are printed out as a 'Symbol'.
 sdep :: Sentence -> Set.Set UID
 sdep = Set.fromList . getUIDs
 {-# INLINE sdep #-}
+
+-- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
+shortdep :: Sentence -> Set.Set UID
+shortdep = Set.fromList . getUIDshort
+{-# INLINE shortdep #-}
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
 lnames :: Sentence -> Set.Set UID
@@ -196,5 +219,5 @@ lnames' = concatMap (Set.toList . lnames)
 {-# INLINE lnames' #-}
 
 instance HasChunkRefs Sentence where
-  chunkRefs s = Set.unions [lnames s, sdep s]
+  chunkRefs s = Set.unions [lnames s, sdep s, shortdep s]
   {-# INLINABLE chunkRefs #-}

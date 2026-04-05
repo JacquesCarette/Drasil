@@ -87,7 +87,7 @@ mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
     [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
-  = SI (SystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
+  = SI (mkSystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
       cqds refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs

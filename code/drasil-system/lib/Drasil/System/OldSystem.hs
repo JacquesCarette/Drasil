@@ -10,7 +10,7 @@ module Drasil.System.OldSystem (
   System(..), SystemKind(..),
   Purpose, Background, Scope, Motivation,
   -- ** Lenses
-  HasSystem(..), HasSystemMeta(..),
+  HasSystem(..),
   -- ** Functions
   whatsTheBigIdea, mkSystem,
   -- ** Hacks

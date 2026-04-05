@@ -10,7 +10,8 @@ import Language.Drasil (Document(Document), ShowTableOfContents(NoToC),
   namedRef, Sentence(S))
 import System.Environment (getEnv, lookupEnv)
 
-import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections, websiteTitle, si)
+import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
+  websiteTitle, webSys)
 
 -- | Collect environment variables, place them in 'FolderLocation',
 -- and generate the Drasil website.
@@ -61,7 +62,7 @@ main = do
             -- but the analysis scripts work nonetheless, so we display it here.
           }
 
-      syst = si allFolders
+      syst = webSys allFolders
 
       --  FIXME: Author is hack for now to show up in proper spot.
       author = namedRef gitHubRef (S "Link to GitHub Repository")

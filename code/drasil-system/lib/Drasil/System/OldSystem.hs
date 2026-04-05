@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
+{-# LANGUAGE GADTs, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
 
 -- Changes to System should be reflected in the 'Creating Your Project in

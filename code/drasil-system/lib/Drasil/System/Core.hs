@@ -1,4 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
 module Drasil.System.Core where
 
 import Control.Lens (makeClassy)

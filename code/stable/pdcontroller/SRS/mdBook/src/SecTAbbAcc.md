@@ -13,6 +13,7 @@
 |ODE         |Ordinary Differential Equation     |
 |P           |proportional                       |
 |PD          |proportional derivative            |
+|PI          |proportional integral              |
 |PID         |proportional integral derivative   |
 |PS          |Physical System Description        |
 |R           |Requirement                        |

@@ -7,12 +7,12 @@
 module Drasil.System.SmithEtAlSRS (
   -- * System
   -- ** Types
-  SmithEtAlSRS(..), SystemKind(..),
+  SmithEtAlSRS(..),
   Purpose, Background, Scope, Motivation,
   -- ** Lenses
   HasSmithEtAlSRS(..),
-  -- ** Functions
-  whatsTheBigIdea, mkSmithEtAlICO,
+  -- ** Constructors
+  mkSmithEtAlICO,
   -- ** Hacks
   refbyLookup, traceLookup
 ) where
@@ -23,19 +23,12 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Concept,
-  Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
+import Language.Drasil (Quantity, MayHaveUnit, Concept, Reference, People, CI,
+  Constrained, ConstQDef, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
-import Drasil.Metadata.SupportedSoftware (runnableSoftware)
-import Drasil.Metadata.Documentation (srs)
 import Utils.Drasil (toPlainName)
 
 import Drasil.System.Core
-
--- | Enumeration of /kinds/ of 'System's we can encode.
-data SystemKind =
-    Specification
-  | RunnableSoftware
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -44,7 +37,6 @@ data SmithEtAlSRS where
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _meta         :: SystemMeta
-  , _kind         :: SystemKind
   , _programName  :: String
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
@@ -65,25 +57,16 @@ makeClassy ''SmithEtAlSRS
 instance HasSystemMeta SmithEtAlSRS where
   systemMeta = meta
 
--- | Probe what kind of 'System' one is. For example, does it represent a
--- (Problem) specification, runnable software, a 'notebook', or a website?
-whatsTheBigIdea :: SmithEtAlSRS -> IdeaDict
-whatsTheBigIdea = whatKind' . (^. kind)
-  where
-    whatKind' :: SystemKind -> IdeaDict
-    whatKind' Specification = nw srs
-    whatKind' RunnableSoftware = runnableSoftware
-
 -- | Build a 'System'.
 mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
+  CI -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     SmithEtAlSRS
-mkSmithEtAlICO nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
-  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
+mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
+  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
       cqds refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs

@@ -22,12 +22,12 @@ import Language.Drasil.Display (compsy)
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
 
-import Drasil.System (SmithEtAlSRS, whatsTheBigIdea, HasSmithEtAlSRS(..), HasSystemMeta(..))
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
 import Drasil.GetChunks (ccss, ccss')
 
 -- Vocabulary
 import Drasil.Metadata.Documentation as Doc (likelyChg, section_, software,
-  unlikelyChg)
+  unlikelyChg, srs)
 
 -- Other docLang
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
@@ -77,7 +77,7 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Creates a document from a 'System', a document description ('SRSDecl'), and
 -- a title combinator.
-mkDoc :: SmithEtAlSRS -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, SmithEtAlSRS)
+mkDoc :: SmithEtAlSRS -> SRSDecl -> (CI -> CI -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       -- /Pre-generate/ the SRS artifact. It is missing content involving
@@ -92,7 +92,7 @@ mkDoc si srsDecl headingComb =
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
-      heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
+      heading = srs `headingComb` (si' ^. sysName)
       authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl

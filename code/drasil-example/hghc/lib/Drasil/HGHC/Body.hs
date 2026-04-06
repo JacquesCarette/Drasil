@@ -3,7 +3,7 @@ module Drasil.HGHC.Body (si, mkSRS) where
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (mkSmithEtAlICO, SystemKind(Specification))
+import Drasil.System (mkSmithEtAlICO)
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName Specification [spencerSmith]
+  progName [spencerSmith]
   [purp] [] [] []
   [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) []

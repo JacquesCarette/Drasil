@@ -13,7 +13,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (SystemKind(Specification), mkSmithEtAlICO)
+import Drasil.System (mkSmithEtAlICO)
 import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
@@ -58,7 +58,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName' Specification [thulasi, brooks, spencerSmith]
+  progName' [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
   inputs outputs constrained specParamValList

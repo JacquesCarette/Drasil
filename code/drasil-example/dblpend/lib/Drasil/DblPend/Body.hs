@@ -7,7 +7,7 @@ import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (SystemKind(Specification), mkSmithEtAlICO)
+import Drasil.System (mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -93,7 +93,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName Specification [dong]
+si = mkSmithEtAlICO progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints

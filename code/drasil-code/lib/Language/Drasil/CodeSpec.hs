@@ -14,7 +14,7 @@ import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSystem(..), HasSystemMeta(..), programName)
+import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Utils.Drasil (subsetOf, RelativeFile)
 
@@ -88,14 +88,14 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
-  _system' :: S.System,
+  _system' :: S.SmithEtAlSRS,
   _oldCode :: OldCodeSpec
 }
 makeLenses ''CodeSpec
 
-instance HasSystem CodeSpec where
-  system :: Lens' CodeSpec S.System
-  system = system'
+instance HasSmithEtAlSRS CodeSpec where
+  smithEtAlSRS :: Lens' CodeSpec S.SmithEtAlSRS
+  smithEtAlSRS = system'
 
 instance HasSystemMeta CodeSpec where
   systemMeta = system' . systemMeta
@@ -121,7 +121,7 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: S.System -> Choices -> CodeSpec
+codeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
 codeSpec si chs = CS {
   _system' = si',
   _oldCode = oldcodeSpec si' chs
@@ -133,14 +133,15 @@ codeSpec si chs = CS {
     db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
     si' = set systemdb db' si
 
--- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
--- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
--- from 'System' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: S.System -> Choices -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._inputs = ins
-                    , S._outputs = outs
-                    , S._constraints = cs
-                    , S._constants = cnsts } chs =
+-- | Generates an 'OldCodeSpec' from 'SmithEtAlSRS', 'Choices', and a list of
+-- 'Mod's. This function extracts various components (e.g., inputs, outputs,
+-- constraints, etc.) from 'SmithEtAlSRS' to populate the 'OldCodeSpec'
+-- structure.
+oldcodeSpec :: S.SmithEtAlSRS -> Choices -> OldCodeSpec
+oldcodeSpec sys@S.ICO{ S._inputs = ins
+                     , S._outputs = outs
+                     , S._constraints = cs
+                     , S._constants = cnsts } chs =
   let ddefs = sys ^. dataDefns
       n = sys ^. programName
       db = sys ^. systemdb

@@ -5,7 +5,7 @@ import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Quantities.Physics (physicscon)
@@ -75,8 +75,8 @@ mkSRS
      ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
-si :: System
-si = mkSystem
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
   progName Specification [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels

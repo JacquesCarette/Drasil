@@ -5,7 +5,7 @@
 
 module Drasil.Template.Body (mkSRS, si) where
 
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSmithEtAlICO)
 import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.DocLang (tunitNone)
@@ -69,8 +69,8 @@ mkSRS = [TableOfContents,
      AuxConsProg progName [],
   Bibliography]
 
-si :: System
-si = mkSystem
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
   progName Specification [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])

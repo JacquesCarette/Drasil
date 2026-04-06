@@ -17,7 +17,7 @@ import Data.Maybe (mapMaybe)
 
 -- rest of Drasil
 import Drasil.Database (ChunkDB, UID, HasUID(..), find)
-import Drasil.System (System, systemdb, refbyLookup)
+import Drasil.System (SmithEtAlSRS, systemdb, refbyLookup)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
@@ -57,27 +57,27 @@ data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
 -- * Types
 
 -- | Helper type that takes a set of 'UID's and a 'ChunkDB'.
-type TraceViewCat = [UID] -> System -> [UID]
+type TraceViewCat = [UID] -> SmithEtAlSRS -> [UID]
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).
-tmodel :: Fields -> System -> TheoryModel -> LabelledContent
+tmodel :: Fields -> SmithEtAlSRS -> TheoryModel -> LabelledContent
 tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (ref t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- 'QDefinition' (called automatically by 'SCSSub' program).
-ddefn :: Fields -> System -> DataDefinition -> LabelledContent
+ddefn :: Fields -> SmithEtAlSRS -> DataDefinition -> LabelledContent
 ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (ref d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program).
-gdefn :: Fields -> System -> GenDefn -> LabelledContent
+gdefn :: Fields -> SmithEtAlSRS -> GenDefn -> LabelledContent
 gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (ref g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program).
-instanceModel :: Fields -> System -> InstanceModel -> LabelledContent
+instanceModel :: Fields -> SmithEtAlSRS -> InstanceModel -> LabelledContent
 instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (ref i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
@@ -102,7 +102,7 @@ nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
-mkTMField :: TheoryModel -> System -> Field -> ModRow -> ModRow
+mkTMField :: TheoryModel -> SmithEtAlSRS -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress t) : fs
 mkTMField t m l@(Description v u) fs = (show l, toList $
@@ -115,12 +115,12 @@ mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for theory models"
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
-helperRefs :: HasUID t => t -> System -> Sentence
+helperRefs :: HasUID t => t -> SmithEtAlSRS -> Sentence
 helperRefs t s = foldlList Comma List $ map (`helpToRefField` (s ^. systemdb)) $ nub $
   refbyLookup (t ^. uid) s
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of
--- the possible data sets contained in the 'System' database.
+-- the possible data sets contained in the 'SmithEtAlSRS' database.
 helpToRefField :: UID -> ChunkDB -> Sentence
 helpToRefField trg db
   | (Just c) <- find trg db :: Maybe DataDefinition  = refS c
@@ -137,7 +137,7 @@ helperSources [] = [mkParagraph $ S "--"]
 helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
-mkDDField :: DataDefinition -> System -> Field -> ModRow -> ModRow
+mkDDField :: DataDefinition -> SmithEtAlSRS -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb $ d ^. defLhs]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless $ d ^. defLhs]) : fs
@@ -151,7 +151,7 @@ mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 
 -- | Creates the description field for 'Contents' (if necessary) using the given
 -- verbosity and including or ignoring units for a model/general definition.
-buildDescription :: Verbosity -> InclUnits -> ModelExpr -> System -> [Contents] ->
+buildDescription :: Verbosity -> InclUnits -> ModelExpr -> SmithEtAlSRS -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
@@ -161,7 +161,7 @@ buildDescription Verbose u e m cs = (UlC . ulcc .
 -- included as the 'firstPair'' in ['Contents'] (independent of verbosity). The
 -- 'Verbose' case also includes more details about the 'DataDefinition'
 -- expressions.
-buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> System ->
+buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SmithEtAlSRS ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
@@ -169,7 +169,7 @@ buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
   either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
-mkGDField :: GenDefn -> System -> Field -> ModRow -> ModRow
+mkGDField :: GenDefn -> SmithEtAlSRS -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
 mkGDField g _ l@Units fs =
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
@@ -182,7 +182,7 @@ mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
-mkIMField :: InstanceModel -> System -> Field -> ModRow -> ModRow
+mkIMField :: InstanceModel -> SmithEtAlSRS -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress i) : fs
 mkIMField i m l@(Description v u) fs = (show l,

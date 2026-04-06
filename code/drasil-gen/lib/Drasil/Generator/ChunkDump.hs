@@ -14,7 +14,7 @@ import Text.PrettyPrint (render)
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
 import Utils.Drasil (createDirIfMissing)
 import Drasil.Database (dumpChunkDB)
-import Drasil.System (System, systemdb, traceTable, refbyTable)
+import Drasil.System (SmithEtAlSRS, systemdb, traceTable, refbyTable)
 
 type Path = String
 type TargetFile = String
@@ -22,7 +22,7 @@ type TargetFile = String
 -- | For debugging purposes, if the system has a `DEBUG_ENV` environment
 --   variable set to anything, we can dump the chunk maps in a system to the
 --   host system.
-dumpEverything :: System -> PrintingInformation -> Path -> IO ()
+dumpEverything :: SmithEtAlSRS -> PrintingInformation -> Path -> IO ()
 dumpEverything si pinfo p = do
   maybeDebugging <- lookupEnv "DEBUG_ENV"
   case maybeDebugging of
@@ -30,7 +30,7 @@ dumpEverything si pinfo p = do
       dumpEverything0 si pinfo p
     _ -> mempty
 
-dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
+dumpEverything0 :: SmithEtAlSRS -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
   createDirIfMissing True targetPath
   let chunkDb = si ^. systemdb
@@ -51,7 +51,7 @@ dumpTo d targetFile = do
   LB.hPutStrLn trg $ encodePretty d
   hClose trg
 
-dumpChunkTables :: System -> PrintingInformation -> TargetFile -> IO ()
+dumpChunkTables :: SmithEtAlSRS -> PrintingInformation -> TargetFile -> IO ()
 dumpChunkTables si pinfo targetFile = do
   trg <- openFile targetFile WriteMode
   mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo (si ^. refbyTable) (si ^. traceTable)

@@ -4,15 +4,15 @@
 -- Changes to System should be reflected in the 'Creating Your Project in
 -- Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-module Drasil.System.OldSystem (
+module Drasil.System.SmithEtAlSRS (
   -- * System
   -- ** Types
-  System(..), SystemKind(..),
+  SmithEtAlSRS(..), SystemKind(..),
   Purpose, Background, Scope, Motivation,
   -- ** Lenses
-  HasSystem(..),
+  HasSmithEtAlSRS(..),
   -- ** Functions
-  whatsTheBigIdea, mkSystem,
+  whatsTheBigIdea, mkSmithEtAlICO,
   -- ** Hacks
   refbyLookup, traceLookup
 ) where
@@ -39,8 +39,8 @@ data SystemKind =
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
-data System where
- SI :: (Quantity h, MayHaveUnit h, Concept h,
+data SmithEtAlSRS where
+ ICO :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _meta         :: SystemMeta
@@ -58,16 +58,16 @@ data System where
   , _refTable     :: M.Map UID Reference
   , _refbyTable   :: M.Map UID [UID]
   , _traceTable   :: M.Map UID [UID]
-  } -> System
+  } -> SmithEtAlSRS
 
-makeClassy ''System
+makeClassy ''SmithEtAlSRS
 
-instance HasSystemMeta System where
+instance HasSystemMeta SmithEtAlSRS where
   systemMeta = meta
 
 -- | Probe what kind of 'System' one is. For example, does it represent a
 -- (Problem) specification, runnable software, a 'notebook', or a website?
-whatsTheBigIdea :: System -> IdeaDict
+whatsTheBigIdea :: SmithEtAlSRS -> IdeaDict
 whatsTheBigIdea = whatKind' . (^. kind)
   where
     whatKind' :: SystemKind -> IdeaDict
@@ -75,24 +75,24 @@ whatsTheBigIdea = whatKind' . (^. kind)
     whatKind' RunnableSoftware = runnableSoftware
 
 -- | Build a 'System'.
-mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
+mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   CI -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
-    System
-mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
-  = SI (mkSystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
+    SmithEtAlSRS
+mkSmithEtAlICO nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
+  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
       cqds refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
     progName = toPlainName $ filter (not . isSpace) $ abrv nm
 
 -- | Find what chunks reference a specific chunk.
-refbyLookup :: UID -> System -> [UID]
+refbyLookup :: UID -> SmithEtAlSRS -> [UID]
 refbyLookup u = fromMaybe [] . M.lookup u . (^. refbyTable)
 
 -- | Find what chunks a specific one references.
-traceLookup :: UID -> System -> [UID]
+traceLookup :: UID -> SmithEtAlSRS -> [UID]
 traceLookup u = fromMaybe [] . M.lookup u . (^. traceTable)

@@ -6,7 +6,7 @@ module Drasil.Website.Example where
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (E)
-import Drasil.System (System(..), programName, sysName, purpose)
+import Drasil.System (SmithEtAlSRS(..), programName, sysName, purpose)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Drasil.Generator (codedDirName, Format(..))
@@ -40,7 +40,7 @@ import qualified Drasil.Projectile.Choices as Projectile (choiceCombos)
 -- | Each Example gets placed in here.
 data Example = E {
   -- | Example system information. Used to get the system name and abbreviation.
-  systemE :: System,
+  systemE :: SmithEtAlSRS,
   -- | Some examples have generated code with specific choices.
   -- They may also have more than one set of choices, so we need a list.
   choicesE :: [Choices],
@@ -52,7 +52,7 @@ data Example = E {
 -- TODO: Automate the gathering of system information, descriptions, and choices.
 
 -- | Records example system information.
-allExampleSI :: [System]
+allExampleSI :: [SmithEtAlSRS]
 allExampleSI = [
   DblPend.si,
   GamePhysics.si,
@@ -73,7 +73,7 @@ allExampleChoices :: [[Choices]]
 allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
-allExamples :: [System] -> [[Choices]] -> FilePath -> FilePath -> [Example]
+allExamples :: [SmithEtAlSRS] -> [[Choices]] -> FilePath -> FilePath -> [Example]
 allExamples si choi srsP doxP = zipWith (\x y -> E x y srsP doxP) si choi
 
 -- | Calls 'allExamples' on 'allExampleSI', 'allExampleDesc', and 'allExampleChoices'.

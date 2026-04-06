@@ -16,7 +16,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
   tAndDWSym)
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -54,8 +54,8 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
-si :: System
-si = mkSystem progName Specification
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO progName Specification
   [nikitha, spencerSmith] [purp] [background] [scope] []
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants

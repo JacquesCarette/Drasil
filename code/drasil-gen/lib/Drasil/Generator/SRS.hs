@@ -19,7 +19,7 @@ import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
   genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
-import Drasil.System (System, refTable, systemdb)
+import Drasil.System (SmithEtAlSRS, refTable, systemdb)
 import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
@@ -29,7 +29,7 @@ import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
 -- | Generate an SRS softifact.
-exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
+exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
       printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational defaultConfiguration
@@ -140,7 +140,7 @@ writeDoc' s MDBook doc = genMDBook $ makeProject s doc
 writeDoc' _ _      _   = srsFormatError
 
 -- | Generates traceability graphs as .dot files.
-genDot :: System -> IO ()
+genDot :: SmithEtAlSRS -> IO ()
 genDot si = do
     workingDir <- getCurrentDirectory
     let gi = mkGraphInfo si

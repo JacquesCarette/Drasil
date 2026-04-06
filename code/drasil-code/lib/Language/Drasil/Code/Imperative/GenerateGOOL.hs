@@ -10,6 +10,9 @@ import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
+import Drasil.Build.Artifacts (FileAndContents)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   getDoxOutput, getSoftwareDossierFiles, HasChoices(..))
@@ -19,17 +22,13 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
+import Drasil.Metadata (watermark)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
-
-import Utils.Drasil.FileData (FileAndContents)
-import Drasil.Metadata (watermark)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
 -- Doxygen comments. If the user did not choose 'CommentMod' but did choose

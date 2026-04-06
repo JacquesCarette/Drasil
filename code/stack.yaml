@@ -39,6 +39,7 @@ ghc-options:
 # non-dependency (i.e. a user package), and its test suites and benchmarks
 # will not be run. This is useful for tweaking upstream packages.
 packages:
+- drasil-build-artifacts
 - drasil-lang
 - drasil-utils
 - drasil-gool

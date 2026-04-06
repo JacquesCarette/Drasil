@@ -26,7 +26,7 @@ import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept,
   Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
-import Drasil.Metadata.SupportedSoftware (runnableSoftware, website)
+import Drasil.Metadata.SupportedSoftware (runnableSoftware)
 import Drasil.Metadata.Documentation (srs, notebook)
 import Utils.Drasil (toPlainName)
 
@@ -37,7 +37,6 @@ data SystemKind =
     Specification
   | RunnableSoftware
   | Notebook
-  | Website
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -76,7 +75,6 @@ whatsTheBigIdea = whatKind' . (^. kind)
     whatKind' Specification = nw srs
     whatKind' RunnableSoftware = runnableSoftware
     whatKind' Notebook = nw notebook
-    whatKind' Website = website
 
 -- | Build a 'System'.
 mkSystem :: (Quantity h, MayHaveUnit h, Concept h,

@@ -10,6 +10,7 @@ description:         Please see the README on GitHub at <https://github.com/Jacq
 language: Haskell2010
 default-extensions:
 - StrictData
+- TemplateHaskell
 
 extra-source-files: []
 

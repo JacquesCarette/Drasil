@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
+{-# LANGUAGE GADTs, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
 
 -- Changes to System should be reflected in the 'Creating Your Project in
@@ -10,7 +10,7 @@ module Drasil.System.OldSystem (
   System(..), SystemKind(..),
   Purpose, Background, Scope, Motivation,
   -- ** Lenses
-  HasSystem(..), HasSystemMeta(..),
+  HasSystem(..),
   -- ** Functions
   whatsTheBigIdea, mkSystem,
   -- ** Hacks
@@ -87,7 +87,7 @@ mkSystem :: (Quantity h, MayHaveUnit h, Concept h,
     [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
     System
 mkSystem nm sk ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
-  = SI (SystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
+  = SI (mkSystemMeta nm ppl prps bkgrd scp motive db) sk progName tms gds dds ims hs is js
       cqds refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs

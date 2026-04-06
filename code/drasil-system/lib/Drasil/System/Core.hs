@@ -1,5 +1,9 @@
-{-# LANGUAGE TemplateHaskell #-}
-module Drasil.System.Core where
+module Drasil.System.Core (
+  Purpose, Background, Scope, Motivation,
+  SystemMeta,
+  HasSystemMeta(..),
+  mkSystemMeta
+) where
 
 import Control.Lens (makeClassy)
 
@@ -27,3 +31,7 @@ data SystemMeta = SystemMeta
   }
 
 makeClassy ''SystemMeta
+
+mkSystemMeta :: CI -> People -> Purpose -> Background -> Scope -> Motivation ->
+  ChunkDB -> SystemMeta
+mkSystemMeta = SystemMeta

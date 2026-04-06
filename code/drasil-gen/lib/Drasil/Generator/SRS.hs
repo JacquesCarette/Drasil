@@ -9,6 +9,7 @@ import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook),
@@ -20,7 +21,6 @@ import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (System, refTable, systemdb)
-import Utils.Drasil (createDirIfMissing)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,

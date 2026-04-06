@@ -17,6 +17,7 @@ dependencies:
 - mtl
 - composition
 - drasil-utils
+- drasil-build-artifacts
 
 ghc-options:
 - -Wall

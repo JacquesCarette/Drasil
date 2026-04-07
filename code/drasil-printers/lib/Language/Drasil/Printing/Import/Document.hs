@@ -1,5 +1,7 @@
 -- | Defines functions to transform Drasil-based documents into a printable version.
-module Language.Drasil.Printing.Import.Document where
+module Language.Drasil.Printing.Import.Document (
+  makeDocument, makeProject
+) where
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)

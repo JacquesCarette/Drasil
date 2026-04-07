@@ -1,6 +1,7 @@
 -- | Defines helper functions used in printing LaTeX documents.
 module Language.Drasil.TeX.Helpers where
 
+import Data.List (isSuffixOf)
 import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 
@@ -9,10 +10,6 @@ import Language.Drasil (MaxWidthPercent)
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
-import Data.List (isSuffixOf)
-
---import Language.Drasil.Config (numberedSections, hyperSettings)
---import Language.Drasil.Document (MaxWidthPercent)
 
 -----------------------------------------------------------------------------
 -- * LaTeX Commands

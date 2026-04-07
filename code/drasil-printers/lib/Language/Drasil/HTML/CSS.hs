@@ -1,9 +1,11 @@
 -- | Defines functions to create accompanying .css files for HTML generators.
-module Language.Drasil.HTML.CSS where
+module Language.Drasil.HTML.CSS (
+  makeCSS, linkCSS
+) where
 
 import Text.PrettyPrint (Doc, text, vcat)
 
-import Language.Drasil hiding (Expr)
+import Language.Drasil (Document)
 
 -- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc

@@ -8,10 +8,10 @@ import Data.List (intersperse)
 import Drasil.Code.CodeExpr.Development
 
 import Drasil.Database (UID)
-import Language.Drasil (DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), LiteralC (int))
+import Language.Drasil (DomainDesc(..), Inclusive(..), RTopology(..),
+  RealInterval(..), LiteralC (int))
 import qualified Language.Drasil.Display as S (Symbol(..))
-import Language.Drasil.Literal.Development
+import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)

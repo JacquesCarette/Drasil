@@ -6,7 +6,8 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 import Data.List (intersperse)
 
 import Drasil.Database (UID)
-import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
+import Language.Drasil (Expr, Symbol, RealInterval(..), LiteralC(int),
+  DomainDesc(..), Inclusive(..), RTopology(..))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), EqBinOp(..), Expr(..),

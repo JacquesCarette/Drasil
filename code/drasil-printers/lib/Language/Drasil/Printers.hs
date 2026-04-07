@@ -13,8 +13,7 @@ module Language.Drasil.Printers (
   -- ** Types
   , SingleLine(..)
   -- ** Functions
-  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showSymb,
-  showHasSymbImpl
+  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showHasSymbImpl
   -- * TeX
   , genTeX
   -- * Jupyter
@@ -36,7 +35,7 @@ import Language.Drasil.Markdown.Config (makeBook, makeRequirements)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
-  codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
+  codeExprDoc, symbolDoc, unitDoc, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   HasPrintingOptions(..), Notation(..), piSys,

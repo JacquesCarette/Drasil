@@ -5,7 +5,7 @@ module Language.Drasil.TeX.Monad where
 import Prelude hiding (print)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil
+import Language.Drasil (RenderSpecial(..), Special(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
 

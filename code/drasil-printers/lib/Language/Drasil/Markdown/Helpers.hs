@@ -2,14 +2,15 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
+import Data.Map (lookup)
 import System.FilePath (takeFileName)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
   brackets, parens, braces)
-import Data.Map (lookup)
-import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
-import Language.Drasil.Printing.LayoutObj (RefMap)
+
 import Language.Drasil.HTML.Helpers (wrap', wrapGen', Variation(Id, Align),
   wrapInside, tagR)
+import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
+import Language.Drasil.Printing.LayoutObj (RefMap)
 
 -- | Angled brackets
 ang :: Doc -> Doc

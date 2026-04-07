@@ -9,8 +9,10 @@ module Language.Drasil.Markdown.CreateMd (
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
     (<>), punctuate, hsep)
+
+import Utils.Drasil (contSep, filterEmpty, listToDoc, Separator)
+
 import Language.Drasil.Printing.Helpers (upcase)
-import Utils.Drasil
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc

@@ -1,6 +1,7 @@
 module Drasil.PDController.Concepts where
 
-import Language.Drasil
+import Language.Drasil (commonIdeaWithDict, dcc, nw, cn', nounPhraseSP, pn, CI,
+  ConceptChunk, IdeaDict)
 
 acronyms :: [CI]
 acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]

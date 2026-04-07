@@ -86,8 +86,8 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
-  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA ],
+   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
+   TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose

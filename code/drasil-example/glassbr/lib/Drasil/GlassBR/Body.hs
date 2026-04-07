@@ -64,7 +64,7 @@ si = mkSmithEtAlICO progName
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)

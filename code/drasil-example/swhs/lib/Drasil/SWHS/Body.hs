@@ -101,7 +101,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA ],
+    TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,

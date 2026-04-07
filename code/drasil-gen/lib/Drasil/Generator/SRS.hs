@@ -33,7 +33,7 @@ exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
       printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational defaultConfiguration
-  dumpEverything syst' printfo ".drasil/"
+  dumpEverything syst' ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!

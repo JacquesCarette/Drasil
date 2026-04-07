@@ -1,5 +1,5 @@
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
-module Language.Drasil.JSON.Print(
+module Language.Drasil.JSON.Print (
   genJupyterLessonPlan, genJupyterSRS
 ) where
 
@@ -7,7 +7,7 @@ import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import qualified Language.Drasil as L
+import Language.Drasil (checkValidStr, RenderSpecial(..), DType(..), MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -16,13 +16,12 @@ import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
-
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
-import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
 import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
   htmlBibFormatter)
+import Language.Drasil.HTML.Monad (unPH)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
@@ -111,13 +110,13 @@ print' = foldr (($$) . printLO') empty
 pSpec :: Spec -> Doc
 pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Tooltip _ s) = pSpec s
-pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec (Sp s)    = text $ unPH $ special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
@@ -139,7 +138,7 @@ pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Set l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ L.special s
+pExpr (Spec s)       = text $ unPH $ special s
 pExpr (Sub e)        = unders <> pExpr e
 pExpr (Sup e)        = hat <> pExpr e
 pExpr (Over Hat s)   = pExpr s <> text "&#770;"
@@ -235,14 +234,14 @@ count c (x:xs)
   | otherwise = count c xs
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "L.Empty definition"
+makeDefn :: DType -> [(String,[LayoutObj])] -> Doc -> Doc
+makeDefn _ [] _  = error "Empty definition"
 makeDefn dt ps l = refID l $$ table [dtag dt]
   (tr (nbformat (th (text "Refname")) $$ td (nbformat(bold l))) $$ makeDRows ps)
-  where dtag L.General  = "gdefn"
-        dtag L.Instance = "idefn"
-        dtag L.Theory   = "tdefn"
-        dtag L.Data     = "ddefn"
+  where dtag General  = "gdefn"
+        dtag Instance = "idefn"
+        dtag Theory   = "tdefn"
+        dtag Data     = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
@@ -278,7 +277,7 @@ sItem (Flat s)     = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l False]
 
 -- | Renders figures in HTML
-makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> MaxWidthPercent -> Doc
 makeFigure r c f wp = refID r $$ image f c wp
 
 -- | Renders assumptions, requirements, likely changes

@@ -6,7 +6,8 @@ module Language.Drasil.Config(
   verboseDDDescription,
   -- * Bibliography
   StyleGuide(..),bibStyleH,bibStyleT,colAwidth,colBwidth,
-  numberedDDEquations,numberedTMEquations) where
+  numberedDDEquations,numberedTMEquations
+) where
 
 -- | TeX font size.
 fontSize :: Int

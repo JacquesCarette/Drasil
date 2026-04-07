@@ -13,6 +13,8 @@ import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
 
+import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents,
+  hasPathAndDocToFileAndContents, createDirIfMissing, createFile)
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState)
@@ -22,9 +24,6 @@ import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
 import Language.Drasil.Printing.Import (spec)
 import Drasil.System
-import Utils.Drasil (createDirIfMissing, createFile)
-import Utils.Drasil.FileData (FileAndContents(..), fileAndContents,
-  hasPathAndDocToFileAndContents)
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)

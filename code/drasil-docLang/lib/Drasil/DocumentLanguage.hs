@@ -26,11 +26,11 @@ import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
   TermAbbr, shortForm, termResolve')
 
-import Drasil.System (System, whatsTheBigIdea, HasSystem(..), HasSystemMeta(..))
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
 import Drasil.GetChunks (ccss, ccss')
 
 -- Vocabulary
-import Drasil.Metadata.Documentation (likelyChg, section_, software,
+import Drasil.Metadata.Documentation (likelyChg, section_, software, srs,
   unlikelyChg, requirement, software, assumption, goalStmt, refBy, refName)
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
@@ -82,7 +82,7 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Creates a document from a 'System', a document description ('SRSDecl'), and
 -- a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
+mkDoc :: SmithEtAlSRS -> SRSDecl -> (CI -> CI -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       -- /Pre-generate/ the SRS artifact. It is missing content involving
@@ -97,7 +97,7 @@ mkDoc si srsDecl headingComb =
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
-      heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
+      heading = srs `headingComb` (si' ^. sysName)
       authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
@@ -116,7 +116,7 @@ mkDoc si srsDecl headingComb =
 -- the "trace" (refers to) and "refBy" (referenced by) maps, placing them in the
 -- output 'System', and generating corresponding 'LabelledContent' chunks for
 -- the traceability graphs to be used in the SRS.
-buildTraceMaps :: DocDesc -> System -> System
+buildTraceMaps :: DocDesc -> SmithEtAlSRS -> SmithEtAlSRS
 buildTraceMaps sd si
   | containsTraceSec sd =
     let db = si ^. systemdb
@@ -138,7 +138,7 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> [Citation] -> System -> System
+fillReferences :: [Section] -> [Citation] -> SmithEtAlSRS -> SmithEtAlSRS
 fillReferences allSections cites si = si2
   where
     -- get old chunk database + ref database
@@ -184,7 +184,7 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
-mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
+mkSections :: SmithEtAlSRS -> DocDesc -> Maybe BibRef -> [Section]
 mkSections si dd mbib = map (either renderRefSec id) partialRender
   where
     delayRenderRefSec :: DocSection -> Either RefSec Section
@@ -229,7 +229,7 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> [Section] -> Section
+mkRefSec :: SmithEtAlSRS -> DocDesc -> RefSec -> [Section] -> Section
 mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
   where
     sysNameUID = si ^. sysName . uid
@@ -289,7 +289,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 -- ** Introduction
 
 -- | Makes the Introduction section into a 'Section'.
-mkIntroSec :: System -> IntroSec -> Section
+mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
   where
@@ -325,28 +325,28 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
 -- ** Specific System Description
 
 -- | Helper for making the Specific System Description section.
-mkSSDSec :: System -> SSDSec -> Section
+mkSSDSec :: SmithEtAlSRS -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
   where
-    mkSubSSD :: System -> SSDSub -> Section
+    mkSubSSD :: SmithEtAlSRS -> SSDSub -> Section
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 -- | Helper for making the Specific System Description Problem section.
-mkSSDProb :: System -> ProblemDescription -> Section
+mkSSDProb :: SmithEtAlSRS -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
 -- | Helper for making the Solution Characteristics Specification section.
-mkSolChSpec :: System -> SolChSpec -> Section
+mkSolChSpec :: SmithEtAlSRS -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. sysName) SSD.imStub] $
     map (mkSubSCS si) l
   where
-    mkSubSCS :: System -> SCSSub -> Section
+    mkSubSCS :: SmithEtAlSRS -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (si' ^. sysName) $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -401,7 +401,7 @@ introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
 -- ** Traceability
 
 -- | Helper for making the Traceability Matrices and Graphs section.
-mkTraceabilitySec :: TraceabilitySec -> System -> Section
+mkTraceabilitySec :: TraceabilitySec -> SmithEtAlSRS -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (si ^. programName) []
@@ -413,7 +413,7 @@ mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
          || null (header (TM.layoutUIDs cols si) si)) progs
 
 -- | Helper to get headers of rows and columns
-header :: ([UID] -> [UID]) -> System -> [Sentence]
+header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
 header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions

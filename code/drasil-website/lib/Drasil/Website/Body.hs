@@ -1,6 +1,6 @@
 -- | Gathers and organizes all the information for the [Drasil website](https://jacquescarette.github.io/Drasil/).
 module Drasil.Website.Body (
-  FolderLocation(..), si, symbMap,
+  FolderLocation(..), webSys, symbMap,
   gitHubRef, sections, websiteTitle,
 ) where
 
@@ -8,7 +8,8 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System
+import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
+  DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
 
@@ -58,17 +59,9 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
--- TODO: Should the website be using a ``System''? This is primarily for the SmithEtAl template.
---       It seems like the website is primarily that functions on a chunkdb.
-
--- | System information.
-si :: FolderLocation -> System
-si fl = mkSystem
-  webName Website []
-  [] [] [] []
-  [] [] [] []
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
-  symbMap (allRefs fl)
+webSys :: FolderLocation -> DrasilWebsite
+-- FIXME: Missing metadata!
+webSys = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) . allRefs
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
@@ -87,7 +80,7 @@ symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
   slope, factor]) [] [] [] [] [] [] [] [] []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
-getSysName :: System -> IdeaDict
+getSysName :: SmithEtAlSRS -> IdeaDict
 getSysName = nw . (^. sysName)
 
 -- | Holds all references and links used in the website.

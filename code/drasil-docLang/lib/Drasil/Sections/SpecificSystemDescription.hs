@@ -28,7 +28,7 @@ import Data.Maybe
 
 -- General Drasil
 import Drasil.Database (UID, HasUID(..), showUID)
-import Drasil.System (System)
+import Drasil.System (SmithEtAlSRS)
 import Language.Drasil hiding (variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -305,7 +305,7 @@ outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.
 -- Used to find where a particular assumption is referenced.
-helperCI :: ConceptInstance -> System -> ConceptInstance
+helperCI :: ConceptInstance -> SmithEtAlSRS -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS

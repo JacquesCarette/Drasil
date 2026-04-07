@@ -22,6 +22,7 @@ dependencies:
 - containers
 - directory
 - time
+- drasil-build-artifacts
 - drasil-build
 - drasil-code
 - drasil-data

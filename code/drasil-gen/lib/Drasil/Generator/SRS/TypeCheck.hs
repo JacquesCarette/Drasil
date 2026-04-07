@@ -13,10 +13,10 @@ import qualified Data.Map.Strict as M
 import Drasil.Database (UID, HasUID(..), ChunkDB, findAll)
 import Language.Drasil (Expr, Space, temporaryIndent, HasSpace(typ),
   RequiresChecking(..), TypeError, Typed(check), DefinedQuantityDict)
-import Drasil.System (System, HasSystem(instModels, dataDefns), systemdb)
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(instModels, dataDefns), systemdb)
 
 -- Note: this should be externally configurable wrt verbosity!
-typeCheckSI :: System -> IO ()
+typeCheckSI :: SmithEtAlSRS -> IO ()
 typeCheckSI sys = do
     let ims = sys ^. instModels
         dds = sys ^. dataDefns

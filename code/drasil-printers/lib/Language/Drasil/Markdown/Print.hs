@@ -1,5 +1,5 @@
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print(genMDBook, pSpec) where
+module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
@@ -13,22 +13,20 @@ import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold),
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.LayoutObj (Project(Project),
-  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
-
+import Language.Drasil.Printing.LayoutObj (Project(Project),
+  LayoutObj(..), Filename, RefMap, File(File))
+import Language.Drasil.HTML.Helpers(BibFormatter(..))
+import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
+import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
+  reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv,
+  em, h, h', centeredDivId)
+import Language.Drasil.TeX.Helpers (commandD, command2D, mkEnv)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText,
   hpunctuate)
-import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
-import Language.Drasil.HTML.Helpers(BibFormatter(..))
-import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
-
-import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
-  reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv,
-  em, h, h', centeredDivId)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------

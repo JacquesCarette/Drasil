@@ -16,10 +16,10 @@ import qualified Data.Set as S
 
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
-import Drasil.System (System, systemdb)
+import Drasil.System (SmithEtAlSRS, systemdb)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
-import Drasil.DocumentLanguage.Core hiding (System)
+import Drasil.DocumentLanguage.Core
 import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
@@ -164,7 +164,7 @@ getSecCon (Con c) = extractSents c
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created
 -- during document generation (like those in orgOfDocIntro).
-extractDocBib :: System -> [Section] -> BibRef
+extractDocBib :: SmithEtAlSRS -> [Section] -> BibRef
 extractDocBib si = resolveBibliography (si ^. systemdb) . extractAllSecRefs
   where
     extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

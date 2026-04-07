@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.Import.Literal (literal) where
 
-import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil (dbl)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
@@ -26,4 +26,3 @@ literal (Str s)                   _ = P.Str s
 literal (Perc a b)               sm = P.Row [literal (dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
-

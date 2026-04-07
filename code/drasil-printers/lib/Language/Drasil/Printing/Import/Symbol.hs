@@ -1,13 +1,13 @@
 -- | Defines functions for printing symbols and units.
 module Language.Drasil.Printing.Import.Symbol (symbol, pUnit) where
 
+import Data.Bifunctor (second)
+import Data.List (partition)
+
 import Language.Drasil (USymb(..))
 import Language.Drasil.ShortHands (cDelta)
 import Language.Drasil.Display (Decoration(..), Symbol(..))
 import qualified Language.Drasil.Printing.AST as P
-
-import Data.List (partition)
-import Data.Bifunctor (second)
 
 -- | Converts a symbol into an expression.
 symbol :: Symbol -> P.Expr

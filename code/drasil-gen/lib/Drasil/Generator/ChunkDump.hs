@@ -7,31 +7,29 @@ import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
-import System.IO (IOMode(WriteMode), openFile, hClose, hPutStrLn)
+import System.IO (IOMode(WriteMode), openFile, hClose)
 import System.Environment (lookupEnv)
-import Text.PrettyPrint (render)
 
-import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Utils.Drasil (createDirIfMissing)
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Drasil.Database (dumpChunkDB)
-import Drasil.System (System, systemdb, traceTable, refbyTable)
+import Drasil.System (SmithEtAlSRS, systemdb, traceTable, refbyTable)
 
 type Path = String
 type TargetFile = String
 
 -- | For debugging purposes, if the system has a `DEBUG_ENV` environment
---   variable set to anything, we can dump the chunk maps in a system to the
---   host system.
-dumpEverything :: System -> PrintingInformation -> Path -> IO ()
-dumpEverything si pinfo p = do
+-- variable set to anything, we can dump the chunk maps in a system to the host
+-- system.
+dumpEverything :: SmithEtAlSRS -> Path -> IO ()
+dumpEverything si p = do
   maybeDebugging <- lookupEnv "DEBUG_ENV"
   case maybeDebugging of
     (Just (_:_)) -> do
-      dumpEverything0 si pinfo p
+      dumpEverything0 si p
     _ -> mempty
 
-dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
-dumpEverything0 si pinfo targetPath = do
+dumpEverything0 :: SmithEtAlSRS -> Path -> IO ()
+dumpEverything0 si targetPath = do
   createDirIfMissing True targetPath
   let chunkDb = si ^. systemdb
       chunkDump = dumpChunkDB chunkDb
@@ -42,17 +40,9 @@ dumpEverything0 si pinfo targetPath = do
   dumpTo traceDump $ targetPath ++ "trace.json"
   dumpTo refByDump $ targetPath ++ "reverse_trace.json"
 
-  dumpChunkTables si pinfo $ targetPath ++ "tables.txt"
-
 -- FIXME: This is more of a general utility than it is drasil-database specific
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 dumpTo d targetFile = do
   trg <- openFile targetFile WriteMode
   LB.hPutStrLn trg $ encodePretty d
-  hClose trg
-
-dumpChunkTables :: System -> PrintingInformation -> TargetFile -> IO ()
-dumpChunkTables si pinfo targetFile = do
-  trg <- openFile targetFile WriteMode
-  mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo (si ^. refbyTable) (si ^. traceTable)
   hClose trg

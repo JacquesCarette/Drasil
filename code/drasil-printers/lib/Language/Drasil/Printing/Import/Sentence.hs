@@ -46,7 +46,7 @@ spec sm (Ref u EmptyS notes)    =
     (Reference _ (Citation ra) _) ->
       P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))    ra (spec sm $ S ra)
     (Reference _ (URI ra) sn) ->
-      P.Ref P.External    ra (spec sm $ renderURI sm sn)
+      P.Ref P.External    ra (spec sm $ getSentSN sn)
 spec sm (Ref u dName notes) =
   let reff = refFind u sm in
   case reff of
@@ -68,10 +68,6 @@ renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbre
 renderShortName pinfo (RConcat a b) sn = renderShortName pinfo a sn :+: renderShortName pinfo b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = getSentSN sn
-
--- | Render a uniform resource locator as a 'Sentence'.
-renderURI :: ctx -> ShortName -> Sentence
-renderURI _ = getSentSN
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence

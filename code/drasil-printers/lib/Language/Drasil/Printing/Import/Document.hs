@@ -10,14 +10,14 @@ import Data.Map (fromList)
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Drasil.Code.CodeExpr.Development (expr)
 
-import Drasil.Database (showUID)
+import Language.Drasil.Printing.Import.Citation (layCite)
+import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
+import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
+import Language.Drasil.Printing.Import.Sentence (spec)
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
-import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
-import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
-import Language.Drasil.Printing.Import.Sentence (spec)
 
 -- * Main Function
 
@@ -184,35 +184,6 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr sm (expr c)))
-
--- | For importing a bibliography.
-layCite :: Citation -> P.Citation
-layCite c = P.Cite (showUID c) (c ^. citeKind) (map layField (c ^. getFields))
-
--- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
-layField :: CiteField -> P.CiteField
-layField (Address      s) = P.Address      $ P.S s
-layField (Author       p) = P.Author       p
-layField (BookTitle    b) = P.BookTitle    $ P.S b
-layField (Chapter      c) = P.Chapter      c
-layField (Edition      e) = P.Edition      e
-layField (Editor       e) = P.Editor       e
-layField (Institution  i) = P.Institution  $ P.S i
-layField (Journal      j) = P.Journal      $ P.S j
-layField (Month        m) = P.Month        m
-layField (Note         n) = P.Note         $ P.S n
-layField (Number       n) = P.Number       n
-layField (Organization o) = P.Organization $ P.S o
-layField (Pages        p) = P.Pages        p
-layField (Publisher    p) = P.Publisher    $ P.S p
-layField (School       s) = P.School       $ P.S s
-layField (Series       s) = P.Series       $ P.S s
-layField (Title        t) = P.Title        $ P.S t
-layField (Type         t) = P.Type         $ P.S t
-layField (Volume       v) = P.Volume       v
-layField (Year         y) = P.Year         y
-layField (HowPublished (URL  u)) = P.HowPublished (P.URL  $ P.S u)
-layField (HowPublished (Verb v)) = P.HowPublished (P.Verb $ P.S v)
 
 -- | Translates lists to be printable.
 makeL :: PrintingInformation -> ListType -> P.ListType

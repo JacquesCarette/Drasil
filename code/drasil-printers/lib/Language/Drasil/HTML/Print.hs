@@ -514,7 +514,7 @@ rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-util
 -- | Render a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
+rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> Doc
@@ -537,14 +537,10 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
--- | Renders a 'Person' as Last, First Middle.
-rendPers :: Person -> String
-rendPers = rendPersLFM
-
 -- | Renders a person's last name.
 rendPersL :: Person -> String
 rendPersL =
-  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPers
+  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPersLFM
 
 -- | adds an 's' if there is more than one person in a list.
 toPlural :: People -> String -> String

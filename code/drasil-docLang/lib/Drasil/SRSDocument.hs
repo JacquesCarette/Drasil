@@ -4,7 +4,7 @@
 module Drasil.SRSDocument (
   -- * Chunk database types and functions
   -- | Imported from "Database.Drasil"
-  ChunkDB, System(..),
+  ChunkDB, SmithEtAlSRS(..), -- FIXME: This should not be exported here!!
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),

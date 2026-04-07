@@ -11,7 +11,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -56,9 +56,9 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
-si :: System
-si = mkSystem
-  progName Specification [henryFrankis, brooks]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
+  progName [henryFrankis, brooks]
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
   inputs outputs constrained []

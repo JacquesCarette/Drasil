@@ -11,7 +11,7 @@ import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
@@ -87,8 +87,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   Bibliography                    -- Adds reference section
   ]
 
-si :: System
-si = mkSystem progName Specification [olu]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints []

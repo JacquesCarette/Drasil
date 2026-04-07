@@ -4,7 +4,7 @@ import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
@@ -134,9 +134,9 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-si :: System
-si = mkSystem
-  progName Specification [thulasi]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
+  progName [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs

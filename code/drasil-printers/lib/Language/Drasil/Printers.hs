@@ -20,8 +20,6 @@ module Language.Drasil.Printers (
   , genJupyterLessonPlan, genJupyterSRS
   -- * Markdown
   , genMDBook, makeBook, makeRequirements
-  -- * Log
-  , printAllDebugInfo
   -- * Printing Information and Options
   , PrintingInformation, piSys
   , HasPrintingOptions (..)
@@ -42,4 +40,3 @@ import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   HasPrintingOptions(..), Notation(..), piSys,
   defaultConfiguration, plainConfiguration)
-import Language.Drasil.Debug.Print (printAllDebugInfo)

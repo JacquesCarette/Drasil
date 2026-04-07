@@ -14,7 +14,7 @@ import Data.Foldable (foldl')
 
 -- General Drasil
 import Drasil.Database (mkUid)
-import Drasil.System (System, HasSystem(..))
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import qualified Language.Drasil.Development as D
@@ -33,7 +33,7 @@ import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
   traceMReferrers, traceView, traceViewCC)
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
-generateTraceTable :: System -> LabelledContent
+generateTraceTable :: SmithEtAlSRS -> LabelledContent
 generateTraceTable = generateTraceTableView (mkUid "Tracey")
   (titleize' item +:+ S "of Different" +:+ titleize' section_) [tvEverything] [tvEverything]
 
@@ -96,7 +96,7 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural dataDefn,
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
 
 -- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
-traceMatOtherReq :: System -> TraceConfig
+traceMatOtherReq :: SmithEtAlSRS -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
   `S.and_` D.toSent (pluralNP (goalStmt `NC.onThePP` dataDefn)), plural thModel,
   plural genDefn, plural inModel] (x titleize' +:+ S "and Other" +:+
@@ -112,6 +112,6 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
 -- | Helpers to check if given argument has more than one peice of information
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
-traceMatStandard :: System -> [TraceConfig]
+traceMatStandard :: SmithEtAlSRS -> [TraceConfig]
 traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
   traceMatOtherReq]

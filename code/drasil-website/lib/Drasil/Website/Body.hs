@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (System, HasSystemMeta(..), mkSystemMeta,
+import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
   DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
@@ -80,7 +80,7 @@ symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
   slope, factor]) [] [] [] [] [] [] [] [] []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
-getSysName :: System -> IdeaDict
+getSysName :: SmithEtAlSRS -> IdeaDict
 getSysName = nw . (^. sysName)
 
 -- | Holds all references and links used in the website.

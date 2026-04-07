@@ -27,16 +27,16 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   Structure(..), Lang(Julia, Java,
   Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-import Drasil.System (System, programName)
+import Drasil.System (SmithEtAlSRS, programName)
 
 -- | Internal: Generate an ICO-style executable softifact.
-exportCode :: System -> Choices -> IO ()
+exportCode :: SmithEtAlSRS -> Choices -> IO ()
 exportCode syst chcs = do
   let code = codeSpec syst chcs
   genCode chcs code
 
 -- | Internal: Generate a zoo of ICO-style executable softifact.
-exportCodeZoo :: System -> [Choices] -> IO ()
+exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
 exportCodeZoo syst = mapM_ $ \chcs -> do
   let dir = map toLower $ codedDirName (syst ^. programName) chcs
   workingDir <- getCurrentDirectory

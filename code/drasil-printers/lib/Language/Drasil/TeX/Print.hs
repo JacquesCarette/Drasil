@@ -1,9 +1,10 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
-module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec, fence, OpenClose(..),
-  pMatrix, cases) where
+module Language.Drasil.TeX.Print (genTeX, pExpr, pUnit, spec, fence,
+  OpenClose(..), pMatrix, cases) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
+import Data.Foldable (foldl')
 import Data.List (transpose, partition)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
@@ -25,8 +26,10 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
   Author, Address), Citation(Cite), BibRef)
+import Language.Drasil.Printing.Import (symbol)
+import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import qualified Language.Drasil.Printing.Import as I
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
   cite, command, command0, commandD, command2D, description, description', document,
@@ -37,8 +40,6 @@ import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
-import Data.Foldable (foldl')
 
 -- | Generates a LaTeX document.
 genTeX :: Document -> L.ShowTableOfContents -> PrintingInformation -> TP.Doc
@@ -324,7 +325,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (LD.Concat s) = foldl' (<>) empty $ map p_symb s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ I.symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ symbol n
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------

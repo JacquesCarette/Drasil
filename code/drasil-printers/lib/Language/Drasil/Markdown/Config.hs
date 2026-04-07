@@ -2,14 +2,14 @@
 module Language.Drasil.Markdown.Config (makeBook, makeRequirements, mkTitle) where
 
 import Data.List (intercalate)
-import Control.Lens((^.))
+import Control.Lens ((^.))
 import Text.PrettyPrint (Doc, text, vcat, (<+>))
 import System.FilePath (takeFileName)
 
 import Language.Drasil (Document(Document), LabelledContent(LblC, _ctype),
   RawContent(Figure), Sentence)
-
 import Drasil.Database.SearchTools (findAllLabelledContent)
+
 import Language.Drasil.Markdown.Print (pSpec)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
 import Language.Drasil.Printing.Import.Sentence (spec)

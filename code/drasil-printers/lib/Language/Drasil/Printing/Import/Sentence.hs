@@ -1,16 +1,17 @@
 -- | Defines helpers for printing 'Sentence's.
-module Language.Drasil.Printing.Import.Sentence where
+module Language.Drasil.Printing.Import.Sentence (spec) where
 
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil (Sentence(..), Reference(..), ShortName, LblType(..),
+  NounPhrase(..), getSentSN, checkValidStr, foldNums, (+:+), sParen, IRefProg(..),
+  RefInfo(..), SentenceStyle(..))
 import Language.Drasil.Development (toSent)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation, refFind, sysdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, refFind, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupSymb)
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)

@@ -27,7 +27,7 @@ import Language.Drasil (Quantity, MayHaveUnit, Concept,
   Reference, People, IdeaDict, CI, Constrained, ConstQDef, nw, abrv)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Drasil.Metadata.SupportedSoftware (runnableSoftware)
-import Drasil.Metadata.Documentation (srs, notebook)
+import Drasil.Metadata.Documentation (srs)
 import Utils.Drasil (toPlainName)
 
 import Drasil.System.Core
@@ -36,7 +36,6 @@ import Drasil.System.Core
 data SystemKind =
     Specification
   | RunnableSoftware
-  | Notebook
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -74,7 +73,6 @@ whatsTheBigIdea = whatKind' . (^. kind)
     whatKind' :: SystemKind -> IdeaDict
     whatKind' Specification = nw srs
     whatKind' RunnableSoftware = runnableSoftware
-    whatKind' Notebook = nw notebook
 
 -- | Build a 'System'.
 mkSystem :: (Quantity h, MayHaveUnit h, Concept h,

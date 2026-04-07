@@ -4,7 +4,7 @@ import Data.List (nub)
 import Language.Drasil hiding (Notebook)
 import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (System, mkSystem, SystemKind(Notebook))
+import Drasil.System (LessonPlan, mkSystemMeta, mkLessonPlan)
 
 -- TODO: Add export parameters in a module
 import Drasil.DocumentLanguage.Notebook (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
@@ -35,13 +35,9 @@ nbDecl = [
     BibSec
   ]
 
-si :: System
-si = mkSystem
-  projectileMotionLesson Notebook [spencerSmith]
-  [] [] [] []
-  [] [] [] []
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
-  symbMap
+si :: LessonPlan
+si = mkLessonPlan
+  (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
   allRefs
 
 symbMap :: ChunkDB

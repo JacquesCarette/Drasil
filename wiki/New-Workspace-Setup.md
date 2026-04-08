@@ -177,26 +177,45 @@ Stack is an easy to use toolkit for building, executing, testing, and benchmarki
 
 Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install-stack), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
 
-The recommended way to install stack is through [GHCup](https://www.haskell.org/ghcup/), which also installs a bunch of other useful tools for Haskell.
+The recommended way to install Stack is through [GHCup](https://www.haskell.org/ghcup/), which also installs a bunch of other useful tools for Haskell. Importantly, GHCup enables the VSCode Haskell extension to automatically download and use the correct version of the Haskell Language Server (HLS) that matches the project's GHC version, preventing version mismatch errors.
 
 ### Installation
 
-> #### MacOS
-> If you are using MacOS, start by opening your terminal (Apple logo + Space, then search "Terminal"), and running:
+Please follow the instructions related to your operating system.
+
+<details>
+
+<summary><h4>Windows (native, without WSL2)</h4></summary>
+
+If you are using native Windows (not WSL2), open a **PowerShell** window and run:
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force;[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; try { & ([ScriptBlock]::Create((Invoke-WebRequest https://www.haskell.org/ghcup/sh/bootstrap-haskell.ps1 -UseBasicParsing))) -Interactive -DisableCurl } catch { Write-Error $_ }
+```
+
+Follow the prompts, wait for it to finish, then open a fresh terminal and enter `stack --version` to check that Stack has been successfully installed.
+
+</details>
+
+<details>
+
+<summary><h4>Mac, Linux, and Windows (WSL2)</h4></summary>
+
+> **MacOS only**: Before running the GHCup installer, open your terminal (Apple logo + Space, then search "Terminal"), and run:
 > ```
 > xcode-select --install
 > ```
 > Note: It may take a while to run.
->
-> You can then continue with the instructions below.
 
-Regardless of your operating system, you should be able to follow the Linux/MacOS/WSL2 [install instructions](https://www.haskell.org/ghcup/install/). It's as simple as entering this into your terminal:
+You can follow the [GHCup install instructions](https://www.haskell.org/ghcup/install/) by entering this into your terminal:
 
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 ```
 
-Follow the prompts, wait for it to finish, then open a fresh terminal and enter `stack --version` to check that it has successfully installed the Haskell compiler.
+Follow the prompts, wait for it to finish, then open a fresh terminal and enter `stack --version` to check that Stack has been successfully installed.
+
+</details>
 
 ### Installing Dependencies
 
@@ -256,7 +275,11 @@ Despite most of these above being "optional", if you have a powerful computer, i
 
 #### Haskell Support
 
-**Note: Using the Haskell Language Server plugin, you should make sure your root folder open in VSCode is `./code/`!**
+> [!IMPORTANT]
+> When using the Haskell Language Server (HLS) plugin:
+> - **Always open the `code/` subdirectory** (i.e., `Drasil/code/`) as your root folder in VSCode — **not** the top-level `Drasil/` directory.
+> - Opening the wrong folder causes HLS to use a mismatched GHC version, which prevents it from working correctly with Drasil's build cache.
+> - If you installed Haskell tools via GHCup, the VSCode Haskell extension can automatically download the correct version of HLS that matches the project's GHC version.
 
 VSCode with the Haskell Language Server plugin creates a very smooth and powerful IDE for Haskell developers. However, the Haskell Language Server is still fairly new and under heavy development, so there will likely be issues that arise while using it. As Drasil is split into multiple packages (each `drasil-*` is a package), we end up with a multi-root software suite. Unfortunately, we are not able to use HLS efficiently under our multi-root software suite, resulting in an instance of HLS opening for each package. This also results in the lack of updates of cross package changes until we re-open HLS/VSCode. For example, if we update a component of `drasil-lang`, using an HLS tool in any of the packages that rely on `drasil-lang` will not "see" the changes you had already made to `drasil-lang`. This often makes refactoring large things across packages a bit difficult due to the HLS plugin showing you false errors. To resolve this issue, you may either restart your HLS plugin, or restart VSCode entirely.
 

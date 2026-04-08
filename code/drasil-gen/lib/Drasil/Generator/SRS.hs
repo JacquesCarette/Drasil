@@ -16,7 +16,7 @@ import Language.Drasil (Stage(Equational), Document(Document, Notebook),
   ShowTableOfContents, checkToC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
-  genMDBook, makeBook, defaultConfiguration, piSys, PrintingInformation,
+  genMDBook, makeBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
@@ -32,7 +32,7 @@ import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
-      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational defaultConfiguration
+      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering
   dumpEverything syst' ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo

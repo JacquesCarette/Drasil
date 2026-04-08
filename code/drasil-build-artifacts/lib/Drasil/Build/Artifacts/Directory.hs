@@ -1,5 +1,6 @@
 module Drasil.Build.Artifacts.Directory (createDirIfMissing) where
 
+import Control.Monad (unless)
 import System.Directory (createDirectoryIfMissing, doesPathExist)
 
 -- | Creates a directory if it does not already exist (optionally with all
@@ -12,6 +13,4 @@ import System.Directory (createDirectoryIfMissing, doesPathExist)
 createDirIfMissing :: Bool -> FilePath -> IO ()
 createDirIfMissing withParents path = do
   exists <- doesPathExist path
-  if exists
-    then pure ()
-    else createDirectoryIfMissing withParents path
+  unless exists $ createDirectoryIfMissing withParents path

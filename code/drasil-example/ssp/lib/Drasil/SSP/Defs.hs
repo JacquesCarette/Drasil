@@ -1,4 +1,4 @@
-module Drasil.SSP.Defs where --export all of this file
+module Drasil.SSP.Defs where
 
 import Control.Lens ((^.))
 
@@ -8,20 +8,12 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.ShortHands (lX,lY)
 
-import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
-  likelyChg, physSyst, property, refBy, refName, requirement, safety, srs,
-  typUnc, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (analysis, property, safety)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
-import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
+import Data.Drasil.Concepts.Physics (threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
-
-----Acronyms-----
-acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
 defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,

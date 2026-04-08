@@ -87,5 +87,5 @@ responseTypeDesc = foldlSent [D.toSent $ atStartNP (the responseTy), S "consider
 ldfConstantDesc :: Sentence
 ldfConstantDesc = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` D.toSent (phraseNP (NP.the (value `of_`
-  loadDF))), sParen (short loadDF) `S.is` D.toSent (phraseNP (a_ constant))
+  loadDF))), sParen (ch loadDF) `S.is` D.toSent (phraseNP (a_ constant))
   `S.in_` short progName]

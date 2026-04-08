@@ -197,7 +197,7 @@ Make complete, checking logs
 ```
 
 ### GitHub Actions / Builds & Tests
-If you'd like to test your new project against the existing build scripts, please include `[workflow-trigger]` in a commit message when pushing your work. This will force our Drasil build workflow to run on your branch, and you will be able to view logs of the run under the "Actions" tab. Alternatively, if you are working in a branch that already has a PR attached to it, it will automatically build and test without the `[workflow-trigger]` in your commit message. You may then view the logs related to your test run by finding the Action run linked to your commit/PR, or by visiting the "Actions" page and looking for your triggered test run.
+If you'd like to test your new project against the existing build scripts, please open a pull request with your branch. GitHub Actions will automatically build and test your branch, and you will be able to view logs of the run under the "Actions" tab. You may then view the logs related to your test run by finding the Action run linked to your commit/PR, or by visiting the "Actions" page and looking for your triggered test run.
 
 For more information about our automated tests, please see our [Workflow documentation](Workflow#continuous-integration-ci---github-actions--builds--tests).
 

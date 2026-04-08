@@ -84,7 +84,6 @@ From your local machine, use `git reset --hard x` where `x` is the commit hash o
 ## Continuous Integration (CI) - GitHub Actions / Builds & Tests
 We use GitHub Actions as a means of testing PRs to ensure that changes do not break our stable `main` branch.
 - When you create a PR, GitHub Actions will automatically create a build for your branch at time of PR creation, and will also create a build/test for each commit you created on your source branch after PR creation. It might result in a "build failure", but don't worry (!), you can grab the logs and see what went awry. To ensure your code won't fail the CI tests, you should run `make pr_ready` and resolve any automatically found errors before creating your pull request.
-- Alternatively, you may include `[workflow-trigger]` anywhere in a commit message to your source branch to have the GitHub Actions build & test script run on your source branch without having a PR around to automatically test it. 
 - If you would like to manually run or re-run a workflow script, please visit the ["Actions"](https://github.com/JacquesCarette/Drasil/actions) tab's workflow dispatch area.
 - Workflow runs are logged under the "Actions" tab. You may view your workflow run logs there for information about why your build succeeded/failed. These workflow runs will also be noted next to your commits in commit histories on GitHub and on related PRs.
 

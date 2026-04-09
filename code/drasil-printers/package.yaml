@@ -1,11 +1,12 @@
-name:                drasil-printers
-version:             0.1.10.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:          "Jacques Carette"
-synopsis:	     A framework for code and document generation for scientific software - Printers SubPackage
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-printers
+version:      0.1.10.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Printers SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 language: Haskell2010
 default-extensions:
@@ -37,6 +38,3 @@ library:
   exposed-modules:
   - Language.Drasil.Printers
   - Language.Drasil.Printing.Import
-  when:
-  - condition: false
-    other-modules: Paths_drasil_printers

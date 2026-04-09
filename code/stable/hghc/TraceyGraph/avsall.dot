@@ -1,4 +1,2 @@
-digraph avsall {
-
-
+digraph "avsall" {
 }

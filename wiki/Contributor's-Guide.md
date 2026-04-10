@@ -33,7 +33,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
 
 # Contributor's Guide
 
-Once you've read through this page, take this [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
+Once you've read through this page, you can take this [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
 
 ## Preparing Your Workspace
 
@@ -82,7 +82,7 @@ At a high-level, our development framework is very similar to most other team-ba
    
    In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes.
 
-However, Drasil is also not exactly like other software projects. With Drasil, as we look to generate software artifacts, Drasil's currently outputted artifacts (by the case studies) are checked into the repository under the [`code/stable/`](https://github.com/JacquesCarette/Drasil/tree/main/code) folder. If and when you modify Drasil such that the artifacts it generates no longer match Drail, you should make sure to [update the `stable` folder](Workflow#updating-stable-folder) (that is, to reflect changes in generated artifacts).
+However, Drasil is also not exactly like most other software projects. With Drasil, generated case-study artifacts are checked into the main repo (under the [`code/stable/`](https://github.com/JacquesCarette/Drasil/tree/main/code) folder) and used as a reference/expectation for what future revisions of Drasil should be generating as well. This is not to say that these “stable” artifacts are flawless, only that they are what we expect, which can change. If and when you modify Drasil such that the artifacts it generates no longer match Drail, you should make sure to [update the `stable` folder](Workflow#updating-stable-folder) (that is, to reflect changes in generated artifacts).
 
 ## Guidelines
 

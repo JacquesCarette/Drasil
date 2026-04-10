@@ -47,7 +47,7 @@ This section serves as an overview of the complete [Workflow](Workflow) article.
 
 ### What it *means* to Develop Drasil
 
-First, recall that Drasil is a software generation framework. As such, developing Drasil means developing a tool for generating software. This is like developing a compiler, except the target output is not executable code, but a complete software project with human-readable comments, documentation, build scripts, and whatever else you might find in a git repo. Drasil's development is navigated through a series of [physics-focused software projects](https://jacquescarette.github.io/Drasil/#Sec:Examples) (i.e., scientific software artifacts).
+Drasil is a software generation framework. As such, developing Drasil means developing a tool for generating software. This is like developing a compiler, except the target output is not executable code, but a complete software project with human-readable comments, documentation, build scripts, and whatever else you might find in a git repo. Drasil's development has been driven by a series of [physics-focused software projects](https://jacquescarette.github.io/Drasil/#Sec:Examples) (i.e., scientific software artifacts), but the Drasil approach is suitable for any well-understood domain.
 
 Developing Drasil can mean one of two things (or both):
 
@@ -65,7 +65,7 @@ As a research project (which Drasil is), developing Drasil means studying the pr
 
 ### What it *looks like* to Develop Drasil
 
-As mentioned earlier, Drasil's development is guided through case study, whether it be refining our target series of software artifacts, adding features, or altering Drasil's internal process for generating software. Your primary activity will be developing Haskell code for generating other kinds of software, and then testing said other kinds of software with their respective tooling (e.g., compilers, viewers, interpreters, etc.).
+As mentioned earlier, Drasil's development is driven by its case studies, whether it be refining our target series of software artifacts, adding features, or altering Drasil's internal process for generating software. Your primary activity will be developing Haskell code for generating other kinds of software, and then testing said other kinds of software with their respective tooling (e.g., compilers, viewers, interpreters, etc.).
 
 At a high-level, our development framework is very similar to most other git-version-controlled, team-based software projects:
 
@@ -79,7 +79,7 @@ At a high-level, our development framework is very similar to most other git-ver
    
    In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes.
 
-However, Drasil is also not exactly like most other software projects. With Drasil, generated case-study artifacts are checked into the main repo (under the [`code/stable/`](https://github.com/JacquesCarette/Drasil/tree/main/code) folder) and used as a reference/expectation for what future revisions of Drasil should be generating as well. This is not to say that these “stable” artifacts are flawless, only that they are what we expect, which can change. If and when you modify Drasil such that the artifacts it generates no longer match Drail, you should make sure to [update the `stable` folder](Workflow#updating-stable-folder) (that is, to reflect changes in generated artifacts).
+Drasil has some difference from a typical software project. With Drasil, generated case-study artifacts are checked into the main repo (under the [`code/stable/`](https://github.com/JacquesCarette/Drasil/tree/main/code) folder) and used as a reference/expectation for what future revisions of Drasil should be generating. This is not to say that these “stable” artifacts are flawless, only that they are what we expect, which can change. If and when you modify Drasil such that the artifacts it generates no longer match Drail, you should make sure to [update the `stable` folder](Workflow#updating-stable-folder) (that is, to reflect changes in generated artifacts).
 
 ## Guidelines
 

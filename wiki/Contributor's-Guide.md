@@ -43,7 +43,7 @@ If you are completely unfamiliar with Haskell or functional programming, it is h
 
 ## Workflow
 
-This section serves as a short version of the complete [Workflow](Workflow) article. It is recommended that you read that wiki page as well. In this section, we will discuss what it [means](#what-it-means-to-develop-drasil) and [looks like](#what-it-looks-like-to-develop-drasil) to develop Drasil.
+This section serves as an overview of the complete [Workflow](Workflow) article. It is recommended that you read that wiki page as well. In this section, we will discuss what it [means](#what-it-means-to-develop-drasil) and [looks like](#what-it-looks-like-to-develop-drasil) to develop Drasil.
 
 ### What it *means* to Develop Drasil
 
@@ -83,7 +83,7 @@ However, Drasil is also not exactly like most other software projects. With Dras
 
 ## Guidelines
 
-One of the most important things in working with Drasil is having a solid foundation for using GitHub. Read through [Git2Know](Git2Know-for-Drasil) to learn more about branching, pull requests, merging, and anything else git or Github related. Also take a look at the [Makefile documentation](Makefile), since that will be the primary way you compile and use Drasil. More optionally, you may want to take a brief look through [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil), and some [tips for debugging](Debugging-in-Drasil).
+As mentioned earlier, your workflow revolves around 3 steps: selecting tasks, working on said tasks, and submitting your work. We use [`git`](https://git-scm.com/) and [GitHub](https://github.com/) to organize and submit work to the Drasil research project. If you are unfamiliar with `git` or GitHub, you should read through the [Git2Know for Drasil](Git2Know-for-Drasil) wiki page to learn more about branching, pull requests, merging, and anything else git or GitHub related. We also interact with Drasil through a [`Makefile`](Makefile). If you are unfamiliar with what `Makefile`s are, you should learn a little bit about [what it is](https://opensource.com/article/18/8/what-how-makefile) as it will be the primary way you compile and use Drasil.
 
 ### Issue Tracking
 
@@ -188,6 +188,10 @@ To get an idea of what Drasil can do, have a look through the [Drasil website](h
 
 Jumping more into what Drasil actually is, you may want to take a look through some [papers](Drasil-Papers-and-Documents) written by the Drasil team (especially the first three). These papers contain the conceptual foundations of Drasil and will help form some of your problem solving and design decisions. Although Drasil has grown a lot since the time these papers were published, the core ideas still remain. Check out [Terminology](Terminology) for explanations of the names we use for various Drasil-related ideas. For more of the programming and implementation side of Drasil, you may want to check out our documentation. In order of importance, [Information Encoding](Information-Encoding), [Chunks](Chunks), [Lenses](Lenses), [Recipes](Recipes), [Expr](Expr), [Combinators](Combinator-Documentation), and [References](Reference-Design-and-Documentation) may prove helpful as you work with Drasil.
 
-When working inside the code, you will often come across foreign functions defined in Drasil. To learn more about these kinds of functions, you can either take a look at the [Haddock Documentation](https://jacquescarette.github.io/Drasil/docs/full/index.html) or use `grep` (as defined in [Debugging](Debugging-in-Drasil)). The Haddock documentation also contains a list of most functions in Drasil, which can be found in the [index](https://jacquescarette.github.io/Drasil/docs/full/doc-index-All.html) tab. You'll also want to take a look at [Folder Layout](Folder-Layout) as it details what each folder means, as well as which ones are generated and should not be changed manually.
+When working on the code, you will often encounter unexpected behaviour and foreign terminology. Learning to [debug](Debugging-in-Drasil) will be crucial. However, we also have some documentation to help you, such as for assistance using [`grep`]((Debugging-in-Drasil#grep-Summary)), [code reference material](https://jacquescarette.github.io/Drasil/docs/full/index.html), and an [explanation of our folder layout](Folder-Layout).
 
 The [analysis section](https://jacquescarette.github.io/Drasil/#Sec:Analysis) of the Drasil website contains tables and graphs that document the structure of Drasil. The linked graphs show the reliance between types, classes, class instances, and modules inside the Drasil framework. This will likely become more important as you progress with learning Drasil, so don't worry too much about it now.
+
+If you'd like to create your own project with Drasil, you should have a look at our [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil) wiki page.
+
+Happy hacking!

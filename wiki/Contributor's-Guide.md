@@ -156,6 +156,4 @@ Make this work your own! Some of the most satisfying work comes from solving pro
 
 The internet is your friend. Back on the topic of seeking help, you will also find yourself scrolling through various forums, documentation, and papers to understand the correct way to solve a problem. Fortunately, there are a wide variety of articles available, the closest being the Wiki. Side note: if you don't find what you are looking for in this wiki and feel that it should be added, feel free to do so, especially if it is Drasil related! Learning how to use the internet to effectively search for a certain topic is one skill that will definitely be used throughout the work term. There are plenty of free and independent resources available, so if something doesn't work out, try looking online. [Stack overflow](https://stackoverflow.com/) (and various other forums), [Hoogle](https://hoogle.haskell.org/), [Hackage](https://hackage.haskell.org/), and [Learn you a Haskell](http://learnyouahaskell.com/) will be super helpful throughout your work term.
 
-<!-- Add any more advice here and remove this comment when done -->
-
 Sincerely, the students of Summer 2021.

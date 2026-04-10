@@ -27,9 +27,11 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
 - Once you've looked at all of the contents of the Contributor's Guide, take this [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors). Use this to learn the skills and knowledge needed for working with the software development infrastructure around Drasil.
 
 ## Setting Up Your Workspace
+
 - View our [New Workspace Setup](New-Workspace-Setup) for all the steps and dependencies required to run Drasil. To get all of the features of Drasil, you will need Git to get this repository locally, Haskell (stack) to compile Drasil's code, LaTeX to compile some generated artifacts, VSCode (or any IDE) for working on Drasil, Inkscape for traceability graphs, and Graphviz also for generating traceability graphs.
 
 ## Issue Tracking
+
 - Please include enough information in your issue so that the reader can respond to the issue without having to track down multiple sources. Some tips on how to do that include the following: 
     - Include excerpts of PDF/HTML documentation, especially annotated excerpts, when referring to output (desired or generated).
     - Highlighting specific portions of such screenshots helps text/discrepancies stand out to the reader.
@@ -49,6 +51,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
 - In GitHub, Markdown can be used to annotate Issues, Pull Requests, Comments, Wiki pages, and any other documents. Here is a useful [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 
 ## Coding Style
+
 - Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
     ```Haskell
     top level
@@ -83,6 +86,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
 - We use Haddock to generate code documentation. Haddock has a specific format to change Haskell's comments into a Haddock document. For example, the syntax `-- |`. The [website](https://haskell-haddock.readthedocs.io/latest/markup.html#markup), gives examples and instructions.
 
 ## Workflow
+
 This section will serve as a roadmap for the [Workflow](Workflow) article. Please view it for more details and specifics regarding the workflow of Drasil. The below paragraph will detail the sections of that article for easy reference. This information is also included on the self-examined [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to check all the required skills and knowledge for working with Drasil.
 
 In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](https://github.com/JacquesCarette/Drasil/wiki/Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](https://github.com/JacquesCarette/Drasil/wiki/Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes. In addition, the article details the process of [making changes](https://github.com/JacquesCarette/Drasil/wiki/Workflow#making-changes) to the Drasil repo, and [updating the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) to reflect any changes in generated artifacts. 
@@ -90,6 +94,7 @@ In the [Workflow](Workflow) article, there is a section detailing the [GitHub Wo
 Note: If changes are made that intentionally modify the generated documentation/code, it is imperative to [update the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) in order to prevent any CI errors.
 
 ## Git Best Practices
+
 To maintain a clean, understandable project history and improve collaboration, please follow these guidelines when contributing code:
 - Structure commits and pull requests thoughtfully
   - Group related changes into the same commit making them easier to track. Ask yourself if the changes you are committing serve the same coherent purpose. If so, try to commit them all together.
@@ -125,12 +130,14 @@ To maintain a clean, understandable project history and improve collaboration, p
     - **Important:** This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
 ## Editing this Wiki
+
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
 
 ## Important Notes (Windows Users read this!)
 - If you are using the Git Bash App (on Windows), you will need to enable UTF-8 Encoding. See **Unicode Support (Important)** under **Windows** in [New Workspace Setup](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup#windows) for details on how to do this. This is required because unicode symbols are in the Drasil source code. This is how Drasil handles Greek letters.
 
 # In-Depth Guide to Drasil
+
 Make sure you fully read through the above [Contributor's Guide](#contributors-guide) section before following the steps here. This includes compiling Drasil after setting up your [workspace](#setting-up-your-workspace) and following the [Quick Start instructions](#getting-started), learning about [issue tracking](#issue-tracking), [coding style](#coding-style), the [workflow](#workflow) of Drasil, and an [important note for Windows users](#important-notes-windows-users-read-this).
 
 To get an idea of what Drasil can do, have a look through the [Drasil website](https://jacquescarette.github.io/Drasil/). The website contains links to Software Requirement Specification (SRS) documents, both in an HTML and PDF format. There are also some links to generated code along with a case studies table to demonstrate the variety of choices that can be made by the user at the time of code generation. There are links to documentation within Drasil, as well as a section analyzing Drasil (we'll get to these last two sections later). All of the examples, example code, and the website itself are artifacts generated by Drasil. You can see their source code in the `drasil-example` and `drasil-website` folders respectively. 
@@ -146,6 +153,7 @@ When working inside the code, you will often come across foreign functions defin
 The [analysis section](https://jacquescarette.github.io/Drasil/#Sec:Analysis) of the Drasil website contains tables and graphs that document the structure of Drasil. The linked graphs show the reliance between types, classes, class instances, and modules inside the Drasil framework. This will likely become more important as you progress with learning Drasil, so don't worry too much about it now.
 
 # Note to Future Summer Research Students
+
 On behalf of the Drasil team, we would like to extend a warm welcome to all future summer students. For the past few years, Drasil has been a home for many Undergraduate Researchers, especially those in first year. This contributor's guide is a product of all of the students working on Drasil, leaving advice, instructions, and tips whenever possible to help any future students who decide to work here. We personally had a great experience working on this project, and would like to leave some things we learned along the way to ensure that future students have a great experience as well. To future students, when you have finished your work on this repo, feel free to add your bits of advice at the bottom of this letter, and sign it with the year you worked here. We think it would be amazing to see all of the helpful tips and lessons passed on to new students, especially the accumulation of advice to advance this project even further.
 
 One of the first lessons we learned here was to **never be afraid** to ask for help. Often, especially when starting, the sheer volume of Drasil's code base can overwhelm students who are new to programming in general. Thankfully, Dr. Carette, Dr. Smith, graduate students, and any other members of the Drasil team were always willing to help. If you ever get stuck on a tricky bit of code or a complex concept, drop a message in the Issue tracker. There will always be someone ready to help, so long as you ask for it. You can also tag people in issues (by using @Username) or assign issues to others and mark it with the `question` label. There are a lot of conceptual ideas within Drasil that might be hard to grasp, so we definitely recommend asking one of the professors or more experienced students about it.

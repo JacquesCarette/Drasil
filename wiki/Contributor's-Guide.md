@@ -177,7 +177,7 @@ To maintain a clean, understandable project history and improve collaboration, p
     -  For a good example to understand the value of squashing [this comment](https://github.com/JacquesCarette/Drasil/pull/3705#issuecomment-2148869719) provides some good feedback in the context of a PR
     - **Important:** This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
-## Editing this Wiki
+### Editing this Wiki
 
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
 

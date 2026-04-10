@@ -31,6 +31,8 @@
 
 `git` is a software for tracking changes in any set of files, usually used for coordinating work among programmers collaboratively developing source code during software development (Credit: [Wikipedia](https://en.wikipedia.org/wiki/Git)). This guide will walk through some common steps that contributors will need to know involving `git`.
 
+If you haven't already installed `git`, you should make sure to install and configure it following the [New Workspace Setup](New-Workspace-Setup#git) guide.
+
 ## Cloning A Repository
 
 You can create a “local” version of a remote repository to work in by cloning it:

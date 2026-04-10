@@ -1,10 +1,12 @@
-# Introduction
+# Contributor's Guide
 
 Welcome to the Contributor's Guide! This wiki page contains a gentle introduction to working with Drasil, general guidelines and advice for contributing to the Drasil research project.
 
+Once you've read through this page, you may also take our [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
+
 If you have any questions, please feel free to either file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
 
-If you are a summer research student, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students.md), written by past summer researchers.
+**If you are a summer research student**, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students.md), written by past summer researchers, in addition to the [onboarding](https://github.com/JacquesCarette/Drasil/blob/main/doc/OnBoarding/onBoarding.pdf) document.
 
 <details>
 <summary>
@@ -13,27 +15,21 @@ If you are a summer research student, please also read the [Letter to Future Sum
 
 </summary>
 
-1. [Introduction](#introduction)
+1. [Contributor's Guide](#contributors-guide)
    1. [Table of Contents](#table-of-contents)
-2. [Contributor's Guide](#contributors-guide)
-   1. [Preparing Your Workspace](#preparing-your-workspace)
-   2. [Haskell](#haskell)
-   3. [Workflow](#workflow)
+   2. [Preparing Your Workspace](#preparing-your-workspace)
+   3. [Haskell](#haskell)
+   4. [Workflow](#workflow)
       1. [What it *means* to Develop Drasil](#what-it-means-to-develop-drasil)
       2. [What it *looks like* to Develop Drasil](#what-it-looks-like-to-develop-drasil)
-   4. [Guidelines](#guidelines)
+   5. [Guidelines](#guidelines)
       1. [Issue Tracking](#issue-tracking)
       2. [Coding Style](#coding-style)
       3. [Git Best Practices](#git-best-practices)
-   5. [Editing this Wiki](#editing-this-wiki)
-3. [In-Depth Guide to Drasil](#in-depth-guide-to-drasil)
-4. [Note to Future Summer Research Students](#note-to-future-summer-research-students)
+      4. [Editing this Wiki](#editing-this-wiki)
+2. [Where to Begin](#where-to-begin)
 
 </details>
-
-# Contributor's Guide
-
-Once you've read through this page, you can take this [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
 
 ## Preparing Your Workspace
 
@@ -41,7 +37,9 @@ Preparing your workspace for Drasil development requires more than a few install
 
 ## Haskell
 
-Drasil is developed in [Haskell](https://www.haskell.org/). If you are unfamiliar with Haskell, it is highly recommended that you pause and learn a bit of Haskell first. We have found the [Learn You a Haskell](https://learnyouahaskell.github.io/) and [Craft of Functional Programming](https://simonjohnthompson.github.io/craft3e/craft3e.pdf) books to be good introductory materials.
+Drasil is developed in [Haskell](https://www.haskell.org/). Rather than an Object Oriented language like C++, Java, Python, etc., Haskell is purely a functional programming language. All this really means is that if you like math, you are in luck! Creating a program in a functional language like Haskell is very similar to creating a series of mathematical functions that take an input and give the desired output.
+
+If you are completely unfamiliar with Haskell or functional programming, it is highly recommended that you pause and learn a bit of Haskell first. We have found the [Learn You a Haskell](https://learnyouahaskell.github.io/) and [Craft of Functional Programming](https://simonjohnthompson.github.io/craft3e/craft3e.pdf) books to be good introductory materials.
 
 ## Workflow
 
@@ -63,14 +61,13 @@ For example, this might mean:
 
 As a research project (which Drasil is), developing Drasil means studying the principal research question:
 
-> [What if everything that is currently human-written in current software
-development was instead generated?](What-If)
+> [What if everything that is currently human-written in current software development was instead generated?](What-If)
 
 ### What it *looks like* to Develop Drasil
 
 As mentioned earlier, Drasil's development is guided through case study, whether it be refining our target series of software artifacts, adding features, or altering Drasil's internal process for generating software. Your primary activity will be developing Haskell code for generating other kinds of software, and then testing said other kinds of software with their respective tooling (e.g., compilers, viewers, interpreters, etc.).
 
-At a high-level, our development framework is very similar to most other team-based software projects:
+At a high-level, our development framework is very similar to most other git-version-controlled, team-based software projects:
 
 1. *Choose a task to work on.*
    * If you're new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling.  Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
@@ -85,6 +82,8 @@ At a high-level, our development framework is very similar to most other team-ba
 However, Drasil is also not exactly like most other software projects. With Drasil, generated case-study artifacts are checked into the main repo (under the [`code/stable/`](https://github.com/JacquesCarette/Drasil/tree/main/code) folder) and used as a reference/expectation for what future revisions of Drasil should be generating as well. This is not to say that these “stable” artifacts are flawless, only that they are what we expect, which can change. If and when you modify Drasil such that the artifacts it generates no longer match Drail, you should make sure to [update the `stable` folder](Workflow#updating-stable-folder) (that is, to reflect changes in generated artifacts).
 
 ## Guidelines
+
+One of the most important things in working with Drasil is having a solid foundation for using GitHub. Read through [Git2Know](Git2Know-for-Drasil) to learn more about branching, pull requests, merging, and anything else git or Github related. Also take a look at the [Makefile documentation](Makefile), since that will be the primary way you compile and use Drasil. More optionally, you may want to take a brief look through [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil), and some [tips for debugging](Debugging-in-Drasil).
 
 ### Issue Tracking
 
@@ -181,15 +180,11 @@ To maintain a clean, understandable project history and improve collaboration, p
 
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
 
-# In-Depth Guide to Drasil
+# Where to Begin
 
-Make sure you fully read through the above [Contributor's Guide](#contributors-guide) section before following the steps here. This includes compiling Drasil after setting up your [workspace](#setting-up-your-workspace) and following the [Quick Start instructions](#getting-started), learning about [issue tracking](#issue-tracking), [coding style](#coding-style), the [workflow](#workflow) of Drasil, and an [important note for Windows users](#important-notes-windows-users-read-this).
+Make sure you fully read through the above [Contributor's Guide](#contributors-guide) section before following the steps here. This includes compiling Drasil after setting up your [workspace](#setting-up-your-workspace) and following the [Quick Start instructions](#getting-started), learning about [issue tracking](#issue-tracking), [coding style](#coding-style), and the Drasil development [workflow](#workflow).
 
-To get an idea of what Drasil can do, have a look through the [Drasil website](https://jacquescarette.github.io/Drasil/). The website contains links to Software Requirement Specification (SRS) documents, both in an HTML and PDF format. There are also some links to generated code along with a case studies table to demonstrate the variety of choices that can be made by the user at the time of code generation. There are links to documentation within Drasil, as well as a section analyzing Drasil (we'll get to these last two sections later). All of the examples, example code, and the website itself are artifacts generated by Drasil. You can see their source code in the `drasil-example` and `drasil-website` folders respectively. 
-
-One of the most important things in working with Drasil is having a solid foundation for using GitHub. Read through [Git2Know](Git2Know-for-Drasil) to learn more about branching, pull requests, merging, and anything else git or Github related. Also take a look at the [Makefile documentation](Makefile), since that will be the primary way you compile and use Drasil. More optionally, you may want to take a brief look through [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil), and some [tips for debugging](Debugging-in-Drasil).
-
-Drasil is primarily built upon the programming language [Haskell](https://www.haskell.org/). Rather than an Object Oriented language like C++, Java, Python, etc., Haskell is purely a functional programming language. All this really means is that if you like math, you are in luck! Creating a program in a functional language like Haskell is very similar to creating a series of mathematical functions that take an input and give the desired output. You will definitely want to read this great introduction to Haskell for more details: [Learn You a Haskell for Great Good](http://learnyouahaskell.com/). There are also some great sources for learning LaTeX in the [New Workspace Setup](New-Workspace-Setup#latex) that will be worth taking a look at.
+To get an idea of what Drasil can do, have a look through the [Drasil website](https://jacquescarette.github.io/Drasil/). The website contains links to Software Requirement Specification (SRS) documents, both in an HTML and PDF format. There are also some links to generated code along with a case studies table to demonstrate the variety of choices that can be made by the user at the time of code generation. There are links to documentation within Drasil, as well as a section analyzing Drasil (we'll get to these last two sections later). All the examples, example code, and the website itself are artifacts generated by Drasil. You can see their source code in the `drasil-example` and `drasil-website` folders respectively. 
 
 Jumping more into what Drasil actually is, you may want to take a look through some [papers](Drasil-Papers-and-Documents) written by the Drasil team (especially the first three). These papers contain the conceptual foundations of Drasil and will help form some of your problem solving and design decisions. Although Drasil has grown a lot since the time these papers were published, the core ideas still remain. Check out [Terminology](Terminology) for explanations of the names we use for various Drasil-related ideas. For more of the programming and implementation side of Drasil, you may want to check out our documentation. In order of importance, [Information Encoding](Information-Encoding), [Chunks](Chunks), [Lenses](Lenses), [Recipes](Recipes), [Expr](Expr), [Combinators](Combinator-Documentation), and [References](Reference-Design-and-Documentation) may prove helpful as you work with Drasil.
 

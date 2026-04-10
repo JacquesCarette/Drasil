@@ -70,7 +70,7 @@ As mentioned earlier, Drasil's development is guided through case study, whether
 At a high-level, our development framework is very similar to most other git-version-controlled, team-based software projects:
 
 1. *Choose a task to work on.*
-   * If you're new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling.  Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
+   * If you're new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling. Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
    * If you're already familiar with Drasil, you'll likely know what you'd like to work on already. That being said, if you don't, that's okay, we have a myriad of [open tickets](https://github.com/JacquesCarette/Drasil/issues).
 2. *Work on said task.* This will involve editing Haskell code.
    * If you're working on a `newcomers`-designated ticket, the ticket should have a good explanation of what work needs to be done and how it should be done. If it doesn't, you should ask the author of the ticket.
@@ -85,6 +85,8 @@ However, Drasil is also not exactly like most other software projects. With Dras
 
 As mentioned earlier, your workflow revolves around 3 steps: selecting tasks, working on said tasks, and submitting your work. We use [`git`](https://git-scm.com/) and [GitHub](https://github.com/) to organize and submit work to the Drasil research project. If you are unfamiliar with `git` or GitHub, you should read through the [Git2Know for Drasil](Git2Know-for-Drasil) wiki page to learn more about branching, pull requests, merging, and anything else git or GitHub related. We also interact with Drasil through a [`Makefile`](Makefile). If you are unfamiliar with what `Makefile`s are, you should learn a little bit about [what it is](https://opensource.com/article/18/8/what-how-makefile) as it will be the primary way you compile and use Drasil.
 
+For the remainder of this section, you will learn about our guidelines regarding [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
+
 ### Issue Tracking
 
 - Please include enough information in your issue so that the reader can respond to the issue without having to track down multiple sources. Some tips on how to do that include the following: 
@@ -92,16 +94,16 @@ As mentioned earlier, your workflow revolves around 3 steps: selecting tasks, wo
     - Highlighting specific portions of such screenshots helps text/discrepancies stand out to the reader.
     - Linking to related issues, pull requests, comments, and commit hashes is also really helpful for easy navigation through related and significant content and discussion in the repo.
     - If there are certain code segments you want to link to an issue, instead of copy-pasting it, permalink is another option. Please see [Creating a Permanent Link to a Code Snippet](https://help.github.com/articles/creating-a-permanent-link-to-a-code-snippet/) for more information.
-    - Familiarizing yourself with working with markdown will be useful in allowing text in your issues to be easier to read. For instance, when recommending a solution (or otherwise inserting multiline code), mentioning the language of the code allows for syntax highlighting. Click on `Edit` to see the source code for this Haskell excerpt below:
-    ``` Haskell
+    - Familiarizing yourself with [GitHub-flavoured Markdown](https://github.github.com/gfm/) will be useful for elegantly formatting your text. For instance, when recommending a solution (or otherwise inserting multiline code), mentioning the language of the code allows for syntax highlighting. Click on `Edit` to see the source code for this Haskell excerpt below:
+    ```haskell
     var :: String
     var = "Hello"
     ```
 - Create issues that are useful for the present, and for the future, but following these guidelines:
   - Search the other issues to see if your issue has already been covered.
   - Use a meaningful title for your issue (this is what people will be reading when they search the issues in the future).
-  - Do not introduce new issues within an existing issue.  We should keep the discussion focused so that it relates to the current issue.  Once an issue is resolved, it should be closed.  Related issues should be created as separate issues, rather than being incorporated into the discussion. (Related issues can be linked to the current issue via a hashtag `#` followed by the number of the other issue.)
-  - Make your issue as specific as possible.  Ideally, closing an issue should be possible with a few days of effort.  This doesn't always happen, but it is something to strive for.
+  - Do not introduce new issues within an existing issue. We should keep the discussion focused so that it relates to the current issue. Once an issue is resolved, it should be closed. Related issues should be created as separate issues, rather than being incorporated into the discussion. (Related issues can be linked to the current issue via a hashtag `#` followed by the number of the other issue.)
+  - Make your issue as specific as possible. Ideally, closing an issue should be possible with a few days of effort. This doesn't always happen, but it is something to strive for.
 - When **closing** an issue, please provide rationale and relevant links to other issues, Pull Requests (PRs), or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
 - In GitHub, Markdown can be used to annotate Issues, Pull Requests, Comments, Wiki pages, and any other documents. Here is a useful [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 
@@ -193,5 +195,7 @@ When working on the code, you will often encounter unexpected behaviour and fore
 The [analysis section](https://jacquescarette.github.io/Drasil/#Sec:Analysis) of the Drasil website contains tables and graphs that document the structure of Drasil. The linked graphs show the reliance between types, classes, class instances, and modules inside the Drasil framework. This will likely become more important as you progress with learning Drasil, so don't worry too much about it now.
 
 If you'd like to create your own project with Drasil, you should have a look at our [Creating Your Project in Drasil](Creating-Your-Project-in-Drasil) wiki page.
+
+Finally, our wiki covers many topics. Searching the navigation pane on the right-hand side of this document may have answers to other questions you might have. If not, please always feel free to file an issue. We are always happy to help! :)
 
 Happy hacking!

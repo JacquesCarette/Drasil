@@ -1,24 +1,34 @@
 # Introduction
-Welcome to the Contributor's Guide! This wiki lays out some guidelines and advice for contributing to Drasil. Take a look at these pages to get a feel for how Drasil's contributions should work. This page specifically is meant to be a gentle introduction to working with Drasil. For more information, check out the rest of the articles under the Getting Started tab. If you have any questions, feel free to reach out to either [Dr. Carette](https://github.com/JacquesCarette) or [Dr. Smith](https://github.com/smiths), the supervisors.
 
-We're looking to expand this page to be a useful guide for all contributors. If you have any requests or suggestions, please contact us.
+Welcome to the Contributor's Guide! This wiki page contains a gentle introduction to working with Drasil, general guidelines and advice for contributing to the Drasil research project.
+
+If you have any questions, please feel free to either file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
 
 If you are new to GitHub, a summer student, or want more in-depth instructions, please read the [articles](#in-depth-guide-to-drasil) listed below in addition to the contributor's guide.
 
+
+<details>
+<summary>
+
 ## Table of Contents
-- [Introduction](#introduction)
-  - [Table of Contents](#table-of-contents)
-- [Contributor's Guide](#contributors-guide)
-  - [Getting Started](#getting-started)
-  - [Setting Up Your Workspace](#setting-up-your-workspace)
-  - [Issue Tracking](#issue-tracking)
-  - [Coding Style](#coding-style)
-  - [Workflow](#workflow)
-  - [Git Best Practices](#git-best-practices)
-  - [Editing this Wiki](#editing-this-wiki)
-  - [Important Notes (Windows Users read this!)](#important-notes-windows-users-read-this)
-- [In-Depth Guide to Drasil](#in-depth-guide-to-drasil)
-- [Note to Future Summer Research Students](#note-to-future-summer-research-students)
+
+</summary>
+
+1. [Introduction](#introduction)
+   1. [Table of Contents](#table-of-contents)
+2. [Contributor's Guide](#contributors-guide)
+   1. [Getting Started](#getting-started)
+   2. [Setting Up Your Workspace](#setting-up-your-workspace)
+   3. [Issue Tracking](#issue-tracking)
+   4. [Coding Style](#coding-style)
+   5. [Workflow](#workflow)
+   6. [Git Best Practices](#git-best-practices)
+   7. [Editing this Wiki](#editing-this-wiki)
+   8. [Important Notes (Windows Users read this!)](#important-notes-windows-users-read-this)
+3. [In-Depth Guide to Drasil](#in-depth-guide-to-drasil)
+4. [Note to Future Summer Research Students](#note-to-future-summer-research-students)
+
+</details>
 
 # Contributor's Guide
 

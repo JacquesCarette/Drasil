@@ -33,7 +33,7 @@ If you have any questions, please feel free to either file an issue or reach out
 
 ## Preparing Your Workspace
 
-Preparing your workspace for Drasil development requires more than a few installation step and dependencies (because of the wide breadth of software Drasil generates). As such, we have a page dedicated to [setting up your workspace](New-Workspace-Setup). The remainder of this document will assume you have a functioning development environment suitable for Drasil.
+Preparing your workspace for Drasil development requires more than a few installation steps and dependencies (because of the wide breadth of software Drasil generates). As such, we have a page dedicated to [setting up your workspace](New-Workspace-Setup). The remainder of this document will assume you have a functioning development environment suitable for Drasil.
 
 ## Haskell
 

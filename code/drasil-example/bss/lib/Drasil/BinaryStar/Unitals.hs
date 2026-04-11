@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   refBy, refName, requirement, srs, typUnc)
 import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, velocity,
-  acceleration, energy, force, time)
+  acceleration, energy, force, fOfGravity, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Quantities.Physics (gravitationalConst, gravitationalConstValue)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
@@ -33,8 +33,8 @@ symbols = map dqdWr [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
   tFinal, sepDist,
   massMin, massMax, rMax, vMax, tMax]
-  ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force, QP.time,
-     QP.energy, gravitationalConst, QPP.mass]
+  ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force,
+     QP.fOfGravity, QP.time, QP.energy, gravitationalConst, QPP.mass]
   ++ [index, numbBodies, dqdWr bssStateVar]
   ++ map dqdWr constants
 

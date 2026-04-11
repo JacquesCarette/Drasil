@@ -7,7 +7,7 @@ import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Data.List.NonEmpty as NE
 
-import Data.Drasil.Quantities.Physics (position, force, gravitationalConst)
+import Data.Drasil.Quantities.Physics (position, fOfGravity, gravitationalConst)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Math (xDir, yDir)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
@@ -75,19 +75,23 @@ gravLawTM = tmNoRefs (equationalModel' gravLawQD)
   "UniversalGravLaw" [gravLawNote]
 
 gravLawQD :: ModelQDef
-gravLawQD = mkQuantDef' force
+gravLawQD = mkQuantDef' fOfGravity
   (nounPhraseSP "Newton's law of universal gravitation") gravLawExpr
 
 gravLawExpr :: ModelExpr
-gravLawExpr = neg (sy gravitationalConst) $*
+gravLawExpr = sy gravitationalConst $*
   (sy mass_1 $* sy mass_2 $/ square (sy sepDist))
 
 gravLawNote :: Sentence
 gravLawNote = foldlSent
-  [S "The gravitational", phrase force,
-   S "between two bodies is proportional to the product of their",
+  [ch fOfGravity `S.isThe`
+   S "magnitude of the gravitational force between two bodies;",
+   S "it is proportional to the product of their",
    plural mass `S.and_`
    S "inversely proportional to the square of the distance between them.",
+   S "The force acts along the relative-position vector",
+   sParen (refS relPosTM) `sC`
+   S "directed from one body toward the other.",
    S "This assumes Newtonian gravitation",
    sParen (refS newtonianGravity) `S.and_`
    S "requires the separation distance to be positive",

@@ -53,7 +53,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose,
       IScope scope,
       IChar [] charsOfReader [],
-      IOrgSec inModel (SRS.inModel [] []) EmptyS
+      IOrgSec inModel (SRS.inModel [] []) Nothing
     ],
   GSDSec $
     GSDProg
@@ -189,7 +189,7 @@ usrCharsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [short progName, S "is intended to simulate the motion of a binary",
+  [S "simulate the motion of a binary",
    S "star system under mutual gravitational interaction"]
 
 physSystParts :: [Sentence]

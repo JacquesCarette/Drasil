@@ -6,6 +6,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Theories.Physics (newtonSL)
 
 import Drasil.BinaryStar.Expressions (accelXExpr_1, accelYExpr_1,
   accelXExpr_2, accelYExpr_2)
@@ -27,10 +28,12 @@ imNotes acc = [foldlSent [ch acc `S.is`
     S "calculated by solving the", short ode,
     S "together with the initial", plural condition +:+. S "",
     S "This model is derived from Newton's second law",
-    sParen (refS accelTM) `sC`
+    sParen (refS newtonSL) `sC`
     S "universal gravitation",
     sParen (refS gravLawTM) `sC`
-    S "and the definitions of velocity",
+    S "and the definitions of acceleration",
+    sParen (refS accelTM) `sC`
+    S "velocity",
     sParen (refS velocityTM) `S.and_`
     S "relative position",
     sParen (refS relPosTM) `sC`

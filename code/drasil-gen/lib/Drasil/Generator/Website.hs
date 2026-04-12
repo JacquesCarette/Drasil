@@ -9,7 +9,7 @@ import Text.PrettyPrint.HughesPJ (render)
 
 import Drasil.Build.Artifacts (createDirIfMissing)
 import Language.Drasil (Stage(Equational), Document)
-import Language.Drasil.Printers (makeCSS, genHTML, defaultConfiguration, piSys)
+import Language.Drasil.Printers (makeCSS, genHTML, Notation(Engineering), piSys)
 import Language.Drasil.Printing.Import (makeDocument)
 import Drasil.System (DrasilWebsite, webRefs, systemdb)
 
@@ -18,7 +18,7 @@ import Drasil.Generator.Formats (Filename)
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: DrasilWebsite -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
-  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational defaultConfiguration
+  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering
       dir = "Website/HTML"
       pd = makeDocument printSetting doc
 

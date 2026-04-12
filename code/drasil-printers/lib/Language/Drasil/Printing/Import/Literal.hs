@@ -4,8 +4,8 @@ import Language.Drasil (dbl)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering))
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
+  Notation(..), notation)
 
 import Control.Lens ((^.))
 import Numeric (floatToDigits)
@@ -14,7 +14,7 @@ import Language.Drasil.Printing.Import.Helpers
     (digitsProcess, processExpo)
 
 literal :: Literal -> PrintingInformation -> P.Expr
-literal (Dbl d)                  sm = case sm ^. getSetting of
+literal (Dbl d)                  sm = case sm ^. notation of
   Engineering ->
      let (f, s) = processExpo $ snd $ floatToDigits 10 d in
      P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)

@@ -1,4 +1,2 @@
-digraph allvsall {
-
-
+digraph "allvsall" {
 }

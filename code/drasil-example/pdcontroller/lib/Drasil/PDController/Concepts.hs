@@ -1,19 +1,12 @@
 module Drasil.PDController.Concepts where
 
-import Language.Drasil
-
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  physSyst, refBy, refName, requirement, srs, typUnc)
-import Data.Drasil.Concepts.Math (ode)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
+import Language.Drasil (commonIdeaWithDict, dcc, nw, cn', nounPhraseSP, pn, CI,
+  ConceptChunk, IdeaDict)
 
 acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst,
-  requirement, refBy, refName, srs, thModel, typUnc, pdControllerCI,
-  proportionalCI, piCI, pidCI, ode, likelyChg]
+acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]
 
 pdControllerCI, proportionalCI, piCI, pidCI :: CI
-
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
 piCI            = commonIdeaWithDict "piCI"            (pn "proportional integral")            "PI"            []

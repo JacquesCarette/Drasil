@@ -42,13 +42,12 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)
-         ],
+          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)],
      GSDSec $
        GSDProg
          [SysCntxt
@@ -111,7 +110,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  map nw [progName, pdControllerCI, proportionalCI, piCI, pidCI] ++ map nw mathcon'
+  nw progName : map nw acronyms ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -140,13 +139,6 @@ labelledContent' = labelledContent ++ funcReqsTables
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- QuantityDicts
-  map nw symbols
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

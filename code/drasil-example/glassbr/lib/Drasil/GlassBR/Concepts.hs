@@ -1,15 +1,12 @@
-module Drasil.GlassBR.Concepts where --whole file is used
+module Drasil.GlassBR.Concepts where
 
-import Language.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
-
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  physSyst, response, refBy, refName, requirement, srs, type_, typUnc, unlikelyChg)
-import Data.Drasil.Concepts.Theory (dataDefn, inModel, thModel)
+import Language.Drasil (commonIdeaWithDict, mkIdea, nc, cn', nounPhraseSP, CI, IdeaDict)
+import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
+import Data.Drasil.Concepts.Documentation (response, type_)
 
 {--}
 idglass :: IdeaDict
-idglass      = mkIdea  "glass"          (cn' "Glass")                 Nothing
+idglass = mkIdea  "glass"          (cn' "Glass")                 Nothing
 
 {--}
 con :: [CI]
@@ -19,13 +16,6 @@ con = [annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
 con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
-
-{-Acronyms-}
-acronyms :: [CI]
-acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt,
-  glassTypeFac, heatS, iGlass, inModel, likelyChg, lDurFac,
-  lGlass, lResistance, lShareFac, nFL, physSyst, requirement,
-  refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
   lResistance, lShareFac, stdOffDist, nFL :: CI

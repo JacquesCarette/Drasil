@@ -52,12 +52,12 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notebook, physSyst, refBy, requirement, srs,
-  thModel, typUnc, unlikelyChg]
-
-dataConst :: CI
+  likelyChg, learnObj, mg, mis, notebook, physSyst, refBy, refName, requirement,
+  srs, thModel, typUnc, unlikelyChg]
 
 -- * Common Ideas
+
+dataConst :: CI
 
 ------------------------------------------------------------------------------------------------------------------------------
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain

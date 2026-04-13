@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..), showUID)
 import Language.Drasil
 
 import Drasil.Code.CodeExpr.Development (CodeExpr, expr, CanGenCode(..))
@@ -81,5 +81,5 @@ odeDef info = CD
   ODE
   where
     dv = depVar info
-    odeSolList = implVarAU' (show $ dv ^. uid) (dv ^. term) (dv ^. defn)
+    odeSolList = implVarAU' (showUID dv) (dv ^. term) (dv ^. defn)
       (getA dv) (Vect $ dv ^. typ) (symbol dv Implementation) (getUnit dv)

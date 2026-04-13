@@ -141,7 +141,7 @@ si = mkSmithEtAlICO
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
-  symbMap allRefs
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
@@ -164,7 +164,10 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
+  NoPCM.iMods genDefs tMods concIns citations labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

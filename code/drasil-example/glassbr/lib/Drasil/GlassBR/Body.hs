@@ -59,6 +59,7 @@ si = mkSmithEtAlICO progName
   [nikitha, spencerSmith] [purp] [background] [scope] []
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants
+  labCon
   symbMap
   allRefs
 

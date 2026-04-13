@@ -20,7 +20,7 @@ import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
   genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
-import Drasil.System (SmithEtAlSRS, refTable, systemdb)
+import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
@@ -32,7 +32,7 @@ import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
-      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering
+      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
   dumpEverything syst' ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo

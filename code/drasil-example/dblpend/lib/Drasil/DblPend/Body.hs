@@ -98,7 +98,7 @@ si = mkSmithEtAlICO progName [dong]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints
   constants
-  symbMap allRefs
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -136,7 +136,10 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
+  dataDefs iMods genDefns tMods concIns citations labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

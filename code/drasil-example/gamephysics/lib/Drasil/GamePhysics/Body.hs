@@ -91,7 +91,7 @@ si = mkSmithEtAlICO progName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
   inputSymbols outputSymbols inputConstraints []
-  symbMap allRefs
+  labelledContent symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,

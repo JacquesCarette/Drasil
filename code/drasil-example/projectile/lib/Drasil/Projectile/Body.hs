@@ -130,7 +130,10 @@ si = mkSmithEtAlICO progName
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs (map cnstrw' constrained) constants
-  symbMap allRefs
+  labelledContent' symbMap allRefs
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -162,7 +165,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
-  iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
+  iMods genDefns tMods concIns citations labelledContent'
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =

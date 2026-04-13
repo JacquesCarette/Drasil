@@ -21,10 +21,7 @@ module Language.Drasil.Printers (
   -- * Markdown
   , genMDBook, makeBook, makeRequirements
   -- * Printing Information and Options
-  , PrintingInformation, piSys
-  , HasPrintingOptions (..)
-  , Notation(..)
-  , defaultConfiguration, plainConfiguration
+  , PrintingInformation, piSys, Notation(..)
 ) where
 
 import Language.Drasil.HTML.CSS (makeCSS)
@@ -38,5 +35,4 @@ import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
-  HasPrintingOptions(..), Notation(..), piSys,
-  defaultConfiguration, plainConfiguration)
+  Notation(..), piSys)

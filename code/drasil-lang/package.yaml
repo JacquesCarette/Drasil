@@ -1,11 +1,12 @@
-name:        drasil-lang
-version:     0.1.60.0
-author:      "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:  "Jacques Carette"
-synopsis:	   A framework for code and document generation for scientific software - Language SubPackage
-github:      JacquesCarette/Drasil
-homepage:    https://jacquescarette.github.io/Drasil/
-description: Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-lang
+version:      0.1.60.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Language SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 language: Haskell2010
 default-extensions:
@@ -49,6 +50,3 @@ library:
   - Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
-  when:
-  - condition: false
-    other-modules: Paths_drasil_lang

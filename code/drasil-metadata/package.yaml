@@ -1,11 +1,12 @@
-name:                drasil-metadata
-version:             0.1.1.0
-author:              "Jacques Carette"
-maintainer:          "Jacques Carette"
-synopsis:	     Meta-data sub-package for Drasil
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-metadata
+version:      0.1.1.0
+author:       "Jacques Carette"
+maintainer:   "Jacques Carette"
+synopsis:     Meta-data sub-package for Drasil
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 language: Haskell2010
 default-extensions:
@@ -40,6 +41,3 @@ library:
   - Drasil.Metadata.SupportedSoftware
   - Drasil.Metadata.TheoryConcepts
   - Drasil.Metadata.TraceabilityGraphs
-  when:
-  - condition: false
-    other-modules: Paths_drasil_metadata

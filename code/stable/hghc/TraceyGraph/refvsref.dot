@@ -1,4 +1,2 @@
-digraph refvsref {
-
-
+digraph "refvsref" {
 }

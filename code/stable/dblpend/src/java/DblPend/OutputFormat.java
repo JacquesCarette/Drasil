@@ -35,8 +35,7 @@ public class OutputFormat {
                 outputfile.print(", ");
             }
         }
-        outputfile.print("]");
-        outputfile.println("");
+        outputfile.println("]");
         outputfile.close();
     }
 }

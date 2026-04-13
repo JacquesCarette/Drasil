@@ -27,10 +27,8 @@ void write_output(double E_W, vector<vector<double>> &T_W) {
             outputfile << ", ";
         }
     }
-    outputfile << "]";
-    outputfile << "" << std::endl;
+    outputfile << "]" << std::endl;
     outputfile << "E_W = ";
-    outputfile << E_W;
-    outputfile << "" << std::endl;
+    outputfile << E_W << std::endl;
     outputfile.close();
 }

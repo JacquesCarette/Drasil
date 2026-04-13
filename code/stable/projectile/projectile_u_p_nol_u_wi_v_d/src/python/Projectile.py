@@ -85,11 +85,9 @@ def input_constraints(v_launch, theta, p_target):
 def write_output(d_offset, t_flight):
     outputfile = open("output.txt", "w")
     print("d_offset = ", end="", file=outputfile)
-    print(d_offset, end="", file=outputfile)
-    print("", file=outputfile)
+    print(d_offset, file=outputfile)
     print("t_flight = ", end="", file=outputfile)
-    print(t_flight, end="", file=outputfile)
-    print("", file=outputfile)
+    print(t_flight, file=outputfile)
     outputfile.close()
 
 filename = sys.argv[1]

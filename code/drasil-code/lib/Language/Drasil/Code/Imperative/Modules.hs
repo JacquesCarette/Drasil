@@ -620,9 +620,8 @@ genOutputFormat = do
         outp <- mapM (\x -> do
           v <- mkVal x
           return $
-            [printFileStr v_outfile (codeName x ++ " = ")]
-            ++ writeOutputValue v_outfile v (x ^. typ)
-            ++ [printFileStrLn v_outfile ""] ) outs
+            printFileStr v_outfile (codeName x ++ " = ")
+            : writeOutputValue v_outfile v (x ^. typ) ) outs
         desc <- woFuncDesc
         mthd <- publicFunc woName void desc (map pcAuto parms) Nothing
           [block $ [
@@ -1028,9 +1027,8 @@ genOutputFormatProc = do
         outp <- mapM (\x -> do
           v <- mkValProc x
           return $
-            [printFileStr v_outfile (codeName x ++ " = ")]
-            ++ writeOutputValue v_outfile v (x ^. typ)
-            ++ [printFileStrLn v_outfile ""] ) outs
+            printFileStr v_outfile (codeName x ++ " = ")
+            : writeOutputValue v_outfile v (x ^. typ) ) outs
         desc <- woFuncDesc
         mthd <- publicFuncProc woName void desc (map pcAuto parms) Nothing
           [block $ [
@@ -1041,17 +1039,29 @@ genOutputFormatProc = do
   genOutput $ Map.lookup woName (eMap g)
 
 writeOutputValue :: (SharedProg r) => SValue r -> SValue r -> Space -> [MSStatement r]
-writeOutputValue out = writeOutputValue' (1 :: Integer)
+writeOutputValue out = writeTop
   where
-    writeOutputValue' n curr (Vect inner) =
+    writeTop curr (Vect inner) =
+      let idx = var "list_i1" int
+          vIdx = valueOf idx
+          elemAt = listAccess curr vIdx
+      in [ printFileStr out "["
+         , forRange idx (litInt 0) (listSize curr) (litInt 1) $ bodyStatements $
+             writeInner (2 :: Integer) elemAt inner ++
+             [ifNoElse [(vIdx ?< (listSize curr #- litInt 1),
+               bodyStatements [printFileStr out ", "])]]
+         , printFileStrLn out "]"
+         ]
+    writeTop curr _ = [printFileLn out curr]
+    writeInner n curr (Vect inner) =
       let idx = var ("list_i" ++ show n) int
           vIdx = valueOf idx
           elemAt = listAccess curr vIdx
       in [ printFileStr out "["
          , forRange idx (litInt 0) (listSize curr) (litInt 1) $ bodyStatements $
-             writeOutputValue' (n + 1) elemAt inner ++
+             writeInner (n + 1) elemAt inner ++
              [ifNoElse [(vIdx ?< (listSize curr #- litInt 1),
                bodyStatements [printFileStr out ", "])]]
          , printFileStr out "]"
          ]
-    writeOutputValue' _ curr _ = [printFile out curr]
+    writeInner _ curr _ = [printFile out curr]

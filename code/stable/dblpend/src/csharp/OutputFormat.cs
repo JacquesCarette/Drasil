@@ -31,8 +31,7 @@ public class OutputFormat {
                 outputfile.Write(", ");
             }
         }
-        outputfile.Write("]");
-        outputfile.WriteLine("");
+        outputfile.WriteLine("]");
         outputfile.Close();
     }
 }

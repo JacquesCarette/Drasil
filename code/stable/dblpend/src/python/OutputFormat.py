@@ -18,6 +18,5 @@ def write_output(theta):
         print("]", end="", file=outputfile)
         if list_i1 < len(theta) - 1:
             print(", ", end="", file=outputfile)
-    print("]", end="", file=outputfile)
-    print("", file=outputfile)
+    print("]", file=outputfile)
     outputfile.close()

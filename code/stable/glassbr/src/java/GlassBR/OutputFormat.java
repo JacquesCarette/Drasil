@@ -40,17 +40,13 @@ public class OutputFormat {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("isSafePb = ");
-        outputfile.print(isSafePb);
-        outputfile.println("");
+        outputfile.println(isSafePb);
         outputfile.print("isSafeLR = ");
-        outputfile.print(isSafeLR);
-        outputfile.println("");
+        outputfile.println(isSafeLR);
         outputfile.print("P_b = ");
-        outputfile.print(P_b);
-        outputfile.println("");
+        outputfile.println(P_b);
         outputfile.print("J = ");
-        outputfile.print(J);
-        outputfile.println("");
+        outputfile.println(J);
         outputfile.close();
     }
 }

@@ -19,9 +19,7 @@ def write_output(E_W, T_W):
         print("]", end="", file=outputfile)
         if list_i1 < len(T_W) - 1:
             print(", ", end="", file=outputfile)
-    print("]", end="", file=outputfile)
-    print("", file=outputfile)
+    print("]", file=outputfile)
     print("E_W = ", end="", file=outputfile)
-    print(E_W, end="", file=outputfile)
-    print("", file=outputfile)
+    print(E_W, file=outputfile)
     outputfile.close()

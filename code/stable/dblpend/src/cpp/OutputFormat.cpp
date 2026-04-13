@@ -27,7 +27,6 @@ void write_output(vector<vector<double>> &theta) {
             outputfile << ", ";
         }
     }
-    outputfile << "]";
-    outputfile << "" << std::endl;
+    outputfile << "]" << std::endl;
     outputfile.close();
 }

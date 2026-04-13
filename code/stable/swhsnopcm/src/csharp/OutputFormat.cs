@@ -32,11 +32,9 @@ public class OutputFormat {
                 outputfile.Write(", ");
             }
         }
-        outputfile.Write("]");
-        outputfile.WriteLine("");
+        outputfile.WriteLine("]");
         outputfile.Write("E_W = ");
-        outputfile.Write(E_W);
-        outputfile.WriteLine("");
+        outputfile.WriteLine(E_W);
         outputfile.Close();
     }
 }

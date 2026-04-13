@@ -36,17 +36,13 @@ public class OutputFormat {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("isSafePb = ");
-        outputfile.Write(isSafePb);
-        outputfile.WriteLine("");
+        outputfile.WriteLine(isSafePb);
         outputfile.Write("isSafeLR = ");
-        outputfile.Write(isSafeLR);
-        outputfile.WriteLine("");
+        outputfile.WriteLine(isSafeLR);
         outputfile.Write("P_b = ");
-        outputfile.Write(P_b);
-        outputfile.WriteLine("");
+        outputfile.WriteLine(P_b);
         outputfile.Write("J = ");
-        outputfile.Write(J);
-        outputfile.WriteLine("");
+        outputfile.WriteLine(J);
         outputfile.Close();
     }
 }

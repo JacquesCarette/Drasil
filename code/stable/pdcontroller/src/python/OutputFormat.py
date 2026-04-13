@@ -18,6 +18,5 @@ def write_output(y_t):
         print("]", end="", file=outputfile)
         if list_i1 < len(y_t) - 1:
             print(", ", end="", file=outputfile)
-    print("]", end="", file=outputfile)
-    print("", file=outputfile)
+    print("]", file=outputfile)
     outputfile.close()

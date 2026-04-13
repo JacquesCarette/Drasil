@@ -36,11 +36,9 @@ public class OutputFormat {
                 outputfile.print(", ");
             }
         }
-        outputfile.print("]");
-        outputfile.println("");
+        outputfile.println("]");
         outputfile.print("E_W = ");
-        outputfile.print(E_W);
-        outputfile.println("");
+        outputfile.println(E_W);
         outputfile.close();
     }
 }

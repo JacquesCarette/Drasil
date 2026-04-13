@@ -1,29 +1,17 @@
-module Drasil.SWHS.Concepts where --all of this file is exported
+module Drasil.SWHS.Concepts where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
-  likelyChg, physSyst, refBy, refName, typUnc, unlikelyChg,
-  requirement, srs)
-import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Domains (materialEng)
 
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
   tankPCM, transient, water, sWHT, tankParam]
-
----Acronyms---
-acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
-
-acronymsFull :: [CI]
-acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
 
 phsChgMtrl:: CI
 phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material"

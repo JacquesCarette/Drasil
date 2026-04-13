@@ -1,20 +1,16 @@
 module Drasil.DblPend.Unitals where
 
 import Language.Drasil
-import qualified Language.Drasil.Development as D
+import qualified Language.Drasil.Development as D (toSent)
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.ShortHands
+import Language.Drasil.ShortHands (cL, cT, lA, lAlpha, lM, lP, lTheta, lV, lW)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  refBy, refName, requirement, srs, typUnc)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
-import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir, ode)
+import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
@@ -25,13 +21,6 @@ import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, 
 
 symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
-
-acronyms :: [CI]
-acronyms = ode : sharedAcronyms
-
-sharedAcronyms :: [CI]
-sharedAcronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2]

@@ -1,6 +1,6 @@
 # Contributor's Guide
 
-Welcome to the Contributor's Guide! This wiki page contains a gentle introduction to working with Drasil, general guidelines and advice for contributing to the Drasil research project.
+Welcome to the Contributor's Guide! This wiki page contains a gentle introduction to working with Drasil, general guidelines, and advice for contributing to the Drasil research project.
 
 Once you've read through this page, you may also take our [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
 
@@ -33,7 +33,7 @@ If you have any questions, please feel free to either file an issue or reach out
 
 ## Preparing Your Workspace
 
-Preparing your workspace for Drasil development requires more than a few installation step and dependencies (because of the wide breadth of software Drasil generates). As such, we have a page dedicated to [setting up your workspace](New-Workspace-Setup). The remainder of this document will assume you have a functioning development environment suitable for Drasil.
+Preparing your workspace for Drasil development requires more than a few installation steps and dependencies (because of the wide breadth of software Drasil generates). As such, we have a page dedicated to [setting up your workspace](New-Workspace-Setup). The remainder of this document will assume you have a functioning development environment suitable for Drasil.
 
 ## Haskell
 

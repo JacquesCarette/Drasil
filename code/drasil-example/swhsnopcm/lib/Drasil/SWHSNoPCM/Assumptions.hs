@@ -8,13 +8,11 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)
-
+import Data.Drasil.Concepts.Thermodynamics as CT (heat)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (pressure)
 import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt)
-
-import Data.Drasil.Concepts.Thermodynamics as CT (heat)
-import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
+import Data.Drasil.SI_Units (centigrade)
 
 import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT, assumpVCN)
@@ -76,8 +74,8 @@ assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+
 assumpS13 =
   D.toSent (atStartNP (NP.the (pressure `inThe` tank))) `S.is` S "atmospheric" `sC` S "so the" +:+
   D.toSent (phraseNP (meltPt `and_` boilPt)) +:+ S "of water are" +:+
-  S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `S.and_`
-  S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) `sC` (S "respectively" !.)
+  S (show (0 :: Integer)) :+: Sy (usymb centigrade) `S.and_`
+  S (show (100 :: Integer)) :+: Sy (usymb centigrade) `sC` (S "respectively" !.)
 
 assumpAPT = cic "assumpAPT" assumpS13
   "Atmospheric-Pressure-Tank" assumpDom

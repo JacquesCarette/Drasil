@@ -72,7 +72,7 @@ concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   surArea, area]
 
 symbolConcepts :: [UnitalChunk]
-symbolConcepts = map ucw [density, mass, time, vol,
+symbolConcepts = [density, mass, time, vol,
   QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 
 -------------------

@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
   UnitalChunk(..),
   -- * Constructors
-  uc, uc', ucStaged, ucStaged', ucuc, ucw) where
+  uc, uc', ucStaged, ucStaged', ucuc) where
 
 import Control.Lens (makeLenses, view, (^.))
 
@@ -96,7 +96,3 @@ ucStaged' i t d sym space u = UC (dqd' (dccWDS i t d) sym space (Just un)) un
 -- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
 ucuc c = UC (dqdWr c)
-
--- | Constructs a UnitalChunk from a 'Concept' with 'Units'.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
-ucw c = ucuc c (unit c)

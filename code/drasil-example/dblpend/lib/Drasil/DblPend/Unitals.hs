@@ -32,7 +32,7 @@ constants :: [ConstQDef]
 constants = [gravitationalAccelConst]
 
 unitalChunks :: [UnitalChunk]
-unitalChunks = [
+unitalChunks = [len,
   lenRod_1, lenRod_2, massObj_1, massObj_2,
   pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2,
   xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1,

@@ -11,6 +11,8 @@ import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr, probConstr)
+import Data.Drasil.Quantities.Math (mathunitals, mathquants)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
@@ -26,7 +28,8 @@ symbols = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
   map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++
   [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
-  map dqdWr derivedInputDataConstraints
+  map dqdWr derivedInputDataConstraints ++
+  map dqdWr mathunitals ++ map dqdWr physicalquants ++ mathquants
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]

@@ -120,7 +120,7 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   (map dqdWr physicscon ++ symbols ++
-    [dqdWr mass, dqdWr posInf, dqdWr negInf] ++
+    [dqdWr mass, posInf, negInf] ++
     map dqdWr pidConstants)
   ideaDicts
   conceptChunks

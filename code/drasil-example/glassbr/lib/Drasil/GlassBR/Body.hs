@@ -31,8 +31,6 @@ import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Concepts.Theory as M (dataDefn, inModel, thModel)
-import Data.Drasil.Quantities.Math (mathquants, mathunitals)
-import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
@@ -122,13 +120,7 @@ ideaDicts =
   map nw [progName, iGlass, lGlass] ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
-conceptChunks =
-  -- ConceptChunks
-  distance : concepts ++ softwarecon ++ physicalcon ++
-  -- Unital Chunks
-  map cw mathunitals ++ map cw physicalquants ++
-  -- DefinedQuantityDicts
-  map cw mathquants
+conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts conceptChunks []

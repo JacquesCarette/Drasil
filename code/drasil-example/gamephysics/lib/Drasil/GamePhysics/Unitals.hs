@@ -1,5 +1,7 @@
 module Drasil.GamePhysics.Unitals where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -16,12 +18,11 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration, angularAcce
   torque, velocity, fOfGravity, positionVec)
 
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect,
-  orientation, perpVect, pi_, unitVect)
+  orientation, perpVect, pi_, unitVect, surface)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
   torqueU, velU, angAccelU)
 
-import Control.Lens((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
 
 defSymbols :: [DefinedQuantityDict]
@@ -43,7 +44,7 @@ unitSymbs = map ucw [iVect, jVect, normalVect,
 
 symbols, inputSymbols, outputSymbols :: [DefinedQuantityDict]
 
-symbols = QP.restitutionCoef : unitless ++ map dqdWr unitalSymbols
+symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] ++ unitless ++ map dqdWr unitalSymbols
 
 inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass,
@@ -54,7 +55,7 @@ outputSymbols = map dqdWr [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 unitalSymbols :: [UnitalChunk]
-unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
+unitalSymbols = [QM.surface, QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.force, QP.impulseV, QP.impulseS, QP.distance, QP.displacement,
   QP.time, QP.angularDisplacement, QP.linearDisplacement, QP.linearVelocity,
   QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height,

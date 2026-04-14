@@ -90,7 +90,7 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
-  inputs outputs inConstraints []
+  inputs outputs inConstraints [] allSymbols
   labelledContent' symbMap allRefs
 
 purp :: Sentence
@@ -111,8 +111,11 @@ conceptChunks =
   -- Unital Chunks
   [cw len]
 
+allSymbols :: [DefinedQuantityDict]
+allSymbols = map (^. output) iMods ++ symbols
+
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] (map (^. output) iMods ++ symbols) ideaDicts
+symbMap = withCommonKnowledge [] allSymbols ideaDicts
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
 

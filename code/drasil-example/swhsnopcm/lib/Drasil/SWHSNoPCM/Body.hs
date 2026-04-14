@@ -140,7 +140,7 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
+  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList) symbols
   labelledContent' symbMap allRefs
 
 purp :: Sentence

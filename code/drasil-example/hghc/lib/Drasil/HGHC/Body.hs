@@ -17,7 +17,7 @@ si = mkSmithEtAlICO
   progName [spencerSmith]
   [purp] [] [] []
   [] [] dataDefs []
-  htInputs htOutputs ([] :: [ConstrConcept]) []
+  htInputs htOutputs ([] :: [ConstrConcept]) [] symbols
   [] symbMap []
 
 mkSRS :: SRSDecl

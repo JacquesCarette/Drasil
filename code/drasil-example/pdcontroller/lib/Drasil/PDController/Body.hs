@@ -80,7 +80,7 @@ si = mkSmithEtAlICO
   progName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
-  inputs outputs (map cnstrw' inpConstrained) pidConstants
+  inputs outputs (map cnstrw' inpConstrained) pidConstants allSymbols
   labelledContent' symbMap allRefs
 
 purp :: Sentence
@@ -117,11 +117,14 @@ conceptChunks =
   -- ConceptChunks
   physicalcon ++ [linear, angular]
 
+allSymbols :: [DefinedQuantityDict]
+allSymbols = map dqdWr physicscon ++ symbols ++
+  [dqdWr mass, posInf, negInf] ++
+  map dqdWr pidConstants
+
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
-  (map dqdWr physicscon ++ symbols ++
-    [dqdWr mass, dqdWr posInf, dqdWr negInf] ++
-    map dqdWr pidConstants)
+  allSymbols
   ideaDicts
   conceptChunks
   ([] :: [UnitDefn])

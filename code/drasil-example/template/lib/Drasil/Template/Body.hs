@@ -74,7 +74,7 @@ si = mkSmithEtAlICO
   progName [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef]) []
   [] symbMap []
 
 ideaDicts :: [IdeaDict]

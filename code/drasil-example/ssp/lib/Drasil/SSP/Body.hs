@@ -61,7 +61,7 @@ si = mkSmithEtAlICO
   progName [henryFrankis, brooks]
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
-  inputs outputs constrained []
+  inputs outputs constrained [] symbols
   labCon symbMap allRefs
 
 mkSRS :: SRSDecl

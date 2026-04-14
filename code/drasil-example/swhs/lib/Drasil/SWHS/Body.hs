@@ -61,7 +61,7 @@ si = mkSmithEtAlICO
   progName' [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
-  inputs outputs constrained specParamValList
+  inputs outputs constrained specParamValList symbols
   labelledContent' symbMap allRefs
 
 purp :: Sentence

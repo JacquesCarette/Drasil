@@ -33,7 +33,7 @@ module Drasil.SRSDocument (
   ) where
 
 import Drasil.Database (ChunkDB)
-import Drasil.System
+import Drasil.System (SmithEtAlSRS(..))
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..),

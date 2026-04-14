@@ -28,7 +28,8 @@ import Language.Drasil (Quantity, MayHaveUnit, Concept, Reference, People, CI,
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Utils.Drasil (toPlainName)
 
-import Drasil.System.Core
+import Drasil.System.Core (SystemMeta, Background, HasSystemMeta(..),
+  mkSystemMeta, Motivation, Purpose, Scope)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.

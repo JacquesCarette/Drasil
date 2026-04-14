@@ -1,5 +1,5 @@
 module Drasil.Projectile.Lesson.Review (
-  reviewContent, reviewSecs
+  reviewSecs
 ) where
 
 import Data.Drasil.Concepts.Physics (motion, position, time, velocity)
@@ -9,9 +9,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, i
 import Language.Drasil
 import Drasil.Document.Contents (foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
-
-reviewContent :: [Contents]
-reviewContent = []
 
 reviewSecs :: [Section]
 reviewSecs = [reviewHead]

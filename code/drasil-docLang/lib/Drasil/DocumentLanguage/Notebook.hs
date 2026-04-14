@@ -5,9 +5,11 @@ module Drasil.DocumentLanguage.Notebook
 
 import Control.Lens ((^.))
 
-import Language.Drasil (IdeaDict, Sentence(S), Section, CI, Document(Notebook), BibRef,
-  foldlList, SepType(Comma), FoldType(List), name, Contents(UlC), ulcc, RawContent(Bib))
-import Drasil.System (System(SI), _authors, whatsTheBigIdea, sysName)
+import Drasil.Database (ChunkDB)
+import Language.Drasil (Sentence(S), Section, CI, Document(Notebook), BibRef,
+  foldlList, SepType(Comma), FoldType(List), fullName, Contents(UlC), ulcc, RawContent(Bib))
+import Drasil.System (LessonPlan, HasSystemMeta(..))
+import Drasil.Metadata.Documentation (notebook)
 
 import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
@@ -16,13 +18,14 @@ import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, exam
 import Drasil.ExtractLsnDesc (extractLsnPlanBib)
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDesc -> (IdeaDict -> CI -> Sentence) -> System -> Document
-mkNb dd comb si@SI { _authors = authors } =
-  Notebook (whatsTheBigIdea si `comb` (si ^. sysName)) (foldlList Comma List $ map (S . name) authors) $
-  mkSections si dd
+mkNb :: LessonPlan -> LsnDesc -> (CI -> CI -> Sentence) -> Document
+mkNb plan dd comb = Notebook nm as $ mkSections (plan ^. systemdb) dd
+  where
+    nm = notebook `comb` (plan ^. sysName)
+    as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
 
 -- | Helper for creating the notebook sections.
-mkSections :: System -> LsnDesc -> [Section]
+mkSections :: ChunkDB -> LsnDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: LsnChapter -> Section

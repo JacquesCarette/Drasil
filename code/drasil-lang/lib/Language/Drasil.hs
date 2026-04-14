@@ -83,8 +83,6 @@ module Language.Drasil (
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
   , dcc, dccAWDS, dccA, dccWDS, cc', ccs, cw, cic
-  -- Language.Drasil.Chunk.Relation
-  , RelationConcept, makeRC
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
@@ -160,7 +158,7 @@ module Language.Drasil (
       -- Month -> CiteField
   , month
   -- Language.Drasil.People
-  , People, Person, person, HasName, name, person', personWM
+  , People, Person, person, HasName, fullName, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
 
@@ -169,7 +167,7 @@ module Language.Drasil (
   -- We also use 'NounPhrase's to record the proper pluralization and capitalization of terms.
 
   -- Language.Drasil.Sentence
-  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent, headSent
+  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
   , ch, eS, eS', sC, sDash, sParen
   -- Language.Drasil.Sentence.Generators
   , fromSource, fterms, getTandS, checkValidStr
@@ -181,7 +179,7 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Language.Drasil.Development.Sentence
-  , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
+  , introduceAbb, introduceAbbPlrl, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
   -- Language.Drasil.ShortName
   , ShortName, shortname', getSentSN, HasShortName(..)
@@ -199,7 +197,7 @@ module Language.Drasil (
 
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSent
-  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
+  , foldlSent_,foldlSentCol, foldlsC, foldOpts, foldNums, numList
 
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
@@ -299,7 +297,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
   ucuc, ucw)
@@ -316,7 +313,7 @@ import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
-  (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen)
+  (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
 import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))
@@ -326,7 +323,7 @@ import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   label, variable, sortBySymbol, sortBySymbolTuple)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.People (People, Person, person, HasName(..),
-  person', personWM, personWM', mononym, name, nameStr, rendPersLFM,
+  person', personWM, personWM', mononym, fullName, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
 import Language.Drasil.Label.Type hiding (name)
 

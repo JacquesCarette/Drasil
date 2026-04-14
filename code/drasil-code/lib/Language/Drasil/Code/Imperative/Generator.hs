@@ -13,18 +13,17 @@ import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
 
+import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents,
+  hasPathAndDocToFileAndContents, createDirIfMissing, createFile)
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, plainConfiguration)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, Notation (Scientific))
 import Language.Drasil.Printing.Import (spec)
 import Drasil.System
-import Utils.Drasil (createDirIfMissing, createFile)
-import Utils.Drasil.FileData (FileAndContents(..), fileAndContents,
-  hasPathAndDocToFileAndContents)
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -102,7 +101,7 @@ generator l dt sd chs cs = let
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation plainConfiguration
+  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation Scientific
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
@@ -160,7 +159,7 @@ genPackage unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map name (codeSpec g ^. authorsO)
+      as = map fullName (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
@@ -276,7 +275,7 @@ genPackageProc unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map name (codeSpec g ^. authorsO)
+      as = map fullName (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = printfo g
       prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)

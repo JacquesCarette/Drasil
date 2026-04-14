@@ -4,7 +4,8 @@ module Language.Drasil.Printing.Helpers where
 import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, (<>), ($$))
 import Data.Char (toUpper, toLower)
-import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
+
+import Language.Drasil.Printing.Citation (CiteField(HowPublished), HP (..))
 
 -- | Custom infix operator for concatenating
 -- two 'Doc's vertically with an empty line in between.

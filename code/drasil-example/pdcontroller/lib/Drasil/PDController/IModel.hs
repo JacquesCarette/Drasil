@@ -57,7 +57,7 @@ imPDRC
 imDeriv :: Derivation
 imDeriv
   = mkDerivName (phrase processVariable)
-      (weave [imDerivStmts, map eS imDerivEqns])
+      (weave imDerivStmts $ map eS imDerivEqns)
 
 imDerivStmts :: [Sentence]
 imDerivStmts = [derivStmt1, derivStmt2, derivStmt3, derivStmt4]

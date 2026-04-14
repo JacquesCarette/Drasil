@@ -40,15 +40,7 @@ ddQD lqde lqdme = lens g s
     s (DDE  qd pkt) u = DDE  (qd & lqde .~ u)  pkt
     s (DDME qd pkt) u = DDME (qd & lqdme .~ u) pkt
 
--- The type signature is really
---
---     ddQDGetter :: Getter SimpleQDef a -> Getter ModelQDef a -> Getter DataDefinition a
---
--- But we need this more general type signature to avoid GHC warning us of
--- "redundant constraints"
-ddQDGetter :: (Profunctor p, Contravariant f) => Getter SimpleQDef a
-  -> Getter ModelQDef a
-  -> Optic' p f DataDefinition a
+ddQDGetter :: Getter SimpleQDef a -> Getter ModelQDef a -> Getter DataDefinition a
 ddQDGetter gsqd gmqd = to g
   where
     g (DDE qd _) = qd ^. gsqd

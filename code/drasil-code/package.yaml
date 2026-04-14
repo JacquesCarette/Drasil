@@ -1,11 +1,12 @@
-name:                drasil-code
-version:             0.1.9.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:          "Jacques Carette"
-synopsis:	     A framework for code and document generation for scientific software - Code SubPackage
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-code
+version:      0.1.9.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Code SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 language: Haskell2010
 default-extensions:
@@ -22,6 +23,7 @@ dependencies:
 - directory
 - filepath
 - split
+- drasil-build-artifacts
 - drasil-build
 - drasil-database
 - drasil-gool
@@ -43,9 +45,6 @@ library:
   - Language.Drasil.Code
   - Language.Drasil.GOOL
   - Data.Drasil.ExternalLibraries.ODELibraries
-  when:
-  - condition: false
-    other-modules: Paths_drasil_code
 
 executables:
   codegenTest:

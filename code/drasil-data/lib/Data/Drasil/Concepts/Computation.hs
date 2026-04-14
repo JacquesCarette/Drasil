@@ -1,5 +1,8 @@
 -- | Defines concepts used in computing.
-module Data.Drasil.Concepts.Computation where
+module Data.Drasil.Concepts.Computation
+  ( module Data.Drasil.Concepts.Computation
+  , module Drasil.Metadata.Concepts.Computation
+  ) where
 
 import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
   ConceptChunk, CI, IdeaDict, dccWDS)
@@ -8,11 +11,10 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
   quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
+import Drasil.Metadata.Concepts.Computation (algorithm)
 import Drasil.Metadata.Domains (compScience)
 
-algorithm, absTolerance, relTolerance:: ConceptChunk
-algorithm = dcc "algorithm" (cn' "algorithm")
-  "a series of steps to be followed in calculations and problem-solving operations"
+absTolerance, relTolerance:: ConceptChunk
 absTolerance = dcc "absTolerance"   (cn' "Absolute tolerance") "a fixed number that is used to make direct comparisons"
 relTolerance = dcc "relTolerance"   (cn' "Relative tolerance") " maximum amount of error that the user is willing to allow in the solution"
 

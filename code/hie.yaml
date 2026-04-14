@@ -3,6 +3,9 @@ cradle:
     - path: "drasil-build/lib"
       component: "drasil-build:lib"
 
+    - path: "drasil-build-artifacts/lib"
+      component: "drasil-build-artifacts:lib"
+
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
 

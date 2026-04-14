@@ -1,30 +1,33 @@
 -- | Define people for use in Drasil. Used often in authors and citations.
-module Data.Drasil.People where
+module Data.Drasil.People
+  ( module Data.Drasil.People
+  , module Drasil.Metadata.People
+  ) where
 
 import Language.Drasil (Person, person, person', personWM, personWM', mononym)
+import Drasil.Metadata.People
 
-spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
+henryFrankis, daAruliah, gWilson,
   cTitus, kdHuff, nChueHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
-  bWaugh, epWhite, pWilson, pcClements, luthfi, alex, nikitha, thulasi,
-  brooks, mLightstone, lLai, pjAgerfalk, nKraiem, jRalyte, jBueche,
+  bWaugh, epWhite, pWilson, luthfi, alex, nikitha, thulasi,
+  brooks, mLightstone, jBueche,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson,
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
   mCampidelli, dmWiess, sPalmer, scottSmith, bKarchewski, rHuston,
   hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler, olu, rodPierce,
-  dong, rKhedri :: Person
+  dong :: Person
 
-pjAgerfalk    = person    "PJ"                        "Agerfalk"
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
 wlBeason      = personWM  "W"         ["Lynn"]        "Beason"
 tBergman      = personWM  "T"         ["L"]           "Bergman"
 jmBracci      = personWM  "Joseph"    ["M"]           "Bracci"
 jBueche       = personWM  "J"         ["Frederick"]   "Bueche"
 mCampidelli   = person    "Manuel"                    "Campidelli"
+dong          = person    "Dong"                      "Chen"
 grChen        = personWM' "G"         ["R"]           "Chen"
 ymChen        = person'   "Yun-Min"                   "Chen"
 pjCleall      = personWM  "Peter"     ["John"]        "Cleall"
-pcClements    = personWM  "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
 samCrawford   = personWM  "Samuel"    ["J"]           "Crawford"
 mDavis        = person    "Matt"                      "Davis"
 dDewitt       = personWM  "D"         ["P"]           "Dewitt"
@@ -43,11 +46,8 @@ thulasi       = person    "Thulasi"                   "Jegatheesan"
 hJosephs      = person    "Harold"                    "Josephs"
 bKarchewski   = person    "Brandon"                   "Karchewski"
 tlKohutek     = personWM  "Terry"     ["L"]           "Kohutek"
-nKoothoor     = person    "Nirmitha"                  "Koothoor"
-nKraiem       = person    "N"                         "Kraiem"
 jKrahn        = person    "J"                         "Krahn"
 nikitha       = person    "Nikitha"                   "Krithnan"
-lLai          = person    "Lei"                       "Lai"
 aLavine       = personWM  "A"         ["S"]           "Lavine"
 cfLee         = personWM' "C"         ["F"]           "Lee"
 mLightstone   = person    "Marilyn"                   "Lightstone"
@@ -58,30 +58,25 @@ luthfi        = person    "Luthfi"                    "Mawarid"
 imMitchell    = personWM  "Ian"       ["M"]           "Mitchell"
 nrMorgenstern = personWM  "N"         ["R"]           "Morgenstern"
 sPalmer       = person    "Steven"                    "Palmer"
-dParnas       = personWM  "David"     ["L"]           "Parnas"
+rodPierce     = person    "Rod"                       "Pierce"
 mdPlumblet    = personWM  "Mark"      ["D"]           "Plumblet"
 vePrice       = personWM  "P"         ["E"]           "Price"
 qhQian        = personWM' "Q"         ["H"]           "Qian"
-jRalyte       = person    "J"                         "Ralyte"
+olu           = person    "Olu"                       "Owojaiye"
   --FIXME: person takes strings but we need an "e" with an accent
   -- S "J. Ralyt" :+: (F Acute 'e')
 jRobertson    = person    "James"                     "Robertson"
 sRobertson    = person    "Suzanne"                   "Robertson"
 scottSmith    = person    "Scott"                     "Smith"
-spencerSmith  = personWM  "W"         ["Spencer"]     "Smith"
 dStolle       = person    "Dieter"                    "Stolle"
 cTitus        = person    "C"                         "Titus"
 bWaugh        = person    "Ben"                       "Waugh" -- Best Practices for Scientific Computing 2013
 epWhite       = personWM  "Ethan"     ["P"]           "White" -- Best Practices for Scientific Computing 2013
+dmWiess       = personWM  ""          []              "Wiess"
 gWilson       = person    "Greg"                      "Wilson"
 pWilson       = person    "Paul"                      "Wilson" -- Best Practices for Scientific Computing 2013
 tltZhan       = personWM  "Tony"      ["L","T"]       "Zhan"
 dyZhu         = personWM' "D"         ["Y"]           "Zhu"
-dmWiess       = personWM  ""          []              "Wiess"
-olu           = person    "Olu"                       "Owojaiye"
-rodPierce     = person    "Rod"                       "Pierce"
-dong          = person    "Dong"                      "Chen"
-rKhedri       = person    "Ridha"                     "Khedri"
 
 -- Right now, we have to say this is a 'Person', even though it clearly isn't
 wikiAuthors :: Person

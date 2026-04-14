@@ -1,28 +1,25 @@
 -- | Defines citations used in Drasil.
-module Data.Drasil.Citations where
+module Data.Drasil.Citations (
+    module Data.Drasil.Citations
+  , module Drasil.Metadata.Citations
+  ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
-import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem,
-  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess, rodPierce,
-  wikiAuthors, rcHibbeler, rKhedri, sRobertson, jRobertson)
+import Data.Drasil.People (dParnas, pcClements, mCampidelli, dmWiess, rodPierce,
+  wikiAuthors, rcHibbeler, sRobertson, jRobertson)
+import Drasil.Metadata.Citations
 
 -- * Citations
 
 -- ** Papers
 
-campidelli, koothoor2013, parnas1972, parnasClements1984,
-  parnasClements1986, rbrtsn2012, smithLai2005, lineSource, pointSource,
-  smithEtAl2007, smithKoothoor2016, hibbeler2004 :: Citation
+campidelli, parnas1972, parnasClements1984,
+  rbrtsn2012, lineSource, pointSource,
+  hibbeler2004 :: Citation
 
 campidelli = cBooklet
   "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading"
   [author [mCampidelli]] "campidelli"
-
-koothoor2013 =
-  cMThesis [nKoothoor]
-  "A Document Driven Approach to Certifying Scientific Computing Software"
-  "McMaster University" 2013 [address "Hamilton, ON, Canada"]
-  "koothoor2013"
 
 parnas1972 = cArticle [dParnas]
   "On the Criteria To Be Used in Decomposing Systems into Modules"
@@ -35,43 +32,11 @@ parnasClements1984 = cInProceedings
   "ICSE '84: Proceedings of the 7th international conference on Software engineering"
   1984 [pages [408..417]] "parnasClements1984"
 
-parnasClements1986 = cArticle [dParnas, pcClements]
-  "A rational design process: How and why to fake it"
-  "IEEE Transactions on Software Engineering" 1986
-  [month Feb, volume 12, number 2, pages [251..257], address "Washington, USA"]
-  "parnasClements1986"
-
 rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
   "Volere requirements specification template edition 16",
   howPublishedU "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf"
   , year 2012]
   "rbrtsn2012"
-
-smithLai2005 = cInProceedings [spencerSmith, lLai]
-  "A new requirements template for scientific computing"
-  ("Proceedings of the First International Workshop on " ++
-  "Situational Requirements Engineering Processes - Methods, " ++
-  "Techniques and Tools to Support Situation-Specific Requirements " ++
-  "Engineering Processes, SREP'05") 2005
-  [ editor [pjAgerfalk, nKraiem, jRalyte], address "Paris, France"
-  , pages [107..121],
-  note "In conjunction with 13th IEEE International Requirements Engineering Conference,"]
-  "smithLai2005"
-
-smithEtAl2007 = cArticle [spencerSmith, lLai, rKhedri]
-  ("Requirements Analysis for Engineering Computation: A Systematic Approach for" ++
-    " Improving Software Reliability")
-  "Reliable Computing, Special Issue on Reliable Engineering Computation" 2007
-  [month Feb, volume 13, number 1, pages [83..107], howPublishedU "https://doi.org/10.1007/s11155-006-9020-7"]
-  "smithEtAl2007"
-
-smithKoothoor2016 = cArticle [spencerSmith, nKoothoor]
-  ("A Document-Driven Method for Certifying Scientific Computing Software for Use" ++
-    " in Nuclear Safety Analysis")
-  "Nuclear Engineering and Technology" 2016
-  [month Apr, volume 48, number 2, pages[404..418],
-    howPublishedU "http://www.sciencedirect.com/science/article/pii/S1738573315002582"]
-  "smithKoothoor2016"
 
 lineSource = cMisc
   [author [mononym "The Editors of Encyclopaedia Britannica"], title "Line",

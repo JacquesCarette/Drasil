@@ -66,7 +66,7 @@ transMotOutputs = foldlSent [D.toSent (atStartNP (output_ `the_ofThe` inModel)),
 
 transMotDeriv :: Derivation
 transMotDeriv = mkDerivName (phrase transMot)
-      (weave [transMotDerivStmts, transMotDerivEqns])
+      (weave transMotDerivStmts transMotDerivEqns)
 
 transMotDerivStmts :: [Sentence]
 transMotDerivStmts = [
@@ -103,7 +103,7 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
 
 rotMotDeriv :: Derivation
 rotMotDeriv = mkDerivName (phrase rotMot)
-      (weave [rotMotDerivStmts, rotMotDerivEqns])
+      (weave rotMotDerivStmts rotMotDerivEqns)
 
 rotMotDerivStmts :: [Sentence]
 rotMotDerivStmts = [

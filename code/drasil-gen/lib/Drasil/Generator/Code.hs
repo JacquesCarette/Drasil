@@ -13,6 +13,7 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 import System.Directory (getCurrentDirectory, setCurrentDirectory)
 
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))
@@ -26,17 +27,16 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   Structure(..), Lang(Julia, Java,
   Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-import Drasil.System (System, programName)
-import Utils.Drasil (createDirIfMissing)
+import Drasil.System (SmithEtAlSRS, programName)
 
 -- | Internal: Generate an ICO-style executable softifact.
-exportCode :: System -> Choices -> IO ()
+exportCode :: SmithEtAlSRS -> Choices -> IO ()
 exportCode syst chcs = do
   let code = codeSpec syst chcs
   genCode chcs code
 
 -- | Internal: Generate a zoo of ICO-style executable softifact.
-exportCodeZoo :: System -> [Choices] -> IO ()
+exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
 exportCodeZoo syst = mapM_ $ \chcs -> do
   let dir = map toLower $ codedDirName (syst ^. programName) chcs
   workingDir <- getCurrentDirectory

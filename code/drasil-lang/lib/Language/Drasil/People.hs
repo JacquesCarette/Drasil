@@ -8,7 +8,7 @@ module Language.Drasil.People (
     -- * Constructors
   , person, person', personWM, personWM', mononym
     -- * Accessors
-  , name, nameStr
+  , fullName, nameStr
   , lstName
   , rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople --For sorting references
@@ -84,8 +84,8 @@ instance HasName Person where
     [dotInitial s] ++ map dotInitial ms ++ [dotInitial g])
 
 -- | Gets the name of a 'Person'. Adds a dot after any initials.
-name :: (HasName n) => n -> String
-name = nameStr
+fullName :: (HasName n) => n -> String
+fullName = nameStr
 
 -- | Gets the last name of a 'Person'.
 lstName :: Person -> String

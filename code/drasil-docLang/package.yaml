@@ -1,11 +1,12 @@
-name:                drasil-docLang
-version:             0.1.26.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Document Language SubPackage
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-docLang
+version:      0.1.26.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Document Language SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 language: Haskell2010
 default-extensions:
@@ -21,7 +22,6 @@ dependencies:
 - pretty
 - transformers
 - multiplate
-- drasil-data
 - drasil-database
 - drasil-lang
 - drasil-metadata
@@ -44,6 +44,3 @@ library:
   - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.Sentence.Combinators
   - Drasil.SRSDocument
-  when:
-  - condition: false
-    other-modules: Paths_drasil_docLang

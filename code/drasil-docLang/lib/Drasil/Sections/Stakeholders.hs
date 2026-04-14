@@ -1,15 +1,19 @@
 -- | Defines helper functions for the Stakeholders section.
 module Drasil.Sections.Stakeholders (stakeholderIntro, tClientF, tCustomerF) where
 
+-- Generic Drasil
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
+-- Vocabulary
+import Drasil.Metadata.Documentation (client, customer, endUser, interest,
+  product_, section_, stakeholder)
+
+-- other docLang
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Document.Contents (foldlSP)
-import Data.Drasil.Concepts.Documentation (client, customer, endUser, interest,
-  product_, section_, stakeholder)
 
 -- | General stakeholders introduction.
 stakeholderIntro :: Contents

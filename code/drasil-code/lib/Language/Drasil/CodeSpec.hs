@@ -9,14 +9,15 @@ import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
+import Drasil.Build.Artifacts (RelativeFile)
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSystem(..), programName)
+import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
-import Utils.Drasil (subsetOf, RelativeFile)
+import Utils.Drasil (subsetOf)
 
 import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
@@ -88,65 +89,21 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
-  _system' :: S.System,
+  _system' :: S.SmithEtAlSRS,
   _oldCode :: OldCodeSpec
 }
 makeLenses ''CodeSpec
 
-instance HasSystem CodeSpec where
-  system :: Lens' CodeSpec S.System
-  system = system'
-  background :: Lens' CodeSpec S.Background
-  background = system . S.background
-  purpose :: Lens' CodeSpec S.Purpose
-  purpose = system . S.purpose
-  scope :: Lens' CodeSpec S.Scope
-  scope = system . S.scope
-  motivation :: Lens' CodeSpec S.Motivation
-  motivation = system . S.motivation
+instance HasSmithEtAlSRS CodeSpec where
+  smithEtAlSRS :: Lens' CodeSpec S.SmithEtAlSRS
+  smithEtAlSRS = system'
+
+instance HasSystemMeta CodeSpec where
+  systemMeta = system' . systemMeta
 
 instance HasOldCodeSpec CodeSpec where
   oldCodeSpec :: Lens' CodeSpec OldCodeSpec
   oldCodeSpec = oldCode
-
-  pNameO :: Lens' CodeSpec Name
-  pNameO = oldCode . pNameO
-
-  authorsO :: Lens' CodeSpec People
-  authorsO = oldCode . authorsO
-
-  inputsO :: Lens' CodeSpec [Input]
-  inputsO = oldCode . inputsO
-
-  extInputsO :: Lens' CodeSpec [Input]
-  extInputsO = oldCode . extInputsO
-
-  derivedInputsO :: Lens' CodeSpec [Derived]
-  derivedInputsO = oldCode . derivedInputsO
-
-  outputsO :: Lens' CodeSpec [Output]
-  outputsO = oldCode . outputsO
-
-  configFilesO :: Lens' CodeSpec [RelativeFile]
-  configFilesO = oldCode . configFilesO
-
-  execOrderO :: Lens' CodeSpec [Def]
-  execOrderO = oldCode . execOrderO
-
-  cMapO :: Lens' CodeSpec ConstraintCEMap
-  cMapO = oldCode . cMapO
-
-  constantsO :: Lens' CodeSpec [Const]
-  constantsO = oldCode . constantsO
-
-  constMapO :: Lens' CodeSpec ConstantMap
-  constMapO = oldCode . constMapO
-
-  modsO :: Lens' CodeSpec [Mod]
-  modsO = oldCode . modsO
-
-  systemdbO :: Lens' CodeSpec ChunkDB
-  systemdbO = oldCode . systemdbO
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -165,7 +122,7 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: S.System -> Choices -> CodeSpec
+codeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
 codeSpec si chs = CS {
   _system' = si',
   _oldCode = oldcodeSpec si' chs
@@ -177,18 +134,18 @@ codeSpec si chs = CS {
     db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
     si' = set systemdb db' si
 
--- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
--- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
--- from 'System' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: S.System -> Choices -> OldCodeSpec
-oldcodeSpec sys@S.SI{ S._authors = as
-                    , S._inputs = ins
-                    , S._outputs = outs
-                    , S._constraints = cs
-                    , S._constants = cnsts
-                    , S._systemdb = db } chs =
+-- | Generates an 'OldCodeSpec' from 'SmithEtAlSRS', 'Choices', and a list of
+-- 'Mod's. This function extracts various components (e.g., inputs, outputs,
+-- constraints, etc.) from 'SmithEtAlSRS' to populate the 'OldCodeSpec'
+-- structure.
+oldcodeSpec :: S.SmithEtAlSRS -> Choices -> OldCodeSpec
+oldcodeSpec sys@S.ICO{ S._inputs = ins
+                     , S._outputs = outs
+                     , S._constraints = cs
+                     , S._constants = cnsts } chs =
   let ddefs = sys ^. dataDefns
       n = sys ^. programName
+      db = sys ^. systemdb
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
@@ -203,7 +160,7 @@ oldcodeSpec sys@S.SI{ S._authors = as
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
-        _authors = as,
+        _authors = sys ^. authors,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,

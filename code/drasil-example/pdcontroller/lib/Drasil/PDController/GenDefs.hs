@@ -10,7 +10,7 @@ import Data.Drasil.Citations ( pidWiki )
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Math (equation)
 
-import Theory.Drasil (GenDefn, gd, othModel')
+import Theory.Drasil (GenDefn, gd, othModel', RelationConcept, makeRC)
 
 import Drasil.PDController.Unitals
 import Drasil.PDController.Assumptions

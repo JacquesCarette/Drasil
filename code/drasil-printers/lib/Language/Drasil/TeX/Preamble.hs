@@ -3,13 +3,12 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
 
+import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
+import Language.Drasil.Printing.Helpers (sq)
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%), nest)
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
   usepackage, lbrace, rbrace)
-import Language.Drasil.Printing.Helpers (sq)
-
-import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
 
 -- FIXME: this really shouldn't be in code, it should be data!
 -- | LaTeX packages.

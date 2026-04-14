@@ -7,4 +7,4 @@ If you would like to fork Drasil and use our default method (GitHub Actions) of 
    1. `BOT_TOKEN` containing the personal access token of your API-ready account.
    2. `BOT_EMAIL` containing the email of the bot (email has to be on the list of emails registered on the bots account).
    3. `BOT_NAME` containing the name (e.g., "drasil-bot") of the bot.
-5. Test your bot and the Actions configuration on your fork: make and merge a PR, or create a commit with "[workflow-trigger]" anywhere in the commit message.
+5. Test your bot and the Actions configuration on your fork: make and merge a PR.

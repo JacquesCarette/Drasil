@@ -89,4 +89,4 @@ angleFD_2 = mkFuncDefByQ angularAccel_2
   [pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2] angularAccelExpr_2
 
 angleDeriv_2 :: Derivation
-angleDeriv_2 = mkDerivName (phrase pendDisAngle_2) (weave [angleDerivSents, map eS angularAccelDerivEqns])
+angleDeriv_2 = mkDerivName (phrase pendDisAngle_2) (weave angleDerivSents $ map eS angularAccelDerivEqns)

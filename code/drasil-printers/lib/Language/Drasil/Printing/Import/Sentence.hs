@@ -1,16 +1,17 @@
 -- | Defines helpers for printing 'Sentence's.
-module Language.Drasil.Printing.Import.Sentence where
+module Language.Drasil.Printing.Import.Sentence (spec) where
 
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil (Sentence(..), Reference(..), ShortName, LblType(..),
+  NounPhrase(..), getSentSN, checkValidStr, foldNums, (+:+), sParen, IRefProg(..),
+  RefInfo(..), SentenceStyle(..))
 import Language.Drasil.Development (toSent)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation
-  (PrintingInformation, refFind, sysdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, refFind, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupSymb, lookupP', lookupS', lookupT')
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
@@ -45,7 +46,7 @@ spec sm (Ref u EmptyS notes)    =
     (Reference _ (Citation ra) _) ->
       P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))    ra (spec sm $ S ra)
     (Reference _ (URI ra) sn) ->
-      P.Ref P.External    ra (spec sm $ renderURI sm sn)
+      P.Ref P.External    ra (spec sm $ getSentSN sn)
 spec sm (Ref u dName notes) =
   let reff = refFind u sm in
   case reff of
@@ -67,10 +68,6 @@ renderShortName pinfo (Deferred u) _ = S $ fromMaybe (error "Domain has no abbre
 renderShortName pinfo (RConcat a b) sn = renderShortName pinfo a sn :+: renderShortName pinfo b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = getSentSN sn
-
--- | Render a uniform resource locator as a 'Sentence'.
-renderURI :: ctx -> ShortName -> Sentence
-renderURI _ = getSentSN
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence

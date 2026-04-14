@@ -7,12 +7,34 @@
 -- instead.
 module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 
+-- General Haskell
 import Control.Lens ((^.), set)
+import Data.Either (rights)
 import Data.Function (on)
-import Data.List (nub, sortBy)
-import Data.Maybe (maybeToList, mapMaybe, fromMaybe)
+import Data.List (nub, sortBy, (\\))
+import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
+import qualified Data.Set as Set
+import qualified Data.Map.Strict as M
 
+-- General Drasil
+import Language.Drasil
+import Language.Drasil.Display (compsy)
+import Language.Drasil.Development (shortdep)
+
+import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
+  TermAbbr, shortForm, termResolve')
+
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
+import Drasil.GetChunks (ccss, ccss')
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (likelyChg, section_, software, srs,
+  unlikelyChg, requirement, software, assumption, goalStmt, refBy, refName)
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+
+-- Other docLang
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -25,17 +47,8 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, extractDocBib)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec, extractDocBib)
 import Drasil.TraceTable (generateTraceMap)
-
-import Language.Drasil
-import Language.Drasil.Display (compsy)
-
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent)
-
-import Drasil.System (System(SI), whatsTheBigIdea, _systemdb, HasSystem(..))
-import Drasil.GetChunks (ccss, ccss')
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
@@ -65,16 +78,11 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGr
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
-import Drasil.Metadata.Documentation as Doc (software)
-import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  unlikelyChg)
-import qualified Data.Map.Strict as M
-
 -- * Main Function
 
 -- | Creates a document from a 'System', a document description ('SRSDecl'), and
 -- a title combinator.
-mkDoc :: System -> SRSDecl -> (IdeaDict -> CI -> Sentence) -> (Document, System)
+mkDoc :: SmithEtAlSRS -> SRSDecl -> (CI -> CI -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       -- /Pre-generate/ the SRS artifact. It is missing content involving
@@ -89,8 +97,8 @@ mkDoc si srsDecl headingComb =
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
-      heading = whatsTheBigIdea si `headingComb` (si' ^. sysName)
-      authorsList = foldlList Comma List $ map (S . name) $ si ^. authors
+      heading = srs `headingComb` (si' ^. sysName)
+      authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
       sections' = mkSections si' dd' (Just refdCites)
@@ -108,7 +116,7 @@ mkDoc si srsDecl headingComb =
 -- the "trace" (refers to) and "refBy" (referenced by) maps, placing them in the
 -- output 'System', and generating corresponding 'LabelledContent' chunks for
 -- the traceability graphs to be used in the SRS.
-buildTraceMaps :: DocDesc -> System -> System
+buildTraceMaps :: DocDesc -> SmithEtAlSRS -> SmithEtAlSRS
 buildTraceMaps sd si
   | containsTraceSec sd =
     let db = si ^. systemdb
@@ -130,7 +138,7 @@ buildTraceMaps sd si
     containsTraceSec []                    = False
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> [Citation] -> System -> System
+fillReferences :: [Section] -> [Citation] -> SmithEtAlSRS -> SmithEtAlSRS
 fillReferences allSections cites si = si2
   where
     -- get old chunk database + ref database
@@ -176,24 +184,38 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
-mkSections :: System -> DocDesc -> Maybe BibRef -> [Section]
-mkSections si dd mbib = map doit dd
+mkSections :: SmithEtAlSRS -> DocDesc -> Maybe BibRef -> [Section]
+mkSections si dd mbib = map (either renderRefSec id) partialRender
   where
-    doit :: DocSection -> Section
-    doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
-    doit (IntroSec is)        = mkIntroSec si is
-    doit (StkhldrSec sts)     = mkStkhldrSec sts
-    doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs
-    doit Bibliography         = mkBib $ fromMaybe [] mbib
-    doit (GSDSec gs')         = mkGSDSec gs'
-    doit (ReqrmntSec r)       = mkReqrmntSec r
-    doit (LCsSec lc)          = mkLCsSec lc
-    doit (UCsSec ulcs)        = mkUCsSec ulcs
-    doit (TraceabilitySec t)  = mkTraceabilitySec t si
-    doit (AppndxSec a)        = mkAppndxSec a
-    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    delayRenderRefSec :: DocSection -> Either RefSec Section
+    delayRenderRefSec (RefSec rs) = Left rs
+    delayRenderRefSec x           = Right (render x)
+
+    partialRender :: [Either RefSec Section]
+    partialRender = map delayRenderRefSec dd
+
+    nonRefSecs :: [Section]
+    nonRefSecs = rights partialRender
+
+    renderRefSec :: RefSec -> Section
+    renderRefSec rs = mkRefSec si dd rs nonRefSecs
+
+    render :: DocSection -> Section
+    render TableOfContents      = mkToC dd
+    render (IntroSec is)        = mkIntroSec si is
+    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (SSDSec ss)          = mkSSDSec si ss
+    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render Bibliography         = mkBib $ fromMaybe [] mbib
+    render (GSDSec gs')         = mkGSDSec gs'
+    render (ReqrmntSec r)       = mkReqrmntSec r
+    render (LCsSec lc)          = mkLCsSec lc
+    render (UCsSec ulcs)        = mkUCsSec ulcs
+    render (TraceabilitySec t)  = mkTraceabilitySec t si
+    render (AppndxSec a)        = mkAppndxSec a
+    render (OffShelfSolnsSec o) = mkOffShelfSolnSec o
+    render (RefSec _)           = error
+      "mkSections passed `render` a `RefSec` in partial-render phase!"
 
 -- ** Table of Contents
 
@@ -207,27 +229,45 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec :: SmithEtAlSRS -> DocDesc -> RefSec -> [Section] -> Section
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
   where
-    mkSubRef :: System -> RefTab -> Section
-    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef SI {_systemdb = db} (TUnits' con f) =
+    sysNameUID = si ^. sysName . uid
+    db = si ^. systemdb
+
+    mkSubRef :: RefTab -> Section
+    mkSubRef TUnits = mkSubRef $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    mkSubRef SI {_systemdb = cdb} (TSymb con) =
+    mkSubRef (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) db))
                 atStart] []
-    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
+    mkSubRef (TSymb' f con) =
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) db) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations sysNameUID renderedSecs db]
         []
+
+collectDocumentAbbreviations :: UID -> [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations sysNameUID renderedSecs cdb =
+  filter (isJust . shortForm) allTerms
+  where
+    -- Terms found in the document using the list of `Sentence`s extracted from
+    -- the sections.
+    foundInDoc = concatMap (Set.toList . shortdep) $ concatMap getSec renderedSecs
+    -- Terms that could not be found in `Sentence`s, but are important to
+    -- include in the table of abbreviations and acronyms.
+    missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
+      inModel, requirement, thModel, refName, refBy]
+    -- Filter out the system name and duplicates
+    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ [sysNameUID]
+    allTerms = map (termResolve' cdb) filtered
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -249,7 +289,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 -- ** Introduction
 
 -- | Makes the Introduction section into a 'Section'.
-mkIntroSec :: System -> IntroSec -> Section
+mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
   where
@@ -285,28 +325,28 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
 -- ** Specific System Description
 
 -- | Helper for making the Specific System Description section.
-mkSSDSec :: System -> SSDSec -> Section
+mkSSDSec :: SmithEtAlSRS -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
   where
-    mkSubSSD :: System -> SSDSub -> Section
+    mkSubSSD :: SmithEtAlSRS -> SSDSub -> Section
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 -- | Helper for making the Specific System Description Problem section.
-mkSSDProb :: System -> ProblemDescription -> Section
+mkSSDProb :: SmithEtAlSRS -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
 -- | Helper for making the Solution Characteristics Specification section.
-mkSolChSpec :: System -> SolChSpec -> Section
+mkSolChSpec :: SmithEtAlSRS -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. sysName) SSD.imStub] $
     map (mkSubSCS si) l
   where
-    mkSubSCS :: System -> SCSSub -> Section
+    mkSubSCS :: SmithEtAlSRS -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (si' ^. sysName) $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -344,24 +384,24 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs unlikelyChg  c : mkEnumSimpleD c) []
 
 -- | Intro paragraph for likely and unlikely changes
 introChgs :: Idea n => n -> [ConceptInstance] -> Contents
 introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
-introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
-  plural xs, S "to be made to the", phrase Doc.software]
+introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
+  introduceAbbPlrl xs, S "to be made to the", phrase software]
 
 -- ** Traceability
 
 -- | Helper for making the Traceability Matrices and Graphs section.
-mkTraceabilitySec :: TraceabilitySec -> System -> Section
+mkTraceabilitySec :: TraceabilitySec -> SmithEtAlSRS -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (si ^. programName) []
@@ -373,7 +413,7 @@ mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
          || null (header (TM.layoutUIDs cols si) si)) progs
 
 -- | Helper to get headers of rows and columns
-header :: ([UID] -> [UID]) -> System -> [Sentence]
+header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
 header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions

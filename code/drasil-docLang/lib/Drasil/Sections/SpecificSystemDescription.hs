@@ -22,30 +22,31 @@ module Drasil.Sections.SpecificSystemDescription (
   tmStub, ddStub, gdStub, imStub, pdStub
 ) where
 
+-- General Haskell
 import Control.Lens ((^.), over)
 import Data.Maybe
 
--- rest of Drasil
+-- General Drasil
 import Drasil.Database (UID, HasUID(..), showUID)
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
-  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
-  element, general, goalStmt, information, input_, limitation, model, output_,
-  physical, physicalConstraint, physicalSystem, physSyst, problem,
-  problemDescription, propOfCorSol, purpose, quantity, scope,
-  section_, softwareConstraint, solutionCharacteristic, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
-import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
-import Data.Drasil.Concepts.Math (equation, parameter)
-import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import Drasil.Metadata.Documentation (requirement, specification)
-import Drasil.System (System)
-import Language.Drasil hiding (variable)
+import Drasil.System (SmithEtAlSRS)
+import Language.Drasil hiding (variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 
--- local
+-- Vocabulary
+import Drasil.Metadata.Documentation (assumption, column, constraint,
+  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
+  element, general, goalStmt, information, input_, limitation, model, output_,
+  physical, physicalConstraint, physicalSystem, physSyst, problem,
+  problemDescription, propOfCorSol, purpose, quantity, refBy, requirement, scope,
+  sec, section_, softwareConstraint, solutionCharacteristic, specification,
+  symbol_, system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+import Drasil.Metadata.Concepts.Math (equation, parameter)
+import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
+
+-- other docLang
 import Drasil.Document.Contents (enumBulletU, enumSimpleU, foldlSP, foldlSP_)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
@@ -119,7 +120,7 @@ goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP' (the inModel),
   S "that govern", short progName, S "are presented in the" +:+.
-  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec),
+  namedRef instModelSection (titleize inModel +:+ titleize sec),
   D.toSent $ atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
   S "and their derivation is also presented, so that the", plural inModel,
@@ -247,6 +248,7 @@ auxSpecSent :: Sentence
 auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
   namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' inDatumConstraint +:+ titleize table_]
+  -- FIXME: inDataConstTbl is abused to get a table reference label.
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> UID -> Sentence -> LabelledContent
@@ -303,11 +305,11 @@ outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.
 -- Used to find where a particular assumption is referenced.
-helperCI :: ConceptInstance -> System -> ConceptInstance
+helperCI :: ConceptInstance -> SmithEtAlSRS -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS
-    refby sent   = sParen $ S "RefBy:" +:+. sent
+    refby sent   = sParen $ short refBy :+: S ":" +:+. sent
 
 -- | Section stubs for implicit referencing of different models and definitions.
 tmStub, ddStub, gdStub, imStub, pdStub :: Section

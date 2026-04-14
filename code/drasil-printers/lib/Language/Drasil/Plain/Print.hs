@@ -3,7 +3,7 @@ module Language.Drasil.Plain.Print (
   -- * Types
   SingleLine(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
+  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc,
   showHasSymbImpl
 ) where
 
@@ -184,10 +184,6 @@ fenceDocR Curly = text "}"
 fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"
 
--- | Helper for printing Symbols
-showSymb :: Symbol -> String
-showSymb a = render $ symbolDoc a
-
 -- | Helper for printing a HasSymbol in Implementation Stage
 showHasSymbImpl :: L.HasSymbol x => x -> String
-showHasSymbImpl x = showSymb (L.symbol x Implementation)
+showHasSymbImpl x = render $ symbolDoc (L.symbol x Implementation)

@@ -2,24 +2,27 @@
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (
-  getDocDesc, egetDocDesc, getSec,
+  getDocDesc, egetDocDesc,
+  sentencePlate,
+  getSec,
   extractDocBib
 ) where
 
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
+import Data.Maybe (maybeToList)
 import qualified Data.Set as S
 
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Development (lnames)
-import Drasil.System (System, HasSystem(systemdb))
+import Drasil.System (SmithEtAlSRS, systemdb)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
-import Drasil.DocumentLanguage.Core hiding (System)
+import Drasil.DocumentLanguage.Core
+import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -90,7 +93,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> s2 : getSec s1,
+      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -124,7 +127,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     getIntroSub (IPurpose ss) = ss
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = s2 : getSec s1
+    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
@@ -161,7 +164,7 @@ getSecCon (Con c) = extractSents c
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created
 -- during document generation (like those in orgOfDocIntro).
-extractDocBib :: System -> [Section] -> BibRef
+extractDocBib :: SmithEtAlSRS -> [Section] -> BibRef
 extractDocBib si = resolveBibliography (si ^. systemdb) . extractAllSecRefs
   where
     extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

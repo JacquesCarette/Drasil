@@ -4,7 +4,7 @@ import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
@@ -36,7 +36,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
   introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
+import Drasil.SWHS.Concepts (coil, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
@@ -86,14 +86,14 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
-  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA abbreviationsList],
+   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
+   TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
-    , IOrgSec inModel (SRS.inModel [] []) orgDocEnd
+    , IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
     ],
   GSDSec $
     GSDProg
@@ -134,9 +134,9 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-si :: System
-si = mkSystem
-  progName Specification [thulasi]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
+  progName [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
@@ -165,13 +165,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -216,7 +209,7 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 ---------------------------------------
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [D.toSent (atStartNP (the inModel)),
+orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
   D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,

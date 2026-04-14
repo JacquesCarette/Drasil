@@ -10,21 +10,20 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, user, software,
-  refBy, refName, typUnc, example, softwareSys, system, environment,
-  product_, interface, condition, physical, datum, input_, softwareConstraint,
-  output_, endUser, requirement, srs)
+import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
+  assumption, sysCont, user, software, example, softwareSys, system,
+  environment, product_, interface, condition, physical, datum, input_,
+  softwareConstraint, output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon',
-  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
+  rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.Concepts.Theory (inModel)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -58,14 +57,14 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA abbreviationsList
+      , TAandA
       ],
   IntroSec $
     IntroProg justification (phrase progName)
       [ IPurpose $ purpDoc progName Verbose
       , IScope scope
       , IChar [] charsOfReader []
-      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
+      , IOrgSec inModel (SRS.inModel [] []) Nothing],
   GSDSec $
       GSDProg
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
@@ -124,8 +123,8 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
   S "etc.")]
 
-si :: System
-si = mkSystem progName Specification
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
@@ -163,13 +162,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -291,7 +283,3 @@ outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
-
-acronyms :: [CI]
-acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, srs, refBy, refName, thModel, typUnc]

@@ -7,9 +7,9 @@ import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
 import Language.Drasil (MaxWidthPercent)
-import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.HTML.Helpers (img)
 import Numeric (showHex)
+import Language.Drasil.Printing.Helpers (bslash)
 
 data Variation = Class | Id
 
@@ -114,7 +114,7 @@ br :: Doc -> Doc
 br x = text "{" <> x <> text "}"
 
 mkDiv :: String -> Doc -> Doc -> Doc
-mkDiv s a0 a1 = (H.bslash <> text s) <> br a0 <> br a1
+mkDiv s a0 a1 = (bslash <> text s) <> br a0 <> br a1
 
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc

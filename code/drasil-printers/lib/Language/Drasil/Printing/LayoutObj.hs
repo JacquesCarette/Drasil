@@ -3,7 +3,7 @@ module Language.Drasil.Printing.LayoutObj where
 
 import Data.Map (Map)
 
-import Language.Drasil hiding (ListType, Contents, BibRef, Document)
+import Language.Drasil (DType, MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
 import Language.Drasil.Printing.Citation (BibRef)

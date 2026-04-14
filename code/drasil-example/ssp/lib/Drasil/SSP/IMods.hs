@@ -75,10 +75,10 @@ fctSftyDesc = foldlList Comma List [shearRNoIntsl `definedIn'''` resShearWOGD,
   shearFNoIntsl `definedIn'''` mobShearWOGD]
 
 fctSftyDeriv :: Derivation
-fctSftyDeriv = mkDerivNoHeader (weave [fctSftyDerivSentences1, map eS fctSftyDerivEqns1] ++
+fctSftyDeriv = mkDerivNoHeader (weave fctSftyDerivSentences1 (map eS fctSftyDerivEqns1) ++
   map eS [fctSftyDerivEqn10b, fctSftyDerivEqn10c] ++ [fctSftyDerivEllipsis] ++
   map eS [fctSftyDerivEqn10d, fctSftyDerivEqn10e, fctSftyDerivEqn10f] ++
-  weave [fctSftyDerivSentences2, map eS fctSftyDerivEqns2] ++
+  weave fctSftyDerivSentences2 (map eS fctSftyDerivEqns2) ++
   fctSftyDerivSentence20)
 
 fctSftyDerivSentences1 :: [Sentence]
@@ -395,7 +395,7 @@ nrmShrFDesc = nrmShearNum `definedIn'''`
   nrmShrForDen !.)
 
 nrmShrDeriv :: Derivation
-nrmShrDeriv = mkDerivNoHeader (weave [nrmShrDerivationSentences, map eS nrmShrDerivEqns] ++
+nrmShrDeriv = mkDerivNoHeader (weave nrmShrDerivationSentences (map eS nrmShrDerivEqns) ++
   nrmShrDerivSentence5)
 
 nrmShrDerivSentence1 :: [Sentence]
@@ -556,7 +556,7 @@ sliceFsDesc = (foldlList Comma List [shearFNoIntsl `definedIn'''` mobShearWOGD,
   mobShrC `definedIn'''` convertFunc2] !.)
 
 intrSlcDeriv :: Derivation
-intrSlcDeriv = mkDerivNoHeader (weave [intrSlcDerivationSentences, map eS intrSlcDerivEqns] ++ intrSlcDerivSentence3)
+intrSlcDeriv = mkDerivNoHeader (weave intrSlcDerivationSentences (map eS intrSlcDerivEqns) ++ intrSlcDerivSentence3)
 
 intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence1 = [S "This derivation" `S.is` S "identical to the derivation for",

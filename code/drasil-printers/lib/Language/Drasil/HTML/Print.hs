@@ -17,7 +17,9 @@ import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import qualified Language.Drasil as L
+import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
+  rendPersLFM'', special, checkValidStr, DType(..), MaxWidthPercent,
+  CitationKind(..), numList)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
@@ -134,13 +136,13 @@ pSpec (E e)  = em $ pExpr e
 -- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
 -- pSpec (Sy s)    = printMath $ TeX.pUnit s
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Tooltip t s) = spanTag' (pSpec t) (pSpec s)
-pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec (Sp s)    = text $ unPH $ special s
 pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)       = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
@@ -163,7 +165,7 @@ pExpr (Str s)        = doubleQuotes $ text s
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ L.special s
+pExpr (Spec s)       = text $ unPH $ special s
 --pExpr (Gr g)         = unPH $ greek g
 pExpr (Sub e)        = sub $ pExpr e
 pExpr (Sup e)        = sup $ pExpr e
@@ -288,14 +290,14 @@ makeColumns = vcat . map (td . pSpec)
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.).
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
+makeDefn :: DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ table [dtag dt]
   (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
-  where dtag L.General  = "gdefn"
-        dtag L.Instance = "idefn"
-        dtag L.Theory   = "tdefn"
-        dtag L.Data     = "ddefn"
+  where dtag General  = "gdefn"
+        dtag Instance = "idefn"
+        dtag Theory   = "tdefn"
+        dtag Data     = "ddefn"
 
 -- | Helper for making the definition table rows.
 makeDRows :: [(String,[LayoutObj])] -> Doc
@@ -336,7 +338,7 @@ pItem (Nested s l) = vcat [pSpec s, makeList l]
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders figures in HTML.
-makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> MaxWidthPercent -> Doc
 makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
@@ -362,12 +364,12 @@ htmlBibFormatter = BibFormatter {
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: BibFormatter -> Citation -> (Doc, Doc)
-renderCite f (Cite e L.Book cfs)      = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
-renderCite f (Cite e L.Article cfs)   = (text e, renderF cfs (useStyleArtcl f)  <> text (sufxPrint cfs))
-renderCite f (Cite e L.MThesis cfs)   = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
-renderCite f (Cite e L.PhDThesis cfs) = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
-renderCite f (Cite e L.Misc cfs)      = (text e, renderF cfs (useStyleBk    f))
-renderCite f (Cite e _ cfs)           = (text e, renderF cfs (useStyleArtcl f)) --FIXME: Properly render these later.
+renderCite f (Cite e Book cfs)      = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
+renderCite f (Cite e Article cfs)   = (text e, renderF cfs (useStyleArtcl f)  <> text (sufxPrint cfs))
+renderCite f (Cite e MThesis cfs)   = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
+renderCite f (Cite e PhDThesis cfs) = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
+renderCite f (Cite e Misc cfs)      = (text e, renderF cfs (useStyleBk    f))
+renderCite f (Cite e _ cfs)         = (text e, renderF cfs (useStyleArtcl f)) --FIXME: Properly render these later.
 
 -- | Render fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
@@ -465,21 +467,21 @@ bookMLA _ (Month        m) = comm $ text $ show m
 bookMLA f (Type         t) = comm $ spec f t
 
 -- | Cite books in APA format.
-bookAPA :: BibFormatter -> CiteField -> Doc --FIXME: year needs to come after author in L.APA
-bookAPA f (Author   p) = spec f (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
-bookAPA _ (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
---bookAPA _ (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
+bookAPA :: BibFormatter -> CiteField -> Doc --FIXME: year needs to come after author in APA
+bookAPA f (Author   p) = spec f (rendPeople rendPersLFM' p) --L.APA uses initals rather than full name
+bookAPA _ (Year     y) = dot $ text $ paren $ show y --APA puts "()" around the year
+--bookAPA _ (Date _ _ y) = bookAPA (Year y) --LAPA doesn't care about the day or month
 --bookAPA _ (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA _ (Pages    p) = dot $ foldPages p
 bookAPA _ (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
-bookAPA f i = bookMLA f i --Most items are rendered the same as L.MLA
+bookAPA f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- | Cite books in Chicago format.
 bookChicago :: BibFormatter -> CiteField -> Doc
-bookChicago f (Author   p) = spec f (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
+bookChicago f (Author   p) = spec f (rendPeople rendPersLFM'' p) -- APA uses middle initals rather than full name
 bookChicago _ (Pages    p) = dot $ foldPages p
 bookChicago _ (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
-bookChicago f i = bookMLA f i --Most items are rendered the same as L.MLA
+bookChicago f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- for article renderings
 -- | Cite articles in MLA format.
@@ -505,22 +507,22 @@ artclChicago f i = bookChicago f i
 
 -- PEOPLE RENDERING --
 -- | Render a list of people (after applying a given function).
-rendPeople :: (L.Person -> String) -> L.People -> Spec
+rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
 -- | Render a list of people (of form FirstName LastName).
-rendPeople' :: L.People -> Spec
+rendPeople' :: People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
+rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> Doc
-foldPages = text . foldlList . L.numList "&ndash;"
+foldPages = text . foldlList . numList "&ndash;"
 
 -- | Organize a list of people.
-foldPeople :: L.People -> Doc
-foldPeople p = text . foldlList $ map L.nameStr p
+foldPeople :: People -> Doc
+foldPeople p = text . foldlList $ map fullName p
 
 -- | Organize a list of Strings, separated by commas and inserting "and" before the last item.
 foldlList :: [String] -> String
@@ -535,16 +537,12 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
--- | Renders a 'Person' as Last, First Middle.
-rendPers :: L.Person -> String
-rendPers = L.rendPersLFM
-
 -- | Renders a person's last name.
-rendPersL :: L.Person -> String
+rendPersL :: Person -> String
 rendPersL =
-  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPers
+  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPersLFM
 
 -- | adds an 's' if there is more than one person in a list.
-toPlural :: L.People -> String -> String
+toPlural :: People -> String -> String
 toPlural (_:_) str = str ++ "s"
 toPlural _     str = str

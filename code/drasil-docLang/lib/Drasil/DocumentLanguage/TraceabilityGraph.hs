@@ -3,27 +3,33 @@
 module Drasil.DocumentLanguage.TraceabilityGraph
   (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
 
+-- Haskell stuff
+import Control.Lens ((^.))
 import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 
+-- General Drasil
 import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
-import Drasil.System (System, systemdb)
-import Control.Lens ((^.))
+import Drasil.System (SmithEtAlSRS, systemdb)
+import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
+
+-- Vocabulary (from Metadata)
+import Drasil.Metadata.Concepts.Math (graph)
+import Drasil.Metadata.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
+import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
+
+-- from docLang itself, i.e. other Document information
 import Drasil.DocumentLanguage.Definitions (TraceViewCat)
 import Drasil.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
+import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
-import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
-import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
-import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
 
 -- * Main Functions
 
@@ -49,7 +55,7 @@ traceGIntro refs trailings = [ulcc $ Paragraph $ foldlSent
         foldlSent_ (zipWith graphShows refs trailings)]
 
 -- | Extracts traceability graph inforomation from filled-in 'System'.
-mkGraphInfo :: System -> GraphInfo
+mkGraphInfo :: SmithEtAlSRS -> GraphInfo
 mkGraphInfo si = GI {
     assumpNF = mkGraphNodes tvAssumps si "mistyrose"
     , ddNF     = mkGraphNodes tvDataDefns si "paleturquoise1"
@@ -71,7 +77,7 @@ mkGraphInfo si = GI {
 
 -- | Gets the node family of a graph based on the given section
 -- and system information. Also applies a given colour to the node family.
-mkGraphNodes :: TraceViewCat -> System -> String -> NodeFamily
+mkGraphNodes :: TraceViewCat -> SmithEtAlSRS -> String -> NodeFamily
 mkGraphNodes entry si col = NF {nodeUIDs = nodeContents,
   nodeLabels = map (checkUIDRefAdd s) nodeContents, nfLabel = checkNodeContents nodeContents,
   nfColour = col}
@@ -85,7 +91,7 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents,
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
-mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
+mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SmithEtAlSRS -> [(UID, [UID])]
 mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf si) $ traceMReferees colf si
     where
         colf = layoutUIDs cols si
@@ -131,13 +137,13 @@ checkUIDRefAdd s t
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
-traceGHeader :: (System -> [UID]) -> System -> [UID]
+traceGHeader :: (SmithEtAlSRS -> [UID]) -> SmithEtAlSRS -> [UID]
 traceGHeader f c = map (`checkUID` (c ^. systemdb)) $ f c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
 -- This is then used to create the graph edges.
-traceGRowHeader :: ([UID] -> [UID]) -> System -> [UID]
+traceGRowHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [UID]
 traceGRowHeader f = traceGHeader (traceMReferrers f)
 
 -- FIXME: Should take a Reference instead of just a Reference UID

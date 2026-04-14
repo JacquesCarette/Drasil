@@ -9,18 +9,18 @@ import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
+import Drasil.Build.Artifacts (createDirIfMissing)
 import Build.Drasil (genMake)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook),
   ShowTableOfContents, checkToC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
-  genMDBook, makeBook, defaultConfiguration, piSys, PrintingInformation,
+  genMDBook, makeBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
-import Drasil.System (System, refTable, systemdb)
-import Utils.Drasil (createDirIfMissing)
+import Drasil.System (SmithEtAlSRS, refTable, systemdb)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
@@ -29,11 +29,11 @@ import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
 -- | Generate an SRS softifact.
-exportSmithEtAlSrs :: System -> SRSDecl -> String -> IO ()
+exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
-      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational defaultConfiguration
-  dumpEverything syst' printfo ".drasil/"
+      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering
+  dumpEverything syst' ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   genDoc (DocSpec (docChoices [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
@@ -140,7 +140,7 @@ writeDoc' s MDBook doc = genMDBook $ makeProject s doc
 writeDoc' _ _      _   = srsFormatError
 
 -- | Generates traceability graphs as .dot files.
-genDot :: System -> IO ()
+genDot :: SmithEtAlSRS -> IO ()
 genDot si = do
     workingDir <- getCurrentDirectory
     let gi = mkGraphInfo si

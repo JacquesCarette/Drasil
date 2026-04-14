@@ -43,7 +43,7 @@ rectVelQD = mkQuantDef' projSpeed
 
 rectVelDeriv :: Derivation
 rectVelDeriv = mkDerivName (phrase rectVel)
-               (weave [rectVelDerivSents, rectVelDerivEqns])
+               (weave rectVelDerivSents rectVelDerivEqns)
 
 rectVelDerivSents :: [Sentence]
 rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
@@ -67,7 +67,7 @@ rectPosQD = mkQuantDef' projPos
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
-               (weave [rectPosDerivSents, rectPosDerivEqns])
+               (weave rectPosDerivSents rectPosDerivEqns)
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,

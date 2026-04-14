@@ -10,6 +10,9 @@ import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
+import Drasil.Build.Artifacts (FileAndContents)
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 import Language.Drasil hiding (List)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   getDoxOutput, getSoftwareDossierFiles, HasChoices(..))
@@ -19,17 +22,13 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
+import Drasil.Metadata (watermark)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
-
-import Utils.Drasil.FileData (FileAndContents)
-import Drasil.Metadata (watermark)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
 -- Doxygen comments. If the user did not choose 'CommentMod' but did choose
@@ -42,7 +41,7 @@ genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] ->
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map name (codeSpec g ^. authorsO )
+  let as = map fullName (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = OO.docMod desc watermark as (g ^. date)
@@ -179,7 +178,7 @@ genModuleWithImportsProc :: (ProcProg r) => Name -> Description -> [Import] ->
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map name (codeSpec g ^. authorsO )
+  let as = map fullName (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = Proc.docMod desc watermark as (g ^. date)
               | CommentFunc `elem` g ^. commented && not (null ms) = Proc.docMod "" watermark [] ""

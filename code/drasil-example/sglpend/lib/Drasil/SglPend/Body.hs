@@ -11,7 +11,7 @@ import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
@@ -27,7 +27,6 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
 import qualified Drasil.DblPend.Body as DPD (tMods)
 import Drasil.DblPend.Concepts (concepts, rod)
 import Drasil.DblPend.Requirements (nonFuncReqs)
-import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)
@@ -47,14 +46,14 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -87,8 +86,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   Bibliography                    -- Adds reference section
   ]
 
-si :: System
-si = mkSystem progName Specification [olu]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints []
@@ -111,13 +110,6 @@ conceptChunks =
   gravitationalConst, gravity, rigidBody, weight, shm] ++
   -- Unital Chunks
   [cw len]
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  map nw acronyms ++
-  -- QuantityDicts
-  map nw symbols
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] (map (^. output) iMods ++ symbols) ideaDicts

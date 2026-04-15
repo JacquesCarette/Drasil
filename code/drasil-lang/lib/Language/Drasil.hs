@@ -89,8 +89,6 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
-  -- Language.Drasil.Chunk.Unitary
-  , unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdQd, dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
@@ -337,4 +335,3 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit))
-import Language.Drasil.Chunk.Unitary (unit_symb)

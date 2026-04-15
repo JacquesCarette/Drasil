@@ -80,8 +80,8 @@ si = mkSmithEtAlICO
   progName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
-  inputs outputs (map cnstrw' inpConstrained)
-  pidConstants symbMap allRefs
+  inputs outputs (map cnstrw' inpConstrained) pidConstants
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -131,7 +131,10 @@ symbMap = withCommonKnowledge []
   theoreticalModels
   conceptInstances
   citations
-  (labelledContent ++ funcReqsTables)
+  labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

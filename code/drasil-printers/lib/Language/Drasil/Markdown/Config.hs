@@ -8,10 +8,9 @@ import System.FilePath (takeFileName)
 
 import Language.Drasil (Document(Document), LabelledContent(LblC, _ctype),
   RawContent(Figure), Sentence)
-import Drasil.Database.SearchTools (findAllLabelledContent)
 
 import Language.Drasil.Markdown.Print (pSpec)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, lbldCntnt)
 import Language.Drasil.Printing.Import.Sentence (spec)
 import Language.Drasil.Printing.LayoutObj (Filepath)
 
@@ -42,7 +41,7 @@ mkTitle sm t = text "\"" <> pSpec mempty (spec sm t) <> text "\""
 assetMat :: PrintingInformation -> [[Filepath]]
 assetMat pinfo =
   [[fp, "src/assets/" ++ takeFileName fp]
-    | LblC { _ctype = Figure _ fp _ _ } <- findAllLabelledContent (pinfo ^. sysdb)]
+    | LblC { _ctype = Figure _ fp _ _ } <- pinfo ^. lbldCntnt]
 
 -- | Creates a CSV file as a 'Doc' from a 'String' matrix.
 makeCSV :: [[String]] -> Doc

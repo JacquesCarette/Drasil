@@ -23,7 +23,7 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, Notation (Scientific))
 import Language.Drasil.Printing.Import (spec)
-import Drasil.System
+import Drasil.System (refTable, HasSystemMeta(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -101,7 +101,7 @@ generator l dt sd chs cs = let
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation Scientific
+  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation Scientific []
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""

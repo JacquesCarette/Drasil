@@ -24,11 +24,12 @@ import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept, Reference, People, CI,
-  Constrained, ConstQDef, abrv)
+  Constrained, ConstQDef, abrv, LabelledContent)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Utils.Drasil (toPlainName)
 
-import Drasil.System.Core
+import Drasil.System.Core (SystemMeta, Background, HasSystemMeta(..),
+  mkSystemMeta, Motivation, Purpose, Scope)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -46,6 +47,12 @@ data SmithEtAlSRS where
   , _outputs      :: [i]
   , _constraints  :: [j]
   , _constants    :: [ConstQDef]
+  -- FIXME: This is a list of all labelled content required for the SRS to be
+  -- generated. In particular, this is needed for the mdBook generator which
+  -- _must_ export a CSV containing a list of all external resources that the
+  -- mdBook compiler is allowed to access. This list should be re-written as
+  -- part of a stateful renderer for the SRS instead.
+  , _lbldCntnt    :: [LabelledContent]
   -- FIXME: Hacks to be removed once 'Reference's are rebuilt.
   , _refTable     :: M.Map UID Reference
   , _refbyTable   :: M.Map UID [UID]
@@ -63,11 +70,11 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   HasUID j, Constrained j) =>
   CI -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> [Reference] ->
+    [h] -> [i] -> [j] -> [ConstQDef] -> [LabelledContent] -> ChunkDB -> [Reference] ->
     SmithEtAlSRS
-mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds db refs
+mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds lcs db refs
   = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
-      cqds refsMap mempty mempty
+      cqds lcs refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
     progName = toPlainName $ filter (not . isSpace) $ abrv nm

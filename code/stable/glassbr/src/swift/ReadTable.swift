@@ -104,7 +104,7 @@ func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inou
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
     var goolContents: [[String]]
     do {
-        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile, encoding: .utf8).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }

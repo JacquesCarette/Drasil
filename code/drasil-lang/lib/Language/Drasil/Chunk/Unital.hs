@@ -13,7 +13,6 @@ import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.Concept (dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
-import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Symbol (Symbol, HasSymbol(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity)
@@ -57,8 +56,6 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 -- | 'UnitalChunk's have a 'Quantity'.
 instance Quantity      UnitalChunk where
--- | Finds the unit definition of a 'UnitalChunk'.
-instance Unitary       UnitalChunk where unit = view uni
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Finds the units used to make the 'UnitalChunk'.

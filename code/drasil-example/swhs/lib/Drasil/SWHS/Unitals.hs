@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect, area)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time)
 import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
@@ -32,8 +32,8 @@ symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 -- Symbols with Units --
 
 units :: [UnitalChunk]
-units = map ucw [sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
-  vol, density] ++ map ucw [mass, time] -- ++ [tankLength, diam, coilSA]
+units = [surArea, area, sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
+  vol, density, mass, time]
 
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = units ++ [inSA, outSA, htCapL, htCapS, htCapV,

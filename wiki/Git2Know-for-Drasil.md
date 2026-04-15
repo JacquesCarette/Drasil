@@ -5,7 +5,8 @@
 
 </summary>
 
-1. [Working with `git`](#working-with-git)
+1. [What is `git`?](#what-is-git)
+2. [Working with `git`](#working-with-git)
    1. [Cloning A Repository](#cloning-a-repository)
    2. [Local \& remote Branch](#local--remote-branch)
    3. [Commits](#commits)
@@ -27,11 +28,13 @@
 
 </details>
 
-# Working with `git`
+# What is `git`?
 
-`git` is a software for tracking changes in any set of files, usually used for coordinating work among programmers collaboratively developing source code during software development (Credit: [Wikipedia](https://en.wikipedia.org/wiki/Git)). This guide will walk through some common steps that contributors will need to know involving `git`.
+`git` is a distributed [version control system](https://en.wikipedia.org/wiki/Version_control) commonly used for software development. `git` is used to share a set of files while keeping information about who made changes, when they were made, and why they were made (through user-provided explanations). This guide will walk through some common `git` commands and problems that contributors will need to know. However, it will not teach you the inner workings of `git` nor is it a substitute for more in-depth resources. If you are new to `git`, you may enjoy reading the [Pro Git](https://git-scm.com/book/en/v2) book (recommended resource). Alternatively, you might first find GitHub's introduction [video](https://www.youtube.com/watch?v=r8jQ9hVA2qs) and [blog post](https://github.blog/developer-skills/programming-languages-and-frameworks/what-is-git-our-beginners-guide-to-version-control/) enjoyable.
 
 If you haven't already installed `git`, you should make sure to install and configure it following the [New Workspace Setup](New-Workspace-Setup#git) guide.
+
+# Working with `git`
 
 ## Cloning A Repository
 

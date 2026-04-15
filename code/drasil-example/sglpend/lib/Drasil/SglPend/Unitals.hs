@@ -19,7 +19,7 @@ import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless
+symbols = map dqdWr unitalChunks ++ unitless ++ inputs ++ outputs
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
@@ -27,11 +27,8 @@ inputs = map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, in
 outputs :: [DefinedQuantityDict]
 outputs = [dqdWr pendDisplacementAngle]
 
-units :: [UnitalChunk]
-units = map ucw unitalChunks
-
 unitalChunks :: [UnitalChunk]
-unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
+unitalChunks = [QPP.len, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, initialPendAngle,

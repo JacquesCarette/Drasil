@@ -18,7 +18,6 @@ import Data.Drasil.Concepts.Math (mathcon')
 import Data.Drasil.Concepts.Physics (physicCon', motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
-import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
@@ -107,9 +106,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] ++
-  -- Unital Chunks
-  [cw len]
+  gravitationalConst, gravity, rigidBody, weight, shm]
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols

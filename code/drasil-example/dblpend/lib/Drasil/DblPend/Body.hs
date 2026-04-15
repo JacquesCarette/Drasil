@@ -27,7 +27,6 @@ import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
@@ -120,11 +119,8 @@ ideaDicts =
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++
-  -- UnitalChunks
-  [cw len]
+  gravitationalConst, gravity]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks []

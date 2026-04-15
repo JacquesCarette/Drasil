@@ -15,7 +15,7 @@ import Data.Maybe (mapMaybe)
 
 import Drasil.Database (HasUID(..))
 import Language.Drasil
-import Drasil.System
+import Drasil.System (purpose)
 import Utils.Drasil (stringList)
 
 import Drasil.Code.CodeVar (CodeIdea(..))

@@ -5,7 +5,7 @@ module Drasil.Website.CaseStudy where
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Code hiding (CS)
-import Drasil.System
+import Drasil.System (SmithEtAlSRS)
 import Drasil.Generator (codedDirName)
 import Drasil.GOOL (CodeType(..))
 

@@ -89,7 +89,7 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
-  inputSymbols outputSymbols inputConstraints []
+  inputSymbols outputSymbols inputConstraints [] symbols
   labelledContent symbMap allRefs
 
 purp :: Sentence

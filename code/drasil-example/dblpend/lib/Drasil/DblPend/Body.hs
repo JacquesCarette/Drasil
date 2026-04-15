@@ -95,8 +95,7 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs inConstraints
-  constants
+  inputs outputs inConstraints constants symbols
   labelledContent' symbMap allRefs
 
 purp :: Sentence

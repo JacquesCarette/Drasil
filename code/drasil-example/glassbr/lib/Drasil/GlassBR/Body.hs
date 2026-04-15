@@ -56,7 +56,7 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName
   [nikitha, spencerSmith] [purp] [background] [scope] []
   tMods [] GB.dataDefs iMods
-  inputs outputs constrained constants
+  inputs outputs constrained constants symbolsWCodeSymbols
   labCon
   symbMap
   allRefs

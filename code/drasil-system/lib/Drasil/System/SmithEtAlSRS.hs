@@ -24,7 +24,7 @@ import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept, Reference, People, CI,
-  Constrained, ConstQDef, abrv, LabelledContent)
+  Constrained, ConstQDef, abrv, LabelledContent, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Utils.Drasil (toPlainName)
 
@@ -47,6 +47,10 @@ data SmithEtAlSRS where
   , _outputs      :: [i]
   , _constraints  :: [j]
   , _constants    :: [ConstQDef]
+  -- FIXME: This is a list of all 'quantites' (variables) used/referenced in an
+  -- SRS. Why is this here? For type-checking the SRS later. Should
+  -- type-checking be done on the SRS level? No. This is a temporary hack.
+  , _quantities   :: [DefinedQuantityDict]
   -- FIXME: This is a list of all labelled content required for the SRS to be
   -- generated. In particular, this is needed for the mdBook generator which
   -- _must_ export a CSV containing a list of all external resources that the
@@ -70,11 +74,11 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   HasUID j, Constrained j) =>
   CI -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [h] -> [i] -> [j] -> [ConstQDef] -> [LabelledContent] -> ChunkDB -> [Reference] ->
-    SmithEtAlSRS
-mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds lcs db refs
+    [h] -> [i] -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
+    [LabelledContent] -> ChunkDB -> [Reference] -> SmithEtAlSRS
+mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs lcs db refs
   = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
-      cqds lcs refsMap mempty mempty
+      cqds qs lcs refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
     progName = toPlainName $ filter (not . isSpace) $ abrv nm

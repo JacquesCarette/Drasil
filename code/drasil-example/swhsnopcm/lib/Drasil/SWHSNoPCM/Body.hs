@@ -67,8 +67,9 @@ symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
   map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr outputs
 
 concepts :: [UnitalChunk]
-concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
-  htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW]
+concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
+  htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW,
+  surArea, area]
 
 symbolConcepts :: [UnitalChunk]
 symbolConcepts = map ucw [density, mass, time, vol,
@@ -158,9 +159,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
-  meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure] ++
-  -- DefinedQuantityDicts
-  map cw [surArea, area]
+  meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] NoPCM.dataDefs

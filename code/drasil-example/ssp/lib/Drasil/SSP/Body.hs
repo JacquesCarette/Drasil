@@ -26,7 +26,6 @@ import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
-import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
   strain, stress, time, twoD, physicCon', distance, friction, linear, velocity, position, threeD)
 import Data.Drasil.Concepts.Software (program, softwarecon)
@@ -134,11 +133,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   defs' ++ softwarecon ++ solidcon ++ physicalcon ++
-  [distance, friction, linear, velocity, gravity, stress, fbd, position] ++
-  -- DefinedQuantityDicts
-  [cw len] ++
-  -- UnitalChunks
-  map cw [time, surface]
+  [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [degree]

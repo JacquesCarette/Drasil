@@ -83,7 +83,7 @@ ideaDicts =
   [nw progName]
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [] :: [ConceptChunk]
+conceptChunks = []
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []

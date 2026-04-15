@@ -21,16 +21,16 @@ import Data.Drasil.Concepts.Math (cartesian, xCoord, xDir, yCoord, yDir,
   zCoord, zDir)
 import Data.Drasil.Concepts.Physics (gravity)
 
-import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
+import Data.Drasil.Quantities.Math (area, pi_, unitVectj, surface)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
-  vol)
+  vol, len)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ,
-  supMax, supMin, torque, weight, positionVec)
+  supMax, supMin, torque, weight, positionVec, time)
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
-  ++ map dqdWr units ++ map dqdWr unitless
+  ++ map dqdWr units ++ unitless
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -201,7 +201,8 @@ units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
   porePressure, sliceHght, sliceHghtW, fx, fy, fn, ft, nrmForceSum, watForceSum,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totNormStress, tangStress,
-  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec]
+  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec,
+  time, surface, len]
 
 accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT,

@@ -24,7 +24,7 @@ import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
 import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
-  , UnitalChunk , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
+  , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
   , HasShortName(..) , short, atStart, titleize, phrase, plural , Section , ItemType(..), ListType(Bullet)
   , ModelExpr , refS, namedRef
   , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
@@ -43,7 +43,7 @@ eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
 eqnWSource a b = eS a +:+ sParen (refS b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
-fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+fromReplace :: (Referable r, HasShortName r, Quantity q) => r -> q -> Sentence
 fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
 
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".

@@ -13,7 +13,7 @@ import Control.Lens((^.))
 -- Generic Drasil
 import Language.Drasil hiding (sec)
 import Drasil.Database (HasUID(..), findAll)
-import Drasil.System
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), systemdb)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,

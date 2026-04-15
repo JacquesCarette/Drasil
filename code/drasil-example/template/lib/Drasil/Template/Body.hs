@@ -75,8 +75,7 @@ si = mkSmithEtAlICO
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
-  symbMap
-  []
+  [] symbMap []
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

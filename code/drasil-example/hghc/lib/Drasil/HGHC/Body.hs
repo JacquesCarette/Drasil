@@ -18,7 +18,7 @@ si = mkSmithEtAlICO
   [purp] [] [] []
   [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) []
-  symbMap []
+  [] symbMap []
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension String: Error {}
+extension String: @retroactive Error {}
 
 /** Structure for holding the input values and constant values
 */

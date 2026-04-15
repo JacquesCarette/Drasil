@@ -878,7 +878,8 @@ swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
   swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError,
   swiftDocDir, swiftUTF8Enc, swiftUserMask, swiftInOutArg, swiftNamedArgSep,
-  swiftTypeSpec, swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
+  swiftTypeSpec, swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap',
+  swiftRetroactive :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
 swiftFirst = text "first"
@@ -902,6 +903,7 @@ swiftConforms = colon
 swiftNoLabel = text "_"
 swiftRetType' = text swiftRetType
 swiftUnwrap' = text swiftUnwrap
+swiftRetroactive = text "@retroactive"
 
 swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine,
@@ -1246,7 +1248,8 @@ swiftStringError = do
   str <- zoom lensMStoVS (string :: VSType SwiftCode)
   if tu && not errdef then do
     modify setErrorDefined
-    pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftError <+> bodyStart <> bodyEnd)
+    pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftRetroactive
+      <+> swiftError <+> bodyStart <> bodyEnd)
   else pure empty
 
 swiftClassDoc :: ClassDocRenderer

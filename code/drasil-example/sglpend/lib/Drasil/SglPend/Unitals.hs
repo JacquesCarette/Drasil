@@ -27,9 +27,6 @@ inputs = map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, in
 outputs :: [DefinedQuantityDict]
 outputs = [dqdWr pendDisplacementAngle]
 
-units :: [UnitalChunk]
-units = map ucw unitalChunks
-
 unitalChunks :: [UnitalChunk]
 unitalChunks = [QPP.len, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,

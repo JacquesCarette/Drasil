@@ -192,7 +192,7 @@ coords = constrainedNRV' (uc' "(x,y)" (cn "cartesian position coordinates")
 ---------------------------
 
 units :: [UnitalChunk]
-units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
+units = [accel, genericMass, genericF, genericA, genericM, genericV,
   genericW, genericSpWght, gravAccel, dens, genericH, genericP, genericR,
   genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords,
   slipDist, mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl,

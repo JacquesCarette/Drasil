@@ -29,7 +29,7 @@ defSymbols :: [DefinedQuantityDict]
 defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints
 
 unitSymbs :: [UnitalChunk]
-unitSymbs = map ucw [iVect, jVect, normalVect,
+unitSymbs = [iVect, jVect, normalVect,
   force_1, force_2, forcej, mass_1, mass_2,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel,

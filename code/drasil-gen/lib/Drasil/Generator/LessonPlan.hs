@@ -20,7 +20,7 @@ import Drasil.System (LessonPlan, lsnPlanRefs, systemdb, LessonPlan)
 exportLessonPlan :: LessonPlan -> LsnDesc -> String -> IO ()
 exportLessonPlan plan nbDecl lsnFileName = do
   let nb = mkNb plan nbDecl S.forT
-      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
+      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering []
       dir = "Lesson/"
       fn  = lsnFileName ++ ".ipynb"
       pd  = makeDocument printSetting nb

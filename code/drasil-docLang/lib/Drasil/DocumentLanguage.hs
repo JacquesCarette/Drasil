@@ -23,7 +23,7 @@ import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts, findAllLabelledContent,
+import Drasil.Database.SearchTools (findAllConcInsts,
   TermAbbr, shortForm, termResolve')
 
 import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
@@ -127,7 +127,8 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
-    in set systemdb (insertAll tglcs db)
+    in set lbldCntnt (si ^. lbldCntnt ++ tglcs)
+     $ set systemdb (insertAll tglcs db)
      $ set traceTable tdb
      $ set refbyTable (invert tdb) si
   | otherwise = si
@@ -150,8 +151,8 @@ fillReferences allSections cites si = si2
     gdefs   = si ^. genDefns
     imods   = si ^. instModels
     tmods   = si ^. theoryModels
+    lblCon  = si ^. lbldCntnt
     concIns = findAllConcInsts chkdb
-    lblCon  = findAllLabelledContent chkdb
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete

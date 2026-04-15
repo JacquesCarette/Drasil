@@ -62,7 +62,7 @@ si = mkSmithEtAlICO
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
   inputs outputs constrained specParamValList
-  symbMap allRefs
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -90,7 +90,10 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
-  insModel genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
+  insModel genDefs tMods concIns citations labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

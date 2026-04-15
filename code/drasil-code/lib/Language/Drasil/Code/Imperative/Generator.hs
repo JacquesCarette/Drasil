@@ -101,7 +101,7 @@ generator l dt sd chs cs = let
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation Scientific
+  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation Scientific []
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""

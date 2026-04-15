@@ -18,7 +18,7 @@ import Drasil.Generator.Formats (Filename)
 -- | Generate a "website" (HTML file) softifact.
 exportWebsite :: DrasilWebsite -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
-  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering
+  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering []
       dir = "Website/HTML"
       pd = makeDocument printSetting doc
 

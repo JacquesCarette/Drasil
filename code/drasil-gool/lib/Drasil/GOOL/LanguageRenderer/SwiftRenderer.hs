@@ -877,8 +877,8 @@ swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
   swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError,
-  swiftDocDir, swiftUserMask, swiftInOutArg, swiftNamedArgSep, swiftTypeSpec,
-  swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
+  swiftDocDir, swiftUTF8Enc, swiftUserMask, swiftInOutArg, swiftNamedArgSep,
+  swiftTypeSpec, swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
 swiftFirst = text "first"
@@ -893,6 +893,7 @@ swiftExtension = text "extension"
 swiftInOut = text "inout"
 swiftError = text "Error"
 swiftDocDir = text $ "" `access` "documentDirectory"
+swiftUTF8Enc = text $ "" `access` "utf8"
 swiftUserMask = text $ "" `access` "userDomainMask"
 swiftNamedArgSep = colon <> space
 swiftInOutArg = text "&"
@@ -1028,8 +1029,12 @@ swiftReadLineFunc :: (CommonRenderSym r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc :: (CommonRenderSym r) => SValue r -> SValue r
-swiftReadFileFunc v = let contentsArg = var swiftContentsOf infile
-  in swiftTryVal $ funcAppNamedArgs CP.stringRender' string [(contentsArg, v)]
+swiftReadFileFunc v = swiftTryVal $
+  funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]
+  where
+    encVal = mkStateVal string swiftUTF8Enc
+    contentsArg = (var swiftContentsOf infile, v)
+    encodingArg = (var "encoding" string, encVal)
 
 swiftSplitFunc :: (OORenderSym r) => Char -> SValue r -> SValue r
 swiftSplitFunc d s = let sepArg = var swiftSepBy char

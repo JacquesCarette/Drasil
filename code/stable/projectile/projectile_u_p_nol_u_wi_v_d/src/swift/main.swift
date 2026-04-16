@@ -52,7 +52,7 @@ func get_input(_ filename: String) throws -> (Double, Double, Double) {
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
     var goolContents: [[String]]
     do {
-        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile, encoding: .utf8).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }

@@ -154,6 +154,16 @@ Many potential simple physics problems are given at: [My Physics Lab](https://ww
 Another great place for Physics is [Dyna-Kinematics](https://github.com/diegomacario/Dyna-Kinematics),
 which also has very pretty animations. Would make a good showcase.
 
+## Jupyter Notebooks: Appropriate Use, Refactoring, and Building an Example
+
+_See [#3019](https://github.com/JacquesCarette/Drasil/issues/3019) for more details._
+
+Jupyter notebooks are used for larger software than they are really suited to. When people use notebooks for writing a more complicated program, especially when they are defining their own functions, or including testing and verification steps, quickly lose their focus. A Jupyter notebook is only easy to follow if all the sections follow a nice easy to see sequence. Jupyter notebooks are best when used as a _higher-level view_ of the important parts of a program, using high-level function calls to abstract away non-problem-essential details as much as possible. 
+
+The [projectile motion lesson plan](https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile/projectileLesson) is a great example of a simple, self-contained example of appropriate Jupyter notebook usage. The [3d reconstruction of the aorta](https://github.com/smiths/GeomRecon/blob/master/People/Kailin/src/circle-method.ipynb) project is not (This is a private repo, so the link will only work if the person clicking has been added to the repo.). We used this example to explore the problem, but it is really awkward for "production" software. The goal of this project would be to use Jupyter notebooks _appropriately_, whether it be reusing our current case studies to create interactive views of physics problems or to recreate past projects (such as the aorta).
+
+See [Soorgeon](https://github.com/ploomber/soorgeon) and [Ploomber](https://ploomber.io/) (both now archived projects). The Aorta notebook does fall into some of the pipelines steps that Ploomber uses, like loading data, and something like cleaning the data. We might be able to use it to explore Soorgeon and Ploomber.
+
 ## Automatic Check for Completeness, Correctness, and Consistency
 
 If information is missing, Drasil should inform the user.  The following
@@ -380,8 +390,3 @@ Currently, Drasil has a home-grown 'units' handling module. This project would i
 * Add interface
 
 The issue can be reopened and assigned once the project is taken on.
-
-
-
-
-

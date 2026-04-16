@@ -1,6 +1,6 @@
 import Foundation
 
-extension String: Error {}
+extension String: @retroactive Error {}
 
 var fileToWrite: FileHandle
 do {
@@ -45,7 +45,7 @@ var fileToRead: URL
 fileToRead = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("testText.txt")
 var goolContents: [[String]]
 do {
-    goolContents = try String(contentsOf: fileToRead).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+    goolContents = try String(contentsOf: fileToRead, encoding: .utf8).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
 } catch {
     throw "Error reading from file."
 }

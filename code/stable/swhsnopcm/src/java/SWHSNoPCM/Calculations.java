@@ -50,8 +50,8 @@ public class Calculations {
         \param tau_W ODE parameter for water related to decay time (s)
         \return temperature of the water (degreeC)
     */
-    public static ArrayList<Double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
-        ArrayList<Double> T_W;
+    public static ArrayList<ArrayList<Double>> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W) {
+        ArrayList<ArrayList<Double>> T_W;
         ODEStepHandler stepHandler = new ODEStepHandler();
         ODE ode = new ODE(tau_W, T_C);
         double[] curr_vals = {T_init};

@@ -46,6 +46,6 @@ double func_tau_W(double C_W, double h_C, double A_C, double m_W);
     \param tau_W ODE parameter for water related to decay time (s)
     \return temperature of the water (degreeC)
 */
-vector<double> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W);
+vector<vector<double>> func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W);
 
 #endif

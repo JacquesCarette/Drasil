@@ -279,16 +279,16 @@ assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
   (_,_) -> error "Fill for assignSolFromObj should provide one CodeChunk and no Exprs")
 
 -- | Specifies a statement where a solution list is initialized with the first
---   element of an array.
+--   value of an array.
 initSolListFromArray :: CodeVarChunk -> Step
 initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[]) -> FAsg s (matrix [[idx (sy a) (int 0)]])
+  ([s],[]) -> FAsg s (matrix [[sy a]])
   (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
 
--- | Specifies a statement where a solution list is initialized with the first value.
+-- | Specifies a statement where a solution list is initialized with the given value.
 initSolListWithVal :: Step
 initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[v]) -> FDecDef s (matrix [[idx v (int 0)]])
+  ([s],[v]) -> FDecDef s (matrix [[v]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
 -- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object,
@@ -310,7 +310,7 @@ returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
 
 -- | A statement where a current solution is appended to a solution list.
 appendCurrSolFS :: CodeExpr -> CodeVarChunk -> FuncStmt
-appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
+appendCurrSolFS cs s = FAppend (sy s) cs
 
 -- | Specifies a use-case-independent statement that returns a fixed value.
 fixedReturn :: CodeExpr -> Step

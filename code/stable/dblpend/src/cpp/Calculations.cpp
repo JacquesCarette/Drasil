@@ -10,8 +10,8 @@
 
 using std::vector;
 
-vector<double> func_theta(double m_1, double m_2, double L_2, double L_1) {
-    vector<double> theta;
+vector<vector<double>> func_theta(double m_1, double m_2, double L_2, double L_1) {
+    vector<vector<double>> theta;
     ODE ode = ODE(m_1, m_2, L_1, L_2);
     vector<double> currVals{1.3463968515384828, 0.0, 2.356194490192345, 0.0};
     Populate pop = Populate(theta);

@@ -21,6 +21,6 @@ using std::vector;
     \param L_1 length of the first rod (m)
     \return dependent variables (rad)
 */
-vector<double> func_theta(double m_1, double m_2, double L_2, double L_1);
+vector<vector<double>> func_theta(double m_1, double m_2, double L_2, double L_1);
 
 #endif

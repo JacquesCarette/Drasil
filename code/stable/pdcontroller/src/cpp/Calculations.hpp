@@ -23,6 +23,6 @@ using std::vector;
     \param t_step Step Time (s)
     \return Process Variable
 */
-vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step);
+vector<vector<double>> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step);
 
 #endif

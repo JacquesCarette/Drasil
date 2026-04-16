@@ -20,7 +20,7 @@ public class Control {
         double t_sim;
         InputParameters.get_input(filename, out r_t, out K_d, out K_p, out t_step, out t_sim);
         InputParameters.input_constraints(r_t, K_d, K_p, t_step, t_sim);
-        List<double> y_t = Calculations.func_y_t(K_d, K_p, r_t, t_sim, t_step);
+        List<List<double>> y_t = Calculations.func_y_t(K_d, K_p, r_t, t_sim, t_step);
         OutputFormat.write_output(y_t);
     }
 }

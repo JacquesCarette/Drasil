@@ -19,7 +19,7 @@ public class Control {
         double m_2;
         InputParameters.get_input(filename, out L_1, out L_2, out m_1, out m_2);
         InputParameters.input_constraints(L_1, L_2, m_1, m_2);
-        List<double> theta = Calculations.func_theta(m_1, m_2, L_2, L_1);
+        List<List<double>> theta = Calculations.func_theta(m_1, m_2, L_2, L_1);
         OutputFormat.write_output(theta);
     }
 }

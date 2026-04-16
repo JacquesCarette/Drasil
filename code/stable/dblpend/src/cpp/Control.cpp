@@ -27,7 +27,7 @@ int main(int argc, const char *argv[]) {
     double m_2;
     get_input(filename, L_1, L_2, m_1, m_2);
     input_constraints(L_1, L_2, m_1, m_2);
-    vector<double> theta = func_theta(m_1, m_2, L_2, L_1);
+    vector<vector<double>> theta = func_theta(m_1, m_2, L_2, L_1);
     write_output(theta);
     
     return 0;

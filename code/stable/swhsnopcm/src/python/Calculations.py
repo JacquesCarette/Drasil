@@ -43,9 +43,9 @@ def func_T_W(T_C, T_init, t_final, A_tol, R_tol, t_step, tau_W):
     r = scipy.integrate.ode(f)
     r.set_integrator("dopri5", atol=A_tol, rtol=R_tol)
     r.set_initial_value([T_init], 0.0)
-    T_W = [[T_init][0]]
+    T_W = [[T_init]]
     while r.successful() and r.t < t_final:
         r.integrate(r.t + t_step)
-        T_W.append(r.y[0])
+        T_W.append(r.y.tolist())
     
     return T_W

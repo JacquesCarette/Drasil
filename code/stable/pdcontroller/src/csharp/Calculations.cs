@@ -18,8 +18,8 @@ public class Calculations {
         \param t_step Step Time (s)
         \return Process Variable
     */
-    public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
-        List<double> y_t;
+    public static List<List<double>> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+        List<List<double>> y_t;
         Func<double, Vector, Vector> f = (t, y_t_vec) => {
             return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
         };
@@ -30,9 +30,13 @@ public class Calculations {
         Vector initv = new Vector(new double[] {0.0, 0.0});
         IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
         IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
-        y_t = new List<double> {};
+        y_t = new List<List<double>> {};
         foreach (SolPoint sp in points) {
-            y_t.Add(sp.X[0]);
+            List<double> xTemp = new List<double>(0);
+            for (int i = 0; i < 2; i += 1) {
+                xTemp.Add(sp.X[i]);
+            }
+            y_t.Add(xTemp);
         }
         
         return y_t;

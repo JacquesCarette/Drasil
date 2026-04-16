@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension String: Error {}
+extension String: @retroactive Error {}
 
 /** Calculates flight duration (s)
     - Parameter v_launch: launch speed (m/s)

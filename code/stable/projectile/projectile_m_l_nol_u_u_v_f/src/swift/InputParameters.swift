@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension String: Error {}
+extension String: @retroactive Error {}
 
 /** Reads input from a file with the given file name
     - Parameter filename: name of the input file

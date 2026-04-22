@@ -28,11 +28,12 @@ import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
 import VectorTest (vectorTestOO, vectorTestProc)
+import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 
--- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- | Renders six GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
-main :: IO()
+main :: IO ()
 main = do
   workingDir <- getCurrentDirectory
   createDirIfMissing False "java"
@@ -78,9 +79,9 @@ classes unRepr unRepr' = zipWith
                 fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
                                         (gs' ^. mainMod)
   in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
-  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
+  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, ooVector, nameGenTestOO]
   (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
-    fileTestsOO, vectorTestOO, nameGenTestOO])
+    fileTestsOO, vectorTestOO, ooVector, nameGenTestOO])
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->

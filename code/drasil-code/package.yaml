@@ -50,14 +50,6 @@ executables:
   codegenTest:
     main: Main
     source-dirs: test
-    other-modules:
-    - FileTests
-    - HelloWorld
-    - Helper
-    - GOOL.Observer
-    - GOOL.PatternTest
-    - VectorTest
-    - NameGenTest
     ghc-options:
     - -threaded
     - -O2

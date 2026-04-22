@@ -83,7 +83,11 @@ Unlike typical software projects, however, Drasil's generated software artifacts
 
 ## Guidelines
 
-In this section, we will discuss the guidelines regarding contributing to Drasil, including [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
+In this section, we will discuss the guidelines regarding contributing to Drasil, including [conduct](#conduct), [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
+
+### Conduct
+
+Learning how to conduct yourself is crucial to working well in any team-based setting. Please refer to our [Code of Conduct](https://github.com/JacquesCarette/Drasil/blob/main/CODE_OF_CONDUCT.md) for more information.
 
 ### Issue Tracking
 

@@ -6,7 +6,7 @@ Once you've read through this page, you may also take our [Contributor's Test](h
 
 If you have any questions, please feel free to either file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
 
-**If you are a summer research student**, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students.md), written by past summer researchers, in addition to the [onboarding](https://github.com/JacquesCarette/Drasil/blob/main/doc/OnBoarding/onBoarding.pdf) document.
+**If you are a summer research student**, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students), written by past summer researchers, in addition to the [onboarding](https://github.com/JacquesCarette/Drasil/blob/main/doc/OnBoarding/onBoarding.pdf) document.
 
 <details>
 <summary>

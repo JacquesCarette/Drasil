@@ -4,7 +4,7 @@ Welcome to the Contributor's Guide! This wiki page contains a gentle introductio
 
 Once you've read through this page, you may also take our [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
 
-If you have any questions, please feel free to either file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
+If you have any questions, please file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
 
 **If you are a summer research student**, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students), written by past summer researchers, in addition to the [onboarding](https://github.com/JacquesCarette/Drasil/blob/main/doc/OnBoarding/onBoarding.pdf) document.
 
@@ -67,15 +67,15 @@ As a research project (which Drasil is), developing Drasil means studying the pr
 
 As mentioned earlier, Drasil's development is driven by its case studies, whether it be refining our target series of software artifacts, adding features, or altering Drasil's internal process for generating software. Your primary activity will be developing Haskell code for generating other kinds of software, and then testing said other kinds of software with their respective tooling (e.g., compilers, viewers, interpreters, etc.).
 
-At a high-level, our development framework is very similar to most other git-version-controlled, team-based software projects:
+Our development workflow is very similar to most other git-version-controlled, team-based software projects:
 
-1. *Choose a task to work on.*
-   * If you're new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling. Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
-   * If you're already familiar with Drasil, you'll likely know what you'd like to work on already. That being said, if you don't, that's okay, we have a myriad of [open tickets](https://github.com/JacquesCarette/Drasil/issues).
-2. *Work on said task.* This will involve editing Haskell code.
-   * If you're working on a `newcomers`-designated ticket, the ticket should have a good explanation of what work needs to be done and how it should be done. If it doesn't, you should ask the author of the ticket.
+1. *Choose a task to work on.* We use [`git`](https://git-scm.com/) and [GitHub](https://github.com/JacquesCarette/Drasil) to organize and submit work to the Drasil research project. If you are new to these tools, please review our [Git2Know for Drasil](Git2Know-for-Drasil) wiki page for a breakdown of branching and pull requests.
+   * If you are new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling. Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
+   * If you are familiar with Drasil, you'll likely know what you want to work on. That being said, if you don't, we have no shortage of [open tickets](https://github.com/JacquesCarette/Drasil/issues)!
+2. *Work on said task.* This will involve editing Drasil's Haskell codebase and compiling and using it through a [`Makefile`](Makefile). If you are unfamiliar with what `Makefile`s are, you should learn a little bit about [what it is](https://opensource.com/article/18/8/what-how-makefile).
+   * If you are working on a `newcomers`-designated ticket, the ticket should come with a concrete work plan. If it doesn't, please ask the author of the ticket.
    * Otherwise, you will need to study Drasil's source code (using our wiki as a supplementary resource) and figure out what needs to be done, just as in any other software project.
-3. *Commit your work and file a PR.* Similar to other open-source projects, whenever you have work you want to contribute upstream (i.e., to the main repository), you will need to commit your code to your own branch/fork of Drasil and file a pull request (PR) from your branch/fork to Drasil's `main` branch. A reviewer (likely one of the principal investigators) will audit your work and provide feedback/request changes whenever necessary until your work can be accepted and merged into the mainline Drasil repo.
+3. *Commit your work and file a PR.* To contribute your work upstream (i.e., to the main repository), you will need to commit your code to your own branch/fork and file a pull request (PR) targeting Drasil's `main` branch. A reviewer (likely one of the principal investigators) will audit your work and provide feedback/request changes whenever necessary until your work can be accepted and merged into the mainline Drasil repo.
    
    In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes.
 
@@ -83,9 +83,7 @@ Unlike typical software projects, however, Drasil's generated software artifacts
 
 ## Guidelines
 
-As mentioned earlier, your workflow revolves around 3 steps: selecting tasks, working on said tasks, and submitting your work. We use [`git`](https://git-scm.com/) and [GitHub](https://github.com/) to organize and submit work to the Drasil research project. If you are unfamiliar with `git` or GitHub, you should read through the [Git2Know for Drasil](Git2Know-for-Drasil) wiki page to learn more about branching, pull requests, merging, and anything else git or GitHub related. We also interact with Drasil through a [`Makefile`](Makefile). If you are unfamiliar with what `Makefile`s are, you should learn a little bit about [what it is](https://opensource.com/article/18/8/what-how-makefile) as it will be the primary way you compile and use Drasil.
-
-For the remainder of this section, you will learn about our guidelines regarding [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
+In this section, we will discuss the guidelines regarding contributing to Drasil, including [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
 
 ### Issue Tracking
 

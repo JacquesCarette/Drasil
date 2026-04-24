@@ -13,8 +13,8 @@ import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
   asVC, funcDef, fDecDef, ffor, funcData, quantvar,
   multiLine, packmod, repeated, singleLine)
-import qualified Drasil.GlassBR.Unitals as U
-import Language.Drasil.Printers
+import qualified Drasil.GlassBR.Unitals as U (interpY, interpZ)
+import Language.Drasil.Printers (showHasSymbImpl)
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]

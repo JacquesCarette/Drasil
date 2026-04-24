@@ -7,38 +7,50 @@ import Drasil.GOOL (OOProg, GSProgram, SMethod, ProgramSym(..), FileSym (..),
   ParameterSym (..), VariableValue (..), StateVarSym (..), VisibilitySym (..),
   PermanenceSym (..), initializer, pubMethod, NumericExpression (..),
   ControlStatement (..), OOVariableSym (..), OOMethodSym (..), OOTypeSym (..),
-  staticVar, DeclStatement (..), ScopeSym (..), newObj, objMethodCall, funcApp)
+  staticVar, DeclStatement (..), ScopeSym (..), newObj, objMethodCall, funcApp, VSType)
 import Drasil.Metadata (watermark)
 import Drasil.GProc (BlockSym(..))
 
 ooTest :: (OOProg r) => GSProgram r
-ooTest = prog "OOTest" "Tests various aspects of general object functionality"
-  [docMod "Tests various aspects of general object functionality" watermark
+ooTest = prog "OOTest" progDesc
+  [docMod progDesc watermark
   ["Brandon Bosman"] "Apr. 24, 2026" (fileDoc (buildModule "OOTest" [] [ooTestMain] [testClass]))]
+
+progDesc :: String
+progDesc = "Tests various aspects of general object functionality"
 
 ooTestMain :: (OOProg r) => SMethod r
 ooTestMain = mainFunction (body [block [
-    printLn $ valueOf $ classVar (obj "testClass") (staticVar "y" double),
-    varDecDef (var "testObj" (obj "testClass")) mainFn (newObj (obj "testClass") [litInt 56]),
-    printLn $ objMethodCall int (valueOf $ var "testObj" (obj "testClass")) "mulByX" [litInt 42],
+    printLn $ valueOf $ classVar testObjType (staticVar "y" double),
+    varDecDef testObjVar mainFn (newObj testObjType [litInt 56]),
+    printLn $ objMethodCall int testObjVar "mulByX" [litInt 42],
     --Hack:
     printLn $ funcApp "testClass.square" double [litDouble 2.5]]
   ])
 
+varX :: (OOProg r) => SVariable
+varX = var "x" int
+
+testObjVar :: (OOProg r) => SVariable
+testObjVar = var "testObj" testObjType
+
+testObjType :: (OOProg r) => VSType r
+testObjType = obj "testClass"
+
 testClass :: (OOProg r) => SClass r
 testClass = docClass testClassDesc (extraClass "testClass" Nothing
-  [pubDVar $ var "x" int, stateVarDef public static  (var "y" double) (litDouble 17.4)]
+  [pubDVar varX, stateVarDef public static  (var "y" double) (litDouble 17.4)]
   [testConstructor] [testMethod, testStaticMethod])
 
 testClassDesc :: String
 testClassDesc = "Basic class to test some stuff"
 
 testConstructor :: (OOProg r) => SMethod r
-testConstructor = initializer [param $ var "x" int] [(var "x" int, valueOf $ var "x" int)]
+testConstructor = initializer [param varX] [(varX, valueOf varX)]
 
 testMethod :: (OOProg r) => SMethod r
 testMethod = pubMethod "mulByX" int [param $ var "num" int]
-  (body [block [returnStmt $ valueOf (objVarSelf $ var "x" int) #* valueOf (var "num" int)]])
+  (body [block [returnStmt $ valueOf (objVarSelf varX) #* valueOf (var "num" int)]])
 
 testStaticMethod :: (OOProg r) => SMethod r
 testStaticMethod = method "square" public static double [param $ var "num" double]

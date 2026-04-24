@@ -120,7 +120,7 @@ The Haskell wiki's programming [Guidelines](https://wiki.haskell.org/Programming
     * Make names meaningful (e.g., `htTransCladFuel` as opposed to `hG`).
     * Avoid overly long names.
     * If something is **heavily used**, shorter names are preferred.
-    * If you notice systematic structure in variable names (e.g., numbering, related naming, etc.), there may be something we should be capturing about the related variables. In this case, it is bneficial to file an issue discussing your findings. See [#1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
+    * If you notice systematic structure in variable names (e.g., numbering, related naming, etc.), there may be something we should be capturing about the related variables. In this case, it is beneficial to file an issue discussing your findings. See [#1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
 * **Whitespace**:
     * Use spaces. Do not use tabs.
     * Prefer 2 spaces per indent level. For example:

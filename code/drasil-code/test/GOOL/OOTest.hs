@@ -6,7 +6,8 @@ import Drasil.GOOL (OOProg, GSProgram, SMethod, ProgramSym(..), FileSym (..),
   SClass, ClassSym (..), pubDVar, VariableSym (..), TypeSym (..),
   ParameterSym (..), VariableValue (..), StateVarSym (..), VisibilitySym (..),
   PermanenceSym (..), initializer, pubMethod, NumericExpression (..),
-  ControlStatement (..), OOVariableSym (..), OOMethodSym (..))
+  ControlStatement (..), OOVariableSym (..), OOMethodSym (..), OOTypeSym (..),
+  staticVar, DeclStatement (..), ScopeSym (..), newObj, objMethodCall, funcApp)
 import Drasil.Metadata (watermark)
 import Drasil.GProc (BlockSym(..))
 
@@ -16,7 +17,13 @@ ooTest = prog "OOTest" "Tests various aspects of general object functionality"
   ["Brandon Bosman"] "Apr. 24, 2026" (fileDoc (buildModule "OOTest" [] [ooTestMain] [testClass]))]
 
 ooTestMain :: (OOProg r) => SMethod r
-ooTestMain = mainFunction (body [block [printLn $ litString "Hello World"]])
+ooTestMain = mainFunction (body [block [
+    printLn $ valueOf $ classVar (obj "testClass") (staticVar "y" double),
+    varDecDef (var "testObj" (obj "testClass")) mainFn (newObj (obj "testClass") [litInt 56]),
+    printLn $ objMethodCall int (valueOf $ var "testObj" (obj "testClass")) "mulByX" [litInt 42],
+    --Hack:
+    printLn $ funcApp "testClass.square" double [litDouble 2.5]]
+  ])
 
 testClass :: (OOProg r) => SClass r
 testClass = docClass testClassDesc (extraClass "testClass" Nothing
@@ -30,8 +37,8 @@ testConstructor :: (OOProg r) => SMethod r
 testConstructor = initializer [param $ var "x" int] [(var "x" int, valueOf $ var "x" int)]
 
 testMethod :: (OOProg r) => SMethod r
-testMethod = pubMethod "mulByX" double [param $ var "num" double]
-  (body [block [returnStmt $ valueOf (objVarSelf $ var "x" double) #* valueOf (var "num" double)]])
+testMethod = pubMethod "mulByX" int [param $ var "num" int]
+  (body [block [returnStmt $ valueOf (objVarSelf $ var "x" int) #* valueOf (var "num" int)]])
 
 testStaticMethod :: (OOProg r) => SMethod r
 testStaticMethod = method "square" public static double [param $ var "num" double]

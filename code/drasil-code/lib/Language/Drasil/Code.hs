@@ -8,7 +8,7 @@ module Language.Drasil.Code (
   OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, SoftwareDossierFile(..),
-  getSampleData, Visibility(..), defaultChoices, CodeSpec(..), OldCodeSpec(..), codeSpec,
+  getSampleData, Visibility(..), defaultChoices, CodeSpec, OldCodeSpec(..), codeSpec,
   HasOldCodeSpec(..), funcUID, asVC, ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -86,7 +86,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..),
+import Language.Drasil.CodeSpec (CodeSpec, OldCodeSpec(..), HasOldCodeSpec(..),
   codeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)

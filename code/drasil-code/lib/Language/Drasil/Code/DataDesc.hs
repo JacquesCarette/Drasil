@@ -1,4 +1,16 @@
-module Language.Drasil.Code.DataDesc where
+module Language.Drasil.Code.DataDesc (
+  -- * Types
+  DataItem, DataDesc'(..), Data'(..), DataItem'(..), Delimiter,
+  DataDesc, Delim, Data(..), LinePattern(..),
+  -- * Constructors
+  dataDesc, singleton', list, interwovenLists, junk,
+  singleton,
+  junkLine,
+  singleLine, multiLine, multiLine',
+  straight, repeated,
+  isJunk, isLine, isLines,
+  getInputs, getDataInputs, getPatternInputs
+) where
 
 import Data.List (nub)
 import Data.List.NonEmpty (NonEmpty(..), fromList)

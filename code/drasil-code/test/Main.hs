@@ -26,11 +26,12 @@ import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
 
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
+import GOOL.OOTest (ooTest)
 import FileTests (fileTestsOO, fileTestsProc)
 import VectorTest (vectorTestOO, vectorTestProc)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 
--- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- | Renders six GOOL tests (FileTests, HelloWorld, PatternTest, OOTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO()
 main = do
@@ -78,8 +79,8 @@ classes unRepr unRepr' = zipWith
                 fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
                                         (gs' ^. mainMod)
   in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
-  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
-  (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
+  [helloWorldOO, ooTest, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
+  (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, ooTest, patternTest,
     fileTestsOO, vectorTestOO, nameGenTestOO])
 
 -- Classes that Julia is currently able to render

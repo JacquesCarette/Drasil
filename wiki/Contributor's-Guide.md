@@ -91,23 +91,26 @@ Learning how to conduct yourself is crucial to working well in any team-based se
 
 ### Issue Tracking
 
-- Please include enough information in your issue so that the reader can respond to the issue without having to track down multiple sources. Some tips on how to do that include the following: 
-    - Include excerpts of PDF/HTML documentation, especially annotated excerpts, when referring to output (desired or generated).
-    - Highlighting specific portions of such screenshots helps text/discrepancies stand out to the reader.
-    - Linking to related issues, pull requests, comments, and commit hashes is also really helpful for easy navigation through related and significant content and discussion in the repo.
-    - If there are certain code segments you want to link to an issue, instead of copy-pasting it, permalink is another option. Please see [Creating a Permanent Link to a Code Snippet](https://help.github.com/articles/creating-a-permanent-link-to-a-code-snippet/) for more information.
-    - Familiarizing yourself with [GitHub-flavoured Markdown](https://github.github.com/gfm/) will be useful for elegantly formatting your text. For instance, when recommending a solution (or otherwise inserting multiline code), mentioning the language of the code allows for syntax highlighting. Click on `Edit` to see the source code for this Haskell excerpt below:
+* **Avoid duplication.** Before filing, please search existing issues to avoid duplicates.
+* **Have a clear, narrow scope.** Your issue should have a clear, narrow scope and objective. Ideally, this coincides with a task that _should be_ resolvable within a reasonable amount of time (e.g., a week).
+* **Be focused.** Avoid introducing unrelated/tangential issues within your issue. Keep discussion focused on your main goal. Instead, file complementary issues and reference them using `#IssueNumber`.
+* **Write a meaningful title.** Use descriptive titles. You want your issue to be discoverable and readable. A well-written title helps prime readers for what to expect as well.
+* **Write clearly and concisely.** Avoid [flowery language](https://www.lib.sfu.ca/about/branches-depts/slc/incommon/flowery-language). Be direct and [frontload your writing](https://digitalcommunications.wp.st-andrews.ac.uk/2017/03/15/web-writing-basics-frontloading/). Avoid writing paragraphs upon paragraphs that make reading a long, burdensome task.
+* **Give context.** Discuss key background information to your issue. Link to related background issues/PRs. However, if your issue relies on 2 or more background comments/discussions/issues/PRs, please copy and paste key excerpts in addition to referencing them.
+* **Use [GitHub-Flavoured Markdown](https://github.github.com/gfm/) to its fullest.** In addition to [basic markdown formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax), you should use rich features whenever appropriate, including:
+    * [Mentioning people (@naming)](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#mentioning-people-and-teams). When you want to draw the attention of specific people to your issues, you can `@` them (e.g., `@JacquesCarette` or `@smiths`) and they will receive a notification on GitHub. _Please do not unnecessarily spam this._
+    * [Linking to related issues, PRs, comments, commits](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls). This eases navigating and helps others find your issues.
+    * [Including screenshots or files](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files). You can include excerpts of PDFs or other files, especially annotated excerpts, when discussing generated artifacts. When sending images, you can/should also add highlighting to help make areas stand out to the reader.
+    * [Code permalinks](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet). Instead of copy/pasting code from the codebase, you should use permanent links to specific sections of code from the codebase.
+    * [Highlighted code](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting). When recommending a solution (or otherwise inserting multiline code), mentioning the language of the code allows for syntax highlighting. Click on `Edit` to see the source code for this Haskell excerpt below:
     ```haskell
     var :: String
     var = "Hello"
     ```
-- Create issues that are useful for the present, and for the future, but following these guidelines:
-  - Search the other issues to see if your issue has already been covered.
-  - Use a meaningful title for your issue (this is what people will be reading when they search the issues in the future).
-  - Do not introduce new issues within an existing issue. We should keep the discussion focused so that it relates to the current issue. Once an issue is resolved, it should be closed. Related issues should be created as separate issues, rather than being incorporated into the discussion. (Related issues can be linked to the current issue via a hashtag `#` followed by the number of the other issue.)
-  - Make your issue as specific as possible. Ideally, closing an issue should be possible with a few days of effort. This doesn't always happen, but it is something to strive for.
-- When **closing** an issue, please provide rationale and relevant links to other issues, Pull Requests (PRs), or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
-- In GitHub, Markdown can be used to annotate Issues, Pull Requests, Comments, Wiki pages, and any other documents. Here is a useful [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+    * [Pretty printing Mathematical expressions with LaTeX](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions).
+    * [Diagrams](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams).
+    * [Collapsible sections](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections). This is particularly helpful when attaching long logs to issues!
+* **Closing protocol.** When closing an issue, please provide rationale and relevant links to other issues, PRs, or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
 
 ### Coding Style
 
@@ -180,7 +183,7 @@ To maintain a clean, understandable project history and improve collaboration, p
     -  For a good example to understand the value of squashing [this comment](https://github.com/JacquesCarette/Drasil/pull/3705#issuecomment-2148869719) provides some good feedback in the context of a PR
     - **Important:** This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
-### Editing this Wiki
+### Editing This Wiki
 
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
 

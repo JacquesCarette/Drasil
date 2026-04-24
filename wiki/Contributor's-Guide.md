@@ -114,38 +114,34 @@ Learning how to conduct yourself is crucial to working well in any team-based se
 
 ### Coding Style
 
-- Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
-    ```Haskell
-    top level
-      indent level 1
-        indent level 2
-    ```
-- Regarding variable names:
-  - Use camel case. Ex: `someFunctionFoo`
-  - Make them meaningful. Ex: `htTransCladFuel` as opposed to `hG`.
-  - Try not to make them ridiculously long either - e.g. the package/module where something comes from shouldn't be repeated in a name.
-  - If something is **heavily used**, then a shorter name might be warranted.
-  - If you find that structure in naming variables (e.g., numbering, systematic
-    concatenation, related naming, etc.), there might be missing
-    connections/chunks we can make between the related variables. In this case,
-    it may be beneficial to file an issue discussing your findings, and asking
-    if anything can be done to remedy it. See [Issue 1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
-  - See this [page](https://kowainik.github.io/posts/naming-conventions) for a broader discussion of variable names for Haskell libraries in general.
-- One blank line between top-level definitions. No blank lines between type signatures and function definitions. Please don't add too many blank lines, 1 to 2 are enough!
-- Surround binary operators with a single space on either side. Ex: `x ^. term`
-- Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
-    ```Haskell
-      S "The" +:+ (phrase $ heatTrans ^. term) +:+ 
-      S "is the"
-      ...
-    ```
-- Try to not make 'long' lines (i.e., lines should not be more than 80 characters wide)
-- Bumping up version numbers in the `package.yaml` files:
-    - The version number should be bumped up only by +0.0.1 in most circumstances.
-    - It should be bumped up whenever a major change is (or multiple minor changes are) made to interfaces, such as any change to `Language/Drasil.hs`, or a change to the signature of any function that is exported there.
-    - Please then also bump up the dependencies of the other packages, so that they will pick up the new version.
-- Leave a single trailing newline character at the end of each file.
-- We use Haddock to generate code documentation. Haddock has a specific format to change Haskell's comments into a Haddock document. For example, the syntax `-- |`. The [website](https://haskell-haddock.readthedocs.io/latest/markup.html#markup), gives examples and instructions.
+The Haskell wiki's programming [Guidelines](https://wiki.haskell.org/Programming_guidelines) and [Tips](https://wiki.haskell.org/index.php?title=Haskell_programming_tips) pages are very good reads on writing conventional Haskell. Some basic notes
+
+* **Line Length**. Avoid long lines. Try to keep lines capped at 80 characters wide. Going over 80 is okay when unavoidable.
+* **Documentation**. Use [Haddock](https://haskell-haddock.readthedocs.io/latest/markup.html)-formatted documentation. We try to have good, public [documentation](https://jacquescarette.github.io/Drasil/docs/index.html) (e.g., [`drasil-database`](https://jacquescarette.github.io/Drasil/docs/drasil-database-0.1.1.0/Drasil-Database.html)).
+* **Naming Conventions**: For a comprehensive guide, see Veronika Romashkina's [discussion with examples](https://kowainik.github.io/posts/naming-conventions). We note some common rules here for convenience:
+    * Use `camelCase` for functions and variables (e.g., `someFuncFoo`), and `PascalCase` for types and data constructors (e.g., `data Baz = FooBar`).
+    * Make names meaningful (e.g., `htTransCladFuel` as opposed to `hG`).
+    * Avoid overly long names.
+    * If something is **heavily used**, shorter names are preferred.
+    * If you notice systematic structure in variable names (e.g., numbering, related naming, etc.), there may be something we should be capturing about the related variables. In this case, it is beneficial to file an issue discussing your findings. See [#1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
+* **Whitespace**:
+    * Use spaces. Do not use tabs.
+    * Prefer 2 spaces per indent level. For example:
+      ```haskell
+      top level
+        indent level 1
+          indent level 2
+      ```
+    * Surround binary operators with a single space on both sides (e.g., `x ^. term`).
+    * Ensure there is a single trailing newline character at the end of each file.
+    * Leave only one empty line between top-level definitions.
+    * Do not leave empty lines between type signatures and their corresponding function definitions.
+    * Do not break operations across lines unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
+      ```Haskell
+        S "The" +:+ (phrase $ heatTrans ^. term) +:+ 
+        S "is the"
+        ...
+      ```
 
 ### Git Best Practices
 

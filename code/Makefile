@@ -484,7 +484,7 @@ shellcheck: ##@Linters Run ShellCheck static analyzer on all shell script files.
 	find . -type f -name '*.sh' -exec shellcheck {} +
 
 docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules. Set FULL=1 if you want to additionally test Haddock generation for website deployment.
-	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
+	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" ./scripts/make_docs.sh
 
 #----------------------------#
 #--- GOOL related targets ---#

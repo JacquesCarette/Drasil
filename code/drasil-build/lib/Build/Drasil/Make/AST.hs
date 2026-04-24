@@ -1,5 +1,11 @@
 -- | Defines a Makefile abstract syntax tree.
-module Build.Drasil.Make.AST where
+module Build.Drasil.Make.AST (
+  -- * Types
+  Makefile(..), Type(..), Rule(..), Command(..), CommandOpts(..), Annotation,
+  Target, Dependencies,
+  -- * Constructors
+  mkFile, mkRule, mkCheckedCommand, mkCommand
+) where
 
 import Build.Drasil.Make.MakeString (MakeString)
 
@@ -16,12 +22,13 @@ data Rule = R Annotation Target Dependencies Type [Command]
 data Command = C MakeString [CommandOpts]
 
 -- | Ignore the return code from the system.
-data CommandOpts =
-  IgnoreReturnCode deriving Eq
+data CommandOpts = IgnoreReturnCode
+  deriving Eq
 
 -- | Type of rule, either abstract or file-oriented.
 data Type = Abstract
-          | File deriving Eq
+          | File
+  deriving Eq
 
 -- | A Makefile Annotation is made of 0 or more 'String's
 type Annotation = [String]

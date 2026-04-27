@@ -39,6 +39,7 @@ type GSProgram a = GS (a (Program a))
 
 class (FileSym r) => ProgramSym r where
   type Program r
+  -- Program name, program purpose, list of files
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
@@ -73,7 +74,8 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
   --   Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] ->
     [SMethod r] -> SClass r
-
+  -- | Creates a class with documenting comment.
+  --   Inputs: description, class
   docClass :: String -> SClass r -> SClass r
 
 type Initializers r = [(SVariable r, SValue r)]

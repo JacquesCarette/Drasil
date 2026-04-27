@@ -1,14 +1,24 @@
 -- | Helper functions for creating HTML printers (specifically, HTML tag wrappers).
-module Language.Drasil.HTML.Helpers where
-
+module Language.Drasil.HTML.Helpers (
+  -- * Types
+  BibFormatter(..), Variation(..),
+  -- * Tag Wrappers
+  html, headTag, body, title, paragraph, code, tr, th, td, figure, figcaption,
+  li, pa, ba, dd, ol, ul, table, dl, img, h, divTag, spanTag, spanTag',
+  image, em, sup, sub, bold,
+  -- * Misc.
+  wrap, wrap', wrapGen, wrapGen', wrapInside, tagL, tagR, indent,
+  caption, descWrap, refwrap, refwrap', reflink, reflinkInfo, reflinkURI,
+  articleTitle, author
+) where
 import Prelude hiding ((<>))
 import Data.List (intersperse)
-import Text.PrettyPrint (Doc, text, empty, ($$), (<>), (<+>), vcat, hcat, nest,
-  cat, hcat)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest,
+  cat)
 
 import Language.Drasil (MaxWidthPercent)
 
-import Language.Drasil.Printing.AST (Expr, Spec)
+import Language.Drasil.Printing.AST (Spec)
 
 -- | Data type that carries functions that vary
 -- for bib printing
@@ -183,6 +193,7 @@ spanTag = wrap "span"
 -- | Span tag wrapper with a title attribute.
 spanTag' :: Doc -> Doc -> Doc
 spanTag' t = wrapGen' hcat Title "span" t [""]
+
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 indent = nest 2

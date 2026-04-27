@@ -267,7 +267,7 @@ instance VariableSym JuliaCode where
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem i = A.arrayElem (litInt i)
+  arrayElem = A.arrayElem
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC

@@ -19,7 +19,6 @@ dependencies:
 - containers
 - directory
 - filepath
-- pretty
 
 ghc-options:
 - -Wall

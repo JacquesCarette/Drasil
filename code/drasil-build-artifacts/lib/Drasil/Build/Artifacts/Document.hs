@@ -1,5 +1,5 @@
 -- | Common 'Doc'-related functions for writting printers with a little more clarity.
-module Utils.Drasil.Document (blank, indent, indentList, contSep, filterEmpty,
+module Drasil.Build.Artifacts.Document (blank, indent, indentList, contSep, filterEmpty,
   listToDoc, Separator) where
 
 import Text.PrettyPrint.HughesPJ (Doc, text, vcat, nest, hsep, comma, isEmpty,

@@ -2,7 +2,8 @@
 module Utils.Drasil.Document (blank, indent, indentList, contSep, filterEmpty,
   listToDoc, Separator) where
 
-import Text.PrettyPrint.HughesPJ
+import Text.PrettyPrint.HughesPJ (Doc, text, vcat, nest, hsep, comma, isEmpty,
+  punctuate)
 
 -- | Separates document sections.
 type Separator = Doc

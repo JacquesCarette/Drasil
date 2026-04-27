@@ -186,22 +186,3 @@ spanTag' t = wrapGen' hcat Title "span" t [""]
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 indent = nest 2
-
--- Not used since we use MathJax handles this
--- | Create and markup fractions
--- fraction :: Doc -> Doc -> Doc
--- fraction a b =
---   divTag ["fraction"] (spanTag ["fup"] a $$ spanTag ["fdn"] b)
-
--- Not used since we use MathJax handles this
--- -- | Build cases for case expressions
--- cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
--- cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"]
---                   (makeCases ps pExpr)
-
--- | Build case expressions.
-makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-makeCases [] _ = empty
-makeCases (p:ps) pExpr = spanTag [] (pExpr (fst p) <> text " , " <>
-                          spanTag ["case"] (pExpr (snd p))) $$
-                          makeCases ps pExpr

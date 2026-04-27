@@ -3,12 +3,12 @@ module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))
 import Data.List (intersperse)
-import Text.PrettyPrint (Doc, text, empty, ($$), (<>), (<+>), vcat, hcat, nest,
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest,
   cat, hcat)
 
 import Language.Drasil (MaxWidthPercent)
 
-import Language.Drasil.Printing.AST (Expr, Spec)
+import Language.Drasil.Printing.AST (Spec)
 
 -- | Data type that carries functions that vary
 -- for bib printing

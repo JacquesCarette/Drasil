@@ -10,6 +10,10 @@ description:  Please see the README on GitHub at <https://github.com/JacquesCare
 
 language: Haskell2010
 default-extensions:
+- DeriveFoldable
+- DeriveFunctor
+- DeriveTraversable
+- ImportQualifiedPost
 - StrictData
 
 extra-source-files: []

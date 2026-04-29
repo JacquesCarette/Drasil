@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = lang metadata code docLang printers build theory gool data database gen utils website
+PACKAGES = build build-artifacts code data database docLang gen gool lang metadata printers system theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -334,7 +334,6 @@ $(GOOLTEST)$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
-
 
 $(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
 	@mkdir -p "$(LOG_FOLDER)"

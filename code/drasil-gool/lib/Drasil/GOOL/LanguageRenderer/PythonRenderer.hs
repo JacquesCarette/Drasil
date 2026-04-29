@@ -10,9 +10,9 @@ import Utils.Drasil (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
-  VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  VSFunction, SLValue, SValue, MSStatement, MixedCtorCall, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), LValueSym(..), VisibilitySym(..),
+  LValueElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
   MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOLValueSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
   InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
   OOValueExpression(..), selfFuncApp, OODeclStatement(..),
@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -268,14 +268,14 @@ instance ScopeSym PythonCode where
 instance ScopeElim PythonCode where
   scopeData = unPC
 
-instance VariableSym PythonCode where
-  type Variable PythonCode = VarData
+instance LValueSym PythonCode where
+  type LValue PythonCode = VarData
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
-instance OOVariableSym PythonCode where
+instance OOLValueSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
                           else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
@@ -286,7 +286,7 @@ instance OOVariableSym PythonCode where
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 
-instance VariableElim PythonCode where
+instance LValueElim PythonCode where
   variableName = varName . unPC
   variableType = onCodeValue varType
 
@@ -294,7 +294,7 @@ instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
   variable = varDoc . unPC
 
-instance RenderVariable PythonCode where
+instance RenderLValue PythonCode where
   varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
@@ -942,7 +942,7 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+pyLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
 
 pyStringType :: (CommonRenderSym r) => VSType r
@@ -971,7 +971,7 @@ pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v
 
-pyInput :: SValue PythonCode -> SVariable PythonCode -> MSStatement PythonCode
+pyInput :: SValue PythonCode -> SLValue PythonCode -> MSStatement PythonCode
 pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
   where pyInput' Integer = readInt inSrc
         pyInput' Float = readDouble inSrc
@@ -984,7 +984,7 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
 pyThrow :: (CommonRenderSym r) => r (Value r) -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
-pyForEach :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+pyForEach :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
@@ -1004,7 +1004,7 @@ pyTryCatch tryB catchB = vcat [
 pyAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
 pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
-pyListSlice :: (CommonRenderSym r, Monad r) => SVariable r -> SValue r -> SValue r ->
+pyListSlice :: (CommonRenderSym r, Monad r) => SLValue r -> SValue r -> SValue r ->
   SValue r -> SValue r -> MS (r Doc)
 pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   vnew <- vn
@@ -1015,7 +1015,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
-pyMethod :: (CommonRenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
+pyMethod :: (CommonRenderSym r) => Label -> r (LValue r) -> [r (Parameter r)] ->
   r (Body r) -> Doc
 pyMethod n slf ps b = vcat [
   pyDef <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,

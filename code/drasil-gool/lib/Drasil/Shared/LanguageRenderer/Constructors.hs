@@ -6,10 +6,10 @@ module Drasil.Shared.LanguageRenderer.Constructors (
   binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
+import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SLValue, SValue,
   TypeSym(..), TypeElim(..), ValueSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderLValue(..),
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
@@ -42,18 +42,18 @@ mkStateVal = valFromData Nothing Nothing
 mkVal :: (CommonRenderSym r) => r (Type r) -> Doc -> SValue r
 mkVal t = valFromData Nothing Nothing (toState t)
 
--- Variables --
+-- LValues --
 
 -- | Constructs a dynamic variable in a stateful context
-mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SLValue r
 mkStateVar = varFromData Dynamic
 
 -- | Constructs a dynamic variable in a non-stateful context
-mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
+mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SLValue r
 mkVar n t = varFromData Dynamic n (toState t)
 
 -- | Constructs a static variable in a stateful context
-mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SLValue r
 mkStaticVar = varFromData Static
 
 -- Operators --

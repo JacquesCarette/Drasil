@@ -1,7 +1,7 @@
 module NameGenTest (nameGenTestOO, nameGenTestProc) where
 
 import Drasil.GOOL (SMethod, SharedProg, OOProg, BodySym(..), BlockSym(..),
-  TypeSym(..), VariableSym(var), Literal(..), DeclStatement(..),
+  TypeSym(..), LValueSym(var), Literal(..), DeclStatement(..),
   ControlStatement(..), MethodSym(..), VariableValue(..), Comparison(..),
   listSlice, List(..), ParameterSym(..), VisibilitySym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),

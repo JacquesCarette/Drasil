@@ -9,13 +9,13 @@ module Drasil.Shared.LanguageRenderer.Macros (
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(..), listOf, ValueSym(valueType),
+  SLValue, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
+  LValueElim(..), listOf, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block),
-  TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(litInt),
+  TypeSym(int, listInnerType), LValueSym(var), ScopeSym(..), Literal(litInt),
   VariableValue(valueOf), ValueExpression(notNull), List(listSize, listAppend,
   listAccess, intToIndex), StatementSym(valStmt, emptyStmt), AssignStatement(assign),
   DeclStatement(varDecDef, listDec),  ControlStatement(ifCond, for, forRange),
@@ -40,13 +40,13 @@ import Text.PrettyPrint.HughesPJ (Doc, vcat)
 ifExists :: (CommonRenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
-decrement1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
+decrement1 :: (CommonRenderSym r) => SLValue r -> MSStatement r
 decrement1 v = v &-= IC.litInt 1
 
-increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r) => SLValue r -> SValue r -> MSStatement r
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
-increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
+increment1 :: (CommonRenderSym r) => SLValue r -> MSStatement r
 increment1 vr = vr &+= IC.litInt 1
 
 strat :: (CommonRenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
@@ -54,7 +54,7 @@ strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
   RC.statement result])
 
 runStrategy :: (CommonRenderSym r, Monad r) => Label -> [(Label, MSBody r)] ->
-  Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
+  Maybe (SValue r) -> Maybe (SLValue r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy")
   (strat (S.stmt resultState)) (lookup l strats)
@@ -64,7 +64,7 @@ runStrategy l strats rv av = maybe
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
 listSlice :: (CommonRenderSym r) => Maybe (SValue r) -> Maybe (SValue r) ->
-  Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+  Maybe (SValue r) -> SLValue r -> SValue r -> MSBlock r
 listSlice beg end step vnew vold = do
 
   l_temp <- genVarName [] "temp"
@@ -136,7 +136,7 @@ makeSetterVal vName step _       _       lb rb  scp =
       theSetter = IC.varDecDef theVar scp $ IC.inlineIf (step ?> IC.litInt 0) lb rb
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
-stringListVals :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListVals :: (CommonRenderSym r) => [SLValue r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getType $ valueType slst))
   where checkList (List String) = assignVals vars 0
@@ -146,7 +146,7 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
         assignVals (v:vs) n = IC.assign v (cast (onStateValue variableType v)
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
-stringListLists :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListLists :: (CommonRenderSym r) => [SLValue r] -> SValue r -> MSStatement r
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
@@ -171,12 +171,12 @@ stringListLists lsts sl = do
     v_i = IC.valueOf var_i
   checkList (getType $ valueType slst)
 
-forRange :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r ->
+forRange :: (CommonRenderSym r) => SLValue r -> SValue r -> SValue r -> SValue r ->
   MSBody r -> MSStatement r
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (CommonRenderSym r) => SVariable r
+observerIndex :: (CommonRenderSym r) => SLValue r
 observerIndex = IC.var "observerIndex" IC.int
 
 observerIdxVal :: (CommonRenderSym r) => SValue r

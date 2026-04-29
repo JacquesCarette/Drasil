@@ -11,9 +11,9 @@ import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  SLValue, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), LValueSym(..),
+  VisibilitySym(..), LValueElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, List(..), Set(..),
@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOLValueSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
@@ -35,7 +35,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -283,14 +283,14 @@ instance ScopeSym SwiftCode where
 instance ScopeElim SwiftCode where
   scopeData = unSC
 
-instance VariableSym SwiftCode where
-  type Variable SwiftCode = VarData
+instance LValueSym SwiftCode where
+  type LValue SwiftCode = VarData
   var         = G.var
   constant    = var
   extVar _    = var
   arrayElem i = G.arrayElem (litInt i)
 
-instance OOVariableSym SwiftCode where
+instance OOLValueSym SwiftCode where
   staticVar' _ = G.staticVar
   self = CP.self
   classVar = CP.classVar R.classVar
@@ -298,7 +298,7 @@ instance OOVariableSym SwiftCode where
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 
-instance VariableElim SwiftCode where
+instance LValueElim SwiftCode where
   variableName = varName . unSC
   variableType = onCodeValue varType
 
@@ -306,7 +306,7 @@ instance InternalVarElim SwiftCode where
   variableBind = varBind . unSC
   variable = varDoc . unSC
 
-instance RenderVariable SwiftCode where
+instance RenderLValue SwiftCode where
   varFromData b n t' d = do
     t <- t'
     pure $ on2CodeValues (vard b n) t (toCode d)
@@ -834,7 +834,7 @@ swiftArgVal v' = do
 -- Putting "gool" in these names to avoid name conflicts
 -- The `local` is a hack, but Swift doesn't care about scope
 -- and I don't want to change the IOStatement API just for this
-swiftContentsVar, swiftLineVar :: SVariable SwiftCode
+swiftContentsVar, swiftLineVar :: SLValue SwiftCode
 swiftContentsVar = var "goolContents" (listType $ listType string)
 swiftLineVar = var "goolLine" (listType string)
 
@@ -979,7 +979,7 @@ swiftNumBinExpr f v1' v2' = do
 swiftLitFloat :: (CommonRenderSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
-swiftLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+swiftLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
     (map RC.variable ps)
@@ -1050,7 +1050,7 @@ swiftIndexOf :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
-swiftListSlice :: (OORenderSym r) => SVariable r -> SValue r ->
+swiftListSlice :: (OORenderSym r) => SLValue r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 swiftListSlice vn vo beg end step = do
 
@@ -1100,7 +1100,7 @@ swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getType . valueType
   where swOut (List _) = printSt newLn f printFn v
         swOut _ = G.print newLn f printFn v
 
-swiftInput :: SVariable SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftInput :: SLValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
 swiftInput vr vl = do
   vr' <- vr
   let swiftInput' String = vl
@@ -1123,7 +1123,7 @@ swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
 
-swiftOpenFileWA :: (OORenderSym r) => Bool -> SVariable r -> SValue r ->
+swiftOpenFileWA :: (OORenderSym r) => Bool -> SLValue r -> SValue r ->
   MSStatement r
 swiftOpenFileWA app f' n' = tryCatch
     (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',
@@ -1147,14 +1147,14 @@ swiftCloseFile f' = do
       swClose _ = error "closeFile called on non-file-typed value"
   swClose (getType $ valueType f)
 
-swiftReadFile :: (OORenderSym r) => SVariable r -> SValue r -> MSStatement r
+swiftReadFile :: (OORenderSym r) => SLValue r -> SValue r -> MSStatement r
 swiftReadFile v f = let l = var "l" string
   in tryCatch
   (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f)
     (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
   (oneLiner $ throw "Error reading from file.")
 
-swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)
+swiftVarDec :: Doc -> SLValue SwiftCode -> SwiftCode (Scope SwiftCode)
   -> MSStatement SwiftCode
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
@@ -1166,7 +1166,7 @@ swiftVarDec dec v' scp = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
 
-swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
+swiftSetDec :: Doc -> SLValue SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -1183,7 +1183,7 @@ replaceBrackets str = "<" ++ (init . tail) str ++ ">"
 swiftThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
-swiftForEach :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+swiftForEach :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> r (Body r) -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
@@ -1202,7 +1202,7 @@ swiftAssert condition errorMessage = vcat [
   text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
   ]
 
-swiftParam :: (CommonRenderSym r) => Doc -> r (Variable r) -> Doc
+swiftParam :: (CommonRenderSym r) => Doc -> r (LValue r) -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> RC.type' (variableType v)
 

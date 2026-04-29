@@ -48,11 +48,11 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
+import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SLValue, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
-  staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
+  BlockSym(..), TypeSym(..), LValueSym(..), ScopeSym(..), OOLValueSym(..),
+  staticConst, LValueElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
@@ -104,7 +104,7 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'staticVar' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
+variable :: (OOProg r) => Name -> VSType r -> GenState (SLValue r)
 variable s t = do
   g <- get
   let cs = codeSpec g
@@ -124,8 +124,8 @@ variable s t = do
 -- WithInputs for constant structure, inputs are 'Bundled', and constant
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
-inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r ->
-  GenState (SVariable r)
+inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SLValue r ->
+  GenState (SLValue r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- get
@@ -145,7 +145,7 @@ inputVariable Bundled Const v = do
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
 constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr ->
-  SVariable r -> GenState (SVariable r)
+  SLValue r -> GenState (SLValue r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
@@ -164,8 +164,8 @@ constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
 -- and cannot be accessed, so throw an error.
 -- If the variable is exported by the current module, use 'classVar'.
 -- If the variable is exported by a different module, use 'extClassVar'.
-classVariable :: (OOProg r) => SVariable r -> SVariable r ->
-  GenState (SVariable r)
+classVariable :: (OOProg r) => SLValue r -> SLValue r ->
+  GenState (SLValue r)
 classVariable c v = do
   g <- get
   let checkCurrent m = if currentModule g == m then classVar else extClassVar
@@ -187,7 +187,7 @@ mkVal v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
+mkVar :: (OOProg r) => CodeVarChunk -> GenState (SLValue r)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
@@ -269,10 +269,10 @@ genMethod f n desc p r b = do
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
 -- for a documented function/method, the visibility, permanence, name, description,
 -- list of inputs, list of outputs, and body.
-genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
-    [SVariable r] -> MSBody r -> SMethod r) ->
-  (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
-    [(String, SVariable r)] -> MSBody r -> SMethod r)
+genInOutFunc :: (OOProg r) => ([SLValue r] -> [SLValue r] ->
+    [SLValue r] -> MSBody r -> SMethod r) ->
+  (String -> [(String, SLValue r)] -> [(String, SLValue r)] ->
+    [(String, SLValue r)] -> MSBody r -> SMethod r)
   -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
   [MSBlock r] -> GenState (SMethod r)
 genInOutFunc f docf n desc ins' outs' b = do
@@ -748,7 +748,7 @@ readData ddef = do
 
 -- | Get entry variables.
 getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
-  GenState [SVariable r]
+  GenState [SLValue r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . listInnerType . convTypeOO))
     s) (getPatternInputs lp)
@@ -790,7 +790,7 @@ valueProc u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'constant' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variableProc :: (SharedProg r) => Name -> VSType r -> GenState (SVariable r)
+variableProc :: (SharedProg r) => Name -> VSType r -> GenState (SLValue r)
 variableProc s t = do
   g <- get
   let cs = codeSpec g
@@ -806,8 +806,8 @@ variableProc s t = do
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, throw an error, since procedural renderers
 -- don't support 'Bundled' inputs yet.
-inputVariableProc :: (SharedProg r) => Structure -> ConstantRepr -> SVariable r ->
-  GenState (SVariable r)
+inputVariableProc :: (SharedProg r) => Structure -> ConstantRepr -> SLValue r ->
+  GenState (SLValue r)
 inputVariableProc Unbundled _ v = return v
 inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
 
@@ -818,7 +818,7 @@ inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers d
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
 constVariableProc :: (SharedProg r) => ConstantStructure -> ConstantRepr ->
-  SVariable r -> GenState (SVariable r)
+  SLValue r -> GenState (SLValue r)
 constVariableProc (Store Unbundled) _ v = return v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
 constVariableProc WithInputs cr v = do
@@ -836,7 +836,7 @@ mkValProc v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVarProc :: (SharedProg r) => CodeVarChunk -> GenState (SVariable r)
+mkVarProc :: (SharedProg r) => CodeVarChunk -> GenState (SLValue r)
 mkVarProc v = do
   t <- codeType v
   let toGOOLVar Nothing = variableProc (codeName v) (convType t)
@@ -986,7 +986,7 @@ readDataProc ddef = do
 
 -- | Get entry variables.
 getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
-  GenState [SVariable r]
+  GenState [SLValue r]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . listInnerType . convType))
     s) (getPatternInputs lp)
@@ -1224,10 +1224,10 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
 -- for a documented function/method, the visibility, permanence, name, description,
 -- list of inputs, list of outputs, and body.
-genInOutFuncProc :: (SharedProg r) => ([SVariable r] -> [SVariable r] ->
-    [SVariable r] -> MSBody r -> SMethod r) ->
-  (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
-    [(String, SVariable r)] -> MSBody r -> SMethod r)
+genInOutFuncProc :: (SharedProg r) => ([SLValue r] -> [SLValue r] ->
+    [SLValue r] -> MSBody r -> SMethod r) ->
+  (String -> [(String, SLValue r)] -> [(String, SLValue r)] ->
+    [(String, SLValue r)] -> MSBody r -> SMethod r)
   -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
   [MSBlock r] -> GenState (SMethod r)
 genInOutFuncProc f docf n desc ins' outs' b = do
@@ -1250,7 +1250,7 @@ genInOutFuncProc f docf n desc ins' outs' b = do
 -- Used for readData and readDataProc
 l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i ::
-  (SharedProg r) => SVariable r
+  (SharedProg r) => SLValue r
 v_line, v_lines, v_linetokens, v_infile, v_i ::
   (SharedProg r) => SValue r
 l_line = "line"

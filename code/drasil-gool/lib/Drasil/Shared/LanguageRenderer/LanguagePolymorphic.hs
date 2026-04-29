@@ -23,16 +23,16 @@ import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
+  VSType, SLValue, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
-  VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
+  LValueSym(LValue), VisibilitySym(..), LValueElim(variableName,
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
+  string, listType, arrayType, listInnerType, funcType, void), LValueSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
@@ -40,7 +40,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), PermanenceSym(..), convTypeOO)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
+import qualified Drasil.GOOL.InterfaceGOOL as IG (OOLValueSym(objVarSelf),
   OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData),
@@ -180,23 +180,23 @@ divideOp = multPrec "/"
 moduloOp :: (Monad r) => VSOp r
 moduloOp = multPrec "%"
 
--- Variables --
+-- LValues --
 
-var :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
+var :: (CommonRenderSym r) => Label -> VSType r -> SLValue r
 var n t = mkStateVar n t (R.var n)
 
-staticVar :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
+staticVar :: (CommonRenderSym r) => Label -> VSType r -> SLValue r
 staticVar n t = mkStaticVar n t (R.var n)
 
 -- | To be used in classVar implementations. Throws an error if the variable is
 -- not static since classVar is for accessing static variables from a class
-classVarCheckStatic :: (CommonRenderSym r) => r (Variable r) -> r (Variable r)
+classVarCheckStatic :: (CommonRenderSym r) => r (LValue r) -> r (LValue r)
 classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
-objVar :: (CommonRenderSym r) => SVariable r -> SVariable r -> SVariable r
+objVar :: (CommonRenderSym r) => SLValue r -> SLValue r -> SLValue r
 objVar o' v' = do
   o <- o'
   v <- v'
@@ -206,7 +206,7 @@ objVar o' v' = do
         (variableType v) (R.objVar (RC.variable o) (RC.variable v))
   objVar' (variableBind v)
 
-arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
+arrayElem :: (OORenderSym r) => SValue r -> SLValue r -> SLValue r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
@@ -233,7 +233,7 @@ litInt i = valFromData Nothing (Just i) IC.int (integer i)
 litString :: (CommonRenderSym r) => String -> SValue r
 litString s = mkStateVal IC.string (doubleQuotedText s)
 
-valueOf :: (CommonRenderSym r) => SVariable r -> SValue r
+valueOf :: (CommonRenderSym r) => SLValue r -> SValue r
 valueOf v' = do
   v <- v'
   mkVal (variableType v) (RC.variable v)
@@ -264,7 +264,7 @@ call sep lib o n t pas nas = do
 funcAppMixedArgs :: (CommonRenderSym r) => MixedCall r
 funcAppMixedArgs = S.call Nothing Nothing
 
-selfFuncAppMixedArgs :: (CommonRenderSym r) => Doc -> SVariable r -> MixedCall r
+selfFuncAppMixedArgs :: (CommonRenderSym r) => Doc -> SLValue r -> MixedCall r
 selfFuncAppMixedArgs d slf n t vs ns = do
   s <- slf
   S.call Nothing (Just $ RC.variable s <> d) n t vs ns
@@ -274,8 +274,8 @@ newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
-lambda :: (CommonRenderSym r) => ([r (Variable r)] -> r (Value r) -> Doc) ->
-  [SVariable r] -> SValue r -> SValue r
+lambda :: (CommonRenderSym r) => ([r (LValue r)] -> r (Value r) -> Doc) ->
+  [SLValue r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
@@ -296,10 +296,10 @@ objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing
 func :: (CommonRenderSym r) => Label -> VSType r -> [SValue r] -> VSFunction r
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
-get :: (OORenderSym r) => SValue r -> SVariable r -> SValue r
+get :: (OORenderSym r) => SValue r -> SLValue r -> SValue r
 get v vToGet = v $. S.getFunc vToGet
 
-set :: (OORenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
+set :: (OORenderSym r) => SValue r -> SLValue r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
 listAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
@@ -327,11 +327,11 @@ listSet v i toVal = do
   f <- S.listSetFunc v (IC.intToIndex i) toVal
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
-getFunc :: (OORenderSym r) => SVariable r -> VSFunction r
+getFunc :: (OORenderSym r) => SLValue r -> VSFunction r
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
-setFunc :: (OORenderSym r) => VSType r -> SVariable r -> SValue r -> VSFunction r
+setFunc :: (OORenderSym r) => VSType r -> SLValue r -> SValue r -> VSFunction r
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 
@@ -351,27 +351,27 @@ loopStmt = S.stmt . setEmpty
 emptyStmt :: (CommonRenderSym r) => MSStatement r
 emptyStmt = mkStmtNoEnd empty
 
-assign :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r ->
+assign :: (CommonRenderSym r) => Terminator -> SLValue r -> SValue r ->
   MSStatement r
 assign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.assign vr v) t
 
-subAssign :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r ->
+subAssign :: (CommonRenderSym r) => Terminator -> SLValue r -> SValue r ->
   MSStatement r
 subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.subAssign vr v) t
 
-increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r) => SLValue r -> SValue r -> MSStatement r
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-objDecNew :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SValue r]
+objDecNew :: (OORenderSym r) => SLValue r -> r (Scope r) -> [SValue r]
   -> MSStatement r
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
@@ -477,7 +477,7 @@ tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 construct :: (CommonRenderSym r) => Label -> MS (r (Type r))
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
-param :: (CommonRenderSym r) => (r (Variable r) -> Doc) -> SVariable r ->
+param :: (CommonRenderSym r) => (r (LValue r) -> Doc) -> SLValue r ->
   MSParameter r
 param f v' = do
   v <- zoom lensMStoVS v'
@@ -490,12 +490,12 @@ method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> VS
   -> [MSParameter r] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r) => SVariable r -> SMethod r
+getMethod :: (OORenderSym r) => SLValue r -> SMethod r
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public dynamic (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.objVarSelf v)
 
-setMethod :: (OORenderSym r) => SVariable r -> SMethod r
+setMethod :: (OORenderSym r) => SLValue r -> SMethod r
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public dynamic IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.objVarSelf v &= IC.valueOf v

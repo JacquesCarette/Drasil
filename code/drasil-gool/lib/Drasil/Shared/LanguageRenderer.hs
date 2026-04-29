@@ -29,7 +29,7 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
-  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
+  TypeSym(Type), TypeElim(..), LValueSym(LValue), LValueElim(..),
   ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
   ParameterSym(Parameter))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
@@ -206,7 +206,7 @@ printFile fn f = f <> dot <> text fn
 
 -- Parameters --
 
-param :: (CommonRenderSym r) => r (Variable r) -> Doc
+param :: (CommonRenderSym r) => r (LValue r) -> Doc
 param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
@@ -255,26 +255,26 @@ switch f st v defBody cs =
 
 -- Statements --
 
-assign :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
+assign :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
-addAssign :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
+addAssign :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
-subAssign :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
+subAssign :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> Doc
 subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
-increment :: (CommonRenderSym r) => r (Variable r) -> Doc
+increment :: (CommonRenderSym r) => r (LValue r) -> Doc
 increment v = RC.variable v <> text "++"
 
-decrement :: (CommonRenderSym r) => r (Variable r) -> Doc
+decrement :: (CommonRenderSym r) => r (LValue r) -> Doc
 decrement v = RC.variable v <> text "--"
 
-listDec :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
+listDec :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> Doc
 listDec v n = space <> equals <+> new' <+> RC.type' (variableType v)
   <> parens (RC.value n)
 
-constDecDef :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
+constDecDef :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> Doc
 constDecDef v def = constDec' <+> RC.type' (variableType v) <+>
   RC.variable v <+> equals <+> RC.value def
 
@@ -428,13 +428,13 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 valueList :: (CommonRenderSym r) => [r (Value r)] -> Doc
 valueList = hicat listSep' . map RC.value
 
-variableList :: (CommonRenderSym r) => [r (Variable r)] -> Doc
+variableList :: (CommonRenderSym r) => [r (LValue r)] -> Doc
 variableList = hicat listSep' . map RC.variable
 
 parameterList :: (CommonRenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat listSep' . map RC.parameter
 
-namedArgList :: (CommonRenderSym r) => Doc -> [(r (Variable r), r (Value r))] -> Doc
+namedArgList :: (CommonRenderSym r) => Doc -> [(r (LValue r), r (Value r))] -> Doc
 namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 

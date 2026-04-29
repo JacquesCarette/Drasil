@@ -5,7 +5,7 @@ module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  LValueSym(..), LValueElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   MethodSym(..), VisibilitySym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
+  OOLValueSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
@@ -112,14 +112,14 @@ instance ScopeSym CodeInfoOO where
   mainFn = toCode ()
   local = toCode ()
 
-instance VariableSym CodeInfoOO where
-  type Variable CodeInfoOO = ()
+instance LValueSym CodeInfoOO where
+  type LValue CodeInfoOO = ()
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
   arrayElem _ _ = noInfo
 
-instance OOVariableSym CodeInfoOO where
+instance OOLValueSym CodeInfoOO where
   staticVar'  _ _ _ = noInfo
   self              = noInfo
   classVar    _ _   = noInfo
@@ -127,7 +127,7 @@ instance OOVariableSym CodeInfoOO where
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
 
-instance VariableElim CodeInfoOO where
+instance LValueElim CodeInfoOO where
   variableName _ = ""
   variableType _ = toCode ""
 

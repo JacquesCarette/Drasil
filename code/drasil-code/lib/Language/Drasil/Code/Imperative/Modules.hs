@@ -25,9 +25,9 @@ import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ), Space(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
 import qualified Language.Drasil.Printing.Import as PI (codeExpr)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
+import Drasil.GOOL (MSBody, MSBlock, SLValue, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), LValueSym(..),
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
@@ -213,7 +213,7 @@ genInputMod = do
 -- (if user chose 'Var'),
 -- or a declare-define statement for a constant variable (if user chose 'Const').
 constVarFunc :: (OOProg r) => ConstantRepr ->
-  (SVariable r -> SValue r -> CSStateVar r)
+  (SLValue r -> SValue r -> CSStateVar r)
 constVarFunc Var = stateVarDef public dynamic
 constVarFunc Const = constVar public
 

@@ -11,9 +11,9 @@ import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  VSFunction, SLValue, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), LValueSym(..),
+  VisibilitySym(..), LValueElim(..),ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOLValueSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -277,14 +277,14 @@ instance ScopeSym JavaCode where
 instance ScopeElim JavaCode where
   scopeData = unJC
 
-instance VariableSym JavaCode where
-  type Variable JavaCode = VarData
+instance LValueSym JavaCode where
+  type LValue JavaCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
   arrayElem i = G.arrayElem (litInt i)
 
-instance OOVariableSym JavaCode where
+instance OOLValueSym JavaCode where
   staticVar' _ = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
@@ -292,7 +292,7 @@ instance OOVariableSym JavaCode where
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 
-instance VariableElim JavaCode where
+instance LValueElim JavaCode where
   variableName = varName . unJC
   variableType = onCodeValue varType
 
@@ -300,7 +300,7 @@ instance InternalVarElim JavaCode where
   variableBind = varBind . unJC
   variable = varDoc . unJC
 
-instance RenderVariable JavaCode where
+instance RenderLValue JavaCode where
   varFromData b n t' d =  do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
@@ -947,7 +947,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+jLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 jLambda ps ex = parens (variableList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -958,7 +958,7 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
         jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
           (RC.value v))
 
-jConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+jConstDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) -> SValue r
   -> MSStatement r
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
@@ -968,8 +968,8 @@ jConstDecDef v' scp def' = do
   mkStmt $ jFinal <+> RC.type' (variableType v) <+>
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
-  [SVariable r] -> MSBody r -> MSStatement r
+jFuncDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) ->
+  [SLValue r] -> MSBody r -> MSStatement r
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -1008,7 +1008,7 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
 jDiscardInput :: SValue JavaCode -> MSStatement JavaCode
 jDiscardInput inFn = valStmt $ inFn $. jNextFunc
 
-jInput :: SVariable JavaCode -> SValue JavaCode -> SValue JavaCode
+jInput :: SLValue JavaCode -> SValue JavaCode -> SValue JavaCode
 jInput vr inFn = do
   v <- vr
   let jInput' Integer = jParseIntFunc $ inFn $. jNextLineFunc
@@ -1027,7 +1027,7 @@ jOpenFileWorA :: (OORenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
-jStringSplit :: (CommonRenderSym r) => SVariable r -> SValue r -> VS Doc
+jStringSplit :: (CommonRenderSym r) => SLValue r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
@@ -1040,17 +1040,17 @@ jMethod n es s p t ps b = vcat [
   indent $ RC.body b,
   rbrace]
 
-outputs :: SVariable JavaCode
+outputs :: SLValue JavaCode
 outputs = var "outputs" jArrayType
 
-jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
+jAssignFromArray :: Integer -> [SLValue JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem c outputs)) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] ->
-  SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] ->
-  [SVariable JavaCode] -> MSStatement JavaCode
+  SValue JavaCode) -> Label -> [SValue JavaCode] -> [SLValue JavaCode] ->
+  [SLValue JavaCode] -> MSStatement JavaCode
 jInOutCall f n ins [] [] = valStmt $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
@@ -1066,7 +1066,7 @@ jInOutCall f n ins outs both = fCall rets
 
 jInOut :: (VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode ->
     SMethod JavaCode) ->
-  [SVariable JavaCode] -> [SVariable JavaCode] -> [SVariable JavaCode] ->
+  [SLValue JavaCode] -> [SLValue JavaCode] -> [SLValue JavaCode] ->
   MSBody JavaCode -> SMethod JavaCode
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
@@ -1090,10 +1090,10 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] ->
+jDocInOut :: (CommonRenderSym r) => ([SLValue r] -> [SLValue r] -> [SLValue r] ->
     MSBody r -> SMethod r) ->
-  String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MSBody r -> SMethod r
+  String -> [(String, SLValue r)] -> [(String, SLValue r)] ->
+  [(String, SLValue r)] -> MSBody r -> SMethod r
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)

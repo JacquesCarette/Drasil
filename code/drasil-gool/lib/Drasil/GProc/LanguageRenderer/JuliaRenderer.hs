@@ -12,8 +12,8 @@ import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
-  SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  SLValue, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), LValueSym(..), LValueElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..), Set(..),
@@ -29,7 +29,7 @@ import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
@@ -262,14 +262,14 @@ instance ScopeSym JuliaCode where
 instance ScopeElim JuliaCode where
   scopeData = unJLC
 
-instance VariableSym JuliaCode where
-  type Variable JuliaCode = VarData
+instance LValueSym JuliaCode where
+  type LValue JuliaCode = VarData
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i = A.arrayElem (litInt i)
 
-instance VariableElim JuliaCode where
+instance LValueElim JuliaCode where
   variableName = varName . unJLC
   variableType = onCodeValue varType
 
@@ -277,7 +277,7 @@ instance InternalVarElim JuliaCode where
   variableBind = varBind . unJLC
   variable = varDoc . unJLC
 
-instance RenderVariable JuliaCode where
+instance RenderLValue JuliaCode where
   varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
@@ -696,21 +696,21 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlAssign :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlAssign :: (CommonRenderSym r) => SLValue r -> SValue r -> MSStatement r
 jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
 
-jlSubAssign :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlSubAssign :: (CommonRenderSym r) => SLValue r -> SValue r -> MSStatement r
 jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
 
-jlIncrement :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlIncrement :: (CommonRenderSym r) => SLValue r -> SValue r -> MSStatement r
 jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -723,7 +723,7 @@ jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
 jlGlobal :: Doc
 jlGlobal = text "global"
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+jlConstDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) -> SValue r
   -> MSStatement r
 jlConstDecDef v' scp def' = do
   let scpData = scopeData scp
@@ -750,7 +750,7 @@ jlIndexOf l v = do
 
 -- List slicing in Julia.  See HelloWorld.jl to see the full suite of
 -- possible outputs of this function.
-jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
+jlListSlice :: (CommonRenderSym r) => SLValue r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 jlListSlice vn vo beg end step = do
 
@@ -800,7 +800,7 @@ jlListSlice vn vo beg end step = do
       setToSlice
     ]
 
-jlListSlice' :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r ->
+jlListSlice' :: (CommonRenderSym r) => SLValue r -> SValue r -> SValue r ->
   SValue r -> SValue r -> Maybe Integer -> MSStatement r
 jlListSlice' vn vo beg end step mStep = do
   vold  <- zoom lensMStoVS vo
@@ -866,7 +866,7 @@ jlSpace :: OptionalSpace
 jlSpace = OSpace {oSpace = empty}
 
 -- | Creates a for-each loop in Julia
-jlForEach :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+jlForEach :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> r (Body r) -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -898,7 +898,7 @@ jlIntFunc n pms bod = do
         indent $ RC.body bod,
         jlEnd]
 
-jlLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+jlLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
@@ -934,7 +934,7 @@ jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlParam :: (CommonRenderSym r) => r (Variable r) -> Doc
+jlParam :: (CommonRenderSym r) => r (LValue r) -> Doc
 jlParam v = RC.variable v <> jlType <> RC.type' (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
@@ -1001,7 +1001,7 @@ jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
 
-jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MSStatement JuliaCode
+jlInput :: SValue JuliaCode -> SLValue JuliaCode -> MSStatement JuliaCode
 jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc

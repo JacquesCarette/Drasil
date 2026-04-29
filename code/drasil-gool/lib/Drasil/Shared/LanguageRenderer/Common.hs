@@ -11,9 +11,9 @@ import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (VSType, SVariable, TypeElim(getType),
+import Drasil.Shared.InterfaceCommon (VSType, SLValue, TypeElim(getType),
   MixedCall, SValue, VSFunction, ValueSym(valueType, Value), MSBody,
-  MSStatement, VariableElim(variableName), VariableSym(Variable), Label,
+  MSStatement, LValueElim(variableName), LValueSym(LValue), Label,
   Library, BodySym(Body), ScopeSym(Scope))
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
@@ -35,7 +35,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
 
-extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
+extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SLValue r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, C++, and Julia --
@@ -63,8 +63,8 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
 
 -- Python, Swift, and Julia --
 
-forEach' :: (CommonRenderSym r) => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc)
-  -> SVariable r -> SValue r -> MSBody r -> MSStatement r
+forEach' :: (CommonRenderSym r) => (r (LValue r) -> r (Value r) -> r (Body r) -> Doc)
+  -> SLValue r -> SValue r -> MSBody r -> MSStatement r
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -73,7 +73,7 @@ forEach' f i' v' b' = do
 
 -- Python and Julia --
 
-varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue r)
+varDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) -> Maybe (SValue r)
   -> MSStatement r
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v

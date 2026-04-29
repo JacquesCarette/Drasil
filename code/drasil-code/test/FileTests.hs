@@ -4,7 +4,7 @@ module FileTests (fileTestsOO, fileTestsProc) where
 
 import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
   BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..),
-  ControlStatement(..), VariableSym(var), Literal(..), VariableValue(..),
+  ControlStatement(..), LValueSym(var), Literal(..), VariableValue(..),
   Comparison(..), List(..), MethodSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))

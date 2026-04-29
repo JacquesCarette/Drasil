@@ -7,7 +7,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, VSType,
-  SVariable, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
+  SLValue, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
@@ -45,8 +45,8 @@ class PermElim r where
   binding :: r (IG.Permanence r) -> Binding
 
 class InternalGetSet r where
-  getFunc :: SVariable r -> VSFunction r
-  setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
+  getFunc :: SLValue r -> VSFunction r
+  setFunc :: VSType r -> SLValue r -> SValue r -> VSFunction r
 
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r

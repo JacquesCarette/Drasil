@@ -24,7 +24,7 @@ import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 
-import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
+import Drasil.GOOL (VSType, SLValue, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
@@ -158,7 +158,7 @@ ctorCall m t = fCall (\cm args nargs -> if m /= cm then
 
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOut :: (OOProg r) => Name -> Name -> [SValue r] ->
-  [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
+  [SLValue r] -> [SLValue r] -> GenState (MSStatement r)
 fAppInOut m n ins outs both = do
   g <- get
   let cm = currentModule g
@@ -210,7 +210,7 @@ fAppProc m s t vl ns = do
 
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOutProc :: (SharedProg r) => Name -> Name -> [SValue r] ->
-  [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
+  [SLValue r] -> [SLValue r] -> GenState (MSStatement r)
 fAppInOutProc m n ins outs both = do
   g <- get
   let cm = currentModule g

@@ -5,7 +5,7 @@ module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
 import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  ScopeSym(..), LValueSym(..), LValueElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
@@ -100,14 +100,14 @@ instance ScopeSym CodeInfoProc where
   mainFn = toCode ()
   local = toCode ()
 
-instance VariableSym CodeInfoProc where
-  type Variable CodeInfoProc = ()
+instance LValueSym CodeInfoProc where
+  type LValue CodeInfoProc = ()
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
   arrayElem _ _ = noInfo
 
-instance VariableElim CodeInfoProc where
+instance LValueElim CodeInfoProc where
   variableName _ = ""
   variableType _ = toCode ""
 

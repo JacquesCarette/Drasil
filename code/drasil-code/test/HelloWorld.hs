@@ -3,11 +3,11 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
+import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SLValue,
   SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
-  ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
+  ControlStatement(..), LValueSym(var, constant), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
   List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
@@ -39,7 +39,7 @@ description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (SharedProg r) => SVariable r
+myOtherList :: (SharedProg r) => SLValue r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
@@ -97,7 +97,7 @@ helloInitVariables = block [comment "Initializing variables",
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
-  mySlicedList10, mySlicedList11 :: (SharedProg r) => SVariable r
+  mySlicedList10, mySlicedList11 :: (SharedProg r) => SLValue r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)

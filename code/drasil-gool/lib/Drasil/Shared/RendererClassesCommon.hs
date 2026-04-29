@@ -4,7 +4,7 @@ module Drasil.Shared.RendererClassesCommon (
   CommonRenderSym, ImportSym(..), ImportElim(..),
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
-  OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..),
+  OpElim(..), RenderLValue(..), InternalVarElim(..), RenderValue(..),
   ValueElim(..), InternalListFunc(..), RenderFunction(..), FunctionElim(..),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim(..),
@@ -14,9 +14,9 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VSType, SLValue, SValue, MSStatement, MSParameter, SMethod, MixedCall,
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), LValueSym(..),
+  LValueElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), ValueExpression(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
@@ -34,12 +34,12 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
-  InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r,
+  InternalList r, VectorExpression r, TypeElim r, LValueElim r, RenderBlock r,
   BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
   FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r,
   VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
   InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
-  InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
+  InternalTypeElim r, RenderValue r, ValueElim r, RenderLValue r,
   InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
   BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
   MethodElim r, ParameterSym r, ScopeElim r
@@ -126,12 +126,12 @@ class OpElim r where
 class ScopeElim r where
   scopeData :: r (Scope r) -> ScopeData
 
-class RenderVariable r where
-  varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
+class RenderLValue r where
+  varFromData :: Binding -> String -> VSType r -> Doc -> SLValue r
 
 class InternalVarElim r where
-  variableBind :: r (Variable r) -> Binding
-  variable  :: r (Variable r) -> Doc
+  variableBind :: r (LValue r) -> Binding
+  variable  :: r (LValue r) -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r
@@ -176,7 +176,7 @@ class FunctionElim r where
   function :: r (Function r) -> Doc
 
 class InternalAssignStmt r where
-  multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r
+  multiAssign       :: [SLValue r] -> [SValue r] -> MSStatement r
 
 class InternalIOStmt r where
   -- newLn, maybe a file to print to, printFunc, value to print
@@ -202,7 +202,7 @@ class VisibilityElim r where
   visibility :: r (Visibility r) -> Doc
 
 class RenderParam r where
-  paramFromData :: SVariable r -> Doc -> MSParameter r
+  paramFromData :: SLValue r -> Doc -> MSParameter r
 
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label

@@ -1,7 +1,7 @@
 module VectorTest (vectorTestOO, vectorTestProc) where
 
-import Drasil.GOOL (SVariable, SMethod, SharedProg, OOProg, BodySym(..),
-  BlockSym(..), TypeSym(..), VariableSym(var), Literal(..), VectorType(..),
+import Drasil.GOOL (SLValue, SMethod, SharedProg, OOProg, BodySym(..),
+  BlockSym(..), TypeSym(..), LValueSym(var), Literal(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), DeclStatement(..),
   ControlStatement(..), Comparison(..), VariableValue(..),
   ThunkAssign(..), MethodSym(..), ScopeSym(mainFn))
@@ -19,13 +19,13 @@ vectorTestProc :: ProcProg r => GProc.GSProgram r
 vectorTestProc = GProc.prog "VectorTest" "" [GProc.fileDoc $ GProc.buildModule
   "VectorTest" [] [main]]
 
-v1 :: SharedProg r => SVariable r
+v1 :: SharedProg r => SLValue r
 v1 = var "v1" (vecType double)
 
-v2 :: SharedProg r => SVariable r
+v2 :: SharedProg r => SLValue r
 v2 = var "v2" (vecType double)
 
-x :: SharedProg r => SVariable r
+x :: SharedProg r => SLValue r
 x = var "x" double
 
 main :: SharedProg r => SMethod r

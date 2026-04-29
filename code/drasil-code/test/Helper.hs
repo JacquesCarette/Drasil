@@ -2,7 +2,7 @@
 module Helper (helperOO, helperProc) where
 
 import Drasil.GOOL (SMethod, SharedProg, OOProg, bodyStatements, TypeSym(..),
-  DeclStatement(..), ControlStatement(..), (&=), VariableSym(var), Literal(..),
+  DeclStatement(..), ControlStatement(..), (&=), LValueSym(var), Literal(..),
   VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..),
   MethodSym(..), ScopeSym(local))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))

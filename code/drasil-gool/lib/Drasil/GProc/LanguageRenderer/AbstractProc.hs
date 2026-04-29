@@ -6,7 +6,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
-  SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
+  SLValue, MSParameter, VSType, LValueElim(variableName, variableType),
   VisibilitySym(..), getType, convType, ScopeSym(Scope))
 import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
   List(intToIndex), ParameterSym(param))
@@ -80,7 +80,7 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 listInnerType :: (ProcRenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
 
-arrayElem :: (ProcRenderSym r) => SValue r -> SVariable r -> SVariable r
+arrayElem :: (ProcRenderSym r) => SValue r -> SLValue r -> SLValue r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
@@ -89,7 +89,7 @@ arrayElem i' v' = do
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
+funcDecDef :: (ProcRenderSym r) => SLValue r -> r (Scope r) -> [SLValue r]
   -> MSBody r -> MSStatement r
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

@@ -11,9 +11,9 @@ import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  VSFunction, SLValue, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), LValueSym(..),
+  VisibilitySym(..), LValueElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOLValueSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -280,14 +280,14 @@ instance ScopeSym CSharpCode where
 instance ScopeElim CSharpCode where
   scopeData = unCSC
 
-instance VariableSym CSharpCode where
-  type Variable CSharpCode = VarData
+instance LValueSym CSharpCode where
+  type LValue CSharpCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
   arrayElem i = G.arrayElem (litInt i)
 
-instance OOVariableSym CSharpCode where
+instance OOLValueSym CSharpCode where
   staticVar' _ = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
@@ -296,7 +296,7 @@ instance OOVariableSym CSharpCode where
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 
-instance VariableElim CSharpCode where
+instance LValueElim CSharpCode where
   variableName = varName . unCSC
   variableType = onCodeValue varType
 
@@ -304,7 +304,7 @@ instance InternalVarElim CSharpCode where
   variableBind = varBind . unCSC
   variable = varDoc . unCSC
 
-instance RenderVariable CSharpCode where
+instance RenderLValue CSharpCode where
   varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
@@ -834,7 +834,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+csLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 csLambda ps ex = parens (variableList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
@@ -872,8 +872,8 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
-  [SVariable r] -> MSBody r -> MSStatement r
+csFuncDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) ->
+  [SLValue r] -> MSBody r -> MSStatement r
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -938,8 +938,8 @@ csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
 csInOutCall :: (Label -> VSType CSharpCode -> [SValue CSharpCode] ->
-  SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SVariable CSharpCode]
-  -> [SVariable CSharpCode] -> MSStatement CSharpCode
+  SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SLValue CSharpCode]
+  -> [SLValue CSharpCode] -> MSStatement CSharpCode
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
@@ -954,7 +954,7 @@ csVarDec Dynamic d = d
 
 csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode ->
     SMethod CSharpCode) ->
-  [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
+  [SLValue CSharpCode] -> [SLValue CSharpCode] -> [SLValue CSharpCode] ->
   MSBody CSharpCode -> SMethod CSharpCode
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $

@@ -5,7 +5,7 @@ module Drasil.GOOL.InterfaceGOOL (
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), staticVar, staticConst, ($->), OOValueSym,
+  OOTypeSym(..), OOLValueSym(..), staticVar, staticConst, ($->), OOValueSym,
   OOVariableValue, OOValueExpression(..), selfFuncApp, newObj, extNewObj,
   libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
@@ -18,12 +18,12 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, SLValue, SValue,
   MSStatement, NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
-  VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
+  LValueSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
@@ -76,13 +76,13 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
 
   docClass :: String -> SClass r -> SClass r
 
-type Initializers r = [(SVariable r, SValue r)]
+type Initializers r = [(SLValue r, SValue r)]
 
 class (MethodSym r, PermanenceSym r) => OOMethodSym r where
   method      :: Label -> r (Visibility r) -> r (Permanence r) -> VSType r ->
     [MSParameter r] -> MSBody r -> SMethod r
-  getMethod   :: SVariable r -> SMethod r
-  setMethod   :: SVariable r -> SMethod r
+  getMethod   :: SLValue r -> SMethod r
+  setMethod   :: SLValue r -> SMethod r
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
   -- inOutMethod and docInOutMethod both need the Permanence parameter
@@ -105,20 +105,20 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where
+class (VisibilitySym r, PermanenceSym r, LValueSym r) => StateVarSym r where
   type StateVar r
-  stateVar :: r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SVariable r ->
+  stateVar :: r (Visibility r) -> r (Permanence r) -> SLValue r -> CSStateVar r
+  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SLValue r ->
     SValue r -> CSStateVar r
-  constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
+  constVar :: r (Visibility r) ->  SLValue r -> SValue r -> CSStateVar r
 
-privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+privDVar :: (StateVarSym r) => SLValue r -> CSStateVar r
 privDVar = stateVar private dynamic
 
-pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubDVar :: (StateVarSym r) => SLValue r -> CSStateVar r
 pubDVar = stateVar public dynamic
 
-pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubSVar :: (StateVarSym r) => SLValue r -> CSStateVar r
 pubSVar = stateVar public static
 
 class PermanenceSym r where
@@ -131,29 +131,29 @@ class (TypeSym r) => OOTypeSym r where
 
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
-class (VariableSym r, OOTypeSym r) => OOVariableSym r where
+class (LValueSym r, OOTypeSym r) => OOLValueSym r where
   -- Bool: False for variable, True for constant.  Required by the Python renderer.
-  staticVar'    :: Bool -> Label -> VSType r -> SVariable r
-  self         :: SVariable r
-  classVar     :: VSType r -> SVariable r -> SVariable r
-  extClassVar  :: VSType r -> SVariable r -> SVariable r
-  objVar       :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf   :: SVariable r -> SVariable r
+  staticVar'    :: Bool -> Label -> VSType r -> SLValue r
+  self         :: SLValue r
+  classVar     :: VSType r -> SLValue r -> SLValue r
+  extClassVar  :: VSType r -> SLValue r -> SLValue r
+  objVar       :: SLValue r -> SLValue r -> SLValue r
+  objVarSelf   :: SLValue r -> SLValue r
 
-staticVar :: (OOVariableSym r) => Label -> VSType r -> SVariable r
+staticVar :: (OOLValueSym r) => Label -> VSType r -> SLValue r
 staticVar = staticVar' False
 
-staticConst :: (OOVariableSym r) => Label -> VSType r -> SVariable r
+staticConst :: (OOLValueSym r) => Label -> VSType r -> SLValue r
 staticConst = staticVar' True
 
-($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
+($->) :: (OOLValueSym r) => SLValue r -> SLValue r -> SLValue r
 infixl 9 $->
 ($->) = objVar
 
-class (VariableValue r, OOVariableSym r) => OOVariableValue r
+class (VariableValue r, OOLValueSym r) => OOVariableValue r
 
 -- for values that can include expressions
-class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
+class (ValueExpression r, OOLValueSym r, OOValueSym r) => OOValueExpression r where
   selfFuncAppMixedArgs ::            MixedCall r
   newObjMixedArgs      ::            MixedCtorCall r
   extNewObjMixedArgs   :: Library -> MixedCtorCall r
@@ -199,24 +199,24 @@ objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
 
-class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
-  objDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+class (DeclStatement r, OOLValueSym r) => OODeclStatement r where
+  objDecDef    :: SLValue r -> r (Scope r) -> SValue r -> MSStatement r
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  extObjDecNew :: Library -> SVariable r -> r (Scope r) -> [SValue r]
+  objDecNew    :: SLValue r -> r (Scope r) -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SLValue r -> r (Scope r) -> [SValue r]
     -> MSStatement r
 
-objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r (Scope r)
+objDecNewNoParams :: (OODeclStatement r) => SLValue r -> r (Scope r)
   -> MSStatement r
 objDecNewNoParams v s = objDecNew v s []
 
-extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r ->
+extObjDecNewNoParams :: (OODeclStatement r) => Library -> SLValue r ->
   r (Scope r) -> MSStatement r
 extObjDecNewNoParams l v s = extObjDecNew l v s []
 
-class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
+class (FuncAppStatement r, OOLValueSym r) => OOFuncAppStatement r where
   selfInOutCall :: InOutCall r
 
 class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
@@ -235,9 +235,9 @@ addObserver o = valStmt $ listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (BodySym r, VariableSym r) => StrategyPattern r where
+class (BodySym r, LValueSym r) => StrategyPattern r where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
-    Maybe (SVariable r) -> MSBlock r
+    Maybe (SLValue r) -> MSBlock r
 
 class (FunctionSym r) => OOFunctionSym r where
   func :: Label -> VSType r -> [SValue r] -> VSFunction r
@@ -250,9 +250,9 @@ infixl 9 $.
 selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
 selfAccess = objAccess (valueOf self)
 
-class (ValueSym r, VariableSym r) => GetSet r where
-  get :: SValue r -> SVariable r -> SValue r
-  set :: SValue r -> SVariable r -> SValue r -> SValue r
+class (ValueSym r, LValueSym r) => GetSet r where
+  get :: SValue r -> SLValue r -> SValue r
+  set :: SValue r -> SLValue r -> SValue r -> SValue r
 
 convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
 convTypeOO (Object n) = obj n

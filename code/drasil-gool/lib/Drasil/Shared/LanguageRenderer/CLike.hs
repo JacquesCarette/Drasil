@@ -11,10 +11,10 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Utils.Drasil (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SLValue,
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
   TypeElim(getType, getTypeString), ScopeSym(..),
-  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
+  LValueElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
@@ -93,9 +93,9 @@ andOp = andPrec "&&"
 
 orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
--- Variables --
+-- LValues --
 
-self :: (OORenderSym r) => SVariable r
+self :: (OORenderSym r) => SLValue r
 self = do
   l <- zoom lensVStoMS getClassName
   mkStateVar R.this (IG.obj l) R.this'
@@ -135,18 +135,18 @@ listSize v = v $. S.listSizeFunc v
 
 -- Statements --
 
-increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
+increment1 :: (CommonRenderSym r) => SLValue r -> MSStatement r
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
-decrement1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
+decrement1 :: (CommonRenderSym r) => SLValue r -> MSStatement r
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
 varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
-  SVariable r -> r (Scope r) -> MSStatement r
+  SLValue r -> r (Scope r) -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -160,7 +160,7 @@ varDec s d pdoc v' scp = do
         ptrdoc (Set _) = pdoc
         ptrdoc _ = empty
 
-varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) ->
+varDecDef :: (CommonRenderSym r) => Terminator -> SLValue r -> r (Scope r) ->
   SValue r -> MSStatement r
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
@@ -169,7 +169,7 @@ varDecDef t vr scp vl' = do
       stmtCtor Semi = mkStmt
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
-setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) -> SValue r ->
+setDecDef :: (CommonRenderSym r) => Terminator -> SLValue r -> r (Scope r) -> SValue r ->
   MSStatement r
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
@@ -179,13 +179,13 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec :: (CommonRenderSym r) => (r (Value r) -> Doc) -> SValue r ->
-  SVariable r -> r (Scope r) -> MSStatement r
+  SLValue r -> r (Scope r) -> MSStatement r
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
-extObjDecNew :: (OORenderSym r) => Library -> SVariable r -> r (Scope r) ->
+extObjDecNew :: (OORenderSym r) => Library -> SLValue r -> r (Scope r) ->
   [SValue r] -> MSStatement r
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)

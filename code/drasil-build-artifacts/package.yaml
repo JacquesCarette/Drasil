@@ -24,6 +24,7 @@ dependencies:
 - directory
 - filepath
 - pretty
+- prettyprinter
 
 ghc-options:
 - -Wall

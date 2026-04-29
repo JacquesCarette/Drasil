@@ -126,6 +126,7 @@ class OpElim r where
 class ScopeElim r where
   scopeData :: r (Scope r) -> ScopeData
 
+-- TODO: [Brandon Bosman, 04/29/2026]: This is an odd method, and it's used for more lvalues than just variables.
 class RenderLValue r where
   varFromData :: Binding -> String -> VSType r -> Doc -> SLValue r
 

@@ -112,6 +112,7 @@ class (LValueSym r) => LValueElim r where
   variableName :: r (LValue r) -> String
   variableType :: r (LValue r) -> r (Type r)
 
+-- TODO [Brandon Bosman, 29/04/2026]: why do we have both listVar and listOf?
 listVar :: (LValueSym r) => Label -> VSType r -> SLValue r
 listVar n t = var n (listType t)
 
@@ -217,6 +218,7 @@ class (ValueSym r) => Comparison r where
   (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
 
+-- TODO: [Brandon Bosman, 04/29/2026]: use binding forms instead of lvalues here
 type NamedArgs r = [(SLValue r, SValue r)]
 -- Function call with both positional and named arguments
 type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
@@ -237,6 +239,7 @@ class (LValueSym r, ValueSym r) => ValueExpression r where
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
 
+  -- TODO: [Brandon Bosman, 04/29/2026]: use binding forms instead of lvalues here
   lambda :: [SLValue r] -> SValue r -> SValue r
 
   notNull :: SValue r -> SValue r
@@ -276,6 +279,7 @@ class (ValueSym r) => List r where
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
+  -- TODO [Brandon Bosman, 28/04/2026]: I think we can merge listAccess and listSet by having listAccess return SLValue
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> SValue r
@@ -297,6 +301,7 @@ class (ValueSym r) => Set r where
   -- Arguments are: Set, Set
   setUnion :: SValue r -> SValue r -> SValue r
 
+-- TODO: [Brandon Bosman, 04/29/2026]: use a binding form instead of LValue here
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SLValue r -> SValue r -> MSBlock r
@@ -331,12 +336,14 @@ class ThunkSym r where
   type Thunk (r :: K.Type -> K.Type)
 
 class (LValueSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
+  -- TODO: [Brandon Bosman, 04/29/2026]: use a binding form instead of LValue
   thunkAssign :: SLValue r -> VSThunk r -> MSStatement r
 
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
 
 class (DeclStatement r) => VectorDecl r where
+  -- TODO: [Brandon Bosman, 04/29/2026]: use a binding form instead of LValue
   -- First argument is size of the vector
   vecDec :: Integer -> SLValue r -> r (Scope r) -> MSStatement r
   vecDecDef :: SLValue r -> r (Scope r) -> [SValue r] -> MSStatement r
@@ -378,6 +385,7 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SLValue r
   -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
+-- TODO: [Brandon Bosman, 04/29/2026]: use binding forms instead of LValues in a bunch of places in this typeclass
 class (LValueSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   varDec       :: SLValue r -> r (Scope r) -> MSStatement r
   varDecDef    :: SLValue r -> r (Scope r) -> SValue r -> MSStatement r
@@ -460,6 +468,7 @@ class (BodySym r, LValueSym r) => ControlStatement r where
 
   for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r ->
     MSStatement r
+  -- TODO: [Brandon Bosman, 04/29/2026]: use binding forms instead of lvalues
   -- Iterator variable, start value, end value, step value, loop body
   forRange :: SLValue r -> SValue r -> SValue r -> SValue r -> MSBody r ->
     MSStatement r

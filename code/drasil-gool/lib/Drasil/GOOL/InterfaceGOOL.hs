@@ -250,6 +250,7 @@ infixl 9 $.
 selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
 selfAccess = objAccess (valueOf self)
 
+-- TODO: [Brandon Bosman, 04/29/2026]: Should this take/return lvalues instead of values?
 class (ValueSym r, LValueSym r) => GetSet r where
   get :: SValue r -> SLValue r -> SValue r
   set :: SValue r -> SLValue r -> SValue r -> SValue r

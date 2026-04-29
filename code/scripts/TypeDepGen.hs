@@ -12,12 +12,10 @@
 module TypeDepGen (main) where
 
 import Data.List
-import Data.Maybe
 import System.IO
 import System.Directory
 import System.FilePath (takeDirectory)
 import Control.Monad
-import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReaderT as SCRT (extractEntryData, EntryData(..),
@@ -52,19 +50,10 @@ main = do
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"
 
-  -- imports configuration settings (drasil- package names + class types order)
-  packageNames <- config scriptsDirectory
-
-  -- uses ordering (imported from config file) iff imported ordering is complete
-  let ordered
-        | ldL == lpN = map (getFolder drctyDict) packageNames
-        | otherwise = drctyList
-      (ldL,lpN) = (length drctyList,length packageNames)
-      -- creates dictionary (Map.Map format) from drasil- directories list
-      drctyDict = Map.fromList $ map toDictList drctyList
+  let packageNames = map DC.folderDrasilPack drctyList
 
   -- all files + filepaths stored here; obtained from ordered list using finder
-  allFiles <- mapM DC.finder ordered
+  allFiles <- mapM DC.finder drctyList
 
   -- creates Entry instances (w/ file data) from File instances (File -> Entry)
   rawEntryData <- zipWithM (createEntry codeDirectory) (concat allFiles) (map DC.fileName (concat allFiles))
@@ -189,17 +178,6 @@ makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataDeclRecord] ->
 makeEntry drpk fn fp dtR dtC ntd td = Entry {drasilPack=drpk,fileName=fn,
   filePath=fp,dataTypeRecords=dtR, dataTypeConstructors=dtC, newtypes=ntd, types=td}
 
--- import configurations function (drasil- packages)
-config :: FilePath -> IO [String]
-config configFilePath = do
-  setCurrentDirectory configFilePath
-  c <- readFile "DTG_Config.txt"
-  let l = map words $ filter isInfoLine (lines c)
-      -- FIXME: use real parser to extract settings from config file
-      -- will improve error messages regarding config file settings
-      packageNames = head l
-  return packageNames
-
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry
 -- creates actual file entries
@@ -220,15 +198,3 @@ createEntry homeDirectory file filename = do
 
   let entry = makeEntry drpk fn efp dataTypeDeclR dataTypeDeclC newtypeDecl typeDecl
   return entry
-
--- used to filter out info lines (i.e. removes comment and empty lines)
-isInfoLine :: String -> Bool
-isInfoLine line = (line /="") && not ("#" `isPrefixOf` line)
-
--- gets folder from dictionary using folder name (iff it exists in dictionary)
-getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder
-getFolder dict name = fromJust $ Map.lookup name dict
-
--- converts list to dictionary list format (for use by drasil- directories only)
-toDictList :: DC.Folder -> (DC.FolderName,DC.Folder)
-toDictList folder = (DC.folderDrasilPack folder,folder)

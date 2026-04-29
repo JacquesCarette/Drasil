@@ -29,7 +29,7 @@ import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(lvalueBind),
   RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
@@ -37,7 +37,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  type', uOp, bOp, lvalue, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
@@ -274,8 +274,8 @@ instance LValueElim JuliaCode where
   variableType = onCodeValue varType
 
 instance InternalVarElim JuliaCode where
-  variableBind = varBind . unJLC
-  variable = varDoc . unJLC
+  lvalueBind = varBind . unJLC
+  lvalue = varDoc . unJLC
 
 instance RenderLValue JuliaCode where
   varFromData b n t' d = do
@@ -732,7 +732,7 @@ jlConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
-  mkStmt $ decDoc <+> RC.variable v <+> equals <+> RC.value def
+  mkStmt $ decDoc <+> RC.lvalue v <+> equals <+> RC.value def
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
@@ -868,7 +868,7 @@ jlSpace = OSpace {oSpace = empty}
 -- | Creates a for-each loop in Julia
 jlForEach :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> r (Body r) -> Doc
 jlForEach i lstVar b = vcat [
-  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
+  forLabel <+> RC.lvalue i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
   jlEnd]
 
@@ -935,7 +935,7 @@ jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
 jlParam :: (CommonRenderSym r) => r (LValue r) -> Doc
-jlParam v = RC.variable v <> jlType <> RC.type' (variableType v)
+jlParam v = RC.lvalue v <> jlType <> RC.type' (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (CommonRenderSym r) => VSType r

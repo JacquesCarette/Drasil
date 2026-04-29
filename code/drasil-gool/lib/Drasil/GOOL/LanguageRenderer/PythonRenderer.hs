@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(lvalueBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -41,7 +41,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  type', uOp, bOp, lvalue, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -58,7 +58,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
+  mkVal, mkStateLVal, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
@@ -278,7 +278,7 @@ instance LValueSym PythonCode where
 instance OOLValueSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
                           else G.staticVar n t
-  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
+  self = zoom lensVStoMS getClassName >>= (\l -> mkStateLVal pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $
@@ -291,8 +291,8 @@ instance LValueElim PythonCode where
   variableType = onCodeValue varType
 
 instance InternalVarElim PythonCode where
-  variableBind = varBind . unPC
-  variable = varDoc . unPC
+  lvalueBind = varBind . unPC
+  lvalue = varDoc . unPC
 
 instance RenderLValue PythonCode where
   varFromData b n t' d = do
@@ -666,7 +666,7 @@ instance OOMethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  param = G.param RC.variable
+  param = G.param RC.lvalue
   pointerParam = param
 
 instance RenderParam PythonCode where
@@ -986,7 +986,7 @@ pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
-  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
+  forLabel <+> RC.lvalue i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
 pyWhile :: (CommonRenderSym r) => r (Value r) -> r (Body r) -> Doc
@@ -1012,13 +1012,13 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   b <- beg
   e <- end
   s <- step
-  pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
+  pure $ toCode $ RC.lvalue vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (CommonRenderSym r) => Label -> r (LValue r) -> [r (Parameter r)] ->
   r (Body r) -> Doc
 pyMethod n slf ps b = vcat [
-  pyDef <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
+  pyDef <+> text n <> parens (RC.lvalue slf <> oneParam <> pms) <> colon,
   indent bodyD]
       where pms = parameterList ps
             oneParam = emptyIfEmpty pms listSep'

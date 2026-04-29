@@ -35,7 +35,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(lvalueBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -44,7 +44,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  type', uOp, bOp, lvalue, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -64,7 +64,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec,
+  mkStateVal, mkVal, mkStateLVal, mkLVal, VSOp, mkOp, unOpPrec, powerPrec,
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
@@ -310,8 +310,8 @@ instance (Pair p) => LValueElim (p CppSrcCode CppHdrCode) where
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
 
 instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
-  variableBind v = variableBind $ pfst v
-  variable v = RC.variable $ pfst v
+  lvalueBind v = lvalueBind $ pfst v
+  lvalue v = RC.lvalue $ pfst v
 
 instance (Pair p) => RenderLValue (p CppSrcCode CppHdrCode) where
   varFromData b n t' d = pair1 (\t -> varFromData b n t d)
@@ -1219,8 +1219,8 @@ instance OOLValueSym CppSrcCode where
     c <- c'
     v <- v'
     vfd <- varFromData
-      (variableBind v) (getTypeString c `nmSpcAccess` variableName v)
-      (toState $ variableType v) (cppClassVar (RC.type' c) (RC.variable v))
+      (lvalueBind v) (getTypeString c `nmSpcAccess` variableName v)
+      (toState $ variableType v) (cppClassVar (RC.type' c) (RC.lvalue v))
     toState $ classVarCheckStatic vfd
   extClassVar c v = do
     t <- c
@@ -1230,16 +1230,16 @@ instance OOLValueSym CppSrcCode where
   objVar = G.objVar
   objVarSelf v' = do
     v <- v'
-    mkVar (R.this ++ ptrAccess ++ variableName v)
-      (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
+    mkLVal (R.this ++ ptrAccess ++ variableName v)
+      (variableType v) (R.this' <> ptrAccess' <> RC.lvalue v)
 
 instance LValueElim CppSrcCode where
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
 
 instance InternalVarElim CppSrcCode where
-  variableBind = varBind . unCPPSC
-  variable = varDoc . unCPPSC
+  lvalueBind = varBind . unCPPSC
+  lvalue = varDoc . unCPPSC
 
 instance RenderLValue CppSrcCode where
   varFromData b n t' d = do
@@ -1490,7 +1490,7 @@ instance DeclStatement CppSrcCode where
     v <- zoom lensMStoVS vr
     modify $ useVarName $ variableName v
     modify $ setVarScope (variableName v) (scopeData scp)
-    mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
+    mkStmt $ RC.type' (variableType v) <+> RC.lvalue v <>
       brackets (RC.value sz)
   arrayDecDef vr scp vals = do
     vdc <- arrayDec (toInteger $ length vals) vr scp
@@ -1653,7 +1653,7 @@ instance MethodSym CppSrcCode where
             t <- typeFromData (List String)
               (constDec ++ " " ++ C.charRender) (constDec' <+> text
               C.charRender)
-            mkVar argv t (cppDeref <> text argv <> array')
+            mkLVal argv t (cppDeref <> text argv <> array')
   docFunc = CP.doxFunc
 
   inOutFunc n s = cppsInOut (function n s)
@@ -1932,25 +1932,25 @@ instance ScopeElim CppHdrCode where
 instance LValueSym CppHdrCode where
   type LValue CppHdrCode = VarData
   var           = G.var
-  constant  _ _ = mkStateVar "" void empty
-  extVar  _ _ _ = mkStateVar "" void empty
-  arrayElem _ _ = mkStateVar "" void empty
+  constant  _ _ = mkStateLVal "" void empty
+  extVar  _ _ _ = mkStateLVal "" void empty
+  arrayElem _ _ = mkStateLVal "" void empty
 
 instance OOLValueSym CppHdrCode where
   staticVar' _ = G.staticVar
-  self = mkStateVar "" void empty
-  classVar _ _ = mkStateVar "" void empty
-  extClassVar _ _ = mkStateVar "" void empty
+  self = mkStateLVal "" void empty
+  classVar _ _ = mkStateLVal "" void empty
+  extClassVar _ _ = mkStateLVal "" void empty
   objVar = G.objVar
-  objVarSelf _ = mkStateVar "" void empty
+  objVarSelf _ = mkStateLVal "" void empty
 
 instance LValueElim CppHdrCode where
   variableName = varName . unCPPHC
   variableType = onCodeValue varType
 
 instance InternalVarElim CppHdrCode where
-  variableBind = varBind . unCPPHC
-  variable = varDoc . unCPPHC
+  lvalueBind = varBind . unCPPHC
+  lvalue = varDoc . unCPPHC
 
 instance RenderLValue CppHdrCode where
   varFromData b n t' d = do
@@ -2695,7 +2695,7 @@ cppClassVar c v = c `nmSpcAccess'` v
 
 cppLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
-  (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> cppLambdaSep <+>
+  (map (RC.type' . variableType) ps) (map RC.lvalue ps)) <+> cppLambdaSep <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
 stodFunc :: SValue CppSrcCode -> SValue CppSrcCode
@@ -2735,9 +2735,9 @@ cppFuncDecDef v scp ps bod = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+  mkStmt $ RC.type' (variableType vr) <+> RC.lvalue vr <+> equals <+>
     cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (map (RC.type' .
-    variableType) pms) (map RC.variable pms)) <+> cppLambdaSep <+> bodyStart $$
+    variableType) pms) (map RC.lvalue pms)) <+> cppLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
 cppPrint :: (CommonRenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
@@ -2773,7 +2773,7 @@ cppInput :: SLValue CppSrcCode -> SValue CppSrcCode -> MSStatement CppSrcCode
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
-  multi [mkStmt (RC.value inFn <+> streamR <+> RC.variable v),
+  multi [mkStmt (RC.value inFn <+> streamR <+> RC.lvalue v),
     valStmt $ ignoreFunc '\n' i]
 
 cppOpenFile :: (OORenderSym r) => Label -> SLValue r -> SValue r -> MSStatement r
@@ -2781,7 +2781,7 @@ cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
   mkStateVal void $ text mode]
 
 cppPointerParamDoc :: (CommonRenderSym r) => r (LValue r) -> Doc
-cppPointerParamDoc v = RC.type' (variableType v) <+> cppPtr <> RC.variable v
+cppPointerParamDoc v = RC.type' (variableType v) <+> cppPtr <> RC.lvalue v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode)
   -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
@@ -2798,7 +2798,7 @@ cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode ->
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   bod -> if null is then CP.constructor n ps is b else modify (setVisibility Pub) >>
-  toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable
+  toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.lvalue
   ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom
   lensMStoVS . snd) is <*> b)
@@ -2848,7 +2848,7 @@ cppsStateVarDef cns s p vr' vl' = do
   emptS <- zoom lensCStoMS emptyStmt
   pure $ on3CodeValues svd (onCodeValue snd s)
     (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+>
-      text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
+      text n `nmSpcAccess'` RC.lvalue vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
 
@@ -2859,7 +2859,7 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   v <- zoom lensMStoVS v'
   b <- b'
   mkStmtNoEnd $ vcat [
-    forEachLabel <+> parens ((text cppConst <+> RC.type' (variableType e) <+> text "&") <> RC.variable e <+>
+    forEachLabel <+> parens ((text cppConst <+> RC.type' (variableType e) <+> text "&") <> RC.lvalue e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
     bEnd]

@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(lvalueBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -40,7 +40,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
   MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  type', uOp, bOp, lvalue, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -301,8 +301,8 @@ instance LValueElim CSharpCode where
   variableType = onCodeValue varType
 
 instance InternalVarElim CSharpCode where
-  variableBind = varBind . unCSC
-  variable = varDoc . unCSC
+  lvalueBind = varBind . unCSC
+  lvalue = varDoc . unCSC
 
 instance RenderLValue CSharpCode where
   varFromData b n t' d = do
@@ -539,7 +539,7 @@ instance AssignStatement CSharpCode where
   (&--) = C.decrement1
 
 instance DeclStatement CSharpCode where
-  varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
+  varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (lvalueBind v') $
     C.varDec static dynamic empty v scp)
   varDecDef = C.varDecDef Semi
   setDec = varDec

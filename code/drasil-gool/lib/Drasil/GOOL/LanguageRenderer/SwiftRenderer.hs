@@ -35,7 +35,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(lvalueBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -44,7 +44,7 @@ import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  type', uOp, bOp, lvalue, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -303,8 +303,8 @@ instance LValueElim SwiftCode where
   variableType = onCodeValue varType
 
 instance InternalVarElim SwiftCode where
-  variableBind = varBind . unSC
-  variable = varDoc . unSC
+  lvalueBind = varBind . unSC
+  lvalue = varDoc . unSC
 
 instance RenderLValue SwiftCode where
   varFromData b n t' d = do
@@ -982,7 +982,7 @@ swiftLitFloat = mkStateVal float . D.float
 swiftLambda :: (CommonRenderSym r) => [r (LValue r)] -> r (Value r) -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
-    (map RC.variable ps)
+    (map RC.lvalue ps)
     (map (RC.type' . variableType) ps)))
   <+> swiftRetType' <+> RC.type' (valueType ex) <+> inLabel <+> RC.value ex
 
@@ -1162,8 +1162,8 @@ swiftVarDec dec v' scp = do
   modify $ setVarScope (variableName v) (scopeData scp)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
-      p = bind $ variableBind v
-  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
+      p = bind $ lvalueBind v
+  mkStmtNoEnd (RC.perm p <+> dec <+> RC.lvalue v <> swiftTypeSpec
     <+> RC.type' (variableType v))
 
 swiftSetDec :: Doc -> SLValue SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
@@ -1173,8 +1173,8 @@ swiftSetDec dec v' scp = do
   modify $ setVarScope (variableName v) (scopeData scp)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
-      p = bind $ variableBind v
-  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
+      p = bind $ lvalueBind v
+  mkStmtNoEnd (RC.perm p <+> dec <+> RC.lvalue v <> swiftTypeSpec
     <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))
 
 replaceBrackets :: String -> String
@@ -1185,7 +1185,7 @@ swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach :: (CommonRenderSym r) => r (LValue r) -> r (Value r) -> r (Body r) -> Doc
 swiftForEach i lstVar b = vcat [
-  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
+  forLabel <+> RC.lvalue i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
   bodyEnd]
 
@@ -1203,7 +1203,7 @@ swiftAssert condition errorMessage = vcat [
   ]
 
 swiftParam :: (CommonRenderSym r) => Doc -> r (LValue r) -> Doc
-swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
+swiftParam io v = swiftNoLabel <+> RC.lvalue v <> swiftTypeSpec <+> io
   <+> RC.type' (variableType v)
 
 swiftMethod :: Label -> SwiftCode (Visibility SwiftCode) ->

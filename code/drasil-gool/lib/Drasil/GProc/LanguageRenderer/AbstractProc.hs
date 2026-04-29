@@ -13,7 +13,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
-  BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
+  BlockCommentSym(..), ValueElim(value), InternalVarElim(lvalue),
   MethodTypeSym(mType), ScopeElim(scopeData))
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
@@ -23,7 +23,7 @@ import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateLVal)
 import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName,
   setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
   currParameters, setVarScope)
@@ -86,8 +86,8 @@ arrayElem i' v' = do
   v <- v'
   let vName = variableName v ++ "[" ++ render (RCC.value i) ++ "]"
       vType = listInnerType $ return $ variableType v
-      vRender = RCC.variable v <> brackets (RCC.value i)
-  mkStateVar vName vType vRender
+      vRender = RCC.lvalue v <> brackets (RCC.value i)
+  mkStateLVal vName vType vRender
 
 funcDecDef :: (ProcRenderSym r) => SLValue r -> r (Scope r) -> [SLValue r]
   -> MSBody r -> MSStatement r

@@ -1,6 +1,6 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateLVal, mkLVal, mkStaticVar,
   VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
   andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExpr', binExprNumDbl', typeBinExpr
@@ -44,13 +44,13 @@ mkVal t = valFromData Nothing Nothing (toState t)
 
 -- LValues --
 
--- | Constructs a dynamic variable in a stateful context
-mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SLValue r
-mkStateVar = varFromData Dynamic
+-- | Constructs a dynamic lvalue in a stateful context
+mkStateLVal :: (CommonRenderSym r) => String -> VSType r -> Doc -> SLValue r
+mkStateLVal = varFromData Dynamic
 
--- | Constructs a dynamic variable in a non-stateful context
-mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SLValue r
-mkVar n t = varFromData Dynamic n (toState t)
+-- | Constructs a dynamic lvalue in a non-stateful context
+mkLVal :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SLValue r
+mkLVal n t = varFromData Dynamic n (toState t)
 
 -- | Constructs a static variable in a stateful context
 mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SLValue r

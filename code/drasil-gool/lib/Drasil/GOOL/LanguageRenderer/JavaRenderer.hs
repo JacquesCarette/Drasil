@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(variableBind),
+  OpElim(uOpPrec, bOpPrec), RenderLValue(..), InternalVarElim(lvalueBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
@@ -40,7 +40,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
   MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  type', uOp, bOp, lvalue, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -297,8 +297,8 @@ instance LValueElim JavaCode where
   variableType = onCodeValue varType
 
 instance InternalVarElim JavaCode where
-  variableBind = varBind . unJC
-  variable = varDoc . unJC
+  lvalueBind = varBind . unJC
+  lvalue = varDoc . unJC
 
 instance RenderLValue JavaCode where
   varFromData b n t' d =  do
@@ -966,7 +966,7 @@ jConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt $ jFinal <+> RC.type' (variableType v) <+>
-    RC.variable v <+> equals <+> RC.value def
+    RC.lvalue v <+> equals <+> RC.value def
 
 jFuncDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) ->
   [SLValue r] -> MSBody r -> MSStatement r
@@ -976,7 +976,7 @@ jFuncDecDef v scp ps bod = do
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+  mkStmt $ RC.type' (variableType vr) <+> RC.lvalue vr <+> equals <+>
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
@@ -1028,7 +1028,7 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
 jStringSplit :: (CommonRenderSym r) => SLValue r -> SValue r -> VS Doc
-jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
+jStringSplit = on2StateValues (\vnew s -> RC.lvalue vnew <+> equals <+>
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)

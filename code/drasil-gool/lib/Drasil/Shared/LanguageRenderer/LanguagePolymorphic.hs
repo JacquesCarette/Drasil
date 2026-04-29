@@ -43,7 +43,7 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOLValueSym(objVarSelf),
   OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
-  InternalVarElim(variableBind), RenderValue(valFromData),
+  InternalVarElim(lvalueBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType),
   RenderStatement(stmtFromData), StatementElim(statementTerm),
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
@@ -52,7 +52,7 @@ import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
+  BlockElim(..), InternalVarElim(lvalue), ValueElim(value, valueInt),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass(inherit, implements),
@@ -74,7 +74,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
   addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func,
   objAccess, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec,
+  mkStateVal, mkVal, mkStateLVal, mkLVal, mkStaticVar, VSOp, unOpPrec,
   compEqualPrec, compPrec, addPrec, multPrec)
 import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
@@ -183,7 +183,7 @@ moduloOp = multPrec "%"
 -- LValues --
 
 var :: (CommonRenderSym r) => Label -> VSType r -> SLValue r
-var n t = mkStateVar n t (R.var n)
+var n t = mkStateLVal n t (R.var n)
 
 staticVar :: (CommonRenderSym r) => Label -> VSType r -> SLValue r
 staticVar n t = mkStaticVar n t (R.var n)
@@ -191,7 +191,7 @@ staticVar n t = mkStaticVar n t (R.var n)
 -- | To be used in classVar implementations. Throws an error if the variable is
 -- not static since classVar is for accessing static variables from a class
 classVarCheckStatic :: (CommonRenderSym r) => r (LValue r) -> r (LValue r)
-classVarCheckStatic v = classVarCS (variableBind v)
+classVarCheckStatic v = classVarCS (lvalueBind v)
   where classVarCS Dynamic = error
           "classVar can only be used to access static variables"
         classVarCS Static = v
@@ -202,9 +202,9 @@ objVar o' v' = do
   v <- v'
   let objVar' Static = error
         "Cannot access static variables through an object, use classVar instead"
-      objVar' Dynamic = mkVar (variableName o `access` variableName v)
-        (variableType v) (R.objVar (RC.variable o) (RC.variable v))
-  objVar' (variableBind v)
+      objVar' Dynamic = mkLVal (variableName o `access` variableName v)
+        (variableType v) (R.objVar (RC.lvalue o) (RC.lvalue v))
+  objVar' (lvalueBind v)
 
 arrayElem :: (OORenderSym r) => SValue r -> SLValue r -> SLValue r
 arrayElem i' v' = do
@@ -212,8 +212,8 @@ arrayElem i' v' = do
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
       vType = listInnerType $ return $ variableType v
-      vRender = RC.variable v <> brackets (RC.value i)
-  mkStateVar vName vType vRender
+      vRender = RC.lvalue v <> brackets (RC.value i)
+  mkStateLVal vName vType vRender
 
 -- Scope --
 local :: (Monad r) => r ScopeData
@@ -236,7 +236,7 @@ litString s = mkStateVal IC.string (doubleQuotedText s)
 valueOf :: (CommonRenderSym r) => SLValue r -> SValue r
 valueOf v' = do
   v <- v'
-  mkVal (variableType v) (RC.variable v)
+  mkVal (variableType v) (RC.lvalue v)
 
 arg :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 arg n' args' = do
@@ -267,7 +267,7 @@ funcAppMixedArgs = S.call Nothing Nothing
 selfFuncAppMixedArgs :: (CommonRenderSym r) => Doc -> SLValue r -> MixedCall r
 selfFuncAppMixedArgs d slf n t vs ns = do
   s <- slf
-  S.call Nothing (Just $ RC.variable s <> d) n t vs ns
+  S.call Nothing (Just $ RC.lvalue s <> d) n t vs ns
 
 newObjMixedArgs :: (CommonRenderSym r) => String -> MixedCtorCall r
 newObjMixedArgs s tp vs ns = do

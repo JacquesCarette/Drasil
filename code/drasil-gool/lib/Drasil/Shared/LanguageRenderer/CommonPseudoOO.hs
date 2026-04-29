@@ -37,14 +37,14 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderLValue(varFromData),
-  InternalVarElim(variableBind),
+  InternalVarElim(lvalueBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..), ScopeElim(scopeData))
 
 import qualified Drasil.Shared.RendererClassesCommon as S
 
 import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
-  BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
+  BodyElim(..), InternalTypeElim(..), InternalVarElim(lvalue), ValueElim(..),
   StatementElim(statement), VisibilityElim(..), MethodElim(..), FunctionElim(..))
 
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, onStateList)
@@ -66,7 +66,7 @@ import Drasil.Shared.LanguageRenderer (listAccessFunc, listSetFunc, array', new'
 import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList, constDecDef)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, mkVal, mkVal)
+  mkStateVal, mkStateLVal, mkVal, mkVal)
 
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
@@ -134,8 +134,8 @@ classVar f c' v'= do
   c <- c'
   v <- v'
   vr <- varFromData
-    (variableBind v) (getTypeString c `access` variableName v)
-    (toState $ variableType v) (f (RC.type' c) (RC.variable v))
+    (lvalueBind v) (getTypeString c `access` variableName v)
+    (toState $ variableType v) (f (RC.type' c) (RC.lvalue v))
   toState $ classVarCheckStatic vr
 
 objVarSelf :: (OORenderSym r) => SLValue r -> SLValue r
@@ -211,7 +211,7 @@ arrayDec n vr scp = do
   modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ listInnerType $ return tp
-  mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+>
+  mkStmt $ RC.type' tp <+> RC.lvalue v <+> equals <+> new' <+>
     RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (CommonRenderSym r) => SLValue r -> r (Scope r) ->
@@ -232,7 +232,7 @@ forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   v <- zoom lensMStoVS v'
   b <- b'
   mkStmtNoEnd $ vcat [
-    forEachLabel <+> parens (RC.type' (variableType e) <+> RC.variable e <+>
+    forEachLabel <+> parens (RC.type' (variableType e) <+> RC.lvalue e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
     bEnd]
@@ -401,7 +401,7 @@ stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 -- Python and Swift --
 
 self :: (OORenderSym r) => SLValue r
-self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
+self = zoom lensVStoMS getClassName >>= (\l -> mkStateLVal R.self (obj l)
   R.self')
 
 multiAssign :: (CommonRenderSym r) => (Doc -> Doc) -> [SLValue r] -> [SValue r] ->
@@ -416,7 +416,7 @@ multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
   vls <- mapM (zoom lensMStoVS) vals
   let wrapIfMult :: [a] -> Doc -> Doc
       wrapIfMult l = if length l > 1 then f else id
-  mkStateVar "" IC.void (wrapIfMult vrs (variableList vrs)) &=
+  mkStateLVal "" IC.void (wrapIfMult vrs (variableList vrs)) &=
     mkStateVal IC.void (wrapIfMult vls (valueList vls))
 
 multiReturn :: (CommonRenderSym r) => (Doc -> Doc) -> [SValue r] -> MSStatement r

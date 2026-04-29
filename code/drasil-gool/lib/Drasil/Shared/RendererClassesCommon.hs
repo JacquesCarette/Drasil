@@ -130,8 +130,8 @@ class RenderLValue r where
   varFromData :: Binding -> String -> VSType r -> Doc -> SLValue r
 
 class InternalVarElim r where
-  variableBind :: r (LValue r) -> Binding
-  variable  :: r (LValue r) -> Doc
+  lvalueBind :: r (LValue r) -> Binding
+  lvalue  :: r (LValue r) -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r

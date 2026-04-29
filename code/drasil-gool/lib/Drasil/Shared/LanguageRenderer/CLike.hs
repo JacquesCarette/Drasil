@@ -21,12 +21,12 @@ import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
+  RenderType(..), InternalVarElim(lvalueBind), RenderValue(valFromData),
   ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(variable), ValueElim(value),
+  InternalTypeElim(..), InternalVarElim(lvalue), ValueElim(value),
   StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
@@ -37,7 +37,7 @@ import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
   decrement, this', this)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+  mkStateVal, mkStateLVal, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName, setVarScope)
 
@@ -98,7 +98,7 @@ orOp = orPrec "||"
 self :: (OORenderSym r) => SLValue r
 self = do
   l <- zoom lensVStoMS getClassName
-  mkStateVar R.this (IG.obj l) R.this'
+  mkStateLVal R.this (IG.obj l) R.this'
 
 -- Values --
 
@@ -151,9 +151,9 @@ varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt (RC.perm (bind $ variableBind v)
+  mkStmt (RC.perm (bind $ lvalueBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
-    RC.variable v))
+    RC.lvalue v))
   where bind Static = s
         bind Dynamic = d
         ptrdoc (List _) = pdoc

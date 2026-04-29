@@ -36,7 +36,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 -- Python, Java, C#, and Julia --
 
 extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SLValue r
-extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
+extVar l n t = mkStateLVal (l `access` n) t (R.extVar l n)
 
 -- Python, Java, C++, and Julia --
 

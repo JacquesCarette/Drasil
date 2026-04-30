@@ -245,7 +245,6 @@ getSRSPath path format ex = path ++ map toLower ex ++ "/SRS/" ++ show format ++ 
     sufx HTML    = ex ++ "_SRS.html"
     sufx TeX     = ex ++ "_SRS.pdf"
     sufx Jupyter = ex ++ "_SRS.html"
-    sufx Plain   = error "Plain SRS display is not supported."
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath

@@ -1,5 +1,5 @@
 module Drasil.Build.Artifacts.Core
-  ( Artifact (..),
+  ( Artifact,
     file,
     directory,
     writeArtifact,
@@ -20,14 +20,16 @@ import System.FilePath (pathSeparator, (</>))
 -- artifacts. For rendering, 'writeArtifact' requires the file content
 -- representation satisfy 'Renderable'.
 data Artifact d
-  = Directory String (M.Map String (Artifact d))
-  | File String d
+  = -- | A directory with optionally many nested artifacts.
+    Directory String (M.Map String (Artifact d))
+  | -- | A file with content (of an unspecific type).
+    File String d
   deriving (Show, Functor, Foldable, Traversable)
 
 -- | Get the name of an 'Artifact'.
 name :: Artifact d -> String
-name (Directory s _) = s
-name (File s _) = s
+name (Directory dn _) = dn
+name (File fn _) = fn
 
 -- | Equality on artifacts is dependent solely on the _names_. Note that this
 -- implies a file and directory of the same name cannot exist within the same
@@ -43,7 +45,9 @@ checkValid "." = error "cannot create artifact with name \".\"."
 checkValid ".." = error "cannot create artifact with name \"..\"."
 checkValid "~" = error "cannot create artifact with name \"~\"."
 checkValid s
-  | pathSeparator `elem` s = error $ "cannot create artifact with \"" ++ pathSeparator : "\" in the name."
+  | pathSeparator `elem` s =
+      error $
+        "cannot create artifact with \"" ++ pathSeparator : "\" in the name."
   | otherwise = s
 
 -- | Create a file 'Artifact'.
@@ -72,5 +76,4 @@ writeArtifact basePath artifact = do
     go currentPath (Directory dname children) = do
       let nextPath = currentPath </> dname
       createDirectory nextPath
-      -- createDirectoryIfMissing True nextPath -- FIXME: Create parent or not?
       F.traverse_ (go nextPath) children

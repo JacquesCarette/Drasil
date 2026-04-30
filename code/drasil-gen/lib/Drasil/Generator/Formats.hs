@@ -3,8 +3,7 @@
 module Drasil.Generator.Formats (
   -- * Types (Printing Options)
   DocSpec(DocSpec), DocChoices(..),
-  DocClass(..), UsePackages(..), ExDoc(..), Filename,
-  Format(..),
+  Filename, Format(..),
   -- * Constructors
   docChoices
 ) where
@@ -56,12 +55,3 @@ instance RuleTransformer DocSpec where
       build = mkCheckedCommand $ makeS "mdbook build"
       server = mkCheckedCommand $ makeS "mdbook serve --open"
   makeRule _ = []
-
--- | LaTeX helper.
-data DocClass = DocClass (Maybe String) String
-
--- | LaTeX helper for adding packages. Wraps a list of package names.
-newtype UsePackages = UsePackages [String] -- Package name list
-
--- | LaTeX helper.
-data ExDoc = ExDoc (Maybe String) String

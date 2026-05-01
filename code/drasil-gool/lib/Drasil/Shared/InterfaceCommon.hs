@@ -8,7 +8,7 @@ module Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
-  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
+  listVar, ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
@@ -115,9 +115,6 @@ class (VariableSym r) => VariableElim r where
 
 listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
 listVar n t = var n (listType t)
-
-listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
-listOf = listVar
 
 type SValue a = VS (a (Value a))
 

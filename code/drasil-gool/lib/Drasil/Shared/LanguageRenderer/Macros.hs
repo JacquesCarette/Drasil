@@ -10,7 +10,7 @@ module Drasil.Shared.LanguageRenderer.Macros (
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(..), listOf, ValueSym(valueType),
+  VariableElim(..), listVar, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
@@ -183,7 +183,7 @@ observerIdxVal :: (CommonRenderSym r) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
 obsList :: (CommonRenderSym r) => VSType r -> SValue r
-obsList t = IC.valueOf $ listOf observerListName t
+obsList t = IC.valueOf $ listVar observerListName t
 
 notify :: (OORenderSym r) => VSType r -> VSFunction r -> MSBody r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f

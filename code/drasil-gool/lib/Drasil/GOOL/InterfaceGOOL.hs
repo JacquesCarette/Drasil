@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
   VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
-  ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
+  ValueExpression, List(listSize, listAdd), listVar, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -232,7 +232,7 @@ initObserverList t os scp = listDecDef (var observerListName (listType t)) scp o
 addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r
   -> MSStatement r
 addObserver o = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
+  where obsList = valueOf $ listVar observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
 class (BodySym r, VariableSym r) => StrategyPattern r where

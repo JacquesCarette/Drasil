@@ -1,24 +1,26 @@
 # System Prerequisites
 
-When working collaboratively on software, you generally need a few things: a compiler, shell + generally available system tools, version control system, and an IDE. In addition to this, we often construct TeX documents alongside our software, requiring that you also have a working LaTeX installation. This guide will give you a simple workspace recommendation for installing Stack (a Haskell development toolkit), VSCode (an IDE), and a basic LaTeX toolkit. Windows users will need to either use Windows WSL (preferred), or install `Cygwin` and `Git` if they don't already have them so that they can have a good BASH shell, common dev utilities, and a Git client. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Windows WSL instead of native Windows installations.
+This guide will provide you with a straightforward workspace recommendation for developing and contributing to Drasil.
 
-In order, you should be installing:
-1. [Basic Development Tools](#basic-development-tools)
-2. [Stack](#stack-via-ghcup)
-3. [VSCode](#vscode) + [Extensions](#extensions)
-4. [LaTeX](#latex)
-5. [Inkscape](#inkscape)
-6. [Graphviz](#graphviz)
+In order, you will be installing the following _bare minimum requirements_ for working with Drasil's Haskell codebase:
 
-Optionally, some functions will be limited without:
-1. [Doxygen](#doxygen)
-2. [ShellCheck](#shellcheck)
-3. [mdBook](#mdBook)
-4. [Jupyter](#jupyter)
+1. [Basic Development Tools](#basic-development-tools): `git`, `GNU Make`, etc.
+2. [Stack](#stack-via-ghcup): A Haskell development toolchain.
+3. [VSCode](#vscode) + [Extensions](#extensions): A commonly used code editor with good Haskell support provided through a [plugin](https://github.com/haskell/haskell-language-server).
 
-**Notes**: 
-1. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Linux on Windows/Windows WSL. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). From experience, installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience.
-2. If you use the `nix` package manager and/or the `NixOS` operating system, you may alternatively use the `shell.nix` ad-hoc development environment provided; however, you should still install [VSCode](#vscode) + [Extensions](#extensions) and [install the `lmodern` and `lmmath` fonts](https://nixos.wiki/wiki/Fonts).
+As Drasil generates a host of different artifacts, you will also need to install various other tools to work with them:
+
+1. [Graphviz](#graphviz)
+2. A [LaTeX](#latex) toolchain
+3. [Inkscape](#inkscape)
+4. [Doxygen](#doxygen)
+5. [mdBook](#mdBook)
+6. [Jupyter](#jupyter) 
+7. [ShellCheck](#shellcheck)
+
+## Windows
+
+**Windows Users**: You have two options for all of these instructions: WSL and Native. WSL is essentially an emulated Linux operating system seamlessly integrated with Windows for which you can do all development through and using. Hence you would be installing Linux-native packages rather than Windows-native ones. From [experience](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398), installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience. However, using WSL requires higher system requirements. Hence, for low-spec devices, you should first attempt to use Windows-native tool installations. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). 
 
 ## Basic Development Tools
 
@@ -36,9 +38,10 @@ Please follow the instructions related to your operating system.
 
 <summary><h4>Windows</h4></summary>
 
-If you're on Windows, there are two options.
-- The simplest option to set up is [WSL2](https://learn.microsoft.com/en-us/windows/wsl/setup/environment), the Windows Subsystem for Linux. With this option, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). WSL2 generally provides excellent compatibility and a smooth overall experience. The potential downside of WSL2 is that some users have experienced significant slowdown compared to native tools.
-- The other option is to use a bash shell emulator such as Git Bash or Cygwin. These tools require more work to set up, but can have better performance. After installing the shell, you will need to install a git client and common development tools (e.g., GNU Make, rm, sort, rev, etc). Instructions for these are below.
+If you're on Windows, there are [two options](#windows):
+
+* The simplest option to set up is [WSL2](https://learn.microsoft.com/en-us/windows/wsl/setup/environment), the Windows Subsystem for Linux. With this option, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). WSL2 generally provides excellent compatibility and a smooth overall experience. The potential downside of WSL2 is that some users have experienced significant slowdown compared to native tools.
+* The other option is to use a bash shell emulator such as [Git Bash](https://git-scm.com) or [Cygwin](https://cygwin.com/). These tools require more work to set up, but can have better performance. After installing the shell, you will need to install a git client and common development tools (e.g., GNU Make, rm, sort, rev, etc). Instructions for these are below.
 
 [Git Bash](https://git-scm.com/downloads) is a custom terminal for Windows users packaged with `git` and other various generally used *nix system tools (including GNU `grep`). The installation process is fairly simple; you will need to download their [Git Bash installer](https://git-scm.com/downloads) and run it. The installer will give you a series of steps, please go through them, leaving all options shown default, unless you specifically know what each option does. Once it's been installed, you can open it by pressing the four-flagged Windows key and searching for "Git Bash", clicking on the "Git Bash" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation.
 

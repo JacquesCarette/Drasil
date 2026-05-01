@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
   CSharpCode(..), csName, csVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
@@ -285,7 +285,7 @@ instance VariableSym CSharpCode where
   var         = G.var
   constant    = var
   extVar      = CS.extVar
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOVariableSym CSharpCode where
   staticVar' _ = G.staticVar

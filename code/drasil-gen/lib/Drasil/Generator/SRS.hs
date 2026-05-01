@@ -23,8 +23,7 @@ import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
-import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
-  docChoices, Format(..), buildMakefile)
+import Drasil.Generator.Formats (DocSpec(..), Filename, Format(..), buildMakefile)
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
@@ -35,13 +34,8 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
       printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
   dumpEverything syst' ".drasil/"
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  genDoc (DocSpec (docChoices [HTML, TeX, Jupyter, MDBook]) srsFileName) srs printfo
+  mapM_ (prntDoc srs printfo srsFileName) [HTML, TeX, Jupyter, MDBook]
   genDot syst' -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
-
--- | Generate a document in one or many flavours (HTML, TeX+Makefile,
--- mdBook+Makefile, or Jupyter Notebook, up to document type).
-genDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-genDoc (DocSpec (DC fmts) fn)  body sm = mapM_ (prntDoc body sm fn) fmts
 
 -- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> Format -> IO ()
@@ -50,10 +44,10 @@ prntDoc d pinfo fn fmt =
     HTML    -> do prntDoc' "SRS/HTML" fn HTML d pinfo
                   prntCSS fn d
     TeX     -> do prntDoc' "SRS/PDF" fn TeX d pinfo
-                  prntMake $ DocSpec (DC [TeX]) fn
+                  prntMake $ DocSpec TeX fn
     Jupyter ->    prntDoc' "SRS/Jupyter" fn Jupyter d pinfo
     MDBook  -> do prntDoc' "SRS/mdBook" fn MDBook d pinfo
-                  prntMake $ DocSpec (DC [MDBook]) fn
+                  prntMake $ DocSpec MDBook fn
                   prntBook d pinfo
                   prntCSV  pinfo
     Plain   -> putStrLn "Plain-rendering is not supported."
@@ -90,16 +84,16 @@ prntDoc' dt' fn format body' sm = do
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC f) _) = case buildMakefile ds of
+prntMake ds@(DocSpec f _) = case buildMakefile ds of
   (Just m) -> do
     outh <- openFile ("SRS" ++ dir f ++ "/Makefile") WriteMode
     hPutStrLn outh $ render $ printMakefile m
     hClose outh
   _ -> pure ()
   where
-    dir [TeX]    = "/PDF"
-    dir [MDBook] = "/mdBook"
-    dir _        = error "Makefile(s) only supported for TeX/MDBook."
+    dir TeX    = "/PDF"
+    dir MDBook = "/mdBook"
+    dir _      = error "Makefile(s) only supported for TeX/MDBook."
 
 -- | Helper that creates a CSS file to accompany an HTML file.
 -- Takes in the folder name, generated file name, and the document.

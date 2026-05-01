@@ -1,12 +1,9 @@
-{- HLINT ignore "Use newtype instead of data" -}
 -- | Defines output formats for the different documents we can generate.
 module Drasil.Generator.Formats (
   -- * Types (Printing Options)
-  DocSpec(DocSpec), DocChoices(..),
+  DocSpec(DocSpec),
   DocClass(..), UsePackages(..), ExDoc(..), Filename,
   Format(..),
-  -- * Constructors
-  docChoices,
   -- * Rules
   buildMakefile
 ) where
@@ -29,22 +26,13 @@ instance Show Format where
   show Jupyter = "Jupyter"
   show MDBook  = "mdBook"
 
--- | Document choices include the type of document as well as the file formats we want to generate as.
-data DocChoices = DC {
-  format :: [Format]
-}
-
 -- | Document specifications. Holds the type of document ('DocType') and its name ('Filename').
-data DocSpec = DocSpec DocChoices Filename
-
--- | Constructor for users to choose their document options
-docChoices :: [Format] -> DocChoices
-docChoices = DC
+data DocSpec = DocSpec Format Filename
 
 -- | Create a 'Makefile' necessary for building a 'DocSpec' when rendered as a
 -- concrete artifact. Only relevant to 'TeX' and 'MDBook'.
 buildMakefile :: DocSpec -> Maybe Makefile
-buildMakefile (DocSpec (DC [TeX]) fn) = Just $ mkMakefile [
+buildMakefile (DocSpec TeX fn) = Just $ mkMakefile [
   mkRule [watermark] (makeS "srs") [pdfName] [],
   mkFile [] pdfName [makeS $ fn ++ ".tex"] $
     map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
@@ -52,7 +40,7 @@ buildMakefile (DocSpec (DC [TeX]) fn) = Just $ mkMakefile [
       lualatex = mkCheckedCommand . (+:+) (makeS "lualatex" +:+ mkFreeVar "TEXFLAGS") . makeS
       bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
       pdfName = makeS $ fn ++ ".pdf"
-buildMakefile (DocSpec (DC [MDBook]) _) = Just $ mkMakefile [
+buildMakefile (DocSpec MDBook _) = Just $ mkMakefile [
   mkRule [watermark] (makeS "build")  [] [build],
   mkRule [] (makeS "server") [] [server]]
   where

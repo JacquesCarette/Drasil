@@ -5,10 +5,6 @@ module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
   getNestDegree
 ) where
 
-import Utils.Drasil (blank)
-
-import qualified Drasil.Shared.CodeType as C (CodeType(..))
-
 import Prelude hiding ((<>))
 import Control.Applicative (liftA3)
 import Control.Monad (liftM2, liftM3)
@@ -16,6 +12,10 @@ import Control.Monad.State (State)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes,
   (<>), empty, isEmpty)
+
+import Drasil.Build.Artifacts (blank)
+
+import qualified Drasil.Shared.CodeType as C (CodeType(..))
 
 angles :: Doc -> Doc
 angles d = char '<' <> d <> char '>'

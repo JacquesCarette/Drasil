@@ -22,6 +22,7 @@ dependencies:
 - MissingH
 - filepath
 - directory
+- drasil-build-artifacts
 - drasil-database
 - drasil-lang
 - drasil-metadata

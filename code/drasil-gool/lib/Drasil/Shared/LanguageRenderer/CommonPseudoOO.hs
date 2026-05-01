@@ -13,7 +13,8 @@ module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
   varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall) where
 
-import Utils.Drasil (indent, stringList)
+import Utils.Drasil (stringList)
+import Drasil.Build.Artifacts (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 

@@ -8,7 +8,7 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   JuliaCode(..), jlName, jlVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,

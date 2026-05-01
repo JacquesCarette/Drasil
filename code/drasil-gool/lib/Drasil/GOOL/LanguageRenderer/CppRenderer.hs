@@ -9,7 +9,7 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC, cppName, cppVersion
 ) where
 
-import Utils.Drasil (blank, indent, indentList)
+import Drasil.Build.Artifacts (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,

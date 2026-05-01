@@ -1,5 +1,5 @@
 -- | Defines functions to render 'Space's into printable 'P.Expr's.
-module Language.Drasil.Printing.Import.Space where
+module Language.Drasil.Printing.Import.Space (space) where
 
 import Language.Drasil (Space(..))
 

@@ -1,4 +1,4 @@
-module Language.Drasil.Printing.Import.Citation where
+module Language.Drasil.Printing.Import.Citation (layCite, layField) where
 
 import Control.Lens ((^.))
 

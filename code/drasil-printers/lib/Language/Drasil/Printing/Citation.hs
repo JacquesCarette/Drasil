@@ -1,5 +1,8 @@
 -- | Defines types used for printing citations.
-module Language.Drasil.Printing.Citation where
+module Language.Drasil.Printing.Citation (
+  -- * Types
+  BibRef, Citation(..), CiteField(..), HP(..)
+) where
 
 import Language.Drasil (People, EntryID, CitationKind, Month)
 

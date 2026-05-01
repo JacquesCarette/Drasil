@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
-module Language.Drasil.Printing.Import.ModelExpr where
+module Language.Drasil.Printing.Import.ModelExpr (modelExpr, modelExpr') where
 
 import Data.List (intersperse)
 

@@ -1,5 +1,11 @@
 -- | Defines types similar to content types in "Language.Drasil" but better suited for printing.
-module Language.Drasil.Printing.LayoutObj where
+module Language.Drasil.Printing.LayoutObj (
+  -- * Types
+  Document(..), Project(..), File(..), LayoutObj(..),
+  -- * Type Aliases
+  Author, Contents, Items, Tags, Depth, Width, Height, Filepath, Filename,
+  Caption, RefMap
+) where
 
 import Data.Map (Map)
 

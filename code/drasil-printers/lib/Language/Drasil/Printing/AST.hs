@@ -1,5 +1,11 @@
 -- | Defines types similar to those in "Drasil.Language", but better suited to printing.
-module Language.Drasil.Printing.AST where
+module Language.Drasil.Printing.AST (
+  -- * Types
+  Expr(..), Spec(..), Ops(..), Fence(..), OverSymb(..), Fonts(..), Spacing(..),
+  LinkType(..), ListType(..), ItemType(..),
+  -- * Type Aliases
+  Label, Title
+) where
 
 import Language.Drasil (Special)
 

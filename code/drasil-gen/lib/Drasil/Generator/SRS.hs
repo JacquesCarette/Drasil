@@ -50,7 +50,6 @@ prntDoc d pinfo fn fmt =
                   prntMake $ DocSpec MDBook fn
                   prntBook d pinfo
                   prntCSV  pinfo
-    Plain   -> putStrLn "Plain-rendering is not supported."
 
 -- | Common error for when an unsupported SRS format is attempted.
 srsFormatError :: a

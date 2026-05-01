@@ -6,7 +6,7 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   PythonCode(..), pyName, pyVersion
 ) where
 
-import Utils.Drasil (blank, indent)
+import Drasil.Build.Artifacts (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
@@ -273,7 +273,7 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem i  = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))

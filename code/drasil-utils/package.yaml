@@ -17,9 +17,6 @@ extra-source-files: []
 dependencies:
 - base >= 4.7 && < 5
 - containers
-- directory
-- filepath
-- pretty
 
 ghc-options:
 - -Wall

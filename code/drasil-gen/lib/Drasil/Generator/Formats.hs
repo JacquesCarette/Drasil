@@ -17,11 +17,10 @@ import Drasil.Metadata (watermark)
 type Filename = String
 
 -- | Possible formats for printer output.
-data Format = TeX | Plain | HTML | Jupyter | MDBook
+data Format = TeX | HTML | Jupyter | MDBook
 
 instance Show Format where
   show TeX     = "PDF"
-  show Plain   = "Plain"
   show HTML    = "HTML"
   show Jupyter = "Jupyter"
   show MDBook  = "mdBook"

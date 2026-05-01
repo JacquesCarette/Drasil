@@ -10,7 +10,7 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Drasil.Build.Artifacts (createDirIfMissing)
-import Build.Drasil (genMake)
+import Build.Drasil (printMakefile)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook),
   ShowTableOfContents, checkToC)
@@ -24,7 +24,7 @@ import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), DocChoices(DC), Filename,
-  docChoices, Format(..))
+  docChoices, Format(..), buildMakefile)
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
@@ -56,7 +56,6 @@ prntDoc d pinfo fn fmt =
                   prntMake $ DocSpec (DC [MDBook]) fn
                   prntBook d pinfo
                   prntCSV  pinfo
-    Plain   -> putStrLn "Plain-rendering is not supported."
 
 -- | Common error for when an unsupported SRS format is attempted.
 srsFormatError :: a
@@ -90,10 +89,12 @@ prntDoc' dt' fn format body' sm = do
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC f) _) =
-  do outh <- openFile ("SRS" ++ dir f ++ "/Makefile") WriteMode
-     hPutStrLn outh $ render $ genMake [ds]
-     hClose outh
+prntMake ds@(DocSpec (DC f) _) = case buildMakefile ds of
+  (Just m) -> do
+    outh <- openFile ("SRS" ++ dir f ++ "/Makefile") WriteMode
+    hPutStrLn outh $ render $ printMakefile m
+    hClose outh
+  _ -> pure ()
   where
     dir [TeX]    = "/PDF"
     dir [MDBook] = "/mdBook"

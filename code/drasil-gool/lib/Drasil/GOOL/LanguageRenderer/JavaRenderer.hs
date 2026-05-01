@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
   JavaCode(..), jName, jVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
@@ -282,7 +282,7 @@ instance LValueSym JavaCode where
   var         = G.var
   constant    = var
   extVar      = CS.extVar
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOLValueSym JavaCode where
   staticVar' _ = G.staticVar
@@ -1046,7 +1046,7 @@ outputs = var "outputs" jArrayType
 jAssignFromArray :: Integer -> [SLValue JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
-  (valueOf $ arrayElem c outputs)) : jAssignFromArray (c+1) vs
+  (valueOf $ arrayElem (litInt c) outputs)) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] ->
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SLValue JavaCode] ->
@@ -1086,7 +1086,7 @@ jInOut f ins outs both b = f (returnTp rets)
           ++ [returnStmt (valueOf outputs)])
         assignArray :: Integer -> [SValue JavaCode] -> [MSStatement JavaCode]
         assignArray _ [] = []
-        assignArray c (v:vs) = (arrayElem c outputs &= v) : assignArray (c+1) vs
+        assignArray c (v:vs) = (arrayElem (litInt c) outputs &= v) : assignArray (c+1) vs
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 

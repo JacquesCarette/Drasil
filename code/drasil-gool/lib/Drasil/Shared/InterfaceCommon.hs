@@ -106,7 +106,8 @@ class (TypeSym r) => LValueSym r where
   -- TODO [Brandon Bosman, 28/04/2026]: I think we want constant to be an RValue.
   constant  :: Label -> VSType r -> SLValue r
   extVar    :: Library -> Label -> VSType r -> SLValue r
-  arrayElem :: Integer -> SLValue r -> SLValue r
+  -- TODO [Brandon Bosman, 04/27/2026]: Move this to a new Array typeclass modelled after List
+  arrayElem :: SValue r -> SLValue r -> SLValue r
 
 class (LValueSym r) => LValueElim r where
   variableName :: r (LValue r) -> String

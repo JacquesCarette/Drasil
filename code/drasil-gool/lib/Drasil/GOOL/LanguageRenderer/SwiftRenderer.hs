@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
@@ -288,7 +288,7 @@ instance LValueSym SwiftCode where
   var         = G.var
   constant    = var
   extVar _    = var
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOLValueSym SwiftCode where
   staticVar' _ = G.staticVar

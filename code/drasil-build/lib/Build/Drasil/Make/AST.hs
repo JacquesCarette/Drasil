@@ -4,7 +4,7 @@ module Build.Drasil.Make.AST (
   Makefile(..), Type(..), Rule(..), Command(..), CommandOpts(..), Annotation,
   Target, Dependencies,
   -- * Constructors
-  mkFile, mkRule, mkCheckedCommand, mkCommand
+  mkMakefile, mkFile, mkRule, mkCheckedCommand, mkCommand
 ) where
 
 import Build.Drasil.Make.MakeString (MakeString)
@@ -39,6 +39,10 @@ type Target = MakeString
 type Dependencies = [Target]
 
 -- * Constructors
+
+-- | Create a Makefile.
+mkMakefile :: [Rule] -> Makefile
+mkMakefile = M
 
 -- | Creates a Rule which results in a file being created.
 mkFile :: Annotation -> Target -> Dependencies -> [Command] -> Rule

@@ -1,5 +1,5 @@
 -- | Defines printers for generating Makefiles.
-module Build.Drasil.Make.Print (genMake) where
+module Build.Drasil.Make.Print (printMakefile) where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
@@ -10,16 +10,11 @@ import Build.Drasil.Make.AST (Annotation, Command(C),
   CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target,
   Type(Abstract))
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
-import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
 
--- | Generates the makefile by calling 'build' after 'toMake'.
-genMake :: RuleTransformer c => [c] -> Doc
-genMake = build . toMake
-
--- | Renders the makefile rules.
-build :: Makefile -> Doc
-build (M rules) = addCommonFeatures rules $
+-- | Render a 'Makefile' to a 'Doc'.
+printMakefile :: Makefile -> Doc
+printMakefile (M rules) = addCommonFeatures rules $
   vcat (map (\x -> printRule x $+$ text "") rules) $$ printPhony rules
 
 -- | Renders specific makefile rules. Called by 'build'.

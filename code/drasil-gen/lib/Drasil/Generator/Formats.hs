@@ -1,9 +1,7 @@
 -- | Defines output formats for the different documents we can generate.
 module Drasil.Generator.Formats (
   -- * Types (Printing Options)
-  DocSpec(DocSpec),
-  DocClass(..), UsePackages(..), ExDoc(..), Filename,
-  Format(..),
+  DocSpec(..), Filename, Format(..),
   -- * Rules
   buildMakefile
 ) where
@@ -46,12 +44,3 @@ buildMakefile (DocSpec MDBook _) = Just $ mkMakefile [
     build = mkCheckedCommand $ makeS "mdbook build"
     server = mkCheckedCommand $ makeS "mdbook serve --open"
 buildMakefile _ = Nothing
-
--- | LaTeX helper.
-data DocClass = DocClass (Maybe String) String
-
--- | LaTeX helper for adding packages. Wraps a list of package names.
-newtype UsePackages = UsePackages [String] -- Package name list
-
--- | LaTeX helper.
-data ExDoc = ExDoc (Maybe String) String

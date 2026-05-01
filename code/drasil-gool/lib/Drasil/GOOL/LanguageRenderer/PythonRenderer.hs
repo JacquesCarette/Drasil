@@ -273,7 +273,7 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem i  = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))

@@ -54,9 +54,11 @@ If you would like to install more *nix tools through Cygwin, you can use the [cy
 The rest of the steps in this guide will assume that you are using Cygwin as your preferred Windows terminal. Git Bash is also very safe to use, but you will need to download [util-linux-ng](https://gnuwin32.sourceforge.net/packages/util-linux-ng.htm), which includes various system utilities (one of our scripts uses `rev`), and add its **bin/** to your PATH.
 
 ##### Unicode Support (Important)
+
 Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, follow the steps outlined [here](https://stackoverflow.com/a/57134096). Open a fresh terminal window and run `chcp.com` or `chcp` and check that the active code page is `65001`. If that does not resolve the issue, you can also edit the `.bashrc` file (found either at `C:/Users/YOU/cygwin64/home/YOU` for Cygwin or `C:/Users/YOU` for Git Bash) and add the following to end: `chcp.com 65001 > /dev/null` or `chcp.com 65001 > /dev/null`. This simply runs the required command each time the terminal is opened. If you choose not to do either of these, then each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
 
 ##### 7-Zip
+
 If you are using Git Bash you will need [7-Zip](https://www.7-zip.org/). Download and run the installer from their website.
 
 Alternatively, if you have [Chocolatey](https://chocolatey.org/install) installed, you can open up a new command line as an administrator and run the following command:
@@ -76,7 +78,11 @@ The Drasil directory structure relies on symbolic links. Windows 10/11 has suppo
 
 <summary><h4>Mac</h4></summary>
 
-Mac already comes with a shell + good terminal, so you should only need to install `git` and GNU `grep`. You might already have `grep` installed, but the one by default shipped with macOS lacks support for the perl dialect of the extended regular expression language (which we use).
+Mac already comes with a shell + good terminal, so you should only need to install `git` and GNU `grep`. You might already have `grep` installed, but the one by default shipped with macOS lacks support for the perl dialect of the extended regular expression language (which we use). If you haven't used your system for development in the past, you will also need to install [Xcode](https://developer.apple.com/xcode/) and accept its EULA.
+
+##### Xcode
+
+If you're using a recent version of Mac (> Mavericks/10.9), please open up a terminal window (`Command + Space`, then search "Terminal"), type in `xcode-select --install`, and then press Enter. You will be prompted to accept the Apple developer EULA, and then installation will begin. Installation may take a while to run. Please be patient in the meanwhile. Once installed, you should open up a fresh terminal and proceed to the next step, installing `git`.
 
 ##### `git`
 
@@ -184,29 +190,19 @@ The recommended way to install stack is through [GHCup](https://www.haskell.org/
 
 ### Installation
 
-> #### MacOS
-> If you are using MacOS, start by opening your terminal (Command + Space, then search "Terminal"), and running:
-> ```
-> xcode-select --install
-> ```
-> Note: It may take a while to run.
->
-> You can then continue with the instructions below.
+Regardless of your operating system, you should be able to follow the Linux/macOS/Windows [install instructions](https://www.haskell.org/ghcup/install/). For Linux/macOS/WSL, it's as simple as entering this into your terminal:
 
-Regardless of your operating system, you should be able to follow the Linux/MacOS/WSL2 [install instructions](https://www.haskell.org/ghcup/install/). It's as simple as entering this into your terminal:
-
-```
+```shell
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 ```
 
-Follow the prompts, wait for it to finish, then open a fresh terminal and enter `stack --version` to check that it has successfully installed the Haskell compiler.
+For Windows-native users, you will have a longer command that you should get directly from the [GHCup website itself](https://www.haskell.org/ghcup/install/).
 
-### Installing Dependencies
+When running the above code, you will be prompted with questions, you only need to make sure to press "Y" when prompted about Stack. Once you've waited for it to finish, open a fresh terminal and run `stack --version` to ensure that everything worked.
 
-If the GHCup installer fails, the most likely cause is that there are missing dependencies. Scroll to your system's section in the GHCup [System Requirements](https://www.haskell.org/ghcup/install/#system-requirements) page and make sure everything there is installed, then retry the GHCup installer.
+### Common Problem: Missing System Dependencies
 
-### Pinning your Stack Version
-If you later experience issues with `.cabal` files being frequently rebuilt, you may pin your `stack` version against our LTS's preferred version. In your terminal window, please run `stack upgrade --binary-version CURRENT_STACK_VERSION` (e.g., `2.5.1`) and it should stop frequently rebuilding the `.cabal` files.
+If the GHCup installer fails, the most likely cause is missing dependencies. Scroll to your system's section in the GHCup [System Requirements](https://www.haskell.org/ghcup/install/#system-requirements) page and make sure everything there is installed, then retry the GHCup installer.
 
 ## VSCode
 
@@ -234,6 +230,7 @@ Once you've downloaded the zip file from the above download link, please open up
 </details>
 
 ### Extensions
+
 The following list of extensions are recommended and are helpful for working with Drasil specifically.
 
 For each of the following plugins/extensions, the same general installation process is followed:
@@ -243,17 +240,18 @@ For each of the following plugins/extensions, the same general installation proc
 4. Click on the target and press "Install". While installing, a little pop up might appear at the bottom right of your screen indicating the progress of the installation (and the installation of the dependencies).
 
 **Recommended Extensions**:
+
 1. [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell) - Please see the [Haskell support section](#haskell-support).
 2. [Language Support (LaTeX, MD, etc)](https://open-vsx.org/extension/valentjn/vscode-ltex)
 3. [Git Support](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) - It's particularly helpful to see how a specific line of code (not just file!) came to be, and observe the history of the repository (often, this is more useful than using GitHub's interface because GitHub has restrictions on many things -- e.g., '--follow' is never enabled!).
 
 **Helpful Extensions/Configurations (all optional):**
+
 1. [Insert Unicode](https://marketplace.visualstudio.com/items?itemName=brunnerh.insert-unicode) - We often use unicode symbols in Drasil, so having a quick way to search unicode symbols by name is very helpful.
-2. [Haskelly](https://marketplace.visualstudio.com/items?itemName=UCL.haskelly) - Some useful GHCi commands for Haskell among other things.
-3. [Nix Environment Selector](https://marketplace.visualstudio.com/items?itemName=arrterian.nix-env-selector) - Automatically use the Drasil `shell.nix`!
-4. If you're interested in using a font that mimics unicode characters for Haskell, consider using the [FiraCode](https://github.com/tonsky/FiraCode) font with ligatures enabled ([installation instructions](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions)). It makes reading Haskell more like reading hand-written simple type theory works.
-5. [TODO Tree](https://open-vsx.org/extension/Gruntfuggly/todo-tree) - Gather your code's TODO notes together in one nice VSCode panel. You need `ripgrep` installed on your machine for this plugin to work. For making sure TODO notes in Haskell source code are gathered correctly, you might need to add "--" to the regular expression used in searching for "TODO" notes in the TODO Tree extension settings.
-7. [Rewrap](https://open-vsx.org/extension/stkb/rewrap) - Hard wrap text in your documents around the 80 character "limit" (configurable).
+2. [Nix Environment Selector](https://marketplace.visualstudio.com/items?itemName=arrterian.nix-env-selector) - Automatically use the Drasil `shell.nix`!
+3. If you're interested in using a font that mimics unicode characters for Haskell, consider using the [FiraCode](https://github.com/tonsky/FiraCode) font with ligatures enabled ([installation instructions](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions)). It makes reading Haskell more like reading hand-written simple type theory works.
+4. [TODO Tree](https://open-vsx.org/extension/Gruntfuggly/todo-tree) - Gather your code's TODO notes together in one nice VSCode panel. You need `ripgrep` installed on your machine for this plugin to work. For making sure TODO notes in Haskell source code are gathered correctly, you might need to add "--" to the regular expression used in searching for "TODO" notes in the TODO Tree extension settings.
+5. [Rewrap](https://open-vsx.org/extension/stkb/rewrap) - Hard wrap text in your documents around the 80 character "limit" (configurable).
 
 Despite most of these above being "optional", if you have a powerful computer, it's best to install all of them.
 
@@ -268,9 +266,11 @@ VSCode with the Haskell Language Server plugin creates a very smooth and powerfu
 You may find that the Haskell extension breaks at times (typically occurs when an update happens, and a file gets corrupted/outdated). The first resolution you should take is to completely clear your `.stack-work` (e.g., in the `code` folder, delete the `.stack-work` folder), and re-compile the entire project and re-open VSCode. If issues persist, it may also be helpful to delete your global Stack cache (on Linux, `~/.stack/`), and continue with another re-compilation of the entire project. If the issue still occurs, you may need to refer to the issue tracker of `haskell-language-server`, or `vscode-haskell`.
 
 ## Using the terminal/PowerShell/Cygwin/Git Bash in VSCode
+
 With VSCode open, please press `` CTRL+SHIFT+` `` (or alternatively, press `Terminal > New Terminal`). It will open up a terminal window in the bottom of your screen.
 
 ### Using an alternative Shell
+
 If you prefer to use a different shell (e.g., Cygwin or Git Bash instead of PowerShell, or bash instead of zsh) as your default in VSCode, after opening a shell, you may [select an alternative shell environment](https://stackoverflow.com/a/50527994) as your default using the dropdown on the right-hand side of the shell window that opens up.
 
 ### General helpful VSCode shortcuts
@@ -294,11 +294,7 @@ If you prefer to use a different shell (e.g., Cygwin or Git Bash instead of Powe
 | `` ALT+ENTER ``              | Select all occurrences of Find match                |
 | `` CTRL+F2 ``                | Select all occurrences of a word                    |
 
- 
-
-#### Note for MacOS users
-
-Switch out CTRL for CMD if you’re using MacOS.
+For macOS users, just make sure to switch out CTRL for Command (CMD).
 
 # Optional Utilities
 

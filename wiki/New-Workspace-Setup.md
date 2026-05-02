@@ -93,7 +93,7 @@ If you're using a recent version of Mac (> Mavericks/10.9), please open up a ter
 
 ##### `git`
 
-If you're using a recent version of Mac (> Mavericks/10.9), please open up a terminal window (`Command + Space`, then search "Terminal"), and type in `git --version` into it, and press enter. A GUI installer will appear prompting you to install Git. Please follow the on-screen steps, leaving all options default. Once the installation is complete, you should be able to type `git --version` into your Terminal window again and receive a version code back instead of having the GUI pop up again. If you're using an older version of Mac, you may follow through the steps of installing Git using any of the [official repositories](https://git-scm.com/download/mac).
+Assuming you use Homebrew, you can use [Homebrew formula](https://formulae.brew.sh/formula/git) to install `git`. That is, you only need to open a terminal and run: `brew install git`. Once it has completed, you should be able to run `git --version` and see a textual version code. Alternatively, if you are not using Homebrew, you can follow the steps for install Git using any of the [official methods](https://git-scm.com/download/mac).
 
 ##### GNU `grep`
 

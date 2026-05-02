@@ -8,15 +8,22 @@ In order, you will be installing the following _bare minimum requirements_ for w
 2. [Stack](#stack-via-ghcup): A Haskell development toolchain.
 3. [VSCode](#vscode) + [Extensions](#extensions): A commonly used code editor with good Haskell support provided through a [plugin](https://github.com/haskell/haskell-language-server).
 
-As Drasil generates a host of different artifacts, you will also need to install various other tools to work with them:
+If you intend to work with the artifacts that Drasil generates, you should also install:
 
-1. [Graphviz](#graphviz)
-2. A [LaTeX](#latex) toolchain
-3. [Inkscape](#inkscape)
-4. [Doxygen](#doxygen)
-5. [mdBook](#mdBook)
-6. [Jupyter](#jupyter) 
-7. [ShellCheck](#shellcheck)
+* For **document** artifacts*:
+    1. [Graphviz](#graphviz)
+    2. A [LaTeX](#latex) toolchain
+    3. [Inkscape](#inkscape)
+    4. [mdBook](#mdBook)
+    5. [Jupyter](#jupyter)
+* For **code** artifacts: [Doxygen](#doxygen)
+* For **linting** Drasil's codebase: [ShellCheck](#shellcheck)
+
+<!--
+TODO:
+1. Linting: HLint, Weeder
+2. Code Artifacts: Java, C[++/#], Swift, Julia, Python
+-->
 
 ## Windows
 

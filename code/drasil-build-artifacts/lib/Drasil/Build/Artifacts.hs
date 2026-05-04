@@ -1,15 +1,15 @@
 module Drasil.Build.Artifacts (
-  module Drasil.Build.Artifacts.Classes,
-  module Drasil.Build.Artifacts.Directory,
-  module Drasil.Build.Artifacts.FileData,
   module Drasil.Build.Artifacts.FileLayout,
-  module Drasil.Build.Artifacts.FileIO,
-  module Drasil.Build.Artifacts.FilePath
+  module Drasil.Build.Artifacts.Legacy.Classes,
+  module Drasil.Build.Artifacts.Legacy.Directory,
+  module Drasil.Build.Artifacts.Legacy.FileData,
+  module Drasil.Build.Artifacts.Legacy.FileIO,
+  module Drasil.Build.Artifacts.Legacy.FilePath
 ) where
 
-import Drasil.Build.Artifacts.Classes
-import Drasil.Build.Artifacts.Directory
-import Drasil.Build.Artifacts.FileData
 import Drasil.Build.Artifacts.FileLayout
-import Drasil.Build.Artifacts.FileIO
-import Drasil.Build.Artifacts.FilePath
+import Drasil.Build.Artifacts.Legacy.Classes
+import Drasil.Build.Artifacts.Legacy.Directory
+import Drasil.Build.Artifacts.Legacy.FileData
+import Drasil.Build.Artifacts.Legacy.FileIO
+import Drasil.Build.Artifacts.Legacy.FilePath

@@ -1,8 +1,8 @@
 module Drasil.Build.Artifacts.Core
-  ( Artifact,
+  ( FileLayout,
     file,
     directory,
-    writeArtifact,
+    writeFiles,
   )
 where
 
@@ -19,57 +19,57 @@ import System.FilePath (pathSeparator, (</>))
 -- Polymorphic over the internal representation of the contents of the
 -- artifacts. For rendering, 'writeArtifact' requires the file content
 -- representation satisfy 'Renderable'.
-data Artifact d
+data FileLayout d
   = -- | A directory with optionally many nested artifacts.
-    Directory String (M.Map String (Artifact d))
+    Directory String (M.Map String (FileLayout d))
   | -- | A file with content (of an unspecific type).
     File String d
   deriving (Show, Functor, Foldable, Traversable)
 
--- | Get the name of an 'Artifact'.
-name :: Artifact d -> String
+-- | Get the name of an 'FileLayout'.
+name :: FileLayout d -> String
 name (Directory dn _) = dn
 name (File fn _) = fn
 
--- | Equality on artifacts is dependent solely on the _names_. Note that this
+-- | Equality on file layout is dependent solely on the _names_. Note that this
 -- implies a file and directory of the same name cannot exist within the same
 -- directory. This is a restriction partially imposed by macOS.
-instance Eq (Artifact d) where
+instance Eq (FileLayout d) where
   (==) = (==) `on` name
 
 -- | Internal: Check if a path component (i.e., text before/between/after path
 -- separators) is a valid component. Here, validity being defined by not being
 -- any of: ., .., ~, or the system-local path separator.
 checkValid :: String -> String
-checkValid "." = error "cannot create artifact with name \".\"."
-checkValid ".." = error "cannot create artifact with name \"..\"."
-checkValid "~" = error "cannot create artifact with name \"~\"."
+checkValid "." = error "invalid path component: \".\"."
+checkValid ".." = error "invalid path component: \"..\"."
+checkValid "~" = error "invalid path component: \"~\"."
 checkValid s
   | pathSeparator `elem` s =
       error $
         "cannot create artifact with \"" ++ pathSeparator : "\" in the name."
   | otherwise = s
 
--- | Create a file 'Artifact'.
-file :: String -> d -> Artifact d
+-- | Create a file 'FileLayout'.
+file :: String -> d -> FileLayout d
 file = File . checkValid
 
--- | Create a directory 'Artifact', optionally containing any number of other
--- artifacts.
-directory :: (Foldable f) => String -> f (Artifact d) -> Artifact d
+-- | Create a directory 'FileLayout', optionally containing any number of other
+-- 'FileLayout's.
+directory :: (Foldable f) => String -> f (FileLayout d) -> FileLayout d
 directory fp = Directory (checkValid fp) . F.foldr' ins mempty
   where
-    ins :: Artifact d -> M.Map String (Artifact d) -> M.Map String (Artifact d)
+    ins :: FileLayout d -> M.Map String (FileLayout d) -> M.Map String (FileLayout d)
     ins v = M.insertWith (error $ "attempting to overwrite: " ++ name v) (name v) v
 
--- | Write 'Artifact' an artifact to disk, about a base path.
-writeArtifact :: (Renderable d) => FilePath -> Artifact d -> IO ()
-writeArtifact basePath artifact = do
-  let targetPath = basePath </> name artifact
+-- | Write a 'FileLayout' to disk, about a base path.
+writeFiles :: (Renderable d) => FilePath -> FileLayout d -> IO ()
+writeFiles basePath layout = do
+  let targetPath = basePath </> name layout
   exists <- doesPathExist targetPath
   if exists
     then error $ "Path already exists: " ++ targetPath
-    else go basePath artifact
+    else go basePath layout
   where
     go currentPath (File fname content) =
       renderToFile (currentPath </> fname) content

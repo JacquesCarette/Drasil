@@ -1,4 +1,4 @@
-module Drasil.Build.Artifacts.Core
+module Drasil.Build.Artifacts.FileLayout
   ( FileLayout,
     file,
     directory,

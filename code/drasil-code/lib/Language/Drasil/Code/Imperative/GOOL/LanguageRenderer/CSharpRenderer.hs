@@ -17,7 +17,7 @@ import qualified
   G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
-  asFragment, buildAll, interpMM, osClassDefault, executable, sharedLibrary)
+  asFragment, buildAll, interp, nameOpts, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 -- | Holds a C# project.
@@ -60,4 +60,4 @@ csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
 
 -- | Default runnable information for C# files.
 csRunnable :: Maybe Runnable
-csRunnable = interpMM "mono"
+csRunnable = interp executable nameOpts "mono" []

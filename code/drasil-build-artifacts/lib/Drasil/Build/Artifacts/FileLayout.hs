@@ -1,65 +1,66 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Drasil.Build.Artifacts.FileLayout
-  ( FileLayout,
+  ( -- * File Layout
+    FileLayout,
+
+    -- ** Constructors
     file,
     directory,
+
+    -- ** Writing
     writeFiles,
   )
 where
 
 import Data.Foldable qualified as F
-import Data.Function (on)
 import Data.Map.Strict qualified as M
-import Drasil.Build.Artifacts.FilePath (PathComponent, (</>), doesPathExist, createDirectory)
+import Data.Maybe (fromMaybe)
+import Drasil.Build.Artifacts.FilePath (PathSegment, toPath, (</>))
 import Drasil.Build.Artifacts.Render (Renderable (..))
+import System.Directory.OsPath (createDirectory, doesPathExist)
+import System.OsPath (OsPath, decodeUtf)
 
--- | Internal: File nodes for layout, omitting the names of things.
-data FileNode d
-  = -- | A directory with optionally many nested artifacts.
-    Directory (M.Map PathComponent (FileNode d))
-  | -- | A file with content (of an unspecific type).
-    File d
-  deriving (Show, Functor, Foldable, Traversable)
-
--- | A software artifact may contain other software artifacts (i.e., be a
--- directory of other artifacts), or just be a single file.
+-- | Container for laying out files, and safely writing to disk.
 --
--- Polymorphic over the internal representation of the contents of the
--- artifacts. For rendering, 'writeArtifact' requires the file content
--- representation satisfy 'Renderable'.
-data FileLayout d = FileLayout PathComponent (FileNode d)
-  deriving (Show, Functor, Foldable, Traversable)
+-- Polymorphic over the representation of the file contents. For rendering,
+-- writeFiles requires the file content representation satisfy 'Renderable'.
+data FileLayout doc = FileLayout
+  { -- | The /name/ of the file or directory.
+    pathSeg :: PathSegment,
+    -- | The /contents/ of the file or directory.
+    fileTree :: FileTree doc
+  }
+  deriving (Functor, Foldable, Traversable)
 
--- | Get the name of an 'FileLayout'.
-name :: FileLayout d -> PathComponent
-name (FileLayout n _) = n
-
-node :: FileLayout d -> FileNode d
-node (FileLayout _ n) = n
-
--- | Equality on file layout is dependent solely on the _names_. Note that this
--- implies a file and directory of the same name cannot exist within the same
--- directory. This is a restriction partially imposed by macOS.
-instance Eq (FileLayout d) where
-  (==) = (==) `on` name -- FIXME: Need to be extra cautious about normalizing names.
+-- | Internal: File layout tree.
+data FileTree doc
+  = -- | A directory with optionally many nested artifacts.
+    Directory (M.Map PathSegment (FileTree doc))
+  | -- | A file with content (of an unspecific type).
+    File doc
+  deriving (Functor, Foldable, Traversable)
 
 -- | Create a file 'FileLayout'.
-file :: PathComponent -> d -> FileLayout d
-file fp content = FileLayout fp (File content)
+file :: PathSegment -> doc -> FileLayout doc
+file fp = FileLayout fp . File
 {-# INLINE file #-}
 
--- | Create a directory 'FileLayout', optionally containing any number of other
--- 'FileLayout's.
-directory :: (Foldable f) => PathComponent -> f (FileLayout d) -> FileLayout d
-directory fp children = FileLayout fp (Directory $ F.foldr' ins mempty children)
-  where
-    ins :: FileLayout d -> M.Map PathComponent (FileNode d) -> M.Map PathComponent (FileNode d)
-    ins v = M.insertWith (error $ "attempting to overwrite: " ++ show (name v)) (name v) (node v)
-{-# INLINE directory #-}
+-- | Create a directory 'FileLayout', optionally containing any number of nested
+-- files.
+directory :: (Foldable f) => PathSegment -> f (FileLayout doc) -> FileLayout doc
+directory fp = FileLayout fp . Directory . F.foldr' insert mempty -- FIXME: Need to deal with duplicate PathSegs due to insensitivity
+{-# INLINE directory #-} -- NOTE: Inlining here and in 'directory' allows for the held @f (FileLayout doc)@s to never actually build 'FileLayout's!
 
--- | Write a 'FileLayout' to disk, about a base path.
-writeFiles :: (Renderable d) => PathComponent -> FileLayout d -> IO ()
+-- | Internal: Insert a 'FileLayout' into a 'Directory''s map.
+insert :: FileLayout d -> M.Map PathSegment (FileTree d) -> M.Map PathSegment (FileTree d)
+insert v = M.insertWithKey (\dup _ -> error $ "duplicate path: " ++ fromMaybe "cannot decode" $([|decodeUtf $ toPath dup :: Maybe String|])) (pathSeg v) (fileTree v)
+{-# INLINE insert #-}
+
+-- | Write a 'FileLayout' to disk about a base path.
+writeFiles :: (Renderable doc) => OsPath -> FileLayout doc -> IO ()
 writeFiles basePath layout = do
-  let targetPath = basePath </> name layout
+  let targetPath = basePath </> pathSeg layout
   exists <- doesPathExist targetPath
   if exists
     then error $ "Path already exists: " ++ show targetPath

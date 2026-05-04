@@ -26,6 +26,8 @@ dependencies:
 - pretty
 - prettyprinter
 - template-haskell
+- file-io
+- os-string
 
 ghc-options:
 - -Wall

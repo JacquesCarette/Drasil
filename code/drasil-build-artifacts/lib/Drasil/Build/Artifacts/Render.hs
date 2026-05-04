@@ -3,15 +3,16 @@ module Drasil.Build.Artifacts.Render
   )
 where
 
+import Drasil.Build.Artifacts.FilePath
 import Prettyprinter qualified as PNew
 import Prettyprinter.Render.Text (renderIO)
-import System.IO (IOMode (WriteMode), withFile)
 import Text.PrettyPrint qualified as PLegacy
+import Prelude hiding (writeFile)
 
 -- | Render a document and write it to a file (with a trailing newline always
 -- added).
 class Renderable doc where
-  renderToFile :: FilePath -> doc -> IO ()
+  renderToFile :: PathComponent -> doc -> IO ()
 
 instance Renderable PLegacy.Doc where
   -- Does conversion to `String` and then does plain `String -> IO ()` writing.
@@ -20,5 +21,5 @@ instance Renderable PLegacy.Doc where
 instance Renderable (PNew.Doc ann) where
   -- `renderIO` skips intermediate representations before writing to disk:
   -- <https://hackage-content.haskell.org/package/prettyprinter-1.7.2/docs/Prettyprinter-Render-Text.html#v:renderIO>
-  renderToFile fp d = withFile fp WriteMode $ \h ->
+  renderToFile fp d = writeFile' fp $ \h ->
     renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions $ d PNew.<> PNew.line)

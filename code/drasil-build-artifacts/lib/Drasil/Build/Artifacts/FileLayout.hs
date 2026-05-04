@@ -9,10 +9,8 @@ where
 import Data.Foldable qualified as F
 import Data.Function (on)
 import Data.Map.Strict qualified as M
-import Drasil.Build.Artifacts.Render (Renderable (..))
 import Drasil.Build.Artifacts.FilePath
-import System.Directory (createDirectory, doesPathExist)
-import System.FilePath ((</>))
+import Drasil.Build.Artifacts.Render (Renderable (..))
 
 -- | Internal: File nodes for layout, omitting the names of things.
 data FileNode d
@@ -45,31 +43,31 @@ instance Eq (FileLayout d) where
   (==) = (==) `on` name -- FIXME: Need to be extra cautious about normalizing names.
 
 -- | Create a file 'FileLayout'.
-file :: FilePath -> d -> FileLayout d
-file fp content = FileLayout (checkValid fp) (File content)
+file :: PathComponent -> d -> FileLayout d
+file fp content = FileLayout fp (File content)
 {-# INLINE file #-}
 
 -- | Create a directory 'FileLayout', optionally containing any number of other
 -- 'FileLayout's.
-directory :: (Foldable f) => FilePath -> f (FileLayout d) -> FileLayout d
-directory fp children = FileLayout (checkValid fp) (Directory $ F.foldr' ins mempty children)
+directory :: (Foldable f) => PathComponent -> f (FileLayout d) -> FileLayout d
+directory fp children = FileLayout fp (Directory $ F.foldr' ins mempty children)
   where
     ins :: FileLayout d -> M.Map PathComponent (FileNode d) -> M.Map PathComponent (FileNode d)
     ins v = M.insertWith (error $ "attempting to overwrite: " ++ unPC (name v)) (name v) (node v)
 {-# INLINE directory #-}
 
 -- | Write a 'FileLayout' to disk, about a base path.
-writeFiles :: (Renderable d) => FilePath -> FileLayout d -> IO ()
+writeFiles :: (Renderable d) => PathComponent -> FileLayout d -> IO ()
 writeFiles basePath layout = do
-  let targetPath = basePath </> unPC (name layout)
+  let targetPath = basePath </> name layout
   exists <- doesPathExist targetPath
   if exists
-    then error $ "Path already exists: " ++ targetPath
+    then error $ "Path already exists: " ++ show targetPath
     else go basePath layout
   where
     go currentPath (FileLayout fname (File content)) =
-      renderToFile (currentPath </> unPC fname) content
+      renderToFile (currentPath </> fname) content
     go currentPath (FileLayout dname (Directory children)) = do
-      let nextPath = currentPath </> unPC dname
+      let nextPath = currentPath </> dname
       createDirectory nextPath
       F.traverse_ (\(n, c) -> go nextPath (FileLayout n c)) (M.toList children)

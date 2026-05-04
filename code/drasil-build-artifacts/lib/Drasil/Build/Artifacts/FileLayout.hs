@@ -10,12 +10,9 @@ import Data.Foldable qualified as F
 import Data.Function (on)
 import Data.Map.Strict qualified as M
 import Drasil.Build.Artifacts.Render (Renderable (..))
+import Drasil.Build.Artifacts.FilePath
 import System.Directory (createDirectory, doesPathExist)
-import System.FilePath (pathSeparator, (</>))
-
--- | Represents a valid component of a path (e.g., a file or directory /name/).
-newtype PathComponent = PC { unPC :: String }
-  deriving (Eq, Ord, Show)
+import System.FilePath ((</>))
 
 -- | Internal: File nodes for layout, omitting the names of things.
 data FileNode d
@@ -46,17 +43,6 @@ node (FileLayout _ n) = n
 -- directory. This is a restriction partially imposed by macOS.
 instance Eq (FileLayout d) where
   (==) = (==) `on` name -- FIXME: Need to be extra cautious about normalizing names.
-
--- | Internal: Check if a path component (i.e., text before/between/after path
--- separators) is a valid component. Here, validity being defined by not being
--- any of: ., .., ~, or the system-local path separator.
-checkValid :: FilePath -> PathComponent
-checkValid s
-  | s `elem` [".", "..", "~"] = error $ "invalid path component: " ++ show s ++ "."
-  | pathSeparator `elem` s =
-      error $
-        "cannot create path component with " ++ show pathSeparator ++ " in the name."
-  | otherwise = PC s
 
 -- | Create a file 'FileLayout'.
 file :: FilePath -> d -> FileLayout d

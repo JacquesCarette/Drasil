@@ -23,6 +23,6 @@ FileTests$(TARGET_EXTENSION): FileTests.cs
 	$(CSC) -out:FileTests$(TARGET_EXTENSION) FileTests.cs
 
 run: build
-	./FileTests$(TARGET_EXTENSION) $(RUNARGS)
+	mono FileTests$(TARGET_EXTENSION) $(RUNARGS)
 
 .PHONY: build run

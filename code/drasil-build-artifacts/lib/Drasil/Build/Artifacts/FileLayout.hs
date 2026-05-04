@@ -9,7 +9,7 @@ where
 import Data.Foldable qualified as F
 import Data.Function (on)
 import Data.Map.Strict qualified as M
-import Drasil.Build.Artifacts.FilePath
+import Drasil.Build.Artifacts.FilePath (PathComponent, (</>), doesPathExist, createDirectory)
 import Drasil.Build.Artifacts.Render (Renderable (..))
 
 -- | Internal: File nodes for layout, omitting the names of things.
@@ -53,7 +53,7 @@ directory :: (Foldable f) => PathComponent -> f (FileLayout d) -> FileLayout d
 directory fp children = FileLayout fp (Directory $ F.foldr' ins mempty children)
   where
     ins :: FileLayout d -> M.Map PathComponent (FileNode d) -> M.Map PathComponent (FileNode d)
-    ins v = M.insertWith (error $ "attempting to overwrite: " ++ unPC (name v)) (name v) (node v)
+    ins v = M.insertWith (error $ "attempting to overwrite: " ++ show (name v)) (name v) (node v)
 {-# INLINE directory #-}
 
 -- | Write a 'FileLayout' to disk, about a base path.

@@ -3,7 +3,7 @@ module Drasil.Build.Artifacts.Render
   )
 where
 
-import Drasil.Build.Artifacts.FilePath
+import Drasil.Build.Artifacts.FilePath (PathComponent, writeFile, writeFile')
 import Prettyprinter qualified as PNew
 import Prettyprinter.Render.Text (renderIO)
 import Text.PrettyPrint qualified as PLegacy

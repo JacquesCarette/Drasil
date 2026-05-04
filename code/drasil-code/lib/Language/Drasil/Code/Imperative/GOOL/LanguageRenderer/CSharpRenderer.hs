@@ -17,7 +17,7 @@ import qualified
   G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
-  asFragment, buildAll, interp, nameOpts, executable, sharedLibrary)
+  asFragment, buildAll, interp, nameOpts, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 -- | Holds a C# project.

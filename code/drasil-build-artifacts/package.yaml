@@ -38,3 +38,4 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Build.Artifacts
+  - Drasil.Build.Artifacts.Legacy

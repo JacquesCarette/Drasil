@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
   JavaCode(..), jName, jVersion
 ) where
 
-import Drasil.Build.Artifacts (indent)
+import Drasil.Build.Artifacts.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,

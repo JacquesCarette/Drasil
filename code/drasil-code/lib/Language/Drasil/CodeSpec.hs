@@ -20,6 +20,7 @@ import Control.Lens ((^.), makeLenses, Lens', makeClassyFor, set)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
+import qualified Data.List.NonEmpty as NE
 
 import Drasil.Build.Artifacts (RelativeFile)
 import Language.Drasil hiding (None)
@@ -158,7 +159,7 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
   let ddefs = sys ^. dataDefns
       n = sys ^. programName
       db = sys ^. systemdb
-      inputs' = map quantvar ins
+      inputs' = map quantvar $ NE.toList ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
@@ -167,7 +168,7 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
         ++ map qtoc (handWiredDefs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
-      outs' = map quantvar outs
+      outs' = map quantvar $ NE.toList outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {

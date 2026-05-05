@@ -1,5 +1,7 @@
 module Drasil.PDController.Unitals where
 
+import qualified Data.List.NonEmpty as NE
+
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
@@ -54,11 +56,11 @@ dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
                     dqdCtrlVarFD, dqdStepTime,
                     dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol :: DefinedQuantityDict
 
-inputs :: [DefinedQuantityDict]
-inputs = [dqdSetPointTD, dqdDerivGain, dqdPropGain, dqdStepTime, dqdSimTime]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList [dqdSetPointTD, dqdDerivGain, dqdPropGain, dqdStepTime, dqdSimTime]
 
-outputs :: [DefinedQuantityDict]
-outputs = [dqdProcessVariableTD]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.fromList [dqdProcessVariableTD]
 
 inputsUC :: [UncertQ]
 inputsUC

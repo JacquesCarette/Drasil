@@ -5,6 +5,8 @@
 
 module Drasil.Template.Body (mkSRS, si) where
 
+import qualified Data.List.NonEmpty as NE
+
 import Drasil.System (mkSmithEtAlICO)
 import Language.Drasil
 import Drasil.SRSDocument
@@ -74,7 +76,7 @@ si = mkSmithEtAlICO
   progName [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef]) []
+  (undefined :: NE.NonEmpty DefinedQuantityDict) (undefined :: NE.NonEmpty DefinedQuantityDict) ([] :: [ConstrConcept]) ([] :: [ConstQDef]) []
   [] symbMap []
 
 ideaDicts :: [IdeaDict]

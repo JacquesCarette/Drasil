@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (si, mkSRS) where
 
+import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
@@ -94,7 +95,7 @@ mkSRS = [TableOfContents,
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
-        , CorrSolnPpties outputs []
+        , CorrSolnPpties (NE.toList outputs) []
         ]
       ],
   ReqrmntSec $ ReqsProg

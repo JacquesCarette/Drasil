@@ -22,6 +22,7 @@ import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
 import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
+import qualified Data.List.NonEmpty as NE
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
@@ -236,11 +237,11 @@ aspectRatioMax = dqd' (dcc "aspectRatioMax"
 -----------------
 
 constrained :: [ConstrConcept]
-constrained = map cnstrw' inputConstraints ++ map cnstrw' outputs
+constrained = map cnstrw' inputConstraints ++ map cnstrw' (NE.toList outputs)
 
 -- Input Constraints
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr inputConstraints ++ map dqdWr [absTol, relTol]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList $ map dqdWr inputConstraints ++ map dqdWr [absTol, relTol]
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
@@ -396,9 +397,9 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   (dbl 0.01) defaultUncrt
 
 -- Output Constraints
-outputs :: [ConstrConcept]
+outputs :: NE.NonEmpty ConstrConcept
 --FIXME: Add typical values or use Nothing if not known
-outputs = [tempW, tempPCM, watE, pcmE]
+outputs = NE.fromList [tempW, tempPCM, watE, pcmE]
 
 -- Constraint 18
 tempW = cuc' "tempW"

@@ -1,5 +1,7 @@
 module Drasil.DblPend.Unitals where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
 import qualified Language.Drasil.Development as D (toSent)
 import Language.Drasil.Display (Symbol(..))
@@ -22,11 +24,11 @@ import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, 
 symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList $ map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2]
 
-outputs :: [DefinedQuantityDict]
-outputs = [dqdWr pendDisAngle]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.fromList [dqdWr pendDisAngle]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]

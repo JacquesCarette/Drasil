@@ -8,6 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Prelude hiding (log)
 import Control.Lens ((^.))
+import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr, probConstr)
@@ -42,8 +43,8 @@ glassTypeCon, nomThick :: ConstrConcept
 
 {--}
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList $ map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
   map dqdWr inputsNoUncrtn ++ map dqdWr sdVector
 
 --inputs with units and uncertainties
@@ -119,8 +120,8 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
-outputs :: [DefinedQuantityDict]
-outputs = map dqdWr [isSafePb, isSafeLR] ++ map dqdWr [probBr, stressDistFac]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.fromList $ map dqdWr [isSafePb, isSafeLR] ++ map dqdWr [probBr, stressDistFac]
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]

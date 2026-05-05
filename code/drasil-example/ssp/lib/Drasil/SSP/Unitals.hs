@@ -1,6 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Control.Lens ((^.))
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
@@ -29,7 +30,7 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   supMax, supMin, torque, weight, positionVec, time)
 
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
+symbols = dqdWr coords : NE.toList inputs ++ map dqdWr (NE.toList outputs)
   ++ map dqdWr units ++ unitless
 
 ---------------------------
@@ -68,7 +69,7 @@ wiif = "without the influence of interslice forces"
 --------------------------------
 
 constrained :: [ConstrConcept]
-constrained = coords : map cnstrw' inputsWUncrtn ++ outputs
+constrained = coords : map cnstrw' inputsWUncrtn ++ NE.toList outputs
 
 inputsWUncrtn :: [UncertQ]
 inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip,
@@ -78,11 +79,11 @@ inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip,
 inputsNoUncrtn :: [DefinedQuantityDict]
 inputsNoUncrtn = [constF]
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList $ map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
 
-outputs :: [ConstrConcept]
-outputs = [fs]
+outputs :: NE.NonEmpty ConstrConcept
+outputs = NE.fromList [fs]
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?

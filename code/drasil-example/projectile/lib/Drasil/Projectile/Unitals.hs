@@ -1,5 +1,7 @@
 module Drasil.Projectile.Unitals where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT, vEpsilon)
@@ -13,11 +15,11 @@ import Data.Drasil.Units.Physics (velU)
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
   flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed, projPos)
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [launSpeed, launAngle, targPos]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList $ map dqdWr [launSpeed, launAngle, targPos]
 
-outputs :: [DefinedQuantityDict]
-outputs = [dqdWr offset, dqdWr flightDur]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.fromList [dqdWr offset, dqdWr flightDur]
 
 projSpeed :: UnitalChunk
 projSpeed = uc C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU

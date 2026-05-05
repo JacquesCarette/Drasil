@@ -2,6 +2,8 @@ module Drasil.SWHSNoPCM.Unitals where
 
 import Language.Drasil
 
+import qualified Data.List.NonEmpty as NE
+
 import Data.Drasil.SI_Units (centigrade)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 
@@ -10,11 +12,11 @@ import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
   timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempW)
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr constrained ++ map dqdWr unconstrained ++ [dqdWr watE]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.fromList $ map dqdWr constrained ++ map dqdWr unconstrained ++ [dqdWr watE]
 
-outputs :: [ConstrConcept]
-outputs = [tempW, watE]
+outputs :: NE.NonEmpty ConstrConcept
+outputs = NE.fromList [tempW, watE]
 
 unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]

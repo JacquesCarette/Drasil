@@ -42,7 +42,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -495,6 +495,9 @@ instance Pair p => BindingFormSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => BindingFormElim (p CppSrcCode CppHdrCode) where
   bindingFormDoc b = bindingDoc $ unCPPSC $ pfst b
   bindingFormType b = pair (bindingFormType $ pfst b) (bindingFormType $ psnd b)
+
+instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) where
+  binder b = binder $ pfst b
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1423,6 +1426,9 @@ instance BindingFormElim CppSrcCode where
   bindingFormDoc = bindingDoc . unCPPSC
   bindingFormType = onCodeValue bindingType
 
+instance InternalBinderElim CppSrcCode where
+  binder = bindingDoc . unCPPSC
+
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
 
@@ -2137,6 +2143,9 @@ instance BindingFormSym CppHdrCode where
 instance BindingFormElim CppHdrCode where
   bindingFormDoc = bindingDoc . unCPPHC
   bindingFormType = onCodeValue bindingType
+
+instance InternalBinderElim CppHdrCode where
+  binder = bindingDoc . unCPPHC
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS

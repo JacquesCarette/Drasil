@@ -36,7 +36,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -434,6 +434,9 @@ instance BindingFormElim JuliaCode where
   bindingFormDoc = bindingDoc . unJLC
   bindingFormType = onCodeValue bindingType
   
+instance InternalBinderElim JuliaCode where
+  binder = bindingDoc . unJLC
+
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS
 

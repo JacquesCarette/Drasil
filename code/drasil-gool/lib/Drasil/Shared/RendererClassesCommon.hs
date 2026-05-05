@@ -4,13 +4,13 @@ module Drasil.Shared.RendererClassesCommon (
   CommonRenderSym, ImportSym(..), ImportElim(..),
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
-  OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..),
-  ValueElim(..), InternalListFunc(..), RenderFunction(..), FunctionElim(..),
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim(..),
-  MSMthdType, MethodTypeSym(..), RenderParam(..), ParamElim(..),
-  RenderMethod(..), MethodElim(..), BlockCommentSym(..), BlockCommentElim(..),
-  ScopeElim(..)
+  OpElim(..), RenderVariable(..), InternalVarElim(..), InternalBinderElim(..),
+  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
+  RenderVisibility(..), VisibilityElim(..), MSMthdType, MethodTypeSym(..),
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
+  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
-  BindingFormElim(..))
+  BindingFormElim(..), BindingFormSym (..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
 import Drasil.Shared.State (MS, VS)
@@ -41,9 +41,10 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r,
   InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r,
   RenderType r, InternalTypeElim r, RenderValue r, ValueElim r,
-  RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r,
-  BinaryOpSym r, BlockCommentSym r, BlockCommentElim r, ValueExpression r,
-  RenderMethod r, MethodElim r, ParameterSym r, ScopeElim r
+  RenderVariable r, InternalVarElim r, InternalBinderElim r, ImportSym r,
+  ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
+  BlockCommentElim r, ValueExpression r, RenderMethod r, MethodElim r,
+  ParameterSym r, ScopeElim r
   ) => CommonRenderSym r
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
@@ -133,6 +134,9 @@ class RenderVariable r where
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
   variable  :: r (Variable r) -> Doc
+
+class InternalBinderElim r where
+  binder  :: r (BindingForm r) -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r

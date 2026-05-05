@@ -39,7 +39,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..),
+  InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -497,6 +498,9 @@ instance BindingFormElim JavaCode where
   bindingFormDoc = bindingDoc . unJC
   bindingFormType = onCodeValue bindingType
   
+instance InternalBinderElim JavaCode where
+  binder = bindingDoc . unJC
+
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS
 

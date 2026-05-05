@@ -42,7 +42,7 @@ import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -490,6 +490,9 @@ instance BindingFormElim SwiftCode where
   bindingFormDoc = bindingDoc . unSC
   bindingFormType = onCodeValue bindingType
   
+instance InternalBinderElim SwiftCode where
+  binder = bindingDoc . unSC
+
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
 

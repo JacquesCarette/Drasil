@@ -471,7 +471,7 @@ instance InternalListFunc CSharpCode where
 
 instance BindingFormSym CSharpCode where
   type BindingForm CSharpCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS

@@ -491,7 +491,7 @@ instance InternalListFunc JavaCode where
 
 instance BindingFormSym JavaCode where
   type BindingForm JavaCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
 
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS

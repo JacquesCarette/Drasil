@@ -1413,7 +1413,7 @@ instance InternalListFunc CppSrcCode where
 
 instance BindingFormSym CppSrcCode where
   type BindingForm CppSrcCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
@@ -2124,7 +2124,7 @@ instance InternalListFunc CppHdrCode where
 
 instance BindingFormSym CppHdrCode where
   type BindingForm CppHdrCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS

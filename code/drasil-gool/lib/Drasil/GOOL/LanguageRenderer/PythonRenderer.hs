@@ -475,7 +475,7 @@ instance InternalListFunc PythonCode where
 
 instance BindingFormSym PythonCode where
   type BindingForm PythonCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS

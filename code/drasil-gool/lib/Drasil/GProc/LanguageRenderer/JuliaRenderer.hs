@@ -427,7 +427,7 @@ instance InternalListFunc JuliaCode where
 
 instance BindingFormSym JuliaCode where
   type BindingForm JuliaCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS

@@ -8,7 +8,7 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,

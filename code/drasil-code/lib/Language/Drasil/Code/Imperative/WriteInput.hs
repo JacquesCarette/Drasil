@@ -6,7 +6,7 @@ import Data.List (intersperse, transpose)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
   text, vcat)
 
-import Utils.Drasil (blank)
+import Drasil.Build.Artifacts (blank)
 import Language.Drasil hiding (space, Matrix)
 import Language.Drasil.Expr.Development (Expr(Matrix))
 import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,

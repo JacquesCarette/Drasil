@@ -105,7 +105,9 @@ class (TypeSym r) => VariableSym r where
   var       :: Label -> VSType r -> SVariable r
   constant  :: Label -> VSType r -> SVariable r
   extVar    :: Library -> Label -> VSType r -> SVariable r
-  arrayElem :: Integer -> SVariable r -> SVariable r
+  -- TODO [Brandon Bosman, 04/27/2026]: Move this to a new Array typeclass modelled after List
+  -- Change return type to SValue
+  arrayElem :: SValue r -> SVariable r -> SVariable r
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String

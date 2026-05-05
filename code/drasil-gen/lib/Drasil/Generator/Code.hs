@@ -29,7 +29,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
--- | Internal: Generate an ICO-style executable softifact.
+-- | Generate an ICO-style executable software artifact.
 exportCode :: SmithEtAlSRS -> Choices -> IO ()
 exportCode syst chcs = do
   let code = codeSpec syst chcs

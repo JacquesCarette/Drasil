@@ -20,11 +20,13 @@ module Drasil.Shared.InterfaceCommon (
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BindingFormSym(..),
+  BindingFormElim(..),
   convType
   ) where
 
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
+import Text.PrettyPrint (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 import Drasil.Shared.CodeType (CodeType(..))
@@ -308,6 +310,10 @@ type VSBindingForm a = VS (a (BindingForm a))
 class (TypeSym r) => BindingFormSym r where
   type BindingForm r
   bindingForm :: Label -> VSType r -> VSBindingForm r
+
+class (BindingFormSym r) => BindingFormElim r where
+  bindingFormDoc :: r (BindingForm r) -> Doc
+  bindingFormType :: r (BindingForm r) -> r (Type r)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:

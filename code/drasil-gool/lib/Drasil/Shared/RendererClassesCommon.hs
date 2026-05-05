@@ -22,7 +22,8 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
+  BindingFormElim(..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
 import Drasil.Shared.State (MS, VS)
@@ -34,15 +35,15 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
-  InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r,
-  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
-  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r,
-  VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
-  InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
-  InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
-  InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
-  BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
-  MethodElim r, ParameterSym r, ScopeElim r
+  InternalList r, VectorExpression r, TypeElim r, VariableElim r,
+  BindingFormElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
+  InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
+  ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r,
+  InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r,
+  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r,
+  RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r,
+  BinaryOpSym r, BlockCommentSym r, BlockCommentElim r, ValueExpression r,
+  RenderMethod r, MethodElim r, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)

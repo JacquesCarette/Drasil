@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  BindingFormSym(..), MethodSym(..))
+  BindingFormSym(..), BindingFormElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -477,6 +477,10 @@ instance BindingFormSym PythonCode where
   type BindingForm PythonCode = BindingFormD
   bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
 
+instance BindingFormElim PythonCode where
+  bindingFormDoc = bindingDoc . unPC
+  bindingFormType = onCodeValue bindingType
+  
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
 

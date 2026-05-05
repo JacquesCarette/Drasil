@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  BindingFormSym(..), MethodSym(..), convScope)
+  BindingFormSym(..), BindingFormElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -486,6 +486,10 @@ instance BindingFormSym SwiftCode where
   type BindingForm SwiftCode = BindingFormD
   bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
 
+instance BindingFormElim SwiftCode where
+  bindingFormDoc = bindingDoc . unSC
+  bindingFormType = onCodeValue bindingType
+  
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
 

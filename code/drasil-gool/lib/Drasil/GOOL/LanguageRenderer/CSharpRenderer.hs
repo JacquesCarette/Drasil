@@ -21,8 +21,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  BindingFormSym(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  BindingFormSym(..), BindingFormElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -473,6 +473,10 @@ instance BindingFormSym CSharpCode where
   type BindingForm CSharpCode = BindingFormD
   bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
 
+instance BindingFormElim CSharpCode where
+  bindingFormDoc = bindingDoc . unCSC
+  bindingFormType = onCodeValue bindingType
+  
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS
 

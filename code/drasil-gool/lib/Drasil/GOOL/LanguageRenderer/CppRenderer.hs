@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   BindingFormSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope)
+  ParameterSym(..), MethodSym(..), convScope, BindingFormElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -491,6 +491,10 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
 instance Pair p => BindingFormSym (p CppSrcCode CppHdrCode) where
   type BindingForm (p CppSrcCode CppHdrCode) = BindingFormD
   bindingForm nm = pair1 (bindingForm nm) (bindingForm nm)
+
+instance (Pair p) => BindingFormElim (p CppSrcCode CppHdrCode) where
+  bindingFormDoc b = bindingDoc $ unCPPSC $ pfst b
+  bindingFormType b = pair (bindingFormType $ pfst b) (bindingFormType $ psnd b)
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1415,6 +1419,10 @@ instance BindingFormSym CppSrcCode where
   type BindingForm CppSrcCode = BindingFormD
   bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
 
+instance BindingFormElim CppSrcCode where
+  bindingFormDoc = bindingDoc . unCPPSC
+  bindingFormType = onCodeValue bindingType
+
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
 
@@ -2125,6 +2133,10 @@ instance InternalListFunc CppHdrCode where
 instance BindingFormSym CppHdrCode where
   type BindingForm CppHdrCode = BindingFormD
   bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
+
+instance BindingFormElim CppHdrCode where
+  bindingFormDoc = bindingDoc . unCPPHC
+  bindingFormType = onCodeValue bindingType
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS

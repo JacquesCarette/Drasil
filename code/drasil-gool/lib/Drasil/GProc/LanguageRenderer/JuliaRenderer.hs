@@ -22,7 +22,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  BindingFormSym(..), MethodSym(..), (&=), switchAsIf, convScope)
+  BindingFormSym(..), BindingFormElim(..), MethodSym(..), (&=), switchAsIf,
+  convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -429,6 +430,10 @@ instance BindingFormSym JuliaCode where
   type BindingForm JuliaCode = BindingFormD
   bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
 
+instance BindingFormElim JuliaCode where
+  bindingFormDoc = bindingDoc . unJLC
+  bindingFormType = onCodeValue bindingType
+  
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS
 

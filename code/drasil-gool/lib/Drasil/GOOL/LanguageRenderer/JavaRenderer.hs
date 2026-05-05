@@ -21,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  BindingFormSym(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -89,7 +90,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData)
+  commonThunkElim, commonThunkDim, ScopeData, BindingFormD(..), bindFormD)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
@@ -487,6 +488,10 @@ instance InternalListFunc JavaCode where
   listAppendFunc _ = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
+
+instance BindingFormSym JavaCode where
+  type BindingForm JavaCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS

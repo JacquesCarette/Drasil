@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), (&=), switchAsIf, convScope)
+  BindingFormSym(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -83,7 +83,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
-  ScopeData(..), sd)
+  ScopeData(..), sd, BindingFormD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
@@ -424,6 +424,10 @@ instance InternalListFunc JuliaCode where
     funcFromData (RC.value f) void
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BindingFormSym JuliaCode where
+  type BindingForm JuliaCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS

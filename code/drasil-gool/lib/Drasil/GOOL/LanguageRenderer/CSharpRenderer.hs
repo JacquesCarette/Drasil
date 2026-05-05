@@ -21,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  BindingFormSym(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -93,7 +94,8 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..),
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
+  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BindingFormD(..),
+  bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -466,6 +468,10 @@ instance InternalListFunc CSharpCode where
   listAppendFunc _ = G.listAppendFunc csListAppend
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BindingFormSym CSharpCode where
+  type BindingForm CSharpCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS

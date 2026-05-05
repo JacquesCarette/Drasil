@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  BindingFormSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -81,7 +81,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
-  ScopeData)
+  ScopeData, BindingFormD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -472,6 +472,10 @@ instance InternalListFunc PythonCode where
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BindingFormSym PythonCode where
+  type BindingForm PythonCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS

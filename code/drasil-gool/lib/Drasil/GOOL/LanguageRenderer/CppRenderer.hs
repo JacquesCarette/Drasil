@@ -23,8 +23,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope)
+  BindingFormSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -93,8 +93,9 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), Binding(..), onBind
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
-  sumComponents, commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
+  VarData(..), vard, BindingFormD(..), bindFormD, CommonThunk, pureValue,
+  vectorize, vectorize2, sumComponents, commonVecIndex, commonThunkElim,
+  commonThunkDim, ScopeData)
 import Drasil.Shared.Classes (Pair(..))
 import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -486,6 +487,10 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
+
+instance Pair p => BindingFormSym (p CppSrcCode CppHdrCode) where
+  type BindingForm (p CppSrcCode CppHdrCode) = BindingFormD
+  bindingForm nm = pair1 (bindingForm nm) (bindingForm nm)
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1406,6 +1411,10 @@ instance InternalListFunc CppSrcCode where
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CS.listSetFunc cppListSetDoc
 
+instance BindingFormSym CppSrcCode where
+  type BindingForm CppSrcCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
 
@@ -2112,6 +2121,10 @@ instance InternalListFunc CppHdrCode where
   listAppendFunc _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
+
+instance BindingFormSym CppHdrCode where
+  type BindingForm CppHdrCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS

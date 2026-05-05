@@ -2,9 +2,10 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
-  VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBindingForm,
+  SVariable, SValue, VSThunk, MSStatement, MSParameter, SMethod, NamedArgs,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
@@ -18,7 +19,8 @@ module Drasil.Shared.InterfaceCommon (
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BindingFormSym(..),
+  convType
   ) where
 
 import Data.Bifunctor (first)
@@ -42,7 +44,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r
+  VariableElim r, MethodSym r, ScopeSym r, BindingFormSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -300,6 +302,12 @@ class (ValueSym r) => Set r where
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SVariable r -> SValue r -> MSBlock r
+
+type VSBindingForm a = VS (a (BindingForm a))
+
+class (TypeSym r) => BindingFormSym r where
+  type BindingForm r
+  bindingForm :: Label -> VSType r -> VSBindingForm r
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:

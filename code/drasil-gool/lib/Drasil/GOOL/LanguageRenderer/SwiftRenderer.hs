@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope)
+  BindingFormSym(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -94,7 +94,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData)
+  commonThunkElim, commonThunkDim, ScopeData, BindingFormD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -481,6 +481,10 @@ instance InternalListFunc SwiftCode where
   listAppendFunc _ = G.listAppendFunc swiftListAppend
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BindingFormSym SwiftCode where
+  type BindingForm SwiftCode = BindingFormD
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS

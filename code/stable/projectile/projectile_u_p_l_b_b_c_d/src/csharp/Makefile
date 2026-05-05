@@ -25,7 +25,7 @@ Projectile$(TARGET_EXTENSION): Projectile.cs
 	$(CSC) -out:Projectile$(TARGET_EXTENSION) Projectile.cs
 
 run: build
-	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
+	mono Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Projectile.cs
 	doxygen doxConfig

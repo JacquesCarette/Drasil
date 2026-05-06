@@ -31,7 +31,7 @@ data FileLayout doc = FileLayout
     -- | The /contents/ of the file or directory.
     fileTree :: FileTree doc
   }
-  deriving (Functor, Foldable, Traversable)
+  deriving (Functor)
 
 -- | Internal: File layout tree.
 data FileTree doc
@@ -39,7 +39,7 @@ data FileTree doc
     Directory (M.Map PathSegment (FileTree doc))
   | -- | A file with content (of an unspecific type).
     File doc
-  deriving (Functor, Foldable, Traversable)
+  deriving (Functor)
 
 -- | Create a file 'FileLayout'.
 file :: PathSegment -> doc -> FileLayout doc

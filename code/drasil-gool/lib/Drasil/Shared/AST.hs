@@ -9,7 +9,7 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
   updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  BindingFormD(bindingDoc, bindingType), bindFormD, CommonThunk,
+  BindingFormD(bindingName, bindingType), bindFormD, CommonThunk,
   pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim
 ) where
@@ -165,9 +165,9 @@ vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
 
 -- Underlying type of BindingForm
-data BindingFormD = BindFormD {bindingDoc :: Doc, bindingType :: TypeData}
+data BindingFormD = BindFormD {bindingName :: String, bindingType :: TypeData}
 
-bindFormD :: Doc -> TypeData -> BindingFormD
+bindFormD :: String -> TypeData -> BindingFormD
 bindFormD = BindFormD
 
 -- Used as the underlying data type for Thunks in all renderers

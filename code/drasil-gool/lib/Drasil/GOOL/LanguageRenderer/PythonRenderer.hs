@@ -475,14 +475,14 @@ instance InternalListFunc PythonCode where
 
 instance BindingFormSym PythonCode where
   type BindingForm PythonCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BindingFormElim PythonCode where
-  bindingFormDoc = bindingDoc . unPC
+  bindingFormName = bindingName . unPC
   bindingFormType = onCodeValue bindingType
   
 instance InternalBinderElim PythonCode where
-  binder = bindingDoc . unPC
+  binder = text . bindingName . unPC
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS

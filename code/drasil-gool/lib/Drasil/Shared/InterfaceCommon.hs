@@ -26,7 +26,6 @@ module Drasil.Shared.InterfaceCommon (
 
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
-import Text.PrettyPrint (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 import Drasil.Shared.CodeType (CodeType(..))
@@ -238,7 +237,7 @@ class (TypeSym r) => BindingFormSym r where
   bindingForm :: Label -> VSType r -> VSBindingForm r
 
 class (BindingFormSym r) => BindingFormElim r where
-  bindingFormDoc :: r (BindingForm r) -> Doc
+  bindingFormName :: r (BindingForm r) -> String
   bindingFormType :: r (BindingForm r) -> r (Type r)
 
 -- for values that can include expressions

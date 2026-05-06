@@ -484,14 +484,14 @@ instance InternalListFunc SwiftCode where
 
 instance BindingFormSym SwiftCode where
   type BindingForm SwiftCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD $ text nm) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BindingFormElim SwiftCode where
-  bindingFormDoc = bindingDoc . unSC
+  bindingFormName = bindingName . unSC
   bindingFormType = onCodeValue bindingType
   
 instance InternalBinderElim SwiftCode where
-  binder = bindingDoc . unSC
+  binder = text . bindingName . unSC
 
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS

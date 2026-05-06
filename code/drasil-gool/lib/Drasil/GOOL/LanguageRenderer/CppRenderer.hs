@@ -493,7 +493,7 @@ instance Pair p => BindingFormSym (p CppSrcCode CppHdrCode) where
   bindingForm nm = pair1 (bindingForm nm) (bindingForm nm)
 
 instance (Pair p) => BindingFormElim (p CppSrcCode CppHdrCode) where
-  bindingFormDoc b = bindingDoc $ unCPPSC $ pfst b
+  bindingFormName b = bindingName $ unCPPSC $ pfst b
   bindingFormType b = pair (bindingFormType $ pfst b) (bindingFormType $ psnd b)
 
 instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) where
@@ -1420,14 +1420,14 @@ instance InternalListFunc CppSrcCode where
 
 instance BindingFormSym CppSrcCode where
   type BindingForm CppSrcCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BindingFormElim CppSrcCode where
-  bindingFormDoc = bindingDoc . unCPPSC
+  bindingFormName = bindingName . unCPPSC
   bindingFormType = onCodeValue bindingType
 
 instance InternalBinderElim CppSrcCode where
-  binder = bindingDoc . unCPPSC
+  binder = text . bindingName . unCPPSC
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
@@ -2138,14 +2138,14 @@ instance InternalListFunc CppHdrCode where
 
 instance BindingFormSym CppHdrCode where
   type BindingForm CppHdrCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD (text nm)) <$> tp
+  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BindingFormElim CppHdrCode where
-  bindingFormDoc = bindingDoc . unCPPHC
+  bindingFormName = bindingName . unCPPHC
   bindingFormType = onCodeValue bindingType
 
 instance InternalBinderElim CppHdrCode where
-  binder = bindingDoc . unCPPHC
+  binder = text . bindingName . unCPPHC
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS

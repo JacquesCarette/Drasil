@@ -2,6 +2,7 @@ module Drasil.SWHSNoPCM.Unitals where
 
 import Language.Drasil
 
+import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.SI_Units (centigrade)
@@ -16,7 +17,7 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.fromList $ map dqdWr constrained ++ map dqdWr unconstrained ++ [dqdWr watE]
 
 outputs :: NE.NonEmpty ConstrConcept
-outputs = NE.fromList [tempW, watE]
+outputs =  tempW :| [watE]
 
 unconstrained :: [UncertQ]
 unconstrained = [absTol, relTol]

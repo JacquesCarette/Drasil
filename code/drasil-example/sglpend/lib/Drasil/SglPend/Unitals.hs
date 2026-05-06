@@ -1,5 +1,6 @@
 module Drasil.SglPend.Unitals where
 
+import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
@@ -24,10 +25,10 @@ symbols:: [DefinedQuantityDict]
 symbols = map dqdWr unitalChunks ++ unitless ++ NE.toList inputs ++ NE.toList outputs
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.fromList $ map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
+inputs = NE.map dqdWr $ lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.fromList [dqdWr pendDisplacementAngle]
+outputs = NE.singleton $ dqdWr pendDisplacementAngle
 
 unitalChunks :: [UnitalChunk]
 unitalChunks = [QPP.len, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,

@@ -83,7 +83,7 @@ inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.fromList $ map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
 
 outputs :: NE.NonEmpty ConstrConcept
-outputs = NE.fromList [fs]
+outputs = NE.singleton fs
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?

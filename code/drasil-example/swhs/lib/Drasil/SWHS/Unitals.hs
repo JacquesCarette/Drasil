@@ -22,6 +22,7 @@ import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
 import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 symbols :: [DefinedQuantityDict]
@@ -399,7 +400,7 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
 -- Output Constraints
 outputs :: NE.NonEmpty ConstrConcept
 --FIXME: Add typical values or use Nothing if not known
-outputs = NE.fromList [tempW, tempPCM, watE, pcmE]
+outputs = tempW :| [tempPCM, watE, pcmE]
 
 -- Constraint 18
 tempW = cuc' "tempW"

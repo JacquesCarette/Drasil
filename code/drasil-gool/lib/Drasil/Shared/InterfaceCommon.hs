@@ -231,6 +231,16 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
+type VSBindingForm a = VS (a (BindingForm a))
+
+class (TypeSym r) => BindingFormSym r where
+  type BindingForm r
+  bindingForm :: Label -> VSType r -> VSBindingForm r
+
+class (BindingFormSym r) => BindingFormElim r where
+  bindingFormDoc :: r (BindingForm r) -> Doc
+  bindingFormType :: r (BindingForm r) -> r (Type r)
+
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
   -- An inline if-statement, aka the ternary operator.  Inputs:
@@ -304,16 +314,6 @@ class (ValueSym r) => Set r where
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SVariable r -> SValue r -> MSBlock r
-
-type VSBindingForm a = VS (a (BindingForm a))
-
-class (TypeSym r) => BindingFormSym r where
-  type BindingForm r
-  bindingForm :: Label -> VSType r -> VSBindingForm r
-
-class (BindingFormSym r) => BindingFormElim r where
-  bindingFormDoc :: r (BindingForm r) -> Doc
-  bindingFormType :: r (BindingForm r) -> r (Type r)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:

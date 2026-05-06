@@ -51,7 +51,7 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, printLabel, listSep, piLabel, access, functionDox, variableList,
+  argv, printLabel, listSep, piLabel, access, functionDox, bindingFormList,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
@@ -953,8 +953,8 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
+pyLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
+pyLambda ps ex = pyLambdaDec <+> bindingFormList ps <> colon <+> RC.value ex
 
 pyStringType :: (CommonRenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)

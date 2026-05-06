@@ -44,8 +44,8 @@ import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
-  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel,
-  valueList)
+  parameterList, forLabel, inLabel, tryLabel, catchLabel,
+  valueList, bindingFormList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
@@ -758,7 +758,7 @@ jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'
   indexToInt $ funcApp
-    jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
+    jlListAbsdex t [lambda [bindingForm "x" t] (valueOf (var "x" t) ?== v), l]
 
 -- List slicing in Julia.  See HelloWorld.jl to see the full suite of
 -- possible outputs of this function.
@@ -910,8 +910,8 @@ jlIntFunc n pms bod = do
         indent $ RC.body bod,
         jlEnd]
 
-jlLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
+jlLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
+jlLambda ps ex = bindingFormList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
 jlThrow :: (CommonRenderSym r) => r (Value r) -> Doc

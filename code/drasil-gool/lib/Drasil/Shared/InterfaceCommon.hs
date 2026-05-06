@@ -241,7 +241,7 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
 
-  lambda :: [SVariable r] -> SValue r -> SValue r
+  lambda :: [VSBindingForm r] -> SValue r -> SValue r
 
   notNull :: SValue r -> SValue r
 

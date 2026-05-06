@@ -54,7 +54,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
-  variableList, appendToBody, surroundBody)
+  variableList, bindingFormList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, func, cast, listSetFunc,
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt,
@@ -848,8 +848,8 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-csLambda ps ex = parens (variableList ps) <+> csLambdaSep <+> RC.value ex
+csLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
+csLambda ps ex = parens (bindingFormList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
 csReadLineFunc = extFuncApp csConsole csReadLine string []

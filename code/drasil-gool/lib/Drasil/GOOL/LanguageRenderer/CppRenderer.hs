@@ -36,16 +36,16 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  InternalBinderElim(..), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+  method, blockComment', InternalBinderElim(binder))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -2727,9 +2727,9 @@ cppIterType t' = do
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v
 
-cppLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+cppLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
-  (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> cppLambdaSep <+>
+  (map (RC.type' . bindingFormType) ps) (map RC.binder ps)) <+> cppLambdaSep <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
 stodFunc :: SValue CppSrcCode -> SValue CppSrcCode

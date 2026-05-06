@@ -54,8 +54,8 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj',
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep,
-  access, containing, mathFunc, functionDox, variableList, parameterList,
-  appendToBody, surroundBody, intValue)
+  access, containing, mathFunc, functionDox, variableList, bindingFormList,
+  parameterList, appendToBody, surroundBody, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
   multiStmt, body, printFile, param, listDec, classVar, cast, castObj, static,
@@ -960,8 +960,8 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-jLambda ps ex = parens (variableList ps) <+> jLambdaSep <+> RC.value ex
+jLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
+jLambda ps ex = parens (bindingFormList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
 jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType

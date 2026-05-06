@@ -25,7 +25,7 @@ Projectile$(TARGET_EXTENSION): Control.cs InputParameters.cs Calculations.cs Out
 	$(CSC) -out:Projectile$(TARGET_EXTENSION) Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
 
 run: build
-	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
+	mono Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig

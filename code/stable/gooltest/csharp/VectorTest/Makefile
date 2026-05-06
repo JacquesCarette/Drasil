@@ -23,6 +23,6 @@ VectorTest$(TARGET_EXTENSION): VectorTest.cs
 	$(CSC) -out:VectorTest$(TARGET_EXTENSION) VectorTest.cs
 
 run: build
-	./VectorTest$(TARGET_EXTENSION) $(RUNARGS)
+	mono VectorTest$(TARGET_EXTENSION) $(RUNARGS)
 
 .PHONY: build run

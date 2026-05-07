@@ -497,7 +497,7 @@ instance BindingFormSym JavaCode where
 instance BindingFormElim JavaCode where
   bindingFormName = bindingName . unJC
   bindingFormType = onCodeValue bindingType
-  
+
 instance InternalBinderElim JavaCode where
   binder = text . bindingName . unJC
 

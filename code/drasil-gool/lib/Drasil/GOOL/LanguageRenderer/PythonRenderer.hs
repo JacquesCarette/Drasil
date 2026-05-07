@@ -480,7 +480,7 @@ instance BindingFormSym PythonCode where
 instance BindingFormElim PythonCode where
   bindingFormName = bindingName . unPC
   bindingFormType = onCodeValue bindingType
- 
+
 instance InternalBinderElim PythonCode where
   binder = text . bindingName . unPC
 

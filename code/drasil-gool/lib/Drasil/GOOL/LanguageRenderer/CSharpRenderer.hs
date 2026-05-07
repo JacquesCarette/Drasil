@@ -477,7 +477,7 @@ instance BindingFormSym CSharpCode where
 instance BindingFormElim CSharpCode where
   bindingFormName = bindingName . unCSC
   bindingFormType = onCodeValue bindingType
-  
+
 instance InternalBinderElim CSharpCode where
   binder = text . bindingName . unCSC
 

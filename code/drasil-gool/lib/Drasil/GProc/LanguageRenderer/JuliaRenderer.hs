@@ -433,7 +433,7 @@ instance BindingFormSym JuliaCode where
 instance BindingFormElim JuliaCode where
   bindingFormName = bindingName . unJLC
   bindingFormType = onCodeValue bindingType
-  
+
 instance InternalBinderElim JuliaCode where
   binder = text . bindingName . unJLC
 

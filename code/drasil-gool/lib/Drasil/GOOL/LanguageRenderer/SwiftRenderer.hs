@@ -489,7 +489,7 @@ instance BindingFormSym SwiftCode where
 instance BindingFormElim SwiftCode where
   bindingFormName = bindingName . unSC
   bindingFormType = onCodeValue bindingType
-  
+
 instance InternalBinderElim SwiftCode where
   binder = text . bindingName . unSC
 

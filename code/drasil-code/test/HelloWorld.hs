@@ -10,7 +10,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
+  Array(..), List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -37,6 +37,10 @@ helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
 -- | Description of program.
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
+
+-- | Variable for an array of doubles
+myArray :: (SharedProg r) => SVariable r
+myArray = var "myArray" (arrayType double)
 
 -- | Variable for a list of doubles
 myOtherList :: (SharedProg r) => SVariable r
@@ -68,8 +72,13 @@ helloInitVariables :: (SharedProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
-  listDecDef myOtherList mainFn [litDouble 1.0,
-    litDouble 1.5],
+  arrayDecDef myArray mainFn [litDouble 1.0, litDouble 1.5],
+  printStr "myArray at 1: ",
+  printLn $ arrayAccess (valueOf myArray) (litInt 1),
+  arraySet (valueOf myArray) (litInt 1) (litDouble 4.5),
+  printStr "myArray at 1 now: ",
+  printLn $ arrayAccess (valueOf myArray) (litInt 1),
+  listDecDef myOtherList mainFn [litDouble 1.0, litDouble 1.5],
   varDecDef (var "oneIndex" int) mainFn (indexOf (valueOf myOtherList) (litDouble 1.0)),
   printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf myOtherList),

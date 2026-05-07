@@ -11,6 +11,12 @@ import .Helper
 
 # Initializing variables
 global b = 5
+global myArray = [1.0, 1.5]
+print("myArray at 1: ")
+println(myArray[2])
+myArray[2] = 4.5;
+print("myArray at 1 now: ")
+println(myArray[2])
 global myOtherList = [1.0, 1.5]
 global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)

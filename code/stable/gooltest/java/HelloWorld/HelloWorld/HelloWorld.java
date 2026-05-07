@@ -17,6 +17,12 @@ public class HelloWorld {
         // Initializing variables
         int a;
         int b = 5;
+        double[] myArray = {1.0, 1.5};
+        System.out.print("myArray at 1: ");
+        System.out.println(myArray[1]);
+        myArray[1] = 4.5;
+        System.out.print("myArray at 1 now: ");
+        System.out.println(myArray[1]);
         ArrayList<Double> myOtherList = new ArrayList<Double>(Arrays.asList(1.0, 1.5));
         int oneIndex = myOtherList.indexOf(1.0);
         System.out.println(oneIndex);

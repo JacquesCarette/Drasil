@@ -14,6 +14,12 @@ public class HelloWorld {
         // Initializing variables
         int a;
         int b = 5;
+        double[] myArray = {1.0, 1.5};
+        Console.Write("myArray at 1: ");
+        Console.WriteLine(myArray[1]);
+        myArray[1] = 4.5;
+        Console.Write("myArray at 1 now: ");
+        Console.WriteLine(myArray[1]);
         List<double> myOtherList = new List<double> {1.0, 1.5};
         int oneIndex = myOtherList.IndexOf(1.0);
         Console.WriteLine(oneIndex);

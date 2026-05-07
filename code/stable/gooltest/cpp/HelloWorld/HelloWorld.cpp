@@ -25,6 +25,12 @@ int main(int argc, const char *argv[]) {
     // Initializing variables
     int a;
     int b = 5;
+    double myArray[2] = {1.0, 1.5};
+    std::cout << "myArray at 1: ";
+    std::cout << myArray[1] << std::endl;
+    myArray[1] = 4.5;
+    std::cout << "myArray at 1 now: ";
+    std::cout << myArray[1] << std::endl;
     vector<double> myOtherList{1.0, 1.5};
     int oneIndex = find(myOtherList.begin(), myOtherList.end(), 1.0) - myOtherList.begin();
     std::cout << oneIndex << std::endl;

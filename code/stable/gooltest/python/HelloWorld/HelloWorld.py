@@ -10,6 +10,12 @@ import Helper
 
 # Initializing variables
 b = 5
+myArray = [1.0, 1.5]
+print("myArray at 1: ", end="")
+print(myArray[1])
+myArray[1] = 4.5;
+print("myArray at 1 now: ", end="")
+print(myArray[1])
 myOtherList = [1.0, 1.5]
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)

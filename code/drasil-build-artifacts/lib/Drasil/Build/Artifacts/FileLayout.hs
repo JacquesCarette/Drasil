@@ -30,6 +30,8 @@ import System.OsPath (OsPath, decodeUtf)
 --     2. Only permits writing files/directories relative to a base path
 --        provided. Does not permit `..`, `.`, nor `~` as directory names.
 --     3. System-local path separator is forbidden from use in directory names.
+--     4. Assumes host file system is case-sensitive (i.e., recognizes `A.txt`
+--        and `a.txt` as different paths).
 data FileLayout doc = FileLayout
   { -- | The /name/ of the file or directory.
     pathSeg :: PathSegment,

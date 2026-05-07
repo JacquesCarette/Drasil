@@ -22,7 +22,7 @@ import Prelude hiding (writeFile)
 
 -- | Represents a valid segment of a path (e.g., a file or directory /name/, or
 -- the name of one parent folder). Does not allow path segments to contain `..`,
--- `.`, `~`, nor the system-local path separator.
+-- `.`, `~`, nor the system-local path separator. Case-sensitive equality.
 newtype PathSegment = PS {unPS :: OsPath}
   deriving (Eq, Ord)
 

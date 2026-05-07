@@ -272,7 +272,7 @@ class (IndexTranslator r) => Array r where
   arrayAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of an array.
   --   Arguments are: Array, Index, Value
-  arraySet    :: SValue r -> SValue r -> SValue r -> SValue r
+  arraySet    :: SValue r -> SValue r -> SValue r -> MSStatement r
   
 
 -- | A resizable, indexable container, similar to Python Lists or Java ArrayLists
@@ -291,6 +291,7 @@ class (IndexTranslator r) => List r where
   listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
+  -- TODO: [Brandon Bosman, 05/07/2026]: This should be a statement, not a value
   listSet    :: SValue r -> SValue r -> SValue r -> SValue r
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value

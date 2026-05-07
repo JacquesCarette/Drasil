@@ -250,7 +250,7 @@ instance IndexTranslator CodeInfoOO where
 
 instance Array CodeInfoOO where
   arrayAccess = execute2
-  arraySet = execute3
+  arraySet _ _ _ = noInfo
 
 instance List CodeInfoOO where
   listSize   = execute1

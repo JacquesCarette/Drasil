@@ -57,9 +57,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var, smartSub)
+  arrayAccess, arraySet, listAccess, listSet, tryCatch, csc, multiBody, sec,
+  cot, stmt, loopStmt, emptyStmt, print, comment, valStmt, returnStmt, param,
+  docFunc, throw, arg, argsList, ifCond, smartAdd, local, var, smartSub)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -398,8 +398,8 @@ instance IndexTranslator JuliaCode where
   indexToInt = CP.indexToInt'
 
 instance Array JuliaCode where
-  arrayAccess = listAccess
-  arraySet = listSet
+  arrayAccess = G.arrayAccess
+  arraySet = G.arraySet
 
 instance List JuliaCode where
   listSize = CS.listSize

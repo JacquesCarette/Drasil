@@ -9,8 +9,8 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
-  listAppend, listAccess, listSet, getFunc, setFunc,
+  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, arrayAccess,
+  arraySet, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
@@ -35,8 +35,8 @@ import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
-  IndexTranslator(intToIndex), ScopeSym(local))
+  IOStatement(print), ControlStatement(returnStmt, for, forEach),
+  ParameterSym(param), IndexTranslator(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), PermanenceSym(..), convTypeOO)
@@ -206,12 +206,12 @@ objVar o' v' = do
         (variableType v) (R.objVar (RC.variable o) (RC.variable v))
   objVar' (variableBind v)
 
-arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
+arrayElem :: (CommonRenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = listInnerType $ return $ variableType v
+      vType = IC.listInnerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
@@ -301,6 +301,22 @@ get v vToGet = v $. S.getFunc vToGet
 
 set :: (OORenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
+
+arrayAccess :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
+arrayAccess i' v' = do
+  i <- IC.intToIndex i'
+  v <- v'
+  let vType = IC.listInnerType $ return $ valueType v
+      vRender = RC.value v <> brackets (RC.value i)
+  mkStateVal vType vRender
+
+arraySet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> MSStatement r
+arraySet v' i' toVal = do
+  i <- zoom lensMStoVS $ IC.intToIndex i'
+  v <- zoom lensMStoVS v'
+  let vType = IC.listInnerType $ return $ valueType v
+      vRender = RC.value v <> brackets (RC.value i)
+  mkStateVar (render vRender) vType vRender &= toVal
 
 listAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd

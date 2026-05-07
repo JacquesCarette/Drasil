@@ -73,12 +73,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  lambda, func, get, set, arrayAccess, arraySet, listAdd, listAppend,
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt,
+  emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -459,7 +459,7 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
   arrayAccess = pair2 arrayAccess arrayAccess
-  arraySet = pair3 arraySet arraySet
+  arraySet arr idx vl = pair3 arraySet arraySet (zoom lensMStoVS arr) (zoom lensMStoVS idx) (zoom lensMStoVS vl)
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
@@ -1388,8 +1388,8 @@ instance IndexTranslator CppSrcCode where
   indexToInt = CP.indexToInt
 
 instance Array CppSrcCode where
-  arrayAccess = undefined -- TODO: [Brandon Bosman, 05/07/2026]: implement
-  arraySet = undefined
+  arrayAccess = G.arrayAccess
+  arraySet = G.arraySet
 
 instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
@@ -2102,7 +2102,7 @@ instance IndexTranslator CppHdrCode where
 
 instance Array CppHdrCode where
   arrayAccess _ _ = mkStateVal void empty
-  arraySet _ _ _ = mkStateVal void empty
+  arraySet _ _ _ = mkStmt empty
 
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty

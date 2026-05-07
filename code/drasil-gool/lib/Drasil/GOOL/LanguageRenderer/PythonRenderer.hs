@@ -66,7 +66,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend,
+  lambda, func, get, set, arrayAccess, arraySet, listAdd, listAppend,
   listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt,
   assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
@@ -445,8 +445,8 @@ instance IndexTranslator PythonCode where
   indexToInt = CP.indexToInt
 
 instance Array PythonCode where
-  arrayAccess = listAccess
-  arraySet = listSet
+  arrayAccess = G.arrayAccess
+  arraySet = G.arraySet
 
 instance List PythonCode where
   listSize = CS.listSize

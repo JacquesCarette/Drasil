@@ -202,7 +202,7 @@ instance IndexTranslator CodeInfoProc where
 
 instance Array CodeInfoProc where
   arrayAccess = execute2
-  arraySet = execute3
+  arraySet _ _ _ = noInfo
 
 instance List CodeInfoProc where
   listSize   = execute1

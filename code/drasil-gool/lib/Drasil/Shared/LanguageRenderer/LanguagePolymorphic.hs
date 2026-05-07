@@ -36,7 +36,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
-  List(intToIndex), ScopeSym(local))
+  IndexTranslator(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), PermanenceSym(..), convTypeOO)

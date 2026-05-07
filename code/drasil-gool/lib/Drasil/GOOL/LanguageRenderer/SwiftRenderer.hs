@@ -16,13 +16,14 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, List(..), Set(..),
-  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope)
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  IndexTranslator(..), List(..), Set(..), listSlice, InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -450,9 +451,11 @@ instance GetSet SwiftCode where
   get = G.get
   set = G.set
 
-instance List SwiftCode where
+instance IndexTranslator SwiftCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance List SwiftCode where
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

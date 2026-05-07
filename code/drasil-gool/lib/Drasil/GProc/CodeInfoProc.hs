@@ -8,12 +8,12 @@ import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..))
+  ValueExpression(..), IndexTranslator(..), List(..), Set(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -196,9 +196,11 @@ instance ValueExpression CodeInfoProc where
 instance FunctionSym CodeInfoProc where
   type Function CodeInfoProc = ()
 
-instance List CodeInfoProc where
+instance IndexTranslator CodeInfoProc where
   intToIndex = execute1
   indexToInt = execute1
+
+instance List CodeInfoProc where
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2

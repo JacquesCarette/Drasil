@@ -12,11 +12,11 @@ module Drasil.Shared.InterfaceCommon (
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), Set(..), InternalList(..), listSlice, listIndexExists, at,
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  exists, IndexTranslator(..), List(..), Set(..), InternalList(..), listSlice,
+  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
@@ -41,8 +41,8 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r
+  BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r, List r,
+  Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -257,13 +257,15 @@ libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (ValueSym r) => List r where
+class (ValueSym r) => IndexTranslator r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
   intToIndex :: SValue r -> SValue r
   -- | Does any necessary conversions from the target language's indexing
   --   assumptions assumptions to GOOL's zero-indexed assumptions
   indexToInt :: SValue r -> SValue r
+
+class (IndexTranslator r) => List r where
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r

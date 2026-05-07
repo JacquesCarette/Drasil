@@ -16,13 +16,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..), Set(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), (&=), switchAsIf, convScope)
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -393,9 +393,11 @@ instance ValueElim JuliaCode where
   valueInt = valInt . unJLC
   value = val . unJLC
 
-instance List JuliaCode where
+instance IndexTranslator JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
+
+instance List JuliaCode where
   listSize = CS.listSize
   listAdd = CP.listAdd
   listAppend = CP.listAppend

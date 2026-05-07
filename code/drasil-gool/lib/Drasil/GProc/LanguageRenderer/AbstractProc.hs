@@ -9,7 +9,7 @@ import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValu
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
   VisibilitySym(..), getType, convType, ScopeSym(Scope))
 import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
-  List(intToIndex), ParameterSym(param))
+  IndexTranslator(intToIndex), ParameterSym(param))
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),

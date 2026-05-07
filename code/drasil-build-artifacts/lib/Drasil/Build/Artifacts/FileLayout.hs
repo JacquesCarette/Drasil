@@ -21,10 +21,15 @@ import Drasil.Build.Artifacts.Render (Renderable (..))
 import System.Directory.OsPath (createDirectory, doesPathExist)
 import System.OsPath (OsPath, decodeUtf)
 
--- | Container for laying out files, and safely writing to disk.
+-- | Container for laying out files in a single container for writing to disk.
+-- Notes:
 --
--- Polymorphic over the representation of the file contents. For rendering,
--- writeFiles requires the file content representation satisfy 'Renderable'.
+--     1. Polymorphic over the representation of the file contents. For
+--        rendering, writeFiles requires the file content representation
+--        satisfy 'Renderable'.
+--     2. Only permits writing files/directories relative to a base path
+--        provided. Does not permit `..`, `.`, nor `~` as directory names.
+--     3. System-local path separator is forbidden from use in directory names.
 data FileLayout doc = FileLayout
   { -- | The /name/ of the file or directory.
     pathSeg :: PathSegment,
@@ -49,12 +54,18 @@ file fp = FileLayout fp . File
 -- | Create a directory 'FileLayout', optionally containing any number of nested
 -- files.
 directory :: (Foldable f) => PathSegment -> f (FileLayout doc) -> FileLayout doc
-directory fp = FileLayout fp . Directory . F.foldr' insert mempty -- FIXME: Need to deal with duplicate PathSegs due to insensitivity
-{-# INLINE directory #-} -- NOTE: Inlining here and in 'directory' allows for the held @f (FileLayout doc)@s to never actually build 'FileLayout's!
+directory fp = FileLayout fp . Directory . F.foldr' insert mempty
+-- NOTE: Inlining here and in 'directory' allows for the held @f (FileLayout
+-- doc)@s to never actually build 'FileLayout's!
+{-# INLINE directory #-}
 
 -- | Internal: Insert a 'FileLayout' into a 'Directory''s map.
 insert :: FileLayout d -> M.Map PathSegment (FileTree d) -> M.Map PathSegment (FileTree d)
-insert v = M.insertWithKey (\dup _ -> error $ "duplicate path: " ++ fromMaybe "cannot decode" $([|decodeUtf $ toPath dup :: Maybe String|])) (pathSeg v) (fileTree v)
+insert v =
+  M.insertWithKey
+    (\dup _ -> error $ "duplicate path: " ++ fromMaybe "cannot decode" $([|decodeUtf $ toPath dup :: Maybe String|]))
+    (pathSeg v)
+    (fileTree v)
 {-# INLINE insert #-}
 
 -- | Write a 'FileLayout' to disk about a base path.

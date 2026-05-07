@@ -21,7 +21,8 @@ import System.OsPath qualified as FP ((</>))
 import Prelude hiding (writeFile)
 
 -- | Represents a valid segment of a path (e.g., a file or directory /name/, or
--- the name of one parent folder).
+-- the name of one parent folder). Does not allow path segments to contain `..`,
+-- `.`, `~`, nor the system-local path separator.
 newtype PathSegment = PS {unPS :: OsPath}
   deriving (Eq, Ord)
 
@@ -36,14 +37,17 @@ toPath = unPS
 -- | Combine a 'OsPath' and a 'PathSegment' into a new 'OsPath'.
 (</>) :: OsPath -> PathSegment -> OsPath
 a </> (PS b) = a FP.</> b
+{-# INLINE (</>) #-}
 
 -- | Write a 'String' to the given 'OsPath'.
 writeFileStr :: OsPath -> String -> IO ()
 writeFileStr rp s = withFile rp WriteMode (`hPutStr` s)
+{-# INLINE writeFileStr #-}
 
 -- | Write to a given 'OsPath' with arbitrary method.
 writeFile :: OsPath -> (Handle -> IO r) -> IO r
 writeFile rp = withFile rp WriteMode
+{-# INLINE writeFile #-}
 
 -- | 'QuasiQuoter' for building 'PathSegment's.
 ps :: QuasiQuoter

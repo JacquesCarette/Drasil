@@ -31,7 +31,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType,
-  VSBindingForm, BindingFormElim(..), BindingFormSym (..))
+  VSBinder, BinderElim(..), BinderSym (..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
@@ -275,12 +275,12 @@ newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
-lambda :: (CommonRenderSym r) => ([r (BindingForm r)] -> r (Value r) -> Doc) ->
-  [VSBindingForm r] -> SValue r -> SValue r
+lambda :: (CommonRenderSym r) => ([r (Binder r)] -> r (Value r) -> Doc) ->
+  [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  let ft = IC.funcType (map (return . bindingFormType) ps) (return $ valueType ex)
+  let ft = IC.funcType (map (return . binderType) ps) (return $ valueType ex)
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (CommonRenderSym r) => SValue r -> VSFunction r -> SValue r

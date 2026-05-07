@@ -21,7 +21,7 @@ module Drasil.Shared.LanguageRenderer (
   objAccess, castObj, break, continue, static, dynamic, private, public,
   blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
   ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod,
-  valueList, variableList, bindingFormList, parameterList, namedArgList,
+  valueList, variableList, binderList, parameterList, namedArgList,
   prependToBody, appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
@@ -32,7 +32,7 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
   ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
-  ParameterSym(Parameter), BindingFormSym(..))
+  ParameterSym(Parameter), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -432,8 +432,8 @@ valueList = hicat listSep' . map RC.value
 variableList :: (CommonRenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat listSep' . map RC.variable
 
-bindingFormList :: (CommonRenderSym r) => [r (BindingForm r)] -> Doc
-bindingFormList = hicat listSep' . map RC.binder
+binderList :: (CommonRenderSym r) => [r (Binder r)] -> Doc
+binderList = hicat listSep' . map RC.binderElim
 
 parameterList :: (CommonRenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat listSep' . map RC.parameter

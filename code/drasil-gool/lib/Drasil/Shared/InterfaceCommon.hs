@@ -2,7 +2,7 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBindingForm,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBinder,
   SVariable, SValue, VSThunk, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
   DocInOutFunc,
@@ -19,8 +19,8 @@ module Drasil.Shared.InterfaceCommon (
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BindingFormSym(..),
-  BindingFormElim(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
+  BinderElim(..),
   convType
   ) where
 
@@ -45,7 +45,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r, BindingFormSym r
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -230,15 +230,15 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
-type VSBindingForm a = VS (a (BindingForm a))
+type VSBinder a = VS (a (Binder a))
 
-class (TypeSym r) => BindingFormSym r where
-  type BindingForm r
-  bindingForm :: Label -> VSType r -> VSBindingForm r
+class (TypeSym r) => BinderSym r where
+  type Binder r
+  binder :: Label -> VSType r -> VSBinder r
 
-class (BindingFormSym r) => BindingFormElim r where
-  bindingFormName :: r (BindingForm r) -> String
-  bindingFormType :: r (BindingForm r) -> r (Type r)
+class (BinderSym r) => BinderElim r where
+  binderName :: r (Binder r) -> String
+  binderType :: r (Binder r) -> r (Type r)
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
@@ -250,7 +250,7 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
 
-  lambda :: [VSBindingForm r] -> SValue r -> SValue r
+  lambda :: [VSBinder r] -> SValue r -> SValue r
 
   notNull :: SValue r -> SValue r
 

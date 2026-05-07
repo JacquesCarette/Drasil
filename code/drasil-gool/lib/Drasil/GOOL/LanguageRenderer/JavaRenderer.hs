@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  BindingFormSym(..), BindingFormElim(..), ControlStatement(..), ScopeSym(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
@@ -54,7 +54,7 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj',
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep,
-  access, containing, mathFunc, functionDox, variableList, bindingFormList,
+  access, containing, mathFunc, functionDox, variableList, binderList,
   parameterList, appendToBody, surroundBody, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
@@ -91,7 +91,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData, BindingFormD(..), bindFormD)
+  commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
@@ -490,16 +490,16 @@ instance InternalListFunc JavaCode where
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
 
-instance BindingFormSym JavaCode where
-  type BindingForm JavaCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+instance BinderSym JavaCode where
+  type Binder JavaCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BindingFormElim JavaCode where
-  bindingFormName = bindingName . unJC
-  bindingFormType = onCodeValue bindingType
+instance BinderElim JavaCode where
+  binderName = bindName . unJC
+  binderType = onCodeValue bindType
 
 instance InternalBinderElim JavaCode where
-  binder = text . bindingName . unJC
+  binderElim = text . bindName . unJC
 
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS
@@ -960,8 +960,8 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
-jLambda ps ex = parens (bindingFormList ps) <+> jLambdaSep <+> RC.value ex
+jLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+jLambda ps ex = parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
 jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType

@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
-  BindingFormElim(..), BindingFormSym (..))
+  BinderElim(..), BinderSym (..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
 import Drasil.Shared.State (MS, VS)
@@ -36,7 +36,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
   InternalList r, VectorExpression r, TypeElim r, VariableElim r,
-  BindingFormElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
+  BinderElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
   InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
   ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r,
   InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r,
@@ -136,7 +136,7 @@ class InternalVarElim r where
   variable  :: r (Variable r) -> Doc
 
 class InternalBinderElim r where
-  binder  :: r (BindingForm r) -> Doc
+  binderElim  :: r (Binder r) -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r

@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  BindingFormSym(..), BindingFormElim(..), ControlStatement(..), ScopeSym(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
@@ -54,7 +54,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
-  variableList, bindingFormList, appendToBody, surroundBody)
+  variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, func, cast, listSetFunc,
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt,
@@ -95,7 +95,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..),
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BindingFormD(..),
+  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BinderD(..),
   bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
@@ -470,16 +470,16 @@ instance InternalListFunc CSharpCode where
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 
-instance BindingFormSym CSharpCode where
-  type BindingForm CSharpCode = BindingFormD
-  bindingForm nm tp = onCodeValue (bindFormD nm) <$> tp
+instance BinderSym CSharpCode where
+  type Binder CSharpCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BindingFormElim CSharpCode where
-  bindingFormName = bindingName . unCSC
-  bindingFormType = onCodeValue bindingType
+instance BinderElim CSharpCode where
+  binderName = bindName . unCSC
+  binderType = onCodeValue bindType
 
 instance InternalBinderElim CSharpCode where
-  binder = text . bindingName . unCSC
+  binderElim = text . bindName . unCSC
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS
@@ -848,8 +848,8 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r (BindingForm r)] -> r (Value r) -> Doc
-csLambda ps ex = parens (bindingFormList ps) <+> csLambdaSep <+> RC.value ex
+csLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
 csReadLineFunc = extFuncApp csConsole csReadLine string []

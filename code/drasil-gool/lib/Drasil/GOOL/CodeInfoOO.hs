@@ -13,7 +13,7 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), VisibilitySym(..), BindingFormSym(..))
+  MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
@@ -265,9 +265,9 @@ instance InternalList CodeInfoOO where
     _ <- vl
     noInfo
 
-instance BindingFormSym CodeInfoOO where
-  type BindingForm CodeInfoOO = ()
-  bindingForm _ _ = noInfo
+instance BinderSym CodeInfoOO where
+  type Binder CodeInfoOO = ()
+  binder _ _ = noInfo
 
 instance ThunkSym CodeInfoOO where
   type Thunk CodeInfoOO = ()

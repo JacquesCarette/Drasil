@@ -12,8 +12,8 @@ module Drasil.Shared.InterfaceCommon (
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, IndexTranslator(..), List(..), Set(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  exists, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
+  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -41,8 +41,8 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r, List r,
-  Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r
+  BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r,
+  Array r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -265,6 +265,17 @@ class (ValueSym r) => IndexTranslator r where
   --   assumptions assumptions to GOOL's zero-indexed assumptions
   indexToInt :: SValue r -> SValue r
 
+-- | A fixed-size, indexable container, such as C-style arrays
+class (IndexTranslator r) => Array r where
+  -- | Gets the value of an index of an array.
+  --   Arguments are: Array, Index
+  arrayAccess :: SValue r -> SValue r -> SValue r
+  -- | Sets the value of an index of an array.
+  --   Arguments are: Array, Index, Value
+  arraySet    :: SValue r -> SValue r -> SValue r -> SValue r
+  
+
+-- | A resizable, indexable container, similar to Python Lists or Java ArrayLists
 class (IndexTranslator r) => List r where
   -- | Finds the size of a list.
   --   Arguments are: List

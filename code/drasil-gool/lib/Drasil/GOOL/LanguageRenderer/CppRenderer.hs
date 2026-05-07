@@ -19,12 +19,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), List(..), Set(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), convScope)
+  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+   convScope)
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -455,6 +456,10 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
 instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   intToIndex = pair1 intToIndex intToIndex
   indexToInt = pair1 indexToInt indexToInt
+
+instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
+  arrayAccess = pair2 arrayAccess arrayAccess
+  arraySet = pair3 arraySet arraySet
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
@@ -1382,6 +1387,10 @@ instance IndexTranslator CppSrcCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Array CppSrcCode where
+  arrayAccess = undefined -- TODO: [Brandon Bosman, 05/07/2026]: implement
+  arraySet = undefined
+
 instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
@@ -2090,6 +2099,10 @@ instance GetSet CppHdrCode where
 instance IndexTranslator CppHdrCode where
   intToIndex _ = mkStateVal void empty
   indexToInt _ = mkStateVal void empty
+
+instance Array CppHdrCode where
+  arrayAccess _ _ = mkStateVal void empty
+  arraySet _ _ _ = mkStateVal void empty
 
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty

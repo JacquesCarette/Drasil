@@ -17,7 +17,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  IndexTranslator(..), List(..), Set(..), listSlice, InternalList(..),
+  IndexTranslator(..), Array(..), List(..), Set(..), listSlice, InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -454,6 +454,10 @@ instance GetSet SwiftCode where
 instance IndexTranslator SwiftCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array SwiftCode where
+  arrayAccess = undefined -- TODO: [Brandon Bosman, 05/07/2026]: implement
+  arraySet = undefined
 
 instance List SwiftCode where
   listSize = C.listSize

@@ -303,7 +303,7 @@ set :: (OORenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
 arrayAccess :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
-arrayAccess i' v' = do
+arrayAccess v' i' = do
   i <- IC.intToIndex i'
   v <- v'
   let vType = IC.listInnerType $ return $ valueType v
@@ -311,12 +311,11 @@ arrayAccess i' v' = do
   mkStateVal vType vRender
 
 arraySet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> MSStatement r
-arraySet v' i' toVal = do
+arraySet v' i' toVal' = do
   i <- zoom lensMStoVS $ IC.intToIndex i'
   v <- zoom lensMStoVS v'
-  let vType = IC.listInnerType $ return $ valueType v
-      vRender = RC.value v <> brackets (RC.value i)
-  mkStateVar (render vRender) vType vRender &= toVal
+  toVal <- zoom lensMStoVS toVal'
+  mkStmt $ RC.value v <> brackets (RC.value i) <+> text "=" <+> RC.value toVal
 
 listAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd

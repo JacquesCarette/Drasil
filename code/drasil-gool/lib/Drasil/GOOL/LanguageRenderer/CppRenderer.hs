@@ -70,7 +70,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, arrayAccess, arraySet, listAdd, listAppend,
@@ -296,7 +296,6 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   var n       = pair1 (var n) (var n)
   constant n  = pair1 (constant n) (constant n)
   extVar l n  = pair1 (extVar l n) (extVar l n)
-  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
@@ -1217,7 +1216,6 @@ instance VariableSym CppSrcCode where
   var          = G.var
   constant     = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
-  arrayElem = G.arrayElem
 
 instance OOVariableSym CppSrcCode where
   staticVar' _ = G.staticVar
@@ -1947,7 +1945,6 @@ instance VariableSym CppHdrCode where
   var           = G.var
   constant  _ _ = mkStateVar "" void empty
   extVar  _ _ _ = mkStateVar "" void empty
-  arrayElem _ _ = mkStateVar "" void empty
 
 instance OOVariableSym CppHdrCode where
   staticVar' _ = G.staticVar

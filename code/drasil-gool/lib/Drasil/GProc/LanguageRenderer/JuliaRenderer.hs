@@ -74,7 +74,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
-  fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
+  fileFromData, buildModule, docMod, modFromData, listInnerType,
   funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
@@ -267,7 +267,6 @@ instance VariableSym JuliaCode where
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = A.arrayElem
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC

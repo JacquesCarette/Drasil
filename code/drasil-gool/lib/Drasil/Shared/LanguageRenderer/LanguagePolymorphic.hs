@@ -7,7 +7,7 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec,
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
-  classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString,
+  classVarCheckStatic, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, arrayAccess,
   arraySet, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
@@ -85,7 +85,7 @@ import Data.Maybe (fromMaybe, maybeToList)
 import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, (<>), (<+>), ($+$),
   parens, brackets, integer, vcat, comma, isEmpty, space)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
@@ -205,15 +205,6 @@ objVar o' v' = do
       objVar' Dynamic = mkVar (variableName o `access` variableName v)
         (variableType v) (R.objVar (RC.variable o) (RC.variable v))
   objVar' (variableBind v)
-
-arrayElem :: (CommonRenderSym r) => SValue r -> SVariable r -> SVariable r
-arrayElem i' v' = do
-  i <- IC.intToIndex i'
-  v <- v'
-  let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = IC.listInnerType $ return $ variableType v
-      vRender = RC.variable v <> brackets (RC.value i)
-  mkStateVar vName vType vRender
 
 -- Scope --
 local :: (Monad r) => r ScopeData

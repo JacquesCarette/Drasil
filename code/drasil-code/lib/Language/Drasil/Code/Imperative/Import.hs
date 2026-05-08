@@ -55,11 +55,11 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
-  VisibilityTag(..), CodeType(..), onStateValue)
+  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
+  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
+  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -583,9 +583,9 @@ convStmt (FAsgIndex v i e) = do
   v' <- mkVar v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
-      asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
+      asgFunc (C.Array _) = arraySet (valueOf v') (litInt i) e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
-      vi = arrayElem (litInt i) v'
+      vi = arrayAccess (valueOf v') (litInt i)
   l <- maybeLog vi
   return $ multi $ asgFunc t : l
 convStmt (FFor v start end step st) = do
@@ -1118,9 +1118,9 @@ convStmtProc (FAsgIndex v i e) = do
   v' <- mkVarProc v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
-      asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
+      asgFunc (C.Array _) = arraySet (valueOf v') (litInt i) e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
-      vi = arrayElem (litInt i) v'
+      vi = arrayAccess (valueOf v') (litInt i)
   l <- maybeLog vi
   return $ multi $ asgFunc t : l
 convStmtProc (FFor v start end step st) = do

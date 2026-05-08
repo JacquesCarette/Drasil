@@ -118,7 +118,6 @@ instance VariableSym CodeInfoOO where
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
-  arrayElem _ _ = noInfo
 
 instance OOVariableSym CodeInfoOO where
   staticVar'  _ _ _ = noInfo

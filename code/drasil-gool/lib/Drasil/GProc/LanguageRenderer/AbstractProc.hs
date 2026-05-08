@@ -1,20 +1,18 @@
 {-# LANGUAGE PostfixOperators #-}
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
-  buildModule, docMod, modFromData, listInnerType, arrayElem, funcDecDef,
-  function
+  buildModule, docMod, modFromData, listInnerType, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
+import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement,
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
   VisibilitySym(..), getType, convType, ScopeSym(Scope))
 import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
-  IndexTranslator(intToIndex), ParameterSym(param))
+  ParameterSym(param))
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
-  BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
-  MethodTypeSym(mType), ScopeElim(scopeData))
+  BlockCommentSym(..), MethodTypeSym(mType), ScopeElim(scopeData))
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
@@ -23,7 +21,7 @@ import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd)
 import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName,
   setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
   currParameters, setVarScope)
@@ -33,7 +31,7 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.), over)
 import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, render, isEmpty, brackets, (<>))
+import Text.PrettyPrint.HughesPJ (Doc, isEmpty, )
 
 -- Files --
 
@@ -79,15 +77,6 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 listInnerType :: (ProcRenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
-
-arrayElem :: (ProcRenderSym r) => SValue r -> SVariable r -> SVariable r
-arrayElem i' v' = do
-  i <- IC.intToIndex i'
-  v <- v'
-  let vName = variableName v ++ "[" ++ render (RCC.value i) ++ "]"
-      vType = listInnerType $ return $ variableType v
-      vRender = RCC.variable v <> brackets (RCC.value i)
-  mkStateVar vName vType vRender
 
 funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
   -> MSBody r -> MSStatement r

@@ -63,7 +63,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, arrayAccess, arraySet, listAdd, listAppend,
@@ -273,7 +273,6 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))

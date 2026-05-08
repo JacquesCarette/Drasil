@@ -67,7 +67,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, arrayAccess, arraySet, listAdd, listAppend,
@@ -290,7 +290,6 @@ instance VariableSym SwiftCode where
   var         = G.var
   constant    = var
   extVar _    = var
-  arrayElem = G.arrayElem
 
 instance OOVariableSym SwiftCode where
   staticVar' _ = G.staticVar

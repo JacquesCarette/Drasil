@@ -105,7 +105,6 @@ instance VariableSym CodeInfoProc where
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
-  arrayElem _ _ = noInfo
 
 instance VariableElim CodeInfoProc where
   variableName _ = ""

@@ -19,7 +19,7 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   defaultOptSpace, smartAdd, smartSub
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,

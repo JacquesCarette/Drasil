@@ -9,7 +9,7 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC, cppName, cppVersion
 ) where
 
-import Utils.Drasil (blank, indent, indentList)
+import Drasil.Build.Artifacts.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
@@ -295,7 +295,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   var n       = pair1 (var n) (var n)
   constant n  = pair1 (constant n) (constant n)
   extVar l n  = pair1 (extVar l n) (extVar l n)
-  arrayElem i = pair1 (arrayElem i) (arrayElem i)
+  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
@@ -1210,7 +1210,7 @@ instance VariableSym CppSrcCode where
   var          = G.var
   constant     = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
-  arrayElem i  = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOVariableSym CppSrcCode where
   staticVar' _ = G.staticVar

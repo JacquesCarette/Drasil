@@ -8,7 +8,7 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   JuliaCode(..), jlName, jlVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
@@ -267,7 +267,7 @@ instance VariableSym JuliaCode where
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem i = A.arrayElem (litInt i)
+  arrayElem = A.arrayElem
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC

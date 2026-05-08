@@ -13,7 +13,7 @@ import Data.Foldable (traverse_)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
 
-import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents,
+import Drasil.Build.Artifacts.Legacy (FileAndContents(..), fileAndContents,
   hasPathAndDocToFileAndContents, createDirIfMissing, createFile)
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
@@ -55,7 +55,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
+import Language.Drasil.CodeSpec (CodeSpec, HasOldCodeSpec(..), getODE)
 
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.

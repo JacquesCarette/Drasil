@@ -1,6 +1,13 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Printing helpers.
-module Language.Drasil.Printing.Import.Helpers where
+module Language.Drasil.Printing.Import.Helpers (
+  -- * Expression-related
+  parens, digitsProcess, processExpo,
+  -- * Symbol and Term Resolution
+  lookupC, lookupC', lookupSymb, lookupT, lookupS, lookupP,
+  -- * Capitalization
+  resolveCapT, resolveCapP, capHelper
+) where
 
 import Control.Lens ((^.))
 import Data.Char (toUpper)

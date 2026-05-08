@@ -13,7 +13,7 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 import System.Directory (getCurrentDirectory, setCurrentDirectory)
 
-import Drasil.Build.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))
@@ -29,7 +29,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
--- | Internal: Generate an ICO-style executable softifact.
+-- | Generate an ICO-style executable software artifact.
 exportCode :: SmithEtAlSRS -> Choices -> IO ()
 exportCode syst chcs = do
   let code = codeSpec syst chcs

@@ -1,6 +1,6 @@
-module Drasil.Build.Artifacts.FileIO (createFile) where
+module Drasil.Build.Artifacts.Legacy.FileIO (createFile) where
 
-import Drasil.Build.Artifacts.Directory (createDirIfMissing)
+import Drasil.Build.Artifacts.Legacy.Directory (createDirIfMissing)
 import System.FilePath (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 

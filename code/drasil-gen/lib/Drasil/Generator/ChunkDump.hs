@@ -10,7 +10,7 @@ import qualified Data.ByteString.Lazy.Char8 as LB
 import System.IO (IOMode(WriteMode), openFile, hClose)
 import System.Environment (lookupEnv)
 
-import Drasil.Build.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
 import Drasil.Database (dumpChunkDB)
 import Drasil.System (SmithEtAlSRS, systemdb, traceTable, refbyTable)
 

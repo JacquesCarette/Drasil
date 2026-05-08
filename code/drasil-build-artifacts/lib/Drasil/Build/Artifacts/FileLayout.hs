@@ -71,6 +71,9 @@ insert v =
 {-# INLINE insert #-}
 
 -- | Write a 'FileLayout' to disk about a base path.
+--
+-- Disclaimer: Fails if files/directories already exist. This is problematic for
+-- case-insensitive file systems where different paths reference the same.
 writeFiles :: (Renderable doc) => OsPath -> FileLayout doc -> IO ()
 writeFiles basePath layout = do
   let targetPath = basePath </> pathSeg layout

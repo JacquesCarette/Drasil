@@ -1,21 +1,22 @@
 {-# LANGUAGE TemplateHaskellQuotes #-}
 
 module Drasil.Build.Artifacts.FilePath
-  ( PathSegment,
-    toPath,
+  ( -- * File Path Segments
+    PathSegment,
+
+    -- ** Construction
     ps,
     (</>),
-    writeFileStr,
-    writeFile,
+
+    -- ** Unpacking
+    toPath,
   )
 where
 
 import Control.Exception (SomeException)
 import Language.Haskell.TH (Exp, Q)
 import Language.Haskell.TH.Quote (QuasiQuoter (..))
-import System.File.OsPath (withFile)
 import System.FilePath (pathSeparator)
-import System.IO (Handle, IOMode (WriteMode), hPutStr)
 import System.OsPath (OsPath, encodeUtf)
 import System.OsPath qualified as FP ((</>))
 import Prelude hiding (writeFile)
@@ -38,16 +39,6 @@ toPath = unPS
 (</>) :: OsPath -> PathSegment -> OsPath
 a </> (PS b) = a FP.</> b
 {-# INLINE (</>) #-}
-
--- | Write a 'String' to the given 'OsPath'.
-writeFileStr :: OsPath -> String -> IO ()
-writeFileStr rp s = withFile rp WriteMode (`hPutStr` s)
-{-# INLINE writeFileStr #-}
-
--- | Write to a given 'OsPath' with arbitrary method.
-writeFile :: OsPath -> (Handle -> IO r) -> IO r
-writeFile rp = withFile rp WriteMode
-{-# INLINE writeFile #-}
 
 -- | 'QuasiQuoter' for building 'PathSegment's.
 ps :: QuasiQuoter

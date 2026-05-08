@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Test.Tasty
+import Test.Tasty (defaultMain)
 import Spec.Drasil.Build.Artifacts (artifactsTests)
 
 main :: IO ()

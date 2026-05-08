@@ -13,7 +13,7 @@ import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..))
+  ParameterSym(..), MethodSym(..), BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -217,6 +217,10 @@ instance InternalList CodeInfoProc where
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
+
+instance BinderSym CodeInfoProc where
+  type Binder CodeInfoProc = ()
+  binder _ _ = noInfo
 
 instance ThunkSym CodeInfoProc where
   type Thunk CodeInfoProc = ()

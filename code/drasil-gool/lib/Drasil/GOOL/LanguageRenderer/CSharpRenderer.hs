@@ -21,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -38,7 +39,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..),
+  InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -52,7 +54,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
-  variableList, appendToBody, surroundBody)
+  variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, func, cast, listSetFunc,
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt,
@@ -93,7 +95,8 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..),
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
+  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BinderD(..),
+  bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -467,6 +470,17 @@ instance InternalListFunc CSharpCode where
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 
+instance BinderSym CSharpCode where
+  type Binder CSharpCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim CSharpCode where
+  binderName = bindName . unCSC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim CSharpCode where
+  binderElim = text . bindName . unCSC
+
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS
 
@@ -834,8 +848,8 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-csLambda ps ex = parens (variableList ps) <+> csLambdaSep <+> RC.value ex
+csLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
 csReadLineFunc = extFuncApp csConsole csReadLine string []

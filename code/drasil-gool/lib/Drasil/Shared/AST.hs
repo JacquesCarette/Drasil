@@ -8,7 +8,8 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ProgData(progName, progPurp, progMods), progD, emptyProg,
   StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
-  updateValDoc, VarData(varBind, varName, varType, varDoc), vard, CommonThunk,
+  updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
+  BinderD(bindName, bindType), bindFormD, CommonThunk,
   pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim
 ) where
@@ -162,6 +163,12 @@ data VarData = VarD {varBind :: Binding, varName :: String,
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
+
+-- Underlying type of Binder
+data BinderD = BindFormD {bindName :: String, bindType :: TypeData}
+
+bindFormD :: String -> TypeData -> BinderD
+bindFormD = BindFormD
 
 -- Used as the underlying data type for Thunks in all renderers
 data CommonThunk s

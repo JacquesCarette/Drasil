@@ -2,9 +2,10 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
-  VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBinder,
+  SVariable, SValue, VSThunk, MSStatement, MSParameter, SMethod, NamedArgs,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
@@ -18,7 +19,9 @@ module Drasil.Shared.InterfaceCommon (
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
+  BinderElim(..),
+  convType
   ) where
 
 import Data.Bifunctor (first)
@@ -42,7 +45,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -227,6 +230,16 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
+type VSBinder a = VS (a (Binder a))
+
+class (TypeSym r) => BinderSym r where
+  type Binder r
+  binder :: Label -> VSType r -> VSBinder r
+
+class (BinderSym r) => BinderElim r where
+  binderName :: r (Binder r) -> String
+  binderType :: r (Binder r) -> r (Type r)
+
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
   -- An inline if-statement, aka the ternary operator.  Inputs:
@@ -237,7 +250,7 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
 
-  lambda :: [SVariable r] -> SValue r -> SValue r
+  lambda :: [VSBinder r] -> SValue r -> SValue r
 
   notNull :: SValue r -> SValue r
 

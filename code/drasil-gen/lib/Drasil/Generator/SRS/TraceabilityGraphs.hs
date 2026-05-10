@@ -6,7 +6,7 @@ import System.Directory (setCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (Doc, render, text, (<>), (<+>), vcat, nest,
   hsep, empty)
 
-import Drasil.Build.Artifacts (createDirIfMissing)
+import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
 import Drasil.Database (UID)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label)

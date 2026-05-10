@@ -1,33 +1,31 @@
-module Drasil.Generator.Website (
-  exportWebsite
-) where
+{-# LANGUAGE QuasiQuotes #-}
 
-import Prelude hiding (id)
+module Drasil.Generator.Website
+  ( exportWebsite,
+  )
+where
+
 import Control.Lens ((^.))
-import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
-import Text.PrettyPrint.HughesPJ (render)
-
-import Drasil.Build.Artifacts (createDirIfMissing)
-import Language.Drasil (Stage(Equational), Document)
-import Language.Drasil.Printers (makeCSS, genHTML, Notation(Engineering), piSys)
-import Language.Drasil.Printing.Import (makeDocument)
-import Drasil.System (DrasilWebsite, webRefs, systemdb)
-
+import Drasil.Build.Artifacts (directory, file, localPath, ps, writeFiles)
 import Drasil.Generator.Formats (Filename)
+import Drasil.System (DrasilWebsite, systemdb, webRefs)
+import Language.Drasil (Document, Stage (Equational))
+import Language.Drasil.Printers (Notation (Engineering), genHTML, makeCSS, piSys)
+import Language.Drasil.Printing.Import (makeDocument)
 
--- | Generate a "website" (HTML file) softifact.
+-- | Generate a "website" (an HTML file with a CSS stylesheet) softifact.
 exportWebsite :: DrasilWebsite -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
   let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering []
-      dir = "Website/HTML"
       pd = makeDocument printSetting doc
+      website =
+        directory
+          [ps|Website|]
+          [ directory
+              [ps|HTML|]
+              [ file [ps|{fileName}.html|] $ genHTML fileName pd,
+                file [ps|{fileName}.css|] $ makeCSS doc
+              ]
+          ]
 
-  createDirIfMissing True dir
-
-  outh <- openFile (dir ++ "/" ++ fileName ++ ".html") WriteMode
-  hPutStrLn outh $ render $ genHTML fileName pd
-  hClose outh
-
-  outh2 <- openFile (dir ++ "/" ++ fileName ++ ".css") WriteMode
-  hPutStrLn outh2 $ render $ makeCSS doc
-  hClose outh2
+  writeFiles localPath website

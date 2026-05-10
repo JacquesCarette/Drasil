@@ -10,7 +10,7 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
     (<>), punctuate, hsep)
 
-import Drasil.Build.Artifacts (contSep, filterEmpty, listToDoc, Separator)
+import Drasil.Build.Artifacts.Legacy (contSep, filterEmpty, listToDoc, Separator)
 
 import Language.Drasil.Printing.Helpers (upcase)
 

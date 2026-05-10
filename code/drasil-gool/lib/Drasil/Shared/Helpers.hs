@@ -13,7 +13,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes,
   (<>), empty, isEmpty)
 
-import Drasil.Build.Artifacts (blank)
+import Drasil.Build.Artifacts.Legacy (blank)
 
 import qualified Drasil.Shared.CodeType as C (CodeType(..))
 

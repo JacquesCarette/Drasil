@@ -10,6 +10,8 @@ description:  Please see the README on GitHub at <https://github.com/JacquesCare
 
 language: Haskell2010
 default-extensions:
+- DeriveFunctor
+- ImportQualifiedPost
 - StrictData
 
 extra-source-files: []
@@ -20,6 +22,10 @@ dependencies:
 - directory
 - filepath
 - pretty
+- prettyprinter
+- template-haskell
+- file-io
+- os-string
 
 ghc-options:
 - -Wall
@@ -30,3 +36,15 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Build.Artifacts
+  - Drasil.Build.Artifacts.Legacy
+
+tests:
+  drasil-build-artifacts-test:
+    source-dirs: test
+    main: Main.hs
+    dependencies:
+    - drasil-build-artifacts
+    - hedgehog
+    - tasty
+    - tasty-hedgehog
+    - tasty-hunit

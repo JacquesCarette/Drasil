@@ -6,6 +6,9 @@ cradle:
     - path: "drasil-build-artifacts/lib"
       component: "drasil-build-artifacts:lib"
 
+    - path: "drasil-build-artifacts/test"
+      component: "drasil-build-artifacts:test:layout-test"
+
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
 

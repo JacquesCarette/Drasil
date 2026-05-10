@@ -524,7 +524,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 #--------------------------------#
 
 # For more information, see the *.hs files in the drasil-website folder.
-website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
+website: clean_Website ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
 	stack build $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \

@@ -212,7 +212,7 @@ instance TypeSym JavaCode where
   setType = jSetType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  funcType = CS.funcType
+  funcType = CS.funcType -- TODO [Brandon Bosman, 05/11/2026]: fix this to work with lambda types
   void = C.void
 
 instance OOTypeSym JavaCode where

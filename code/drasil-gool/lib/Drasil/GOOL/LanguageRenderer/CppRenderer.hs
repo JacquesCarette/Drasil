@@ -2515,7 +2515,7 @@ cppName = "C++"
 cppVersion = "gcc 10.1"
 
 guard, inc, ifndef, define, defineSuffix, endif, using, namespace, cppPtr,
-  cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi,
+  cppDeref, streamL, streamR, cppLambdaDec, catchAll, cppPi,
   ptrAccess' :: Doc
 guard = text "#"
 inc = guard <> text "include"
@@ -2530,7 +2530,6 @@ cppDeref = text "*"
 streamL = text "<<"
 streamR = text ">>"
 cppLambdaDec = text "[]"
-cppLambdaSep = text "->"
 catchAll = text "..."
 cppPi = text "M_PI"
 ptrAccess' = text ptrAccess
@@ -2729,7 +2728,7 @@ cppClassVar c v = c `nmSpcAccess'` v
 
 cppLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
-  (map (RC.type' . binderType) ps) (map RC.binderElim ps)) <+> cppLambdaSep <+>
+  (map (RC.type' . binderType) ps) (map RC.binderElim ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
 stodFunc :: SValue CppSrcCode -> SValue CppSrcCode
@@ -2771,7 +2770,7 @@ cppFuncDecDef v scp ps bod = do
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
     cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (map (RC.type' .
-    variableType) pms) (map RC.variable pms)) <+> cppLambdaSep <+> bodyStart $$
+    variableType) pms) (map RC.variable pms)) <+>  bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
 cppPrint :: (CommonRenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r

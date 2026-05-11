@@ -1146,7 +1146,7 @@ instance TypeSym CppSrcCode where
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
-  funcType = CS.funcType
+  funcType = cppFuncType
   void = C.void
 
 instance OOTypeSym CppSrcCode where
@@ -2725,6 +2725,12 @@ cppIterType t' = do
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v
+
+cppFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+cppFuncType ps' r' =  do
+  ps <- sequence ps'
+  r <- r'
+  typeFromData (Func (map getType ps) (getType r)) "auto" (text "auto")
 
 cppLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)

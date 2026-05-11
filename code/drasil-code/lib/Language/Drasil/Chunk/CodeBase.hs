@@ -1,4 +1,6 @@
-module Language.Drasil.Chunk.CodeBase where
+module Language.Drasil.Chunk.CodeBase (
+  quantvar, quantfunc, codevars, codevars', varResolve
+) where
 
 import Drasil.Database (ChunkDB, findOrErr, UID)
 import Language.Drasil

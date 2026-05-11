@@ -23,6 +23,6 @@ HelloWorld$(TARGET_EXTENSION): HelloWorld.cs Helper.cs
 	$(CSC) -out:HelloWorld$(TARGET_EXTENSION) HelloWorld.cs Helper.cs
 
 run: build
-	./HelloWorld$(TARGET_EXTENSION) $(RUNARGS)
+	mono HelloWorld$(TARGET_EXTENSION) $(RUNARGS)
 
 .PHONY: build run

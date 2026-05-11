@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.Build.Artifacts.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope)
+  BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -42,10 +42,10 @@ import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+  type', uOp, bOp, variable, binderElim, value, function, statement, visibility,
+  parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -94,7 +94,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData)
+  commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -288,7 +288,7 @@ instance VariableSym SwiftCode where
   var         = G.var
   constant    = var
   extVar _    = var
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOVariableSym SwiftCode where
   staticVar' _ = G.staticVar
@@ -482,6 +482,17 @@ instance InternalListFunc SwiftCode where
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 
+instance BinderSym SwiftCode where
+  type Binder SwiftCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim SwiftCode where
+  binderName = bindName . unSC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim SwiftCode where
+  binderElim = text . bindName . unSC
+
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
 
@@ -618,12 +629,13 @@ instance IOStatement SwiftCode where
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
     li <- getLineIndex
-    let l = var "l" (listType string)
+    let l_binder = binder "l" (listType string)
+        l_var = var "l" (listType string)
     slc <- listSlice swiftContentsVar swiftContentsVal
       (Just $ litInt (li+1)) Nothing Nothing
     multi [mkStmtNoEnd $ RC.block slc,
       v &= swiftMapFunc swiftContentsVal
-        (lambda [l] (swiftJoinedFunc ' ' (valueOf l)))]
+        (lambda [l_binder] (swiftJoinedFunc ' ' (valueOf l_var)))]
 
 instance StringStatement SwiftCode where
   stringSplit d vnew s = vnew &= swiftSplitFunc d s
@@ -979,11 +991,11 @@ swiftNumBinExpr f v1' v2' = do
 swiftLitFloat :: (CommonRenderSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
-swiftLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+swiftLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
-    (map RC.variable ps)
-    (map (RC.type' . variableType) ps)))
+    (map RC.binderElim ps)
+    (map (RC.type' . binderType) ps)))
   <+> swiftRetType' <+> RC.type' (valueType ex) <+> inLabel <+> RC.value ex
 
 swiftReadableTypes :: [CodeType]
@@ -1068,8 +1080,9 @@ swiftListSlice vn vo beg end step = do
   let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) scp
       (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) scp
 
-      i = var "i" int
-      setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
+      i_binder = binder "i" int
+      i_var = var "i" int
+      setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i_binder] (listAccess vo (valueOf i_var)))
   block [
       setBeg,
       setEnd,
@@ -1148,10 +1161,12 @@ swiftCloseFile f' = do
   swClose (getType $ valueType f)
 
 swiftReadFile :: (OORenderSym r) => SVariable r -> SValue r -> MSStatement r
-swiftReadFile v f = let l = var "l" string
+swiftReadFile v f =
+  let l_binder = binder "l" string
+      l_var = var "l" string
   in tryCatch
   (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f)
-    (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
+    (lambda [l_binder] (swiftSplitFunc ' ' (valueOf l_var))))
   (oneLiner $ throw "Error reading from file.")
 
 swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)

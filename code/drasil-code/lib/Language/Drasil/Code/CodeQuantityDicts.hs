@@ -1,5 +1,7 @@
 -- | Defines QuantityDicts needed in the code generation stage.
-module Language.Drasil.Code.CodeQuantityDicts where
+module Language.Drasil.Code.CodeQuantityDicts (
+  inFileName, inParams, consts, codeDQDs
+) where
 
 import Language.Drasil
 

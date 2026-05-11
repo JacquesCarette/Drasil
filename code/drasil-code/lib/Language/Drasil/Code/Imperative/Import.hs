@@ -583,9 +583,9 @@ convStmt (FAsgIndex v i e) = do
   v' <- mkVar v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
-      asgFunc (C.Array _) = assign (arrayElem i v') e'
+      asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
-      vi = arrayElem i v'
+      vi = arrayElem (litInt i) v'
   l <- maybeLog vi
   return $ multi $ asgFunc t : l
 convStmt (FFor v start end step st) = do
@@ -1118,9 +1118,9 @@ convStmtProc (FAsgIndex v i e) = do
   v' <- mkVarProc v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
-      asgFunc (C.Array _) = assign (arrayElem i v') e'
+      asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
-      vi = arrayElem i v'
+      vi = arrayElem (litInt i) v'
   l <- maybeLog vi
   return $ multi $ asgFunc t : l
 convStmtProc (FFor v start end step st) = do

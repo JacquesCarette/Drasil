@@ -1,6 +1,12 @@
 {-# Language FlexibleInstances #-}
 -- | Printing Monad. Starts with a specific data type (reader monad) and extends from there.
-module Language.Drasil.TeX.Monad where
+module Language.Drasil.TeX.Monad (
+  -- * Types
+  MathContext(..), PrintLaTeX(..), D, Latex(..),
+  -- * Functions
+  switch, toMath, toText, getCtx, (%%), ($+$), vcat, vpunctuate,
+  hpunctuate, nest, lub
+) where
 
 import Prelude hiding (print)
 import qualified Text.PrettyPrint as TP

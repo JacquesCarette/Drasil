@@ -23,6 +23,6 @@ NameGenTest$(TARGET_EXTENSION): NameGenTest.cs
 	$(CSC) -out:NameGenTest$(TARGET_EXTENSION) NameGenTest.cs
 
 run: build
-	./NameGenTest$(TARGET_EXTENSION) $(RUNARGS)
+	mono NameGenTest$(TARGET_EXTENSION) $(RUNARGS)
 
 .PHONY: build run

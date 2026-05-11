@@ -1,28 +1,121 @@
-module Drasil.Build.Artifacts.FilePath (
-  RelativeFile, relativeFile, relFileToStr
-) where
+{-# LANGUAGE TemplateHaskell #-}
 
-import Data.List (foldl')
-import System.FilePath (isAbsolute, isValid, hasExtension, splitDirectories)
+module Drasil.Build.Artifacts.FilePath
+  ( -- * File Path Segments
+    PathSegment,
 
--- | A valid, relative file path with an extension in canonical form.
-newtype RelativeFile = RF { relFileToStr :: String }
-  deriving Eq
+    -- ** Construction
+    ps,
+    (</>),
 
--- | Create a 'RelativeFile' given a 'String' that must be in canonical form, be
--- a valid file path, contain a file extension, and be relative (not absolute);
--- otherwise, an error is raised.
-relativeFile :: String -> RelativeFile
-relativeFile fp
-  | not $ isCanonical fp = error $ "`" ++ fp ++ "` is not in canonical form."
-  | not $ isValid fp = error $ "`" ++ fp ++ "` is not a valid file path."
-  | not $ hasExtension fp = error $ "`" ++ fp ++ "` does not contain a file extension."
-  | isAbsolute fp = error $ "`" ++ fp ++ "` is an absolute file path, but a relative file path was expected."
-  | otherwise = RF fp
+    -- ** Unpacking
+    toPath,
+  )
+where
 
-isCanonical :: String -> Bool
-isCanonical fp = foldl' step True (splitDirectories fp)
+import Language.Haskell.TH (Exp, Q, listE, mkName, stringE, varE)
+import Language.Haskell.TH.Quote (QuasiQuoter (..))
+import System.FilePath (pathSeparator)
+import System.OsPath (OsPath, encodeUtf)
+import System.OsPath qualified as FP ((</>))
+import Prelude hiding (writeFile)
+
+-- | Represents a single valid segment of a path (e.g., a file or directory
+-- /name/, usually the terminal basename of a path). Does not allow path
+-- segments to be any of: `..`, `.`, nor `~`. Assumes case-sensitive equality.
+newtype PathSegment = PS {unPS :: OsPath}
+  deriving (Eq, Ord)
+
+-- | Retrieve 'OsPath' representation of a 'PathSegment'.
+toPath :: PathSegment -> OsPath
+toPath = unPS
+-- NOTE: 'toPath' is exported (& exists) so that 'PathSegment's internal
+-- 'OsPath' can be read, but a 'PathSegment' can never be updated via normal
+-- accessor update.
+{-# INLINE toPath #-}
+
+-- | Append a terminal 'PathSegment' onto a 'OsPath' to form a new 'OsPath'.
+(</>) :: OsPath -> PathSegment -> OsPath
+a </> (PS b) = a FP.</> b
+{-# INLINE (</>) #-}
+
+-- | 'QuasiQuoter' for building 'PathSegment's.
+--
+-- Syntax:
+--   ps ::= comp+
+--   comp ::= '{' hsVar '}'
+--         |  <any string excl. '.', '..', '~', not
+--             including the system-local path sep.>
+--   hsVar ::= <any string>
+ps :: QuasiQuoter
+ps =
+  QuasiQuoter
+    { quoteExp = qPathSeg,
+      quotePat = unpermitted,
+      quoteType = unpermitted,
+      quoteDec = unpermitted
+    }
   where
-    step _   "."  = False -- Should not include current dir
-    step _   ".." = False -- Should not "go up" directories
-    step acc _    = acc
+    unpermitted _ = fail "quasiquoting paths only permitted for Haskell expressions"
+
+-- | Internal: Quote a 'String' into a 'PathSegment'.
+qPathSeg :: String -> Q Exp
+qPathSeg [] = fail "empty path"
+qPathSeg s = do
+  comps <- pathSegComps s
+  case comps of
+    [Str s'] -> do
+      p <- either fail pure (validatePathSegStr s')
+      [|PS p|]
+    _ ->
+      [|mkPathSegOrErr $ concat $(listE $ map pathSegCompToQExp comps)|]
+
+-- | Internal: Constructor for dynamic path splices.
+mkPathSegOrErr :: String -> PathSegment
+mkPathSegOrErr = either error PS . validatePathSegStr
+
+-- | Internal: Check if a path segment (i.e., text before/between/after path
+-- separators) is a valid segment. Here, validity being defined by being
+-- non-empty, not containing the system-local path separator, nor being any of:
+-- ., .., or ~.
+validatePathSegStr :: String -> Either String OsPath
+validatePathSegStr [] = Left "empty path"
+validatePathSegStr s
+  | s `elem` [".", "..", "~"] = Left $ "invalid path segment: " ++ show s ++ "."
+  | pathSeparator `elem` s = Left $ "cannot create path segment with " ++ show pathSeparator ++ " in the name."
+  | otherwise = either (Left . ("invalid os path: " ++) . show) pure (encodeUtf s)
+
+-- | Internal: A Haskell variable is just a string. We will make no effort to
+-- audit them because Haskell supports unicode variable names.
+type HaskellVar = String
+
+-- | Internal: A path segment component is either a static 'String' or an
+-- arbitrary Haskell expression.
+data PathSegmentComponent
+  = Str String
+  | HsVar HaskellVar
+  deriving (Eq, Show)
+
+-- | Internal: Lift a 'PathSegmentComponent' into a Template Haskell expression.
+pathSegCompToQExp :: PathSegmentComponent -> Q Exp
+pathSegCompToQExp (Str s) = stringE s
+pathSegCompToQExp (HsVar v) = varE (mkName v)
+
+-- | Internal: Parse 'PathSegmentComponent's from a 'String' using sub-'String's
+-- of the form `{x}` to indicate Haskell-level variables.
+pathSegComps :: (MonadFail m) => String -> m [PathSegmentComponent]
+pathSegComps = go []
+  where
+    go acc [] = finAcc acc
+    go acc ('\\' : '{' : xs) = go ('{' : acc) xs
+    go acc ('{' : xs) =
+      case break (== '}') xs of
+        (_, []) -> fail "missing closing } in Haskell variable reference"
+        (var, _ : rest) -> do
+          prefix <- finAcc acc
+          next <- go [] rest
+          pure $ prefix ++ HsVar var : next
+    go acc (x : xs) = go (x : acc) xs
+
+    finAcc [] = pure []
+    finAcc as = pure [Str (reverse as)]

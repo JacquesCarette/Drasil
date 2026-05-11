@@ -14,12 +14,10 @@
 module ClassInstDepGen (main) where
 
 import Data.List
-import Data.Maybe
 import System.IO
 import System.Directory
 import System.FilePath (takeDirectory)
 import Control.Monad
-import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
@@ -122,19 +120,11 @@ main = do
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"
 
-  -- imports configuration settings (drasil- package names + class types order)
-  (packageNames,classInstOrd) <- config scriptsDirectory
-
-  -- uses ordering (imported from config file) iff imported ordering is complete
-  let ordered
-        | ldL == lpN = map (getFolder drctyDict) packageNames
-        | otherwise = drctyList
-      (ldL,lpN) = (length drctyList,length packageNames)
-      -- creates dictionary (Map.Map format) from drasil- directories list
-      drctyDict = Map.fromList $ map toDictList drctyList
+  let packageNames = map DC.folderDrasilPack drctyList
+      classInstOrd = [Haskell, Drasil, GOOL]
 
   -- all files + filepaths stored here; obtained from ordered list using finder
-  allFiles <- mapM DC.finder ordered
+  allFiles <- mapM DC.finder drctyList
 
   -- adds newline File entries (to separate Files by drasil- package)
   let rawFileData = intercalate [DC.createFile "" "" "newline"] allFiles
@@ -271,31 +261,6 @@ separateN :: [EntryString] -> [EntryString]
 separateN = concatMap (splitOn "\n")
 
 -------------
--- Configuration file parser
--------------
-
--- import configurations function (drasil- package + class instance orderings)
-config :: FilePath -> IO ([String],[ClassType])
-config configFilePath = do
-  setCurrentDirectory configFilePath
-  c <- readFile "DTG_Config.txt"
-  let l = map words $ filter isInfoLine (lines c)
-      -- FIXME: use real parser to extract settings from config file
-      -- will improve error messages regarding config file settings
-      (packageNames,classInstOrd) = (head l, map toClassType (l !! 1))
-  return (packageNames,classInstOrd)
-
--- used to filter out info lines (i.e. removes comment and empty lines)
-isInfoLine :: String -> Bool
-isInfoLine line = (line /="") && not ("#" `isPrefixOf` line)
-
--- converts string to classtype (for use by config function)
-toClassType :: String -> ClassType
-toClassType "Haskell" = Haskell
-toClassType "Drasil"  = Drasil
-toClassType "GOOL"    = GOOL
-
--------------
 -- Data formatting functions and other helpers
 -------------
 
@@ -388,14 +353,6 @@ compileEntryData ordClassInsts entry filename = do
 
   -- mapM_ print (lines output)
   return output
-
--- gets folder from dictionary using folder name (iff it exists in dictionary)
-getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder
-getFolder dict name = fromMaybe (error $ "Could not find " ++ name) $ Map.lookup name dict
-
--- converts list to dictionary list format (for use by drasil- directories only)
-toDictList :: DC.Folder -> (DC.FolderName,DC.Folder)
-toDictList folder = (DC.folderDrasilPack folder,folder)
 
 -- gets raw Entries, extracts classes and orders them with config file settings
 ordClasses :: [ClassType] -> [Entry] -> [Class]

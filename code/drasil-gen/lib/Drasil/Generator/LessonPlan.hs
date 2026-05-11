@@ -1,10 +1,12 @@
+{-# LANGUAGE QuasiQuotes #-}
+
 module Drasil.Generator.LessonPlan (
   exportLessonPlan
 ) where
 
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts (directory, file, writeArtifact)
+import Drasil.Build.Artifacts (directory, file, localPath, ps, writeFiles)
 import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Printers (Notation (Engineering), genJupyterLessonPlan, piSys)
@@ -20,8 +22,8 @@ exportLessonPlan plan nbDecl lsnFileName = do
       pd = makeDocument printSetting nb
       artifact =
         directory
-          "Lesson"
-          [ file (lsnFileName ++ ".ipynb") $ genJupyterLessonPlan pd
+          [ps|Lesson|]
+          [ file [ps|{lsnFileName}.ipynb|] $ genJupyterLessonPlan pd
           ]
 
-  writeArtifact "." artifact
+  writeFiles localPath artifact

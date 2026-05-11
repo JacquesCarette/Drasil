@@ -1,5 +1,16 @@
 -- | Defines helper functions for creating jupyter notebooks.
-module Language.Drasil.JSON.Helpers where
+module Language.Drasil.JSON.Helpers (
+  -- * Types
+  Variation(..),
+  -- * Jupyter-related
+  markdownB, markdownB', markdownE, markdownE', codeB, codeE, markdownCell,
+  codeCell, nbformat, codeformat, escapeStringForJson,
+  makeMetadata,
+  -- * HTML Tag Wrappers
+  tr, td, figure, li, pa, ba, ol, ul, table,
+  wrap, wrap', refwrap, refID, reflink, reflinkURI, image, h, br, mkDiv,
+  stripnewLine,
+) where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat)

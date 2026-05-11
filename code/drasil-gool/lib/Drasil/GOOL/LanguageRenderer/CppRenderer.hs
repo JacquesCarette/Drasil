@@ -9,7 +9,7 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC, cppName, cppVersion
 ) where
 
-import Utils.Drasil (blank, indent, indentList)
+import Drasil.Build.Artifacts.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
@@ -23,8 +23,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope)
+  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -36,16 +36,16 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  InternalBinderElim(..), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+  method, blockComment', InternalBinderElim(binderElim))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -93,8 +93,9 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), Binding(..), onBind
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
-  sumComponents, commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
+  VarData(..), vard, BinderD(..), bindFormD, CommonThunk, pureValue,
+  vectorize, vectorize2, sumComponents, commonVecIndex, commonThunkElim,
+  commonThunkDim, ScopeData)
 import Drasil.Shared.Classes (Pair(..))
 import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -295,7 +296,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   var n       = pair1 (var n) (var n)
   constant n  = pair1 (constant n) (constant n)
   extVar l n  = pair1 (extVar l n) (extVar l n)
-  arrayElem i = pair1 (arrayElem i) (arrayElem i)
+  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
@@ -486,6 +487,17 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
+
+instance Pair p => BinderSym (p CppSrcCode CppHdrCode) where
+  type Binder (p CppSrcCode CppHdrCode) = BinderD
+  binder nm = pair1 (binder nm) (binder nm)
+
+instance (Pair p) => BinderElim (p CppSrcCode CppHdrCode) where
+  binderName b = bindName $ unCPPSC $ pfst b
+  binderType b = pair (binderType $ pfst b) (binderType $ psnd b)
+
+instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) where
+  binderElim b = binderElim $ pfst b
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1210,7 +1222,7 @@ instance VariableSym CppSrcCode where
   var          = G.var
   constant     = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
-  arrayElem i  = G.arrayElem (litInt i)
+  arrayElem = G.arrayElem
 
 instance OOVariableSym CppSrcCode where
   staticVar' _ = G.staticVar
@@ -1405,6 +1417,17 @@ instance InternalListFunc CppSrcCode where
   listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CS.listSetFunc cppListSetDoc
+
+instance BinderSym CppSrcCode where
+  type Binder CppSrcCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim CppSrcCode where
+  binderName = bindName . unCPPSC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim CppSrcCode where
+  binderElim = text . bindName . unCPPSC
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
@@ -2113,6 +2136,17 @@ instance InternalListFunc CppHdrCode where
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 
+instance BinderSym CppHdrCode where
+  type Binder CppHdrCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim CppHdrCode where
+  binderName = bindName . unCPPHC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim CppHdrCode where
+  binderElim = text . bindName . unCPPHC
+
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS
 
@@ -2693,9 +2727,9 @@ cppIterType t' = do
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v
 
-cppLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+cppLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
-  (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> cppLambdaSep <+>
+  (map (RC.type' . binderType) ps) (map RC.binderElim ps)) <+> cppLambdaSep <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
 stodFunc :: SValue CppSrcCode -> SValue CppSrcCode

@@ -1,7 +1,19 @@
 {-# LANGUAGE GADTs, TemplateHaskell #-}
 {-# LANGUAGE InstanceSigs #-}
 -- | Defines the CodeSpec structure and related functions.
-module Language.Drasil.CodeSpec where
+module Language.Drasil.CodeSpec (
+  -- * Types
+  Input, Output, Const, Derived, ConstantMap,
+  CodeSpec, OldCodeSpec(..),
+  -- * Typeclasses
+  HasOldCodeSpec(..),
+  -- * Constructors
+  codeSpec,
+  -- * ODEs
+  getODE, mapODE,
+  -- * Hacks
+  asVC, funcUID, getDerivedInputs, getConstraints, constraintvars
+) where
 
 import Prelude hiding (const)
 import Control.Lens ((^.), makeLenses, Lens', makeClassyFor, set)
@@ -9,7 +21,7 @@ import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 
-import Drasil.Build.Artifacts (RelativeFile)
+import Drasil.Build.Artifacts.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)

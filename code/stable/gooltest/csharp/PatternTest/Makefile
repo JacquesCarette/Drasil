@@ -23,6 +23,6 @@ PatternTest$(TARGET_EXTENSION): PatternTest.cs Observer.cs
 	$(CSC) -out:PatternTest$(TARGET_EXTENSION) PatternTest.cs Observer.cs
 
 run: build
-	./PatternTest$(TARGET_EXTENSION) $(RUNARGS)
+	mono PatternTest$(TARGET_EXTENSION) $(RUNARGS)
 
 .PHONY: build run

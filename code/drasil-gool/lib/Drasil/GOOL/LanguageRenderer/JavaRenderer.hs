@@ -229,7 +229,6 @@ instance InternalTypeElim JavaCode where
   type' = typeDoc . unJC
 
 instance UnaryOpSym JavaCode where
-  type UnaryOp JavaCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = jUnaryMath R.sqrt

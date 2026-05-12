@@ -9,7 +9,7 @@ module Drasil.Shared.LanguageRenderer.Constructors (
 import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
   TypeSym(..), TypeElim(..), ValueSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
@@ -112,7 +112,7 @@ unExpr' u' v'= do
   v <- v'
   (join .: on2StateValues (mkUnExpr (if maybe False (< uOpPrec u) (valuePrec v) then unOpDocD else unOpDocD'))) u' v'
 
-mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) ->
+mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r OpData ->
   r (Value r) -> SValue r
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 

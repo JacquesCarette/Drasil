@@ -233,7 +233,6 @@ instance InternalTypeElim CSharpCode where
   type' = typeDoc . unCSC
 
 instance UnaryOpSym CSharpCode where
-  type UnaryOp CSharpCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = csUnaryMath "Sqrt"

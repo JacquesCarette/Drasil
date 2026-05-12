@@ -241,7 +241,6 @@ instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
   type' s = RC.type' $ pfst s
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
-  type UnaryOp (p CppSrcCode CppHdrCode) = OpData
   notOp = on2StateValues pair notOp notOp
   negateOp = on2StateValues pair negateOp negateOp
   sqrtOp = on2StateValues pair sqrtOp sqrtOp
@@ -1166,7 +1165,6 @@ instance InternalTypeElim CppSrcCode where
   type' = typeDoc . unCPPSC
 
 instance UnaryOpSym CppSrcCode where
-  type UnaryOp CppSrcCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = cppSqrtOp
@@ -1900,7 +1898,6 @@ instance InternalTypeElim CppHdrCode where
   type' = typeDoc . unCPPHC
 
 instance UnaryOpSym CppHdrCode where
-  type UnaryOp CppHdrCode = OpData
   notOp = mkOp 0 empty
   negateOp = mkOp 0 empty
   sqrtOp = mkOp 0 empty

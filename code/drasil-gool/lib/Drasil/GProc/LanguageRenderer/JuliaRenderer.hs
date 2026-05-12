@@ -213,7 +213,6 @@ instance InternalTypeElim JuliaCode where
       _ -> t
 
 instance UnaryOpSym JuliaCode where
-  type UnaryOp JuliaCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = jlUnaryMath R.sqrt

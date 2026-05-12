@@ -218,7 +218,6 @@ instance InternalTypeElim PythonCode where
   type' = typeDoc . unPC
 
 instance UnaryOpSym PythonCode where
-  type UnaryOp PythonCode = OpData
   notOp = pyNotOp
   negateOp = G.negateOp
   sqrtOp = pySqrtOp

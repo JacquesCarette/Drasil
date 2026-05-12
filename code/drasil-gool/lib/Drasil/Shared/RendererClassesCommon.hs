@@ -25,7 +25,8 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
   BinderElim(..), BinderSym (..))
 import Drasil.Shared.CodeType (CodeType)
-import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData, TypeData)
+import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData,
+  TypeData, OpData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -80,10 +81,9 @@ class RenderType r where
 class InternalTypeElim r where
   type' :: r TypeData -> Doc
 
-type VSUnOp a = VS (a (UnaryOp a))
+type VSUnOp a = VS (a OpData)
 
 class UnaryOpSym r where
-  type UnaryOp r
   notOp    :: VSUnOp r
   negateOp :: VSUnOp r
   sqrtOp   :: VSUnOp r
@@ -120,9 +120,9 @@ class BinaryOpSym r where
   orOp           :: VSBinOp r
 
 class OpElim r where
-  uOp :: r (UnaryOp r) -> Doc
+  uOp :: r OpData -> Doc
   bOp :: r (BinaryOp r) -> Doc
-  uOpPrec :: r (UnaryOp r) -> Int
+  uOpPrec :: r OpData -> Int
   bOpPrec :: r (BinaryOp r) -> Int
 
 class ScopeElim r where

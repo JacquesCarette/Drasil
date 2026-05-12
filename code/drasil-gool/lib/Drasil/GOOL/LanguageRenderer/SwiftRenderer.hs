@@ -233,7 +233,6 @@ instance InternalTypeElim SwiftCode where
   type' = typeDoc . unSC
 
 instance UnaryOpSym SwiftCode where
-  type UnaryOp SwiftCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = swiftUnaryMath R.sqrt

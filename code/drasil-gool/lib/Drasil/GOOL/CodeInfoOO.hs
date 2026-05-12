@@ -84,7 +84,6 @@ instance BlockSym CodeInfoOO where
   block = executeList
 
 instance TypeSym CodeInfoOO where
-  type Type CodeInfoOO = String
   bool              = noInfoVSType
   int               = noInfoVSType
   float             = noInfoVSType

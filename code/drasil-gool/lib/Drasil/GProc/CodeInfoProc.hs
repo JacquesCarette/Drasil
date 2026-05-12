@@ -75,7 +75,6 @@ instance BlockSym CodeInfoProc where
   block = executeList
 
 instance TypeSym CodeInfoProc where
-  type Type CodeInfoProc = String
   bool              = noInfoVSType
   int               = noInfoVSType
   float             = noInfoVSType

@@ -73,7 +73,6 @@ class (StatementSym r) => BlockSym r where
 type VSType a = VS (a TypeData)
 
 class TypeSym r where
-  type Type r
   bool          :: VSType r
   int           :: VSType r -- This is 32-bit signed ints except in Python,
                             -- which has unlimited precision ints; and Julia,

@@ -199,7 +199,6 @@ instance BlockElim JavaCode where
   block = unJC
 
 instance TypeSym JavaCode where
-  type Type JavaCode = TypeData
   bool = jBoolType
   int = CP.int
   float = C.float

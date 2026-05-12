@@ -200,7 +200,6 @@ instance BlockElim SwiftCode where
   block = unSC
 
 instance TypeSym SwiftCode where
-  type Type SwiftCode = TypeData
   bool = CS.bool
   int = swiftIntType
   float = CP.float

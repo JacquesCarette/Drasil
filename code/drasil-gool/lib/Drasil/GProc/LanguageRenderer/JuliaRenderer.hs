@@ -177,7 +177,6 @@ instance BlockElim JuliaCode where
   block = unJLC
 
 instance TypeSym JuliaCode where
-  type Type JuliaCode = TypeData
   bool = CS.bool
   int = jlIntType
   float = jlFloatType

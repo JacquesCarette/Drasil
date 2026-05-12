@@ -285,7 +285,7 @@ instance RenderVariable JuliaCode where
 
 instance ValueSym JuliaCode where
   type Value JuliaCode = ValData
-  valueType = onCodeValue valType
+  valueType v = valType <$> v
 
 instance Argument JuliaCode where
   pointerArg = id

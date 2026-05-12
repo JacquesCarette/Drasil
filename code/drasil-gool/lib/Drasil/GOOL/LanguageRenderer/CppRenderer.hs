@@ -2854,7 +2854,7 @@ cppsIntFunc f s t ps b = do
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
-cpphMethod :: (CommonRenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
+cpphMethod :: (CommonRenderSym r) => Label -> r TypeData -> [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n
   <> parens (parameterList ps) <> endStatement
 

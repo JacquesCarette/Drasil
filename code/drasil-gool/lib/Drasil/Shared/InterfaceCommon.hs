@@ -27,7 +27,7 @@ module Drasil.Shared.InterfaceCommon (
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
 
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData)
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData, BinderD)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -228,15 +228,14 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
-type VSBinder a = VS (a (Binder a))
+type VSBinder a = VS (a BinderD)
 
 class (TypeSym r) => BinderSym r where
-  type Binder r
   binder :: Label -> VSType r -> VSBinder r
 
 class (BinderSym r) => BinderElim r where
-  binderName :: r (Binder r) -> String
-  binderType :: r (Binder r) -> r TypeData
+  binderName :: r BinderD -> String
+  binderType :: r BinderD -> r TypeData
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where

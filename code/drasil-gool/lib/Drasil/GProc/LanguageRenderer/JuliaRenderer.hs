@@ -423,7 +423,6 @@ instance InternalListFunc JuliaCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym JuliaCode where
-  type Binder JuliaCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim JuliaCode where
@@ -904,7 +903,7 @@ jlIntFunc n pms bod = do
         indent $ RC.body bod,
         jlEnd]
 
-jlLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+jlLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions

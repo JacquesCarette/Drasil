@@ -30,8 +30,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse, convType, VSBinder, BinderElim(..),
-  BinderSym (..))
+  printFileStr, printFileStrLn), ifNoElse, convType, VSBinder, BinderElim(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
@@ -64,7 +63,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
 import Drasil.Shared.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
-  ScopeData, sd, TypeData)
+  ScopeData, sd, TypeData, BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
@@ -275,7 +274,7 @@ newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
-lambda :: (CommonRenderSym r) => ([r (Binder r)] -> r (Value r) -> Doc) ->
+lambda :: (CommonRenderSym r) => ([r BinderD] -> r (Value r) -> Doc) ->
   [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'

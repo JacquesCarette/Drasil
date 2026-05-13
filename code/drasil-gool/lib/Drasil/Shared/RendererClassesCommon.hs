@@ -22,11 +22,10 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..),
-  BinderSym (..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData,
-  TypeData, OpData)
+  TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -135,7 +134,7 @@ class InternalVarElim r where
   variable  :: r (Variable r) -> Doc
 
 class InternalBinderElim r where
-  binderElim  :: r (Binder r) -> Doc
+  binderElim  :: r BinderD -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r

@@ -3,10 +3,10 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
-  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+import Drasil.Shared.InterfaceCommon (MSBody, VSType, VSBinder, SValue,
+  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
@@ -22,7 +22,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
-  ScopeData, ScopeTag(..), sd)
+  ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -266,8 +266,7 @@ instance InternalList CodeInfoOO where
     noInfo
 
 instance BinderSym CodeInfoOO where
-  type Binder CodeInfoOO = ()
-  binder _ _ = noInfo
+  binder _ _ = noInfoBinder
 
 instance ThunkSym CodeInfoOO where
   type Thunk CodeInfoOO = ()
@@ -483,14 +482,20 @@ instance ModuleSym CodeInfoOO where
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
+emptyType :: TypeData
+emptyType = td Void "" empty -- Hack
+
 noInfoType :: CodeInfoOO TypeData
-noInfoType = return $ td Void "" empty -- Hack
+noInfoType = return emptyType
 
 noInfoVSType :: VSType CodeInfoOO
 noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoOO ScopeData
 noInfoScope = return $ sd Global -- Hack
+
+noInfoBinder :: VSBinder CodeInfoOO
+noInfoBinder = return $ return $ bindFormD "" emptyType
 
 updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do

@@ -479,7 +479,6 @@ instance InternalListFunc SwiftCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym SwiftCode where
-  type Binder SwiftCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim SwiftCode where
@@ -986,7 +985,7 @@ swiftNumBinExpr f v1' v2' = do
 swiftLitFloat :: (CommonRenderSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
-swiftLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+swiftLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
     (map RC.binderElim ps)

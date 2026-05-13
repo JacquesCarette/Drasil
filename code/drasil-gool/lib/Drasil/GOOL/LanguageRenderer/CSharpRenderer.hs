@@ -467,7 +467,6 @@ instance InternalListFunc CSharpCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where
-  type Binder CSharpCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim CSharpCode where
@@ -843,7 +842,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+csLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode

@@ -485,7 +485,6 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listSetFunc = pair3 listSetFunc listSetFunc
 
 instance Pair p => BinderSym (p CppSrcCode CppHdrCode) where
-  type Binder (p CppSrcCode CppHdrCode) = BinderD
   binder nm = pair1 (binder nm) (binder nm)
 
 instance (Pair p) => BinderElim (p CppSrcCode CppHdrCode) where
@@ -1410,7 +1409,6 @@ instance InternalListFunc CppSrcCode where
   listSetFunc = CS.listSetFunc cppListSetDoc
 
 instance BinderSym CppSrcCode where
-  type Binder CppSrcCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim CppSrcCode where
@@ -2123,7 +2121,6 @@ instance InternalListFunc CppHdrCode where
   listSetFunc _ _ _ = funcFromData empty void
 
 instance BinderSym CppHdrCode where
-  type Binder CppHdrCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim CppHdrCode where
@@ -2717,7 +2714,7 @@ cppFuncType ps' r' =  do
   r <- r'
   typeFromData (Func (map getType ps) (getType r)) "auto" (text "auto")
 
-cppLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+cppLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
   (map (RC.type' . binderType) ps) (map RC.binderElim ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd

@@ -487,7 +487,6 @@ instance InternalListFunc JavaCode where
   listSetFunc = jListSetFunc
 
 instance BinderSym JavaCode where
-  type Binder JavaCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim JavaCode where
@@ -955,7 +954,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: [r (Binder r)] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constraint
+jLambda :: [r BinderD] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constraint
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode

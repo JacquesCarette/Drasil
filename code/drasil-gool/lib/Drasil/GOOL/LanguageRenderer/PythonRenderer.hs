@@ -81,7 +81,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
-  ScopeData, BinderD(..), bindFormD)
+  BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -470,7 +470,6 @@ instance InternalListFunc PythonCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym PythonCode where
-  type Binder PythonCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim PythonCode where
@@ -948,7 +947,7 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+pyLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (CommonRenderSym r) => VSType r

@@ -7,14 +7,16 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), vcat, nest,
   hsep, empty)
 
-import Drasil.Build.Artifacts (FileLayout, file, ps)
+import Drasil.Build.Artifacts (FileLayout, directory, file, ps)
 import Drasil.Database (UID)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label)
 
--- | Creates a list of `FileLayout`s for the generated graphs.
-outputDot :: GraphInfo -> [FileLayout Doc]
+-- | Creates a `FileLayout`s for the generated TraceyGraph directory.
+outputDot :: GraphInfo -> FileLayout Doc
 outputDot gi =
+  directory
+  [ps|TraceyGraph|]
   [ mkOutput gi "avsa" edgesAvsA [assumpNF],
     mkOutput gi "avsall" edgesAvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, chgNF],
     mkOutput gi "refvsref" edgesRefvsRef [ddNF, tmNF, gdNF, imNF],

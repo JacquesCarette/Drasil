@@ -38,8 +38,7 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   let srsLayout    = directory [ps|SRS|] $
                        map (prntDoc srs printfo srsFileName)
                        [HTML, TeX, Jupyter, MDBook]
-      traceyLayout = directory [ps|TraceyGraph|]
-                       (outputDot (mkGraphInfo syst')) -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
+      traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
   -- FIXME: Ultimately, there should be a single writeFiles call.
   writeFiles localPath srsLayout
   writeFiles localPath traceyLayout

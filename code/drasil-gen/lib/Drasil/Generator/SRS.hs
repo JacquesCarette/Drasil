@@ -22,6 +22,7 @@ import Data.Maybe (maybeToList)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
+import System.Environment (lookupEnv)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (DocSpec(..), Filename, Format(..), buildMakefile)
@@ -33,7 +34,7 @@ exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
       printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
-  dumpEverything syst' ".drasil/"
+  debugDump syst'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   let srsLayout    = directory [ps|SRS|] $
                        map (prntDoc srs printfo srsFileName)
@@ -42,6 +43,17 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   -- FIXME: Ultimately, there should be a single writeFiles call.
   writeFiles localPath srsLayout
   writeFiles localPath traceyLayout
+
+-- | Internal: Dumps the chunk maps to disk if the `DEBUG_ENV` environment
+-- variable is non-empty.
+debugDump :: SmithEtAlSRS -> IO ()
+debugDump si = do
+  -- FIXME: This should be made pure, by passing the 'debug' option instead of using an environment variable
+  maybeDebugging <- lookupEnv "DEBUG_ENV"
+  case maybeDebugging of
+    (Just (_:_)) -> do
+      writeFiles localPath $ dumpEverything si
+    _ -> mempty
 
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
 prntDoc :: Document -> PrintingInformation -> String -> Format -> FileLayout Doc

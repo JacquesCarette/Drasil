@@ -10,7 +10,6 @@ import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 
 import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
-import Build.Drasil (printMakefile)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook),
   ShowTableOfContents, checkToC)
@@ -18,6 +17,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
   genMDBook, makeBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
+import Drasil.Makefile (printMakefile)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)

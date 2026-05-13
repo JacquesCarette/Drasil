@@ -1,16 +1,16 @@
 -- | Defines printers for generating Makefiles.
-module Build.Drasil.Make.Print (printMakefile) where
+module Drasil.Makefile.Make.Print (printMakefile) where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 import qualified Data.Text as T
 import Text.Wrap
 
-import Build.Drasil.Make.AST (Annotation, Command(C),
+import Drasil.Makefile.Make.AST (Annotation, Command(C),
   CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target,
   Type(Abstract))
-import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
-import Build.Drasil.Make.MakeString (renderMS)
+import Drasil.Makefile.Make.Helpers (addCommonFeatures, tab)
+import Drasil.Makefile.Make.MakeString (renderMS)
 
 -- | Render a 'Makefile' to a 'Doc'.
 printMakefile :: Makefile -> Doc

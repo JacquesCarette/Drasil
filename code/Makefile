@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = build build-artifacts code data database docLang gen gool lang metadata printers system theory utils website
+PACKAGES = build-artifacts code data database docLang gen gool lang makefile metadata printers system theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes

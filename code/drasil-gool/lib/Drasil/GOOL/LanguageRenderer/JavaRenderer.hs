@@ -781,7 +781,6 @@ instance ModuleElim JavaCode where
   module' = modDoc . unJC
 
 instance BlockCommentSym JavaCode where
-  type BlockComment JavaCode = Doc
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)

@@ -807,7 +807,6 @@ instance ModuleElim SwiftCode where
   module' = modDoc . unSC
 
 instance BlockCommentSym SwiftCode where
-  type BlockComment SwiftCode = Doc
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)

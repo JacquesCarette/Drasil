@@ -789,7 +789,6 @@ instance ModuleElim PythonCode where
   module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
-  type BlockComment PythonCode = Doc
   blockComment lns = toCode $ pyBlockComment lns pyCommentStart
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
     pyCommentStart)

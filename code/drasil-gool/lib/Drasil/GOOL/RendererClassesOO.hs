@@ -36,7 +36,7 @@ class (BlockCommentSym r) => RenderFile r where
   top :: r (IG.Module r) -> r (Block r)
   bottom :: r (Block r)
 
-  commentedMod :: IG.SFile r -> FS (r (BlockComment r)) -> IG.SFile r
+  commentedMod :: IG.SFile r -> FS (r Doc) -> IG.SFile r
 
   fileFromData :: FilePath -> IG.FSModule r -> IG.SFile r
 
@@ -76,7 +76,7 @@ class (BlockCommentSym r) => RenderClass r where
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec
 
-  commentedClass :: CS (r (BlockComment r)) -> IG.SClass r -> IG.SClass r
+  commentedClass :: CS (r Doc) -> IG.SClass r -> IG.SClass r
 
 class ClassElim r where
   class' :: r (IG.Class r) -> Doc

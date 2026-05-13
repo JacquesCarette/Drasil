@@ -532,7 +532,7 @@ implementingClass n is = S.intClass n public (implements is)
 docClass :: (OORenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r
 docClass cdr d = S.commentedClass (docComment $ toState $ cdr d)
 
-commentedClass :: (OORenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r
+commentedClass :: (OORenderSym r, Monad r) => CS (r Doc) -> SClass r
   -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RC.class' cs))

@@ -214,13 +214,12 @@ class ParamElim r where
   parameter     :: r (Parameter r) -> Doc
 
 class BlockCommentSym r where
-  type BlockComment r
-  blockComment :: [String] -> r (BlockComment r)
+  blockComment :: [String] -> r Doc
   -- | Converts a list of strings into a block comment
-  docComment :: State a [String] -> State a (r (BlockComment r))
+  docComment :: State a [String] -> State a (r Doc)
 
 class BlockCommentElim r where
-  blockComment' :: r (BlockComment r) -> Doc
+  blockComment' :: r Doc -> Doc
 
 type MSMthdType a = MS (a (MethodType a))
 
@@ -230,7 +229,7 @@ class (TypeSym r) => MethodTypeSym r where
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   -- | Takes a BlockComment and a method and generates a function.
-  commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
+  commentedFunc :: MS (r Doc) -> SMethod r -> SMethod r
   mthdFromData :: VisibilityTag -> Doc -> SMethod r
 
 class MethodElim r where

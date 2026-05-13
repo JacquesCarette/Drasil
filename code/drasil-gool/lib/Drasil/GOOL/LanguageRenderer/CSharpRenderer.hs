@@ -755,7 +755,6 @@ instance ModuleElim CSharpCode where
   module' = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where
-  type BlockComment CSharpCode = Doc
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)

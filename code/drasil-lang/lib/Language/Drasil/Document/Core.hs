@@ -56,12 +56,6 @@ data Contents = UlC UnlabelledContent
 --   gdefn, General, mkGDField [Para, EqnBlock, Enumeration]
 --   instanceModel, Instance, mkIMField [Para, EqnBlock, Enumeration]
 
--- | Types of definitions (general, instance, theory, or data).
-data DType = General
-           | Instance
-           | Theory
-           | Data
-
 -- | Indicates whether a figure has a caption or not.
 data HasCaption = NoCaption | WithCaption
   deriving (Eq)

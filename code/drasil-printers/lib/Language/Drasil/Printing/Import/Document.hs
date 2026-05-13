@@ -54,7 +54,7 @@ createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]
 createRefMap fn (T.Header _ _ l)     = createRef fn l
 createRefMap fn (T.HDiv   _ _ l)     = createRef fn l
 createRefMap fn (T.Table  _ _ l _ _) = createRef fn l
-createRefMap fn (T.Definition _ _ l) = createRef fn l
+createRefMap fn (T.Definition _ l)   = createRef fn l
 createRefMap fn (T.List t)           = pass t
   where
     pass (P.Ordered ls)     = process  ls
@@ -152,9 +152,8 @@ layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
 layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ _ (Defini dtyp pairs)) = T.Definition
-  dtyp (layPairs pairs)
-  (P.S $ getAdd $ getRefAdd x)
+layLabelled sm x@(LblC _ _ (Defini pairs)) =
+  T.Definition (layPairs pairs) (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
 layLabelled sm (LblC _ _ (Paragraph c))         = T.Paragraph (spec sm c)
 layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
@@ -179,7 +178,7 @@ layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2")
   (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Defini pairs)  = T.Definition (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib

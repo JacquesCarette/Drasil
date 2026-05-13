@@ -73,7 +73,7 @@ data RawContent =
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
-  | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
+  | Defini [(Identifier, [Contents])]        -- ^ Defines something with a type, identifier, and 'Contents'.
   | Figure Lbl Filepath MaxWidthPercent HasCaption
                                              -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.

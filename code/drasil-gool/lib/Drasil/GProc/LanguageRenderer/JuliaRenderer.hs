@@ -230,7 +230,6 @@ instance UnaryOpSym JuliaCode where
   ceilOp = jlUnaryMath R.ceil
 
 instance BinaryOpSym JuliaCode where
-  type BinaryOp JuliaCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp

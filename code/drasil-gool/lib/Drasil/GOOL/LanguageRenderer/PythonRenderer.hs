@@ -235,7 +235,6 @@ instance UnaryOpSym PythonCode where
   ceilOp = pyCeilOp
 
 instance BinaryOpSym PythonCode where
-  type BinaryOp PythonCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp

@@ -250,7 +250,6 @@ instance UnaryOpSym SwiftCode where
   ceilOp = swiftUnaryMath R.ceil
 
 instance BinaryOpSym SwiftCode where
-  type BinaryOp SwiftCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp

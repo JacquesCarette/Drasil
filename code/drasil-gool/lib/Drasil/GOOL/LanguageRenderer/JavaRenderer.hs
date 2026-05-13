@@ -246,7 +246,6 @@ instance UnaryOpSym JavaCode where
   ceilOp = jUnaryMath R.ceil
 
 instance BinaryOpSym JavaCode where
-  type BinaryOp JavaCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp

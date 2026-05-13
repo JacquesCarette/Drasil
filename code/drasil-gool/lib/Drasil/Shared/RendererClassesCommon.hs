@@ -100,10 +100,9 @@ class UnaryOpSym r where
   floorOp  :: VSUnOp r
   ceilOp   :: VSUnOp r
 
-type VSBinOp a = VS (a (BinaryOp a))
+type VSBinOp a = VS (a OpData)
 
 class BinaryOpSym r where
-  type BinaryOp r
   equalOp        :: VSBinOp r
   notEqualOp     :: VSBinOp r
   greaterOp      :: VSBinOp r
@@ -121,9 +120,9 @@ class BinaryOpSym r where
 
 class OpElim r where
   uOp :: r OpData -> Doc
-  bOp :: r (BinaryOp r) -> Doc
+  bOp :: r OpData -> Doc
   uOpPrec :: r OpData -> Int
-  bOpPrec :: r (BinaryOp r) -> Int
+  bOpPrec :: r OpData -> Int
 
 class ScopeElim r where
   scopeData :: r (Scope r) -> ScopeData

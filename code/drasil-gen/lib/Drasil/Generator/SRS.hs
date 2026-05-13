@@ -46,15 +46,18 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
 prntDoc :: Document -> PrintingInformation -> String -> Format -> FileLayout Doc
 prntDoc d pinfo fn fmt =
-    directory (outPath fmt) $ (doc : mMakefile) ++ extraFiles fmt
+    directory (toPathSeg fmt) $ (doc : mMakefile) ++ extraFiles fmt
   where
     doc = prntDoc' fn fmt d pinfo
     mMakefile = maybeToList $ prntMake $ DocSpec fmt fn
 
-    outPath HTML    = [ps|HTML|]
-    outPath TeX     = [ps|PDF|]
-    outPath Jupyter = [ps|Jupyter|]
-    outPath MDBook  = [ps|mdBook|]
+    toPathSeg f = [ps|{seg}|]
+      where seg = outPath f
+
+    outPath HTML    = "HTML"
+    outPath TeX     = "PDF"
+    outPath Jupyter = "Jupyter"
+    outPath MDBook  = "mdBook"
 
     extraFiles HTML   = [ file [ps|{fn}.css|] $ makeCSS d ]
     extraFiles MDBook = [ file [ps|book.toml|] $ makeBook d pinfo,

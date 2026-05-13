@@ -280,7 +280,6 @@ instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   bOpPrec o = bOpPrec $ pfst o
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
-  type Scope (p CppSrcCode CppHdrCode) = ScopeData
   global = pair global global
   mainFn = pair mainFn mainFn
   local = pair local local
@@ -1202,7 +1201,6 @@ instance OpElim CppSrcCode where
   bOpPrec = opPrec . unCPPSC
 
 instance ScopeSym CppSrcCode where
-  type Scope CppSrcCode = ScopeData
   global = CP.global
   mainFn = local
   local = G.local
@@ -1933,7 +1931,6 @@ instance OpElim CppHdrCode where
   bOpPrec = opPrec . unCPPHC
 
 instance ScopeSym CppHdrCode where
-  type Scope CppHdrCode = ScopeData
   global = CP.global
   mainFn = local
   local = G.local
@@ -2666,7 +2663,7 @@ cppIterEndFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (CommonRenderSym r) => ([r (Value r)] -> Doc) -> SVariable r ->
-  r (Scope r) -> [SValue r] -> MSStatement r
+  r ScopeData -> [SValue r] -> MSStatement r
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2754,7 +2751,7 @@ cppListDecDoc n = parens (RC.value n)
 cppListDecDefDoc :: (CommonRenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+cppFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MSStatement r
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v

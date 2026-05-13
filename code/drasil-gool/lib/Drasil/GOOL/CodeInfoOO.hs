@@ -21,7 +21,8 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
+  ScopeData, ScopeTag(..), sd)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -107,10 +108,9 @@ instance TypeElim CodeInfoOO where
   getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoOO where
-  type Scope CodeInfoOO = ()
-  global = toCode ()
-  mainFn = toCode ()
-  local = toCode ()
+  global = noInfoScope
+  mainFn = noInfoScope
+  local = noInfoScope
 
 instance VariableSym CodeInfoOO where
   type Variable CodeInfoOO = ()
@@ -484,10 +484,13 @@ noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
 noInfoType :: CodeInfoOO TypeData
-noInfoType = return $ td Void "" empty
+noInfoType = return $ td Void "" empty -- Hack
 
 noInfoVSType :: VSType CodeInfoOO
 noInfoVSType = return noInfoType
+
+noInfoScope :: CodeInfoOO ScopeData
+noInfoScope = return $ sd Global -- Hack
 
 updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do

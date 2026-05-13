@@ -272,7 +272,6 @@ instance OpElim CSharpCode where
   bOpPrec = opPrec . unCSC
 
 instance ScopeSym CSharpCode where
-  type Scope CSharpCode = ScopeData
   global = CP.global
   mainFn = local
   local = G.local
@@ -882,7 +881,7 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MSStatement r
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v

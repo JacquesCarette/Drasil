@@ -28,12 +28,12 @@ import qualified Language.Drasil.Printing.Import as PI (codeExpr)
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
   oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
-  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-    convTypeOO, VisibilityTag(..))
+  ScopeSym(..), ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), ControlStatement(..),
+  ifNoElse, VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
+  convTypeOO, VisibilityTag(..))
 import qualified Drasil.GOOL as OO (SFile)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
@@ -190,7 +190,7 @@ initConsts = do
 
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
-initLogFileVar :: (SharedProg r) => [Logging] -> r (Scope r) -> [MSStatement r]
+initLogFileVar :: (SharedProg r) => [Logging] -> r ScopeData -> [MSStatement r]
 initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 ------- INPUT ----------

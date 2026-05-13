@@ -22,8 +22,8 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
-  BinderElim(..), BinderSym (..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..),
+  BinderSym (..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData,
   TypeData, OpData)
@@ -125,7 +125,7 @@ class OpElim r where
   bOpPrec :: r OpData -> Int
 
 class ScopeElim r where
-  scopeData :: r (Scope r) -> ScopeData
+  scopeData :: r ScopeData -> ScopeData
 
 class RenderVariable r where
   varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r

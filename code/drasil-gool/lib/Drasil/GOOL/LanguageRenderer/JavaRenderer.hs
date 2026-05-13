@@ -268,7 +268,6 @@ instance OpElim JavaCode where
   bOpPrec = opPrec . unJC
 
 instance ScopeSym JavaCode where
-  type Scope JavaCode = ScopeData
   global = CP.global
   mainFn = local
   local = G.local
@@ -967,7 +966,7 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
         jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
           (RC.value v))
 
-jConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+jConstDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
   -> MSStatement r
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
@@ -977,7 +976,7 @@ jConstDecDef v' scp def' = do
   mkStmt $ jFinal <+> RC.type' (variableType v) <+>
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MSStatement r
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v

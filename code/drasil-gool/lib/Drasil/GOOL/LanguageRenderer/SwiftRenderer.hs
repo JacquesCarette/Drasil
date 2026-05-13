@@ -272,7 +272,6 @@ instance OpElim SwiftCode where
   bOpPrec = opPrec . unSC
 
 instance ScopeSym SwiftCode where
-  type Scope SwiftCode = ScopeData
   global = CP.global
   mainFn = global
   local = G.local
@@ -1165,7 +1164,7 @@ swiftReadFile v f =
     (lambda [l_binder] (swiftSplitFunc ' ' (valueOf l_var))))
   (oneLiner $ throw "Error reading from file.")
 
-swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)
+swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData
   -> MSStatement SwiftCode
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
@@ -1177,7 +1176,7 @@ swiftVarDec dec v' scp = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
 
-swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
+swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData -> MSStatement SwiftCode
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)

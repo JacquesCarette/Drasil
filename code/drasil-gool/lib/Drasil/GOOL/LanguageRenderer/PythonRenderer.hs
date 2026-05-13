@@ -257,7 +257,6 @@ instance OpElim PythonCode where
   bOpPrec = opPrec . unPC
 
 instance ScopeSym PythonCode where
-  type Scope PythonCode = ScopeData
   global = CP.global
   mainFn = global
   local = G.local

@@ -17,7 +17,8 @@ import Drasil.Shared.InterfaceCommon (MSBody, SValue, VSType, MSStatement,
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
+  ScopeData(..), ScopeTag (..), sd)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
@@ -95,10 +96,9 @@ instance TypeElim CodeInfoProc where
   getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoProc where
-  type Scope CodeInfoProc = ()
-  global = toCode ()
-  mainFn = toCode ()
-  local = toCode ()
+  global = noInfoScope
+  mainFn = noInfoScope
+  local = noInfoScope
 
 instance VariableSym CodeInfoProc where
   type Variable CodeInfoProc = ()
@@ -377,10 +377,13 @@ noInfo :: State s (CodeInfoProc ())
 noInfo = toState $ toCode ()
 
 noInfoType :: CodeInfoProc TypeData
-noInfoType = return $ td Void "" empty
+noInfoType = return $ td Void "" empty -- Hack
 
 noInfoVSType :: VSType CodeInfoProc
 noInfoVSType = return noInfoType
+
+noInfoScope :: CodeInfoProc ScopeData
+noInfoScope = return $ sd Global -- Hack
 
 updateMEMandCM :: String -> MSBody CodeInfoProc -> SMethod CodeInfoProc
 updateMEMandCM n b = do

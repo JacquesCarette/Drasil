@@ -252,7 +252,6 @@ instance OpElim JuliaCode where
   bOpPrec = opPrec . unJLC
 
 instance ScopeSym JuliaCode where
-  type Scope JuliaCode = ScopeData
   global = toCode $ sd Global
   mainFn = global
   local = G.local
@@ -730,7 +729,7 @@ jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
 jlGlobal :: Doc
 jlGlobal = text "global"
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
   -> MSStatement r
 jlConstDecDef v' scp def' = do
   let scpData = scopeData scp

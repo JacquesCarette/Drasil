@@ -95,10 +95,9 @@ class (TypeSym r) => TypeElim r where
   getTypeString :: r TypeData -> String
 
 class ScopeSym r where
-  type Scope r
-  global :: r (Scope r) -- Definite global scope
-  mainFn :: r (Scope r) -- Main program - either main function or global scope
-  local  :: r (Scope r) -- Definite local scope
+  global :: r ScopeData -- Definite global scope
+  mainFn :: r ScopeData -- Main program - either main function or global scope
+  local  :: r ScopeData -- Definite local scope
 
 type SVariable a = VS (a (Variable a))
 
@@ -350,8 +349,8 @@ class TypeSym r => VectorType r where
 
 class (DeclStatement r) => VectorDecl r where
   -- First argument is size of the vector
-  vecDec :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
-  vecDecDef :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  vecDec :: Integer -> SVariable r -> r ScopeData -> MSStatement r
+  vecDecDef :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
 
 class (VariableSym r, ThunkSym r) => VectorThunk r where
   vecThunk :: SVariable r -> VSThunk r
@@ -391,18 +390,18 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
-  varDec       :: SVariable r -> r (Scope r) -> MSStatement r
-  varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  varDec       :: SVariable r -> r ScopeData -> MSStatement r
+  varDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
   -- First argument is size of the list
-  listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
-  listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  setDec       :: SVariable r -> r (Scope r) -> MSStatement r
-  setDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> r ScopeData -> MSStatement r
+  listDecDef   :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  setDec       :: SVariable r -> r ScopeData -> MSStatement r
+  setDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
   -- First argument is size of the array
-  arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
-  arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
-  funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
+  arrayDec     :: Integer -> SVariable r -> r ScopeData -> MSStatement r
+  arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MSBody r
     -> MSStatement r
 
 class (VariableSym r, StatementSym r) => IOStatement r where
@@ -545,6 +544,6 @@ convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
 
-convScope :: (ScopeSym r) => ScopeData -> r (Scope r)
+convScope :: (ScopeSym r) => ScopeData -> r ScopeData
 convScope (SD {scopeTag = Global}) = global
 convScope (SD {scopeTag = Local}) = local

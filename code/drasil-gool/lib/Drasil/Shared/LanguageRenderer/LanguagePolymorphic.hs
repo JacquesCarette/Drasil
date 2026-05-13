@@ -86,7 +86,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, (<>), (<+>), ($+$),
-  parens, brackets, integer, vcat, comma, isEmpty, space)
+  parens, brackets, integer, vcat, comma, isEmpty, space, render)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -301,12 +301,12 @@ arrayAccess v' i' = do
       vRender = RC.value v <> brackets (RC.value i)
   mkStateVal vType vRender
 
+-- This has some hacks (e.g. using render to reconstruct the variable's name)
 arraySet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> MSStatement r
 arraySet v' i' toVal' = do
-  i <- zoom lensMStoVS $ IC.intToIndex i'
-  v <- zoom lensMStoVS v'
-  toVal <- zoom lensMStoVS toVal'
-  mkStmt $ RC.value v <> brackets (RC.value i) <+> text "=" <+> RC.value toVal
+  v_i <- zoom lensMStoVS (arrayAccess v' i')
+  lval <- zoom lensMStoVS (mkStateVar (render $ RC.value v_i) (return $ valueType v_i) (RC.value v_i))
+  return lval &= toVal'
 
 listAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd

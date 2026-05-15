@@ -214,7 +214,7 @@ genInputMod = do
 -- or a declare-define statement for a constant variable (if user chose 'Const').
 constVarFunc :: (OOProg r) => ConstantRepr ->
   (SVariable r -> SValue r -> CSStateVar r)
-constVarFunc Var = stateVarDef public dynamic
+constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 
 -- | Returns 'Nothing' if no inputs or constants are mapped to InputParameters in

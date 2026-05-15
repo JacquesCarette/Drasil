@@ -169,8 +169,8 @@ instance ImportElim CSharpCode where
 
 instance AttachmentSym CSharpCode where
   type Attachment CSharpCode = Doc
-  static = toCode R.static
-  dynamic = toCode R.dynamic
+  classLevel = toCode R.static
+  instanceLevel = toCode R.dynamic
 
 instance PermElim CSharpCode where
   perm = unCSC
@@ -554,7 +554,7 @@ instance AssignStatement CSharpCode where
 
 instance DeclStatement CSharpCode where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
-    C.varDec static dynamic empty v scp)
+    C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef

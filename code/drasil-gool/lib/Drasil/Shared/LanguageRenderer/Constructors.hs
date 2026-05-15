@@ -52,7 +52,7 @@ mkStateVar = varFromData Dynamic
 mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
 mkVar n t = varFromData Dynamic n (toState t)
 
--- | Constructs a static variable in a stateful context
+-- | Constructs a classLevel variable in a stateful context
 mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStaticVar = varFromData Static
 

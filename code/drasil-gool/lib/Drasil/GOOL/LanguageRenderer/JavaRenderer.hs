@@ -169,8 +169,8 @@ instance ImportElim JavaCode where
 
 instance AttachmentSym JavaCode where
   type Attachment JavaCode = Doc
-  static = toCode R.static
-  dynamic = toCode R.dynamic
+  classLevel = toCode R.static
+  instanceLevel = toCode R.dynamic
 
 instance PermElim JavaCode where
   perm = unJC
@@ -574,7 +574,7 @@ instance AssignStatement JavaCode where
   (&--) = C.decrement1
 
 instance DeclStatement JavaCode where
-  varDec = C.varDec static dynamic empty
+  varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -748,7 +748,7 @@ instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (static :: JavaCode (Attachment JavaCode)))
+  constVar = CP.constVar (RC.perm (classLevel :: JavaCode (Attachment JavaCode)))
 
 instance StateVarElim JavaCode where
   stateVar = unJC

@@ -31,7 +31,7 @@ selfX = objVarSelf x
 
 -- | Helper function to create the class.
 helperClass :: (ClassSym r, IOStatement r, Literal r, OOVariableValue r) => SClass r
-helperClass = buildClass Nothing [stateVar public dynamic x]
+helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
@@ -40,5 +40,5 @@ observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
 printNumMethod :: (OOMethodSym r, IOStatement r, OOVariableValue r) => SMethod r
-printNumMethod = method printNum public dynamic void [] $
+printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

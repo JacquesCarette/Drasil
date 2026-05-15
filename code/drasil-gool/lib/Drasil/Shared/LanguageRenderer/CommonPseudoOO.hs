@@ -114,7 +114,7 @@ int = typeFromData Integer intRender (text intRender)
 constructor :: (OORenderSym r) => Label -> [MSParameter r] -> Initializers r ->
   MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
-  public dynamic (S.construct c) ps (S.multiBody [initStmts is, b]))
+  public instanceLevel (S.construct c) ps (S.multiBody [initStmts is, b]))
 
 doxFunc :: (CommonRenderSym r) => String -> [String] -> Maybe String -> SMethod r ->
   SMethod r
@@ -247,7 +247,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
 mainFunction :: (OORenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
-mainFunction s n = S.intFunc True n public static (mType IC.void)
+mainFunction s n = S.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
   (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 

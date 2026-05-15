@@ -218,14 +218,14 @@ publicMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicMethod n t = do
-  genMethod (method n public dynamic t) n
+  genMethod (method n public instanceLevel t) n
 
 -- | Generates a private method.
 privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 privateMethod n t = do
-  genMethod (method n private dynamic t) n
+  genMethod (method n private instanceLevel t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
@@ -235,7 +235,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
+privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel) (docInOutMethod n private instanceLevel) n
 
 -- | Generates a constructor.
 genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] ->

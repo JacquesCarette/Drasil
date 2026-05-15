@@ -91,11 +91,11 @@ class (MethodSym r, AttachmentSym r) => OOMethodSym r where
 
 privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
-privMethod n = method n private dynamic
+privMethod n = method n private instanceLevel
 
 pubMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
-pubMethod n = method n public dynamic
+pubMethod n = method n public instanceLevel
 
 initializer :: (OOMethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
 initializer ps is = constructor ps is (body [])
@@ -113,18 +113,19 @@ class (VisibilitySym r, AttachmentSym r, VariableSym r) => StateVarSym r where
   constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
 
 privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-privDVar = stateVar private dynamic
+privDVar = stateVar private instanceLevel
 
 pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-pubDVar = stateVar public dynamic
+pubDVar = stateVar public instanceLevel
 
 pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-pubSVar = stateVar public static
+pubSVar = stateVar public classLevel
 
+-- | Used to differentiate whether a method is attached to the class or the instance
 class AttachmentSym r where
   type Attachment r
-  static  :: r (Attachment r)
-  dynamic :: r (Attachment r)
+  classLevel  :: r (Attachment r)
+  instanceLevel :: r (Attachment r)
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r

@@ -170,8 +170,8 @@ instance ImportElim SwiftCode where
 
 instance AttachmentSym SwiftCode where
   type Attachment SwiftCode = Doc
-  static = toCode R.static
-  dynamic = toCode R.dynamic
+  classLevel = toCode R.static
+  instanceLevel = toCode R.dynamic
 
 instance PermElim SwiftCode where
   perm = unSC
@@ -747,7 +747,7 @@ instance RenderMethod SwiftCode where
 
 instance OORenderMethod SwiftCode where
   intMethod _ = swiftMethod
-  intFunc _ n s _ = swiftMethod n s dynamic
+  intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName
 
 instance MethodElim SwiftCode where
@@ -759,7 +759,7 @@ instance StateVarSym SwiftCode where
     v <- zoom lensCStoVS vr
     stateVarDef s p vr (typeDfltVal $ getType $ variableType v)
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (static :: SwiftCode (Attachment SwiftCode)))
+  constVar = CP.constVar (RC.perm (classLevel :: SwiftCode (Attachment SwiftCode)))
 
 instance StateVarElim SwiftCode where
   stateVar = unSC
@@ -1175,8 +1175,8 @@ swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind Static = static :: SwiftCode (Attachment SwiftCode)
-      bind Dynamic = dynamic :: SwiftCode (Attachment SwiftCode)
+  let bind Static = classLevel :: SwiftCode (Attachment SwiftCode)
+      bind Dynamic = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
@@ -1186,8 +1186,8 @@ swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind Static = static :: SwiftCode (Attachment SwiftCode)
-      bind Dynamic = dynamic :: SwiftCode (Attachment SwiftCode)
+  let bind Static = classLevel :: SwiftCode (Attachment SwiftCode)
+      bind Dynamic = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))

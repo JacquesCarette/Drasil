@@ -52,11 +52,11 @@ class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
 class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
-  -- | Main method?, name, public/private, static/dynamic,
+  -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Attachment r) ->
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-  -- | True for main function, name, public/private, static/dynamic,
+  -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r (Visibility r) -> r (IG.Attachment r)
     -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r

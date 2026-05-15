@@ -69,8 +69,8 @@ instance FileSym CodeInfoOO where
 
 instance AttachmentSym CodeInfoOO where
   type Attachment CodeInfoOO = ()
-  static  = toCode ()
-  dynamic = toCode ()
+  classLevel  = toCode ()
+  instanceLevel = toCode ()
 
 instance BodySym CodeInfoOO where
   type Body CodeInfoOO = ()

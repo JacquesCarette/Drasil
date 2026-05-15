@@ -158,8 +158,8 @@ instance ImportElim PythonCode where
 
 instance AttachmentSym PythonCode where
   type Attachment PythonCode = Doc
-  static = toCode empty
-  dynamic = toCode R.dynamic
+  classLevel = toCode empty
+  instanceLevel = toCode R.dynamic
 
 instance PermElim PythonCode where
   perm = unPC
@@ -736,7 +736,7 @@ instance StateVarSym PythonCode where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
-    (static :: PythonCode (Attachment PythonCode)))
+    (classLevel :: PythonCode (Attachment PythonCode)))
 
 instance StateVarElim PythonCode where
   stateVar = unPC

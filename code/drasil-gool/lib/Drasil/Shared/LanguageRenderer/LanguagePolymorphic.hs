@@ -493,12 +493,12 @@ method n s p t = intMethod False n s p (mType t)
 
 getMethod :: (OORenderSym r) => SVariable r -> SMethod r
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
-  vr) public dynamic (toState $ variableType vr) [] getBody)
+  vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.objVarSelf v)
 
 setMethod :: (OORenderSym r) => SVariable r -> SMethod r
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
-  vr) public dynamic IC.void [IC.param v] setBody)
+  vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.objVarSelf v &= IC.valueOf v
 
 initStmts :: (OORenderSym r) => Initializers r -> MSBody r
@@ -506,7 +506,7 @@ initStmts = bodyStatements . map (\(vr, vl) -> IG.objVarSelf vr &= vl)
 
 function :: (OORenderSym r) => Label -> r (Visibility r) -> VSType r ->
   [MSParameter r] -> MSBody r -> SMethod r
-function n s t = S.intFunc False n s static (mType t)
+function n s t = S.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (CommonRenderSym r) => FuncDocRenderer -> String -> [String] ->
   [String] -> SMethod r -> SMethod r

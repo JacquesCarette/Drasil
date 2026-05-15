@@ -69,7 +69,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -299,12 +299,13 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
-  staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
+  classVar n = pair1 (classVar n) (classVar n)
+  classConst n = pair1 (classConst n) (classConst n)
   self = on2StateValues pair self self
   classVarAccess = pair2 classVarAccess classVarAccess
   extClassVarAccess = pair2 extClassVarAccess extClassVarAccess
-  objVarAccess = pair2 objVarAccess objVarAccess
-  objVarSelf = pair1 objVarSelf objVarSelf
+  instanceVarAccess = pair2 instanceVarAccess instanceVarAccess
+  instanceVarSelf = pair1 instanceVarSelf instanceVarSelf
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
@@ -1225,7 +1226,8 @@ instance VariableSym CppSrcCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym CppSrcCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
   self = C.self
   classVarAccess c' v'= do
     c <- c'
@@ -1239,8 +1241,8 @@ instance OOVariableSym CppSrcCode where
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS)
       (Map.lookup (getTypeString t) cm) $ classVarAccess (pure t) v
-  objVarAccess = G.objVarAccess
-  objVarSelf v' = do
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf v' = do
     v <- v'
     mkVar (R.this ++ ptrAccess ++ variableName v)
       (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
@@ -1960,12 +1962,13 @@ instance VariableSym CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
 
 instance OOVariableSym CppHdrCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
   self = mkStateVar "" void empty
   classVarAccess _ _ = mkStateVar "" void empty
   extClassVarAccess _ _ = mkStateVar "" void empty
-  objVarAccess = G.objVarAccess
-  objVarSelf _ = mkStateVar "" void empty
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf _ = mkStateVar "" void empty
 
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC

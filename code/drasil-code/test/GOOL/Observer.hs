@@ -27,7 +27,7 @@ x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
 selfX :: (OOVariableSym r) => SVariable r
-selfX = objVarSelf x
+selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
 helperClass :: (ClassSym r, IOStatement r, Literal r, OOVariableValue r) => SClass r

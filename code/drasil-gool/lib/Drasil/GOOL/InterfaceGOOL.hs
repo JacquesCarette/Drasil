@@ -5,9 +5,9 @@ module Drasil.GOOL.InterfaceGOOL (
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), staticVar, staticConst, ($->), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj, extNewObj,
-  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
@@ -134,22 +134,17 @@ class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   -- Bool: False for variable, True for constant.  Required by the Python renderer.
-  staticVar'        :: Bool -> Label -> VSType r -> SVariable r
+  classVar          :: Label -> VSType r -> SVariable r
+  classConst        :: Label -> VSType r -> SVariable r
   self              :: SVariable r
   classVarAccess    :: VSType r -> SVariable r -> SVariable r
   extClassVarAccess :: VSType r -> SVariable r -> SVariable r
-  objVarAccess      :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf        :: SVariable r -> SVariable r
-
-staticVar :: (OOVariableSym r) => Label -> VSType r -> SVariable r
-staticVar = staticVar' False
-
-staticConst :: (OOVariableSym r) => Label -> VSType r -> SVariable r
-staticConst = staticVar' True
+  instanceVarAccess :: SVariable r -> SVariable r -> SVariable r
+  instanceVarSelf   :: SVariable r -> SVariable r
 
 ($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
-($->) = objVarAccess
+($->) = instanceVarAccess
 
 class (VariableValue r, OOVariableSym r) => OOVariableValue r
 

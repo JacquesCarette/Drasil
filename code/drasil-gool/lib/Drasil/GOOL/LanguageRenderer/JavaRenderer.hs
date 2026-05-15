@@ -67,7 +67,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -287,12 +287,13 @@ instance VariableSym JavaCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym JavaCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
   self = C.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
-  objVarAccess = G.objVarAccess
-  objVarSelf = CP.objVarSelf
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim JavaCode where
   variableName = varName . unJC

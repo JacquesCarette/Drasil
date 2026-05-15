@@ -120,12 +120,13 @@ instance VariableSym CodeInfoOO where
   arrayElem _ _ = noInfo
 
 instance OOVariableSym CodeInfoOO where
-  staticVar'  _ _ _ = noInfo
+  classVar _ _ = noInfo
+  classConst _ _ = noInfo
   self              = noInfo
   classVarAccess    _ _   = noInfo
   extClassVarAccess _ _   = noInfo
-  objVarAccess      _ _   = noInfo
-  objVarSelf  _     = noInfo
+  instanceVarAccess      _ _   = noInfo
+  instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""

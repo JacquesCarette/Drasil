@@ -1,7 +1,7 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVarAccess,
-  objVarSelf, indexOf, contains, containsInt, listAddFunc, discardFileLine,
+  instanceVarSelf, indexOf, contains, containsInt, listAddFunc, discardFileLine,
   intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec,
   arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', call',
   listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
@@ -35,7 +35,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
-  OOVariableSym(self, objVarAccess), OOFunctionSym(..))
+  OOVariableSym(self, instanceVarAccess), OOFunctionSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
@@ -141,8 +141,8 @@ classVarAccess f c' v'= do
     (toState $ variableType v) (f (RC.type' c) (RC.variable v))
   toState $ classVarAccessCheckStatic vr
 
-objVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
-objVarSelf = IG.objVarAccess IG.self
+instanceVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
+instanceVarSelf = IG.instanceVarAccess IG.self
 
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])

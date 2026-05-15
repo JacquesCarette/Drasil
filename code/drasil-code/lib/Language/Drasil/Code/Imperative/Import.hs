@@ -52,14 +52,14 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
   BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
-  staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
-  VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
-  VisibilityTag(..), CodeType(..), onStateValue)
+  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, List(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
+  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
+  onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -102,14 +102,14 @@ value u s t = do
 -- If variable is a constant and 'Var' constant representation is chosen,
 -- construct it with 'var' and pass to 'constVariable'.
 -- If variable is a constant and 'Const' constant representation is chosen,
--- construct it with 'staticVar' and pass to 'constVariable'.
+-- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
 variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
       defFunc Var = var
-      defFunc Const = staticConst
+      defFunc Const = classConst
   if s `elem` map codeName (cs ^. inputsO)
     then inputVariable (g ^. inStruct) Var (var s t)
     else if s `elem` map codeName (cs ^. constantsO)
@@ -131,7 +131,7 @@ inputVariable Bundled Var v = do
   g <- get
   inClsName <- genICName InputParameters
   ip <- mkVar (quantvar inParams)
-  return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
+  return $ if currentClass g == inClsName then instanceVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
@@ -182,7 +182,7 @@ mkVal v = do
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ objVarAccess (var (codeName o) (convTypeOO ot))
+        return $ valueOf $ instanceVarAccess (var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
@@ -193,7 +193,7 @@ mkVar v = do
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVarAccess (var (codeName o) (convTypeOO ot))
+        return $ instanceVarAccess (var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 

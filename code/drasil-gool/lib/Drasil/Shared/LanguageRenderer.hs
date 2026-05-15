@@ -16,7 +16,7 @@ module Drasil.Shared.LanguageRenderer (
   package, file, module', class', multiStmt, block, body, print, printFile,
   param, method, stateVar, constVar, stateVarList, switch, assign,
   addAssign, subAssign, increment, decrement, listDec, getTerm, return',
-  comment, var, extVar, arg, classVarAccess, objVarAccess, unOpDocD, unOpDocD', binOpDocD,
+  comment, var, extVar, arg, classVarAccess, instanceVarAccess, unOpDocD, unOpDocD', binOpDocD,
   binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc,
   objAccess, castObj, break, continue, classLevel, instanceLevel, private, public,
   blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
@@ -306,8 +306,8 @@ arg n argsList = RC.value argsList <> brackets (RC.value n)
 classVarAccess :: Doc -> Doc -> Doc
 classVarAccess c v = c <> dot <> v
 
-objVarAccess :: Doc -> Doc ->  Doc
-objVarAccess n1 n2 = n1 <> dot <> n2
+instanceVarAccess :: Doc -> Doc ->  Doc
+instanceVarAccess n1 n2 = n1 <> dot <> n2
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v

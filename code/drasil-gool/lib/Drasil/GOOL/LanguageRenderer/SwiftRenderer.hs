@@ -66,7 +66,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -77,7 +77,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  classVarAccess, objVarSelf, intClass, buildModule, docMod', contains,
+  classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
   bindingError, notNull, listDecDef, destructorError, stateVarDef, constVar,
   litArray, extraClass, doubleRender, double, openFileR, openFileW, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
@@ -291,12 +291,13 @@ instance VariableSym SwiftCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym SwiftCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
   self = CP.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
-  objVarAccess = G.objVarAccess
-  objVarSelf = CP.objVarSelf
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim SwiftCode where
   variableName = varName . unSC

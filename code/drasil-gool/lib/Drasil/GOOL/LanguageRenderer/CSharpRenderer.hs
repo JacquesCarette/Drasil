@@ -65,7 +65,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -79,7 +79,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex, listAddFunc,
-  listDecDef, mainFunction, notNull, objVarSelf, openFileA, openFileR, openFileW,
+  listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
@@ -291,13 +291,14 @@ instance VariableSym CSharpCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym CSharpCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
   self = C.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
 
-  objVarAccess = G.objVarAccess
-  objVarSelf = CP.objVarSelf
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC

@@ -63,7 +63,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend,
@@ -276,15 +276,15 @@ instance VariableSym PythonCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
-  staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
-                          else G.staticVar n t
+  classVar = G.classVar
+  classConst n t = mkStaticVar n t (R.var (toConstName n))
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $
     CP.classVarAccess pyClassVarAccess (toState t) v) c getClassMap
-  objVarAccess = G.objVarAccess
-  objVarSelf = CP.objVarSelf
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim PythonCode where
   variableName = varName . unPC

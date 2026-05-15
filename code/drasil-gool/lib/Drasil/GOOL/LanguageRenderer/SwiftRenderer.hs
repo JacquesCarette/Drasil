@@ -58,7 +58,7 @@ import Drasil.Shared.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   printLabel, listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
-  classVar, func, listSetFunc, castObj, static, dynamic, break, continue,
+  classVar, func, listSetFunc, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
@@ -170,8 +170,8 @@ instance ImportElim SwiftCode where
 
 instance AttachmentSym SwiftCode where
   type Attachment SwiftCode = Doc
-  classLevel = toCode R.static
-  instanceLevel = toCode R.dynamic
+  classLevel = toCode R.classLevel
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim SwiftCode where
   perm = unSC

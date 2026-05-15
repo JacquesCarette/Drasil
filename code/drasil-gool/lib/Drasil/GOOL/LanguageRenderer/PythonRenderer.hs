@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVar, listSetFunc, castObj, dynamic, break, continue, addComments,
+  classVar, listSetFunc, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
@@ -159,7 +159,7 @@ instance ImportElim PythonCode where
 instance AttachmentSym PythonCode where
   type Attachment PythonCode = Doc
   classLevel = toCode empty
-  instanceLevel = toCode R.dynamic
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim PythonCode where
   perm = unPC

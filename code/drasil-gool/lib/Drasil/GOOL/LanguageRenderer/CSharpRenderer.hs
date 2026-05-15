@@ -57,8 +57,8 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, func, cast, listSetFunc,
-  castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt,
-  addComments, commentedMod, commentedItem)
+  castObj, classLevel, instanceLevel, break, continue, private, public,
+  blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
@@ -169,8 +169,8 @@ instance ImportElim CSharpCode where
 
 instance AttachmentSym CSharpCode where
   type Attachment CSharpCode = Doc
-  classLevel = toCode R.static
-  instanceLevel = toCode R.dynamic
+  classLevel = toCode R.classLevel
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim CSharpCode where
   perm = unCSC
@@ -963,7 +963,7 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
 csVarDec :: AttachmentTag -> MSStatement CSharpCode -> MSStatement CSharpCode
-csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
+csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
 csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode ->

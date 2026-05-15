@@ -58,9 +58,9 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   parameterList, appendToBody, surroundBody, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
-  multiStmt, body, printFile, param, listDec, classVar, cast, castObj, static,
-  dynamic, break, continue, private, public, blockCmt, docCmt, addComments,
-  commentedMod, commentedItem)
+  multiStmt, body, printFile, param, listDec, classVar, cast, castObj,
+  classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
+  addComments, commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
@@ -169,8 +169,8 @@ instance ImportElim JavaCode where
 
 instance AttachmentSym JavaCode where
   type Attachment JavaCode = Doc
-  classLevel = toCode R.static
-  instanceLevel = toCode R.dynamic
+  classLevel = toCode R.classLevel
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim JavaCode where
   perm = unJC

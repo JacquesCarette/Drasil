@@ -18,7 +18,7 @@ module Drasil.Shared.LanguageRenderer (
   addAssign, subAssign, increment, decrement, listDec, getTerm, return',
   comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD,
   binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc,
-  objAccess, castObj, break, continue, static, dynamic, private, public,
+  objAccess, castObj, break, continue, classLevel, instanceLevel, private, public,
   blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
   ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod,
   valueList, variableList, binderList, parameterList, namedArgList,
@@ -343,11 +343,11 @@ castObj t v = t <> parens v
 
 -- Attachment --
 
-static :: Doc
-static = text "static"
+classLevel :: Doc
+classLevel = text "static"
 
-dynamic :: Doc
-dynamic = empty
+instanceLevel :: Doc
+instanceLevel = empty
 
 -- Jumps --
 

@@ -60,8 +60,8 @@ import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
-  body, param, stateVar, constVar, cast, castObj, static, dynamic, break,
-  continue, private, public, blockCmt, docCmt, addComments, commentedMod,
+  body, param, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
+  break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec,
@@ -1093,8 +1093,8 @@ instance ImportElim CppSrcCode where
 
 instance AttachmentSym CppSrcCode where
   type Attachment CppSrcCode = AttachmentData
-  classLevel = toCode $ ad ClassLevel R.static
-  instanceLevel = toCode $ ad InstanceLevel R.dynamic
+  classLevel = toCode $ ad ClassLevel R.classLevel
+  instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
 instance PermElim CppSrcCode where
   perm = attachmentDoc . unCPPSC
@@ -1831,8 +1831,8 @@ instance ImportElim CppHdrCode where
 
 instance AttachmentSym CppHdrCode where
   type Attachment CppHdrCode = AttachmentData
-  classLevel = toCode $ ad ClassLevel R.static
-  instanceLevel = toCode $ ad InstanceLevel R.dynamic
+  classLevel = toCode $ ad ClassLevel R.classLevel
+  instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
 instance PermElim CppHdrCode where
   perm = attachmentDoc . unCPPHC

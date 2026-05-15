@@ -92,7 +92,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
+  progD, TypeData(..), td, ValData(..), vd, AttachmentTag(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
@@ -1175,8 +1175,8 @@ swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind Static = classLevel :: SwiftCode (Attachment SwiftCode)
-      bind Dynamic = instanceLevel :: SwiftCode (Attachment SwiftCode)
+  let bind ClassLevel = classLevel :: SwiftCode (Attachment SwiftCode)
+      bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
@@ -1186,8 +1186,8 @@ swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind Static = classLevel :: SwiftCode (Attachment SwiftCode)
-      bind Dynamic = instanceLevel :: SwiftCode (Attachment SwiftCode)
+  let bind ClassLevel = classLevel :: SwiftCode (Attachment SwiftCode)
+      bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))

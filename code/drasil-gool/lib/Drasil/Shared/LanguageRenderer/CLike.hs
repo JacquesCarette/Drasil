@@ -31,7 +31,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.Shared.AST (Binding(..), Terminator(..))
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..))
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
@@ -154,8 +154,8 @@ varDec s d pdoc v' scp = do
   mkStmt (RC.perm (bind $ variableBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
     RC.variable v))
-  where bind Static = s
-        bind Dynamic = d
+  where bind ClassLevel = s
+        bind InstanceLevel = d
         ptrdoc (List _) = pdoc
         ptrdoc (Set _) = pdoc
         ptrdoc _ = empty

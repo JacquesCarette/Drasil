@@ -13,7 +13,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), Binding(..), OpData, od)
+import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (VS)
@@ -46,15 +46,15 @@ mkVal t = valFromData Nothing Nothing (toState t)
 
 -- | Constructs a dynamic variable in a stateful context
 mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStateVar = varFromData Dynamic
+mkStateVar = varFromData InstanceLevel
 
 -- | Constructs a dynamic variable in a non-stateful context
 mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
-mkVar n t = varFromData Dynamic n (toState t)
+mkVar n t = varFromData InstanceLevel n (toState t)
 
 -- | Constructs a classLevel variable in a stateful context
 mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar = varFromData Static
+mkStaticVar = varFromData ClassLevel
 
 -- Operators --
 

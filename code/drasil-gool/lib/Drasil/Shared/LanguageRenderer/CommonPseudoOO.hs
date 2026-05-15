@@ -317,7 +317,7 @@ docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
 -- Python, Java, C#, and Swift --
 
 bindingError :: String -> String
-bindingError l = "Binding unimplemented in " ++ l
+bindingError l = "AttachmentTag unimplemented in " ++ l
 
 notNull :: (CommonRenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)

@@ -12,7 +12,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.Shared.AST (Binding)
+import Drasil.Shared.AST (AttachmentTag)
 import Drasil.Shared.State (FS, CS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -42,7 +42,7 @@ class (BlockCommentSym r) => RenderFile r where
 
 class PermElim r where
   perm :: r (IG.Attachment r) -> Doc
-  binding :: r (IG.Attachment r) -> Binding
+  binding :: r (IG.Attachment r) -> AttachmentTag
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r

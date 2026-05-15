@@ -89,13 +89,13 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
-import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), Binding(..), onBinding,
-  BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
-  ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard, BinderD(..), bindFormD, CommonThunk, pureValue,
-  vectorize, vectorize2, sumComponents, commonVecIndex, commonThunkElim,
-  commonThunkDim, ScopeData)
+import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
+  onAttachment, BindData(..), bd, FileType(..), FileData(..), fileD,
+  FuncData(..), fd, ModData(..), md, updateMod, OpData(..), ParamData(..), pd,
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td,
+  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, CommonThunk,
+  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.Shared.Classes (Pair(..))
 import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -1093,8 +1093,8 @@ instance ImportElim CppSrcCode where
 
 instance AttachmentSym CppSrcCode where
   type Attachment CppSrcCode = BindData
-  classLevel = toCode $ bd Static R.static
-  instanceLevel = toCode $ bd Dynamic R.dynamic
+  classLevel = toCode $ bd ClassLevel R.static
+  instanceLevel = toCode $ bd InstanceLevel R.dynamic
 
 instance PermElim CppSrcCode where
   perm = bindDoc . unCPPSC
@@ -1831,8 +1831,8 @@ instance ImportElim CppHdrCode where
 
 instance AttachmentSym CppHdrCode where
   type Attachment CppHdrCode = BindData
-  classLevel = toCode $ bd Static R.static
-  instanceLevel = toCode $ bd Dynamic R.dynamic
+  classLevel = toCode $ bd ClassLevel R.static
+  instanceLevel = toCode $ bd InstanceLevel R.dynamic
 
 instance PermElim CppHdrCode where
   perm = bindDoc . unCPPHC
@@ -2881,7 +2881,7 @@ cppsStateVarDef cns s p vr' vl' = do
   n <- zoom lensCStoMS getClassName
   emptS <- zoom lensCStoMS emptyStmt
   pure $ on3CodeValues svd (onCodeValue snd s)
-    (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+>
+    (toCode $ onAttachment (binding p) (cns <+> RC.type' (variableType vr) <+>
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
@@ -2908,7 +2908,7 @@ cppLitSet f t' es' = do
 cpphStateVarDef :: (OORenderSym r) => Doc -> r (Attachment r) -> SVariable r ->
   SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p)
+  RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] ->

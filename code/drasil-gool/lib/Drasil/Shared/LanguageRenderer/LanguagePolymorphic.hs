@@ -63,7 +63,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.Shared.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
   ScopeData, sd)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
@@ -193,17 +193,17 @@ staticVar n t = mkStaticVar n t (R.var n)
 -- not static since classVar is for accessing static variables from a class
 classVarCheckStatic :: (CommonRenderSym r) => r (Variable r) -> r (Variable r)
 classVarCheckStatic v = classVarCS (variableBind v)
-  where classVarCS Dynamic = error
+  where classVarCS InstanceLevel = error
           "classVar can only be used to access static variables"
-        classVarCS Static = v
+        classVarCS ClassLevel = v
 
 objVar :: (CommonRenderSym r) => SVariable r -> SVariable r -> SVariable r
 objVar o' v' = do
   o <- o'
   v <- v'
-  let objVar' Static = error
+  let objVar' ClassLevel = error
         "Cannot access static variables through an object, use classVar instead"
-      objVar' Dynamic = mkVar (variableName o `access` variableName v)
+      objVar' InstanceLevel = mkVar (variableName o `access` variableName v)
         (variableType v) (R.objVar (RC.variable o) (RC.variable v))
   objVar' (variableBind v)
 

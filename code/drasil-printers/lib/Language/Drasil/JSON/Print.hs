@@ -79,12 +79,11 @@ printLO CodeBlock {}                    = empty
 
 -- printLO' is used for generating general notebook (lesson plans)
 printLO' :: LayoutObj -> Doc
-printLO' (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map printLO' layoutObs)
 printLO' (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO' (Cell layoutObs)                 = vcat (map printLO' layoutObs)
 printLO' HDiv {}                          = empty
 printLO' (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
-printLO' (EqnBlock contents)              = nbformat mathEqn
+printLO' (EqnBlock contents)              = markdownCell $ nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"

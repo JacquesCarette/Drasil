@@ -162,13 +162,13 @@ constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
 -- | For generating GOOL for a variable that is accessed through a class.
 -- If the variable is not in the export map, then it is not a public class variable
 -- and cannot be accessed, so throw an error.
--- If the variable is exported by the current module, use 'classVar'.
--- If the variable is exported by a different module, use 'extClassVar'.
+-- If the variable is exported by the current module, use 'classVarAccess'.
+-- If the variable is exported by a different module, use 'extClassVarAccess'.
 classVariable :: (OOProg r) => SVariable r -> SVariable r ->
   GenState (SVariable r)
 classVariable c v = do
   g <- get
-  let checkCurrent m = if currentModule g == m then classVar else extClassVar
+  let checkCurrent m = if currentModule g == m then classVarAccess else extClassVarAccess
   return $ do
     v' <- v
     let nm = variableName v'
@@ -182,7 +182,7 @@ mkVal v = do
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot))
+        return $ valueOf $ objVarAccess (var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
@@ -193,7 +193,7 @@ mkVar v = do
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVar (var (codeName o) (convTypeOO ot))
+        return $ objVarAccess (var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 

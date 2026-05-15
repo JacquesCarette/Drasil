@@ -69,7 +69,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -78,7 +78,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace, local)
-import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheckStatic)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
@@ -301,9 +301,9 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
   self = on2StateValues pair self self
-  classVar = pair2 classVar classVar
-  extClassVar = pair2 extClassVar extClassVar
-  objVar = pair2 objVar objVar
+  classVarAccess = pair2 classVarAccess classVarAccess
+  extClassVarAccess = pair2 extClassVarAccess extClassVarAccess
+  objVarAccess = pair2 objVarAccess objVarAccess
   objVarSelf = pair1 objVarSelf objVarSelf
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
@@ -1227,19 +1227,19 @@ instance VariableSym CppSrcCode where
 instance OOVariableSym CppSrcCode where
   staticVar' _ = G.staticVar
   self = C.self
-  classVar c' v'= do
+  classVarAccess c' v'= do
     c <- c'
     v <- v'
     vfd <- varFromData
       (variableBind v) (getTypeString c `nmSpcAccess` variableName v)
-      (toState $ variableType v) (cppClassVar (RC.type' c) (RC.variable v))
-    toState $ classVarCheckStatic vfd
-  extClassVar c v = do
+      (toState $ variableType v) (cppClassVarAccess (RC.type' c) (RC.variable v))
+    toState $ classVarAccessCheckStatic vfd
+  extClassVarAccess c v = do
     t <- c
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS)
-      (Map.lookup (getTypeString t) cm) $ classVar (pure t) v
-  objVar = G.objVar
+      (Map.lookup (getTypeString t) cm) $ classVarAccess (pure t) v
+  objVarAccess = G.objVarAccess
   objVarSelf v' = do
     v <- v'
     mkVar (R.this ++ ptrAccess ++ variableName v)
@@ -1962,9 +1962,9 @@ instance VariableSym CppHdrCode where
 instance OOVariableSym CppHdrCode where
   staticVar' _ = G.staticVar
   self = mkStateVar "" void empty
-  classVar _ _ = mkStateVar "" void empty
-  extClassVar _ _ = mkStateVar "" void empty
-  objVar = G.objVar
+  classVarAccess _ _ = mkStateVar "" void empty
+  extClassVarAccess _ _ = mkStateVar "" void empty
+  objVarAccess = G.objVarAccess
   objVarSelf _ = mkStateVar "" void empty
 
 instance VariableElim CppHdrCode where
@@ -2724,8 +2724,8 @@ cppIterType t' = do
     (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t)
     `nmSpcAccess'` text cppIterator)
 
-cppClassVar :: Doc -> Doc -> Doc
-cppClassVar c v = c `nmSpcAccess'` v
+cppClassVarAccess :: Doc -> Doc -> Doc
+cppClassVarAccess c v = c `nmSpcAccess'` v
 
 cppLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)

@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVar, listSetFunc, castObj, instanceLevel, break, continue, addComments,
+  classVarAccess, listSetFunc, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
@@ -63,7 +63,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend,
@@ -279,11 +279,11 @@ instance OOVariableSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
                           else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
-  classVar = CP.classVar R.classVar
-  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
+  classVarAccess = CP.classVarAccess R.classVarAccess
+  extClassVarAccess c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $
-    CP.classVar pyClassVar (toState t) v) c getClassMap
-  objVar = G.objVar
+    CP.classVarAccess pyClassVarAccess (toState t) v) c getClassMap
+  objVarAccess = G.objVarAccess
   objVarSelf = CP.objVarSelf
 
 instance VariableElim PythonCode where
@@ -942,8 +942,8 @@ readString inSrc = objMethodCall string inSrc pyRstrip []
 range :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
-pyClassVar :: Doc -> Doc -> Doc
-pyClassVar c v = c <> dot <> c <> dot <> v
+pyClassVarAccess :: Doc -> Doc -> Doc
+pyClassVarAccess c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 pyInlineIf c' v1' v2' = do

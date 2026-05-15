@@ -122,9 +122,9 @@ instance VariableSym CodeInfoOO where
 instance OOVariableSym CodeInfoOO where
   staticVar'  _ _ _ = noInfo
   self              = noInfo
-  classVar    _ _   = noInfo
-  extClassVar _ _   = noInfo
-  objVar      _ _   = noInfo
+  classVarAccess    _ _   = noInfo
+  extClassVarAccess _ _   = noInfo
+  objVarAccess      _ _   = noInfo
   objVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where

@@ -1,11 +1,12 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
-  doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
-  indexOf, contains, containsInt, listAddFunc, discardFileLine, intClass, funcType, buildModule,
-  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach,
-  docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
-  string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
-  listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
+  doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVarAccess,
+  objVarSelf, indexOf, contains, containsInt, listAddFunc, discardFileLine,
+  intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec,
+  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', call',
+  listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
+  bindingError, extFuncAppMixedArgs, notNull, listDecDef, destructorError,
+  stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
   forLoopError, mainBody, inOutFunc, docInOutFunc', bool,
@@ -34,7 +35,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
-  OOVariableSym(self, objVar), OOFunctionSym(..))
+  OOVariableSym(self, objVarAccess), OOFunctionSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
@@ -69,8 +70,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 
-import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
-  call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
+  classVarAccessCheckStatic, call, initStmts, docFunc, docFuncRepr, docClass,
+  docMod, smartAdd, smartSub)
 
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
 
@@ -129,18 +131,18 @@ doxMod = docMod moduleDox
 
 -- Python, Java, and C# --
 
-classVar :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
+classVarAccess :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
   SVariable r
-classVar f c' v'= do
+classVarAccess f c' v'= do
   c <- c'
   v <- v'
   vr <- varFromData
     (variableBind v) (getTypeString c `access` variableName v)
     (toState $ variableType v) (f (RC.type' c) (RC.variable v))
-  toState $ classVarCheckStatic vr
+  toState $ classVarAccessCheckStatic vr
 
 objVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
-objVarSelf = IG.objVar IG.self
+objVarSelf = IG.objVarAccess IG.self
 
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])

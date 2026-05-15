@@ -134,12 +134,12 @@ class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   -- Bool: False for variable, True for constant.  Required by the Python renderer.
-  staticVar'    :: Bool -> Label -> VSType r -> SVariable r
-  self         :: SVariable r
-  classVar     :: VSType r -> SVariable r -> SVariable r
-  extClassVar  :: VSType r -> SVariable r -> SVariable r
-  objVar       :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf   :: SVariable r -> SVariable r
+  staticVar'        :: Bool -> Label -> VSType r -> SVariable r
+  self              :: SVariable r
+  classVarAccess    :: VSType r -> SVariable r -> SVariable r
+  extClassVarAccess :: VSType r -> SVariable r -> SVariable r
+  objVarAccess      :: SVariable r -> SVariable r -> SVariable r
+  objVarSelf        :: SVariable r -> SVariable r
 
 staticVar :: (OOVariableSym r) => Label -> VSType r -> SVariable r
 staticVar = staticVar' False
@@ -149,7 +149,7 @@ staticConst = staticVar' True
 
 ($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
-($->) = objVar
+($->) = objVarAccess
 
 class (VariableValue r, OOVariableSym r) => OOVariableValue r
 

@@ -27,7 +27,7 @@ import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbIm
 import qualified Language.Drasil.Printing.Import as PI (codeExpr)
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
+  oneLiner, BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..),
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,

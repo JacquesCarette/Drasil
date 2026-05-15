@@ -17,7 +17,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
-import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
@@ -145,7 +145,7 @@ decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
+varDec :: (OORenderSym r) => r (Attachment r) -> r (Attachment r) -> Doc ->
   SVariable r -> r (Scope r) -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
@@ -228,7 +228,7 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc :: (OORenderSym r) => Bool -> Label -> r (Visibility  r) ->
-  r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+  r (Attachment r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 intFunc = intMethod
 
 -- Error Messages --

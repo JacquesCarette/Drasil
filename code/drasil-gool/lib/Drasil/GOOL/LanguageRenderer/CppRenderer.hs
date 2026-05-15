@@ -27,7 +27,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
+  AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, InternalValueExp(..), objMethodCall,
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -179,8 +179,8 @@ instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
   import' i = RC.import' $ pfst i
 
-instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
-  type Permanence (p CppSrcCode CppHdrCode) = BindData
+instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) where
+  type Attachment (p CppSrcCode CppHdrCode) = BindData
   static = pair static static
   dynamic = pair dynamic dynamic
 
@@ -1091,8 +1091,8 @@ instance ImportSym CppSrcCode where
 instance ImportElim CppSrcCode where
   import' = unCPPSC
 
-instance PermanenceSym CppSrcCode where
-  type Permanence CppSrcCode = BindData
+instance AttachmentSym CppSrcCode where
+  type Attachment CppSrcCode = BindData
   static = toCode $ bd Static R.static
   dynamic = toCode $ bd Dynamic R.dynamic
 
@@ -1829,8 +1829,8 @@ instance ImportSym CppHdrCode where
 instance ImportElim CppHdrCode where
   import' = unCPPHC
 
-instance PermanenceSym CppHdrCode where
-  type Permanence CppHdrCode = BindData
+instance AttachmentSym CppHdrCode where
+  type Attachment CppHdrCode = BindData
   static = toCode $ bd Static R.static
   dynamic = toCode $ bd Dynamic R.dynamic
 
@@ -2873,7 +2873,7 @@ cppCommentedFunc ft cmt fn = do
   ret ft
 
 cppsStateVarDef :: Doc -> CppSrcCode (Visibility CppSrcCode) ->
-  CppSrcCode (Permanence CppSrcCode) -> SVariable CppSrcCode ->
+  CppSrcCode (Attachment CppSrcCode) -> SVariable CppSrcCode ->
   SValue CppSrcCode -> CSStateVar CppSrcCode
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
@@ -2905,7 +2905,7 @@ cppLitSet f t' es' = do
   lt <- f t'
   mkVal lt ( braces (valueList es))
 
-cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
+cpphStateVarDef :: (OORenderSym r) => Doc -> r (Attachment r) -> SVariable r ->
   SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p)

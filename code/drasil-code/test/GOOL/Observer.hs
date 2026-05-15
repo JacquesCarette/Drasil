@@ -2,7 +2,7 @@
 module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
-  PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
+  AttachmentSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
   OOVariableSym(..), Literal(..), VariableValue(..), OOVariableValue,
   VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..),
   ClassSym(..), ModuleSym(..))

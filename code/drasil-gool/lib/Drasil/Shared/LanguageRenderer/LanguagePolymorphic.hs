@@ -40,7 +40,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   List(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
-  ($.), PermanenceSym(..), convTypeOO)
+  ($.), AttachmentSym(..), convTypeOO)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
   OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
@@ -487,7 +487,7 @@ param f v' = do
   modify $ useVarName n
   paramFromData v' $ f v
 
-method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> VSType r
+method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) -> VSType r
   -> [MSParameter r] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 

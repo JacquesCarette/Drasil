@@ -33,7 +33,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
   ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
   ParameterSym(Parameter), BinderSym(..))
-import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(Attachment))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
@@ -212,7 +212,7 @@ param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
-method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) ->
+method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) ->
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
@@ -341,7 +341,7 @@ objAccess v f = v <> f
 castObj :: Doc -> Doc -> Doc
 castObj t v = t <> parens v
 
--- Permanence --
+-- Attachment --
 
 static :: Doc
 static = text "static"

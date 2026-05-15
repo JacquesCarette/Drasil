@@ -32,7 +32,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   pointerParam), MethodSym(mainFunction), ScopeSym(..))
 
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
-  OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams, objMethodCall)
+  OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   OOVariableSym(self, objVar), OOFunctionSym(..))
 
@@ -347,7 +347,7 @@ setMethodCall n a b = objMethodCall (listInnerType $ onStateValue valueType a) a
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
-stateVarDef :: (OORenderSym r, Monad r) => r (Visibility  r) -> r (Permanence r) ->
+stateVarDef :: (OORenderSym r, Monad r) => r (Visibility  r) -> r (Attachment r) ->
   SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility  s) (RC.perm p) . RC.statement)
@@ -394,7 +394,7 @@ openFileW :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r -> SValue 
   SVariable r -> SValue r -> MSStatement r
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
-stateVar :: (OORenderSym r, Monad r) => r (Visibility  r) -> r (Permanence r) ->
+stateVar :: (OORenderSym r, Monad r) => r (Visibility  r) -> r (Attachment r) ->
   SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDec v IC.local)

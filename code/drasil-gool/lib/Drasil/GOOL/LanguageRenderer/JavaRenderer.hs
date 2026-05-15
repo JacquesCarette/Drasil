@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -167,8 +167,8 @@ instance ImportSym JavaCode where
 instance ImportElim JavaCode where
   import' = unJC
 
-instance PermanenceSym JavaCode where
-  type Permanence JavaCode = Doc
+instance AttachmentSym JavaCode where
+  type Attachment JavaCode = Doc
   static = toCode R.static
   dynamic = toCode R.dynamic
 
@@ -748,7 +748,7 @@ instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
+  constVar = CP.constVar (RC.perm (static :: JavaCode (Attachment JavaCode)))
 
 instance StateVarElim JavaCode where
   stateVar = unJC
@@ -1044,7 +1044,7 @@ jStringSplit :: (CommonRenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
+jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Attachment r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>

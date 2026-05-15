@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -167,8 +167,8 @@ instance ImportSym CSharpCode where
 instance ImportElim CSharpCode where
   import' = unCSC
 
-instance PermanenceSym CSharpCode where
-  type Permanence CSharpCode = Doc
+instance AttachmentSym CSharpCode where
+  type Attachment CSharpCode = Doc
   static = toCode R.static
   dynamic = toCode R.dynamic
 

@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
+  OOVariableSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
@@ -67,8 +67,8 @@ instance FileSym CodeInfoOO where
 
   docMod _ _ _ _ = execute1
 
-instance PermanenceSym CodeInfoOO where
-  type Permanence CodeInfoOO = ()
+instance AttachmentSym CodeInfoOO where
+  type Attachment CodeInfoOO = ()
   static  = toCode ()
   dynamic = toCode ()
 

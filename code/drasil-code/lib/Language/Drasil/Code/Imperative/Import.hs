@@ -50,7 +50,7 @@ import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
+  Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
   BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
   staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
@@ -267,7 +267,7 @@ genMethod f n desc p r b = do
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
--- for a documented function/method, the visibility, permanence, name, description,
+-- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->
@@ -1222,7 +1222,7 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
--- for a documented function/method, the visibility, permanence, name, description,
+-- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFuncProc :: (SharedProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->

@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
   OOValueExpression(..), selfFuncApp, OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -156,8 +156,8 @@ instance ImportSym PythonCode where
 instance ImportElim PythonCode where
   import' = unPC
 
-instance PermanenceSym PythonCode where
-  type Permanence PythonCode = Doc
+instance AttachmentSym PythonCode where
+  type Attachment PythonCode = Doc
   static = toCode empty
   dynamic = toCode R.dynamic
 
@@ -736,7 +736,7 @@ instance StateVarSym PythonCode where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
-    (static :: PythonCode (Permanence PythonCode)))
+    (static :: PythonCode (Attachment PythonCode)))
 
 instance StateVarElim PythonCode where
   stateVar = unPC

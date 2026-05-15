@@ -11,7 +11,7 @@ module Drasil.GOOL.InterfaceGOOL (
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, PermanenceSym(..),
+  StateVarSym(..), privDVar, pubDVar, pubSVar, AttachmentSym(..),
   OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
@@ -78,16 +78,16 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r, PermanenceSym r) => OOMethodSym r where
-  method      :: Label -> r (Visibility r) -> r (Permanence r) -> VSType r ->
+class (MethodSym r, AttachmentSym r) => OOMethodSym r where
+  method      :: Label -> r (Visibility r) -> r (Attachment r) -> VSType r ->
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
-  -- inOutMethod and docInOutMethod both need the Permanence parameter
-  inOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
-  docInOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
+  -- inOutMethod and docInOutMethod both need the Attachment parameter
+  inOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> DocInOutFunc r
 
 privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
@@ -105,10 +105,10 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where
+class (VisibilitySym r, AttachmentSym r, VariableSym r) => StateVarSym r where
   type StateVar r
-  stateVar :: r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SVariable r ->
+  stateVar :: r (Visibility r) -> r (Attachment r) -> SVariable r -> CSStateVar r
+  stateVarDef :: r (Visibility r) -> r (Attachment r) -> SVariable r ->
     SValue r -> CSStateVar r
   constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
 
@@ -121,10 +121,10 @@ pubDVar = stateVar public dynamic
 pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 pubSVar = stateVar public static
 
-class PermanenceSym r where
-  type Permanence r
-  static  :: r (Permanence r)
-  dynamic :: r (Permanence r)
+class AttachmentSym r where
+  type Attachment r
+  static  :: r (Attachment r)
+  dynamic :: r (Attachment r)
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r

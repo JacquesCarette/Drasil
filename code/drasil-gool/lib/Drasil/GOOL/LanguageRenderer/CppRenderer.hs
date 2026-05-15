@@ -90,7 +90,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
-  onAttachment, BindData(..), bd, FileType(..), FileData(..), fileD,
+  onAttachment, AttachmentData(..), ad, FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, OpData(..), ParamData(..), pd,
   ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td,
   ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, CommonThunk,
@@ -180,7 +180,7 @@ instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
   import' i = RC.import' $ pfst i
 
 instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) where
-  type Attachment (p CppSrcCode CppHdrCode) = BindData
+  type Attachment (p CppSrcCode CppHdrCode) = AttachmentData
   classLevel = pair classLevel classLevel
   instanceLevel = pair instanceLevel instanceLevel
 
@@ -1092,13 +1092,13 @@ instance ImportElim CppSrcCode where
   import' = unCPPSC
 
 instance AttachmentSym CppSrcCode where
-  type Attachment CppSrcCode = BindData
-  classLevel = toCode $ bd ClassLevel R.static
-  instanceLevel = toCode $ bd InstanceLevel R.dynamic
+  type Attachment CppSrcCode = AttachmentData
+  classLevel = toCode $ ad ClassLevel R.static
+  instanceLevel = toCode $ ad InstanceLevel R.dynamic
 
 instance PermElim CppSrcCode where
-  perm = bindDoc . unCPPSC
-  binding = bind . unCPPSC
+  perm = attachmentDoc . unCPPSC
+  binding = attachment . unCPPSC
 
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
@@ -1830,13 +1830,13 @@ instance ImportElim CppHdrCode where
   import' = unCPPHC
 
 instance AttachmentSym CppHdrCode where
-  type Attachment CppHdrCode = BindData
-  classLevel = toCode $ bd ClassLevel R.static
-  instanceLevel = toCode $ bd InstanceLevel R.dynamic
+  type Attachment CppHdrCode = AttachmentData
+  classLevel = toCode $ ad ClassLevel R.static
+  instanceLevel = toCode $ ad InstanceLevel R.dynamic
 
 instance PermElim CppHdrCode where
-  perm = bindDoc . unCPPHC
-  binding = bind . unCPPHC
+  perm = attachmentDoc . unCPPHC
+  binding = attachment . unCPPHC
 
 instance BodySym CppHdrCode where
   type Body CppHdrCode = Doc
@@ -2383,7 +2383,7 @@ instance StateVarSym CppHdrCode where
   stateVarDef s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
   constVar s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) .
-    on2CodeValues (R.constVar empty endStatement) (bindDoc <$> classLevel))
+    on2CodeValues (R.constVar empty endStatement) (attachmentDoc <$> classLevel))
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
 
 instance StateVarElim CppHdrCode where

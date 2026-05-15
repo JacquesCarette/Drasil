@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
-  AttachmentTag(..), onAttachment, BindData(bind, bindDoc), bd, FileData(filePath,
+  AttachmentTag(..), onAttachment, AttachmentData(attachment, attachmentDoc), ad, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
   opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
@@ -51,11 +51,11 @@ onAttachment :: AttachmentTag -> a -> a -> a
 onAttachment ClassLevel s _ = s
 onAttachment InstanceLevel _ d = d
 
--- Used as the underlying data type for Permanence in the C++ renderer
-data BindData = BD {bind :: AttachmentTag, bindDoc :: Doc}
+-- Used as the underlying data type for Attachment in the C++ renderer
+data AttachmentData = BD {attachment :: AttachmentTag, attachmentDoc :: Doc}
 
-bd :: AttachmentTag -> Doc -> BindData
-bd = BD
+ad :: AttachmentTag -> Doc -> AttachmentData
+ad = BD
 
 -- Used as the underlying data type for Files in all renderers
 data FileData = FileD {filePath :: FilePath, fileMod :: ModData}

@@ -1,5 +1,4 @@
 {-# LANGUAGE QuasiQuotes #-}
-
 module Drasil.Generator.SRS (
   -- * Generators
   exportSmithEtAlSrs
@@ -10,22 +9,22 @@ import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Build.Artifacts (FileLayout, directory, file, localPath, ps, writeFiles)
-import Build.Drasil (printMakefile)
+import Build.Drasil ((+:+), makeS, mkCheckedCommand, mkCommand,
+  mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.DocLang (mkGraphInfo)
-import Language.Drasil (Stage(Equational), Document(Document, Notebook),
-  ShowTableOfContents, checkToC)
+import Language.Drasil (Stage(Equational), Document(..), checkToC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
-import Data.Maybe (maybeToList)
+import Drasil.Metadata (watermark)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
 import System.Environment (lookupEnv)
 
 import Drasil.Generator.ChunkDump (dumpEverything)
-import Drasil.Generator.Formats (DocSpec(..), Filename, Format(..), buildMakefile)
+import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
@@ -37,7 +36,7 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
   debugDump syst'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   let srsLayout    = directory [ps|SRS|] $
-                       map (prntDoc srs printfo srsFileName)
+                       map (\x -> let x' = show x in directory [ps|{x'}|] $ prntDoc srs printfo srsFileName x)
                        [HTML, TeX, Jupyter, MDBook]
       traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
   -- FIXME: Ultimately, there should be a single writeFiles call.
@@ -56,60 +55,34 @@ debugDump si = do
     _ -> mempty
 
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
-prntDoc :: Document -> PrintingInformation -> String -> Format -> FileLayout Doc
-prntDoc d pinfo fn fmt =
-    directory (toPathSeg fmt) $ prntDoc' fn fmt d pinfo ++ mMakefile ++ extraFiles fmt
+prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout Doc]
+prntDoc d pinfo _ MDBook =
+  mdBookMakefile : genMDBook (makeProject pinfo d)
+prntDoc d pinfo fn Jupyter =
+  [file [ps|{fn}.ipynb|] $ genJupyterSRS $ makeDocument pinfo d]
+prntDoc d pinfo fn HTML =
+  [ file [ps|{fn}.html|] $ genHTML fn $ makeDocument pinfo d,
+    file [ps|{fn}.css|] $ makeCSS d
+  ]
+prntDoc (Document _ _ st _) pinfo fn TeX =
+  [ file [ps|{fn}.tex|] $ genTeX (makeDocument pinfo $ checkToC d) st pinfo,
+    teXMakefile fn
+  ]
+prntDoc Notebook {} _ _ TeX = error "cannot render notebooks into LaTeX"
+
+-- | Internal: Basic Makefile suitable for building TeX projects.
+teXMakefile :: Filename -> FileLayout Doc
+teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
+  mkRule [watermark] (makeS "srs") [pdfName] [],
+  mkFile [] pdfName [texFile] [lualatex, bibtex, lualatex, lualatex]]
   where
-    mMakefile = maybeToList $ prntMake $ DocSpec fmt fn
+    lualatex = mkCheckedCommand $ makeS "lualatex" +:+ mkFreeVar "TEXFLAGS"    +:+ makeS fn
+    bibtex   = mkCommand        $ makeS "bibtex"   +:+ mkFreeVar "BIBTEXFLAGS" +:+ makeS fn
+    pdfName  = makeS $ fn ++ ".pdf"
+    texFile  = makeS $ fn ++ ".tex"
 
-    toPathSeg f = [ps|{seg}|]
-      where seg = outPath f
-
-    outPath HTML    = "HTML"
-    outPath TeX     = "PDF"
-    outPath Jupyter = "Jupyter"
-    outPath MDBook  = "mdBook"
-
-    extraFiles HTML   = [ file [ps|{fn}.css|] $ makeCSS d ]
-    extraFiles _      = []
-
--- | Internal: Common error for when an unsupported SRS format is attempted.
-srsFormatError :: a
-srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
-
--- | Internal: Creates a `FileLayout` for the core content of an SRS in a
--- specific format.
-prntDoc' :: String -> Format -> Document -> PrintingInformation -> [FileLayout Doc]
-prntDoc' _ MDBook body' sm = writeDoc' sm MDBook body'
-prntDoc' fn format body' sm =
-  [file [ps|{fn}.{ext}|] $ writeDoc sm format fn body']
-  where
-    ext = getExt format
-    -- | Gets extension for a particular format.
-    -- MDBook case is handled above.
-    getExt  TeX         = "tex"
-    getExt  HTML        = "html"
-    getExt  Jupyter     = "ipynb"
-    getExt _            = srsFormatError
-
--- | Internal: Creates a `FileLayout` for the Makefile of an SRS,
--- if applicable to the secified Format.
-prntMake :: DocSpec -> Maybe (FileLayout Doc)
-prntMake = fmap (file [ps|Makefile|] . printMakefile) . buildMakefile
-
--- | Internal: Renders single-page documents.
-writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
-writeDoc s  TeX     _  doc = genTeX (makeDocument s dd) mToC s
-  where
-    getDoc :: Document -> (Document, ShowTableOfContents)
-    getDoc d@(Document _ _ st _) = (d , st)
-    getDoc   (Notebook{})        = error "cannot render notebooks into LaTeX"
-    (dd , mToC) = getDoc $ checkToC doc
-writeDoc s  HTML    fn doc = genHTML fn $ makeDocument s doc
-writeDoc s Jupyter _  doc = genJupyterSRS $ makeDocument s doc
-writeDoc _  _       _  _   = srsFormatError
-
--- | Internal: Renders multi-page documents.
-writeDoc' :: PrintingInformation -> Format -> Document -> [FileLayout Doc]
-writeDoc' s MDBook doc = genMDBook $ makeProject s doc
-writeDoc' _ _      _   = srsFormatError
+-- | Internal: Basic Makefile suitable for building mdBook projects.
+mdBookMakefile :: FileLayout Doc
+mdBookMakefile = file [ps|Makefile|] $ printMakefile $ mkMakefile [
+  mkRule [watermark] (makeS "build")  [] [mkCheckedCommand $ makeS "mdbook build"],
+  mkRule []          (makeS "server") [] [mkCheckedCommand $ makeS "mdbook serve --open"]]

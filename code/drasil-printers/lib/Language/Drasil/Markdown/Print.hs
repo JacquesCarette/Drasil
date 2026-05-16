@@ -1,11 +1,16 @@
+{-# LANGUAGE QuasiQuotes #-}
+
 -- | Defines main Markdown printer functions.
 module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
-import Data.List (transpose)
+import Data.List (transpose, intercalate)
 import Data.List.Utils (replace)
+import System.FilePath (takeFileName)
+
+import Drasil.Build.Artifacts (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -16,7 +21,7 @@ import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (Project(Project),
-  LayoutObj(..), Filename, RefMap, File(File))
+  LayoutObj(..), Filename, RefMap, File(File), Filepath)
 import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
@@ -33,8 +38,12 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText
 -----------------------------------------------------------------
 
 -- | Generate a mdBook SRS
-genMDBook :: Project -> [(Filename, Doc)]
-genMDBook = build'
+genMDBook :: Project -> [FileLayout Doc]
+genMDBook p@(Project t _ rm _) =
+  [ file [ps|book.toml|] (makeBook rm t)
+  , file [ps|.drasil-requirements.csv|] (makeRequirements p)
+  , directory [ps|src|] (map (\(fn, d) -> file [ps|{fn}.md|] d) (build' p))
+  ]
 
 -- | Build the mdBook Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]
@@ -42,6 +51,59 @@ build' p@(Project _ _ rm d) =
   printSummary rm files : map (print' rm) files
   where
     files = createTitleFile p : d
+
+-- | Prints the .toml config file for mdBook.
+makeBook :: RefMap -> Spec -> Doc
+makeBook rm t = vcat [
+  text "[book]",
+  text "language = \"en\"",
+  text "src = \"src\"",
+  text "title =" <+> mkTitle rm t,
+  text "[output.html]",
+  text "smart-punctuation = true",
+  text "mathjax-support = true"
+  ]
+
+-- | Render a title 'Spec'.
+mkTitle :: RefMap -> Spec -> Doc
+mkTitle rm t = text "\"" <> pSpec rm t <> text "\""
+
+-- | Prints the .csv file mapping the original filepaths of assets to the
+-- location mdBook uses.
+makeRequirements :: Project -> Doc
+makeRequirements p = makeCSV $ ["Original", "Copy"] : assetMat p
+
+-- | Map the original filepaths of assets to the location mdBook generator
+-- needs.
+assetMat :: Project -> [[Filepath]]
+assetMat (Project _ _ _ files) =
+  [[fp, "src/assets/" ++ takeFileName fp] | fp <- concatMap (extractFiles . (\(File _ _ _ los) -> los)) files]
+  where
+    extractFiles = concatMap getFigures
+    getFigures (Figure _ _ fp _)      = [fp]
+    getFigures (HDiv _ los _)         = extractFiles los
+    getFigures (Cell los)             = extractFiles los
+    getFigures (Definition _ pairs _) = concatMap (extractFiles . snd) pairs
+    getFigures _                      = []
+
+-- | Creates a CSV file as a 'Doc' from a 'String' matrix.
+makeCSV :: [[String]] -> Doc
+makeCSV rows = vcat $ map (text . formatRow) rows
+  where
+    -- | Seperates each row item with a comma.
+    formatRow :: [String] -> String
+    formatRow = intercalate "," . map escape
+
+    -- | Adds quotations around the item if it contains ',', '"', \n', or ' '.
+    escape :: String -> String
+    escape s
+      | any (`elem` ",\"\n ") s = "\"" ++ concatMap escapeChar s ++ "\""
+      | otherwise = s
+
+    -- | Escapes double quotes.
+    escapeChar :: Char -> String
+    escapeChar '"' = "\"\""
+    escapeChar c   = [c]
 
 -- | Called by build', uses 'printLO' to render a File
 -- into a single Doc

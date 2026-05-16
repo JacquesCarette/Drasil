@@ -15,8 +15,8 @@ import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(Document, Notebook),
   ShowTableOfContents, checkToC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Printers (makeCSS, makeRequirements, genHTML, genTeX,
-  genMDBook, makeBook, Notation(Engineering), piSys, PrintingInformation,
+import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
+  genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
 import Data.Maybe (maybeToList)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
@@ -58,9 +58,8 @@ debugDump si = do
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
 prntDoc :: Document -> PrintingInformation -> String -> Format -> FileLayout Doc
 prntDoc d pinfo fn fmt =
-    directory (toPathSeg fmt) $ (doc : mMakefile) ++ extraFiles fmt
+    directory (toPathSeg fmt) $ prntDoc' fn fmt d pinfo ++ mMakefile ++ extraFiles fmt
   where
-    doc = prntDoc' fn fmt d pinfo
     mMakefile = maybeToList $ prntMake $ DocSpec fmt fn
 
     toPathSeg f = [ps|{seg}|]
@@ -72,9 +71,6 @@ prntDoc d pinfo fn fmt =
     outPath MDBook  = "mdBook"
 
     extraFiles HTML   = [ file [ps|{fn}.css|] $ makeCSS d ]
-    extraFiles MDBook = [ file [ps|book.toml|] $ makeBook d pinfo,
-                          file [ps|.drasil-requirements.csv|] $ makeRequirements pinfo
-                        ]
     extraFiles _      = []
 
 -- | Internal: Common error for when an unsupported SRS format is attempted.
@@ -83,14 +79,10 @@ srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 
 -- | Internal: Creates a `FileLayout` for the core content of an SRS in a
 -- specific format.
-prntDoc' :: String -> Format -> Document -> PrintingInformation -> FileLayout Doc
-prntDoc' _ MDBook body' sm =
-  directory [ps|src|] $ map writeDocToFile con
-  where
-    con = writeDoc' sm MDBook body'
-    writeDocToFile (fp, d) = file [ps|{fp}.md|] d
+prntDoc' :: String -> Format -> Document -> PrintingInformation -> [FileLayout Doc]
+prntDoc' _ MDBook body' sm = writeDoc' sm MDBook body'
 prntDoc' fn format body' sm =
-  file [ps|{fn}.{ext}|] $ writeDoc sm format fn body'
+  [file [ps|{fn}.{ext}|] $ writeDoc sm format fn body']
   where
     ext = getExt format
     -- | Gets extension for a particular format.
@@ -118,6 +110,6 @@ writeDoc s Jupyter _  doc = genJupyterSRS $ makeDocument s doc
 writeDoc _  _       _  _   = srsFormatError
 
 -- | Internal: Renders multi-page documents.
-writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]
+writeDoc' :: PrintingInformation -> Format -> Document -> [FileLayout Doc]
 writeDoc' s MDBook doc = genMDBook $ makeProject s doc
 writeDoc' _ _      _   = srsFormatError

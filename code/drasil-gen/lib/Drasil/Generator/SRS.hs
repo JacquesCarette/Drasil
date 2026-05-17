@@ -32,12 +32,18 @@ import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
-      printfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
+      pinfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
   debugDump syst'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  let srsLayout    = directory [ps|SRS|] $
-                       map (\x -> let x' = show x in directory [ps|{x'}|] $ prntDoc srs printfo srsFileName x)
-                       [HTML, TeX, Jupyter, MDBook]
+  let srsLayout =
+        directory [ps|SRS|] $
+          map
+            ( \x ->
+                let x' = show x
+                in directory [ps|{x'}|] $
+                      prntDoc srs pinfo srsFileName x
+            )
+            [HTML, TeX, Jupyter, MDBook]
       traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
   -- FIXME: Ultimately, there should be a single writeFiles call.
   writeFiles localPath srsLayout
@@ -64,7 +70,7 @@ prntDoc d pinfo fn HTML =
   [ file [ps|{fn}.html|] $ genHTML fn $ makeDocument pinfo d,
     file [ps|{fn}.css|] $ makeCSS d
   ]
-prntDoc (Document _ _ st _) pinfo fn TeX =
+prntDoc d@(Document _ _ st _) pinfo fn TeX =
   [ file [ps|{fn}.tex|] $ genTeX (makeDocument pinfo $ checkToC d) st pinfo,
     teXMakefile fn
   ]

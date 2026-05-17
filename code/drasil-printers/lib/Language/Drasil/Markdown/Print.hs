@@ -5,10 +5,11 @@ module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
-import Text.PrettyPrint hiding (Str)
 import Data.List (transpose, intercalate)
 import Data.List.Utils (replace)
+import qualified Data.Set as S
 import System.FilePath (takeFileName)
+import Text.PrettyPrint hiding (Str)
 
 import Drasil.Build.Artifacts (FileLayout, file, directory, ps)
 
@@ -73,18 +74,30 @@ mkTitle rm t = text "\"" <> pSpec rm t <> text "\""
 makeRequirements :: Project -> Doc
 makeRequirements p = makeCSV $ ["Original", "Copy"] : assetMat p
 
--- | Map the original filepaths of assets to the location mdBook generator
--- needs.
+-- | FIXME: HACK: Find all figure assets from a 'Project'. This is a hack
+-- because (a) there can be assets other than figures, (b) we are searching
+-- _after_ layout onto a list of 'LayoutObj's. This should be a matter of
+-- knowing which artifacts were rendered and when some (new) chunk 'SystemAsset'
+-- is referenced.
 assetMat :: Project -> [[Filepath]]
 assetMat (Project _ _ _ files) =
-  [[fp, "src/assets/" ++ takeFileName fp] | fp <- concatMap (extractFiles . (\(File _ _ _ los) -> los)) files]
+  [[fp, "src/assets/" ++ takeFileName fp] | fp <- S.toAscList extractedLOs]
   where
-    extractFiles = concatMap getFigures
-    getFigures (Figure _ _ fp _)      = [fp]
-    getFigures (HDiv _ los _)         = extractFiles los
-    getFigures (Cell los)             = extractFiles los
-    getFigures (Definition _ pairs _) = concatMap (extractFiles . snd) pairs
-    getFigures _                      = []
+    extractedLOs = S.unions $ map (\(File _ _ _ los) -> S.unions $ map figs los) files
+    unionsFigs = S.unions . map figs
+    figs :: LayoutObj -> S.Set String
+    figs (Figure _ _ fp _)     = S.singleton fp
+    figs (HDiv _ los _)        = unionsFigs los
+    figs (Cell los)            = unionsFigs los
+    figs (Definition _ slos _) = S.unions (map (unionsFigs . snd) slos)
+    figs Table{}               = S.empty
+    figs Header{}              = S.empty
+    figs Paragraph{}           = S.empty
+    figs EqnBlock{}            = S.empty
+    figs List{}                = S.empty
+    figs Graph{}               = S.empty
+    figs CodeBlock{}           = S.empty
+    figs Bib{}                 = S.empty
 
 -- | Creates a CSV file as a 'Doc' from a 'String' matrix.
 makeCSV :: [[String]] -> Doc
@@ -183,9 +196,9 @@ pExpr (Str s)        = printMath $ toText $ pure $ lq <> text s <> rq
     lq = text "\\\\(\\``\\\\)"
     rq = text "''"
 pExpr (Div n d)      = printMath $ command2D "frac" (pExpr' n) (pExpr' d)
-pExpr (Case ps)      = printMath $ mkEnv "cases" (P.<>) cases
+pExpr (Case ees)     = printMath $ mkEnv "cases" (P.<>) cases
   where
-    cases = TeX.cases ps hpunctuate lnl pExpr'
+    cases = TeX.cases ees hpunctuate lnl pExpr'
 pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
   where
     matrix = TeX.pMatrix a hpunctuate lnl pExpr'
@@ -276,12 +289,12 @@ makeCell content size = content <> spaces
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: RefMap -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _  [] _ = error "L.Empty definition"
-makeDefn rm ps l =
-  makeDHeaderText rm ps l $^$
+makeDefn rm slos l =
+  makeDHeaderText rm slos l $^$
   makeHeaderCols [text "Refname", l] size $$
   makeRows docDefn size
   where
-    docDefn = mkDocDefn rm ps
+    docDefn = mkDocDefn rm slos
     size = columnSize docDefn
 
 -- | Helper for convering definition to Doc matrix
@@ -290,9 +303,9 @@ mkDocDefn rm = map (\(f, d) -> [text f, makeLO rm (f,d)])
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: RefMap -> [(String, [LayoutObj])] -> Doc -> Doc
-makeDHeaderText rm ps l = centeredDiv header
+makeDHeaderText rm slos l = centeredDiv header
   where
-    lo = lookup "Label" ps
+    lo = lookup "Label" slos
     c = maybe l (\lo' -> makeLO rm ("Label", lo')) lo
     header = h' 2 <+> heading c l
 

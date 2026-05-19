@@ -69,7 +69,7 @@ makeCSS _ = vcat [
     text "  margin-right: auto;}"],
   text "th, td {border: 1px solid black; padding: 0.5em;}",
   text ".defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
-  text ".tdefn th, .ddefn th, .gdefn th, .idefn th {width: 15%;}",
+  text ".defn-table th {width: 15%;}",
   text ".section {width: 80%; margin: 0 auto; text-align: left;}",
   vcat [
     text ".code {",

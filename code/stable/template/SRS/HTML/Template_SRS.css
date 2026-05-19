@@ -44,7 +44,7 @@ table, th, td {
   margin-right: auto;}
 th, td {border: 1px solid black; padding: 0.5em;}
 .defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}
-.tdefn th, .ddefn th, .gdefn th, .idefn th {width: 15%;}
+.defn-table th {width: 15%;}
 .section {width: 80%; margin: 0 auto; text-align: left;}
 .code {
   display: inline-block;

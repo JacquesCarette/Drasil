@@ -16,11 +16,11 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), List(..),
-  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
@@ -283,7 +283,6 @@ instance VariableSym JavaCode where
   var         = G.var
   constant    = var
   extVar      = CS.extVar
-  arrayElem = G.arrayElem
 
 instance OOVariableSym JavaCode where
   staticVar' _ = G.staticVar
@@ -462,6 +461,9 @@ instance GetSet JavaCode where
 instance IndexTranslator JavaCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array JavaCode where
+  arrayElem = G.arrayElem
 
 instance List JavaCode where
   listSize = C.listSize

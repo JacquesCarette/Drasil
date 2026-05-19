@@ -17,7 +17,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -267,7 +267,6 @@ instance VariableSym JuliaCode where
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = A.arrayElem
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -396,6 +395,9 @@ instance ValueElim JuliaCode where
 instance IndexTranslator JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
+
+instance Array JuliaCode where
+  arrayElem = A.arrayElem
 
 instance List JuliaCode where
   listSize = CS.listSize

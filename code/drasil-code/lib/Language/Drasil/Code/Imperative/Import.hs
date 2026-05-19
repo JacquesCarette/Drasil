@@ -55,11 +55,11 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
-  VisibilityTag(..), CodeType(..), onStateValue)
+  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
+  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
+  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))

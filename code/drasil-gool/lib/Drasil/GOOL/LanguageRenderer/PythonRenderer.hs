@@ -15,11 +15,11 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), List(..),
-  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -272,7 +272,6 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
@@ -442,6 +441,9 @@ instance GetSet PythonCode where
 instance IndexTranslator PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array PythonCode where
+  arrayElem = G.arrayElem
 
 instance List PythonCode where
   listSize = CS.listSize

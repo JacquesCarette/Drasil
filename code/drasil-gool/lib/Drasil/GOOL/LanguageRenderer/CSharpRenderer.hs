@@ -16,11 +16,11 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), List(..),
-  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -287,7 +287,6 @@ instance VariableSym CSharpCode where
   var         = G.var
   constant    = var
   extVar      = CS.extVar
-  arrayElem = G.arrayElem
 
 instance OOVariableSym CSharpCode where
   staticVar' _ = G.staticVar
@@ -442,6 +441,9 @@ instance GetSet CSharpCode where
 instance IndexTranslator CSharpCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array CSharpCode where
+  arrayElem = G.arrayElem
 
 instance List CSharpCode where
   listSize = C.listSize

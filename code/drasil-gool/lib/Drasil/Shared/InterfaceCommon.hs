@@ -13,8 +13,8 @@ module Drasil.Shared.InterfaceCommon (
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, IndexTranslator(..), List(..), Set(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  exists, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
+  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -45,7 +45,8 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r,
-  List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r, BinderSym r
+  Array r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r,
+  BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -107,9 +108,6 @@ class (TypeSym r) => VariableSym r where
   var       :: Label -> VSType r -> SVariable r
   constant  :: Label -> VSType r -> SVariable r
   extVar    :: Library -> Label -> VSType r -> SVariable r
-  -- TODO [Brandon Bosman, 04/27/2026]: Move this to a new Array typeclass modelled after List
-  -- Change return type to SValue
-  arrayElem :: SValue r -> SVariable r -> SVariable r
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -278,6 +276,10 @@ class (ValueSym r) => IndexTranslator r where
   indexToInt :: SValue r -> SValue r
   -- | Finds the size of a list.
   --   Arguments are: List
+
+class (IndexTranslator r) => Array r where
+  -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
+  arrayElem :: SValue r -> SVariable r -> SVariable r
 
 class (IndexTranslator r) => List r where
   listSize   :: SValue r -> SValue r

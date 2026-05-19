@@ -1,6 +1,6 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
   VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
   andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExpr', binExprNumDbl', typeBinExpr
@@ -44,17 +44,17 @@ mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
--- | Constructs a dynamic variable in a stateful context
+-- | Constructs an instance-level variable in a stateful context
 mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStateVar = varFromData InstanceLevel
 
--- | Constructs a dynamic variable in a non-stateful context
+-- | Constructs an instance-level variable in a non-stateful context
 mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
 mkVar n t = varFromData InstanceLevel n (toState t)
 
 -- | Constructs a classLevel variable in a stateful context
-mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar = varFromData ClassLevel
+mkClassVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkClassVar = varFromData ClassLevel
 
 -- Operators --
 

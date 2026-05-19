@@ -78,7 +78,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace, local)
-import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheckStatic)
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
@@ -1235,7 +1235,7 @@ instance OOVariableSym CppSrcCode where
     vfd <- varFromData
       (variableBind v) (getTypeString c `nmSpcAccess` variableName v)
       (toState $ variableType v) (cppClassVarAccess (RC.type' c) (RC.variable v))
-    toState $ classVarAccessCheckStatic vfd
+    toState $ classVarAccessCheck vfd
   extClassVarAccess c v = do
     t <- c
     cm <- getClassMap

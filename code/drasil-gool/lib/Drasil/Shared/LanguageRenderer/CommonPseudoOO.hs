@@ -71,7 +71,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
-  classVarAccessCheckStatic, call, initStmts, docFunc, docFuncRepr, docClass,
+  classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
@@ -139,7 +139,7 @@ classVarAccess f c' v'= do
   vr <- varFromData
     (variableBind v) (getTypeString c `access` variableName v)
     (toState $ variableType v) (f (RC.type' c) (RC.variable v))
-  toState $ classVarAccessCheckStatic vr
+  toState $ classVarAccessCheck vr
 
 instanceVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
 instanceVarSelf = IG.instanceVarAccess IG.self

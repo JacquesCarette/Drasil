@@ -59,7 +59,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   commentedMod, commentedItem, var)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
-  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
+  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -277,7 +277,7 @@ instance VariableSym PythonCode where
 
 instance OOVariableSym PythonCode where
   classVar = G.classVar
-  classConst n t = mkStaticVar n t (R.var (toConstName n))
+  classConst n t = mkClassVar n t (R.var (toConstName n))
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .

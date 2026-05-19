@@ -7,7 +7,7 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec,
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
-  classVarAccessCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString,
+  classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
   listAppend, listAccess, listSet, getFunc, setFunc,
@@ -75,7 +75,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
   addAssign, subAssign, return', comment, getTerm, var, instanceVarAccess, arg, func,
   objAccess, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec,
+  mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec,
   compEqualPrec, compPrec, addPrec, multPrec)
 import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
@@ -187,14 +187,14 @@ var :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
 var n t = mkStateVar n t (R.var n)
 
 classVar :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
-classVar n t = mkStaticVar n t (R.var n)
+classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
--- not static since classVarAccess is for accessing static variables from a class
-classVarAccessCheckStatic :: (CommonRenderSym r) => r (Variable r) -> r (Variable r)
-classVarAccessCheckStatic v = classVarCS (variableBind v)
+-- not class-level since classVarAccess is for accessing class-level variables from a class
+classVarAccessCheck :: (CommonRenderSym r) => r (Variable r) -> r (Variable r)
+classVarAccessCheck v = classVarCS (variableBind v)
   where classVarCS InstanceLevel = error
-          "classVarAccess can only be used to access static variables"
+          "classVarAccess can only be used to access class-level variables"
         classVarCS ClassLevel = v
 
 instanceVarAccess :: (CommonRenderSym r) => SVariable r -> SVariable r -> SVariable r
@@ -202,7 +202,7 @@ instanceVarAccess o' v' = do
   o <- o'
   v <- v'
   let instanceVarAccess' ClassLevel = error
-        "Cannot access static variables through an object, use classVarAccess instead"
+        "Cannot access class-level variables through an object, use classVarAccess instead"
       instanceVarAccess' InstanceLevel = mkVar (variableName o `access` variableName v)
         (variableType v) (R.instanceVarAccess (RC.variable o) (RC.variable v))
   instanceVarAccess' (variableBind v)

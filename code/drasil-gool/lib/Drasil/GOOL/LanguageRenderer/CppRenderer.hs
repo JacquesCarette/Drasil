@@ -19,12 +19,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
+  extFuncApp, IndexTranslator(..), List(..), Set(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), BinderSym(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -81,7 +82,8 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
+  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef,
+  docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -452,9 +454,11 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   get = pair2 get get
   set = pair3 set set
 
-instance (Pair p) => List (p CppSrcCode CppHdrCode) where
+instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   intToIndex = pair1 intToIndex intToIndex
   indexToInt = pair1 indexToInt indexToInt
+
+instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
@@ -1386,9 +1390,11 @@ instance GetSet CppSrcCode where
   get = G.get
   set = G.set
 
-instance List CppSrcCode where
+instance IndexTranslator CppSrcCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -2103,9 +2109,11 @@ instance GetSet CppHdrCode where
   get _ _ = mkStateVal void empty
   set _ _ _ = mkStateVal void empty
 
-instance List CppHdrCode where
+instance IndexTranslator CppHdrCode where
   intToIndex _ = mkStateVal void empty
   indexToInt _ = mkStateVal void empty
+
+instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty

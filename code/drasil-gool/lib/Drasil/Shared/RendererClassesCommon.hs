@@ -18,12 +18,12 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
-  InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
-  BinderElim(..), BinderSym (..))
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  IndexTranslator(..), List(..), InternalList(..), VectorExpression(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), ScopeSym(..), BinderElim(..), BinderSym (..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData, TypeData)
 import Drasil.Shared.State (MS, VS)
@@ -34,8 +34,8 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, List r,
-  InternalList r, VectorExpression r, TypeElim r, VariableElim r,
+  NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,
+  List r, InternalList r, VectorExpression r, TypeElim r, VariableElim r,
   BinderElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
   InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
   ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r,

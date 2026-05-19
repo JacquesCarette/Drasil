@@ -8,12 +8,13 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), VisibilitySym(..), BinderSym(..))
+  ValueExpression(..), IndexTranslator(..), List(..), Set(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..),
+  BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
@@ -243,9 +244,11 @@ instance GetSet CodeInfoOO where
   get v _ = execute1 v
   set v _ = execute2 v
 
-instance List CodeInfoOO where
+instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
+
+instance List CodeInfoOO where
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2

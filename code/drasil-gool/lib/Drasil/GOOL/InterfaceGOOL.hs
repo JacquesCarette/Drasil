@@ -133,13 +133,20 @@ class (TypeSym r) => OOTypeSym r where
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  -- Bool: False for variable, True for constant.  Required by the Python renderer.
+  -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
   classVar          :: Label -> VSType r -> SVariable r
+  -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
   classConst        :: Label -> VSType r -> SVariable r
+  -- | `self` keyword
   self              :: SVariable r
+  -- | Given a class `C` and a class-level variable `v`, creates `C.v`
   classVarAccess    :: VSType r -> SVariable r -> SVariable r
+  -- | Given a class `C` from an external module and a class-level variable `v`,
+  -- performs any necessary imports and creates `C.v`
   extClassVarAccess :: VSType r -> SVariable r -> SVariable r
+  -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
   instanceVarAccess :: SVariable r -> SVariable r -> SVariable r
+  -- | Given a variable `v`, creates `self.v`
   instanceVarSelf   :: SVariable r -> SVariable r
 
 ($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r

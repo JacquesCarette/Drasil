@@ -121,7 +121,7 @@ pubDVar = stateVar public instanceLevel
 pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 pubSVar = stateVar public classLevel
 
--- | Used to differentiate whether a method is attached to the class or the instance
+-- | Used to differentiate whether a member is attached to the class or the instance
 class AttachmentSym r where
   type Attachment r
   classLevel  :: r (Attachment r)

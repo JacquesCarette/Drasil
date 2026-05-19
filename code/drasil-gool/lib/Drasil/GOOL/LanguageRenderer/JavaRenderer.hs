@@ -288,7 +288,7 @@ instance VariableSym JavaCode where
 
 instance OOVariableSym JavaCode where
   classVar = G.classVar
-  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
+  classConst = classVar
   self = C.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess

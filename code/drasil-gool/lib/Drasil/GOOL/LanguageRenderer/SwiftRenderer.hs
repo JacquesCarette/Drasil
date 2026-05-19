@@ -292,7 +292,7 @@ instance VariableSym SwiftCode where
 
 instance OOVariableSym SwiftCode where
   classVar = G.classVar
-  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
+  classConst = classVar
   self = CP.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess

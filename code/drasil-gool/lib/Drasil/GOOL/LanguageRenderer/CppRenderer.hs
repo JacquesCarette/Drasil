@@ -1227,7 +1227,7 @@ instance VariableSym CppSrcCode where
 
 instance OOVariableSym CppSrcCode where
   classVar = G.classVar
-  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
+  classConst = classVar
   self = C.self
   classVarAccess c' v'= do
     c <- c'
@@ -1963,7 +1963,7 @@ instance VariableSym CppHdrCode where
 
 instance OOVariableSym CppHdrCode where
   classVar = G.classVar
-  classConst = classVar -- TODO [Brandon Bosman, 05/15/2026]: use this information?
+  classConst = classVar
   self = mkStateVar "" void empty
   classVarAccess _ _ = mkStateVar "" void empty
   extClassVarAccess _ _ = mkStateVar "" void empty

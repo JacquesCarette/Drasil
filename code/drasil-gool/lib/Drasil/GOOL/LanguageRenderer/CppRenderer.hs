@@ -1509,7 +1509,12 @@ instance AssignStatement CppSrcCode where
   (&--) = C.decrement1
 
 instance DeclStatement CppSrcCode where
-  varDec = C.varDec static dynamic empty
+  varDec vr scp = do
+    vr' <- zoom lensMStoVS vr
+    let tp = (cType . unCPPSC . variableType) vr'
+    case tp of
+      (Array _) -> cppSrcArrDec vr scp
+      _         -> C.varDec static dynamic empty vr scp
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -2219,7 +2224,12 @@ instance AssignStatement CppHdrCode where
   (&--) _ = emptyStmt
 
 instance DeclStatement CppHdrCode where
-  varDec = C.varDec static dynamic empty
+  varDec vr scp = do
+    vr' <- zoom lensMStoVS vr
+    let tp = (cType . unCPPHC . variableType) vr'
+    case tp of
+      (Array _) -> cppHdrArrDec vr scp
+      _         -> C.varDec static dynamic empty vr scp
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -2995,3 +3005,25 @@ cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins
 cppInOutParams ins outs both = map pointerParam both ++ map getParam ins ++
   map pointerParam outs
+
+cppSrcArrDec :: SVariable CppSrcCode -> CppSrcCode (Scope CppSrcCode) -> MSStatement CppSrcCode
+cppSrcArrDec vr' scp = do
+  vr <- zoom lensMStoVS vr'
+  modify $ useVarName (variableName vr)
+  modify $ setVarScope (variableName vr) (scopeData scp)
+  mkStmt (RC.perm (cppBind $ variableBind vr)
+    <+> RC.type' (variableType vr) <+> RC.variable vr <> array')
+  where cppBind :: Binding -> CppSrcCode (Permanence CppSrcCode)
+        cppBind Static = static
+        cppBind Dynamic = dynamic
+
+cppHdrArrDec :: SVariable CppHdrCode -> CppHdrCode (Scope CppHdrCode) -> MSStatement CppHdrCode
+cppHdrArrDec vr' scp = do
+  vr <- zoom lensMStoVS vr'
+  modify $ useVarName (variableName vr)
+  modify $ setVarScope (variableName vr) (scopeData scp)
+  mkStmt (RC.perm (cppBind $ variableBind vr)
+    <+> RC.type' (variableType vr) <+> RC.variable vr <> array')
+  where cppBind :: Binding -> CppHdrCode (Permanence CppHdrCode)
+        cppBind Static = static
+        cppBind Dynamic = dynamic

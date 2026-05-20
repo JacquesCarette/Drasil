@@ -403,8 +403,7 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
-  where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn
-          prLnFn
+  where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
         print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn prLnFn (convType t)
         print' _ = S.printSt newLn f printFn v

@@ -7,7 +7,7 @@ cradle:
       component: "drasil-build-artifacts:lib"
 
     - path: "drasil-build-artifacts/test"
-      component: "drasil-build-artifacts:test:layout-test"
+      component: "drasil-build-artifacts:test:drasil-build-artifacts-test"
 
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
@@ -38,6 +38,9 @@ cradle:
 
     - path: "drasil-data/lib"
       component: "drasil-data:lib"
+
+    - path: "drasil-data-formats/lib"
+      component: "drasil-data-formats:lib"
 
     - path: "drasil-database/lib"
       component: "drasil-database:lib"

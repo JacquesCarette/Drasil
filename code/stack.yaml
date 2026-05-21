@@ -40,6 +40,7 @@ ghc-options:
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - drasil-build-artifacts
+- drasil-data-formats
 - drasil-lang
 - drasil-utils
 - drasil-gool

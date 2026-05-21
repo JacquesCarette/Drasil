@@ -39,33 +39,33 @@ ghc-options:
 # non-dependency (i.e. a user package), and its test suites and benchmarks
 # will not be run. This is useful for tweaking upstream packages.
 packages:
-- drasil-build-artifacts
-- drasil-data-formats
-- drasil-lang
-- drasil-utils
-- drasil-gool
 - drasil-build
+- drasil-build-artifacts
 - drasil-code
-- drasil-system
-- drasil-theory
-- drasil-database
-- drasil-printers
-- drasil-gen
 - drasil-data
+- drasil-data-formats
+- drasil-database
 - drasil-docLang
-- drasil-metadata
-- drasil-website
 - drasil-example/dblpend
-- drasil-example/sglpend
 - drasil-example/gamephysics
 - drasil-example/glassbr
 - drasil-example/hghc
-- drasil-example/swhsnopcm
 - drasil-example/pdcontroller
 - drasil-example/projectile
+- drasil-example/sglpend
 - drasil-example/ssp
 - drasil-example/swhs
+- drasil-example/swhsnopcm
 - drasil-example/template
+- drasil-gen
+- drasil-gool
+- drasil-lang
+- drasil-metadata
+- drasil-printers
+- drasil-system
+- drasil-theory
+- drasil-utils
+- drasil-website
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

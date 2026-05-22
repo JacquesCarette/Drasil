@@ -452,6 +452,7 @@ instance IndexTranslator SwiftCode where
 
 instance Array SwiftCode where
   arrayElem = G.arrayElem
+  arrayClone = id -- Swift uses value semantics for arrays
 
 instance List SwiftCode where
   listSize = C.listSize

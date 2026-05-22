@@ -280,6 +280,10 @@ class (ValueSym r) => IndexTranslator r where
 class (IndexTranslator r) => Array r where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
   arrayElem :: SValue r -> SVariable r -> SVariable r
+  -- TODO [Brandon Bosman, 05/21/2026]: Consider switching this to a polymorphic `clone`,
+  -- more like how `print` currently works
+  -- | Given a source array, create a (shallow) clone of it
+  arrayClone :: SValue r -> SValue r
 
 class (IndexTranslator r) => List r where
   listSize   :: SValue r -> SValue r

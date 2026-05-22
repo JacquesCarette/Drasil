@@ -1,5 +1,5 @@
--- | Re-export all contents in drasil-build for external use.
-module Build.Drasil (
+-- | Re-export all contents in drasil-makefile for external use.
+module Drasil.Makefile (
   -- * Makefiles
   -- ** Types
     Annotation, Dependencies, Makefile, Command, Rule
@@ -11,8 +11,8 @@ module Build.Drasil (
   , printMakefile
 ) where
 
-import Build.Drasil.Make.AST (Annotation, Command, Dependencies, mkCheckedCommand,
+import Drasil.Makefile.Make.AST (Annotation, Command, Dependencies, mkCheckedCommand,
   mkCommand, mkFile, mkMakefile, mkRule, Makefile, Rule)
-import Build.Drasil.Make.MakeString ((+:+), makeS, MakeString, mkFreeVar,
+import Drasil.Makefile.Make.MakeString ((+:+), makeS, MakeString, mkFreeVar,
   mkImplicitVar, mkWindowsVar, mkOSVar)
-import Build.Drasil.Make.Print (printMakefile)
+import Drasil.Makefile.Make.Print (printMakefile)

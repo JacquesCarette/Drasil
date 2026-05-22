@@ -38,7 +38,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
--- Python, Java, C++, and Julia --
+-- Python, Java, and Julia --
 
 funcType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
 funcType ps' r' =  do

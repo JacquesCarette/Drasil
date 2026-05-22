@@ -1,7 +1,10 @@
 {-# LANGUAGE GADTs #-}
 
 -- | The Drasil Modelling Expression language
-module Language.Drasil.ModelExpr.Lang where
+module Language.Drasil.ModelExpr.Lang (
+  ModelExpr(..), DerivType(..),
+  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..)
+) where
 
 import Prelude hiding (sqrt)
 

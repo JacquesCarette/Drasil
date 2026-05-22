@@ -1,6 +1,10 @@
 {-# Language TemplateHaskell #-}
 -- | Contains types and functions common to aspects of generating documents.
-module Language.Drasil.Document.Core where
+module Language.Drasil.Document.Core (
+  Contents(..), ListType(..), ItemType(..), DType(..),RawContent(..),
+  ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
+  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
+) where
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 

@@ -1,6 +1,12 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language.
-module Language.Drasil.Document where
+module Language.Drasil.Document (
+  section, fig, figNoCap, figWithWidth, figNoCapWithWidth, Section(..),
+  SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
+  ulcc, Document(..), mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..),
+  checkToC, makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI,
+  makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
+) where
 
 import Control.Lens ((^.), makeLenses, view)
 

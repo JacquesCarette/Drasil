@@ -24,7 +24,7 @@ import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
-import HelloWorld (helloWorldOO, helloWorldProc)
+import HelloWorld (helloWorldOO, helloWorldCpp, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
 import VectorTest (vectorTestOO, vectorTestProc)
@@ -49,7 +49,7 @@ main = do
   setCurrentDirectory workingDir
   createDirIfMissing False "cpp"
   setCurrentDirectory "cpp"
-  genCode (classes unCPPC unCPPP)
+  genCode (cppClasses unCPPC unCPPP)
   setCurrentDirectory workingDir
   createDirIfMissing False "swift"
   setCurrentDirectory "swift"
@@ -80,6 +80,18 @@ classes unRepr unRepr' = zipWith
   in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
   [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
   (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
+    fileTestsOO, vectorTestOO, nameGenTestOO])
+
+cppClasses :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
+  (r' PackageData -> PackageData) -> [PackageData]
+cppClasses unRepr unRepr' = zipWith
+  (\p gs -> let (p',gs') = runState p gs
+                pd = unRepr p'
+                fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
+                                        (gs' ^. mainMod)
+  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
+  [helloWorldCpp, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
+  (map (OO.unCI . (`evalState` initialState)) [helloWorldCpp, patternTest,
     fileTestsOO, vectorTestOO, nameGenTestOO])
 
 -- Classes that Julia is currently able to render

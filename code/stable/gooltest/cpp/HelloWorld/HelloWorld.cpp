@@ -22,9 +22,7 @@ using std::string;
 using std::vector;
 
 int main(int argc, const char *argv[]) {
-    // Initializing variables
-    int a;
-    int b = 5;
+    // Array tests
     int arr[] = {1, 2, 3};
     std::cout << "Value of arr: ";
     std::cout << "[";
@@ -37,6 +35,10 @@ int main(int argc, const char *argv[]) {
         first = false;
     }
     std::cout << "]" << std::endl;
+    
+    // Initializing variables
+    int a;
+    int b = 5;
     vector<double> myOtherList{1.0, 1.5};
     int oneIndex = find(myOtherList.begin(), myOtherList.end(), 1.0) - myOtherList.begin();
     std::cout << oneIndex << std::endl;

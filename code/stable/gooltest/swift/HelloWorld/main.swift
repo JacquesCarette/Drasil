@@ -8,12 +8,22 @@ import Foundation
 
 extension String: @retroactive Error {}
 
-// Initializing variables
-var a: Int
-var b: Int = 5
+// Array tests
 var arr: [Int] = [1, 2, 3]
 print("Value of arr: ", terminator: "")
 print(arr)
+var arr_copy: [Int] = arr
+print("Value of arr_copy: ", terminator: "")
+print(arr_copy)
+arr[1] = 400
+print("Value of arr after updating arr: ", terminator: "")
+print(arr)
+print("Value of arr_copy after updating arr: ", terminator: "")
+print(arr_copy)
+
+// Initializing variables
+var a: Int
+var b: Int = 5
 var myOtherList: [Double] = [1.0, 1.5]
 var oneIndex: Int = myOtherList.firstIndex(of: 1.0)!
 print(oneIndex)

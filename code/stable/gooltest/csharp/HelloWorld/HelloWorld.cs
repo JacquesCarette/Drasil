@@ -11,14 +11,30 @@ using System.Diagnostics;
 public class HelloWorld {
     
     public static void Main(string[] args) {
-        // Initializing variables
-        int a;
-        int b = 5;
+        // Array tests
         int[] arr = new int[] {1, 2, 3};
         Console.Write("Value of arr: ");
         Console.Write("[");
         Console.Write(string.Join(", ", arr));
         Console.WriteLine("]");
+        int[] arr_copy = (int[])(arr.Clone());
+        Console.Write("Value of arr_copy: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr_copy));
+        Console.WriteLine("]");
+        arr[1] = 400;
+        Console.Write("Value of arr after updating arr: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr));
+        Console.WriteLine("]");
+        Console.Write("Value of arr_copy after updating arr: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr_copy));
+        Console.WriteLine("]");
+        
+        // Initializing variables
+        int a;
+        int b = 5;
         List<double> myOtherList = new List<double> {1.0, 1.5};
         int oneIndex = myOtherList.IndexOf(1.0);
         Console.WriteLine(oneIndex);

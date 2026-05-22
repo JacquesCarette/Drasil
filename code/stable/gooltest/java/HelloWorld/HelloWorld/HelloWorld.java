@@ -14,12 +14,22 @@ import java.util.Set;
 public class HelloWorld {
     
     public static void main(String[] args) {
-        // Initializing variables
-        int a;
-        int b = 5;
+        // Array tests
         int[] arr = {1, 2, 3};
         System.out.print("Value of arr: ");
         System.out.println(Arrays.toString(arr));
+        int[] arr_copy = arr.clone();
+        System.out.print("Value of arr_copy: ");
+        System.out.println(Arrays.toString(arr_copy));
+        arr[1] = 400;
+        System.out.print("Value of arr after updating arr: ");
+        System.out.println(Arrays.toString(arr));
+        System.out.print("Value of arr_copy after updating arr: ");
+        System.out.println(Arrays.toString(arr_copy));
+        
+        // Initializing variables
+        int a;
+        int b = 5;
         ArrayList<Double> myOtherList = new ArrayList<Double>(Arrays.asList(1.0, 1.5));
         int oneIndex = myOtherList.indexOf(1.0);
         System.out.println(oneIndex);

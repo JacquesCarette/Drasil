@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
-module HelloWorld (helloWorldOO, helloWorldProc) where
+module HelloWorld (helloWorldOO, helloWorldCpp, helloWorldProc) where
 
 import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
@@ -10,7 +10,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
+  Array(..), List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -26,6 +26,12 @@ helloWorldOO :: (OOProg r) => OO.GSProgram r
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
   [helloWorldMainOO] []), helperOO]
+
+-- | Creates the HelloWorld program and necessary files.
+helloWorldCpp :: (OOProg r) => OO.GSProgram r
+helloWorldCpp = OO.prog "HelloWorld" "" [OO.docMod description watermark
+  ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
+  [helloWorldMainCpp] []), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc :: (ProcProg r) => GProc.GSProgram r
@@ -44,7 +50,18 @@ myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO :: (OOProg r) => SMethod r
-helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+helloWorldMainOO = mainFunction (body ([helloArrayTests] ++ [helloInitVariables] ++ listSliceTests
+    ++ [block [printLn $ litString "", ifCond [
+      (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
+        varDecDef (var "dummy" string) mainFn (litString "dummy"),
+        objDecDef (var "myObj" char) mainFn (litChar 'o')]),
+      (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
+      helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
+      helloForEachLoop, helloTryCatch]]))
+
+-- | Main function. Initializes variables and combines all the helper functions defined below.
+helloWorldMainCpp :: (OOProg r) => SMethod r
+helloWorldMainCpp = mainFunction (body ([helloArrayTestsCpp] ++ [helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy"),
@@ -55,7 +72,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainProc :: (ProcProg r) => SMethod r
-helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+helloWorldMainProc = mainFunction (body ([helloArrayTests] ++ [helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
@@ -63,14 +80,31 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
       helloForEachLoop, helloTryCatch]]))
 
+helloArrayTests :: (SharedProg r) => MSBlock r
+helloArrayTests = block [comment "Array tests",
+  varDecDef (var "arr" (arrayType int)) mainFn (litArray int (map litInt [1..3])),
+  printStr "Value of arr: ",
+  printLn $ valueOf (var "arr" (arrayType int)),
+  varDecDef (var "arr_copy" (arrayType int)) mainFn $ arrayClone (valueOf $ var "arr" (arrayType int)),
+  printStr "Value of arr_copy: ",
+  printLn $ valueOf (var "arr_copy" (arrayType int)),
+  arrayElem (litInt 1) (var "arr" (arrayType int)) &= litInt 400,
+  printStr "Value of arr after updating arr: ",
+  printLn $ valueOf (var "arr" (arrayType int)),
+  printStr "Value of arr_copy after updating arr: ",
+  printLn $ valueOf (var "arr_copy" (arrayType int))]
+
+helloArrayTestsCpp :: (SharedProg r) => MSBlock r
+helloArrayTestsCpp = block [comment "Array tests",
+  varDecDef (var "arr" (arrayType int)) mainFn (litArray int (map litInt [1..3])),
+  printStr "Value of arr: ",
+  printLn $ valueOf (var "arr" (arrayType int))]
+
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (SharedProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
-  varDecDef (var "arr" (arrayType int)) mainFn (litArray int (map litInt [1..3])),
-  printStr "Value of arr: ",
-  printLn $ valueOf (var "arr" (arrayType int)),
   listDecDef myOtherList mainFn [litDouble 1.0,
     litDouble 1.5],
   varDecDef (var "oneIndex" int) mainFn (indexOf (valueOf myOtherList) (litDouble 1.0)),

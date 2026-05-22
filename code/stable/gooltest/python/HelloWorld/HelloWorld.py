@@ -8,11 +8,21 @@ import sys
 
 import Helper
 
-# Initializing variables
-b = 5
+# Array tests
 arr = [1, 2, 3]
 print("Value of arr: ", end="")
 print(arr)
+arr_copy = arr.copy()
+print("Value of arr_copy: ", end="")
+print(arr_copy)
+arr[1] = 400
+print("Value of arr after updating arr: ", end="")
+print(arr)
+print("Value of arr_copy after updating arr: ", end="")
+print(arr_copy)
+
+# Initializing variables
+b = 5
 myOtherList = [1.0, 1.5]
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)

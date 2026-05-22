@@ -9,11 +9,21 @@ module HelloWorld
 include("Helper.jl")
 import .Helper
 
-# Initializing variables
-global b = 5
+# Array tests
 global arr = [1, 2, 3]
 print("Value of arr: ")
 println(arr)
+global arr_copy = copy(arr)
+print("Value of arr_copy: ")
+println(arr_copy)
+global arr[2] = 400
+print("Value of arr after updating arr: ")
+println(arr)
+print("Value of arr_copy after updating arr: ")
+println(arr_copy)
+
+# Initializing variables
+global b = 5
 global myOtherList = [1.0, 1.5]
 global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)

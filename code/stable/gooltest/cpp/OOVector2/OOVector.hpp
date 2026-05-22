@@ -6,13 +6,14 @@
 using std::string;
 
 /** \brief Vectors of doubles and common vector-related operations.
-*/
+ */
+template <std::size_t N>
 class Vector {
     public:
         /** \brief Construct a vector from an array of doubles.
             \param v The doubles.
         */
-        Vector(const double* v, int length);
+        Vector(std::array<double, N> v);
         /** \brief Returns the dimension of this vector.
             \return The dimension of the vector.
         */
@@ -47,9 +48,8 @@ class Vector {
         void print();
     
     private:
-        double* v;
-        int length;
-        
+        std::array<double, N> v;
+
 };
 
 #endif

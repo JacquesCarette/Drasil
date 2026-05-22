@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using java.util.Arrays;
 
 public class OOVector {
     
@@ -34,29 +33,29 @@ public class OOVector {
 */
 public class Vector {
     private double[] v;
-    
+
     /** \brief Construct a vector from an array of doubles.
         \param v The doubles.
     */
     public Vector(double[] v) {
-        Debug.Assert( v.length > 0 , "Vector dimension must be > 0.");
-        this.v = v.clone();
+        Debug.Assert( v.Length > 0 , "Vector dimension must be > 0.");
+        this.v = (double[]) v.Clone(); // Note: clones need to be cast back to their type
     }
-    
+
     /** \brief Returns the dimension of this vector.
         \return The dimension of the vector.
     */
     public int dimension() {
-        return this.v.length;
+        return this.v.Length;
     }
-    
+
     /** \brief Calculate the Euclidean norm (magnitude) of this vector.
         \return The magnitude.
     */
     public double magnitude() {
         return Math.Sqrt(Vector.dot(this, this));
     }
-    
+
     /** \brief Calculate unit vector of this vector.
         \return A new unit vector.
     */
@@ -65,7 +64,7 @@ public class Vector {
         Debug.Assert( mag > 0.0 , "Cannot normalize a zero vector.");
         return this.scale(1.0 / mag);
     }
-    
+
     /** \brief Calculate the dot product of two vectors.
         \param v1 First vector.
         \param v2 Second vector.
@@ -79,7 +78,7 @@ public class Vector {
         }
         return res;
     }
-    
+
     /** \brief Calculate the resultant vector of two vectors.
         \param v1 First vector.
         \param v2 Second vector.
@@ -87,28 +86,28 @@ public class Vector {
     */
     public static Vector add(Vector v1, Vector v2) {
         Debug.Assert( v1.dimension() == v2.dimension() , "Vector dimensions must match for addition.");
-        double[] res = v1.v.clone();
+        double[] res = (double[]) v1.v.Clone();
         for (int i = 0; i < v1.dimension(); i += 1) {
             res[i] = res[i] + v2.v[i];
         }
         return new Vector(res);
     }
-    
+
     /** \brief Scale this vector by a factor.
         \param s Scalar factor.
         \return A new scaled vector.
     */
     public Vector scale(double s) {
-        double[] res = this.v.clone();
+        double[] res = (double[]) this.v.Clone();
         for (int i = 0; i < this.dimension(); i += 1) {
             res[i] = s * res[i];
         }
         return new Vector(res);
     }
-    
+
     /** \brief Prints the vector elements to console.
     */
     public void print() {
-        Console.WriteLine(Arrays.toString(this.v));
+        Console.WriteLine("[" + string.Join(", ", this.v) + "]"); // Note: printing arrays is messier in C#
     }
 }

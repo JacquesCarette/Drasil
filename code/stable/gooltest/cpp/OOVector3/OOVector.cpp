@@ -4,18 +4,17 @@
 #include <iostream>
 #include <math.h>
 #include <string>
+#include <vector>
 
 using std::string;
 
-Vector::Vector(const double* v, int length) {
-    assert(length > 0 && "Vector dimension must be > 0.");
-    this->length = length;
-    this->v = new double[length];
-    std::copy(v, v + length, this->v);
+Vector::Vector(std::vector<double> v) {
+    assert(v.size() > 0 && "Vector dimension must be > 0.");
+    this->v = v;
 }
 
 int Vector::dimension() {
-    return this->length;
+    return this->v.size();
 }
 
 double Vector::magnitude() {
@@ -28,7 +27,7 @@ Vector Vector::norm() {
     return this->scale(1.0 / mag);
 }
 
- double Vector::dot(Vector v1, Vector v2) {
+double Vector::dot(Vector v1, Vector v2) {
     assert(v1.dimension() == v2.dimension() && "Vector dimensions must match for dot product.");
     double res = 0.0;
     for (int i = 0; i < v1.dimension(); i += 1) {
@@ -38,22 +37,21 @@ Vector Vector::norm() {
 }
 
 Vector Vector::add(Vector v1, Vector v2) {
-    assert(v1.dimension() == v2.dimension() && "Vector dimensions must match for addition.");
-    double res[v1.dimension()];
-    std::copy(v1.v, v1.v + v1.dimension(), res);
+  assert(v1.dimension() == v2.dimension() &&
+         "Vector dimensions must match for addition.");
+    std::vector<double> res = v1.v;
     for (int i = 0; i < v1.dimension(); i += 1) {
         res[i] = res[i] + v2.v[i];
     }
-    return Vector(res, v1.dimension());
+    return Vector(res);
 }
 
 Vector Vector::scale(double s) {
-    double res[this->length];
-    std::copy(this->v, this->v + this->dimension(), res);
+    std::vector<double> res = this->v;
     for (int i = 0; i < this->dimension(); i += 1) {
         res[i] = s * res[i];
     }
-    return Vector(res, this->dimension());
+    return Vector(res);
 }
 
 void Vector::print() {
@@ -68,10 +66,10 @@ void Vector::print() {
 }
 
 int main(int argc, const char *argv[]) {
-    double ds1[3] = {1.0, 2.0, 3.0};
-    double ds2[3] = {4.0, 5.0, 6.0};
-    Vector v1 = Vector(ds1, 3);
-    Vector v2 = Vector(ds2, 3);
+    std::vector<double> ds1 {1.0, 2.0, 3.0};
+    std::vector<double> ds2 {4.0, 5.0, 6.0};
+    Vector v1 = Vector(ds1);
+    Vector v2 = Vector(ds2);
     std::cout << "v1: ";
     v1.print();
     std::cout << "v2: ";

@@ -2,17 +2,18 @@
 #define OOVector_h
 
 #include <string>
+#include <vector>
 
 using std::string;
 
 /** \brief Vectors of doubles and common vector-related operations.
-*/
+ */
 class Vector {
     public:
         /** \brief Construct a vector from an array of doubles.
             \param v The doubles.
         */
-        Vector(const double* v, int length);
+        Vector(std::vector<double> v);
         /** \brief Returns the dimension of this vector.
             \return The dimension of the vector.
         */
@@ -47,9 +48,8 @@ class Vector {
         void print();
     
     private:
-        double* v;
-        int length;
-        
+        std::vector<double> v;
+
 };
 
 #endif

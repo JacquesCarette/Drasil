@@ -1,19 +1,17 @@
 import math
 
-import java.util.Arrays
-
 ## \brief Vectors of doubles and common vector-related operations.
 class Vector:
     ## \brief Construct a vector from an array of doubles.
     # \param v The doubles.
     def __init__(self, v):
-        assert v.length > 0, "Vector dimension must be > 0."
-        self.v = v.clone()
+        assert len(v) > 0, "Vector dimension must be > 0."
+        self.v = v.copy()
     
     ## \brief Returns the dimension of this vector.
     # \return The dimension of the vector.
     def dimension(self):
-        return self.v.length
+        return len(self.v)
     
     ## \brief Calculate the Euclidean norm (magnitude) of this vector.
     # \return The magnitude.
@@ -31,7 +29,8 @@ class Vector:
     # \param v1 First vector.
     # \param v2 Second vector.
     # \return The dot product.
-    def dot(self, v1, v2):
+    @classmethod
+    def dot(cls, v1, v2):
         assert v1.dimension() == v2.dimension(), "Vector dimensions must match for dot product."
         res = 0.0
         for i in range(0, v1.dimension(), 1):
@@ -42,9 +41,10 @@ class Vector:
     # \param v1 First vector.
     # \param v2 Second vector.
     # \return The resultant vector.
-    def add(self, v1, v2):
+    @classmethod
+    def add(cls, v1, v2):
         assert v1.dimension() == v2.dimension(), "Vector dimensions must match for addition."
-        res = v1.v.clone()
+        res = v1.v.copy()
         for i in range(0, v1.dimension(), 1):
             res[i] = res[i] + v2.v[i]
         return Vector(res)
@@ -53,14 +53,14 @@ class Vector:
     # \param s Scalar factor.
     # \return A new scaled vector.
     def scale(self, s):
-        res = self.v.clone()
+        res = self.v.copy()
         for i in range(0, self.dimension(), 1):
             res[i] = s * res[i]
         return Vector(res)
     
     ## \brief Prints the vector elements to console.
     def print(self):
-        print(java.util.Arrays.Arrays.toString(self.v))
+        print(self.v)
 
 ds1 = [1.0, 2.0, 3.0]
 ds2 = [4.0, 5.0, 6.0]

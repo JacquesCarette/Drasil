@@ -74,6 +74,9 @@ extra-deps:
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699,1000
 - transformers-0.6.1.1@sha256:80d128763c6965dfcddca2155b3dec3bb1970d476f0c8cceb4bb28608ab75e7c,3243
 
+# lts-22.44 includes 0.1.5, but we need 0.1.6+ due to https://github.com/haskell/file-io/issues/45
+- file-io-0.1.6@sha256:5e3466f15993e499db47d79d09c519d6d37c143cfe94fb46dd218bf2f6f3fd39,3550
+
 # The following packages are dependencies needed for 'stan' and 'weeder', 'stan' specifically tested against GHC 9.4.8.
 - clay-0.14.0@sha256:a50ba73137a39c55e89f24a7792107ec40ba07320b2c5ff7932049845c50ffc9,2204
 - dir-traverse-0.2.3.0@sha256:adcc128f201ff95131b15ffe41365dc99c50dc3fa3a910f021521dc734013bfa,2137

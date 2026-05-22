@@ -177,7 +177,6 @@ instance BlockElim JuliaCode where
   block = unJLC
 
 instance TypeSym JuliaCode where
-  type Type JuliaCode = TypeData
   bool = CS.bool
   int = jlIntType
   float = jlFloatType
@@ -285,7 +284,7 @@ instance RenderVariable JuliaCode where
 
 instance ValueSym JuliaCode where
   type Value JuliaCode = ValData
-  valueType = onCodeValue valType
+  valueType v = valType <$> v
 
 instance Argument JuliaCode where
   pointerArg = id

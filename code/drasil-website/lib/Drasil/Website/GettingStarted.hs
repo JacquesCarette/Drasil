@@ -1,4 +1,4 @@
-module Drasil.Website.GettingStarted where
+module Drasil.Website.GettingStarted (gettingStartedSec) where
 
 import Language.Drasil
 

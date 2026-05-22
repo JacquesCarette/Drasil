@@ -1,5 +1,5 @@
 -- | Defines types and functions for generating Makefiles.
-module Build.Drasil.Make.MakeString (
+module Drasil.Makefile.Make.MakeString (
   MakeString(..), MVar,
   (+:+),
   renderMS, renderVar,

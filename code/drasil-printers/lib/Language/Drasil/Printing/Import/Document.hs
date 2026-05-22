@@ -142,9 +142,7 @@ layLabelled sm x@(LblC _ _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ _ (EqnBlock c))        = T.HDiv ["equation"]
-  [T.EqnBlock (P.E (modelExpr c sm))]
-  (P.S $ getAdd $ getRefAdd x)
+layLabelled sm (LblC _ _ (EqnBlock c))          = T.EqnBlock (P.E (modelExpr c sm))
 layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (P.S $ getAdd $ getRefAdd x)
   (if hc == WithCaption then Just (spec sm c) else Nothing)
@@ -170,7 +168,7 @@ layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (modelExpr c sm))] P.EmptyS
+layUnlabelled sm (EqnBlock c)     = T.EqnBlock (P.E (modelExpr c sm))
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"

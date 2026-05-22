@@ -9,14 +9,14 @@ import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Build.Artifacts (FileLayout, directory, file, localPath, ps, writeFiles)
-import Build.Drasil ((+:+), makeS, mkCheckedCommand, mkCommand,
-  mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(..), checkToC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
+import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
+  mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)

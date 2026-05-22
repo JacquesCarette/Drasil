@@ -323,7 +323,7 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 # No traceability graphs will be created, only the dot files.
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
-$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): %$(BC_E_SUFFIX)
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"

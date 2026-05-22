@@ -211,7 +211,6 @@ instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) where
   block b = RC.block $ pfst b
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
-  type Type (p CppSrcCode CppHdrCode) = TypeData
   bool = on2StateValues pair bool bool
   int = on2StateValues pair int int
   float = on2StateValues pair float float
@@ -1123,7 +1122,6 @@ instance BlockElim CppSrcCode where
   block = unCPPSC
 
 instance TypeSym CppSrcCode where
-  type Type CppSrcCode = TypeData
   bool = cppBoolType
   int = CP.int
   float = C.float
@@ -1146,7 +1144,7 @@ instance TypeSym CppSrcCode where
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
-  funcType = CS.funcType
+  funcType = cppFuncType
   void = C.void
 
 instance OOTypeSym CppSrcCode where
@@ -1861,7 +1859,6 @@ instance BlockElim CppHdrCode where
   block = unCPPHC
 
 instance TypeSym CppHdrCode where
-  type Type CppHdrCode = TypeData
   bool = cppBoolType
   int = CP.int
   float = C.float
@@ -2515,7 +2512,7 @@ cppName = "C++"
 cppVersion = "gcc 10.1"
 
 guard, inc, ifndef, define, defineSuffix, endif, using, namespace, cppPtr,
-  cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi,
+  cppDeref, streamL, streamR, cppLambdaDec, catchAll, cppPi,
   ptrAccess' :: Doc
 guard = text "#"
 inc = guard <> text "include"
@@ -2530,7 +2527,6 @@ cppDeref = text "*"
 streamL = text "<<"
 streamR = text ">>"
 cppLambdaDec = text "[]"
-cppLambdaSep = text "->"
 catchAll = text "..."
 cppPi = text "M_PI"
 ptrAccess' = text ptrAccess
@@ -2727,9 +2723,15 @@ cppIterType t' = do
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v
 
+cppFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+cppFuncType ps' r' =  do
+  ps <- sequence ps'
+  r <- r'
+  typeFromData (Func (map getType ps) (getType r)) "auto" (text "auto")
+
 cppLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
-  (map (RC.type' . binderType) ps) (map RC.binderElim ps)) <+> cppLambdaSep <+>
+  (map (RC.type' . binderType) ps) (map RC.binderElim ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
 stodFunc :: SValue CppSrcCode -> SValue CppSrcCode
@@ -2771,7 +2773,7 @@ cppFuncDecDef v scp ps bod = do
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
     cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (map (RC.type' .
-    variableType) pms) (map RC.variable pms)) <+> cppLambdaSep <+> bodyStart $$
+    variableType) pms) (map RC.variable pms)) <+>  bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
 cppPrint :: (CommonRenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
@@ -2837,14 +2839,14 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom
   lensMStoVS . snd) is <*> b)
 
-cppsFunction :: Label -> CppSrcCode (Type CppSrcCode) ->
+cppsFunction :: Label -> CppSrcCode TypeData ->
   [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
 cppsFunction n t ps b = vcat [
   RC.type' t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
 
-cppsIntFunc :: (CppSrcCode (Type CppSrcCode) ->
+cppsIntFunc :: (CppSrcCode TypeData ->
   [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc)
   -> CppSrcCode (Visibility CppSrcCode) -> MSMthdType CppSrcCode ->
   [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode
@@ -2854,7 +2856,7 @@ cppsIntFunc f s t ps b = do
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
-cpphMethod :: (CommonRenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
+cpphMethod :: (CommonRenderSym r) => Label -> r TypeData -> [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n
   <> parens (parameterList ps) <> endStatement
 

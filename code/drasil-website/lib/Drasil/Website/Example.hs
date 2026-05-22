@@ -1,7 +1,10 @@
 {-# LANGUAGE TupleSections #-}
 
 -- | Create the list of Generated Examples for the Drasil website.
-module Drasil.Website.Example where
+module Drasil.Website.Example (
+  Example(..), examples, exName,
+  exampleSec, exampleRefs, allExampleSI
+) where
 
 import Control.Lens ((^.))
 

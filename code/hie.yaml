@@ -1,8 +1,5 @@
 cradle:
   stack:
-    - path: "drasil-build/lib"
-      component: "drasil-build:lib"
-
     - path: "drasil-build-artifacts/lib"
       component: "drasil-build-artifacts:lib"
 
@@ -122,6 +119,9 @@ cradle:
 
     - path: "drasil-lang/lib"
       component: "drasil-lang:lib"
+
+    - path: "drasil-makefile/lib"
+      component: "drasil-makefile:lib"
 
     - path: "drasil-metadata/lib"
       component: "drasil-metadata:lib"

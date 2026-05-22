@@ -24,7 +24,7 @@ dependencies:
 - pretty
 - prettyprinter
 - template-haskell
-- file-io
+- file-io >= 0.1.6
 - os-string
 
 ghc-options:

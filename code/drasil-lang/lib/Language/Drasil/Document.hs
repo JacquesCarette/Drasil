@@ -29,10 +29,6 @@ import Language.Drasil.Sentence (Sentence(..))
 data SecCons = Sub Section
              | Con Contents
 
-data Partition = Sections
-                | Part
-                | Chapter
-
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
 data Section = Section

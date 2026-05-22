@@ -41,7 +41,6 @@ type MaxWidthPercent = Float
 type Title    = Sentence
 type Author   = Sentence
 type Header   = Sentence -- ^ Used when creating sublists.
-type Depth    = Int
 type Width    = Float
 type Height   = Float
 type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. For use in lists.

@@ -30,9 +30,6 @@ import Language.Drasil.WellTyped
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
 
--- | The variable type is just a renamed 'String'.
-type Variable = String
-
 -- Binary functions
 
 -- | Arithmetic operators (fractional, power, and subtraction).

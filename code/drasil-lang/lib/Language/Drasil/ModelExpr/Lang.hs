@@ -112,9 +112,6 @@ data ModelExpr where
   -- | Universal quantification
   ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
 
--- | The variable type is just a renamed 'String'.
-type Variable = String
-
 -- instance Num Expr where
 --   (Int 0)        + b              = b
 --   a              + (Int 0)        = a

@@ -199,7 +199,6 @@ instance BlockElim JavaCode where
   block = unJC
 
 instance TypeSym JavaCode where
-  type Type JavaCode = TypeData
   bool = jBoolType
   int = CP.int
   float = C.float
@@ -1045,7 +1044,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
-  -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
+  -> r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>

@@ -27,7 +27,7 @@ module Drasil.Shared.InterfaceCommon (
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
 
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -70,10 +70,9 @@ class (StatementSym r) => BlockSym r where
   type Block r
   block   :: [MSStatement r] -> MSBlock r
 
-type VSType a = VS (a (Type a))
+type VSType a = VS (a TypeData)
 
 class TypeSym r where
-  type Type r
   bool          :: VSType r
   int           :: VSType r -- This is 32-bit signed ints except in Python,
                             -- which has unlimited precision ints; and Julia,
@@ -92,8 +91,8 @@ class TypeSym r where
   void          :: VSType r
 
 class (TypeSym r) => TypeElim r where
-  getType :: r (Type r) -> CodeType
-  getTypeString :: r (Type r) -> String
+  getType :: r TypeData -> CodeType
+  getTypeString :: r TypeData -> String
 
 class ScopeSym r where
   type Scope r
@@ -114,7 +113,7 @@ class (TypeSym r) => VariableSym r where
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
-  variableType :: r (Variable r) -> r (Type r)
+  variableType :: r (Variable r) -> r TypeData
 
 listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
 listVar n t = var n (listType t)
@@ -126,7 +125,7 @@ type SValue a = VS (a (Value a))
 
 class (TypeSym r) => ValueSym r where
   type Value r
-  valueType :: r (Value r) -> r (Type r)
+  valueType :: r (Value r) -> r TypeData
 
 class (ValueSym r) => Argument r where
   pointerArg :: SValue r -> SValue r
@@ -238,7 +237,7 @@ class (TypeSym r) => BinderSym r where
 
 class (BinderSym r) => BinderElim r where
   binderName :: r (Binder r) -> String
-  binderType :: r (Binder r) -> r (Type r)
+  binderType :: r (Binder r) -> r TypeData
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where

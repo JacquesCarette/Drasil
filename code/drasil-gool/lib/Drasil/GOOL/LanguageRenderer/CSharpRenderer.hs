@@ -199,7 +199,6 @@ instance BlockElim CSharpCode where
   block = unCSC
 
 instance TypeSym CSharpCode where
-  type Type CSharpCode = TypeData
   bool = addSystemImport csBoolType
   int = CP.int
   float = C.float

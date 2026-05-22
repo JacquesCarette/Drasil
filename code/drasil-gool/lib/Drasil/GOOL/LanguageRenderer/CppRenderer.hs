@@ -211,7 +211,6 @@ instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) where
   block b = RC.block $ pfst b
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
-  type Type (p CppSrcCode CppHdrCode) = TypeData
   bool = on2StateValues pair bool bool
   int = on2StateValues pair int int
   float = on2StateValues pair float float
@@ -1123,7 +1122,6 @@ instance BlockElim CppSrcCode where
   block = unCPPSC
 
 instance TypeSym CppSrcCode where
-  type Type CppSrcCode = TypeData
   bool = cppBoolType
   int = CP.int
   float = C.float
@@ -1861,7 +1859,6 @@ instance BlockElim CppHdrCode where
   block = unCPPHC
 
 instance TypeSym CppHdrCode where
-  type Type CppHdrCode = TypeData
   bool = cppBoolType
   int = CP.int
   float = C.float
@@ -2842,14 +2839,14 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom
   lensMStoVS . snd) is <*> b)
 
-cppsFunction :: Label -> CppSrcCode (Type CppSrcCode) ->
+cppsFunction :: Label -> CppSrcCode TypeData ->
   [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
 cppsFunction n t ps b = vcat [
   RC.type' t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
 
-cppsIntFunc :: (CppSrcCode (Type CppSrcCode) ->
+cppsIntFunc :: (CppSrcCode TypeData ->
   [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc)
   -> CppSrcCode (Visibility CppSrcCode) -> MSMthdType CppSrcCode ->
   [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode
@@ -2859,7 +2856,7 @@ cppsIntFunc f s t ps b = do
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
-cpphMethod :: (CommonRenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
+cpphMethod :: (CommonRenderSym r) => Label -> r TypeData -> [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n
   <> parens (parameterList ps) <> endStatement
 

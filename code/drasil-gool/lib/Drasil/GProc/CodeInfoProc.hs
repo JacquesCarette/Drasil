@@ -3,8 +3,8 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
-  SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+import Drasil.Shared.InterfaceCommon (MSBody, SValue, VSType, MSStatement,
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -17,7 +17,7 @@ import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
@@ -29,6 +29,7 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
+import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfoProc a = CI {unCI :: a} deriving Eq
 
@@ -74,25 +75,24 @@ instance BlockSym CodeInfoProc where
   block = executeList
 
 instance TypeSym CodeInfoProc where
-  type Type CodeInfoProc = String
-  bool              = noInfoType
-  int               = noInfoType
-  float             = noInfoType
-  double            = noInfoType
-  char              = noInfoType
-  string            = noInfoType
-  infile            = noInfoType
-  outfile           = noInfoType
-  listType      _   = noInfoType
-  setType      _   = noInfoType
-  arrayType     _   = noInfoType
-  listInnerType _   = noInfoType
-  funcType      _ _ = noInfoType
-  void              = noInfoType
+  bool              = noInfoVSType
+  int               = noInfoVSType
+  float             = noInfoVSType
+  double            = noInfoVSType
+  char              = noInfoVSType
+  string            = noInfoVSType
+  infile            = noInfoVSType
+  outfile           = noInfoVSType
+  listType      _   = noInfoVSType
+  setType      _   = noInfoVSType
+  arrayType     _   = noInfoVSType
+  listInnerType _   = noInfoVSType
+  funcType      _ _ = noInfoVSType
+  void              = noInfoVSType
 
 instance TypeElim CodeInfoProc where
   getType _     = Void
-  getTypeString = unCI
+  getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoProc where
   type Scope CodeInfoProc = ()
@@ -109,11 +109,11 @@ instance VariableSym CodeInfoProc where
 
 instance VariableElim CodeInfoProc where
   variableName _ = ""
-  variableType _ = toCode ""
+  variableType _ = noInfoType
 
 instance ValueSym CodeInfoProc where
   type Value CodeInfoProc = ()
-  valueType _ = toCode ""
+  valueType _ = noInfoType
 
 instance Argument CodeInfoProc where
   pointerArg = id
@@ -229,7 +229,7 @@ instance ThunkAssign CodeInfoProc where
   thunkAssign _ = zoom lensMStoVS . execute1
 
 instance VectorType CodeInfoProc where
-  vecType _ = noInfoType
+  vecType _ = noInfoVSType
 
 instance VectorDecl CodeInfoProc where
   vecDec  _ _ _ = noInfo
@@ -376,8 +376,11 @@ instance ModuleSym CodeInfoProc where
 noInfo :: State s (CodeInfoProc ())
 noInfo = toState $ toCode ()
 
-noInfoType :: State s (CodeInfoProc String)
-noInfoType = toState $ toCode ""
+noInfoType :: CodeInfoProc TypeData
+noInfoType = return $ td Void "" empty
+
+noInfoVSType :: VSType CodeInfoProc
+noInfoVSType = return noInfoType
 
 updateMEMandCM :: String -> MSBody CodeInfoProc -> SMethod CodeInfoProc
 updateMEMandCM n b = do

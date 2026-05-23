@@ -5,6 +5,8 @@ module Drasil.Generator.LessonPlan (
 ) where
 
 import Control.Lens ((^.))
+import Data.Char (toLower)
+import System.Directory (getCurrentDirectory, setCurrentDirectory, createDirectoryIfMissing)
 
 import Drasil.Build.Artifacts (directory, file, localPath, ps, writeFiles)
 import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
@@ -20,10 +22,15 @@ exportLessonPlan plan nbDecl lsnFileName = do
   let nb = mkNb plan nbDecl S.forT
       printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering []
       pd = makeDocument printSetting nb
+      exampleName = map toLower $ takeWhile (/= '_') lsnFileName
       artifact =
         directory
           [ps|Lesson|]
           [ file [ps|{lsnFileName}.ipynb|] $ genJupyterLessonPlan pd
           ]
 
+  workingDir <- getCurrentDirectory
+  createDirectoryIfMissing False exampleName
+  setCurrentDirectory exampleName
   writeFiles localPath artifact
+  setCurrentDirectory workingDir

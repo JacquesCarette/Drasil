@@ -20,22 +20,24 @@ import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
 import Drasil.Metadata (watermark)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
-import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
-import System.Environment (lookupEnv)
+import Data.Char (toLower)
+import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt, programName)
 
-import Drasil.Generator.ChunkDump (dumpEverything)
+import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
+import Data.Maybe (maybeToList)
 
 -- | Generate an SRS softifact.
 exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
 exportSmithEtAlSrs syst srsDecl srsFileName = do
   let (srs, syst') = mkDoc syst srsDecl S.forT
       pinfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
-  debugDump syst'
+  mDbgData <- buildDebugData syst'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  let srsLayout =
+  let dbgData = maybeToList mDbgData
+      srsLayout =
         directory [ps|SRS|] $
           map
             ( \x ->
@@ -45,20 +47,9 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
             )
             [HTML, TeX, Jupyter, MDBook]
       traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
-  -- FIXME: Ultimately, there should be a single writeFiles call.
-  writeFiles localPath srsLayout
-  writeFiles localPath traceyLayout
-
--- | Internal: Dumps the chunk maps to disk if the `DEBUG_ENV` environment
--- variable is non-empty.
-debugDump :: SmithEtAlSRS -> IO ()
-debugDump si = do
-  -- FIXME: This should be made pure, by passing the 'debug' option instead of using an environment variable
-  maybeDebugging <- lookupEnv "DEBUG_ENV"
-  case maybeDebugging of
-    (Just (_:_)) -> do
-      writeFiles localPath $ dumpEverything si
-    _ -> mempty
+      exampleName = map toLower (syst' ^. programName)
+      exampleLayout = directory [ps|{exampleName}|] $ dbgData ++ [srsLayout, traceyLayout]
+  writeFiles localPath exampleLayout
 
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
 prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout Doc]

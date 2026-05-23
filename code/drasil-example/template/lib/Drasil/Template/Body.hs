@@ -101,8 +101,8 @@ figTemp = llccFig "dblpend" $ figWithWidth EmptyS
   (resourcePath ++ "dblpend.png") 60
 
 -- MOVE TO CONCEPTS
-progName :: CI
-progName = commonIdeaWithDict "progName" (pn "ProgName") "ProgName" []
+progName :: CI -- FIXME: Replace "template" with the name of your project!
+progName = commonIdeaWithDict "progName" (pn "Template") "Template" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

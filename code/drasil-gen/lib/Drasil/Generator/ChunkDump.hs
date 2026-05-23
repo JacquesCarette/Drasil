@@ -25,22 +25,16 @@ buildDebugData si = do
     (Just (_:_)) -> pure $ Just $ dumpEverything si
     _ -> pure Nothing
 
--- | For debugging purposes, constructs a `FileLayout` with a dump of the
--- chunk maps.
+-- | Internal: For debugging purposes, constructs a `FileLayout` with a dump of
+-- the chunk maps.
 dumpEverything :: SmithEtAlSRS -> FileLayout Doc
 dumpEverything si =
   directory [ps|.drasil|]
   [
-    dumpTo chunkDump [ps|seeds.json|],
-    dumpTo traceDump [ps|trace.json|],
-    dumpTo refByDump [ps|reverse_trace.json|]
+    dumpTo [ps|seeds.json|] $ dumpChunkDB (si ^. systemdb),
+    dumpTo [ps|trace.json|] $ si ^. traceTable,
+    dumpTo [ps|reverse_trace.json|] $ si ^. refbyTable
   ]
-  where chunkDb = si ^. systemdb
-        chunkDump = dumpChunkDB chunkDb
-        traceDump = si ^. traceTable
-        refByDump = si ^. refbyTable
 
--- FIXME: This is more of a general utility than it is drasil-database specific
-dumpTo :: ToJSON a => a -> PathSegment -> FileLayout Doc
-dumpTo d targetPath =
-  file targetPath (text $ LB.unpack $ encodePretty d)
+dumpTo :: ToJSON a => PathSegment -> a -> FileLayout Doc
+dumpTo targetPath d = file targetPath (text $ LB.unpack $ encodePretty d)

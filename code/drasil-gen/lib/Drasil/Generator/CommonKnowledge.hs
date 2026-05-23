@@ -46,18 +46,16 @@ basisReferences = SRS.sectionReferences
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =
-  -- | DefinedQuantityDicts
   --  * codeDQDs - A list of DefinedQuantityDicts that are used for general
   --               code generation in all case studies
   codeDQDs
 
 -- | The basic idea dicts that are used to construct the basis chunk database.
 -- Every chunk added here is added to every new chunk database created that uses
---  the cdb constructor. This ensures that the information in these idea dicts
---  is always available in the chunk database.
+-- the cdb constructor. This ensures that the information in these idea dicts is
+-- always available in the chunk database.
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
-  -- | Actual IdeaDicts
   --  * doccon - General documentation related IdeaDicts. Included in the basis
   --             as it is data which all the cases studies use and is not specific
   --             to a particular case study.
@@ -81,7 +79,6 @@ basisIdeaDicts =
 
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =
-  -- | ConceptChunks
   --  * algorithm - A concept chunk that describes algorithms. This is included in the
   --                basis as algorithms are a commonly used concept in the case studies.
   --                but did not fit into the other lists

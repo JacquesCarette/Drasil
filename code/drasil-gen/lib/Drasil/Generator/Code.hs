@@ -1,6 +1,6 @@
 module Drasil.Generator.Code (
   -- * Generators
-  exportCode, exportCodeZoo,
+  genCode, genCodeZoo,
   -- * Internal Functions
   codedDirName
 ) where
@@ -29,20 +29,6 @@ import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
 -- | Generate an ICO-style executable software artifact.
-exportCode :: SmithEtAlSRS -> Choices -> IO ()
-exportCode = genCode
-
--- | Internal: Generate a zoo of ICO-style executable softifact.
-exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
-exportCodeZoo syst = mapM_ $ \chcs -> do
-  let dir = map toLower $ codedDirName (syst ^. programName) chcs
-  workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False dir
-  setCurrentDirectory dir
-  exportCode syst chcs
-  setCurrentDirectory workingDir
-
--- | Calls the code generator.
 genCode :: SmithEtAlSRS -> Choices -> IO ()
 genCode syst chs = do
   let spec = codeSpec syst chs
@@ -63,6 +49,16 @@ genCode syst chs = do
       genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
+  setCurrentDirectory workingDir
+
+-- | Generate a zoo of ICO-style executable softifact.
+genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
+genCodeZoo syst = mapM_ $ \chcs -> do
+  let dir = map toLower $ codedDirName (syst ^. programName) chcs
+  workingDir <- getCurrentDirectory
+  createDirectoryIfMissing False dir
+  setCurrentDirectory dir
+  genCode syst chcs
   setCurrentDirectory workingDir
 
 -- | Find name of folders created for a "zoo" of executable softifacts.

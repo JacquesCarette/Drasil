@@ -1,55 +1,46 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Drasil.Generator.SRS (
   -- * Generators
-  exportSmithEtAlSrs
+  genSmithEtAlSrs
 ) where
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, localPath, ps, writeFiles)
+import Drasil.Build.Artifacts (FileLayout, directory, file, ps)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(..), checkToC)
-import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
-import Data.Char (toLower)
-import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt, programName)
+import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
 
-import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
-import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
-import Data.Maybe (maybeToList)
 
--- | Generate an SRS softifact.
-exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
-exportSmithEtAlSrs syst srsDecl srsFileName = do
-  let (srs, syst') = mkDoc syst srsDecl S.forT
-      pinfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering (syst' ^. lbldCntnt)
-  mDbgData <- buildDebugData syst'
-  typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  let dbgData = maybeToList mDbgData
-      srsLayout =
-        directory [ps|SRS|] $
-          map
-            ( \x ->
-                let x' = show x
-                in directory [ps|{x'}|] $
-                      prntDoc srs pinfo srsFileName x
-            )
-            [HTML, TeX, Jupyter, MDBook]
-      traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
-      exampleName = map toLower (syst' ^. programName)
-      exampleLayout = directory [ps|{exampleName}|] $ dbgData ++ [srsLayout, traceyLayout]
-  writeFiles localPath exampleLayout
+-- | Generate Drasil's SRS (in HTML, TeX, Jupyter, and MDBook formats).
+genSmithEtAlSrs :: SmithEtAlSRS -> Document -> String -> [FileLayout Doc]
+genSmithEtAlSrs syst doc srsFileName =
+  [ srsLayout,
+    traceyLayout
+  ]
+  where
+    pinfo = piSys (syst ^. systemdb) (syst ^. refTable) Equational Engineering (syst ^. lbldCntnt)
+    srsLayout =
+      directory [ps|SRS|] $
+        map
+          ( \x ->
+              let x' = show x
+              in directory [ps|{x'}|] $
+                    prntDoc doc pinfo srsFileName x
+          )
+          [HTML, TeX, Jupyter, MDBook]
+    traceyLayout = outputDot (mkGraphInfo syst) -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
 
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
 prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout Doc]

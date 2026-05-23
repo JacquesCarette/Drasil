@@ -11,9 +11,8 @@ import Data.Char (toLower)
 import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import System.Directory (getCurrentDirectory, setCurrentDirectory, createDirectoryIfMissing)
 
-import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))
@@ -40,7 +39,7 @@ exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
 exportCodeZoo syst = mapM_ $ \chcs -> do
   let dir = map toLower $ codedDirName (syst ^. programName) chcs
   workingDir <- getCurrentDirectory
-  createDirIfMissing False dir
+  createDirectoryIfMissing False dir
   setCurrentDirectory dir
   exportCode syst chcs
   setCurrentDirectory workingDir
@@ -52,7 +51,7 @@ genCode chs spec = do
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (spec ^. extInputsO)) (getSampleData chs)
-  createDirIfMissing False "src"
+  createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP
       genLangCode Python = genCall Python unPC unPP

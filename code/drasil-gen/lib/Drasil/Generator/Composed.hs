@@ -9,9 +9,8 @@ import Data.Char (toLower)
 import Language.Drasil.Code (Choices)
 import Drasil.SRSDocument (SRSDecl)
 import Drasil.System (SmithEtAlSRS, programName)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import System.Directory (getCurrentDirectory, setCurrentDirectory, createDirectoryIfMissing)
 
-import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
 import Drasil.Generator.Code (exportCode, exportCodeZoo)
 import Drasil.Generator.SRS (exportSmithEtAlSrs)
 
@@ -21,7 +20,7 @@ exportSmithEtAlSrsWCode syst srsDecl srsFileName chcs = do
   let exampleName = map toLower (syst ^. programName)
   exportSmithEtAlSrs syst srsDecl srsFileName
   workingDir <- getCurrentDirectory
-  createDirIfMissing False exampleName
+  createDirectoryIfMissing False exampleName
   setCurrentDirectory exampleName
   exportCode syst chcs
   setCurrentDirectory workingDir
@@ -32,8 +31,7 @@ exportSmithEtAlSrsWCodeZoo syst srsDecl srsFileName chcs = do
   let exampleName = map toLower (syst ^. programName)
   exportSmithEtAlSrs syst srsDecl srsFileName
   workingDir <- getCurrentDirectory
-  createDirIfMissing False exampleName
+  createDirectoryIfMissing False exampleName
   setCurrentDirectory exampleName
   exportCodeZoo syst chcs
   setCurrentDirectory workingDir
-

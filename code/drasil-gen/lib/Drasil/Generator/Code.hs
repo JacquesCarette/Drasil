@@ -1,6 +1,6 @@
 module Drasil.Generator.Code (
   -- * Generators
-  exportCode, exportCodeZoo,
+  genCode, genCodeZoo,
   -- * Internal Functions
   codedDirName
 ) where
@@ -11,9 +11,9 @@ import Data.Char (toLower)
 import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
+import System.Directory (getCurrentDirectory, setCurrentDirectory,
+  createDirectoryIfMissing)
 
-import Drasil.Build.Artifacts.Legacy (createDirIfMissing)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))
@@ -25,34 +25,19 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   constStructure), ImplementationType(..), LogConfig(logging), Logging,
   Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
   Structure(..), Lang(Julia, Java,
-  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
+  Python, CSharp, Cpp, Swift), HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
 -- | Generate an ICO-style executable software artifact.
-exportCode :: SmithEtAlSRS -> Choices -> IO ()
-exportCode syst chcs = do
-  let code = codeSpec syst chcs
-  genCode chcs code
-
--- | Internal: Generate a zoo of ICO-style executable softifact.
-exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
-exportCodeZoo syst = mapM_ $ \chcs -> do
-  let dir = map toLower $ codedDirName (syst ^. programName) chcs
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False dir
-  setCurrentDirectory dir
-  exportCode syst chcs
-  setCurrentDirectory workingDir
-
--- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> IO ()
-genCode chs spec = do
+genCode :: SmithEtAlSRS -> Choices -> IO ()
+genCode syst chs = do
+  let spec = codeSpec syst chs
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (spec ^. extInputsO)) (getSampleData chs)
-  createDirIfMissing False "src"
+  createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP
       genLangCode Python = genCall Python unPC unPP
@@ -65,6 +50,16 @@ genCode chs spec = do
       genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
+  setCurrentDirectory workingDir
+
+-- | Generate a zoo of ICO-style executable softifact.
+genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
+genCodeZoo syst = mapM_ $ \chcs -> do
+  let dir = map toLower $ codedDirName (syst ^. programName) chcs
+  workingDir <- getCurrentDirectory
+  createDirectoryIfMissing False dir
+  setCurrentDirectory dir
+  genCode syst chcs
   setCurrentDirectory workingDir
 
 -- | Find name of folders created for a "zoo" of executable softifacts.
@@ -107,7 +102,7 @@ codedConRepr Var = "V"
 codedConRepr Const = "C"
 
 codedSpaceMatch :: SpaceMatch -> String
-codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
-                                     [Float, Double] -> "F"
-                                     _ -> error
-                                       "Unexpected SpaceMatch for Projectile"
+codedSpaceMatch sm = case sm Real of
+  [Double, Float] -> "D"
+  [Float, Double] -> "F"
+  _ -> error "Unexpected SpaceMatch for Projectile"

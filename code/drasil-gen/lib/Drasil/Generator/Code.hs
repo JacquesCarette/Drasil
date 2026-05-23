@@ -24,15 +24,13 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   constStructure), ImplementationType(..), LogConfig(logging), Logging,
   Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
   Structure(..), Lang(Julia, Java,
-  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
+  Python, CSharp, Cpp, Swift), HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
 -- | Generate an ICO-style executable software artifact.
 exportCode :: SmithEtAlSRS -> Choices -> IO ()
-exportCode syst chcs = do
-  let code = codeSpec syst chcs
-  genCode chcs code
+exportCode = genCode
 
 -- | Internal: Generate a zoo of ICO-style executable softifact.
 exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
@@ -45,8 +43,9 @@ exportCodeZoo syst = mapM_ $ \chcs -> do
   setCurrentDirectory workingDir
 
 -- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> IO ()
-genCode chs spec = do
+genCode :: SmithEtAlSRS -> Choices -> IO ()
+genCode syst chs = do
+  let spec = codeSpec syst chs
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD

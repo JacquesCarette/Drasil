@@ -26,11 +26,14 @@ dependencies:
 - template-haskell
 - file-io >= 0.1.6
 - os-string
+- process
+- tasty
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -threaded
 
 library:
   source-dirs: lib

@@ -7,10 +7,10 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
-  ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
+  ControlStatement(..), VariableSym(..), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  Array(..), List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
+  List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)

@@ -1,6 +1,5 @@
 on:
   pull_request:
-    branches: main
   workflow_dispatch:
     paths: [code/drasil-**, .github/workflows/Lint.yaml, code/scripts/**]
 name: Linter

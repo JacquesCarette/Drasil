@@ -1,4 +1,4 @@
-module DataPrinters.HTML where
+module Drasil.Meta.Analysis.DataPrinters.HTML where
 
 import Data.List.Split (splitOn)
 

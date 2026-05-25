@@ -1,12 +1,3 @@
-#!/usr/bin/env stack
-{- stack script
-   --resolver lts-22.44
-   --package split
-   --package directory,filepath
-   --package text
-   --package containers
--}
-
 -- FIXME: use real parser (Low Priority; see line 267)
 -- | Data table generator. Uses information from SourceCodeReader.hs
 -- to organize all types, classes, and instances in Drasil.
@@ -18,12 +9,12 @@ import System.IO
 import System.Directory
 import System.FilePath (takeDirectory)
 import Control.Monad
-import qualified DirectoryController as DC (createFolder, createFile, finder,
+import qualified Drasil.Meta.Analysis.DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
-import SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
+import Drasil.Meta.Analysis.SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
-import DataPrinters.Dot
-import DataPrinters.HTML
+import Drasil.Meta.Analysis.DataPrinters.Dot
+import Drasil.Meta.Analysis.DataPrinters.HTML
 
 import Data.Containers.ListUtils (nubOrd)
 

@@ -1,5 +1,5 @@
 -- | Directory controller for SourceCodeReader.hs and SourceCodeReaderTypes.hs.
-module DirectoryController (createFolder, createFile, finder, getDirectories,
+module Drasil.Meta.Analysis.DirectoryController (createFolder, createFile, finder, getDirectories,
   DrasilPack, FileName, FolderName, File(..), Folder(..)) where
 
 import Data.List

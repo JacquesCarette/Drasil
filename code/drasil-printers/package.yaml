@@ -25,7 +25,6 @@ dependencies:
 - drasil-build-artifacts
 - drasil-database
 - drasil-lang
-- drasil-metadata
 - drasil-theory
 - drasil-utils
 - split

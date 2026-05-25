@@ -10,7 +10,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
+  Array(..), List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -68,6 +68,11 @@ helloInitVariables :: (SharedProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
+  arrayDecDef (var "arr" (arrayType int)) mainFn (map litInt [1..3]),
+  arrayDec 3 (var "arr2" (arrayType int)) mainFn,
+  arrayElem (litInt 0) (var "arr2" (arrayType int)) &= litInt 4,
+  arrayElem (litInt 1) (var "arr2" (arrayType int)) &= litInt 5,
+  arrayElem (litInt 2) (var "arr2" (arrayType int)) &= litInt 6,
   listDecDef myOtherList mainFn [litDouble 1.0,
     litDouble 1.5],
   varDecDef (var "oneIndex" int) mainFn (indexOf (valueOf myOtherList) (litDouble 1.0)),

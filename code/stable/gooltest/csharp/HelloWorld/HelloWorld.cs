@@ -14,6 +14,11 @@ public class HelloWorld {
         // Initializing variables
         int a;
         int b = 5;
+        int[] arr = {1, 2, 3};
+        int[] arr2 = new int[3];
+        arr2[0] = 4;
+        arr2[1] = 5;
+        arr2[2] = 6;
         List<double> myOtherList = new List<double> {1.0, 1.5};
         int oneIndex = myOtherList.IndexOf(1.0);
         Console.WriteLine(oneIndex);

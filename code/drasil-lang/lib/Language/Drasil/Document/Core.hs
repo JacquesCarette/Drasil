@@ -56,12 +56,6 @@ data Contents = UlC UnlabelledContent
 --   gdefn, General, mkGDField [Para, EqnBlock, Enumeration]
 --   instanceModel, Instance, mkIMField [Para, EqnBlock, Enumeration]
 
--- | Types of definitions (general, instance, theory, or data).
-data DType = General
-           | Instance
-           | Theory
-           | Data
-
 -- | Indicates whether a figure has a caption or not.
 data HasCaption = NoCaption | WithCaption
   deriving (Eq)
@@ -73,7 +67,7 @@ data RawContent =
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
-  | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
+  | Defini [(Identifier, [Contents])]        -- ^ Defines something with a type, identifier, and 'Contents'.
   | Figure Lbl Filepath MaxWidthPercent HasCaption
                                              -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.

@@ -75,7 +75,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
-  notifyObservers')
+  notifyObservers', arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
@@ -562,7 +562,7 @@ instance DeclStatement PythonCode where
   setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
-  arrayDec = listDec
+  arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef v scp e = do
     v' <- zoom lensMStoVS v

@@ -58,7 +58,7 @@ stripWS = T.unpack . T.strip . T.pack
 -- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()
 forceRead [] = ()
-forceRead (x:xs) = forceRead xs
+forceRead (_:xs) = forceRead xs
 
 -- index number, class + script lines, indexes list (for multi-line classes)
 getIndexes :: Int -> [String] -> [String] -> [Int]

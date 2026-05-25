@@ -5,18 +5,15 @@ module TypeDepGen (main) where
 import Data.List
 import System.IO
 import System.Directory
-import System.FilePath (takeDirectory)
 import Control.Monad
-import qualified Drasil.Meta.Analysis.DirectoryController as DC (createFolder, createFile, finder,
-  getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
+import qualified Drasil.Meta.Analysis.DirectoryController as DC (finder,
+  getDirectories, DrasilPack, FileName, File(..), Folder(..))
 import Drasil.Meta.Analysis.SourceCodeReaderT as SCRT (extractEntryData, EntryData(..),
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..),
   DataTypeDeclaration(..))
-import Data.List.Split (splitOn)
 import Data.Char (toLower)
 import Drasil.Meta.Analysis.DataPrinters.Dot
 
-type EntryString = String
 type Colour = String
 
 -- Entry data type for storing entry data for each file entry

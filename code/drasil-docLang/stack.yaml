@@ -31,13 +31,13 @@ resolver: lts-22.44
 packages:
 - .
 - ../drasil-build-artifacts
-- ../drasil-build
 - ../drasil-code
 - ../drasil-metadata
 - ../drasil-data
 - ../drasil-database
 - ../drasil-gool
 - ../drasil-lang
+- ../drasil-makefile
 - ../drasil-printers
 - ../drasil-system
 - ../drasil-theory

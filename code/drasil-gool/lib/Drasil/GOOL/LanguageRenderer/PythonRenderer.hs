@@ -188,7 +188,6 @@ instance BlockElim PythonCode where
   block = unPC
 
 instance TypeSym PythonCode where
-  type Type PythonCode = TypeData
   bool = typeFromData Boolean "" empty
   int = CP.int
   float = error pyFloatError

@@ -1,13 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: April 17, 2019
+Last updated: May 13, 2026
 --------------------------------------------------
 
-**Drasil**
-  - Contains the build system generators for the Drasil language
+**Makefile**
+  - Contains the makefile generator for the Drasil language
  
-**Drasil.hs**
-  - Public interface for the build package
+**Makefile.hs**
+  - Public interface for the makefile package
 
 README.md
   - This file

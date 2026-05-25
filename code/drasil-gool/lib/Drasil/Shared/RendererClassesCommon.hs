@@ -78,7 +78,7 @@ class RenderType r where
   typeFromData :: CodeType -> String -> Doc -> VSType r
 
 class InternalTypeElim r where
-  type' :: r (Type r) -> Doc
+  type' :: r TypeData -> Doc
 
 type VSUnOp a = VS (a (UnaryOp a))
 
@@ -177,7 +177,7 @@ class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r
 
 class FunctionElim r where
-  functionType :: r (Function r) -> r (Type r)
+  functionType :: r (Function r) -> r TypeData
   function :: r (Function r) -> Doc
 
 class InternalAssignStmt r where
@@ -211,7 +211,7 @@ class RenderParam r where
 
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label
-  parameterType :: r (Parameter r) -> r (Type r)
+  parameterType :: r (Parameter r) -> r TypeData
   parameter     :: r (Parameter r) -> Doc
 
 class BlockCommentSym r where

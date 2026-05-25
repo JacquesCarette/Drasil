@@ -6,7 +6,7 @@ module Drasil.Generator.Formats (
   buildMakefile
 ) where
 
-import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
+import Drasil.Makefile ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, mkMakefile, Makefile)
 import Drasil.Metadata (watermark)
 

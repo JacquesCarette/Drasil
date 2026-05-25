@@ -30,9 +30,9 @@ import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
-  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
-  ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
-  ParameterSym(Parameter), BinderSym(..))
+  TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..),
+  StatementSym(Statement), VisibilitySym(Visibility), ParameterSym(Parameter),
+  BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(Attachment))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -213,7 +213,7 @@ param v = RC.type' (variableType v) <+> RC.variable v
 -- Method --
 
 method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) ->
-  r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
+  r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
     parens (parameterList ps) <+> lbrace,

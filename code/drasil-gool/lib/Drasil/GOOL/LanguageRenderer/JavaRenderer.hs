@@ -54,7 +54,7 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj',
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep,
-  access, containing, mathFunc, functionDox, variableList, binderList,
+  access, containing, mathFunc, functionDox, variableList,
   parameterList, appendToBody, surroundBody, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
@@ -199,7 +199,6 @@ instance BlockElim JavaCode where
   block = unJC
 
 instance TypeSym JavaCode where
-  type Type JavaCode = TypeData
   bool = jBoolType
   int = CP.int
   float = C.float
@@ -212,7 +211,7 @@ instance TypeSym JavaCode where
   setType = jSetType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  funcType = CS.funcType
+  funcType = CS.funcType -- TODO [Brandon Bosman, 05/11/2026]: fix this to work with lambda types
   void = C.void
 
 instance OOTypeSym JavaCode where
@@ -961,8 +960,8 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
-jLambda ps ex = parens (binderList ps) <+> jLambdaSep <+> RC.value ex
+jLambda :: [r (Binder r)] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constraint
+jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
 jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
@@ -1046,7 +1045,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Attachment r)
-  -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
+  -> r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>

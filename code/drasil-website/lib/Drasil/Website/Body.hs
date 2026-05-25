@@ -133,7 +133,7 @@ danPoster = makeURI "danPoster" (danContributionPath
   ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
 wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
-  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
+  ++ "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
@@ -152,7 +152,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-danContributionPath = gitHubInfoURL ++ "/blob/master/People/Dan"
+danContributionPath = gitHubInfoURL ++ "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section

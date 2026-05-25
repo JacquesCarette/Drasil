@@ -3,7 +3,6 @@ resolver: lts-22.44
 packages:
 - .
 - ../drasil-build-artifacts
-- ../drasil-build
 - ../drasil-code
 - ../drasil-data
 - ../drasil-database
@@ -11,6 +10,7 @@ packages:
 - ../drasil-gen
 - ../drasil-gool
 - ../drasil-lang
+- ../drasil-makefile
 - ../drasil-metadata
 - ../drasil-printers
 - ../drasil-system

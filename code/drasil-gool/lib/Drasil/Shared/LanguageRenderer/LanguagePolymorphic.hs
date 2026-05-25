@@ -25,7 +25,7 @@ import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
-  BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
+  BlockSym(Block), TypeElim(getType, getTypeString),
   VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
@@ -63,8 +63,8 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
-  ScopeData, sd)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
+  ScopeTag(Local), ScopeData, sd, TypeData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
@@ -475,7 +475,7 @@ tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
 
-construct :: (CommonRenderSym r) => Label -> MS (r (Type r))
+construct :: (CommonRenderSym r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (CommonRenderSym r) => (r (Variable r) -> Doc) -> SVariable r ->

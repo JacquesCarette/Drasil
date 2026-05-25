@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | About Drasil
-module Drasil.Website.About where
+module Drasil.Website.About (aboutSec) where
 
 import Language.Drasil
 import Drasil.Document.Contents (enumBulletU)

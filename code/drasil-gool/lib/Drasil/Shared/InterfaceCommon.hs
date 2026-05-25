@@ -391,7 +391,11 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
+  -- | Declare a variable without giving it a value.
+  -- Not for use with arrays; use `arrayDec` instead.
   varDec       :: SVariable r -> r (Scope r) -> MSStatement r
+  -- | Declare a variable and give it a value.
+  -- Not for use with arrays; use `arrayDecDef` instead.
   varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
   -- First argument is size of the list
   listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r

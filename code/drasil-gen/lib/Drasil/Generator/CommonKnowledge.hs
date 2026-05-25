@@ -6,7 +6,8 @@ module Drasil.Generator.CommonKnowledge (
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
-import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
+import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource,
+  smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -98,4 +99,5 @@ basisConceptChunks =
   [algorithm, errMsg, program] ++ srsDomains ++ mathcon
 
 basisCitations :: [Citation]
-basisCitations = [cartesianWiki, lineSource, pointSource]
+basisCitations = [cartesianWiki, lineSource, pointSource,
+  smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013]

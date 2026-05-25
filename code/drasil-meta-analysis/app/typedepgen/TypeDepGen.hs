@@ -32,11 +32,9 @@ data Entry = Entry { drasilPack :: DC.DrasilPack
 -- main controller function; initiates function calls to generate output file
 main :: IO ()
 main = do
-  -- directory variables (for scripts, code and output directories)
-  scriptsDirectory <- getCurrentDirectory
-  -- obtains code directory and output directory filepaths
-  let codeDirectory = takeDirectory scriptsDirectory
-      outputDirectory = codeDirectory ++ "/analysis/TypeDependencyGraphs"
+  -- directory variables (for, code and output directories)
+  codeDirectory <- getCurrentDirectory
+  let outputDirectory = codeDirectory ++ "/analysis/TypeDependencyGraphs"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"

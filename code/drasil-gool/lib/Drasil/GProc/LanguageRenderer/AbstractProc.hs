@@ -33,7 +33,7 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.), over)
 import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, render, isEmpty, brackets, (<>))
+import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>))
 
 -- Files --
 
@@ -84,7 +84,7 @@ arrayElem :: (ProcRenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
-  let vName = variableName v ++ "[" ++ render (RCC.value i) ++ "]"
+  let vName = variableName v -- Slight hack; we used to add `++ "[" ++ render (RCC.value i) ++ "]"`
       vType = listInnerType $ return $ variableType v
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender

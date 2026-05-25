@@ -25,7 +25,8 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
   BinderElim(..), BinderSym (..))
 import Drasil.Shared.CodeType (CodeType)
-import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData)
+import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
+  TypeData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)

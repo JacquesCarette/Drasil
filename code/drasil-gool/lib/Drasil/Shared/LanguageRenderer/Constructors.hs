@@ -13,7 +13,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData,
+import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
   TypeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)

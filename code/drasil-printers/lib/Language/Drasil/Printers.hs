@@ -19,7 +19,7 @@ module Language.Drasil.Printers (
   -- * Jupyter
   , genJupyterLessonPlan, genJupyterSRS
   -- * Markdown
-  , genMDBook, makeBook, makeRequirements
+  , genMDBook
   -- * Printing Information and Options
   , PrintingInformation, piSys, Notation(..)
 ) where
@@ -28,7 +28,6 @@ import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)
-import Language.Drasil.Markdown.Config (makeBook, makeRequirements)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,

@@ -116,7 +116,8 @@ removeNewlineGuard = filterNewline (const True) (isPrefixOf "|")
 
 -- Gets rid of automatically derived instances since we only care about type dependencies.
 removeDeriving :: [String] -> [String]
-removeDeriving = mapIf (isInfixOf "deriving ") $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l )
+-- FIXME: we use `"deriving" ++ " "` so that this line doesn't crash while trying to analyze itself.
+removeDeriving = mapIf (isInfixOf ("deriving" ++ " ")) $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l )
 
 -- Removes comments that are a part of datatype lines (drops everything after the comment symbol).
 removeComments :: [String] -> [String]

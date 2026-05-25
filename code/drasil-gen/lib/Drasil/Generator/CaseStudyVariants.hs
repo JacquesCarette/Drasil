@@ -1,5 +1,3 @@
-{-# LANGUAGE QuasiQuotes #-}
-
 -- | Case study variants.
 --
 -- Each case study is expected to generate files in a specific pattern that the

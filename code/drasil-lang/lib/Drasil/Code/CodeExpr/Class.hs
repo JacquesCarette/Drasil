@@ -1,4 +1,4 @@
-module Drasil.Code.CodeExpr.Class where
+module Drasil.Code.CodeExpr.Class (CodeExprC(..)) where
 
 import Control.Lens ((^.))
 

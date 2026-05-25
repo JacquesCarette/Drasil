@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 -- | Contains types and functions common to aspects of generating documents.
 module Language.Drasil.Document.Core (
-  Contents(..), ListType(..), ItemType(..), DType(..),RawContent(..),
+  Contents(..), ListType(..), ItemType(..), RawContent(..),
   ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
   UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
 ) where

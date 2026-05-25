@@ -1,6 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Defines chunk types for use in code generation.
-module Drasil.Code.CodeVar where
+module Drasil.Code.CodeVar (
+  CodeIdea(..), DefiningCodeExpr(..), VarOrFunc(..), CodeChunk(..), qc,
+  CodeVarChunk(..), ccv, obv, CodeFuncChunk(..),  ccf,
+  funcPrefix, listToArray
+) where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 

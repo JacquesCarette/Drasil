@@ -1,5 +1,9 @@
 -- | Defines operator precedence.
-module Language.Drasil.Expr.Precedence where
+module Language.Drasil.Expr.Precedence (
+  prec2Arith, prec2Eq, prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV,
+  prec2ESS, prec2ESB, precA, precB, precC, prec1, prec1B, prec1VV, prec1VN,
+  eprec
+) where
 
 import Language.Drasil.Expr.Lang (Expr(..),
   ArithBinOp(..), EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,

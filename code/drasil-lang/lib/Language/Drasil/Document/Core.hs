@@ -1,6 +1,10 @@
 {-# Language TemplateHaskell #-}
 -- | Contains types and functions common to aspects of generating documents.
-module Language.Drasil.Document.Core where
+module Language.Drasil.Document.Core (
+  Contents(..), ListType(..), ItemType(..), DType(..),RawContent(..),
+  ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
+  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
+) where
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 
@@ -37,7 +41,6 @@ type MaxWidthPercent = Float
 type Title    = Sentence
 type Author   = Sentence
 type Header   = Sentence -- ^ Used when creating sublists.
-type Depth    = Int
 type Width    = Float
 type Height   = Float
 type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. For use in lists.

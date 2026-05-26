@@ -50,16 +50,16 @@ import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
+  Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
   BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
-  staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
-  VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
-  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
+  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, Array(..),
+  List(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
+  privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -102,14 +102,14 @@ value u s t = do
 -- If variable is a constant and 'Var' constant representation is chosen,
 -- construct it with 'var' and pass to 'constVariable'.
 -- If variable is a constant and 'Const' constant representation is chosen,
--- construct it with 'staticVar' and pass to 'constVariable'.
+-- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
 variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
       defFunc Var = var
-      defFunc Const = staticConst
+      defFunc Const = classConst
   if s `elem` map codeName (cs ^. inputsO)
     then inputVariable (g ^. inStruct) Var (var s t)
     else if s `elem` map codeName (cs ^. constantsO)
@@ -131,7 +131,7 @@ inputVariable Bundled Var v = do
   g <- get
   inClsName <- genICName InputParameters
   ip <- mkVar (quantvar inParams)
-  return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
+  return $ if currentClass g == inClsName then instanceVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
@@ -162,13 +162,13 @@ constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
 -- | For generating GOOL for a variable that is accessed through a class.
 -- If the variable is not in the export map, then it is not a public class variable
 -- and cannot be accessed, so throw an error.
--- If the variable is exported by the current module, use 'classVar'.
--- If the variable is exported by a different module, use 'extClassVar'.
+-- If the variable is exported by the current module, use 'classVarAccess'.
+-- If the variable is exported by a different module, use 'extClassVarAccess'.
 classVariable :: (OOProg r) => SVariable r -> SVariable r ->
   GenState (SVariable r)
 classVariable c v = do
   g <- get
-  let checkCurrent m = if currentModule g == m then classVar else extClassVar
+  let checkCurrent m = if currentModule g == m then classVarAccess else extClassVarAccess
   return $ do
     v' <- v
     let nm = variableName v'
@@ -182,7 +182,7 @@ mkVal v = do
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot))
+        return $ valueOf $ instanceVarAccess (var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
@@ -193,7 +193,7 @@ mkVar v = do
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVar (var (codeName o) (convTypeOO ot))
+        return $ instanceVarAccess (var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 
@@ -218,14 +218,14 @@ publicMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicMethod n t = do
-  genMethod (method n public dynamic t) n
+  genMethod (method n public instanceLevel t) n
 
 -- | Generates a private method.
 privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 privateMethod n t = do
-  genMethod (method n private dynamic t) n
+  genMethod (method n private instanceLevel t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
@@ -235,7 +235,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
+privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel) (docInOutMethod n private instanceLevel) n
 
 -- | Generates a constructor.
 genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] ->
@@ -267,7 +267,7 @@ genMethod f n desc p r b = do
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
--- for a documented function/method, the visibility, permanence, name, description,
+-- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->
@@ -1222,7 +1222,7 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
--- for a documented function/method, the visibility, permanence, name, description,
+-- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFuncProc :: (SharedProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->

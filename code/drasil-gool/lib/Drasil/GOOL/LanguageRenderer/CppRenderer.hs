@@ -28,7 +28,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
+  AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, InternalValueExp(..), objMethodCall,
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -61,8 +61,8 @@ import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
-  body, param, stateVar, constVar, cast, castObj, static, dynamic, break,
-  continue, private, public, blockCmt, docCmt, addComments, commentedMod,
+  body, param, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
+  break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec,
@@ -70,7 +70,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -79,7 +79,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace, local)
-import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef,
@@ -91,13 +91,13 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
-import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), Binding(..), onBinding,
-  BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
-  ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard, BinderD(..), bindFormD, CommonThunk, pureValue,
-  vectorize, vectorize2, sumComponents, commonVecIndex, commonThunkElim,
-  commonThunkDim, ScopeData)
+import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
+  onAttachment, AttachmentData(..), ad, FileType(..), FileData(..), fileD,
+  FuncData(..), fd, ModData(..), md, updateMod, OpData(..), ParamData(..), pd,
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td,
+  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, CommonThunk,
+  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.Shared.Classes (Pair(..))
 import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -181,10 +181,10 @@ instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
   import' i = RC.import' $ pfst i
 
-instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
-  type Permanence (p CppSrcCode CppHdrCode) = BindData
-  static = pair static static
-  dynamic = pair dynamic dynamic
+instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) where
+  type Attachment (p CppSrcCode CppHdrCode) = AttachmentData
+  classLevel = pair classLevel classLevel
+  instanceLevel = pair instanceLevel instanceLevel
 
 instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) where
   perm p = RC.perm $ pfst p
@@ -299,12 +299,13 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   extVar l n  = pair1 (extVar l n) (extVar l n)
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
-  staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
+  classVar n = pair1 (classVar n) (classVar n)
+  classConst n = pair1 (classConst n) (classConst n)
   self = on2StateValues pair self self
-  classVar = pair2 classVar classVar
-  extClassVar = pair2 extClassVar extClassVar
-  objVar = pair2 objVar objVar
-  objVarSelf = pair1 objVarSelf objVarSelf
+  classVarAccess = pair2 classVarAccess classVarAccess
+  extClassVarAccess = pair2 extClassVarAccess extClassVarAccess
+  instanceVarAccess = pair2 instanceVarAccess instanceVarAccess
+  instanceVarSelf = pair1 instanceVarSelf instanceVarSelf
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
@@ -1096,14 +1097,14 @@ instance ImportSym CppSrcCode where
 instance ImportElim CppSrcCode where
   import' = unCPPSC
 
-instance PermanenceSym CppSrcCode where
-  type Permanence CppSrcCode = BindData
-  static = toCode $ bd Static R.static
-  dynamic = toCode $ bd Dynamic R.dynamic
+instance AttachmentSym CppSrcCode where
+  type Attachment CppSrcCode = AttachmentData
+  classLevel = toCode $ ad ClassLevel R.classLevel
+  instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
 instance PermElim CppSrcCode where
-  perm = bindDoc . unCPPSC
-  binding = bind . unCPPSC
+  perm = attachmentDoc . unCPPSC
+  binding = attachment . unCPPSC
 
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
@@ -1228,22 +1229,23 @@ instance VariableSym CppSrcCode where
   extVar l n t = modify (addModuleImportVS l) >> var n t
 
 instance OOVariableSym CppSrcCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar
   self = C.self
-  classVar c' v'= do
+  classVarAccess c' v'= do
     c <- c'
     v <- v'
     vfd <- varFromData
       (variableBind v) (getTypeString c `nmSpcAccess` variableName v)
-      (toState $ variableType v) (cppClassVar (RC.type' c) (RC.variable v))
-    toState $ classVarCheckStatic vfd
-  extClassVar c v = do
+      (toState $ variableType v) (cppClassVarAccess (RC.type' c) (RC.variable v))
+    toState $ classVarAccessCheck vfd
+  extClassVarAccess c v = do
     t <- c
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS)
-      (Map.lookup (getTypeString t) cm) $ classVar (pure t) v
-  objVar = G.objVar
-  objVarSelf v' = do
+      (Map.lookup (getTypeString t) cm) $ classVarAccess (pure t) v
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf v' = do
     v <- v'
     mkVar (R.this ++ ptrAccess ++ variableName v)
       (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
@@ -1509,7 +1511,7 @@ instance AssignStatement CppSrcCode where
   (&--) = C.decrement1
 
 instance DeclStatement CppSrcCode where
-  varDec = C.varDec static dynamic empty
+  varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -1676,7 +1678,7 @@ instance MethodSym CppSrcCode where
   docMain b = commentedFunc (docComment $ toState $ functionDox mainDesc
     [(argc, argcDesc), (argv, argvDesc)] [mainReturnDesc]) (mainFunction b)
   function = G.function
-  mainFunction b = intFunc True mainFunc public static (mType int)
+  mainFunction b = intFunc True mainFunc public classLevel (mType int)
     [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argcVar = var argc int
@@ -1730,7 +1732,7 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode
     empty)) $ zoom lensCStoMS emptyStmt
   stateVarDef = cppsStateVarDef empty
-  constVar s = cppsStateVarDef constDec' s static
+  constVar s = cppsStateVarDef constDec' s classLevel
 
 instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC
@@ -1837,14 +1839,14 @@ instance ImportSym CppHdrCode where
 instance ImportElim CppHdrCode where
   import' = unCPPHC
 
-instance PermanenceSym CppHdrCode where
-  type Permanence CppHdrCode = BindData
-  static = toCode $ bd Static R.static
-  dynamic = toCode $ bd Dynamic R.dynamic
+instance AttachmentSym CppHdrCode where
+  type Attachment CppHdrCode = AttachmentData
+  classLevel = toCode $ ad ClassLevel R.classLevel
+  instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
 instance PermElim CppHdrCode where
-  perm = bindDoc . unCPPHC
-  binding = bind . unCPPHC
+  perm = attachmentDoc . unCPPHC
+  binding = attachment . unCPPHC
 
 instance BodySym CppHdrCode where
   type Body CppHdrCode = Doc
@@ -1966,12 +1968,13 @@ instance VariableSym CppHdrCode where
   extVar  _ _ _ = mkStateVar "" void empty
 
 instance OOVariableSym CppHdrCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar
   self = mkStateVar "" void empty
-  classVar _ _ = mkStateVar "" void empty
-  extClassVar _ _ = mkStateVar "" void empty
-  objVar = G.objVar
-  objVarSelf _ = mkStateVar "" void empty
+  classVarAccess _ _ = mkStateVar "" void empty
+  extClassVarAccess _ _ = mkStateVar "" void empty
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf _ = mkStateVar "" void empty
 
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC
@@ -2219,7 +2222,7 @@ instance AssignStatement CppHdrCode where
   (&--) _ = emptyStmt
 
 instance DeclStatement CppHdrCode where
-  varDec = C.varDec static dynamic empty
+  varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -2354,9 +2357,9 @@ instance MethodSym CppHdrCode where
 instance OOMethodSym CppHdrCode where
   method = G.method
   getMethod v = zoom lensMStoVS v >>= (\v' -> method (getterName $ variableName
-    v') public dynamic (toState $ variableType v') [] (toState $ toCode empty))
+    v') public instanceLevel (toState $ variableType v') [] (toState $ toCode empty))
   setMethod v = zoom lensMStoVS v >>= (\v' -> method (setterName $ variableName
-    v') public dynamic void [param v] (toState $ toCode empty))
+    v') public instanceLevel void [param v] (toState $ toCode empty))
   constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
   inOutMethod n s p = cpphInOut (method n s p)
@@ -2387,14 +2390,14 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ C.varDec static dynamic (text "&") v local
+    dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel (text "&") v local
     emptS <- zoom lensCStoMS emptyStmt
     pure $ on3CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS
   stateVarDef s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
   constVar s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) .
-    on2CodeValues (R.constVar empty endStatement) (bindDoc <$> static))
+    on2CodeValues (R.constVar empty endStatement) (attachmentDoc <$> classLevel))
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
 
 instance StateVarElim CppHdrCode where
@@ -2734,8 +2737,8 @@ cppIterType t' = do
     (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t)
     `nmSpcAccess'` text cppIterator)
 
-cppClassVar :: Doc -> Doc -> Doc
-cppClassVar c v = c `nmSpcAccess'` v
+cppClassVarAccess :: Doc -> Doc -> Doc
+cppClassVarAccess c v = c `nmSpcAccess'` v
 
 cppFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
 cppFuncType ps' r' =  do
@@ -2889,7 +2892,7 @@ cppCommentedFunc ft cmt fn = do
   ret ft
 
 cppsStateVarDef :: Doc -> CppSrcCode (Visibility CppSrcCode) ->
-  CppSrcCode (Permanence CppSrcCode) -> SVariable CppSrcCode ->
+  CppSrcCode (Attachment CppSrcCode) -> SVariable CppSrcCode ->
   SValue CppSrcCode -> CSStateVar CppSrcCode
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
@@ -2897,7 +2900,7 @@ cppsStateVarDef cns s p vr' vl' = do
   n <- zoom lensCStoMS getClassName
   emptS <- zoom lensCStoMS emptyStmt
   pure $ on3CodeValues svd (onCodeValue snd s)
-    (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+>
+    (toCode $ onAttachment (binding p) (cns <+> RC.type' (variableType vr) <+>
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
@@ -2921,10 +2924,10 @@ cppLitSet f t' es' = do
   lt <- f t'
   mkVal lt ( braces (valueList es))
 
-cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
+cpphStateVarDef :: (OORenderSym r) => Doc -> r (Attachment r) -> SVariable r ->
   SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p)
+  RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] ->

@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
-module Language.Drasil.ModelExpr.Class where
+module Language.Drasil.ModelExpr.Class (ModelExprC(..)) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))

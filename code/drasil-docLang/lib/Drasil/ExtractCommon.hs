@@ -50,7 +50,7 @@ extractSents = go . (^. accessContents)
     go (Bib _)             = []
     go (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                               in l : ls ++ rs
-    go (Defini _ ics)      = concatMap (concatMap extractSents . snd) ics
+    go (Defini ics)        = concatMap (concatMap extractSents . snd) ics
 
     -- | Extracts 'Sentence's from lists.
     goList :: ListType -> [Sentence]

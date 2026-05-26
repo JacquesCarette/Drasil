@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
-  Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
+  AttachmentTag(..), onAttachment, AttachmentData(attachment, attachmentDoc), ad, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
   opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
@@ -44,19 +44,18 @@ isSource :: FileType -> Bool
 isSource Header = False
 isSource _ = True
 
--- Static means bound at compile-time, Dynamic at run-time, used in BindData
--- and VarData
-data Binding = Static | Dynamic
+-- | Denotes whether a member is bound to the class or its instances
+data AttachmentTag = ClassLevel | InstanceLevel
 
-onBinding :: Binding -> a -> a -> a
-onBinding Static s _ = s
-onBinding Dynamic _ d = d
+onAttachment :: AttachmentTag -> a -> a -> a
+onAttachment ClassLevel s _ = s
+onAttachment InstanceLevel _ d = d
 
--- Used as the underlying data type for Permanence in the C++ renderer
-data BindData = BD {bind :: Binding, bindDoc :: Doc}
+-- Used as the underlying data type for Attachment in the C++ renderer
+data AttachmentData = BD {attachment :: AttachmentTag, attachmentDoc :: Doc}
 
-bd :: Binding -> Doc -> BindData
-bd = BD
+ad :: AttachmentTag -> Doc -> AttachmentData
+ad = BD
 
 -- Used as the underlying data type for Files in all renderers
 data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
@@ -158,10 +157,10 @@ updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valInt v) (valType v) ((f . val) v)
 
 -- Used as the underlying data type for Variables in all renderers
-data VarData = VarD {varBind :: Binding, varName :: String,
+data VarData = VarD {varBind :: AttachmentTag, varName :: String,
   varType :: TypeData, varDoc :: Doc}
 
-vard :: Binding -> String -> TypeData -> Doc -> VarData
+vard :: AttachmentTag -> String -> TypeData -> Doc -> VarData
 vard = VarD
 
 -- Underlying type of Binder

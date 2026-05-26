@@ -5,16 +5,14 @@ import Language.Drasil
 import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
   mLightstone)
 
-import Data.Drasil.Citations (koothoor2013, parnasClements1986,
-  smithEtAl2007, smithLai2005, smithKoothoor2016)
+import Data.Drasil.Citations (parnasClements1986)
 
 ----------------------------
 -- Section 9 : References --
 ----------------------------
 citations :: BibRef
-citations = [bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012,
-             parnasClements1986, smithEtAl2007, smithLai2005,
-             smithKoothoor2016]
+citations = [bueche1986, incroperaEtAl2007, lightstone2012,
+             parnasClements1986]
 
 bueche1986, incroperaEtAl2007, lightstone2012 :: Citation
 

@@ -13,7 +13,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), Binding(..), OpData, od)
+import Drasil.Shared.AST (Terminator(..), Binding(..), OpData, od, TypeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (VS)
@@ -39,7 +39,7 @@ mkStateVal :: (CommonRenderSym r) => VSType r -> Doc -> SValue r
 mkStateVal = valFromData Nothing Nothing
 
 -- | Constructs a value in a non-stateful context
-mkVal :: (CommonRenderSym r) => r (Type r) -> Doc -> SValue r
+mkVal :: (CommonRenderSym r) => r TypeData -> Doc -> SValue r
 mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
@@ -49,7 +49,7 @@ mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStateVar = varFromData Dynamic
 
 -- | Constructs a dynamic variable in a non-stateful context
-mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
+mkVar :: (CommonRenderSym r) => String -> r TypeData -> Doc -> SVariable r
 mkVar n t = varFromData Dynamic n (toState t)
 
 -- | Constructs a static variable in a stateful context
@@ -127,7 +127,7 @@ unExprNumDbl u' v' = do
   unExprCastFloat (valueType v) w
 
 -- Only used by unExprNumDbl
-unExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Value r) -> SValue r
+unExprCastFloat :: (CommonRenderSym r) => r TypeData -> r (Value r) -> SValue r
 unExprCastFloat t = castType (getType t) . toState
   where castType Float = cast float
         castType _ = id
@@ -171,7 +171,7 @@ binExprNumDbl' b' v1' v2' = do
   binExprCastFloat t1 t2 e
 
 -- Only used by binExprNumDbl'
-binExprCastFloat :: (CommonRenderSym r) => r (Type r) -> r (Type r) -> r (Value r) ->
+binExprCastFloat :: (CommonRenderSym r) => r TypeData -> r TypeData -> r (Value r) ->
   SValue r
 binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState
   where castType Float _ = cast float
@@ -212,7 +212,7 @@ exprRender' f b' v1' v2' = do
   v2 <- v2'
   toState $ f b v1 v2
 
-mkExpr :: (CommonRenderSym r) => Int -> r (Type r) -> Doc -> SValue r
+mkExpr :: (CommonRenderSym r) => Int -> r TypeData -> Doc -> SValue r
 mkExpr p t = valFromData (Just p) Nothing (toState t)
 
 binOpDocDRend :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) ->

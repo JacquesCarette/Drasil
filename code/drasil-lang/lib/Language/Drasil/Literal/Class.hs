@@ -1,4 +1,4 @@
-module Language.Drasil.Literal.Class where
+module Language.Drasil.Literal.Class (LiteralC(..)) where
 
 import Language.Drasil.Literal.Lang (Literal(..))
 

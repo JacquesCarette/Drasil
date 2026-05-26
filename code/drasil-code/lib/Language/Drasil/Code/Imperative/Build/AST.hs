@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.Build.AST (
   doxygenDocConfig
 ) where
 
-import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar,
+import Drasil.Makefile (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar,
   Command, mkCheckedCommand, Dependencies)
 
 -- | Used to build commands. Type synonym of a 'MakeString' for clarity.

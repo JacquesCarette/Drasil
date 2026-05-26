@@ -1,6 +1,12 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language.
-module Language.Drasil.Document where
+module Language.Drasil.Document (
+  section, fig, figNoCap, figWithWidth, figNoCapWithWidth, Section(..),
+  SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
+  ulcc, Document(..), mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..),
+  checkToC, makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI,
+  makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
+) where
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -22,10 +28,6 @@ import Language.Drasil.Sentence (Sentence(..))
 -- are standard layout objects (see 'Contents').
 data SecCons = Sub Section
              | Con Contents
-
-data Partition = Sections
-                | Part
-                | Chapter
 
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').

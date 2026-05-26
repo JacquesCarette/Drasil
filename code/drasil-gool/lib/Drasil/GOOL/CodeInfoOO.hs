@@ -8,12 +8,12 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), VisibilitySym(..))
+  MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
@@ -21,7 +21,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -34,6 +34,7 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
+import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfoOO a = CI {unCI :: a} deriving Eq
 
@@ -83,28 +84,27 @@ instance BlockSym CodeInfoOO where
   block = executeList
 
 instance TypeSym CodeInfoOO where
-  type Type CodeInfoOO = String
-  bool              = noInfoType
-  int               = noInfoType
-  float             = noInfoType
-  double            = noInfoType
-  char              = noInfoType
-  string            = noInfoType
-  infile            = noInfoType
-  outfile           = noInfoType
-  setType       _   = noInfoType
-  listType      _   = noInfoType
-  arrayType     _   = noInfoType
-  listInnerType _   = noInfoType
-  funcType      _ _ = noInfoType
-  void              = noInfoType
+  bool              = noInfoVSType
+  int               = noInfoVSType
+  float             = noInfoVSType
+  double            = noInfoVSType
+  char              = noInfoVSType
+  string            = noInfoVSType
+  infile            = noInfoVSType
+  outfile           = noInfoVSType
+  setType       _   = noInfoVSType
+  listType      _   = noInfoVSType
+  arrayType     _   = noInfoVSType
+  listInnerType _   = noInfoVSType
+  funcType      _ _ = noInfoVSType
+  void              = noInfoVSType
 
 instance OOTypeSym CodeInfoOO where
-  obj               = toState . toCode
+  obj             _ = noInfoVSType
 
 instance TypeElim CodeInfoOO where
   getType _     = Void
-  getTypeString = unCI
+  getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoOO where
   type Scope CodeInfoOO = ()
@@ -129,11 +129,11 @@ instance OOVariableSym CodeInfoOO where
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
-  variableType _ = toCode ""
+  variableType _ = noInfoType
 
 instance ValueSym CodeInfoOO where
   type Value CodeInfoOO = ()
-  valueType _ = toCode ""
+  valueType _ = noInfoType
 
 instance OOValueSym CodeInfoOO
 
@@ -265,6 +265,10 @@ instance InternalList CodeInfoOO where
     _ <- vl
     noInfo
 
+instance BinderSym CodeInfoOO where
+  type Binder CodeInfoOO = ()
+  binder _ _ = noInfo
+
 instance ThunkSym CodeInfoOO where
   type Thunk CodeInfoOO = ()
 
@@ -272,7 +276,7 @@ instance ThunkAssign CodeInfoOO where
   thunkAssign _ = zoom lensMStoVS . execute1
 
 instance VectorType CodeInfoOO where
-  vecType _ = noInfoType
+  vecType _ = noInfoVSType
 
 instance VectorDecl CodeInfoOO where
   vecDec  _ _ _ = noInfo
@@ -479,8 +483,11 @@ instance ModuleSym CodeInfoOO where
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
-noInfoType :: State s (CodeInfoOO String)
-noInfoType = toState $ toCode ""
+noInfoType :: CodeInfoOO TypeData
+noInfoType = return $ td Void "" empty
+
+noInfoVSType :: VSType CodeInfoOO
+noInfoVSType = return noInfoType
 
 updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do

@@ -54,7 +54,7 @@ createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]
 createRefMap fn (T.Header _ _ l)     = createRef fn l
 createRefMap fn (T.HDiv   _ _ l)     = createRef fn l
 createRefMap fn (T.Table  _ _ l _ _) = createRef fn l
-createRefMap fn (T.Definition _ _ l) = createRef fn l
+createRefMap fn (T.Definition _ l)   = createRef fn l
 createRefMap fn (T.List t)           = pass t
   where
     pass (P.Ordered ls)     = process  ls
@@ -142,9 +142,7 @@ layLabelled sm x@(LblC _ _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ _ (EqnBlock c))        = T.HDiv ["equation"]
-  [T.EqnBlock (P.E (modelExpr c sm))]
-  (P.S $ getAdd $ getRefAdd x)
+layLabelled sm (LblC _ _ (EqnBlock c))          = T.EqnBlock (P.E (modelExpr c sm))
 layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (P.S $ getAdd $ getRefAdd x)
   (if hc == WithCaption then Just (spec sm c) else Nothing)
@@ -152,9 +150,8 @@ layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
 layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ _ (Defini dtyp pairs)) = T.Definition
-  dtyp (layPairs pairs)
-  (P.S $ getAdd $ getRefAdd x)
+layLabelled sm x@(LblC _ _ (Defini pairs)) =
+  T.Definition (layPairs pairs) (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
 layLabelled sm (LblC _ _ (Paragraph c))         = T.Paragraph (spec sm c)
 layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
@@ -170,7 +167,7 @@ layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (modelExpr c sm))] P.EmptyS
+layUnlabelled sm (EqnBlock c)     = T.EqnBlock (P.E (modelExpr c sm))
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"
@@ -179,7 +176,7 @@ layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2")
   (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Defini pairs)  = T.Definition (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib

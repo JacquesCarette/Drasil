@@ -1,11 +1,11 @@
 -- | Helper functions for creating Makefiles.
-module Build.Drasil.Make.Helpers (
+module Drasil.Makefile.Make.Helpers (
   addCommonFeatures,
   tab, msIndent
 ) where
 
-import Build.Drasil.Make.AST (Command(C), Rule(R))
-import Build.Drasil.Make.MakeString (MakeString(..), MVar, varName, win, mac,
+import Drasil.Makefile.Make.AST (Command(C), Rule(R))
+import Drasil.Makefile.Make.MakeString (MakeString(..), MVar, varName, win, mac,
   linux, isOsVar)
 
 import Data.List (nubBy)

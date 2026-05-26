@@ -21,23 +21,23 @@ module Drasil.Shared.LanguageRenderer (
   objAccess, castObj, break, continue, static, dynamic, private, public,
   blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
   ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod,
-  valueList, variableList, parameterList, namedArgList, prependToBody,
-  appendToBody, surroundBody, getterName, setterName, intValue
+  valueList, variableList, binderList, parameterList, namedArgList,
+  prependToBody, appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
-import Drasil.Build.Artifacts (blank, indent, indentList)
+import Drasil.Build.Artifacts.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
-  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
-  ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
-  ParameterSym(Parameter))
+  TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..),
+  StatementSym(Statement), VisibilitySym(Visibility), ParameterSym(Parameter),
+  BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
-  VisibilityElim(..), ParamElim(..))
+  VisibilityElim(..), ParamElim(..), InternalBinderElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
@@ -213,7 +213,7 @@ param v = RC.type' (variableType v) <+> RC.variable v
 -- Method --
 
 method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) ->
-  r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
+  r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
     parens (parameterList ps) <+> lbrace,
@@ -431,6 +431,9 @@ valueList = hicat listSep' . map RC.value
 
 variableList :: (CommonRenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat listSep' . map RC.variable
+
+binderList :: (CommonRenderSym r) => [r (Binder r)] -> Doc
+binderList = hicat listSep' . map RC.binderElim
 
 parameterList :: (CommonRenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat listSep' . map RC.parameter

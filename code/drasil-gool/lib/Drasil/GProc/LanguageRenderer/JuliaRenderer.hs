@@ -8,7 +8,7 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   JuliaCode(..), jlName, jlVersion
 ) where
 
-import Drasil.Build.Artifacts (indent)
+import Drasil.Build.Artifacts.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
@@ -22,7 +22,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), (&=), switchAsIf, convScope)
+  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf,
+  convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -35,7 +36,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -43,8 +44,8 @@ import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
-  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel,
-  valueList)
+  parameterList, forLabel, inLabel, tryLabel, catchLabel,
+  valueList, binderList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
@@ -83,7 +84,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
-  ScopeData(..), sd)
+  ScopeData(..), sd, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
@@ -176,7 +177,6 @@ instance BlockElim JuliaCode where
   block = unJLC
 
 instance TypeSym JuliaCode where
-  type Type JuliaCode = TypeData
   bool = CS.bool
   int = jlIntType
   float = jlFloatType
@@ -284,7 +284,7 @@ instance RenderVariable JuliaCode where
 
 instance ValueSym JuliaCode where
   type Value JuliaCode = ValData
-  valueType = onCodeValue valType
+  valueType v = valType <$> v
 
 instance Argument JuliaCode where
   pointerArg = id
@@ -424,6 +424,17 @@ instance InternalListFunc JuliaCode where
     funcFromData (RC.value f) void
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BinderSym JuliaCode where
+  type Binder JuliaCode = BinderD
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim JuliaCode where
+  binderName = bindName . unJLC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim JuliaCode where
+  binderElim = text . bindName . unJLC
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS
@@ -746,7 +757,7 @@ jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'
   indexToInt $ funcApp
-    jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
+    jlListAbsdex t [lambda [binder "x" t] (valueOf (var "x" t) ?== v), l]
 
 -- List slicing in Julia.  See HelloWorld.jl to see the full suite of
 -- possible outputs of this function.
@@ -898,8 +909,8 @@ jlIntFunc n pms bod = do
         indent $ RC.body bod,
         jlEnd]
 
-jlLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
+jlLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
 jlThrow :: (CommonRenderSym r) => r (Value r) -> Doc

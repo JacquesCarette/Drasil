@@ -2,9 +2,10 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
-  VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBinder,
+  SVariable, SValue, VSThunk, MSStatement, MSParameter, SMethod, NamedArgs,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
@@ -18,13 +19,15 @@ module Drasil.Shared.InterfaceCommon (
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
+  BinderElim(..),
+  convType
   ) where
 
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
 
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -42,7 +45,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -67,10 +70,9 @@ class (StatementSym r) => BlockSym r where
   type Block r
   block   :: [MSStatement r] -> MSBlock r
 
-type VSType a = VS (a (Type a))
+type VSType a = VS (a TypeData)
 
 class TypeSym r where
-  type Type r
   bool          :: VSType r
   int           :: VSType r -- This is 32-bit signed ints except in Python,
                             -- which has unlimited precision ints; and Julia,
@@ -89,8 +91,8 @@ class TypeSym r where
   void          :: VSType r
 
 class (TypeSym r) => TypeElim r where
-  getType :: r (Type r) -> CodeType
-  getTypeString :: r (Type r) -> String
+  getType :: r TypeData -> CodeType
+  getTypeString :: r TypeData -> String
 
 class ScopeSym r where
   type Scope r
@@ -111,7 +113,7 @@ class (TypeSym r) => VariableSym r where
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
-  variableType :: r (Variable r) -> r (Type r)
+  variableType :: r (Variable r) -> r TypeData
 
 listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
 listVar n t = var n (listType t)
@@ -123,7 +125,7 @@ type SValue a = VS (a (Value a))
 
 class (TypeSym r) => ValueSym r where
   type Value r
-  valueType :: r (Value r) -> r (Type r)
+  valueType :: r (Value r) -> r TypeData
 
 class (ValueSym r) => Argument r where
   pointerArg :: SValue r -> SValue r
@@ -227,6 +229,16 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
+type VSBinder a = VS (a (Binder a))
+
+class (TypeSym r) => BinderSym r where
+  type Binder r
+  binder :: Label -> VSType r -> VSBinder r
+
+class (BinderSym r) => BinderElim r where
+  binderName :: r (Binder r) -> String
+  binderType :: r (Binder r) -> r TypeData
+
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
   -- An inline if-statement, aka the ternary operator.  Inputs:
@@ -237,7 +249,7 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
 
-  lambda :: [SVariable r] -> SValue r -> SValue r
+  lambda :: [VSBinder r] -> SValue r -> SValue r
 
   notNull :: SValue r -> SValue r
 

@@ -93,8 +93,7 @@ symbMap = withCommonKnowledge []
   citations ([] :: [LabelledContent])
 
 citations :: BibRef
-citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
-             smithKoothoor2016]
+citations = [parnasClements1986]
 
 figTemp :: LabelledContent
 figTemp = llccFig "dblpend" $ figWithWidth EmptyS

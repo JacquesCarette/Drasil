@@ -1015,6 +1015,9 @@ jOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r 
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
+        jOut' (Array _) = do
+          zoom lensMStoVS $ modify (addLangImportVS $ utilImport jArrays)
+          printSt newLn f printFn (extFuncApp jArrays "toString" string [v])
         jOut' _ = G.print newLn f printFn v
 
 jDiscardInput :: SValue JavaCode -> MSStatement JavaCode

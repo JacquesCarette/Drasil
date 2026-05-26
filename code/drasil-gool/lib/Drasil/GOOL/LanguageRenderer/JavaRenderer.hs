@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -58,16 +58,16 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   parameterList, appendToBody, surroundBody, intValue, valueList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
-  multiStmt, body, printFile, param, listDec, classVar, cast, castObj, static,
-  dynamic, break, continue, private, public, blockCmt, docCmt, addComments,
-  commentedMod, commentedItem)
+  multiStmt, body, printFile, param, listDec, classVarAccess, cast, castObj,
+  classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
+  addComments, commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -167,10 +167,10 @@ instance ImportSym JavaCode where
 instance ImportElim JavaCode where
   import' = unJC
 
-instance PermanenceSym JavaCode where
-  type Permanence JavaCode = Doc
-  static = toCode R.static
-  dynamic = toCode R.dynamic
+instance AttachmentSym JavaCode where
+  type Attachment JavaCode = Doc
+  classLevel = toCode R.classLevel
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim JavaCode where
   perm = unJC
@@ -286,12 +286,13 @@ instance VariableSym JavaCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym JavaCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar
   self = C.self
-  classVar = CP.classVar R.classVar
-  extClassVar = classVar
-  objVar = G.objVar
-  objVarSelf = CP.objVarSelf
+  classVarAccess = CP.classVarAccess R.classVarAccess
+  extClassVarAccess = classVarAccess
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim JavaCode where
   variableName = varName . unJC
@@ -573,7 +574,7 @@ instance AssignStatement JavaCode where
   (&--) = C.decrement1
 
 instance DeclStatement JavaCode where
-  varDec = C.varDec static dynamic empty
+  varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -747,7 +748,7 @@ instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
+  constVar = CP.constVar (RC.perm (classLevel :: JavaCode (Attachment JavaCode)))
 
 instance StateVarElim JavaCode where
   stateVar = unJC
@@ -1050,7 +1051,7 @@ jStringSplit :: (CommonRenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
+jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Attachment r)
   -> r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>

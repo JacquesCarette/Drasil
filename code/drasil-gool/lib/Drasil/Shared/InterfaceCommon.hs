@@ -104,11 +104,17 @@ type SVariable a = VS (a (Variable a))
 
 class (TypeSym r) => VariableSym r where
   type Variable r
+  -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
   var       :: Label -> VSType r -> SVariable r
+  -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
   constant  :: Label -> VSType r -> SVariable r
+  -- | An instance- or module-level variable from an external library.
+  -- Given library `Lib`, variable name `v`, and variable type `t`,
+  -- it performs the necessary imports and creates `Lib.v`
   extVar    :: Library -> Label -> VSType r -> SVariable r
   -- TODO [Brandon Bosman, 04/27/2026]: Move this to a new Array typeclass modelled after List
   -- Change return type to SValue
+  -- | Given array `a` and index `i`, creates `a[i]`
   arrayElem :: SValue r -> SVariable r -> SVariable r
 
 class (VariableSym r) => VariableElim r where

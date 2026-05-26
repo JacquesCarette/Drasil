@@ -7,7 +7,7 @@ import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import Language.Drasil (checkValidStr, RenderSpecial(..), DType(..), MaxWidthPercent)
+import Language.Drasil (checkValidStr, RenderSpecial(..), MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -70,7 +70,7 @@ printLO (EqnBlock contents)              = nbformat mathEqn
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
-printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
+printLO (Definition ssPs l)             = nbformat (text "<br>") $$ makeDefn ssPs (pSpec l)
 printLO (List t)                        = nbformat empty $$ makeList t False
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
@@ -234,14 +234,10 @@ count c (x:xs)
   | otherwise = count c xs
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "Empty definition"
-makeDefn dt ps l = refID l $$ table [dtag dt]
+makeDefn :: [(String, [LayoutObj])] -> Doc -> Doc
+makeDefn [] _ = error "Empty definition"
+makeDefn ps l = refID l $$ table ["defn-table"]
   (tr (nbformat (th (text "Refname")) $$ td (nbformat(bold l))) $$ makeDRows ps)
-  where dtag General  = "gdefn"
-        dtag Instance = "idefn"
-        dtag Theory   = "tdefn"
-        dtag Data     = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc

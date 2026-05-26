@@ -18,8 +18,8 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', special, checkValidStr, DType(..), MaxWidthPercent,
-  CitationKind(..), numList)
+  rendPersLFM'', special, checkValidStr, MaxWidthPercent, CitationKind(..),
+  numList)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
@@ -104,7 +104,7 @@ printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
-printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
+printLO (Definition ssPs l)    = makeDefn ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
@@ -290,14 +290,10 @@ makeColumns = vcat . map (td . pSpec)
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.).
-makeDefn :: DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ table [dtag dt]
+makeDefn :: [(String, [LayoutObj])] -> Doc -> Doc
+makeDefn [] _  = error "L.Empty definition"
+makeDefn ps l = refwrap l $ table ["defn-table"]
   (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
-  where dtag General  = "gdefn"
-        dtag Instance = "idefn"
-        dtag Theory   = "tdefn"
-        dtag Data     = "ddefn"
 
 -- | Helper for making the definition table rows.
 makeDRows :: [(String,[LayoutObj])] -> Doc

@@ -10,9 +10,9 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, VSType,
   SVariable, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.Shared.AST (Binding)
+import Drasil.Shared.AST (AttachmentTag)
 import Drasil.Shared.State (FS, CS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -41,8 +41,8 @@ class (BlockCommentSym r) => RenderFile r where
   fileFromData :: FilePath -> IG.FSModule r -> IG.SFile r
 
 class PermElim r where
-  perm :: r (IG.Permanence r) -> Doc
-  binding :: r (IG.Permanence r) -> Binding
+  perm :: r (IG.Attachment r) -> Doc
+  binding :: r (IG.Attachment r) -> AttachmentTag
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r
@@ -52,13 +52,13 @@ class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
 class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
-  -- | Main method?, name, public/private, static/dynamic,
+  -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r) ->
+  intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Attachment r) ->
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-  -- | True for main function, name, public/private, static/dynamic,
+  -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r)
+  intFunc       :: Bool -> Label -> r (Visibility r) -> r (IG.Attachment r)
     -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 
   destructor :: [IG.CSStateVar r] -> SMethod r

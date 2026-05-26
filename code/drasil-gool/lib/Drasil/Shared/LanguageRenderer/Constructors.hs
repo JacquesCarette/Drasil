@@ -1,6 +1,6 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
   VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
   andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExpr', binExprNumDbl', typeBinExpr
@@ -13,7 +13,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), Binding(..), OpData, od, TypeData)
+import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
+  TypeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (VS)
@@ -44,17 +45,17 @@ mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
--- | Constructs a dynamic variable in a stateful context
+-- | Constructs an instance-level variable in a stateful context
 mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStateVar = varFromData Dynamic
+mkStateVar = varFromData InstanceLevel
 
--- | Constructs a dynamic variable in a non-stateful context
+-- | Constructs an instance-level variable in a non-stateful context
 mkVar :: (CommonRenderSym r) => String -> r TypeData -> Doc -> SVariable r
-mkVar n t = varFromData Dynamic n (toState t)
+mkVar n t = varFromData InstanceLevel n (toState t)
 
--- | Constructs a static variable in a stateful context
-mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar = varFromData Static
+-- | Constructs a classLevel variable in a stateful context
+mkClassVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkClassVar = varFromData ClassLevel
 
 -- Operators --
 

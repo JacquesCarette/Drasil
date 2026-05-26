@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..))
 import Drasil.Shared.CodeType (CodeType)
-import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData,
+import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
 
@@ -127,10 +127,10 @@ class ScopeElim r where
   scopeData :: r ScopeData -> ScopeData
 
 class RenderVariable r where
-  varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
+  varFromData :: AttachmentTag -> String -> VSType r -> Doc -> SVariable r
 
 class InternalVarElim r where
-  variableBind :: r (Variable r) -> Binding
+  variableBind :: r (Variable r) -> AttachmentTag
   variable  :: r (Variable r) -> Doc
 
 class InternalBinderElim r where

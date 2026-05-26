@@ -17,7 +17,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   VisibilitySym(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
-import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
@@ -31,7 +31,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.Shared.AST (Binding(..), Terminator(..), ScopeData)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
@@ -145,7 +145,7 @@ decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
+varDec :: (OORenderSym r) => r (Attachment r) -> r (Attachment r) -> Doc ->
   SVariable r -> r ScopeData -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
@@ -154,8 +154,8 @@ varDec s d pdoc v' scp = do
   mkStmt (RC.perm (bind $ variableBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
     RC.variable v))
-  where bind Static = s
-        bind Dynamic = d
+  where bind ClassLevel = s
+        bind InstanceLevel = d
         ptrdoc (List _) = pdoc
         ptrdoc (Set _) = pdoc
         ptrdoc _ = empty
@@ -228,7 +228,7 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc :: (OORenderSym r) => Bool -> Label -> r (Visibility  r) ->
-  r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+  r (Attachment r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 intFunc = intMethod
 
 -- Error Messages --

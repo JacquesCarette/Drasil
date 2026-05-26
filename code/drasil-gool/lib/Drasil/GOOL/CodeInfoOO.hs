@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, VSBinder, SValue,
   MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
+  OOVariableSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
@@ -69,10 +69,10 @@ instance FileSym CodeInfoOO where
 
   docMod _ _ _ _ = execute1
 
-instance PermanenceSym CodeInfoOO where
-  type Permanence CodeInfoOO = ()
-  static  = toCode ()
-  dynamic = toCode ()
+instance AttachmentSym CodeInfoOO where
+  type Attachment CodeInfoOO = ()
+  classLevel  = toCode ()
+  instanceLevel = toCode ()
 
 instance BodySym CodeInfoOO where
   type Body CodeInfoOO = ()
@@ -120,12 +120,13 @@ instance VariableSym CodeInfoOO where
   arrayElem _ _ = noInfo
 
 instance OOVariableSym CodeInfoOO where
-  staticVar'  _ _ _ = noInfo
+  classVar _ _ = noInfo
+  classConst _ _ = noInfo
   self              = noInfo
-  classVar    _ _   = noInfo
-  extClassVar _ _   = noInfo
-  objVar      _ _   = noInfo
-  objVarSelf  _     = noInfo
+  classVarAccess    _ _   = noInfo
+  extClassVarAccess _ _   = noInfo
+  instanceVarAccess      _ _   = noInfo
+  instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""

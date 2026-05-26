@@ -1,6 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
@@ -69,18 +70,18 @@ wiif = "without the influence of interslice forces"
 --------------------------------
 
 constrained :: [ConstrConcept]
-constrained = coords : map cnstrw' inputsWUncrtn ++ NE.toList outputs
+constrained = coords : map cnstrw' (NE.toList inputsWUncrtn) ++ NE.toList outputs
 
-inputsWUncrtn :: [UncertQ]
-inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip,
+inputsWUncrtn :: NE.NonEmpty UncertQ
+inputsWUncrtn = slopeDist :| [slopeHght, waterDist, waterHght, xMaxExtSlip,
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion,
   fricAngle, dryWeight, satWeight, waterWeight]
 
-inputsNoUncrtn :: [DefinedQuantityDict]
-inputsNoUncrtn = [constF]
+inputsNoUncrtn :: NE.NonEmpty DefinedQuantityDict
+inputsNoUncrtn = constF :| []
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.fromList $ map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
+inputs = NE.map dqdWr inputsWUncrtn <> NE.map dqdWr inputsNoUncrtn
 
 outputs :: NE.NonEmpty ConstrConcept
 outputs = NE.singleton fs

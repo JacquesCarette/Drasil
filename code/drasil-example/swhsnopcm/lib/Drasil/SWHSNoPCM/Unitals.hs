@@ -14,7 +14,7 @@ import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
   timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin, watE, tempW)
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.fromList $ map dqdWr constrained ++ map dqdWr unconstrained ++ [dqdWr watE]
+inputs = (map dqdWr constrained ++ map dqdWr unconstrained) `NE.prependList` NE.singleton (dqdWr watE)
 
 outputs :: NE.NonEmpty ConstrConcept
 outputs =  tempW :| [watE]

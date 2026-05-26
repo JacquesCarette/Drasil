@@ -94,7 +94,7 @@ mkSRS = [TableOfContents,
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
+        , Constraints EmptyS (NE.toList inputsWUncrtn) --FIXME: issue #295
         , CorrSolnPpties (NE.toList outputs) []
         ]
       ],

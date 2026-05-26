@@ -242,7 +242,7 @@ constrained = map cnstrw' inputConstraints ++ map cnstrw' (NE.toList outputs)
 
 -- Input Constraints
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.fromList $ map dqdWr inputConstraints ++ map dqdWr [absTol, relTol]
+inputs = NE.map dqdWr (absTol :| [relTol]) `NE.appendList` map dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,

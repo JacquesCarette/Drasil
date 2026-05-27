@@ -13,22 +13,27 @@ import Language.Drasil.Choices (Logging(..))
 import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..),
   Literal(..), VariableValue(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), lensMStoVS, ScopeSym(..))
+  IOStatement(..), lensMStoVS, ScopeSym(..), LoggerCode(..))
+
+import Text.PrettyPrint.HughesPJ (render)
 
 -- | Generates a statement that logs the given variable's value, if the user
 -- chose to turn on logging of variable assignments.
-maybeLog :: (SharedProg r) => SVariable r -> GenState [MSStatement r]
-maybeLog v = do
+maybeLog :: (SharedProg r) => SVariable LoggerCode -> SVariable r -> GenState [MSStatement r]
+maybeLog vlog v = do
   g <- get
-  sequence [loggedVar v | LogVar `elem` g ^. logKind]
+  sequence [loggedVar vlog v | LogVar `elem` g ^. logKind]
 
 -- | Generates a statement that logs the name of the given variable, its current
 -- value, and the current module name.
-loggedVar :: (SharedProg r) => SVariable r -> GenState (MSStatement r)
-loggedVar v = do
+loggedVar :: (SharedProg r) => SVariable LoggerCode -> SVariable r -> GenState (MSStatement r)
+loggedVar vlog v = do
   g <- get
   return $ multi [
     openFileA varLogFile (litString $ g ^. logName),
+    do
+      vlog' <- zoom lensMStoVS vlog
+      printFileStr valLogFile ("var '" ++ (render . unLC) vlog' ++ "' assigned "),
     zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++
       variableName v' ++ "' assigned ")),
     printFile valLogFile (valueOf v),

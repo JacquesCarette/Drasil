@@ -8,6 +8,7 @@ import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
 import Data.Functor ((<&>))
 import Data.Foldable (traverse_)
+import GHC.IO.Encoding (setLocaleEncoding, utf8)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -34,6 +35,7 @@ import NameGenTest (nameGenTestOO, nameGenTestProc)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO()
 main = do
+  setLocaleEncoding utf8
   workingDir <- getCurrentDirectory
   createDirIfMissing False "java"
   setCurrentDirectory "java"

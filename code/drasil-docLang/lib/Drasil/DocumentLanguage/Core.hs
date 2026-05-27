@@ -18,11 +18,6 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.DocumentLanguage.Definitions (Fields, TraceViewCat)
 
--- | Type synonym for clarity.
-type System = Sentence
--- | Type synonym for clarity.
-type DocKind = Sentence
-
 -- * Document Types
 
 -- | A document description is made up of document sections.

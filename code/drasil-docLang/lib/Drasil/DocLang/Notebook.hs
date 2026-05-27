@@ -6,7 +6,7 @@ import Language.Drasil
 
 import qualified Drasil.Metadata.Documentation as Doc (caseProb,
   introduction, learnObj,
-  prpsOfDoc, review, summary, example, appendix, reference)
+  review, summary, example, appendix, reference)
 
 --  Notebook constructor.
 -- Create the notebook from given system name, authors, and sections
@@ -29,19 +29,13 @@ summary   cs ss = section (titleize Doc.summary)      cs ss summaryLabel
 appendix  cs ss = section (titleize Doc.appendix)     cs ss appendixLabel
 reference cs ss = section (titleize' Doc.reference)   cs ss referenceLabel
 
---Labels--
-sectionReferences :: [Reference]
-sectionReferences = [introLabel, learnObjLabel, docPurposeLabel, referenceLabel,
-  reviewLabel, appendixLabel, summaryLabel, exampleLabel]
-
 -- * Section References
 
 -- | Individual section reference labels. Used in creating example sections for the notebook.
-introLabel, learnObjLabel, docPurposeLabel, referenceLabel,
+introLabel, learnObjLabel, referenceLabel,
   reviewLabel, caseProbLabel, appendixLabel, summaryLabel, exampleLabel :: Reference
 introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
 learnObjLabel       = makeSecRef "LearnObj"         $ titleize' Doc.learnObj
-docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize Doc.prpsOfDoc
 referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference
 reviewLabel         = makeSecRef "Review"           $ titleize Doc.review
 caseProbLabel       = makeSecRef "CaseProb"         $ titleize Doc.caseProb

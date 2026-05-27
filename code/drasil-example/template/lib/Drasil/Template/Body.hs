@@ -146,7 +146,7 @@ figTemp = llccFig "dblpend" $ figWithWidth EmptyS
 
 -- MOVE TO CONCEPTS
 progName :: CI
-progName = commonIdeaWithDict "progName" (pn "ProgName") "ProgName" []
+progName = commonIdeaWithDict "templateName" (pn "Template") "Template" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

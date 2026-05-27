@@ -23,12 +23,13 @@ import Drasil.Shared.InterfaceCommon (
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
-  VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
+  VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS)
+import Drasil.Shared.AST (ScopeData)
 
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
   OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,
@@ -203,20 +204,20 @@ objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
 objMethodCallNoParams t o f = objMethodCall t o f []
 
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
-  objDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  extObjDecNew :: Library -> SVariable r -> r (Scope r) -> [SValue r]
+  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
     -> MSStatement r
 
-objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r (Scope r)
+objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r ScopeData
   -> MSStatement r
 objDecNewNoParams v s = objDecNew v s []
 
 extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r ->
-  r (Scope r) -> MSStatement r
+  r ScopeData -> MSStatement r
 extObjDecNewNoParams l v s = extObjDecNew l v s []
 
 class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
@@ -228,7 +229,7 @@ class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> r (Scope r)
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> r ScopeData
   -> MSStatement r
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 

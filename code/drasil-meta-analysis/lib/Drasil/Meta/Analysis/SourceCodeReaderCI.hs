@@ -1,14 +1,14 @@
 -- | Source code reader for all types, classes, and instances in Drasil.
 -- Only records the names of types and classes, not contents.
 -- Meant to show instances of types within classes.
-module SourceCodeReaderCI (extractEntryData, EntryData(..)) where
+module Drasil.Meta.Analysis.SourceCodeReaderCI (extractEntryData, EntryData(..)) where
 
 import Data.List
 import System.IO
 import System.Directory
 import qualified Data.Text as T
 
-import DirectoryController as DC (FileName)
+import Drasil.Meta.Analysis.DirectoryController as DC (FileName)
 
 type DataName = String
 type NewtypeName = String
@@ -58,7 +58,7 @@ stripWS = T.unpack . T.strip . T.pack
 -- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()
 forceRead [] = ()
-forceRead (x:xs) = forceRead xs
+forceRead (_:xs) = forceRead xs
 
 -- index number, class + script lines, indexes list (for multi-line classes)
 getIndexes :: Int -> [String] -> [String] -> [Int]

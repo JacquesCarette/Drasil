@@ -53,6 +53,7 @@ packages:
 - drasil-docLang
 - drasil-makefile
 - drasil-metadata
+- drasil-meta-analysis
 - drasil-website
 - drasil-example/dblpend
 - drasil-example/sglpend

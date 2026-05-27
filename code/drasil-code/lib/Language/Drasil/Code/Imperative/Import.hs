@@ -11,7 +11,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Prelude hiding (sin, cos, tan, log, exp)
 import Control.Lens ((^.))
 import qualified Data.Map as Map (lookup)
-import Control.Monad (liftM2,liftM3)
+import Control.Monad (liftM2,liftM3, zipWithM)
 import Control.Monad.State (get, modify)
 import Data.List ((\\), intersect)
 
@@ -565,28 +565,32 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
+  vlog <- mkVar v
   v' <- mkVar v
   t <- codeType v
   let listFunc (C.List _) = litList
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
     els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
+  vlog <- mkVar v
   v' <- mkVar v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' e' : l
 convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
+  vlog <- mkVar v
   v' <- mkVar v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
+      vilog = arrayElem (litInt i) vlog
       vi = arrayElem (litInt i) v'
-  l <- maybeLog vi
+  l <- maybeLog vilog vi
   return $ multi $ asgFunc t : l
 convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
@@ -633,8 +637,9 @@ convStmt (FDecDef v (Matrix [[]])) = do
 convStmt (FDecDef v e) = do
   g <- get
   let scp = convScope $ currentScope g
+  vlog <- mkVar v
   v' <- mkVar v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
         let contDecDef (C.List _) = listDecDef
@@ -691,8 +696,9 @@ readData ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (OOProg r) => Data -> r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
+            vlog <- mkVar v
             vv <- mkVar v
-            l <- maybeLog vv
+            l <- maybeLog vlog vv
             return [multi $ getFileInput v_infile vv : l]
         inData JunkData _ = return [discardFileLine v_infile]
         inData (Line lp d) scp = do
@@ -756,8 +762,9 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- | Get entry variable logs.
 getEntryVarLogs :: (OOProg r) => LinePattern -> GenState [MSStatement r]
 getEntryVarLogs lp = do
+  vlogs <- getEntryVars Nothing lp
   vs <- getEntryVars Nothing lp
-  logs <- mapM maybeLog vs
+  logs <- zipWithM maybeLog vlogs vs
   return $ concat logs
 
 -- Procedural Versions --
@@ -929,8 +936,9 @@ readDataProc ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (SharedProg r) => Data -> r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
+            vlog <- mkVarProc v
             vv <- mkVarProc v
-            l <- maybeLog vv
+            l <- maybeLog vlog vv
             return [multi $ getFileInput v_infile vv : l]
         inData JunkData _ = return [discardFileLine v_infile]
         inData (Line lp d) scp = do
@@ -994,8 +1002,9 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 -- | Get entry variable logs.
 getEntryVarLogsProc :: (SharedProg r) => LinePattern -> GenState [MSStatement r]
 getEntryVarLogsProc lp = do
+  vlogs <- getEntryVarsProc Nothing lp
   vs <- getEntryVarsProc Nothing lp
-  logs <- mapM maybeLog vs
+  logs <- zipWithM maybeLog vlogs vs
   return $ concat logs
 
 -- | Converts an 'Expr' to a GOOL Value.
@@ -1100,28 +1109,32 @@ convCallProc c x ns f libf = do
 convStmtProc :: (SharedProg r) => FuncStmt -> GenState (MSStatement r)
 convStmtProc (FAsg v (Matrix [es])) = do
   els <- mapM convExprProc es
+  vlog <- mkVarProc v
   v' <- mkVarProc v
   t <- codeType v
   let listFunc (C.List _) = litList
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
     els) : l
 convStmtProc (FAsg v e) = do
   e' <- convExprProc e
+  vlog <- mkVarProc v
   v' <- mkVarProc v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' e' : l
 convStmtProc (FAsgIndex v i e) = do
   e' <- convExprProc e
+  vlog <- mkVarProc v
   v' <- mkVarProc v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
+      vilog = arrayElem (litInt i) vlog
       vi = arrayElem (litInt i) v'
-  l <- maybeLog vi
+  l <- maybeLog vilog vi
   return $ multi $ asgFunc t : l
 convStmtProc (FFor v start end step st) = do
   stmts <- mapM convStmtProc st
@@ -1168,8 +1181,9 @@ convStmtProc (FDecDef v (Matrix [[]])) = do
 convStmtProc (FDecDef v e) = do
   g <- get
   let scp = convScope $ currentScope g
+  vlog <- mkVarProc v
   v' <- mkVarProc v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
         let contDecDef (C.List _) = listDecDef

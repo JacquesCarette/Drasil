@@ -99,8 +99,9 @@ genMainFunc = do
     let mainFunc Library = return Nothing
         mainFunc Program = do
           modify (\st -> st {currentScope = MainFn})
+          v_filename_log <- mkVar (quantvar inFileName)
           v_filename <- mkVar (quantvar inFileName)
-          logInFile <- maybeLog v_filename
+          logInFile <- maybeLog v_filename_log v_filename
           co <- initConsts
           ip <- getInputDecl
           ics <- genAllInputCalls
@@ -175,9 +176,10 @@ initConsts = do
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
+        vars_log <- mapM (mkVar . quantvar) cs
         vars <- mapM (mkVar . quantvar) cs
         vals <- mapM (convExpr . (^. codeExpr)) cs
-        logs <- mapM maybeLog vars
+        logs <- zipWithM maybeLog vars_log vars
         return $ Just $ multi $
           zipWith (\vr -> defFunc (g ^. conRepr) vr scp) vars vals ++ concat logs
       defFunc Var = varDecDef
@@ -570,9 +572,10 @@ genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> CodeExpr ->
   GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
+  vlog <- mkVar (quantvar v)
   vv <- mkVar (quantvar v)
   ee <- convExpr e
-  l <- maybeLog vv
+  l <- maybeLog vlog vv
   return $ block $ assign vv ee : l
 genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 
@@ -649,8 +652,9 @@ genMainFuncProc = do
     let mainFunc Library = return Nothing
         mainFunc Program = do
           modify (\st -> st {currentScope = MainFn})
+          v_filename_log <- mkVarProc (quantvar inFileName)
           v_filename <- mkVarProc (quantvar inFileName)
-          logInFile <- maybeLog v_filename
+          logInFile <- maybeLog v_filename_log v_filename
           co <- initConstsProc
           ip <- getInputDeclProc
           ics <- genAllInputCallsProc
@@ -688,9 +692,10 @@ initConstsProc = do
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
+        vars_log <- mapM (mkVarProc . quantvar) cs
         vars <- mapM (mkVarProc . quantvar) cs
         vals <- mapM (convExprProc . (^. codeExpr)) cs
-        logs <- mapM maybeLog vars
+        logs <- zipWithM maybeLog vars_log vars
         return $ Just $ multi $
           zipWith (\vr -> defFunc (g ^. conRepr) vr scp) vars vals ++ concat logs
       defFunc Var = varDecDef
@@ -806,9 +811,10 @@ genCalcBlockProc :: (SharedProg r) => CalcType -> CodeDefinition -> CodeExpr ->
   GenState (MSBlock r)
 genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
 genCalcBlockProc CalcAssign v e = do
+  vlog <- mkVarProc (quantvar v)
   vv <- mkVarProc (quantvar v)
   ee <- convExprProc e
-  l <- maybeLog vv
+  l <- maybeLog vlog vv
   return $ block $ assign vv ee : l
 genCalcBlockProc CalcReturn _ e = block <$> liftS (returnStmt <$> convExprProc e)
 

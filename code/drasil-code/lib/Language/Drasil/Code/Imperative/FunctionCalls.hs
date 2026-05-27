@@ -67,8 +67,9 @@ genCalcCall c = do
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
+  vlog <- mkVar (quantvar c)
   v <- mkVar (quantvar c)
-  l <- maybeLog v
+  l <- maybeLog vlog v
   return $ fmap (multi . (: l) . varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
@@ -167,8 +168,9 @@ genCalcCallProc c = do
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
+  vlog <- mkVarProc (quantvar c)
   v <- mkVarProc (quantvar c)
-  l <- maybeLog v
+  l <- maybeLog vlog v
   return $ fmap (multi . (: l) . (`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.

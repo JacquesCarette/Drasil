@@ -11,6 +11,9 @@ extension String: @retroactive Error {}
 // Initializing variables
 var a: Int
 var b: Int = 5
+var arr: [Int] = [1, 2, 3]
+print("Value of arr: ", terminator: "")
+print(arr)
 var myOtherList: [Double] = [1.0, 1.5]
 var oneIndex: Int = myOtherList.firstIndex(of: 1.0)!
 print(oneIndex)

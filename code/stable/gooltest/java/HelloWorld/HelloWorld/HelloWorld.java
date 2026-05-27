@@ -17,6 +17,9 @@ public class HelloWorld {
         // Initializing variables
         int a;
         int b = 5;
+        int[] arr = {1, 2, 3};
+        System.out.print("Value of arr: ");
+        System.out.println(Arrays.toString(arr));
         ArrayList<Double> myOtherList = new ArrayList<Double>(Arrays.asList(1.0, 1.5));
         int oneIndex = myOtherList.indexOf(1.0);
         System.out.println(oneIndex);

@@ -3,12 +3,14 @@
 module Drasil.Build.Artifacts.FileLayout
   ( -- * File Layout
     FileLayout,
+    name,
 
     -- ** Constructors
     file,
     directory,
 
     -- ** Writing
+    OverwritePolicy(..),
     writeFiles,
   )
 where
@@ -18,7 +20,7 @@ import Data.Map.Strict qualified as M
 import Data.Maybe (fromMaybe)
 import Drasil.Build.Artifacts.FilePath (PathSegment, toPath, (</>))
 import Drasil.Build.Artifacts.Render (Renderable (..))
-import System.Directory.OsPath (createDirectory, doesPathExist)
+import System.Directory.OsPath (createDirectoryIfMissing, doesPathExist)
 import System.OsPath (OsPath, decodeUtf)
 
 -- | Container for laying out files in a single container for writing to disk.
@@ -39,6 +41,11 @@ data FileLayout doc = FileLayout
     fileTree :: FileTree doc
   }
   deriving (Functor)
+
+-- | Get the top-level name (a 'PathSegment') of a 'FileLayout'.
+name :: FileLayout doc -> PathSegment
+name = pathSeg
+{-# INLINE name #-}
 
 -- | Internal: File layout tree.
 data FileTree doc
@@ -70,21 +77,34 @@ insert v =
     (fileTree v)
 {-# INLINE insert #-}
 
+-- | When writing files or creating directories, is overwriting allowed?
+data OverwritePolicy = OverwriteAllowed | NeverOverwrite
+
 -- | Write a 'FileLayout' to disk about a base path.
 --
--- Disclaimer: Fails if files/directories already exist. This is problematic for
--- case-insensitive file systems where different paths reference the same.
-writeFiles :: (Renderable doc) => OsPath -> FileLayout doc -> IO ()
-writeFiles basePath layout = do
-  let targetPath = basePath </> pathSeg layout
+-- If the given 'OverwritePolicy' is 'NeverOverwrite', this will fail if the
+-- /top-level/ target path already exists. If it is 'OverwriteAllowed', it will
+-- overwrite existing files.
+--
+-- Disclaimer: For case-insensitive file systems where different paths in the
+-- layout might reference the same on-disk path, this code will fail.
+writeFiles :: (Renderable doc) => OverwritePolicy -> OsPath -> FileLayout doc -> IO ()
+writeFiles OverwriteAllowed basePath layout = writeFiles0 basePath layout
+writeFiles NeverOverwrite basePath layout = do
   exists <- doesPathExist targetPath
   if exists
     then error $ "Path already exists: " ++ show targetPath
-    else go basePath layout
+    else writeFiles0 basePath layout
   where
-    go currentPath (FileLayout fname (File content)) =
-      renderToFile (currentPath </> fname) content
-    go currentPath (FileLayout dname (Directory children)) = do
-      let nextPath = currentPath </> dname
-      createDirectory nextPath
-      F.traverse_ (\(n, c) -> go nextPath (FileLayout n c)) (M.toList children)
+    targetPath = basePath </> pathSeg layout
+
+-- Internal: `writeFiles` internal. It will create directories as needed and
+-- blindly overwrite any existing files as designated in the layout.
+writeFiles0 :: (Renderable doc) => OsPath -> FileLayout doc -> IO ()
+writeFiles0 currentPath (FileLayout fname (File content)) =
+  renderToFile (currentPath </> fname) content
+writeFiles0 currentPath (FileLayout dname (Directory children)) = do
+  let nextPath = currentPath </> dname
+  createDirectoryIfMissing False nextPath
+  F.traverse_ (\(n, c) -> writeFiles0 nextPath (FileLayout n c)) (M.toList children)
+{-# INLINE writeFiles0 #-}

@@ -10,6 +10,9 @@ import Helper
 
 # Initializing variables
 b = 5
+arr = [1, 2, 3]
+print("Value of arr: ", end="")
+print(arr)
 myOtherList = [1.0, 1.5]
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)

@@ -11,6 +11,9 @@ import .Helper
 
 # Initializing variables
 global b = 5
+global arr = [1, 2, 3]
+print("Value of arr: ")
+println(arr)
 global myOtherList = [1.0, 1.5]
 global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)

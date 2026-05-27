@@ -22,8 +22,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), BinderSym(..), CommentStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), BinderSym(..), CommentStatement(..), ifNoElse,
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
@@ -112,7 +112,7 @@ import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName,
   setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, useVarName,
+  setCurrMainFunc, getCurrMainFunc, useVarName, genVarName,
   genLoopIndex, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
@@ -1538,15 +1538,15 @@ instance OODeclStatement CppSrcCode where
   extObjDecNew = C.extObjDecNew
 
 instance IOStatement CppSrcCode where
-  print      = G.print False Nothing printFunc
-  printLn    = G.print True  Nothing printLnFunc
-  printStr   = G.print False Nothing printFunc   . litString
-  printStrLn = G.print True  Nothing printLnFunc . litString
+  print      = cppOut False Nothing printFunc
+  printLn    = cppOut True  Nothing printLnFunc
+  printStr   = cppOut False Nothing printFunc   . litString
+  printStrLn = cppOut True  Nothing printLnFunc . litString
 
-  printFile f      = G.print False (Just f) (printFileFunc f)
-  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
-  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
+  printFile f      = cppOut False (Just f) (printFileFunc f)
+  printFileLn f    = cppOut True  (Just f) (printFileLnFunc f)
+  printFileStr f   = cppOut False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = cppOut True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ cppDiscardInput '\n'
@@ -2802,6 +2802,23 @@ cppPrint newLn pf vl = do
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
+
+cppOut :: Bool -> Maybe (SValue CppSrcCode) -> SValue CppSrcCode ->
+  SValue CppSrcCode -> MSStatement CppSrcCode
+cppOut newLn f printFn v = zoom lensMStoVS v >>= cppOut' . getType . valueType
+  where cppOut' (Array _) = do
+          firstVar <- genVarName [] "first"
+          elemVar <- genVarName [] "elem"
+          let innerType = listInnerType (onStateValue valueType v)
+              printMaybeNewLn = if newLn then printLn else print
+          multi [printStr "[",
+            varDecDef (var firstVar bool) local litTrue,
+            forEach (var elemVar innerType) v (body [block[
+              ifNoElse [((valueOf (var firstVar bool) ?!), oneLiner $ printStr ", ")],
+              print $ valueOf (var elemVar innerType),
+              var firstVar bool &= litFalse]]),
+              printMaybeNewLn $ litString "]"]
+        cppOut' _ = G.print newLn f printFn v
 
 cppThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)

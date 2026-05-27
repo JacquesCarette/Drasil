@@ -576,15 +576,15 @@ instance OODeclStatement CSharpCode where
   extObjDecNew = C.extObjDecNew
 
 instance IOStatement CSharpCode where
-  print      = G.print False Nothing printFunc
-  printLn    = G.print True  Nothing printLnFunc
-  printStr   = G.print False Nothing printFunc   . litString
-  printStrLn = G.print True  Nothing printLnFunc . litString
+  print      = csPrint False Nothing printFunc
+  printLn    = csPrint True  Nothing printLnFunc
+  printStr   = csPrint False Nothing printFunc   . litString
+  printStrLn = csPrint True  Nothing printLnFunc . litString
 
-  printFile f      = G.print False (Just f) (printFileFunc f)
-  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
-  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
+  printFile f      = csPrint False (Just f) (printFileFunc f)
+  printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
+  printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = csDiscardInput inputFunc
@@ -983,3 +983,12 @@ csInOut f ins [] [v] b = f (onStateValue variableType v)
 csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
+
+csPrint :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r ->
+  SValue r -> MSStatement r
+csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getType . valueType
+  where csPrint' (Array _) = multi [printStr "[",
+          print $ extFuncApp "string" "Join" string [litString ", ", v],
+          printMaybeNewLn $ litString "]"]
+        csPrint' _ = G.print newLn f printFn v
+        printMaybeNewLn = if newLn then printLn else print

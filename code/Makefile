@@ -347,10 +347,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 # Same as above targets; run individual examples but create traceability graphs
 # for each example run. Needs Graphviz to run. Graphs generate in svg, pdf, and png formats.
 # Specific example targets will have the name exampleName_trace_graph.
-$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
-	stack build $(stackArgs) "$(EEXE)"
-	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"
+$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): %$(GEN_E_SUFFIX) graphmod
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
@@ -551,7 +548,8 @@ deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating ar
 # Prepares a website folder deployable to GitHub Pages using freshly generated
 # artifacts. If you don't want to use freshly generated artifacts, consider
 # using theg `deploy_lite` target instead.
-deploy: analysis graphs convertAnalyzed packagedeps docs tex doxygen ##@Deploy Generates all artifacts and the Drasil website locally.
+deploy: FULL=1
+deploy: analysis graphs convertAnalyzed packagedeps docs tex doxygen mdbook_build jupyter_html ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#

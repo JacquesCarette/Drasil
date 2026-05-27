@@ -1,5 +1,5 @@
 -- | Defines operator precedence.
-module Language.Drasil.ModelExpr.Precedence where
+module Language.Drasil.ModelExpr.Precedence (mePrec, precB) where
 
 import Language.Drasil.ModelExpr.Lang
 import Language.Drasil.Expr.Lang (ArithBinOp(..))

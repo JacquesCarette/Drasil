@@ -8,7 +8,7 @@ import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
 
-import Language.Drasil hiding (Data, Matrix)
+import Language.Drasil hiding (Matrix)
 import Language.Drasil.Expr.Development (Expr(Matrix))
 
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),

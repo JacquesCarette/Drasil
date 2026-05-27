@@ -13,7 +13,7 @@ where
 
 import Data.Proxy (Proxy (..))
 import Drasil.Build.Artifacts.CommonPaths (localPath)
-import Drasil.Build.Artifacts.FileLayout (FileLayout, name, writeFiles)
+import Drasil.Build.Artifacts.FileLayout (FileLayout, OverwritePolicy(..), name, writeFiles)
 import Drasil.Build.Artifacts.FilePath (toPath)
 import Drasil.Build.Artifacts.Render (Renderable)
 import System.Directory.OsPath (createDirectoryIfMissing, removePathForcibly)
@@ -123,5 +123,5 @@ goldenTest tName layout = GTC $
           buildRoot
           goldenRoot
           (toPath (name layout))
-          (`writeFiles` layout)
+          (\p -> writeFiles NeverOverwrite p layout)
       )

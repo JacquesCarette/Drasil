@@ -150,11 +150,10 @@ pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
         (D.toSent $ phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
 
-lRod, label1, label2, labelx, labely, initial, lTheta':: Symbol
+lRod, label1, label2, labelx, labely, lTheta':: Symbol
 lRod = label "rod"
 labelx = label "x"
 labely = label "y"
-initial = label "i"
 label1  = Integ 1
 label2  = Integ 2
 lTheta'  = label "theta"
@@ -162,12 +161,10 @@ lTheta'  = label "theta"
 ----------------
 -- CONSTRAINT --
 ----------------
-lenRodCon_1, lenRodCon_2, pendDisAngleCon_1, pendDisAngleCon_2, massCon_1, massCon_2
+lenRodCon_1, lenRodCon_2, massCon_1, massCon_2
   :: ConstrConcept
 lenRodCon_1       = constrained' lenRod_1 [gtZeroConstr] (dbl 1)
 lenRodCon_2       = constrained' lenRod_2 [gtZeroConstr] (dbl 1)
-pendDisAngleCon_1 = constrained' pendDisAngle_1 [gtZeroConstr] (dbl 30)
-pendDisAngleCon_2 = constrained' pendDisAngle_2 [gtZeroConstr] (dbl 30)
 massCon_1         = constrained' massObj_1 [gtZeroConstr] (dbl 0.5)
 massCon_2         = constrained' massObj_2 [gtZeroConstr] (dbl 0.5)
 

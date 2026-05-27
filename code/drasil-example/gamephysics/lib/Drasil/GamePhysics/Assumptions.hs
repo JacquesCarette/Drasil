@@ -56,7 +56,3 @@ assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 {-assumptions_list = enumSimple 1 (short assumption) $ map (foldlSent)
   [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc,
   assumpDIDesc, assumpCAJIDesc]-}
-
-assumptionsListA :: [[Sentence]]
-assumptionsListA = [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc,
-  assumpCTDesc, assumpDIDesc, assumpCAJIDesc]

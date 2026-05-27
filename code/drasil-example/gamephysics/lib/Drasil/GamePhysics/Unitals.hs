@@ -4,7 +4,7 @@ module Drasil.GamePhysics.Unitals (
   mTot, massj, massA, massB, mass_1, mass_2, distMass,
   normalVect, posCM, posj, rOB, rRot, timeT, time_1, time_2, timeC, sqrDist,
   torquej, forcej, force_1, force_2, angAccj, mLarger, dispNorm, dVect, accj,
-  momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB
+  momtInertA, momtInertB, normalLen, perpLenA, perpLenB
 ) where
 
 import Control.Lens ((^.))
@@ -31,19 +31,6 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
   torqueU, velU, angAccelU)
 
 import Data.Drasil.Constraints (gtZeroConstr)
-
-defSymbols :: [DefinedQuantityDict]
-defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints
-
-unitSymbs :: [UnitalChunk]
-unitSymbs = [iVect, jVect, normalVect,
-  force_1, force_2, forcej, mass_1, mass_2,
-  dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
-  posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel,
-  massA, massB, massIRigidBody, normalLen, contDispA, contDispB,
-  perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime,
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
-  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect]
 
 ----------------------
 -- TABLE OF SYMBOLS --

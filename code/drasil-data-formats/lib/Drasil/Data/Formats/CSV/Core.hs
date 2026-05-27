@@ -15,7 +15,7 @@ where
 import Data.List (find)
 import Data.Text (Text)
 
--- | A CSV file representation.
+-- | A CSV file representation; an optional header and a list of rows.
 data CSV = CSV (Maybe [Text]) [[Text]]
   deriving (Show, Eq)
 

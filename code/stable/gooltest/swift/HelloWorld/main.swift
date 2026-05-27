@@ -12,6 +12,8 @@ extension String: @retroactive Error {}
 var a: Int
 var b: Int = 5
 var arr: [Int] = [1, 2, 3]
+print("Value of arr: ", terminator: "")
+print(arr)
 var arr2: [Int] = []
 for i in [Int](stride(from: 0, to: 3, by: 1)) {
     arr2.append(0)
@@ -19,6 +21,8 @@ for i in [Int](stride(from: 0, to: 3, by: 1)) {
 arr2[0] = 4
 arr2[1] = 5
 arr2[2] = 6
+print("Value of arr2: ", terminator: "")
+print(arr2)
 var myOtherList: [Double] = [1.0, 1.5]
 var oneIndex: Int = myOtherList.firstIndex(of: 1.0)!
 print(oneIndex)

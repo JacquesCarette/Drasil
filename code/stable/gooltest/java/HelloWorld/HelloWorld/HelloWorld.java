@@ -18,10 +18,14 @@ public class HelloWorld {
         int a;
         int b = 5;
         int[] arr = {1, 2, 3};
+        System.out.print("Value of arr: ");
+        System.out.println(Arrays.toString(arr));
         int[] arr2 = new int[3];
         arr2[0] = 4;
         arr2[1] = 5;
         arr2[2] = 6;
+        System.out.print("Value of arr2: ");
+        System.out.println(Arrays.toString(arr2));
         ArrayList<Double> myOtherList = new ArrayList<Double>(Arrays.asList(1.0, 1.5));
         int oneIndex = myOtherList.indexOf(1.0);
         System.out.println(oneIndex);

@@ -1,6 +1,9 @@
 {-# LANGUAGE GADTs #-}
 -- | Lesson plan notebook chapter types.
-module Drasil.DocumentLanguage.Notebook.Core where
+module Drasil.DocumentLanguage.Notebook.Core (
+  LsnDesc, LsnChapter(..), Intro(..), LearnObj(..), Review(..), CaseProb(..),
+  Example(..), Smmry(..), Apndx(..)
+) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 import Language.Drasil

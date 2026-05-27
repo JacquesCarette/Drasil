@@ -30,16 +30,20 @@ rows (CSV _ rs) = rs
 -- | Create a 'CSV'. Expects all rows to have the same length as the header (if
 -- it exists) or the first row (if the rows are non-empty).
 mkCSV :: Maybe [Text] -> [[Text]] -> Either String CSV
-mkCSV mhr rs@(fr : rrs) =
-  case find (\(_, r) -> length r /= expLen) (zip ([1 ..] :: [Int]) rrs) of
-    Nothing -> pure $ CSV mhr rs
-    Just (i, r) -> Left $ concat [
-        "Row ", show i, " has ", show (length r), " columns, but expected ", show expLen,
-        " (based on ", expLenSrc, ")"
-      ]
+mkCSV mhr rs = maybe (pure $ CSV mhr rs) Left (saneLengths mhr rs)
+
+-- | Internal: Check if all rows have the same length as the header (if it
+-- exists) or the first row (if the rows are non-empty). Returns 'Nothing' if
+-- the CSV is valid, or 'Just' the error message otherwise.
+saneLengths :: Maybe [Text] -> [[Text]] -> Maybe String
+saneLengths mhr (fr : rrs) =
+  fmap (\(i, r) -> concat [
+      "Row ", show i, " has ", show (length r), " columns, but expected ", show expLen,
+      " (based on ", expLenSrc, ")"
+    ]) (find (\(_, r) -> length r /= expLen) (zip ([1 ..] :: [Int]) rrs))
   where
     (expLen, expLenSrc) = maybe (length fr, "first row") (\r -> (length r, "header")) mhr
-mkCSV mhr [] = pure $ CSV mhr []
+saneLengths _ [] = Nothing
 
 -- | Calculate the number of rows in a 'CSV'.
 rowCount :: CSV -> Int

@@ -16,7 +16,7 @@ import Language.Drasil.Printing.Import (makeDocument)
 -- | Generate a "website" (an HTML file with a CSS stylesheet) softifact.
 exportWebsite :: DrasilWebsite -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
-  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering []
+  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering
       pd = makeDocument printSetting doc
       website =
         directory

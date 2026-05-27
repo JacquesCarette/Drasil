@@ -18,7 +18,7 @@ import Drasil.System (LessonPlan, lsnPlanRefs, systemdb)
 exportLessonPlan :: LessonPlan -> LsnDesc -> String -> IO ()
 exportLessonPlan plan nbDecl lsnFileName = do
   let nb = mkNb plan nbDecl S.forT
-      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering []
+      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
       pd = makeDocument printSetting nb
       artifact =
         directory

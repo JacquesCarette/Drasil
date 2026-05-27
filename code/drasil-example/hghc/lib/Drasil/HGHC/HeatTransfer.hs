@@ -1,5 +1,8 @@
 module Drasil.HGHC.HeatTransfer where --whole file is used
 
+import Data.List.NonEmpty (NonEmpty ((:|)))
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Theory.Drasil (DataDefinition, ddENoRefs)
@@ -9,20 +12,20 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 {--}
 
 symbols :: [DefinedQuantityDict]
-symbols = htOutputs ++ htInputs
+symbols = NE.toList htOutputs ++ NE.toList htInputs
 
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
-qDefs :: [SimpleQDef]
-qDefs = [htTransCladFuel, htTransCladCool]
+qDefs :: NE.NonEmpty SimpleQDef
+qDefs = htTransCladFuel :| [htTransCladCool]
 
-htVars :: [DefinedQuantityDict]
-htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
+htVars :: NE.NonEmpty DefinedQuantityDict
+htVars = cladThick :| [coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [DefinedQuantityDict]
-htInputs = map dqdWr htVars
-htOutputs = map dqdWr qDefs
+htInputs, htOutputs :: NE.NonEmpty DefinedQuantityDict
+htInputs = NE.map dqdWr htVars
+htOutputs = NE.map dqdWr qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict
 cladThick    = dqdNoUnit (dcc "cladThick"    (cn''' "clad thickness")

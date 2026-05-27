@@ -5,6 +5,9 @@
 
 module Drasil.Template.Body (mkSRS, si) where
 
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
+
 import Drasil.System (mkSmithEtAlICO)
 import Language.Drasil
 import Language.Drasil.Display
@@ -86,7 +89,7 @@ si = mkSmithEtAlICO
   progName [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([t0, dt] :: [DefinedQuantityDict]) ([t1] :: [DefinedQuantityDict])
+  (t0 :| [dt]) (NE.singleton t1)
   ([] :: [ConstrConcept]) ([] :: [ConstQDef]) []
   [] symbMap []
 

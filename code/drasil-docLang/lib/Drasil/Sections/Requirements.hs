@@ -15,6 +15,7 @@ module Drasil.Sections.Requirements (
 -- Generic Haskell
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
+import qualified Data.List.NonEmpty as NE
 
 -- Generic Drasil
 import Drasil.Database (HasUID(..))
@@ -50,7 +51,7 @@ reqF = SRS.require [reqIntro]
 -- The resulting requirement sentence is of the form: "Inputs the values from
 -- @table_ref@, which define @description@". If the description is 'Nothing',
 -- the sentence is: "Inputs the values from @table_ref@".
-inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> [q] -> (ConceptInstance, LabelledContent)
+inReqWTab :: (Quantity q, MayHaveUnit q) => Maybe Sentence -> NE.NonEmpty q -> (ConceptInstance, LabelledContent)
 inReqWTab mdesc qs = (ci, tbl)
   where
     tbl = mkInputPropsTable qs
@@ -147,10 +148,9 @@ mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i) =>
-                          [i] -> LabelledContent
-mkInputPropsTable []        = mkRawLC (Paragraph EmptyS) reqInputsRef
+                          NE.NonEmpty i -> LabelledContent
 mkInputPropsTable reqInputs = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
-  (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
+  (mkTable [ch, atStart, toSentence] $ sortBySymbol (NE.toList reqInputs))
   (titleize' reqInput) True) reqInputsRef
 
 -- | Reference for the Required Inputs table.

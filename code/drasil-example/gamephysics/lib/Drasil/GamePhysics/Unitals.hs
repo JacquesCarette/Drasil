@@ -1,6 +1,8 @@
 module Drasil.GamePhysics.Unitals where
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -42,16 +44,17 @@ unitSymbs = [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbols, inputSymbols, outputSymbols :: [DefinedQuantityDict]
-
+symbols :: [DefinedQuantityDict]
 symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] ++ unitless ++ map dqdWr unitalSymbols
 
-inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation,
+inputSymbols, outputSymbols :: NE.NonEmpty DefinedQuantityDict
+
+inputSymbols = NE.map dqdWr (QP.position :| [QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass,
-  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec] ++
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec]) `NE.appendList`
   [QP.restitutionCoef]
 
-outputSymbols = map dqdWr [QP.position, QP.velocity, QM.orientation,
+outputSymbols = NE.map dqdWr $ QP.position :| [QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 unitalSymbols :: [UnitalChunk]

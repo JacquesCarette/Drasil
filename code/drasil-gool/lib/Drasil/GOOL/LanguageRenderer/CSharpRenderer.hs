@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -56,16 +56,16 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, param, method, listDec, classVar, func, cast, listSetFunc,
-  castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt,
-  addComments, commentedMod, commentedItem)
+  printFile, param, method, listDec, classVarAccess, func, cast, listSetFunc,
+  castObj, classLevel, instanceLevel, break, continue, private, public,
+  blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
@@ -75,11 +75,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVar, constDecDef,
+  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess, constDecDef,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex, listAddFunc,
-  listDecDef, mainFunction, notNull, objVarSelf, openFileA, openFileR, openFileW,
+  listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
@@ -93,7 +93,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..),
+  TypeData(..), td, ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
   commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BinderD(..),
   bindFormD)
@@ -167,10 +167,10 @@ instance ImportSym CSharpCode where
 instance ImportElim CSharpCode where
   import' = unCSC
 
-instance PermanenceSym CSharpCode where
-  type Permanence CSharpCode = Doc
-  static = toCode R.static
-  dynamic = toCode R.dynamic
+instance AttachmentSym CSharpCode where
+  type Attachment CSharpCode = Doc
+  classLevel = toCode R.classLevel
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim CSharpCode where
   perm = unCSC
@@ -290,13 +290,14 @@ instance VariableSym CSharpCode where
   arrayElem = G.arrayElem
 
 instance OOVariableSym CSharpCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar
   self = C.self
-  classVar = CP.classVar R.classVar
-  extClassVar = classVar
+  classVarAccess = CP.classVarAccess R.classVarAccess
+  extClassVarAccess = classVarAccess
 
-  objVar = G.objVar
-  objVarSelf = CP.objVarSelf
+  instanceVarAccess = G.instanceVarAccess
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
@@ -553,7 +554,7 @@ instance AssignStatement CSharpCode where
 
 instance DeclStatement CSharpCode where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
-    C.varDec static dynamic empty v scp)
+    C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
@@ -961,9 +962,9 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: Binding -> MSStatement CSharpCode -> MSStatement CSharpCode
-csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
-csVarDec Dynamic d = d
+csVarDec :: AttachmentTag -> MSStatement CSharpCode -> MSStatement CSharpCode
+csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
+csVarDec InstanceLevel d = d
 
 csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode ->
     SMethod CSharpCode) ->

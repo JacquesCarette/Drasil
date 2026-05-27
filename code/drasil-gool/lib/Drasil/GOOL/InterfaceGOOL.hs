@@ -5,13 +5,13 @@ module Drasil.GOOL.InterfaceGOOL (
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), staticVar, staticConst, ($->), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj, extNewObj,
-  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, PermanenceSym(..),
+  StateVarSym(..), privDVar, pubDVar, pubSVar, AttachmentSym(..),
   OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
@@ -78,24 +78,24 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r, PermanenceSym r) => OOMethodSym r where
-  method      :: Label -> r (Visibility r) -> r (Permanence r) -> VSType r ->
+class (MethodSym r, AttachmentSym r) => OOMethodSym r where
+  method      :: Label -> r (Visibility r) -> r (Attachment r) -> VSType r ->
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
-  -- inOutMethod and docInOutMethod both need the Permanence parameter
-  inOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
-  docInOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
+  -- inOutMethod and docInOutMethod both need the Attachment parameter
+  inOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> DocInOutFunc r
 
 privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
-privMethod n = method n private dynamic
+privMethod n = method n private instanceLevel
 
 pubMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
   -> SMethod r
-pubMethod n = method n public dynamic
+pubMethod n = method n public instanceLevel
 
 initializer :: (OOMethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
 initializer ps is = constructor ps is (body [])
@@ -105,26 +105,27 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where
+class (VisibilitySym r, AttachmentSym r, VariableSym r) => StateVarSym r where
   type StateVar r
-  stateVar :: r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SVariable r ->
+  stateVar :: r (Visibility r) -> r (Attachment r) -> SVariable r -> CSStateVar r
+  stateVarDef :: r (Visibility r) -> r (Attachment r) -> SVariable r ->
     SValue r -> CSStateVar r
   constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
 
 privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-privDVar = stateVar private dynamic
+privDVar = stateVar private instanceLevel
 
 pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-pubDVar = stateVar public dynamic
+pubDVar = stateVar public instanceLevel
 
 pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-pubSVar = stateVar public static
+pubSVar = stateVar public classLevel
 
-class PermanenceSym r where
-  type Permanence r
-  static  :: r (Permanence r)
-  dynamic :: r (Permanence r)
+-- | Used to differentiate whether a member is attached to the class or the instance
+class AttachmentSym r where
+  type Attachment r
+  classLevel  :: r (Attachment r)
+  instanceLevel :: r (Attachment r)
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r
@@ -132,23 +133,25 @@ class (TypeSym r) => OOTypeSym r where
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  -- Bool: False for variable, True for constant.  Required by the Python renderer.
-  staticVar'    :: Bool -> Label -> VSType r -> SVariable r
-  self         :: SVariable r
-  classVar     :: VSType r -> SVariable r -> SVariable r
-  extClassVar  :: VSType r -> SVariable r -> SVariable r
-  objVar       :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf   :: SVariable r -> SVariable r
-
-staticVar :: (OOVariableSym r) => Label -> VSType r -> SVariable r
-staticVar = staticVar' False
-
-staticConst :: (OOVariableSym r) => Label -> VSType r -> SVariable r
-staticConst = staticVar' True
+  -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
+  classVar          :: Label -> VSType r -> SVariable r
+  -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
+  classConst        :: Label -> VSType r -> SVariable r
+  -- | `self` keyword
+  self              :: SVariable r
+  -- | Given a class `C` and a class-level variable `v`, creates `C.v`
+  classVarAccess    :: VSType r -> SVariable r -> SVariable r
+  -- | Given a class `C` from an external module and a class-level variable `v`,
+  -- performs any necessary imports and creates `C.v`
+  extClassVarAccess :: VSType r -> SVariable r -> SVariable r
+  -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
+  instanceVarAccess :: SVariable r -> SVariable r -> SVariable r
+  -- | Given a variable `v`, creates `self.v`
+  instanceVarSelf   :: SVariable r -> SVariable r
 
 ($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
-($->) = objVar
+($->) = instanceVarAccess
 
 class (VariableValue r, OOVariableSym r) => OOVariableValue r
 

@@ -57,7 +57,7 @@ data GOOLState = GS {
   _mainMod :: Maybe FilePath, -- Used by Drasil generator to access main
                               -- mod file path (needed in Makefile generation)
   _classMap :: Map String ClassName, -- Used to determine whether an import is
-                                     -- needed when using extClassVar and obj
+                                     -- needed when using extClassVarAccess and obj
 
   -- Only used in Java and Swift, to generate correct "throws Exception" declarations
   _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown

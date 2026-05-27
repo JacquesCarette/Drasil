@@ -1,9 +1,9 @@
 module Drasil.Data.Formats.CSV.Render
-  ( -- * Rendering
-    renderCSV,
+  ( -- ** Rendering
+    CSVRenderOptions,
     DoubleQuotationPolicy (..),
     csvRenderOpts,
-    CSVRenderOptions,
+    renderCSV,
   )
 where
 

@@ -3,6 +3,7 @@
 module Drasil.Build.Artifacts.FileLayout
   ( -- * File Layout
     FileLayout,
+    name,
 
     -- ** Constructors
     file,
@@ -40,6 +41,11 @@ data FileLayout doc = FileLayout
     fileTree :: FileTree doc
   }
   deriving (Functor)
+
+-- | Get the top-level name (a 'PathSegment') of a 'FileLayout'.
+name :: FileLayout doc -> PathSegment
+name = pathSeg
+{-# INLINE name #-}
 
 -- | Internal: File layout tree.
 data FileTree doc

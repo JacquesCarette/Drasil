@@ -13,7 +13,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
   VariableElim(..), listOf, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
-  AssignStatement((&+=), (&-=), (&++)), (&=), ScopeSym(..), convScope)
+  AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block),
   TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(..),
   VariableValue(valueOf), ValueExpression(notNull), List(..),
@@ -31,6 +31,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
+import Drasil.Shared.AST (ScopeData)
 
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
@@ -127,7 +128,7 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (MSStatement, SValue): (setter, value) of bound
 makeSetterVal :: (CommonRenderSym r) => Label -> SValue r -> Maybe Integer ->
-  Maybe (SValue r) -> SValue r -> SValue r -> r (IC.Scope r) ->
+  Maybe (SValue r) -> SValue r -> SValue r -> r ScopeData ->
   (MSStatement r, SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)
@@ -198,7 +199,7 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0
 
-arrayDecAsList :: (CommonRenderSym r) => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+arrayDecAsList :: (CommonRenderSym r) => Integer -> SVariable r -> r ScopeData -> MSStatement r
 arrayDecAsList len vr scp = do
   vr' <- zoom lensMStoVS vr
   let innerTp = IC.listInnerType $ return $ variableType vr'

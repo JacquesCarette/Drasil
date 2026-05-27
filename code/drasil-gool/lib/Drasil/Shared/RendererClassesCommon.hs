@@ -22,11 +22,10 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..),
-  BinderElim(..), BinderSym (..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..))
 import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
-  TypeData)
+  TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -81,10 +80,9 @@ class RenderType r where
 class InternalTypeElim r where
   type' :: r TypeData -> Doc
 
-type VSUnOp a = VS (a (UnaryOp a))
+type VSUnOp a = VS (a OpData)
 
 class UnaryOpSym r where
-  type UnaryOp r
   notOp    :: VSUnOp r
   negateOp :: VSUnOp r
   sqrtOp   :: VSUnOp r
@@ -101,10 +99,9 @@ class UnaryOpSym r where
   floorOp  :: VSUnOp r
   ceilOp   :: VSUnOp r
 
-type VSBinOp a = VS (a (BinaryOp a))
+type VSBinOp a = VS (a OpData)
 
 class BinaryOpSym r where
-  type BinaryOp r
   equalOp        :: VSBinOp r
   notEqualOp     :: VSBinOp r
   greaterOp      :: VSBinOp r
@@ -121,13 +118,13 @@ class BinaryOpSym r where
   orOp           :: VSBinOp r
 
 class OpElim r where
-  uOp :: r (UnaryOp r) -> Doc
-  bOp :: r (BinaryOp r) -> Doc
-  uOpPrec :: r (UnaryOp r) -> Int
-  bOpPrec :: r (BinaryOp r) -> Int
+  uOp :: r OpData -> Doc
+  bOp :: r OpData -> Doc
+  uOpPrec :: r OpData -> Int
+  bOpPrec :: r OpData -> Int
 
 class ScopeElim r where
-  scopeData :: r (Scope r) -> ScopeData
+  scopeData :: r ScopeData -> ScopeData
 
 class RenderVariable r where
   varFromData :: AttachmentTag -> String -> VSType r -> Doc -> SVariable r
@@ -137,7 +134,7 @@ class InternalVarElim r where
   variable  :: r (Variable r) -> Doc
 
 class InternalBinderElim r where
-  binderElim  :: r (Binder r) -> Doc
+  binderElim  :: r BinderD -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r
@@ -216,13 +213,12 @@ class ParamElim r where
   parameter     :: r (Parameter r) -> Doc
 
 class BlockCommentSym r where
-  type BlockComment r
-  blockComment :: [String] -> r (BlockComment r)
+  blockComment :: [String] -> r Doc
   -- | Converts a list of strings into a block comment
-  docComment :: State a [String] -> State a (r (BlockComment r))
+  docComment :: State a [String] -> State a (r Doc)
 
 class BlockCommentElim r where
-  blockComment' :: r (BlockComment r) -> Doc
+  blockComment' :: r Doc -> Doc
 
 type MSMthdType a = MS (a (MethodType a))
 
@@ -232,7 +228,7 @@ class (TypeSym r) => MethodTypeSym r where
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   -- | Takes a BlockComment and a method and generates a function.
-  commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
+  commentedFunc :: MS (r Doc) -> SMethod r -> SMethod r
   mthdFromData :: VisibilityTag -> Doc -> SMethod r
 
 class MethodElim r where

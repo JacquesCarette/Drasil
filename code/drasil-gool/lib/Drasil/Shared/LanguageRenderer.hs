@@ -31,8 +31,7 @@ import Utils.Drasil (capitalize, stringList)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..),
-  StatementSym(Statement), VisibilitySym(Visibility), ParameterSym(Parameter),
-  BinderSym(..))
+  StatementSym(Statement), VisibilitySym(Visibility), ParameterSym(Parameter))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(Attachment))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -41,7 +40,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..))
+  updateMod, TypeData(..), VarData(..), BinderD)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last, intercalate)
@@ -432,7 +431,7 @@ valueList = hicat listSep' . map RC.value
 variableList :: (CommonRenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat listSep' . map RC.variable
 
-binderList :: (CommonRenderSym r) => [r (Binder r)] -> Doc
+binderList :: (CommonRenderSym r) => [r BinderD] -> Doc
 binderList = hicat listSep' . map RC.binderElim
 
 parameterList :: (CommonRenderSym r) => [r (Parameter r)] -> Doc

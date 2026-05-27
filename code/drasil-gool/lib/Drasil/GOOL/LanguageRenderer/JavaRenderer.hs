@@ -229,7 +229,6 @@ instance InternalTypeElim JavaCode where
   type' = typeDoc . unJC
 
 instance UnaryOpSym JavaCode where
-  type UnaryOp JavaCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = jUnaryMath R.sqrt
@@ -247,7 +246,6 @@ instance UnaryOpSym JavaCode where
   ceilOp = jUnaryMath R.ceil
 
 instance BinaryOpSym JavaCode where
-  type BinaryOp JavaCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp
@@ -270,7 +268,6 @@ instance OpElim JavaCode where
   bOpPrec = opPrec . unJC
 
 instance ScopeSym JavaCode where
-  type Scope JavaCode = ScopeData
   global = CP.global
   mainFn = local
   local = G.local
@@ -491,7 +488,6 @@ instance InternalListFunc JavaCode where
   listSetFunc = jListSetFunc
 
 instance BinderSym JavaCode where
-  type Binder JavaCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim JavaCode where
@@ -784,7 +780,6 @@ instance ModuleElim JavaCode where
   module' = modDoc . unJC
 
 instance BlockCommentSym JavaCode where
-  type BlockComment JavaCode = Doc
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
@@ -960,7 +955,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: [r (Binder r)] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constraint
+jLambda :: [r BinderD] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constraint
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -971,7 +966,7 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
         jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
           (RC.value v))
 
-jConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+jConstDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
   -> MSStatement r
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
@@ -981,7 +976,7 @@ jConstDecDef v' scp def' = do
   mkStmt $ jFinal <+> RC.type' (variableType v) <+>
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MSStatement r
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v

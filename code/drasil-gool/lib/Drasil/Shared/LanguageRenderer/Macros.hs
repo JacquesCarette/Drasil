@@ -31,6 +31,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
+import Drasil.Shared.AST (ScopeData)
 
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
@@ -127,7 +128,7 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (MSStatement, SValue): (setter, value) of bound
 makeSetterVal :: (CommonRenderSym r) => Label -> SValue r -> Maybe Integer ->
-  Maybe (SValue r) -> SValue r -> SValue r -> r (IC.Scope r) ->
+  Maybe (SValue r) -> SValue r -> SValue r -> r ScopeData ->
   (MSStatement r, SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)

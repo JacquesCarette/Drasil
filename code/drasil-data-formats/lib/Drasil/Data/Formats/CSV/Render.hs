@@ -10,8 +10,8 @@ where
 import Data.List (intersperse)
 import Data.Text (Text)
 import qualified Data.Text as T (any, pack, replace, splitOn)
-import Prettyprinter (Doc, Pretty (..), comma, dquotes, hardline, hcat, vcat)
 import Drasil.Data.Formats.CSV.Core (CSV, header, rows)
+import Prettyprinter (Doc, Pretty (..), comma, dquotes, hardline, hcat, vcat)
 
 -- | Options for rendering a 'CSV'.
 newtype CSVRenderOptions = CSVRO DoubleQuotationPolicy
@@ -48,7 +48,7 @@ escapeCellPolicy Everywhere t = quoteAndEscape t
 -- | Internal: Check if a character appearing in a cell indicates that the cell
 -- /must/ be quoted.
 needsQuote :: Char -> Bool
-needsQuote c = c == '"' || c == ',' || c == '\n' || c == '\r'
+needsQuote c = c `elem` ['"', ',', '\n', '\r']
 
 -- | Internal: Replace all double-quotes with double-double-quotes in a cell and
 -- wrap the whole cell in double-quotes.

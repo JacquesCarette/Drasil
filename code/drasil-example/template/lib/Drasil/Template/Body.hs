@@ -5,10 +5,13 @@
 
 module Drasil.Template.Body (mkSRS, si) where
 
+import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Drasil.System (mkSmithEtAlICO)
 import Language.Drasil
+import Language.Drasil.Display
+import Language.Drasil.ShortHands (lT)
 import Drasil.SRSDocument
 import Drasil.DocLang (tunitNone)
 import Drasil.Generator (withCommonKnowledge)
@@ -18,6 +21,7 @@ import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Data.Drasil.Concepts.Theory (inModel)
 import Drasil.DocumentLanguage.TraceabilityGraph
+import Data.Drasil.SI_Units (second)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -71,12 +75,22 @@ mkSRS = [TableOfContents,
      AuxConsProg progName [],
   Bibliography]
 
+t0 :: DefinedQuantityDict
+t0 = dqd (dcc "t0" (cn' "start time") "the start time") (sub lT (Integ 0)) Real second
+
+t1 :: DefinedQuantityDict
+t1 = dqd (dcc "t1" (cn' "end time") "the end time") (sub lT (Integ 1)) Real second
+
+dt :: DefinedQuantityDict
+dt = dqd (dcc "td" (cn' "time delta") "the time delta") (Atop Delta lT) Real second
+
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
   progName [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  (undefined :: NE.NonEmpty DefinedQuantityDict) (undefined :: NE.NonEmpty DefinedQuantityDict) ([] :: [ConstrConcept]) ([] :: [ConstQDef]) []
+  (t0 :| [dt]) (NE.singleton t1)
+  ([] :: [ConstrConcept]) ([] :: [ConstQDef]) []
   [] symbMap []
 
 ideaDicts :: [IdeaDict]

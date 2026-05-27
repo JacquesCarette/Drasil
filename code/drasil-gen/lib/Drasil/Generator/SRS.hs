@@ -8,7 +8,8 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, localPath, ps, writeFiles)
+import Drasil.Build.Artifacts (FileLayout, OverwritePolicy(..), directory, file,
+  localPath, ps, writeFiles)
 import Drasil.DocLang (mkGraphInfo)
 import Language.Drasil (Stage(Equational), Document(..), checkToC)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -46,8 +47,8 @@ exportSmithEtAlSrs syst srsDecl srsFileName = do
             [HTML, TeX, Jupyter, MDBook]
       traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
   -- FIXME: Ultimately, there should be a single writeFiles call.
-  writeFiles localPath srsLayout
-  writeFiles localPath traceyLayout
+  writeFiles OverwriteAllowed localPath srsLayout
+  writeFiles OverwriteAllowed localPath traceyLayout
 
 -- | Internal: Dumps the chunk maps to disk if the `DEBUG_ENV` environment
 -- variable is non-empty.
@@ -57,7 +58,7 @@ debugDump si = do
   maybeDebugging <- lookupEnv "DEBUG_ENV"
   case maybeDebugging of
     (Just (_:_)) -> do
-      writeFiles localPath $ dumpEverything si
+      writeFiles OverwriteAllowed localPath $ dumpEverything si
     _ -> mempty
 
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.

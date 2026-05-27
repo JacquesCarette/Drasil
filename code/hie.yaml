@@ -120,6 +120,15 @@ cradle:
     - path: "drasil-makefile/lib"
       component: "drasil-makefile:lib"
 
+    - path: "drasil-meta-analysis/lib"
+      component: "drasil-meta-analysis:lib"
+
+    - path: "drasil-meta-analysis/app/classinstdepgen/ClassInstDepGen.hs"
+      component: "drasil-meta-analysis:exe:classinstdepgen"
+
+    - path: "drasil-meta-analysis/app/typedepgen/TypeDepGen.hs"
+      component: "drasil-meta-analysis:exe:typedepgen"
+
     - path: "drasil-metadata/lib"
       component: "drasil-metadata:lib"
 

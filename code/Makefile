@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = build-artifacts code data database docLang gen gool lang makefile metadata printers system theory utils website
+PACKAGES = build-artifacts code data database docLang gen gool lang makefile metadata meta-analysis printers system theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -446,8 +446,8 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	rm -rf "./$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
-	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs
+	stack run classinstdepgen
+	stack run typedepgen
 	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
 convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.

@@ -1,5 +1,5 @@
 -- | Source code reader for type dependency graphs of all Drasil types.
-module SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
+module Drasil.Meta.Analysis.SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
  DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..), DataTypeDeclaration(..)) where
 
 import Data.List
@@ -10,7 +10,7 @@ import qualified Data.List.Split as L
 import Data.Maybe (fromJust)
 import Data.Char (isUpper)
 
-import DirectoryController as DC (FileName)
+import Drasil.Meta.Analysis.DirectoryController as DC (FileName)
 
 import Data.Containers.ListUtils (nubOrd)
 
@@ -116,7 +116,8 @@ removeNewlineGuard = filterNewline (const True) (isPrefixOf "|")
 
 -- Gets rid of automatically derived instances since we only care about type dependencies.
 removeDeriving :: [String] -> [String]
-removeDeriving = mapIf (isInfixOf "deriving ") $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l)
+-- FIXME: we use `"deriving" ++ " "` so that this line doesn't crash while trying to analyze itself.
+removeDeriving = mapIf (isInfixOf ("deriving" ++ " ")) $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l )
 
 -- Removes comments that are a part of datatype lines (drops everything after the comment symbol).
 removeComments :: [String] -> [String]
@@ -347,5 +348,5 @@ stripWS = T.unpack . T.strip . T.pack
 -- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()
 forceRead [] = ()
-forceRead (x:xs) = forceRead xs
+forceRead (_:xs) = forceRead xs
 

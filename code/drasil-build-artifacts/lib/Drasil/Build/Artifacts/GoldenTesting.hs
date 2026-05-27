@@ -107,7 +107,9 @@ instance IsTest GoldenTest where
             ""
         case exitCode of
           ExitSuccess -> pure $ testPassed ""
-          _ -> pure $ testFailed $ "Outputs differ:\n" ++ stdout ++ stderr
+          _ -> pure $ testFailed $
+            "Outputs differ:\n" ++ stdout ++ stderr ++
+            "\nIf this is expected, you can accept the changes using `stack test --test-arguments=\"--accept\"`"
 
 -- | Create a golden test case for a given 'FileLayout'. Within the context of a
 -- 'goldenTestingGroup', will be dumped to the build folder and compared with

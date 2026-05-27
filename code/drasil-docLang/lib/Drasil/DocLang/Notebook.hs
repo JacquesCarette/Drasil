@@ -1,4 +1,6 @@
-module Drasil.DocLang.Notebook where
+module Drasil.DocLang.Notebook (
+  intro, learnObj, caseProb, example, appendix, review, reference, summary
+) where
 
 import Language.Drasil
 

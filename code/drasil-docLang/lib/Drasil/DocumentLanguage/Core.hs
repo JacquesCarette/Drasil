@@ -1,6 +1,14 @@
 {-# LANGUAGE GADTs #-}
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
-module Drasil.DocumentLanguage.Core where
+module Drasil.DocumentLanguage.Core (
+  DocDesc, DocSection(..), RefSec(..), IntroSec(..), StkhldrSec(..), GSDSec(..),
+  SSDSec(..), SSDSub(..), ProblemDescription(..), PDSub(..), SolChSpec(..),
+  SCSSub(..), ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
+  TraceabilitySec(..), AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..),
+  DerivationDisplay(..), Emphasis(..), GSDSub(..), IntroSub(..), LFunc(..),
+  Literature(..), RefTab(..), StkhldrSub(..), TConvention(..), TSIntro(..),
+  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID
+) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 

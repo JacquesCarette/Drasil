@@ -1,4 +1,6 @@
-module Drasil.GamePhysics.Assumptions where
+module Drasil.GamePhysics.Assumptions (
+  assumptions, assumpCT, assumpDI, assumpCAJI, assumpOT, assumpOD, assumpAD
+) where
 
 import Language.Drasil hiding (organization)
 

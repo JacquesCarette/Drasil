@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Body where
+module Drasil.GamePhysics.Body (mkSRS, si) where
 
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument

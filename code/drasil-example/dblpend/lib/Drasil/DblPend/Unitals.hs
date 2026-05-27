@@ -1,4 +1,12 @@
-module Drasil.DblPend.Unitals where
+module Drasil.DblPend.Unitals (
+  symbols, inputs, outputs, inConstraints, outConstraints, constants, unitalChunks,
+  pendDisAngle, lRod,
+  lenRod_1, lenRod_2, pendDisAngle_1, pendDisAngle_2,
+  xPos_1, xPos_2, yPos_1, yPos_2,
+  xVel_1, xVel_2, yVel_1, yVel_2, xAccel_1, xAccel_2, yAccel_1, yAccel_2,
+  massObj_1, massObj_2, tension_1, tension_2, angularVel_1,  angularVel_2,
+  angularAccel_1, angularAccel_2
+) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D (toSent)

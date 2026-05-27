@@ -1,4 +1,11 @@
-module Drasil.GamePhysics.Unitals where
+module Drasil.GamePhysics.Unitals (
+  symbols, outputConstraints, inputSymbols, outputSymbols, inputConstraints,
+  finRelVel, initRelVel, velAP, velB, velBP, velO, velo_1, velo_2, velj, velA,
+  mTot, massj, massA, massB, mass_1, mass_2, distMass,
+  normalVect, posCM, posj, rOB, rRot, timeT, time_1, time_2, timeC, sqrDist,
+  torquej, forcej, force_1, force_2, angAccj, mLarger, dispNorm, dVect, accj,
+  momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB
+) where
 
 import Control.Lens ((^.))
 

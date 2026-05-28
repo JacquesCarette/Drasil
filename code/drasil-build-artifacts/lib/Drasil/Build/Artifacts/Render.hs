@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{- HLINT ignore "Use writeFile" -}
 
 module Drasil.Build.Artifacts.Render
   ( Renderable (..),
@@ -11,7 +12,7 @@ import Data.Text.IO qualified as TIO
 import Prettyprinter qualified as PNew
 import Prettyprinter.Render.Text (renderIO)
 import System.File.OsPath (withFile)
-import System.IO (Handle, IOMode (..), hPutStr)
+import System.IO (Handle, IOMode (..), hPutStrLn)
 import System.OsPath (OsPath)
 import Text.PrettyPrint qualified as PLegacy
 import Prelude hiding (writeFile)
@@ -48,9 +49,7 @@ instance Renderable LB.ByteString where
 -- | Write a 'String' to the given 'OsPath' (with a trailing newline always
 -- added).
 writeFileStr :: OsPath -> String -> IO ()
-writeFileStr rp s = withFile rp WriteMode $ \h -> do
-  hPutStr h s
-  hPutStr h "\n"
+writeFileStr rp s = withFile rp WriteMode $ \h -> hPutStrLn h s
 {-# INLINE writeFileStr #-}
 
 -- | Write to a given 'OsPath' with arbitrary method.

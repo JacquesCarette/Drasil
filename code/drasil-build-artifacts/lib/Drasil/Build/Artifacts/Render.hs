@@ -1,8 +1,13 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Drasil.Build.Artifacts.Render
   ( Renderable (..),
   )
 where
 
+import Data.ByteString.Lazy.Char8 qualified as LB
+import Data.Text qualified as T
+import Data.Text.IO qualified as TIO
 import Prettyprinter qualified as PNew
 import Prettyprinter.Render.Text (renderIO)
 import System.File.OsPath (withFile)
@@ -18,7 +23,7 @@ class Renderable doc where
 
 instance Renderable PLegacy.Doc where
   -- Does conversion to `String` and then does plain `String -> IO ()` writing.
-  renderToFile fp = writeFileStr fp . PLegacy.render . (PLegacy.$+$ PLegacy.text "")
+  renderToFile fp = writeFileStr fp . PLegacy.render
 
 instance Renderable (PNew.Doc ann) where
   -- `renderIO` skips intermediate representations before writing to disk:
@@ -26,9 +31,21 @@ instance Renderable (PNew.Doc ann) where
   renderToFile fp d = writeFile fp $ \h ->
     renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions $ d PNew.<> PNew.line)
 
--- | Write a 'String' to the given 'OsPath'.
+instance Renderable String where
+  renderToFile = writeFileStr
+
+instance Renderable T.Text where
+  renderToFile fp t = writeFile fp $ \h -> TIO.hPutStrLn h t
+
+instance Renderable LB.ByteString where
+  renderToFile fp bs = writeFile fp $ \h -> LB.hPutStrLn h bs
+
+-- | Write a 'String' to the given 'OsPath' (with a trailing newline always
+-- added).
 writeFileStr :: OsPath -> String -> IO ()
-writeFileStr rp s = withFile rp WriteMode (`hPutStr` s)
+writeFileStr rp s = withFile rp WriteMode $ \h -> do
+  hPutStr h s
+  hPutStr h "\n"
 {-# INLINE writeFileStr #-}
 
 -- | Write to a given 'OsPath' with arbitrary method.

@@ -15,7 +15,6 @@ import Data.Proxy (Proxy (..))
 import Drasil.Build.Artifacts.CommonPaths (localPath)
 import Drasil.Build.Artifacts.FileLayout (FileLayout, OverwritePolicy(..), name, writeFiles)
 import Drasil.Build.Artifacts.FilePath (toPath)
-import Drasil.Build.Artifacts.Render (Renderable)
 import System.Directory.OsPath (createDirectoryIfMissing, removePathForcibly)
 import System.Exit (ExitCode (ExitSuccess))
 import System.OsPath (OsPath, decodeUtf, (</>))
@@ -114,7 +113,7 @@ instance IsTest GoldenTest where
 -- | Create a golden test case for a given 'FileLayout'. Within the context of a
 -- 'goldenTestingGroup', will be dumped to the build folder and compared with
 -- the golden artifacts folder.
-goldenTest :: (Renderable doc) => TestName -> FileLayout doc -> GoldenTestCase
+goldenTest :: TestName -> FileLayout -> GoldenTestCase
 goldenTest tName layout = GTC $
   \buildRoot goldenRoot ->
     singleTest

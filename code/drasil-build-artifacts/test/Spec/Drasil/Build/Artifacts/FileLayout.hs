@@ -3,7 +3,7 @@
 module Spec.Drasil.Build.Artifacts.FileLayout (fileLayoutTests) where
 
 import Drasil.Build.Artifacts (FileLayout, directory, file, goldenTest, goldenTestingGroup, ps)
-import Prettyprinter (Doc, Pretty (..))
+import Prettyprinter (Pretty (..))
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
 
@@ -27,7 +27,7 @@ writeFilesTests =
         ]
     ]
 
-nestedFiles :: FileLayout (Doc ann)
+nestedFiles :: FileLayout
 nestedFiles =
   directory
     [ps|nested-files|]
@@ -47,5 +47,5 @@ nestedFiles =
         ]
     ]
 
-helloWorldFile :: FileLayout (Doc ann)
+helloWorldFile :: FileLayout
 helloWorldFile = file [ps|hello-world.txt|] (pretty "Hello, World!")

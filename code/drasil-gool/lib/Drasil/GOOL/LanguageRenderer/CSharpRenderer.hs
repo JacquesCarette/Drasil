@@ -16,13 +16,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..))
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -233,7 +233,6 @@ instance InternalTypeElim CSharpCode where
   type' = typeDoc . unCSC
 
 instance UnaryOpSym CSharpCode where
-  type UnaryOp CSharpCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = csUnaryMath "Sqrt"
@@ -251,7 +250,6 @@ instance UnaryOpSym CSharpCode where
   ceilOp = csUnaryMath "Ceiling"
 
 instance BinaryOpSym CSharpCode where
-  type BinaryOp CSharpCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp
@@ -274,7 +272,6 @@ instance OpElim CSharpCode where
   bOpPrec = opPrec . unCSC
 
 instance ScopeSym CSharpCode where
-  type Scope CSharpCode = ScopeData
   global = CP.global
   mainFn = local
   local = G.local
@@ -287,7 +284,6 @@ instance VariableSym CSharpCode where
   var         = G.var
   constant    = var
   extVar      = CS.extVar
-  arrayElem = G.arrayElem
 
 instance OOVariableSym CSharpCode where
   classVar = G.classVar
@@ -440,9 +436,14 @@ instance GetSet CSharpCode where
   get = G.get
   set = G.set
 
-instance List CSharpCode where
+instance IndexTranslator CSharpCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array CSharpCode where
+  arrayElem = G.arrayElem
+
+instance List CSharpCode where
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -471,7 +472,6 @@ instance InternalListFunc CSharpCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where
-  type Binder CSharpCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim CSharpCode where
@@ -572,15 +572,15 @@ instance OODeclStatement CSharpCode where
   extObjDecNew = C.extObjDecNew
 
 instance IOStatement CSharpCode where
-  print      = G.print False Nothing printFunc
-  printLn    = G.print True  Nothing printLnFunc
-  printStr   = G.print False Nothing printFunc   . litString
-  printStrLn = G.print True  Nothing printLnFunc . litString
+  print      = csPrint False Nothing printFunc
+  printLn    = csPrint True  Nothing printLnFunc
+  printStr   = csPrint False Nothing printFunc   . litString
+  printStrLn = csPrint True  Nothing printLnFunc . litString
 
-  printFile f      = G.print False (Just f) (printFileFunc f)
-  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
-  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
+  printFile f      = csPrint False (Just f) (printFileFunc f)
+  printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
+  printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = csDiscardInput inputFunc
@@ -758,7 +758,6 @@ instance ModuleElim CSharpCode where
   module' = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where
-  type BlockComment CSharpCode = Doc
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
@@ -848,7 +847,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+csLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
@@ -886,7 +885,7 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MSStatement r
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
@@ -979,3 +978,12 @@ csInOut f ins [] [v] b = f (onStateValue variableType v)
 csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
+
+csPrint :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r ->
+  SValue r -> MSStatement r
+csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getType . valueType
+  where csPrint' (Array _) = multi [printStr "[",
+          print $ extFuncApp "string" "Join" string [litString ", ", v],
+          printMaybeNewLn $ litString "]"]
+        csPrint' _ = G.print newLn f printFn v
+        printMaybeNewLn = if newLn then printLn else print

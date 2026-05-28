@@ -1,6 +1,14 @@
 {-# LANGUAGE GADTs #-}
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
-module Drasil.DocumentLanguage.Core where
+module Drasil.DocumentLanguage.Core (
+  DocDesc, DocSection(..), RefSec(..), IntroSec(..), StkhldrSec(..), GSDSec(..),
+  SSDSec(..), SSDSub(..), ProblemDescription(..), PDSub(..), SolChSpec(..),
+  SCSSub(..), ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
+  TraceabilitySec(..), AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..),
+  DerivationDisplay(..), Emphasis(..), GSDSub(..), IntroSub(..), LFunc(..),
+  Literature(..), RefTab(..), StkhldrSub(..), TConvention(..), TSIntro(..),
+  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID
+) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
@@ -9,11 +17,6 @@ import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict.
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.DocumentLanguage.Definitions (Fields, TraceViewCat)
-
--- | Type synonym for clarity.
-type System = Sentence
--- | Type synonym for clarity.
-type DocKind = Sentence
 
 -- * Document Types
 

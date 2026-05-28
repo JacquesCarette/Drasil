@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
-import Text.PrettyPrint.HughesPJ (Doc, text)
+import Text.PrettyPrint.HughesPJ (text)
 
 import Drasil.Build.Artifacts (FileLayout, PathSegment, directory, file, ps)
 import Drasil.Database (dumpChunkDB)
@@ -17,7 +17,7 @@ import Drasil.System (SmithEtAlSRS, systemdb, traceTable, refbyTable)
 
 -- | For debugging purposes, constructs a `FileLayout` with a dump of the
 -- chunk maps.
-dumpEverything :: SmithEtAlSRS -> FileLayout Doc
+dumpEverything :: SmithEtAlSRS -> FileLayout
 dumpEverything si =
   directory [ps|.drasil|]
   [
@@ -31,6 +31,6 @@ dumpEverything si =
         refByDump = si ^. refbyTable
 
 -- FIXME: This is more of a general utility than it is drasil-database specific
-dumpTo :: ToJSON a => a -> PathSegment -> FileLayout Doc
+dumpTo :: ToJSON a => a -> PathSegment -> FileLayout
 dumpTo d targetPath =
   file targetPath (text $ LB.unpack $ encodePretty d)

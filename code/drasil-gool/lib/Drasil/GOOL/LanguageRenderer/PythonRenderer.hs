@@ -15,13 +15,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..))
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -75,13 +75,13 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
-  notifyObservers')
+  notifyObservers', arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
-  ScopeData, BinderD(..), bindFormD)
+  BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -218,7 +218,6 @@ instance InternalTypeElim PythonCode where
   type' = typeDoc . unPC
 
 instance UnaryOpSym PythonCode where
-  type UnaryOp PythonCode = OpData
   notOp = pyNotOp
   negateOp = G.negateOp
   sqrtOp = pySqrtOp
@@ -236,7 +235,6 @@ instance UnaryOpSym PythonCode where
   ceilOp = pyCeilOp
 
 instance BinaryOpSym PythonCode where
-  type BinaryOp PythonCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp
@@ -259,7 +257,6 @@ instance OpElim PythonCode where
   bOpPrec = opPrec . unPC
 
 instance ScopeSym PythonCode where
-  type Scope PythonCode = ScopeData
   global = CP.global
   mainFn = global
   local = G.local
@@ -272,7 +269,6 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
   classVar = G.classVar
@@ -439,9 +435,14 @@ instance GetSet PythonCode where
   get = G.get
   set = G.set
 
-instance List PythonCode where
+instance IndexTranslator PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array PythonCode where
+  arrayElem = G.arrayElem
+
+instance List PythonCode where
   listSize = CS.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -473,7 +474,6 @@ instance InternalListFunc PythonCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym PythonCode where
-  type Binder PythonCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim PythonCode where
@@ -562,7 +562,7 @@ instance DeclStatement PythonCode where
   setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
-  arrayDec = listDec
+  arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef v scp e = do
     v' <- zoom lensMStoVS v
@@ -791,7 +791,6 @@ instance ModuleElim PythonCode where
   module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
-  type BlockComment PythonCode = Doc
   blockComment lns = toCode $ pyBlockComment lns pyCommentStart
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
     pyCommentStart)
@@ -952,7 +951,7 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+pyLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (CommonRenderSym r) => VSType r

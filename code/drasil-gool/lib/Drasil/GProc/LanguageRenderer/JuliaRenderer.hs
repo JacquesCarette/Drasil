@@ -16,14 +16,14 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..), Set(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf,
-  convScope)
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
+  switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -78,7 +78,7 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
-  decrement1, ifExists, stringListVals, stringListLists)
+  decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
@@ -213,7 +213,6 @@ instance InternalTypeElim JuliaCode where
       _ -> t
 
 instance UnaryOpSym JuliaCode where
-  type UnaryOp JuliaCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = jlUnaryMath R.sqrt
@@ -231,7 +230,6 @@ instance UnaryOpSym JuliaCode where
   ceilOp = jlUnaryMath R.ceil
 
 instance BinaryOpSym JuliaCode where
-  type BinaryOp JuliaCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp
@@ -254,7 +252,6 @@ instance OpElim JuliaCode where
   bOpPrec = opPrec . unJLC
 
 instance ScopeSym JuliaCode where
-  type Scope JuliaCode = ScopeData
   global = toCode $ sd Global
   mainFn = global
   local = G.local
@@ -267,7 +264,6 @@ instance VariableSym JuliaCode where
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = A.arrayElem
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -393,9 +389,14 @@ instance ValueElim JuliaCode where
   valueInt = valInt . unJLC
   value = val . unJLC
 
-instance List JuliaCode where
+instance IndexTranslator JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
+
+instance Array JuliaCode where
+  arrayElem = A.arrayElem
+
+instance List JuliaCode where
   listSize = CS.listSize
   listAdd = CP.listAdd
   listAppend = CP.listAppend
@@ -426,7 +427,6 @@ instance InternalListFunc JuliaCode where
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym JuliaCode where
-  type Binder JuliaCode = BinderD
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim JuliaCode where
@@ -514,7 +514,7 @@ instance DeclStatement JuliaCode where
   setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
-  arrayDec = listDec
+  arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef = jlConstDecDef
   funcDecDef = A.funcDecDef
@@ -644,8 +644,6 @@ instance ModuleElim JuliaCode where
   module' = modDoc . unJLC
 
 instance BlockCommentSym JuliaCode where
-  type BlockComment JuliaCode = Doc
-
   blockComment lns = toCode $ R.blockCmt lns jlBlockCmtStart jlBlockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns jlDocCmtStart
     jlDocCmtEnd)
@@ -734,7 +732,7 @@ jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
 jlGlobal :: Doc
 jlGlobal = text "global"
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
   -> MSStatement r
 jlConstDecDef v' scp def' = do
   let scpData = scopeData scp
@@ -909,7 +907,7 @@ jlIntFunc n pms bod = do
         indent $ RC.body bod,
         jlEnd]
 
-jlLambda :: (CommonRenderSym r) => [r (Binder r)] -> r (Value r) -> Doc
+jlLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions

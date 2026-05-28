@@ -1,16 +1,17 @@
 -- | Source code reader for type dependency graphs of all Drasil types.
-module SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
+module Drasil.Meta.Analysis.SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
  DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..), DataTypeDeclaration(..)) where
 
-import Data.List
-import System.IO
-import System.Directory
+import Data.List ((\\), elemIndex, findIndex, isInfixOf, isPrefixOf,
+  isSuffixOf, nub)
+import System.IO (readFile')
+import System.Directory (setCurrentDirectory)
 import qualified Data.Text as T
 import qualified Data.List.Split as L
 import Data.Maybe (fromJust)
 import Data.Char (isUpper)
 
-import DirectoryController as DC (FileName)
+import Drasil.Meta.Analysis.DirectoryController as DC (FileName)
 
 import Data.Containers.ListUtils (nubOrd)
 
@@ -61,9 +62,7 @@ data EntryData = EntryData { dRNs :: ![DataDeclRecord]    -- Record datatypes wi
 extractEntryData :: DC.FileName -> FilePath -> IO EntryData
 extractEntryData fileName filePath = do
   setCurrentDirectory filePath
-  handle <- openFile fileName ReadMode
-  scriptFile <- hGetContents handle
-  forceRead scriptFile `seq` hClose handle
+  scriptFile <- readFile' fileName
 
       -- general light cleanup of the files before sorting by datatype
   let scriptFileLines = scriptFilter scriptFile
@@ -116,7 +115,8 @@ removeNewlineGuard = filterNewline (const True) (isPrefixOf "|")
 
 -- Gets rid of automatically derived instances since we only care about type dependencies.
 removeDeriving :: [String] -> [String]
-removeDeriving = mapIf (isInfixOf "deriving ") $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l)
+-- FIXME: we use `"deriving" ++ " "` so that this line doesn't crash while trying to analyze itself.
+removeDeriving = mapIf (isInfixOf ("deriving" ++ " ")) $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l )
 
 -- Removes comments that are a part of datatype lines (drops everything after the comment symbol).
 removeComments :: [String] -> [String]
@@ -343,9 +343,3 @@ filterQualifiedTypes l = if '.' `elem` l then drop (fromJust (elemIndex '.' l)+1
 -- strips leading and trailing whitespace from strings
 stripWS :: String -> String
 stripWS = T.unpack . T.strip . T.pack
-
--- enforces strict file reading; files can be closed to avoid memory exhaustion
-forceRead :: [a0] -> ()
-forceRead [] = ()
-forceRead (x:xs) = forceRead xs
-

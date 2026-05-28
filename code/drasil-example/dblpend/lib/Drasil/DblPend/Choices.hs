@@ -1,4 +1,4 @@
-module Drasil.DblPend.Choices where
+module Drasil.DblPend.Choices (choices) where
 
 import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),

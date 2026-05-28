@@ -1,4 +1,6 @@
-module Drasil.DblPend.Requirements where
+module Drasil.DblPend.Requirements (
+  funcReqs, nonFuncReqs, funcReqsTables, verifyInptVals
+) where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)

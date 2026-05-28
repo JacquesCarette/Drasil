@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = build-artifacts code data data-formats database docLang gen gool lang makefile metadata printers system theory utils website
+PACKAGES = build-artifacts code data data-formats database docLang gen gool lang makefile metadata meta-analysis printers system theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -323,7 +323,7 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 # No traceability graphs will be created, only the dot files.
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
-$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): %$(BC_E_SUFFIX)
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"
@@ -446,8 +446,8 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	rm -rf "./$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
-	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs
+	stack run classinstdepgen
+	stack run typedepgen
 	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
 convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.
@@ -521,7 +521,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 #--------------------------------#
 
 # For more information, see the *.hs files in the drasil-website folder.
-website: clean_Website ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
+website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
 	stack build $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \

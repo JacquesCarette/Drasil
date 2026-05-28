@@ -13,11 +13,11 @@ module Drasil.Shared.InterfaceCommon (
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), Set(..), InternalList(..), listSlice, listIndexExists, at,
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  exists, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
+  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
   BinderElim(..),
@@ -27,7 +27,7 @@ module Drasil.Shared.InterfaceCommon (
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
 
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData)
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData, BinderD)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -44,8 +44,9 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
+  BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r,
+  Array r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r,
+  BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -95,10 +96,9 @@ class (TypeSym r) => TypeElim r where
   getTypeString :: r TypeData -> String
 
 class ScopeSym r where
-  type Scope r
-  global :: r (Scope r) -- Definite global scope
-  mainFn :: r (Scope r) -- Main program - either main function or global scope
-  local  :: r (Scope r) -- Definite local scope
+  global :: r ScopeData -- Definite global scope
+  mainFn :: r ScopeData -- Main program - either main function or global scope
+  local  :: r ScopeData -- Definite local scope
 
 type SVariable a = VS (a (Variable a))
 
@@ -112,10 +112,6 @@ class (TypeSym r) => VariableSym r where
   -- Given library `Lib`, variable name `v`, and variable type `t`,
   -- it performs the necessary imports and creates `Lib.v`
   extVar    :: Library -> Label -> VSType r -> SVariable r
-  -- TODO [Brandon Bosman, 04/27/2026]: Move this to a new Array typeclass modelled after List
-  -- Change return type to SValue
-  -- | Given array `a` and index `i`, creates `a[i]`
-  arrayElem :: SValue r -> SVariable r -> SVariable r
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -235,15 +231,14 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
-type VSBinder a = VS (a (Binder a))
+type VSBinder a = VS (a BinderD)
 
 class (TypeSym r) => BinderSym r where
-  type Binder r
   binder :: Label -> VSType r -> VSBinder r
 
 class (BinderSym r) => BinderElim r where
-  binderName :: r (Binder r) -> String
-  binderType :: r (Binder r) -> r TypeData
+  binderName :: r BinderD -> String
+  binderType :: r BinderD -> r TypeData
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
@@ -275,7 +270,7 @@ libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (ValueSym r) => List r where
+class (ValueSym r) => IndexTranslator r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
   intToIndex :: SValue r -> SValue r
@@ -284,6 +279,13 @@ class (ValueSym r) => List r where
   indexToInt :: SValue r -> SValue r
   -- | Finds the size of a list.
   --   Arguments are: List
+
+class (IndexTranslator r) => Array r where
+  -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
+  -- | Given array `a` and index `i`, creates `a[i]`
+  arrayElem :: SValue r -> SVariable r -> SVariable r
+
+class (IndexTranslator r) => List r where
   listSize   :: SValue r -> SValue r
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
@@ -356,8 +358,8 @@ class TypeSym r => VectorType r where
 
 class (DeclStatement r) => VectorDecl r where
   -- First argument is size of the vector
-  vecDec :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
-  vecDecDef :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  vecDec :: Integer -> SVariable r -> r ScopeData -> MSStatement r
+  vecDecDef :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
 
 class (VariableSym r, ThunkSym r) => VectorThunk r where
   vecThunk :: SVariable r -> VSThunk r
@@ -397,18 +399,22 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
-  varDec       :: SVariable r -> r (Scope r) -> MSStatement r
-  varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- | Declare a variable without giving it a value.
+  -- Not for use with arrays; use `arrayDec` instead.
+  varDec       :: SVariable r -> r ScopeData -> MSStatement r
+  -- | Declare a variable and give it a value.
+  -- Not for use with arrays; use `arrayDecDef` instead.
+  varDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
   -- First argument is size of the list
-  listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
-  listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  setDec       :: SVariable r -> r (Scope r) -> MSStatement r
-  setDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> r ScopeData -> MSStatement r
+  listDecDef   :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  setDec       :: SVariable r -> r ScopeData -> MSStatement r
+  setDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
   -- First argument is size of the array
-  arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
-  arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
-  funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
+  arrayDec     :: Integer -> SVariable r -> r ScopeData -> MSStatement r
+  arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MSBody r
     -> MSStatement r
 
 class (VariableSym r, StatementSym r) => IOStatement r where
@@ -551,6 +557,6 @@ convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
 
-convScope :: (ScopeSym r) => ScopeData -> r (Scope r)
+convScope :: (ScopeSym r) => ScopeData -> r ScopeData
 convScope (SD {scopeTag = Global}) = global
 convScope (SD {scopeTag = Local}) = local

@@ -1,31 +1,21 @@
-#!/usr/bin/env stack
-{- stack script
-   --resolver lts-22.44
-   --package split
-   --package directory,filepath
-   --package text
-   --package containers
--}
-
 -- FIXME: use real parser (Low Priority; see line 189)
 -- | Creates graphs showing the dependency of one type upon another.
 module TypeDepGen (main) where
 
-import Data.List
-import System.IO
-import System.Directory
-import System.FilePath (takeDirectory)
-import Control.Monad
-import qualified DirectoryController as DC (createFolder, createFile, finder,
-  getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
-import SourceCodeReaderT as SCRT (extractEntryData, EntryData(..),
+import Data.List ( (\\) )
+import System.IO (hClose, hPutStrLn, openFile, Handle, IOMode(..))
+import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
+  setCurrentDirectory)
+import Control.Monad (zipWithM)
+import qualified Drasil.Meta.Analysis.DirectoryController as DC (finder,
+  getDirectories, DrasilPack, FileName, File(..), Folder(..))
+import Drasil.Meta.Analysis.SourceCodeReaderT as SCRT (extractEntryData, EntryData(..),
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..),
   DataTypeDeclaration(..))
-import Data.List.Split (splitOn)
 import Data.Char (toLower)
-import DataPrinters.Dot
+import Drasil.Meta.Analysis.DataPrinters.Dot (digraph, replaceInvalidChars,
+  subgraph)
 
-type EntryString = String
 type Colour = String
 
 -- Entry data type for storing entry data for each file entry
@@ -41,11 +31,9 @@ data Entry = Entry { drasilPack :: DC.DrasilPack
 -- main controller function; initiates function calls to generate output file
 main :: IO ()
 main = do
-  -- directory variables (for scripts, code and output directories)
-  scriptsDirectory <- getCurrentDirectory
-  -- obtains code directory and output directory filepaths
-  let codeDirectory = takeDirectory scriptsDirectory
-      outputDirectory = codeDirectory ++ "/analysis/TypeDependencyGraphs"
+  -- directory variables (for, code and output directories)
+  codeDirectory <- getCurrentDirectory
+  let outputDirectory = codeDirectory ++ "/analysis/TypeDependencyGraphs"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"

@@ -7,14 +7,28 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{tabularray}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{graphics}
+\usepackage{svg}
+\usepackage{float}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
-\title{Software Requirements Specification for ProgName}
+\title{Software Requirements Specification for Template}
 \author{Author Name}
 \begin{document}
 \maketitle
@@ -26,23 +40,41 @@ This section records information for easy reference.
 
 \subsection{Table of Units}
 \label{Sec:ToU}
-There are no units.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description, and the SI name.
 
-
+\begin{longtblr}
+[caption={Table of Units}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
+\\
+${\text{s}}$ & time & second
+\label{Table:ToU}
+\end{longtblr}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-There are no symbols.
+The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 
-
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+$Δt$ & Time delta & ${\text{s}}$
+\\
+${t_{0}}$ & Start time & ${\text{s}}$
+\\
+${t_{1}}$ & End time & ${\text{s}}$
+\label{Table:ToS}
+\end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
 There is no problem introduction.
 
-The following section provides an overview of the software requirements specification (SRS) for ProgName. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for Template. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of ProgName. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of ProgName. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of Template. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Template. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -98,7 +130,7 @@ There are no goal statements.
 
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern ProgName are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Template are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -114,7 +146,37 @@ There are no general definitions.
 
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
-There are no data definitions.
+This section collects and defines all the data needed to build the instance models.
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:t1}
+\phantomsection 
+\label{DD:t1}
+\\ \midrule
+Label & End time
+        
+\\ \midrule
+Symbol & ${t_{1}}$
+         
+\\ \midrule
+Units & ${\text{s}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{t_{1}}={t_{0}}+Δt}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${t_{1}}$ is the end time (${\text{s}}$)}
+              \item{${t_{0}}$ is the start time (${\text{s}}$)}
+              \item{$Δt$ is the time delta (${\text{s}}$)}
+              \end{symbDescription}
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -134,8 +196,22 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-There are no functional requirements.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
+\begin{description}[font=\normalfont]
+\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${t_{1}}$.}
+\end{description}
+\begin{longtblr}
+[caption={Required Inputs}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+$Δt$ & Time delta & ${\text{s}}$
+\\
+${t_{0}}$ & Start time & ${\text{s}}$
+\label{Table:ReqInputs}
+\end{longtblr}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 There are no non-functional requirements.
@@ -150,8 +226,72 @@ There are no unlikely changes.
 
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-There are no traceability matrices or traceability graphs.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:t1]{DD:t1}}
+\\
+\hyperref[DD:t1]{DD:t1} & 
+\label{Table:TraceMatRefvsRef}
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Requirements and Other Items}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:t1]{DD:t1}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+\\
+\hyperref[inputValues]{FR:Input-Values} &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  & 
+\label{Table:TraceMatAllvsR}
+\end{longtblr}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/template/avsa}
+\caption{TraceGraphAvsA}
+\label{Figure:TraceGraphAvsA}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/template/avsall}
+\caption{TraceGraphAvsAll}
+\label{Figure:TraceGraphAvsAll}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/template/refvsref}
+\caption{TraceGraphRefvsRef}
+\label{Figure:TraceGraphRefvsRef}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/template/allvsr}
+\caption{TraceGraphAllvsR}
+\label{Figure:TraceGraphAllvsR}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/template/allvsall}
+\caption{TraceGraphAllvsAll}
+\label{Figure:TraceGraphAllvsAll}
+\end{center}
+\end{figure}
+For convenience, the following graphs can be found at the links below:
+
+\begin{itemize}
+\item{\hyperref{../../../../traceygraphs/template/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../../../traceygraphs/template/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../../../traceygraphs/template/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../../../traceygraphs/template/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../../../traceygraphs/template/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

@@ -61,6 +61,7 @@ packages:
 - drasil-lang
 - drasil-makefile
 - drasil-metadata
+- drasil-meta-analysis
 - drasil-printers
 - drasil-system
 - drasil-theory

@@ -8,11 +8,11 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VariableSym(..), ScopeSym(..), VariableElim(..), listOf, listVar,
+  VariableSym(..), ScopeSym(..), ScopeData, VariableElim(..), listOf, listVar,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, FunctionSym(..), List(..), Set(..),  listSlice,
+  libFuncApp, exists, FunctionSym(..), Array(..), List(..), Set(..),  listSlice,
   listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
   ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
@@ -32,12 +32,12 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, List(..), Set(..), listSlice, listIndexExists, at,
-  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
+  libFuncApp, exists, Array(..), List(..), Set(..), listSlice, listIndexExists,
+  at, ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
 import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))

@@ -24,13 +24,13 @@ import Drasil.Shared.InterfaceCommon (varDecDef, bool, extFuncAppMixedArgs,funcT
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
-  VisibilitySym(..), MethodSym(function), funcApp, ScopeSym(Scope), listSize)
+  VisibilitySym(..), MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
-  varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
-  pointerParam), MethodSym(mainFunction), ScopeSym(..))
+  varDecDef, constDecDef), IndexTranslator(intToIndex, indexToInt),
+  ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..))
 
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
@@ -205,7 +205,7 @@ printSt va' vb' = do
   vb <- zoom lensMStoVS vb'
   mkStmt (R.print va vb)
 
-arrayDec :: (CommonRenderSym r) => SValue r -> SVariable r -> r (Scope r)
+arrayDec :: (CommonRenderSym r) => SValue r -> SVariable r -> r ScopeData
   -> MSStatement r
 arrayDec n vr scp = do
   sz <- zoom lensMStoVS n
@@ -217,7 +217,7 @@ arrayDec n vr scp = do
   mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+>
     RC.type' innerTp <> brackets (RC.value sz)
 
-arrayDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+arrayDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SValue r] -> MSStatement r
 arrayDecDef v' scp vals' = do
   vs <- mapM (zoom lensMStoVS) vals'
@@ -296,7 +296,7 @@ stringRender = "string"
 string :: (CommonRenderSym r) => VSType r
 string = typeFromData String stringRender (text stringRender)
 
-constDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+constDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
   -> MSStatement r
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
@@ -324,20 +324,20 @@ bindingError l = "AttachmentTag unimplemented in " ++ l
 notNull :: (CommonRenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
-listDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+listDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SValue r] -> MSStatement r
 listDecDef v scp vals = do
   vr <- zoom lensMStoVS v
   let lst = IC.litList (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) scp lst
 
-setDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
 setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
   let st = IC.litSet (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) scp st
 
-setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r (Scope r) -> MSStatement r
+setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MSStatement r
 setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
@@ -429,10 +429,10 @@ multiReturn f vs = do
   vs' <- mapM (zoom lensMStoVS) vs
   returnStmt $ mkStateVal IC.void $ f $ valueList vs'
 
-listDec :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> MSStatement r
+listDec :: (CommonRenderSym r) => SVariable r -> r ScopeData -> MSStatement r
 listDec v scp = listDecDef v scp []
 
-funcDecDef :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SVariable r] ->
+funcDecDef :: (OORenderSym r) => SVariable r -> r ScopeData -> [SVariable r] ->
   MSBody r -> MSStatement r
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

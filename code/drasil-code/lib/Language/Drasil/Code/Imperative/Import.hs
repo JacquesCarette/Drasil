@@ -51,15 +51,15 @@ import Language.Drasil.Printers (showHasSymbImpl)
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
-  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, List(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
-  onStateValue)
+  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
+  OOVariableSym(..), VariableElim(..), ($->), ValueSym(..), Literal(..),
+  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..),
+  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
+  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
+  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -689,7 +689,7 @@ readData ddef = do
     listDec 0 var_linetokens localScope ] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
+  where inData :: (OOProg r) => Data -> r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
             vv <- mkVar v
             l <- maybeLog vv
@@ -715,7 +715,7 @@ readData ddef = do
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
-        lineData :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
+        lineData :: (OOProg r) => Maybe String -> LinePattern -> r ScopeData ->
           GenState [MSStatement r]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
@@ -725,12 +725,12 @@ readData ddef = do
           sequence $ clearTemps s ds scp ++ return
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
-        clearTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
+        clearTemps :: (OOProg r) => Maybe String -> [DataItem] -> r ScopeData ->
           [GenState (MSStatement r)]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
+        clearTemp :: (OOProg r) => String -> DataItem -> r ScopeData ->
           GenState (MSStatement r)
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (listInnerType $ convTypeOO t)) scp []) (codeType v)
@@ -927,7 +927,7 @@ readDataProc ddef = do
     listDec 0 var_linetokens localScope] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (SharedProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
+  where inData :: (SharedProg r) => Data -> r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
             vv <- mkVarProc v
             l <- maybeLog vv
@@ -953,7 +953,7 @@ readDataProc ddef = do
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
-        lineData :: (SharedProg r) => Maybe String -> LinePattern -> r (Scope r) ->
+        lineData :: (SharedProg r) => Maybe String -> LinePattern -> r ScopeData ->
           GenState [MSStatement r]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
@@ -963,12 +963,12 @@ readDataProc ddef = do
           sequence $ clearTemps s ds scp ++ return
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
-        clearTemps :: (SharedProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
+        clearTemps :: (SharedProg r) => Maybe String -> [DataItem] -> r ScopeData ->
           [GenState (MSStatement r)]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (SharedProg r) => String -> DataItem -> r (Scope r) ->
+        clearTemp :: (SharedProg r) => String -> DataItem -> r ScopeData ->
           GenState (MSStatement r)
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (listInnerType $ convType t)) scp []) (codeType v)

@@ -1,10 +1,10 @@
 -- | Directory controller for SourceCodeReader.hs and SourceCodeReaderTypes.hs.
-module DirectoryController (createFolder, createFile, finder, getDirectories,
+module Drasil.Meta.Analysis.DirectoryController (createFolder, createFile, finder, getDirectories,
   DrasilPack, FileName, FolderName, File(..), Folder(..)) where
 
-import Data.List
-import System.IO
-import System.Directory
+import Data.List ((\\), isInfixOf, isPrefixOf, isSuffixOf, partition, sort)
+import System.Directory (doesDirectoryExist, listDirectory,
+  setCurrentDirectory)
 import System.FilePath (joinPath)
 
 type FilterPrefix = String
@@ -68,9 +68,9 @@ finder folder = do
 getDirectories :: FilePath -> FilterPrefix -> IO [Folder]
 getDirectories directoryPath filterPrefix = do
   -- all raw directory contents
-  all <- listDirectory directoryPath
+  allPaths <- listDirectory directoryPath
   -- raw drasil- package directories + package names
-  let rawPackages = sort $ filter (isPrefixOf filterPrefix) all
+  let rawPackages = sort $ filter (isPrefixOf filterPrefix) allPaths
       packageNames = map (\\"drasil-") rawPackages
   -- convert list of directories into folder data types
       directories = zipWith (createFolder directoryPath) packageNames rawPackages

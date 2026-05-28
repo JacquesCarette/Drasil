@@ -1,29 +1,21 @@
-#!/usr/bin/env stack
-{- stack script
-   --resolver lts-22.44
-   --package split
-   --package directory,filepath
-   --package text
-   --package containers
--}
-
 -- FIXME: use real parser (Low Priority; see line 267)
 -- | Data table generator. Uses information from SourceCodeReader.hs
 -- to organize all types, classes, and instances in Drasil.
 -- Generates a .csv file and an HTML table with this information.
 module ClassInstDepGen (main) where
 
-import Data.List
-import System.IO
-import System.Directory
-import System.FilePath (takeDirectory)
-import Control.Monad
-import qualified DirectoryController as DC (createFolder, createFile, finder,
-  getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
-import SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
+import Data.List ((\\), intercalate, nub, partition)
+import System.IO (hClose, hPutStr, hPutStrLn, openFile, IOMode(..))
+import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
+  setCurrentDirectory)
+import Control.Monad (zipWithM)
+import qualified Drasil.Meta.Analysis.DirectoryController as DC (createFile, finder,
+  getDirectories, DrasilPack, FileName, File(..))
+import Drasil.Meta.Analysis.SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
-import DataPrinters.Dot
-import DataPrinters.HTML
+import Drasil.Meta.Analysis.DataPrinters.Dot (digraph)
+import Drasil.Meta.Analysis.DataPrinters.HTML (htmlConfig, htmlDataTableTitle,
+  htmlEnd, mkhtmlEmptyCell, mkhtmlHeader, mkhtmlRow, mkhtmlTitle)
 
 import Data.Containers.ListUtils (nubOrd)
 
@@ -85,8 +77,8 @@ instance Show ClassType where
 -- makes Entry data instance
 makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] ->
   [Newtype] -> [Class] -> [ClassInstance] -> Entry
-makeEntry drpk fn fp dtl ntl cls clsint = Entry {drasilPack=drpk, fileName = fn,
-  filePath = fp, dataTypes = dtl, newtypes = ntl, classes = cls, classInstances = clsint}
+makeEntry drpk fn fp dtl ntl clss clsint = Entry {drasilPack=drpk, fileName = fn,
+  filePath = fp, dataTypes = dtl, newtypes = ntl, classes = clss, classInstances = clsint}
 
 -- makes Class data instance
 makeClass :: ClassType -> ClassName -> Class
@@ -94,7 +86,7 @@ makeClass clstp clsnm = Class {className = clsnm, classType = clstp}
 
 -- makes ClassInstance data instance
 makeClassInstance :: (DNType,ClassName) -> ClassInstance
-makeClassInstance (dnt,cls) = ClassInstance {dnType = dnt, clsInstName = cls}
+makeClassInstance (dnt,clss) = ClassInstance {dnType = dnt, clsInstName = clss}
 
 -- makes SmallEntry data instance
 makeSmallEntry :: [String] -> [ClassName] -> [ClassName] -> [Edges] -> SmallEntry
@@ -111,17 +103,14 @@ makeEntryPack nm ents = EP {dPack = nm, pkgEntries = ents}
 -- main controller function; initiates function calls to generate output file
 main :: IO ()
 main = do
-  -- directory variables (for scripts, code and output directories)
-  scriptsDirectory <- getCurrentDirectory
-  -- obtains code directory and output directory filepaths
-  let codeDirectory = takeDirectory scriptsDirectory
-      outputDirectory = codeDirectory ++ "/analysis/ClassInstDep"
+  -- directory variables (for code and output directories)
+  codeDirectory <- getCurrentDirectory
+  let outputDirectory = codeDirectory ++ "/analysis/ClassInstDep"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"
 
-  let packageNames = map DC.folderDrasilPack drctyList
-      classInstOrd = [Haskell, Drasil, GOOL]
+  let classInstOrd = [Haskell, Drasil, GOOL]
 
   -- all files + filepaths stored here; obtained from ordered list using finder
   allFiles <- mapM DC.finder drctyList
@@ -218,7 +207,7 @@ escapeDotID = map go
 
 -- Helper to convert class instances into graph edges.
 mkPkgEdges :: [ClassInstance] -> [Edges]
-mkPkgEdges cis = concatOver2 $ map (\ClassInstance {dnType = typ, clsInstName = cls} -> (escapeDotID typ, [escapeDotID cls])) cis
+mkPkgEdges cis = concatOver2 $ map (\ClassInstance {dnType = typ, clsInstName = clss} -> (escapeDotID typ, [escapeDotID clss])) cis
 
 -- Helper to concatenate tuples based on the first part of the tuple
 -- (if two elements have the same thing for the first part of the tuple, concatenate the second parts)
@@ -290,10 +279,10 @@ createEntry homeDirectory file filename = do
         | drpk == "gool" = GOOL
         | otherwise = Drasil
 
-  let cls = map (makeClass clstp) classNames
+  let clss = map (makeClass clstp) classNames
       clsint = map makeClassInstance stripInstances
 
-  let entry = makeEntry drpk fn efp dtl ntl cls clsint
+  let entry = makeEntry drpk fn efp dtl ntl clss clsint
   return entry
 
 -- creates entrystring for each entry (contains lines for each entry's data)
@@ -301,7 +290,7 @@ compileEntryData :: [ClassName] -> Entry -> DC.FileName -> IO EntryString
 -- creates blank line entrystring to separate file entries by drasil- package
 compileEntryData _ _ "newline" = return "\t"
 -- creates entrystrings for actual file entries
-compileEntryData ordClassInsts entry filename = do
+compileEntryData ordClassInsts entry _ = do
 
   -- joins data, newtype and class values/placeholders (first data entry line)
   let f d n c = intercalate "," [drpk,fp,fn,d,n,c]
@@ -314,7 +303,7 @@ compileEntryData ordClassInsts entry filename = do
       entryClassInsts = classInstances entry
 
   -- guards determine how to handle first data entry line
-  let entry = hEnt dataNames newtypeNames classNames
+  let entryLine = hEnt dataNames newtypeNames classNames
       hEnt (x:_) _ _ = f x "\t" "\t"
       hEnt _ (x:_) _ = f "\t" x "\t"
       hEnt _ _ (x:_) = f "\t" "\t" x
@@ -340,19 +329,20 @@ compileEntryData ordClassInsts entry filename = do
 
   -- guards determine how to handle overall file entry output
   -- for single line entry data vs. multi-line entry data
-  let output = tEnt (length entryData) dtRefLines ntRefLines entryData
-      tEnt 0 _ _ _          = entry
+  let genOutput = tEnt (length entryData) dtRefLines ntRefLines entryData
+      tEnt 0 _ _ _          = entryLine
       tEnt 1 (x:_) _ _      = fstl x
       tEnt 1 _ (x:_) _      = fstl x
-      tEnt 1 _ _ _          = entry
+      tEnt 1 _ _ _          = entryLine
       tEnt _ (x:_) _ (_:xs) = fstl x ++ "\n" ++ sbE xs
       tEnt _ _ (x:_) (_:xs) = fstl x ++ "\n" ++ sbE xs
-      tEnt _ _ _ (_:xs)     = entry ++ "\n" ++ sbE xs
-      fstl = join' entry
+      tEnt _ _ _ (_:xs)     = entryLine ++ "\n" ++ sbE xs
+      tEnt _ _ _ _          = error "Unexpected case"
+      fstl = join' entryLine
       sbE  = intercalate "\n"
 
   -- mapM_ print (lines output)
-  return output
+  return genOutput
 
 -- gets raw Entries, extracts classes and orders them with config file settings
 ordClasses :: [ClassType] -> [Entry] -> [Class]

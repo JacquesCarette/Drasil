@@ -14,7 +14,7 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (VSType, SVariable, TypeElim(getType),
   MixedCall, SValue, VSFunction, ValueSym(valueType, Value), MSBody,
   MSStatement, VariableElim(variableName), VariableSym(Variable), Label,
-  Library, BodySym(Body), ScopeSym(Scope))
+  Library, BodySym(Body))
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc)
@@ -24,6 +24,7 @@ import Drasil.Shared.Helpers (on2StateValues, onStateValue)
 import Drasil.Shared.State (lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (emptyStmt, assign)
 import qualified Drasil.Shared.RendererClassesCommon as S (listSizeFunc)
+import Drasil.Shared.AST (ScopeData)
 
 -- Swift and Julia --
 
@@ -73,7 +74,7 @@ forEach' f i' v' b' = do
 
 -- Python and Julia --
 
-varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue r)
+varDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> Maybe (SValue r)
   -> MSStatement r
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v

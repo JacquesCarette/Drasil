@@ -39,7 +39,7 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText
 -----------------------------------------------------------------
 
 -- | Generate a mdBook SRS
-genMDBook :: Project -> [FileLayout Doc]
+genMDBook :: Project -> [FileLayout]
 genMDBook p@(Project t _ rm _) =
   [ file [ps|book.toml|] (makeBook rm t)
   , file [ps|.drasil-requirements.csv|] (makeRequirements p)

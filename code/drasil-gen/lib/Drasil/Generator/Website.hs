@@ -6,7 +6,8 @@ module Drasil.Generator.Website
 where
 
 import Control.Lens ((^.))
-import Drasil.Build.Artifacts (directory, file, localPath, ps, writeFiles)
+import Drasil.Build.Artifacts (OverwritePolicy (..), directory, file, localPath,
+  ps, writeFiles)
 import Drasil.Generator.Formats (Filename)
 import Drasil.System (DrasilWebsite, systemdb, webRefs)
 import Language.Drasil (Document, Stage (Equational))
@@ -16,7 +17,7 @@ import Language.Drasil.Printing.Import (makeDocument)
 -- | Generate a "website" (an HTML file with a CSS stylesheet) softifact.
 exportWebsite :: DrasilWebsite -> Document -> Filename -> IO ()
 exportWebsite syst doc fileName = do
-  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering []
+  let printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering
       pd = makeDocument printSetting doc
       website =
         directory
@@ -28,4 +29,4 @@ exportWebsite syst doc fileName = do
               ]
           ]
 
-  writeFiles localPath website
+  writeFiles OverwriteAllowed localPath website

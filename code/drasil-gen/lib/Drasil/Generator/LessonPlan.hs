@@ -6,7 +6,8 @@ module Drasil.Generator.LessonPlan (
 
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts (directory, file, localPath, ps, writeFiles)
+import Drasil.Build.Artifacts (OverwritePolicy (..), directory, file, localPath,
+  ps, writeFiles)
 import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Printers (Notation (Engineering), genJupyterLessonPlan, piSys)
@@ -18,7 +19,7 @@ import Drasil.System (LessonPlan, lsnPlanRefs, systemdb)
 exportLessonPlan :: LessonPlan -> LsnDesc -> String -> IO ()
 exportLessonPlan plan nbDecl lsnFileName = do
   let nb = mkNb plan nbDecl S.forT
-      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering []
+      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
       pd = makeDocument printSetting nb
       artifact =
         directory
@@ -26,4 +27,4 @@ exportLessonPlan plan nbDecl lsnFileName = do
           [ file [ps|{lsnFileName}.ipynb|] $ genJupyterLessonPlan pd
           ]
 
-  writeFiles localPath artifact
+  writeFiles OverwriteAllowed localPath artifact

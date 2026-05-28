@@ -30,14 +30,13 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType,
-  VSBinder, BinderElim(..), BinderSym (..))
+  printFileStr, printFileStrLn), ifNoElse, convType, VSBinder, BinderElim(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
-  List(intToIndex), ScopeSym(local))
+  IndexTranslator(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), AttachmentSym(..), convTypeOO)
@@ -63,8 +62,8 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
+  ScopeData, sd, TypeData, BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
@@ -275,7 +274,7 @@ newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
-lambda :: (CommonRenderSym r) => ([r (Binder r)] -> r (Value r) -> Doc) ->
+lambda :: (CommonRenderSym r) => ([r BinderD] -> r (Value r) -> Doc) ->
   [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
@@ -372,7 +371,7 @@ increment vr' v'= do
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-objDecNew :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SValue r]
+objDecNew :: (OORenderSym r) => SVariable r -> r ScopeData -> [SValue r]
   -> MSStatement r
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
@@ -403,8 +402,7 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
-  where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn
-          prLnFn
+  where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
         print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn prLnFn (convType t)
         print' _ = S.printSt newLn f printFn v
@@ -532,7 +530,7 @@ implementingClass n is = S.intClass n public (implements is)
 docClass :: (OORenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r
 docClass cdr d = S.commentedClass (docComment $ toState $ cdr d)
 
-commentedClass :: (OORenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r
+commentedClass :: (OORenderSym r, Monad r) => CS (r Doc) -> SClass r
   -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RC.class' cs))

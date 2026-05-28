@@ -15,13 +15,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..))
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -269,7 +269,6 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem = G.arrayElem
 
 instance OOVariableSym PythonCode where
   classVar = G.classVar
@@ -436,9 +435,14 @@ instance GetSet PythonCode where
   get = G.get
   set = G.set
 
-instance List PythonCode where
+instance IndexTranslator PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array PythonCode where
+  arrayElem = G.arrayElem
+
+instance List PythonCode where
   listSize = CS.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

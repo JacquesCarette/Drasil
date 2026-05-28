@@ -13,11 +13,11 @@ module Drasil.Shared.InterfaceCommon (
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), Set(..), InternalList(..), listSlice, listIndexExists, at,
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  exists, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
+  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
   BinderElim(..),
@@ -44,8 +44,9 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
-  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
+  BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r,
+  Array r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r,
+  BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -111,10 +112,6 @@ class (TypeSym r) => VariableSym r where
   -- Given library `Lib`, variable name `v`, and variable type `t`,
   -- it performs the necessary imports and creates `Lib.v`
   extVar    :: Library -> Label -> VSType r -> SVariable r
-  -- TODO [Brandon Bosman, 04/27/2026]: Move this to a new Array typeclass modelled after List
-  -- Change return type to SValue
-  -- | Given array `a` and index `i`, creates `a[i]`
-  arrayElem :: SValue r -> SVariable r -> SVariable r
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -273,7 +270,7 @@ libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (ValueSym r) => List r where
+class (ValueSym r) => IndexTranslator r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
   intToIndex :: SValue r -> SValue r
@@ -282,6 +279,13 @@ class (ValueSym r) => List r where
   indexToInt :: SValue r -> SValue r
   -- | Finds the size of a list.
   --   Arguments are: List
+
+class (IndexTranslator r) => Array r where
+  -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
+  -- | Given array `a` and index `i`, creates `a[i]`
+  arrayElem :: SValue r -> SVariable r -> SVariable r
+
+class (IndexTranslator r) => List r where
   listSize   :: SValue r -> SValue r
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value

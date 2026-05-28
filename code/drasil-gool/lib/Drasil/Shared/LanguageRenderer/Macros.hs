@@ -16,9 +16,10 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block),
   TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(..),
-  VariableValue(valueOf), ValueExpression(notNull), List(..),
+  VariableValue(valueOf), ValueExpression(notNull),
+  List(listSize, listAppend, listAccess), IndexTranslator(intToIndex),
   StatementSym(valStmt, emptyStmt), AssignStatement(assign),
-  DeclStatement(varDecDef, listDec),  ControlStatement(ifCond, for, forRange),
+  DeclStatement(varDecDef, listDec), ControlStatement(ifCond, for, forRange),
   ValueExpression(inlineIf))
 import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderValue(cast),

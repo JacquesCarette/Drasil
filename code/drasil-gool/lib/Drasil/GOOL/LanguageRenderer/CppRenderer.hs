@@ -19,12 +19,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  BinderSym(..), CommentStatement(..), ControlStatement(..), ifNoElse,
-  ScopeSym(..), ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
+  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), BinderSym(..), CommentStatement(..), ifNoElse,
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -81,7 +82,8 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
+  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef,
+  docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -292,7 +294,6 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   var n       = pair1 (var n) (var n)
   constant n  = pair1 (constant n) (constant n)
   extVar l n  = pair1 (extVar l n) (extVar l n)
-  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   classVar n = pair1 (classVar n) (classVar n)
@@ -450,9 +451,14 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   get = pair2 get get
   set = pair3 set set
 
-instance (Pair p) => List (p CppSrcCode CppHdrCode) where
+instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   intToIndex = pair1 intToIndex intToIndex
   indexToInt = pair1 indexToInt indexToInt
+
+instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
+  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
+
+instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
@@ -1213,7 +1219,6 @@ instance VariableSym CppSrcCode where
   var          = G.var
   constant     = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
-  arrayElem = G.arrayElem
 
 instance OOVariableSym CppSrcCode where
   classVar = G.classVar
@@ -1380,9 +1385,14 @@ instance GetSet CppSrcCode where
   get = G.get
   set = G.set
 
-instance List CppSrcCode where
+instance IndexTranslator CppSrcCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array CppSrcCode where
+  arrayElem = G.arrayElem
+
+instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -1948,7 +1958,6 @@ instance VariableSym CppHdrCode where
   var           = G.var
   constant  _ _ = mkStateVar "" void empty
   extVar  _ _ _ = mkStateVar "" void empty
-  arrayElem _ _ = mkStateVar "" void empty
 
 instance OOVariableSym CppHdrCode where
   classVar = G.classVar
@@ -2098,9 +2107,14 @@ instance GetSet CppHdrCode where
   get _ _ = mkStateVal void empty
   set _ _ _ = mkStateVal void empty
 
-instance List CppHdrCode where
+instance IndexTranslator CppHdrCode where
   intToIndex _ = mkStateVal void empty
   indexToInt _ = mkStateVal void empty
+
+instance Array CppHdrCode where
+  arrayElem _ _ = mkStateVar "" void empty
+
+instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty

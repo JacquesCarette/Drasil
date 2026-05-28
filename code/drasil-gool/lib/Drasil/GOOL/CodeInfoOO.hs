@@ -8,12 +8,13 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, VSBinder, SValue,
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), VisibilitySym(..), BinderSym(..))
+  ValueExpression(..), IndexTranslator(..), Array(..), List(..), Set(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
@@ -117,7 +118,6 @@ instance VariableSym CodeInfoOO where
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
-  arrayElem _ _ = noInfo
 
 instance OOVariableSym CodeInfoOO where
   classVar _ _ = noInfo
@@ -244,9 +244,14 @@ instance GetSet CodeInfoOO where
   get v _ = execute1 v
   set v _ = execute2 v
 
-instance List CodeInfoOO where
+instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
+
+instance Array CodeInfoOO where
+  arrayElem _ _ = noInfo
+
+instance List CodeInfoOO where
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2

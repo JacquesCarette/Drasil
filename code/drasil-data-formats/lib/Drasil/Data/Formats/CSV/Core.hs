@@ -19,7 +19,7 @@ import Data.Text (Text)
 -- | The number of columns a CSV has.
 type ColumnCount = Int
 
--- | The number of rows a CSV has.
+-- | The number of rows a CSV has (excluding its reader).
 type RowCount = Int
 
 -- | A CSV file representation containing an optional header and a list of rows.
@@ -32,7 +32,7 @@ data CSV = CSV (Maybe [Text]) [[Text]] ColumnCount RowCount
 header :: CSV -> Maybe [Text]
 header (CSV mhr _ _ _) = mhr
 
--- | Get all rows of a 'CSV'.
+-- | Get all rows of a 'CSV' (excludes header).
 rows :: CSV -> [[Text]]
 rows (CSV _ rs _ _) = rs
 
@@ -40,7 +40,7 @@ rows (CSV _ rs _ _) = rs
 columnCount :: CSV -> ColumnCount
 columnCount (CSV _ _ cc _) = cc
 
--- | Get the number of rows in a 'CSV'.
+-- | Get the number of rows in a 'CSV' (excludes header).
 rowCount :: CSV -> RowCount
 rowCount (CSV _ _ _ rc) = rc
 

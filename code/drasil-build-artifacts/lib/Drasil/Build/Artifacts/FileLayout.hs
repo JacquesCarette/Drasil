@@ -56,7 +56,7 @@ data FileTree where
   File :: (Renderable doc) => doc -> FileTree
 
 -- | Create a file 'FileLayout'.
-file :: Renderable doc => PathSegment -> doc -> FileLayout
+file :: (Renderable doc) => PathSegment -> doc -> FileLayout
 file fp = FileLayout fp . File
 {-# INLINE file #-}
 

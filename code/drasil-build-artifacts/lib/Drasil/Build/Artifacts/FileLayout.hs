@@ -42,7 +42,6 @@ data FileLayout = FileLayout
     fileTree :: FileTree
   }
 
-
 -- | Get the top-level name (a 'PathSegment') of a 'FileLayout'.
 name :: FileLayout -> PathSegment
 name = pathSeg

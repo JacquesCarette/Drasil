@@ -42,7 +42,7 @@ renderCSV csv (CSVRO dqp) = vcat $ map renderRow allRs
 escapeCellPolicy :: DoubleQuotationPolicy -> Text -> Doc ann
 escapeCellPolicy Minimal t
   | T.any needsQuote t = quoteAndEscape t
-  | otherwise = escHls t
+  | otherwise = escapeHLs t
 escapeCellPolicy Everywhere t = quoteAndEscape t
 
 -- | Internal: Check if a character appearing in a cell indicates that the cell
@@ -53,7 +53,7 @@ needsQuote c = c `elem` ['"', ',', '\n', '\r']
 -- | Internal: Replace all double-quotes with double-double-quotes in a cell and
 -- wrap the whole cell in double-quotes.
 quoteAndEscape :: Text -> Doc ann
-quoteAndEscape = dquotes . escHls . T.replace dqs ddqs
+quoteAndEscape = dquotes . escapeHLs . T.replace dqs ddqs
 
 -- | Internal: Double quotes as 'Text'.
 dqs :: Text
@@ -64,8 +64,8 @@ ddqs :: Text
 ddqs = dqs <> dqs
 
 -- | Internal: `prettyprinter` needs us to manually deal with hard linebreaks.
-escHls :: Text -> Doc ann
-escHls = hcat . intersperse hardline . map pretty . T.splitOn lf . T.replace crlf lf
+escapeHLs :: Text -> Doc ann
+escapeHLs = hcat . intersperse hardline . map pretty . T.splitOn lf . T.replace crlf lf
   where
     lf = T.pack "\n"
     crlf = T.pack "\r\n"

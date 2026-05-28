@@ -5,9 +5,14 @@
 
 module Drasil.Shared.LanguageRenderer.Logger (LoggerCode(..)) where
 
-import Drasil.Shared.InterfaceCommon (TypeSym(..), VariableSym(..), ValueSym(..))
+import Drasil.Shared.InterfaceCommon (TypeSym(..), VariableSym(..),
+  ValueSym(..), Literal(..))
+import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..))
+import Drasil.Shared.AST (TypeData(..))
 
-import Text.PrettyPrint.HughesPJ (Doc, text, brackets)
+import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
+  punctuate, hcat)
+import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
 
 newtype LoggerCode a = LC {unLC :: a} deriving Functor
 
@@ -27,6 +32,25 @@ instance VariableSym LoggerCode where
     idx <- idx'
     vr <- vr'
     return $ return $ unLC idx <> brackets (unLC vr)
+
+instance OOVariableSym LoggerCode where
+  classVar = var
+  classConst = constant
+  self = return $ return $ text "self"
+  classVarAccess cls vr = do
+    cls' <- cls
+    vr' <- vr
+    let clsDoc = (typeDoc . unLC) cls'
+        vrDoc = unLC vr'
+    return $ return $ clsDoc <> text "." <> vrDoc
+  extClassVarAccess = classVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    return $ return $ unLC ob' <> text "." <> unLC vr'
+  instanceVarSelf vr = do
+    vr' <- vr
+    return $ return $ text "self." <> unLC vr'
 
 instance ValueSym LoggerCode where
   type Value LoggerCode = Doc
@@ -48,3 +72,23 @@ instance TypeSym LoggerCode where
   funcType = error "Not implemented"
   void = error "Not implemented"
 
+instance OOTypeSym LoggerCode where
+  obj = error "Not Implemented"
+
+instance Literal LoggerCode where
+  litTrue = litString "True"
+  litFalse = litString "False"
+  litChar = return . return . P.char
+  litDouble = return . return . P.double
+  litFloat = return . return . P.float
+  litInt = return . return . P.integer
+  litString = return . return . text
+  litArray _ vs = do
+    vs' <- sequence vs
+    let docs = map unLC vs'
+    return $ return $ brackets $ hcat $ punctuate (comma <> space) docs
+  litList = litArray
+  litSet _ vs = do
+    vs' <- sequence vs
+    let docs = map unLC vs'
+    return $ return $ braces $ hcat $ punctuate (comma <> space) docs

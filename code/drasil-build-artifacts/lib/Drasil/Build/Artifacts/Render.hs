@@ -39,17 +39,17 @@ instance Renderable String where
   {-# INLINE renderToFile #-}
 
 instance Renderable T.Text where
-  renderToFile fp t = writeFile fp $ \h -> TIO.hPutStrLn h t
+  renderToFile fp t = writeFile fp (`TIO.hPutStrLn` t)
   {-# INLINE renderToFile #-}
 
 instance Renderable LB.ByteString where
-  renderToFile fp bs = writeFile fp $ \h -> LB.hPutStrLn h bs
+  renderToFile fp bs = writeFile fp (`LB.hPutStrLn` bs)
   {-# INLINE renderToFile #-}
 
 -- | Write a 'String' to the given 'OsPath' (with a trailing newline always
 -- added).
 writeFileStr :: OsPath -> String -> IO ()
-writeFileStr rp s = withFile rp WriteMode $ \h -> hPutStrLn h s
+writeFileStr rp s = withFile rp WriteMode (`hPutStrLn` s)
 {-# INLINE writeFileStr #-}
 
 -- | Write to a given 'OsPath' with arbitrary method.

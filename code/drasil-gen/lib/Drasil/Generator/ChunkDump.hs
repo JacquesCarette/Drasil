@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
-import Text.PrettyPrint.HughesPJ (Doc, text)
+import Text.PrettyPrint.HughesPJ (text)
 
 import Drasil.Build.Artifacts (FileLayout, PathSegment, directory, file, ps)
 import Drasil.Database (dumpChunkDB)

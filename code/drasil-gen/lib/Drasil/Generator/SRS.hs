@@ -6,7 +6,6 @@ module Drasil.Generator.SRS (
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Build.Artifacts (FileLayout, OverwritePolicy(..), directory, file,
   localPath, ps, writeFiles)

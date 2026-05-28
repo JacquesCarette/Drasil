@@ -1,12 +1,18 @@
+{-# LANGUAGE FlexibleInstances #-}
+{- HLINT ignore "Use writeFile" -}
+
 module Drasil.Build.Artifacts.Render
   ( Renderable (..),
   )
 where
 
+import Data.ByteString.Lazy.Char8 qualified as LB
+import Data.Text qualified as T
+import Data.Text.IO qualified as TIO
 import Prettyprinter qualified as PNew
 import Prettyprinter.Render.Text (renderIO)
 import System.File.OsPath (withFile)
-import System.IO (Handle, IOMode (..), hPutStr)
+import System.IO (Handle, IOMode (..), hPutStrLn)
 import System.OsPath (OsPath)
 import Text.PrettyPrint qualified as PLegacy
 import Prelude hiding (writeFile)
@@ -18,17 +24,32 @@ class Renderable doc where
 
 instance Renderable PLegacy.Doc where
   -- Does conversion to `String` and then does plain `String -> IO ()` writing.
-  renderToFile fp = writeFileStr fp . PLegacy.render . (PLegacy.$+$ PLegacy.text "")
+  renderToFile fp = writeFileStr fp . PLegacy.render
+  {-# INLINE renderToFile #-}
 
 instance Renderable (PNew.Doc ann) where
   -- `renderIO` skips intermediate representations before writing to disk:
   -- <https://hackage-content.haskell.org/package/prettyprinter-1.7.2/docs/Prettyprinter-Render-Text.html#v:renderIO>
   renderToFile fp d = writeFile fp $ \h ->
     renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions $ d PNew.<> PNew.line)
+  {-# INLINE renderToFile #-}
 
--- | Write a 'String' to the given 'OsPath'.
+instance Renderable String where
+  renderToFile = writeFileStr
+  {-# INLINE renderToFile #-}
+
+instance Renderable T.Text where
+  renderToFile fp t = writeFile fp (`TIO.hPutStrLn` t)
+  {-# INLINE renderToFile #-}
+
+instance Renderable LB.ByteString where
+  renderToFile fp bs = writeFile fp (`LB.hPutStrLn` bs)
+  {-# INLINE renderToFile #-}
+
+-- | Write a 'String' to the given 'OsPath' (with a trailing newline always
+-- added).
 writeFileStr :: OsPath -> String -> IO ()
-writeFileStr rp s = withFile rp WriteMode (`hPutStr` s)
+writeFileStr rp s = withFile rp WriteMode (`hPutStrLn` s)
 {-# INLINE writeFileStr #-}
 
 -- | Write to a given 'OsPath' with arbitrary method.

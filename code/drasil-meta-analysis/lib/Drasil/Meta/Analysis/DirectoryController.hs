@@ -2,8 +2,9 @@
 module Drasil.Meta.Analysis.DirectoryController (createFolder, createFile, finder, getDirectories,
   DrasilPack, FileName, FolderName, File(..), Folder(..)) where
 
-import Data.List
-import System.Directory
+import Data.List ((\\), isInfixOf, isPrefixOf, isSuffixOf, partition, sort)
+import System.Directory (doesDirectoryExist, listDirectory,
+  setCurrentDirectory)
 import System.FilePath (joinPath)
 
 type FilterPrefix = String

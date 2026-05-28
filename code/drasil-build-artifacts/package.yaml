@@ -28,6 +28,8 @@ dependencies:
 - os-string
 - process
 - tasty
+- text
+- bytestring
 
 ghc-options:
 - -Wall

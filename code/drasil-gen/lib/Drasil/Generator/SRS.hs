@@ -6,7 +6,6 @@ module Drasil.Generator.SRS (
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Build.Artifacts (FileLayout, directory, file, ps)
 import Drasil.DocLang (mkGraphInfo)
@@ -24,7 +23,7 @@ import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 
 -- | Generate Drasil's SRS (in HTML, TeX, Jupyter, and MDBook formats).
-genSmithEtAlSrs :: SmithEtAlSRS -> Document -> String -> [FileLayout Doc]
+genSmithEtAlSrs :: SmithEtAlSRS -> Document -> String -> [FileLayout]
 genSmithEtAlSrs syst doc srsFileName =
   [ srsLayout,
     traceyLayout
@@ -43,8 +42,8 @@ genSmithEtAlSrs syst doc srsFileName =
     traceyLayout = outputDot (mkGraphInfo syst)
 
 -- | Internal: Render an SRS in a specified 'Format' and lay out artifacts into
--- a `[FileLayout Doc]`.
-prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout Doc]
+-- a `[FileLayout]`.
+prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout]
 prntDoc d pinfo _ MDBook =
   mdBookMakefile : genMDBook (makeProject pinfo d)
 prntDoc d pinfo fn Jupyter =
@@ -60,7 +59,7 @@ prntDoc d@(Document _ _ st _) pinfo fn TeX =
 prntDoc Notebook {} _ _ TeX = error "cannot render notebooks into LaTeX"
 
 -- | Internal: Basic Makefile suitable for building TeX projects.
-teXMakefile :: Filename -> FileLayout Doc
+teXMakefile :: Filename -> FileLayout
 teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   mkRule [watermark] (makeS "srs") [pdfName] [],
   mkFile [] pdfName [texFile] [lualatex, bibtex, lualatex, lualatex]]
@@ -71,7 +70,7 @@ teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
     texFile  = makeS $ fn ++ ".tex"
 
 -- | Internal: Basic Makefile suitable for building mdBook projects.
-mdBookMakefile :: FileLayout Doc
+mdBookMakefile :: FileLayout
 mdBookMakefile = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   mkRule [watermark] (makeS "build")  [] [mkCheckedCommand $ makeS "mdbook build"],
   mkRule []          (makeS "server") [] [mkCheckedCommand $ makeS "mdbook serve --open"]]

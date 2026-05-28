@@ -15,10 +15,9 @@ import qualified Language.Drasil.Printers as P (genJupyterLessonPlan)
 import Language.Drasil.Printing.Import (makeDocument)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (LessonPlan, lsnPlanRefs, systemdb)
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Generate a Lesson Plan (an interactive JupyterNotebook).
-genJupyterLessonPlan :: LessonPlan -> LsnDesc -> String -> FileLayout Doc
+genJupyterLessonPlan :: LessonPlan -> LsnDesc -> String -> FileLayout
 genJupyterLessonPlan plan nbDecl lsnFileName =
   file [ps|{lsnFileName}.ipynb|] $ P.genJupyterLessonPlan pd
   where

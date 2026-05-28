@@ -18,7 +18,6 @@ dependencies:
 - base >= 4.7 && < 5
 - prettyprinter
 - text
-- vector
 
 ghc-options:
 - -Wall

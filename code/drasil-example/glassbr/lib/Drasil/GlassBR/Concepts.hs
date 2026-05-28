@@ -1,4 +1,9 @@
-module Drasil.GlassBR.Concepts where
+module Drasil.GlassBR.Concepts (
+  beam, cantilever, edge, glaSlab, glass, lShareFac, plane, responseTy,
+  blastRisk, glaPlane, aR, stdOffDist, idglass,
+  glassTypeFac, lResistance, nFL, lDurFac,
+  ptOfExplsn, con', iGlass, lGlass, annealed, fullyT, heatS
+) where
 
 import Language.Drasil (commonIdeaWithDict, mkIdea, nc, cn', nounPhraseSP, CI, IdeaDict)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)

@@ -1,4 +1,4 @@
-module Drasil.HGHC.Choices where
+module Drasil.HGHC.Choices () where
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Unitals where --whole file is used
+module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
@@ -52,7 +52,7 @@ inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
 inputsWUnitsUncrtn = plateLen :| [plateWidth, charWeight]
 
 --inputs with uncertainties and no units
-inputsWUncrtn :: NE.NonEmpty UncertQ
+ :: NE.NonEmpty UncertQ
 inputsWUncrtn = pbTol :| [tNT]
 
 --inputs with no uncertainties

@@ -17,6 +17,9 @@ import Drasil.Shared.InterfaceCommon (SharedProg, VSType, TypeSym(..),
   TypeElim(..), VariableElim(..), ParameterSym(..), VisibilitySym(..),
   MethodSym(..), ScopeSym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), convTypeOO)
+import Drasil.GProc.InterfaceProc (ProcProg)
+import qualified Drasil.GProc.InterfaceProc as GProc (ProgramSym(..),
+  FileSym(..), ModuleSym(..))
 import Drasil.Shared.AST (TypeData(..), td)
 import Drasil.Shared.CodeType (CodeType(..))
 
@@ -35,6 +38,7 @@ instance Monad LoggerCode where
   LC x >>= f = f x
 
 instance SharedProg LoggerCode
+instance ProcProg LoggerCode
 
 instance VariableSym LoggerCode where
   type Variable LoggerCode = Doc
@@ -354,3 +358,16 @@ instance ScopeSym LoggerCode where
 
 instance BinderSym LoggerCode where
   binder = undefined
+
+instance GProc.ProgramSym LoggerCode where
+  type Program LoggerCode = ()
+  prog = undefined
+
+instance GProc.FileSym LoggerCode where
+  type File LoggerCode = ()
+  fileDoc = undefined
+  docMod = undefined
+
+instance GProc.ModuleSym LoggerCode where
+  type Module LoggerCode = ()
+  buildModule = undefined

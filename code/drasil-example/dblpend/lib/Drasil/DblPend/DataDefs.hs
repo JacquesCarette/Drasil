@@ -1,4 +1,9 @@
-module Drasil.DblPend.DataDefs where
+module Drasil.DblPend.DataDefs (
+  dataDefs, accelGQD, forceGQD,
+  positionXEqn_1, positionGDD, positionXDD_1, positionYDD_1,
+  positionGQD, positionYQD_1, positionYQD_2, positionXQD_2, positionXDD_2,
+  positionYDD_2, positionXEqn_2, positionYEqn_2
+) where
 
 import Control.Lens ((^.))
 

@@ -15,7 +15,8 @@ import Control.Monad (void)
 import Data.Maybe (maybeToList)
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
-import Drasil.Build.Artifacts (directory, localPath, ps, writeFiles)
+import Drasil.Build.Artifacts (OverwritePolicy(..), directory, localPath, ps,
+  writeFiles)
 import Drasil.DocumentLanguage.Notebook (LsnDesc)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS)
@@ -43,7 +44,7 @@ writeSmithEtAlSrs syst srsDecl srsFileName = do
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   let dbgData = maybeToList mDbgData
       layout = dbgData ++ genSmithEtAlSrs syst' srs srsFileName
-  mapM_ (writeFiles localPath) layout
+  mapM_ (writeFiles OverwriteAllowed localPath) layout
   pure syst'
 
 -- | A case study that only outputs an SRS in each of our supported variants.
@@ -69,14 +70,14 @@ caseStudyMainSRSWCodeZooWLsnPlan syst srsDecl srsFileName choices plan nbDecl ls
   setSystemLocale
   syst' <- writeSmithEtAlSrs syst srsDecl srsFileName
   genCodeZoo syst' choices
-  writeFiles localPath $ directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
+  writeFiles OverwriteAllowed localPath $ directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).
 caseStudyMainDrasilWebsite :: DrasilWebsite -> Document -> IO ()
 caseStudyMainDrasilWebsite syst websiteDoc = do
   setSystemLocale
-  writeFiles localPath $
+  writeFiles OverwriteAllowed localPath $
     directory
       [ps|Website|]
       [ directory [ps|HTML|] $

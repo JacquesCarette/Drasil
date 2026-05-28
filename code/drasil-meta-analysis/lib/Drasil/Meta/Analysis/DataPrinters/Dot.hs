@@ -1,5 +1,5 @@
 -- To generalize the use of dot printers in generating graphs
-module DataPrinters.Dot (digraph, subgraph,
+module Drasil.Meta.Analysis.DataPrinters.Dot (digraph, subgraph,
   makeEdgesDi, makeEdgesSub, makeNodesDi, makeNodesSub, replaceInvalidChars) where
 
 import System.IO

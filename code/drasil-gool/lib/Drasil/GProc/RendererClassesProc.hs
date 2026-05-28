@@ -29,7 +29,7 @@ class (BlockCommentSym r) => RenderFile r where
   top :: r (IP.Module r) -> r (Block r)
   bottom :: r (Block r)
 
-  commentedMod :: IP.SFile r -> FS (r (BlockComment r)) -> IP.SFile r
+  commentedMod :: IP.SFile r -> FS (r Doc) -> IP.SFile r
 
   fileFromData :: FilePath -> IP.FSModule r -> IP.SFile r
 

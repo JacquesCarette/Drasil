@@ -1,5 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.DblPend.Body where
+module Drasil.DblPend.Body (
+  mkSRS, si, justification, externalLinkRef, charsOfReader,
+  sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
+  userCharacteristicsIntro, tMods
+) where
 
 import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D

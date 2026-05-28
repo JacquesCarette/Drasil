@@ -1,4 +1,6 @@
-module Drasil.GamePhysics.References where
+module Drasil.GamePhysics.References (
+  citations, uriReferences, chaslesWiki, accelGravitySrc, impulseSrc
+) where
 
 import Language.Drasil
 

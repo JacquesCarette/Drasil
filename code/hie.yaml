@@ -4,7 +4,7 @@ cradle:
       component: "drasil-build-artifacts:lib"
 
     - path: "drasil-build-artifacts/test"
-      component: "drasil-build-artifacts:test:layout-test"
+      component: "drasil-build-artifacts:test:drasil-build-artifacts-test"
 
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
@@ -119,6 +119,15 @@ cradle:
 
     - path: "drasil-makefile/lib"
       component: "drasil-makefile:lib"
+
+    - path: "drasil-meta-analysis/lib"
+      component: "drasil-meta-analysis:lib"
+
+    - path: "drasil-meta-analysis/app/classinstdepgen/ClassInstDepGen.hs"
+      component: "drasil-meta-analysis:exe:classinstdepgen"
+
+    - path: "drasil-meta-analysis/app/typedepgen/TypeDepGen.hs"
+      component: "drasil-meta-analysis:exe:typedepgen"
 
     - path: "drasil-metadata/lib"
       component: "drasil-metadata:lib"

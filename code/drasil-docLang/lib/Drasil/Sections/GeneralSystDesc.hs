@@ -1,5 +1,7 @@
 -- | Defines helper functions used to make the general system description section.
-module Drasil.Sections.GeneralSystDesc where
+module Drasil.Sections.GeneralSystDesc (
+  genSysIntro, systCon, usrCharsF, sysContxt
+) where
 
 -- General Drasil
 import Language.Drasil

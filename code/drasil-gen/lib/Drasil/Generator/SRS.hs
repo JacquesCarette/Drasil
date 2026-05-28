@@ -6,7 +6,6 @@ module Drasil.Generator.SRS (
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Build.Artifacts (FileLayout, OverwritePolicy(..), directory, file,
   localPath, ps, writeFiles)
@@ -62,7 +61,7 @@ debugDump si = do
     _ -> mempty
 
 -- | Internal: Creates a `FileLayout` for the SRS in a specific format.
-prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout Doc]
+prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout]
 prntDoc d pinfo _ MDBook =
   mdBookMakefile : genMDBook (makeProject pinfo d)
 prntDoc d pinfo fn Jupyter =
@@ -78,7 +77,7 @@ prntDoc d@(Document _ _ st _) pinfo fn TeX =
 prntDoc Notebook {} _ _ TeX = error "cannot render notebooks into LaTeX"
 
 -- | Internal: Basic Makefile suitable for building TeX projects.
-teXMakefile :: Filename -> FileLayout Doc
+teXMakefile :: Filename -> FileLayout
 teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   mkRule [watermark] (makeS "srs") [pdfName] [],
   mkFile [] pdfName [texFile] [lualatex, bibtex, lualatex, lualatex]]
@@ -89,7 +88,7 @@ teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
     texFile  = makeS $ fn ++ ".tex"
 
 -- | Internal: Basic Makefile suitable for building mdBook projects.
-mdBookMakefile :: FileLayout Doc
+mdBookMakefile :: FileLayout
 mdBookMakefile = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   mkRule [watermark] (makeS "build")  [] [mkCheckedCommand $ makeS "mdbook build"],
   mkRule []          (makeS "server") [] [mkCheckedCommand $ makeS "mdbook serve --open"]]

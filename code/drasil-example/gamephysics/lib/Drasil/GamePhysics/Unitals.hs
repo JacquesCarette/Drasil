@@ -1,6 +1,15 @@
-module Drasil.GamePhysics.Unitals where
+module Drasil.GamePhysics.Unitals (
+  symbols, outputConstraints, inputSymbols, outputSymbols, inputConstraints,
+  finRelVel, initRelVel, velAP, velB, velBP, velO, velo_1, velo_2, velj, velA,
+  mTot, massj, massA, massB, mass_1, mass_2, distMass,
+  normalVect, posCM, posj, rOB, rRot, timeT, time_1, time_2, timeC, sqrDist,
+  torquej, forcej, force_1, force_2, angAccj, mLarger, dispNorm, dVect, accj,
+  momtInertA, momtInertB, normalLen, perpLenA, perpLenB
+) where
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -25,33 +34,21 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 
 import Data.Drasil.Constraints (gtZeroConstr)
 
-defSymbols :: [DefinedQuantityDict]
-defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints
-
-unitSymbs :: [UnitalChunk]
-unitSymbs = [iVect, jVect, normalVect,
-  force_1, force_2, forcej, mass_1, mass_2,
-  dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
-  posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel,
-  massA, massB, massIRigidBody, normalLen, contDispA, contDispB,
-  perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime,
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
-  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect]
-
 ----------------------
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbols, inputSymbols, outputSymbols :: [DefinedQuantityDict]
-
+symbols :: [DefinedQuantityDict]
 symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] ++ unitless ++ map dqdWr unitalSymbols
 
-inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation,
+inputSymbols, outputSymbols :: NE.NonEmpty DefinedQuantityDict
+
+inputSymbols = NE.map dqdWr (QP.position :| [QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass,
-  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec] ++
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec]) `NE.appendList`
   [QP.restitutionCoef]
 
-outputSymbols = map dqdWr [QP.position, QP.velocity, QM.orientation,
+outputSymbols = NE.map dqdWr $ QP.position :| [QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 unitalSymbols :: [UnitalChunk]

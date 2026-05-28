@@ -88,7 +88,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
-  makeSetterVal)
+  makeSetterVal, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -571,7 +571,7 @@ instance DeclStatement SwiftCode where
   setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
-  arrayDec = listDec
+  arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef vr scp vl' = do
     vdec <- swiftVarDec swiftConst vr scp

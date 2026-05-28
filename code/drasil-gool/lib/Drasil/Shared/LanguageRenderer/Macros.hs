@@ -4,7 +4,7 @@
 module Drasil.Shared.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy,
   listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
-  notifyObservers'
+  notifyObservers', arrayDecAsList
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
@@ -15,7 +15,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block),
-  TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(litInt),
+  TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(..),
   VariableValue(valueOf), ValueExpression(notNull),
   List(listSize, listAppend, listAccess), IndexTranslator(intToIndex),
   StatementSym(valStmt, emptyStmt), AssignStatement(assign),
@@ -199,3 +199,13 @@ notifyObservers' :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0
+
+arrayDecAsList :: (CommonRenderSym r) => Integer -> SVariable r -> r ScopeData -> MSStatement r
+arrayDecAsList len vr scp = do
+  vr' <- zoom lensMStoVS vr
+  let innerTp = IC.listInnerType $ return $ variableType vr'
+  i <- genVarName [] "i"
+  multi [
+    IC.varDecDef vr scp (IC.litList innerTp []),
+    IC.forRange (IC.var i IC.int) (IC.litInt 0) (IC.litInt len) (IC.litInt 1)
+      (oneLiner $ IC.valStmt $ IC.listAppend (IC.valueOf vr) (IC.litInt 0))]

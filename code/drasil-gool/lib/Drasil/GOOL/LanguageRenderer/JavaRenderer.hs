@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj',
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep,
   access, containing, mathFunc, functionDox, variableList,
-  parameterList, appendToBody, surroundBody, intValue)
+  parameterList, appendToBody, surroundBody, intValue, valueList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
   multiStmt, body, printFile, param, listDec, classVarAccess, cast, castObj,
@@ -320,7 +320,7 @@ instance Literal JavaCode where
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray braces
+  litArray = jLitArray
   litSet = CP.litSet (text jSetOf <>) parens
 
   litList t es = do
@@ -906,6 +906,13 @@ jSetType t = do
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)
+
+jLitArray :: (CommonRenderSym r) => VSType r -> [SValue r] -> SValue r
+jLitArray t' es' = do
+  es <- sequence es'
+  lt <- arrayType t'
+  mkVal lt (new' <+> RC.type' lt
+    <+> braces (valueList es))
 
 jFileType :: (OORenderSym r) => VSType r
 jFileType = do

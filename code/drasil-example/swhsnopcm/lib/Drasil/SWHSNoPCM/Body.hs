@@ -1,5 +1,7 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -64,7 +66,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
   [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
-  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr outputs
+  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 
 concepts :: [UnitalChunk]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

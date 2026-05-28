@@ -24,21 +24,26 @@ class Renderable doc where
 instance Renderable PLegacy.Doc where
   -- Does conversion to `String` and then does plain `String -> IO ()` writing.
   renderToFile fp = writeFileStr fp . PLegacy.render
+  {-# INLINE renderToFile #-}
 
 instance Renderable (PNew.Doc ann) where
   -- `renderIO` skips intermediate representations before writing to disk:
   -- <https://hackage-content.haskell.org/package/prettyprinter-1.7.2/docs/Prettyprinter-Render-Text.html#v:renderIO>
   renderToFile fp d = writeFile fp $ \h ->
     renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions $ d PNew.<> PNew.line)
+  {-# INLINE renderToFile #-}
 
 instance Renderable String where
   renderToFile = writeFileStr
+  {-# INLINE renderToFile #-}
 
 instance Renderable T.Text where
   renderToFile fp t = writeFile fp $ \h -> TIO.hPutStrLn h t
+  {-# INLINE renderToFile #-}
 
 instance Renderable LB.ByteString where
   renderToFile fp bs = writeFile fp $ \h -> LB.hPutStrLn h bs
+  {-# INLINE renderToFile #-}
 
 -- | Write a 'String' to the given 'OsPath' (with a trailing newline always
 -- added).

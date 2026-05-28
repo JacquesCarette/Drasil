@@ -11,15 +11,20 @@ module Drasil.Generator.CaseStudyVariants
   )
 where
 
+import Control.Exception (bracket)
+import Control.Lens ((^.))
 import Control.Monad (void)
+import Data.Char (toLower)
 import Data.Maybe (maybeToList)
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
+import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
+  setCurrentDirectory)
 
 import Drasil.Build.Artifacts (OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
 import Drasil.DocumentLanguage.Notebook (LsnDesc)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
-import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS)
+import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS, programName)
 import Language.Drasil (Document)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -35,17 +40,32 @@ import Drasil.Generator.Website (genWebsite)
 setSystemLocale :: IO ()
 setSystemLocale = setLocaleEncoding utf8
 
+-- | Internal: Run an action in a directory, restoring the original directory
+-- afterwards.
+inDir :: FilePath -> IO () -> IO ()
+inDir path action = do
+  createDirectoryIfMissing False path
+  bracket getCurrentDirectory setCurrentDirectory $ const $ do
+    setCurrentDirectory path
+    action
+
+-- | Internal: The `build/` subfolder the Makefile expects each case study will
+-- build in (other than the website).
+caseStudyBuildFolder :: SmithEtAlSRS -> String
+caseStudyBuildFolder = map toLower . (^. programName)
+
 -- | Internal: Generate documents and construct the SRS directory layout
 -- structure (and debug data) for an example.
-writeSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO SmithEtAlSRS
+writeSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO (SmithEtAlSRS, String)
 writeSmithEtAlSrs syst srsDecl srsFileName = do
-  let (srs, syst') = mkDoc syst srsDecl S.forT
+  let exampleName = caseStudyBuildFolder syst
+      (srs, syst') = mkDoc syst srsDecl S.forT
   mDbgData <- buildDebugData syst'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   let dbgData = maybeToList mDbgData
-      layout = dbgData ++ genSmithEtAlSrs syst' srs srsFileName
-  mapM_ (writeFiles OverwriteAllowed localPath) layout
-  pure syst'
+      exampleLayout = directory [ps|{exampleName}|] $ dbgData ++ genSmithEtAlSrs syst' srs srsFileName
+  writeFiles OverwriteAllowed localPath exampleLayout
+  pure (syst', exampleName)
 
 -- | A case study that only outputs an SRS in each of our supported variants.
 caseStudyMainSRS :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
@@ -59,8 +79,8 @@ caseStudyMainSRS syst srsDecl srsFileName = do
 caseStudyMainSRSWCode :: SmithEtAlSRS -> SRSDecl -> String -> Choices -> IO ()
 caseStudyMainSRSWCode syst srsDecl srsFileName choices = do
   setSystemLocale
-  syst' <- writeSmithEtAlSrs syst srsDecl srsFileName
-  genCode syst' choices
+  (syst', exampleName) <- writeSmithEtAlSrs syst srsDecl srsFileName
+  inDir exampleName $ genCode syst' choices
 
 -- | The same as 'caseStudyMainSRSWCode', except it also produces a
 -- JupyterNotebook-based lesson plan.
@@ -68,9 +88,10 @@ caseStudyMainSRSWCodeZooWLsnPlan :: SmithEtAlSRS -> SRSDecl -> String
   -> [Choices] -> LessonPlan -> LsnDesc -> String -> IO ()
 caseStudyMainSRSWCodeZooWLsnPlan syst srsDecl srsFileName choices plan nbDecl lsnFileName = do
   setSystemLocale
-  syst' <- writeSmithEtAlSrs syst srsDecl srsFileName
-  genCodeZoo syst' choices
-  writeFiles OverwriteAllowed localPath $ directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
+  (syst', exampleName) <- writeSmithEtAlSrs syst srsDecl srsFileName
+  inDir exampleName $ do
+    genCodeZoo syst' choices
+    writeFiles OverwriteAllowed localPath $ directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).

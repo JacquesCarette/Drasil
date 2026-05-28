@@ -14,6 +14,15 @@ global b = 5
 global arr = [1, 2, 3]
 print("Value of arr: ")
 println(arr)
+global arr2 = Int64[]
+for i in 0:1:2
+    append!(arr2, 0)
+end
+global arr2[1] = 4
+global arr2[2] = 5
+global arr2[3] = 6
+print("Value of arr2: ")
+println(arr2)
 global myOtherList = [1.0, 1.5]
 global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)

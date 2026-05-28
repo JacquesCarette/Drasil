@@ -16,7 +16,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, VSType, TypeSym(..),
   ValueExpression(..), IndexTranslator(..), Array(..), List(..), Set(..),
   TypeElim(..), VariableElim(..), ParameterSym(..), VisibilitySym(..),
   MethodSym(..), ScopeSym(..), BinderSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), convTypeOO)
+import Drasil.GOOL.InterfaceGOOL (OOProg, OOTypeSym(..), OOVariableSym(..),
+  OOVariableValue, OODeclStatement(..), OOFuncAppStatement(..),
+  OOValueExpression(..), InternalValueExp(..), GetSet(..), ObserverPattern(..),
+  StrategyPattern(..), ClassSym(..), OOMethodSym(..), StateVarSym(..),
+  AttachmentSym(..), OOValueSym, OOFunctionSym(..), convTypeOO)
+import qualified Drasil.GOOL.InterfaceGOOL as GOOL (ProgramSym(..), FileSym(..),
+  ModuleSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg)
 import qualified Drasil.GProc.InterfaceProc as GProc (ProgramSym(..),
   FileSym(..), ModuleSym(..))
@@ -39,6 +45,7 @@ instance Monad LoggerCode where
 
 instance SharedProg LoggerCode
 instance ProcProg LoggerCode
+instance OOProg LoggerCode
 
 instance VariableSym LoggerCode where
   type Variable LoggerCode = Doc
@@ -359,6 +366,82 @@ instance ScopeSym LoggerCode where
 instance BinderSym LoggerCode where
   binder = undefined
 
+-- GOOL-specific
+instance GOOL.ProgramSym LoggerCode where
+  type Program LoggerCode = ()
+  prog = undefined
+
+instance GOOL.FileSym LoggerCode where
+  type File LoggerCode = ()
+  fileDoc = undefined
+  docMod = undefined
+
+instance GOOL.ModuleSym LoggerCode where
+  type Module LoggerCode = ()
+  buildModule = undefined
+
+instance ClassSym LoggerCode where
+  type Class LoggerCode = ()
+  buildClass = undefined
+  extraClass = undefined
+  implementingClass = undefined
+  docClass = undefined
+
+instance OOMethodSym LoggerCode where
+  method = undefined
+  getMethod = undefined
+  setMethod = undefined
+  constructor = undefined
+  inOutMethod = undefined
+  docInOutMethod = undefined
+
+instance StateVarSym LoggerCode where
+  type StateVar LoggerCode = ()
+  stateVar = undefined
+  stateVarDef = undefined
+  constVar = undefined
+
+instance AttachmentSym LoggerCode where
+  type Attachment LoggerCode = ()
+  classLevel = undefined
+  instanceLevel = undefined
+
+instance OOVariableValue LoggerCode where
+
+instance OODeclStatement LoggerCode where
+  objDecDef = undefined
+  objDecNew = undefined
+  extObjDecNew = undefined
+
+instance OOFuncAppStatement LoggerCode where
+  selfInOutCall = undefined
+
+instance OOValueExpression LoggerCode where
+  selfFuncAppMixedArgs = undefined
+  newObjMixedArgs = undefined
+  extNewObjMixedArgs = undefined
+  libNewObjMixedArgs = undefined
+
+instance OOValueSym LoggerCode
+
+instance InternalValueExp LoggerCode where
+  objMethodCallMixedArgs' = undefined
+
+instance GetSet LoggerCode where
+  get = undefined
+  set = undefined
+
+instance ObserverPattern LoggerCode where
+  notifyObservers = undefined
+
+instance OOFunctionSym LoggerCode where
+  func = undefined
+  objAccess = undefined
+
+instance StrategyPattern LoggerCode where
+  runStrategy = undefined
+
+-- GProc-specific
 instance GProc.ProgramSym LoggerCode where
   type Program LoggerCode = ()
   prog = undefined

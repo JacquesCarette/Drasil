@@ -34,8 +34,6 @@ loggedVar vlog v = do
     do
       vlog' <- zoom lensMStoVS vlog
       printFileStr valLogFile ("var '" ++ (render . unLC) vlog' ++ "' assigned "),
-    zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++
-      variableName v' ++ "' assigned ")),
     printFile valLogFile (valueOf v),
     printFileStrLn valLogFile (" in module " ++ currentModule g),
     closeFile valLogFile]

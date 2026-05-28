@@ -11,10 +11,12 @@
 
 #include <math.h>
 #include <string>
+#include <vector>
 
 using std::ifstream;
 using std::ofstream;
 using std::string;
+using std::vector;
 
 /** \brief Calculates flight duration (s)
     \param v_launch launch speed (m/s)

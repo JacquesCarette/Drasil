@@ -22,8 +22,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), BinderSym(..), CommentStatement(..), ifNoElse,
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), BinderSym(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
@@ -112,8 +112,8 @@ import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName,
   setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, useVarName, genVarName,
-  genLoopIndex, setVarScope, getVarScope)
+  setCurrMainFunc, getCurrMainFunc, useVarName, genLoopIndex, setVarScope,
+  getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -122,8 +122,8 @@ import Control.Monad.State (State, modify)
 import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets,
-  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, braces,
+  parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -1144,7 +1144,7 @@ instance TypeSym CppSrcCode where
   setType t = do
     modify (addUsing cppSet . addLangImportVS cppSet)
     C.setType cppSet t
-  arrayType = cppArrayType
+  arrayType = listType
   listInnerType = G.listInnerType
   funcType = cppFuncType
   void = C.void
@@ -1273,8 +1273,8 @@ instance Literal CppSrcCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet = cppLitSet setType
-  litList _ _ = error $ "List literals not supported in " ++ cppName
+  litSet = litList
+  litList = CP.litArray braces
 
 instance MathConstant CppSrcCode where
   pi = do
@@ -1520,7 +1520,7 @@ instance DeclStatement CppSrcCode where
     modify $ useVarName $ variableName v
     modify $ setVarScope (variableName v) (scopeData scp)
     mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
-      brackets (RC.value sz)
+      parens (RC.value sz)
   arrayDecDef vr scp vals = do
     vdc <- arrayDec (toInteger $ length vals) vr scp
     vs <- mapM (zoom lensMStoVS) vals
@@ -1886,7 +1886,7 @@ instance TypeSym CppHdrCode where
   setType t = do
     modify (addHeaderUsing cppSet . addHeaderLangImport cppSet)
     C.setType cppSet t
-  arrayType = cppArrayType
+  arrayType = listType
   listInnerType = G.listInnerType
   funcType = CS.funcType
   void = C.void
@@ -1998,9 +1998,9 @@ instance Literal CppHdrCode where
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray braces
+  litArray = litList
   litSet = cppLitSet setType
-  litList _ _ = error $ "List literals not supported in " ++ cppName
+  litList = CP.litArray braces
 
 instance MathConstant CppHdrCode where
   pi = do
@@ -2720,11 +2720,6 @@ cppOutfileType = do
   t <- typeFromData OutFile cppOutfile (text cppOutfile)
   addFStreamImport t
 
-cppArrayType :: (CommonRenderSym r) => VSType r -> VSType r
-cppArrayType t' = do
-  t <- t'
-  typeFromData (Array (getType t)) (getTypeString t) (RC.type' t)
-
 cppIterType :: (CommonRenderSym r) => VSType r -> VSType r
 cppIterType t' = do
   t <- t'
@@ -2800,20 +2795,7 @@ cppPrint newLn pf vl = do
 
 cppOut :: Bool -> Maybe (SValue CppSrcCode) -> SValue CppSrcCode ->
   SValue CppSrcCode -> MSStatement CppSrcCode
-cppOut newLn f printFn v = zoom lensMStoVS v >>= cppOut' . getType . valueType
-  where cppOut' (Array _) = do
-          firstVar <- genVarName [] "first"
-          elemVar <- genVarName [] "elem"
-          let innerType = listInnerType (onStateValue valueType v)
-              printMaybeNewLn = if newLn then printLn else print
-          multi [printStr "[",
-            varDecDef (var firstVar bool) local litTrue,
-            forEach (var elemVar innerType) v (body [block[
-              ifNoElse [((valueOf (var firstVar bool) ?!), oneLiner $ printStr ", ")],
-              print $ valueOf (var elemVar innerType),
-              var firstVar bool &= litFalse]]),
-              printMaybeNewLn $ litString "]"]
-        cppOut' _ = G.print newLn f printFn v
+cppOut newLn f printFn = G.print newLn f printFn
 
 cppThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)

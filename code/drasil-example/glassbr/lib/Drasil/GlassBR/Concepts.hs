@@ -13,11 +13,6 @@ import Data.Drasil.Concepts.Documentation (response, type_)
 idglass :: IdeaDict
 idglass = mkIdea  "glass"          (cn' "Glass")                 Nothing
 
-{--}
-con :: [CI]
-con = [annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
-  lResistance, lShareFac, stdOffDist, nFL]
-
 con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]

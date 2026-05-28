@@ -52,7 +52,7 @@ inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
 inputsWUnitsUncrtn = plateLen :| [plateWidth, charWeight]
 
 --inputs with uncertainties and no units
- :: NE.NonEmpty UncertQ
+inputsWUncrtn :: NE.NonEmpty UncertQ
 inputsWUncrtn = pbTol :| [tNT]
 
 --inputs with no uncertainties

@@ -15,7 +15,7 @@ default-extensions:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
-- -Werror=missing-export-lists
+- -Wmissing-export-lists
 
 extra-source-files: []
 

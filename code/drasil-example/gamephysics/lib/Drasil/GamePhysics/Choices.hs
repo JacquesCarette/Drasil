@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Choices where
+module Drasil.GamePhysics.Choices () where
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),

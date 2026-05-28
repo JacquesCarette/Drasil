@@ -16,9 +16,9 @@ module Drasil.Shared.LanguageRenderer (
   package, file, module', class', multiStmt, block, body, print, printFile,
   param, method, stateVar, constVar, stateVarList, switch, assign,
   addAssign, subAssign, increment, decrement, listDec, getTerm, return',
-  comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD,
+  comment, var, extVar, arg, classVarAccess, instanceVarAccess, unOpDocD, unOpDocD', binOpDocD,
   binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc,
-  objAccess, castObj, break, continue, static, dynamic, private, public,
+  objAccess, castObj, break, continue, classLevel, instanceLevel, private, public,
   blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
   ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod,
   valueList, variableList, binderList, parameterList, namedArgList,
@@ -31,9 +31,8 @@ import Utils.Drasil (capitalize, stringList)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..),
-  StatementSym(Statement), VisibilitySym(Visibility), ParameterSym(Parameter),
-  BinderSym(..))
-import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
+  StatementSym(Statement), VisibilitySym(Visibility), ParameterSym(Parameter))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(Attachment))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
@@ -41,7 +40,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..))
+  updateMod, TypeData(..), VarData(..), BinderD)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last, intercalate)
@@ -212,7 +211,7 @@ param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
-method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) ->
+method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) ->
   r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
@@ -303,11 +302,11 @@ extVar l n = text l <> dot <> text n
 arg :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
 arg n argsList = RC.value argsList <> brackets (RC.value n)
 
-classVar :: Doc -> Doc -> Doc
-classVar c v = c <> dot <> v
+classVarAccess :: Doc -> Doc -> Doc
+classVarAccess c v = c <> dot <> v
 
-objVar :: Doc -> Doc ->  Doc
-objVar n1 n2 = n1 <> dot <> n2
+instanceVarAccess :: Doc -> Doc ->  Doc
+instanceVarAccess n1 n2 = n1 <> dot <> n2
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
@@ -341,13 +340,13 @@ objAccess v f = v <> f
 castObj :: Doc -> Doc -> Doc
 castObj t v = t <> parens v
 
--- Permanence --
+-- Attachment --
 
-static :: Doc
-static = text "static"
+classLevel :: Doc
+classLevel = text "static"
 
-dynamic :: Doc
-dynamic = empty
+instanceLevel :: Doc
+instanceLevel = empty
 
 -- Jumps --
 
@@ -432,7 +431,7 @@ valueList = hicat listSep' . map RC.value
 variableList :: (CommonRenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat listSep' . map RC.variable
 
-binderList :: (CommonRenderSym r) => [r (Binder r)] -> Doc
+binderList :: (CommonRenderSym r) => [r BinderD] -> Doc
 binderList = hicat listSep' . map RC.binderElim
 
 parameterList :: (CommonRenderSym r) => [r (Parameter r)] -> Doc

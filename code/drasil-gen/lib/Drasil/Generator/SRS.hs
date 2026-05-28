@@ -18,7 +18,7 @@ import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
-import Drasil.System (SmithEtAlSRS, refTable, systemdb, lbldCntnt)
+import Drasil.System (SmithEtAlSRS, refTable, systemdb)
 
 import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
@@ -30,7 +30,7 @@ genSmithEtAlSrs syst doc srsFileName =
     traceyLayout
   ]
   where
-    pinfo = piSys (syst ^. systemdb) (syst ^. refTable) Equational Engineering (syst ^. lbldCntnt)
+    pinfo = piSys (syst ^. systemdb) (syst ^. refTable) Equational Engineering
     srsLayout =
       directory [ps|SRS|] $
         map

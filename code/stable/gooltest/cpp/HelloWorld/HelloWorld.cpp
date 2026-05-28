@@ -25,6 +25,33 @@ int main(int argc, const char *argv[]) {
     // Initializing variables
     int a;
     int b = 5;
+    int arr[3] = {1, 2, 3};
+    std::cout << "Value of arr: ";
+    std::cout << "[";
+    bool first = true;
+    for (const int &elem : arr) {
+        if (!(first)) {
+            std::cout << ", ";
+        }
+        std::cout << elem;
+        first = false;
+    }
+    std::cout << "]" << std::endl;
+    int arr2[3];
+    arr2[0] = 4;
+    arr2[1] = 5;
+    arr2[2] = 6;
+    std::cout << "Value of arr2: ";
+    std::cout << "[";
+    bool first0 = true;
+    for (const int &elem0 : arr2) {
+        if (!(first0)) {
+            std::cout << ", ";
+        }
+        std::cout << elem0;
+        first0 = false;
+    }
+    std::cout << "]" << std::endl;
     vector<double> myOtherList{1.0, 1.5};
     int oneIndex = find(myOtherList.begin(), myOtherList.end(), 1.0) - myOtherList.begin();
     std::cout << oneIndex << std::endl;

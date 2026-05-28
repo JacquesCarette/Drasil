@@ -1,4 +1,8 @@
-module Drasil.DblPend.Concepts where
+module Drasil.DblPend.Concepts (
+  pendMotion, rod, concepts, firstRod, secondRod, firstObject,
+  secondObject, verticalPos, horizontalPos, horizontalVel, verticalVel,
+  horizontalForce, verticalForce, horizontalAccel, verticalAccel, arcLen
+)where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (first, second_, object)

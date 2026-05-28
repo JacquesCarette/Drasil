@@ -1,6 +1,6 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
-  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
   VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
   andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExpr', binExprNumDbl', typeBinExpr
@@ -9,11 +9,12 @@ module Drasil.Shared.LanguageRenderer.Constructors (
 import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
   TypeSym(..), TypeElim(..), ValueSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
+  ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.Shared.AST (Terminator(..), Binding(..), OpData, od, TypeData)
+import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
+  TypeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (VS)
@@ -44,17 +45,17 @@ mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
--- | Constructs a dynamic variable in a stateful context
+-- | Constructs an instance-level variable in a stateful context
 mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStateVar = varFromData Dynamic
+mkStateVar = varFromData InstanceLevel
 
--- | Constructs a dynamic variable in a non-stateful context
+-- | Constructs an instance-level variable in a non-stateful context
 mkVar :: (CommonRenderSym r) => String -> r TypeData -> Doc -> SVariable r
-mkVar n t = varFromData Dynamic n (toState t)
+mkVar n t = varFromData InstanceLevel n (toState t)
 
--- | Constructs a static variable in a stateful context
-mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar = varFromData Static
+-- | Constructs a classLevel variable in a stateful context
+mkClassVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkClassVar = varFromData ClassLevel
 
 -- Operators --
 
@@ -112,7 +113,7 @@ unExpr' u' v'= do
   v <- v'
   (join .: on2StateValues (mkUnExpr (if maybe False (< uOpPrec u) (valuePrec v) then unOpDocD else unOpDocD'))) u' v'
 
-mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) ->
+mkUnExpr :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> r OpData ->
   r (Value r) -> SValue r
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 
@@ -204,7 +205,7 @@ numType v1' v2' = do
       numericType _ _ = error "Numeric types required for numeric expression"
   toState $ numericType (getType t1) (getType t2)
 
-exprRender' :: (r (BinaryOp r) -> r (Value r) -> r (Value r) -> Doc) ->
+exprRender' :: (r OpData -> r (Value r) -> r (Value r) -> Doc) ->
   VSBinOp r -> SValue r -> SValue r -> VS Doc
 exprRender' f b' v1' v2' = do
   b <- b'
@@ -215,26 +216,26 @@ exprRender' f b' v1' v2' = do
 mkExpr :: (CommonRenderSym r) => Int -> r TypeData -> Doc -> SValue r
 mkExpr p t = valFromData (Just p) Nothing (toState t)
 
-binOpDocDRend :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) ->
+binOpDocDRend :: (CommonRenderSym r) => r OpData -> r (Value r) ->
   r (Value r) -> Doc
 binOpDocDRend b v1 v2 = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
 
 -- Adds parentheses around an expression passed as the left argument to a
 -- left-associative binary operator if the precedence of the expression is less
 -- than the precedence of the operator
-exprParensL :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> Doc
+exprParensL :: (CommonRenderSym r) => r OpData -> r (Value r) -> Doc
 exprParensL o v = (if maybe False (< bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Adds parentheses around an expression passed as the right argument to a
 -- left-associative binary operator if the precedence of the expression is less
 -- than or equal to the precedence of the operator
-exprParensR :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> Doc
+exprParensR :: (CommonRenderSym r) => r OpData -> r (Value r) -> Doc
 exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Renders binary expression, adding parentheses if needed
-binExprRender :: (CommonRenderSym r) =>  r (BinaryOp r) -> r (Value r) -> r (Value r)
+binExprRender :: (CommonRenderSym r) =>  r OpData -> r (Value r) -> r (Value r)
   -> Doc
 binExprRender b v1 v2 =
   let leftExpr = exprParensL b v1

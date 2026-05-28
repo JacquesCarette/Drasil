@@ -22,5 +22,5 @@ genWebsite syst doc =
     file [ps|index.css|] $ makeCSS doc
   ]
   where
-    printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering []
+    printSetting = piSys (syst ^. systemdb) (syst ^. webRefs) Equational Engineering
     pd = makeDocument printSetting doc

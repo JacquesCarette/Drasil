@@ -23,5 +23,5 @@ genJupyterLessonPlan plan nbDecl lsnFileName =
   file [ps|{lsnFileName}.ipynb|] $ P.genJupyterLessonPlan pd
   where
     nb = mkNb plan nbDecl S.forT
-    printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering []
+    printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
     pd = makeDocument printSetting nb

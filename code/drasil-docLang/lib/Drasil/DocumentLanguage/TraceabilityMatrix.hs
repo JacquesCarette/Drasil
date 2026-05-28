@@ -1,6 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | Defines functions to create traceability matrices in SRS documents.
-module Drasil.DocumentLanguage.TraceabilityMatrix where
+module Drasil.DocumentLanguage.TraceabilityMatrix (
+  generateTraceTableView, traceMHeader, layoutUIDs, traceMReferees,
+  traceMReferrers, traceMColumns, traceMIntro, traceView, traceViewCC
+) where
 
 -- General Haskell
 import Control.Lens ((^.))

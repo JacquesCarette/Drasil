@@ -2,9 +2,10 @@
 module Drasil.Meta.Analysis.SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
  DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..), DataTypeDeclaration(..)) where
 
-import Data.List
-import System.IO
-import System.Directory
+import Data.List ((\\), elemIndex, findIndex, isInfixOf, isPrefixOf,
+  isSuffixOf, nub)
+import System.IO (readFile')
+import System.Directory (setCurrentDirectory)
 import qualified Data.Text as T
 import qualified Data.List.Split as L
 import Data.Maybe (fromJust)

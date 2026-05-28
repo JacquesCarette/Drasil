@@ -3,9 +3,9 @@
 -- Meant to show instances of types within classes.
 module Drasil.Meta.Analysis.SourceCodeReaderCI (extractEntryData, EntryData(..)) where
 
-import Data.List
-import System.IO
-import System.Directory
+import Data.List ((\\), isInfixOf, isPrefixOf, isSuffixOf)
+import System.IO (readFile')
+import System.Directory (setCurrentDirectory)
 import qualified Data.Text as T
 
 import Drasil.Meta.Analysis.DirectoryController as DC (FileName)

@@ -231,7 +231,6 @@ instance StringStatement LoggerCode where
   stringListVals = undefined
   stringListLists = undefined
 
-
 instance FunctionSym LoggerCode where
   type Function LoggerCode = ()
 

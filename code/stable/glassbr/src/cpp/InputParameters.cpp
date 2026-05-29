@@ -7,13 +7,11 @@
 #include <math.h>
 #include <set>
 #include <string>
-#include <vector>
 
 using std::ifstream;
 using std::ofstream;
 using std::set;
 using std::string;
-using std::vector;
 
 InputParameters::InputParameters(string filename) {
     ofstream outfile;

@@ -1273,7 +1273,7 @@ instance Literal CppSrcCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet = litList
+  litSet = cppLitSet setType
   litList = CP.litArray braces
 
 instance MathConstant CppSrcCode where
@@ -1532,15 +1532,15 @@ instance OODeclStatement CppSrcCode where
   extObjDecNew = C.extObjDecNew
 
 instance IOStatement CppSrcCode where
-  print      = cppOut False Nothing printFunc
-  printLn    = cppOut True  Nothing printLnFunc
-  printStr   = cppOut False Nothing printFunc   . litString
-  printStrLn = cppOut True  Nothing printLnFunc . litString
+  print      = G.print False Nothing printFunc
+  printLn    = G.print True  Nothing printLnFunc
+  printStr   = G.print False Nothing printFunc   . litString
+  printStrLn = G.print True  Nothing printLnFunc . litString
 
-  printFile f      = cppOut False (Just f) (printFileFunc f)
-  printFileLn f    = cppOut True  (Just f) (printFileLnFunc f)
-  printFileStr f   = cppOut False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = cppOut True  (Just f) (printFileLnFunc f) . litString
+  printFile f      = G.print False (Just f) (printFileFunc f)
+  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
+  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ cppDiscardInput '\n'
@@ -2797,10 +2797,6 @@ cppPrint newLn pf vl = do
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
-
-cppOut :: Bool -> Maybe (SValue CppSrcCode) -> SValue CppSrcCode ->
-  SValue CppSrcCode -> MSStatement CppSrcCode
-cppOut newLn f printFn = G.print newLn f printFn
 
 cppThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)

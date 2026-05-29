@@ -28,3 +28,14 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Data.Formats.CSV
+
+tests:
+  drasil-data-formats-test:
+    source-dirs: test
+    main: Main.hs
+    dependencies:
+    - drasil-build-artifacts
+    - drasil-data-formats
+    - filepath
+    - tasty
+    - tasty-hunit

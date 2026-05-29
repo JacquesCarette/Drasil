@@ -39,6 +39,9 @@ cradle:
     - path: "drasil-data-formats/lib"
       component: "drasil-data-formats:lib"
 
+    - path: "drasil-data-formats/test"
+      component: "drasil-data-formats:test:drasil-data-formats-test"
+
     - path: "drasil-database/lib"
       component: "drasil-database:lib"
 

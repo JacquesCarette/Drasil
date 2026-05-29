@@ -19,14 +19,14 @@ import Text.PrettyPrint.HughesPJ (render)
 
 -- | Generates a statement that logs the given variable's value, if the user
 -- chose to turn on logging of variable assignments.
-maybeLog :: (SharedProg r) => SVariable LoggerCode -> SVariable r -> GenState [MSStatement r]
+maybeLog :: (SharedProg r) => SVariable (LoggerCode r) -> SVariable r -> GenState [MSStatement r]
 maybeLog vlog v = do
   g <- get
   sequence [loggedVar vlog v | LogVar `elem` g ^. logKind]
 
 -- | Generates a statement that logs the name of the given variable, its current
 -- value, and the current module name.
-loggedVar :: (SharedProg r) => SVariable LoggerCode -> SVariable r -> GenState (MSStatement r)
+loggedVar :: (SharedProg r) => SVariable (LoggerCode r) -> SVariable r -> GenState (MSStatement r)
 loggedVar vlog v = do
   g <- get
   return $ multi [

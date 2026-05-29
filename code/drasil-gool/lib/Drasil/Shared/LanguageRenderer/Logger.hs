@@ -34,26 +34,26 @@ import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
 import Data.List (intercalate)
 
-newtype LoggerCode a = LC {unLC :: a} deriving Functor
+newtype (SharedProg lang) => LoggerCode lang a = LC {unLC :: a} deriving Functor
 
-instance Applicative LoggerCode where
+instance Applicative (LoggerCode lang) where
   pure = LC
   (LC f) <*> (LC x) = LC (f x)
 
-instance Monad LoggerCode where
+instance Monad (LoggerCode lang) where
   LC x >>= f = f x
 
-instance SharedProg LoggerCode
-instance ProcProg LoggerCode
-instance OOProg LoggerCode
+instance SharedProg (LoggerCode lang)
+instance ProcProg (LoggerCode lang)
+instance OOProg (LoggerCode lang)
 
-instance VariableSym LoggerCode where
-  type Variable LoggerCode = Doc
+instance VariableSym (LoggerCode lang) where
+  type Variable (LoggerCode lang) = Doc
   var n _ = return $ return $ text n
   constant n _ = return $ return $ text n
   extVar l n _ = return $ return $ text l <> text "." <> text n
 
-instance OOVariableSym LoggerCode where
+instance OOVariableSym (LoggerCode lang) where
   classVar = var
   classConst = constant
   self = return $ return $ text "self"
@@ -72,11 +72,11 @@ instance OOVariableSym LoggerCode where
     vr' <- vr
     return $ return $ text "self." <> unLC vr'
 
-instance ValueSym LoggerCode where
-  type Value LoggerCode = Doc
+instance ValueSym (LoggerCode lang) where
+  type Value (LoggerCode lang) = Doc
   valueType = error "Not implemented"
 
-instance TypeSym LoggerCode where
+instance TypeSym (LoggerCode lang) where
   bool = typeFromData Boolean "Boolean"
   int = typeFromData Integer "Integer"
   float = typeFromData Float "Float"
@@ -107,13 +107,13 @@ instance TypeSym LoggerCode where
       ("(" ++ intercalate " × " (map typeString inTpsData) ++ ") → " ++ typeString outTpData)
   void = typeFromData Void "Void"
 
-instance OOTypeSym LoggerCode where
+instance OOTypeSym (LoggerCode lang) where
   obj nm = typeFromData (Object nm) ("Object<" ++ nm ++ ">")
 
-typeFromData :: CodeType -> String -> VSType LoggerCode
+typeFromData :: CodeType -> String -> VSType (LoggerCode lang)
 typeFromData tp str = return $ return $ td tp str (text str)
 
-instance Literal LoggerCode where
+instance Literal (LoggerCode lang) where
   litTrue = litString "True"
   litFalse = litString "False"
   litChar = return . return . P.char
@@ -131,65 +131,65 @@ instance Literal LoggerCode where
     let docs = map unLC vs'
     return $ return $ braces $ hcat $ punctuate (comma <> space) docs
 
-instance IndexTranslator LoggerCode where
+instance IndexTranslator (LoggerCode lang) where
   intToIndex = id
   indexToInt = id
 
-instance Array LoggerCode where
+instance Array (LoggerCode lang) where
   arrayElem idx' vr' = do
     idx <- idx'
     vr <- vr'
     return $ return $ unLC idx <> brackets (unLC vr)
 
 -- Not Implemented
-instance BlockSym LoggerCode where
-  type Block LoggerCode = ()
+instance BlockSym (LoggerCode lang) where
+  type Block (LoggerCode lang) = ()
   block = undefined
 
-instance BodySym LoggerCode where
-  type Body LoggerCode = ()
+instance BodySym (LoggerCode lang) where
+  type Body (LoggerCode lang) = ()
   body = undefined
   addComments = undefined
 
-instance StatementSym LoggerCode where
-  type Statement LoggerCode = ()
+instance StatementSym (LoggerCode lang) where
+  type Statement (LoggerCode lang) = ()
   valStmt = undefined
   emptyStmt = undefined
   multi = undefined
 
-instance Argument LoggerCode where
+instance Argument (LoggerCode lang) where
   pointerArg = undefined
 
-instance VectorType LoggerCode where
+instance VectorType (LoggerCode lang) where
   vecType = undefined
 
-instance VectorDecl LoggerCode where
+instance VectorDecl (LoggerCode lang) where
   vecDec = undefined
   vecDecDef = undefined
 
-instance ThunkSym LoggerCode where
-  type Thunk LoggerCode = ()
+instance ThunkSym (LoggerCode lang) where
+  type Thunk (LoggerCode lang) = ()
 
-instance VectorThunk LoggerCode where
+instance VectorThunk (LoggerCode lang) where
   vecThunk = undefined
 
-instance VectorExpression LoggerCode where
+instance VectorExpression (LoggerCode lang) where
   vecScale = undefined
   vecAdd = undefined
   vecIndex = undefined
   vecDot = undefined
 
-instance ThunkAssign LoggerCode where
+instance ThunkAssign (LoggerCode lang) where
   thunkAssign = undefined
 
-instance AssignStatement LoggerCode where
+instance AssignStatement (LoggerCode lang) where
   (&-=) = undefined
   (&+=) = undefined
   (&++) = undefined
   (&--) = undefined
   assign = undefined
 
-instance DeclStatement LoggerCode where
+instance DeclStatement (LoggerCode lang) where
   varDec = undefined
   varDecDef = undefined
   listDec = undefined
@@ -201,7 +201,7 @@ instance DeclStatement LoggerCode where
   constDecDef = undefined
   funcDecDef = undefined
 
-instance IOStatement LoggerCode where
+instance IOStatement (LoggerCode lang) where
   print = undefined
   printLn = undefined
   printStr = undefined
@@ -226,22 +226,22 @@ instance IOStatement LoggerCode where
   discardFileLine = undefined
   getFileInputAll = undefined
 
-instance StringStatement LoggerCode where
+instance StringStatement (LoggerCode lang) where
   stringSplit = undefined
   stringListVals = undefined
   stringListLists = undefined
 
-instance FunctionSym LoggerCode where
-  type Function LoggerCode = ()
+instance FunctionSym (LoggerCode lang) where
+  type Function (LoggerCode lang) = ()
 
-instance FuncAppStatement LoggerCode where
+instance FuncAppStatement (LoggerCode lang) where
   inOutCall = undefined
   extInOutCall = undefined
 
-instance CommentStatement LoggerCode where
+instance CommentStatement (LoggerCode lang) where
   comment = undefined
 
-instance ControlStatement LoggerCode where
+instance ControlStatement (LoggerCode lang) where
   break = undefined
   continue = undefined
   returnStmt = undefined
@@ -256,21 +256,21 @@ instance ControlStatement LoggerCode where
   tryCatch = undefined
   assert = undefined
 
-instance InternalList LoggerCode where
+instance InternalList (LoggerCode lang) where
   listSlice' = undefined
 
-instance MathConstant LoggerCode where
+instance MathConstant (LoggerCode lang) where
   pi = undefined
 
-instance VariableValue LoggerCode where
+instance VariableValue (LoggerCode lang) where
   valueOf = undefined
 
-instance CommandLineArgs LoggerCode where
+instance CommandLineArgs (LoggerCode lang) where
   arg = undefined
   argsList = undefined
   argExists = undefined
 
-instance NumericExpression LoggerCode where
+instance NumericExpression (LoggerCode lang) where
   (#~) = undefined
   (#/^) = undefined
   (#|) = undefined
@@ -295,12 +295,12 @@ instance NumericExpression LoggerCode where
   floor = undefined
   ceil = undefined
 
-instance BooleanExpression LoggerCode where
+instance BooleanExpression (LoggerCode lang) where
   (?!) = undefined
   (?&&) = undefined
   (?||) = undefined
 
-instance Comparison LoggerCode where
+instance Comparison (LoggerCode lang) where
   (?<) = undefined
   (?<=) = undefined
   (?>) = undefined
@@ -308,7 +308,7 @@ instance Comparison LoggerCode where
   (?==) = undefined
   (?!=) = undefined
 
-instance ValueExpression LoggerCode where
+instance ValueExpression (LoggerCode lang) where
   inlineIf = undefined
   funcAppMixedArgs = undefined
   extFuncAppMixedArgs = undefined
@@ -316,7 +316,7 @@ instance ValueExpression LoggerCode where
   lambda = undefined
   notNull = undefined
 
-instance List LoggerCode where
+instance List (LoggerCode lang) where
   listSize = undefined
   listAdd = undefined
   listAppend = undefined
@@ -324,32 +324,32 @@ instance List LoggerCode where
   listSet = undefined
   indexOf = undefined
 
-instance Set LoggerCode where
+instance Set (LoggerCode lang) where
   contains = undefined
   setAdd = undefined
   setRemove = undefined
   setUnion = undefined
 
-instance TypeElim LoggerCode where
+instance TypeElim (LoggerCode lang) where
   getType = undefined
   getTypeString = undefined
 
-instance VariableElim LoggerCode where
+instance VariableElim (LoggerCode lang) where
   variableName = undefined
   variableType = undefined
 
-instance ParameterSym LoggerCode where
-  type Parameter LoggerCode = ()
+instance ParameterSym (LoggerCode lang) where
+  type Parameter (LoggerCode lang) = ()
   param = undefined
   pointerParam = undefined
 
-instance VisibilitySym LoggerCode where
-  type Visibility LoggerCode = ()
+instance VisibilitySym (LoggerCode lang) where
+  type Visibility (LoggerCode lang) = ()
   private = undefined
   public = undefined
 
-instance MethodSym LoggerCode where
-  type Method LoggerCode = ()
+instance MethodSym (LoggerCode lang) where
+  type Method (LoggerCode lang) = ()
   docMain = undefined
   function = undefined
   mainFunction = undefined
@@ -357,36 +357,36 @@ instance MethodSym LoggerCode where
   inOutFunc = undefined
   docInOutFunc = undefined
 
-instance ScopeSym LoggerCode where
+instance ScopeSym (LoggerCode lang) where
   global = undefined
   local = undefined
   mainFn = undefined
 
-instance BinderSym LoggerCode where
+instance BinderSym (LoggerCode lang) where
   binder = undefined
 
 -- GOOL-specific
-instance GOOL.ProgramSym LoggerCode where
-  type Program LoggerCode = ()
+instance GOOL.ProgramSym (LoggerCode lang) where
+  type Program (LoggerCode lang) = ()
   prog = undefined
 
-instance GOOL.FileSym LoggerCode where
-  type File LoggerCode = ()
+instance GOOL.FileSym (LoggerCode lang) where
+  type File (LoggerCode lang) = ()
   fileDoc = undefined
   docMod = undefined
 
-instance GOOL.ModuleSym LoggerCode where
-  type Module LoggerCode = ()
+instance GOOL.ModuleSym (LoggerCode lang) where
+  type Module (LoggerCode lang) = ()
   buildModule = undefined
 
-instance ClassSym LoggerCode where
-  type Class LoggerCode = ()
+instance ClassSym (LoggerCode lang) where
+  type Class (LoggerCode lang) = ()
   buildClass = undefined
   extraClass = undefined
   implementingClass = undefined
   docClass = undefined
 
-instance OOMethodSym LoggerCode where
+instance OOMethodSym (LoggerCode lang) where
   method = undefined
   getMethod = undefined
   setMethod = undefined
@@ -394,62 +394,62 @@ instance OOMethodSym LoggerCode where
   inOutMethod = undefined
   docInOutMethod = undefined
 
-instance StateVarSym LoggerCode where
-  type StateVar LoggerCode = ()
+instance StateVarSym (LoggerCode lang) where
+  type StateVar (LoggerCode lang) = ()
   stateVar = undefined
   stateVarDef = undefined
   constVar = undefined
 
-instance AttachmentSym LoggerCode where
-  type Attachment LoggerCode = ()
+instance AttachmentSym (LoggerCode lang) where
+  type Attachment (LoggerCode lang) = ()
   classLevel = undefined
   instanceLevel = undefined
 
-instance OOVariableValue LoggerCode where
+instance OOVariableValue (LoggerCode lang) where
 
-instance OODeclStatement LoggerCode where
+instance OODeclStatement (LoggerCode lang) where
   objDecDef = undefined
   objDecNew = undefined
   extObjDecNew = undefined
 
-instance OOFuncAppStatement LoggerCode where
+instance OOFuncAppStatement (LoggerCode lang) where
   selfInOutCall = undefined
 
-instance OOValueExpression LoggerCode where
+instance OOValueExpression (LoggerCode lang) where
   selfFuncAppMixedArgs = undefined
   newObjMixedArgs = undefined
   extNewObjMixedArgs = undefined
   libNewObjMixedArgs = undefined
 
-instance OOValueSym LoggerCode
+instance OOValueSym (LoggerCode lang)
 
-instance InternalValueExp LoggerCode where
+instance InternalValueExp (LoggerCode lang) where
   objMethodCallMixedArgs' = undefined
 
-instance GetSet LoggerCode where
+instance GetSet (LoggerCode lang) where
   get = undefined
   set = undefined
 
-instance ObserverPattern LoggerCode where
+instance ObserverPattern (LoggerCode lang) where
   notifyObservers = undefined
 
-instance OOFunctionSym LoggerCode where
+instance OOFunctionSym (LoggerCode lang) where
   func = undefined
   objAccess = undefined
 
-instance StrategyPattern LoggerCode where
+instance StrategyPattern (LoggerCode lang) where
   runStrategy = undefined
 
 -- GProc-specific
-instance GProc.ProgramSym LoggerCode where
-  type Program LoggerCode = ()
+instance GProc.ProgramSym (LoggerCode lang) where
+  type Program (LoggerCode lang) = ()
   prog = undefined
 
-instance GProc.FileSym LoggerCode where
-  type File LoggerCode = ()
+instance GProc.FileSym (LoggerCode lang) where
+  type File (LoggerCode lang) = ()
   fileDoc = undefined
   docMod = undefined
 
-instance GProc.ModuleSym LoggerCode where
-  type Module LoggerCode = ()
+instance GProc.ModuleSym (LoggerCode lang) where
+  type Module (LoggerCode lang) = ()
   buildModule = undefined

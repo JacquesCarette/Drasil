@@ -20,7 +20,12 @@ import System.OsPath (OsPath)
 import Text.PrettyPrint qualified as PLegacy
 import Prelude hiding (writeFile)
 
-data WritePolicy = AppendNewline | ExactBytes
+-- | How should files be written?
+data WritePolicy
+  = -- | With a trailing newline?
+    AppendNewline
+  | -- | Or without one?
+    ExactBytes
 
 -- | Render a document and write it to a file (respecting the 'WritePolicy').
 class Renderable doc where

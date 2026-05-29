@@ -53,14 +53,17 @@ data FileTree where
   -- | A directory with optionally many nested artifacts with 'PathSegment'
   -- (base name).
   Directory :: M.Map PathSegment FileTree -> FileTree
-  -- | A file with content (of an unspecific type).
+  -- | A file with content (of an unspecific type) and a file writing policy.
   File :: (Renderable doc) => doc -> WritePolicy -> FileTree
 
--- | Create a file 'FileLayout'.
+-- | Create a file 'FileLayout'. When written, this file will have a /trailing
+-- newline always added/. Use 'exactFile' for building raw files. This is
+-- primarily for synthetic files/generated ones.
 file :: (Renderable doc) => PathSegment -> doc -> FileLayout
 file fp doc = FileLayout fp $ File doc AppendNewline
 {-# INLINE file #-}
 
+-- | Create a file 'FileLayout' containing the /exact/ file contents.
 exactFile :: (Renderable doc) => PathSegment -> doc -> FileLayout
 exactFile fp doc = FileLayout fp $ File doc ExactBytes
 {-# INLINE exactFile #-}

@@ -10,7 +10,7 @@ import System.OsPath (osp)
 import Text.PrettyPrint qualified as PLegacy (text)
 import Test.Tasty (TestTree, testGroup)
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, goldenTest,
+import Drasil.Build.Artifacts (FileLayout, directory, file, exactFile, goldenTest,
   goldenTestingGroup, ps)
 
 fileLayoutTests :: TestTree
@@ -47,7 +47,13 @@ renderToFileTests =
           goldenTest "String ends with newline" stringFile,
           goldenTest "T.Text ends with newline" textFile,
           goldenTest "B.ByteString ends with newline" strictByteStringFile,
-          goldenTest "LB.ByteString ends with newline" lazyByteStringFile
+          goldenTest "LB.ByteString ends with newline" lazyByteStringFile,
+          goldenTest "PLegacy.Doc exact bytes" plegacyDocFileExact,
+          goldenTest "PNew.Doc exact bytes" pnewDocFileExact,
+          goldenTest "String exact bytes" stringFileExact,
+          goldenTest "T.Text exact bytes" textFileExact,
+          goldenTest "B.ByteString exact bytes" strictByteStringFileExact,
+          goldenTest "LB.ByteString exact bytes" lazyByteStringFileExact
         ]
     ]
 
@@ -68,6 +74,24 @@ strictByteStringFile = file [ps|strict-bytestring.txt|] (B.pack "strict-bytestri
 
 lazyByteStringFile :: FileLayout
 lazyByteStringFile = file [ps|lazy-bytestring.txt|] (LB.pack "lazy-bytestring")
+
+plegacyDocFileExact :: FileLayout
+plegacyDocFileExact = exactFile [ps|exact-plegacy-doc.txt|] (PLegacy.text "plegacy-doc")
+
+pnewDocFileExact :: FileLayout
+pnewDocFileExact = exactFile [ps|exact-pnew-doc.txt|] (PNew.pretty "pnew-doc")
+
+stringFileExact :: FileLayout
+stringFileExact = exactFile [ps|exact-string.txt|] ("string" :: String)
+
+textFileExact :: FileLayout
+textFileExact = exactFile [ps|exact-text.txt|] (T.pack "text")
+
+strictByteStringFileExact :: FileLayout
+strictByteStringFileExact = exactFile [ps|exact-strict-bytestring.txt|] (B.pack "strict-bytestring")
+
+lazyByteStringFileExact :: FileLayout
+lazyByteStringFileExact = exactFile [ps|exact-lazy-bytestring.txt|] (LB.pack "lazy-bytestring")
 
 nestedFiles :: FileLayout
 nestedFiles =

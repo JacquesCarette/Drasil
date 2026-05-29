@@ -1514,17 +1514,14 @@ instance DeclStatement CppSrcCode where
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr scp = do
+    decBase <- arrayDecBase vr scp
     let sz' = litInt n :: SValue CppSrcCode
     sz <- zoom lensMStoVS sz'
-    v <- zoom lensMStoVS vr
-    modify $ useVarName $ variableName v
-    modify $ setVarScope (variableName v) (scopeData scp)
-    mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
-      parens (RC.value sz)
+    mkStmt $ decBase <> parens (RC.value sz)
   arrayDecDef vr scp vals = do
-    vdc <- arrayDec (toInteger $ length vals) vr scp
+    decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
-    mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
+    mkStmt $ decBase <+> braces (valueList vs)
   constDecDef = CP.constDecDef
   funcDecDef = cppFuncDecDef
 
@@ -2517,6 +2514,13 @@ iterBegin v = v $. cppIterBeginFunc (G.listInnerType $ onStateValue valueType v)
 
 iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
 iterEnd v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
+
+arrayDecBase :: SVariable CppSrcCode -> CppSrcCode ScopeData -> MS Doc
+arrayDecBase vr scp = do
+  vr' <- zoom lensMStoVS vr
+  modify $ useVarName $ variableName vr'
+  modify $ setVarScope (variableName vr') (scopeData scp)
+  return $ RC.type' (variableType vr') <+> RC.variable vr'
 
 -- convenience
 cppName, cppVersion :: String

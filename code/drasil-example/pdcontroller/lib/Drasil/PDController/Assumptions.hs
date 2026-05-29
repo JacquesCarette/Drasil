@@ -55,7 +55,7 @@ aStiffnessCoeff
   = cic "stiffnessCoeffSpring" aStiffnessCoeffDesc "Spring Stiffness Coefficient"
       assumpDom
 
-pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,
+pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc,
               aInitialValueDesc, aParallelEqDesc, apwrPlantTxFnxDesc,
               aUnfilteredDerivativeDesc, aMassDesc, aDampingCoeffDesc,
               aStiffnessCoeffDesc :: Sentence
@@ -83,10 +83,6 @@ aExtDisturbDesc
   = foldlSent
       [S "There are no external disturbances to the", phrase powerPlant,
          S "during the", phrase simulation]
-
-aManualTuningDesc
-  = foldlSent
-      [S "This model will be used for manual tuning" `S.ofThe` phrase pidC]
 
 aInitialValueDesc
   = foldlSent

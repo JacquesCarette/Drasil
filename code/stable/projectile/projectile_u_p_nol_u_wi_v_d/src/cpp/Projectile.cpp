@@ -14,12 +14,10 @@
 #include <limits>
 #include <math.h>
 #include <string>
-#include <vector>
 
 using std::ifstream;
 using std::ofstream;
 using std::string;
-using std::vector;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments

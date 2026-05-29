@@ -5,14 +5,12 @@
 */
 
 #include <string>
-#include <vector>
 
 #include "Calculations.hpp"
 #include "InputParameters.hpp"
 #include "OutputFormat.hpp"
 
 using std::string;
-using std::vector;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments

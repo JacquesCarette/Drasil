@@ -18,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Verbose Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../datafiles/pdcontroller/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/pdcontroller/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
   extLibs = [Math (makeODE [pidODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

@@ -1,3 +1,5 @@
+{-# LANGUAGE QuasiQuotes #-}
+
 module Drasil.Generator.Code (
   -- * Generators
   genCode, genCodeZoo,
@@ -11,9 +13,8 @@ import Data.Char (toLower)
 import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
-import System.Directory (getCurrentDirectory, setCurrentDirectory,
-  createDirectoryIfMissing)
 
+import Drasil.Build.Artifacts (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))
@@ -30,15 +31,12 @@ import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
 -- | Generate an ICO-style executable software artifact.
-genCode :: SmithEtAlSRS -> Choices -> IO ()
+genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
 genCode syst chs = do
   let spec = codeSpec syst chs
-  workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (spec ^. extInputsO)) (getSampleData chs)
-  createDirectoryIfMissing False "src"
-  setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP
       genLangCode Python = genCall Python unPC unPP
       genLangCode CSharp = genCall CSharp unCSC unCSP
@@ -49,18 +47,14 @@ genCode syst chs = do
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
       genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
-  mapM_ genLangCode (lang chs)
-  setCurrentDirectory workingDir
+      layout = directory [ps|src|] $ map genLangCode (lang chs)
+  return layout
 
--- | Generate a zoo of ICO-style executable softifact.
-genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
-genCodeZoo syst = mapM_ $ \chcs -> do
-  let dir = map toLower $ codedDirName (syst ^. programName) chcs
-  workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False dir
-  setCurrentDirectory dir
-  genCode syst chcs
-  setCurrentDirectory workingDir
+genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]
+genCodeZoo syst = mapM $ \chcs -> do
+    let dir = map toLower $ codedDirName (syst ^. programName) chcs
+    layout <- genCode syst chcs
+    return $ directory [ps|{dir}|] [layout]
 
 -- | Find name of folders created for a "zoo" of executable softifacts.
 --

@@ -4,11 +4,9 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (empty)
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.SoftwareDossier.SoftwareDossierSym ( SoftwareDossierSym(..),
-  sdsFromData)
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
 import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
 
 import Drasil.GOOL (swiftName, swiftVersion)
@@ -33,7 +31,7 @@ instance Monad SwiftProject where
   SP x >>= f = f x
 
 instance SoftwareDossierSym SwiftProject where
-  doxConfig _ _ _ = sdsFromData "" empty
+  doxConfig _ _ _ = Nothing
   readMe rmi = G.readMe rmi {
         langName = swiftName,
         langVersion = swiftVersion}

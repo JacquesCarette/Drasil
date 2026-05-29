@@ -17,7 +17,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [LogVar, LogFunc] "log.txt")
-    [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/glassbr/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
   defaultConfigFiles = configFp,
   extraMods = allMods

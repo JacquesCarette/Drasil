@@ -34,7 +34,7 @@ instance Monad CppProject where
   CPPP x >>= f = f x
 
 instance SoftwareDossierSym CppProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = cppName,

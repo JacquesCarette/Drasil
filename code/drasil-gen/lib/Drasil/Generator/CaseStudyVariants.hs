@@ -11,14 +11,11 @@ module Drasil.Generator.CaseStudyVariants
   )
 where
 
-import Control.Exception (bracket)
 import Control.Lens ((^.))
 import Control.Monad (void)
 import Data.Char (toLower)
 import Data.Maybe (maybeToList)
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
-import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
-  setCurrentDirectory)
 
 import Drasil.Build.Artifacts (OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
@@ -39,15 +36,6 @@ import Drasil.Generator.Website (genWebsite)
 -- | Internal: Set system locale encoding to UTF-8.
 setSystemLocale :: IO ()
 setSystemLocale = setLocaleEncoding utf8
-
--- | Internal: Run an action in a directory, restoring the original directory
--- afterwards.
-inDir :: FilePath -> IO () -> IO ()
-inDir path action = do
-  createDirectoryIfMissing False path
-  bracket getCurrentDirectory setCurrentDirectory $ const $ do
-    setCurrentDirectory path
-    action
 
 -- | Internal: The `build/` subfolder the Makefile expects each case study will
 -- build in (other than the website).
@@ -80,7 +68,8 @@ caseStudyMainSRSWCode :: SmithEtAlSRS -> SRSDecl -> String -> Choices -> IO ()
 caseStudyMainSRSWCode syst srsDecl srsFileName choices = do
   setSystemLocale
   (syst', exampleName) <- writeSmithEtAlSrs syst srsDecl srsFileName
-  inDir exampleName $ genCode syst' choices
+  codeLayout <- genCode syst' choices
+  writeFiles OverwriteAllowed localPath $ directory [ps|{exampleName}|] [codeLayout]
 
 -- | The same as 'caseStudyMainSRSWCode', except it also produces a
 -- JupyterNotebook-based lesson plan.
@@ -89,9 +78,10 @@ caseStudyMainSRSWCodeZooWLsnPlan :: SmithEtAlSRS -> SRSDecl -> String
 caseStudyMainSRSWCodeZooWLsnPlan syst srsDecl srsFileName choices plan nbDecl lsnFileName = do
   setSystemLocale
   (syst', exampleName) <- writeSmithEtAlSrs syst srsDecl srsFileName
-  inDir exampleName $ do
-    genCodeZoo syst' choices
-    writeFiles OverwriteAllowed localPath $ directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
+  zooLayouts <- genCodeZoo syst' choices
+  let lessonLayout = directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
+      layout = directory [ps|{exampleName}|] $ lessonLayout : zooLayouts
+  writeFiles OverwriteAllowed localPath layout
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).

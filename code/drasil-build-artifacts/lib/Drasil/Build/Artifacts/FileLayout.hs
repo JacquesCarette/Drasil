@@ -1,5 +1,5 @@
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Drasil.Build.Artifacts.FileLayout
   ( -- * File Layout
@@ -8,10 +8,11 @@ module Drasil.Build.Artifacts.FileLayout
 
     -- ** Constructors
     file,
+    exactFile,
     directory,
 
     -- ** Writing
-    OverwritePolicy(..),
+    OverwritePolicy (..),
     writeFiles,
   )
 where
@@ -20,7 +21,7 @@ import Data.Foldable qualified as F
 import Data.Map.Strict qualified as M
 import Data.Maybe (fromMaybe)
 import Drasil.Build.Artifacts.FilePath (PathSegment, toPath, (</>))
-import Drasil.Build.Artifacts.Render (Renderable (..))
+import Drasil.Build.Artifacts.Render (Renderable (..), WritePolicy (..))
 import System.Directory.OsPath (createDirectoryIfMissing, doesPathExist)
 import System.OsPath (OsPath, decodeUtf)
 
@@ -53,12 +54,16 @@ data FileTree where
   -- (base name).
   Directory :: M.Map PathSegment FileTree -> FileTree
   -- | A file with content (of an unspecific type).
-  File :: (Renderable doc) => doc -> FileTree
+  File :: (Renderable doc) => doc -> WritePolicy -> FileTree
 
 -- | Create a file 'FileLayout'.
 file :: (Renderable doc) => PathSegment -> doc -> FileLayout
-file fp = FileLayout fp . File
+file fp doc = FileLayout fp $ File doc AppendNewline
 {-# INLINE file #-}
+
+exactFile :: (Renderable doc) => PathSegment -> doc -> FileLayout
+exactFile fp doc = FileLayout fp $ File doc ExactBytes
+{-# INLINE exactFile #-}
 
 -- | Create a directory 'FileLayout', optionally containing any number of nested
 -- files.
@@ -101,8 +106,8 @@ writeFiles NeverOverwrite basePath layout = do
 -- Internal: `writeFiles` internal. It will create directories as needed and
 -- blindly overwrite any existing files as designated in the layout.
 writeFiles0 :: OsPath -> FileLayout -> IO ()
-writeFiles0 basePath (FileLayout fname (File content)) =
-  renderToFile (basePath </> fname) content
+writeFiles0 basePath (FileLayout fname (File content policy)) =
+  renderToFile (basePath </> fname) policy content
 writeFiles0 basePath (FileLayout dname (Directory children)) = do
   let nextPath = basePath </> dname
   createDirectoryIfMissing False nextPath

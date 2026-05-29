@@ -2,6 +2,7 @@
 
 module Spec.Drasil.Build.Artifacts.FileLayout (fileLayoutTests) where
 
+import Data.ByteString.Char8 qualified as B (pack)
 import Data.ByteString.Lazy.Char8 qualified as LB (pack)
 import Data.Text qualified as T (pack)
 import Prettyprinter qualified as PNew (Pretty (..))
@@ -45,7 +46,8 @@ renderToFileTests =
           goldenTest "PNew.Doc ends with newline" pnewDocFile,
           goldenTest "String ends with newline" stringFile,
           goldenTest "T.Text ends with newline" textFile,
-          goldenTest "LB.ByteString ends with newline" byteStringFile
+          goldenTest "B.ByteString ends with newline" strictByteStringFile,
+          goldenTest "LB.ByteString ends with newline" lazyByteStringFile
         ]
     ]
 
@@ -61,8 +63,11 @@ stringFile = file [ps|string.txt|] ("string" :: String)
 textFile :: FileLayout
 textFile = file [ps|text.txt|] (T.pack "text")
 
-byteStringFile :: FileLayout
-byteStringFile = file [ps|bytestring.txt|] (LB.pack "bytestring")
+strictByteStringFile :: FileLayout
+strictByteStringFile = file [ps|strict-bytestring.txt|] (B.pack "strict-bytestring")
+
+lazyByteStringFile :: FileLayout
+lazyByteStringFile = file [ps|lazy-bytestring.txt|] (LB.pack "lazy-bytestring")
 
 nestedFiles :: FileLayout
 nestedFiles =

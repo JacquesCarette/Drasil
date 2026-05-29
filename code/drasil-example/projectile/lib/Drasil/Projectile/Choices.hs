@@ -1,5 +1,5 @@
 {-# LANGUAGE TupleSections #-}
-module Drasil.Projectile.Choices where
+module Drasil.Projectile.Choices (choiceCombos) where
 
 import Language.Drasil (Space(..))
 import Language.Drasil.Code (Choices(..), Comments(..),

@@ -1,4 +1,14 @@
-module Drasil.PDController.Unitals where
+module Drasil.PDController.Unitals (
+  symbols, inputs, outputs, inputsUC, inpConstrained,
+  pidConstants,
+  symDampingCoeff, symStifnessCoeff,
+  dqdSetPointTD, dqdPropGain, dqdDerivGain, dqdSimTime, dqdStepTime,
+  dqdProcessErrorFD, dqdSetPointFD, dqdProcessVariableFD, dqdPropControlFD,
+  dqdDerivativeControlFD, dqdFreqDomain, dqdCtrlVarFD, dqdProcessVariableTD,
+  dqdInvLaplaceTransform, dqdLaplaceTransform, dqdFxnTDomain, dqdDampingCoeff,
+  dqdStiffnessCoeff,
+  odeRelTolConst, odeAbsTolConst, opProcessVariable
+) where
 
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE

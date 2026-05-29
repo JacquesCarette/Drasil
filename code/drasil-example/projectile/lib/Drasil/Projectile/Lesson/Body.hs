@@ -1,4 +1,4 @@
-module Drasil.Projectile.Lesson.Body where
+module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
 import Data.List (nub)
 import Language.Drasil hiding (Notebook)

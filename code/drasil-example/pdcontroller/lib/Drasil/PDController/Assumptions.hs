@@ -1,4 +1,7 @@
-module Drasil.PDController.Assumptions where
+module Drasil.PDController.Assumptions (
+  assumptions, aSP, aParallelEq, aDecoupled, aExtDisturb, apwrPlantTxFnx,
+  aMass, aDampingCoeff, aStiffnessCoeff, aInitialValue, aUnfilteredDerivative
+) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

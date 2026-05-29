@@ -1,5 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.PDController.TModel where
+module Drasil.PDController.TModel (
+  theoreticalModels,
+  tmLaplace, tmSOSystem, tmInvLaplace
+) where
 
 import Control.Lens ((^.))
 

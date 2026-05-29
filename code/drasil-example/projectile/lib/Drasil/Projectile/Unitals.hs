@@ -1,4 +1,8 @@
-module Drasil.Projectile.Unitals where
+module Drasil.Projectile.Unitals (
+  offset, flightDur, targPos, inputs, outputs, tol,
+  launAngle, launSpeed, landPos, projSpeed, projPos,
+  launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc
+) where
 
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE

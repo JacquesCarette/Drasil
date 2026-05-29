@@ -1,5 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.PDController.GenDefs where
+module Drasil.PDController.GenDefs (
+  genDefns, gdPowerPlant
+) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D

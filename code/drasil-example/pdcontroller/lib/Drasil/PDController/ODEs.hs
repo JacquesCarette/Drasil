@@ -1,4 +1,4 @@
-module Drasil.PDController.ODEs where
+module Drasil.PDController.ODEs (pidODEInfo) where
 
 import Language.Drasil (LiteralC(exactDbl), ExprC(sy))
 import Language.Drasil.Code (odeInfo', odeOptions, quantvar, ODEInfo,

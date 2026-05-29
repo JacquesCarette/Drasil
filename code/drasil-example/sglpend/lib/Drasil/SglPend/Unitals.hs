@@ -1,4 +1,7 @@
-module Drasil.SglPend.Unitals where
+module Drasil.SglPend.Unitals (
+  inputs, outputs, inConstraints, outConstraints, symbols, lenRod, initialPendAngle,
+  pendDisplacementAngle
+) where
 
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE

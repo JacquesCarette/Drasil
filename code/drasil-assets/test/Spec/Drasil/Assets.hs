@@ -1,6 +1,10 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+{- HLINT ignore "Unused LANGUAGE pragma" -}
+-- ^ HLint reports `TemplateHaskell` is unused, but we use it in
+-- `helloWorldFile` below.
+
 module Spec.Drasil.Assets (assetTests) where
 
 import Drasil.Assets

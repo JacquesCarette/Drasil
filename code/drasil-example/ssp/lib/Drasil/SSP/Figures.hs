@@ -1,4 +1,4 @@
-module Drasil.SSP.Figures where
+module Drasil.SSP.Figures (figForceActing) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Physics (force)

@@ -1,4 +1,4 @@
-module Drasil.SWHSNoPCM.Choices where
+module Drasil.SWHSNoPCM.Choices (choices) where
 
 import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),

@@ -1,4 +1,7 @@
-module Drasil.SSP.References where
+module Drasil.SSP.References (
+  citations,
+  morgenstern1965, chen2005, fredlund1977, karchewski2012, huston2008, li2010
+) where
 
 import Language.Drasil
 

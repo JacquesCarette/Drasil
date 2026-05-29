@@ -1,4 +1,8 @@
-module Drasil.SWHS.Requirements where
+module Drasil.SWHS.Requirements (
+  funcReqs, nfRequirements, verifyEnergyOutput, funcReqsTables,
+  calcValues, checkWithPhysConsts, findMassConstruct, inReqDesc,
+  oIDQConstruct, outputValues
+) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

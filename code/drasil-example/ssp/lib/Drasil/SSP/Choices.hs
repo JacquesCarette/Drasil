@@ -1,4 +1,4 @@
-module Drasil.SSP.Choices where
+module Drasil.SSP.Choices () where
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),

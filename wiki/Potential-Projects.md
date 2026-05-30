@@ -424,6 +424,8 @@ The issue can be reopened and assigned once the project is taken on.
 
 ## Generating More Document Types and Formats
 
+_Suggested by: [@balacij](https://github.com/balacij). If pursued, he will be more than happy to help! Especially for ePub/SSML/audiobook generation._
+
 **This project should only be pursued once [\#4989](https://github.com/JacquesCarette/Drasil/issues/4989) has been resolved.**
 
 At time of writing (Fri. May $29^{\text{th}}$, 2026), Drasil supports generating the following document types:

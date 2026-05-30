@@ -21,7 +21,7 @@ import Data.Foldable qualified as F
 import Data.Map.Strict qualified as M
 import Data.Maybe (fromMaybe)
 import Drasil.Build.Artifacts.FilePath (PathSegment, toPath, (</>))
-import Drasil.Build.Artifacts.Render (Renderable (..), WritePolicy (..))
+import Drasil.Build.Artifacts.WriteFiles (Writeable (..), WritePolicy (..))
 import System.Directory.OsPath (createDirectoryIfMissing, doesPathExist)
 import System.OsPath (OsPath, decodeUtf)
 
@@ -30,7 +30,7 @@ import System.OsPath (OsPath, decodeUtf)
 --
 --     1. Polymorphic over the representation of the file contents. For
 --        rendering, writeFiles requires the file content representation
---        satisfy 'Renderable'.
+--        satisfy 'Writeable'.
 --     2. Only permits writing files/directories relative to a base path
 --        provided. Does not permit `..`, `.`, nor `~` as directory names.
 --     3. System-local path separator is forbidden from use in directory names.
@@ -54,17 +54,17 @@ data FileTree where
   -- (base name).
   Directory :: M.Map PathSegment FileTree -> FileTree
   -- | A file with content (of an unspecific type) and a file writing policy.
-  File :: (Renderable doc) => doc -> WritePolicy -> FileTree
+  File :: (Writeable doc) => doc -> WritePolicy -> FileTree
 
 -- | Create a file 'FileLayout'. When written, this file will have a /trailing
 -- newline always added/. Use 'exactFile' for building raw files. This is
 -- primarily for synthetic files/generated ones.
-file :: (Renderable doc) => PathSegment -> doc -> FileLayout
+file :: (Writeable doc) => PathSegment -> doc -> FileLayout
 file fp doc = FileLayout fp $ File doc AppendNewline
 {-# INLINE file #-}
 
 -- | Create a file 'FileLayout' containing the /exact/ file contents.
-exactFile :: (Renderable doc) => PathSegment -> doc -> FileLayout
+exactFile :: (Writeable doc) => PathSegment -> doc -> FileLayout
 exactFile fp doc = FileLayout fp $ File doc ExactBytes
 {-# INLINE exactFile #-}
 
@@ -110,7 +110,7 @@ writeFiles NeverOverwrite basePath layout = do
 -- blindly overwrite any existing files as designated in the layout.
 writeFiles0 :: OsPath -> FileLayout -> IO ()
 writeFiles0 basePath (FileLayout fname (File content policy)) =
-  renderToFile (basePath </> fname) policy content
+  writeToFile (basePath </> fname) policy content
 writeFiles0 basePath (FileLayout dname (Directory children)) = do
   let nextPath = basePath </> dname
   createDirectoryIfMissing False nextPath

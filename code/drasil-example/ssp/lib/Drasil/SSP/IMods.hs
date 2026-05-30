@@ -1,5 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.IMods where
+module Drasil.SSP.IMods (
+  instModIntro, iMods, fctSfty, nrmShrFor, intsliceFs, crtSlpId
+) where
 
 import Prelude hiding (tan, product, sin, cos)
 

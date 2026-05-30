@@ -20,7 +20,7 @@ import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 import Data.Deriving.Internal (interleave)
 
-import Drasil.Build.Artifacts.Legacy (FileAndContents)
+import Drasil.Build.Artifacts (FileLayout)
 import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ), Space(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
@@ -475,7 +475,7 @@ genDataDesc = do
 
 -- | Generates a sample input file compatible with the generated program,
 -- if the user chose to.
-genSampleInput :: (Applicative r) => GenState (Maybe (r FileAndContents))
+genSampleInput :: (Applicative r) => GenState (Maybe (r FileLayout))
 genSampleInput = do
   g <- get
   dd <- genDataDesc

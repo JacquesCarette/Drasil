@@ -16,7 +16,6 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
 
 import Drasil.Shared.CodeType (CodeType)
 
-import Drasil.Build.Artifacts.Legacy (HasPathAndDoc(..))
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
@@ -62,10 +61,6 @@ data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
 
 fileD :: FilePath -> ModData -> FileData
 fileD = FileD
-
-instance HasPathAndDoc FileData Doc where
-  getPath = filePath
-  getDoc = modDoc . fileMod
 
 -- Replace a FileData's ModData with a new ModData
 updateFileMod :: ModData -> FileData -> FileData

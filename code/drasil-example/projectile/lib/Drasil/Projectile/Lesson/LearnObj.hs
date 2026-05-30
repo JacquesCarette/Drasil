@@ -1,4 +1,4 @@
-module Drasil.Projectile.Lesson.LearnObj where
+module Drasil.Projectile.Lesson.LearnObj (learnObjContext) where
 
 -- Drasil
 import Data.Drasil.Concepts.Physics (motion)

@@ -1,4 +1,4 @@
-module Drasil.HGHC.HeatTransfer where --whole file is used
+module Drasil.HGHC.HeatTransfer (module Drasil.HGHC.HeatTransfer) where --whole file is used
 
 import Data.List.NonEmpty (NonEmpty ((:|)))
 import qualified Data.List.NonEmpty as NE

@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GlassBR.Body where
+module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
@@ -20,7 +20,7 @@ import Drasil.System (mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
-  characteristic, company, condition, dataConst, datum,
+  characteristic, company, condition, datum,
   environment, input_, interface, model, physical, problem, product_,
   software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
@@ -28,9 +28,8 @@ import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structur
 import Data.Drasil.Concepts.Math (graph, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
-import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, portability, softwarecon)
-import Data.Drasil.Concepts.Theory as M (dataDefn, inModel, thModel)
+import Data.Drasil.Concepts.Software (softwarecon)
+import Data.Drasil.Concepts.Theory as M (dataDefn)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
@@ -168,17 +167,9 @@ termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. d
   ++
   map tAndDOnly (drop 2 loadTypes)]
 
-solChSpecSubsections :: [CI]
-solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
-
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [ConstQDef]
 auxiliaryConstants = assumptionConstants ++ specParamVals
-
---Used in "Non-Functional Requirements" Section--
-priorityNFReqs :: [ConceptChunk]
-priorityNFReqs = [correctness, verifiability, understandability,
-  reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
 

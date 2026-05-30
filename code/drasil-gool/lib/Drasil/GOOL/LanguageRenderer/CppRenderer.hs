@@ -22,8 +22,8 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), BinderSym(..), CommentStatement(..), ifNoElse,
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), BinderSym(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
@@ -71,14 +71,14 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
+  funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
+  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -112,8 +112,8 @@ import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName,
   setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, useVarName, genVarName,
-  genLoopIndex, setVarScope, getVarScope)
+  setCurrMainFunc, getCurrMainFunc, useVarName, genLoopIndex, setVarScope,
+  getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -122,8 +122,8 @@ import Control.Monad.State (State, modify)
 import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets,
-  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, braces,
+  parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -1144,7 +1144,7 @@ instance TypeSym CppSrcCode where
   setType t = do
     modify (addUsing cppSet . addLangImportVS cppSet)
     C.setType cppSet t
-  arrayType = cppArrayType
+  arrayType = listType
   listInnerType = G.listInnerType
   funcType = cppFuncType
   void = C.void
@@ -1274,7 +1274,7 @@ instance Literal CppSrcCode where
   litString = G.litString
   litArray = CP.litArray braces
   litSet = cppLitSet setType
-  litList _ _ = error $ "List literals not supported in " ++ cppName
+  litList = CP.litArray braces
 
 instance MathConstant CppSrcCode where
   pi = do
@@ -1288,7 +1288,7 @@ instance OOVariableValue CppSrcCode
 
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
-  argsList = G.argsList argv
+  argsList = mkStateVal argvType (text argv)
   argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression CppSrcCode where
@@ -1502,6 +1502,7 @@ instance AssignStatement CppSrcCode where
   (&--) = C.decrement1
 
 instance DeclStatement CppSrcCode where
+  -- TODO [Brandon Bosman, 05/29/2026]: consider re-enabling `varDec` for arrays
   varDec vr scp = do
     vr' <- zoom lensMStoVS vr
     let tp = (cType . unCPPSC . variableType) vr'
@@ -1514,17 +1515,14 @@ instance DeclStatement CppSrcCode where
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr scp = do
+    decBase <- arrayDecBase vr scp
     let sz' = litInt n :: SValue CppSrcCode
     sz <- zoom lensMStoVS sz'
-    v <- zoom lensMStoVS vr
-    modify $ useVarName $ variableName v
-    modify $ setVarScope (variableName v) (scopeData scp)
-    mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
-      brackets (RC.value sz)
+    mkStmt $ decBase <> parens (RC.value sz)
   arrayDecDef vr scp vals = do
-    vdc <- arrayDec (toInteger $ length vals) vr scp
+    decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
-    mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
+    mkStmt $ decBase <+> braces (valueList vs)
   constDecDef = CP.constDecDef
   funcDecDef = cppFuncDecDef
 
@@ -1534,15 +1532,15 @@ instance OODeclStatement CppSrcCode where
   extObjDecNew = C.extObjDecNew
 
 instance IOStatement CppSrcCode where
-  print      = cppOut False Nothing printFunc
-  printLn    = cppOut True  Nothing printLnFunc
-  printStr   = cppOut False Nothing printFunc   . litString
-  printStrLn = cppOut True  Nothing printLnFunc . litString
+  print      = G.print False Nothing printFunc
+  printLn    = G.print True  Nothing printLnFunc
+  printStr   = G.print False Nothing printFunc   . litString
+  printStrLn = G.print True  Nothing printLnFunc . litString
 
-  printFile f      = cppOut False (Just f) (printFileFunc f)
-  printFileLn f    = cppOut True  (Just f) (printFileLnFunc f)
-  printFileStr f   = cppOut False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = cppOut True  (Just f) (printFileLnFunc f) . litString
+  printFile f      = G.print False (Just f) (printFileFunc f)
+  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
+  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ cppDiscardInput '\n'
@@ -1886,7 +1884,7 @@ instance TypeSym CppHdrCode where
   setType t = do
     modify (addHeaderUsing cppSet . addHeaderLangImport cppSet)
     C.setType cppSet t
-  arrayType = cppArrayType
+  arrayType = listType
   listInnerType = G.listInnerType
   funcType = CS.funcType
   void = C.void
@@ -1998,9 +1996,9 @@ instance Literal CppHdrCode where
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray braces
+  litArray = litList
   litSet = cppLitSet setType
-  litList _ _ = error $ "List literals not supported in " ++ cppName
+  litList = CP.litArray braces
 
 instance MathConstant CppHdrCode where
   pi = do
@@ -2014,7 +2012,7 @@ instance OOVariableValue CppHdrCode
 
 instance CommandLineArgs CppHdrCode where
   arg n = G.arg (litInt $ n+1) argsList
-  argsList = G.argsList argv
+  argsList = mkStateVal argvType (text argv)
   argExists _ = mkStateVal void empty
 
 instance NumericExpression CppHdrCode where
@@ -2518,6 +2516,13 @@ iterBegin v = v $. cppIterBeginFunc (G.listInnerType $ onStateValue valueType v)
 iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
 iterEnd v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
 
+arrayDecBase :: SVariable CppSrcCode -> CppSrcCode ScopeData -> MS Doc
+arrayDecBase vr scp = do
+  vr' <- zoom lensMStoVS vr
+  modify $ useVarName $ variableName vr'
+  modify $ setVarScope (variableName vr') (scopeData scp)
+  return $ RC.type' (variableType vr') <+> RC.variable vr'
+
 -- convenience
 cppName, cppVersion :: String
 cppName = "C++"
@@ -2715,15 +2720,13 @@ cppInfileType = do
   t <- typeFromData InFile cppInfile (text cppInfile)
   addFStreamImport t
 
+argvType :: (RenderType r) => VSType r
+argvType = typeFromData (Array String) "const char**" (text "const char**")
+
 cppOutfileType :: (CommonRenderSym r) => VSType r
 cppOutfileType = do
   t <- typeFromData OutFile cppOutfile (text cppOutfile)
   addFStreamImport t
-
-cppArrayType :: (CommonRenderSym r) => VSType r -> VSType r
-cppArrayType t' = do
-  t <- t'
-  typeFromData (Array (getType t)) (getTypeString t) (RC.type' t)
 
 cppIterType :: (CommonRenderSym r) => VSType r -> VSType r
 cppIterType t' = do
@@ -2797,23 +2800,6 @@ cppPrint newLn pf vl = do
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
-
-cppOut :: Bool -> Maybe (SValue CppSrcCode) -> SValue CppSrcCode ->
-  SValue CppSrcCode -> MSStatement CppSrcCode
-cppOut newLn f printFn v = zoom lensMStoVS v >>= cppOut' . getType . valueType
-  where cppOut' (Array _) = do
-          firstVar <- genVarName [] "first"
-          elemVar <- genVarName [] "elem"
-          let innerType = listInnerType (onStateValue valueType v)
-              printMaybeNewLn = if newLn then printLn else print
-          multi [printStr "[",
-            varDecDef (var firstVar bool) local litTrue,
-            forEach (var elemVar innerType) v (body [block[
-              ifNoElse [((valueOf (var firstVar bool) ?!), oneLiner $ printStr ", ")],
-              print $ valueOf (var elemVar innerType),
-              var firstVar bool &= litFalse]]),
-              printMaybeNewLn $ litString "]"]
-        cppOut' _ = G.print newLn f printFn v
 
 cppThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)

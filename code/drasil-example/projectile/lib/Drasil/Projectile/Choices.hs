@@ -1,5 +1,5 @@
 {-# LANGUAGE TupleSections #-}
-module Drasil.Projectile.Choices where
+module Drasil.Projectile.Choices (choiceCombos) where
 
 import Language.Drasil (Space(..))
 import Language.Drasil.Code (Choices(..), Comments(..),
@@ -32,7 +32,7 @@ choiceCombos = [
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
-      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+      [SampleInput "../datafiles/projectile/sampleInput.txt", ReadME],
     folderVal = 5
   },
   baseChoices {
@@ -41,7 +41,7 @@ choiceCombos = [
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
-      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+      [SampleInput "../datafiles/projectile/sampleInput.txt", ReadME],
     folderVal = 5
   }]
 
@@ -57,7 +57,7 @@ baseChoices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/projectile/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   folderVal = 5
 }

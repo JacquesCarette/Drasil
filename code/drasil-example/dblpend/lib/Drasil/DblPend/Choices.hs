@@ -18,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../datafiles/dblpend/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/dblpend/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   extLibs = [Math (makeODE [dblPenODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

@@ -1,4 +1,4 @@
-module Drasil.Projectile.References where
+module Drasil.Projectile.References (citations) where
 
 import Language.Drasil
 import Data.Drasil.Citations (accelerationWiki, velocityWiki,

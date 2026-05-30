@@ -1,4 +1,4 @@
-module Drasil.PDController.Changes where
+module Drasil.PDController.Changes (likelyChgs) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

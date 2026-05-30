@@ -1,4 +1,4 @@
-module Drasil.SWHS.DataDefs where --exports all of it
+module Drasil.SWHS.DataDefs (module Drasil.SWHS.DataDefs) where --exports all of it
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

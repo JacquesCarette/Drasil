@@ -1,8 +1,10 @@
 {-# LANGUAGE FlexibleInstances #-}
+
 {- HLINT ignore "Use writeFile" -}
 
 module Drasil.Build.Artifacts.Render
   ( Renderable (..),
+    WritePolicy (..),
   )
 where
 
@@ -13,26 +15,36 @@ import Data.Text.IO qualified as TIO
 import Prettyprinter qualified as PNew
 import Prettyprinter.Render.Text (renderIO)
 import System.File.OsPath (withFile)
-import System.IO (Handle, IOMode (..), hPutStrLn)
+import System.IO (Handle, IOMode (..), hPutStr, hPutStrLn)
 import System.OsPath (OsPath)
 import Text.PrettyPrint qualified as PLegacy
 import Prelude hiding (writeFile)
 
--- | Render a document and write it to a file (with a trailing newline always
--- added).
+-- | How should files be written?
+data WritePolicy
+  = -- | With a trailing newline?
+    AppendNewline
+  | -- | Or without one?
+    ExactBytes
+
+-- | Render a document and write it to a file (respecting the 'WritePolicy').
 class Renderable doc where
-  renderToFile :: OsPath -> doc -> IO ()
+  renderToFile :: OsPath -> WritePolicy -> doc -> IO ()
 
 instance Renderable PLegacy.Doc where
   -- Does conversion to `String` and then does plain `String -> IO ()` writing.
-  renderToFile fp = writeFileStr fp . PLegacy.render
+  renderToFile fp pol = writeFileStr fp pol . PLegacy.render
   {-# INLINE renderToFile #-}
 
 instance Renderable (PNew.Doc ann) where
   -- `renderIO` skips intermediate representations before writing to disk:
   -- <https://hackage-content.haskell.org/package/prettyprinter-1.7.2/docs/Prettyprinter-Render-Text.html#v:renderIO>
-  renderToFile fp d = writeFile fp $ \h ->
-    renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions $ d PNew.<> PNew.line)
+  renderToFile fp pol d = writeFile fp $ \h ->
+    renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions d')
+    where
+      d' = case pol of
+        AppendNewline -> d PNew.<> PNew.line
+        ExactBytes -> d
   {-# INLINE renderToFile #-}
 
 instance Renderable String where
@@ -40,21 +52,36 @@ instance Renderable String where
   {-# INLINE renderToFile #-}
 
 instance Renderable T.Text where
-  renderToFile fp t = writeFile fp (`TIO.hPutStrLn` t)
+  renderToFile fp pol t = writeFile fp (`write` t)
+    where
+      write = case pol of
+        AppendNewline -> TIO.hPutStrLn
+        ExactBytes -> TIO.hPutStr
   {-# INLINE renderToFile #-}
 
 instance Renderable B.ByteString where
-  renderToFile fp bs = writeFile fp (`B.hPutStrLn` bs)
+  renderToFile fp pol bs = writeFile fp (`write` bs)
+    where
+      write = case pol of
+        AppendNewline -> B.hPutStrLn
+        ExactBytes -> B.hPut
   {-# INLINE renderToFile #-}
 
 instance Renderable LB.ByteString where
-  renderToFile fp bs = writeFile fp (`LB.hPutStrLn` bs)
+  renderToFile fp pol bs = writeFile fp (`write` bs)
+    where
+      write = case pol of
+        AppendNewline -> LB.hPutStrLn
+        ExactBytes -> LB.hPut
   {-# INLINE renderToFile #-}
 
--- | Write a 'String' to the given 'OsPath' (with a trailing newline always
--- added).
-writeFileStr :: OsPath -> String -> IO ()
-writeFileStr rp s = withFile rp WriteMode (`hPutStrLn` s)
+-- | Write a 'String' to the given 'OsPath' (respecting the write policy).
+writeFileStr :: OsPath -> WritePolicy -> String -> IO ()
+writeFileStr rp pol s = withFile rp WriteMode (`write` s)
+  where
+    write = case pol of
+      AppendNewline -> hPutStrLn
+      ExactBytes -> hPutStr
 {-# INLINE writeFileStr #-}
 
 -- | Write to a given 'OsPath' with arbitrary method.

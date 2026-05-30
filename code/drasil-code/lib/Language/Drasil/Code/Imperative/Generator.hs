@@ -1,4 +1,4 @@
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE PatternSynonyms, QuasiQuotes #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
@@ -8,16 +8,14 @@ import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
 import qualified Data.Set as Set (fromList)
 import Data.Map (fromList, member, keys, elems)
+import qualified Data.Map as M
 import Data.Maybe (maybeToList, catMaybes)
-import Data.Foldable (traverse_)
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
+import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
-import Drasil.Build.Artifacts.Legacy (FileAndContents(..), fileAndContents,
-  hasPathAndDocToFileAndContents, createDirIfMissing, createFile)
+import Drasil.Build.Artifacts (FileLayout, file, directory, ps)
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
-  ProgData(..), initialState)
+  ProgData(..), initialState, FileData(..), modDoc)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
@@ -124,22 +122,47 @@ generator l dt sd chs cs = let
 generateCode :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
   (packRepr PackageData -> PackageData) ->
-  DrasilState -> IO ()
-generateCode l unReprProg unReprPack g = do
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False (getDir l)
-  setCurrentDirectory (getDir l)
-  let (pckg, ds) = runState (genPackage unReprProg) g
+  DrasilState -> FileLayout
+generateCode l unReprProg unReprPack g =
+  let dirName = getDir l
+      (pckg, ds) = runState (genPackage unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg
-      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+      designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
-      initFile = [fileAndContents "__init__.py" mempty | l == Python]
-      dossier = progDossier ++ designLogFile ++ initFile
-      packageFiles = map
-        hasPathAndDocToFileAndContents (progMods prog)
-        ++ dossier
-  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
-  setCurrentDirectory workingDir
+      initFile = [file [ps|__init__.py|] empty | l == Python]
+      packageFiles = toFileLayout (progMods prog) ++ progDossier
+        ++ designLogFile ++ initFile
+  in
+    directory
+      [ps|{dirName}|]
+      packageFiles
+
+-- | Internal: Converts a list of `FileData` to a `FileLayout`.
+toFileLayout :: [FileData] -> [FileLayout]
+toFileLayout fc =
+  let
+    root = foldl (\m f -> insertFile (filePath f, modDoc $ fileMod f) m) M.empty fc
+
+    entryToLayout (n, File d) = file [ps|{n}|] d
+    entryToLayout (n, Folder m) = directory [ps|{n}|] $ map entryToLayout $ M.assocs m
+  in
+    map entryToLayout (M.assocs root)
+
+data Entry a = File a | Folder (M.Map String (Entry a))
+  deriving (Show)
+
+insertFile :: (String, a) -> M.Map String (Entry a) -> M.Map String (Entry a)
+insertFile (p, d) m =
+  if '/' `elem` p
+    then
+      let (fname, rest) = break (== '/') p
+          folderM = case M.findWithDefault (Folder M.empty) fname m of
+                      File _   -> dupError fname
+                      Folder f -> f
+      in M.insert fname (Folder $ insertFile (drop 1 rest, d) folderM) m
+    else M.insertWith (\_ -> dupError p) p (File d) m
+  where
+    dupError fname = error $ "A file or folder with name '" ++ fname ++ "' already exists."
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
 -- configuration file (all subject to the user's choices).
@@ -241,21 +264,19 @@ genModules = do
 generateCodeProc :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
   (packRepr PackageData -> PackageData) ->
-  DrasilState -> IO ()
-generateCodeProc l unReprProg unReprPack g = do
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False (getDir l)
-  setCurrentDirectory (getDir l)
-  let (pckg, ds) = runState (genPackageProc unReprProg) g
+  DrasilState -> FileLayout
+generateCodeProc l unReprProg unReprPack g =
+  let dirName = getDir l
+      (pckg, ds) = runState (genPackageProc unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg
-      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+      designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
-      dossier =  progDossier ++ designLogFile
-      packageFiles = map
-        hasPathAndDocToFileAndContents (progMods prog)
-        ++ dossier
-  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
-  setCurrentDirectory workingDir
+      packageFiles = toFileLayout (progMods prog) ++ progDossier
+        ++ designLogFile
+  in
+    directory
+      [ps|{dirName}|]
+      packageFiles
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
 -- configuration file (all subject to the user's choices).

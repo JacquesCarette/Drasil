@@ -18,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../datafiles/swhsnopcm/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/swhsnopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

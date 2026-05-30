@@ -34,7 +34,7 @@ instance Monad CSharpProject where
   CSP x >>= f = f x
 
 instance SoftwareDossierSym CSharpProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = csName,

@@ -6,6 +6,7 @@ module Drasil.Build.Artifacts.Render
   )
 where
 
+import Data.ByteString.Char8 qualified as B
 import Data.ByteString.Lazy.Char8 qualified as LB
 import Data.Text qualified as T
 import Data.Text.IO qualified as TIO
@@ -40,6 +41,10 @@ instance Renderable String where
 
 instance Renderable T.Text where
   renderToFile fp t = writeFile fp (`TIO.hPutStrLn` t)
+  {-# INLINE renderToFile #-}
+
+instance Renderable B.ByteString where
+  renderToFile fp bs = writeFile fp (`B.hPutStrLn` bs)
   {-# INLINE renderToFile #-}
 
 instance Renderable LB.ByteString where

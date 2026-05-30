@@ -49,6 +49,7 @@ Lastly, there may be other potential projects hiding in [Cold Issues](Cold-Issue
 21. [Generate Graphs in Drasil](#generate-graphs-in-drasil)
 22. [Visualizing our Case Studies](#visualizing-our-case-studies)
 23. [Investigate / Add Hackage Dimensional Package](#investigate--add-hackage-dimensional-package)
+24. [Generating More Document Types and Formats](#generating-more-document-types-and-formats)
 
 </details>
 
@@ -420,3 +421,18 @@ Currently, Drasil has a home-grown 'units' handling module. This project would i
 * Add interface
 
 The issue can be reopened and assigned once the project is taken on.
+
+## Generating More Document Types and Formats
+
+**This project should only be pursued once [\#4989](https://github.com/JacquesCarette/Drasil/issues/4989) has been resolved.**
+
+At time of writing (Fri. May $29^{\text{th}}$, 2026), Drasil supports generating the following document types:
+
+* LaTeX
+* HTML
+* Markdown
+* Jupyter notebooks
+
+Drasil supports generating these through the _generic document language_ that [`drasil-printers`](https://github.com/JacquesCarette/Drasil/blob/cbcf885d07f6dd787eed724b6515e29409375188/code/drasil-printers/lib/Language/Drasil/Printing/LayoutObj.hs#L17-L18) contains (a [similar](https://github.com/JacquesCarette/Drasil/blob/cbcf885d07f6dd787eed724b6515e29409375188/code/drasil-printers/lib/Language/Drasil/Printing/LayoutObj.hs#L46-L59) construction to [`pandoc`](https://hackage-content.haskell.org/package/pandoc-types-1.23.1.1/docs/Text-Pandoc-Definition.html#t:Block)). If/when [\#4989](https://github.com/JacquesCarette/Drasil/issues/4989) is resolved, you should see that ticket for the most relevant information about how documents are generated with Drasil.
+
+The goal of this project is to be creative and generate more kinds of document types and formats. For example, generating: [ePub](https://en.wikipedia.org/wiki/EPUB)s, [Typst](https://en.wikipedia.org/wiki/Typst), and [SSML](https://en.wikipedia.org/wiki/Speech_Synthesis_Markup_Language). Why are these examples worth looking into? ePubs can be used to generate documents (e.g., books, papers, SRS documents even) readable on [eReader](https://en.wikipedia.org/wiki/E-reader)s, Typst is a modern alternative to LaTeX (a showcase of reusable knowledge with different implications), and SSML can be used for generating speech (allowing us to generate audiobooks, for example).

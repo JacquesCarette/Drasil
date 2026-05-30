@@ -22,6 +22,36 @@ The SE4SC repo (not public) provides some additional brainstormed ideas.
 
 Lastly, there may be other potential projects hiding in [Cold Issues](Cold-Issues). Feel free to take a look there!
 
+<details>
+
+<summary><b>Table of Contents</b></sumary>
+
+1. [Incorporate Pandoc into DocLang](#incorporate-pandoc-into-doclang)
+2. [Scientific Knowledge Ontology](#scientific-knowledge-ontology)
+3. [Scientific Project Related Knowledge Ontology](#scientific-project-related-knowledge-ontology)
+4. [Generation of test cases based on data constraints and properties of a correct solution](#generation-of-test-cases-based-on-data-constraints-and-properties-of-a-correct-solution)
+5. [Add 3D Model of the Aorta to Drasil](#add-3d-model-of-the-aorta-to-drasil)
+6. [Generate Jupyter notebooks - probably starting with generating simple physics experiments](#generate-jupyter-notebooks---probably-starting-with-generating-simple-physics-experiments)
+7. [Jupyter Notebooks: Appropriate Use, Refactoring, and Building an Example](#jupyter-notebooks-appropriate-use-refactoring-and-building-an-example)
+8. [Automatic Check for Completeness, Correctness, and Consistency](#automatic-check-for-completeness-correctness-and-consistency)
+9. [Complete and Fix Incomplete Case Studies](#complete-and-fix-incomplete-case-studies)
+10. [Add New Case Studies to Drasil](#add-new-case-studies-to-drasil)
+11. [Correct-by-Construction READMEs](#correct-by-construction-readmes)
+12. [Add A Recipe to Drasil for Generating Papers](#add-a-recipe-to-drasil-for-generating-papers)
+13. [Generate the Drasil Wiki](#generate-the-drasil-wiki)
+14. [Add Support for External Libraries to Drasil](#add-support-for-external-libraries-to-drasil)
+15. [A Sound Type System for Physical  Quantities, Units, and Measurements](#a-sound-type-system-for-physical--quantities-units-and-measurements)
+16. [A domain knowledge and recipes for verifying a cruise control system using Simulink](#a-domain-knowledge-and-recipes-for-verifying-a-cruise-control-system-using-simulink)
+17. [Drasil in Drasil](#drasil-in-drasil)
+18. [Check Drasil and Generated Projects with Checklists](#check-drasil-and-generated-projects-with-checklists)
+19. [Develop a Strategy for Working with Shared External Libraries](#develop-a-strategy-for-working-with-shared-external-libraries)
+20. [Improve Automation of Formatting Long Equations in LaTeX Generated pdfs](#improve-automation-of-formatting-long-equations-in-latex-generated-pdfs)
+21. [Generate Graphs in Drasil](#generate-graphs-in-drasil)
+22. [Visualizing our Case Studies](#visualizing-our-case-studies)
+23. [Investigate / Add Hackage Dimensional Package](#investigate--add-hackage-dimensional-package)
+
+</details>
+
 ## Incorporate Pandoc into DocLang
 
 Pandoc is a Haskell library for converting from one markup format to another.

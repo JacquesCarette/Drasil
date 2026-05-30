@@ -1,4 +1,7 @@
-module Drasil.SWHS.References where
+module Drasil.SWHS.References (
+  citations, uriReferences, consThemESrc, sensHtESrc, latHtESrc,
+  bueche1986, lightstone2012, incroperaEtAl2007
+) where
 
 import Language.Drasil
 

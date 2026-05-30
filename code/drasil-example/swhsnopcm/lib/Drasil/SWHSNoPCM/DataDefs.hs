@@ -1,4 +1,6 @@
-module Drasil.SWHSNoPCM.DataDefs where --exports all of it
+module Drasil.SWHSNoPCM.DataDefs (
+  qDefs, dataDefs, waterVolumeQD, waterVolumeEqn, waterVolumeNotes, waterVolume
+) where --exports all of it
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddENoRefs)

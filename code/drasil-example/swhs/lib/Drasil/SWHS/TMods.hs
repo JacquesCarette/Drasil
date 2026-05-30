@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
-  nwtnCooling, sensHtE, sensHtETemplate, tMods, consThemESrc) where
+  nwtnCooling, sensHtE, sensHtETemplate, tMods) where
 
 import Control.Lens ((^.))
 import qualified Data.List.NonEmpty as NE

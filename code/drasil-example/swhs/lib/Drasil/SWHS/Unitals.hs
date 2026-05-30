@@ -1,4 +1,4 @@
-module Drasil.SWHS.Unitals where -- all of this file is exported
+module Drasil.SWHS.Unitals (module Drasil.SWHS.Unitals) where -- all of this file is exported
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S

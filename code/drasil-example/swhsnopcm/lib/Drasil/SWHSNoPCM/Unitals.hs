@@ -1,4 +1,6 @@
-module Drasil.SWHSNoPCM.Unitals where
+module Drasil.SWHSNoPCM.Unitals (
+  inputs, constrained, specParamValList, outputs
+) where
 
 import Language.Drasil
 

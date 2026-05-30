@@ -1,4 +1,4 @@
-module Drasil.PDController.Choices where
+module Drasil.PDController.Choices (choices) where
 
 import Language.Drasil.Code (SoftwareDossierFile(..), Choices(..), Comments(..),
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..),

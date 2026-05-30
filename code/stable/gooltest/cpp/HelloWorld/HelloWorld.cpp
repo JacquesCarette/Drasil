@@ -25,31 +25,29 @@ int main(int argc, const char *argv[]) {
     // Initializing variables
     int a;
     int b = 5;
-    int arr[3] = {1, 2, 3};
+    vector<int> arr {1, 2, 3};
     std::cout << "Value of arr: ";
     std::cout << "[";
-    bool first = true;
-    for (const int &elem : arr) {
-        if (!(first)) {
-            std::cout << ", ";
-        }
-        std::cout << elem;
-        first = false;
+    for (int list_i1 = 0; list_i1 < (int)(arr.size()) - 1; list_i1++) {
+        std::cout << arr.at(list_i1);
+        std::cout << ", ";
+    }
+    if ((int)(arr.size()) > 0) {
+        std::cout << arr.at((int)(arr.size()) - 1);
     }
     std::cout << "]" << std::endl;
-    int arr2[3];
+    vector<int> arr2(3);
     arr2[0] = 4;
     arr2[1] = 5;
     arr2[2] = 6;
     std::cout << "Value of arr2: ";
     std::cout << "[";
-    bool first0 = true;
-    for (const int &elem0 : arr2) {
-        if (!(first0)) {
-            std::cout << ", ";
-        }
-        std::cout << elem0;
-        first0 = false;
+    for (int list_i1 = 0; list_i1 < (int)(arr2.size()) - 1; list_i1++) {
+        std::cout << arr2.at(list_i1);
+        std::cout << ", ";
+    }
+    if ((int)(arr2.size()) > 0) {
+        std::cout << arr2.at((int)(arr2.size()) - 1);
     }
     std::cout << "]" << std::endl;
     vector<double> myOtherList{1.0, 1.5};

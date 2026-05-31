@@ -6,7 +6,7 @@ of our case studies using Drasil. Content here is primarily illustrative:
 concrete examples, issue identifiers, and sample artifacts that document how the
 single-source approach affected consistency, traceability, and
 reimplementation effort. Formal, controlled experiments are future work
-(see Chapter~\ref{c:future}). For interpretation and implications of these
+(see Chapter~\ref{sec:fw:exp}). For interpretation and implications of these
 observations, see Chapter~\ref{c:discussion}.
 
 \section{Value in the mundane}
@@ -24,9 +24,14 @@ consistent by construction. Small, localized edits to domain knowledge or
 recipes propagated deterministically to all generated outputs (documentation
 and code). During reimplementations, this property reduced the number of
 manual synchronization tasks normally required when maintaining separate
-artifacts. In practice, consistency by construction meant that corrections
-made in the knowledge base appeared immediately and uniformly across the SRS,
-reference tables, and generated code after regeneration. 
+artifacts. In practice, consistency by construction meant that small
+corrections such as renaming a quantity to use a single canonical identifier,
+fixing a typographical error in a definition or table entry, or revising the
+wording of an assumption were made once in the knowledge base and then
+appeared immediately and uniformly across the SRS, reference tables, and
+generated code after regeneration. Rather than checking each artifact
+individually, regeneration ensured that every occurrence reflected the same
+correction.
 
 Additionally, all domain knowledge must be explicitly encoded, which prevents
 dangling references or undefined symbols as observed in a number of 
@@ -46,17 +51,20 @@ hunting through multiple artifacts.
 
 For example, in the GlassBR case study (see issue~\#349), a unit conversion
 was embedded implicitly in the original documentation. With Drasil, it was
-straightforward to trace the generated formula back to its originating chunk,
-facilitating a single-point correction to change the implicit conversion into 
-an explicit one that propagated to all artifacts after regeneration, 
-demonstrating the practical benefits of strong traceability and reducing the 
-burden of maintenance.
+straightforward to use the generated traceability information to identify the
+exact chunk from which the formula was produced. That made it clear where the
+conversion logic belonged: instead of leaving the division by 1000 implicit in
+the rendered equation, we made the conversion explicit in the source chunk
+itself. After regeneration, the corrected expression appeared consistently in
+the SRS and in every downstream artifact derived from that chunk,
+demonstrating more explicitly how traceability supports single-point
+maintenance.
 
 \subsection{Reproducibility and Determinism}
-Artifact generation in Drasil was fully deterministic: repeated generation runs
-from the same knowledge base and recipe set produced byte-for-byte equivalent
+Artifact generation in Drasil is fully deterministic: repeated generation runs
+from the same knowledge base and recipe set produce byte-for-byte equivalent
 outputs for generated softifacts as compared to the then-current stable 
-versions. These outputs were confirmed using a diff tool that ran as part of an 
+versions. These outputs were confirmed using a diff tool that runs as part of an 
 automated regression test suite.
 
 Furthermore, repeatability checks executed during the case study 
@@ -116,8 +124,14 @@ encoded as chunks and recipes was emitted to multiple target languages with
 consistent identifiers and traceability annotations.
 
 Generated code and documentation remained consistent after edits to the
-knowledge base, with regeneration producing updated artifacts across all
-targets.
+knowledge base, with regeneration producing updated artifacts across all 
+targets. For example, the GlassBR unit-conversion correction from issue~\#349 
+was made once in the source knowledge and then propagated to the SRS and 
+generated code after regeneration, while the NoPCM variant was produced from 
+the SWHS knowledge base by excluding PCM-related chunks rather than rewriting 
+the specification. These examples are discussed further in 
+Section~\ref{sec:quality}, Section~\ref{sec:design_change}, and in the 
+interpretive discussion in Section~\ref{sec:dis_traceability}.
 
 \subsection{Quality and Bug Detectability}
 \label{sec:quality}
@@ -149,9 +163,12 @@ A similar example arose in the GlassBR case study (see issue \#349), where an
 implicit division by 1000 for unit conversion was embedded in the original 
 documentation. Drasil's explicit chunk encoding surfaced this hidden 
 assumption, enabling a single-point correction that propagated to all generated 
-artifacts. Other similar issues surfaced during reimplementation, each 
-illustrating how centralized knowledge capture increases error visibility and 
-simplifies maintenance.
+artifacts. Similar issues surfaced throughout the reimplementations, including 
+inconsistent symbol names, missing symbol definitions, implicit unit 
+conversions, undocumented unit vectors, mismatched units across tables and 
+equations, and unstated domain assumptions. Taken together, these recurring 
+issue types reinforced that centralized knowledge capture makes such problems 
+easier to detect, localize, and correct.
 
 \subsection{Design for Change and Software Families}
 \label{sec:design_change}
@@ -195,14 +212,13 @@ implementations, highlighting which chunks and concepts were unique to each
 variant and which were shared.
 
 \section{Usability and Adoption}
-From the reimplementation work it became clear that Drasil's expressiveness
-comes with an onboarding cost. Contributors familiar with the codebase could
-encode and modify domain knowledge effectively; new users required a
-nontrivial ramp-up period of up to two weeks of mentoring to understand the 
-chunk combinators and recipe patterns. Common challenges
-included understanding the how to build new chunks, particularly while 
-referencing other chunks, and how to find existing chunks of the 
-appropriate type in the knowledge base. 
+From the reimplementation work it became clear that Drasil's expressiveness 
+comes with an onboarding cost. Contributors familiar with the codebase could 
+encode and modify domain knowledge effectively; new users required a nontrivial 
+ramp-up period of up to two weeks of mentoring to understand the chunk 
+combinators and recipe patterns. Common challenges included understanding how 
+to build new chunks, particularly while referencing other chunks, and how to 
+find existing chunks of the appropriate type in the knowledge base. 
 
 Feedback collected during onboarding, along with the observations listed above, 
 indicated that improved search tools and documentation would significantly 

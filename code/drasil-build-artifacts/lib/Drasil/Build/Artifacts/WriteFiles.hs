@@ -27,19 +27,6 @@ data WritePolicy
   | -- | Or without one?
     ExactBytes
 
--- | Internal: 'WritePolicy' eliminator.
-policy ::
-  -- | Value returned if the 'WritePolicy' is 'AppendNewline'.
-  f ->
-  -- | Value returned if the 'WritePolicy' is 'ExactBytes'.
-  f ->
-  -- | The 'WritePolicy'.
-  WritePolicy ->
-  f
-policy f _ AppendNewline = f
-policy _ f ExactBytes = f
-{-# INLINE policy #-}
-
 -- | Write arbitrary things to a file (respecting a 'WritePolicy').
 class Writeable doc where
   writeToFile :: OsPath -> WritePolicy -> doc -> IO ()
@@ -95,5 +82,6 @@ writeFile ::
   -- | The data to be written.
   a ->
   IO r
-writeFile append exact rp pol = withFile rp WriteMode . flip (policy append exact pol)
+writeFile append _     rp AppendNewline = withFile rp WriteMode . flip append
+writeFile _      exact rp ExactBytes    = withFile rp WriteMode . flip exact
 {-# INLINE writeFile #-}

@@ -1,5 +1,6 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 {- HLINT ignore "Unused LANGUAGE pragma" -}
 -- ^ HLint reports `TemplateHaskell` is unused, but we use it in

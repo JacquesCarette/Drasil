@@ -19,6 +19,7 @@ module Drasil.Assets
   )
 where
 
+import Data.Text (Text)
 import Data.ByteString qualified as B (ByteString)
 import Drasil.Build.Artifacts (FileLayout, PathSegment, exactFile)
 import Language.Haskell.TH (Code (examineCode), Q, liftCode, runIO)
@@ -29,11 +30,11 @@ import System.OsPath (OsPath, decodeUtf, encodeUtf)
 import Prelude hiding (readFile)
 
 -- | An arbitrary file asset; a 'B.ByteString' with a description.
-data Asset = Asset String B.ByteString
+data Asset = Asset Text B.ByteString
   deriving (Lift)
 
 -- | Get the description of an 'Asset'.
-description :: Asset -> String
+description :: Asset -> Text
 description (Asset desc _) = desc
 
 -- | Get the raw 'ByteString' content of an 'Asset'.
@@ -46,7 +47,7 @@ toFile :: Asset -> PathSegment -> FileLayout
 toFile a = flip exactFile (content a)
 
 -- | Read a file from disk, providing a description of the asset.
-readAsset :: OsPath -> String -> Code Q Asset
+readAsset :: OsPath -> Text -> Code Q Asset
 readAsset filePath desc = liftCode $ do
   strPath <- runIO (decodeUtf filePath)
   -- FIXME: HACK: This relies on decoding the path, making it relative, and then

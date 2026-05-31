@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Drasil.Data.Formats.CSV.Render
   ( -- ** Rendering
     CSVRenderOptions,
@@ -9,7 +11,7 @@ where
 
 import Data.List (intersperse)
 import Data.Text (Text)
-import qualified Data.Text as T (any, pack, replace, splitOn)
+import qualified Data.Text as T (any, replace, splitOn)
 import Drasil.Data.Formats.CSV.Core (CSV, header, rows)
 import Prettyprinter (Doc, Pretty (..), comma, dquotes, hardline, hcat, vcat)
 
@@ -53,19 +55,13 @@ needsQuote c = c `elem` ['"', ',', '\n', '\r']
 -- | Internal: Replace all double-quotes with double-double-quotes in a cell and
 -- wrap the whole cell in double-quotes.
 quoteAndEscape :: Text -> Doc ann
-quoteAndEscape = dquotes . escapeHLs . T.replace dqs ddqs
-
--- | Internal: Double quotes as 'Text'.
-dqs :: Text
-dqs = T.pack "\""
-
--- | Internal: Double double-qoutes as 'Text'.
-ddqs :: Text
-ddqs = dqs <> dqs
+quoteAndEscape = dquotes . escapeHLs . T.replace "\"" "\"\""
 
 -- | Internal: `prettyprinter` needs us to manually deal with hard linebreaks.
 escapeHLs :: Text -> Doc ann
-escapeHLs = hcat . intersperse hardline . map pretty . T.splitOn lf . T.replace crlf lf
-  where
-    lf = T.pack "\n"
-    crlf = T.pack "\r\n"
+escapeHLs =
+  hcat
+    . intersperse hardline
+    . map pretty
+    . T.splitOn "\n"
+    . T.replace "\r\n" "\n"

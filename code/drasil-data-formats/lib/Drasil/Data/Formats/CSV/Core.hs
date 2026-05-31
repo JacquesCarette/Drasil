@@ -51,10 +51,9 @@ rowCount (CSV _ _ _ rc) = rc
 -- header does not exist, the length of the first row is used. If the data is
 -- also empty, you will have an empty CSV with no columns and no rows.
 mkCSV :: Maybe ColumnCount -> Maybe [Text] -> [[Text]] -> Either String CSV
-mkCSV mcols mhr rs = maybe (Right $ CSV mhr rs cc rc) Left (saneLengths (cc, src) mhr rs)
+mkCSV mcols mhr rs = maybe (Right $ CSV mhr rs cc (len rs)) Left (saneLengths (cc, src) mhr rs)
   where
     (cc, src) = expectedColumnCount mcols mhr rs
-    rc = fromIntegral $ length rs
 
 -- | Internal: Check if the header and all rows have the same length as the
 -- expected number of columns. Returns 'Nothing' if the CSV is valid, or 'Just'
@@ -62,19 +61,24 @@ mkCSV mcols mhr rs = maybe (Right $ CSV mhr rs cc rc) Left (saneLengths (cc, src
 saneLengths :: (Natural, String) -> Maybe [Text] -> [[Text]] -> Maybe String
 saneLengths (expLen, expLenSrc) mhr rs =
   case mhr of
-    Just hdr | fromIntegral (length hdr) /= expLen -> Just $ formatErr "Header" (length hdr)
-    _ -> rowLengthErr <$> find (\(_, r) -> fromIntegral (length r) /= expLen) (zip [1 :: Natural ..] rs)
+    Just hdr | let l = len hdr, l /= expLen -> Just $ formatErr "Header" l
+    _ -> format <$> find ((/= expLen) . snd) (zip [1 :: Natural ..] (map len rs))
   where
     formatErr target actualLen = concat [
         target, " has ", show actualLen, " columns, but expected ",
         show expLen, " (based on ", expLenSrc, ")"
       ]
-    rowLengthErr (i, r) = formatErr ("Row " ++ show i) (length r)
+    format (i, l) = formatErr ("Row " ++ show i) l
 
 -- | Internal: Find the expected number of columns for a CSV, along with a
 -- description of the source of the expectation.
 expectedColumnCount :: Maybe ColumnCount -> Maybe [Text] -> [[Text]] -> (Natural, String)
 expectedColumnCount (Just cols) _ _ = (cols, "expected columns input")
-expectedColumnCount _ (Just header') _ = (fromIntegral $ length header', "header length")
-expectedColumnCount _ _ (fr : _) = (fromIntegral $ length fr, "first row length")
+expectedColumnCount _ (Just header') _ = (len header', "header length")
+expectedColumnCount _ _ (fr : _) = (len fr, "first row length")
 expectedColumnCount _ _ _ = (0, "empty data")
+
+-- | Internal: Output polymorphic 'length'.
+len :: Integral n => [a] -> n
+len = fromIntegral . length
+{-# INLINE len #-}

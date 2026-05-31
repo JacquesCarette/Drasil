@@ -102,7 +102,8 @@ systems cover a variety of use cases, to help avoid over-specializing into one
 particular system type. 
 
 The majority of the aforementioned case studies were developed to solve real
-problems. The following cards are meant to be used as a high-level reference to 
+problems by other teams at McMaster University. The following cards are meant 
+to be used as a high-level reference to 
 each case study, providing the general details at a glance. For the specifics 
 of each system, all relevant case study artifacts can be found in the GitHub 
 repository.
@@ -345,7 +346,8 @@ some is in-between: it is specific to the problem domain for the proposed
 system, but not necessarily specific to the system itself. For example, many 
 theoretical models would fall into that in-between category\textemdash{}they 
 represent theories from their problem domain (ex. Physics) that are used to 
-derive the system-specific knowledge.
+derive the system-specific knowledge. \ds{give a few more examples in the 
+previous para}
 
 Observing the contents of an SRS template adhere to said template may seem 
 mundane, but it is a necessary step before we can move on to other \sfs{}. 
@@ -360,7 +362,7 @@ The module guide (MG) is a \sf{} that details the architecture of a given
 software system. It holds a number of design decisions around sensibly grouping 
 functionalities within the system into modules to fulfill the requirements laid 
 out in the SRS. For example, one might have an input/output module for handling 
-user input and giving the user feedback through the display (ie. via print 
+user input and giving the user feedback through the display (i.e. via print 
 commands or some other output), or a calculations module that contains all of 
 the calculation functions being performed in the normal operation of the given 
 software system. The \smithea{} MG template also includes a traceability matrix 
@@ -629,6 +631,9 @@ $\hat{q}$, such as in the data definitions of the Stress Distribution Factor
 ($J$) and Non-Factored Load ($NFL$). There are also implied references through 
 intermediate calculations, for example the Calculation of Capacity ($LR$) is 
 defined in terms of $NFL$ which relies on $\hat{q}$.
+\ds{Use a bulleted list instead of text to point out all the places q hat 
+appears}
+
 
 Although the full definition of $\hat{q}$ is initially provided 
 for a human audience only once, it is necessary to reference it in different 
@@ -666,23 +671,24 @@ consume the representation (projected knowledge) and transform it into their
 own internal representation, based on their personal knowledge-base.
 
 Relying on common representations, eliding definitions, projecting and 
-transforming knowledge are fundamental to the way humans communicate. They are 
-readily observable in all forms of communications, whether written or oral, as 
-we assign meaning to given sounds and symbols (words) according to the agreed 
-upon grammar of a given language and use those words (knowledge projections) to 
-simplify communication to a given audience. A context-specific glossary, or 
-more generally a dictionary, is a prime example of a knowledge-base that we use 
-for communication via knowledge projections and transformations. By maintaining 
-a shared vocabulary, we can communicate using the symbolic representations 
-(words) instead of requiring terms to be decomposed (defined) to their most 
-basic form. However, communication of this sort is still imperfect, due to gaps 
-in shared knowledge between participants or misunderstanding of overloaded 
-terms. Interpersonal communications can involve nuance and context-dependent 
-interpretations, yet they still boil down to knowledge projection on the part of
-the communicator and knowledge transformation on the part of the 
-communicatee.\footnote{All this to say, words are a shorthand for their 
-definitions.} The latter can infer context, or be provided with explicit 
-context, which affirms their use of the appropriate knowledge transformations.
+transforming knowledge are \emph{fundamental to the way humans communicate}. 
+They are readily observable in all forms of communications, whether written or 
+oral, as we assign meaning to given sounds and symbols (words) according to the 
+agreed upon grammar of a given language and use those words (knowledge 
+projections) to simplify communication to a given audience. A context-specific 
+glossary, or more generally a dictionary, is a prime example of a 
+knowledge-base that we use for communication via knowledge projections and 
+transformations. By maintaining a shared vocabulary, we can communicate using 
+the symbolic representations (words) instead of requiring terms to be 
+decomposed (defined) to their most basic form. However, communication of this 
+sort is still imperfect, due to gaps in shared knowledge between participants 
+or misunderstanding of overloaded terms. Interpersonal communications can 
+involve nuance and context-dependent interpretations, yet they still boil down 
+to knowledge projection on the part of the communicator and knowledge 
+transformation on the part of the communicatee.\footnote{All this to say, words 
+are a shorthand for their definitions.} The latter can infer context, or be 
+provided with explicit context, which affirms their use of the appropriate 
+knowledge transformations.
 
 Returning to the context of software systems, if we broaden our view from a 
 single system, to a software family, we can also find patterns of commonality 
@@ -735,7 +741,7 @@ has been projected through some means, and patterns of organization of those
 knowledge projections within \sfs{}. Common knowledge, in this case, refers to 
 one of three categories of knowledge: system-specific, domain-specific, or 
 common to \sfs{} as a whole. It should also be noted that knowledge projections 
-may include the identity projection (ie. the full, unabridged definition) as 
+may include the identity projection (i.e. the full, unabridged definition) as 
 they are dependent on the relevance to the audience of the given \sf{}. 
 Regardless, the captured knowledge fundamentally underlies these patterns of 
 repetition, and is where we need to focus if we intend to reduce unnecessary 
@@ -765,7 +771,8 @@ design.
 
 To this point we have been referring to an intuitive, albeit nebulous concept 
 of \emph{knowledge} without explicitly defining it. Before we can discuss how 
-to organize knowledge, let us first clarify what it is: knowledge is 
+to organize knowledge, let us first clarify what it is \ds{this is my 
+definition so make that clear!}: knowledge is 
 information that has been structured and contextualized to be meaningful and 
 useful. It encompasses facts, concepts, definitions, theories, and 
 relationships that are relevant to a particular domain or problem. Knowledge 
@@ -898,7 +905,7 @@ audience. We have also explored strategies for organizing that knowledge in a
 practical manner. 
 
 We have determined the three main components necessary for any useful \sf{}: 
-knowledge, context (ie. audience), and organizational structure. From here we 
+knowledge, context (i.e. audience), and organizational structure. From here we 
 can operationalize each component in a reusable and (relatively) 
 redundancy-free manner. This operationalization informs the initial design for 
 our framework Drasil which will be covered in depth in Chapter~\ref{c:drasil}. 

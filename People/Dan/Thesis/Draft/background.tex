@@ -107,7 +107,7 @@ Software design can follow a number of different design processes, each with
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
 model (Figure~\ref{fig:Waterfall}) of software 
 development~\cite{PfleegerAndAtlee2010Ch2}, which often does not work in 
-practice~\cite{}. \ds{Need this source.}
+practice~\cite{??}. \ds{Need this source.}
 However, Parnas and Clements~\cite{ParnasAndClements1986} detailed what they 
 dubbed a ``rational" design process; an idealized version of software 
 development that includes what needs to be documented in corresponding \sfs{}.
@@ -288,6 +288,9 @@ Linux, you'll likely be comfortable moving between several of the distributions
 built upon the same cores. You may even be familiar moving to other *NIX based 
 systems like MacOS/Unix.
 
+\ds{ Add a blurb here about spinning up a kernel through parameterized options 
+and how that can create a fully customized family member.}
+
 Software/program families can provide a range of benefits to both developers 
 and end-users. For developers, software families can increase 
 productivity by providing a reusable set of core technologies and design 
@@ -364,7 +367,9 @@ work~\cite{IonescuAndJansson2013}.
 
 Reproducible research has been used to mean embedding executable code in
 research papers (example: using Jupyter Notebooks~\cite{Jupyter}) to allow 
-readers to reproduce the results described~\cite{SchulteEtAl2012}. We have designed Drasil to go beyond this narrow definition of reproducible research by
+readers to reproduce the results described~\cite{SchulteEtAl2012}. \ds{In 
+contrast to stuff covered in the problem statement Drasil is doing X} We have 
+designed Drasil to go beyond this narrow definition of reproducible research by
 emphasizing the generation of multiple, consistent artifacts from a single knowledge base. This approach not only facilitates the reproduction of computational results but also ensures that all related documentation, code, and tests remain synchronized and up-to-date, thereby enhancing the overall reproducibility and reliability of scientific software.
 
 Combining research reports with relevant code, data, etc. is not necessarily
@@ -593,3 +598,13 @@ Drasil aims to utilize code generation to produce a comprehensive suite of
 software artifacts, from a single knowledge base. This holistic approach 
 ensures consistency across all artifacts and addresses the diverse needs of 
 modern software engineering practices.
+
+\ds{Not using LLMs or AI models for generation}
+
+\ds{cover meta-programming here as well -> broad strokes. We rely on GOOL so in 
+many ways it doesn't matter how much I understand about code gen. According to 
+Jacques -> can pass the buck. }
+
+\ds{Add section for model driven engineering explaining that we did not look 
+into it to avoid biasing our approach (practical example-driven requirements 
+for our model)}

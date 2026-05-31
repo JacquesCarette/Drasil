@@ -18,6 +18,9 @@ describe how we selected and analyzed a set of representative case studies,
 breaking down their artifacts to identify recurring patterns and organizational 
 structures. This analysis leads to a general methodology for knowledge capture 
 and projection, which ultimately shaped the core principles of Drasil. 
+Because this methodology depends on what we mean by \emph{knowledge}, the 
+chapter also introduces a working definition of that term that underlies the 
+framework developed later in the thesis. 
 Throughout, we emphasize the interplay between practical experience and 
 theoretical insight, illustrating how each informed our process and contributed 
 to the framework's evolution.
@@ -27,10 +30,10 @@ to the framework's evolution.
 
 Before delving into the full complexity of our case studies and artifact 
 templates, it is helpful to illustrate the core problem of knowledge redundancy 
-with an incredibly minimal, toy example. For this, we use the ``HGHC'' system, 
-a simple heat transfer case study included in the repository.
+with a minimal, toy example. For this, we use the ``HGHC'' system, a simple 
+heat transfer case study included in the Drasil repository.
 
-The HGHC example's SRS specifies what problem the software is trying to solve/ 
+The HGHC example's SRS specifies what problem the software is trying to solve.
 In this case, it should model heat transfer coefficients in nuclear fuel rods, 
 specifically $h_g$ (gap conductance) and $h_c$ (effective heat transfer 
 coefficient between clad and coolant). Even in this minimal system, the same 
@@ -49,12 +52,12 @@ equations for $h_g$ and $h_c$ are also given as:
 
 We can already see repeated knowledge ($k_c$ and $\tau_c$) in these two 
 equations. The redundancy goes even deeper in the full SRS (which can be 
-found in Appendix~\ref{appendix:hghc}). There we can see repeated descriptions 
-and units for $h_g$ and $h_c$ in the table of symbols and the data definitions. 
-We also observe something more troubling: missing symbols. None of $k_c$, 
-$h_p$, $h_b$, or $\tau_c$ have units associated with them nor are they defined 
-in the table of symbols despite their presence in the equations and data 
-definitions for $h_g$ and $h_c$.
+found in Appendix~\ref{appendix:hghc}). In the given SRS we can see repeated 
+descriptions and units for $h_g$ and $h_c$ in the table of symbols and the data 
+definitions. We also observe something more troubling: missing symbols. None of 
+$k_c$, $h_p$, $h_b$, or $\tau_c$ have units associated with them nor are they 
+defined in the table of symbols, despite their presence in the equations and 
+data definitions for $h_g$ and $h_c$.
 
 As this is a toy example, it may seem contrived to have missing information. 
 However we ran into exactly these sorts of issues with our real-world case 
@@ -101,53 +104,45 @@ Section~\ref{sec:scope}, our case study software systems follow the
 systems cover a variety of use cases, to help avoid over-specializing into one 
 particular system type. 
 
-The majority of the aforementioned case studies were developed to solve real
-problems by other teams at McMaster University. The following cards are meant 
-to be used as a high-level reference to 
-each case study, providing the general details at a glance. For the specifics 
-of each system, all relevant case study artifacts can be found in the GitHub 
-repository.
+The majority of the aforementioned case studies were developed at McMaster 
+University to address real engineering problems outside of our research group. 
+Table~\ref{tab:case-studies} provides a high-level reference to each case 
+study. For the specifics of each system, all relevant case study artifacts can 
+be found in the GitHub repository.
 
-\ds{The cards were initially going to say more, but I might convert them into a 
-table at this point. Though I like a bit of visual difference.}
-%if removing cards, update above sentence
-
-\card{\gb}
-{We need to efficiently and correctly predict whether a glass 
-slab can withstand a blast under given conditions.}
-{SRS, source code.}
-
-\card{\sw}
-{Solar water heating systems incorporating phase change 
- material (PCM) use a renewable energy source and provide a novel way of 
- storing energy. A system is needed to investigate the effect of employing PCM
- within a solar water heating tank.}
-{SRS, source code.}
-
-\card{\np}
-{Solar water heating systems provide a novel way of 
-heating water and storing renewable energy. A system is needed to investigate
-the heating of water within a solar water heating tank.}
-{SRS, source code.}
+\begin{table}
+\centering
+\caption{Summary of the case study systems}
+\label{tab:case-studies}
+\begin{tabular}{|p{0.18\linewidth}|p{0.74\linewidth}|}
+\hline
+\textbf{\rule{0pt}{4.5ex}Case study} & \textbf{Problem} \\
+\hline
+\rule{0pt}{4.5ex}\gb{} & Predict whether a glass slab can withstand a blast 
+under specified conditions. \\
+\hline
+\rule{0pt}{4.5ex}\sw{} & Investigate how phase change material (PCM) affects 
+heating and energy storage in a solar water heating tank. \\
+\hline
+\rule{0pt}{4.5ex}\np{} & Investigate heating and energy storage in a solar 
+water heating tank without phase change material. \\
+\hline
+\rule{0pt}{4.5ex}\sp{} & Evaluate slope stability by identifying the critical 
+slip surface and determining the associated factor of safety and interslice 
+forces. \\
+\hline
+\rule{0pt}{4.5ex}\pr{} & Predict the landing position of a projectile. \\
+\hline
+\rule{0pt}{4.5ex}\gp{} & Provide a physics library that simulates objects under 
+varied physical conditions efficiently enough for soft real-time use in games. 
+\\
+\hline
+\end{tabular}
+\end{table}
 
 The NoPCM case study was created as a software family member for the SWHS case
 study. It was manually written, removing all references to PCM and thus 
 remodeling the system.
-
-\card{\sp}
-{A slope of geological mass, composed of soil and rock 
- and sometimes water, is subject to the influence of gravity on the mass. 
- This can cause instability in the form of soil or rock movement which can
- be hazardous. A system is needed to evaluate the factor of safety of 
- a slope's slip surface and identify the critical slip surface of the slope, 
- as well as the interslice normal force and shear force along the critical 
- slip surface.}
-{SRS, source code.}
-
-\card{\pr}
-{A system is needed to efficiently and correctly predict
- the landing position of a projectile.}
-{SRS, source code.}
 
 The Projectile case study, was the first example of a system 
 created solely in Drasil, i.e. we did not have a manually created version to 
@@ -156,15 +151,6 @@ referenced often since it did not inform Drasil's design or development until
 much further in our process. The Projectile case study was created post-facto 
 to provide a simple, understandable example for a general audience as it 
 requires, at most, a high-school level understanding of physics. 
-
-\card{\gp}
-{Many video games need physics libraries that simulate 
- objects acting under various physical conditions, while simultaneously being 
- fast and efficient enough to work in soft real-time during the game. 
- Developing a physics library from scratch takes a long period of time and is 
- very costly, presenting barriers of entry which make it difficult for game 
- developers to include physics in their products.}
-{SRS, source code.}
 
 After carefully selecting our case studies, we went about a practical approach
 to find and remove redundancies. The first step was to break down each artifact
@@ -338,16 +324,18 @@ the subtleties of \emph{what} is contained therein\footnote{The breakdown
 details are omitted for brevity and due to their monotonous nature, although 
 the overall process is very much akin to the breakdown of the Reference 
 Material section.} it should be unsurprising that each section maps to the 
-definition provided in the \smithea{} template. However, as noted above, we can 
-see distinct differences in the types of information contained in each section. 
-Again we find some is boilerplate text meant to give a generic 
-(non-system-specific) overview, some is specific to the proposed system, and 
-some is in-between: it is specific to the problem domain for the proposed 
-system, but not necessarily specific to the system itself. For example, many 
-theoretical models would fall into that in-between category\textemdash{}they 
-represent theories from their problem domain (ex. Physics) that are used to 
-derive the system-specific knowledge. \ds{give a few more examples in the 
-previous para}
+definition provided in the \smithea{} template. However, the kinds of 
+information contained in those sections differ substantially. Some material is 
+generic boilerplate, such as the introductory text describing the purpose and 
+organization of each section of the SRS. Some is clearly system-specific, such 
+as \gb{}'s goal statements, its instance models, and its data definitions for 
+quantities like demand, stress distribution factor, and probability of 
+breakage. Between those extremes is material that belongs to the problem domain 
+more than to the individual software system. In \gb{}, for example, the 
+theoretical background concerning glass mechanics, load, and resistance is not 
+unique to that one program; rather, it is domain knowledge that the SRS uses to 
+derive the system-specific models, constraints, and calculations presented 
+later in the document.
 
 Observing the contents of an SRS template adhere to said template may seem 
 mundane, but it is a necessary step before we can move on to other \sfs{}. 
@@ -582,13 +570,14 @@ introduction to the Table of Units is nothing more than boilerplate text
 dropped into each case study verbatim; it is completely generic and applicable 
 to \emph{any} software system using SI units. The introduction to the Table of 
 Symbols also appears to be boilerplate across several examples, however, it 
-does have minor variations which we can see by comparing 
-Figure~\ref{fig:gbrtos} to Figure~\ref{fig:gptos} (\gb{} compared to \gp{}). 
-These variations reveal the obvious: the variability between systems is greater 
-than simply a difference in choice of symbols, and so there is some 
-system-specific knowledge being encoded. While we can intuitively infer this 
-conclusion based solely on each system addressing a different problem, our 
-observation of the (structural) patterns within this SRS section confirms it.
+does have minor variations. For an easy visual comparison, the earlier \gb{} 
+example in Figure~\ref{fig:gbrtos} can be compared directly with 
+Figure~\ref{fig:gptos} (\gp{}). These variations reveal the obvious: the 
+variability between systems is greater than simply a difference in choice of 
+symbols, and so there is some system-specific knowledge being encoded. While we 
+can intuitively infer this conclusion based solely on each system addressing a 
+different problem, our observation of the (structural) patterns within this SRS 
+section confirms it.
 
 \fig{
 \centering
@@ -621,18 +610,27 @@ artifacts in a project.
 \includegraphics[width=\textwidth]{figures/gb_dd_q.png}}
 {Data Definition for Dimensionless Load ($\hat{q}$) from \gb{} SRS}
 {fig:gbrddq}
-Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. That 
-same term was previously defined with fewer details in the table of symbols 
-(omitted here for brevity), as well as showing up implicitly or in passing 
-in the MG (Figure~\ref{fig:gbrmgcm} and the \emph{loadASTM} module 
-respectively), and implemented in the Source Code (Figure~\ref{fig:gbrsrccalc} 
-lines 11-14). It should be noted that the SRS contains many references to 
-$\hat{q}$, such as in the data definitions of the Stress Distribution Factor 
-($J$) and Non-Factored Load ($NFL$). There are also implied references through 
-intermediate calculations, for example the Calculation of Capacity ($LR$) is 
-defined in terms of $NFL$ which relies on $\hat{q}$.
-\ds{Use a bulleted list instead of text to point out all the places q hat 
-appears}
+Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. The 
+same term was previously defined with fewer details in the table of symbols, as 
+well as showing up implicitly or in passing in the MG (Figure~\ref{fig:gbrmgcm} 
+and the \emph{loadASTM} module respectively), and implemented in the Source 
+Code (Figure~\ref{fig:gbrsrccalc} lines 11-14). A non-exhaustive list of places 
+where $\hat{q}$ appears helps make the repetition more explicit:
+
+\begin{itemize}
+\item In the SRS table of symbols, where $\hat{q}$ is introduced in abbreviated 
+form.
+\item In the data definition shown in Figure~\ref{fig:gbrddq}, where it is 
+defined more fully.
+\item In other SRS data definitions, such as the Stress Distribution Factor 
+($J$) and Non-Factored Load ($NFL$), which refer to $\hat{q}$ directly.
+\item In the SRS calculation of Capacity ($LR$), where $\hat{q}$ appears 
+indirectly through intermediary quantities such as $NFL$.
+\item In the MG, where the \emph{loadASTM} and \emph{Calc} modules mention or 
+rely on the quantity.
+\item In the source code, where the corresponding calculation is implemented 
+explicitly (Figure~\ref{fig:gbrsrccalc}, lines 11-14).
+\end{itemize}
 
 
 Although the full definition of $\hat{q}$ is initially provided 
@@ -667,28 +665,8 @@ in this section to emphasize our argument and make a meta-argument that the
 definition is irrelevant to our audience in this example. What matters is the 
 symbolic reference, which we share a common understanding of.} The audience, on 
 the other hand, engages in \emph{knowledge transformation}, whereby they 
-consume the representation (projected knowledge) and transform it into their 
-own internal representation, based on their personal knowledge-base.
-
-Relying on common representations, eliding definitions, projecting and 
-transforming knowledge are \emph{fundamental to the way humans communicate}. 
-They are readily observable in all forms of communications, whether written or 
-oral, as we assign meaning to given sounds and symbols (words) according to the 
-agreed upon grammar of a given language and use those words (knowledge 
-projections) to simplify communication to a given audience. A context-specific 
-glossary, or more generally a dictionary, is a prime example of a 
-knowledge-base that we use for communication via knowledge projections and 
-transformations. By maintaining a shared vocabulary, we can communicate using 
-the symbolic representations (words) instead of requiring terms to be 
-decomposed (defined) to their most basic form. However, communication of this 
-sort is still imperfect, due to gaps in shared knowledge between participants 
-or misunderstanding of overloaded terms. Interpersonal communications can 
-involve nuance and context-dependent interpretations, yet they still boil down 
-to knowledge projection on the part of the communicator and knowledge 
-transformation on the part of the communicatee.\footnote{All this to say, words 
-are a shorthand for their definitions.} The latter can infer context, or be 
-provided with explicit context, which affirms their use of the appropriate 
-knowledge transformations.
+consume the representation and transform it into their own internal 
+representation, based on their personal knowledge-base.
 
 Returning to the context of software systems, if we broaden our view from a 
 single system, to a software family, we can also find patterns of commonality 
@@ -747,6 +725,23 @@ Regardless, the captured knowledge fundamentally underlies these patterns of
 repetition, and is where we need to focus if we intend to reduce unnecessary 
 redundancy and improve maintainability.
 
+These observations are not peculiar to software artifacts alone. More broadly, 
+they reflect a general feature of human communication: we routinely rely on 
+common representations (shared symbols) and elided definitions rather than 
+restating the full context every time. In that sense, what we have called 
+knowledge projection and knowledge transformation are not ad hoc mechanisms 
+invented to describe \sfs{}; they are a domain-specific instance of how people 
+communicate more generally. This matters for Drasil because it suggests that 
+the redundancy we observe across \sfs{} is not simply the result of poor 
+writing or careless process. Rather, it arises in part because the same 
+underlying knowledge must be projected differently for different audiences, 
+contexts, and purposes.
+
+If this is the case, then the central challenge is not merely to eliminate 
+repetition, but to determine how that underlying knowledge should be captured 
+and organized so that appropriate projections can be generated consistently. 
+This is the problem to which we now turn.
+
 These patterns directly inform the requirements and architecture of Drasil. By 
 understanding them, we reveal challenges and opportunities for automation and 
 consistency in software artifact generation. Recognizing that redundancy arises 
@@ -770,25 +765,27 @@ knowledge capture and organization that can lay the groundwork for Drasil's
 design.
 
 To this point we have been referring to an intuitive, albeit nebulous concept 
-of \emph{knowledge} without explicitly defining it. Before we can discuss how 
-to organize knowledge, let us first clarify what it is \ds{this is my 
-definition so make that clear!}: knowledge is 
-information that has been structured and contextualized to be meaningful and 
-useful. It encompasses facts, concepts, definitions, theories, and 
-relationships that are relevant to a particular domain or problem. Knowledge 
-can be represented in various forms, such as mathematical equations, natural 
-language descriptions, code snippets, diagrams, and more. The core of what a 
-piece of knowledge is remains consistent, regardless of its representation. 
-This should become more clear in Chapter~\ref{c:drasil}, specifically 
+of \emph{knowledge} without explicitly defining it. Because this concept is 
+central to the remainder of this chapter and to the design of Drasil, we make 
+our intended meaning explicit here. In this thesis, we propose the following 
+working definition of knowledge: knowledge is information that has been 
+structured and contextualized to be meaningful and useful. On this view, 
+knowledge encompasses facts, concepts, definitions, theories, and 
+relationships relevant to a particular domain or problem. It may be 
+represented in various forms, such as mathematical equations, natural 
+language descriptions, code snippets, diagrams, and more, while remaining the 
+same underlying knowledge. This definition underlies our later discussion of 
+knowledge chunks and projections in Chapter~\ref{c:drasil}, especially 
 Section~\ref{sec:kcChunk}.
 
 \emph{For clarity in the following examples, we will use set notation to 
 describe relationships between knowledge and projections. This is not intended 
 as a formalization, but rather as a familiar mathematical juxtaposition to help 
 illustrate the concepts.} Here, we use $K$ to denote a set, or in our 
-terminology a \emph{chunk}, of one or more related pieces of information. Each 
-$K$ may represent a single fact, a definition, or a tightly connected set of 
-information relevant to a particular concept or artifact.
+terminology a \emph{chunk}, of one or more related pieces of information. Under 
+the working definition above, each $K$ may represent a single fact, a 
+definition, or a tightly connected set of information relevant to a particular 
+concept or artifact.
 
 Given the patterns across \sfs{} we observed in the previous section, we can 
 generalize knowledge projections to their projection functions. Identity 

@@ -1,7 +1,7 @@
 spec-version: 0.36.0
 name:         drasil-assets
-version:      0.1.1.0
-author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+version:      0.0.1
+author:       "Jason Balaci, Jacques Carette, Spencer Smith"
 maintainer:   "Jacques Carette"
 synopsis:     A framework for code and document generation for scientific software - Assets SubPackage
 github:       JacquesCarette/Drasil

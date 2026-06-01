@@ -26,16 +26,30 @@
 
 % Additional packages
 \usepackage{xcolor}
+\usepackage{tikz}
 \numberwithin{equation}{section}       % Numbers equations based on their 
 									   %   section
 \usepackage[normalem]{ulem}			   % Strikeout and advanced emphasis
 \usepackage{forest}				       % Trees and such
 \usepackage{pdfpages}				   % Include PDF
+\usetikzlibrary{calc}
 % ********************************
 \definecolor{codegreen}{rgb}{0,0.6,0}  % Custom code colours
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{annotblue}{RGB}{44,103,176}
+\definecolor{annotorange}{RGB}{217,95,2}
+\definecolor{annotgreen}{RGB}{27,158,119}
+\definecolor{annotred}{RGB}{204,0,0}
+
+\tikzset{
+  boiler/.style={draw=annotblue, line width=1.2pt},
+  system/.style={draw=annotorange, line width=1.2pt},
+  domainbox/.style={draw=annotgreen, dashed, line width=1.2pt},
+  annotlabel/.style={fill=white, draw=black, font=\scriptsize\bfseries, inner sep=1.5pt},
+  callnum/.style={circle, draw=annotred, fill=white, font=\scriptsize\bfseries, inner sep=1pt, line width=1pt}
+}
 
 
 \usepackage{listings}				   % For code

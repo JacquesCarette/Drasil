@@ -121,10 +121,10 @@ be found in the GitHub repository.
 \rule{0pt}{4.5ex}\gb{} & Predict whether a glass slab can withstand a blast 
 under specified conditions. \\
 \hline
-\rule{0pt}{4.5ex}\sw{} & Investigate how phase change material (PCM) affects 
+\rule{0pt}{4.5ex}\sw{} & Simulate how phase change material (PCM) affects 
 heating and energy storage in a solar water heating tank. \\
 \hline
-\rule{0pt}{4.5ex}\np{} & Investigate heating and energy storage in a solar 
+\rule{0pt}{4.5ex}\np{} & Simulate heating and energy storage in a solar 
 water heating tank without phase change material. \\
 \hline
 \rule{0pt}{4.5ex}\sp{} & Evaluate slope stability by identifying the critical 
@@ -253,51 +253,61 @@ contents for an SRS using the \smithea{} template.
 
 With the structure of the document in mind, let us look at several of our case
 studies' SRS documents to get a deeper understanding of what each section truly
-represents. Figure~\ref{fig:csRefSecs} shows the reference section of the SRS 
-for \gb. Each of the case studies' SRS contains a similar section so for 
+represents. Figures~\ref{fig:gbrtou}, \ref{fig:gbrtos}, 
+and~\ref{fig:gbrtoa} show the reference sections of the SRS for \gb. Each of 
+the case studies' SRS contains a similar section so for 
 brevity we will omit the others here, but they can be found in the GitHub 
 repository. We will try to ignore any superficial differences (spelling, 
 grammar, phrasing, etc.) in each of the case studies while we look for 
 commonality. We are also trying to determine how the non-superficial 
 differences relate to the document template, general problem domain, and 
-specific system information.
+specific system information. In the annotated Table of Symbols figures used in 
+this chapter, `B' denotes repeated boilerplate structure and `P' denotes a 
+bundled set of problem-specific entries, including both domain-specific and 
+system-specific content. We use that coarser label here because these figures 
+make the shared structure clear, but do not visually support a reliable finer 
+distinction. We return to that finer distinction later in the SWHS/NoPCM 
+comparison, where the few system-specific differences can be marked directly.
 
-\ds{The figure with subfigures might be a hassle to keep co-located, might 
-split it up into 3 separate figures and just refer to them collectively}
-
-\fig{
-\centering
-\begin{subfigure}{\textwidth}
+\begin{figure}[H]
 \centering
 \fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToU.png}}
-\caption{Table of Units Section}
+\caption{Table of Units section from \gb{} SRS}
 \label{fig:gbrtou}
-\end{subfigure}
-
 \end{figure}
 
-\begin{figure}\ContinuedFloat
-
-\begin{subfigure}{\textwidth}
+\begin{figure}[H]
 \centering
-\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToS.png}}
-\caption{Table of Symbols (truncated) Section}
+\begin{tikzpicture}
+\node[inner sep=0] 
+(img){\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToS.png}}};
+
+\begin{scope}[
+  shift={(img.south west)},
+  x={($(img.south east)-(img.south west)$)},
+  y={($(img.north west)-(img.south west)$)}
+]
+\draw[boiler] (0.01,0.63) rectangle (0.99,0.99);
+\node[annotlabel] at (0.95,0.95) {B};
+
+\draw[domainbox] (0.01,0.01) rectangle (0.99,0.62);
+\node[annotlabel] at (0.95,0.57) {P};
+\end{scope}
+\end{tikzpicture}
+\caption{Table of Symbols (truncated) section from \gb{} SRS}
 \label{fig:gbrtos}
-\end{subfigure}
+\end{figure}
 
-
-\begin{subfigure}{\textwidth}
+\begin{figure}[H]
 \centering
 \fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToAA.png}}
-\caption{Table of Abbreviations and Acronyms (truncated) Section}
+\caption{Table of Abbreviations and Acronyms (truncated) section from \gb{} SRS}
 \label{fig:gbrtoa}
-\end{subfigure}
-}
-{The reference sections of \gb}
-{fig:csRefSecs}
+\end{figure}
 
 Looking at the (truncated for space) Table of Symbols, Table of Units, and 
-Table of Abbreviations and Acronyms sections (Figure~\ref{fig:csRefSecs}) we 
+Table of Abbreviations and Acronyms sections (Figures~\ref{fig:gbrtou}, 
+\ref{fig:gbrtos}, and~\ref{fig:gbrtoa}) we 
 can see that, barring the table values themselves, they are almost identical. 
 The Table of Symbols is simply a table of values, akin to a glossary, specific 
 to the symbols that appear throughout the rest of the document. For each of 
@@ -572,18 +582,38 @@ to \emph{any} software system using SI units. The introduction to the Table of
 Symbols also appears to be boilerplate across several examples, however, it 
 does have minor variations. For an easy visual comparison, the earlier \gb{} 
 example in Figure~\ref{fig:gbrtos} can be compared directly with 
-Figure~\ref{fig:gptos} (\gp{}). These variations reveal the obvious: the 
-variability between systems is greater than simply a difference in choice of 
-symbols, and so there is some system-specific knowledge being encoded. While we 
-can intuitively infer this conclusion based solely on each system addressing a 
-different problem, our observation of the (structural) patterns within this SRS 
-section confirms it.
+Figure~\ref{fig:gptos} (\gp{}): in both figures, `B' highlights repeated 
+boilerplate structure while `P' highlights the problem-specific entries. Here, 
+``problem-specific'' intentionally bundles together domain-specific and 
+system-specific content, since these figures support that coarser distinction 
+much more clearly than a finer split. The later SWHS/NoPCM example will make 
+that finer split more visible by marking the small number of explicitly 
+system-specific additions. Even at this coarser level, the variability between 
+systems is greater than simply a difference in choice of symbols, and so there 
+is problem-specific knowledge being encoded. While we can intuitively infer 
+this conclusion based solely on each system addressing a different problem, our 
+observation of the structural patterns within this SRS section confirms it.
 
 \fig{
 \centering
-\fbox{\includegraphics[width=\textwidth]{figures/gp_SRS_ToS.png}}
+\begin{tikzpicture}
+\node[inner sep=0] 
+(img){\fbox{\includegraphics[width=\textwidth]{figures/gp_SRS_ToS.png}}};
+
+\begin{scope}[
+  shift={(img.south west)},
+  x={($(img.south east)-(img.south west)$)},
+  y={($(img.north west)-(img.south west)$)}
+]
+\draw[boiler] (0.01,0.51) rectangle (0.99,0.99);
+\node[annotlabel] at (0.95,0.95) {B};
+
+\draw[domainbox] (0.01,0.01) rectangle (0.99,0.49);
+\node[annotlabel] at (0.95,0.44) {P};
+\end{scope}
+\end{tikzpicture}
 }
-{Table of Symbols (truncated) Section from \gp{}}
+{Table of Symbols (truncated) section from \gp{} SRS}
 {fig:gptos}
 
 The reference section of the SRS provides a lot of knowledge in a very 
@@ -591,7 +621,7 @@ straightforward and organized manner. The basic units provided in the table of
 units give a prime example of fundamental, global knowledge shared across 
 domains. Nearly any system involving physical quantities will use one or more 
 of these units. On the other hand, the table of symbols provides 
-system/problem-domain specific knowledge that will not be useful across 
+problem-specific knowledge that will not be useful across 
 unrelated domains. For example, the stress distribution factor $J$ from \gb{} 
 may appear in several related problems, but would be unlikely to be seen in 
 something like SWHS, NoPCM, or Projectile. Finally, acronyms are very 
@@ -607,7 +637,22 @@ being introduced in multiple areas within a single artifact and across
 artifacts in a project.
 \fig{
 \centering
-\includegraphics[width=\textwidth]{figures/gb_dd_q.png}}
+\begin{tikzpicture}
+\node[inner sep=0] 
+(img){\includegraphics[width=\textwidth]{figures/gb_dd_q.png}};
+
+\begin{scope}[
+  shift={(img.south west)},
+  x={($(img.south east)-(img.south west)$)},
+  y={($(img.north west)-(img.south west)$)}
+]
+\node[callnum] at (0.5,0.84) {1};
+\node[callnum] at (0.78,0.66) {2};
+\node[callnum] at (0.27,0.33) {3};
+\node[callnum] at (0.73,0.24) {4};
+\node[callnum] at (0.24,0.06) {5};
+\end{scope}
+\end{tikzpicture}}
 {Data Definition for Dimensionless Load ($\hat{q}$) from \gb{} SRS}
 {fig:gbrddq}
 Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. The 
@@ -615,21 +660,22 @@ same term was previously defined with fewer details in the table of symbols, as
 well as showing up implicitly or in passing in the MG (Figure~\ref{fig:gbrmgcm} 
 and the \emph{loadASTM} module respectively), and implemented in the Source 
 Code (Figure~\ref{fig:gbrsrccalc} lines 11-14). A non-exhaustive list of places 
-where $\hat{q}$ appears helps make the repetition more explicit:
+where $\hat{q}$ appears helps make the repetition more explicit. The numbered 
+callouts in Figure~\ref{fig:gbrddq} highlight several of the direct references 
+within the data definition itself:
 
 \begin{itemize}
-\item In the SRS table of symbols, where $\hat{q}$ is introduced in abbreviated 
-form.
-\item In the data definition shown in Figure~\ref{fig:gbrddq}, where it is 
-defined more fully.
-\item In other SRS data definitions, such as the Stress Distribution Factor 
-($J$) and Non-Factored Load ($NFL$), which refer to $\hat{q}$ directly.
-\item In the SRS calculation of Capacity ($LR$), where $\hat{q}$ appears 
-indirectly through intermediary quantities such as $NFL$.
-\item In the MG, where the \emph{loadASTM} and \emph{Calc} modules mention or 
-rely on the quantity.
-\item In the source code, where the corresponding calculation is implemented 
-explicitly (Figure~\ref{fig:gbrsrccalc}, lines 11-14).
+\item Callout 1 marks the definition of $\hat{q}$ itself within the data 
+definition.
+\item Callout 2 marks the reference to IM3 in the description.
+\item Callout 3 marks the reference to DD2 in the description.
+\item Callout 4 marks the reference to DD6 in the description.
+\item Callout 5 marks the reverse reference from DD4 in the ``Ref. By'' row.
+\item Beyond this figure, $\hat{q}$ also appears in the SRS table of symbols, 
+in other SRS data definitions such as the Stress Distribution Factor ($J$) and 
+Non-Factored Load ($NFL$), in the SRS calculation of Capacity ($LR$) through 
+intermediary quantities such as $NFL$, in the MG, and in the source code 
+(Figure~\ref{fig:gbrsrccalc}, lines 11-14).
 \end{itemize}
 
 
@@ -686,11 +732,15 @@ NoPCM SRS}
 
 Looking at SWHS and NoPCM, we can easily find identical theoretical models 
 (TMs) as the underlying theory for each system is based on the problem domain 
-(see example in Figure~\ref{fig:swhstm1}).
-However, when we follow the derivations from the TMs to the Instance Models 
-(IMs), we find the resulting equations have changed due to the context of the 
-system; the lack of PCM has changed the relevant equations for calculating the 
-energy balance on water in the tank as shown in Figure~\ref{fig:swhsnopcmim1}.
+(see example in Figure~\ref{fig:swhstm1} which is the same in both SRS 
+documents). However, when we follow the derivations from the TMs to the 
+Instance Models (IMs), we find the resulting equations have changed due to the 
+context of the system; the lack of PCM has changed the relevant equations for 
+calculating the energy balance on water in the tank as shown in 
+Figure~\ref{fig:swhsnopcmim1}. In that comparison, the overall similarity of 
+the two IMs already shows that most of the content is shared. The only 
+annotations we need are the `S' markers on the SWHS model, which identify the 
+few PCM-specific inputs and terms that disappear in NoPCM.
 
 \fig{
 \centering
@@ -698,13 +748,45 @@ energy balance on water in the tank as shown in Figure~\ref{fig:swhsnopcmim1}.
 %			study, split into multiple subfigures - case study TBD}
 \begin{subfigure}{\textwidth}
 \centering
-\fbox{\includegraphics[width=0.8\textwidth]{figures/swhs_IM1.png}}
+\begin{tikzpicture}
+\node[inner sep=0] (img) {\fbox{\includegraphics[width=0.8\textwidth]{figures/swhs_IM1.png}}};
+
+\begin{scope}[
+  shift={(img.south west)},
+  x={($(img.south east)-(img.south west)$)},
+  y={($(img.north west)-(img.south west)$)}
+]
+
+\draw[system] (0.37,0.81) rectangle (0.46,0.87);
+\node[annotlabel] at (0.41,0.85) {S};
+
+\draw[system] (0.62,0.81) rectangle (0.83,0.87);
+\node[annotlabel] at (0.81,0.84) {S};
+
+\draw[system] (0.43,0.63) rectangle (0.7,0.69);
+\node[annotlabel] at (0.68,0.67) {S};
+
+\draw[system] (0.17,0.56) rectangle (0.75,0.62);
+\node[annotlabel] at (0.73,0.6) {S};
+
+\draw[system] (0.17,0.44) rectangle (0.75,0.5);
+\node[annotlabel] at (0.73,0.48) {S};
+
+\draw[system] (0.17,0.27) rectangle (0.7,0.33);
+\node[annotlabel] at (0.66,0.31) {S};
+
+\end{scope}
+\end{tikzpicture}
 \caption{SWHS Instance Model for Energy Balance on Water}
 \label{fig:swhs_im1}
 \end{subfigure}
 \begin{subfigure}{\textwidth}
 \centering
-\fbox{\includegraphics[width=0.8\textwidth]{figures/nopcm_IM1.png}}
+\begin{tikzpicture}
+\node[inner sep=0] 
+(img){\fbox{\includegraphics[width=0.8\textwidth]{figures/nopcm_IM1.png}}};
+
+\end{tikzpicture}
 \caption{NoPCM Instance Model for Energy Balance on Water}
 \label{fig:nopcm_im1}
 \end{subfigure}

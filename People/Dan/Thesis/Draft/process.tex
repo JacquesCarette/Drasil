@@ -61,10 +61,14 @@ data definitions for $h_g$ and $h_c$.
 
 As this is a toy example, it may seem contrived to have missing information. 
 However we ran into exactly these sorts of issues with our real-world case 
-studies. In this example, while we can easily identify and rectify omissions,
+studies. In this example, while we can easily identify and rectify omissions, 
 it highlights a key issue: even in a simple system, knowledge is repeated 
 across different sections of a single \sf{}, and critical definitions can be 
-overlooked. Once we add more complexity, with multiple \sfs{} and larger 
+overlooked. This kind of repetitive, reference-style information is also 
+exactly the sort of tedious material that is easy to omit from real-world, 
+manually produced documentation, which helps explain both why practitioners 
+dislike writing it and why manual processes are unreliable for maintaining it 
+consistently. Once we add more complexity, with multiple \sfs{} and larger 
 systems, these issues compound.
 
 Imagine now that we wish to validate the units of both $h_g$ and $h_c$. The 
@@ -77,7 +81,7 @@ created based on these definitions, the challenge of maintaining consistency
 becomes even greater. Corrections would now be required across multiple input 
 languages (for example, \LaTeX{} and Python), significantly increasing the 
 verification burden. Ultimately, these \sfs{} are communicating much of the 
-same knowledge (i.e. the definitions of $h_g$ and $h_c$), merely formatted for 
+same knowledge (i.e.\ the definitions of $h_g$ and $h_c$), merely formatted for 
 different audiences. In the case of the SRS and the source code, the audiences 
 are human stakeholders and computers, respectively.
 
@@ -104,11 +108,14 @@ Section~\ref{sec:scope}, our case study software systems follow the
 systems cover a variety of use cases, to help avoid over-specializing into one 
 particular system type. 
 
-The majority of the aforementioned case studies were developed at McMaster 
-University to address real engineering problems outside of our research group. 
-Table~\ref{tab:case-studies} provides a high-level reference to each case 
-study. For the specifics of each system, all relevant case study artifacts can 
-be found in the GitHub repository.
+The majority of the aforementioned case studies were developed by other teams 
+at McMaster University to address real engineering problems outside of our 
+research group. Table~\ref{tab:case-studies} provides a high-level reference to 
+each case study. For each system, the GitHub repository contains the artifacts 
+relevant to our analysis, namely the documents and implementation materials 
+that expose the system's requirements, design decisions, and implementation 
+details. These include, where available, artifacts such as the SRS, Module 
+Guide, MIS, source code, and other supporting materials.
 
 \begin{table}
 \centering
@@ -145,7 +152,7 @@ study. It was manually written, removing all references to PCM and thus
 remodeling the system.
 
 The Projectile case study, was the first example of a system 
-created solely in Drasil, i.e. we did not have a manually created version to 
+created solely in Drasil, i.e.\ we did not have a manually created version to 
 compare and contrast with through development. As such, it will not be 
 referenced often since it did not inform Drasil's design or development until 
 much further in our process. The Projectile case study was created post-facto 
@@ -163,10 +170,16 @@ type and understand exactly what they are trying to convey.
 To meaningfully address redundancy in software artifacts, we must understand 
 the purpose, content, and audience of each artifact\textemdash{}not just 
 observe repetition. Building on the foundation provided by our case studies, 
-this section examines the structure and role of each major \sf{}\footnote{For 
+we use the term \emph{core knowledge} to refer to the system information that 
+recurs across artifacts, such as the quantities being modeled, the relations 
+among them, the requirements on acceptable behavior, and the design decisions 
+needed to realize those requirements. This section examines the structure and 
+role of each major \sf{}\footnote{For 
 brevity, we focus our analysis on the SRS, Module Guide, and Source Code, as 
-these artifacts are both representative and sufficiently distinct to illustrate 
-the patterns of redundancy and knowledge organization central to our argument.} 
+these artifacts capture complementary aspects of a software system: 
+requirements, design decisions, and implementation. Together, they provide a 
+useful basis for identifying the patterns of knowledge organization and 
+redundancy that informed the later design of Drasil.} 
 in our process. By breaking down these artifacts, we aim to reveal both their 
 commonalities and their differences, setting the stage for identifying patterns 
 of knowledge organization and redundancy that inform the design of Drasil.
@@ -186,9 +199,9 @@ that a comprehensive overview would be excessively lengthy.
 To start, we look at the Software Requirements Specification (SRS). The SRS
 (or some incarnation of it) is one of the most important artifacts for any
 software project as it specifies what problem the software is trying to solve.
-There are many ways to state this problem, and the template from \smithea{} has 
-given us a strong starting point. Figure~\ref{fig:SRSToC} shows the table of 
-contents for an SRS using the \smithea{} template.
+There are many ways to state this problem, and the template from \smithea{}\ 
+has given us a strong starting point. Figure~\ref{fig:SRSToC} shows the table 
+of contents for an SRS using the \smithea{}\ template.
 
 \fig{
   \begin{center}
@@ -280,7 +293,7 @@ comparison, where the few system-specific differences can be marked directly.
 \centering
 \begin{tikzpicture}
 \node[inner sep=0] 
-(img){\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToS.png}}};
+(img){\includegraphics[width=\textwidth]{figures/gb_SRS_ToS.png}};
 
 \begin{scope}[
   shift={(img.south west)},
@@ -288,11 +301,20 @@ comparison, where the few system-specific differences can be marked directly.
   y={($(img.north west)-(img.south west)$)}
 ]
 \draw[boiler] (0.01,0.63) rectangle (0.99,0.99);
-\node[annotlabel] at (0.95,0.95) {B};
+\node[annotlabel] at (0.97,0.95) {B};
 
-\draw[domainbox] (0.01,0.01) rectangle (0.99,0.62);
-\node[annotlabel] at (0.95,0.57) {P};
+\coordinate (symdomnw) at (0.01,0.62);
+\coordinate (symdomne) at (0.99,0.62);
+\node[annotlabel] at (0.97,0.57) {P};
 \end{scope}
+\node[anchor=north, fill=white, inner sep=1pt] (symdots) at ([yshift=-6pt]img.south) {$\vdots$};
+\coordinate (symdomsw) at ($(img.south west)!0.01!(img.south east)$);
+\coordinate (symdomse) at ($(img.south west)!0.99!(img.south east)$);
+\draw[domainbox]
+  ($(symdomsw |- symdots.south)+(0pt,-2pt)$)
+  rectangle
+  (symdomne);
+\draw ($(img.north west)+(-3pt,3pt)$) rectangle ($(img.south east |- symdots.south)+(3pt,-3pt)$);
 \end{tikzpicture}
 \caption{Table of Symbols (truncated) section from \gb{} SRS}
 \label{fig:gbrtos}
@@ -300,34 +322,49 @@ comparison, where the few system-specific differences can be marked directly.
 
 \begin{figure}[H]
 \centering
-\fbox{\includegraphics[width=\textwidth]{figures/gb_SRS_ToAA.png}}
+\begin{tikzpicture}
+\node[inner sep=0]
+(img){\includegraphics[width=\textwidth]{figures/gb_SRS_ToAA.png}};
+
+\begin{scope}[
+  shift={(img.south west)},
+  x={($(img.south east)-(img.south west)$)},
+  y={($(img.north west)-(img.south west)$)}
+]
+\end{scope}
+\node[anchor=north, fill=white, inner sep=1pt] (aadots) at ([yshift=-6pt]img.south) {$\vdots$};
+\draw ($(img.north west)+(-3pt,3pt)$) rectangle ($(img.south east |- aadots.south)+(3pt,-3pt)$);
+\end{tikzpicture}
 \caption{Table of Abbreviations and Acronyms (truncated) section from \gb{} SRS}
 \label{fig:gbrtoa}
 \end{figure}
 
 Looking at the (truncated for space) Table of Symbols, Table of Units, and 
 Table of Abbreviations and Acronyms sections (Figures~\ref{fig:gbrtou}, 
-\ref{fig:gbrtos}, and~\ref{fig:gbrtoa}) we 
-can see that, barring the table values themselves, they are almost identical. 
-The Table of Symbols is simply a table of values, akin to a glossary, specific 
-to the symbols that appear throughout the rest of the document. For each of 
-those symbols, we see the symbol itself, a brief description of what that 
-symbol represents, and the units it is measured in, if applicable. Similarly, 
-the Table of Units lists the Syst\`eme International d'Unit\'es (SI) Units used 
+\ref{fig:gbrtos}, and~\ref{fig:gbrtoa}) across the case studies, we can see 
+that, barring the table values themselves, they are almost identical. More 
+specifically, these sections show that tabular structure itself recurs as a 
+common way of organizing and projecting knowledge within the artifacts. The 
+Table of Symbols is simply a table of values, akin to a glossary, specific to 
+the symbols that appear throughout the rest of the document. For each of those 
+symbols, we see the symbol itself, a brief description of what that symbol 
+represents, and the units it is measured in, if applicable. Similarly, the 
+Table of Units lists the Syst\`eme International d'Unit\'es (SI) Units used 
 throughout the document, their descriptions, and the SI name. Finally, the 
 table of Abbreviations and Acronyms lists the abbreviations and their full 
 forms, which are essentially the symbols and their descriptions for each of the 
 abbreviations.
 
 While the reference material section should be fairly self-explanatory as to 
-what it contains, other sections and subsections may not be so clear from their 
-name alone. For example, it may not be clear offhand of what constitutes a 
-theoretical model compared to a data definition or an instance model. One may 
-argue that the author of the SRS, particularly if they chose to use the 
-\smithea{} template, would need to understand that difference. However, it is 
-not clear whether the intended audience would also have such an understanding. 
-Who is that audience? Refer to Section~\ref{sec:sfs}, for more details. A brief 
-summary is available in Table~\ref{tab:sfsummary}.
+what it contains, other sections and subsections are not always so clear from 
+their names alone. For example, a section labeled as a theoretical model, data 
+definition, or instance model does not by itself reveal exactly what kind of 
+knowledge is being presented, how detailed that knowledge is, or how it relates 
+to other sections of the document. This matters for our analysis because, to 
+identify patterns of redundancy and organization across artifacts, we first had 
+to determine what each section was actually saying rather than rely only on the 
+template labels. Refer to Section~\ref{sec:sfs} for more details on the roles 
+of these artifacts; a brief summary is available in Table~\ref{tab:sfsummary}.
 
 Returning to our exercise of breaking down each section of the SRS to determine 
 the subtleties of \emph{what} is contained therein\footnote{The breakdown 
@@ -343,9 +380,9 @@ quantities like demand, stress distribution factor, and probability of
 breakage. Between those extremes is material that belongs to the problem domain 
 more than to the individual software system. In \gb{}, for example, the 
 theoretical background concerning glass mechanics, load, and resistance is not 
-unique to that one program; rather, it is domain knowledge that the SRS uses to 
-derive the system-specific models, constraints, and calculations presented 
-later in the document.
+unique to that one program; rather, it is broader domain knowledge that the SRS 
+uses to derive the system-specific models, constraints, and calculations 
+presented later in the document.
 
 Observing the contents of an SRS template adhere to said template may seem 
 mundane, but it is a necessary step before we can move on to other \sfs{}. 
@@ -360,7 +397,7 @@ The module guide (MG) is a \sf{} that details the architecture of a given
 software system. It holds a number of design decisions around sensibly grouping 
 functionalities within the system into modules to fulfill the requirements laid 
 out in the SRS. For example, one might have an input/output module for handling 
-user input and giving the user feedback through the display (i.e. via print 
+user input and giving the user feedback through the display (i.e.\ via print 
 commands or some other output), or a calculations module that contains all of 
 the calculation functions being performed in the normal operation of the given 
 software system. The \smithea{} MG template also includes a traceability matrix 
@@ -395,9 +432,9 @@ Changes" section, we see that again the introductions to this section and
 its subsections are generic boilerplate, however the details of each section 
 are not. Both subsections are written in the same way: as a list of labeled 
 changes (AC\# for anticipated change, UC\# for unlikely change). This is the 
-first place we see both problem-domain and system-specific information 
+first place we see both problem-domain and system-specific information. 
 Interestingly, the Module Hierarchy section follows the same general style: it 
-is a list of modules which represent the leaves of the module hierarchy tree 
+is a list of modules that represent the leaves of the module hierarchy tree 
 and each one is labeled (M\#).
 
 \fig{
@@ -409,27 +446,30 @@ and each one is labeled (M\#).
 
 Skipping ahead to the module decomposition, we find a section heading for each 
 Level 1 module in the hierarchy, followed by subsections describing the Level 2 
-modules. The former are almost entirely generic boilerplate (for example common 
-Level 1 modules include: Hardware-Hiding, Behaviour-Hiding, and 
-Software Decision modules), but the latter are problem-domain or system 
-specific. An example of a system-specific module is shown in 
-Figure~\ref{fig:gbrmgcm}. 
+modules. The Level 1 headings are almost entirely generic boilerplate, with 
+common examples including Hardware-Hiding, Behaviour-Hiding, and Software 
+Decision modules. The Level 2 modules, by contrast, are problem-domain or 
+system-specific. An example of a system-specific module is shown in 
+Figure~\ref{fig:gbrmgcm}.
 
 Each module is described by its secrets, services, and what it will be 
 implemented by. For example, a given module could be implemented by the 
 operating system (OS), the system being described (ex. \gb{}), or a third party 
 system/library that will inter-operate with the given system.
 
-Finally we have a traceability matrix and use hierarchy diagram. Both are 
-visual representations of how the different modules implement the requirements 
-and use each other respectively. The traceability matrix provides a direct and 
-obvious link between the SRS and MG, where other connections between the two 
-\sfs{} have been implicit until this point. Generally, the next \sf{} would be 
-the MIS, however as it is structured so similarly to the MG (one section per 
-module, each section organized in a very similar way, a repeated use hierarchy, 
-etc) we will skip it for brevity. The MIS includes novel system-specific, 
-implementation-level information denoting the interfaces between modules, but 
-for our current exercise does not provide any revelations beyond that of the MG.
+Finally, the MG includes a traceability matrix and use hierarchy diagram. 
+These provide visual summaries of how modules relate to the system's 
+requirements and to one another, respectively. The traceability matrix makes 
+the connection between the SRS and MG especially explicit, whereas many of the 
+other links between these two \sfs{} have been implicit until this point. We do 
+not analyze these representations in detail here, however, because for our 
+purposes they largely restate relationships already visible in the module 
+decomposition. Generally, the next \sf{} would be the MIS, but as it is 
+structured so similarly to the MG (one section per module, each section 
+organized in a very similar way, a repeated use hierarchy, etc.) we will skip 
+it for brevity. The MIS includes novel system-specific, implementation-level 
+information denoting the interfaces between modules, but for our current 
+exercise does not provide any revelations beyond that of the MG.
 
 The MG gives us a very clear picture of \textit{decisions} made by the system 
 designers, as opposed to the knowledge of the system domain, problem being 
@@ -442,8 +482,8 @@ mind, let us move on to dissecting the source code.
 \label{sec:breakdown:code}
 
 The source code is arguably the most important \sf{} in any given software 
-system since it serves as the set of instructions that a computer executes in 
-order to solve the given problem. With only the other \sfs{} and without the 
+system since it serves as the set of instructions that a computer executes
+to solve the given problem. With only the other \sfs{} and without the 
 source code, we would have a very well defined problem and acceptance criteria 
 for a possible solution, but would never actually solve the problem.
 
@@ -492,23 +532,26 @@ for a possible solution, but would never actually solve the problem.
 {Python source code directory structure for \gb{}}
 {fig:gbsrcstruct}
 
-As the source code is the executable set of instructions, one would expect it 
-to be almost entirely system and problem-domain specific with very little 
-boilerplate. Looking into the source of our case studies, we find this to be 
-mostly true barring the most generic of library use (ex. 
-\code{C}{stdio} in C).
+As the source code is the executable set of instructions, one would expect much 
+of it to be system- and problem-domain specific. Looking into the source of our 
+case studies, we find this to be largely true for the computational core, while 
+also observing recurring implementation-level boilerplate across projects. For 
+example, tasks such as reading inputs, writing outputs, and managing files are 
+often structured very similarly between systems, and some later-added numerical 
+components, such as ODE solvers, are generic rather than domain-specific.
 
 Returning to our example of the MG from \gb{} (Figure~\ref{fig:gbrmgtoc}) and 
 comparing it to the python source code structure shown in 
-Figure~\ref{fig:gbsrcstruct} we can see that the source code follows almost 
-identically in structure to the module decomposition. The only difference being 
-the existence of an exceptions module defining the different types of
-exceptions that may be thrown by the other modules. While this can be 
-considered a fairly trivial difference, likely made for ease of maintenance, 
-readability, and extensibility, it highlights that \textbf{the two \sfs{} are 
-out of sync}. We speculate this difference was caused by a change made during 
-the implementation phase, wherein the MG was not updated to reflect the 
-addition of an exceptions module.
+Figure~\ref{fig:gbsrcstruct}, we can see that in this manually maintained case 
+study the source code follows almost identically in structure to the module 
+decomposition. The only difference is the existence of an exceptions module 
+defining the different types of exceptions that may be thrown by the other 
+modules. While this can be considered a fairly trivial difference, likely made 
+for ease of maintenance, readability, and extensibility, it highlights that 
+\textbf{the two \sfs{} can drift out of sync when maintained separately}. We 
+speculate this difference was caused by a change made during the implementation 
+phase, wherein the MG was not updated to reflect the addition of an exceptions 
+module.
 
 \fig{
 \lstinputlisting[language=Python, firstline=5, 
@@ -529,76 +572,82 @@ The source code provides clear instructions to the machine on how to calculate
 each of these values and their intermediaries; it provides the actionable steps 
 to solve the given problem. When we compare the code with relevant sections of 
 the SRS, specifically the Data Definitions (DDs) for each term, we can see a 
-very obvious transformation from one form to the other; the symbol used by the 
-DD is the (partial) name of the function in the source code and the equation 
-from the DD is calculated within the source code. This is one of many patterns 
-we see across our \sfs{} within each case study.
+very obvious transformation from one form to the other. For a concrete 
+example, compare the data definition for $\hat{q}$ shown later in 
+Figure~\ref{fig:gbrddq} with its corresponding implementation 
+(\code{python}|calc_q_hat|) in Figure~\ref{fig:gbrsrccalc}: the symbol used by 
+the DD is reflected in the (partial) name of the function in the source code, 
+and the equation from the DD is calculated within the source code. This is one 
+of many patterns we see across our \sfs{} within each case study.
 
 \subsection{Wrapping up}
 
 A close examination of each major software artifact reveals that, while their 
 purposes and audiences differ, they are all fundamentally built upon the same 
-core knowledge. Redundancy is introduced both within and across these 
-artifacts, often as a result of tailoring the same information for different 
-contexts or audiences. Structural similarities emerge across artifacts, 
-highlighting opportunities for systematic knowledge capture and reuse. At the 
-same time, inconsistencies and omissions can easily arise when artifacts are 
-maintained separately, underscoring the risks inherent in manual, disconnected 
-processes. Understanding the intent, content, and audience of each artifact is 
-therefore essential for identifying patterns of redundancy and for informing 
-the design of tools that aim to improve consistency and reduce unnecessary 
-repetition.
+core knowledge: the system quantities and definitions, the relations among 
+them, the requirements on acceptable behavior, and the decisions needed to 
+realize those requirements. Redundancy is introduced both within and across 
+these artifacts, often as a result of tailoring the same information for 
+different contexts or audiences. Structural similarities emerge across 
+artifacts, highlighting opportunities for systematic knowledge capture and 
+reuse. At the same time, inconsistencies and omissions can easily arise when 
+artifacts are maintained separately, underscoring the risks inherent in manual, 
+disconnected processes. Understanding the intent, content, and audience of each 
+artifact is therefore essential for identifying patterns of redundancy and for 
+informing the design of tools that aim to improve consistency and reduce 
+unnecessary repetition.
 
-By systematically dissecting each artifact type, we not only reveal the sources 
-and forms of redundancy, but also clarify the requirements for any framework 
-(Drasil) that aims to automate or improve the generation of these artifacts. 
-This analysis directly informs the patterns and organizational strategies we 
-discuss in the following sections.
+By systematically dissecting each artifact type, we clarify what information 
+each artifact carries and how overlapping knowledge is represented across them. 
+That decomposition sets up the more explicit discussion of recurring patterns 
+of redundancy, and of why those patterns arise, in the following sections, 
+while also clarifying the requirements for any framework (Drasil) that aims to 
+automate or improve the generation of these artifacts.
 
 \section{Identifying Repetitive Redundancy}
 \label{sec:patterns}
 
-From the examples in Sections~\ref{sec:hghc-mini}~and~\ref{sec:breakdown}, we 
-can see a number of simple patterns emerging with respect to organization and 
-information repetition within a case study. Upon applying our process to all of 
-the case studies and adopting a broader perspective, numerous instances emerge 
-where patterns transcend individual case studies and remain universally 
-applicable. Several of these patterns should be unsurprising, as they relate to 
-the template of a particular \sf{}. It is interesting, however, that patterns 
-of information organization crop up within a given \sf{} in multiple places, 
-containing distinct information.
+Having examined how the artifacts are structured, we can now turn to the 
+recurring patterns of redundancy and information organization that appear 
+within and across the case studies. Some of these patterns follow directly from 
+the templates used to construct particular \sfs{}, while others reflect 
+repeated ways of organizing and reusing information within a single artifact. 
+In the examples that follow, we make these patterns more concrete by examining 
+recurring tabular structures, repeated boilerplate text, and repeated 
+references to the same underlying system knowledge across sections and 
+artifacts.
 
-Returning to our example from Section~\ref{sec:breakdown:srs}, looking only at 
-the reference section of our SRS template, we have already found three 
-subsections that contain the majority of their information in the same 
-organizational structure: a table defining terms with respect to their symbolic 
-representation and general information relevant to those terms. Additionally, 
-we can see that the Table of Units and Table of Symbols have an introductory 
-blurb preceding the tables themselves, whereas the Table of Abbreviations and 
-Acronyms does not. Inspecting across case studies, we observe that the 
-introduction to the Table of Units is nothing more than boilerplate text 
-dropped into each case study verbatim; it is completely generic and applicable 
-to \emph{any} software system using SI units. The introduction to the Table of 
-Symbols also appears to be boilerplate across several examples, however, it 
-does have minor variations. For an easy visual comparison, the earlier \gb{} 
-example in Figure~\ref{fig:gbrtos} can be compared directly with 
-Figure~\ref{fig:gptos} (\gp{}): in both figures, `B' highlights repeated 
+Returning to our example from Section~\ref{sec:breakdown:srs}, and in 
+particular to Figures~\ref{fig:gbrtou}, \ref{fig:gbrtos}, 
+and~\ref{fig:gbrtoa}, the reference section of the SRS template already shows 
+one clear recurring pattern: its three subsections are organized in nearly the 
+same way, each presenting a table of terms with short descriptive information. 
+Figures~\ref{fig:gbrtou} and~\ref{fig:gbrtos} further show that the Table of 
+Units and Table of Symbols include a short introductory blurb before the table 
+itself, whereas Figure~\ref{fig:gbrtoa} shows that the Table of 
+Abbreviations and Acronyms does not. Across case studies, the introduction to 
+the Table of Units is pure boilerplate, repeated verbatim and applicable to 
+\emph{any} software system using SI units. The introduction to the Table of 
+Symbols is similarly boilerplate, although it admits minor variations. This is 
+easy to see by comparing the earlier \gb{} example in Figure~\ref{fig:gbrtos} 
+with Figure~\ref{fig:gptos} (\gp{}): It is easy to see that \gp{} explicitly 
+states its vector notation convention, whereas \gb{} does not, because vectors 
+do not arise in that case study. In both figures, `B' highlights repeated 
 boilerplate structure while `P' highlights the problem-specific entries. Here, 
 ``problem-specific'' intentionally bundles together domain-specific and 
 system-specific content, since these figures support that coarser distinction 
 much more clearly than a finer split. The later SWHS/NoPCM example will make 
 that finer split more visible by marking the small number of explicitly 
 system-specific additions. Even at this coarser level, the variability between 
-systems is greater than simply a difference in choice of symbols, and so there 
-is problem-specific knowledge being encoded. While we can intuitively infer 
-this conclusion based solely on each system addressing a different problem, our 
-observation of the structural patterns within this SRS section confirms it.
+systems is greater than a mere change in symbol choice, confirming that 
+genuinely problem-specific knowledge is being encoded within this repeated 
+structure.
 
 \fig{
 \centering
 \begin{tikzpicture}
 \node[inner sep=0] 
-(img){\fbox{\includegraphics[width=\textwidth]{figures/gp_SRS_ToS.png}}};
+(img){\includegraphics[width=\textwidth]{figures/gp_SRS_ToS.png}};
 
 \begin{scope}[
   shift={(img.south west)},
@@ -608,28 +657,39 @@ observation of the structural patterns within this SRS section confirms it.
 \draw[boiler] (0.01,0.51) rectangle (0.99,0.99);
 \node[annotlabel] at (0.95,0.95) {B};
 
-\draw[domainbox] (0.01,0.01) rectangle (0.99,0.49);
+\coordinate (gpdomnw) at (0.01,0.49);
+\coordinate (gpdomne) at (0.99,0.49);
 \node[annotlabel] at (0.95,0.44) {P};
 \end{scope}
+\node[anchor=north, fill=white, inner sep=1pt] (gpdots) at 
+([yshift=-6pt]img.south) {$\vdots$};
+\coordinate (gpdomsw) at ($(img.south west)!0.01!(img.south east)$);
+\coordinate (gpdomse) at ($(img.south west)!0.99!(img.south east)$);
+\draw[domainbox]
+  ($(gpdomsw |- gpdots.south)+(0pt,-2pt)$)
+  rectangle
+  (gpdomne);
+\draw ($(img.north west)+(-3pt,3pt)$) rectangle ($(img.south east |- 
+gpdots.south)+(3pt,-3pt)$);
 \end{tikzpicture}
 }
 {Table of Symbols (truncated) section from \gp{} SRS}
 {fig:gptos}
 
-The reference section of the SRS provides a lot of knowledge in a very 
-straightforward and organized manner. The basic units provided in the table of 
-units give a prime example of fundamental, global knowledge shared across 
-domains. Nearly any system involving physical quantities will use one or more 
-of these units. On the other hand, the table of symbols provides 
-problem-specific knowledge that will not be useful across 
-unrelated domains. For example, the stress distribution factor $J$ from \gb{} 
-may appear in several related problems, but would be unlikely to be seen in 
-something like SWHS, NoPCM, or Projectile. Finally, acronyms are very 
-context-dependent. They are often specific to a given domain and, without a 
-coinciding definition, it can be very difficult for even the target audience to 
-understand what they refer to. Within one domain, there may be several acronyms 
-that look identical, but mean different things, for example: PM can refer to a 
-Product Manager, Project Manager, Program Manager, Portfolio Manager, etc.
+The reference section of the SRS conveys a substantial amount of knowledge in a 
+very straightforward and organized manner. The basic units provided in the 
+table of units give a prime example of fundamental, global knowledge shared 
+across domains. Nearly any system involving physical quantities will use one or 
+more of these units. On the other hand, the table of symbols provides 
+problem-specific knowledge that will not be useful across unrelated domains. 
+For example, the stress distribution factor $J$ from \gb{} may appear in 
+several related problems, but would be unlikely to be seen in something like 
+SWHS, NoPCM, or Projectile. Finally, acronyms are very context-dependent. They 
+are often specific to a given domain and, without a coinciding definition, it 
+can be very difficult for even the target audience to understand what they 
+refer to. Within one domain, there may be several acronyms that look identical, 
+but mean different things, for example: PM can refer to a Product Manager, 
+Project Manager, Program Manager, Portfolio Manager, etc.
 
 By continuing to breakdown the SRS and other \sfs{}, we are able to find many 
 more patterns of knowledge repetition. For example, we see the same concept 
@@ -673,9 +733,9 @@ definition.
 \item Callout 5 marks the reverse reference from DD4 in the ``Ref. By'' row.
 \item Beyond this figure, $\hat{q}$ also appears in the SRS table of symbols, 
 in other SRS data definitions such as the Stress Distribution Factor ($J$) and 
-Non-Factored Load ($NFL$), in the SRS calculation of Capacity ($LR$) through 
-intermediary quantities such as $NFL$, in the MG, and in the source code 
-(Figure~\ref{fig:gbrsrccalc}, lines 11-14).
+Non-Factored Load ($\mathit{NFL}$), in the SRS calculation of Capacity ($LR$) 
+through intermediary quantities such as $\mathit{NFL}$, in the MG, and in the 
+source code (Figure~\ref{fig:gbrsrccalc}, lines 11-14).
 \end{itemize}
 
 
@@ -686,7 +746,7 @@ meaning within their given context or consult other \sfs{} for more
 comprehensive understanding. When reading the SRS, the data definitions and 
 other reference materials play a crucial role in swiftly comprehending the 
 complete definition of $\hat{q}$ in relation to the system's inputs, outputs, 
-functional requirements, and acceptance criteria.
+functional requirements, and properties of a correct solution.
 
 The MG, on the other hand, briefly mentions $\hat{q}$ when defining the 
 responsibilities of both the \emph{loadASTM} and \emph{Calc} modules (the 
@@ -706,7 +766,7 @@ is deemed superfluous, based on the context and the specific requirements of
 our audience. In other words, the authors only \emph{project} some portion of 
 their knowledge of given terms at a given time, depending on their needs 
 (precision, brevity, clarity, etc.), the expectations of the audience, and 
-contextual relevance. \footnote{We have only referred to the term as $\hat{q}$ 
+contextual relevance.\footnote{We have only referred to the term as $\hat{q}$ 
 in this section to emphasize our argument and make a meta-argument that the 
 definition is irrelevant to our audience in this example. What matters is the 
 symbolic reference, which we share a common understanding of.} The audience, on 
@@ -730,15 +790,16 @@ general (boilerplate).
 NoPCM SRS}
 {fig:swhstm1}
 
-Looking at SWHS and NoPCM, we can easily find identical theoretical models 
-(TMs) as the underlying theory for each system is based on the problem domain 
-(see example in Figure~\ref{fig:swhstm1} which is the same in both SRS 
-documents). However, when we follow the derivations from the TMs to the 
-Instance Models (IMs), we find the resulting equations have changed due to the 
-context of the system; the lack of PCM has changed the relevant equations for 
-calculating the energy balance on water in the tank as shown in 
-Figure~\ref{fig:swhsnopcmim1}. In that comparison, the overall similarity of 
-the two IMs already shows that most of the content is shared. The only 
+Looking at SWHS and NoPCM, we can readily identify identical theoretical 
+models~(TMs), because the underlying theory is determined by the shared problem 
+domain. For example, both systems use the principle of conservation of thermal 
+energy, shown in Figure~\ref{fig:swhstm1}, which appears unchanged in both 
+SRS documents. However, when we move from that shared theoretical model to the 
+corresponding instance models~(IMs), the equations change to reflect the 
+system context. In this case, the absence of PCM changes the equations used to 
+calculate the energy balance on water in the tank, as shown in 
+Figure~\ref{fig:swhsnopcmim1}. At the same time, the strong visual similarity 
+between the two IMs shows that most of the content is still shared. The only 
 annotations we need are the `S' markers on the SWHS model, which identify the 
 few PCM-specific inputs and terms that disappear in NoPCM.
 
@@ -749,7 +810,8 @@ few PCM-specific inputs and terms that disappear in NoPCM.
 \begin{subfigure}{\textwidth}
 \centering
 \begin{tikzpicture}
-\node[inner sep=0] (img) {\fbox{\includegraphics[width=0.8\textwidth]{figures/swhs_IM1.png}}};
+\node[inner sep=0] 
+(img){\fbox{\includegraphics[width=0.8\textwidth]{figures/swhs_IM1.png}}};
 
 \begin{scope}[
   shift={(img.south west)},
@@ -796,16 +858,21 @@ few PCM-specific inputs and terms that disappear in NoPCM.
 
 While these examples are fairly small and specific, they are indicative of 
 a larger, more generalizable, set of patterns of knowledge organization and 
-repetition. These patterns are at their core: the use of common knowledge that 
-has been projected through some means, and patterns of organization of those 
-knowledge projections within \sfs{}. Common knowledge, in this case, refers to 
-one of three categories of knowledge: system-specific, domain-specific, or 
-common to \sfs{} as a whole. It should also be noted that knowledge projections 
-may include the identity projection (i.e. the full, unabridged definition) as 
-they are dependent on the relevance to the audience of the given \sf{}. 
-Regardless, the captured knowledge fundamentally underlies these patterns of 
-repetition, and is where we need to focus if we intend to reduce unnecessary 
-redundancy and improve maintainability.
+repetition. Across the case studies, we repeatedly see the same core knowledge 
+organized in recurring tabular structures, introduced by reusable boilerplate, 
+referenced symbolically across multiple sections, and re-expressed across 
+artifacts such as the SRS, MG, and source code. Across related systems, we 
+also see shared domain knowledge retained while a smaller set of 
+system-specific details varies, as in the SWHS/NoPCM comparison. In these 
+examples, the shared knowledge may be common to \sfs{} as a whole, common to a 
+problem domain, or specific to an individual system, and it may be projected 
+either in full or in abbreviated form depending on the audience and purpose of 
+the given \sf{}. Unnecessary redundancy arises when those repeated projections 
+must be maintained separately: the same definition, equation, table entry, or 
+boilerplate explanation must be updated in multiple places, increasing the 
+risk of omissions, inconsistencies, and drift between artifacts. Improving 
+maintainability therefore means reducing the number of independent edits 
+required to keep these related projections consistent.
 
 These observations are not peculiar to software artifacts alone. More broadly, 
 they reflect a general feature of human communication: we routinely rely on 
@@ -817,7 +884,7 @@ communicate more generally. This matters for Drasil because it suggests that
 the redundancy we observe across \sfs{} is not simply the result of poor 
 writing or careless process. Rather, it arises in part because the same 
 underlying knowledge must be projected differently for different audiences, 
-contexts, and purposes.
+contexts, and purposes, even in carefully structured artifacts.
 
 If this is the case, then the central challenge is not merely to eliminate 
 repetition, but to determine how that underlying knowledge should be captured 
@@ -825,14 +892,17 @@ and organized so that appropriate projections can be generated consistently.
 This is the problem to which we now turn.
 
 These patterns directly inform the requirements and architecture of Drasil. By 
-understanding them, we reveal challenges and opportunities for automation and 
-consistency in software artifact generation. Recognizing that redundancy arises 
-from projecting the same core knowledge into different forms for different 
-audiences, we see the need for a framework that can capture, organize, and 
-project knowledge in a principled, reusable way. This insight is the conceptual 
-bridge to Drasil: a framework explicitly designed to operationalize these 
-patterns, reduce unnecessary duplication, and ensure consistency across 
-artifacts. The following sections build on this foundation.
+understanding them, we reveal specific challenges and opportunities for 
+automation and consistency in software artifact generation. Drasil must be able 
+to capture shared definitions, relations, and explanations once, distinguish 
+reusable boilerplate from domain-specific and system-specific knowledge, and 
+project that knowledge consistently into different artifacts and sections. This 
+directly targets the maintenance problems identified above: repeated manual 
+updates, cross-artifact drift, and inconsistencies between related 
+representations of the same knowledge. In this sense, Drasil is intended to 
+operationalize these patterns by reducing unnecessary duplication while 
+preserving the context-specific projections that different audiences require. 
+The following sections build on this foundation.
 
 \section{Organizing knowledge - a fluid approach}
 
@@ -858,7 +928,7 @@ represented in various forms, such as mathematical equations, natural
 language descriptions, code snippets, diagrams, and more, while remaining the 
 same underlying knowledge. This definition underlies our later discussion of 
 knowledge chunks and projections in Chapter~\ref{c:drasil}, especially 
-Section~\ref{sec:kcChunk}.
+Section~\ref{sec:kcChunk}: Capturing Knowledge via Chunks.
 
 \emph{For clarity in the following examples, we will use set notation to 
 describe relationships between knowledge and projections. This is not intended 
@@ -871,7 +941,7 @@ concept or artifact.
 
 Given the patterns across \sfs{} we observed in the previous section, we can 
 generalize knowledge projections to their projection functions. Identity 
-projection functions directly repeat knowledge verbatim i.e. $p(K) \equiv K$ 
+projection functions directly repeat knowledge verbatim i.e.\ $p(K) \equiv K$ 
 for some set of knowledge $K$. It should be noted in our case that as long as 
 the projection used contains the full definition and context of a piece of 
 knowledge, that projection is considered an identity projection 
@@ -880,19 +950,19 @@ language (ex. ``$x = y$" vs ``$x$ is equal to $y$" vs ``x est \'egal \`a y").
 An identity projection is providing the knowledge chunk in full. 
 Non-identity projections require using representations that elide some details 
 of the knowledge at hand to make it more palatable for the audience of the 
-given \sf{} i.e. $p(K) \subset K$. Similarly, we can have multivariant 
+given \sf{} i.e.\ $p(K) \subset K$. Similarly, we can have multivariant 
 projection functions (whether identity or not) which project knowledge from 
-several places into one form, i.e. $p(K,L,M) \subseteq K\cup L\cup M$.
+several places into one form, i.e.\ $p(K,L,M) \subseteq K\cup L\cup M$.
 
 In all cases, we have some fully defined knowledge and then we apply 
 a projection function to retrieve the necessary information for our \sf{}. We 
 can postulate that organizing and grouping knowledge into some type of 
-structure, with an assortment of projection functions (ex. To look up the full 
-definition in different representations, pull out relevant portions for a given 
-audience, or provide useful abstractions) will allow us to reduce the need for 
-manual duplication and remove unnecessary redundancies, as anything we need to 
-include in our \sfs{} can be retrieved from a given source with a given 
-projection function.
+structure, with an assortment of projection functions (For example, to look up 
+the full definition in different representations, pull out relevant portions 
+for a given audience, or provide useful abstractions) will allow us to reduce 
+the need for manual duplication and remove unnecessary redundancies, as 
+anything we need to include in our \sfs{} can be retrieved from a given source 
+with a given projection function.
 
 Keeping in mind that our core knowledge is used across all \sfs{} via 
 projections, we may naively choose to consolidate all knowledge into a single
@@ -973,10 +1043,15 @@ that knowledge between them. We use several case study systems that fit our
 scope (\mbox{input~$\rightarrow$~process~$\rightarrow$~output}) as examples to 
 give a concrete, applied base to the work.
 
-Generally, we see \sfs{} for a given system have a lot in common, namely they 
-require the same core knowledge tailored to a specific audience for each \sf{}. 
-This knowledge is organized in a meaningful way, and portions relevant to the 
-context of the \sf{} are presented to the audience.
+Taken together, the case studies show that the same information recurs in a 
+small number of predictable ways: artifact templates reuse familiar tabular 
+and boilerplate structures, key quantities are referenced repeatedly across 
+sections and artifacts, and software family members preserve shared domain 
+content while varying only limited system-specific details. The recurring 
+material is the substance of the system itself\textemdash{}its quantities, 
+relationships, behavioral expectations, and design decisions\textemdash{}but 
+each \sf{} presents that material differently to suit a particular audience 
+and purpose.
 
 We delved into the idea of knowledge chunks and projection functions for 
 producing context-relevant pieces of knowledge that are consumable by a given 
@@ -984,10 +1059,10 @@ audience. We have also explored strategies for organizing that knowledge in a
 practical manner. 
 
 We have determined the three main components necessary for any useful \sf{}: 
-knowledge, context (i.e. audience), and organizational structure. From here we 
+knowledge, context (i.e.\ audience), and organizational structure. From here we 
 can operationalize each component in a reusable and (relatively) 
 redundancy-free manner. This operationalization informs the initial design for 
-our framework Drasil which will be covered in depth in Chapter~\ref{c:drasil}. 
+our framework Drasil, which will be covered in depth in Chapter~\ref{c:drasil}. 
 
 Effectively, we want to automate the generation of \sfs{} through applying 
 projections to knowledge and presenting it in a given structure. The structure 

@@ -1,5 +1,5 @@
 module Drasil.PDController.Concepts (
-  acronyms, concepts, defs, simulation, processError, simulationTime, stepTime,
+  concepts, defs, simulation, processError, simulationTime, stepTime,
   controlVariable, propControl, derControl,
   pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL, processVariable,
   ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
@@ -10,8 +10,7 @@ module Drasil.PDController.Concepts (
 import Language.Drasil (commonIdeaWithDict, dcc, nw, cn', nounPhraseSP, pn, CI,
   ConceptChunk, IdeaDict)
 
-acronyms :: [CI]
-acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]
+
 
 pdControllerCI, proportionalCI, piCI, pidCI :: CI
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []

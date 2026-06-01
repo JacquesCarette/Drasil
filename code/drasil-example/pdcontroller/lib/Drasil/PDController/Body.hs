@@ -17,7 +17,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs,
+import Drasil.PDController.Concepts (pidC, concepts, defs,
   pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
@@ -110,8 +110,8 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon'
-
+  nw progName : map nw [pdControllerCI, proportionalCI, piCI, pidCI] ++ map nw mathcon'
+  
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks

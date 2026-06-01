@@ -1,0 +1,9 @@
+resolver: lts-22.44
+
+packages:
+- .
+- ../drasil-build-artifacts
+
+extra-deps:
+# lts-22.44 includes 0.1.5, but we need 0.1.6+ due to https://github.com/haskell/file-io/issues/45
+- file-io-0.1.6@sha256:5e3466f15993e499db47d79d09c519d6d37c143cfe94fb46dd218bf2f6f3fd39,3550

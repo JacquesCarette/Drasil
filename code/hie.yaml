@@ -1,5 +1,11 @@
 cradle:
   stack:
+    - path: "drasil-assets/lib"
+      component: "drasil-assets:lib"
+
+    - path: "drasil-assets/test"
+      component: "drasil-assets:test:drasil-assets-test"
+
     - path: "drasil-build-artifacts/lib"
       component: "drasil-build-artifacts:lib"
 

@@ -111,7 +111,7 @@ ideaDicts =
   concepts ++
   -- CIs
   nw progName : map nw [pdControllerCI, proportionalCI, piCI, pidCI] ++ map nw mathcon'
-  
+
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks

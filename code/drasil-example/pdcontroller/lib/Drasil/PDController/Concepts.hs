@@ -10,8 +10,6 @@ module Drasil.PDController.Concepts (
 import Language.Drasil (commonIdeaWithDict, dcc, nw, cn', nounPhraseSP, pn, CI,
   ConceptChunk, IdeaDict)
 
-
-
 pdControllerCI, proportionalCI, piCI, pidCI :: CI
 pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
 proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []

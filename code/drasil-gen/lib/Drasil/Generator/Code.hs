@@ -14,7 +14,7 @@ import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
-import Drasil.Build.Artifacts (FileLayout, directory, ps)
+import Drasil.FileHandling (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
 import Drasil.GProc (unJLC)
 import Language.Drasil (Space(..))

@@ -2,7 +2,7 @@
 
 {- HLINT ignore "Use writeFile" -}
 
-module Drasil.Build.Artifacts.WriteFiles
+module Drasil.FileHandling.WriteFiles
   ( Writeable (..),
     WritePolicy (..),
   )

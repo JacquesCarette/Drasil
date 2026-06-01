@@ -5,7 +5,6 @@ ghc-options:
 
 packages:
 - drasil-assets
-- drasil-build-artifacts
 - drasil-code
 - drasil-data
 - drasil-database
@@ -21,6 +20,7 @@ packages:
 - drasil-example/ssp
 - drasil-example/swhs
 - drasil-example/template
+- drasil-file-handling
 - drasil-gen
 - drasil-gool
 - drasil-lang

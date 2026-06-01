@@ -4,7 +4,7 @@
 -- <https://hackage-content.haskell.org/package/tasty-golden-2.3.6>
 --
 -- Run your test suite with @--accept@ to accept files as the new golden tests.
-module Drasil.Build.Artifacts.GoldenTesting
+module Drasil.FileHandling.GoldenTesting
   ( goldenTestingGroup,
     GoldenTestCase,
     goldenTest,
@@ -12,9 +12,9 @@ module Drasil.Build.Artifacts.GoldenTesting
 where
 
 import Data.Proxy (Proxy (..))
-import Drasil.Build.Artifacts.CommonPaths (localPath)
-import Drasil.Build.Artifacts.FileLayout (FileLayout, OverwritePolicy(..), name, writeFiles)
-import Drasil.Build.Artifacts.FilePath (toPath)
+import Drasil.FileHandling.CommonPaths (localPath)
+import Drasil.FileHandling.FileLayout (FileLayout, OverwritePolicy(..), name, writeFiles)
+import Drasil.FileHandling.FilePath (toPath)
 import System.Directory.OsPath (createDirectoryIfMissing, removePathForcibly)
 import System.Exit (ExitCode (ExitSuccess))
 import System.OsPath (OsPath, decodeUtf, (</>))

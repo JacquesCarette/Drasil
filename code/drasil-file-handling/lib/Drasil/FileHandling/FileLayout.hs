@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Drasil.Build.Artifacts.FileLayout
+module Drasil.FileHandling.FileLayout
   ( -- * File Layout
     FileLayout,
     name,
@@ -20,8 +20,8 @@ where
 import Data.Foldable qualified as F
 import Data.Map.Strict qualified as M
 import Data.Maybe (fromMaybe)
-import Drasil.Build.Artifacts.FilePath (PathSegment, toPath, (</>))
-import Drasil.Build.Artifacts.WriteFiles (Writeable (..), WritePolicy (..))
+import Drasil.FileHandling.FilePath (PathSegment, toPath, (</>))
+import Drasil.FileHandling.WriteFiles (Writeable (..), WritePolicy (..))
 import System.Directory.OsPath (createDirectoryIfMissing, doesPathExist)
 import System.OsPath (OsPath, decodeUtf)
 

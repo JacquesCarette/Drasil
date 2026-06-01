@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
-import Drasil.Build.Artifacts (FileLayout, file, directory, ps)
+import Drasil.FileHandling (FileLayout, file, directory, ps)
 import Language.Drasil
 import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState, FileData(..), modDoc)

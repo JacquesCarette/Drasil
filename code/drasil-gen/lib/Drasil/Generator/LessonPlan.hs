@@ -7,8 +7,8 @@ where
 
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts (FileLayout, file, ps)
 import Drasil.DocumentLanguage.Notebook (LsnDesc, mkNb)
+import Drasil.FileHandling (FileLayout, file, ps)
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Printers (Notation (Engineering), piSys)
 import qualified Language.Drasil.Printers as P (genJupyterLessonPlan)

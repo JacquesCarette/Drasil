@@ -1,6 +1,6 @@
 module Drasil.GlassBR.Choices (choices) where
 
-import Drasil.Build.Artifacts.Legacy (RelativeFile, relativeFile)
+import Drasil.FileHandling.Legacy (RelativeFile, relativeFile)
 import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),

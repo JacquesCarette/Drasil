@@ -1,4 +1,4 @@
-module Drasil.Build.Artifacts.Legacy.FilePath (
+module Drasil.FileHandling.Legacy.FilePath (
   RelativeFile, relativeFile, relFileToStr
 ) where
 

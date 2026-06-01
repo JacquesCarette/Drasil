@@ -1,6 +1,6 @@
 {-# LANGUAGE QuasiQuotes #-}
 
-module Spec.Drasil.Build.Artifacts.FileLayout (fileLayoutTests) where
+module Spec.Drasil.FileHandling.FileLayout (fileLayoutTests) where
 
 import Data.ByteString.Char8 qualified as B (pack)
 import Data.ByteString.Lazy.Char8 qualified as LB (pack)
@@ -10,13 +10,13 @@ import System.OsPath (osp)
 import Text.PrettyPrint qualified as PLegacy (text)
 import Test.Tasty (TestTree, testGroup)
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, exactFile, goldenTest,
+import Drasil.FileHandling (FileLayout, directory, file, exactFile, goldenTest,
   goldenTestingGroup, ps)
 
 fileLayoutTests :: TestTree
 fileLayoutTests =
   testGroup
-    "Drasil.Build.Artifacts.FileLayout"
+    "Drasil.FileHandling.FileLayout"
     [ writeFilesTests,
       renderToFileTests
     ]

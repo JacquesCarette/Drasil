@@ -3,7 +3,7 @@ module Language.Drasil.Code.PackageData (PackageData(packageProg, packageAux),
   pattern PackageData, package
 ) where
 
-import Drasil.Build.Artifacts (FileLayout)
+import Drasil.FileHandling (FileLayout)
 import Drasil.GOOL (ProgData, onCodeList)
 
 -- | The underlying data type for packages in all renderers.

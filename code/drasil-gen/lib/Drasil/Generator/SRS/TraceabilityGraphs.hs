@@ -7,8 +7,8 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), vcat, nest,
   hsep, empty)
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, ps)
 import Drasil.Database (UID)
+import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label)
 

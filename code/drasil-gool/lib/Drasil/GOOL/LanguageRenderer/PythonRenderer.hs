@@ -6,7 +6,7 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   PythonCode(..), pyName, pyVersion
 ) where
 
-import Drasil.Build.Artifacts.Legacy (blank, indent)
+import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,

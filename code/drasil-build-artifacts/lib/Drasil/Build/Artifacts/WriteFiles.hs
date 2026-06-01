@@ -41,12 +41,10 @@ instance Writeable PLegacy.Doc where
 instance Writeable (PNew.Doc ann) where
   -- `renderIO` skips intermediate representations before writing to disk:
   -- <https://hackage-content.haskell.org/package/prettyprinter-1.7.2/docs/Prettyprinter-Render-Text.html#v:renderIO>
-  writeToFile fp pol d = writeFile fp $ \h ->
-    renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions d')
+  writeToFile = writeFile withNL write
     where
-      d' = case pol of
-        AppendNewline -> d PNew.<> PNew.line
-        ExactBytes -> d
+      write h d = renderIO h (PNew.layoutPretty PNew.defaultLayoutOptions d)
+      withNL h d = write h (d PNew.<> PNew.line)
   {-# INLINE writeToFile #-}
 
 instance Writeable String where
@@ -54,39 +52,36 @@ instance Writeable String where
   {-# INLINE writeToFile #-}
 
 instance Writeable T.Text where
-  writeToFile fp pol t = writeFile fp (`write` t)
-    where
-      write = case pol of
-        AppendNewline -> TIO.hPutStrLn
-        ExactBytes -> TIO.hPutStr
+  writeToFile = writeFile TIO.hPutStrLn TIO.hPutStr
   {-# INLINE writeToFile #-}
 
 instance Writeable B.ByteString where
-  writeToFile fp pol bs = writeFile fp (`write` bs)
-    where
-      write = case pol of
-        AppendNewline -> B.hPutStrLn
-        ExactBytes -> B.hPut
+  writeToFile = writeFile B.hPutStrLn B.hPut
   {-# INLINE writeToFile #-}
 
 instance Writeable LB.ByteString where
-  writeToFile fp pol bs = writeFile fp (`write` bs)
-    where
-      write = case pol of
-        AppendNewline -> LB.hPutStrLn
-        ExactBytes -> LB.hPut
+  writeToFile = writeFile LB.hPutStrLn LB.hPut
   {-# INLINE writeToFile #-}
 
--- | Write a 'String' to the given 'OsPath' (respecting the write policy).
+-- | Internal: Write a 'String' to the given 'OsPath' respecting the
+-- 'WritePolicy'.
 writeFileStr :: OsPath -> WritePolicy -> String -> IO ()
-writeFileStr rp pol s = withFile rp WriteMode (`write` s)
-  where
-    write = case pol of
-      AppendNewline -> hPutStrLn
-      ExactBytes -> hPutStr
+writeFileStr = writeFile hPutStrLn hPutStr
 {-# INLINE writeFileStr #-}
 
--- | Write to a given 'OsPath' with arbitrary method.
-writeFile :: OsPath -> (Handle -> IO r) -> IO r
-writeFile rp = withFile rp WriteMode
+-- | Internal: Write to an 'OsPath' with a 'WritePolicy' appropriate writer.
+writeFile ::
+  -- | 'AppendNewline' writer.
+  (Handle -> a -> IO r) ->
+  -- | 'ExactBytes' writer.
+  (Handle -> a -> IO r) ->
+  -- | The file to be written to.
+  OsPath ->
+  -- | The 'WritePolicy'.
+  WritePolicy ->
+  -- | The data to be written.
+  a ->
+  IO r
+writeFile append _     rp AppendNewline = withFile rp WriteMode . flip append
+writeFile _      exact rp ExactBytes    = withFile rp WriteMode . flip exact
 {-# INLINE writeFile #-}

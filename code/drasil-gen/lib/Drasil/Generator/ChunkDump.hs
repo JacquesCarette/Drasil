@@ -11,8 +11,8 @@ import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import System.Environment (lookupEnv)
 
-import Drasil.Build.Artifacts (FileLayout, PathSegment, directory, file, ps)
 import Drasil.Database (dumpChunkDB)
+import Drasil.FileHandling (FileLayout, PathSegment, directory, file, ps)
 import Drasil.System (SmithEtAlSRS, systemdb, traceTable, refbyTable)
 
 -- | Builds the `.drasil` chunk dump directory if the `DEBUG_ENV` environment

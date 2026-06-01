@@ -11,7 +11,7 @@ import qualified Data.Set as S
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
-import Drasil.Build.Artifacts (FileLayout, file, directory, ps)
+import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,

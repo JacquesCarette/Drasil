@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Drasil.Build.Artifacts.FilePath
+module Drasil.FileHandling.FilePath
   ( -- * File Path Segments
     PathSegment,
 

@@ -13,8 +13,8 @@ import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.Build.Artifacts (OverwritePolicy(..), directory, localPath, ps, writeFiles)
-import Drasil.Build.Artifacts.Legacy (createDirIfMissing, createFile)
+import Drasil.FileHandling (OverwritePolicy(..), directory, localPath, ps, writeFiles)
+import Drasil.FileHandling.Legacy (createDirIfMissing, createFile)
 import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   FileData(..), modDoc)

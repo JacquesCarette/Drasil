@@ -23,7 +23,7 @@ dependencies:
 - file-io >= 0.1.6
 - template-haskell
 - text
-- drasil-build-artifacts
+- drasil-file-handling
 
 ghc-options:
 - -Wall
@@ -41,7 +41,7 @@ tests:
     main: Main.hs
     dependencies:
     - drasil-assets
-    - drasil-build-artifacts
+    - drasil-file-handling
     - hedgehog
     - tasty
     - tasty-hedgehog

@@ -1,4 +1,4 @@
-module Drasil.Build.Artifacts.Legacy.Directory (createDirIfMissing) where
+module Drasil.FileHandling.Legacy.Directory (createDirIfMissing) where
 
 import Control.Monad (unless)
 import System.Directory (createDirectoryIfMissing, doesPathExist)

@@ -1,8 +1,8 @@
 {-# LANGUAGE QuasiQuotes #-}
 
-module Spec.Drasil.Build.Artifacts.FilePath (filePathTests) where
+module Spec.Drasil.FileHandling.FilePath (filePathTests) where
 
-import Drasil.Build.Artifacts (ps, toPath)
+import Drasil.FileHandling (ps, toPath)
 import System.OsPath (OsPath, encodeUtf)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (testCase, (@?=))
@@ -13,7 +13,7 @@ encodeUtf' = either (error . show) id . encodeUtf
 filePathTests :: TestTree
 filePathTests =
   testGroup
-    "Drasil.Build.Artifacts.FilePath"
+    "Drasil.FileHandling.FilePath"
     [ psTests
     ]
 

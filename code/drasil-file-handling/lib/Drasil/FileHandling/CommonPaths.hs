@@ -1,5 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
-module Drasil.Build.Artifacts.CommonPaths (
+module Drasil.FileHandling.CommonPaths (
   localPath
 ) where
 

@@ -22,7 +22,7 @@ import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Build.Artifacts.Legacy (RelativeFile)
+import Drasil.FileHandling.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)

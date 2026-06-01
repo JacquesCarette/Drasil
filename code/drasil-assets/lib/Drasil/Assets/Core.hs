@@ -22,7 +22,7 @@ import Data.Text (Text)
 import Language.Haskell.TH.Syntax (Lift)
 import Prelude hiding (readFile)
 
-import Drasil.Build.Artifacts (FileLayout, PathSegment, exactFile)
+import Drasil.FileHandling (FileLayout, PathSegment, exactFile)
 
 -- | An arbitrary file asset; a 'B.ByteString' with a description.
 data Asset = Asset Text B.ByteString

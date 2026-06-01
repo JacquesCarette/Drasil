@@ -22,7 +22,7 @@ dependencies:
 - MissingH
 - filepath
 - directory
-- drasil-build-artifacts
+- drasil-file-handling
 - drasil-database
 - drasil-lang
 - drasil-theory

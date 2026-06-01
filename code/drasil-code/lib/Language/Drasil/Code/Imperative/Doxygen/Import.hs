@@ -7,7 +7,7 @@ import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 
-import Drasil.Build.Artifacts.Legacy (blank)
+import Drasil.FileHandling.Legacy (blank)
 
 import Language.Drasil.Choices (Verbosity(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierState,

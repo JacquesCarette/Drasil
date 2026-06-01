@@ -10,7 +10,7 @@ module Language.Drasil.Document (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid, HasChunkRefs(..))
 import Utils.Drasil (repUnd)
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
@@ -60,6 +60,8 @@ instance Referable Section where
   renderRef (Section _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
 instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
+
+instance HasChunkRefs Section where chunkRefs (Section _ _ lb) = chunkRefs lb
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.

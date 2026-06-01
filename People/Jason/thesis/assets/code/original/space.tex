@@ -1,0 +1,20 @@
+\begin{haskell}{Original Space Definition}{origSpace}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/drasil-lang/Language/Drasil/Space.hs\#L10-L27}
+-- | Spaces
+data Space =
+    Integer
+  | Rational
+  | Real
+  | Natural
+  | Boolean
+  | Char
+  | String
+  | Radians
+  | Vect Space
+  | Array Space
+  | Actor String
+  | DiscreteI [Int]  --ex. let A = {1, 2, 4, 7}
+  | DiscreteD [Double]
+  | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
+  | Void
+  deriving (Eq, Show)
+\end{haskell}

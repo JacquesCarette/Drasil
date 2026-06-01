@@ -1,4 +1,4 @@
-module Drasil.SWHS.Goals (goals, waterTempGS, pcmTempGS, waterEnergyGS, 
+module Drasil.SWHS.Goals (goals, waterTempGS, pcmTempGS, waterEnergyGS,
   pcmEnergyGS) where
 
 import Language.Drasil
@@ -16,7 +16,7 @@ waterTempGS = cic "waterTempGS" (goalState tempW) "Predict-Water-Temperature"
   goalStmtDom
 
 pcmTempGS :: ConceptInstance
-pcmTempGS = cic "pcmTempGS" (goalState tempPCM) "Predict-PCM-Temperature" 
+pcmTempGS = cic "pcmTempGS" (goalState tempPCM) "Predict-PCM-Temperature"
   goalStmtDom
 
 waterEnergyGS :: ConceptInstance
@@ -24,7 +24,7 @@ waterEnergyGS = cic "waterEnergyGS" (goalState watE) "Predict-Water-Energy"
   goalStmtDom
 
 pcmEnergyGS :: ConceptInstance
-pcmEnergyGS = cic "pcmEnergyGS" (goalState pcmE) "Predict-PCM-Energy" 
+pcmEnergyGS = cic "pcmEnergyGS" (goalState pcmE) "Predict-PCM-Energy"
   goalStmtDom
 
 goalState :: NamedIdea varTerm => varTerm -> Sentence

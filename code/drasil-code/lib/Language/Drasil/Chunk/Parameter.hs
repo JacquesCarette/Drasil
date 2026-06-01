@@ -3,10 +3,12 @@ module Language.Drasil.Chunk.Parameter (
   PassBy(..), ParameterChunk(..), pcAuto, pcVal
 ) where
 
-import Language.Drasil hiding (Ref)
-import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
-
 import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Language.Drasil hiding (Ref)
+
+import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
 
 -- | Determines whether a parameter is passed by value or by reference.
 data PassBy = Val | Ref
@@ -16,12 +18,20 @@ data ParameterChunk = PC {_pcc :: CodeChunk
                          , passBy :: PassBy}
 makeLenses ''ParameterChunk
 
+instance HasChunkRefs ParameterChunk where
+  chunkRefs pc = chunkRefs (pc ^. pcc)
+  {-# INLINABLE chunkRefs #-}
+
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasUID      ParameterChunk where uid = pcc . uid
 -- | Finds the term ('NP') of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance NamedIdea   ParameterChunk where term = pcc . term
 -- | Finds the idea contained in the 'CodeChunk' used to make the 'ParameterChunk'.
 instance Idea        ParameterChunk where getA = getA . view pcc
+-- | Finds the definition of the 'CodeChunk' used to make the 'ParameterChunk'.
+instance Definition  ParameterChunk where defn = pcc . defn
+
+instance ConceptDomain ParameterChunk where cdom = cdom . view pcc
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasSpace    ParameterChunk where typ = pcc . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'ParameterChunk'.

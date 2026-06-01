@@ -1,0 +1,12 @@
+\begin{pseudohaskell}{Example Angle Equation Encoding}{exampleAngleEquationEncoding}
+firingAngleIM :: InstanceModel
+firingAngleIM = imNoRefs firingAngleEqn
+    [] (qw firingAngle) [UpFrom (Exc, dbl 0)]
+    (Just firingAngleEqnDerivation)
+    "firingAngleFormula" []
+
+firingAngleEqn :: RelationConcept
+firingAngleEqn = makeRC "firingAngleEqn"
+    (nounPhraseSP "firing angle formula")
+    (sy firingAngle $= arcsin (sy targetDistanceFromCannon * sy gravity / square (sy v)) / dbl 2)
+\end{pseudohaskell}

@@ -3,12 +3,12 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
-import Language.Drasil.TeX.Monad (D, vcat, (%%))
-import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command2, command3, 
-  usepackage)
-
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
+import Language.Drasil.Printing.Helpers (sq)
+import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
+import Language.Drasil.TeX.Monad (D, vcat, (%%), nest)
+import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
+  usepackage, lbrace, rbrace)
 
 -- FIXME: this really shouldn't be in code, it should be data!
 -- | LaTeX packages.
@@ -19,7 +19,6 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
              | Graphics     -- ^ Manipulate graphical elements.
              | HyperRef     -- ^ Handles cross-referencing within the document.
              | Listings     -- ^ Source code printer for LaTeX.
-             | LongTable    -- ^ Allow tables to overflow page boundaries.
              | Tikz         -- ^ Create graphical elements.
              | Dot2Tex      -- ^ Create better graphs.
              | AdjustBox    -- ^ Adjustable boxed content.
@@ -27,13 +26,15 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
 --           | Breqn --line breaks long equations automatically
              | FileContents -- ^ Creates .bib file within .tex file.
              | BibLaTeX     -- ^ Reimplementation of bibliography elements.
-             | Tabu         -- ^ Adds auto column width feature for tables.
+             | Tabularray   -- ^ Adds auto column width feature for tables.
+             | TabularX     -- ^ Adds \arraybackslash
              | Mathtools    -- ^ Line breaks for long fractions and cases.
              | URL          -- ^ Allows for hyperlinks.
              | FontSpec     -- ^ For utf-8 encoding in lualatex.
              | Unicode      -- ^ For unicode-math in lualatex.
              | EnumItem     -- ^ Contol basic list environments.
              | SVG          -- ^ For rendering svg diagrams.
+             | Float        -- ^ For enhanced control over placement of figures and tables.
              deriving Eq
 
 -- | Adds a 'Package' to the LaTeX document.
@@ -46,7 +47,6 @@ addPackage Graphics  = usepackage "graphics"
 addPackage HyperRef  = usepackage "hyperref" %%
                        command "hypersetup" hyperSettings
 addPackage Listings  = usepackage "listings"
-addPackage LongTable = usepackage "longtable"
 addPackage Tikz      = usepackage "tikz" %%
                        command "usetikzlibrary" "arrows.meta, shapes"
 addPackage Dot2Tex   = usepackage "dot2texi"
@@ -55,7 +55,8 @@ addPackage AMSsymb   = usepackage "amssymb"
 --addPackage Breqn     = usepackage "breqn"
 addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
-addPackage Tabu      = usepackage "tabu"
+addPackage Tabularray = usepackage "tabularray"
+addPackage TabularX  = usepackage "tabularx"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
 -- Discussed in issue #1819
@@ -64,15 +65,16 @@ addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 addPackage SVG       = usepackage "svg"
+addPackage Float     = usepackage "float"
 
 -- | Common LaTeX commands.
 data Def = Bibliography
-         | TabuLine
          | GreaterThan
          | LessThan
          | SetMathFont
          | SymbDescriptionP1
          | SymbDescriptionP2
+         | ResizeExpr
          deriving Eq
 
 -- | Define common LaTeX commands.
@@ -80,10 +82,14 @@ addDef :: Def -> D
 addDef Bibliography  = command "bibliography" bibFname
 addDef GreaterThan   = command2 "newcommand" "\\gt" "\\ensuremath >"
 addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
-addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
+addDef ResizeExpr = vcat [
+    command "newcommand" "\\resizeExpression" <> pure (sq "1") <> lbrace,
+    nest 2 $ command2 "adjustbox" "max width=\\linewidth" "$#1$",
+    rbrace
+  ]
 
 -- | Generates LaTeX document preamble.
 genPreamble :: [LayoutObj] -> D
@@ -93,29 +99,30 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 -- | Helper to gather all preamble information.
 parseDoc :: [LayoutObj] -> ([Package], [Def])
-parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
+parseDoc los' =
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++
    nub (concatMap fst res)
   , [SetMathFont, GreaterThan, LessThan] ++ nub (concatMap snd res))
-  where 
+  where
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
-    parseDoc' Table{} = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
-    parseDoc' (HDiv _ slos _) = 
+    parseDoc' Table{} = ([Tabularray,TabularX,BookTabs,Caption], [])
+    parseDoc' (HDiv _ slos _) =
       let res1 = map parseDoc' slos in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
       (pp, dd)
-    parseDoc' (Definition _ ps _) =
+    parseDoc' (Definition ps _) =
       let res1 = concatMap (map parseDoc' . snd) ps in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
-      (Tabu:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:TabuLine:dd)
-    parseDoc' Figure{}     = ([Graphics,Caption, SVG],[])
+      (Tabularray:TabularX:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:dd)
+    parseDoc' Figure{}     = ([Graphics,Caption, SVG, Float],[])
     parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' Header{}     = ([], [])
     parseDoc' Paragraph{}  = ([], [])
     parseDoc' List{}       = ([EnumItem], [])
-    parseDoc' EqnBlock{}   = ([], [])
+    parseDoc' EqnBlock{}   = ([AdjustBox], [ResizeExpr])
     parseDoc' Cell{}       = ([], [])
+    parseDoc' CodeBlock{}  = ([], [])

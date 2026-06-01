@@ -5,15 +5,21 @@ import Language.Drasil
 import Language.Drasil.Display
 import Language.Drasil.ShortHands
 
-import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
+import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient,
     normalV, orient, perpV, pi_, posInf, negInf, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
 -- * May Not Have Units
 
+mathquants :: [DefinedQuantityDict]
+mathquants = [gradient, normalVect, unitVect, perpVect,
+  pi_, posInf, negInf, euclidNorm]
+
+mathunitals :: [UnitalChunk]
+mathunitals = [area, diameter, surface, surArea, orientation]
+
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
   pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
- 
 
 gradient    = dqdNoUnit CM.gradient lNabla         Real
 normalVect  = dqdNoUnit CM.normalV  (vec lN)       Real
@@ -30,11 +36,11 @@ euclidNorm  = dqdNoUnit CM.euclidN  (Atop Magnitude $ vec lD) Real
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
 
-area        = ucs' CM.area     cA   Real    m_2
-diameter    = ucs' CM.diameter lD   Real    metre
-surface     = ucs' CM.surface  cS   Real    m_2
-surArea     = ucs' CM.surArea  cA   Real    m_2
-orientation = ucs' CM.orient   lPhi Radians radian
+area        = uc CM.area     cA   Real m_2
+diameter    = uc CM.diameter lD   Real metre
+surface     = uc CM.surface  cS   Real m_2
+surArea     = uc CM.surArea  cA   Real m_2
+orientation = uc CM.orient   lPhi Real radian
 
 -- * Constants
 

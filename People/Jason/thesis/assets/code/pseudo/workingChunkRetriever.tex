@@ -1,0 +1,6 @@
+\begin{pseudohaskell}{Working QuantityDict Chunk Retriever}{workingChunkRetriever}
+retrieveQD :: UID -> ChunkDB -> Maybe QuantityDict
+retrieveQD u cdb = do
+    (Chunk expectedQd) <- lookup u cdb
+    cast expectedQd
+\end{pseudohaskell}

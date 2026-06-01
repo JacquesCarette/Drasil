@@ -1,6 +1,12 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs                 #-}
+{-# LANGUAGE InstanceSigs          #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
-module Language.Drasil.Literal.Lang where
+module Language.Drasil.Literal.Lang (Literal(..)) where
+
+import Language.Drasil.Space (Space (..))
+import Language.Drasil.WellTyped (Typed(..), TypingContext, TypeError,
+  typeCheckByInfer)
 
 data Literal where
     Int      :: Integer -> Literal
@@ -10,12 +16,13 @@ data Literal where
     Perc     :: Integer -> Integer -> Literal
     deriving Eq
 
-{- TODO: When typing the Expression language, this will be usable
-instance Eq (Literal a) where
-    (Int l)      == (Int r)      =  l == r
-    (Str l)      == (Str r)      =  l == r
-    (Dbl l)      == (Dbl r)      =  l == r
-    (ExactDbl l) == (ExactDbl r) =  l == r
-    (Perc l1 l2) == (Perc r1 r2) =  l1 == r1 && l2 == r2
-    _            == _            =  False
--}
+instance Typed Literal Space where
+  infer :: TypingContext Space -> Literal -> Either TypeError Space
+  infer _ (Int _)      = pure Integer
+  infer _ (Str _)      = pure String
+  infer _ (Dbl _)      = pure Real
+  infer _ (ExactDbl _) = pure Real
+  infer _ (Perc _ _)   = pure Real
+
+  check :: TypingContext Space -> Literal -> Space -> Either TypeError Space
+  check = typeCheckByInfer

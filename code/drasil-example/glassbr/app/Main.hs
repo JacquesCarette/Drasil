@@ -1,14 +1,9 @@
 module Main (main) where
 
-import GHC.IO.Encoding
-import Language.Drasil.Generate (gen, genCode, genDot, genLog, DocSpec(DocSpec), DocType(SRS), Format(..), docChoices)
-import Drasil.GlassBR.Body (srs, printSetting, fullSI)
-import Drasil.GlassBR.Choices (choices, code)
+import Drasil.Generator (caseStudyMainSRSWCode)
 
-main :: IO()
-main = do
-  setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
-  genCode choices code
-  genDot fullSI
-  genLog fullSI printSetting
+import Drasil.GlassBR.Body (mkSRS, si)
+import Drasil.GlassBR.Choices (choices)
+
+main :: IO ()
+main = caseStudyMainSRSWCode si mkSRS "GlassBR_SRS" choices

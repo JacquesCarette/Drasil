@@ -1,13 +1,15 @@
 -- | Routines to help with Symbols and Stages.
 module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft,
-  vec, label, variable) where
+  vec, label, variable, sortBySymbol, sortBySymbolTuple, compareBySymbol) where
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
+import Data.Function (on)
+import Data.List (sortBy)
 import Data.List.Split (splitOn)
 
-import Language.Drasil.Symbol (HasSymbol(symbol), Symbol(..), Decoration(..))
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol(..), Decoration(..), compsy)
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 
 -- | Helper for creating smart constructors for 'Symbol's.
@@ -96,3 +98,19 @@ unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList 
     nameList = splitOn " " . map toLower . getCharacterName
     getName ("greek":_:_:name) = unwords name
     getName _ = error "unicodeString not fully implemented"
+
+-----------------------
+-- Useful for sorting
+
+-- | Compare the equational 'Symbol' of two things.
+compareBySymbol :: HasSymbol a => a -> a -> Ordering
+compareBySymbol a b = compsy (eqSymb a) (eqSymb b)
+
+-- | Sorts a list of 'HasSymbols' by 'Symbol'.
+sortBySymbol :: HasSymbol a => [a] -> [a]
+sortBySymbol = sortBy compareBySymbol
+
+-- | Sorts a tuple list of 'HasSymbols' by first Symbol in the tuple.
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
+

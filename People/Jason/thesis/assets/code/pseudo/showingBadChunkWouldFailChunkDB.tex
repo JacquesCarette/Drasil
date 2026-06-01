@@ -1,0 +1,9 @@
+\begin{pseudohaskell}{Prospective Chunk Database}{showingBadChunkWouldFailChunkDB}
+-- | Our chunk databases. Should contain all the maps we will need.
+data ChunkDB = CDB { a   :: Map UID (Chunk A)
+                   , b   :: Map UID (Chunk B)
+                   , c   :: Map UID (Chunk C)
+                   , ...
+                   , ... :: Map UID (Chunk ...)
+                   }
+\end{pseudohaskell}

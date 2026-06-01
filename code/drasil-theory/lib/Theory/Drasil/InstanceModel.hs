@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
+{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, MultiParamTypeClasses #-}
 -- | Defines types and functions for Instance Models.
 module Theory.Drasil.InstanceModel(
   -- * Type
@@ -10,31 +10,44 @@ module Theory.Drasil.InstanceModel(
   , qwUC, qwC
   ) where
 
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
-import Language.Drasil.Development (showUID)
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
-import Data.Drasil.TheoryConcepts (inModel)
+import Drasil.Metadata.TheoryConcepts (inModel)
 
-import Control.Lens ((^.), view, makeLenses, _1, _2) 
+import Control.Lens ((^.), makeLenses, _1, _2)
+import Theory.Drasil.Components.Derivation (Derivation,MayHaveDerivation(derivations))
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
-type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
+type Input = (DefinedQuantityDict, Maybe (RealInterval Expr Expr))
 type Inputs = [Input]
-type Output = QuantityDict
+type Output = DefinedQuantityDict
 type OutputConstraints = [RealInterval Expr Expr]
 
--- | An instance model is a ModelKind that may have specific inputs, outputs, and output
--- constraints. It also has attributes like references, derivation, labels ('ShortName'), reference address, and notes.
-data InstanceModel = IM { _mk       :: ModelKind Expr
-                        , _imInputs :: Inputs
-                        , _imOutput :: (Output, OutputConstraints)
-                        , _rf       :: [DecRef]
-                        , _deri     :: Maybe Derivation
-                        ,  lb       :: ShortName
-                        ,  ra       :: String
-                        , _notes    :: [Sentence]
-                        }
+-- | An instance model is a ModelKind that may have specific inputs, outputs,
+-- and output constraints. It also has attributes like references, derivation,
+-- labels ('ShortName'), reference address, and notes.
+data InstanceModel = IM {
+    _mk       :: ModelKind Expr
+  , _imInputs :: Inputs
+  , _imOutput :: (Output, OutputConstraints)
+  , _rf       :: [DecRef]
+  , _deri     :: Maybe Derivation
+  ,  lb       :: ShortName
+  ,  ra       :: String
+  , _notes    :: [Sentence]
+}
 makeLenses ''InstanceModel
+
+instance HasChunkRefs InstanceModel where
+  chunkRefs imd = mconcat
+    [ chunkRefs (imd ^. mk)
+    , chunkRefs (map fst (imd ^. imInputs))
+    , chunkRefs (imd ^. imOutput . _1)
+    , chunkRefs (lb imd)
+    , chunkRefs (imd ^. notes)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of an 'InstanceModel'.
 instance HasUID             InstanceModel where uid = mk . uid
@@ -49,7 +62,7 @@ instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Converts the 'InstanceModel's related expression into the display language.
 instance Express            InstanceModel where express = express . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
-instance HasDerivation      InstanceModel where derivations = deri
+instance MayHaveDerivation  InstanceModel where derivations = deri
 {--- | Finds 'Reference's contained in the 'InstanceModel'.
 instance HasReference       InstanceModel where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'InstanceModel'.
@@ -60,14 +73,15 @@ instance HasShortName       InstanceModel where shortname = lb
 instance HasRefAddress      InstanceModel where getRefAdd l = RP (prepend $ abrv l) (ra l)
 -- | Finds any additional notes for the 'InstanceModel'.
 instance HasAdditionalNotes InstanceModel where getNotes = notes
--- | 'InstanceModel's have an 'Quantity'.
-instance Quantity           InstanceModel where
 -- | Finds the idea of an 'InstanceModel' (abbreviation).
 instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 -- | Finds the reference address of an 'InstanceModel'.
 instance Referable          InstanceModel where
   refAdd      = ra
   renderRef l = RP (prepend $ abrv l) (refAdd l)
+-- | Finds the 'Quantity' of an 'InstanceModel'
+instance DefinesQuantity    InstanceModel where
+  defLhs = imOutput . _1
 -- | Finds the inputs of an 'InstanceModel'.
 instance HasInputs          InstanceModel where
   inputs          = imInputs
@@ -75,46 +89,44 @@ instance HasInputs          InstanceModel where
 instance HasOutput          InstanceModel where
   output          = imOutput . _1
   out_constraints = imOutput . _2
--- | Finds the output 'Symbol's of the 'InstanceModel'.
-instance HasSymbol          InstanceModel where symbol = symbol . view output -- ???
--- | Finds the output 'Space' of the 'InstanceModel'.
-instance HasSpace           InstanceModel where typ = output . typ
--- | Finds the units of the 'InstanceModel'.
-instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
+
+-- | Expose all expressions that need to be type-checked.
+instance RequiresChecking InstanceModel Expr Space where
+  requiredChecks = requiredChecks . (^. mk)
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind Expr -> Inputs -> Output -> 
+im :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im mkind _  _ _  [] _  _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
-im mkind i o oc r der sn = 
+im mkind i o oc r der sn =
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
-imNoDeriv :: ModelKind Expr -> Inputs -> Output -> 
+imNoDeriv :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
 imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no references.
-imNoRefs :: ModelKind Expr -> Inputs -> Output -> 
+imNoRefs :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-imNoRefs mkind i o oc der sn = 
+imNoRefs mkind i o oc der sn =
   IM mkind i (o, oc) [] der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivations or references.
-imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output -> 
+imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output ->
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-imNoDerivNoRefs mkind i o oc sn = 
+imNoDerivNoRefs mkind i o oc sn =
   IM mkind i (o, oc) [] Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint.
-qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 
-qwUC x = (qw x, Nothing)
+qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input
+qwUC x = (dqdWr x, Nothing)
 
 -- | For building a quantity with a constraint.
-qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
-qwC x y = (qw x, Just y)
+qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input
+qwC x y = (dqdWr x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]

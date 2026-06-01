@@ -1,0 +1,17 @@
+\begin{haskell}{``landPosIM'' Using ``QDefinition''}{landPosIMQD}{https://github.com/JacquesCarette/Drasil/blob/7e2475041503d2ff79e522e0695408b8d32b576e/code/drasil-example/projectile/lib/Drasil/Projectile/IMods.hs\#L76-L89}
+landPosIM :: InstanceModel
+landPosIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing position") landPosQD)
+  [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
+   qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
+  (qw landPos) [UpFrom (Exc, exactDbl 0)]
+  (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
+
+landPosQD :: QDefinition
+landPosQD = mkQuantDef landPos E.landPosExpr
+
+landPosDeriv :: Derivation
+landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map eS landPosDerivEqns])
+
+landPosDerivSents :: [Sentence]
+landPosDerivSents = [landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4]
+\end{haskell}

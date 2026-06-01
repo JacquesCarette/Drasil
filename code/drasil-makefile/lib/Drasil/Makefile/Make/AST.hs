@@ -1,0 +1,61 @@
+-- | Defines a Makefile abstract syntax tree.
+module Drasil.Makefile.Make.AST (
+  -- * Types
+  Makefile(..), Type(..), Rule(..), Command(..), CommandOpts(..), Annotation,
+  Target, Dependencies,
+  -- * Constructors
+  mkMakefile, mkFile, mkRule, mkCheckedCommand, mkCommand
+) where
+
+import Drasil.Makefile.Make.MakeString (MakeString)
+
+-- * Types
+
+-- | A Makefile is made up of Makefile rules.
+newtype Makefile = M [Rule]
+
+-- | A Makefile Rule can have comments and commands but needs a target,
+-- dependencies, and a type.
+data Rule = R Annotation Target Dependencies Type [Command]
+
+-- | A command is made up of 'MakeString's and command operators.
+data Command = C MakeString [CommandOpts]
+
+-- | Ignore the return code from the system.
+data CommandOpts = IgnoreReturnCode
+  deriving Eq
+
+-- | Type of rule, either abstract or file-oriented.
+data Type = Abstract
+          | File
+  deriving Eq
+
+-- | A Makefile Annotation is made of 0 or more 'String's
+type Annotation = [String]
+
+-- | A Makefile target is made from a 'MakeString'.
+type Target = MakeString
+-- | Dependencies are made up of 0 or more 'Target's.
+type Dependencies = [Target]
+
+-- * Constructors
+
+-- | Create a Makefile.
+mkMakefile :: [Rule] -> Makefile
+mkMakefile = M
+
+-- | Creates a Rule which results in a file being created.
+mkFile :: Annotation -> Target -> Dependencies -> [Command] -> Rule
+mkFile c t d = R c t d File
+
+-- | Creates an abstract Rule not associated to a specific file.
+mkRule :: Annotation -> Target -> Dependencies -> [Command] -> Rule
+mkRule c t d = R c t d Abstract
+
+-- | Creates a Command which fails the make process if it does not return zero.
+mkCheckedCommand :: MakeString -> Command
+mkCheckedCommand = flip C []
+
+-- | Creates a command which executes and ignores the return code.
+mkCommand :: MakeString -> Command
+mkCommand = flip C [IgnoreReturnCode]

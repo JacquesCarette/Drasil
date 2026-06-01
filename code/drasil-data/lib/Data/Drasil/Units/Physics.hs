@@ -5,7 +5,7 @@ import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
   m_2, m_3, newton)
 import Language.Drasil (cn, dcc, newUnit, UnitDefn, (/:), (/$), (*:), makeDerU)
 
-accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU, 
+accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU,
  impulseU, springConstU, torqueU, velU :: UnitDefn
 
 accelU          = newUnit "acceleration"         $ metre /: s_2

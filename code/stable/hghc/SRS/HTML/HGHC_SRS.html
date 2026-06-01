@@ -40,12 +40,19 @@
             </ul>
           </li>
           <li>
+            <a href=#Sec:Intro>Introduction</a>
+            <ul class="list"></ul>
+          </li>
+          <li>
             <a href=#Sec:SpecSystDesc>Specific System Description</a>
             <ul class="list">
               <li>
                 <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>
                 <ul class="list">
+                  <li><a href=#Sec:TMs>Theoretical Models</a></li>
+                  <li><a href=#Sec:GDs>General Definitions</a></li>
                   <li><a href=#Sec:DDs>Data Definitions</a></li>
+                  <li><a href=#Sec:IMs>Instance Models</a></li>
                 </ul>
               </li>
             </ul>
@@ -63,7 +70,7 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description, and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
@@ -150,6 +157,17 @@
         </div>
       </div>
     </div>
+    <div id="Sec:Intro">
+      <div class="section">
+        <h1>Introduction</h1>
+        <p class="paragraph">
+          Heat transfer through the cladding of a nuclear fuel element influences performance and safety. Engineers therefore rely on dependable calculations of the heat transfer coefficients used for simulating the temperature. This document describes the requirements of a program called HGHC.
+        </p>
+        <p class="paragraph">
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for HGHC. This section explains the purpose of this document.
+        </p>
+      </div>
+    </div>
     <div id="Sec:SpecSystDesc">
       <div class="section">
         <h1>Specific System Description</h1>
@@ -160,8 +178,20 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern HGHC are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="HGHC">HGHC</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
+            <div id="Sec:TMs">
+              <div class="subsubsection">
+                <h3>Theoretical Models</h3>
+                <p class="paragraph">There are no theoretical models.</p>
+              </div>
+            </div>
+            <div id="Sec:GDs">
+              <div class="subsubsection">
+                <h3>General Definitions</h3>
+                <p class="paragraph">There are no general definitions.</p>
+              </div>
+            </div>
             <div id="Sec:DDs">
               <div class="subsubsection">
                 <h3>Data Definitions</h3>
@@ -169,7 +199,7 @@
                   This section collects and defines all the data needed to build the instance models.
                 </p>
                 <div id="DD:htTransCladFuel">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:htTransCladFuel</b></td>
@@ -197,7 +227,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{h_{\text{g}}}=\frac{2 {k_{\text{c}}} {h_{\text{p}}}}{2 {k_{\text{c}}}+{τ_{\text{c}}} {h_{\text{p}}}}\]
+                        \[{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -218,7 +248,7 @@
                   </table>
                 </div>
                 <div id="DD:htTransCladCool">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:htTransCladCool</b></td>
@@ -246,7 +276,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{h_{\text{c}}}=\frac{2 {k_{\text{c}}} {h_{\text{b}}}}{2 {k_{\text{c}}}+{τ_{\text{c}}} {h_{\text{b}}}}\]
+                        \[{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -266,6 +296,12 @@
                     </tr>
                   </table>
                 </div>
+              </div>
+            </div>
+            <div id="Sec:IMs">
+              <div class="subsubsection">
+                <h3>Instance Models</h3>
+                <p class="paragraph">There are no instance models.</p>
               </div>
             </div>
           </div>

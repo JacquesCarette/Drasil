@@ -15,7 +15,7 @@ import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (determines bolding, italics, etc).
-data Decoration = 
+data Decoration =
     Hat       -- ^ Places a @^@ on top of a symbol.
   | Vector    -- ^ Makes a symbol bold.
   | Prime     -- ^ Appends a @'@ to a symbol.
@@ -23,13 +23,13 @@ data Decoration =
   | Magnitude -- ^ Places @||@ before and after a symbol.
   deriving (Eq, Ord)
 
--- | A 'Symbol' is actually going to be a graphical description of what
--- gets rendered as a (unique) symbol.  This is actually NOT based on
--- semantics at all, but just a description of how things look.
--- 
+-- | A 'Symbol' is actually going to be a graphical description of what gets
+-- rendered as a (unique) symbol.  This is actually NOT based on semantics at
+-- all, but just a description of how things look.
+--
 -- Symbols can be:
--- 
---     * @'Variable'@ (string such as "x" that represent a value that can vary) 
+--
+--     * @'Variable'@ (string such as "x" that represent a value that can vary)
 --     * @'Label'@ (strings such as "max" or "target" that represent a single idea)
 --     * @'Special'@ characters (ex. unicode)
 --     * @Decorated@ symbols using 'Atop'
@@ -37,11 +37,11 @@ data Decoration =
 --     * @'Empty'@! (this is to give this a monoid-like flavour)
 data Symbol =
     Variable String -- ^ Basic variable name creation.
-  | Label    String 
+  | Label    String
     -- ^ For when symbols need more context, but we don't want to add a new variable name.
     -- For example, @v_f@ may be encoded as @Concat [variable "v", label "f"]@.
   | Integ    Int -- ^ For using numbers in Symbols.
-  | Special  Special 
+  | Special  Special
     -- ^ For now, special characters are the degree and partial
     -- differentiation symbols. These should eventually move elsewhere
     -- and the 'Special' type removed.
@@ -76,33 +76,33 @@ instance Semigroup Symbol where
 -- | Symbols can be empty or concatenated.
 instance Monoid Symbol where
   mempty = Empty
-  mappend a b = Concat [a , b]
 
 -- | Gives an 'Ordering' of two lists of 'Symbol's.
 complsy :: [Symbol] -> [Symbol] -> Ordering
 complsy [] [] = EQ
 complsy [] _  = LT
 complsy _  [] = GT
-complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
+complsy (x : xs) (y : ys) = compsy x y <> complsy xs ys
 
--- | The default compare function that sorts all the lower case symbols after the upper case ones.
+-- | The default compare function that sorts all the lower case symbols after
+-- the upper case ones.
 --
--- Comparation is used twice for each `Atomic` case,
--- once for making sure they are the same letter, once for case sensitive.
--- As far as this comparison is considered, `Δ` is a "decoration" and ignored
--- unless the compared symbols are the exact same, in which case it is ordered
--- after the undecorated symbol.
+-- Comparation is used twice for each `Atomic` case, once for making sure they
+-- are the same letter, once for case sensitive. As far as this comparison is
+-- considered, `Δ` is a "decoration" and ignored unless the compared symbols are
+-- the exact same, in which case it is ordered after the undecorated symbol.
 --
--- Superscripts and subscripts are ordered after the base symbols (because they add additional context to a symbol). 
--- For example: `v_f^{AB}` (expressed in LaTeX
--- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the
--- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be
--- following `v_f` as it is logical to place it with its parent concept.
+-- Superscripts and subscripts are ordered after the base symbols (because they
+-- add additional context to a symbol). For example: `v_f^{AB}` (expressed in
+-- LaTeX notation for clarity), where `v_f` is a final velocity, and the `^{AB}`
+-- adds context that it is the final velocity between points `A` and `B`. In
+-- these cases, the sorting of `v_f^{AB}` should be following `v_f` as it is
+-- logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat x) (Concat y) = complsy x y
 compsy (Concat a) b = complsy a [b]
 compsy b (Concat a) = complsy [b] a
-compsy (Atop d1 a) (Atop d2 a') = 
+compsy (Atop d1 a) (Atop d2 a') =
   case compsy a a' of
     EQ -> compare d1 d2
     other -> other
@@ -193,5 +193,5 @@ compsy Empty Empty    = EQ
 -- | Helper for 'compsy' that compares lower case 'String's.
 compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (map toLower x) (map toLower y) of
-  EQ    -> compare x y 
+  EQ    -> compare x y
   other -> other

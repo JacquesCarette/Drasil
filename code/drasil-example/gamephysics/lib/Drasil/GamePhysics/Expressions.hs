@@ -1,13 +1,15 @@
-module Drasil.GamePhysics.Expressions where
+module Drasil.GamePhysics.Expressions (
+    transMotExpr, transMotExprDeriv1, rotMotExpr, rotMotExprDeriv1
+) where
 
 import Language.Drasil
 
 import Drasil.GamePhysics.Unitals (massj, velj, torquej, forcej, angAccj)
-import Data.Drasil.Quantities.Physics (time, momentOfInertia, 
+import Data.Drasil.Quantities.Physics (time, momentOfInertia,
     gravitationalAccel, angularVelocity)
 
 transMotExpr :: PExpr
-transMotExpr = sy gravitationalAccel `addRe` (apply1 forcej time $/ sy massj)
+transMotExpr = sy gravitationalAccel $+ (apply1 forcej time $/ sy massj)
 
 transMotExprDeriv1 :: (ModelExprC r, ExprC r) => r
 transMotExprDeriv1 = defines (sy angAccj) $ deriv (apply1 velj time) time

@@ -1,11 +1,21 @@
-name:                gamephysics
-version:             0.1.24.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Example SubPackage
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         gamephysics
+version:      0.1.24.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Example SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -Wmissing-export-lists
 
 extra-source-files: []
 
@@ -14,15 +24,14 @@ dependencies:
 - lens
 - directory
 - drasil-code
-- drasil-code-base
 - drasil-data
 - drasil-database
 - drasil-docLang
 - drasil-gen
 - drasil-gool
 - drasil-lang
-- drasil-metadata
 - drasil-printers
+- drasil-system
 - drasil-theory
 - drasil-utils
 
@@ -31,7 +40,6 @@ library:
   when:
   - condition: false
     other-modules:
-    - Paths_gamephysics
     - Drasil.GamePhysics.GDefs
     - Drasil.GamePhysics.DesignDec.Arbiter
     - Drasil.GamePhysics.DesignDec.Vector
@@ -39,14 +47,9 @@ library:
 executables:
   gamephysics:
     main: Main
-    source-dirs: app 
+    source-dirs: app
     ghc-options:
-    - -Wall
-    - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:
     - gamephysics
-    when:
-    - condition: false
-      other-modules: Paths_gamephysics

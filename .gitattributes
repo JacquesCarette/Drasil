@@ -6,6 +6,7 @@ People/** linguist-documentation
 Presentations/** linguist-documentation
 WindowsFix/** linguist-vendored
 code/stable/** linguist-generated
+code/stable-website/** linguist-generated
 code/datafiles/** linguist-vendored
 doc/** linguist-documentation
 notes/** linguist-documentation

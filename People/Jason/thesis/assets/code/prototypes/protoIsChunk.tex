@@ -1,0 +1,4 @@
+\begin{haskell}{Chunk Constraints, Wrapped Together}{protoIsChunk}{https://github.com/balacij/ProtoChunkDB/blob/main/src/Chunk.hs\#L24-L25}
+-- | Constraint for anything that may be considered a valid chunk type.
+type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
+\end{haskell}

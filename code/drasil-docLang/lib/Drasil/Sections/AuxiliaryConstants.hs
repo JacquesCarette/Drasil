@@ -1,13 +1,24 @@
 -- | Defines helper functions for making the Table of Auxiliary Constants section.
-module Drasil.Sections.AuxiliaryConstants 
+module Drasil.Sections.AuxiliaryConstants
   (valsOfAuxConstantsF, tableOfConstants, tableOfConstantsRef) where
 
-import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
-import Drasil.DocumentLanguage.Units (toSentence)
-import Data.Drasil.Concepts.Documentation (value, description, symbol_, tAuxConsts)
-import qualified Data.Drasil.Concepts.Math as CM (unit_)
+-- General Haskell
 import Control.Lens ((^.))
+
+-- General Drasil
+import Drasil.Database (HasUID(..))
+import Language.Drasil
+import Utils.Drasil (mkTable)
+
+-- Other docLang
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+import Drasil.DocumentLanguage.Units (toSentence) -- TODO: suspicious
+import Drasil.Document.Contents (foldlSP)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (value, description, symbol_, tAuxConsts)
+import qualified Drasil.Metadata.Concepts.Math as CM (unit_)
 
 -- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.
 valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
@@ -15,21 +26,21 @@ valsOfAuxConstantsF kWord listOfConstants = SRS.valsOfAuxCons (contentGenerator 
 
 -- | Gets a table of constants from a 'QDefinition'. Also uses an 'Idea' as the introduction.
 contentGenerator :: Idea a => a -> [ConstQDef] -> [Contents]
-contentGenerator _ [] = [foldlSP [S "There are no auxiliary constants"]]
+contentGenerator _ [] = [mkParagraph $ emptySectSentPlu [tAuxConsts]]
 contentGenerator a b  = [intro a, LlC $ tableOfConstants b]
 
 --FIXME: general introduction?
 -- | Helper that creates a general introduction using an 'Idea'.
 intro :: (Idea a) => a -> Contents
-intro kWord =  foldlSP [S "This section contains the standard values that are used for calculations in" +:+ short kWord]
+intro kWord = foldlSP [S "This section contains the standard values that are used for calculations in" +:+ short kWord]
 
 -- | Helper that gets a table of constants from a 'QDefinition'.
 tableOfConstants :: [ConstQDef] -> LabelledContent
-tableOfConstants f = llcc tableOfConstantsRef $ Table
+tableOfConstants f = mkRawLC (Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
   (mkTable [ch, phrase, \c -> eS $ express $ c ^. defnExpr, toSentence] f)
   (titleize' tAuxConsts)
-  True
+  True) tableOfConstantsRef
 
 -- | Table of constants reference label.
 tableOfConstantsRef :: Reference

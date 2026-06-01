@@ -1,5 +1,5 @@
 -- | Helpers for dealing with formatting of Units
-module Drasil.DocumentLanguage.Units where
+module Drasil.DocumentLanguage.Units (toSentenceUnitless, toSentence) where
 
 import Language.Drasil (Sentence(S, Sy), usymb, MayHaveUnit(getUnit))
 

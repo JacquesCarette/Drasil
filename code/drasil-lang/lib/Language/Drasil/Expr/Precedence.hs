@@ -1,12 +1,16 @@
 -- | Defines operator precedence.
-module Language.Drasil.Expr.Precedence where
+module Language.Drasil.Expr.Precedence (
+  prec2Arith, prec2Eq, prec2LA, prec2Ord, prec2VVV, prec2VVN, prec2NVV,
+  prec2ESS, prec2ESB, precA, precB, precC, prec1, prec1B, prec1VV, prec1VN,
+  eprec
+) where
 
 import Language.Drasil.Expr.Lang (Expr(..),
-  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
+  ArithBinOp(..), EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
+  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
--- These precedences are inspired from Haskell/F# 
+-- These precedences are inspired from Haskell/F#
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 
@@ -15,10 +19,6 @@ prec2Arith :: ArithBinOp -> Int
 prec2Arith Frac = 190
 prec2Arith Pow = 200
 prec2Arith Subt = 180
-
--- | prec2Bool - precedence for boolean-related binary operations.
-prec2Bool :: BoolBinOp -> Int
-prec2Bool _ = 130
 
 -- | prec2Eq - precedence for equality-related binary operations.
 prec2Eq :: EqBinOp -> Int
@@ -40,17 +40,30 @@ prec2VVV _ = 190
 prec2VVN :: VVNBinOp -> Int
 prec2VVN _ = 190
 
+-- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
+prec2NVV :: NVVBinOp -> Int
+prec2NVV _ = 190
+
+-- | prec2ESS - precedence for Element->Set->Set-related binary operations.
+prec2ESS :: ESSBinOp -> Int
+prec2ESS _  = 130
+
+-- | prec2ESS - precedence for Element->Set->Bool-related binary operations.
+prec2ESB :: ESBBinOp -> Int
+prec2ESB _  = 130
+
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
-precA MulI = 190
-precA MulRe = 190
-precA AddI = 180
-precA AddRe = 180
+precA Mul = 190
+precA Add = 180
 
 -- | precB - precedence for boolean-related Binary-Associative (Commutative) operators.
 precB :: AssocBoolOper -> Int
 precB And = 120
 precB Or = 110
+
+precC :: AssocConcatOper -> Int
+precC SUnion = 120
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
@@ -75,20 +88,25 @@ eprec :: Expr -> Int
 eprec Lit{}                  = 500
 eprec (AssocA op _)          = precA op
 eprec (AssocB op _)          = precB op
+eprec (AssocC op _)          = precC op
 eprec C{}                    = 500
 eprec FCall{}                = 210
 eprec Case{}                 = 200
 eprec Matrix{}               = 220
+eprec Set{}                  = 220
+eprec (Variable _ _)         = 220
 eprec (UnaryOp fn _)         = prec1 fn
 eprec (UnaryOpB fn _)        = prec1B fn
 eprec (UnaryOpVV fn _)       = prec1VV fn
 eprec (UnaryOpVN fn _)       = prec1VN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
-eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
 eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
 eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
+eprec (NVVBinaryOp bo _ _)   = prec2NVV bo
+eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
+eprec (ESBBinaryOp bo _ _)   = prec2ESB bo
 eprec RealI{}                = 170

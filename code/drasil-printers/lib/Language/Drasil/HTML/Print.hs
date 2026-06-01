@@ -4,8 +4,12 @@ module Language.Drasil.HTML.Print(
   genHTML,
   -- * Citation Renderer
   renderCite,
+  -- * HTML Bib Formatter
+  htmlBibFormatter,
+  -- * HTML Spec Printing
+  pSpec,
   -- * Term Fencing Helpers
-  OpenClose(Open, Close), 
+  OpenClose(Open, Close),
   fence) where
 
 import Prelude hiding (print, (<>))
@@ -13,29 +17,29 @@ import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import qualified Language.Drasil as L
+import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
+  rendPersLFM'', special, checkValidStr, MaxWidthPercent, CitationKind(..),
+  numList)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
-  caption, divTag, em, h, headTag, html, image, li, ol, pa,
-  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
-  th, title, tr, ul)
+  caption, divTag, spanTag', em, h, headTag, html, image, li, ol, pa,
+  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, refwrap', sub, sup, table, td,
+  th, title, tr, ul, dl, dd, BibFormatter(..))
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
-import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
-import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
+import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
-  Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
+  Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
@@ -44,9 +48,9 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'.
-genHTML :: PrintingInformation -> String -> L.Document -> Doc
-genHTML sm fn doc = build fn (makeDocument sm doc)
---         ^^ -- should really be of type Filename, but that's not in scope
+genHTML ::  String -> Document -> Doc
+genHTML = build
+--      first arg should really be of type Filename, but that's not in scope
 
 -- TODO: Use our JSON printer here to create this code snippet.
 -- | Variable to include MathJax in our HTML files so we can render equations in LaTeX.
@@ -100,14 +104,14 @@ printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
-printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
+printLO (Definition ssPs l)    = makeDefn ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Figure r c f wp)      = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty
-
+printLO CodeBlock{}            = empty
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in 'Doc' format.
@@ -132,12 +136,13 @@ pSpec (E e)  = em $ pExpr e
 -- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
 -- pSpec (Sy s)    = printMath $ TeX.pUnit s
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec (Tooltip t s) = spanTag' (pSpec t) (pSpec s)
+pSpec (Sp s)    = text $ unPH $ special s
 pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)       = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
@@ -148,11 +153,9 @@ pSpec (Quote q) = doubleQuotes $ pSpec q
 --pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
 --pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
 
-
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
-
 
 -- | Renders expressions in the HTML document (called by multiple functions).
 pExpr :: Expr -> Doc
@@ -162,7 +165,7 @@ pExpr (Str s)        = doubleQuotes $ text s
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ L.special s
+pExpr (Spec s)       = text $ unPH $ special s
 --pExpr (Gr g)         = unPH $ greek g
 pExpr (Sub e)        = sub $ pExpr e
 pExpr (Sup e)        = sup $ pExpr e
@@ -185,52 +188,60 @@ pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "<
 
 -- | Converts expression operators into HTML characters.
 pOps :: Ops -> String
-pOps IsIn     = "&thinsp;&isin;&thinsp;"
-pOps Integer  = "&#8484;"
-pOps Rational = "&#8474;"
-pOps Real     = "&#8477;"
-pOps Natural  = "&#8469;"
-pOps Boolean  = "&#120121;"
-pOps Comma    = ","
-pOps Prime    = "&prime;"
-pOps Log      = "log"
-pOps Ln       = "ln"
-pOps Sin      = "sin"
-pOps Cos      = "cos"
-pOps Tan      = "tan"
-pOps Sec      = "sec"
-pOps Csc      = "csc"
-pOps Cot      = "cot"
-pOps Arcsin   = "arcsin"
-pOps Arccos   = "arccos"
-pOps Arctan   = "arctan"
-pOps Not      = "&not;"
-pOps Dim      = "dim"
-pOps Exp      = "e"
-pOps Neg      = "&minus;"
-pOps Cross    = "&#10799;"
-pOps Dot      = "&sdot;"
-pOps Eq       = " = " -- with spaces?
-pOps NEq      = "&ne;"
-pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-pOps Gt       = "&thinsp;&gt;&thinsp;"
-pOps LEq      = "&thinsp;&le;&thinsp;"
-pOps GEq      = "&thinsp;&ge;&thinsp;"
-pOps Impl     = " &rArr; "
-pOps Iff      = " &hArr; "
-pOps Subt     = "&minus;"
-pOps And      = " &and; "
-pOps Or       = " &or; "
-pOps Add      = "&plus;"
-pOps Mul      = "&#8239;"
-pOps Summ     = "&sum;"
-pOps Inte     = "&int;"
-pOps Prod     = "&prod;"
-pOps Point    = "."
-pOps Perc     = "%"
-pOps LArrow   = " &larr; "
-pOps RArrow   = " &rarr; "
-pOps ForAll   = " &forall; "
+pOps IsIn       = "&thinsp;&isin;&thinsp;"
+pOps Integer    = "&#8484;"
+pOps Rational   = "&#8474;"
+pOps Real       = "&#8477;"
+pOps Natural    = "&#8469;"
+pOps Boolean    = "&#120121;"
+pOps Comma      = ","
+pOps Prime      = "&prime;"
+pOps Log        = "log"
+pOps Ln         = "ln"
+pOps Sin        = "sin"
+pOps Cos        = "cos"
+pOps Tan        = "tan"
+pOps Sec        = "sec"
+pOps Csc        = "csc"
+pOps Cot        = "cot"
+pOps Arcsin     = "arcsin"
+pOps Arccos     = "arccos"
+pOps Arctan     = "arctan"
+pOps Not        = "&not;"
+pOps Dim        = "dim"
+pOps Exp        = "e"
+pOps Neg        = "&minus;"
+pOps Cross      = "&#10799;"
+pOps VAdd       = "&plus;"
+pOps VSub       = "&minus;"
+pOps Dot        = "&sdot;"
+pOps Scale      = "&#8239;" -- same as Mul
+pOps Eq         = " = " -- with spaces?
+pOps NEq        = "&ne;"
+pOps Lt         = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt         = "&thinsp;&gt;&thinsp;"
+pOps LEq        = "&thinsp;&le;&thinsp;"
+pOps GEq        = "&thinsp;&ge;&thinsp;"
+pOps Impl       = " &rArr; "
+pOps Iff        = " &hArr; "
+pOps Subt       = "&minus;"
+pOps And        = " &and; "
+pOps Or         = " &or; "
+pOps Add        = "&plus;"
+pOps Mul        = "&#8239;"
+pOps Summ       = "&sum;"
+pOps Inte       = "&int;"
+pOps Prod       = "&prod;"
+pOps Point      = "."
+pOps Perc       = "%"
+pOps LArrow     = " &larr; "
+pOps RArrow     = " &rarr; "
+pOps ForAll     = " &forall; "
+pOps Partial    = "&part;"
+pOps SAdd       = " + "
+pOps SRemove    = " - "
+pOps SContains  = " in "
+pOps SUnion     = " and "
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String
@@ -279,14 +290,10 @@ makeColumns = vcat . map (td . pSpec)
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.).
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ table [dtag dt]
+makeDefn :: [(String, [LayoutObj])] -> Doc -> Doc
+makeDefn [] _  = error "L.Empty definition"
+makeDefn ps l = refwrap l $ table ["defn-table"]
   (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
-  where dtag L.General  = "gdefn"
-        dtag L.Instance = "idefn"
-        dtag L.Theory   = "tdefn"
-        dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows.
 makeDRows :: [(String,[LayoutObj])] -> Doc
@@ -327,12 +334,12 @@ pItem (Nested s l) = vcat [pSpec s, makeList l]
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders figures in HTML.
-makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> MaxWidthPercent -> Doc
 makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
-makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = li (refwrap l (i <> text ": " <> a))
+makeRefList :: Doc -> Doc -> Doc
+makeRefList l a = refwrap' "dt" l (brackets $ bold l) $$ dd a
 
 ---------------------
 --HTML bibliography--
@@ -341,18 +348,24 @@ makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 
 -- | Makes a bilbliography for the document.
 makeBib :: BibRef -> Doc
-makeBib = ul ["hide-list-style"] . vcat .
-  zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
+makeBib = dl ["reference-list"] . vcat .
+  map (uncurry makeRefList . renderCite htmlBibFormatter)
+
+-- | HTML specific bib rendering functions
+htmlBibFormatter :: BibFormatter
+htmlBibFormatter = BibFormatter {
+  emph = em,
+  spec = pSpec
+}
 
 -- | For when we add other things to reference like website, newspaper
-renderCite :: Citation -> (Doc, Doc)
-renderCite (Cite e L.Book cfs)      = (text e, renderF cfs useStyleBk    <> text " Print.")
-renderCite (Cite e L.Article cfs)   = (text e, renderF cfs useStyleArtcl <> text " Print.")
-renderCite (Cite e L.MThesis cfs)   = (text e, renderF cfs useStyleBk    <> text " Print.")
-renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk    <> text " Print.")
-renderCite (Cite e L.Misc cfs)      = (text e, renderF cfs useStyleBk)
-renderCite (Cite e _ cfs)           = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
+renderCite :: BibFormatter -> Citation -> (Doc, Doc)
+renderCite f (Cite e Book cfs)      = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
+renderCite f (Cite e Article cfs)   = (text e, renderF cfs (useStyleArtcl f)  <> text (sufxPrint cfs))
+renderCite f (Cite e MThesis cfs)   = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
+renderCite f (Cite e PhDThesis cfs) = (text e, renderF cfs (useStyleBk    f)  <> text (sufxPrint cfs))
+renderCite f (Cite e Misc cfs)      = (text e, renderF cfs (useStyleBk    f))
+renderCite f (Cite e _ cfs)         = (text e, renderF cfs (useStyleArtcl f)) --FIXME: Properly render these later.
 
 -- | Render fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
@@ -406,106 +419,106 @@ compCiteField (Type       _) _ = LT
 
 -- Config helpers --
 -- | Renders citation as a book style.
-useStyleBk :: StyleGuide -> (CiteField -> Doc)
-useStyleBk MLA     = bookMLA
-useStyleBk APA     = bookAPA
-useStyleBk Chicago = bookChicago
+useStyleBk :: BibFormatter -> StyleGuide -> (CiteField -> Doc)
+useStyleBk f MLA     = bookMLA f
+useStyleBk f APA     = bookAPA f
+useStyleBk f Chicago = bookChicago f
 
 -- | Renders citation as an article style.
-useStyleArtcl :: StyleGuide -> (CiteField -> Doc)
-useStyleArtcl MLA     = artclMLA
-useStyleArtcl APA     = artclAPA
-useStyleArtcl Chicago = artclChicago
+useStyleArtcl :: BibFormatter -> StyleGuide -> (CiteField -> Doc)
+useStyleArtcl f MLA     = artclMLA f
+useStyleArtcl f APA     = artclAPA f
+useStyleArtcl f Chicago = artclChicago f
 
 -- FIXME: move these show functions and use tags, combinators
 -- | Cite books in MLA format.
-bookMLA :: CiteField -> Doc
-bookMLA (Address   s) = pSpec s <> text ":"
-bookMLA (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
-bookMLA (Series    s) = dot $ em $ pSpec s
-bookMLA (Title     s) = dot $ em $ pSpec s --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume    s) = comm $ text $ "vol. " ++ show s
-bookMLA (Publisher s) = comm $ pSpec s
-bookMLA (Author    p) = dot $ pSpec (rendPeople' p)
-bookMLA (Year      y) = dot $ text $ show y
---bookMLA (Date    d m y) = dot $ unwords [show d, show m, show y]
---bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
-bookMLA (BookTitle s) = dot $ em $ pSpec s
-bookMLA (Journal   s) = comm $ em $ pSpec s
-bookMLA (Pages   [p]) = dot $ text $ "pg. " ++ show p
-bookMLA (Pages     p) = dot $ text "pp. " <> foldPages p
-bookMLA (Note      s) = pSpec s
-bookMLA (Number    n) = comm $ text ("no. " ++ show n)
-bookMLA (School    s) = comm $ pSpec s
---bookMLA (Thesis     t)  = comm $ show t
---bookMLA (URL        s)  = dot $ pSpec s
-bookMLA (HowPublished (Verb s))      = comm $ pSpec s
-bookMLA (HowPublished (URL l@(S s))) = dot  $ pSpec $ Ref External s l
-bookMLA (HowPublished (URL s))       = dot  $ pSpec s
-bookMLA (Editor       p) = comm $ text "Edited by " <> foldPeople p
-bookMLA (Chapter      _) = text ""
-bookMLA (Institution  i) = comm $ pSpec i
-bookMLA (Organization i) = comm $ pSpec i
-bookMLA (Month        m) = comm $ text $ show m
-bookMLA (Type         t) = comm $ pSpec t
+bookMLA :: BibFormatter -> CiteField -> Doc
+bookMLA f (Address   s) = spec f s <> text ":"
+bookMLA _ (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
+bookMLA f (Series    s) = dot $ emph f $ spec f s
+bookMLA f (Title     s) = dot $ emph f $ spec f s --If there is a series or collection, this should be in quotes, not italics
+bookMLA _ (Volume    s) = comm $ text $ "vol. " ++ show s
+bookMLA f (Publisher s) = comm $ spec f s
+bookMLA f (Author    p) = dot $ spec f (rendPeople' p)
+bookMLA _ (Year      y) = dot $ text $ show y
+--bookMLA _ (Date    d m y) = dot $ unwords [show d, show m, show y]
+--bookMLA f (URLdate d m y) = "Web. " ++ bookMLA f (Date d m y) sm
+bookMLA f (BookTitle s) = dot $ emph f $ spec f s
+bookMLA f (Journal   s) = comm $ emph f $ spec f s
+bookMLA _ (Pages   [p]) = dot $ text $ "pg. " ++ show p
+bookMLA _ (Pages     p) = dot $ text "pp. " <> foldPages p
+bookMLA f (Note      s) = spec f s
+bookMLA _ (Number    n) = comm $ text ("no. " ++ show n)
+bookMLA f (School    s) = comm $ spec f s
+--bookMLA _ (Thesis     t)  = comm $ show t
+--bookMLA f (URL        s)  = dot $ spec f s
+bookMLA f (HowPublished (Verb s))      = comm $ spec f s
+bookMLA f (HowPublished (URL l@(S s))) = dot  $ spec f $ Ref External s l
+bookMLA f (HowPublished (URL s))       = dot  $ spec f s
+bookMLA _ (Editor       p) = comm $ text "Edited by " <> foldPeople p
+bookMLA _ (Chapter      _) = text ""
+bookMLA f (Institution  i) = comm $ spec f i
+bookMLA f (Organization i) = comm $ spec f i
+bookMLA _ (Month        m) = comm $ text $ show m
+bookMLA f (Type         t) = comm $ spec f t
 
 -- | Cite books in APA format.
-bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
-bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
-bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
---bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
---bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Pages    p) = dot $ foldPages p
-bookAPA (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
-bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
+bookAPA :: BibFormatter -> CiteField -> Doc --FIXME: year needs to come after author in APA
+bookAPA f (Author   p) = spec f (rendPeople rendPersLFM' p) --L.APA uses initals rather than full name
+bookAPA _ (Year     y) = dot $ text $ paren $ show y --APA puts "()" around the year
+--bookAPA _ (Date _ _ y) = bookAPA (Year y) --LAPA doesn't care about the day or month
+--bookAPA _ (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
+bookAPA _ (Pages    p) = dot $ foldPages p
+bookAPA _ (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
+bookAPA f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- | Cite books in Chicago format.
-bookChicago :: CiteField -> Doc
-bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
-bookChicago (Pages    p) = dot $ foldPages p
-bookChicago (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
-bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
+bookChicago :: BibFormatter -> CiteField -> Doc
+bookChicago f (Author   p) = spec f (rendPeople rendPersLFM'' p) -- APA uses middle initals rather than full name
+bookChicago _ (Pages    p) = dot $ foldPages p
+bookChicago _ (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
+bookChicago f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- for article renderings
 -- | Cite articles in MLA format.
-artclMLA :: CiteField -> Doc
-artclMLA (Title s) = doubleQuotes $ dot $ pSpec s
-artclMLA i         = bookMLA i
+artclMLA :: BibFormatter -> CiteField -> Doc
+artclMLA f (Title s) = doubleQuotes $ dot $ spec f s
+artclMLA f i         = bookMLA f i
 
 -- | Cite articles in APA format.
-artclAPA :: CiteField -> Doc
-artclAPA (Title  s)  = dot $ pSpec s
-artclAPA (Volume n)  = em $ text $ show n
-artclAPA (Number  n) = comm $ text $ paren $ show n
-artclAPA i           = bookAPA i
+artclAPA :: BibFormatter -> CiteField -> Doc
+artclAPA f (Title  s)  = dot $ spec f s
+artclAPA _ (Volume n)  = em $ text $ show n
+artclAPA _ (Number  n) = comm $ text $ paren $ show n
+artclAPA f i           = bookAPA f i
 
 -- | Cite articles in Chicago format.
-artclChicago :: CiteField -> Doc
-artclChicago i@(Title    _) = artclMLA i
-artclChicago (Volume     n) = comm $ text $ show n
-artclChicago (Number      n) = text $ "no. " ++ show n
-artclChicago i@(Year     _) = bookAPA i
---artclChicago i@(Date _ _ _) = bookAPA i
-artclChicago i = bookChicago i
+artclChicago :: BibFormatter -> CiteField -> Doc
+artclChicago f i@(Title    _) = artclMLA f i
+artclChicago _ (Volume     n) = comm $ text $ show n
+artclChicago _ (Number      n) = text $ "no. " ++ show n
+artclChicago f i@(Year     _) = bookAPA f i
+--artclChicago f i@(Date _ _ _) = bookAPA f i
+artclChicago f i = bookChicago f i
 
 -- PEOPLE RENDERING --
 -- | Render a list of people (after applying a given function).
-rendPeople :: (L.Person -> String) -> L.People -> Spec
+rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
 -- | Render a list of people (of form FirstName LastName).
-rendPeople' :: L.People -> Spec
+rendPeople' :: People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
+rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> Doc
-foldPages = text . foldlList . L.numList "&ndash;"
+foldPages = text . foldlList . numList "&ndash;"
 
 -- | Organize a list of people.
-foldPeople :: L.People -> Doc
-foldPeople p = text . foldlList $ map L.nameStr p
+foldPeople :: People -> Doc
+foldPeople p = text . foldlList $ map fullName p
 
 -- | Organize a list of Strings, separated by commas and inserting "and" before the last item.
 foldlList :: [String] -> String
@@ -520,16 +533,12 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
--- | Renders a 'Person' as Last, First Middle.
-rendPers :: L.Person -> String
-rendPers = L.rendPersLFM
-
 -- | Renders a person's last name.
-rendPersL :: L.Person -> String
+rendPersL :: Person -> String
 rendPersL =
-  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPers
+  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPersLFM
 
 -- | adds an 's' if there is more than one person in a list.
-toPlural :: L.People -> String -> String
+toPlural :: People -> String -> String
 toPlural (_:_) str = str ++ "s"
 toPlural _     str = str

@@ -1,4 +1,7 @@
-module Drasil.HGHC.HeatTransfer where --whole file is used
+module Drasil.HGHC.HeatTransfer (module Drasil.HGHC.HeatTransfer) where --whole file is used
+
+import Data.List.NonEmpty (NonEmpty ((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.ShortHands
@@ -8,30 +11,35 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 
 {--}
 
-symbols :: [QuantityDict]
-symbols = htOutputs ++ htInputs
+symbols :: [DefinedQuantityDict]
+symbols = NE.toList htOutputs ++ NE.toList htInputs
 
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
-qDefs :: [SimpleQDef]
-qDefs = [htTransCladFuel, htTransCladCool]
+qDefs :: NE.NonEmpty SimpleQDef
+qDefs = htTransCladFuel :| [htTransCladCool]
 
-htVars :: [QuantityDict]
-htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
+htVars :: NE.NonEmpty DefinedQuantityDict
+htVars = cladThick :| [coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [QuantityDict]
-htInputs = map qw htVars
-htOutputs = map qw qDefs
+htInputs, htOutputs :: NE.NonEmpty DefinedQuantityDict
+htInputs = NE.map dqdWr htVars
+htOutputs = NE.map dqdWr qDefs
 
-cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
-cladThick    = vc "cladThick"    (cn''' "clad thickness")
+cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict
+cladThick    = dqdNoUnit (dcc "cladThick"    (cn''' "clad thickness")
+  "the clad thickness")
   (sub lTau lClad) Real
-coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
+coolFilmCond = dqdNoUnit (dcc "coolFilmCond" (cn' "initial coolant film conductance")
+  "the initial coolant film conductance")
   (sub lH lCoolant) Real
-gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
+gapFilmCond  = dqdNoUnit (dcc "gapFilmCond"  (cn' "initial gap film conductance")
+  "the initial gap film conductance")
   (sub lH lGap) Real
-cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK lClad) Real
+cladCond     = dqdNoUnit (dcc "cladCond"     (cnIES "clad conductivity")
+  "the clad conductivity")
+  (sub lK lClad) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
 htTransCladCool, htTransCladFuel :: SimpleQDef
@@ -47,8 +55,8 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   EmptyS (sub lH lClad) Real heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
-  exactDbl 2 `mulRe` sy cladCond `mulRe` sy coolFilmCond $/ (exactDbl 2 `mulRe` sy cladCond `addRe` (sy cladThick 
-  `mulRe` sy coolFilmCond))
+  exactDbl 2 $* sy cladCond $* sy coolFilmCond $/ (exactDbl 2 $* sy cladCond $+ (sy cladThick
+  $* sy coolFilmCond))
 
 ---
 
@@ -60,15 +68,12 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS (sub lH lEffective) Real heatTransferCoef htTransCladFuelEq
 
-htTransCladFuelEq = (exactDbl 2 `mulRe` sy cladCond `mulRe` sy gapFilmCond) $/ (exactDbl 2 `mulRe` sy cladCond
-  `addRe` (sy cladThick `mulRe` sy gapFilmCond))
+htTransCladFuelEq = (exactDbl 2 $* sy cladCond $* sy gapFilmCond) $/ (exactDbl 2 $* sy cladCond
+  $+ (sy cladThick $* sy gapFilmCond))
 
 ---
 
-hghc :: CommonConcept
-hghc = dcc' "hghc" (cn "HGHC") "HGHC program" "HGHC"
-
-nuclearPhys, fp :: NamedChunk
+nuclearPhys, fp :: IdeaDict
 nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")
 

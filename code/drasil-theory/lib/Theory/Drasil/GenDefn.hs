@@ -6,14 +6,16 @@ module Theory.Drasil.GenDefn (
   -- * Constructors
   gd, gdNoRefs,
   -- * Functions
-  getEqModQdsFromGd) where
-
-import Language.Drasil
-import Language.Drasil.Development (showUID)
-import Data.Drasil.TheoryConcepts (genDefn)
-import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
+  getEqModQdsFromGd
+) where
 
 import Control.Lens ((^.), view, makeLenses)
+
+import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
+import Language.Drasil
+import Drasil.Metadata.TheoryConcepts (genDefn)
+import Theory.Drasil.Components.Derivation (Derivation, MayHaveDerivation(derivations))
+import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
 -- references (as 'DecRef's), a shortname, a reference address, and notes.
@@ -26,6 +28,15 @@ data GenDefn = GD { _mk    :: ModelKind ModelExpr
                   , _notes :: [Sentence]
                   }
 makeLenses ''GenDefn
+
+instance HasChunkRefs GenDefn where
+  chunkRefs gdn = mconcat
+    [ chunkRefs (gdn ^. mk)
+    , chunkRefs (gdUnit gdn)
+    , chunkRefs (gdn ^. sn)
+    , chunkRefs (gdn ^. notes)
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of a 'GenDefn'.
 instance HasUID             GenDefn where uid         = mk . uid
@@ -40,7 +51,7 @@ instance ConceptDomain      GenDefn where cdom        = cdom . (^. mk)
 -- | Converts the 'GenDefn's related expression into a 'ModelExpr'.
 instance Express            GenDefn where express     = express . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
-instance HasDerivation      GenDefn where derivations = deri
+instance MayHaveDerivation  GenDefn where derivations = deri
 {-- | Finds 'Reference's contained in the 'GenDefn'.
 instance HasReference       GenDefn where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'GenDefn'.
@@ -64,13 +75,13 @@ instance Referable          GenDefn where
 gd :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
-gd mkind u derivs refs sn_ = 
+gd mkind u derivs refs sn_ =
   GD mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
-gdNoRefs mkind u derivs sn_ = 
+gdNoRefs mkind u derivs sn_ =
   GD mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.

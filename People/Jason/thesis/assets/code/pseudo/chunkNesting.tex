@@ -1,0 +1,10 @@
+\begin{pseudohaskell}{Example of Chunk Nesting}{chunkNesting}
+data A = A {_uid :: UID, ...}
+instance HasUID A where uid = _uid
+
+data B = B {_a :: A, ...}
+instance HasUID B where uid = uid . _a
+
+data C = C {_b :: B, ...}
+instance HasUID C where uid = uid . _b
+\end{pseudohaskell}

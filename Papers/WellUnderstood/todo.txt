@@ -1,0 +1,144 @@
+
+=============================================================================
+typos: (all fixed)
+------
+- Missing comma in "What software architecture data-structures, algorithms" (should be one just after "architecture").
+- "software oriented decisions" -> "software-oriented decisions"
+- Definition 2: Hard to read: "...a coupling of a concepts ...1,2,3... of a concept" - too many concepts?
+- [No, this one is correct.] Sec 2: "we have built infrastructure... It consists" - should it not be "an infrastructure"?
+- Sec 4: "Others [5] have...requirements." -> "Dines has...requirements [5]."
+"a lot of" -> "a significant amount of"
+- abstract says "our encodings", but they haven't been introduced. 
+  I'd suggest to mention Drasil in the abstract. 
+- l. 67: refinements -> refinement
+
+Minor:
+------
+- Sec 1.5: Would be good to also mention other well-known examples of long-lived software e.g. financial systems, control systems.
+* mentioned control systems as 'good' examples that fit, financial systems as non-examples
+- Figure 1: Caption should explain what the colors indicate.
+* done.
+- Figure 2: the comment "(compare bold box in Figure 1)" is missing an explanation
+* done.
+- The "main" program fragment at the end of Section 2 does not seem very useful - why do we need to see this?
+* Agreed - replaced by an English description.
+- Too many uses of enumerations, the text of 1.3 could have been written as a single paragraph of text.
+* The enumeration was quite purposeful, as it exactly mirrors the enumeration of definition 1.
+  This is now explained in the text itself, and the enumeration is formatted as a paragraph.
+- Sec 1.4: Why break the text here into two paragraphs? Also, why the very specific detail of "we use standards..." here? Seems out of context. 
+* Second paragraph information was shortened and moved to a more appropriate place.
+- the abstract mentions "context", but later it is called "forces"; I think the
+  latter is more accurate. 
+* In fact, the abstract mentions "contextual forces" first, before talking about both forces
+  and context. In places where it made sense, things have been rewritten to prefer "forces"
+  over "context".
+- Sec 3: Consider putting the idealized process in a figure and then use the text to explain it.
+* We very seriously considered that and, for now, decided not to do it. It would indeed be
+  the right thing to do, but are really afraid we might introduce serious mistakes that
+  ought to be caught by a proper round of review. We didn't want to take that risk.
+
+General Comments:
+-----------------
+
+- make the text in Section 1 a bit smoother (it's very choppy, with lots of enumerates, and very little
+  explanation/context). 
+* Section 1 was sorely missing some explanation as to why each subsection was there,
+  which has now been added. Some context (both goals and historical setting) has been added
+  as well. Additional text has been added throughout section 1 to make things smoother and
+  tie them together.
+
+- Sec 2: "A full description would take too much space." yes probably, but a
+  high-level overview to guide the reader and make your paper understandable
+  would not, so you should as a minimum provide that!  
+* Done.
+
+- Sec 3: is the idealized process general or is it specific to your infrastructure? (This also begs the question: does your infrastructure have a name? "Drasil"?)
+* It is meant to be general for well-understood and long-lived software, and
+  our infrastructure (also called Drasil) is meant to support that. These points have all
+  been clarified at the start of section 3.
+
+- Indeed, it is an old vision to represent domain knowledge first-class, to avoid
+  duplication, and to offer variation points to make engineering trade-offs. Another
+  lens to see this through (not mentioned in the paper), DSLs create
+  opportunities for *design reuse*. 
+* That this is an old vision is now up-front in the introduction. The conclusion also
+  quickly mentions design reuse: we're eager to get there, but Drasil does not offer
+  enough yet on that front.
+
+- I am anxious to learn more details about this
+  system, and if the ideas embedded in Drasil, could be transferred to an actual
+  (external) DSL, built using a language workbench (like WebDSL), or, in any
+  case, what motivated the authors to make a “library” in Haskell. 
+* (This comment has not resulted in any changes to the paper itself). The choice of
+  Haskell is driven by the author's firm belief that it is a fantastic prototyping
+  language for "language processors". It is sufficiently typed to allow easy refactoring,
+  but is also very succinct when its features are used properly. Most language workbenches
+  are, to our taste, ridiculously verbose. They are aimed at a (very large!) class of
+  programmers who are not assumed to know as much theory as we do...
+
+- The link with Eelco's WebDSL is appreciated. However, WebDSL is deemed to
+  cover a domain that is *not* well-understood. One might conjecture, however,
+  (and I think Eelco would agree), that the act of creating a DSL for a certain
+  domain is way of making that domain well-understood. But of course, this might
+  be a philosophical debate. 
+* I thought it was already clear that we agree that it was not well-understood when
+  it started. The paragraph has been modified to make this even clearer.
+
+- This is a fine paper. There are questions about its relationship to Eelco
+  Visser's work but I don't think that we should be too concerned. Still, this is
+  a part to bring out more clearly. Eelco Visser's work offered a lot of
+  meta-programming/generative programming infrastructure, and, although this is
+  not used concretely, it certainly connects to the themes of the research.
+  Finding connections with publications should not be too hard.
+* 4 of Eelco's papers are already cited. We shared a lot high-level ideas as well
+  as a number of tools (DSLs, program generation) but at a technical level, we
+  tended to differ significantly. Same goals, but using widely different parts of
+  the design space to get there. While we hugely respect Eelco's work, it is hard to
+  find technical papers to cite, as we fairly systematically chose different routes.
+  This is why more of his papers are not cited. It would take many pages to do
+  justice to the reasoning behind the difference in choices; and it is also just that,
+  differences in choices due to personal views of what part of the design space to
+  explore.
+
+- Reviewer 3 has some interesting concerns about the paper being a bit
+  "old-fashioned" and how this could be addressed, for example, by fleshing out
+  the "Create a coherent narrative" paragraph.
+  research of several decades ago focused on the same themes: represent knowledge
+  at a higher level and be able to generate code in multiple target languages and
+  configure low-level specifics (such as whether to have logging and whether code
+  is to be inlined or supplied as functions). These are good themes, but hardly
+  novel. What may be more interesting is the particular application in this
+  specific domain, as well as the detailing of specifics, e.g., by fleshing out
+  the "Create a coherent narrative" paragraph (l.175-180).
+* We rather take that as a compliment... there should be no fashions in research,
+  in an ideal world. These decades-old themes have not had, in our opinion,
+  sufficient influence on today's development practice. Again, in our opinion, it is
+  because the pioneers were over-reaching and tried to apply their ideas everywhere,
+  i.e. not taking into account what we now call "forces".  Furthermore, the
+  technology available then was not yet up to the task. So we feel like it is time 
+  for another try.
+
+  A paragraph has been added to flesh out "Create a coherent narrative"
+  at the conceptual level. For the GlassBR application, the details are unfortunately
+  uninteresting - it boils down to some straight-line code that is not very long.
+  Nevertheless, some comments about that have been inserted.
+  What is interesting about GlassBR is why those are the correct lines of code, and
+  that relies on a few pages worth of Science & Engineering.
+
+- With respect to the example of Drasil, we only get to see
+  client/instantiation code to configure a system. Could we also see an example
+  of how DK is encoded? How a code generator is specified? Etc. 
+* Here we have made the tough decision to go with: 'no'. A short example of how the
+  DK is encoded would be deeply unsatisfying for the reader, wanting even more details,
+  while a properly illustrative example would add more than a page. Given how much
+  longer than the initial limit the paper is, it just seems too much. (The resulting
+  exposition might also qualify as needing re-review).
+  As for the details of the code generator, that is contained in the GOOL paper
+  already cited.
+
+Related Work:
+* We were (sadly!) unfamiliar with some of this related work. Thank you so much
+  for pointing it out to us. It is extremely relevant indeed, and a whole section on
+  the related work has been inserted. The analysis deserves to be quite a bit deeper
+  (and indeed, on our own Drasil wiki, there is now an in-depth analysis that would
+  likely span about 5 pages in the format used by EVCS)

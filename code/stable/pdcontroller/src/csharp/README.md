@@ -1,5 +1,17 @@
-# PD_Controller 
+# PDController 
 > Author: Naveen Ganesh Muralidharan
+
+> Motivation: The gains of a controller in an application must be tuned before the controller is ready for production.
+
+> Purpose: Provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
+
+------------------------------------------------------------
+## What 
+ 
+
+> Background: Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc.
+
+> Scope: A PD Control Loop with three subsystems, namely: a PD Controller, a Summing Point, and a Power Plant.
 
 ------------------------------------------------------------
 ## Making Examples 
@@ -14,6 +26,10 @@ In your terminal command line, enter the same directory as this README file. The
 ```
 make build
 ```
+
+How to Change Input:
+PDController will take the inputs from `input.txt` and write the outputs to `output.txt`.
+Inputs can be changed by editing `input.txt`.
 
 ------------------------------------------------------------
 ## Version 

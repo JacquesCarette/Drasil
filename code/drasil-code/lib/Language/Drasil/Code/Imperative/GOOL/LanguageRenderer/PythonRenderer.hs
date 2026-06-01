@@ -1,25 +1,21 @@
-{-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Python auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..), 
-  AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+
+import Drasil.GOOL (pyName, pyVersion)
+
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
-
-import GOOL.Drasil (onCodeList, pyName, pyVersion)
-
-import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Holds a Python project.
 newtype PythonProject a = PP {unPP :: a}
@@ -32,30 +28,21 @@ instance Applicative PythonProject where
   (PP f) <*> (PP x) = PP (f x)
 
 instance Monad PythonProject where
-  return = PP
   PP x >>= f = f x
 
-instance PackageSym PythonProject where
-  type Package PythonProject = PackData
-  package p = onCodeList (packD p)
-
-instance AuxiliarySym PythonProject where
-  type Auxiliary PythonProject = AuxData
-  type AuxHelper PythonProject = Doc
-  doxConfig = G.doxConfig optimizeDox
+instance SoftwareDossierSym PythonProject where
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = pyName,
         langVersion = pyVersion}
-  sampleInput = G.sampleInput
 
-  optimizeDox = return yes
+  optimizeDox = pure yes
 
   makefile _ it cms = G.makefile Nothing (G.noRunIfLib it pyRunnable)
     (G.docIfEnabled cms G.doxDocConfig)
 
-  auxHelperDoc = unPP
-  auxFromData fp d = return $ ad fp d
+  unReprDoc = unPP
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable

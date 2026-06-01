@@ -1,0 +1,23 @@
+module Drasil.DblPend.LabelledContent (
+  labelledContent, figMotion, sysCtxFig1
+) where
+
+import Language.Drasil
+import qualified Language.Drasil.Development as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
+
+import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
+
+labelledContent :: [LabelledContent]
+labelledContent = [figMotion, sysCtxFig1]
+
+resourcePath :: String
+resourcePath = "../../../../datafiles/dblpend/"
+
+figMotion :: LabelledContent
+figMotion = llccFig "dblpend" $ figWithWidth (D.toSent $ atStartNP (the physicalSystem))
+  (resourcePath ++ "dblpend.png") 60
+
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llccFig "sysCtxDiag" $ fig (titleize sysCont)
+  (resourcePath ++ "SystemContextFigure.png")

@@ -1,0 +1,11 @@
+\begin{haskell}{Original relToQD}{origRelToQD}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/drasil-code/Language/Drasil/CodeSpec.hs\#L112-L120}
+-- Converts a chunk with a defining relation to a QDefinition
+relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat)
+
+-- Converts an Expr representing a definition (i.e. an equality where the left 
+-- side is just a variable) to a QDefinition.
+convertRel :: ChunkDB -> Expr -> QDefinition
+convertRel sm (BinaryOp Eq (C x) r) = ec (symbResolve sm x) r
+convertRel _ _ = error "Conversion failed"
+\end{haskell}

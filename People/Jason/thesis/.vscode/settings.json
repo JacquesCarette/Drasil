@@ -1,0 +1,7 @@
+{
+    "ltex.additionalRules.enablePickyRules": true,
+    "ltex.language": "en-CA",
+    "ltex.latex.environments": {
+        "haskell": "ignore"
+    },
+}

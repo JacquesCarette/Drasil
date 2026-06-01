@@ -1,24 +1,10 @@
--- | Gather Drasil's utility functions and re-export for easy use.
--- For now, does not include combinators (Sentence.hs, NounPhrase.hs, Concepts.hs)
+-- | Re-exports all utilities.
 module Utils.Drasil (
-  -- * Documents
-  -- | From "Utils.Drasil.Document".
-  blank, indent, indentList,
-
-  -- * Language
-  -- | From "Utils.Drasil.English".
-  capitalize, stringList,
-  
-  -- * Lists
-  -- | From "Utils.Drasil.Lists". General functions involving lists.
-  replaceAll, subsetOf, nubSort, weave,
-  foldle, foldle1,
-
-  -- ** Strings
-  toPlainName
+  module Utils.Drasil.English,
+  module Utils.Drasil.Lists,
+  module Utils.Drasil.Strings,
 ) where
 
-import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Lists
 import Utils.Drasil.Strings

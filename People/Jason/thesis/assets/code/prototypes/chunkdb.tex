@@ -1,0 +1,9 @@
+\begin{haskell}{Prototyped Chunk Database}{protoChunkDB}{https://github.com/balacij/ProtoChunkDB/blob/main/src/ChunkDB.hs\#L34-L40}
+type ReferredBy = [UID]
+
+type ChunkByUID = M.Map UID (Chunk, ReferredBy)
+
+type ChunksByTypeRep = M.Map TypeRep [Chunk]
+
+newtype ChunkDB = ChunkDB (ChunkByUID, ChunksByTypeRep)
+\end{haskell}

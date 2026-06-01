@@ -1,31 +1,38 @@
 -- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
 
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                               -- Vector - Name conflict (defined in file)
-
+-- Generic Haskell
 import Data.List (nub, (\\))
 import Control.Lens (view)
-import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>))
+import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>)) -- FIXME
 
-import Drasil.DocumentLanguage.Units (toSentence)
-import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
-import Data.Drasil.Concepts.Math (unit_)
-import Language.Drasil.Printers (symbolDoc)
+-- Generic Drasil
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
+                                             -- Vector - Name conflict (defined in file)
+import Drasil.Database (HasUID(..))
+import Utils.Drasil (mkTable)
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (symbol_, description, tOfSymb)
+import Drasil.Metadata.Concepts.Math (unit_)
+
+-- other docLang
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.DocumentLanguage.Units (toSentence) -- suspicious
 import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
 -- the symbols into a 'Sentence'. Filters non-symbol chunks and checks for duplicate symbol error.
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
+table _ [] _ = mkRawLC (Paragraph EmptyS) symbTableRef
 table st ls f
-    |noDuplicate = llcc symbTableRef $
-      Table [atStart symbol_, atStart description, atStart' unit_]
+    |noDuplicate = mkRawLC (Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
-      (titleize' tOfSymb) True
-    | otherwise = error errorMessage 
-    where 
-        filteredChunks = filter (`hasStageSymbol`st) ls
+      (titleize' tOfSymb) True) symbTableRef
+    | otherwise = error errorMessage
+    where
+        filteredChunks = filter (`hasStageSymbol` st) ls
         symbolsCol     = map (`symbol` st) filteredChunks
         uidCol         = map (view uid)    filteredChunks
         symUidPair     = zip symbolsCol uidCol
@@ -35,8 +42,8 @@ table st ls f
         extractPairs symb = filter (\x -> fst x == symb) symUidPair
         extractUid  = map snd
         extractUidFromPairs = text . show . extractUid . extractPairs
-        errSymUidDuplicates = vcat $ map (\symb -> 
-          extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates
+        errSymUidDuplicates = vcat $ map (\symb ->
+          extractUidFromPairs symb <+> text "all have the same symbol") symDuplicates
         errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
 
 -- | Makes a reference to the Table of Symbols.
@@ -58,6 +65,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro
 
 -- | Table of symbols introduction builder. Used by 'mkRefSec'.
 tsIntro :: [TSIntro] -> Contents
+tsIntro [] = mkParagraph $ emptySectSentPlu [symbol_]
 tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.

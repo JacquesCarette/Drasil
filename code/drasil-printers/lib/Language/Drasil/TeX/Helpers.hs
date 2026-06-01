@@ -1,6 +1,33 @@
 -- | Defines helper functions used in printing LaTeX documents.
-module Language.Drasil.TeX.Helpers where
+module Language.Drasil.TeX.Helpers (
+  -- * Formatting
+  br, sq, parens, quote, lbrace, rbrace,
+  -- * Commands
+  command0, command, commandD, command1o, command1oD, command1p, command1pD,
+  texSym, command2, command2D, command3,
+  -- * Environments
+  mkEnv, mkEnvArgBr, mkEnvArgSq, mkMinipage, comm, renewcomm, empty,
+  -- * Sectioning
+  genSec, sec,
+  -- * References and Citations
+  ref, sref, hyperref, externalref, snref, href, cite,
+  -- * Document Elements
+  count, mathbb, usepackage, includegraphics, author, caption, item, label,
+  title, bold, item', maketitle, maketoc, newpage, centering, code, itemize,
+  enumerate, description, description', figure, center, document, equation,
+  symbDescription, docclass,
+  -- * Math Symbols
+  subscript, superscript, fraction,
+  -- * Preamble
+  bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum,
+  newline, hyperConfig, useTikz,
+  -- * Equations
+  toEqn,
+  -- * Strings
+  paren, sqbrac
+) where
 
+import Data.List (isSuffixOf)
 import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 
@@ -9,10 +36,6 @@ import Language.Drasil (MaxWidthPercent)
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
-import Data.List (isSuffixOf)
-
---import Language.Drasil.Config (numberedSections, hyperSettings)
---import Language.Drasil.Document (MaxWidthPercent)
 
 -----------------------------------------------------------------------------
 -- * LaTeX Commands
@@ -25,10 +48,7 @@ import Data.List (isSuffixOf)
 -- | Helper for adding fencing symbols.
 br, sq, parens, quote :: D -> D
 -- | Curly braces.
-br x = lb <> x <> rb
-  where
-  lb = pure $ text "{"
-  rb = pure $ text "}"
+br x = lbrace <> x <> rbrace
 -- | Square brackets.
 sq x = ls <> x <> rs
   where
@@ -44,6 +64,12 @@ quote x = lq <> x <> rq
   where
   lq = pure $ text "``"
   rq = pure $ text "''"
+
+lbrace, rbrace :: D
+-- | Helper for opening curly brace.
+lbrace = pure $ text "{"
+-- | Helper for closing curly brace.
+rbrace = pure $ text "}"
 
 -- | 0-argument command.
 command0 :: String -> D
@@ -90,34 +116,34 @@ command3 :: String -> String -> String -> String -> D
 command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1 TP.<> H.br a2
 
 -- | Encapsulate environments.
-mkEnv :: String -> D -> D
-mkEnv nm d =
-  pure (text ("\\begin" ++ H.brace nm)) $+$ 
-  d $+$
+mkEnv :: String -> (D -> D -> D) -> D -> D
+mkEnv nm cat d =
+  pure (text ("\\begin" ++ H.brace nm)) `cat`
+  d `cat`
   pure (text ("\\end" ++ H.brace nm))
 
 -- | Encapsulate environments with argument with braces.
 mkEnvArgBr :: String -> String -> D -> D
 mkEnvArgBr nm args d =
-  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$ 
+  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
 -- | Encapsulate environments with argument with brackets.
 mkEnvArgSq :: String -> String -> D -> D
 mkEnvArgSq nm args d =
-  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$ 
+  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
 -- | Makes minipage environment.
 mkMinipage :: D -> D
-mkMinipage d = commandD "vspace" (command0 "baselineskip") $+$
-  command0 "noindent" $+$ mkEnvArgBr "minipage" "\\textwidth" d
+mkMinipage d = command0 "medskip" $+$
+  command0 "noindent" $+$ mkEnvArgBr "minipage" "\\textwidth" d $+$ pure (text "")
 
 -- | For defining (LaTeX) macros.
 comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 
+comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<>
   maybe TP.empty H.sq s1 TP.<> H.br b2)
 
 -- this one is special enough, let this sub-optimal implementation stand
@@ -135,9 +161,9 @@ genSec d
   | d < 0 = error "Cannot have section with negative depth"
   | d > 3 = error "Section depth must be from 0-2"
   | d == 3 = pure $ H.bslash TP.<> text "paragraph"
-  | otherwise = pure $ 
-     H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
-      TP.<> (if not numberedSections then text "*" else TP.empty) 
+  | otherwise = pure $
+     H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section"
+      TP.<> (if not numberedSections then text "*" else TP.empty)
 
 -- | For references.
 ref, sref, hyperref, externalref, snref :: String -> D -> D
@@ -171,7 +197,7 @@ usepackage = command "usepackage"
 
 -- | Include graphics with a given max width percentage.
 includegraphics :: MaxWidthPercent -> String -> D
-includegraphics n fp 
+includegraphics n fp
   | ".svg" `isSuffixOf` fp = command1p "includesvg" ("width=" ++ per n ++ "\\textwidth, inkscapelatex = false") fpNoSvg -- in order to use inkscape to render svgs, there can't be a file type appended
   | otherwise = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth") fp -- still need a case for normal images
   where
@@ -200,17 +226,18 @@ newpage   = command0 "newpage"
 centering = command0 "centering"
 
 -- | Common commands and formatting options for a LaTeX document.
-code, itemize, enumerate, description, figure, center, document, 
-  equation, symbDescription :: D -> D
-code        = mkEnv "lstlisting"
-itemize     = mkEnv "itemize"
-enumerate   = mkEnv "enumerate"
-description = mkEnv "description"
-figure      = mkEnv "figure"
-center      = mkEnv "center"
-document    = mkEnv "document"
-equation    = mkEnv "displaymath" --displays math
-symbDescription = mkEnv "symbDescription"
+code, itemize, enumerate, description, description', figure,
+  center, document, equation, symbDescription :: D -> D
+code         = mkEnv "lstlisting" ($+$)
+itemize      = mkEnv "itemize" ($+$)
+enumerate    = mkEnv "enumerate" ($+$)
+description  = mkEnv "description" ($+$)
+description' = mkEnvArgSq "description" "font=\\normalfont"
+figure       = mkEnvArgSq "figure" "H"
+center       = mkEnv "center" ($+$)
+document     = mkEnv "document" ($+$)
+equation     = mkEnv "displaymath" ($+$) --displays math
+symbDescription = mkEnv "symbDescription" ($+$)
 
 -- | Command for the document class.
 docclass :: String -> String -> D
@@ -267,7 +294,7 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$
   command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
   command "usegdlibrary" "layered"
-  
+
 -- * Helpers
 
 -----------------------------------------------------------------------------
@@ -275,9 +302,9 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- on Monad...
 
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
+-- Uses resizeExpression macro (defined in Preamble.hs) to prevent page overflow.
 toEqn :: D -> D
-toEqn (PL g) = equation $ PL (\_ -> g Math)
-
+toEqn (PL g) = equation $ commandD "resizeExpression" $ PL (\_ -> g Math)
 -----------------------------------------------------------------------------
 -- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.
 paren, sqbrac :: String -> String

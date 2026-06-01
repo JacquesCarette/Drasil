@@ -1,7 +1,29 @@
 {-# LANGUAGE GADTs #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
-module Drasil.DocDecl where
 
+-- Changes to DocSection and its subections should be reflected in the 'Creating Your Project
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
+module Drasil.DocDecl (
+  SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..), PDSub(..),
+  ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..), SolChSpec(..),
+  mkDocDesc
+) where
+
+-- Generic Haskell
+import Control.Lens((^.))
+
+-- Generic Drasil
+import Language.Drasil hiding (sec)
+import Drasil.Database (HasUID(..), findAll)
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), systemdb)
+
+-- Vocabulary
+import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,
+  nonFuncReqDom, likeChgDom, unlikeChgDom)
+
+-- Other docLang
 import Drasil.DocumentLanguage.Core (DocDesc)
 import Drasil.DocumentLanguage.Definitions (Fields)
 import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
@@ -9,16 +31,6 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
-import Drasil.Sections.Requirements (fullReqs, fullTables)
-
-import Database.Drasil
-import SysInfo.Drasil
-import Language.Drasil hiding (sec)
-
-import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
-  nonFuncReqDom, likeChgDom, unlikeChgDom)
-
-import Control.Lens((^.), Getting)
 
 -- * Types
 
@@ -90,18 +102,16 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 -- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. 'LabelledContent' for tables (includes input values).
-  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. 'LabelledContent' for tables (no input values).
-  FReqsSub'   :: [LabelledContent] -> ReqsSub
+  -- | Functional requirements. 'LabelledContent' for tables.
+  FReqsSub    :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
 
 -- * Functions
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
-mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
-mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
+mkDocDesc :: SmithEtAlSRS -> SRSDecl -> DocDesc
+mkDocDesc sys = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
@@ -117,28 +127,29 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec Bibliography = DL.Bibliography
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
+
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
-  reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
+  reqSec (FReqsSub t) = DL.FReqsSub (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
+
   ssdSec :: SSDSub -> DL.SSDSub
   ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
   ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ map scsSub scs
+
   pdSub :: PDSub -> DL.PDSub
   pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c
   pdSub (PhySysDesc i s lc c) = DL.PhySysDesc i s lc c
   pdSub (Goals s) = DL.Goals s $ fromConcInsDB goalStmtDom
+
   scsSub :: SCSSub -> DL.SCSSub
   scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
-  scsSub (TMs s f) = DL.TMs s f $ allInDB theoryModelTable
-  scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
-  scsSub (DDs s f dd) = DL.DDs s f (allInDB dataDefnTable) dd
-  scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
+  scsSub (TMs s f)    = DL.TMs s f (sys ^. theoryModels)
+  scsSub (GDs s f dd) = DL.GDs s f (sys ^. genDefns)     dd
+  scsSub (DDs s f dd) = DL.DDs s f (sys ^. dataDefns)    dd
+  scsSub (IMs s f dd) = DL.IMs s f (sys ^. instModels)   dd
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
-  expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
-  expandFromDB f = f . asOrderedList . (db ^.)
-  allInDB :: Getting (UMap a) ChunkDB (UMap a) -> [a]
-  allInDB = expandFromDB id
+
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = expandFromDB (filter (\x -> sDom (cdom x) == c ^. uid)) conceptinsTable
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid)
+    $ findAll $ sys ^. systemdb

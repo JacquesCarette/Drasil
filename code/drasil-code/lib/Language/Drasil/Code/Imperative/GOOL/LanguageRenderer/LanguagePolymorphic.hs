@@ -1,48 +1,39 @@
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic (
   -- * Common Syntax
-  doxConfig, readMe,sampleInput, makefile, noRunIfLib, doxDocConfig, 
+  doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled
 ) where
 
-import Language.Drasil (Expr)
+import Text.PrettyPrint.HughesPJ (Doc)
 
-import Database.Drasil (ChunkDB)
-
-import GOOL.Drasil (ProgData, GOOLState)
+import Drasil.Build.Artifacts (FileLayout)
+import Drasil.GOOL (ProgData)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
-import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig, doxygenDocConfig)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
-import Language.Drasil.Code.Imperative.WriteReadMe (makeReadMe)
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
-  makefileName, sampleInputName, readMeName)
-
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( ReadMeInfo(..),
-  AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
+import Language.Drasil.Code.Imperative.Build.Import (buildMakefile)
+import Language.Drasil.SoftwareDossier.FileNames (doxConfigName, makefileName,
+  readMeName)
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
+    SoftwareDossierSym(unReprDoc), sdsFromData, SoftwareDossierState)
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
-doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String -> 
-  GOOLState -> Verbosity -> r (Auxiliary r)
-doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s 
-  (auxHelperDoc opt) v)
+doxConfig :: (SoftwareDossierSym r, Applicative r) => r Doc -> String ->
+  SoftwareDossierState -> Verbosity -> r FileLayout
+doxConfig opt pName s v = sdsFromData doxConfigName (makeDoxConfig pName s
+  (unReprDoc opt) v)
 
 -- | Defines a markdown file.
-readMe :: (AuxiliarySym r) => ReadMeInfo -> r (Auxiliary r)
-readMe rmi= auxFromData readMeName (makeReadMe rmi)
-
--- | Defines a sample input file.
-sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] -> 
-  r (Auxiliary r)
-sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
+readMe :: (Applicative r) => ReadMeInfo -> r FileLayout
+readMe rmi= sdsFromData readMeName (makeReadMe rmi)
 
 -- | Defines a Makefile.
-makefile :: (AuxiliarySym r) => Maybe BuildConfig -> Maybe Runnable -> 
-  Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
-makefile bc r dc s p = auxFromData makefileName (makeBuild dc bc r s p)
+makefile :: (Applicative r) => Maybe BuildConfig -> Maybe Runnable ->
+  Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileLayout
+makefile bc r d s p = sdsFromData makefileName (buildMakefile d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.
 noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable

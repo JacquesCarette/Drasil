@@ -1,38 +1,24 @@
-module Drasil.GlassBR.Concepts where --whole file is used
+module Drasil.GlassBR.Concepts (
+  beam, cantilever, edge, glaSlab, glass, lShareFac, plane, responseTy,
+  blastRisk, glaPlane, aR, stdOffDist, idglass,
+  glassTypeFac, lResistance, nFL, lDurFac,
+  ptOfExplsn, con', iGlass, lGlass, annealed, fullyT, heatS
+) where
 
-import Language.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
-
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)
-import Data.Drasil.TheoryConcepts (dataDefn, inModel, thModel)
+import Language.Drasil (commonIdeaWithDict, mkIdea, nc, cn', nounPhraseSP, CI, IdeaDict)
+import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
+import Data.Drasil.Concepts.Documentation (response, type_)
 
 {--}
 idglass :: IdeaDict
-idglass      = mkIdea  "glass"          (cn' "Glass")                 Nothing
+idglass = mkIdea  "glass"          (cn' "Glass")                 Nothing
 
-{--}
-con :: [CI]
-con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, glassBR, stdOffDist, nFL]
-
-con' :: [NamedChunk]
+con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
-{-glassBRProg :: CommonConcept
-glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
-  "The glass safety analysis program" "GlassBR"-}
-
-{-Acronyms-}
-acronyms :: [CI]
-acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
-  glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
-  lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
-  stdOffDist, srs, thModel, typUnc, unlikelyChg]
-
-annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, glassBR, stdOffDist, nFL :: CI
+annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
+  lResistance, lShareFac, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
 
@@ -45,23 +31,22 @@ iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating gla
 lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
 lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")         "LR"       [idglass]
 lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      [idglass]
-glassBR       = commonIdeaWithDict "glassBR"       (pn "GlassBR")                           "GlassBR"  [idglass]
 stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
-loadDurFactor = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
+lDurFac       = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
 nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
- 
+
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
-  glass, ptOfExplsn, responseTy :: NamedChunk
-beam         = nc "beam"       (nounPhraseSP "beam")
+  glass, ptOfExplsn, responseTy :: IdeaDict
+beam         = nc "beam"       (cn' "beam")
 blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
 edge         = nc "edge"       (cn'          "edge")
 glass        = nc "glass"      (nounPhraseSP "glass")
-glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab")
-plane        = nc "plane"      (nounPhraseSP "plane")
+glaSlab      = nc "glaSlab"    (cn' "glass slab")
+plane        = nc "plane"      (cn' "plane")
 
 ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")
 

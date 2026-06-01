@@ -4,14 +4,17 @@ module Data.Drasil.Quantities.PhysicalProperties where
 import Language.Drasil
 import Language.Drasil.ShortHands (lM, cL, cV, lGamma, lRho)
 
-import Data.Drasil.Concepts.PhysicalProperties as CPP (density, specWeight, len,
+import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (density, specWeight, len,
   mass, vol)
 import Data.Drasil.SI_Units (kilogram, metre, m_3, specificWeight)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 
+physicalquants :: [UnitalChunk]
+physicalquants = [density, specWeight, mass, len, vol]
+
 density, specWeight, mass, len, vol :: UnitalChunk
-density    = uc CPP.density    lRho   densityU
-specWeight = uc CPP.specWeight lGamma specificWeight
-mass       = uc CPP.mass       lM     kilogram
-len        = uc CPP.len        cL     metre
-vol        = uc CPP.vol        cV     m_3
+density    = uc CPP.density    lRho   Real densityU
+specWeight = uc CPP.specWeight lGamma Real specificWeight
+mass       = uc CPP.mass       lM     Real kilogram
+len        = uc CPP.len        cL     Real metre
+vol        = uc CPP.vol        cV     Real m_3

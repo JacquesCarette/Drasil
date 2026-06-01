@@ -1,10 +1,8 @@
 module Main (main) where
 
-import GHC.IO.Encoding
-import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(SRS), Format(..), docChoices)
-import Drasil.Template.Body (srs, printSetting)
+import Drasil.Generator (caseStudyMainSRS)
 
-main :: IO()
-main = do
-  setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "Template_SRS") srs printSetting
+import Drasil.Template.Body (mkSRS, si)
+
+main :: IO ()
+main = caseStudyMainSRS si mkSRS "Template_SRS"

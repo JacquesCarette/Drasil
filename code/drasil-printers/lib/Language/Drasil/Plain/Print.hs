@@ -1,61 +1,55 @@
 -- | Defines functions to print on plain files (for .txt, .log, etc.).
 module Language.Drasil.Plain.Print (
   -- * Types
-  Linearity(..),
+  SingleLine(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
+  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc,
   showHasSymbImpl
 ) where
 
-import Database.Drasil (ChunkDB)
-import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
-import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import qualified Language.Drasil.CodeExpr as C (CodeExpr)
-import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
-  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
-import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
-import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
-  PrintingInformation(..), Notation(Scientific))
-
-import Utils.Drasil (toPlainName)
-
 import Prelude hiding ((<>))
 import Data.List (partition)
-import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double, 
-  doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text, 
+import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
+  doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text,
   vcat, render)
 
--- | Data is either linear or not.
-data Linearity = Linear | Nonlinear
+import Language.Drasil (Special(..), Stage(..), Symbol, USymb(..))
+import qualified Language.Drasil as L (HasSymbol(..))
+import Utils.Drasil (toPlainName)
 
--- | Simple printing configuration is scientific.
-plainConfiguration :: PrintingConfiguration
-plainConfiguration = PC Scientific
+import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
+  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
+import Language.Drasil.Printing.Import.Symbol (symbol)
+
+-- | Data is either linear or not.
+data SingleLine = OneLine | MultiLine
 
 -- | Create expressions for a document in 'Doc' format.
-exprDoc :: ChunkDB -> Stage -> Linearity -> L.Expr -> Doc
-exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration))
+exprDoc :: SingleLine -> Expr -> Doc
+exprDoc = pExprDoc
 
 -- | Create code expressions for a document in 'Doc' format.
-codeExprDoc :: ChunkDB -> Stage -> Linearity -> C.CodeExpr -> Doc
-codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration))
+-- assumes someone has already makde the code expression into an expression
+codeExprDoc :: SingleLine -> Expr -> Doc
+codeExprDoc = pExprDoc
 
 -- | Create sentences for a document in 'Doc' format.
-sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
-sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration) s)
+sentenceDoc :: SingleLine -> Spec -> Doc
+sentenceDoc = specDoc
 
 -- | Create symbols for a document in 'Doc' format.
 symbolDoc :: Symbol -> Doc
-symbolDoc s = pExprDoc Linear (symbol s)
+symbolDoc = pExprDoc OneLine . symbol
 
--- | Helper for printing expressions in 'Doc' format. Display format of an expression may change regarding the 'Linearity'.
-pExprDoc :: Linearity -> Expr -> Doc
+-- | Helper for printing expressions in 'Doc' format. Display format of an expression may change regarding the 'SingleLine'.
+pExprDoc :: SingleLine -> Expr -> Doc
 pExprDoc _ (Dbl d) = double d
 pExprDoc _ (Int i) = integer i
 pExprDoc _ (Str s) = text s
 pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
 pExprDoc f (Row es) = hcat $ map (pExprDoc f) es
+pExprDoc f (Set es) = hcat $ map (pExprDoc f) es
 pExprDoc _ (Ident s) = text $ toPlainName s
 pExprDoc _ (Label s) = text $ toPlainName s
 pExprDoc _ (Spec s) = specialDoc s
@@ -63,7 +57,7 @@ pExprDoc f (Sub e) = text "_" <> pExprDoc f e
 pExprDoc f (Sup e) = text "^" <> pExprDoc f e
 pExprDoc _ (MO o) = opsDoc o
 pExprDoc f (Over Hat e) = pExprDoc f e <> text "_hat"
-pExprDoc f (Fenced l r e) = fenceDocL l <> pExprDoc f e <> fenceDocR r 
+pExprDoc f (Fenced l r e) = fenceDocL l <> pExprDoc f e <> fenceDocR r
 pExprDoc f (Font Bold e) = pExprDoc f e <> text "_vect"
 pExprDoc f (Font Emph e) = text "_" <> pExprDoc f e <> text "_"
 pExprDoc f (Div n d) = parens (pExprDoc f n) <> text "/" <> parens (pExprDoc f d)
@@ -71,20 +65,21 @@ pExprDoc f (Sqrt e) = text "sqrt" <> parens (pExprDoc f e)
 pExprDoc _ (Spc Thin) = space
 
 -- | Helper for printing sentences ('Spec's) in 'Doc' format.
-specDoc :: Linearity -> Spec -> Doc
+specDoc :: SingleLine -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
+specDoc f (Tooltip _ s) = specDoc f s
 specDoc _ (Sp s) = specialDoc s
 specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
 specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = doubleQuotes $ specDoc f s
-specDoc Nonlinear HARDNL = text "\n"
-specDoc Linear HARDNL = error "HARDNL encountered in attempt to format linearly"
+specDoc MultiLine HARDNL = text "\n"
+specDoc OneLine HARDNL = error "HARDNL encountered in attempt to format linearly"
 
 -- | Helper for printing units in 'Doc' format.
-unitDoc :: Linearity -> USymb -> Doc
+unitDoc :: SingleLine -> USymb -> Doc
 unitDoc f (US us) = formatu t b
   where
   (t,b) = partition ((> 0) . snd) us
@@ -100,24 +95,23 @@ unitDoc f (US us) = formatu t b
   pow (x,1) = pExprDoc f $ symbol x
   pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
 
--- | Helper for printing multicase expressions differently based on linearity.
-caseDoc :: Linearity -> [(Expr, Expr)] -> Doc
-caseDoc Linear cs = hsep $ punctuate comma $ map (\(e,c) -> pExprDoc Linear c
-  <+> text "=>" <+> pExprDoc Linear e) cs
-caseDoc Nonlinear cs = vcat $ map (\(e,c) -> pExprDoc Nonlinear e <> comma <+> 
-  pExprDoc Nonlinear c) cs
+-- | Helper for printing multicase expressions differently based on linearity (SingleLine).
+caseDoc :: SingleLine -> [(Expr, Expr)] -> Doc
+caseDoc OneLine cs = hsep $ punctuate comma $ map (\(e,c) -> pExprDoc OneLine c
+  <+> text "=>" <+> pExprDoc OneLine e) cs
+caseDoc MultiLine cs = vcat $ map (\(e,c) -> pExprDoc MultiLine e <> comma <+>
+  pExprDoc MultiLine c) cs
 
 -- | Helper for printing matrices.
-mtxDoc :: Linearity -> [[Expr]] -> Doc
-mtxDoc Linear rs = brackets $ hsep $ map (brackets . hsep . map (pExprDoc 
-  Linear)) rs
-mtxDoc Nonlinear rs = brackets $ vcat $ map (hsep . map (pExprDoc Nonlinear)) rs
+mtxDoc :: SingleLine -> [[Expr]] -> Doc
+mtxDoc OneLine rs = brackets $ hsep $ map (brackets . hsep . map (pExprDoc
+  OneLine)) rs
+mtxDoc MultiLine rs = brackets $ vcat $ map (hsep . map (pExprDoc MultiLine)) rs
 
 -- TODO: Double check that this is valid in all output languages
 -- | Helper for printing special characters (for degrees and partial derivatives).
 specialDoc :: Special -> Doc
 specialDoc Circle  = text "degree"
-specialDoc Partial = text "partial"
 
 -- | Helper for printing operators.
 opsDoc :: Ops -> Doc
@@ -145,7 +139,10 @@ opsDoc Dim = text "dim"
 opsDoc Exp = text "exp"
 opsDoc Neg = text "-"
 opsDoc Cross = text " cross "
+opsDoc VAdd = text " + "
+opsDoc VSub = text " - "
 opsDoc Dot = text " dot "
+opsDoc Scale = text " * "
 opsDoc Eq = text " == "
 opsDoc NEq = text " != "
 opsDoc Lt = text " < "
@@ -158,6 +155,10 @@ opsDoc Subt = text " - "
 opsDoc And = text " && "
 opsDoc Or = text " || "
 opsDoc Add = text " + "
+opsDoc SAdd = text " + "
+opsDoc SRemove = text " - "
+opsDoc SContains = text " in "
+opsDoc SUnion = text "+"
 opsDoc Mul = text " * "
 opsDoc Summ = text "sum "
 opsDoc Inte = text "integral "
@@ -167,6 +168,7 @@ opsDoc Perc = text "%"
 opsDoc LArrow = text " <- "
 opsDoc RArrow = text " -> "
 opsDoc ForAll = text " ForAll "
+opsDoc Partial = text "partial"
 
 -- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc
@@ -182,10 +184,6 @@ fenceDocR Curly = text "}"
 fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"
 
--- | Helper for printing Symbols
-showSymb :: Symbol -> String
-showSymb a = render $ symbolDoc a
-
 -- | Helper for printing a HasSymbol in Implementation Stage
 showHasSymbImpl :: L.HasSymbol x => x -> String
-showHasSymbImpl x = showSymb (L.symbol x Implementation)
+showHasSymbImpl x = render $ symbolDoc (L.symbol x Implementation)

@@ -10,10 +10,10 @@ Monad.hs
   - Maintains the printing context (text vs math mode).
 
 Preamble.hs
-  - Generates the TeX preamble based on the necessary packages for a doc
+  - Generates the TeX preamble based on the necessary packages for a doc.
 
 Print.hs
-  - Defines the pretty printer for generating the LaTeX documents from the AST representation
+  - Defines the pretty printer for generating the LaTeX documents from the AST representation.
 
 README.md
   - This file.

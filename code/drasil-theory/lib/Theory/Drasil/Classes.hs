@@ -7,16 +7,16 @@ module Theory.Drasil.Classes (
 
 import Language.Drasil
 
-import Control.Lens (Lens')
+import Control.Lens (Lens', Getter)
 
 -- | Members of this class may have inputs.
 class HasInputs c where
-  -- | Provides a 'Lens' that holds a 'QuantityDict' and maybe constraints.
-  inputs :: Lens' c [(QuantityDict, Maybe (RealInterval Expr Expr))]
+  -- | Provides a 'Lens' that holds a 'DefinedQuantityDict' and maybe constraints.
+  inputs :: Lens' c [(DefinedQuantityDict, Maybe (RealInterval Expr Expr))]
 
 -- | Members of this class may have outputs.
 class HasOutput c where
-  -- | Provides a 'Lens' that holds a 'QuantityDict' for output.
-  output :: Lens' c QuantityDict
-  -- | Provides a 'Lens' that holds constraints on the output.
-  out_constraints :: Lens' c [RealInterval Expr Expr]
+  -- | Provides a 'Getter' that holds a 'DefinedQuantityDict' for output.
+  output :: Getter c DefinedQuantityDict
+  -- | Provides a 'Getter' that holds constraints on the output.
+  out_constraints :: Getter c [RealInterval Expr Expr]

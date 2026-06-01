@@ -1,24 +1,31 @@
 {-# LANGUAGE TemplateHaskell #-}
--- | Contains types that define quantities from concepts. Similar to 'QuantityDict'.
+-- | Contains types that define quantities from concepts.
 module Language.Drasil.Chunk.DefinedQuantity (
   -- * Chunk Type
   DefinedQuantityDict,
+  -- * Type classes
+  DefinesQuantity(defLhs),
   -- * Constructors
-  dqd, dqdNoUnit, dqd',
-  dqdQd, dqdWr, tempdqdWr') where
+  dqd, dqdNoUnit, dqdNoUnit', dqd', dqdQd, dqdWr,
+  implVar, implVar', implVarAU, implVarAU'
+) where
 
-import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
+import Control.Lens ((^.), makeLenses, view, Getter)
+
+import Drasil.Database (HasChunkRefs(..), HasUID(..))
+import qualified Data.Set as Set
+
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS, cc')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
-import Language.Drasil.Stages (Stage)
-import Language.Drasil.UID (HasUID(uid))
-
-import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Stages (Stage (Implementation, Equational))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
+import Language.Drasil.Sentence (Sentence)
 
 -- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
 -- Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
@@ -30,8 +37,17 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
                                }
-
 makeLenses ''DefinedQuantityDict
+
+class DefinesQuantity d where
+  defLhs :: Getter d DefinedQuantityDict
+
+instance HasChunkRefs DefinedQuantityDict where
+  chunkRefs d = Set.unions
+    [ chunkRefs (d ^. con)
+    , chunkRefs (d ^. unit')
+    ]
+  {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid
@@ -49,7 +65,7 @@ instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 instance HasSpace      DefinedQuantityDict where typ = spa
 -- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
--- | 'DefinedQuantityDict's have a 'Quantity'. 
+-- | 'DefinedQuantityDict's have a 'Quantity'.
 instance Quantity      DefinedQuantityDict where
 -- | Finds the units of the 'DefinedQuantityDict'.
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
@@ -64,6 +80,9 @@ dqd c s sp = DQD c (const s) sp . Just . unitWrapper
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
 dqdNoUnit c s sp = DQD c (const s) sp Nothing
 
+dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
+dqdNoUnit' c s sp = DQD c s sp Nothing
+
 -- | Similar to 'dqd', but the 'Symbol' is now dependent on the 'Stage'.
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
 dqd' = DQD
@@ -72,10 +91,38 @@ dqd' = DQD
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
--- | Temporary projection constructor, not to be used outside @drasil-lang@.
-tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
-
 -- | When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
-dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c)
+dqdQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> DefinedQuantityDict
+dqdQd c cc = DQD (cc' c cc) (symbol c) (c ^. typ) (getUnit c)
+
+-- | Makes a variable that is implementation-only.
+implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
+implVar i ter desc sp sym = dqdNoUnit' (dcc i ter desc) f sp
+  where
+    f :: Stage -> Symbol
+    f Implementation = sym
+    f Equational = Empty
+
+-- | Similar to 'implVar', but takes in a 'Sentence' for the description rather than a 'String'.
+implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
+implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
+  where
+    f :: Stage -> Symbol
+    f Implementation = sym
+    f Equational = Empty
+
+-- | Similar to 'implVar' but allows specification of abbreviation and unit.
+implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol ->
+  Maybe UnitDefn -> DefinedQuantityDict
+implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty
+
+-- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol ->
+  Maybe UnitDefn -> DefinedQuantityDict
+implVarAU' s np desc a t sym = dqd' (dccAWDS s np desc a) f t
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty

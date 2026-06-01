@@ -1,0 +1,13 @@
+digraph "avsall" {
+    "dataDefn:t1" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:t1"];
+    subgraph "DD" {
+        rank="same";
+        "dataDefn:t1";
+    }
+    "instance:inputValues" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:inputValues"];
+    "instance:outputValues" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues"];
+    subgraph "FR" {
+        rank="same";
+        "instance:inputValues" "instance:outputValues";
+    }
+}

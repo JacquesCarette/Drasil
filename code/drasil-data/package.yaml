@@ -1,11 +1,16 @@
-name:                drasil-data
-version:             0.1.13.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
-maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Data System SubPackage
-github:              JacquesCarette/Drasil
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-data
+version:      0.1.13.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Data System SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
 
 extra-source-files: []
 
@@ -24,6 +29,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
+  - Data.Drasil.Domains
   - Data.Drasil.People
   - Data.Drasil.Citations
   - Data.Drasil.Constraints
@@ -37,6 +43,7 @@ library:
   - Data.Drasil.Concepts.Software
   - Data.Drasil.Concepts.Math
   - Data.Drasil.Concepts.SolidMechanics
+  - Data.Drasil.Concepts.Theory
   - Data.Drasil.Equations.Defining.Physics
   - Data.Drasil.Quantities.Thermodynamics
   - Data.Drasil.Quantities.PhysicalProperties
@@ -49,6 +56,3 @@ library:
   - Data.Drasil.Units.Physics
   - Data.Drasil.Units.SolidMechanics
   - Data.Drasil.Theories.Physics
-  when:
-  - condition: false
-    other-modules: Paths_drasil_data

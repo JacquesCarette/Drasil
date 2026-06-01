@@ -1,71 +1,59 @@
-module Drasil.GamePhysics.Body where
-
-import Data.Maybe (mapMaybe)
+module Drasil.GamePhysics.Body (mkSRS, si) where
 
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
+import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (qdEFromDD)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (mkSmithEtAlICO)
 
-import Data.Drasil.Concepts.Computation (algorithm)
+import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
-  condition, consumer, document, endUser, environment, game, guide,
-  input_, interface, object, organization, physical,
-  physicalSim, physics, problem, product_, project, quantity, realtime,
-  section_, simulation, software, softwareSys, srsDomains, system,
-  systemConstraint, sysCont, task, template, user, doccon, doccon',
+  condition, consumer, endUser, environment, game, guide, input_, interface,
+  object, physical, physicalSim, physics, problem, product_, project,
+  realtime, simulation, software, softwareSys,
+  system, systemConstraint, sysCont, task, user,
   property, problemDescription)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
-  highSchoolPhysics, educon)
+  highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
-  derived, fundamentals, joule)
-import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
+import Data.Drasil.Software.Products (openSource, videoGame)
 
-import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
-import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon, mathcon', rightHand, line, point)
+import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
+  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
+import qualified Data.Drasil.Concepts.Math as CM (cartesian,
+  mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
+import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
+import Drasil.GamePhysics.MetaConcepts (progName)
+import Drasil.GamePhysics.References (citations, uriReferences)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
-import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols)
+import Drasil.GamePhysics.Unitals (symbols, outputConstraints,
+  inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
-
-srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize short) si
-
-fullSI :: SystemInformation
-fullSI = fillcdbSRS mkSRS si
-
-printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../../datafiles/gamephysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
-  [IPurpose $ purpDoc gamePhysics Verbose,
+  IntroSec $ IntroProg para1_introduction_intro (short progName)
+  [IPurpose $ purpDoc progName Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+   IOrgSec inModel (SRS.inModel [] []) Nothing],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
@@ -86,74 +74,58 @@ mkSRS = [TableOfContents,
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub' [],
+      FReqsSub [],
       NonFReqsSub
     ],
     LCsSec,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg gamePhysics [],
+    AuxConstntSec $ AuxConsProg progName [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
-si :: SystemInformation
-si = SI {
-  _sys         = gamePhysics,
-  _kind        = Doc.srs,
-  _authors     = [alex, luthfi, olu],
-  _purpose     = purpDoc gamePhysics Verbose,
-  -- FIXME: The _quants field should be filled in with all the symbols, however
-  -- #1658 is why this is empty, otherwise we end up with unused (and probably
-  -- should be removed) symbols. But that's for another time. This is "fine"
-  -- because _quants are only used relative to #1658.
-  _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
-  _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputSymbols,
-  _outputs     = outputSymbols, 
-  _defSequence = map (`Parallel` []) qDefs,
-  _constraints = inputConstraints,
-  _constants   = [],
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
-}
-  where qDefs = mapMaybe qdEFromDD dataDefs
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO progName [alex, luthfi, olu]
+  [purp] [] [] []
+  tMods generalDefns dataDefs iMods
+  inputSymbols outputSymbols inputConstraints [] symbols
+  labelledContent symbMap allRefs
+
+purp :: Sentence
+purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
+  phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
-
-section :: [Section]
-section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 --FIXME: Need to be able to print defn for gravitational constant.
 
-refDB :: ReferenceDB
-refDB = rdb citations concIns
-
 --FIXME: All named ideas, not just acronyms.
 
-units :: [UnitDefn] -- FIXME
-units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- CIs
+  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
+  map nw CP.physicCon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
+  CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
+  CP.elasticity]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
-  ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns ++ map nw iMods
-  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
-  ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
-  ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon') 
-  (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] []
+symbMap = withCommonKnowledge allRefs symbols ideaDicts conceptChunks []
+  dataDefs iMods generalDefns tMods concIns citations labelledContent
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -171,29 +143,35 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
 
 para1_introduction_intro :: Sentence
 para1_introduction_intro = foldlSent
-  [S "Due to the rising cost of developing", plural videoGame `sC` 
-  S "developers are looking for ways to save time and money for their" +:+.
-  plural project, S "Using an", phrase openSource, 
+  [S "Due to the rising cost of developing", plural videoGame `sC`
+  S "developers are looking" `S.for` S "ways to save time and money for their" +:+.
+  plural project, S "Using an", phrase openSource,
   phrase physLib,
   S "that is reliable and free will cut down development costs and lead",
-  S "to better quality", plural product_]
+  S "to better quality" +:+. plural product_ ,
+  S "The document describes the program",
+  S " based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "GamePhysics")]
 
+externalLinkRef :: Reference
+externalLinkRef = makeURI "GamePhysicsSRSLink"
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys"
+  (shortname' $ S "GamePhysicsSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
 -- Purpose of Document automatically generated in IPurpose
 
-
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
+scope = foldlSent_ [D.toSent (phraseNP (the physicalSim)) `S.of_` short twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
-  
-{-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
+
+{-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these",
   plural CP.rigidBody, S "interact with one another"]
 -}
 ----------------------------------------------
@@ -203,13 +181,6 @@ scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
 -------------------------------------
 -- 2.3 : Organization of Documents --
 -------------------------------------
-
-organizationOfDocumentsIntro :: Sentence
-organizationOfDocumentsIntro = foldlSent 
-  [atStartNP (the organization), S "of this", phrase document, 
-  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -221,25 +192,20 @@ organizationOfDocumentsIntro = foldlSent
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
-   S "A circle represents an entity external to the", phrase software
-   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the", phraseNP (system
-   `andIts` environment)]
-
-sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "sysctx.png")
+   S "A circle represents an entity external" `S.toThe` phrase software
+   `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
-   `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phraseNP (user 
-   `andThe` system), S "are as follows"]
+sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent (phraseNP (product_ `andThe` user)),
+   S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user `andThe` system)),
+   S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state of the" +:+ phrase simulation `sC`
+sysCtxUsrResp = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
+  physical)) +:+ S "state" `S.ofThe` phrase simulation `sC`
   plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
   S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
@@ -247,22 +213,22 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
-  phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
+  phrase problem +:+ D.toSent (phraseNP (the software)) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
-    simulation) +:+ S "state satisfy the required" +:+.
+sysCtxSysResp = [S "Determine if the" +:+ D.toSent (pluralNP (input_ `and_PS`
+    simulation)) +:+ S "state satisfy the required" +:+.
     namedRef (SRS.datCon ([]::[Contents]) ([]::[Section])) (phrase physical `S.and_` plural systemConstraint),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
   S "Provide updated" +:+ phrase physical +:+ S "state of all" +:+
-    plural CP.rigidBody +:+ S "at the end of a" +:+ phrase simulation +:+.
+    plural CP.rigidBody +:+ S "at the end" `S.ofA` phrase simulation +:+.
     S "step"]
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short gamePhysics +:+ S "Responsibilities"]
+  short progName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -274,13 +240,13 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short gamePhysics,
+  [S "The", phrase endUser `S.of_` short progName,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `S.and_` S "an understanding of", phrase highSchoolPhysics]
 
--------------------------------
--- 3.3 : System Constraints  --
--------------------------------
+------------------------------
+-- 3.3 : System Constraints --
+------------------------------
 
 ---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --
@@ -295,20 +261,19 @@ userCharacteristicsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [S "create a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
-  getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` S "which will allow for more accessible",
-  phrase game, S "development" `S.and_` S "the production of higher quality" +:+. plural product_,
+  [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
+  S "manner" `sC` S "which will allow" `S.for` S "the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
-  S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
+  S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
-  phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
+  phrase realtime, S "during the" +:+. phrase game, S "Developing a",
   phrase physLib, S "from scratch takes a long period" `S.of_` phrase QP.time `S.and_`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
-  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
+  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+.
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
   namedRef (SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])) (plural physLib),
   S "available to be used for", phrase consumer, plural product_]
-  
+
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
@@ -336,15 +301,6 @@ terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand,
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-generalDefinitionsIntro :: Contents
--- general_definitions_GDefs :: [Contents]
-
-generalDefinitionsIntro = foldlSP 
-  [S "This", phrase section_, S "collects the", pluralNP (CM.law `and_PP` 
-  CM.equation), S "that will be used in deriving the", 
-  plural dataDefn `sC` S "which in turn will be used to build the", 
-  plural inModel]
-
 -- GDefs not yet implemented --
 {-
 general_definitions_GDefs :: [Contents]
@@ -355,10 +311,6 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-dataDefinitionsIntro :: Sentence
-dataDefinitionsIntro = foldlSent [atStartNP (the CPP.dimension)
-   `S.of_` S "each", phrase quantity, S "is also given"]
-
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
@@ -367,11 +319,11 @@ dataDefinitionsIntro = foldlSent [atStartNP (the CPP.dimension)
 -- Collision Diagram        --
 ------------------------------
 {-- should be paired with the last instance model for this example
-secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image", 
-  S "of a typical collision between two 2D rigid bodies labeled A and B,"  
+secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image",
+  S "of a typical collision between two 2D rigid bodies labeled A and B,"
   S "showing the position of the two objects, the collision normal vector n and",
   S "the vectors from the approximate center of mass of each object to the point",
-  S "of collision P, rAP and rBP. Note that this figure only presents", 
+  S "of collision P, rAP and rBP. Note that this figure only presents",
   S "vertex-to-edge collisions, as per our assumptions (A5)."]
 --}
 
@@ -401,30 +353,53 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 
 offShelfSols :: [Contents]
 offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
-                offShelfSolsMid,   offShelfSols3DList]
+                offShelfSolsMid, offShelfSols3DList]
 
-offShelfSolsIntro, offShelfSols2DList, 
+offShelfSolRefs :: [Reference]
+offShelfSolRefs = [box2D, napePhysicsEngine, bullet,
+                   openDynamicsEngine, newtonGameDynamics]
+
+offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
-offShelfSolsIntro = mkParagraph $ foldlSentCol 
-  [S "As mentioned in the", namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
+offShelfSolsIntro = mkParagraph $ foldlSentCol
+  [S "As mentioned" `S.inThe` namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
-  plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
+  plural physLib, S "Similar", short twoD, plural physLib, S "are"]
 
-offShelfSols2DList = enumBulletU [S "Box2D: http://box2d.org/",
-  S "Nape Physics Engine: http://napephys.com/"]
+offShelfSols2DList = enumBulletU [
+  namedRef box2D (S "Box2D"),
+  namedRef napePhysicsEngine (S"Nape Physics Engine")]
 
 offShelfSolsMid = mkParagraph $ foldl (+:+) EmptyS [S "Free", phrase openSource,
-  getAcc threeD, phrase game, plural physLib, S "include:"]
+  short threeD, phrase game, plural physLib, S "include:"]
 
 offShelfSols3DList = enumBulletU [
-  S "Bullet: http://bulletphysics.org/",
-  S "Open Dynamics Engine: http://www.ode.org/",
-  S "Newton Game Dynamics: http://newtondynamics.com/"]
+  namedRef bullet (S "Bullet"),
+  namedRef openDynamicsEngine (S "Open Dynamics Engine"),
+  namedRef newtonGameDynamics (S "Newton Game Dynamics")]
 
------------------------------------------------------
--- SECTION 8 : Traceability Matrices and Graph    --
------------------------------------------------------
+box2D, napePhysicsEngine, bullet, openDynamicsEngine,
+  newtonGameDynamics :: Reference
+
+box2D = makeURI "box2D" "http://box2d.org/" $
+  shortname' $ S "Box2D"
+
+napePhysicsEngine = makeURI "napePhysicsEngine" "http://napephys.com/" $
+  shortname' $ S "Nape Physics Engine"
+
+bullet = makeURI "bullet" "http://bulletphysics.org/" $
+  shortname' $ S "Bullet"
+
+openDynamicsEngine = makeURI "openDynamicsEngine" "http://www.ode.org/" $
+  shortname' $ S "Open Dynamic Engine"
+
+newtonGameDynamics = makeURI "newtonGameDynamics" "http://newtondynamics.com/" $
+  shortname' $ S "Newton Game Dynamics"
+
+-------------------------------------------------
+-- SECTION 8 : Traceability Matrices and Graph --
+-------------------------------------------------
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

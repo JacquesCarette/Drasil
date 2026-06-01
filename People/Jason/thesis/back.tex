@@ -1,0 +1,16 @@
+%------------------------------------------------------------------------------
+% Bibliography
+%------------------------------------------------------------------------------
+\printbibliography[heading=bibintoc]
+
+%------------------------------------------------------------------------------
+% Appendix
+%------------------------------------------------------------------------------
+
+\appendix
+\chapter{Appendix}
+\renewcommand{\thechapter}{A}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+\counterwithin{listing}{chapter}
+\input{back/appendix}

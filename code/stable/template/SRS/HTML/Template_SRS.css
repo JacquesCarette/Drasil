@@ -43,9 +43,8 @@ table, th, td {
   margin-left: auto;
   margin-right: auto;}
 th, td {border: 1px solid black; padding: 0.5em;}
-.tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}
-.tdefn th {width: 15%;}
-.ddefn th {width: 15%;}
+.defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}
+.defn-table th {width: 15%;}
 .section {width: 80%; margin: 0 auto; text-align: left;}
 .code {
   display: inline-block;
@@ -93,3 +92,10 @@ ul.hide-list-style {
 ul.hide-list-style-no-indent {
   list-style-type: none;
 padding: 0;}
+dl.reference-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;}
+dd {
+  margin: 0;}

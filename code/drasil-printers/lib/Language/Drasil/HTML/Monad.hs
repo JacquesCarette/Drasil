@@ -1,15 +1,11 @@
 -- | Defines types needed for HTML printers.
-module Language.Drasil.HTML.Monad where
+module Language.Drasil.HTML.Monad (PrintHTML, unPH) where
 
-import Language.Drasil
+import Language.Drasil (RenderSpecial(..), Special(..))
 
------------------------------------------------------------------------------
--- | Printing "monad". Doesn't need context, so Identity (under another name)
--- will do just fine.
-
+-- | Printing "monad".
 newtype PrintHTML = PH {unPH :: String}
 
 -- | Special HTML symbols (degree and Greek partial derivative symbol).
 instance RenderSpecial PrintHTML where
-  special Circle       = PH "&deg;"
-  special Partial      = PH "&part;"
+  special Circle = PH "&deg;"

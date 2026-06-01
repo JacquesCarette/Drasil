@@ -1,0 +1,5 @@
+\begin{pseudohaskell}{Examinable Chunk Box}{examinableChunkBox}
+{-# LANGUAGE ExistentialQuantification #-}
+...
+data Chunk = forall a. Typeable a => Chunk a
+\end{pseudohaskell}

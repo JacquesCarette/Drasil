@@ -1,17 +1,27 @@
-{-#LANGUAGE PostfixOperators#-}
-module Drasil.PDController.Requirements where
+module Drasil.PDController.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
-import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
-
+import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
 import Drasil.DocLang.SRS (datCon)
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
+  mkSecurityNFR, inReqWTab)
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
+import Drasil.PDController.Unitals (inputs)
 
 import Language.Drasil
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInputs, calculateValues, outputValues]
+funcReqs = [inputValues, verifyInputs, calculateValues, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 verifyInputs, calculateValues, outputValues :: ConceptInstance
 verifyInputs
@@ -44,34 +54,13 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [portability, security, maintainability, verifiability]
 
 portability :: ConceptInstance
-portability
-  = cic "portability"
-      (S "The code shall be portable to multiple Operating Systems" !.)
-      "Portable"
-      nonFuncReqDom
+portability = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
 
 security :: ConceptInstance
-security
-  = cic "security"
-      (foldlSent
-         [S "The code shall be immune to common security problems such as memory",
-            S "leaks, divide by zero errors, and the square root of negative numbers"])
-      "Secure"
-      nonFuncReqDom
+security = mkSecurityNFR "security" "Security"
 
 maintainability :: ConceptInstance
-maintainability
-  = cic "maintainability"
-      (foldlSent
-         [S "The dependencies among the instance models, requirements,",
-            S "likely changes, assumptions and all other relevant sections of",
-            S "this document shall be traceable to each other in the trace matrix"])
-      "Maintainable"
-      nonFuncReqDom
+maintainability = mkMaintainableNFR "maintainability" 10 "Maintainability"
 
 verifiability :: ConceptInstance
-verifiability
-  = cic "verifiability"
-      (S "The code shall be verifiable against a Verification and Validation plan" !.)
-      "Verifiable"
-      nonFuncReqDom
+verifiability = mkVerifiableNFR "verifiability" "Verifiability"

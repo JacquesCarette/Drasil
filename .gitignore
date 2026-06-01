@@ -6,6 +6,7 @@ desktop.ini
 # Editors
 .idea
 .vscode
+.direnv
 
 # Drasil/Haskell
 *.cabal
@@ -23,6 +24,8 @@ dist
 .drasil-min-stack-ver
 stack.yaml.lock
 .hlint*
+.envrc
+.hie
 
 # Drasil supported programming languages
 __pycache__

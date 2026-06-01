@@ -1,91 +1,63 @@
-module Drasil.Projectile.Lesson.Body where
+module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
 import Data.List (nub)
-import Language.Drasil
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil
-import SysInfo.Drasil
-import qualified Language.Drasil.Sentence.Combinators as S
+import Language.Drasil hiding (Notebook)
+import Drasil.Database (ChunkDB)
+import Drasil.Generator (withCommonKnowledge)
+import Drasil.System (LessonPlan, mkSystemMeta, mkLessonPlan)
 
 -- TODO: Add export parameters in a module
-import Drasil.DocLang (mkNb, NBDecl, NbSection(BibSec, IntrodSec, BodySec), 
-  IntrodSec(..), BodySec(..), BodySub(..))
+import Drasil.DocumentLanguage.Notebook (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
+  LearnObj(..), Review(..), CaseProb(..), Example(..))
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
-import Data.Drasil.Concepts.Math (mathcon)
-import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
-import Data.Drasil.Quantities.Physics (physicscon)
-import Data.Drasil.Concepts.Physics (physicCon)
+import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
+  speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,
+  xPos, yPos, ixVel, iyVel, xVel, yVel, scalarPos, iPos, height)
+import qualified Data.Drasil.Concepts.Physics as CCs (motion, acceleration,
+  velocity, force, verticalMotion, gravity, position)
 
 import Data.Drasil.People (spencerSmith)
 
-import Drasil.Projectile.Concepts (concepts, projMotion)
+import Drasil.Projectile.Concepts (concepts)
 import Drasil.Projectile.Expressions (eqnRefs)
 
-import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
-import Drasil.Projectile.Lesson.Review (reviewContent)
-import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
-  motionContextP2, horMotion, verMotion, summary)
-import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
+import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
+import Drasil.Projectile.Lesson.Review (reviewSecs)
+import Drasil.Projectile.Lesson.CaseProb (caseProbCont, caseProbSecs, figRefs)
+import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
-nb :: Document
-nb = mkNb mkNB (S.forGen titleize phrase) si
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
-
-mkNB :: NBDecl
-mkNB = [
-  IntrodSec $
-    IntrodProg [introContext, reasonList, overviewParagraph] [],
-  BodySec $
-       BodyProg
-         [Review reviewContent,
-          MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
-  BibSec
+nbDecl :: LsnDesc
+nbDecl = [
+    LearnObj $ LrnObjProg [learnObjContext],
+    Review $ ReviewProg [] reviewSecs,
+    CaseProb $ CaseProbProg caseProbCont caseProbSecs,
+    Example $ ExampleProg exampleContent,
+    BibSec
   ]
 
-si :: SystemInformation
-si = SI {
-  _sys         = projectileMotion,
-  _kind        = Doc.notebook,
-  _authors     = [spencerSmith],
-  _purpose     = [],
-  _quants      = [] :: [QuantityDict],
-  _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = [],
-  _datadefs    = [],
-  _configFiles  = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _defSequence = [] :: [Block SimpleQDef],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
-}
+si :: LessonPlan
+si = mkLessonPlan
+  (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
+  allRefs
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon) (nw projectileMotion : map nw doccon ++ 
-  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
+symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] [] [] [] [] [] [] []
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+ideaDicts :: [IdeaDict]
+ideaDicts = nw projectileMotionLesson : concepts
 
-refDB :: ReferenceDB
-refDB = rdb [] []
+conceptChunks :: [ConceptChunk]
+conceptChunks = [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
+  CCs.verticalMotion, CCs.gravity, CCs.position]
 
-projectileMotion :: CI
-projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion") "Projectile Motion" []
+symbols :: [DefinedQuantityDict]
+symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
+  Qs.gravitationalAccel, Qs.xAccel, Qs.yAccel, Qs.time, Qs.ixPos, Qs.iyPos,
+  Qs.xPos, Qs.yPos, Qs.ixVel, Qs.iyVel, Qs.xVel, Qs.yVel, Qs.scalarPos,
+  Qs.iPos, Qs.height, horiz_velo]
 
-mAndaintro :: Contents
-mAndaintro = foldlSP 
-  [S "Free-flight", phrase projMotion, S "problems can be solved using the following procedure"]
+projectileMotionLesson :: CI
+projectileMotionLesson = commonIdeaWithDict "projMotLsn" (pn "Projectile Motion Lesson") "Projectile Motion" []
 
 allRefs :: [Reference]
-allRefs = nub (figRefs ++ eqnRefs) 
+allRefs = nub (figRefs ++ eqnRefs)

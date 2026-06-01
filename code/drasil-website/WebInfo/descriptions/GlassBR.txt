@@ -1,1 +1,0 @@
-predicts whether a given glass slab is likely to resist a specified blast.

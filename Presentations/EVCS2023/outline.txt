@@ -1,0 +1,24 @@
+Context (of the presentation):
+- Eelco Visser Commemorative Symposium (to tie in to his work!)
+- just 10 minutes, so
+  - make it memorable
+  - make it a sales pitch
+- extra twist: diverse audience. Make it understandable to them too!
+
+Outline
+1. Title
+2. "Old Fashioned" -- presented as a quote?
+3. well understood (as a key driver) 
+   equations; "well understood"
+4. knowledge duplication; redundancy illustration
+    Spencer's nice picture
+   emergence of "language of design"
+5. the process "pictorially"
+  - (human-provided) knowledge -> programmer's brains -> softifacts
+  - knowledge + (hp) design -> program -> softifacts
+6. documentation / English as our key difference
+    (github AI project?)
+7. better tech (Haskell, DSLs, GOOL, codegen, tagless, ?)
+   and better theory
+8. What if we wrote a program to output what 'we' usually do by hand?
+  One potential 'answer': Drasil

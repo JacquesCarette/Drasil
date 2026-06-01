@@ -1,4 +1,9 @@
 -- | Holds all section constructors and labels for creating SRS documents.
+
+-- Changes to SRS sections should be reflected in the 'Creating Your Project
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
 module Drasil.DocLang.SRS (
   -- * Section Constructors
   -- | For use in an SRS document. Ordered by appearance in a SRS.
@@ -23,23 +28,25 @@ module Drasil.DocLang.SRS (
   -- * All Section References
   sectionReferences) where
 --Temporary file for keeping the "srs" document constructor until I figure out
--- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
+-- a better place for it. Maybe Metadata.Drasil or Language.Drasil.Template?
 
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
+import qualified Drasil.Metadata.TheoryConcepts as M (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.Metadata.Documentation as Doc (abbAcc, appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
   generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
-  unlikelyChg, nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst,
-  prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
-  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription,
-  stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
-  tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
-import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
+  nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst, prodUCTable,
+  problemDescription, propOfCorSol, prpsOfDoc, reference, refMat, requirement,
+  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, stakeholder,
+  sysCont, systemConstraint, termAndDef, terminology, traceyMandG, tOfCont,
+  tOfSymb, tOfUnit, unlikelyChg, userCharacteristic)
 
+import Control.Lens ((^.), view)
 
 -- Ordered by appearance in SRS.
 -- | Standard SRS section builders.
@@ -52,7 +59,7 @@ tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   termogy :: [Contents] -> [Section] -> Section
 
 -- | Table of Contents section.
-tOfCont       cs ss = section (titleize' Doc.tOfCont)                   cs ss tOfContLabel
+tOfCont       cs ss = section (titleize' Doc.tOfCont)                  cs ss tOfContLabel
 
 -- | Reference Material section.
 refMat        cs ss = section (titleize Doc.refMat)                    cs ss refMatLabel
@@ -77,9 +84,9 @@ orgOfDoc      cs ss = section (titleize Doc.orgOfDoc)                  cs ss doc
 -- | Stakeholders section.
 stakeholder   cs ss = section (titleize' Doc.stakeholder)              cs ss stakeholderLabel
 -- | The Customer section.
-theCustomer   cs ss = section (titleizeNP $ the Doc.customer)          cs ss customerLabel
+theCustomer   cs ss = section (D.toSent $ titleizeNP $ the Doc.customer) cs ss customerLabel
 -- | The Client section.
-theClient     cs ss = section (titleizeNP $ the Doc.client)            cs ss clientLabel
+theClient     cs ss = section (D.toSent $ titleizeNP $ the Doc.client) cs ss clientLabel
 
 -- | General System Description section.
 genSysDes     cs ss = section (titleize Doc.generalSystemDescription)  cs ss genSysDescLabel
@@ -107,13 +114,13 @@ solCharSpec   cs ss = section (titleize Doc.solutionCharSpec)          cs ss sol
 -- | Assumptions section.
 assumpt       cs ss = section (titleize' Doc.assumption)               cs ss assumptLabel
 -- | Theoretical Models section.
-thModel       cs ss = section (titleize' Doc.thModel)                  cs ss thModelLabel
+thModel       cs ss = section (titleize' M.thModel)                    cs ss thModelLabel
 -- | General Definitions section.
-genDefn       cs ss = section (titleize' Doc.genDefn)                  cs ss genDefnLabel
+genDefn       cs ss = section (titleize' M.genDefn)                    cs ss genDefnLabel
 -- | Data Definitions section.
-dataDefn      cs ss = section (titleize' Doc.dataDefn)                 cs ss dataDefnLabel
+dataDefn      cs ss = section (titleize' M.dataDefn)                   cs ss dataDefnLabel
 -- | Instance Models section.
-inModel       cs ss = section (titleize' Doc.inModel)                  cs ss inModelLabel
+inModel       cs ss = section (titleize' M.inModel)                    cs ss inModelLabel
 -- | Data Constraints section.
 datCon        cs ss = section (titleize' Doc.datumConstraint)          cs ss datConLabel
 -- | Properties of a Correct Solution section.
@@ -144,7 +151,7 @@ offShelfSol   cs ss = section (titleize' Doc.offShelfSolution)         cs ss off
 
 -- Unused
 -- | Scope of the Project section.
-scpOfTheProj  cs ss = section (atStart (Doc.scpOfTheProj titleize))    cs ss projScopeLabel
+scpOfTheProj  cs ss = section (atStart (Doc.scpOfTheProj (\s -> titleizeNP (s ^. term))))    cs ss projScopeLabel
 -- | Product Use Case Table section.
 prodUCTable   cs ss = section (titleize Doc.prodUCTable)               cs ss useCaseTableLabel
 -- | Individual Product Use Case section.
@@ -191,8 +198,8 @@ readerCharsLabel    = makeSecRef "ReaderChars"      $ titleize' Doc.charOfIR
 docOrgLabel         = makeSecRef "DocOrg"           $ titleize  Doc.orgOfDoc
 
 stakeholderLabel    = makeSecRef "Stakeholder"      $ titleize' Doc.stakeholder
-clientLabel         = makeSecRef "Client"           $ titleizeNP $ the Doc.client
-customerLabel       = makeSecRef "Customer"         $ titleizeNP $ the Doc.customer
+clientLabel         = makeSecRef "Client"           $ D.toSent $ titleizeNP $ the Doc.client
+customerLabel       = makeSecRef "Customer"         $ D.toSent $ titleizeNP $ the Doc.customer
 
 genSysDescLabel     = makeSecRef "GenSysDesc"       $ titleize  Doc.generalSystemDescription
 sysContextLabel     = makeSecRef "SysContext"       $ titleize  Doc.sysCont
@@ -207,10 +214,10 @@ goalStmtLabel       = makeSecRef "GoalStmt"         $ titleize' Doc.goalStmt
 
 solCharSpecLabel    = makeSecRef "SolCharSpec"      $ titleize  Doc.solutionCharSpec
 assumptLabel        = makeSecRef "Assumps"          $ titleize' Doc.assumption
-thModelLabel        = makeSecRef "TMs"              $ titleize' Doc.thModel
-genDefnLabel        = makeSecRef "GDs"              $ titleize' Doc.genDefn
-dataDefnLabel       = makeSecRef "DDs"              $ titleize' Doc.dataDefn
-inModelLabel        = makeSecRef "IMs"              $ titleize' Doc.inModel
+thModelLabel        = makeSecRef "TMs"              $ titleize' M.thModel
+genDefnLabel        = makeSecRef "GDs"              $ titleize' M.genDefn
+dataDefnLabel       = makeSecRef "DDs"              $ titleize' M.dataDefn
+inModelLabel        = makeSecRef "IMs"              $ titleize' M.inModel
 datConLabel         = makeSecRef "DataConstraints"  $ titleize' Doc.datumConstraint
 corSolPropsLabel    = makeSecRef "CorSolProps"      $ titleize' Doc.propOfCorSol
 
@@ -223,13 +230,13 @@ unlikeChgLabel      = makeSecRef "UCs"              $ titleize' Doc.unlikelyChg
 
 traceMatricesLabel  = makeSecRef "TraceMatrices"    $ titleize' Doc.traceyMandG
 valsOfAuxConsLabel  = makeSecRef "AuxConstants"     $ titleize  Doc.consVals
-referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference 
+referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference
 appendixLabel       = makeSecRef "Appendix"         $ titleize  Doc.appendix
 offShelfSolnsLabel  = makeSecRef "offShelfSolns"    $ titleize' Doc.offShelfSolution
 
 -- Used only under People/Dan/Presentations/CommitteeMeeting4/BodyNew.hs
 indPRCaseLabel      = makeSecRef "IndividualProdUC" $ titleize' Doc.indPRCase
 -- Seem to be unused. Should they be deleted?
-projScopeLabel      = makeSecRef "ProjScope"        $ atStart $ Doc.scpOfTheProj titleize
+projScopeLabel      = makeSecRef "ProjScope"        $ atStart $ Doc.scpOfTheProj (titleizeNP . view term)
 useCaseTableLabel   = makeSecRef "UseCaseTable"     $ titleize  Doc.prodUCTable
 terminologyLabel    = makeSecRef "Terminology"      $ titleize  Doc.terminology

@@ -1,24 +1,35 @@
 {-# LANGUAGE PostfixOperators, TupleSections #-}
 -- | Defines functions to create traceability graphs in SRS documents.
-module Drasil.DocumentLanguage.TraceabilityGraph where
+module Drasil.DocumentLanguage.TraceabilityGraph
+  (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
 
-import Language.Drasil
-import Database.Drasil hiding (cdb)
-import SysInfo.Drasil
+-- Haskell stuff
 import Control.Lens ((^.))
-import qualified Data.Map as Map
-import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
-  traceMColumns, ensureItems, layoutUIDs, traceMIntro)
+import Data.Char (toLower)
+import Data.Maybe (fromMaybe)
+
+-- General Drasil
+import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
+import Drasil.Database.SearchTools (termResolve', shortForm)
+import Drasil.System (SmithEtAlSRS, systemdb)
+import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
+
+-- Vocabulary (from Metadata)
+import Drasil.Metadata.Concepts.Math (graph)
+import Drasil.Metadata.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
+import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
+
+-- from docLang itself, i.e. other Document information
+import Drasil.DocumentLanguage.Definitions (TraceViewCat)
+import Drasil.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
+  traceMColumns, layoutUIDs, traceMIntro)
+import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
-import qualified Drasil.DocLang.SRS as SRS
-import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
-import Data.Maybe (fromMaybe)
-import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose)
-import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Char (isSpace, toLower)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Functions
 
@@ -26,6 +37,7 @@ import Data.Char (isSpace, toLower)
 -- trailing notes ('Sentence's), and any other needed contents to create a Traceability 'Section'.
 -- Traceability graphs generate as both a link and a figure for convenience.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
+traceMGF [] [] [] _ = SRS.traceyMandG [mkParagraph $ emptySectSentPlu [traceyMatrix, traceyGraph]]
 traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents
   ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon ex)
 
@@ -42,8 +54,8 @@ traceGIntro refs trailings = [ulcc $ Paragraph $ foldlSent
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
         foldlSent_ (zipWith graphShows refs trailings)]
 
--- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
-mkGraphInfo :: SystemInformation -> GraphInfo
+-- | Extracts traceability graph inforomation from filled-in 'System'.
+mkGraphInfo :: SmithEtAlSRS -> GraphInfo
 mkGraphInfo si = GI {
     assumpNF = mkGraphNodes tvAssumps si "mistyrose"
     , ddNF     = mkGraphNodes tvDataDefns si "paleturquoise1"
@@ -65,24 +77,25 @@ mkGraphInfo si = GI {
 
 -- | Gets the node family of a graph based on the given section
 -- and system information. Also applies a given colour to the node family.
-mkGraphNodes :: TraceViewCat -> SystemInformation -> String -> NodeFamily
-mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (checkUIDRefAdd si) nodeContents, nfLabel = checkNodeContents nodeContents, nfColour = col}
+mkGraphNodes :: TraceViewCat -> SmithEtAlSRS -> String -> NodeFamily
+mkGraphNodes entry si col = NF {nodeUIDs = nodeContents,
+  nodeLabels = map (checkUIDRefAdd s) nodeContents, nfLabel = checkNodeContents nodeContents,
+  nfColour = col}
     where
         checkNodeContents :: [UID] -> String
         checkNodeContents [] = ""
-        checkNodeContents (x:_) = checkUIDAbbrev si x
-        nodeContents = traceMReferees entryF cdb
-        cdb = _sysinfodb si
-        entryF = layoutUIDs [entry] cdb
+        checkNodeContents (x:_) = checkUIDAbbrev s x
+        nodeContents = traceMReferees entryF si
+        entryF = layoutUIDs [entry] si
+        s = si ^. systemdb
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
-mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
-mkGraphEdges cols rows si = makeTGraph (ensureItems "Traceability Graph" $ traceGRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb
+mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SmithEtAlSRS -> [(UID, [UID])]
+mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf si) $ traceMReferees colf si
     where
-        cdb = _sysinfodb si
-        colf = layoutUIDs cols cdb
-        rowf = layoutUIDs rows cdb
+        colf = layoutUIDs cols si
+        rowf = layoutUIDs rows si
 
 -- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.
 -- But, instead of marking "X" on two related ideas, it makes them an edge.
@@ -91,58 +104,46 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
   where
     zipFTable' content = filter (`elem` content)
 
--- | Checker for uids by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
-checkUID :: UID -> SystemInformation -> UID
-checkUID t si
-  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = t
-  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = t
-  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = t
-  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = t
-  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = t
-  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t
-  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
-  | t `elem` map  (^. uid) (citeDB si) = mkUid ""
+-- | Checker for uids by finding if the 'UID' is in one of the possible data
+-- sets contained in the 'ChunkDB' database.
+checkUID :: UID -> ChunkDB -> UID
+checkUID t s
+  | isRegistered t s = t
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
 
 -- | Similar to 'checkUID' but prepends domain for labelling.
-checkUIDAbbrev :: SystemInformation -> UID -> String
-checkUIDAbbrev si t
-  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ getA $ defResolve s $ sDom $ cdom x
-  | Just _ <- Map.lookup t (s ^. sectionTable)              = show t -- shouldn't really reach these cases
-  | Just _ <- Map.lookup t (s ^. labelledcontentTable)      = show t
-  | t `elem` map  (^. uid) (citeDB si) = ""
+checkUIDAbbrev :: ChunkDB -> UID -> String
+checkUIDAbbrev s t
+  | Just x <- find t s :: Maybe DataDefinition  = abrv x
+  | Just x <- find t s :: Maybe InstanceModel   = abrv x
+  | Just x <- find t s :: Maybe GenDefn         = abrv x
+  | Just x <- find t s :: Maybe TheoryModel     = abrv x
+  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
+  | Just _ <- find t s :: Maybe LabelledContent = show t
+  | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
 
 -- | Similar to 'checkUID' but gets reference addresses for display.
-checkUIDRefAdd :: SystemInformation -> UID -> String
-checkUIDRefAdd si t
-  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getAdd $ getRefAdd x
-  -- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Just _ <- Map.lookup t (s ^. sectionTable)              = show t -- shouldn't really reach these cases
-  | Just _ <- Map.lookup t (s ^. labelledcontentTable)      = show t
-  | t `elem` map  (^. uid) (citeDB si) = ""
-  | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+checkUIDRefAdd :: ChunkDB -> UID -> String
+checkUIDRefAdd s t
+  | Just x <- find t s :: Maybe DataDefinition  = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe InstanceModel   = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe TheoryModel     = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
+  | Just _ <- find t s :: Maybe LabelledContent = show t
+  | Just _ <- find t s :: Maybe Citation        = ""
+  | otherwise                                   = error $ show t ++ "Caught."
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
-traceGHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [UID]
-traceGHeader f c = map (`checkUID` c) $ f $ _sysinfodb c
+traceGHeader :: (SmithEtAlSRS -> [UID]) -> SmithEtAlSRS -> [UID]
+traceGHeader f c = map (`checkUID` (c ^. systemdb)) $ f c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
 -- This is then used to create the graph edges.
-traceGRowHeader :: ([UID] -> [UID]) -> SystemInformation -> [UID]
+traceGRowHeader :: ([UID] -> [UID]) -> SmithEtAlSRS -> [UID]
 traceGRowHeader f = traceGHeader (traceMReferrers f)
 
 -- FIXME: Should take a Reference instead of just a Reference UID
@@ -165,12 +166,19 @@ traceGLst :: Contents
 traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
 
 -- | The Traceability Graph contents.
-traceGCon :: String -> [Contents]
-traceGCon ex = map LlC (zipWith (traceGraphLC ex) traceGFiles traceGUIDs) ++ [mkParagraph $ S "For convenience, the following graphs can be found at the links below:", traceGLst]
+traceGCon :: String -> [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
+traceGCon ex = map LlC (genTraceGraphLabCons ex)
+            ++ [mkParagraph $ S "For convenience, the following graphs can be\
+               \ found at the links below:", traceGLst]
+
+-- | Generate the `LabelledContent` chunks, specialized to a specific example
+-- (and its path).
+genTraceGraphLabCons :: String -> [LabelledContent]
+genTraceGraphLabCons ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
 
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent
-traceGraphLC ex fp u = llcc (makeFigRef' u) $ fig (S $ show u) $ traceyGraphPath ex fp
+traceGraphLC ex fp u = llccFig' u $ fig (S $ show u) (traceyGraphPath ex fp)
 
 -- | Traceability graph file names.
 traceGFiles :: [String]
@@ -185,10 +193,10 @@ traceyGraphPath :: String -> String -> String
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
-traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs ex = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs (traceyGraphPaths $ map toLower $ filter (not.isSpace) ex)
+traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower ex ++ "/" ++ x ++ ".svg") traceGFiles
+traceyGraphGetRefs ex = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs (traceyGraphPaths $ map toLower ex)
 -- for actual use in creating the graph figures
-traceyGraphPath ex f = resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ f ++ ".svg"
+traceyGraphPath ex f = resourcePath ++ map toLower ex ++ "/" ++ f ++ ".svg"
 
 -- | Traceability graphs reference path.
 resourcePath :: String

@@ -1,0 +1,6 @@
+\begin{pseudohaskell}{Basic Chunk Box (Data Voids)}{voidDataChunks}
+{-# LANGUAGE ExistentialQuantification #-}
+...
+data Chunk = forall a. Chunk a
+\end{pseudohaskell}
+    

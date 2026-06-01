@@ -4,7 +4,7 @@ Last updated: August 13, 2021
 ----------------------------------------------------------
 
 **Concept**
-  - `ConceptChunk`, `CommonConcept`, and `ConceptInstance` data types
+  - `ConceptChunk` and `ConceptInstance` data types
 
 Citation.hs
   - `Citation` chunks and related data types
@@ -26,8 +26,8 @@ Eq.hs
   - Defines `QDefinition` data type (quantity with units and defining equations)
 
 NamedIdea.hs
-  - `NamedChunk` and `IdeaDict` data types
-  - Various `NamedChunk` combinators
+  - `IdeaDict` data types
+  - Various `IdeaDict` combinators
 
 Quantity.hs
   - `Quantity` class definition

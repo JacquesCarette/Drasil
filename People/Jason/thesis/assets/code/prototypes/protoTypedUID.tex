@@ -1,0 +1,14 @@
+\begin{haskell}{Prototyped Typed UID References}{protoTypedUID}{https://github.com/balacij/ProtoChunkDB/blob/main/src/TypedUIDRef.hs\#L14-L25}
+-- | 'TypedUIDRef' represents typed references to chunks using their 'UID' and
+-- type.
+newtype TypedUIDRef typ = TypedUIDRef UID
+
+mkRef :: IsChunk t => t -> TypedUIDRef t
+mkRef = TypedUIDRef . uid
+
+typedFind :: IsChunk t => TypedUIDRef t -> ChunkDB -> Maybe t
+typedFind (TypedUIDRef u) = find u
+
+typedFindOrErr :: IsChunk t => TypedUIDRef t -> ChunkDB -> t
+typedFindOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (typedFind tu cdb)
+\end{haskell}

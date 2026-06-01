@@ -1,4 +1,3 @@
-
 \documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{oasics-v2021}
 %This is a template for producing OASIcs articles. 
 %See oasics-v2021-authors-guidelines.pdf for further information.
@@ -12,7 +11,7 @@
 %for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
 %for producing a PDF according the PDF/A standard, add "pdfa"
 
-%\pdfoutput=1 %uncomment to ensure pdflatex processing (mandatatory e.g. to submit to arXiv)
+\pdfoutput=1 %uncomment to ensure pdflatex processing (mandatatory e.g. to submit to arXiv)
 %\hideOASIcs %uncomment to remove references to OASIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
@@ -21,23 +20,15 @@
 
 \title{Generating Software for Well-Understood Domains}
 
-%\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
-
 \author{Jacques Carette}{Department of Computing and Software, McMaster University, 1280 Main Street West, Hamilton, Ontario, L8S 4L8, Canada \and \url{https://www.cas.mcmaster.ca/~carette/} }{carette@mcmaster.ca}{https://orcid.org/0000-0001-8993-9804}{}
 \author{Spencer W. Smith}{Department of Computing and Software, McMaster University, 1280 Main Street West, Hamilton, Ontario, L8S 4L8, Canada \and \url{https://www.cas.mcmaster.ca/~smiths/} }{smiths@mcmaster.ca}{https://orcid.org/0000-0002-0760-0987}{}
 \author{Jason Balaci}{Department of Computing and Software, McMaster University, 1280 Main Street West, Hamilton, Ontario, L8S 4L8, Canada}{balacij@mcmaster.ca}{}{}
 
-% \author{Jane {Open Access}}{Dummy University Computing Laboratory, [optional: Address], Country \and My second affiliation, Country \and \url{http://www.myhomepage.edu} }{johnqpublic@dummyuni.org}{https://orcid.org/0000-0002-1825-0097}{(Optional) author-specific funding acknowledgements}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional. Use additional curly braces to indicate the correct name splitting when the last name consists of multiple name parts.
+\authorrunning{J. Carette, S.\,W. Smith, and J. Balaci}
 
-% \author{Joan R. Public\footnote{Optional footnote, e.g. to mark corresponding author}}{Department of Informatics, Dummy College, [optional: Address], Country}{joanrpublic@dummycollege.org}{[orcid]}{[funding]}
-
-\authorrunning{J. Carette, S.\,W. Smith, and J. Balaci} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
-
-\Copyright{Jacques Carette, Spencer W. Smith, and Jason Balaci} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+\Copyright{Jacques Carette, Spencer W. Smith, and Jason Balaci}
 
 
-% \ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
-% Generator:   http://dl.acm.org/ccs.cfm
 \begin{CCSXML}
 <ccs2012>
    <concept>
@@ -69,39 +60,37 @@
 \ccsdesc[500]{Software and its engineering~Automatic programming}
 %% End of generated code
 
-% \keywords{Dummy keyword} %TODO mandatory; please add comma-separated list of keywords
-
 \keywords{code generation, document generation, knowledge capture,
   software engineering}
 
-\category{} %optional, e.g. invited paper
+\category{Research} %optional, e.g. invited paper
 
-\relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
-%\relatedversiondetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93]{Classification (e.g. Full Version, Extended Version, Previous Version}{URL to related version} %linktext and cite are optional
+\relatedversion{}
 
 %\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
 %\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
 
 %\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
 
-% \acknowledgements{I want to thank \dots}%optional
+%\acknowledgements{I want to thank \dots}%optional
 
-%\nolinenumbers %uncomment to disable line numbering
+\nolinenumbers %uncomment to disable line numbering
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\EventEditors{John Q. Open and Joan R. Access}
-\EventNoEds{2}
-\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
-\EventShortTitle{CVIT 2016}
-\EventAcronym{CVIT}
-\EventYear{2016}
-\EventDate{December 24--27, 2016}
-\EventLocation{Little Whinging, United Kingdom}
+\EventEditors{Ralf L\"{a}mmel, Peter D. Mosses, and Friedrich Steimann}
+\EventNoEds{3}
+\EventLongTitle{Eelco Visser Commemorative Symposium (EVCS 2023)}
+\EventShortTitle{EVCS 2023}
+\EventAcronym{EVCS}
+\EventYear{2023}
+\EventDate{April 5, 2023}
+\EventLocation{Delft, The Netherlands}
 \EventLogo{}
-\SeriesVolume{42}
-\ArticleNo{23}
+\SeriesVolume{109}
+\ArticleNo{1}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Recommended way to typeset C++ from the C++ ISO committee:
 \newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\small\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\small\bf +}}
 
 \lstset{language=haskell, basicstyle=\scriptsize, breaklines=true,
@@ -109,11 +98,6 @@
   escapeinside={\%*}{*)}}
 
 \usepackage{dashbox}
-
-%%%%%%%
-%%% GUIDELINES
-% https://submission.dagstuhl.de/styles/instructions/72
-%%%%
 
 \begin{document}
 
@@ -132,10 +116,10 @@
     languages and generative techniques, we can capture the contents of many of
     the artifacts of such software.  Assuming an appropriate codification of
     domain knowledge, we find that the resulting de-duplicated sources are
-    shorter and closer to the domain.  Our encodings also seem to do well with
-    respect to increasing traceability and change management. We're hopeful
+    shorter and closer to the domain.  Our prototype, Drasil, indicates
+    improvements to traceability and change management. We're also hopeful
     that this could lead to long-term productivity improvements for software
-    that fit this context.
+    where these forces are at play.
 \end{abstract}
 
 \section{The Context}
@@ -144,8 +128,29 @@
 Not all software is the same. In fact, there is enough variation in the
 context in which developers create various software products to warrant exploring and
 using different processes, depending on the forces~\cite{alexander1977pattern}
-at play. Here we explore two such forces: ``well understood'' and ``long
-lived''.
+at play. Here we explore two such forces: ``well understood'' and ``long lived''.
+
+We need to be precise about what we mean by ``well understood'' and ``long lived'',
+and thus will start by defining these terms. The definition of ``well understood''
+has three components, which will be successively refined throughout this paper.
+As the codification of what is understood tends to be reliably communicated via
+\emph{documentation}, we review that as well, before discussing which aspects of
+software products, aka software artifacts, we are considering. Then we give
+concrete examples of software domains where these ideas come together.
+
+This work can be seen as resurrecting many of the goals of projects like
+Draco~\cite{neighbors1984draco,neighbors1989draco}, 
+DMS~\cite{baxter1992design,baxter2002dms}, 
+GLisp~\cite{novak1983glisp,novak1994generating} and 
+SpecWare~\cite{srinivas95specware,smith1999mechanizing}. 
+All are
+variants on \emph{automatic programming}. Unlike many of these projects, our
+primary aim is not automation, but rather a combination of raising the level
+of abstraction and knowledge capture. And indeed \emph{domain engineering},
+as coined by Draco's creator James Neighbors, is core to our work. Where we
+differ is our emphasis on all software artifacts, not just code, and being able to leverage
+several decades of theoretical and technological advances. See~\ref{sec:relwork}
+for more details on these and other related projects and ideas.
 
 \subsection{``Well-understood'' software?}
 \label{subsec:well-understood}
@@ -177,7 +182,7 @@ refinement should be understood more holistically.
 \end{enumerate}
 Most importantly, the last two parts deeply involve \emph{choices}: What
 quantities are considered inputs, outputs and parameters to make the model
-functional? What programming language?  What software architecture
+functional? What programming language?  What software architecture,
 data-structures, algorithms, etc.?
 
 In other words, \emph{well understood} does not imply \emph{choice free}.
@@ -192,50 +197,38 @@ For us, long-lived software~\cite{SPL-long-lived} is software that is expected
 to be in continuous use and evolution for \(20\) or more years. The main
 characteristic of such software is the \emph{expected turnover} of key staff.
 This means that all tacit knowledge about the software will be lost over time if
-it is not captured.
-
-%\subsection{Productivity?}
-%\label{subsec:productivity}
-%
-%We adapt the standard definition of productivity \cite{Boehm1987}, where inputs
-%are labour, but adjust the outputs to be knowledge and user satisfaction, where
-%user satisfaction acts as a proxy for effective quality.
-%(see~\cite{SmithAndCarette2020arXiv} for more)
-%
-%This explicit emphasis on all knowledge produced, rather than just the
-%operationalizable knowledge (aka code) implies that human-reusable knowledge,
-%i.e.\ documentation, is crucial. This is why the \emph{long-lived} context is
-%important.
+it is not captured. Relying on oral tradition and word-of-mouth becomes untenable
+for the viability of long-lived projects, and documentation becomes a core asset of
+value comparable, if not greater than, the actual code.
 
 \subsection{Documentation}
 \label{subsec:documentation}
 
 Well understood also applies to \textbf{documentation} aimed
-at humans~\cite{parnas2011precise}. Explicitly:
-\begin{enumerate}
-\item The meaning of the models is understood at a human-pedagogical level,
-i.e.\ it is explainable.
-\item Combining models is explainable. Thus, the act of combining models
-must simultaneously
-operate on mathematical representations and on explanations. This requires that
-English descriptions also be captured in the same manner as the
-formal-mathematical knowledge.
-\item Similarly, the refinements steps that are performed due to making software
-oriented decisions should be captured with a similar mechanism, and also include
-English explanations.
-\end{enumerate}
+at humans~\cite{parnas2011precise}. The same three items of
+Definition~\ref{defn:well-understood} can be retargeted to apply to
+documentation as follows: (1) The meaning of the models is understood at a
+human-pedagogical level, i.e., it is explainable.  (2)~Combining models is
+explainable. Thus, the act of combining models must simultaneously operate on
+mathematical representations and on explanations. This requires that English
+descriptions also be captured in the same manner as the formal-mathematical
+knowledge.  (3)~The refinement steps that are performed due to making
+software-oriented decisions should be captured with a similar mechanism, and
+also include English explanations.
 
+Coupling together well-understood domains and its documentation, we
+obtain what we call triform theories.
 \begin{definition}
 \label{defn:triform-theories}
-We dub these \textbf{triform theories}, as a nod to \emph{biform
-theories}~\cite{Farmer2007}. They are a coupling of a concepts
+\textbf{Triform theories}, as a nod to \emph{biform
+theories}~\cite{Farmer2007}, are the coupling of three concepts:
 \begin{enumerate}
   \item an axiomatic description,
   \item a computational description, and
-  \item an English description
+  \item an English description.
 \end{enumerate}
-of a concept.
 \end{definition}
+\noindent These will form the heart of our approach to domain engineering.
 
 \subsection{Software artifacts}
 \label{subsec:software-artifacts}
@@ -243,14 +236,12 @@ of a concept.
 Software currently consists of a whole host of artifacts: requirements,
 specifications, user manual, unit tests, system tests, usability tests, build
 scripts, READMEs, license documents, process documents, as well as code.
+Our aim is to understand the ``information content'' of each artifact
+sufficiently to construct a Domain Specific Language (DSL) that describes how
+to weave information gleaned from triform theories with instance specific
+choices that are sufficient to enable the generation of each artifact.
 
-Whenever appropriate, we use standards and templates for each of the generated
-artifacts. For requirements, we use a variant~\cite{SmithEtAl2007}
-%~\cite{SmithAndLai2005,
-of the IEEE~\cite{IEEE1998} and Volere
-templates~\cite{RobertsonAndRobertson1999Vol}.
-
-\subsection{Instances of our context}
+\subsection{Instances}
 \label{subsec:examples-of-context}
 
 When are these well understood and long lived conditions fulfilled? One example
@@ -258,28 +249,57 @@ is \emph{research software} in science and engineering. While the results of
 running various simulations is entirely new, the underlying models and how to
 simulate them are indeed well known. One particularly long-lived example is
 embedded software for space probes (like Pioneer 10). Another would be ocean
-models, such as NEMO~\cite{madec_gurvan_2022_6334656} which can trace its
-origins to OPA 8~\cite{Madec1998}. In fact, most sub-domains of science and engineering
-harbour their own niche long-lived software.
+models, such as NEMO~\cite{madec_gurvan_2022_6334656}, which can trace its
+origins to OPA 8~\cite{Madec1998}. In fact, most subdomains of science and
+engineering harbour their own niche long-lived software. The domain of
+control systems is particularly rich in examples.
+
+Note that some better-known long-lived software, such as financial
+systems, do not fall within our purview, as the implemented  business processes
+are not \emph{well understood}. This is why most large rewrites of financial 
+systems fail as the functionality actually implemented in the source system is
+not documented.
+
+\begin{figure*}[t!]
+  \centering
+  \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-blind-v1-300dpi.png}
+  \caption{Colors and shapes mapping from captured domain knowledge to generated
+  artifacts. Red oval: program name; green rectangle: author name; blue circle:
+  symbols for real-valued variables; pink lozenge: assumptions used (load 
+  distribution factor is constant);
+  orange cloud: mathematical definition of $B$; gray arrow: option to turn on
+  logging; light brown rounded-corners rectangle: how inputs should be ``bundled'';
+  purple wavy rectangle: how constants are handled (here: inlined).}
+  \label{Fig_DrasilAndChange}
+\end{figure*}
 
 \section{An Example}
 \label{sec:example}
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\linewidth]{assets/DrasilSupportsChange-right-portrait-overlapped-ungrouped-11ptFont-squished-blind-v1-300dpi.png}
-  \caption{Colors and shapes mapping from captured domain knowledge to generated
-  artifacts.}
-  \label{Fig_DrasilAndChange}
-\end{figure*}
-
-We have built infrastructure%
+We have built infrastructure, which we also call Drasil%
 \footnote{\url{https://github.com/JacquesCarette/Drasil}} 
 to carry out these ideas. It consists of 60KLoc of Haskell
 implementing a series of interacting Domain Specific Languages (DSLs) for
 knowledge encodings, mathematical expressions, theories, English fragments,
-code generation and document generation.  A full description would take too
-much space.  Instead, we provide an illustrative example.
+code generation and document generation.  
+
+Drasil consists of a ``database'' of information about certain domains of
+interest (parts of physics, some mathematics, software engineering,
+documentation and computing), encoded in a home-grown ontology somewhat
+resembling the work of Novak~\cite{kook1991representation,novak1994generating}.
+It has also a number of internal DSLs for representing the contents of
+various kinds of documents (specifications, programs, simple build scripts,
+READMEs), coupled with DSLs for rendering in various formats (\LaTeX, HTML
+and plain text, used for specifications, and GOOL~\cite{GOOLPEPM} for
+representing Object-Oriented programs that can be rendered in six different
+languages). There are also DSLs for triform theories, mathematical expressions,
+English fragments, citations, authors, some software choices, and so on. Lastly
+another DSL weaves together all the previous information to render the
+artifacts that together make a piece of software. A longer article describing
+all of these in detail is being written.
+
+We provide a bit of the overall flavour of Drasil through what we hope to be
+an illustrative example.
 
 \subsection{GlassBR}
 We will focus on information capture and the artifacts we can generate. For
@@ -296,15 +316,15 @@ Makefile). Moreover, our implementation is actually a family of implementations,
 since some design decisions are explicitly exposed as changeable variabilities,
 as described below.
 
-The transformation of captured domain knowledge is illustrated in
-Figure~\ref{Fig_DrasilAndChange}. This is read starting from the upper right
-box. Each piece of information in this figure has its own shape and colour
-(orange cloud, pink lozenge, etc). It should be immediately clear that all
-pieces of information reappear in multiple places in the generated artifacts.
-For example, the name of the software (GlassBR) ends up appearing more than 80
-times in the generated artifacts (in the folder structure, requirements, README,
-Makefile and source code). Changing this name would traditionally be extremely
-difficult; we can achieve this by modifying a single place, and regenerating.
+Figure~\ref{Fig_DrasilAndChange} illustrates the transformation of captured
+domain knowledge. Reading this figure starts from the upper right box. Each
+piece of information has its own shape and colour (orange cloud,
+pink lozenge, etc). It should be immediately clear that all pieces of
+information reappear in multiple places in the generated artifacts. For example,
+the name of the software (GlassBR) ends up appearing more than 80 times in the
+generated artifacts (in the folder structure, requirements, README, Makefile and
+source code). Changing this name would traditionally be extremely difficult; we
+can achieve this by modifying a single place, and regenerating.
 
 The first box shows the directory structure of the currently generated
 artifacts; continuing clockwise, we see examples of Makefiles for the Java and
@@ -376,14 +396,14 @@ A recurring idea is the different types of \texttt{Glass}:
   \end{tabular}
 \end{center}
 Some concepts, such as those of \emph{explosion}, \emph{glass slab}, and
-\emph{degree} do not need to be defined mathematically -- an Enlish description
+\emph{degree} do not need to be defined mathematically --- an English description
 is sufficient.
 
 The descriptions in GlassBR are produced using an experimental language using
 specialized markup for describing relations between knowledge. For example, the
 goal of GlassBR (``Predict-Glass-Withstands-Explosion'') is to ``Analyze and
 predict whether the \textit{glass slab} under consideration will be able to
-withstand the \textbf{explosion} of a certain \textbf{degree} which is
+withstand the \textbf{explosion} of a certain \textbf{degree} that is
 calculated based on \textit{user input}.'', where italicized names are ``named
 ideas'', and bold faced names are ``concept chunks'' (named ideas with a domain
 of related ideas). We call this goal a ``concept instance'' (a concept chunk
@@ -397,7 +417,7 @@ to be necessary to generate our artifacts. In other words, we define a
 The most important results of this phase are descriptions of \emph{theories}
 that link all the important concepts together. For example, the description
 of all the elements that comprise Newton's Law $F = m a$,
-i.e. what is a force, a mass, acceleration (and how is it related to
+i.e., what is a force, a mass, acceleration (and how is it related to
 velocity, position and time), what are the units involved, etc.
 
 \subparagraph*{Define the characteristics of a good solution}
@@ -438,9 +458,23 @@ ensure that there exists a deterministic path from the inputs we are given,
 through the equations we have, to all of the outputs we've declared we are
 interested in.
 
-For this example, the computations are all quite simple, but in general this
-might involve solving ordinary differential equations, computing a solution to
-an optimization problem, etc.
+For this example, the computations are all quite simple. The reasons why
+GlassBR's few lines of code are correct is what is interesting, and that
+description, which is part of the specification, spans a few pages. That
+information is generic about the properties of glass and the effects of
+explosions, and could be reused in other applications.
+In general, research software tends to involve
+solving ordinary differential equations, computing a solution to
+an optimization problem, etc. Again the reason why a particular differential
+equation is an adequate model of the problem at hand is part of the
+important information we wish to capture.
+
+In other words, the main narrative of a piece of software is its high level
+design. What are the techniques used to derive the outputs from the inputs,
+obtained in a reasoned manner by successive refinements of the underlying
+theory into an actual program. While the code itself is akin to the actual
+words used to tell a story, the narrative is the story, its themes
+and topics, and so on.
 
 \subparagraph*{Make code level choices}
 From a \emph{deterministic model of the solution}, it should be
@@ -471,37 +505,38 @@ choices = defaultChoices {
  constStructure = Inline, constRepr = Const
 }
 \end{lstlisting}
-  \caption{Code level choices for GlassBR (compare bold box in \Cref{Fig_DrasilAndChange}).}
+  \caption{Code level choices for GlassBR (corresponds to much of the material
+  in the bold box in top right of \Cref{Fig_DrasilAndChange}).}
   \label{fig:CodeChoices}
 \end{figure}
 
 \subparagraph*{Create recipes to generate artifacts}
 The information collected in the previous steps form the core of the various
 software artifacts normally written. To perform this assembly, we write
-programs that we dub \emph{recipes}. We have DSLs for creating specifications,
+programs that we dub \emph{recipes}. We have DSLs for creating 
+requirements specifications~\cite{SmithEtAl2007},
 code~\cite{GOOLPEPM}, dependency diagrams, Makefiles, READMEs and a log of all choices
 used.
 
-While we currently generate \texttt{Makefile}s, a good example of a DSL for
-specifying build scripts, our ideas are more properly compared with
-the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
+%   JC: (Pointed out by SS) Should be explicit about the ideas of Rattle rather 
+%   than have the reader puzzle it out.
+%While we currently generate \texttt{Makefile}s, a good example of a DSL for
+%specifying build scripts, our ideas are more properly compared with
+%the kind of thinking behind \textit{Rattle}~\cite{mitchell:rattle_18_nov_2020}.
 
 Finally, we can put the contents created via the previous steps together and
-\textbf{generate everything}:
-\begin{lstlisting}
-main :: IO()
-main = do
-  setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "GlassBR_SRS") srs printSetting
-  genCode choices code
-  genDot fullSI
-  genLog fullSI printSetting
-\end{lstlisting}
+\textbf{generate everything}, here the SRS, the code, traceability graphs and
+a log of the design choices.
 
 \section{An Idealized Process}
 \label{sec:idealized-process}
 
-It is useful to summarize the \emph{idealized process} we used above.
+The above used what we refer to as an \emph{idealized process} for
+the development of software that is both well-understood and
+long-lived. Drasil is meant to facilitate this process. In other words,
+as we ourselves better understand this idealized process, we modify Drasil
+to follow suit, rather than the other way around. We can summarize the
+process as follows.
 
 \begin{enumerate}
 \item\label{it:problem} Have a task to achieve where \emph{software} can
@@ -520,7 +555,7 @@ understood}.
 how the problem description can be turned into a deterministic\footnote{A current
 meta-design choice.} input-output process.
   \begin{enumerate}
-  \item Some refinements will involve \emph{specialization} (e.g. from
+  \item Some refinements will involve \emph{specialization} (e.g., from
     \(n\)-dimensional to \(2\)-dimensional, assuming no friction, etc).  These
     \emph{choices} and their \emph{rationale} need to be documented, as a
     crucial part of the solution.  Whether these choices are (un)likely to
@@ -551,38 +586,75 @@ It turns out that many of them are quite straightforward.
 
 Note that in many software projects, steps~\ref{it:problem}
 and~\ref{it:probdesc} are skipped; this is part of the \textbf{tacit knowledge}
-of a lot of software.  Our process requires that this knowledge be made
+of a lot of software.  Our process requires that we make this knowledge
 explicit, a fundamental step in \emph{Knowledge Management}~\cite{Dalkir2011}.
 
 % TODO: insert graphical illustration of the funnel from information to
 % artifacts.
 
+\section{Related Work}\label{sec:relwork}
+
+As one referee put it, our work is ``old fashioned'', in that its goals
+indeed repeat that of work from decades ago. What we see, however, is
+that only a small slice of those goals has made it into today's
+practices. Thus, we think it is worthwhile to revisit these goals.
+
+Draco~\cite{neighbors1984draco,neighbors1989draco}, one of the oldest
+such projects, is also one of the closest to Drasil, goal-wise. Many of
+its ideas have percolated through the literature on DSLs and product
+lines (see the wonderful textbook~\cite{apel2016feature} for a modern
+exposition), and we used them without a proper appreciation for their
+source. While DMS~\cite{baxter1992design,baxter2002dms}, and
+GLisp~\cite{novak1983glisp,DBLP:journals/tse/Novak95a} are different in their
+aims, they also contain some of the same ideas (knowledge capture,
+using various ontologies, refinement and reuse). The examples that
+drove GLisp (see~\cite{novak1994generating,kook1991representation})
+are very close to many of ours, namely applications of physics.
+SpecWare~\cite{srinivas95specware,smith1999mechanizing} goes much
+further along the formality spectrum, incorporating correctness proofs
+as part of its refinement process, as well as being based on a solid
+theoretical framework.
+
+Unfortunately a lot of the above work was very code-centric. None of
+the systems generate all software artifacts, especially not documentation.
+Furthermore, quite a lot of the work uses fairly coarse-grained
+chunks of information (``components'') which, in our experience, reduces the
+potential for reuse. Many of the projects were extremely ambitious regarding
+what aspects of software production they aimed to automate. We do not
+aim to automate any activity that can reasonably be called \emph{design}.
+
+We have borrowed ideas from product families~\cite{parnas1976families}
+and software product lines~\cite{apel2016feature}.  We have also
+borrowed ideas from literate programming~\cite{Knuth1984}, namely the
+idea of \emph{chunks} of knowledge that can be written in a different
+order than what the underlying programming language may want, as well as
+the idea of tightly coupling explanation with its language encoding.
+The weaving of multiple languages together, as available via
+org-mode's babel-mode~\cite{schulte2012multi} to achieve ``reproducible
+research'' is a more modern take on literate software development.
+Jupyter notebooks~\cite{kluyver2016jupyter} is a GUI-driven approach
+that is more beginner-friendly but has scaling drawbacks. We have
+explicitly decided that it is too early to provide this kind of GUI
+for Drasil.
+
+Thinking of doing large scale work has been strongly influenced by Eelco
+Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
+made it clear that many different artifacts can be generated. He was braver than
+us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
+indeed expected to be long lived, but certainly was not created for a
+well-understood domain! The domain analysis of web applications is a non-trivial
+contribution of WebDSL, and may well have moved that domain into the ``well understood''
+column. Whether it is product lines or program families, weaving
+them from DSLs is also something he preached~\cite{voelter2011product}.
+We never got a chance to present Drasil to Eelco, but we hope that it would
+have resonated with him.
+
 \section{Concluding Remarks}
 \label{sec:concluding-remarks}
 
-
-%\begin{figure}
-%  \centering
-%  \fbox{
-%    \begin{minipage}[c]{0.65\textwidth}
-%      \centering
-%      \begin{tabular}{rcl}
-%        \textbf{Opportunity} & : & well-understood + long-lived \\
-%        \textbf{Tools}       & : & knowledge capture + DSLs + generators \\
-%        \textbf{Result}      & : & \emph{long-term productivity gain}
-%      \end{tabular}
-%   \end{minipage}
-% }
-% \caption{Summary}
-% \label{fig:summary}
-%\end{figure}
-
-% TODO
-% - link with Eelco's work
-
-Others~\cite{bjorner2021domaineng} have already remarked that for most software,
+Dines~\cite{bjorner2021domaineng} has already remarked that for most software,
 the \emph{domain knowledge} is the slowest moving part of the requirements.
-We add to this the ideas that for certain kinds of software, there is a lot of
+We add to this the ideas that for certain kinds of software, there is significant
 \emph{knowledge duplication} amongst the artifacts, much of which is traceable
 to domain knowledge. Thus, in well-understood domains, it should be feasible to
 record the domain knowledge ``once'', and then write recipes to generate
@@ -603,10 +675,11 @@ table of symbols from those symbols actually used in the document, and whose
 definition is automatically extracted from the base knowledge.
 
 There are further ideas that co-exist smoothly with our framework, most notably
-software families and correctness, particularly correctness of documentation.  
-As we generate the documentation in tandem with, and using the same information as,
-the source code, these will necessarily be synchronized. Errors will co-occur in both.
-This is a feature, as they are more likely to be caught that way.
+software families, software product lines and correctness, particularly
+correctness of documentation.  As we generate the documentation in tandem with,
+and using the same information as, the source code, these will necessarily be
+synchronized. Errors will co-occur in both.  This is a feature, as they are
+more likely to be caught that way.
 
 We've also noticed that we can more easily experiment with ``what if'' scenarios,
 which make it easy to understand the ramifications of proposed changes.  
@@ -616,17 +689,12 @@ more coherence checks on the domain knowledge itself. For example, it should not
 be possible to associate a \textit{weight} attribute to the concept
 \textit{program name}, but only to concepts that are somehow ``physical''. 
 Perhaps a large ontology in the style of Cyc~\cite{lenat1995cyc} would help.
+We also hope to develop a language of design to embody patterns of choices.
+Many projects already mentioned have such a language that we are eager to
+borrow from.
 
-That work of this scale is possible has strongly been influenced by Eelco
-Visser's grand projects. His work on the Spoofax language workbench~\cite{Spoofax}
-made it clear that many different artifacts can be generated. He was braver than
-us: his WebDSL~\cite{WebDSL}, at the heart of researchr~\cite{researchr}, is
-indeed expected to be long lived, but certainly was not created for a
-well-understood domain! The domain analysis of web applications is a non-trivial
-contribution of WebDSL. Whether it is product lines or program families, weaving
-them from DSLs is also something he preached~\cite{voelter2011product}.
-We never got a chance to present Drasil to Eelco, but we hope that it would
-have resonated with him.
+More people should resurrect older ideas that were too ambitious for their
+time, and apply modern understanding and tooling to them.
 %%
 %% Bibliography
 %%

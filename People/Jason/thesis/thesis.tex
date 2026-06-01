@@ -1,0 +1,228 @@
+\documentclass[12pt,oneside]{book}
+
+% Extra functionality for command parsing, colouring elements, and commentary
+\usepackage{xparse}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{comment}
+
+% Make \today only show month and year
+\usepackage[en-CA]{datetime2}
+\DTMlangsetup[en-CA]{showdayofmonth=false}
+
+% Manifest data
+\input{manifest}
+
+% Configure font and file encodings, and language as Canadian English
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[canadian]{babel}
+\usepackage{lmodern}
+\usepackage{anyfontsize}
+
+% Math-related, but also generally helpful
+\usepackage{proof}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{svg}
+\usepackage{mathpartir}
+\usepackage{braket}
+
+% Since LaTeX doesn't, and many fonts rarely, fully support unicode, we need to
+% manually create characters to replace missing glyphs.
+\usepackage{newunicodechar}
+\input{unicode_chars}
+
+% Tiny package for easily grabbing the page count of the "main matter"
+\usepackage{lastpage}
+
+% For quotes, I wanted to put the "left bar" style. For implementation, Gonzalo
+% Medina was very kind to create an example. It is based on:
+% https://tex.stackexchange.com/a/50623
+\usepackage{framed}
+\usepackage[framemethod=TikZ]{mdframed}
+\newmdenv[topline=false, rightline=false, bottomline=false,%
+  linewidth=2pt, innerrightmargin=0pt, leftmargin=0pt,%
+  innerleftmargin=5pt, skipabove=8pt, skipbelow=8pt]{mdleftbar}
+
+\newmdenv[linewidth=2pt, linecolor=green, backgroundcolor=green!8, roundcorner=10pt,
+  skipabove=8pt, skipbelow=8pt]{mdwritingdirectives}
+
+% For nice captions and floating environments, such as for my code snippets
+\usepackage{caption}
+\usepackage{float}
+
+% For inline-able list environments
+\usepackage{paralist}
+
+% Extra features for changing page widths ("adjustwidth" is a helpful environment!)
+\usepackage{changepage}
+
+% For code highlighting
+\usepackage[newfloat,outputdir=build]{minted}
+% Credits to Arash Esbati (https://tex.stackexchange.com/a/254177) for the
+% listings-related component of minted usage.
+
+\usemintedstyle{colorful}
+
+% Configure page shape
+\usepackage[
+  a4paper,
+  top=\thesisMarginTop{},
+  bottom=\thesisMarginBottom{},
+  inner=\thesisMarginInner{},
+  outer=\thesisMarginOuter{},
+  headheight=\thesisMarginHeadheight{},
+]{geometry}
+
+\usepackage{afterpage}
+
+% Allow labelling enum items: Credits to: https://texblog.org/2012/03/21/cross-referencing-list-items/
+\usepackage{enumitem}
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+    \textbf{#2}%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother
+
+\ifresetfootnotecounter
+  % Make footnote counter reset for each new page.
+  \usepackage{footnpag}
+\fi
+
+% Set spacing according to manifest
+\usepackage{setspace}
+\thesisSpacing{}
+
+% Required for biblatex, but also adds functionality for quotation
+\usepackage{csquotes}
+
+% Credit to Gabriel Devenyi for this bibliography cfg:
+% github.com/gdevenyi/mcmaster.latex
+\usepackage[
+  style=numeric-comp,
+  backend=biber,
+  sorting=none,
+  backref=true,
+  maxnames=99,
+  alldates=iso,
+  seconds=true
+]{biblatex} % bibliography
+\addbibresource{references.bib}
+
+% Fancy Headers
+\usepackage{fancyhdr}
+
+% Allow more line breaks in URLs
+\usepackage{xurl}
+
+% Enable links within the document
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=red,
+  urlcolor=red,
+  breaklinks=true,
+  pdftitle={\thesisTitle{}},
+  pdfauthor={\thesisAuthorName{}}
+}
+\urlstyle{rm} % Make URL styled fonts match hyperref's hrefs
+\usepackage[nameinlink]{cleveref} % Fixes capitalization of internal references
+
+% For abbreviations, we use "acro" package, and mfirstuc to help capitalize long
+% versions normally
+\usepackage{array}
+\usepackage{mfirstuc}
+\MFUhyphentrue % tell mfirstuc to capitalize hyphenated words
+
+% Acronyms
+\usepackage{acro}
+\input{acronyms}
+
+% General Utility Functions
+\input{macros}
+
+% General Assets
+\input{assets}
+
+% McMaster Colours
+\input{mcmaster_colours}
+
+% For fancy pictures
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,cd}
+\usepackage{quiver}
+\usetikzlibrary{babel} % Make sure quiver/tikz uses babel
+\usetikzlibrary {arrows.meta,graphs,graphdrawing}
+\usegdlibrary {layered}
+
+% Make sure the floating lists (figures, source codes, and abbreviations) are
+% shown in the toc.
+\usepackage{tocbibind}
+
+% Counters
+\usepackage{chngcntr}
+
+\title{
+    {\thesisTitle{}}\\
+    {\thesisInstitution{}}
+}
+\author{\thesisAuthorName{}}
+\date{\thesisSubmissionMonthYear{}}
+
+% START : TODO LIST SETUP
+\ifshowwritingdirectives
+  \usepackage[backgroundcolor=yellow,colorinlistoftodos]{todonotes}
+  \setlength{\marginparwidth}{\thesisTODOMarginSize{}}
+  \reversemarginpar % place on left-hand side
+\else
+  \usepackage[disable]{todonotes}
+\fi
+% END   : TODO LIST SETUP
+
+\begin{document}
+
+%------------------------------------------------------------------------------
+% Front Matters
+%------------------------------------------------------------------------------
+
+\frontmatter
+
+% START : TODO LIST
+% Only show it if the "show writing directives" flag is enabled
+\ifshowwritingdirectives
+  \todototoc
+  \listoftodos
+  \newpage
+\fi
+% END   : TODO LIST
+
+\input{front}
+
+%------------------------------------------------------------------------------
+% Main Matters/Chapters
+%------------------------------------------------------------------------------
+
+\mainmatter
+
+% START : HEADER %
+\fancyhead[R]{\thesisInstitution{} \textemdash{} \thesisInstitutionDepartmentShort{}}
+\fancyhead[L]{\thesisTargetDegreeNameShort{} Thesis \textemdash{} \thesisAuthorNameShort{}}
+% END   : HEADER %
+
+\input{chapters}
+
+%------------------------------------------------------------------------------
+% Back Matters
+%------------------------------------------------------------------------------
+
+\backmatter
+\input{back}
+
+\end{document}

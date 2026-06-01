@@ -1,9 +1,15 @@
 -- | Gathers and organizes all the information for the [Drasil website](https://jacquescarette.github.io/Drasil/).
-module Drasil.Website.Body where
+module Drasil.Website.Body (
+  FolderLocation(..), webSys, symbMap,
+  gitHubRef, sections, websiteTitle,
+) where
 
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil
-import SysInfo.Drasil
+import Control.Lens ((^.))
+
+import Drasil.Database (ChunkDB)
+import Drasil.Generator (withCommonKnowledge)
+import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
+  DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
 
@@ -14,18 +20,18 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
+import Drasil.GlassBR.Unitals (blast)
+import Drasil.GlassBR.Concepts (glaSlab)
+import Data.Drasil.Concepts.Thermodynamics (heatTrans)
+import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
+import Drasil.PDController.Concepts (pidC)
+import Drasil.Projectile.Concepts (target, projectile)
+import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor)
+import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
+import Drasil.SSP.IMods (fctSfty)
 
 -- * Functions to Generate the Website Through Drasil
-
--- | Printing info to get document to generate. Takes in the 'FolderLocation'.
-printSetting :: FolderLocation -> PrintingInformation
-printSetting fl = PI (symbMap fl) Equational defaultConfiguration
-
--- | Instead of being an 'SRSDecl', this takes the folder locations and generates the document from there.
-mkWebsite :: FolderLocation -> Document
-mkWebsite fl =
-    --Document  -- Title  --  author  (hack for now to show up in proper spot) -- no table of contents -- [Section]
-    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) NoToC $ sections fl
 
 -- | Folder locations based on environment variables (using 'getEnv' in "Drasil.Website.Main").
 data FolderLocation = Folder {
@@ -53,79 +59,56 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
--- TODO: Should the website be using a ``SystemInformation''? This is primarily for the SmithEtAl template.
---       It seems like the website is primarily that functions on a chunkdb.
-
--- | System information.
-si :: FolderLocation -> SystemInformation
-si fl = SI {
-    _sys         = webName,
-    _kind        = web,
-    _authors     = [] :: [Person],
-    _quants      = [] :: [QuantityDict],
-    _purpose     = [],
-    _concepts    = [] :: [UnitalChunk],
-    _instModels  = [],
-    _datadefs    = [],
-    _configFiles = [],
-    _inputs      = [] :: [QuantityDict],
-    _outputs     = [] :: [QuantityDict],
-    _defSequence = [] :: [Block SimpleQDef],
-    _constraints = [] :: [ConstrainedChunk],
-    _constants   = [] :: [ConstQDef],
-    _sysinfodb   = symbMap fl,
-    _usedinfodb  = usedDB,
-    refdb        = rdb [] []
-}
+webSys :: FolderLocation -> DrasilWebsite
+-- FIXME: Missing metadata!
+webSys = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) . allRefs
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
-sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki 
-  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) 
-  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki 
-  paperGOOL papersWiki, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl), analysisSec (analysisRt fl) 
-  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
+sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki
+  createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl)
+  (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki
+  paperGOOL papersWiki icsePositionPaper danPoster wellUnderstoodPaper, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
+  analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
-symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web] ++ map getSysName allExampleSI)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] $ allRefs fl
+symbMap :: ChunkDB
+symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
+  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
+  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
+  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
+  slope, factor]) [] [] [] [] [] [] [] [] []
 
--- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
-getSysName :: SystemInformation -> IdeaDict
-getSysName SI{_sys = nm} = nw nm 
-
--- | Empty database needed for 'si' to work.
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+-- | Helper to get the system name as an 'IdeaDict' from 'System'.
+getSysName :: SmithEtAlSRS -> IdeaDict
+getSysName = nw . (^. sysName)
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
-allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki, 
-  quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki] 
-  ++ exampleRefs (repoRt fl) (exRt fl) 
-  ++ docRefs (docsRt fl) 
+allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki,
+  quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
+  icsePositionPaper, danPoster, wellUnderstoodPaper]
+  ++ exampleRefs (repoRt fl) (exRt fl)
+  ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
   ++ concatMap findAllRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
-webName, web :: CI
-webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" []
-web = commonIdea "website" (cn "website") "web" []
+webName :: CI
+webName = commonIdeaWithDict "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 
 -- | Header section creator.
 headerSec :: Section
-headerSec = 
+headerSec =
   section EmptyS -- No title
   [LlC imageContent] -- Contents
   [] $ makeSecRef "Header" $ S "Header" -- Section reference
 
 -- | For the drasil tree image on the website.
 imageContent :: LabelledContent
-imageContent = llcc (makeFigRef "Drasil") $ figWithWidth EmptyS imagePath 50
+imageContent = llccFig "Drasil" $ figNoCapWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference
@@ -139,9 +122,18 @@ chunksWiki = makeURI "chunksWiki" (gitHubInfoURL ++ "/wiki/Chunks") (shortname' 
 recipesWiki :: Reference
 recipesWiki = makeURI "recipesWiki" (gitHubInfoURL ++ "/wiki/Recipes") (shortname' $ S "recipesWiki")
 paperGOOL :: Reference
-paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/master/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
+paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
 papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
+icsePositionPaper :: Reference
+icsePositionPaper = makeURI "icsePositionPaper" (danContributionPath
+  ++ "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
+danPoster :: Reference
+danPoster = makeURI "danPoster" (danContributionPath
+  ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
+wellUnderstoodPaper :: Reference
+wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
+  ++ "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
@@ -157,9 +149,10 @@ debuggingWiki = makeURI "debuggingWiki" (gitHubInfoURL ++ "/wiki/Debugging-in-Dr
 
 -- | Hardcoded info for the title, URL, and image path.
 websiteTitle :: String
-gitHubInfoURL, imagePath :: FilePath
+gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
+danContributionPath = gitHubInfoURL ++ "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section
@@ -171,7 +164,3 @@ footer _ = section EmptyS [mkParagraph copyrightInfo] [] $ makeSecRef "Footer" $
 -- | 'footer' contents.
 copyrightInfo :: Sentence
 copyrightInfo = S "Copyright (c) Jacques Carette, 2021. All rights reserved. This website is a software artifact generated by Drasil."
-
--- uncomment to add in build number and path information
---buildInfo :: String -> String -> Sentence
---buildInfo bnum bPath = S $ "Build number: " ++ bnum ++ ". Generated from " ++ bPath ++ "."

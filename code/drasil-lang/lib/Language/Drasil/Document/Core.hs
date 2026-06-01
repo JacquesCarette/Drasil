@@ -1,10 +1,17 @@
 {-# Language TemplateHaskell #-}
 -- | Contains types and functions common to aspects of generating documents.
-module Language.Drasil.Document.Core where
+module Language.Drasil.Document.Core (
+  Contents(..), ListType(..), ItemType(..), RawContent(..),
+  ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
+  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
+) where
 
+import Control.Lens ((^.), makeLenses, Lens', set, view)
+
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
+
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Chunk.Citation (BibRef)
-
-import Language.Drasil.UID (HasUID(..))
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
@@ -12,15 +19,13 @@ import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
 
-import Control.Lens ((^.), makeLenses, Lens', set, view)
-
 -- * Lists
 
 -- | Denotes the different possible types that can be used as a list.
 data ListType = Bullet      [(ItemType, Maybe String)] -- ^ Bulleted list.
               | Numeric     [(ItemType, Maybe String)] -- ^ Enumerated list.
               | Simple      [ListTuple] -- ^ Simple list with items denoted by @:@. Renders as "Title: Item"
-              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title: Item__" (see 'ListTuple').
+              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title__: Item" (see 'ListTuple').
               | Definitions [ListTuple] -- ^ Renders a list of "@'Title'@ is the @Item@".
 
 -- | Denotes how something should behave in a list ('ListType').
@@ -36,7 +41,6 @@ type MaxWidthPercent = Float
 type Title    = Sentence
 type Author   = Sentence
 type Header   = Sentence -- ^ Used when creating sublists.
-type Depth    = Int
 type Width    = Float
 type Height   = Float
 type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. For use in lists.
@@ -55,11 +59,9 @@ data Contents = UlC UnlabelledContent
 --   gdefn, General, mkGDField [Para, EqnBlock, Enumeration]
 --   instanceModel, Instance, mkIMField [Para, EqnBlock, Enumeration]
 
--- | Types of definitions (general, instance, theory, or data).
-data DType = General
-           | Instance
-           | Theory
-           | Data
+-- | Indicates whether a figure has a caption or not.
+data HasCaption = NoCaption | WithCaption
+  deriving (Eq)
 
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
@@ -68,22 +70,23 @@ data RawContent =
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
-  | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
-  | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
+  | Defini [(Identifier, [Contents])]        -- ^ Defines something with a type, identifier, and 'Contents'.
+  | Figure Lbl Filepath MaxWidthPercent HasCaption
+                                             -- ^ For creating figures in a document includes whether the figure has a caption.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
- -- | CodeBlock CodeExpr                       -- ^ Block for codes
-               -- TODO: Fill this one in.
+  | CodeBlock Expr                           -- ^ Block for codes
 
 -- | An identifier is just a 'String'.
 type Identifier = String
 
 -- | Contains a 'Reference' and 'RawContent'.
-data LabelledContent = LblC { _ref :: Reference
+data LabelledContent = LblC { _lcUid :: UID
+                            , _ref :: Reference
                             , _ctype :: RawContent
                             }
 
--- | Only contains 'RawContent'.                         
+-- | Only contains 'RawContent'.
 newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent
@@ -95,12 +98,16 @@ class HasContents c where
   -- | Provides a 'Lens' to the 'RawContent'.
   accessContents :: Lens' c RawContent
 
+instance HasChunkRefs LabelledContent where
+  chunkRefs l = chunkRefs (l ^. ref)
+  {-# INLINABLE chunkRefs #-}
+
 -- | Finds 'UID' of the 'LabelledContent'.
-instance HasUID        LabelledContent where uid = ref . uid
+instance HasUID        LabelledContent where uid = lcUid
 -- | 'LabelledContent's are equal if their reference 'UID's are equal.
-instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid) 
+instance Eq            LabelledContent where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the reference address contained in the 'Reference' of 'LabelledContent'.
-instance HasRefAddress LabelledContent where getRefAdd (LblC lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
+instance HasRefAddress LabelledContent where getRefAdd (LblC _ lb c) = RP (prependLabel c) $ getAdd $ getRefAdd lb
 -- | Access the 'RawContent' within the 'LabelledContent'.
 instance HasContents   LabelledContent where accessContents = ctype
 -- | Find the shortname of the reference address used for the 'LabelledContent'.
@@ -128,9 +135,10 @@ prependLabel Figure{}       = prepend "Fig"
 prependLabel Graph{}        = prepend "Fig"
 prependLabel Defini{}       = prepend "Def"
 prependLabel EqnBlock{}     = prepend "EqnB"
+prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
 prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"
-prependLabel Bib{}          = error $ 
+prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

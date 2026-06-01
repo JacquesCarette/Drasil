@@ -1,14 +1,17 @@
 {-# Language FlexibleInstances #-}
 -- | Printing Monad. Starts with a specific data type (reader monad) and extends from there.
-module Language.Drasil.TeX.Monad where
+module Language.Drasil.TeX.Monad (
+  -- * Types
+  MathContext(..), PrintLaTeX(..), D, Latex(..),
+  -- * Functions
+  switch, toMath, toText, getCtx, (%%), ($+$), vcat, vpunctuate,
+  hpunctuate, nest, lub
+) where
 
 import Prelude hiding (print)
-import Text.PrettyPrint (($$))
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil
-
-import Control.Applicative hiding (empty)
+import Language.Drasil (RenderSpecial(..), Special(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
 
@@ -20,8 +23,8 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- to extend, so start there.
 
 -- | There are two proper contexts, Text and Math; Curr is the current context.
--- There are multiple ways of getting there: for Text, either being at the top-level 
--- or inside \text. For Math, either surrounded by $ or 
+-- There are multiple ways of getting there: for Text, either being at the top-level
+-- or inside \text. For Math, either surrounded by $ or
 -- in \begin{equation} .. \end{equation}.
 -- Curr is when the current context is fine.
 data MathContext = Text | Math | Curr deriving Eq
@@ -41,7 +44,7 @@ instance Applicative PrintLaTeX where
 -- | Define the printing monad.
 instance Monad PrintLaTeX where
   return = pure
-  m >>= k = PL $ \ctx -> 
+  m >>= k = PL $ \ctx ->
     let a = runPrint m ctx in
     runPrint (k a) ctx
 
@@ -64,7 +67,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
     adjust Text Math gen = H.dollarDoc $ gen Math
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
-    adjust x Curr gen = gen x 
+    adjust x Curr gen = gen x
 
 toMath, toText :: D -> D
 -- | Change context to Math.
@@ -80,18 +83,18 @@ getCtx = PL id
 instance Semigroup (PrintLaTeX TP.Doc) where
   (PL s1) <> (PL s2) = PL $ \ctx -> s1 ctx TP.<> s2 ctx
 
--- very convenient lifting of $$
--- | D is a monad.
+-- | D is a monoid.
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
-  (PL s1) `mappend` (PL s2) = PL $ \ctx -> s1 ctx $$ s2 ctx
 
 -- may revisit later
--- | Since Text.PrettyPrint steals <>, use %% instead for mappend.
+-- | Since Text.PrettyPrint steals <>, use %% instead for $$.
+infixl 5 %%
 (%%) :: D -> D -> D
-(%%) = mappend
+(%%) = liftA2 (TP.$$)
 
 -- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
+infixr 6 $+$
 ($+$) :: D -> D -> D
 ($+$) = liftA2 (TP.$+$)
 
@@ -112,6 +115,10 @@ vpunctuate x = tpRunPrint (TP.vcat . TP.punctuate x)
 -- Combine 'TP.hcat' and 'TP.punctuate'.
 hpunctuate :: TP.Doc -> [D] -> D
 hpunctuate x = tpRunPrint (TP.hcat . TP.punctuate x)
+
+-- | Nest a 'D' by a specified indentation level.
+nest :: Int -> D -> D
+nest i (PL f) = PL $ \ctx -> TP.nest i (f ctx)
 --------
 -- | MathContext operations.
 lub :: MathContext -> MathContext -> MathContext
@@ -130,4 +137,4 @@ newtype Latex = L { unPL :: String }
 -- | Renders special characters.
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"
-  special Partial      = L "\\partial{}"
+  -- special Partial      = L "\\partial{}"

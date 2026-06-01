@@ -1,41 +1,24 @@
-module Drasil.SWHS.Concepts where --all of this file is exported
+module Drasil.SWHS.Concepts (
+  coil, tank, phsChgMtrl, water, perfectInsul, charging, discharging,
+  con, phaseChangeMaterial, sWHT, tankPCM, transient, gaussDiv
+) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
-  likelyChg, physSyst, requirement, srs, typUnc, unlikelyChg)
-import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
+import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Domains (materialEng)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
   tankPCM, transient, water, sWHT, tankParam]
 
----Acronyms---
-acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  progName, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
-
-acronymsFull :: [CI]
-acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
-
-phsChgMtrl, progName :: CI
-
+phsChgMtrl:: CI
 phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material"
   "phase change materials") "PCM" [materialEng]
-
-progName    = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
-  "solar water heating systems") "SWHS" [materialEng]
-
-full :: NamedChunk
-full = nc "full" (progName `with` phsChgMtrl)
--- I want to include SI as an acronym, but I can't find a way for the
--- description to have accents when using dcc.
 
 ---ConceptChunks---
 
@@ -65,7 +48,7 @@ perfectInsul = dcc "perfectInsul" (nounPhraseSP "perfectly insulated")
 phaseChangeMaterial = dcc "pcm" (phsChgMtrl ^. term)
   ("a substance that uses phase changes (such as melting) to absorb or " ++
   "release large amounts of heat at a constant temperature")
-  
+
 tankParam = dcc "tankParam" (compoundPhrase' (tank ^. term)
   (parameter ^. term))
   "values associated with the tank"
@@ -74,19 +57,9 @@ tank  = dcc "tank"  (cn' "tank") "enclosure containing some kind of substance"
 sWHT  = dcc "sWHT"  (cn' "solar water heating tank") "solar water heating tank"
 water = dcc "water" (cn' "water") "the liquid with which the tank is filled"
 
+-- TODO: extract 'PCM' from 'phsChgMtrl' again instead of hard-coding it
 tankPCM = dcc "tankPCM" (nounPhrase''
-  (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
-  (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
+  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
+  (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
   CapFirst CapWords)
   "solar water heating tank incorporating phase change material"
-
-swhsPCM :: CommonConcept
--- Nounphrase'' hack to get nounPhraseSP words to accept
--- nounPhrases instead of strings
--- Another capitalization hack.
-swhsPCM = dcc' "swhsPCM" (nounPhrase''
-  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
-  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
-  CapFirst CapWords)
-  "solar water heating systems incorporating phase change material"
-  "SWHS"

@@ -1,1 +1,0 @@
-describes the requirements of a slope stability analysis program.

@@ -1,37 +1,157 @@
-module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
+module Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe, instModIntro) where
 
+import Control.Lens ((^.))
 import Prelude hiding (exp)
+
+import Drasil.Sentence.Combinators (definedIn', definedIn)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, equationalModelN)
+import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.SI_Units
-import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity,
-  pbTolUsr, qRef)
-import Drasil.GlassBR.Goals (willBreakGS)
-import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (charWeight, demand, isSafeLR, isSafePb,
-  lRe, pbTol, plateLen, plateWidth, probBr, standOffDist)
+import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN, output)
 
-import Data.Drasil.Concepts.Documentation (goal)
+import Data.Drasil.Citations (campidelli)
+import Data.Drasil.Concepts.Documentation (goal, user, datum)
+
+import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
+  gtfRef, hRef, loadDFDD, stdVals)
+import Drasil.GlassBR.LabelledContent (dimlessloadVsARFig)
+import Drasil.GlassBR.Goals (willBreakGS)
+import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
+import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
-iMods = [pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
+  calofCapacity, pbIsSafe, lrIsSafe]
 
-symb :: [UnitalChunk]
-symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
--- ++
- -- [dqdQd (qw calofDemand) demandq]
+abInputConstraints :: [(DefinedQuantityDict, Maybe (RealInterval Expr Expr))]
+abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
+                      qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)]
+
+aspectRatioConstraint :: RealInterval Expr Expr
+aspectRatioConstraint = UpFrom (Inc, exactDbl 1)
+
+probConstraint :: RealInterval Expr Expr
+probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
+
+{--}
+
+risk :: InstanceModel
+risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
+  (qwUC modElas : qwUC loadDF : qwUC stressDistFac :
+    map qwUC [sflawParamK, sflawParamM, minThick] ++ abInputConstraints)
+    riskFun [] [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+    dRefInfo campidelli $ Equation [14]] "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
+
+-- FIXME [4] !!!
+riskQD :: SimpleQDef
+riskQD = mkQuantDef riskFun ((sy sflawParamK $/
+  (sy plateLen $* sy plateWidth $^ (sy sflawParamM $- exactDbl 1))) $*
+  ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy loadDF $* exp (sy stressDistFac))
+
+{--}
+
+strDisFac :: InstanceModel
+strDisFac = imNoDeriv (equationalModelN (stressDistFac ^. term) strDisFacQD)
+  (qwC aspectRatio aspectRatioConstraint : [qwUC dimlessLoad]) (dqdWr stressDistFac)
+  [Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)]
+  [dRef astm2009] "stressDistFac"
+  [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
+
+strDisFacQD :: SimpleQDef
+strDisFacQD = mkQuantDef stressDistFac strDisFacEq
+
+strDisFacEq :: Expr
+-- strDisFacEq = apply (sy stressDistFac)
+--   [sy dimlessLoad, sy aspectRatio]
+strDisFacEq = apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
+
+{--}
+
+nonFL :: InstanceModel
+nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
+  (qwUC tolLoad : qwUC modElas : qwUC minThick : abInputConstraints)
+  (dqdWr nonFactorL) [] [dRef astm2009] "nFL"
+  [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
+
+nonFLEq :: Expr
+nonFLEq = (sy tolLoad $* sy modElas) $* (sy minThick $^ exactDbl 4) $/
+  square (sy plateLen $* sy plateWidth)
+
+nonFLQD :: SimpleQDef
+nonFLQD = mkQuantDef nonFactorL nonFLEq
+
+{--}
+
+dimLL :: InstanceModel
+dimLL = imNoDeriv (equationalModelN (dimlessLoad ^. term) dimLLQD)
+  (qwUC demand : qwUC modElas : qwUC minThick : qwUC gTF : abInputConstraints)
+  dimlessLoad [] [dRef astm2009, dRefInfo campidelli $ Equation [7]]
+  "dimlessLoad" [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
+
+dimLLEq :: Expr
+dimLLEq = sy demand $* square (sy plateLen $* sy plateWidth)
+  $/ (sy modElas $* (sy minThick $^ exactDbl 4)) $* sy gTF
+
+dimLLQD :: SimpleQDef
+dimLLQD = mkQuantDef dimlessLoad dimLLEq
+
+{--}
+
+tolPre :: InstanceModel
+tolPre = imNoDeriv (equationalModelN (tolLoad ^. term) tolPreQD)
+  [qwC aspectRatio aspectRatioConstraint, qwUC $ tolStrDisFac ^. output] tolLoad []
+  [dRef astm2009] "tolLoad" [interpolating tolLoad dimlessloadVsARFig, arRef,
+    jtolRef]
+
+tolPreEq :: Expr
+--tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
+tolPreEq = apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
+
+tolPreQD :: SimpleQDef
+tolPreQD = mkQuantDef tolLoad tolPreEq
+
+{--}
+
+tolStrDisFac :: InstanceModel
+tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
+  ((loadDF, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
+    map qwUC [sflawParamM, sflawParamK, minThick]) sdfTol []
+  [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
+      sflawParamK, modElas], hRef, ldfRef]
+
+tolStrDisFacQD :: SimpleQDef
+tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
+  $* ((sy plateLen $* sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
+    (sy sflawParamK $* ((sy modElas $*
+    square (sy minThick)) $^ sy sflawParamM) $* sy loadDF)))
+
+{--}
+
+probOfBreak :: InstanceModel
+probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
+  [qwUC $ risk ^. output] (dqdWr probBr) [probConstraint] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
+  [riskRef]
+
+probOfBreakQD :: SimpleQDef
+probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg $ sy $ risk ^. output))
+
+{--}
+
+calofCapacity :: InstanceModel
+calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
+  (qwUC (nonFL ^. output) : qwUC (glaTyFac ^. output) : [qwUC loadSF]) (dqdWr lRe) []
+  [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
+
+calofCapacityQD :: SimpleQDef
+calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) $* sy (glaTyFac ^. defLhs) $* sy loadSF)
 
 {--}
 
 pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD)
-  [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
-  (qw isSafePb) []
-  [dRef astm2009] "isSafePb"
-  [pbIsSafeDesc, probBRRef, pbTolUsr]
-
+  [qwC probBr probConstraint, qwC pbTol probConstraint] isSafePb []
+  [dRef astm2009] "isSafePb" [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 pbIsSafeQD :: SimpleQDef
 pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
@@ -41,27 +161,32 @@ pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
 lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD)
   [qwC lRe $ UpFrom (Exc, exactDbl 0), qwC demand $ UpFrom (Exc, exactDbl 0)]
-  (qw isSafeLR) []
+  isSafeLR []
   [dRef astm2009] "isSafeLR"
-  [lrIsSafeDesc, capRef, qRef] 
+  [lrIsSafeDesc, capRef, qRef]
 
-lrIsSafeQD :: SimpleQDef 
+lrIsSafeQD :: SimpleQDef
 lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)
 
-iModDesc :: QuantityDict -> Sentence -> Sentence
+iModDesc :: DefinedQuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
     S "considered safe", s `S.are` S "either both True or both False"]
-  
+
 -- Intro --
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), refS willBreakGS, 
+instModIntro = foldlSent [D.toSent $ atStartNP (the goal), refS willBreakGS,
   S "is met by", refS pbIsSafe `sC` refS lrIsSafe]
 
 -- Notes --
+lrCap :: Sentence
+lrCap = ch lRe +:+. S "is also called capacity"
 
-capRef :: Sentence
-capRef = definedIn' calofCapacity (S "and is also called capacity")
+pbTolUsr :: Sentence
+pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
+
+qRef :: Sentence
+qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = iModDesc isSafeLR
@@ -69,7 +194,21 @@ lrIsSafeDesc = iModDesc isSafeLR
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
-  (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
+  (ch isSafePb `S.and_` ch isSafeLR +:+ fromSource lrIsSafe)
 
-probBRRef :: Sentence
-probBRRef = definedIn probOfBreak
+capRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
+  riskRef :: Sentence
+capRef      = definedIn' calofCapacity (S "and is also called capacity")
+jRef        = definedIn  strDisFac
+jtolRef     = definedIn  tolStrDisFac
+ldfRef      = definedIn  loadDFDD
+nonFLRef    = definedIn  nonFL
+probBRRef   = definedIn  probOfBreak
+qHtRef      = definedIn  dimLL
+qHtTlTolRef = definedIn  tolPre
+riskRef     = definedIn  risk
+
+-- Helper --
+interpolating :: (Quantity s, Referable f, HasShortName f) => s -> f -> Sentence
+interpolating s f = foldlSent [ch s `S.is` S "obtained by interpolating from",
+  plural datum, S "shown" `S.in_` refS f]

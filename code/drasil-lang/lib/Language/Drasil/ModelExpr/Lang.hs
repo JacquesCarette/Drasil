@@ -1,71 +1,29 @@
 {-# LANGUAGE GADTs #-}
 
 -- | The Drasil Modelling Expression language
-module Language.Drasil.ModelExpr.Lang where
+module Language.Drasil.ModelExpr.Lang (
+  ModelExpr(..), DerivType(..),
+  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..)
+) where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr.Lang (Completeness)
+import Drasil.Database (UID)
+
+import Language.Drasil.Expr.Lang
+  (Completeness, ArithBinOp, EqBinOp, LABinOp, OrdBinOp,
+   VVVBinOp, VVNBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocArithOper,
+   AssocConcatOper,
+   UFunc, UFuncB, UFuncVV, UFuncVN)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
-import Language.Drasil.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions
 
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp = Frac | Pow | Subt
-  deriving Eq
-
--- | Equality operators (equal or not equal).
-data EqBinOp = Eq | NEq
-  deriving Eq
-
--- | Conditional and Biconditional operators (Expressions can imply
--- one another, or exist if and only if another expression exists).
-data BoolBinOp = Impl | Iff
-  deriving Eq
-
--- | Index operator.
-data LABinOp = Index
-  deriving Eq
-
--- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
-data OrdBinOp = Lt | Gt | LEq | GEq
-  deriving Eq
-
--- | @Vector x Vector -> Vector@ binary operations (cross product).
-data VVVBinOp = Cross
-  deriving Eq
-
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
-  deriving Eq
-
--- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = AddI | AddRe | MulI | MulRe
-  deriving Eq
-
 -- | Associative boolean operators (and, or).
 data AssocBoolOper = And | Or | Equivalence
   deriving (Eq, Show)
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
-  deriving Eq
-
--- | @Bool -> Bool@ operators.
-data UFuncB = Not
-  deriving Eq
-
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
-  deriving Eq
-
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
-  deriving Eq
 
 -- | Statements involving 2 arguments.
 data StatBinOp = Defines
@@ -93,6 +51,8 @@ data ModelExpr where
   AssocA    :: AssocArithOper -> [ModelExpr] -> ModelExpr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB    :: AssocBoolOper  -> [ModelExpr] -> ModelExpr
+
+  AssocC   :: AssocConcatOper -> [ModelExpr] -> ModelExpr
   -- | Derivative syntax is:
   --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1).
@@ -100,18 +60,16 @@ data ModelExpr where
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C         :: UID -> ModelExpr
-  -- | A function call accepts a list of parameters and a list of named parameters.
-  --   For example
-  --
-  --   * F(x) is (FCall F [x] []).
-  --   * F(x,y) would be (FCall F [x,y]).
-  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
-  FCall     :: UID -> [ModelExpr] -> [(UID, ModelExpr)] -> ModelExpr
+  -- | Function applications.
+  FCall     :: UID -> [ModelExpr] -> ModelExpr
   -- | For multi-case expressions, each pair represents one case.
   Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
   -- | Represents a matrix of expressions.
   Matrix    :: [[ModelExpr]] -> ModelExpr
-  
+  -- | Represents a set of expressions
+  Set       :: Space -> [ModelExpr] -> ModelExpr
+  -- | used to refernce the (name + type = variable )
+  Variable :: String -> ModelExpr -> ModelExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -123,8 +81,6 @@ data ModelExpr where
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for boolean operators (implies, iff).
-  BoolBinaryOp  :: BoolBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for equality between expressions.
   EqBinaryOp    :: EqBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for indexing two expressions.
@@ -139,6 +95,12 @@ data ModelExpr where
   VVVBinaryOp   :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
   VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
+  NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Element + Set -> Set
+  ESSBinaryOp :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Element + Set -> Bool
+  ESBBinaryOp :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -146,12 +108,9 @@ data ModelExpr where
   Operator :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval ModelExpr ModelExpr -> ModelExpr
-  
+
   -- | Universal quantification
   ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
-
--- | The variable type is just a renamed 'String'.
-type Variable = String
 
 -- instance Num Expr where
 --   (Int 0)        + b              = b
@@ -167,7 +126,7 @@ type Variable = String
 --   a              * b              = AssocA Mul [a, b]
 
 --   a - b = ArithBinaryOp Subt a b
-  
+
 --   fromInteger = Int
 --   abs         = UnaryOp Abs
 --   negate      = UnaryOp Neg
@@ -177,20 +136,18 @@ type Variable = String
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq ModelExpr where
-  Lit l              == Lit r                =  l == r
-  -- Lit a               == Lit b               =   a == b -- TODO: When we have typed expressions, I think this will be possible.
+  Lit l               == Lit r               =   l == r
   AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
   AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
   Deriv a t1 b c      == Deriv d t2 e f      =   a == d && t1 == t2 && b == e && c == f
   C a                 == C b                 =   a == b
-  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
-  Case a b            == Case c d            =   a == c && b == d 
+  FCall a b           == FCall c d           =   a == c && b == d
+  Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
   UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
   UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
-  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   SpaceBinaryOp o a b == SpaceBinaryOp p c d =   o == p && a == c && b == d
@@ -198,6 +155,8 @@ instance Eq ModelExpr where
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
+  ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 

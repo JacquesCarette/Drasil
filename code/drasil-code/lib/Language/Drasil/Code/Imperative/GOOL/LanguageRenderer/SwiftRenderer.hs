@@ -1,25 +1,21 @@
-{-# LANGUAGE TypeFamilies #-}
-
 -- | The logic to render Swift auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
   SwiftProject(..)
 ) where
 
-import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
-  PackageSym(..), AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
-  packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
-  DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
-
-import GOOL.Drasil (onCodeList, swiftName, swiftVersion)
-
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
+
+import Language.Drasil.Choices (ImplementationType(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
+import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+
+import Drasil.GOOL (swiftName, swiftVersion)
+
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (readMe, makefile, noRunIfLib, docIfEnabled)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
+  DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
 -- | Holds a Swift project.
 newtype SwiftProject a = SP {unSP :: a}
@@ -32,28 +28,19 @@ instance Applicative SwiftProject where
   (SP f) <*> (SP x) = SP (f x)
 
 instance Monad SwiftProject where
-  return = SP
   SP x >>= f = f x
 
-instance PackageSym SwiftProject where
-  type Package SwiftProject = PackData
-  package p = onCodeList (packD p)
-
-instance AuxiliarySym SwiftProject where
-  type Auxiliary SwiftProject = AuxData
-  type AuxHelper SwiftProject = Doc
-  doxConfig _ _ _ = auxFromData "" empty
+instance SoftwareDossierSym SwiftProject where
+  doxConfig _ _ _ = Nothing
   readMe rmi = G.readMe rmi {
         langName = swiftName,
         langVersion = swiftVersion}
-  sampleInput = G.sampleInput
 
   optimizeDox = error doxError
 
   makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
-  auxHelperDoc = unSP
-  auxFromData fp d = return $ ad fp d
+  unReprDoc = unSP
 
 -- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

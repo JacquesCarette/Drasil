@@ -2,32 +2,38 @@
 module Drasil.Sections.TableOfAbbAndAcronyms
   (tableAbbAccGen, tableAbbAccRef) where
 
-import Language.Drasil
-import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
-
+-- Generic Haskell
 import Control.Lens ((^.))
-import Data.List (sortBy)
 import Data.Function (on)
+import Data.List (sortBy)
 
--- | Helper function that gets the acronym out of an 'Idea'.
-select :: (Idea s) => [s] -> [(String, s)]
-select [] = []
-select (x:xs) = case getA x of
-  Nothing -> select xs
-  Just y  -> (y, x) : select xs
+-- Generic Drasil
+import Language.Drasil
+import Language.Drasil.Development (toSent)
+import Drasil.Database (HasUID(..))
+import Drasil.Database.SearchTools (TermAbbr (shortForm), longForm)
+import Utils.Drasil (mkTable)
 
--- | The actual table creation function.
-tableAbbAccGen :: (Idea s) => [s] -> LabelledContent
-tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  llcc tableAbbAccRef $ Table
+-- Vocabulary
+import Drasil.Metadata.Documentation (abbreviation, fullForm, abbAcc)
+
+-- other docLang
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+
+-- | Create a table of abbreviations from the given 'TermAbbr's. If the list is
+-- empty, it will return a paragraph saying there are no abbreviations or
+-- acronyms. It is assumed that the provided 'TermAbbr's are unique and all have
+-- a short form.
+tableAbbAccGen :: [TermAbbr] -> LabelledContent
+tableAbbAccGen [] = mkRawLC (Paragraph $ emptySectSentPlu [abbAcc]) tableAbbAccRef
+tableAbbAccGen ls = let chunks = sortBy (compare `on` shortForm) ls in
+  mkRawLC (Table
   (map titleize [abbreviation, fullForm]) (mkTable
-  [\(a,_) -> S a,
-   \(_,b) -> titleize b]
+    [maybe EmptyS S . shortForm,
+     toSent . titleizeNP . longForm]
   chunks)
-  (titleize' abbAcc) True
+  (titleize' abbAcc) True) tableAbbAccRef
 
 -- | Table of abbreviations and acronyms reference.
 tableAbbAccRef :: Reference
 tableAbbAccRef = makeTabRef' $ abbAcc ^. uid
-
-

@@ -1,0 +1,254 @@
+% Modified from https://www.overleaf.com/latex/templates/stockholm-university-poster-template/xsrhnggqmcsx
+% The author, Qi Dang, based their work on that of Jiyu Chen, as mentioned above.
+% Modified by Jason Balaci
+% Last Modified: 2022-04-12
+
+\documentclass[20pt,margin=1in,innermargin=-1in,blockverticalspace=-0.1in]{tikzposter}
+\geometry{paperwidth=36in,paperheight=24in}
+
+\usepackage{xparse}
+
+\usepackage[canadian]{babel}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{blindtext}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=numeric]{biblatex}
+
+\usepackage{tikz}
+\usetikzlibrary{cd}
+\usepackage{quiver}
+\usetikzlibrary{babel} % Make sure quiver/tikz uses babel
+
+\usepackage{mwe} % for placeholder images
+
+\addbibresource{references.bib}
+
+\usepackage{McMasterTheme}
+\tikzposterlatexaffectionproofoff
+\usetheme{McMasterTheme}
+\usecolorstyle{McMasterStyle}
+\usetitlestyle{Filled}
+
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault} 
+\usepackage[T1]{fontenc}
+
+\title{Capturing Mathematical Knowledge in Drasil: the Case of Theories}
+\author{Jason Balaci (balacij), Dr. Jacques Carette (carette)}
+\institute{Department of Computing and Software, McMaster University}
+\titlegraphic{\includegraphics[width=0.16\textwidth]{assets/mcm-cas_left-wht_eps.eps}}
+\projectlogo{\includegraphics[width=0.06\textwidth]{assets/Drasil Logo White.png}}
+
+% begin document
+\begin{document}
+
+\maketitle
+
+\centering
+\begin{columns}
+    %----------------------------------
+    %- First Column
+    %----------------------------------
+    \column{0.32}
+
+    \block{What is Drasil?}{ Drasil is a framework for generating families of
+        software artifacts from a coherent knowledge base, following its mantra,
+        ``Generate All The Things!''. Drasil uses a series of variably sized
+        Domain-Specific Languages (DSLs) to describe various fragments of
+        knowledge that domain experts and users alike may use to piece together
+        fragments of knowledge into a coherent ``story''. Through forming some
+        coherent ``story'' in a domain captured by Drasil, a representational
+        software artifact may be generated. Drasil currently focuses on
+        Scientific Computing Software (SCS), following Smith and Lai's Software
+        Requirements Specifications (SRS) template as described in
+        \cite{SmithAndLai2005}. Behind the scenes of the SRS, a mathematical
+        language is used to describe various theories, and have representational
+        software constructed via compiling to Generic Object-Oriented Language
+        (GOOL) \cite{Carette2020GOOL}. Through encoding knowledge in Drasil, an
+        increase in productivity (and maintainability) in building reliable and
+        traceable software artifacts is observed \cite{SzymczakEtAl2016},
+        specifically in SCS \cite{Smith2018}. Drasil's source code (Haskell),
+        case studies, and documentation studies can be found on its website;
+        \url{https://jacquescarette.github.io/Drasil/}.}
+
+    \block{Research Motivation/Problem}{
+        \begin{itemize}
+            \item \textit{Theories} are constructed using a natural English
+                  description and a single term from a single universal
+                  mathematical expression language.
+                  \begin{itemize}
+                      \item Expressions must be precisely written in a manner
+                            ``digestible'' to the code generator so that a
+                            representational software code snippet can be
+                            constructed.
+                      \item Not all expressions have definite values and are
+                            immediately usable in all programming languages.
+                  \end{itemize}
+            \item Only a handful of the case studies generate code,
+                  because...
+                  \begin{itemize}
+                      \item Understanding of the expressions is weak and brittle
+                            as they don't expose sufficient information about
+                            the theories.
+                      \item Software artifacts are validated, we must obey rigid
+                            rules of other languages.
+                      \item Cognitive load of writing expressions in precise
+                            manners to accommodate the code generator would
+                            increase.
+                  \end{itemize}
+        \end{itemize}
+    }
+
+    %----------------------------------
+    %- Second Column
+    %----------------------------------
+    \column{0.36}
+
+    \block{Mathematical Knowledge Flow}{
+        \vspace{-1em}
+        % Originally created with https://q.uiver.app/?q=WzAsNyxbOCw0XSxbMSwwLCJUaGVvcmllcyAoUmVsYXRpb25Db25jZXB0KSJdLFswLDAsIkV4cHJlc3Npb25zIChFeHByKSJdLFsyLDAsIk1hdGhlbWF0aWNhbCBLbm93bGVkZ2UiXSxbMiwxLCJRdWFudGl0eSBEZWZpbml0aW9ucyAoUURlZm5zKSJdLFsyLDIsIkNvZGUgKEdPT0wpIl0sWzEsMSwiU2NpZW50aWZpYyBSZXF1aXJlbWVudHMgU3BlY2lmaWNhdGlvbnMgKFNSUykiXSxbMiwxXSxbMSwzXSxbMyw0XSxbNCw1XSxbMSw2XV0=
+        % But requires some post-processing
+        \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
+                {\parbox{0.2\linewidth}{\centering Expression (\textit{Expr}) \\$+$ Description}}
+                \& {\parbox{0.24\linewidth}{\centering Theory \\(\textit{RelationConcept})}}
+                \& |[draw=orange, cloud, aspect=2.8, inner sep=0pt, line width=4]| {\parbox{0.18\linewidth}{\centering Mathematical Knowledge}} \\
+
+                {\parbox{0.25\linewidth}{\centering Scientific Requirements Specifications (SRS)}}
+                \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}}
+                \& {\parbox{0.2\linewidth}{\centering Quantity Definition (\textit{QDefn})}} \\
+
+                \arrow[line width=2, color=green, from=1-1, to=1-2]
+                \arrow[line width=2, squiggly, color=red, from=1-2, to=1-3]
+                \arrow[line width=2, squiggly, color=red, from=1-3, to=2-3]
+                \arrow[line width=2, squiggly, color=red, from=2-3, to=2-2]
+                \arrow[line width=2, color=green, from=1-2, to=2-1]
+            \end{tikzcd}\]
+        \vspace{-2.5em}
+
+        \small
+        \begin{tabular}{llllll}
+            \textcolor{green}{$\rightarrow$}    & Stable transformation   &
+            \textcolor{red}{$\rightsquigarrow$} & Unstable transformation & \tikz{\node[cloud, aspect=3, draw=orange] (c) at (0,0) {};} & Partially/implicitly captured \\
+        \end{tabular}
+    }
+
+    \block{Capturing Mathematical Knowledge}{
+        \vspace{-1em}
+        % Originally created with https://q.uiver.app/?q=WzAsNixbMSwxLCJNYXRoZW1hdGljYWwgS25vd2xlZGdlIChNb2RlbEtpbmRzKSJdLFsxLDIsIkNvZGUgKEdPT0wpIl0sWzAsMCwiRXF1YXRpb25hbE1vZGVsIChRRGVmbikiXSxbMSwwLCJFcXVhdGlvbmFsUmVhbG0gKE11bHRpRGVmbikiXSxbMiwwLCJldGMuIl0sWzAsMiwiU1JTIl0sWzAsMSwiT25seSBFcXVhdGlvbmFsIl0sWzIsMF0sWzMsMF0sWzQsMF0sWzAsNV1d
+        % But requires some post-processing
+        \[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
+                {\parbox{0.25\linewidth}{\centering EquationalModel (\textit{QDefn Expr'/ModelExpr})}}
+                \& {\parbox{0.25\linewidth}{\centering EquationalRealm (\textit{MultiDefn Expr'/ModelExpr})}}
+                \& {\parbox{0.25\linewidth}{\centering etc.}} \\
+
+                {\parbox{0.1\linewidth}{\centering SRS}}
+                \& {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (\textit{ModelKinds})}}
+                \& {\parbox{0.1\linewidth}{\centering Code (GOOL)}} \\
+
+                \arrow[line width=2, squiggly, color=blue, from=2-2, to=2-3]
+                \arrow[line width=2, color=green, from=1-1, to=2-2]
+                \arrow[line width=2, color=green, from=1-2, to=2-2]
+                \arrow[line width=2, color=green, from=1-3, to=2-2]
+                \arrow[line width=2, color=green, from=2-2, to=2-1]
+            \end{tikzcd}\]
+        \vspace{-2em}
+
+        \small
+        \begin{tabular}{llll}
+            \textcolor{green}{$\rightarrow$} & Stable transformation & \textcolor{blue}{$\rightsquigarrow$} & ``Close to stable'' transformation \\
+        \end{tabular}
+    }
+
+    \block{What changed?}{
+        \vspace{-1em}
+        \begin{itemize}
+            \item More static validation! Safer generation!
+            \item Expression language division: \(\textit{Expr} \longrightarrow \textit{Expr'}\ \cup\ \textit{ModelExpr}\ \cup\ \textit{CodeExpr}\)
+                  \begin{itemize}
+                      \item \textit{Expr'}: Restricting the language to terms
+                            ``well-understood'', with a definite meaning and
+                            value.
+                      \item \textit{ModelExpr}: Restricting the language to
+                            terms with definite meanings, but not necessarily
+                            definite values.
+                      \item \textit{CodeExpr}: Restricting the language to terms
+                            that have a definite meaning and value to most
+                            general purpose programming languages, with some
+                            goodies for OOP.
+                  \end{itemize}
+            \item Created Typed Tagless Final (TTF) \cite{Carette2009}
+                  encodings; Expression creation is just as easy as it ever was!
+        \end{itemize}
+    }
+
+    %----------------------------------
+    %- Third Column
+    %----------------------------------
+    \column{0.32}
+
+    \block{}{
+        \vspace{-1.5em}
+        \begin{itemize}
+            \item Created a system of classifying \textit{theories}
+                  (\textit{ModelKinds})
+                  \begin{itemize}
+                      \item Increased the depth \& breadth of knowledge
+                            contained.
+                      \item First-class representation of theories, with their
+                            meaningful components fully exposed. No more
+                            brittle \textit{cast}-like conversion of mathematical
+                            expressions (low info. density) to
+                            well-understood pieces of knowledge (high
+                            info. density).
+                      \item Instances of theories usable in a wide variety of
+                            ways can be statically \& reliably checked for
+                            validity.
+                      \item Creating instances of theories comes with
+                            projectional editor-like ease.
+                  \end{itemize}
+            \item Improving productivity, stability, and flexibility in usage
+            \item Current theory types:
+                  \begin{itemize}
+                      \item \textit{EquationalModel}: \(x = f(a, b, c, \ldots)\)
+                      \item \textit{EquationalRealm}: \(x = a \lor x = b \lor x = c \lor \ldots\)
+                      \item \textit{EquationalConstraints}: \(a \land b \land c \land \ldots\)
+                      \item \textit{DEModel}: \(\ldots\frac{dy}{dx}\ldots\)
+                  \end{itemize}
+        \end{itemize}
+        \vspace{-0.5em}
+    }
+
+    \block{Conclusion \& Future Work}{
+        \vspace{-1.2em}
+        \begin{itemize}
+            \item Through capturing and classifying mathematical knowledge, we
+                  earn significant gains in flexibility, usability, and productivity.
+            \item \textit{In progress}: Adding extra type information to
+                  expressions, allowing us to add type information to GOOL, and
+                  further improve static validity rules of various mathematical
+                  constructions.
+            \item Teaching more theories to Drasil!
+        \end{itemize}
+    }
+
+    \block{References}{
+        \vspace{-1em}
+        \renewcommand*{\bibfont}{\footnotesize}
+        \printbibliography[heading=none]
+    }
+
+\end{columns}
+
+\end{document}

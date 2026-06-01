@@ -1,0 +1,19 @@
+% Based on https://tikz.dev/gd
+\begin{figure}[H]
+	\centering
+	\caption{Rough Sketch of Network of
+	Domains Relevant to the \textit{Smith et al.} \acs{scs} Generator}
+	\label{fig:roughNetworkOfDomainsIntro}
+
+	\tikz [nodes={text height=.7em, text depth=.2em,
+	              draw=black!20, thick, fill=white, font=\footnotesize},
+	       >={Stealth[round,sep]}, rounded corners, semithick]
+	  \graph [layered layout, level distance=1cm, sibling sep=.5em, sibling distance=1cm] {
+		"Scientific Knowledge" -> "Coherent SRS Abstraction" -> { "Generic Document Language", "Generic Object-Oriented Language" };
+		"Generic Document Language" -> { "HTML", "\LaTeX{}" };
+		"Generic Object-Oriented Language" -> { "Python", "Java", "Swift", "C\#", "C$++$" };
+	  };
+
+\end{figure}
+
+

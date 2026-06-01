@@ -1,4 +1,6 @@
-module Drasil.GamePhysics.Assumptions where
+module Drasil.GamePhysics.Assumptions (
+  assumptions, assumpCT, assumpDI, assumpCAJI, assumpOT, assumpOD, assumpAD
+) where
 
 import Language.Drasil hiding (organization)
 
@@ -23,26 +25,26 @@ assumpCT = cic "assumpCT" (foldlSent assumpCTDesc) "collisionType" assumpDom
 assumpDI = cic "assumpDI" (foldlSent assumpDIDesc) "dampingInvolvement" assumpDom
 assumpCAJI = cic "assumpCAJI" (foldlSent assumpCAJIDesc) "constraintsAndJointsInvolvement" assumpDom
 
-assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc, 
+assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc,
   assumpDIDesc, assumpCAJIDesc :: [Sentence]
 
 allObject :: Sentence -> [Sentence]
 allObject thing = [S "All objects are", thing]
 
 thereNo :: [Sentence] -> [Sentence]
-thereNo [x]      = [S "There is no", x, S "involved throughout the", 
+thereNo [x]      = [S "There is no", x, S "involved throughout the",
   phrase simulation]
-thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the", 
+thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the",
   phrase simulation]
 
 implies :: Sentence -> [Sentence]
-implies f = [S "and this implies that there are no", f] 
+implies f = [S "and this implies that there are no", f]
 --not sure if defining a new function is the best way to do this,
 -- as was done in the original file,but it displays correctly
 --(line 52 was added for assumption6)
 
 assumpOTDesc = allObject (plural CP.rigidBody)
-assumpODDesc = allObject (getAcc twoD)
+assumpODDesc = allObject (short twoD)
 assumpCSTDesc = [S "The library uses a", phrase CM.cartesian]
 assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
 assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
@@ -51,10 +53,6 @@ assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
 assumpDIDesc = thereNo [phrase CP.damping] ++ implies (phrase CP.friction +:+ plural CP.force)
 assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 
-{-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
-  [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc, 
+{-assumptions_list = enumSimple 1 (short assumption) $ map (foldlSent)
+  [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc,
   assumpDIDesc, assumpCAJIDesc]-}
-
-assumptionsListA :: [[Sentence]]
-assumptionsListA = [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc,
-  assumpCTDesc, assumpDIDesc, assumpCAJIDesc]

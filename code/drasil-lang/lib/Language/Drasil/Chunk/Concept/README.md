@@ -4,7 +4,7 @@ Last updated: August 13, 2021
 ----------------------------------------------------------
 
 Core.hs
-  - `ConceptChunk`, `CommonConcept`, and `ConceptInstance` data types
+  - `ConceptChunk` and `ConceptInstance` data types
 
 README.md
   - This file

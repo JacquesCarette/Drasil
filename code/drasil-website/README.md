@@ -18,3 +18,6 @@ The layout of this folder is similar to that of the drasil-example folder. Howev
 
 **WebInfo**
 - Contains the images, `css` file, and example descriptions used in the Drasil website. However, both the `css` and `descriptions` folders are currently unused and are leftover from the previous generation of the website. Instead, the Drasil generators create the required `css` files and the descriptions of each example can be found in `lib/Drasil/Website/Example.hs`.
+
+README.md
+  - This file

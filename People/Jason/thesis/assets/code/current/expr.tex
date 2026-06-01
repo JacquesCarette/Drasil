@@ -1,0 +1,54 @@
+\begin{haskell}{Expression Language}{curExpr}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-lang/lib/Language/Drasil/Expr/Lang.hs\#L81-L135}
+-- | Expression language where all terms are supposed to be 'well understood'
+--   (i.e., have a definite meaning). Right now, this coincides with
+--   "having a definite value", but should not be restricted to that.
+data Expr where
+  -- | Brings a literal into the expression language.
+  Lit :: Literal -> Expr
+  -- | Takes an associative arithmetic operator with a list of expressions.
+  AssocA   :: AssocArithOper -> [Expr] -> Expr
+  -- | Takes an associative boolean operator with a list of expressions.
+  AssocB   :: AssocBoolOper  -> [Expr] -> Expr
+  -- | C stands for "Chunk", for referring to a chunk in an expression.
+  --   Implicitly assumes that the chunk has a symbol.
+  C        :: UID -> Expr
+  -- | A function call accepts a list of parameters and a list of named parameters.
+  --   For example
+  --
+  --   * F(x) is (FCall F [x] []).
+  --   * F(x,y) would be (FCall F [x,y]).
+  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
+  FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+  -- | For multi-case expressions, each pair represents one case.
+  Case     :: Completeness -> [(Expr, Relation)] -> Expr
+  -- | Represents a matrix of expressions.
+  Matrix   :: [[Expr]] -> Expr
+  -- | Unary operation for most functions (eg. sin, cos, log, etc.).
+  UnaryOp       :: UFunc -> Expr -> Expr
+  -- | Unary operation for @Bool -> Bool@ operations.
+  UnaryOpB      :: UFuncB -> Expr -> Expr
+  -- | Unary operation for @Vector -> Vector@ operations.
+  UnaryOpVV     :: UFuncVV -> Expr -> Expr
+  -- | Unary operation for @Vector -> Number@ operations.
+  UnaryOpVN     :: UFuncVN -> Expr -> Expr
+  -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
+  ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for boolean operators (implies, iff).
+  BoolBinaryOp  :: BoolBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for equality between expressions.
+  EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for indexing two expressions.
+  LABinaryOp    :: LABinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for ordering expressions (less than, greater than, etc.).
+  OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
+  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
+  VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
+  -- | Operators are generalized arithmetic operators over a 'DomainDesc'
+  --   of an 'Expr'.  Could be called BigOp.
+  --   ex: Summation is represented via 'Add' over a discrete domain.
+  Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
+  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
+  RealI    :: UID -> RealInterval Expr Expr -> Expr
+\end{haskell}

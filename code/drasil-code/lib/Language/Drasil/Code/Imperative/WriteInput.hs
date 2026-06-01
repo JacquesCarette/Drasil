@@ -1,52 +1,52 @@
 module Language.Drasil.Code.Imperative.WriteInput (
   makeInputFile
-) where 
-  
-import Utils.Drasil (blank)
-import Database.Drasil (ChunkDB)
-import Language.Drasil hiding (space)
-import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim, 
-  LinePattern(..), getDataInputs, isJunk)
-import Language.Drasil.Expr.Development (Expr(Matrix))
-import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc, 
-  unitDoc)
+) where
 
-import Control.Lens (view)
 import Data.List (intersperse, transpose)
-import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space, 
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
   text, vcat)
 
+import Drasil.Build.Artifacts.Legacy (blank)
+import Language.Drasil hiding (space, Matrix)
+import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
+  unitDoc, PrintingInformation)
+import Language.Drasil.Printing.Import (expr, spec)
+
+import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
+  LinePattern(..), getDataInputs, isJunk)
+
 -- | Generate a sample input file.
-makeInputFile :: ChunkDB -> DataDesc -> [Expr] -> Doc
+makeInputFile :: PrintingInformation -> DataDesc -> [Expr] -> Doc
 makeInputFile db dd sampData = vcat (convDataDesc db dd sampData)
 
--- | Writes a data file formatted according to the given 'DataDesc', where the data 
--- values come from the passed \['Expr'\]. 
-convDataDesc :: ChunkDB -> DataDesc -> [Expr] -> [Doc]
-convDataDesc _ [] (_:_) = error $ "makeInputFile received more inputs" ++ 
+-- | Writes a data file formatted according to the given 'DataDesc', where the data
+-- values come from the passed \['Expr'\].
+convDataDesc :: PrintingInformation -> DataDesc -> [Expr] -> [Doc]
+convDataDesc _ [] (_:_) = error $ "makeInputFile received more inputs" ++
           " than expected, should be impossible"
-convDataDesc _ ds [] = if all isJunk ds then replicate (length ds) blank 
+convDataDesc _ ds [] = if all isJunk ds then replicate (length ds) blank
   else error "makeInputFile received fewer inputs than expected, should be impossible"
 convDataDesc db (JunkData : ds@(Singleton _ : _)) es = docLine db ds ' ' es
 convDataDesc db (JunkData : ds@(Line _ dl : _)) es = docLine db ds dl es
 convDataDesc db (JunkData : ds@(Lines _ _ dl : _)) es = docLine db ds dl es
 convDataDesc db (Singleton _ : ds) (e:es) = eDoc db e : convDataDesc db ds es
-convDataDesc db (Line (Straight dis) dl : ds) es = let 
-  (l,ls) = splitAt (length dis) es 
+convDataDesc db (Line (Straight dis) dl : ds) es = let
+  (l,ls) = splitAt (length dis) es
   in dataLine db dl l : convDataDesc db ds ls
-convDataDesc db (Line (Repeat dis) dl : ds) es = let 
-  (l,ls) = splitAt (length dis) es 
+convDataDesc db (Line (Repeat dis) dl : ds) es = let
+  (l,ls) = splitAt (length dis) es
   in dataLine db dl (concat $ orderVecs l)
   : convDataDesc db ds ls
-convDataDesc db (Lines (Straight _) Nothing dl : _) es = map (dataLine db dl) 
+convDataDesc db (Lines (Straight _) Nothing dl : _) es = map (dataLine db dl)
   (orderVecs es)
 convDataDesc db (Lines (Straight dis) (Just n) dl : ds) es = let
-  (l,ls) = splitAt (length dis) es 
+  (l,ls) = splitAt (length dis) es
   vs = orderVecs l
   in if toInteger (length vs) == n then map (dataLine db dl) vs
   ++ convDataDesc db ds ls
   else error "makeInputFile encountered wrong-sized vectors"
-convDataDesc db (Lines (Repeat _) Nothing dl : _) es = map 
+convDataDesc db (Lines (Repeat _) Nothing dl : _) es = map
   (dataLine db dl . concat . transpose) (orderMtxs es)
 convDataDesc db (Lines (Repeat dis) (Just n) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
@@ -57,18 +57,18 @@ convDataDesc db (Lines (Repeat dis) (Just n) dl : ds) es = let
   else error "makeInputFile encountered wrong-sized matrices"
 convDataDesc db (JunkData : ds) es = blank : convDataDesc db ds es
 
--- helpers 
+-- helpers
 
 -- | Helper to create a data line with the given delimeter.
-dataLine :: ChunkDB -> Delim -> [Expr] -> Doc
+dataLine :: PrintingInformation -> Delim -> [Expr] -> Doc
 dataLine db dl = hcat . intersperse (char dl) . map (eDoc db)
 
 -- | Helper to create document lines with a data description, delimiter, and expressions.
-docLine :: ChunkDB -> DataDesc -> Delim -> [Expr] -> [Doc]
-docLine db ds dl es = let dis = getDataInputs (head ds) 
-  in text "#" <+> hcat (intersperse (char dl <> space) 
-  (map (\di -> (sDoc db . phraseNP . view term) di <+> 
-  maybe empty (parens . uDoc . usymb) (getUnit di)) dis)) 
+docLine :: PrintingInformation -> DataDesc -> Delim -> [Expr] -> [Doc]
+docLine db ds dl es = let dis = getDataInputs (head ds)
+  in text "#" <+> hcat (intersperse (char dl <> space)
+  (map (\di -> (sDoc db . phrase) di <+>
+  maybe empty (parens . uDoc . usymb) (getUnit di)) dis))
   : convDataDesc db ds es
 
 -- | Order vectors.
@@ -89,14 +89,14 @@ getMtxLists :: Expr -> [[Expr]]
 getMtxLists (Matrix l) = l
 getMtxLists _ = error "makeInputFile encountered unexpected type, expected matrix"
 
--- | Creates a 'Linear' 'Implementation'-stage 'sentenceDoc'.
-sDoc :: ChunkDB -> Sentence -> Doc
-sDoc db = sentenceDoc db Implementation Linear
+-- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
+sDoc :: PrintingInformation -> Sentence -> Doc
+sDoc pinfo = sentenceDoc OneLine . spec pinfo
 
--- | Creates a 'Linear' 'Implementation'-stage 'exprDoc'.
-eDoc :: ChunkDB -> Expr -> Doc
-eDoc db = exprDoc db Implementation Linear
+-- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
+eDoc :: PrintingInformation -> Expr -> Doc
+eDoc pinfo e = exprDoc OneLine (expr e pinfo)
 
--- | Creates a 'Linear' 'unitDoc'.
+-- | Creates a 'OneLine' 'unitDoc'.
 uDoc :: USymb -> Doc
-uDoc = unitDoc Linear
+uDoc = unitDoc OneLine

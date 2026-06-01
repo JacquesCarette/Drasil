@@ -1,15 +1,26 @@
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Printing helpers.
-module Language.Drasil.Printing.Import.Helpers where
-
-import Language.Drasil (Stage(..), codeSymb, eqSymb, Idea(..),
-  NamedIdea(..), NounPhrase(..), Sentence(S), Symbol, UID,
-  TermCapitalization(..), titleizeNP, titleizeNP', atStartNP, atStartNP', NP)
-import Database.Drasil (ChunkDB, symbResolve, termResolve)
-
-import qualified Language.Drasil.Printing.AST as P
+module Language.Drasil.Printing.Import.Helpers (
+  -- * Expression-related
+  parens, digitsProcess, processExpo,
+  -- * Symbol and Term Resolution
+  lookupC, lookupC', lookupSymb, lookupT, lookupS, lookupP,
+  -- * Capitalization
+  resolveCapT, resolveCapP, capHelper
+) where
 
 import Control.Lens ((^.))
 import Data.Char (toUpper)
+
+import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw)
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
+import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
+  Symbol, TermCapitalization(..), titleizeNP, titleizeNP', HasSymbol,
+  atStartNP, atStartNP', NP, DefinedQuantityDict)
+import Language.Drasil.Development (toSent)
+
+import qualified Language.Drasil.Printing.AST as P
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, sysdb)
 
 -- * Expr-related
 
@@ -38,50 +49,63 @@ digitsProcess [] pos coun ex
 -- References for standard of Engineering Notation:
 --
 -- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
---    intro-to-ee/a/ee-numbers-in-electrical-engineering 
+--    intro-to-ee/a/ee-numbers-in-electrical-engineering
 --
 -- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
 --
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
-processExpo a
-  | mod (a-1) 3 == 0 = (1, a-1)
-  | mod (a-1) 3 == 1 = (2, a-2)
-  | mod (a-1) 3 == 2 = (3, a-3)
-  | otherwise = error "The cases of processExpo should be exhaustive!"
+processExpo a = (r, a - r)
+  where r = 1 + mod (a -1) 3
 
 -- * Lookup/Term Resolution Functions
 
 -- | Given the stage of the symbol, looks up a character/symbol
--- inside a chunk database that matches the given 'UID'. 
+-- inside a chunk database that matches the given 'UID'.
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
-lookupC Equational     sm c = eqSymb   $ symbResolve sm c
-lookupC Implementation sm c = codeSymb $ symbResolve sm c
+lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
+lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
+
+lookupC' :: PrintingInformation -> UID -> Symbol
+lookupC' pinfo = lookupC (pinfo ^. stg) (pinfo ^. sysdb)
+
+-- | Look up a symbol given a chunk database and a 'UID' associated with the
+-- symbol. Hack: Always uses 'DefinedQuantityDict' as the chunk type to look up,
+-- despite that not being the _actual type_ of the chunk being looked up.
+--
+-- Note: It is because of this function that that the
+-- `-Wno-redundant-constraints` OPTIONS_GHC pragma is at the top of the file.
+-- This is because we technically don't use `t` at all in the output expression.
+-- It can technically be anything!
+lookupSymb :: (IsChunk t, HasSymbol t) => PrintingInformation -> UIDRef t -> Symbol
+lookupSymb pinfo u = sytyF (pinfo ^. stg) (findOrErr (raw u) (pinfo ^. sysdb) :: DefinedQuantityDict)
+  where sytyF Equational = eqSymb
+        sytyF Implementation = codeSymb
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
-lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ termResolve sm c ^. term
+lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. sysdb) c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
-lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= capHelper sCap
-  where l = termResolve sm c
+lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
+  where l = termResolve' (sm ^. sysdb) c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
-lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ termResolve sm c ^. term
+lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. sysdb) c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)
-resolveCapT NoCap = phraseNP
-resolveCapT CapF = atStartNP
-resolveCapT CapW = titleizeNP
+resolveCapT NoCap = toSent . phraseNP
+resolveCapT CapF = toSent . atStartNP
+resolveCapT CapW = toSent . titleizeNP
 
 -- | Helper to get the right function for capitalizing a 'NP' based on its 'TermCapitalization'. Plural case.
 resolveCapP :: TermCapitalization -> (NP -> Sentence)
-resolveCapP NoCap = pluralNP
-resolveCapP CapF = atStartNP'
-resolveCapP CapW = titleizeNP'
+resolveCapP NoCap = toSent . pluralNP
+resolveCapP CapF = toSent . atStartNP'
+resolveCapP CapW = toSent . titleizeNP'
 
 -- | Helper to get the capital case of an abbreviation based on 'TermCapitalization'. For sentence and title cases.
 capHelper :: TermCapitalization -> String -> Maybe String

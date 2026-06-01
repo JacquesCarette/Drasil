@@ -1,12 +1,14 @@
 -- | Defines functions to create accompanying .css files for HTML generators.
-module Language.Drasil.HTML.CSS where
+module Language.Drasil.HTML.CSS (
+  makeCSS, linkCSS
+) where
 
 import Text.PrettyPrint (Doc, text, vcat)
 
-import Language.Drasil hiding (Expr)
+import Language.Drasil (Document)
 
 -- | Generates the CSS selectors necessary for a document.
-makeCSS :: Document -> Doc  
+makeCSS :: Document -> Doc
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
   text "body {min-width: 400px; max-width: 1400px;}",
@@ -66,9 +68,8 @@ makeCSS _ = vcat [
     text "  margin-left: auto;",
     text "  margin-right: auto;}"],
   text "th, td {border: 1px solid black; padding: 0.5em;}",
-  text ".tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
-  text ".tdefn th {width: 15%;}",
-  text ".ddefn th {width: 15%;}",
+  text ".defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
+  text ".defn-table th {width: 15%;}",
   text ".section {width: 80%; margin: 0 auto; text-align: left;}",
   vcat [
     text ".code {",
@@ -124,10 +125,21 @@ makeCSS _ = vcat [
     text "ul.hide-list-style-no-indent {",
     text "  list-style-type: none;",
     text "padding: 0;}"
-    ] 
+    ],
+  vcat [
+    text "dl.reference-list {",
+    text "  display: grid;",
+    text "  grid-template-columns: auto 1fr;",
+    text "  gap: 20px;",
+    text "  align-items: start;}"
+    ],
+  vcat [
+    text "dd {",
+    text "  margin: 0;}"
+    ]
   ]
 
 -- | Create the link to the necessary CSS file.
-linkCSS :: String -> Doc  
-linkCSS fn = 
+linkCSS :: String -> Doc
+linkCSS fn =
   text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"

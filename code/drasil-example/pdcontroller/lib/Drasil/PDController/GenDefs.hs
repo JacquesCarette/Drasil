@@ -1,18 +1,24 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.PDController.GenDefs where
+module Drasil.PDController.GenDefs (
+  genDefns, gdPowerPlant
+) where
 
+import Language.Drasil
+import qualified Language.Drasil.Development as D
+import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Sentence.Combinators as S
+
+import Data.Drasil.Citations ( pidWiki )
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Math (equation)
+
+import Theory.Drasil (GenDefn, gd, othModel', RelationConcept, makeRC)
+
+import Drasil.PDController.Unitals
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-import Language.Drasil
-import Theory.Drasil (GenDefn, gd, othModel')
-import Language.Drasil.Chunk.Concept.NamedCombinators
-import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Citations ( pidWiki )
-import Drasil.PDController.Unitals
 
 genDefns :: [GenDefn]
 genDefns = [gdPowerPlant]
@@ -35,20 +41,20 @@ gdPowerPlantRC
 
 gdPowerPlantEqn :: Expr
 gdPowerPlantEqn
-  = recip_ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` exactDbl 20)
+  = recip_ (square (sy dqdFreqDomain) $+ sy dqdFreqDomain $+ exactDbl 20)
 
 gdPowerPlantNote :: Sentence
 gdPowerPlantNote
   = foldlSent
-      [atStartNP (ccTransferFxn `the_ofThe` secondOrderSystem),
+      [D.toSent (atStartNP (ccTransferFxn `the_ofThe` secondOrderSystem)),
          fromSource tmSOSystem,
          S "is reduced to this equation by substituting the",
          phrase mass, S "(m) to 1 Kg", fromSource aMass `sC`
-         phraseNP (the ccDampingCoeff), sParen (P symDampingCoeff),
+         D.toSent (phraseNP (the ccDampingCoeff)), sParen (P symDampingCoeff),
          S "to 1", fromSource aDampingCoeff `sC` EmptyS
          `S.andThe` phrase ccStiffCoeff, sParen (P symStifnessCoeff),
          S "to 20" +:+. fromSource aStiffnessCoeff,
-       atStartNP (the equation), S "is converted to the", phrase ccFrequencyDomain,
+       D.toSent (atStartNP (the equation)) `S.is` S "converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
-       S "Additionally, there are no external disturbances to the power plant",
+       S "Additionally, there" `S.are` S "no external disturbances" `S.toThe` S "power plant",
          fromSource aExtDisturb]

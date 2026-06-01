@@ -1,26 +1,27 @@
+{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Class (
   ExprC(..),
   frac, recip_,
   square, half,
   oneHalf, oneThird,
-  apply1, apply2
+  apply1, apply2,
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  PExpr
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
-
 import Control.Lens ((^.))
+
+import Drasil.Database (HasUID(..))
+import Utils.Drasil (toColumn)
 
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
-import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
-import Language.Drasil.Classes (IsArgumentName)
+import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import Language.Drasil.Literal.Class (LiteralC(..))
-import Language.Drasil.UID (HasUID(..))
-
--- TODO: figure out which ones can be moved outside of the ExprC class
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
@@ -51,9 +52,40 @@ apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
 apply1 f a = apply f [sy a]
 
 -- | Similar to 'apply', but the applied function takes two parameters (which are both 'Symbol's).
-apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
+apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b)
     => f -> a -> b -> r
 apply2 f a b = apply f [sy a, sy b]
+
+-- | Create a two-by-two matrix from four given values. For example:
+--
+-- >>> m2x2 1 2 3 4
+-- [ [1,2],
+--   [3,4] ]
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+m2x2 a b c d = matrix [[a,b],[c,d]]
+
+mkSet :: ExprC r => Space -> [r] -> r
+mkSet = set'
+
+-- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+vec2D a b = matrix [[a],[b]]
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--
+-- >>> dgnl2x2 1 2
+-- [ [1, 0],
+--   [0, 2] ]
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+dgnl2x2 a = m2x2 a (int 0) (int 0)
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+rowVec a = matrix [a]
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+columnVec a = matrix $ toColumn a
 
 class ExprC r where
   infixr 8 $^
@@ -61,164 +93,136 @@ class ExprC r where
   infixr 4 $=
   infixr 9 $&&
   infixr 9 $||
-  
   lit :: Literal -> r
 
   -- * Binary Operators
-  
+
   ($=), ($!=) :: r -> r -> r
-  
+
   -- | Smart constructor for ordering two equations.
   ($<), ($>), ($<=), ($>=) :: r -> r -> r
-  
+
   -- | Smart constructor for the dot product of two equations.
   ($.) :: r -> r -> r
-  
-  -- | Add two expressions (Integers).
-  addI :: r -> r -> r
-  
-  -- | Add two expressions (Real numbers).
-  addRe :: r -> r -> r
-  
-  -- | Multiply two expressions (Integers).
-  mulI :: r -> r -> r
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe :: r -> r -> r
-  
+
+  -- | Add two expressions.
+  ($+) :: r -> r -> r
+
+  -- | Multiply two expressions.
+  ($*) :: r -> r -> r
+
   ($-), ($/), ($^) :: r -> r -> r
-  
-  ($=>), ($<=>) :: r -> r -> r
-  
+
   ($&&), ($||) :: r -> r -> r
-  
+
+  -- | Smart constructor for set-theoretic membership relation. Added ' to avoid conflict.
+  in' :: r -> r -> r
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ :: r -> r
-  
+
   -- | Smart constructor for negating an expression.
-  neg :: r -> r 
-  
+  neg :: r -> r
+
   -- | Smart constructor to take the log of an expression.
   log :: r -> r
-  
+
   -- | Smart constructor to take the ln of an expression.
   ln :: r -> r
-  
+
   -- | Smart constructor to take the square root of an expression.
   sqrt :: r -> r
-  
+
   -- | Smart constructor to apply sin to an expression.
   sin :: r -> r
-  
+
   -- | Smart constructor to apply cos to an expression.
-  cos :: r -> r 
-  
+  cos :: r -> r
+
   -- | Smart constructor to apply tan to an expression.
   tan :: r -> r
-  
+
   -- | Smart constructor to apply sec to an expression.
-  sec :: r -> r 
-  
+  sec :: r -> r
+
   -- | Smart constructor to apply csc to an expression.
   csc :: r -> r
-  
+
   -- | Smart constructor to apply cot to an expression.
-  cot :: r -> r 
-  
+  cot :: r -> r
+
   -- | Smart constructor to apply arcsin to an expression.
-  arcsin :: r -> r 
-  
+  arcsin :: r -> r
+
   -- | Smart constructor to apply arccos to an expression.
-  arccos :: r -> r 
-  
+  arccos :: r -> r
+
   -- | Smart constructor to apply arctan to an expression.
-  arctan :: r -> r 
-  
+  arctan :: r -> r
+
   -- | Smart constructor for the exponential (base e) function.
   exp :: r -> r
-  
+
   -- | Smart constructor for calculating the dimension of a vector.
   dim :: r -> r
-  
+
   -- | Smart constructor for calculating the normal form of a vector.
   norm :: r -> r
-  
+
   -- | Smart constructor for negating vectors.
   negVec :: r -> r
-  
+
   -- | Smart constructor for applying logical negation to an expression.
   not_ :: r -> r
-  
+
   -- | Smart constructor for indexing.
   idx :: r -> r -> r
-  
+
+  -- | Smart constructor for indexOf. Finds the index of the first occurrence of a value in a list.
+  idxOf :: r -> r -> r
+
   -- | Smart constructor for the summation, product, and integral functions over an interval.
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
-  
+
   -- | Smart constructor for 'real interval' membership.
   realInterval :: HasUID c => c -> RealInterval r r -> r
-  
+
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
-  
--- TODO:  sum' :: (Num a, Foldable t) => t a -> a
--- TODO:  sum' = foldr1 (+)
-    
+
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
-  
+
+  -- | Smart constructor for vector scaling
+  vScale :: r -> r -> r
+
+  -- | Vector Addition
+  vAdd :: r -> r -> r
+
+  -- | Vector Subtraction
+  vSub :: r -> r -> r
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
-  
+
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase :: [(r, r)] -> r
-  
+
   -- | Create a matrix.
-  -- TODO: Re-work later.
   matrix :: [[r]] -> r
 
-  -- TODO: The 3 below smart constructors can be re-built above without needing to be inside of this typeclass definition.
+  -- | Create a Set.
+  set' :: Space -> [r] -> r
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 :: r -> r -> r -> r -> r
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D :: r -> r -> r
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 :: r -> r -> r
-  
-  -- | Create a row vector
-  rowVec :: [r] -> r
-
-  -- | Create a column vector
-  columnVec :: [r] -> r
-
-  -- | Change row vector to column vector
-  toColumn ::  [r] -> [[r]]
-
-  -- Some helper functions to do function application
-  
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
-    -> [r] -> [(a, r)] -> r
-  
+
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
+
+-- Useful synonym
+type PExpr = forall r . (ExprC r, LiteralC r) => r
 
 instance ExprC Expr where
   lit = Lit
@@ -227,7 +231,7 @@ instance ExprC Expr where
   ($=)  = EqBinaryOp Eq
   -- | Smart constructor for showing that two expressions are not equal.
   ($!=) = EqBinaryOp NEq
-  
+
   -- | Smart constructor for ordering two equations.
   -- | Less than.
   ($<)  = OrdBinaryOp Lt
@@ -237,342 +241,295 @@ instance ExprC Expr where
   ($<=) = OrdBinaryOp LEq
   -- | Greater than or equal to.
   ($>=) = OrdBinaryOp GEq
-  
+
   -- | Smart constructor for the dot product of two equations.
   ($.) = VVNBinaryOp Dot
-  
-  -- | Add two expressions (Integers).
-  addI l (Lit (Int 0)) = l
-  addI (Lit (Int 0)) r = r
-  addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
-  addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
-  addI l (AssocA AddI r) = AssocA AddI (l : r)
-  addI l r = AssocA AddI [l, r]
-  
-  -- | Add two expressions (Real numbers).
-  addRe l (Lit (Dbl 0))= l
-  addRe (Lit(Dbl 0)) r      = r
-  addRe l (Lit (ExactDbl 0)) = l
-  addRe (Lit (ExactDbl 0)) r = r
-  addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
-  addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
-  addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
-  addRe l r = AssocA AddRe [l, r]
-  
-  -- | Multiply two expressions (Integers).
-  mulI l (Lit (Int 1)) = l
-  mulI (Lit (Int 1)) r = r
-  mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
-  mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
-  mulI l (AssocA MulI r) = AssocA MulI (l : r)
-  mulI l r = AssocA MulI [l, r]
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (Lit (Dbl 1))      = l
-  mulRe (Lit (Dbl 1)) r      = r
-  mulRe l (Lit (ExactDbl 1)) = l
-  mulRe (Lit (ExactDbl 1)) r = r
-  mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
-  mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
-  mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
-  mulRe l r = AssocA MulRe [l, r]
-  
+
+  -- | Add two expressions.
+  ($+) (Lit (Int 0)) r = r
+  ($+) l (Lit (Int 0)) = l
+  ($+) (Lit (Dbl 0)) r = r
+  ($+) l (Lit (Dbl 0)) = l
+  ($+) l (Lit (ExactDbl 0)) = l
+  ($+) (Lit (ExactDbl 0)) r = r
+  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l ++ r)
+  ($+) (AssocA Add l) r = AssocA Add (l ++ [r])
+  ($+) l (AssocA Add r) = AssocA Add (l : r)
+  ($+) l r = AssocA Add [l, r]
+
+  -- | Multiply two expressions.
+  ($*) (Lit (Int 1)) r = r
+  ($*) l (Lit (Int 1)) = l
+  ($*) (Lit (Dbl 1.0)) r = r
+  ($*) l (Lit (Dbl 1.0)) = l
+  ($*) l (Lit (ExactDbl 1)) = l
+  ($*) (Lit (ExactDbl 1)) r = r
+  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
+  ($*) (AssocA Mul l) r = AssocA Mul (l ++ [r])
+  ($*) l (AssocA Mul r) = AssocA Mul (l : r)
+  ($*) l r = AssocA Mul [l, r]
+
   -- | Smart constructor for subtracting two expressions.
   ($-) = ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
   ($/) = ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
   ($^) = ArithBinaryOp Pow
-  
-  -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>)  = BoolBinaryOp Impl
-  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = BoolBinaryOp Iff
-  
+
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = AssocB And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = AssocB Or  [a, b]
-  
+
+  in' = ESBBinaryOp SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = UnaryOp Abs
-  
+
   -- | Smart constructor for negating an expression.
   neg = UnaryOp Neg
-  
+
   -- | Smart constructor to take the log of an expression.
   log = UnaryOp Log
-  
+
   -- | Smart constructor to take the ln of an expression.
   ln = UnaryOp Ln
-  
+
   -- | Smart constructor to take the square root of an expression.
   sqrt = UnaryOp Sqrt
-  
+
   -- | Smart constructor to apply sin to an expression.
   sin = UnaryOp Sin
-  
+
   -- | Smart constructor to apply cos to an expression.
   cos = UnaryOp Cos
-  
+
   -- | Smart constructor to apply tan to an expression.
   tan = UnaryOp Tan
-  
+
   -- | Smart constructor to apply sec to an expression.
   sec = UnaryOp Sec
-  
+
   -- | Smart constructor to apply csc to an expression.
   csc = UnaryOp Csc
-  
+
   -- | Smart constructor to apply cot to an expression.
   cot = UnaryOp Cot
-  
+
   -- | Smart constructor to apply arcsin to an expression.
   arcsin = UnaryOp Arcsin
-  
+
   -- | Smart constructor to apply arccos to an expression.
   arccos = UnaryOp Arccos
-  
+
   -- | Smart constructor to apply arctan to an expression.
   arctan = UnaryOp Arctan
-  
+
   -- | Smart constructor for the exponential (base e) function.
   exp = UnaryOp Exp
-  
+
   -- | Smart constructor for calculating the dimension of a vector.
   dim = UnaryOpVN Dim
-  
+
   -- | Smart constructor for calculating the normal form of a vector.
   norm = UnaryOpVN Norm
-  
+
   -- | Smart constructor for negating vectors.
   negVec = UnaryOpVV NegV
-  
+  -- | And more general scaling
+  vScale = NVVBinaryOp Scale
+
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
-  
+
   -- | Smart constructor for indexing.
   idx = LABinaryOp Index
-  
+
+  idxOf = LABinaryOp IndexOf
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = Operator AddRe (BoundedDD v Continuous low high)
-  
+  defint v low high = Operator Add (BoundedDD v Continuous low high)
+
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
-  
+  defsum v low high = Operator Add (BoundedDD v Discrete low high)
+
   -- | Product over some expression with bounds (∏).
-  defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
-  
+  defprod v low high = Operator Mul (BoundedDD v Discrete low high)
+
   -- | Smart constructor for 'real interval' membership.
   realInterval c = RealI (c ^. uid)
-  
+
+  -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
-  
+  euclidean = sqrt . foldr1 ($+) . map square
+
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
-  
+  -- | Adding vectors
+  vAdd  = VVVBinaryOp VAdd
+  -- | Subtracting vectors
+  vSub  = VVVBinaryOp VSub
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
-  
+
   -- | Smart constructor for case statements with an incomplete set of cases.
   incompleteCase = Case Incomplete
-  
+
   matrix = Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-  
-  -- | Create a row vector
-  rowVec a = matrix [a]
-
-  -- | Create a column vector
-  columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
-
-  -- Some helper functions to do function application
-  
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
+  set' = Set
   -- | Applies a given function with a list of parameters.
-  apply f ps = FCall (f ^. uid) ps []
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
-  
-  -- Note how |sy| 'enforces' having a symbol
+  apply f [] = sy f
+  apply f ps = FCall (f ^. uid) ps
+
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
-  
+
 instance ExprC M.ModelExpr where
   lit = M.Lit
 
   -- | Smart constructor for equating two expressions.
-  ($=)  = M.EqBinaryOp M.Eq
+  ($=)  = M.EqBinaryOp Eq
   -- | Smart constructor for showing that two expressions are not equal.
-  ($!=) = M.EqBinaryOp M.NEq
+  ($!=) = M.EqBinaryOp NEq
 
   -- | Smart constructor for ordering two equations.
   -- | Less than.
-  ($<)  = M.OrdBinaryOp M.Lt
+  ($<)  = M.OrdBinaryOp Lt
   -- | Greater than.
-  ($>)  = M.OrdBinaryOp M.Gt
+  ($>)  = M.OrdBinaryOp Gt
   -- | Less than or equal to.
-  ($<=) = M.OrdBinaryOp M.LEq
+  ($<=) = M.OrdBinaryOp LEq
   -- | Greater than or equal to.
-  ($>=) = M.OrdBinaryOp M.GEq
+  ($>=) = M.OrdBinaryOp GEq
 
   -- | Smart constructor for the dot product of two equations.
-  ($.) = M.VVNBinaryOp M.Dot
+  ($.) = M.VVNBinaryOp Dot
 
-  -- | Add two expressions (Integers).
-  addI l (M.Lit (Int 0)) = l
-  addI (M.Lit (Int 0)) r = r
-  addI (M.AssocA M.AddI l) (M.AssocA M.AddI r) = M.AssocA M.AddI (l ++ r)
-  addI (M.AssocA M.AddI l) r = M.AssocA M.AddI (l ++ [r])
-  addI l (M.AssocA M.AddI r) = M.AssocA M.AddI (l : r)
-  addI l r = M.AssocA M.AddI [l, r]
+  -- | Add two expressions.
+  ($+) (M.Lit (Int 0)) r = r
+  ($+) l (M.Lit (Int 0)) = l
+  ($+) (M.Lit (Dbl 0)) r = r
+  ($+) l (M.Lit (Dbl 0)) = l
+  ($+) l (M.Lit (ExactDbl 0)) = l
+  ($+) (M.Lit (ExactDbl 0)) r = r
+  ($+) (M.AssocA Add l) (M.AssocA Add r) = M.AssocA Add (l ++ r)
+  ($+) (M.AssocA Add l) r = M.AssocA Add (l ++ [r])
+  ($+) l (M.AssocA Add r) = M.AssocA Add (l : r)
+  ($+) l r = M.AssocA Add [l, r]
 
-  -- | Add two expressions (Real numbers).
-  addRe l (M.Lit (Dbl 0))      = l
-  addRe (M.Lit (Dbl 0)) r      = r
-  addRe l (M.Lit (ExactDbl 0)) = l
-  addRe (M.Lit (ExactDbl 0)) r = r
-  addRe (M.AssocA M.AddRe l) (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l ++ r)
-  addRe (M.AssocA M.AddRe l) r = M.AssocA M.AddRe (l ++ [r])
-  addRe l (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l : r)
-  addRe l r = M.AssocA M.AddRe [l, r]
-
-  -- | Multiply two expressions (Integers).
-  mulI l (M.Lit (Int 1)) = l
-  mulI (M.Lit (Int 1)) r = r
-  mulI (M.AssocA M.MulI l) (M.AssocA M.MulI r) = M.AssocA M.MulI (l ++ r)
-  mulI (M.AssocA M.MulI l) r = M.AssocA M.MulI (l ++ [r])
-  mulI l (M.AssocA M.MulI r) = M.AssocA M.MulI (l : r)
-  mulI l r = M.AssocA M.MulI [l, r]
-
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (M.Lit (Dbl 1))      = l
-  mulRe (M.Lit (Dbl 1)) r      = r
-  mulRe l (M.Lit (ExactDbl 1)) = l
-  mulRe (M.Lit (ExactDbl 1)) r = r
-  mulRe (M.AssocA M.MulRe l) (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l ++ r)
-  mulRe (M.AssocA M.MulRe l) r = M.AssocA M.MulRe (l ++ [r])
-  mulRe l (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l : r)
-  mulRe l r = M.AssocA M.MulRe [l, r]
-
+  -- | Multiply two expressions.
+  ($*) (M.Lit (Int 1)) r = r
+  ($*) l (M.Lit (Int 1)) = l
+  ($*) (M.Lit (Dbl 1.0)) r = r
+  ($*) l (M.Lit (Dbl 1.0)) = l
+  ($*) l (M.Lit (ExactDbl 1)) = l
+  ($*) (M.Lit (ExactDbl 1)) r = r
+  ($*) (M.AssocA Mul l) (M.AssocA Mul r) = M.AssocA Mul (l ++ r)
+  ($*) (M.AssocA Mul l) r = M.AssocA Mul (l ++ [r])
+  ($*) l (M.AssocA Mul r) = M.AssocA Mul (l : r)
+  ($*) l r = M.AssocA Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
-  ($-) = M.ArithBinaryOp M.Subt
+  ($-) = M.ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
-  ($/) = M.ArithBinaryOp M.Frac
+  ($/) = M.ArithBinaryOp Frac
   -- | Smart constructor for rasing the first expression to the power of the second.
-  ($^) = M.ArithBinaryOp M.Pow
-
-  -- | Smart constructor to show that one expression implies the other (conditional operator).
-  ($=>)  = M.BoolBinaryOp M.Impl
-  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
-  ($<=>) = M.BoolBinaryOp M.Iff
+  ($^) = M.ArithBinaryOp Pow
 
   -- | Smart constructor for the boolean /and/ operator.
   a $&& b = M.AssocB M.And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
 
+  in' = M.ESBBinaryOp SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
-  abs_ = M.UnaryOp M.Abs
+  abs_ = M.UnaryOp Abs
 
   -- | Smart constructor for negating an expression.
-  neg = M.UnaryOp M.Neg
+  neg = M.UnaryOp Neg
 
   -- | Smart constructor to take the log of an expression.
-  log = M.UnaryOp M.Log
+  log = M.UnaryOp Log
 
   -- | Smart constructor to take the ln of an expression.
-  ln = M.UnaryOp M.Ln
+  ln = M.UnaryOp Ln
 
   -- | Smart constructor to take the square root of an expression.
-  sqrt = M.UnaryOp M.Sqrt
+  sqrt = M.UnaryOp Sqrt
 
   -- | Smart constructor to apply sin to an expression.
-  sin = M.UnaryOp M.Sin
+  sin = M.UnaryOp Sin
 
   -- | Smart constructor to apply cos to an expression.
-  cos = M.UnaryOp M.Cos
+  cos = M.UnaryOp Cos
 
   -- | Smart constructor to apply tan to an expression.
-  tan = M.UnaryOp M.Tan
+  tan = M.UnaryOp Tan
 
   -- | Smart constructor to apply sec to an expression.
-  sec = M.UnaryOp M.Sec
+  sec = M.UnaryOp Sec
 
   -- | Smart constructor to apply csc to an expression.
-  csc = M.UnaryOp M.Csc
+  csc = M.UnaryOp Csc
 
   -- | Smart constructor to apply cot to an expression.
-  cot = M.UnaryOp M.Cot
+  cot = M.UnaryOp Cot
 
   -- | Smart constructor to apply arcsin to an expression.
-  arcsin = M.UnaryOp M.Arcsin
+  arcsin = M.UnaryOp Arcsin
 
   -- | Smart constructor to apply arccos to an expression.
-  arccos = M.UnaryOp M.Arccos
+  arccos = M.UnaryOp Arccos
 
   -- | Smart constructor to apply arctan to an expression.
-  arctan = M.UnaryOp M.Arctan
+  arctan = M.UnaryOp Arctan
 
   -- | Smart constructor for the exponential (base e) function.
-  exp = M.UnaryOp M.Exp
+  exp = M.UnaryOp Exp
 
   -- | Smart constructor for calculating the dimension of a vector.
-  dim = M.UnaryOpVN M.Dim
+  dim = M.UnaryOpVN Dim
 
   -- | Smart constructor for calculating the normal form of a vector.
-  norm = M.UnaryOpVN M.Norm
+  norm = M.UnaryOpVN Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = M.UnaryOpVV M.NegV
+  negVec = M.UnaryOpVV NegV
+  -- | More general scaling
+  vScale = M.NVVBinaryOp Scale
 
   -- | Smart constructor for applying logical negation to an expression.
-  not_ = M.UnaryOpB M.Not
+  not_ = M.UnaryOpB Not
 
   -- | Smart constructor for indexing.
-  idx = M.LABinaryOp M.Index
+  idx = M.LABinaryOp Index
+
+  -- | Smart constructor for indexing.
+  idxOf = M.LABinaryOp IndexOf
 
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = M.Operator M.AddRe (BoundedDD v Continuous low high)
+  defint v low high = M.Operator Add (BoundedDD v Continuous low high)
 
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = M.Operator M.AddRe (BoundedDD v Discrete low high)
+  defsum v low high = M.Operator Add (BoundedDD v Discrete low high)
 
   -- | Product over some expression with bounds (∏).
-  defprod v low high = M.Operator M.MulRe (BoundedDD v Discrete low high)
+  defprod v low high = M.Operator Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
   realInterval c = M.RealI (c ^. uid)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
-  cross = M.VVVBinaryOp M.Cross
+  cross = M.VVVBinaryOp Cross
+
+  -- | Adding vectors
+  vAdd  = M.VVVBinaryOp VAdd
+  -- | Subtracting vectors
+  vSub  = M.VVVBinaryOp VSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
@@ -582,43 +539,10 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-
-  -- | Create a row vector
-  rowVec a = matrix [a]
-
-  -- | Create a column vector
-  columnVec a = matrix $ toColumn a
-
-  -- | Change row vector to column vector
-  toColumn [] = []
-  toColumn (x:xs) = [x]:toColumn xs
-
-  -- Some helper functions to do function application
-
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
+  set' = M.Set
   -- | Applies a given function with a list of parameters.
-  apply f ps = M.FCall (f ^. uid) ps []
-
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
+  apply f [] = sy f
+  apply f ps = M.FCall (f ^. uid) ps
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.

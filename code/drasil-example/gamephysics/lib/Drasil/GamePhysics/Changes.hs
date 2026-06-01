@@ -5,6 +5,7 @@ module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sentence.Combinators (chgsStart, maybeExpanded, maybeChanged)
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
@@ -13,15 +14,15 @@ import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 
 import Drasil.GamePhysics.Assumptions (assumpCT, assumpDI, assumpCAJI)
 
----------------------
---  LIKELY CHANGES --
----------------------
+--------------------
+-- LIKELY CHANGES --
+--------------------
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
 
 --these statements look like they could be parametrized
-likelyChangesStmt1 = (S "internal" +:+ getAcc CM.ode :+:
+likelyChangesStmt1 = (S "internal" +:+ short CM.ode :+:
   S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
   phrase library) `maybeChanged` S "in the future"
 
@@ -51,10 +52,10 @@ likelyChgs = [lcVODES, lcEC, lcID, lcIJC]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2, unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
 
-unlikelyChangesStmt1 = (S "The goal of the system is to simulate the interactions of rigid bodies" !.)
+unlikelyChangesStmt1 = (S "The goal of the system" `S.is` S "to simulate the interactions of rigid bodies" !.)
 unlikelyChangesStmt2 = (S "There will always be a source of input data external to the software" !.)
 unlikelyChangesStmt3 = (S "A Cartesian Coordinate system is used" !.)
-unlikelyChangesStmt4 = (S "All objects are rigid bodies" !.)
+unlikelyChangesStmt4 = (S "All objects" `S.are` S "rigid bodies" !.)
 
 ucSRB, ucEI, ucCCS, ucORB :: ConceptInstance
 
@@ -62,6 +63,6 @@ ucSRB = cic "ucSRB" unlikelyChangesStmt1 "Simulate-Rigid-Bodies" unlikeChgDom
 ucEI = cic "ucEI" unlikelyChangesStmt2 "External-Input" unlikeChgDom
 ucCCS = cic "ucCCS" unlikelyChangesStmt3 "Cartesian-Coordinate-System" unlikeChgDom
 ucORB = cic "ucORB" unlikelyChangesStmt4 "Objects-Rigid-Bodies" unlikeChgDom
-  
+
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [ucSRB, ucEI, ucCCS, ucORB]

@@ -5,6 +5,9 @@ module Theory.Drasil (
   -- * Constraint Sets
   , ConstraintSet
   , mkConstraintSet
+  -- Theory.Drasil.Components.Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
+  , MayHaveDerivation(derivations)
   -- * Data Definitions
   , DataDefinition
   , ddE, ddENoRefs
@@ -27,15 +30,28 @@ module Theory.Drasil (
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , qwUC, qwC, getEqModQdsFromIm
+  -- * Relation Concepts
+  , RelationConcept, makeRC
   -- * Theory Models
-  , Theory(..), TheoryModel
+  , TheoryModel
   , tm, tmNoRefs
+  -- * Differential Models
+  , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..)
+  , ($^^), ($**), ($++)
+  , makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE, formEquations
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
+import Theory.Drasil.Components.Derivation (
+  Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(derivations))
 import Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet)
 import Theory.Drasil.DataDefinition (ddMENoRefs, ddME, ddENoRefs, ddE,
   DataDefinition, qdFromDD, qdEFromDD)
+import Theory.Drasil.DifferentialModel (
+  DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),
+  ($^^), ($**), ($++),
+  makeAODESolverFormat, makeAIVP, makeASystemDE, makeASingleDE,
+  formEquations)
 import Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd)
 import Theory.Drasil.ModelKinds (ModelKind,
   newDEModel, newDEModel',
@@ -51,4 +67,5 @@ import Theory.Drasil.InstanceModel (InstanceModel,
 import Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
   mkDefiningExpr, mkMultiDefn,
   mkMultiDefnForQuant, multiDefnGenQD, multiDefnGenQDByUID)
-import Theory.Drasil.Theory (tm, tmNoRefs, Theory(..), TheoryModel)
+import Theory.Drasil.RelationConcept (RelationConcept, makeRC)
+import Theory.Drasil.Theory (tm, tmNoRefs, TheoryModel)

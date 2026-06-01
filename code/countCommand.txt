@@ -1,5 +1,0 @@
-If you need to count all of the unique words in a file, use the following:
-
-cat [FILE] | tr " " "\n" | sort | uniq -c
-
-Replace [FILE] with the file(s) you wish to look through.

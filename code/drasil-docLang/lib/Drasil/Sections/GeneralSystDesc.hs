@@ -1,12 +1,20 @@
 -- | Defines helper functions used to make the general system description section.
-module Drasil.Sections.GeneralSystDesc where
+module Drasil.Sections.GeneralSystDesc (
+  genSysIntro, systCon, usrCharsF, sysContxt
+) where
 
+-- General Drasil
 import Language.Drasil
 import Language.Drasil.Sentence.Combinators
 
-import Data.Drasil.Concepts.Documentation (interface, system, environment,
-  userCharacteristic, systemConstraint, information, section_)
+-- Vocabulary
+import Drasil.Metadata.Documentation (interface, system, environment,
+  userCharacteristic, systemConstraint, information, section_, sysCont)
+
+-- Other docLang
+import Drasil.Document.Contents (foldlSP)
 import qualified Drasil.DocLang.SRS as SRS (sysCon, sysCont, userChar)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Default General System Description introduction.
 genSysIntro :: Contents
@@ -17,15 +25,16 @@ genSysIntro = foldlSP [S "This", phrase section_, S "provides general",
 
 -- | User Characeristics section constructor. Does not contain any subsections.
 usrCharsF :: [Contents] -> Section
+usrCharsF [] = SRS.userChar [mkParagraph $ emptySectSentPlu [userCharacteristic]] []
 usrCharsF intro = SRS.userChar intro []
 
 -- | System Constraints section constructor.
 -- Generalized if no constraints, but if there are, they can be passed through.
 systCon :: [Contents] -> [Section] -> Section
-systCon [] subSec  = SRS.sysCon [systCon_none] subSec
-            where systCon_none = mkParagraph (S "There are no" +:+. plural systemConstraint)
+systCon [] subSec  = SRS.sysCon [mkParagraph $ emptySectSentPlu [systemConstraint]] subSec
 systCon a subSec = SRS.sysCon a subSec
 
 -- | System Context section constructor. Does not contain any subsections.
 sysContxt :: [Contents] -> Section
+sysContxt [] = SRS.sysCont [mkParagraph $ emptySectSentPlu [sysCont]] []
 sysContxt cs = SRS.sysCont cs []

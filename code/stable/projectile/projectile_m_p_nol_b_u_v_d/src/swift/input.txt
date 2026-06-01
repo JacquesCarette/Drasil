@@ -1,0 +1,6 @@
+# launch speed (m/s)
+20.0
+# launch angle (rad)
+0.785398
+# target position (m)
+41.0

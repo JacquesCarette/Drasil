@@ -1,0 +1,152 @@
+\documentclass[12pt]{report} % Times New Roman, 12pt
+
+% Extra functionality for colouring elements
+\usepackage[table,dvipsnames]{xcolor}
+
+\usepackage{gscale_thesis_doublespace} % Double spaced thesis
+\usepackage{fancyheadings} % Header and footer styling
+\usepackage{setspace} % Allows double spacing but skips headers/footers
+\setcounter{tocdepth}{1} % Limits the TOC to chapter and section names
+
+% Additional packages
+\usepackage{graphicx} % Allows the inclusion of figures
+\usepackage{subcaption} % Allows captions to be added to subfigures
+\usepackage[justification=centering]{caption} % Centres caption text
+\usepackage{array} % Used for table formatting
+\newcolumntype{P}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{booktabs} % Fancy-style tables
+\usepackage{longtable} % Allows for tables that are more than one page long
+\usepackage{float} % Better figure placement control
+\usepackage{enumerate} % Numbered lists
+\usepackage[shortlabels]{enumitem} % For controlling enumerate labels
+\usepackage[shortcuts]{extdash} % Allows manual hyphenation of hypenated words
+\usepackage{amsmath} % Non-standard math symbols
+\usepackage{amsfonts} % Extended fonts for mathematics
+
+% For nice captions and floating environments, such as for my code snippets
+\usepackage{caption}
+\usepackage{float}
+\definecolor{darkblue}{RGB}{0,0,139}
+
+\usepackage{todonotes}
+
+\usepackage[newfloat=true]{minted}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Code, listname=List of Codes}
+
+\usepackage{listings}
+\renewcommand{\lstlistlistingname}{List of Codes}
+
+\lstdefinelanguage{json}{
+	tabsize=1,
+	basicstyle=\normalfont\ttfamily,
+	numbers=left,
+	numberstyle=\scriptsize,
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	literate=
+	{:}{{{\color{McMasterLightMaroon}{:}}}}{1}
+	{,}{{{\color{McMasterLightMaroon}{,}}}}{1}
+	{\{}{{{\color{McMasterWorldBlue}{\{}}}}{1}
+	{\}}{{{\color{McMasterWorldBlue}{\}}}}}{1}
+	{[}{{{\color{McMasterWorldBlue}{[}}}}{1}
+	{]}{{{\color{McMasterWorldBlue}{]}}}}{1},
+}
+
+\lstdefinelanguage{haskell1}{
+	language=haskell,
+	tabsize=2,
+	basicstyle=\small\ttfamily,
+	numbers=left,
+	numberstyle=\scriptsize,
+	stringstyle=\color{orange},
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{black}{$\hookrightarrow$}\space},
+	frame=lines,
+	framerule=1.5pt,
+	commentstyle=\color{gray},
+	morecomment=[l]\--,
+	keywordstyle=[1]\color{McMasterWorldGreen},
+	keywords=[1]{case,class,data,deriving,do,else,if,import,qualified,in,infixl,
+		infixr,instance,let,module,of,primitive,then,type,where,family,newtype,as},
+	keywordstyle=[1]\color{McMasterWorldGreen},
+	keywords=[2]{->,|,=>,::,[,],\,*,<-, Document, Title, Author, 
+	LayoutObj, Sentence, Bool, ModelExpr, PExpr, RawContent, ListType, DType, 
+	Identifier, Contents, Lbl, Filepath, MaxWidthPercent, BibRef, Maybe, Width, 
+	Height, Tags, Spec, Label, Caption, Depth, String, Reference, 
+	LabelledContent, PrintingInformation, D, Doc, DocSection, Intro, LearnObj, 
+	Review, CaseProb, Example, Smmry, BibSec, Apndx, LsnDesc, LsnChapter, 
+	LsnDecl, IdeaDict, SystemInformation, Notebook, ShowToC, Section, SecCons, 
+	UnitalChunk, CI, CodeExpr, Expr, Special, LinkType, DocType, Char, Int, 
+	ItemType, Ops, Variation},
+	keywordstyle=[2]\color{McMasterWorldBlue},
+	keywords=[3]{equationsSent, lbldExpr, unlbldExpr, lo, makeEquation, toEqn, 
+	layLabelled, layUnlabelled, DocDesc, printLO, unlbldCode, rectVel},
+	keywordstyle=[3]\color{McMasterHeritageMaroon},
+	keywords=[4]{T, QP, P, J, NB, Lsn, CP, TeX, L, Docum},
+	keywordstyle=[4]\color{blue}
+ }
+
+\usepackage[hidelinks]{hyperref} % Linking to LaTeX labels and external URLs
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=red,
+	citecolor=blue
+}
+
+\numberwithin{equation}{section} % Numbers equations based on their section
+
+% McMaster Colours
+\input{mcmaster_colours}
+
+\newcommand*{\macred}{\textcolor{McMasterHeritageMaroon}}
+\newcommand*{\macblue}{\textcolor{McMasterWorldBlue}}
+
+% Required for biblatex, but also adds functionality for quotation
+\usepackage{csquotes}
+
+\usepackage[
+style=numeric-comp,
+backend=biber,
+sorting=none,
+backref=true,
+maxnames=99,
+alldates=iso,
+seconds=true
+]{biblatex} % bibliography
+\addbibresource{references.bib}
+
+% ********************************
+\begin{document}
+\include{definitions} % LaTeX variables for preface pages/headers
+
+\beforepreface % Half title page, title page, declaration page   
+  \include{layabstr} % Lay Abstract
+  \include{abstr} % Abstract
+  \include{acknowledgements} % Acknowledgements
+  \referencepages % Table of Contents, List of Figures, List of Tables
+  \lstlistoflistings
+  \include{notation}
+  \academicstatement{academicachievementdeclaration}
+\afterpreface  
+
+  \include{chapters}          
+
+   \include{appendix}
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+% The bibliography is set up to allow for multiple bib files
+\printbibliography
+
+\label{NumDocumentPages}
+
+\end{document}
+% ********************************

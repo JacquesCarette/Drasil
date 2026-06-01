@@ -1,0 +1,6 @@
+\begin{pseudohaskell}{Partial Upgrade To ModelKinds}{partialModelKindsUpgrade}
+data ModelKinds e where
+    EquationalModel :: QDefinition e -> ModelKinds e
+    DEModel         :: RelationConcept -> ModelKinds e
+    OthModel        :: RelationConcept -> ModelKinds ModelExpr
+\end{pseudohaskell}

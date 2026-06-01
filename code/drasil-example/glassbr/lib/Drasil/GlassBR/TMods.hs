@@ -19,12 +19,9 @@ tMods = [pbIsSafe, lrIsSafe]
 -- glass_concept :: [ConceptInstance]
 -- glass_concept = []
 
-
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (equationalModel' lrIsSafeQD)
-   [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
-   [lrIsSafeQD] [] [] [dRef astm2009] 
-   "isSafeLoad" [lrIsSafeDesc]
+lrIsSafe =
+  tm (equationalModel' lrIsSafeQD) [dRef astm2009] "isSafeLoad" [lrIsSafeDesc]
 
 lrIsSafeQD :: ModelQDef
 lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
@@ -36,10 +33,8 @@ lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (equationalModel' pbIsSafeQD) 
-  [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [pbIsSafeQD] [] [] [dRef astm2009]
-  "isSafeProb" [pbIsSafeDesc]
+pbIsSafe =
+  tm (equationalModel' pbIsSafeQD) [dRef astm2009] "isSafeProb" [pbIsSafeDesc]
 
 pbIsSafeQD :: ModelQDef
 pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr
@@ -50,5 +45,5 @@ pbIsSafeExpr = sy probFail $< sy pbTolfail
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc isSafeProb
 
-tModDesc :: QuantityDict -> Sentence
+tModDesc :: DefinedQuantityDict -> Sentence
 tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")

@@ -1,20 +1,18 @@
-module Drasil.GamePhysics.References (chaslesWiki, citations, koothoor2013,
-  smithLai2005) where
+module Drasil.GamePhysics.References (
+  citations, uriReferences, chaslesWiki, accelGravitySrc, impulseSrc
+) where
 
 import Language.Drasil
 
-import Data.Drasil.Citations (cartesianWiki, koothoor2013, parnasClements1986,
-  smithLai2005, lineSource, pointSource, dampingSource)
-import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite, gWilson,
-  imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock,
-  wikiAuthors)
+import Data.Drasil.Citations (parnasClements1986, dampingSource, hibbeler2004)
+import Data.Drasil.People (dParnas, wikiAuthors)
+import qualified Language.Drasil.Sentence.Combinators as S
 
-chaslesWiki, jfBeucheIntro, parnas1978, sciComp2013 :: Citation
+chaslesWiki, parnas1978 :: Citation
 
 citations :: BibRef
-citations = [parnas1978, sciComp2013, chaslesWiki, parnasClements1986,
-  koothoor2013, smithLai2005, jfBeucheIntro, cartesianWiki, lineSource,
-  pointSource, dampingSource]
+citations = [parnas1978, chaslesWiki, parnasClements1986,
+  dampingSource, hibbeler2004]
 
 --FIXME: check for references made within document
 
@@ -23,22 +21,18 @@ chaslesWiki = cMisc [author [wikiAuthors],
   howPublishedU "https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)",
   month Nov, year 2018] "chaslesWiki"
 
-jfBeucheIntro = cMisc
-  [ author [jBueche]
-  , title "Introduction to Physics for Scientists, Fourth Edition"
-  , publisher "Mcgraw-Hill College" --FIXME: not sure if this is publisher of 4th edition
-  , year 1986
-  ] "jfBeucheIntro"
-
 parnas1978 = cInProceedings [dParnas]
     "Designing Software for Ease of Extension and Contraction"
-    "ICSE '78: Proceedings of the 3rd international conference on Software engineering" 
+    "ICSE '78: Proceedings of the 3rd international conference on Software engineering"
     1978 [pages [264..277]] "parnas1978"
 
-sciComp2013 = cArticle
-  [gWilson, daAruliah, cTitus, nChueHong, mDavis, rGuy, shdHaddock,
-  kdHuff, imMitchell, mdPlumblet, bWaugh, epWhite, pWilson]
-  "Best Practices for Scientific Computing, 2013"
-  "PLoS Biol" 2013
-  [volume 12, number 1] "sciComp2013"
+uriReferences :: [Reference]
+uriReferences = [accelGravitySrc, impulseSrc]
 
+accelGravitySrc :: Reference
+accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
+  shortname' $ S "Definition" `S.of_` S "Gravitational Acceleration"
+
+impulseSrc :: Reference
+impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
+  shortname' $ S "Impulse for Collision Ref"

@@ -1,0 +1,36 @@
+% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions#Figures
+% The "[H]" means ~"place it precisely here".
+
+\begin{figure}[H]
+	\centering
+	\caption[Mathematical Knowledge Flow, with Formal Capture]{Mathematical Knowledge Flow, with Formal Capture\footnotemark{}}
+	\label{fig:theoriesWithModelKinds}
+
+	% Originally created with https://q.uiver.app/?q=WzAsNixbMSwxLCJNYXRoZW1hdGljYWwgS25vd2xlZGdlIChNb2RlbEtpbmRzKSJdLFsxLDIsIkNvZGUgKEdPT0wpIl0sWzAsMCwiRXF1YXRpb25hbE1vZGVsIChRRGVmbikiXSxbMSwwLCJFcXVhdGlvbmFsUmVhbG0gKE11bHRpRGVmbikiXSxbMiwwLCJldGMuIl0sWzAsMiwiU1JTIl0sWzAsMSwiT25seSBFcXVhdGlvbmFsIl0sWzIsMF0sWzMsMF0sWzQsMF0sWzAsNV1d
+	% But requires some post-processing
+	\[\begin{tikzcd}[cramped,sep=small,align=center,ampersand replacement=\&]
+			{\parbox{0.25\linewidth}{\centering EquationalModel (\textit{QDefn Expr/ModelExpr})}}
+			\& {\parbox{0.25\linewidth}{\centering EquationalRealm (\textit{MultiDefn Expr/ModelExpr})}}
+			\& {\parbox{0.25\linewidth}{\centering etc.}} \\
+
+			{\parbox{0.1\linewidth}{\centering \acs{srs}}}
+			\& |[draw=green, cloud, aspect=2.8, inner sep=0pt, line width=2]| {\parbox{0.25\linewidth}{\centering Mathematical Knowledge (\textit{ModelKinds})}}
+			\& {\parbox{0.1\linewidth}{\centering Code (\acs{gool})}} \\
+
+			\arrow[line width=1, squiggly, color=blue, from=2-2, to=2-3]
+			\arrow[line width=1, color=green, from=1-1, to=2-2]
+			\arrow[line width=1, color=green, from=1-2, to=2-2]
+			\arrow[line width=1, color=green, from=1-3, to=2-2]
+			\arrow[line width=1, color=green, from=2-2, to=2-1]
+		\end{tikzcd}\]
+	\vspace{-2em}
+
+	\footnotesize
+	\begin{tabular}{llllll}
+		\textcolor{green}{$\rightarrow$}                           & Stable transformation    &
+		\textcolor{blue}{$\rightsquigarrow$}                       & Imperfect transformation &
+		\tikz{\node[cloud, aspect=3, draw=green] (c) at (0,0) {};} & Formally captured          \\ \\
+	\end{tabular}
+\end{figure}
+
+\footnotetext{This is an updated version of the diagram from my project poster \cite{Balaci2021Poster}.}

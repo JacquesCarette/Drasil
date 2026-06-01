@@ -1,25 +1,33 @@
-module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
+module Drasil.Projectile.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
 import Language.Drasil
-import Drasil.DocLang.SRS (datCon, propCorSol)
-import Language.Drasil.Chunk.Concept.NamedCombinators
+import Drasil.DocLang.SRS (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
-  environment, funcReqDom, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
-  property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan, propOfCorSol)
+import Data.Drasil.Concepts.Documentation (datumConstraint,
+  funcReqDom, output_, value)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
-import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
+import Drasil.Projectile.IMods (landPosIM, offsetIM, timeIM)
+import Drasil.Projectile.Unitals (flightDur, landPos, offset, inputs)
 
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInVals, calcValues, outputValues]
+funcReqs = [inputValues, verifyInVals, calcValues, outputValues]
+
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputValuesTable]
+
+inputValues :: ConceptInstance
+inputValuesTable :: LabelledContent
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
 verifyInVals, calcValues, outputValues :: ConceptInstance
 
@@ -30,17 +38,20 @@ outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReq
 verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
 verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the" +:+. namedRef (datCon [] []) (plural datumConstraint),
-  S "If any of the", plural inValue, S "are out of bounds" `sC`
+  S "If any" `S.ofThe` plural inValue `S.are` S "out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ fromSource timeIM,
     ch landPos   +:+ fromSource landPosIM,
-    ch offset    +:+ fromSource offsetIM,
-    ch message   +:+ fromSource messageIM
+    ch offset    +:+ fromSource offsetIM
   ]]
-outputValuesDesc = foldlSent [atStart output_, ch message,
-  fromSource messageIM `S.and_` ch offset, fromSource offsetIM]
+outputValuesDesc = atStart output_ +:+. outputs
+  where
+    outputs = foldlList Comma List $ map foldlSent_ [
+        [ch flightDur, fromSource timeIM],
+        [ch offset, fromSource offsetIM]
+      ]
 
 {--Nonfunctional Requirements--}
 
@@ -48,32 +59,19 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", namedRef (propCorSol [] []) (titleize' propOfCorSol)
-  ]) "Correct" nonFuncReqDom
- 
+correct = mkCorrectNFR "correct" "Correctness"
+
 verifiable :: ConceptInstance
-verifiable = cic "verifiable" (foldlSent [
-  atStartNP (the code), S "is tested with complete",
-  phrase vavPlan]) "Verifiable" nonFuncReqDom
+verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
-  phraseNP (mg `and_` mis)]) "Understandable" nonFuncReqDom
+understandable = mkUnderstandableNFR "understandable" "Understandability"
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
+reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
-portable = cic "portable" (foldlSent [
-  atStartNP (the code), S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom
+portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"

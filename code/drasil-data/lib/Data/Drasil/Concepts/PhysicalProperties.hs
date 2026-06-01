@@ -9,8 +9,7 @@ import Data.Drasil.Concepts.Math (centre)
 
 -- | Collects all physical property-related concepts.
 physicalcon :: [ConceptChunk]
-physicalcon = [gaseous, liquid, solid, ctrOfMass, density, specWeight, mass,
-  len, dimension, vol, flexure]
+physicalcon = [gaseous, liquid, solid, ctrOfMass, dimension, flexure]
 
 -- * Physical Properties
 
@@ -30,5 +29,5 @@ len        = dcc "length"     (cn' "length"         ) ("the straight-line distan
 mass       = dcc "mass"       (cn''' "mass"         ) "the quantity of matter in a body"
 vol        = dcc "volume"     (cn' "volume"         ) "the amount of space that a substance or object occupies"
 
-materialProprty :: NamedChunk
+materialProprty :: IdeaDict
 materialProprty = compoundNC material_ property

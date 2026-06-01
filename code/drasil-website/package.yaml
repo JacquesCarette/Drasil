@@ -1,10 +1,20 @@
-name:                drasil-website
-version:             0.1.0.0
-github:              JacquesCarette/Drasil
-maintainer:          "Jacques Carette"
-synopsis:            Using the Drasil generators to create Drasil's website
-homepage:            https://jacquescarette.github.io/Drasil/
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+spec-version: 0.36.0
+name:         drasil-website
+version:      0.1.0.0
+github:       JacquesCarette/Drasil
+maintainer:   "Jacques Carette"
+synopsis:     Using the Drasil generators to create Drasil's website
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -Wmissing-export-lists
 
 extra-source-files: []
 
@@ -21,15 +31,15 @@ dependencies:
 - drasil-gen
 - drasil-lang
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
-- sglpendulum
-- dblpendulum
+- sglpend
+- dblpend
 - gamephysics
 - glassbr
 - hghc
-- nopcm
+- swhsnopcm
 - pdcontroller
 - projectile
 - ssp
@@ -38,21 +48,13 @@ dependencies:
 
 library:
   source-dirs: lib
-  when:
-  - condition: false
-    other-modules: Paths_drasil_website
 
 executables:
   website:
     main: Main
     source-dirs: app
     ghc-options:
-    - -Wall
-    - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:
     - drasil-website
-    when:
-    - condition: false
-      other-modules: Paths_drasil_website

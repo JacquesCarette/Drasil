@@ -1,15 +1,9 @@
 module Main (main) where
 
-import GHC.IO.Encoding (setLocaleEncoding, utf8)
-import Drasil.PDController.Body (printSetting, srs, fullSI)
-import Drasil.PDController.Choices (codeChoices, codeSpecs)
-import Language.Drasil.Generate (gen, genCode, genDot, genLog, DocSpec(DocSpec), DocType(SRS), Format(..), docChoices)
+import Drasil.Generator (caseStudyMainSRSWCode)
 
+import Drasil.PDController.Body (mkSRS, si)
+import Drasil.PDController.Choices (choices)
 
 main :: IO ()
-main = do
-  setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX]) "PDController_SRS") srs printSetting
-  genCode codeChoices codeSpecs
-  genDot fullSI
-  genLog fullSI printSetting
+main = caseStudyMainSRSWCode si mkSRS "PDController_SRS" choices

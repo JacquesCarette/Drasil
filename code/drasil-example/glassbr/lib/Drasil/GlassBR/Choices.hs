@@ -1,27 +1,27 @@
-module Drasil.GlassBR.Choices where
+module Drasil.GlassBR.Choices (choices) where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..), makeArchit,
-  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats,
-  defaultChoices)
+import Drasil.Build.Artifacts.Legacy (RelativeFile, relativeFile)
+import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
+  ConstantRepr(..), SoftwareDossierFile(..), Visibility(..), makeArchit,
+  makeData, makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
 
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.Body (fullSI)
-
-code :: CodeSpec
-code = codeSpec fullSI choices allMods
 
 choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
-  architecture = makeArchit (Modular Separated) Program,
+  architecture = makeArchit Modular Program,
   dataInfo = makeData Bundled Inline Const,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [LogVar, LogFunc] "log.txt")
-    [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
-  srsConstraints = makeConstraints Exception Exception
+    [SampleInput "../datafiles/glassbr/sampleInput.txt", ReadME],
+  srsConstraints = makeConstraints Exception Exception,
+  defaultConfigFiles = configFp,
+  extraMods = allMods
 }
-  
+
+configFp :: [RelativeFile]
+configFp = map relativeFile ["SDF.txt", "TSD.txt"]

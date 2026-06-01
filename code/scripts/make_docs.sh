@@ -18,12 +18,18 @@ FULL_DOCS_FOLDER="${DOCS_FOLDER}full/"
 rm -rf "$DOCS_FOLDER"
 mkdir -p "$FULL_DOCS_FOLDER"
 
-# Get location of buildable docs location
+# Get list of target packages to build documentation for. That is, projectile
+# and its `drasil-*` dependencies ONLY. Showing too many case studies is very
+# noisy for readers.
+TARGETS=("projectile")
+for dir in drasil-*; do
+  if [ -d "$dir" ] && [ "$dir" != "drasil-website" ] && [ "$dir" != "drasil-example" ]; then
+    TARGETS+=("$(basename "$dir")")
+  fi
+done
 
 # Build full variant
-stack haddock --haddock-arguments "--show-all" --ghc-options="$GHC_FLAGS"
-
-if [ "$?" -eq "0" ]; then
+if stack haddock "${TARGETS[@]}" --haddock-arguments "--show-all" --ghc-options="$GHC_FLAGS"; then
   echo "Successfully created fully exposed variant of Haddock docs!"
 else
   echo "Fully exposed Haddock build failed!"
@@ -46,9 +52,7 @@ cp -rf "$DOCS_LOC/." "$FULL_DOCS_FOLDER"
 stack clean
 
 # Build small variant
-stack haddock --ghc-options="$GHC_FLAGS"
-
-if [ "$?" -eq "0" ]; then
+if stack haddock "${TARGETS[@]}" --ghc-options="$GHC_FLAGS"; then
   echo "Successfully created normal Haddock docs!"
 else
   echo "Normal Haddock build failed!"

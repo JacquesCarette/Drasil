@@ -1,6 +1,6 @@
 import Foundation
 
-extension String: Error {}
+extension String: @retroactive Error {}
 
 var fileToWrite: FileHandle
 do {
@@ -45,17 +45,17 @@ var fileToRead: URL
 fileToRead = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("testText.txt")
 var goolContents: [[String]]
 do {
-    goolContents = try String(contentsOf: fileToRead).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+    goolContents = try String(contentsOf: fileToRead, encoding: .utf8).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
 } catch {
     throw "Error reading from file."
 }
 var fileLine: String
-var goolLine: [String]
-goolLine = [Int](stride(from: 0, to: goolContents[0].count, by: 1)).map({(i: Int) -> String in goolContents[0][i]})
-fileLine = goolLine.joined(separator: " ")
+fileLine = goolContents[0][0]
+assert( fileLine != "" , "First line should not be empty.")
 var fileContents: [String] = []
 
-goolContents = [Int](stride(from: 3, to: goolContents.count, by: 1)).map({(i: Int) -> [String] in goolContents[i]})
+goolContents = [Int](stride(from: 2, to: goolContents.count, by: 1)).map({(i: Int) -> [String] in goolContents[i]})
 fileContents = goolContents.map({(l: [String]) -> String in l.joined(separator: " ")})
 
 print(fileContents)
+assert( fileContents.count > 0 , "fileContents should not be empty.")

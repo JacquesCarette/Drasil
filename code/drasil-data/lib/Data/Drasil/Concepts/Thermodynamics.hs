@@ -10,23 +10,22 @@ import Data.Drasil.Concepts.Physics (energy)
 
 -- | Collects all thermodynamics-related concepts.
 thermocon :: [ConceptChunk]
-thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,
-  htFlux, htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt,
-  melting, phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
-  thermalConductor, thermalEnergy]
+thermocon = [boiling, degree_', enerSrc, heat, heatTrans, htTransTheo,
+  lawConsEnergy, lawConvCooling, melting, phaseChange, thermalAnalysis,
+  thermalConduction, thermalConductor, thermalEnergy]
 
 boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
   htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt, melting,
   phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
   thermalConductor, thermalEnergy :: ConceptChunk
-  
+
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
 --    Same for "Melting"
 boiling           = dcc "boiling"           (cn "boiling")
                       "the phase change from liquid to vapour"
-boilPt            = dcc "boilPt"           (cn' "boiling point temperature")
+boilPt            = dcc "boilPt"            (cn' "boiling point temperature")
                       "the temperature at which a substance changes from liquid to vapour"
-degree_'          = dcc "degree"            (cn' "degree")
+degree_'          = dcc "thermo_degree"     (cn' "degree")
                       "a measure of the warmth or coldness of an object or substance"
 heat              = dcc "heat"              (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++
@@ -37,7 +36,7 @@ heatTrans         = dcc "heatTrans"         (cn' "heat transfer")
 heatCapSpec       = dcc "heatCapSpec"       (cnIES "specific heat capacity")
                       ("the amount of energy required to raise the temperature " ++
                       "of the unit mass of a given substance by a given amount")
-htFlux            = dcc "htFlux"            (cn'' "heat flux") 
+htFlux            = dcc "htFlux"            (cn'' "heat flux")
                       ("the rate of thermal energy transfer through a given " ++
                       "surface per unit time")
 latentHeat        = dcc "latentHeat"        (cn' "latent heat")

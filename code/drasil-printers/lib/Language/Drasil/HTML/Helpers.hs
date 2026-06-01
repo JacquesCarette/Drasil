@@ -1,18 +1,36 @@
 -- | Helper functions for creating HTML printers (specifically, HTML tag wrappers).
-module Language.Drasil.HTML.Helpers where
-
+module Language.Drasil.HTML.Helpers (
+  -- * Types
+  BibFormatter(..), Variation(..),
+  -- * Tag Wrappers
+  html, headTag, body, title, paragraph, code, tr, th, td, figure, figcaption,
+  li, pa, ba, dd, ol, ul, table, dl, img, h, divTag, spanTag, spanTag',
+  image, em, sup, sub, bold,
+  -- * Misc.
+  wrap, wrap', wrapGen, wrapGen', wrapInside, tagL, tagR, indent,
+  caption, descWrap, refwrap, refwrap', reflink, reflinkInfo, reflinkURI,
+  articleTitle, author
+) where
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, empty, ($$), (<>), (<+>), vcat, hcat, nest,
-  cat, hcat)
 import Data.List (intersperse)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest,
+  cat)
 
-import Language.Drasil hiding (Expr)
+import Language.Drasil (MaxWidthPercent)
 
---import Language.Drasil.Document (Document, MaxWidthPercent)
-import Language.Drasil.Printing.AST (Expr)
+import Language.Drasil.Printing.AST (Spec)
+
+-- | Data type that carries functions that vary
+-- for bib printing
+data BibFormatter = BibFormatter {
+  -- | Emphasis (italics) rendering
+  emph :: Doc -> Doc,
+  -- | Spec rendering
+  spec :: Spec -> Doc
+}
 
 html, headTag, body, title, paragraph, code, tr, th, td, figure,
-  figcaption, li, pa, ba :: Doc -> Doc
+  figcaption, li, pa, ba, dd :: Doc -> Doc
 -- | HTML tag wrapper.
 html       = wrap "html" []
 -- | Head tag wrapper.
@@ -41,14 +59,18 @@ li         = wrap "li" []
 pa         = wrap "p" []
 -- | Bring attention to element wrapper.
 ba         = wrap "b" []
+-- | Description wrapper
+dd         = wrap "dd" []
 
-ol, ul, table :: [String] -> Doc -> Doc
+ol, ul, table, dl :: [String] -> Doc -> Doc
 -- | Ordered list tag wrapper.
 ol       = wrap "ol"
 -- | Unordered list tag wrapper.
 ul       = wrap "ul"
 -- | Table tag wrapper.
 table    = wrap "table"
+-- | Description list wrapper
+dl       = wrap "dl"
 
 img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper.
@@ -60,8 +82,14 @@ h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = wrap ("h" ++ show n) []
 
--- | HTML class or id selector.
-data Variation = Class | Id
+-- | HTML attribute selector.
+data Variation = Class | Id | Align | Title deriving Eq
+
+instance Show Variation where
+  show Class = "class"
+  show Id    = "id"
+  show Align = "align"
+  show Title = "title"
 
 -- | General 'Class' wrapper function and formats the document space with 'cat'.
 wrap :: String -> [String] -> Doc -> Doc
@@ -74,22 +102,26 @@ wrap' a = wrapGen' hcat Class a empty
 -- | Helper for wrapping HTML tags.
 -- The fourth argument provides class names for the CSS.
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen' sepf _ s _ [] = \x -> 
-  let tb c = text $ "<" ++ c ++ ">"
-  in sepf [tb s, indent x, tb $ '/':s]
+wrapGen' sepf _ s _ [] = \x ->
+  sepf [text $ "<" ++ s ++ ">", indent x, tagR s]
 wrapGen' sepf Class s _ ts = \x ->
-  let tb c = text $ "<" ++ c ++ " class=\"" ++ foldr1 (++) (intersperse " " ts) ++ "\">"
-  in let te c = text $ "</" ++ c ++ ">"
-  in sepf [tb s, indent x, te s]
-wrapGen' sepf Id s ti _ = \x ->
-  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
-      te c = text $ "</" ++ c ++ ">"
-  in sepf [tb s, indent x, te s] 
+  let val = text $ foldr1 (++) (intersperse " " ts)
+  in sepf [tagL s Class val, indent x, tagR s]
+wrapGen' sepf v s ti _ = \x ->
+  let con = if v == Align then x else indent x
+  in sepf [tagL s v ti, con, tagR s]
 
 -- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen = wrapGen' cat
 
+-- | Helper for creating a left HTML tag with a single attribute.
+tagL :: String -> Variation -> Doc -> Doc
+tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">"
+
+-- | Helper for creating a right HTML closing tag.
+tagR :: String -> Doc
+tagR t = text $ "</" ++ t ++ ">"
 
 -- | Helper for wrapping attributes in a tag.
 --
@@ -100,13 +132,20 @@ wrapInside :: String -> [(String, Doc)] -> Doc
 wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
   where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
--- | Helper for setting up captions. 
+-- | Helper for setting up captions.
 caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
 
+descWrap :: [String] -> Doc -> Doc -> Doc
+descWrap = flip (wrapGen Class "dt")
+
 -- | Helper for wrapping divisions or sections.
+-- Arguments: Wrapper element type/tag (e.g., p, div, a), attribute value, body text
+refwrap' :: String -> Doc -> Doc -> Doc
+refwrap' a = flip (wrapGen Id a) [""]
+
 refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrapGen Id "div") [""]
+refwrap = refwrap' "div"
 
 -- | Helper for setting up links to references.
 reflink :: String -> Doc -> Doc
@@ -121,15 +160,11 @@ reflinkURI :: String -> Doc -> Doc
 reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures.
-image :: Doc -> Doc -> MaxWidthPercent -> Doc
-image f c 100 = 
-  figure $ vcat [
-  img [("src", f), ("alt", c)],
-  figcaption c]
-image f c wp =
-  figure $ vcat [
-  img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")],
-  figcaption c]
+image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
+image f Nothing wp =
+  figure $ vcat [img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
+image f (Just c) wp =
+  figure $ vcat [img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100], figcaption $ text "Figure: " <> c]
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.
@@ -155,25 +190,10 @@ divTag = wrap "div"
 spanTag :: [String] -> Doc -> Doc
 spanTag = wrap "span"
 
+-- | Span tag wrapper with a title attribute.
+spanTag' :: Doc -> Doc -> Doc
+spanTag' t = wrapGen' hcat Title "span" t [""]
+
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 indent = nest 2
-
--- Not used since we use MathJax handles this
--- | Create and markup fractions
--- fraction :: Doc -> Doc -> Doc
--- fraction a b =
---   divTag ["fraction"] (spanTag ["fup"] a $$ spanTag ["fdn"] b)
-
--- Not used since we use MathJax handles this
--- -- | Build cases for case expressions
--- cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
--- cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"] 
---                   (makeCases ps pExpr)
-
--- | Build case expressions.
-makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
-makeCases [] _ = empty
-makeCases (p:ps) pExpr = spanTag [] (pExpr (fst p) <> text " , " <>
-                          spanTag ["case"] (pExpr (snd p))) $$
-                          makeCases ps pExpr

@@ -1,0 +1,14 @@
+\begin{haskell}{``MultiDefinitions'' (MultiDefn) Definition}{curMultiDefn}{https://github.com/JacquesCarette/Drasil/blob/051b9881a6417e51e818c6673c5eab0f48bd5af2/code/drasil-theory/lib/Theory/Drasil/MultiDefn.hs\#L45-L56}
+-- | 'MultiDefn's are QDefinition factories, used for showing one or more ways
+--   we can define a QDefinition.
+data MultiDefn e = MultiDefn{
+  -- | UID
+  _rUid :: UID,
+  -- | Underlying quantity it defines.
+  _qd :: QuantityDict,
+  -- | Explanation of the different ways we can define a quantity.
+  _rDesc :: Sentence,
+  -- | All possible ways we can define the related quantity.
+  _rvs :: NE.NonEmpty (DefiningExpr e)
+}
+\end{haskell}

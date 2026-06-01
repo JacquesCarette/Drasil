@@ -1,13 +1,20 @@
 {-# Language TupleSections #-}
 -- | Standard code to make a table of contents.
-module Drasil.Sections.TableOfContents (toToC, findToC) where
+module Drasil.Sections.TableOfContents (toToC) where
 
+-- General Drasil
 import Language.Drasil
-import Drasil.DocumentLanguage.Core
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.Development as D
+
+-- Vocabulary
+import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata.Documentation (refMat, requirement, tOfCont)
+import qualified Drasil.Metadata.Documentation as Doc
+
+-- Other docLang
 import qualified Drasil.DocLang.SRS as SRS
-import qualified Data.Drasil.Concepts.Documentation as Doc
-import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
+import Drasil.DocumentLanguage.Core
 
 {- Layout for Table of Contents in SRS documents:
 Table of Contents
@@ -82,12 +89,12 @@ mkHeaderItem' hdr itm = Nested hdr $ Bullet $ map (, Nothing) itm
 
 -- | Helper for creating the 'Table of Contents' section ToC entry
 mktToCSec :: ItemType
-mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' Doc.tOfCont
+mktToCSec = Flat $ namedRef SRS.tOfContLabel $ titleize' tOfCont
 
 -- | Helper for creating the 'Reference Material' section ToC entry
 mktRefSec :: RefSec -> ItemType
 mktRefSec (RefProg _ l) =
-  mkHeaderItem (namedRef SRS.refMatLabel $ titleize Doc.refMat) $ map mktSubRef l
+  mkHeaderItem (namedRef SRS.refMatLabel $ titleize refMat) $ map mktSubRef l
   where
     mktSubRef :: RefTab -> Sentence
     mktSubRef TUnits        = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
@@ -113,8 +120,8 @@ mktStkhldrSec (StkhldrProg l) =
   mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ map mktSub l
   where
     mktSub :: StkhldrSub -> Sentence
-    mktSub (Client _ _) = namedRef SRS.customerLabel $ titleizeNP $ the Doc.customer
-    mktSub (Cstmr _)    = namedRef SRS.clientLabel   $ titleizeNP $ the Doc.client
+    mktSub (Client _ _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
+    mktSub (Cstmr _)    = namedRef SRS.clientLabel   $ D.toSent $ titleizeNP $ the Doc.client
 
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType
@@ -142,20 +149,19 @@ mktSSDSec (SSDProg l) =
 
     mktSubSCS :: SCSSub -> Sentence
     mktSubSCS (Assumptions _)      = namedRef SRS.assumptLabel     $ titleize' Doc.assumption
-    mktSubSCS TMs {}               = namedRef SRS.thModelLabel     $ titleize' Doc.thModel
-    mktSubSCS GDs {}               = namedRef SRS.genDefnLabel     $ titleize' Doc.genDefn
-    mktSubSCS DDs {}               = namedRef SRS.dataDefnLabel    $ titleize' Doc.dataDefn
-    mktSubSCS IMs {}               = namedRef SRS.inModelLabel     $ titleize' Doc.inModel
+    mktSubSCS TMs {}               = namedRef SRS.thModelLabel     $ titleize' thModel
+    mktSubSCS GDs {}               = namedRef SRS.genDefnLabel     $ titleize' genDefn
+    mktSubSCS DDs {}               = namedRef SRS.dataDefnLabel    $ titleize' dataDefn
+    mktSubSCS IMs {}               = namedRef SRS.inModelLabel     $ titleize' inModel
     mktSubSCS (Constraints _ _)    = namedRef SRS.datConLabel      $ titleize' Doc.datumConstraint
     mktSubSCS (CorrSolnPpties _ _) = namedRef SRS.corSolPropsLabel $ titleize' Doc.propOfCorSol
 
 -- | Helper for creating the 'Requirements' section ToC entry
 mktReqrmntSec :: ReqrmntSec -> ItemType
 mktReqrmntSec (ReqsProg l) =
-  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' Doc.requirement) $ map mktSubs l
+  mkHeaderItem (namedRef SRS.requirementsLabel $ titleize' requirement) $ map mktSubs l
   where
     mktSubs :: ReqsSub -> Sentence
-    mktSubs (FReqsSub' _ _) = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
     mktSubs (FReqsSub _ _)  = namedRef SRS.funcReqLabel    $ titleize' Doc.functionalRequirement
     mktSubs (NonFReqsSub _) = namedRef SRS.nonfuncReqLabel $ titleize' Doc.nonfunctionalRequirement
 
@@ -177,7 +183,7 @@ mktAuxConsSec (AuxConsProg _ _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ title
 
 -- | Helper for creating the 'References' section ToC entry
 mktBib :: ItemType
-mktBib = Flat $ namedRef SRS.referenceLabel $ titleize' Doc.reference 
+mktBib = Flat $ namedRef SRS.referenceLabel $ titleize' Doc.reference
 
 -- | Helper for creating the 'Appendix' section ToC entry
 mktAppndxSec :: AppndxSec -> ItemType
@@ -187,9 +193,3 @@ mktAppndxSec (AppndxProg _) = Flat $ namedRef SRS.appendixLabel $ titleize  Doc.
 mktOffShelfSolnSec :: OffShelfSolnsSec -> ItemType
 mktOffShelfSolnSec (OffShelfSolnsProg _) = Flat $ namedRef SRS.offShelfSolnsLabel $ titleize' Doc.offShelfSolution
 
--- Find more concise way to do this
--- | Finds whether the Table of Contents is in a SRSDecl.
-findToC :: [DocSection] -> ShowTableOfContents
-findToC [] = NoToC
-findToC (TableOfContents:_) = ToC
-findToC (_:dds) = findToC dds

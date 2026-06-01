@@ -4,11 +4,7 @@
 module Drasil.SRSDocument (
   -- * Chunk database types and functions
   -- | Imported from "Database.Drasil"
-  Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(..),
-  cdb, rdb,
-  -- * Printing Information needed to generate all documents
-  -- | Imported from "Language.Drasil.Printers"
-  PrintingInformation(..), defaultConfiguration, piSys,
+  ChunkDB, SmithEtAlSRS(..), -- FIXME: This should not be exported here!!
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -27,7 +23,7 @@ module Drasil.SRSDocument (
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..),
   -- * SRS Document creator functions
   -- | Imported from "Drasil.DocumentLanguage"
-  mkDoc, fillcdbSRS,
+  mkDoc,
   -- ** Helper functions to make an SRS Document
   -- | Imports from various sections of @drasil-docLang@
   intro,            -- Drasil.Sections.ReferenceMaterial
@@ -36,9 +32,8 @@ module Drasil.SRSDocument (
   purpDoc           -- Drasil.Sections.Introduction
   ) where
 
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil
-import SysInfo.Drasil
+import Drasil.Database (ChunkDB)
+import Drasil.System (SmithEtAlSRS(..))
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..),
@@ -54,7 +49,7 @@ import Drasil.DocLang (
   -- Drasil.Sections.ReferenceMaterial
   intro,
   -- DocumentLanguage
-  mkDoc, fillcdbSRS,
+  mkDoc,
   -- Sections.TraceabilityMandGs
   traceMatStandard,
   -- Sections.TableOfSymbols

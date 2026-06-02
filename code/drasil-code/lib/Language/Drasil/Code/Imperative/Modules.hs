@@ -26,10 +26,10 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ), Space(.
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl, PrintingInformation)
 import qualified Language.Drasil.Printing.Import as PI (codeExpr)
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
-  SMethod, CSStateVar, SClass, SharedProg, OOProg, LoggerCode, OOVariableSym(..),
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
-  TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData, Literal(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  SMethod, CSStateVar, SClass, SharedProg, OOProg, LoggerCode,
+  InstanceVarSelfSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
+  Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
@@ -85,7 +85,7 @@ type ConstraintCE = Constraint CodeExpr
 ---- MAIN ---
 
 -- | Generates a controller module.
-genMain :: (OOProg r, OOVariableSym (LoggerCode r)) => GenState (OO.SFile r)
+genMain :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => GenState (OO.SFile r)
 genMain = genModule "Control" "Controls the flow of the program"
   [genMainFunc] []
 
@@ -94,7 +94,8 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- functions for reading input values, calculating derived inputs, checking
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
-genMainFunc :: (OOProg r, OOVariableSym (LoggerCode r)) => GenState (Maybe (SMethod r))
+genMainFunc :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  GenState (Maybe (SMethod r))
 genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
@@ -164,7 +165,8 @@ getInputDecl = do
 -- If constants are 'Bundled' 'WithInputs', do 'Nothing'; declaration of the 'inParams'
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
-initConsts :: (OOProg r, OOVariableSym (LoggerCode r)) => GenState (Maybe (MSStatement r))
+initConsts :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  GenState (Maybe (MSStatement r))
 initConsts = do
   g <- get
   let scp = convScope $ currentScope g
@@ -199,12 +201,13 @@ initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 ------- INPUT ----------
 
 -- | Generates a single module containing all input-related components.
-genInputMod :: (OOProg r, OOVariableSym (LoggerCode r)) => GenState [OO.SFile r]
+genInputMod :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  GenState [OO.SFile r]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
-  let genMod :: (OOProg r, OOVariableSym (LoggerCode r)) => Maybe (SClass r) ->
-        GenState (OO.SFile r)
+  let genMod :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+        Maybe (SClass r) -> GenState (OO.SFile r)
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
       genMod _ = genModule cname ipDesc [] [genInputClass Primary]
@@ -226,7 +229,7 @@ constVarFunc Const = constVar public
 -- the InputParameters class containing the inputs and constants as state
 -- variables. If the InputParameters constructor is also exported, then the
 -- generated class also contains the input-related functions as private methods.
-genInputClass :: (OOProg r, OOVariableSym (LoggerCode r)) => ClassType ->
+genInputClass :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => ClassType ->
   GenState (Maybe (SClass r))
 genInputClass scp = do
   g <- get
@@ -240,13 +243,14 @@ genInputClass scp = do
       constructors = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor]
         else return []
-      methods :: (OOProg r, OOVariableSym (LoggerCode r)) => GenState [SMethod r]
+      methods :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+        GenState [SMethod r]
       methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
         genInputDerived Priv, genInputConstraints Priv]
         else return []
-      genClass :: (OOProg r, OOVariableSym (LoggerCode r)) => [CodeVarChunk] ->
-        [CodeDefinition] -> GenState (Maybe (SClass r))
+      genClass :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+        [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
@@ -286,8 +290,8 @@ genInputConstructor = do
     dvName, icName]
 
 -- | Generates a function for calculating derived inputs.
-genInputDerived :: (OOProg r, OOVariableSym (LoggerCode r)) => VisibilityTag ->
-  GenState (Maybe (SMethod r))
+genInputDerived :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  VisibilityTag -> GenState (Maybe (SMethod r))
 genInputDerived s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -295,8 +299,8 @@ genInputDerived s = do
   let dvals = codeSpec g ^. derivedInputsO
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genDerived :: (OOProg r, OOVariableSym (LoggerCode r)) => Bool -> GenState
-        (Maybe (SMethod r))
+      genDerived :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => Bool ->
+        GenState (Maybe (SMethod r))
       genDerived False = return Nothing
       genDerived _ = do
         ins <- getDerivedIns
@@ -446,8 +450,8 @@ printExpr Lit{} _  = []
 printExpr e     db = [printStr $ " (" ++ render (codeExprDoc OneLine $ PI.codeExpr db e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
-genInputFormat :: (OOProg r, OOVariableSym (LoggerCode r)) => VisibilityTag ->
-  GenState (Maybe (SMethod r))
+genInputFormat :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  VisibilityTag -> GenState (Maybe (SMethod r))
 genInputFormat s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -455,8 +459,8 @@ genInputFormat s = do
   giName <- genICName GetInput
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genInFormat :: (OOProg r, OOVariableSym (LoggerCode r)) => Bool -> GenState
-        (Maybe (SMethod r))
+      genInFormat :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => Bool ->
+        GenState (Maybe (SMethod r))
       genInFormat False = return Nothing
       genInFormat _ = do
         ins <- getInputFormatIns
@@ -523,7 +527,8 @@ genConstClass scp = do
 ------- CALC ----------
 
 -- | Generates a module containing calculation functions.
-genCalcMod :: (OOProg r, OOVariableSym (LoggerCode r)) => GenState (OO.SFile r)
+genCalcMod :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  GenState (OO.SFile r)
 genCalcMod = do
   g <- get
   cName <- genICName Calculations
@@ -534,8 +539,8 @@ genCalcMod = do
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
-genCalcFunc :: (OOProg r, OOVariableSym (LoggerCode r)) => CodeDefinition ->
-  GenState (SMethod r)
+genCalcFunc :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+  CodeDefinition -> GenState (SMethod r)
 genCalcFunc cdef = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -569,7 +574,7 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
-genCalcBlock :: (OOProg r, OOVariableSym (LoggerCode r)) => CalcType ->
+genCalcBlock :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => CalcType ->
   CodeDefinition -> CodeExpr -> GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
@@ -583,7 +588,7 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- | Generates a calculation block for a value defined by cases.
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
-genCaseBlock :: (OOProg r, OOVariableSym (LoggerCode r)) => CalcType ->
+genCaseBlock :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => CalcType ->
   CodeDefinition -> Completeness -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"

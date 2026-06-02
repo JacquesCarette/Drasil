@@ -29,7 +29,7 @@ import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, LoggerCode,
-  OOVariableSym(..), TypeSym(..), VariableValue(..), StatementSym(..),
+  InstanceVarSelfSym(..), TypeSym(..), VariableValue(..), StatementSym(..),
   DeclStatement(..), convType, convTypeOO)
 
 -- | Generates calls to all of the input-related functions. First is the call to
@@ -63,7 +63,8 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r, OOVariableSym (LoggerCode r)) => CodeDefinition ->
+genCalcCall :: (OOProg r,
+  InstanceVarSelfSym (LoggerCode r)) => CodeDefinition ->
   GenState (Maybe (MSStatement r))
 genCalcCall c = do
   g <- get

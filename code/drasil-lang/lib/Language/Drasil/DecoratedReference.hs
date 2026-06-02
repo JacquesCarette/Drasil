@@ -11,7 +11,7 @@ module Language.Drasil.DecoratedReference (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (HasUID(..), IsChunk)
+import Drasil.Database (HasUID(..), IsChunk, HasChunkRefs(..))
 
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Reference (Reference, ref)
@@ -35,6 +35,8 @@ instance Eq            DecRef where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the 'UID' of a 'Reference'.
 instance HasUID        DecRef where uid = rf . uid
 -- | Finds the reference address contained in a 'Reference' (through a 'LblType').
+instance HasChunkRefs DecRef where chunkRefs dr = chunkRefs (dr ^. rf)
+
 instance HasRefAddress DecRef where getRefAdd (DR r _) = getRefAdd r
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  DecRef where shortname (DR r _) = shortname r

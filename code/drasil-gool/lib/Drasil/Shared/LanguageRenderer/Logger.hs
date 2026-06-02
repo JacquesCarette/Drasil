@@ -15,7 +15,7 @@ import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
   punctuate, hcat)
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
 import Data.List (intercalate)
-import Data.Kind
+import Data.Kind (Type)
 
 newtype LoggerCode (lang :: Type -> Type) a = LC {unLC :: a} deriving Functor
 

@@ -21,8 +21,8 @@ import Drasil.GOOL.LanguageRenderer.PythonRenderer (PythonCode)
 import Drasil.GOOL.LanguageRenderer.SwiftRenderer (SwiftCode)
 import Drasil.Shared.LanguageRenderer (dot)
 
-import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
-  punctuate, hcat)
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, comma, space, brackets,
+  braces, punctuate, hcat)
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
 import Data.List (intercalate)
 import Data.Kind (Type)
@@ -43,24 +43,13 @@ instance VariableSym (LoggerCode lang) where
   extVar l n _ = return $ return $ text l <> dot <> text n
 
 instance OOVariableSym (LoggerCode CodeInfoOO) where
-  classVar = var
-  classConst = constant
-  self = return $ return $ text "this"
-  classVarAccess cls vr = do
-    cls' <- cls
-    vr' <- vr
-    let clsDoc = (typeDoc . unLC) cls'
-        vrDoc = unLC vr'
-    return $ return $ clsDoc <> dot <> vrDoc
-  extClassVarAccess = classVarAccess
-  instanceVarAccess ob vr = do
-    ob' <- ob
-    vr' <- vr
-    return $ return $ unLC ob' <> dot <> unLC vr'
-  instanceVarSelf vr = do
-    vr' <- vr
-    self' <- self @(LoggerCode CodeInfoOO)
-    return $ return $ unLC self' <> dot <> unLC vr'
+  classVar _ _ = return $ return empty
+  classConst _ _ = return $ return empty
+  self = return $ return empty
+  classVarAccess _ _ = return $ return empty
+  extClassVarAccess _ _ = return $ return empty
+  instanceVarAccess _ _ = return $ return empty
+  instanceVarSelf _ = return $ return empty
 
 instance OOVariableSym (LoggerCode JavaCode) where
   classVar = var

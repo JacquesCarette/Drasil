@@ -1,10 +1,10 @@
 cradle:
   stack:
-    - path: "drasil-build-artifacts/lib"
-      component: "drasil-build-artifacts:lib"
+    - path: "drasil-assets/lib"
+      component: "drasil-assets:lib"
 
-    - path: "drasil-build-artifacts/test"
-      component: "drasil-build-artifacts:test:drasil-build-artifacts-test"
+    - path: "drasil-assets/test"
+      component: "drasil-assets:test:drasil-assets-test"
 
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
@@ -107,6 +107,12 @@ cradle:
 
     - path: "drasil-example/template/app/Main.hs"
       component: "template:exe:template"
+
+    - path: "drasil-file-handling/lib"
+      component: "drasil-file-handling:lib"
+
+    - path: "drasil-file-handling/test"
+      component: "drasil-file-handling:test:drasil-file-handling-test"
 
     - path: "drasil-gen/lib"
       component: "drasil-gen:lib"

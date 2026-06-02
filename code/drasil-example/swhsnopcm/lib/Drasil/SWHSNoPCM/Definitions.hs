@@ -1,4 +1,4 @@
-module Drasil.SWHSNoPCM.Definitions where --whole file is used
+module Drasil.SWHSNoPCM.Definitions (htTrans) where --whole file is used
 
 import Language.Drasil
 

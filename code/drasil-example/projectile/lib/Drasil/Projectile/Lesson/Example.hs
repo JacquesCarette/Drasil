@@ -1,4 +1,4 @@
-module Drasil.Projectile.Lesson.Example where
+module Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo) where
 
 import Data.Drasil.Concepts.Physics (velocity, height, time, acceleration, gravity, horizontalMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (height, gravitationalAccel)

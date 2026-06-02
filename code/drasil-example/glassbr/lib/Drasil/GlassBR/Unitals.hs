@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Unitals where --whole file is used
+module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))

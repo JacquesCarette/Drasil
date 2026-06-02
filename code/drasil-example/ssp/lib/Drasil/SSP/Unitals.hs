@@ -1,4 +1,4 @@
-module Drasil.SSP.Unitals where --export all of it
+module Drasil.SSP.Unitals (module Drasil.SSP.Unitals) where --export all of it
 
 import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty((:|)))

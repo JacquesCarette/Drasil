@@ -4,16 +4,18 @@
 -- Generates a .csv file and an HTML table with this information.
 module ClassInstDepGen (main) where
 
-import Data.List
-import System.IO
-import System.Directory
-import Control.Monad
+import Data.List ((\\), intercalate, nub, partition)
+import System.IO (hClose, hPutStr, hPutStrLn, openFile, IOMode(..))
+import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
+  setCurrentDirectory)
+import Control.Monad (zipWithM)
 import qualified Drasil.Meta.Analysis.DirectoryController as DC (createFile, finder,
   getDirectories, DrasilPack, FileName, File(..))
 import Drasil.Meta.Analysis.SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
-import Drasil.Meta.Analysis.DataPrinters.Dot
-import Drasil.Meta.Analysis.DataPrinters.HTML
+import Drasil.Meta.Analysis.DataPrinters.Dot (digraph)
+import Drasil.Meta.Analysis.DataPrinters.HTML (htmlConfig, htmlDataTableTitle,
+  htmlEnd, mkhtmlEmptyCell, mkhtmlHeader, mkhtmlRow, mkhtmlTitle)
 
 import Data.Containers.ListUtils (nubOrd)
 

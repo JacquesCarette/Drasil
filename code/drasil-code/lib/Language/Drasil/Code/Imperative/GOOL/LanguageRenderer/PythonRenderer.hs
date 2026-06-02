@@ -31,7 +31,7 @@ instance Monad PythonProject where
   PP x >>= f = f x
 
 instance SoftwareDossierSym PythonProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = pyName,

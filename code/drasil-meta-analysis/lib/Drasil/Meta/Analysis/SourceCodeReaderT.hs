@@ -2,9 +2,10 @@
 module Drasil.Meta.Analysis.SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
  DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..), DataTypeDeclaration(..)) where
 
-import Data.List
-import System.IO
-import System.Directory
+import Data.List ((\\), elemIndex, findIndex, isInfixOf, isPrefixOf,
+  isSuffixOf, nub)
+import System.IO (readFile')
+import System.Directory (setCurrentDirectory)
 import qualified Data.Text as T
 import qualified Data.List.Split as L
 import Data.Maybe (fromJust)
@@ -61,9 +62,7 @@ data EntryData = EntryData { dRNs :: ![DataDeclRecord]    -- Record datatypes wi
 extractEntryData :: DC.FileName -> FilePath -> IO EntryData
 extractEntryData fileName filePath = do
   setCurrentDirectory filePath
-  handle <- openFile fileName ReadMode
-  scriptFile <- hGetContents handle
-  forceRead scriptFile `seq` hClose handle
+  scriptFile <- readFile' fileName
 
       -- general light cleanup of the files before sorting by datatype
   let scriptFileLines = scriptFilter scriptFile
@@ -344,9 +343,3 @@ filterQualifiedTypes l = if '.' `elem` l then drop (fromJust (elemIndex '.' l)+1
 -- strips leading and trailing whitespace from strings
 stripWS :: String -> String
 stripWS = T.unpack . T.strip . T.pack
-
--- enforces strict file reading; files can be closed to avoid memory exhaustion
-forceRead :: [a0] -> ()
-forceRead [] = ()
-forceRead (_:xs) = forceRead xs
-

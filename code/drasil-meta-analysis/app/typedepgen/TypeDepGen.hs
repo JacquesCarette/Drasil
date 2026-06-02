@@ -2,17 +2,19 @@
 -- | Creates graphs showing the dependency of one type upon another.
 module TypeDepGen (main) where
 
-import Data.List
-import System.IO
-import System.Directory
-import Control.Monad
+import Data.List ( (\\) )
+import System.IO (hClose, hPutStrLn, openFile, Handle, IOMode(..))
+import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
+  setCurrentDirectory)
+import Control.Monad (zipWithM)
 import qualified Drasil.Meta.Analysis.DirectoryController as DC (finder,
   getDirectories, DrasilPack, FileName, File(..), Folder(..))
 import Drasil.Meta.Analysis.SourceCodeReaderT as SCRT (extractEntryData, EntryData(..),
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..),
   DataTypeDeclaration(..))
 import Data.Char (toLower)
-import Drasil.Meta.Analysis.DataPrinters.Dot
+import Drasil.Meta.Analysis.DataPrinters.Dot (digraph, replaceInvalidChars,
+  subgraph)
 
 type Colour = String
 

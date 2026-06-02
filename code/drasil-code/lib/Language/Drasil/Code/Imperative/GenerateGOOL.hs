@@ -10,7 +10,7 @@ import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts.Legacy (FileAndContents)
+import Drasil.FileHandling (FileLayout)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 import Language.Drasil hiding (List)
@@ -56,23 +56,23 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO
       cms = g ^. commented
       v = getDoxOutput g
-  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
+  return $ if not (null cms) then doxConfig n s v else Nothing
 
 -- | Generates a README file.
-genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
+genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
   let n = codeSpec g ^. pNameO
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
-getReadMe :: (SoftwareDossierSym r) => [SoftwareDossierFile] -> ReadMeInfo -> Maybe (r FileAndContents)
+getReadMe :: (SoftwareDossierSym r) => [SoftwareDossierFile] -> ReadMeInfo -> Maybe (r FileLayout)
 getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary

@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
-import Drasil.Build.Artifacts.Legacy (indent)
+import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,

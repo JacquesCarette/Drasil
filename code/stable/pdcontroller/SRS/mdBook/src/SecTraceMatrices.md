@@ -121,8 +121,8 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 For convenience, the following graphs can be found at the links below:
 
-- [TraceGraphAvsA](../../../../traceygraphs/pdcontroller/avsa.svg)
-- [TraceGraphAvsAll](../../../../traceygraphs/pdcontroller/avsall.svg)
-- [TraceGraphRefvsRef](../../../../traceygraphs/pdcontroller/refvsref.svg)
-- [TraceGraphAllvsR](../../../../traceygraphs/pdcontroller/allvsr.svg)
-- [TraceGraphAllvsAll](../../../../traceygraphs/pdcontroller/allvsall.svg)
+- [TraceGraphAvsA](../../TraceyGraph/avsa.svg)
+- [TraceGraphAvsAll](../../TraceyGraph/avsall.svg)
+- [TraceGraphRefvsRef](../../TraceyGraph/refvsref.svg)
+- [TraceGraphAllvsR](../../TraceyGraph/allvsr.svg)
+- [TraceGraphAllvsAll](../../TraceyGraph/allvsall.svg)

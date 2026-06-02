@@ -1,6 +1,6 @@
-module Drasil.GlassBR.Choices where
+module Drasil.GlassBR.Choices (choices) where
 
-import Drasil.Build.Artifacts.Legacy (RelativeFile, relativeFile)
+import Drasil.FileHandling.Legacy (RelativeFile, relativeFile)
 import Language.Drasil.Code (Choices(..), defaultChoices, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..),
@@ -17,7 +17,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [LogVar, LogFunc] "log.txt")
-    [SampleInput "../../datafiles/glassbr/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/glassbr/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Exception Exception,
   defaultConfigFiles = configFp,
   extraMods = allMods

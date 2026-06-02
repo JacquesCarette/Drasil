@@ -11,7 +11,7 @@ import qualified Data.Set as S
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
-import Drasil.Build.Artifacts (FileLayout, file, directory, ps)
+import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -39,7 +39,7 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText
 -----------------------------------------------------------------
 
 -- | Generate a mdBook SRS
-genMDBook :: Project -> [FileLayout Doc]
+genMDBook :: Project -> [FileLayout]
 genMDBook p@(Project t _ rm _) =
   [ file [ps|book.toml|] (makeBook rm t)
   , file [ps|.drasil-requirements.csv|] (makeRequirements p)

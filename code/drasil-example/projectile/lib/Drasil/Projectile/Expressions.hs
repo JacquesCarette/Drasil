@@ -2,7 +2,12 @@
 --
 -- This is supposed to always be imported qualified, since we're purposefully
 -- overloading the names.
-module Drasil.Projectile.Expressions where
+module Drasil.Projectile.Expressions (
+  eqnRefs, speed', scalarPos', flightDur', offset', velVecExpr, posVecExpr,
+  lcrectVel, lcrectPos, lcrectNoTime, landPosExpr,
+  horizVel, horizPos, vertVel, vertPos, vertNoTime, iyPos, yConstAccel, iSpeed,
+  velocityXY, accelerationXY, positionXY, constAccelXY,
+) where
 
 import Prelude hiding (cos, sin)
 

@@ -23,8 +23,8 @@ dependencies:
 - directory
 - filepath
 - split
-- drasil-build-artifacts
 - drasil-database
+- drasil-file-handling
 - drasil-gool
 - drasil-lang
 - drasil-makefile

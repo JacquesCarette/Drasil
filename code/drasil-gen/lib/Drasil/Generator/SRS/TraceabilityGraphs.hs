@@ -7,13 +7,13 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), vcat, nest,
   hsep, empty)
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, ps)
 import Drasil.Database (UID)
+import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label)
 
 -- | Creates a `FileLayout`s for the generated TraceyGraph directory.
-outputDot :: GraphInfo -> FileLayout Doc
+outputDot :: GraphInfo -> FileLayout
 outputDot gi =
   directory
   [ps|TraceyGraph|]
@@ -25,7 +25,7 @@ outputDot gi =
   ]
 
 -- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
-mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> FileLayout Doc
+mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> FileLayout
 mkOutput gi ttl getDirections getLabels =
   file [ps|{ttl}.dot|] (mkDot ttl (getDirections gi) (map ($ gi) getLabels))
 

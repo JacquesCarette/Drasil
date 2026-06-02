@@ -1,4 +1,4 @@
-module Drasil.SWHS.MetaConcepts where
+module Drasil.SWHS.MetaConcepts (progName, progName') where
 
 import Language.Drasil
 import Data.Drasil.Domains (materialEng)

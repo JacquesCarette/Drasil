@@ -1,4 +1,7 @@
-module Drasil.PDController.References where
+module Drasil.PDController.References (
+  citations,
+  johnson2008, abbasi2015
+) where
 import Data.Drasil.Citations (laplaceWiki, pidWiki)
 
 import Language.Drasil

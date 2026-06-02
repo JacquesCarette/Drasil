@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SWHSNoPCM.Assumptions where --all of this file is exported
+module Drasil.SWHSNoPCM.Assumptions (module Drasil.SWHSNoPCM.Assumptions) where --all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

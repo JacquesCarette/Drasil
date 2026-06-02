@@ -1,4 +1,6 @@
-module Drasil.PDController.GenSysDesc where
+module Drasil.PDController.GenSysDesc (
+  gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics
+) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

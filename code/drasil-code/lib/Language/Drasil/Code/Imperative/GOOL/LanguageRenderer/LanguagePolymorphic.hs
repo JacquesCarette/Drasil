@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Build.Artifacts.Legacy (FileAndContents)
+import Drasil.FileHandling (FileLayout)
 import Drasil.GOOL (ProgData)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
@@ -22,17 +22,17 @@ import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
 doxConfig :: (SoftwareDossierSym r, Applicative r) => r Doc -> String ->
-  SoftwareDossierState -> Verbosity -> r FileAndContents
+  SoftwareDossierState -> Verbosity -> r FileLayout
 doxConfig opt pName s v = sdsFromData doxConfigName (makeDoxConfig pName s
   (unReprDoc opt) v)
 
 -- | Defines a markdown file.
-readMe :: (Applicative r) => ReadMeInfo -> r FileAndContents
+readMe :: (Applicative r) => ReadMeInfo -> r FileLayout
 readMe rmi= sdsFromData readMeName (makeReadMe rmi)
 
 -- | Defines a Makefile.
 makefile :: (Applicative r) => Maybe BuildConfig -> Maybe Runnable ->
-  Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileAndContents
+  Maybe DocConfig -> SoftwareDossierState -> ProgData -> r FileLayout
 makefile bc r d s p = sdsFromData makefileName (buildMakefile d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.

@@ -1,68 +1,49 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Drasil.Generator.SRS (
-  -- * Generators
-  exportSmithEtAlSrs
+  -- * SRS Generator
+  genSmithEtAlSrs
 ) where
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Build.Artifacts (FileLayout, OverwritePolicy(..), directory, file,
-  localPath, ps, writeFiles)
 import Drasil.DocLang (mkGraphInfo)
+import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational), Document(..), checkToC)
-import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (SmithEtAlSRS, refTable, systemdb)
-import System.Environment (lookupEnv)
 
-import Drasil.Generator.ChunkDump (dumpEverything)
 import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
-import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 
--- | Generate an SRS softifact.
-exportSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ()
-exportSmithEtAlSrs syst srsDecl srsFileName = do
-  let (srs, syst') = mkDoc syst srsDecl S.forT
-      pinfo = piSys (syst' ^. systemdb) (syst' ^. refTable) Equational Engineering
-  debugDump syst'
-  typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  let srsLayout =
-        directory [ps|SRS|] $
-          map
-            ( \x ->
-                let x' = show x
-                in directory [ps|{x'}|] $
-                      prntDoc srs pinfo srsFileName x
-            )
-            [HTML, TeX, Jupyter, MDBook]
-      traceyLayout = outputDot (mkGraphInfo syst') -- FIXME: This *MUST* use syst', NOT syst (or else it misses things!)!
-  -- FIXME: Ultimately, there should be a single writeFiles call.
-  writeFiles OverwriteAllowed localPath srsLayout
-  writeFiles OverwriteAllowed localPath traceyLayout
+-- | Generate Drasil's SRS (in HTML, TeX, Jupyter, and MDBook formats).
+genSmithEtAlSrs :: SmithEtAlSRS -> Document -> String -> [FileLayout]
+genSmithEtAlSrs syst doc srsFileName =
+  [ srsLayout,
+    traceyLayout
+  ]
+  where
+    pinfo = piSys (syst ^. systemdb) (syst ^. refTable) Equational Engineering
+    srsLayout =
+      directory [ps|SRS|] $
+        map
+          ( \x ->
+              let x' = show x
+              in directory [ps|{x'}|] $
+                    prntDoc doc pinfo srsFileName x
+          )
+          [HTML, TeX, Jupyter, MDBook]
+    traceyLayout = outputDot (mkGraphInfo syst)
 
--- | Internal: Dumps the chunk maps to disk if the `DEBUG_ENV` environment
--- variable is non-empty.
-debugDump :: SmithEtAlSRS -> IO ()
-debugDump si = do
-  -- FIXME: This should be made pure, by passing the 'debug' option instead of using an environment variable
-  maybeDebugging <- lookupEnv "DEBUG_ENV"
-  case maybeDebugging of
-    (Just (_:_)) -> do
-      writeFiles OverwriteAllowed localPath $ dumpEverything si
-    _ -> mempty
-
--- | Internal: Creates a `FileLayout` for the SRS in a specific format.
-prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout Doc]
+-- | Internal: Render an SRS in a specified 'Format' and lay out artifacts into
+-- a `[FileLayout]`.
+prntDoc :: Document -> PrintingInformation -> String -> Format -> [FileLayout]
 prntDoc d pinfo _ MDBook =
   mdBookMakefile : genMDBook (makeProject pinfo d)
 prntDoc d pinfo fn Jupyter =
@@ -78,7 +59,7 @@ prntDoc d@(Document _ _ st _) pinfo fn TeX =
 prntDoc Notebook {} _ _ TeX = error "cannot render notebooks into LaTeX"
 
 -- | Internal: Basic Makefile suitable for building TeX projects.
-teXMakefile :: Filename -> FileLayout Doc
+teXMakefile :: Filename -> FileLayout
 teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   mkRule [watermark] (makeS "srs") [pdfName] [],
   mkFile [] pdfName [texFile] [lualatex, bibtex, lualatex, lualatex]]
@@ -89,7 +70,7 @@ teXMakefile fn = file [ps|Makefile|] $ printMakefile $ mkMakefile [
     texFile  = makeS $ fn ++ ".tex"
 
 -- | Internal: Basic Makefile suitable for building mdBook projects.
-mdBookMakefile :: FileLayout Doc
+mdBookMakefile :: FileLayout
 mdBookMakefile = file [ps|Makefile|] $ printMakefile $ mkMakefile [
   mkRule [watermark] (makeS "build")  [] [mkCheckedCommand $ makeS "mdbook build"],
   mkRule []          (makeS "server") [] [mkCheckedCommand $ makeS "mdbook serve --open"]]

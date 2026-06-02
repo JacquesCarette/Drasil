@@ -42,7 +42,7 @@ instance Monad JavaProject where
   JP x >>= f = f x
 
 instance SoftwareDossierSym JavaProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = jName,

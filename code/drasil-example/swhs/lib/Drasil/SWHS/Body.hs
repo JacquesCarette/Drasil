@@ -1,5 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SWHS.Body where
+module Drasil.SWHS.Body (
+  mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
+  externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
+  sysCntxtRespIntro, userChars
+) where
 
 import Control.Lens ((^.))
 

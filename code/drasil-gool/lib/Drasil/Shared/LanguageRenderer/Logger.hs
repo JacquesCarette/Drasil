@@ -10,6 +10,7 @@ import Drasil.Shared.InterfaceCommon (VSType, TypeSym(..), VariableSym(..),
 import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), convTypeOO)
 import Drasil.Shared.AST (TypeData(..), td)
 import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.LanguageRenderer (dot)
 
 import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
   punctuate, hcat)
@@ -30,7 +31,7 @@ instance VariableSym (LoggerCode lang) where
   type Variable (LoggerCode lang) = Doc
   var n _ = return $ return $ text n
   constant n _ = return $ return $ text n
-  extVar l n _ = return $ return $ text l <> text "." <> text n
+  extVar l n _ = return $ return $ text l <> dot <> text n
 
 instance OOVariableSym (LoggerCode lang) where
   classVar = var
@@ -41,15 +42,15 @@ instance OOVariableSym (LoggerCode lang) where
     vr' <- vr
     let clsDoc = (typeDoc . unLC) cls'
         vrDoc = unLC vr'
-    return $ return $ clsDoc <> text "." <> vrDoc
+    return $ return $ clsDoc <> dot <> vrDoc
   extClassVarAccess = classVarAccess
   instanceVarAccess ob vr = do
     ob' <- ob
     vr' <- vr
-    return $ return $ unLC ob' <> text "." <> unLC vr'
+    return $ return $ unLC ob' <> dot <> unLC vr'
   instanceVarSelf vr = do
     vr' <- vr
-    return $ return $ text "self." <> unLC vr'
+    return $ return $ text "self" <> dot <> unLC vr'
 
 instance ValueSym (LoggerCode lang) where
   type Value (LoggerCode lang) = Doc

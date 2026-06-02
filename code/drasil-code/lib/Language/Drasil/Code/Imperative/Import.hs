@@ -51,9 +51,9 @@ import Language.Drasil.Printers (showHasSymbImpl)
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
-  OOVariableSym(..), VariableElim(..), ($->), ValueSym(..), Literal(..),
-  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ScopeSym(..),
+  ScopeData, OOVariableSym(..), VariableElim(..), ($->), ValueSym(..),
+  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -104,7 +104,8 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
+variable :: (OOVariableSym r, VariableElim r) => Name -> VSType r ->
+  GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
@@ -124,8 +125,8 @@ variable s t = do
 -- WithInputs for constant structure, inputs are 'Bundled', and constant
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
-inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r ->
-  GenState (SVariable r)
+inputVariable :: (OOVariableSym r, VariableElim r) => Structure ->
+  ConstantRepr -> SVariable r -> GenState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- get
@@ -144,8 +145,8 @@ inputVariable Bundled Const v = do
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr ->
-  SVariable r -> GenState (SVariable r)
+constVariable :: (OOVariableSym r, VariableElim r) => ConstantStructure ->
+  ConstantRepr -> SVariable r -> GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
@@ -164,8 +165,8 @@ constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
 -- and cannot be accessed, so throw an error.
 -- If the variable is exported by the current module, use 'classVarAccess'.
 -- If the variable is exported by a different module, use 'extClassVarAccess'.
-classVariable :: (OOProg r) => SVariable r -> SVariable r ->
-  GenState (SVariable r)
+classVariable :: (OOVariableSym r, VariableElim r) => SVariable r ->
+  SVariable r -> GenState (SVariable r)
 classVariable c v = do
   g <- get
   let checkCurrent m = if currentModule g == m then classVarAccess else extClassVarAccess
@@ -187,7 +188,8 @@ mkVal v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
+mkVar :: (OOVariableSym r, VariableElim r) => CodeVarChunk ->
+  GenState (SVariable r)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
@@ -753,8 +755,8 @@ readData ddef = do
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
-  GenState [SVariable r]
+getEntryVars :: (OOVariableSym r, VariableElim r) => Maybe String ->
+  LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . listInnerType . convTypeOO))
     s) (getPatternInputs lp)
@@ -797,7 +799,7 @@ valueProc u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'constant' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variableProc :: (SharedProg r) => Name -> VSType r -> GenState (SVariable r)
+variableProc :: (VariableSym r) => Name -> VSType r -> GenState (SVariable r)
 variableProc s t = do
   g <- get
   let cs = codeSpec g
@@ -813,7 +815,7 @@ variableProc s t = do
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, throw an error, since procedural renderers
 -- don't support 'Bundled' inputs yet.
-inputVariableProc :: (SharedProg r) => Structure -> ConstantRepr -> SVariable r ->
+inputVariableProc :: (VariableSym r) => Structure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
 inputVariableProc Unbundled _ v = return v
 inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
@@ -824,7 +826,7 @@ inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers d
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariableProc :: (SharedProg r) => ConstantStructure -> ConstantRepr ->
+constVariableProc :: (VariableSym r) => ConstantStructure -> ConstantRepr ->
   SVariable r -> GenState (SVariable r)
 constVariableProc (Store Unbundled) _ v = return v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
@@ -843,7 +845,7 @@ mkValProc v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVarProc :: (SharedProg r) => CodeVarChunk -> GenState (SVariable r)
+mkVarProc :: (VariableSym r) => CodeVarChunk -> GenState (SVariable r)
 mkVarProc v = do
   t <- codeType v
   let toGOOLVar Nothing = variableProc (codeName v) (convType t)
@@ -993,7 +995,7 @@ readDataProc ddef = do
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
+getEntryVarsProc :: (VariableSym r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . listInnerType . convType))

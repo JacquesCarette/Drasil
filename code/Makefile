@@ -153,8 +153,8 @@ DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
 TRACEY_GRAPH_FOLDER_NAME = TraceyGraph
 TRACEY_GRAPH_FOLDER = $(TRACEY_GRAPH_FOLDER_NAME)/
 TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
-WEBSITE_FOLDER_NAME = Website
-WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
+WEBSITE_FOLDER_NAME = website
+WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
 
 #####################################
 #--- `make` command line options ---#
@@ -394,10 +394,9 @@ $(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
 
 # The website stabilization. First builds the website, and then copies the
 # contents from the website folder into stable-website.
-# Target will have the form Website_stabilize.
+# Target will have the form website_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
 	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
-	@mkdir -p "$(STABLE_WEBSITE_FOLDER)"
 	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 
 # Generate individual example pdfs. Needs Graphviz to work.

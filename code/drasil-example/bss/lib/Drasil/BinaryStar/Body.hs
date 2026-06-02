@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
-import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.System (mkSmithEtAlICO)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -29,7 +29,7 @@ import Drasil.BinaryStar.MetaConcepts (progName)
 import Drasil.BinaryStar.Concepts (concepts, defs)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
 import Drasil.BinaryStar.References (citations)
-import Drasil.BinaryStar.Unitals (symbols, acronyms, inputs, outputs,
+import Drasil.BinaryStar.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, constants, mass_1, mass_2,
   xVel_1, yVel_1, xVel_2, yVel_2, sepDist)
 import Drasil.BinaryStar.Assumptions (assumptions, isolated, constantMass)
@@ -46,7 +46,7 @@ mkSRS = [TableOfContents,
   RefProg intro
     [ TUnits
     , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-    , TAandA abbreviationsList
+    , TAandA
     ],
   IntroSec $
   IntroProg introBlurb (phrase progName)
@@ -205,20 +205,16 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 -- System Information --
 ------------------------------
 
-si :: System
-si = mkSystem
-  progName Specification [authorName]
+si :: SmithEtAlSRS
+si = mkSmithEtAlICO
+  progName [authorName]
   [] [] [] []
   tMods ([] :: [GenDefn]) dataDefs iMods
-  inputs outputs inConstraints constants
-  symbMap
-  []
+  inputs outputs inConstraints constants symbols
+  (labelledContent ++ funcReqsTables) symbMap []
 
 authorName :: Person
 authorName = person "Xinlu" "Yan"
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList = map nw symbols ++ nw progName : map nw acronyms
 
 ideaDicts :: [IdeaDict]
 ideaDicts = nw progName : nw ode : nw twoD : nw gravity : concepts

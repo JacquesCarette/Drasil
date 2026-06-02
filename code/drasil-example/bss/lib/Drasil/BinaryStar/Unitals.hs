@@ -7,6 +7,9 @@ import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
+
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   refBy, refName, requirement, srs, typUnc)
@@ -44,13 +47,13 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
 -- | Input variables (what the user provides)
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr [mass_1, mass_2, xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
-  xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0, tFinal]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.map dqdWr $ mass_1 :| [mass_2, xPos_1_0, yPos_1_0, xPos_2_0,
+  yPos_2_0, xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0, tFinal]
 
 -- | Output variables (what the system calculates)
-outputs :: [DefinedQuantityDict]
-outputs = [dqdWr bssStateVar]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = dqdWr bssStateVar :| []
 
 -- | Constants
 constants :: [ConstQDef]

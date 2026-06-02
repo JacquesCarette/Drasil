@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Drasil.Generator.Code (
   -- * Generators
   exportCode, exportCodeZoo,

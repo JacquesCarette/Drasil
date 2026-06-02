@@ -1,5 +1,8 @@
 {-# LANGUAGE DeriveFunctor #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TypeApplications #-}
 
 -- | MVP renderer for logging statements.
 
@@ -10,6 +13,12 @@ import Drasil.Shared.InterfaceCommon (VSType, TypeSym(..), VariableSym(..),
 import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), convTypeOO)
 import Drasil.Shared.AST (TypeData(..), td)
 import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.GOOL.CodeInfoOO (CodeInfoOO)
+import Drasil.GOOL.LanguageRenderer.JavaRenderer (JavaCode)
+import Drasil.GOOL.LanguageRenderer.CSharpRenderer (CSharpCode)
+import Drasil.GOOL.LanguageRenderer.CppRenderer (CppCode, CppSrcCode, CppHdrCode)
+import Drasil.GOOL.LanguageRenderer.PythonRenderer (PythonCode)
+import Drasil.GOOL.LanguageRenderer.SwiftRenderer (SwiftCode)
 import Drasil.Shared.LanguageRenderer (dot)
 
 import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
@@ -33,7 +42,87 @@ instance VariableSym (LoggerCode lang) where
   constant n _ = return $ return $ text n
   extVar l n _ = return $ return $ text l <> dot <> text n
 
-instance OOVariableSym (LoggerCode lang) where
+instance OOVariableSym (LoggerCode CodeInfoOO) where
+  classVar = var
+  classConst = constant
+  self = return $ return $ text "this"
+  classVarAccess cls vr = do
+    cls' <- cls
+    vr' <- vr
+    let clsDoc = (typeDoc . unLC) cls'
+        vrDoc = unLC vr'
+    return $ return $ clsDoc <> dot <> vrDoc
+  extClassVarAccess = classVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    return $ return $ unLC ob' <> dot <> unLC vr'
+  instanceVarSelf vr = do
+    vr' <- vr
+    self' <- self @(LoggerCode CodeInfoOO)
+    return $ return $ unLC self' <> dot <> unLC vr'
+
+instance OOVariableSym (LoggerCode JavaCode) where
+  classVar = var
+  classConst = constant
+  self = return $ return $ text "this"
+  classVarAccess cls vr = do
+    cls' <- cls
+    vr' <- vr
+    let clsDoc = (typeDoc . unLC) cls'
+        vrDoc = unLC vr'
+    return $ return $ clsDoc <> dot <> vrDoc
+  extClassVarAccess = classVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    return $ return $ unLC ob' <> dot <> unLC vr'
+  instanceVarSelf vr = do
+    vr' <- vr
+    self' <- self @(LoggerCode JavaCode)
+    return $ return $ unLC self' <> dot <> unLC vr'
+
+instance OOVariableSym (LoggerCode CSharpCode) where
+  classVar = var
+  classConst = constant
+  self = return $ return $ text "this"
+  classVarAccess cls vr = do
+    cls' <- cls
+    vr' <- vr
+    let clsDoc = (typeDoc . unLC) cls'
+        vrDoc = unLC vr'
+    return $ return $ clsDoc <> dot <> vrDoc
+  extClassVarAccess = classVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    return $ return $ unLC ob' <> dot <> unLC vr'
+  instanceVarSelf vr = do
+    vr' <- vr
+    self' <- self @(LoggerCode CSharpCode)
+    return $ return $ unLC self' <> dot <> unLC vr'
+
+instance OOVariableSym (LoggerCode (CppCode CppSrcCode CppHdrCode)) where
+  classVar = var
+  classConst = constant
+  self = return $ return $ text "self"
+  classVarAccess cls vr = do
+    cls' <- cls
+    vr' <- vr
+    let clsDoc = (typeDoc . unLC) cls'
+        vrDoc = unLC vr'
+    return $ return $ clsDoc <> dot <> vrDoc
+  extClassVarAccess = classVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    return $ return $ unLC ob' <> text "->" <> unLC vr'
+  instanceVarSelf vr = do
+    vr' <- vr
+    self' <- self @(LoggerCode (CppCode CppSrcCode CppHdrCode))
+    return $ return $ unLC self' <> text "->" <> unLC vr'
+
+instance OOVariableSym (LoggerCode PythonCode) where
   classVar = var
   classConst = constant
   self = return $ return $ text "self"
@@ -50,7 +139,28 @@ instance OOVariableSym (LoggerCode lang) where
     return $ return $ unLC ob' <> dot <> unLC vr'
   instanceVarSelf vr = do
     vr' <- vr
-    return $ return $ text "self" <> dot <> unLC vr'
+    self' <- self @(LoggerCode PythonCode)
+    return $ return $ unLC self' <> dot <> unLC vr'
+
+instance OOVariableSym (LoggerCode SwiftCode) where
+  classVar = var
+  classConst = constant
+  self = return $ return $ text "self"
+  classVarAccess cls vr = do
+    cls' <- cls
+    vr' <- vr
+    let clsDoc = (typeDoc . unLC) cls'
+        vrDoc = unLC vr'
+    return $ return $ clsDoc <> dot <> vrDoc
+  extClassVarAccess = classVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    return $ return $ unLC ob' <> dot <> unLC vr'
+  instanceVarSelf vr = do
+    vr' <- vr
+    self' <- self @(LoggerCode SwiftCode)
+    return $ return $ unLC self' <> dot <> unLC vr'
 
 instance ValueSym (LoggerCode lang) where
   type Value (LoggerCode lang) = Doc

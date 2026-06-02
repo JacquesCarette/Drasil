@@ -1,5 +1,6 @@
 {-# LANGUAGE PostfixOperators, Rank2Types #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
+{-# LANGUAGE FlexibleContexts #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, publicFuncProc, privateMethod, privateFuncProc, publicInOutFunc,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,
@@ -50,16 +51,17 @@ import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ScopeSym(..),
-  ScopeData, OOVariableSym(..), VariableElim(..), ($->), ValueSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
-  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
+  Initializers, SharedProg, OOProg, LoggerCode, AttachmentSym(..),
+  bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
+  ScopeSym(..), ScopeData, OOVariableSym(..), VariableElim(..), ($->),
+  ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..),
+  OOValueExpression(..), objMethodCallMixedArgs, Array(..), List(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
+  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
+  onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -503,7 +505,7 @@ elementSetBoolBfunc SContains = S.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r) => Mod -> GenState (OO.SFile r)
+genModDef :: (OOProg r, OOVariableSym (LoggerCode r)) => Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
@@ -511,18 +513,18 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
                 map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r) => Mod -> [GenState (SMethod r)]
+genModFuncs :: (OOProg r, OOVariableSym (LoggerCode r)) => Mod -> [GenState (SMethod r)]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r) => Mod -> [GenState (SClass r)]
+genModClasses :: (OOProg r, OOVariableSym (LoggerCode r)) => Mod -> [GenState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
-genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
-  -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
-  M.Class -> GenState (SClass r)
+genClass :: (OOProg r, OOVariableSym (LoggerCode r)) => (Name -> Maybe Name ->
+  Description -> [CSStateVar r] -> GenState [SMethod r] ->
+  GenState [SMethod r] -> GenState (SClass r)) -> M.Class -> GenState (SClass r)
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
@@ -537,9 +539,9 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
-  -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
-  [StateVariable] -> Func -> GenState (SMethod r)
+genFunc :: (OOProg r, OOVariableSym (LoggerCode r)) => (Name -> VSType r ->
+  Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
+  GenState (SMethod r)) -> [StateVariable] -> Func -> GenState (SMethod r)
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -564,7 +566,7 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
   genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
+convStmt :: (OOProg r, OOVariableSym (LoggerCode r)) => FuncStmt -> GenState (MSStatement r)
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
   vlog <- mkVar v
@@ -674,7 +676,7 @@ convStmt (FAppend a b) = do
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
-genDataFunc :: (OOProg r) => Name -> Description -> DataDesc ->
+genDataFunc :: (OOProg r, OOVariableSym (LoggerCode r)) => Name -> Description -> DataDesc ->
   GenState (SMethod r)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -684,7 +686,7 @@ genDataFunc nameTitle desc ddef = do
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
-readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
+readData :: (OOProg r, OOVariableSym (LoggerCode r)) => DataDesc -> GenState [MSBlock r]
 readData ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -696,7 +698,7 @@ readData ddef = do
     listDec 0 var_linetokens localScope ] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r) => Data -> r ScopeData -> GenState [MSStatement r]
+  where inData :: (OOProg r, OOVariableSym (LoggerCode r)) => Data -> r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
             vlog <- mkVar v
             vv <- mkVar v
@@ -762,7 +764,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
     s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
-getEntryVarLogs :: (OOProg r) => LinePattern -> GenState [MSStatement r]
+getEntryVarLogs :: (OOProg r, OOVariableSym (LoggerCode r)) => LinePattern -> GenState [MSStatement r]
 getEntryVarLogs lp = do
   vlogs <- getEntryVars Nothing lp
   vs <- getEntryVars Nothing lp

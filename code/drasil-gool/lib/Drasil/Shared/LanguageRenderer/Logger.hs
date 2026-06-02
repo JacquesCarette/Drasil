@@ -15,8 +15,9 @@ import Text.PrettyPrint.HughesPJ (Doc, text, comma, space, brackets, braces,
   punctuate, hcat)
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
 import Data.List (intercalate)
+import Data.Kind
 
-newtype (SharedProg lang) => LoggerCode lang a = LC {unLC :: a} deriving Functor
+newtype LoggerCode (lang :: Type -> Type) a = LC {unLC :: a} deriving Functor
 
 instance Applicative (LoggerCode lang) where
   pure = LC

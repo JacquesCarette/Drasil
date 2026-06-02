@@ -8,7 +8,6 @@ module Drasil.Generator.ChunkDump (
 import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
-import qualified Data.ByteString.Lazy.Char8 as LB
 import System.Environment (lookupEnv)
 
 import Drasil.Database (dumpChunkDB)
@@ -36,4 +35,4 @@ dumpEverything si =
 
 -- | Internal: Build a JSON file from arbitrary data.
 dumpTo :: ToJSON a => PathSegment -> a -> FileLayout
-dumpTo targetPath = file targetPath . LB.unpack . encodePretty
+dumpTo targetPath = file targetPath . encodePretty

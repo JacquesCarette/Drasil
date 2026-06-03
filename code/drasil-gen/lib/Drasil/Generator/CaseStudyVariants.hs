@@ -89,7 +89,5 @@ caseStudyMainDrasilWebsite syst websiteDoc = do
   setSystemLocale
   writeFiles OverwriteAllowed localPath $
     directory
-      [ps|Website|]
-      [ directory [ps|HTML|] $
-          genWebsite syst websiteDoc
-      ]
+      [ps|website|] $
+      genWebsite syst websiteDoc

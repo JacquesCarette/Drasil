@@ -50,4 +50,4 @@ import Drasil.Shared.Helpers (onStateValue, onCodeList)
 import Drasil.GProc.CodeInfoProc (unCI)
 
 import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
-import Drasil.Shared.LanguageRenderer.Logger (LoggingFor(..))
+import Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..))

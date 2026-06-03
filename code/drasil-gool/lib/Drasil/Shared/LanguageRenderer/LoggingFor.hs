@@ -5,7 +5,7 @@
 
 -- | MVP renderer for logging statements.
 
-module Drasil.Shared.LanguageRenderer.Logger (LoggingFor(..)) where
+module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
 import Drasil.Shared.InterfaceCommon (SharedProg, VSType, TypeSym(..),
   VariableSym(..), ValueSym(..), Literal(..), IndexTranslator(..), Array(..),

@@ -13,6 +13,8 @@ b = 5
 arr = [1, 2, 3]
 print("Value of arr: ", end="")
 print(arr)
+print("Length of arr: ", end="")
+print(len(arr))
 arr2 = []
 for i in range(0, 3, 1):
     arr2.append(0)
@@ -21,6 +23,8 @@ arr2[1] = 5
 arr2[2] = 6
 print("Value of arr2: ", end="")
 print(arr2)
+print("Length of arr2: ", end="")
+print(len(arr2))
 myOtherList = [1.0, 1.5]
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)

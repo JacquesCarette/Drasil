@@ -466,7 +466,6 @@ instance Array JavaCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "clone" []
 
-
 instance List JavaCode where
   listSize = C.listSize
   listAdd = G.listAdd

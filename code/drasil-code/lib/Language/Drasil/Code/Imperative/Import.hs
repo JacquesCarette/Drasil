@@ -51,7 +51,7 @@ import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, LoggerCode, AttachmentSym(..),
+  Initializers, SharedProg, OOProg, LoggingFor, AttachmentSym(..),
   bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
   ScopeSym(..), ScopeData, OOVariableSym(..), InstanceVarSelfSym(..),
   VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
@@ -505,7 +505,7 @@ elementSetBoolBfunc SContains = S.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+genModDef :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
   Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
@@ -514,18 +514,18 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
                 map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+genModFuncs :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
   Mod -> [GenState (SMethod r)]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+genModClasses :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
   Mod -> [GenState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
-genClass :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+genClass :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
   (Name -> Maybe Name -> Description -> [CSStateVar r] ->
    GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
   M.Class -> GenState (SClass r)
@@ -543,7 +543,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFunc :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+genFunc :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
   (Name -> VSType r -> Description -> [ParameterChunk] -> Maybe Description ->
   [MSBlock r] -> GenState (SMethod r)) -> [StateVariable] -> Func ->
   GenState (SMethod r)
@@ -571,7 +571,7 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
   genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmt :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => FuncStmt ->
+convStmt :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => FuncStmt ->
   GenState (MSStatement r)
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
@@ -682,7 +682,7 @@ convStmt (FAppend a b) = do
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
-genDataFunc :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => Name ->
+genDataFunc :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => Name ->
   Description -> DataDesc -> GenState (SMethod r)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -692,7 +692,7 @@ genDataFunc nameTitle desc ddef = do
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
-readData :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => DataDesc ->
+readData :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => DataDesc ->
  GenState [MSBlock r]
 readData ddef = do
   g <- get
@@ -705,7 +705,7 @@ readData ddef = do
     listDec 0 var_linetokens localScope ] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) => Data ->
+  where inData :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => Data ->
           r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
             vlog <- mkVar v
@@ -772,7 +772,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
     s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
-getEntryVarLogs :: (OOProg r, InstanceVarSelfSym (LoggerCode r)) =>
+getEntryVarLogs :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
   LinePattern -> GenState [MSStatement r]
 getEntryVarLogs lp = do
   vlogs <- getEntryVars Nothing lp

@@ -27,7 +27,7 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
   mainMod, initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC,
   unCPPC, unSC, pyName, pyVersion, jName, jVersion, csName, csVersion, cppName,
-  cppVersion, swiftName, swiftVersion, LoggerCode(..)
+  cppVersion, swiftName, swiftVersion, LoggingFor(..)
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
@@ -73,4 +73,4 @@ import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
 import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
 import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
 import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
-import Drasil.Shared.LanguageRenderer.Logger (LoggerCode(..))
+import Drasil.Shared.LanguageRenderer.Logger (LoggingFor(..))

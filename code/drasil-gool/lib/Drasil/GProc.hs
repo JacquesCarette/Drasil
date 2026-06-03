@@ -17,7 +17,7 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
   mainMod, initialState, onStateValue, onCodeList, unCI, unJLC, jlName,
-  jlVersion, LoggerCode(..)
+  jlVersion, LoggingFor(..)
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
@@ -50,4 +50,4 @@ import Drasil.Shared.Helpers (onStateValue, onCodeList)
 import Drasil.GProc.CodeInfoProc (unCI)
 
 import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
-import Drasil.Shared.LanguageRenderer.Logger (LoggerCode(..))
+import Drasil.Shared.LanguageRenderer.Logger (LoggingFor(..))

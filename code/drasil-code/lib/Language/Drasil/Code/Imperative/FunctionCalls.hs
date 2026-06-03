@@ -28,7 +28,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, LoggerCode,
+import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, LoggingFor,
   InstanceVarSelfSym(..), TypeSym(..), VariableValue(..), StatementSym(..),
   DeclStatement(..), convType, convTypeOO)
 
@@ -64,7 +64,7 @@ genConstraintCall = do
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
 genCalcCall :: (OOProg r,
-  InstanceVarSelfSym (LoggerCode r)) => CodeDefinition ->
+  InstanceVarSelfSym (LoggingFor r)) => CodeDefinition ->
   GenState (Maybe (MSStatement r))
 genCalcCall c = do
   g <- get

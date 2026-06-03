@@ -5,7 +5,7 @@
 
 -- | MVP renderer for logging statements.
 
-module Drasil.Shared.LanguageRenderer.Logger (LoggerCode(..)) where
+module Drasil.Shared.LanguageRenderer.Logger (LoggingFor(..)) where
 
 import Drasil.Shared.InterfaceCommon (SharedProg, VSType, TypeSym(..),
   VariableSym(..), ValueSym(..), Literal(..), IndexTranslator(..), Array(..),
@@ -26,22 +26,22 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, comma, space, brackets,
   braces, punctuate, hcat)
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
 
-newtype (SharedProg lang) => LoggerCode lang a = LC {unLC :: a} deriving Functor
+newtype (SharedProg lang) => LoggingFor lang a = LC {unLC :: a} deriving Functor
 
-instance Applicative (LoggerCode lang) where
+instance Applicative (LoggingFor lang) where
   pure = LC
   (LC f) <*> (LC x) = LC (f x)
 
-instance Monad (LoggerCode lang) where
+instance Monad (LoggingFor lang) where
   LC x >>= f = f x
 
-instance VariableSym (LoggerCode lang) where
-  type Variable (LoggerCode lang) = Doc
+instance VariableSym (LoggingFor lang) where
+  type Variable (LoggingFor lang) = Doc
   var n _ = return $ return $ text n
   constant n _ = return $ return $ text n
   extVar l n _ = return $ return $ text l <> dot <> text n
 
-instance OOVariableSym (LoggerCode lang) where
+instance OOVariableSym (LoggingFor lang) where
   classVar = var
   classConst = constant
   classVarAccess cls vr = do
@@ -56,62 +56,62 @@ instance OOVariableSym (LoggerCode lang) where
     vr' <- vr
     return $ return $ unLC ob' <> dot <> unLC vr'
 
-instance SelfSym (LoggerCode CodeInfoOO) where
+instance SelfSym (LoggingFor CodeInfoOO) where
   self = return $ return empty
 
-instance InstanceVarSelfSym (LoggerCode CodeInfoOO) where
+instance InstanceVarSelfSym (LoggingFor CodeInfoOO) where
   instanceVarSelf _ = return $ return empty
 
-instance SelfSym (LoggerCode JavaCode) where
+instance SelfSym (LoggingFor JavaCode) where
   self = return $ return $ text "this"
 
-instance InstanceVarSelfSym (LoggerCode JavaCode) where
+instance InstanceVarSelfSym (LoggingFor JavaCode) where
   instanceVarSelf vr = do
     vr' <- vr
-    self' <- self @(LoggerCode JavaCode)
+    self' <- self @(LoggingFor JavaCode)
     return $ return $ unLC self' <> dot <> unLC vr'
 
-instance SelfSym (LoggerCode CSharpCode) where
+instance SelfSym (LoggingFor CSharpCode) where
   self = return $ return $ text "this"
 
-instance InstanceVarSelfSym (LoggerCode CSharpCode) where
+instance InstanceVarSelfSym (LoggingFor CSharpCode) where
   instanceVarSelf vr = do
     vr' <- vr
-    self' <- self @(LoggerCode CSharpCode)
+    self' <- self @(LoggingFor CSharpCode)
     return $ return $ unLC self' <> dot <> unLC vr'
 
-instance SelfSym (LoggerCode (CppCode CppSrcCode CppHdrCode)) where
+instance SelfSym (LoggingFor (CppCode CppSrcCode CppHdrCode)) where
   self = return $ return $ text "self"
 
-instance InstanceVarSelfSym (LoggerCode (CppCode CppSrcCode CppHdrCode)) where
+instance InstanceVarSelfSym (LoggingFor (CppCode CppSrcCode CppHdrCode)) where
   instanceVarSelf vr = do
     vr' <- vr
-    self' <- self @(LoggerCode (CppCode CppSrcCode CppHdrCode))
+    self' <- self @(LoggingFor (CppCode CppSrcCode CppHdrCode))
     return $ return $ unLC self' <> text "->" <> unLC vr'
 
-instance SelfSym (LoggerCode PythonCode) where
+instance SelfSym (LoggingFor PythonCode) where
   self = return $ return $ text "self"
 
-instance InstanceVarSelfSym (LoggerCode PythonCode) where
+instance InstanceVarSelfSym (LoggingFor PythonCode) where
   instanceVarSelf vr = do
     vr' <- vr
-    self' <- self @(LoggerCode PythonCode)
+    self' <- self @(LoggingFor PythonCode)
     return $ return $ unLC self' <> dot <> unLC vr'
 
-instance SelfSym (LoggerCode SwiftCode) where
+instance SelfSym (LoggingFor SwiftCode) where
   self = return $ return $ text "self"
 
-instance InstanceVarSelfSym (LoggerCode SwiftCode) where
+instance InstanceVarSelfSym (LoggingFor SwiftCode) where
   instanceVarSelf vr = do
     vr' <- vr
-    self' <- self @(LoggerCode SwiftCode)
+    self' <- self @(LoggingFor SwiftCode)
     return $ return $ unLC self' <> dot <> unLC vr'
 
-instance ValueSym (LoggerCode lang) where
-  type Value (LoggerCode lang) = Doc
+instance ValueSym (LoggingFor lang) where
+  type Value (LoggingFor lang) = Doc
   valueType = error "Not implemented"
 
-instance TypeSym (LoggerCode lang) where
+instance TypeSym (LoggingFor lang) where
   bool = bool
   int = int
   float = float
@@ -127,13 +127,13 @@ instance TypeSym (LoggerCode lang) where
   funcType = funcType
   void = void
 
-instance OOTypeSym (LoggerCode lang) where
+instance OOTypeSym (LoggingFor lang) where
   obj nm = typeFromData (Object nm) ("Object<" ++ nm ++ ">")
 
-typeFromData :: CodeType -> String -> VSType (LoggerCode lang)
+typeFromData :: CodeType -> String -> VSType (LoggingFor lang)
 typeFromData tp str = return $ return $ td tp str (text str)
 
-instance Literal (LoggerCode lang) where
+instance Literal (LoggingFor lang) where
   litTrue = litString "True"
   litFalse = litString "False"
   litChar = return . return . P.char
@@ -151,17 +151,17 @@ instance Literal (LoggerCode lang) where
     let docs = map unLC vs'
     return $ return $ braces $ hcat $ punctuate (comma <> space) docs
 
-instance IndexTranslator (LoggerCode lang) where
+instance IndexTranslator (LoggingFor lang) where
   intToIndex = id
   indexToInt = id
 
-instance Array (LoggerCode lang) where
+instance Array (LoggingFor lang) where
   arrayElem idx' vr' = do
     idx <- idx'
     vr <- vr'
     return $ return $ unLC idx <> brackets (unLC vr)
 
 -- Not Implemented
-instance VariableElim (LoggerCode lang) where
+instance VariableElim (LoggingFor lang) where
   variableName = undefined
   variableType = undefined

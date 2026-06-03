@@ -14,8 +14,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (mkSmithEtAlICO)
 
 import Data.Drasil.People (olu)
-import Data.Drasil.Concepts.Math (mathcon')
-import Data.Drasil.Concepts.Physics (physicCon', motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
+import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Theories.Physics (newtonSLR)
@@ -100,7 +99,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw physicCon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

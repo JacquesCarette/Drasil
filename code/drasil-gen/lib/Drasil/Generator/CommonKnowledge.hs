@@ -13,7 +13,8 @@ import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.Physics (physicCon')
 import Data.Drasil.SI_Units (siUnits)
 import qualified Drasil.DocLang.SRS as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
@@ -78,7 +79,9 @@ basisIdeaDicts =
   doccon ++ prodtcon ++ educon ++ compcon ++
   -- CIs
   --  * doccon' - A list of CommonIdeas that are added for the same purpose as `doccon`.
-  map nw doccon'
+  --  * mathcon' - Math-related CommonIdeas. Used in 8/9 case studies so included in basis.
+  --  * physicCon' - Physics-related CommonIdeas (1D, 2D, 3D). Used in 6/9 case studies.
+  map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
 
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =

@@ -26,8 +26,8 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   physical, software, sysCont, softwareConstraint, softwareSys,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
-import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
-import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
+import Data.Drasil.Concepts.Math (cartesian, ode, graph)
+import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
@@ -119,7 +119,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw physicCon'
+  nw progName : []
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

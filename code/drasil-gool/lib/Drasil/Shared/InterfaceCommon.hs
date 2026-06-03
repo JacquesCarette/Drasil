@@ -284,6 +284,10 @@ class (IndexTranslator r) => Array r where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
   -- | Given array `a` and index `i`, creates `a[i]`
   arrayElem :: SValue r -> SVariable r -> SVariable r
+  -- TODO [Brandon Bosman, 06/03/2026]: Consider switching to a polymorphic `length`
+  -- for Array, List, and Set
+  -- | Given an array, return its length
+  arrayLength :: SValue r -> SValue r
 
 class (IndexTranslator r) => List r where
   listSize   :: SValue r -> SValue r

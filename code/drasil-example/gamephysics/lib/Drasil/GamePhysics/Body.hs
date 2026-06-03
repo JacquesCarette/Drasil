@@ -27,7 +27,7 @@ import Data.Drasil.Software.Products (openSource, videoGame)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
   rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
-import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
+import qualified Data.Drasil.Concepts.Math as CM (cartesian,
   rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 

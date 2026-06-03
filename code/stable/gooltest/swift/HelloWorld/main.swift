@@ -24,6 +24,18 @@ arr2[2] = 6
 print("Value of arr2: ", terminator: "")
 print(arr2)
 var myOtherList: [Double] = [1.0, 1.5]
+var arr_copy: [Int] = []
+for i0 in [Int](stride(from: 0, to: 3, by: 1)) {
+    arr_copy.append(0)
+}
+arr_copy = arr
+print("Value of arr_copy: ", terminator: "")
+print(arr_copy)
+arr[1] = 42
+print("Value of arr after modifying arr: ", terminator: "")
+print(arr)
+print("Value of arr_copy after modifying arr: ", terminator: "")
+print(arr_copy)
 var oneIndex: Int = myOtherList.firstIndex(of: 1.0)!
 print(oneIndex)
 a = myOtherList.count

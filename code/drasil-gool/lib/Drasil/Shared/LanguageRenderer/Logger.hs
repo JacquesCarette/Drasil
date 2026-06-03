@@ -8,10 +8,11 @@
 
 module Drasil.Shared.LanguageRenderer.Logger (LoggerCode(..)) where
 
-import Drasil.Shared.InterfaceCommon (VSType, TypeSym(..), VariableSym(..),
-  ValueSym(..), Literal(..), IndexTranslator(..), Array(..), VariableElim(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, VSType, TypeSym(..),
+  VariableSym(..), ValueSym(..), Literal(..), IndexTranslator(..), Array(..),
+  VariableElim(..))
 import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..), convTypeOO)
+  InstanceVarSelfSym(..))
 import Drasil.Shared.AST (TypeData(..), td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.GOOL.CodeInfoOO (CodeInfoOO)
@@ -25,10 +26,8 @@ import Drasil.Shared.LanguageRenderer (dot)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, comma, space, brackets,
   braces, punctuate, hcat)
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
-import Data.List (intercalate)
-import Data.Kind (Type)
 
-newtype LoggerCode (lang :: Type -> Type) a = LC {unLC :: a} deriving Functor
+newtype (SharedProg lang) => LoggerCode lang a = LC {unLC :: a} deriving Functor
 
 instance Applicative (LoggerCode lang) where
   pure = LC
@@ -114,35 +113,20 @@ instance ValueSym (LoggerCode lang) where
   valueType = error "Not implemented"
 
 instance TypeSym (LoggerCode lang) where
-  bool = typeFromData Boolean "Boolean"
-  int = typeFromData Integer "Integer"
-  float = typeFromData Float "Float"
-  double = typeFromData Double "Double"
-  char = typeFromData Char "Char"
-  string = typeFromData String "String"
-  infile = typeFromData InFile "InFile"
-  outfile = typeFromData OutFile "OutFile"
-  listType tp = do
-    tp' <- tp
-    let tpData = unLC tp'
-    typeFromData (List (cType tpData)) ("List<" ++ typeString tpData ++ ">")
-  setType tp = do
-    tp' <- tp
-    let tpData = unLC tp'
-    typeFromData (Set (cType tpData)) ("Set<" ++ typeString tpData ++ ">")
-  arrayType tp = do
-    tp' <- tp
-    let tpData = unLC tp'
-    typeFromData (Array (cType tpData)) ("Array<" ++ typeString tpData ++ ">")
-  listInnerType tp = tp >>= (convTypeOO . cType . unLC)
-  funcType inTps outTp = do
-    inTps' <- sequence inTps
-    outTp' <- outTp
-    let inTpsData = map unLC inTps'
-        outTpData = unLC outTp'
-    typeFromData (Func (map cType inTpsData) (cType outTpData))
-      ("(" ++ intercalate " × " (map typeString inTpsData) ++ ") → " ++ typeString outTpData)
-  void = typeFromData Void "Void"
+  bool = bool
+  int = int
+  float = float
+  double = double
+  char = char
+  string = string
+  infile = infile
+  outfile = outfile
+  listType = listType
+  setType = setType
+  arrayType = arrayType
+  listInnerType = listInnerType
+  funcType = funcType
+  void = void
 
 instance OOTypeSym (LoggerCode lang) where
   obj nm = typeFromData (Object nm) ("Object<" ++ nm ++ ">")

@@ -26,24 +26,33 @@ type RowCount = Natural
 -- | A CSV file representation containing an optional header and a list of rows.
 --
 -- Caches the column and row counts for future potential reference.
-data CSV = CSV (Maybe [Text]) [[Text]] ColumnCount RowCount
+data CSV = CSV
+  { _header :: Maybe [Text],
+    _rows :: [[Text]],
+    _columnCount :: ColumnCount,
+    _rowCount :: RowCount
+  }
   deriving (Show, Eq)
 
 -- | Get the header row of a 'CSV'.
 header :: CSV -> Maybe [Text]
-header (CSV mhr _ _ _) = mhr
+header = _header
+{-# INLINE header #-}
 
 -- | Get all rows of a 'CSV' (excludes header).
 rows :: CSV -> [[Text]]
-rows (CSV _ rs _ _) = rs
+rows = _rows
+{-# INLINE rows #-}
 
 -- | Get the number of columns in a 'CSV'.
 columnCount :: CSV -> ColumnCount
-columnCount (CSV _ _ cc _) = cc
+columnCount = _columnCount
+{-# INLINE columnCount #-}
 
 -- | Get the number of rows in a 'CSV' (excludes header).
 rowCount :: CSV -> RowCount
-rowCount (CSV _ _ _ rc) = rc
+rowCount = _rowCount
+{-# INLINE rowCount #-}
 
 -- | Create a 'CSV'. Expects all rows and the header to have the same length. If
 -- the expected column count is not provided (the first parameter), then the
@@ -79,6 +88,6 @@ expectedColumnCount _ _ (fr : _) = (len fr, "first row length")
 expectedColumnCount _ _ _ = (0, "empty data")
 
 -- | Internal: Output polymorphic 'length'.
-len :: Integral n => [a] -> n
+len :: (Integral n) => [a] -> n
 len = fromIntegral . length
 {-# INLINE len #-}

@@ -119,7 +119,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : []
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

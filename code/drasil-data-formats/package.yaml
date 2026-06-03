@@ -34,7 +34,7 @@ tests:
     source-dirs: test
     main: Main.hs
     dependencies:
-    - drasil-build-artifacts
+    - drasil-file-handling
     - drasil-data-formats
     - filepath
     - tasty

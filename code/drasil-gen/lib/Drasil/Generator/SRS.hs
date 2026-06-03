@@ -7,8 +7,8 @@ module Drasil.Generator.SRS (
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts (FileLayout, directory, file, ps)
 import Drasil.DocLang (mkGraphInfo)
+import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational), Document(..), checkToC)
 import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,

@@ -25,7 +25,7 @@ module Drasil.Shared.LanguageRenderer (
   prependToBody, appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
-import Drasil.Build.Artifacts.Legacy (blank, indent, indentList)
+import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))

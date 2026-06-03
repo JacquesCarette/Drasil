@@ -22,11 +22,11 @@ dependencies:
 - containers
 - directory
 - time
-- drasil-build-artifacts
 - drasil-code
 - drasil-data
 - drasil-database
 - drasil-docLang
+- drasil-file-handling
 - drasil-gool
 - drasil-makefile
 - drasil-metadata

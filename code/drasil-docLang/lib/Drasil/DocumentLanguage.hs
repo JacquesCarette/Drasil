@@ -122,7 +122,7 @@ buildTraceMaps sd si
     let db = si ^. systemdb
         -- Generate a copy to the /future/ SVG-based 'LabelledContent's
         -- containing the traceability graphs.
-        tglcs = genTraceGraphLabCons $ si ^. programName
+        tglcs = genTraceGraphLabCons
         -- Generates the traceability map from the 'DocDesc' for use in the
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
@@ -156,7 +156,7 @@ fillReferences allSections cites si = si2
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs (si ^. programName) ++ map ref cites
+      ++ traceyGraphGetRefs ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
@@ -405,7 +405,7 @@ introChgs xs _ = foldlSP [S "This", phrase section_, S "lists the",
 mkTraceabilitySec :: TraceabilitySec -> SmithEtAlSRS -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (map LlC trace) (si ^. programName) []
+  (map LlC trace) []
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs

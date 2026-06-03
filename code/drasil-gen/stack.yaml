@@ -30,11 +30,11 @@ resolver: lts-22.44
 #   - wai
 packages:
 - .
-- ../drasil-build-artifacts
 - ../drasil-code
 - ../drasil-data
 - ../drasil-database
 - ../drasil-docLang
+- ../drasil-file-handling
 - ../drasil-gool
 - ../drasil-lang
 - ../drasil-makefile

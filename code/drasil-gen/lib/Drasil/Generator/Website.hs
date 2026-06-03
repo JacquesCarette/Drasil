@@ -8,7 +8,7 @@ where
 
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts (FileLayout, file, ps)
+import Drasil.FileHandling (FileLayout, file, ps)
 import Drasil.System (DrasilWebsite, systemdb, webRefs)
 import Language.Drasil (Document, Stage (Equational))
 import Language.Drasil.Printers (Notation (Engineering), genHTML, makeCSS, piSys)

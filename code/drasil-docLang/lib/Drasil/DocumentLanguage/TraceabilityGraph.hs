@@ -5,7 +5,6 @@ module Drasil.DocumentLanguage.TraceabilityGraph
 
 -- Haskell stuff
 import Control.Lens ((^.))
-import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 
 -- General Drasil
@@ -36,10 +35,10 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 -- | Wrapper for 'traceMIntro' and 'traceGIntro'. Turns references ('LabelledContent's),
 -- trailing notes ('Sentence's), and any other needed contents to create a Traceability 'Section'.
 -- Traceability graphs generate as both a link and a figure for convenience.
-traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
-traceMGF [] [] [] _ = SRS.traceyMandG [mkParagraph $ emptySectSentPlu [traceyMatrix, traceyGraph]]
-traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents
-  ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon ex)
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
+traceMGF [] [] [] = SRS.traceyMandG [mkParagraph $ emptySectSentPlu [traceyMatrix, traceyGraph]]
+traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents
+  ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon)
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
@@ -166,41 +165,40 @@ traceGLst :: Contents
 traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
 
 -- | The Traceability Graph contents.
-traceGCon :: String -> [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
-traceGCon ex = map LlC (genTraceGraphLabCons ex)
+traceGCon :: [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
+traceGCon = map LlC genTraceGraphLabCons
             ++ [mkParagraph $ S "For convenience, the following graphs can be\
                \ found at the links below:", traceGLst]
 
--- | Generate the `LabelledContent` chunks, specialized to a specific example
--- (and its path).
-genTraceGraphLabCons :: String -> [LabelledContent]
-genTraceGraphLabCons ex = zipWith (traceGraphLC ex) traceGFiles traceGUIDs
+-- | Generate the `LabelledContent` chunks
+genTraceGraphLabCons :: [LabelledContent]
+genTraceGraphLabCons = zipWith traceGraphLC traceGFiles traceGUIDs
 
 -- | Generates traceability graphs as figures on an SRS document.
-traceGraphLC :: String -> FilePath -> UID -> LabelledContent
-traceGraphLC ex fp u = llccFig' u $ fig (S $ show u) (traceyGraphPath ex fp)
+traceGraphLC :: FilePath -> UID -> LabelledContent
+traceGraphLC fp u = llccFig' u $ fig (S $ show u) (traceyGraphPath fp)
 
 -- | Traceability graph file names.
 traceGFiles :: [String]
 -- | Traceabiliy graph reference 'UID's.
 traceGUIDs :: [UID]
--- | Create reference paths to traceability graphs given an example name. For @.pdf@ links
-traceyGraphPaths :: String -> [String]
--- | Create references to traceability graphs given an example name. Primarily used for reference database in examples.
-traceyGraphGetRefs :: String -> [Reference]
--- | Gets the path of a traceability graph given an example folder name and the graph name. For @.png@ files
-traceyGraphPath :: String -> String -> String
+-- | Create reference paths to traceability graphs. For @.pdf@ links
+traceyGraphPaths :: [String]
+-- | Create references to traceability graphs. Primarily used for reference database in examples.
+traceyGraphGetRefs :: [Reference]
+-- | Gets the path of a traceability graph given the graph name. For @.png@ files
+traceyGraphPath :: String -> String
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
-traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower ex ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs ex = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs (traceyGraphPaths $ map toLower ex)
+traceyGraphPaths = map (\x -> resourcePath ++ "/" ++ x ++ ".svg") traceGFiles
+traceyGraphGetRefs = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
 -- for actual use in creating the graph figures
-traceyGraphPath ex f = resourcePath ++ map toLower ex ++ "/" ++ f ++ ".svg"
+traceyGraphPath f = resourcePath ++ "/" ++ f ++ ".svg"
 
 -- | Traceability graphs reference path.
 resourcePath :: String
-resourcePath = "../../../../traceygraphs/"
+resourcePath = "../../TraceyGraph"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]

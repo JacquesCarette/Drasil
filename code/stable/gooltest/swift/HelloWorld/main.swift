@@ -14,6 +14,8 @@ var b: Int = 5
 var arr: [Int] = [1, 2, 3]
 print("Value of arr: ", terminator: "")
 print(arr)
+print("Length of arr: ", terminator: "")
+print(arr.count)
 var arr2: [Int] = []
 for i in [Int](stride(from: 0, to: 3, by: 1)) {
     arr2.append(0)
@@ -23,6 +25,8 @@ arr2[1] = 5
 arr2[2] = 6
 print("Value of arr2: ", terminator: "")
 print(arr2)
+print("Length of arr2: ", terminator: "")
+print(arr2.count)
 var myOtherList: [Double] = [1.0, 1.5]
 var arr_copy: [Int] = []
 for i0 in [Int](stride(from: 0, to: 3, by: 1)) {

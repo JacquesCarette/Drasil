@@ -36,6 +36,8 @@ int main(int argc, const char *argv[]) {
         std::cout << arr.at((int)(arr.size()) - 1);
     }
     std::cout << "]" << std::endl;
+    std::cout << "Length of arr: ";
+    std::cout << (int)(arr.size()) << std::endl;
     vector<int> arr2(3);
     arr2[0] = 4;
     arr2[1] = 5;
@@ -50,6 +52,8 @@ int main(int argc, const char *argv[]) {
         std::cout << arr2.at((int)(arr2.size()) - 1);
     }
     std::cout << "]" << std::endl;
+    std::cout << "Length of arr2: ";
+    std::cout << (int)(arr2.size()) << std::endl;
     vector<double> myOtherList{1.0, 1.5};
     vector<int> arr_copy(3);
     arr_copy = arr;

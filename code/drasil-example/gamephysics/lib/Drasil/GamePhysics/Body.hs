@@ -26,9 +26,9 @@ import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
-  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
+  rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian,
-  mathcon', rightHand, line, point)
+  rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -109,8 +109,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- CIs
-  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
-  map nw CP.physicCon'
+  map nw [progName, centreMass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

@@ -457,6 +457,7 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
+  arrayLength = pair1 arrayLength arrayLength
   arrayClone = pair1 arrayClone arrayClone
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
@@ -1392,6 +1393,7 @@ instance IndexTranslator CppSrcCode where
 
 instance Array CppSrcCode where
   arrayElem = G.arrayElem
+  arrayLength = listSize
   arrayClone = id -- C++ automatically clones std::vectors on assignment
 
 instance List CppSrcCode where
@@ -2113,6 +2115,7 @@ instance IndexTranslator CppHdrCode where
 
 instance Array CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
+  arrayLength = listSize
   arrayClone = id -- C++ automatically clones std::vectors on assignment
 
 instance List CppHdrCode where

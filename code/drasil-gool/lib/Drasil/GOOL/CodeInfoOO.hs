@@ -250,6 +250,7 @@ instance IndexTranslator CodeInfoOO where
 
 instance Array CodeInfoOO where
   arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
   arrayClone _ = noInfo
 
 instance List CodeInfoOO where

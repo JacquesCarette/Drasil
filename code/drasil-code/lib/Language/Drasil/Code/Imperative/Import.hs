@@ -21,7 +21,7 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), IsChunk)
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
@@ -131,7 +131,7 @@ inputVariable Bundled Var v = do
   g <- get
   inClsName <- genICName InputParameters
   ip <- mkVar (quantvar inParams)
-  return $ if currentClass g == inClsName then instanceVarSelf v else ip $-> v
+  return $ if currentClass g == inClsName then instanceVarSelf v else valueOf ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
@@ -149,7 +149,7 @@ constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr ->
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
-  return $ cs $-> v
+  return $ valueOf cs $-> v
 constVariable (Store Bundled) Const v = do
   cs <- mkVar (quantvar consts)
   classVariable cs v
@@ -182,7 +182,7 @@ mkVal v = do
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ instanceVarAccess (var (codeName o) (convTypeOO ot))
+        return $ valueOf $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
@@ -193,7 +193,7 @@ mkVar v = do
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ instanceVarAccess (var (codeName o) (convTypeOO ot))
+        return $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 
@@ -403,12 +403,12 @@ convCall c x ns f libf = do
     (Map.lookup funcNm mem)
 
 -- | Converts a 'Constraint' to a 'CodeExpr'.
-renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
+renderC :: (IsChunk c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
 renderC s (Elem _ rr)          = renderSet s rr
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
-renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
+renderRealInt :: (IsChunk c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
 renderRealInt s (Bounded (Inc, a) (Inc, b)) = (a $<= sy s) $&& (sy s $<= b)
 renderRealInt s (Bounded (Inc, a) (Exc, b)) = (a $<= sy s) $&& (sy s $<  b)
 renderRealInt s (Bounded (Exc, a) (Inc, b)) = (a $<  sy s) $&& (sy s $<= b)
@@ -418,7 +418,7 @@ renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
-renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
+renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
 renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.

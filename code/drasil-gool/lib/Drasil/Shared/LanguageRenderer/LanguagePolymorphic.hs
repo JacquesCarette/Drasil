@@ -47,7 +47,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
   RenderFunction(funcFromData), FunctionElim(functionType),
   RenderStatement(stmtFromData), StatementElim(statementTerm),
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
-  BlockCommentSym(..))
+  BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
@@ -196,14 +196,14 @@ classVarAccessCheck v = classVarCS (variableBind v)
           "classVarAccess can only be used to access class-level variables"
         classVarCS ClassLevel = v
 
-instanceVarAccess :: (CommonRenderSym r) => SVariable r -> SVariable r -> SVariable r
+instanceVarAccess :: (CommonRenderSym r) => SValue r -> SVariable r -> SVariable r
 instanceVarAccess o' v' = do
   o <- o'
   v <- v'
   let instanceVarAccess' ClassLevel = error
         "Cannot access class-level variables through an object, use classVarAccess instead"
-      instanceVarAccess' InstanceLevel = mkVar (variableName o `access` variableName v)
-        (variableType v) (R.instanceVarAccess (RC.variable o) (RC.variable v))
+      instanceVarAccess' InstanceLevel = mkVar (render (value o) `access` variableName v)
+        (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
 arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r

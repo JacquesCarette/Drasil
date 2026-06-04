@@ -25,7 +25,7 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (softwarecon)
@@ -117,7 +117,7 @@ ideaDicts =
   -- IdeaDicts
   [lateralLoad, materialProprty] ++ con' ++
   -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+  map nw [progName, iGlass, lGlass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon

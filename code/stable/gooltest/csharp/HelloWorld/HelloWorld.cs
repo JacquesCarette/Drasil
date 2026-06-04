@@ -19,6 +19,8 @@ public class HelloWorld {
         Console.Write("[");
         Console.Write(string.Join(", ", arr));
         Console.WriteLine("]");
+        Console.Write("Length of arr: ");
+        Console.WriteLine(arr.Length);
         int[] arr2 = new int[3];
         arr2[0] = 4;
         arr2[1] = 5;
@@ -27,6 +29,8 @@ public class HelloWorld {
         Console.Write("[");
         Console.Write(string.Join(", ", arr2));
         Console.WriteLine("]");
+        Console.Write("Length of arr2: ");
+        Console.WriteLine(arr2.Length);
         List<double> myOtherList = new List<double> {1.0, 1.5};
         int[] arr_copy = new int[3];
         arr_copy = (int[])(arr.Clone());

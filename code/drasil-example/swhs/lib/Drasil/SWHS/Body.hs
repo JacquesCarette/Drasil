@@ -25,7 +25,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   output_, physical, physics, property, quantity, software, softwareSys,
   solution, sysCont, system, user, value, variable)
 import Data.Drasil.Concepts.Education (calculus, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon)
@@ -81,8 +81,7 @@ ideaDicts =
   -- Actual IdeaDicts
   materialProprty :
   -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++
-  map nw mathcon'
+  map nw [progName', progName] ++ [nw phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

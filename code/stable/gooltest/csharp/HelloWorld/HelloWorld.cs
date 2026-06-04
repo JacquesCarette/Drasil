@@ -422,3 +422,15 @@ public class HelloWorld {
         }
     }
 }
+
+public class TestClass {
+    public int a;
+    
+    public TestClass(int a) {
+        this.a = a;
+    }
+    
+    public static TestClass add(TestClass t1, TestClass t2) {
+        return new TestClass(t1.a + t2.a);
+    }
+}

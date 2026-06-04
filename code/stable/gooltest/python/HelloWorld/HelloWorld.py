@@ -8,6 +8,13 @@ import sys
 
 import Helper
 
+class TestClass:
+    def __init__(self, a):
+        self.a = a
+    
+    def add(self, t1, t2):
+        return TestClass(t1.a + t2.a)
+
 # Initializing variables
 b = 5
 arr = [1, 2, 3]

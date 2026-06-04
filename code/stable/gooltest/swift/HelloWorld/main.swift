@@ -8,6 +8,18 @@ import Foundation
 
 extension String: @retroactive Error {}
 
+class TestClass {
+    var a: Int = 0
+    
+    init(_ a: Int) {
+        self.a = a
+    }
+    
+    static func add(_ t1: TestClass, _ t2: TestClass) -> TestClass {
+        return TestClass(t1.a + t2.a)
+    }
+}
+
 // Initializing variables
 var a: Int
 var b: Int = 5

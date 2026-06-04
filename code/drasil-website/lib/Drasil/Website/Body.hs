@@ -20,7 +20,7 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
 import Drasil.GlassBR.Unitals (blast)
 import Drasil.GlassBR.Concepts (glaSlab)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
@@ -73,7 +73,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
+symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl] ++
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,

@@ -8,7 +8,8 @@
 module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
 import Drasil.Shared.InterfaceCommon (VSType, TypeSym(..), VariableSym(..),
-  ValueSym(..), Literal(..), IndexTranslator(..), Array(..), VariableElim(..))
+  VariableValue(..), ValueSym(..), Literal(..), IndexTranslator(..), Array(..),
+  VariableElim(..))
 import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..))
 import Drasil.Shared.AST (TypeData(..), td)
@@ -165,3 +166,6 @@ instance Array (LoggingFor lang) where
 instance VariableElim (LoggingFor lang) where
   variableName = undefined
   variableType = undefined
+
+instance VariableValue (LoggingFor lang) where
+  valueOf = id

@@ -145,9 +145,9 @@ class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   -- performs any necessary imports and creates `C.v`
   extClassVarAccess :: VSType r -> SVariable r -> SVariable r
   -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
-  instanceVarAccess :: SVariable r -> SVariable r -> SVariable r
+  instanceVarAccess :: SValue r -> SVariable r -> SVariable r
 
-($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
+($->) :: (OOVariableSym r) => SValue r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = instanceVarAccess
 

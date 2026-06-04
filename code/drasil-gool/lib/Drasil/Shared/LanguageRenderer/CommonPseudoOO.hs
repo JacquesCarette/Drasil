@@ -142,7 +142,7 @@ classVarAccess f c' v'= do
   toState $ classVarAccessCheck vr
 
 instanceVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
-instanceVarSelf = IG.instanceVarAccess IG.self
+instanceVarSelf = IG.instanceVarAccess (IC.valueOf IG.self)
 
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])

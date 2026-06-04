@@ -202,6 +202,7 @@ instance IndexTranslator CodeInfoProc where
 
 instance Array CodeInfoProc where
   arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
 
 instance List CodeInfoProc where
   listSize   = execute1

@@ -455,6 +455,7 @@ instance IndexTranslator SwiftCode where
 
 instance Array SwiftCode where
   arrayElem = G.arrayElem
+  arrayLength = listSize
 
 instance List SwiftCode where
   listSize = C.listSize

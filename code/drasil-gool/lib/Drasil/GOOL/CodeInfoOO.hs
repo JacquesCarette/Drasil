@@ -254,6 +254,7 @@ instance IndexTranslator CodeInfoOO where
 
 instance Array CodeInfoOO where
   arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
 
 instance List CodeInfoOO where
   listSize   = execute1

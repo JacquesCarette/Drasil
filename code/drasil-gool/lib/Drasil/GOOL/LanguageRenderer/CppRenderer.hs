@@ -461,6 +461,7 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
+  arrayLength = pair1 arrayLength arrayLength
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
@@ -1399,6 +1400,7 @@ instance IndexTranslator CppSrcCode where
 
 instance Array CppSrcCode where
   arrayElem = G.arrayElem
+  arrayLength = listSize
 
 instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
@@ -2123,6 +2125,7 @@ instance IndexTranslator CppHdrCode where
 
 instance Array CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
+  arrayLength = listSize
 
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty

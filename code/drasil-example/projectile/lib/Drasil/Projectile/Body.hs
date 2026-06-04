@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (gravity, physicCon',
+import Data.Drasil.Concepts.Physics (gravity,
   rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Theory (inModel)
@@ -154,7 +154,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [projMotion, rectVel] ++
   -- CIs
-  nw progName : map nw physicCon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

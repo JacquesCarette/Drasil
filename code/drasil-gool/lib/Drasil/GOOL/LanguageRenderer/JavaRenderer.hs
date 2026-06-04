@@ -466,6 +466,7 @@ instance IndexTranslator JavaCode where
 
 instance Array JavaCode where
   arrayElem = G.arrayElem
+  arrayLength arr = valueOf $ instanceVarAccess arr (var "length" int)
 
 instance List JavaCode where
   listSize = C.listSize

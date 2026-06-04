@@ -22,7 +22,7 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), IsChunk)
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
@@ -53,15 +53,15 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, LoggingFor, AttachmentSym(..),
   bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
-  ScopeSym(..), ScopeData, OOVariableSym(..), InstanceVarSelfSym(..),
-  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, Array(..),
-  List(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
-  privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue)
+  VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..),
+  InstanceVarSelfSym(..), VariableElim(..), ($->), ValueSym(..), Literal(..),
+  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..),
+  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
+  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
+  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -106,8 +106,8 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r) => Name ->
-  VSType r -> GenState (SVariable r)
+variable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
@@ -127,14 +127,15 @@ variable s t = do
 -- WithInputs for constant structure, inputs are 'Bundled', and constant
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
-inputVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r) =>
-  Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
+inputVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => Structure -> ConstantRepr -> SVariable r ->
+  GenState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- get
   inClsName <- genICName InputParameters
   ip <- mkVar (quantvar inParams)
-  return $ if currentClass g == inClsName then instanceVarSelf v else ip $-> v
+  return $ if currentClass g == inClsName then instanceVarSelf v else valueOf ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
@@ -147,12 +148,13 @@ inputVariable Bundled Const v = do
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r) =>
-  ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
+constVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => ConstantStructure -> ConstantRepr -> SVariable r ->
+  GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
-  return $ cs $-> v
+  return $ valueOf cs $-> v
 constVariable (Store Bundled) Const v = do
   cs <- mkVar (quantvar consts)
   classVariable cs v
@@ -185,19 +187,19 @@ mkVal v = do
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ instanceVarAccess (var (codeName o) (convTypeOO ot))
+        return $ valueOf $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r) => CodeVarChunk ->
-  GenState (SVariable r)
+mkVar :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ instanceVarAccess (var (codeName o) (convTypeOO ot))
+        return $ instanceVarAccess (valueOf $ var (codeName o) (convTypeOO ot))
           (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 
@@ -407,12 +409,12 @@ convCall c x ns f libf = do
     (Map.lookup funcNm mem)
 
 -- | Converts a 'Constraint' to a 'CodeExpr'.
-renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
+renderC :: (IsChunk c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
 renderC s (Elem _ rr)          = renderSet s rr
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
-renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
+renderRealInt :: (IsChunk c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
 renderRealInt s (Bounded (Inc, a) (Inc, b)) = (a $<= sy s) $&& (sy s $<= b)
 renderRealInt s (Bounded (Inc, a) (Exc, b)) = (a $<= sy s) $&& (sy s $<  b)
 renderRealInt s (Bounded (Exc, a) (Inc, b)) = (a $<  sy s) $&& (sy s $<= b)
@@ -422,7 +424,7 @@ renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
-renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
+renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
 renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
@@ -765,8 +767,8 @@ readData ddef = do
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVars :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r) =>
-  Maybe String -> LinePattern -> GenState [SVariable r]
+getEntryVars :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . listInnerType . convTypeOO))
     s) (getPatternInputs lp)

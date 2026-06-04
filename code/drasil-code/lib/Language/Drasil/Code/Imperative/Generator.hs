@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
-import Drasil.FileHandling (FileLayout, file, directory, ps)
+import Drasil.FileHandling (FileLayout, file, directory, exactFile, ps)
 import Language.Drasil
 import Drasil.GOOL (OOProg, LoggingFor, InstanceVarSelfSym(..),
   VisibilityTag(..), headers, sources, mainMod, ProgData(..), initialState,
@@ -130,7 +130,7 @@ generateCode l unReprProg unReprPack g =
       (PackageData prog progDossier) = unReprPack pckg
       designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
-      initFile = [file [ps|__init__.py|] empty | l == Python]
+      initFile = [exactFile [ps|__init__.py|] empty | l == Python]
       packageFiles = toFileLayout (progMods prog) ++ progDossier
         ++ designLogFile ++ initFile
   in
@@ -379,3 +379,4 @@ getDir Java = "java"
 getDir Python = "python"
 getDir Swift = "swift"
 getDir Julia = "julia"
+getDir Matlab = "matlab"

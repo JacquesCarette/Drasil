@@ -14,9 +14,9 @@ import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation as Doc (material_)
-import Data.Drasil.Concepts.Math (mathcon', ode)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
@@ -154,8 +154,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [htTrans, materialProprty] ++
   -- CIs
-  map nw [progName, phsChgMtrl] ++
-  map nw CP.physicCon' ++ map nw mathcon'
+  map nw [progName, phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

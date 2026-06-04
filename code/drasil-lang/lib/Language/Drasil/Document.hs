@@ -10,8 +10,9 @@ module Language.Drasil.Document (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid, HasChunkRefs(..))
 import Utils.Drasil (repUnd)
+import qualified Data.Set as Set
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
@@ -50,6 +51,13 @@ data Content   = Content   Contents
 -}
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
+
+instance HasChunkRefs Section where 
+  chunkRefs sec = Set.unions
+    [ chunkRefs (tle sec)
+    , chunkRefs (sec ^. lab)
+    ]
+  {-# INLINABLE chunkRefs #-}
 -- | 'Section's are equal if 'UID's are equal.
 instance Eq Section where a == b = a ^. uid == b ^. uid
 -- | Finds the short name of a 'Section'.

@@ -9,7 +9,8 @@ import qualified Data.Map as M
 import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.FileHandling (FileLayout, file, directory, ps, goldenTestingGroup, goldenTest)
+import Drasil.FileHandling (FileLayout, file, directory, ps, goldenTestingGroup,
+  goldenTest, ps, (</>))
 import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   FileData(..), modDoc)
@@ -60,8 +61,8 @@ codeGenTestGroup =
 goolTestGroup :: String -> (forall r. (OOProg r) => OO.GSProgram r) -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
-    [osp|test/build2/{n}|]
-    [osp|test/golden2/{n}|]
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
     n
     [ goldenTest "java" $ directory [ps|java|] $ genCode [classes unJC unJP p],
       goldenTest "python" $ directory [ps|python|] $ genCode [classes unPC unPP p],
@@ -73,8 +74,8 @@ goolTestGroup n p =
 gProcTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
-    [osp|test/build2/{n}|]
-    [osp|test/golden2/{n}|]
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
     n
     [ goldenTest "julia" $ directory [ps|julia|] $ genCode [jlClasses unJLC unJLP p]
     ]

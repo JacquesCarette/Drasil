@@ -60,6 +60,10 @@ public class HelloWorld {
         Set<Integer> s = Set.of(4, 7, 5);
         assert s.contains(7) : "Set s should contain 7";
         
+        // Object tests
+        TestClass t1 = new TestClass(5);
+        TestClass t2 = new TestClass(4);
+        
         // List slicing tests
         // Create variables for list slices
         ArrayList<Double> mySlicedList = new ArrayList<Double>(2);

@@ -139,6 +139,10 @@ int main(int argc, const char *argv[]) {
     set<int> s = {4, 7, 5};
     assert(s.find(7) != s.end() && "Set s should contain 7");
     
+    // Object tests
+    TestClass t1 = TestClass(5);
+    TestClass t2 = TestClass(4);
+    
     // List slicing tests
     // Create variables for list slices
     vector<double> mySlicedList(2);

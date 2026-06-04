@@ -46,7 +46,7 @@ myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO :: (OOProg r) => SMethod r
-helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy"),
@@ -118,6 +118,11 @@ helloInitVariables = block [comment "Initializing variables",
   setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
+
+objectTests :: (OOProg r) => MSBlock r
+objectTests = block [comment "Object tests",
+  varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
+  varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4])]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,

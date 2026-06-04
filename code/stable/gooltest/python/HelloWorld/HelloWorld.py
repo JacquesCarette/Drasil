@@ -63,6 +63,10 @@ assert oneIndex == 0, "oneIndex should be 0"
 s = {4, 7, 5}
 assert 7 in s, "Set s should contain 7"
 
+# Object tests
+t1 = TestClass(5)
+t2 = TestClass(4)
+
 # List slicing tests
 # Create variables for list slices
 mySlicedList = []

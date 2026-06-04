@@ -83,6 +83,10 @@ public class HelloWorld {
         HashSet<int> s = new HashSet<int> {4, 7, 5};
         Debug.Assert( s.Contains(7) , "Set s should contain 7");
         
+        // Object tests
+        TestClass t1 = new TestClass(5);
+        TestClass t2 = new TestClass(4);
+        
         // List slicing tests
         // Create variables for list slices
         List<double> mySlicedList = new List<double>(2);

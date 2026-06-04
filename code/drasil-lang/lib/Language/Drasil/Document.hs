@@ -52,7 +52,7 @@ data Content   = Content   Contents
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 
-instance HasChunkRefs Section where 
+instance HasChunkRefs Section where
   chunkRefs sec = Set.unions
     [ chunkRefs (tle sec)
     , chunkRefs (sec ^. lab)

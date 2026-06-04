@@ -1,4 +1,4 @@
-{-# LANGUAGE PatternSynonyms, QuasiQuotes, TupleSections #-}
+{-# LANGUAGE PatternSynonyms, QuasiQuotes, TupleSections, RankNTypes #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
@@ -13,9 +13,9 @@ import Drasil.FileHandling (FileLayout, file, directory, ps, goldenTestingGroup,
 import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   FileData(..), modDoc)
-import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
+import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
 import Drasil.GProc (ProcProg, unJLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
+import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
 import Language.Drasil.Code (ImplementationType(..), makeSds)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,
@@ -26,7 +26,7 @@ import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
 import VectorTest (vectorTestOO, vectorTestProc)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
-import Test.Tasty (TestTree, defaultMain)
+import Test.Tasty (TestTree, defaultMain, testGroup)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
@@ -38,92 +38,46 @@ main' = defaultMain codeGenTestGroup
 
 codeGenTestGroup :: TestTree
 codeGenTestGroup =
-  goldenTestingGroup
-    [osp|test/build|]
-    [osp|test/golden|]
-    "gooltest"
-    [ goldenTest "java" $ directory [ps|java|] $ genCode (classes unJC unJP),
-      goldenTest "python" $ directory [ps|python|] $ genCode (classes unPC unPP),
-      goldenTest "csharp" $ directory [ps|csharp|] $ genCode (classes unCSC unCSP),
-      goldenTest "cpp" $ directory [ps|cpp|] $ genCode (classes unCPPC unCPPP),
-      goldenTest "swift" $ directory [ps|swift|] $ genCode (classes unSC unSP),
-      goldenTest "julia" $ directory [ps|julia|] $ genCode (jlClasses unJLC unJLP)
+  testGroup
+    "Codegen Test"
+    [ testGroup
+        "GOOL"
+        [ goolTestGroup "HelloWorldOO" helloWorldOO,
+          goolTestGroup "PatternTestOO" patternTest,
+          goolTestGroup "FileTestsOO" fileTestsOO,
+          goolTestGroup "VectorTestOO" vectorTestOO,
+          goolTestGroup "NameGenTestOO" nameGenTestOO
+        ],
+      testGroup
+        "GProc"
+        [ gProcTestGroup "HelloWorldProc" helloWorldProc,
+          gProcTestGroup "FileTestsProc" fileTestsProc,
+          gProcTestGroup "VectorTestProc" vectorTestProc,
+          gProcTestGroup "NameGenTestProc" nameGenTestProc
+        ]
     ]
-    
--- codeGenTestGroup :: TestTree
--- codeGenTestGroup =
---   testGroup
---     "Codegen Test"
---     [ testGroup
---         "GOOL"
---         [ goolTestGroup "HelloWorld" helloWorldOO,
---           goolTestGroup "PatternTest" patternTest,
---           goolTestGroup "FileTests" fileTestsOO,
---           goolTestGroup "VectorTest" vectorTestOO,
---           goolTestGroup "NameGenTest" nameGenTestOO
---         ],
---       testGroup
---         "GProc"
---         [ 
---         ]
---     ]
 
--- goolTestGroup :: (OOProg r) => String -> OO.GSProgram r -> TestTree
--- goolTestGroup n p =
---   goldenTestingGroup
---     [osp|test/build2/{n}|]
---     [osp|test/golden2/{n}|]
---     n
---     [ goldenTest "java" $ directory [ps|java|] $ genCode [classes' unJC unJP p],
---       goldenTest "python" $ directory [ps|python|] $ genCode [classes' unPC unPP p],
---       goldenTest "csharp" $ directory [ps|csharp|] $ genCode [classes' unCSC unCSP p],
---       goldenTest "cpp" $ directory [ps|cpp|] $ genCode [classes' unCPPC unCPPP p],
---       goldenTest "swift" $ directory [ps|swift|] $ genCode [classes' unSC unSP p]
---     ]
+goolTestGroup :: String -> (forall r. (OOProg r) => OO.GSProgram r) -> TestTree
+goolTestGroup n p =
+  goldenTestingGroup
+    [osp|test/build2/{n}|]
+    [osp|test/golden2/{n}|]
+    n
+    [ goldenTest "java" $ directory [ps|java|] $ genCode [classes unJC unJP p],
+      goldenTest "python" $ directory [ps|python|] $ genCode [classes unPC unPP p],
+      goldenTest "csharp" $ directory [ps|csharp|] $ genCode [classes unCSC unCSP p],
+      goldenTest "cpp" $ directory [ps|cpp|] $ genCode [classes unCPPC unCPPP p],
+      goldenTest "swift" $ directory [ps|swift|] $ genCode [classes unSC unSP p]
+    ]
 
--- gProcTestGroup :: (ProcProg r) => String -> Proc.GSProgram r -> TestTree
--- gProcTestGroup n p =
---   goldenTestingGroup
---     [osp|test/build2/{n}|]
---     [osp|test/golden2/{n}|]
---     n
---     [ goldenTest "julia" $ directory [ps|julia|] $ genCode [jlClasses' unJC unJP p]
---     ]
-
--- codeGenTestGroup2 :: TestTree
--- codeGenTestGroup2 =
---   testGroup
---     "gooltest"
---     [ goldenTestingGroup
---         [osp|test/build2|]
---         [osp|test/golden2|]
---         "Golden Tests"
---         [ 
---         ]
---     ]
-
--- langTestGroup :: String -> TestTree
--- langTestGroup lang =
---   testGroup
---     lang
---     [ goldenTestingGroup
---         [osp|test/build2/{lang}|]
---         [osp|test/golden2/{lang}|]
---         "Golden Tests"
---         [ goldenTest "HelloWorld" $ directory [ps|HelloWorld|] $ genCode [classes'' lang helloWorldOO],
---           goldenTest "PatternTest" $ directory [ps|PatternTest|] $ genCode [classes'' lang patternTest],
---           goldenTest "FileTests" $ directory [ps|FileTests|] $ genCode [classes'' lang fileTestsOO],
---           goldenTest "VectorTest" $ directory [ps|VectorTest|] $ genCode [classes'' lang vectorTestOO],
---           goldenTest "NameGenTest" $ directory [ps|NameGenTest|] $ genCode [classes'' lang nameGenTestOO]
---         ]
---     ]
---   where
---     classes'' :: (OOProg r) => String -> OO.GSProgram r -> PackageData
---     classes'' "java" = classes' unJC unJP
---     classes'' "python" = classes' unPC unPP
---     classes'' "csharp" = classes' unCSC unCSP
---     classes'' "cpp" = classes' unCPPC unCPPP
---     classes'' "swift" = classes' unSC unSP
+gProcTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
+gProcTestGroup n p =
+  goldenTestingGroup
+    [osp|test/build2/{n}|]
+    [osp|test/golden2/{n}|]
+    n
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCode [jlClasses unJLC unJLP p]
+    ]
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackageData] -> [FileLayout]
@@ -136,39 +90,25 @@ genCode = map genCode'
       in directory [ps|{label}|] layout
 
 classes :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> [PackageData]
-classes unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-                fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
-                                        (gs' ^. mainMod)
-  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
-  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
-  (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
-    fileTestsOO, vectorTestOO, nameGenTestOO])
-
--- classes' :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
---   (r' PackageData -> PackageData) -> OO.GSProgram r -> PackageData
--- classes' unRepr unRepr' p =
---   let
---     gs = OO.unCI (evalState p initialState)
---     (p', gs') = runState p gs
---     pd = unRepr p'
---     fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
---   in unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
+  (r' PackageData -> PackageData) -> (forall s. (OOProg s) => OO.GSProgram s) -> PackageData
+classes unRepr unRepr' p =
+  let
+    gs = OO.unCI (evalState p initialState)
+    (p', gs') = runState p gs
+    pd = unRepr p'
+    fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
+  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> [PackageData]
-jlClasses unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-                fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
-                                        (gs' ^. mainMod)
-  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
-  [helloWorldProc, fileTestsProc, vectorTestProc, nameGenTestProc]
-  (map (Proc.unCI . (`evalState` initialState)) [helloWorldProc,
-    fileTestsProc, vectorTestProc, nameGenTestProc])
+  (r' PackageData -> PackageData) -> (forall s. (ProcProg s) => Proc.GSProgram s) -> PackageData
+jlClasses unRepr unRepr' p =
+  let
+    gs = Proc.unCI (evalState p initialState)
+    (p', gs') = runState p gs
+    pd = unRepr p'
+    fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
+  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
 
 -- | Internal: Converts a list of `FileData` to a `FileLayout`.
 toFileLayout :: [FileData] -> [FileLayout]

@@ -21,7 +21,7 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
-import Drasil.Database (UID, HasUID(..))
+import Drasil.Database (UID, HasUID(..), IsChunk)
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
@@ -403,12 +403,12 @@ convCall c x ns f libf = do
     (Map.lookup funcNm mem)
 
 -- | Converts a 'Constraint' to a 'CodeExpr'.
-renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
+renderC :: (IsChunk c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
 renderC s (Elem _ rr)          = renderSet s rr
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
-renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
+renderRealInt :: (IsChunk c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
 renderRealInt s (Bounded (Inc, a) (Inc, b)) = (a $<= sy s) $&& (sy s $<= b)
 renderRealInt s (Bounded (Inc, a) (Exc, b)) = (a $<= sy s) $&& (sy s $<  b)
 renderRealInt s (Bounded (Exc, a) (Inc, b)) = (a $<  sy s) $&& (sy s $<= b)
@@ -418,7 +418,7 @@ renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
-renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
+renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
 renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.

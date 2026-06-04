@@ -161,6 +161,7 @@ instance Array (LoggingFor lang) where
     idx <- idx'
     vr <- vr'
     return $ return $ unLC idx <> brackets (unLC vr)
+  arrayLength = undefined
 
 -- Not Implemented
 instance VariableElim (LoggingFor lang) where

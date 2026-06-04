@@ -7,9 +7,8 @@
 
 module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
-import Drasil.Shared.InterfaceCommon (SharedProg, VSType, TypeSym(..),
-  VariableSym(..), ValueSym(..), Literal(..), IndexTranslator(..), Array(..),
-  VariableElim(..))
+import Drasil.Shared.InterfaceCommon (VSType, TypeSym(..), VariableSym(..),
+  ValueSym(..), Literal(..), IndexTranslator(..), Array(..), VariableElim(..))
 import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..))
 import Drasil.Shared.AST (TypeData(..), td)
@@ -25,8 +24,9 @@ import Drasil.Shared.LanguageRenderer (dot)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, comma, space, brackets,
   braces, punctuate, hcat)
 import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
+import Data.Kind (Type)
 
-newtype (SharedProg lang) => LoggingFor lang a = LC {unLC :: a} deriving Functor
+newtype LoggingFor (lang :: Type -> Type) a = LC {unLC :: a} deriving Functor
 
 instance Applicative (LoggingFor lang) where
   pure = LC

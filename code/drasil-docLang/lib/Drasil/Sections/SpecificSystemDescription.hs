@@ -290,9 +290,10 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 -- | Creates the Properties of a Correct Solution section.
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
-propCorSolF []  [] = SRS.propCorSol [mkParagraph $ emptySectSentPlu [propOfCorSol]] []
-propCorSolF [] con = SRS.propCorSol con []
-propCorSolF c  con = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []
+propCorSolF c con
+  | any (\x -> not $ null (x ^. constraints)) c = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []
+  | null con = SRS.propCorSol [mkParagraph $ emptySectSentPlu [propOfCorSol]] []
+  | otherwise = SRS.propCorSol con []
 
 -- | Creates the Properties of a Correct Solution introduction.
 propsIntro :: Contents

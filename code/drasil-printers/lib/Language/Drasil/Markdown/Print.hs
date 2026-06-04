@@ -5,7 +5,6 @@ module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
-import Data.Either (fromRight)
 import Data.List (transpose)
 import Data.List.Utils (replace)
 import qualified Data.Set as S
@@ -80,7 +79,7 @@ makeRequirements :: Project -> PNew.Doc ann
 makeRequirements p =
   let
     mCSV = mkCSV (Just 2) (Just ["Original", "Copy"]) (assetMat p)
-    csv = fromRight (error "expected csv") mCSV
+    csv = either error id mCSV
   in renderCSV csv (csvRenderOpts Minimal)
 
 -- | FIXME: HACK: Find all figure assets from a 'Project'. This is a hack

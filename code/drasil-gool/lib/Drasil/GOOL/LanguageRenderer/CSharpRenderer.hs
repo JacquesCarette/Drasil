@@ -443,7 +443,7 @@ instance IndexTranslator CSharpCode where
 instance Array CSharpCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "Length" int)
-  arrayClone arr = let
+  arrayCopy arr = let
     arrTp = onStateValue valueType arr
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 

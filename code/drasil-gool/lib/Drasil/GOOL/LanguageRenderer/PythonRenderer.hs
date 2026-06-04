@@ -442,7 +442,7 @@ instance IndexTranslator PythonCode where
 instance Array PythonCode where
   arrayElem = G.arrayElem
   arrayLength = listSize
-  arrayClone arr = let
+  arrayCopy arr = let
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "copy" []
 

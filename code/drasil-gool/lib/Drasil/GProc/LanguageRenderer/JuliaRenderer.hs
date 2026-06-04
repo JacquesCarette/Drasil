@@ -396,7 +396,7 @@ instance IndexTranslator JuliaCode where
 instance Array JuliaCode where
   arrayElem = A.arrayElem
   arrayLength = listSize
-  arrayClone arr = let
+  arrayCopy arr = let
     arrTp = onStateValue valueType arr
     in funcApp "copy" arrTp [arr]
 

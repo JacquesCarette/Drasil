@@ -441,6 +441,7 @@ instance IndexTranslator PythonCode where
 
 instance Array PythonCode where
   arrayElem = G.arrayElem
+  arrayLength = listSize
 
 instance List PythonCode where
   listSize = CS.listSize

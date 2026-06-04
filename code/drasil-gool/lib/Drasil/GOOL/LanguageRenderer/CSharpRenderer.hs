@@ -442,6 +442,7 @@ instance IndexTranslator CSharpCode where
 
 instance Array CSharpCode where
   arrayElem = G.arrayElem
+  arrayLength arr = valueOf $ instanceVarAccess arr (var "Length" int)
 
 instance List CSharpCode where
   listSize = C.listSize

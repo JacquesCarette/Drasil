@@ -395,6 +395,7 @@ instance IndexTranslator JuliaCode where
 
 instance Array JuliaCode where
   arrayElem = A.arrayElem
+  arrayLength = listSize
 
 instance List JuliaCode where
   listSize = CS.listSize

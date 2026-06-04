@@ -56,7 +56,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , Quantity
   , HasReasVal(reasVal)
-  , HasRationale(rationale)
+  , MayHaveRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
   , IsUnit(getUnits)
@@ -275,7 +275,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), HasRationale(rationale), DefiningExpr(defnExpr), Quantity)
+  HasReasVal(reasVal), MayHaveRationale(rationale), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef

@@ -42,6 +42,8 @@ library:
   - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
-  - Drasil.LessonPlan
   - Drasil.Sentence.Combinators
   - Drasil.SRSDocument
+  - Drasil.GetChunks
+  - Drasil.ExtractCommon
+  - Drasil.ExtractDocDesc

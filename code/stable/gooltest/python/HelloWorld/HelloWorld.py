@@ -12,6 +12,7 @@ class TestClass:
     def __init__(self, a):
         self.a = a
     
+    @staticmethod
     def add(self, t1, t2):
         return TestClass(t1.a + t2.a)
 

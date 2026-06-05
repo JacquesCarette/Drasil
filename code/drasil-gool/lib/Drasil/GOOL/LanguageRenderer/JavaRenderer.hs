@@ -25,11 +25,11 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), objMethodCall, selfFuncApp, newObj,
-  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  SelfSym(..), InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), objMethodCall, selfFuncApp,
+  newObj, InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -284,10 +284,14 @@ instance VariableSym JavaCode where
 instance OOVariableSym JavaCode where
   classVar = G.classVar
   classConst = classVar
-  self = C.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym JavaCode where
+  self = C.self
+
+instance InstanceVarSelfSym JavaCode where
   instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim JavaCode where

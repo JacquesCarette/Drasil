@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Language.Drasil.Code.Imperative.FunctionCalls (
   genAllInputCalls, genAllInputCallsProc, genInputCall, genInputCallProc,
   genDerivedCall, genDerivedCallProc, genConstraintCall, genConstraintCallProc,
@@ -26,9 +28,9 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg,
-  TypeSym(..), VariableValue(..), StatementSym(..), DeclStatement(..),
-  convType, convTypeOO)
+import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, LoggingFor,
+  InstanceVarSelfSym(..), TypeSym(..), VariableValue(..), StatementSym(..),
+  DeclStatement(..), convType, convTypeOO)
 
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
@@ -61,14 +63,17 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
+genCalcCall :: (OOProg r,
+  InstanceVarSelfSym (LoggingFor r)) => CodeDefinition ->
+  GenState (Maybe (MSStatement r))
 genCalcCall c = do
   g <- get
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
+  vlog <- mkVar (quantvar c)
   v <- mkVar (quantvar c)
-  l <- maybeLog v
+  l <- maybeLog vlog v
   return $ fmap (multi . (: l) . varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
@@ -167,8 +172,9 @@ genCalcCallProc c = do
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
+  vlog <- mkVarProc (quantvar c)
   v <- mkVarProc (quantvar c)
-  l <- maybeLog v
+  l <- maybeLog vlog v
   return $ fmap (multi . (: l) . (`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.

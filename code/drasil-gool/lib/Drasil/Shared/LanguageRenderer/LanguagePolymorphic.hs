@@ -40,8 +40,8 @@ import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), AttachmentSym(..), convTypeOO)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(instanceVarSelf),
-  OOMethodSym(method), OOFunctionSym(func))
+import qualified Drasil.GOOL.InterfaceGOOL as IG (
+  InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType),

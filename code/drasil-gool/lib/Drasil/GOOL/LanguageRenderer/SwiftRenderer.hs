@@ -24,14 +24,13 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..), Initializers,
-  convTypeOO)
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -288,10 +287,14 @@ instance VariableSym SwiftCode where
 instance OOVariableSym SwiftCode where
   classVar = G.classVar
   classConst = classVar
-  self = CP.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym SwiftCode where
+  self = CP.self
+
+instance InstanceVarSelfSym SwiftCode where
   instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim SwiftCode where

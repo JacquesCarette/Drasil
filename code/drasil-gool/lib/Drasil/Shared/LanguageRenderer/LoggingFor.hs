@@ -162,6 +162,7 @@ instance Array (LoggingFor lang) where
     vr <- vr'
     return $ return $ unLC idx <> brackets (unLC vr)
   arrayLength = undefined
+  arrayCopy = undefined
 
 -- Not Implemented
 instance VariableElim (LoggingFor lang) where

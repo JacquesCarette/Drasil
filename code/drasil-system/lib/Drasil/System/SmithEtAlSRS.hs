@@ -24,9 +24,9 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Concept, Reference, People, CI,
+import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
   Constrained, ConstQDef, abrv, DefinedQuantityDict)
-import Language.Drasil.Docs (LabelledContent)
+import Language.Drasil.Docs (LabelledContent, Reference)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Utils.Drasil (toPlainName)
 

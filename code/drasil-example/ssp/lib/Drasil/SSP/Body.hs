@@ -6,7 +6,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Docs (fig, llccFig, makeURI, ulcc, Contents(..),
-  LabelledContent, RawContent(..))
+  LabelledContent, RawContent(..), Reference, namedRef, refS)
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)

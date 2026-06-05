@@ -2,6 +2,7 @@
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
 import Utils.Drasil (weave)

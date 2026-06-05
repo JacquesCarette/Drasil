@@ -65,8 +65,6 @@ module Language.Drasil (
   -- Language.Drasil.Symbol
   , HasRefAddress(getRefAdd)
   , Referable(..)
-  -- Language.Drasil.Classes
-  , HasReference(getReferences)
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
@@ -121,10 +119,6 @@ module Language.Drasil (
   -- Language.Drasil.Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
-  -- Language.Drasil.Reference
-  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
-  -- Language.Drasil.Decorated Reference
-  , DecRef(refInfo), dRefInfo, dRef, HasDecRef(..)
 
   -- *** Citations
   -- Language.Drasil.Chunk.Citation
@@ -288,8 +282,6 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitaliza
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
 import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
-import Language.Drasil.Document.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))
-import Language.Drasil.Document.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable, sortBySymbol, sortBySymbolTuple)

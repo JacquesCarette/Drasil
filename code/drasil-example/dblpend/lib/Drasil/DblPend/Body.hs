@@ -7,7 +7,7 @@ module Drasil.DblPend.Body (
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Docs (makeURI, ulcc, Section, Contents(..),
-  LabelledContent, RawContent(..))
+  LabelledContent, RawContent(..), Reference, namedRef, refS)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument

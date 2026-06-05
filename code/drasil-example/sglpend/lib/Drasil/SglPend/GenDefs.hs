@@ -16,6 +16,7 @@ import Data.Drasil.Theories.Physics (newtonSLR)
 
 import Drasil.Sentence.Combinators (definedIn, definedIn'')
 import Language.Drasil
+import Language.Drasil.Docs
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

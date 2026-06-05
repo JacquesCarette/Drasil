@@ -4,6 +4,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
 import Control.Lens((^.))
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

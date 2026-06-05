@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 import Prelude hiding (log, exp, sqrt)
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (definedIn', definedIn)

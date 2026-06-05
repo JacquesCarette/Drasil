@@ -2,6 +2,7 @@ module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL,
   likeChgTLH, unlikelyChgs) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

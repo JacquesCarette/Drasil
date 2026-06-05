@@ -4,6 +4,7 @@ module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
   posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Development as D

@@ -8,7 +8,7 @@ import Control.Lens (makeLenses, (^.))
 import qualified Data.Map.Strict as M
 
 import Drasil.Database (UID, uid)
-import Language.Drasil (Reference)
+import Language.Drasil.Docs (Reference)
 
 import Drasil.System.Core (SystemMeta, HasSystemMeta(..))
 

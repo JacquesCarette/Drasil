@@ -2,7 +2,6 @@
 -- This aims to reduce clutter at the top of every @Body.hs@ file in the Drasil examples.
 -- If an import is changed here, it will be changed for every example.
 module Drasil.SRSDocument (
-  SmithEtAlSRS(..),
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -30,7 +29,6 @@ module Drasil.SRSDocument (
   purpDoc           -- Drasil.Sections.Introduction
   ) where
 
-import Drasil.System (SmithEtAlSRS(..))
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..),

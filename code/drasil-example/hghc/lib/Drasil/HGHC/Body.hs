@@ -4,7 +4,7 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)

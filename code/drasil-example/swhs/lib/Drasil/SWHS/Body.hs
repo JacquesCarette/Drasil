@@ -18,7 +18,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,

@@ -6,7 +6,7 @@ import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)

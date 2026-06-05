@@ -197,22 +197,6 @@ module Language.Drasil (
   , foldlEnumList, foldlList, foldlSent
   , foldlSent_,foldlSentCol, foldOpts, foldNums, numList
 
-  -- * Basic Document Language
-  -- | Holds all the types and helper functions needed especially in @drasil-docLang@
-  -- Language.Drasil.Document
-  , Document(..), ShowTableOfContents(..), Section(..)
-  , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
-  , mkParagraph, mkRawLC, checkToC
-  , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn', ulcc
-  , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
-  , MaxWidthPercent
-  , HasContents(accessContents)
-  , RawContent(..)
-  , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
-  , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
-
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
 
@@ -261,15 +245,6 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
-import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
-  , Section(..), SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn', ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
-  , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
-import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
-  , RawContent(..), ListTuple, MaxWidthPercent
-  , HasContents(accessContents)
-  , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),

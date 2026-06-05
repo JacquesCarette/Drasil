@@ -23,6 +23,6 @@ OOVector$(TARGET_EXTENSION): OOVector.cs
 	$(CSC) -out:OOVector$(TARGET_EXTENSION) OOVector.cs
 
 run: build
-	./OOVector$(TARGET_EXTENSION) $(RUNARGS)
+	mono OOVector$(TARGET_EXTENSION) $(RUNARGS)
 
 .PHONY: build run

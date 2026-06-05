@@ -2,8 +2,10 @@
 #define OOVector_h
 
 #include <string>
+#include <vector>
 
 using std::string;
+using std::vector;
 
 /** \brief Vectors of doubles and common vector-related operations.
 */
@@ -12,7 +14,7 @@ class Vector {
         /** \brief Construct a vector from an array of doubles.
             \param v The doubles.
         */
-        Vector(double v);
+        Vector(vector<double> v);
         /** \brief Returns the dimension of this vector.
             \return The dimension of the vector.
         */
@@ -30,13 +32,13 @@ class Vector {
             \param v2 Second vector.
             \return The dot product.
         */
-        double dot(Vector v1, Vector v2);
+        static double dot(Vector v1, Vector v2);
         /** \brief Calculate the resultant vector of two vectors.
             \param v1 First vector.
             \param v2 Second vector.
             \return The resultant vector.
         */
-        Vector add(Vector v1, Vector v2);
+        static Vector add(Vector v1, Vector v2);
         /** \brief Scale this vector by a factor.
             \param s Scalar factor.
             \return A new scaled vector.
@@ -47,7 +49,7 @@ class Vector {
         void print();
     
     private:
-        double v;
+        vector<double> &v;
         
 };
 

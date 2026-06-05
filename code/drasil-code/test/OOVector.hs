@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module OOVector (ooVector) where
 
-import Drasil.GOOL hiding (arrayElem)
+import Drasil.GOOL
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 ooVector :: OOProg r => GSProgram r
@@ -10,13 +10,13 @@ ooVector = prog "OOVector" "" [fileDoc (buildModule "OOVector" []
 
 vectorClass :: OOProg r => SClass r
 vectorClass = docClass "Vectors of doubles and common vector-related operations." $
-  extraClass "Vector" Nothing [stateVar private dynamic localV]
+  extraClass "Vector" Nothing [stateVar private instanceLevel localV]
   [docFunc "Construct a vector from an array of doubles." ["The doubles."] Nothing $
    constructor [param argV] [] (body [
      block [
-       assert (valueOf (objVar argV (var "length" int)) ?> litInt 0)
+       assert (valueOf (instanceVarAccess (valueOf argV) (var "length" int)) ?> litInt 0)
               (litString "Vector dimension must be > 0."),
-       objVarSelf localV &= objMethodCallNoParams (arrayType double) (valueOf argV) "clone"
+       instanceVarSelf localV &= objMethodCallNoParams (arrayType double) (valueOf argV) "clone"
      ]
    ])]
   methods
@@ -29,20 +29,13 @@ vecVar v = var v (obj "Vector")
 localV :: VariableSym r => SVariable r
 localV = var "v" (arrayType double)
 
-thisV :: OOVariableSym r =>SVariable r
-thisV = objVarSelf localV
-
--- Adapted from GProc's arrayElem
-arrayElem :: OOProg r => SVariable r -> SVariable r -> SVariable r
-arrayElem vr' ir' = do
-  vr <- vr'
-  ir <- ir'
-  var (variableName vr ++ "[" ++ variableName ir ++ "]") double
+thisV :: InstanceVarSelfSym r =>SVariable r
+thisV = instanceVarSelf localV
 
 dimension :: OOProg r => SMethod r
 dimension = docFunc "Returns the dimension of this vector." [] (Just "The dimension of the vector.") $
-  method "dimension" public dynamic int [] $ bodyStatements [
-    returnStmt $ valueOf $ objVar thisV (var "length" int)
+  method "dimension" public instanceLevel int [] $ bodyStatements [
+    returnStmt $ valueOf $ instanceVarAccess (valueOf thisV) (var "length" int)
   ]
 
 magnitude :: OOProg r => SMethod r
@@ -64,14 +57,14 @@ norm = docFunc "Calculate unit vector of this vector."
 dot :: OOProg r => SMethod r
 dot = docFunc "Calculate the dot product of two vectors."
   ["First vector.", "Second vector."] (Just "The dot product.") $
-  method "dot" public static double [param v1, param v2] $ bodyStatements [
+  method "dot" public classLevel double [param v1, param v2] $ bodyStatements [
     assert (objMethodCallNoParams int (valueOf v1) "dimension" ?==
             objMethodCallNoParams int (valueOf v2) "dimension")
            (litString "Vector dimensions must match for dot product."),
     varDecDef res local (litDouble 0.0),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf v1) "dimension") (litInt 1) (bodyStatements [
-      res &= valueOf res #+ (listAccess (valueOf (objVar v1 localV)) (valueOf i) #*
-                             listAccess (valueOf (objVar v2 localV)) (valueOf i))
+      res &= valueOf res #+ (listAccess (valueOf (instanceVarAccess (valueOf v1) localV)) (valueOf i) #*
+                             listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i))
     ]),
     returnStmt $ valueOf res
   ]
@@ -83,14 +76,14 @@ dot = docFunc "Calculate the dot product of two vectors."
 add :: OOProg r => SMethod r
 add = docFunc "Calculate the resultant vector of two vectors."
   ["First vector.", "Second vector."] (Just "The resultant vector.") $
-  method "add" public static (obj "Vector") [param v1, param v2] $ bodyStatements [
+  method "add" public classLevel (obj "Vector") [param v1, param v2] $ bodyStatements [
     assert (objMethodCallNoParams int (valueOf v1) "dimension" ?==
             objMethodCallNoParams int (valueOf v2) "dimension")
            (litString "Vector dimensions must match for addition."),
-    varDecDef res local (objMethodCallNoParams (arrayType double) (valueOf (objVar v1 localV)) "clone"),
+    varDecDef res local (objMethodCallNoParams (arrayType double) (valueOf (instanceVarAccess (valueOf v1) localV)) "clone"),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf v1) "dimension") (litInt 1) (bodyStatements [
-      arrayElem res i &= (listAccess (valueOf res) (valueOf i) #+
-                     listAccess (valueOf (objVar v2 localV)) (valueOf i))
+      arrayElem (valueOf i) res &= (listAccess (valueOf res) (valueOf i) #+
+                     listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i))
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])
   ]
@@ -105,7 +98,7 @@ scale = docFunc "Scale this vector by a factor."
   pubMethod "scale" (obj "Vector") [param s] $ bodyStatements [
     varDecDef res local (objMethodCallNoParams (arrayType double) (valueOf thisV) "clone"),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf self) "dimension") (litInt 1) (bodyStatements [
-      arrayElem res i &= (valueOf s #* listAccess (valueOf res) (valueOf i))
+      arrayElem (valueOf i) res &= (valueOf s #* listAccess (valueOf res) (valueOf i))
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])
   ]

@@ -31,7 +31,8 @@ class Vector:
     # \param v1 First vector.
     # \param v2 Second vector.
     # \return The dot product.
-    def dot(self, v1, v2):
+    @staticmethod
+    def dot(v1, v2):
         assert v1.dimension() == v2.dimension(), "Vector dimensions must match for dot product."
         res = 0.0
         for i in range(0, v1.dimension(), 1):
@@ -42,7 +43,8 @@ class Vector:
     # \param v1 First vector.
     # \param v2 Second vector.
     # \return The resultant vector.
-    def add(self, v1, v2):
+    @staticmethod
+    def add(v1, v2):
         assert v1.dimension() == v2.dimension(), "Vector dimensions must match for addition."
         res = v1.v.clone()
         for i in range(0, v1.dimension(), 1):

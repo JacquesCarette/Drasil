@@ -4,12 +4,14 @@
 #include <iostream>
 #include <math.h>
 #include <string>
+#include <vector>
 
 #include "java.util.Arrays.hpp"
 
 using std::string;
+using std::vector;
 
-Vector::Vector(double v) {
+Vector::Vector(vector<double> v) {
     assert(v.length > 0 && "Vector dimension must be > 0.");
     this->v = v.clone();
 }
@@ -32,24 +34,24 @@ double Vector::dot(Vector v1, Vector v2) {
     assert(v1.dimension() == v2.dimension() && "Vector dimensions must match for dot product.");
     double res = 0.0;
     for (int i = 0; i < v1.dimension(); i += 1) {
-        res = res + v1.v[i] * v2.v[i];
+        res = res + v1.v.at(i) * v2.v.at(i);
     }
     return res;
 }
 
 Vector Vector::add(Vector v1, Vector v2) {
     assert(v1.dimension() == v2.dimension() && "Vector dimensions must match for addition.");
-    double res = v1.v.clone();
+    vector<double> res = v1.v.clone();
     for (int i = 0; i < v1.dimension(); i += 1) {
-        res[i] = res[i] + v2.v[i];
+        res[i] = res.at(i) + v2.v.at(i);
     }
     return Vector(res);
 }
 
 Vector Vector::scale(double s) {
-    double res = this->v.clone();
+    vector<double> res = this->v.clone();
     for (int i = 0; i < this.dimension(); i += 1) {
-        res[i] = s * res[i];
+        res[i] = s * res.at(i);
     }
     return Vector(res);
 }
@@ -59,8 +61,8 @@ void Vector::print() {
 }
 
 int main(int argc, const char *argv[]) {
-    double ds1[3] = {1.0, 2.0, 3.0};
-    double ds2[3] = {4.0, 5.0, 6.0};
+    vector<double> ds1 {1.0, 2.0, 3.0};
+    vector<double> ds2 {4.0, 5.0, 6.0};
     Vector v1 = Vector(ds1);
     Vector v2 = Vector(ds2);
     std::cout << "v1: ";

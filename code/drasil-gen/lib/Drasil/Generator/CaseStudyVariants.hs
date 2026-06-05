@@ -16,9 +16,9 @@ import Data.Char (toLower)
 import Data.Maybe (maybeToList)
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
-import Drasil.DocumentLanguage.Notebook (LsnDesc)
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
+import Drasil.LessonPlan (LsnDesc)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS, programName)
 import Language.Drasil (Document)

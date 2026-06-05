@@ -40,8 +40,8 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
   - Drasil.Document.Contents
-  - Drasil.DocumentLanguage.Notebook
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
+  - Drasil.LessonPlan
   - Drasil.Sentence.Combinators
   - Drasil.SRSDocument

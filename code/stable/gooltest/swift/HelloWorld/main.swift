@@ -8,6 +8,18 @@ import Foundation
 
 extension String: @retroactive Error {}
 
+class TestClass {
+    var a: Int = 0
+    
+    init(_ a: Int) {
+        self.a = a
+    }
+    
+    static func add(_ t1: TestClass, _ t2: TestClass) -> TestClass {
+        return TestClass(t1.a + t2.a)
+    }
+}
+
 // Initializing variables
 var a: Int
 var b: Int = 5
@@ -59,6 +71,13 @@ assert( myOtherList.count == 4 , "myOtherList should have 4 elements")
 assert( oneIndex == 0 , "oneIndex should be 0")
 let s: Set<Int> = [4, 7, 5]
 assert( s.contains(7) , "Set s should contain 7")
+
+// Object tests
+var t1: TestClass = TestClass(5)
+var t2: TestClass = TestClass(4)
+var t3: TestClass = TestClass.add(t1, t2)
+print("Value of t3.a: ", terminator: "")
+print(t3.a)
 
 // List slicing tests
 // Create variables for list slices

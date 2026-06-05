@@ -236,6 +236,7 @@ instance OOValueExpression CodeInfoOO where
 
 instance InternalValueExp CodeInfoOO where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
+  classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance FunctionSym CodeInfoOO where
   type Function CodeInfoOO = ()

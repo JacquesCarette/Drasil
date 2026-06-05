@@ -46,7 +46,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment', InternalBinderElim(binderElim))
+  method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -88,7 +88,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
   increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew, switch,
-  for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
+  for, while, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -443,6 +443,9 @@ instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f = pair2Vals3Lists
     (objMethodCallMixedArgs' f)
     (objMethodCallMixedArgs' f)
+  classMethodCallMixedArgs' f = pair2Vals3Lists
+    (classMethodCallMixedArgs' f)
+    (classMethodCallMixedArgs' f)
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
@@ -1383,6 +1386,9 @@ instance ValueElim CppSrcCode where
 
 instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' f t cls vs ns = do
+    c <- cls
+    RC.call Nothing (Just $ RC.type' c <> text nmSpc) f t vs ns
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
@@ -2109,6 +2115,7 @@ instance ValueElim CppHdrCode where
 
 instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
+  classMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
@@ -2383,12 +2390,12 @@ instance RenderMethod CppHdrCode where
   mthdFromData s d = toState $ toCode $ mthd s d
 
 instance OORenderMethod CppHdrCode where
-  intMethod _ n s _ t ps _ = do
+  intMethod _ n s a t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))
     tp <- t
     pms <- sequence ps
-    pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp pms
-  intFunc = C.intFunc
+    pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp a pms
+  intFunc _ = cpphIntFunc
   destructor vars = do
     n <- getClassName
     m <- pubMethod ('~':n) void [] (pure (toCode empty)) :: SMethod CppHdrCode
@@ -2889,9 +2896,25 @@ cppsIntFunc f s t ps b = do
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
-cpphMethod :: (CommonRenderSym r) => Label -> r TypeData -> [r (Parameter r)] -> Doc
-cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n
-  <> parens (parameterList ps) <> endStatement
+cpphIntFunc :: Label -> CppHdrCode (Visibility CppHdrCode) ->
+  CppHdrCode (Attachment CppHdrCode) -> MSMthdType CppHdrCode ->
+  [MSParameter CppHdrCode] -> MSBody CppHdrCode -> SMethod CppHdrCode
+cpphIntFunc n s _ t ps _ = do
+    modify (setVisibility (snd $ unCPPHC s))
+    tp <- t
+    pms <- sequence ps
+    pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphFunc n tp pms
+
+cpphFunc :: (CommonRenderSym r) => Label -> CppHdrCode TypeData ->
+  [r (Parameter r)] -> Doc
+cpphFunc n t ps = (if isDtor n then empty else RC.type' t) <+>
+  text n <> parens (parameterList ps) <> endStatement
+
+cpphMethod :: (CommonRenderSym r, PermElim r) => Label -> CppHdrCode TypeData ->
+  r (Attachment r) -> [r (Parameter r)] -> Doc
+cpphMethod n t a ps = let attchDoc = RC.perm a
+  in attchDoc <+> (if isDtor n then empty else RC.type' t) <+> text n
+    <> parens (parameterList ps) <> endStatement
 
 cppCommentedFunc :: (CommonRenderSym r, Monad r) => FileType ->
   MS (r Doc) -> MS (r MethodData) -> MS (r MethodData)

@@ -20,7 +20,7 @@ import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent)
 import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
-import Language.Drasil.Reference (Reference(Reference))
+import Language.Drasil.Document.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
 
 -- * Section Types

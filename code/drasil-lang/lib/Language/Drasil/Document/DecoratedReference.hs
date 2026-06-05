@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 -- | References that have extra information.
-module Language.Drasil.DecoratedReference (
+module Language.Drasil.Document.DecoratedReference (
   -- * Type
   DecRef(..),
   -- * Class
@@ -14,7 +14,7 @@ import Control.Lens ((^.), makeLenses, Lens')
 import Drasil.Database (HasUID(..), IsChunk)
 
 import Language.Drasil.Sentence (RefInfo(..))
-import Language.Drasil.Reference (Reference, ref)
+import Language.Drasil.Document.Reference (Reference, ref)
 import Language.Drasil.Label.Type (HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..))
 

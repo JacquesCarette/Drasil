@@ -288,8 +288,8 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitaliza
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
 import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
-import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))
-import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
+import Language.Drasil.Document.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))
+import Language.Drasil.Document.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable, sortBySymbol, sortBySymbolTuple)

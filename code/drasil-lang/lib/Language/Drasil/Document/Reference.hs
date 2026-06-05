@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 -- | Defines a type used to hold referencing information.
-module Language.Drasil.Reference (
+module Language.Drasil.Document.Reference (
   -- * Type
   Reference(Reference),
   -- * Class

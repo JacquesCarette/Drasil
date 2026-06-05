@@ -20,7 +20,7 @@ class TestClass {
         int a;
         
         TestClass(int a);
-        TestClass add(TestClass t1, TestClass t2);
+        static TestClass add(TestClass t1, TestClass t2);
 };
 
 #endif

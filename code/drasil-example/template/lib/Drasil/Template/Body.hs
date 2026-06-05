@@ -8,6 +8,7 @@ module Drasil.Template.Body (mkSRS, si) where
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (ChunkDB)
 import Drasil.System (mkSmithEtAlICO)
 import Language.Drasil
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))

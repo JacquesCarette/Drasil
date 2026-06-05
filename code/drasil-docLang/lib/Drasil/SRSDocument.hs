@@ -2,9 +2,7 @@
 -- This aims to reduce clutter at the top of every @Body.hs@ file in the Drasil examples.
 -- If an import is changed here, it will be changed for every example.
 module Drasil.SRSDocument (
-  -- * Chunk database types and functions
-  -- | Imported from "Database.Drasil"
-  ChunkDB, SmithEtAlSRS(..), -- FIXME: This should not be exported here!!
+  SmithEtAlSRS(..),
   -- * Document section types needed for a SRS
   -- | Imported from "Drasil.DocDecl"
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -32,7 +30,6 @@ module Drasil.SRSDocument (
   purpDoc           -- Drasil.Sections.Introduction
   ) where
 
-import Drasil.Database (ChunkDB)
 import Drasil.System (SmithEtAlSRS(..))
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core

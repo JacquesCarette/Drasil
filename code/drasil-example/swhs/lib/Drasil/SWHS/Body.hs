@@ -7,6 +7,7 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)

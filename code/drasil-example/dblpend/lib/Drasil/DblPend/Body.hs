@@ -5,6 +5,7 @@ module Drasil.DblPend.Body (
   userCharacteristicsIntro, tMods
 ) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, section)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)

@@ -1,5 +1,6 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)

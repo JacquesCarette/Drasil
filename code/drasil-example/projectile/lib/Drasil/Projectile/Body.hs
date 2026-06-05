@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument

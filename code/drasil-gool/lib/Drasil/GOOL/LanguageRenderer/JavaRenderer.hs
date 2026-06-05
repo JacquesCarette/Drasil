@@ -26,10 +26,10 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..),
-  OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  OOValueSym, OOVariableValue, OOValueExpression(..), objMethodCall, selfFuncApp,
+  newObj, InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -467,6 +467,9 @@ instance IndexTranslator JavaCode where
 instance Array JavaCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "length" int)
+  arrayCopy arr = let
+    arrTp = onStateValue valueType arr
+    in objMethodCall arrTp arr "clone" []
 
 instance List JavaCode where
   listSize = C.listSize

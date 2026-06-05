@@ -28,6 +28,18 @@ println(arr2)
 print("Length of arr2: ")
 println(length(arr2))
 global myOtherList = [1.0, 1.5]
+global arr_copy = Int64[]
+for i0 in 0:1:2
+    append!(arr_copy, 0)
+end
+global arr_copy = copy(arr)
+print("Value of arr_copy: ")
+println(arr_copy)
+global arr[2] = 42
+print("Value of arr after modifying arr: ")
+println(arr)
+print("Value of arr_copy after modifying arr: ")
+println(arr_copy)
 global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)
 global a = length(myOtherList)

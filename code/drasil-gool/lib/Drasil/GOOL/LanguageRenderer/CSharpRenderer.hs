@@ -27,9 +27,9 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), objMethodCallNoParams, OOFunctionSym(..), ($.),
-  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  InternalValueExp(..), objMethodCall, objMethodCallNoParams, OOFunctionSym(..),
+  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -446,6 +446,9 @@ instance IndexTranslator CSharpCode where
 instance Array CSharpCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "Length" int)
+  arrayCopy arr = let
+    arrTp = onStateValue valueType arr
+    in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
 instance List CSharpCode where
   listSize = C.listSize

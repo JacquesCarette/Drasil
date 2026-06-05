@@ -448,6 +448,7 @@ instance InternalValueExp JavaCode where
     let tp = getTypeString (valueType ob)
     modify (maybe id addExceptions (Map.lookup (qualName tp f) mem))
     G.objMethodCall f t o ps ns
+  classMethodCallMixedArgs' = undefined
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData

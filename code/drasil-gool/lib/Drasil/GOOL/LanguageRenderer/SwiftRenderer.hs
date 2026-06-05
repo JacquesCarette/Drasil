@@ -437,6 +437,7 @@ instance ValueElim SwiftCode where
 
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = undefined
 
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData

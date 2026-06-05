@@ -443,6 +443,9 @@ instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f = pair2Vals3Lists
     (objMethodCallMixedArgs' f)
     (objMethodCallMixedArgs' f)
+  classMethodCallMixedArgs' f = pair2Vals3Lists
+    (classMethodCallMixedArgs' f)
+    (classMethodCallMixedArgs' f)
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
@@ -1383,6 +1386,7 @@ instance ValueElim CppSrcCode where
 
 instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = undefined
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
@@ -2109,6 +2113,7 @@ instance ValueElim CppHdrCode where
 
 instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
+  classMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData

@@ -427,6 +427,7 @@ instance ValueElim PythonCode where
 
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = undefined
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData

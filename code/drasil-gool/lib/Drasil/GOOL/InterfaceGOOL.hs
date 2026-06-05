@@ -10,11 +10,12 @@ module Drasil.GOOL.InterfaceGOOL (
   extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
   objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
-  objMethodCallNoParams, OOMethodSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..),
-  observerListName, initObserverList, addObserver, StrategyPattern(..),
-  convTypeOO
+  objMethodCallNoParams, classMethodCall, classMethodCallNamedArgs,
+  classMethodCallMixedArgs, classMethodCallNoParams, OOMethodSym(..), privMethod,
+  pubMethod, initializer, nonInitConstructor, StateVarSym(..), privDVar, pubDVar,
+  pubSVar, AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess,
+  ObserverPattern(..), observerListName, initObserverList, addObserver,
+  StrategyPattern(..), convTypeOO
   ) where
 
 import Drasil.Shared.InterfaceCommon (
@@ -186,6 +187,11 @@ class (ValueSym r) => InternalValueExp r where
   --   positional arguments, and a list of named arguments.
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] ->
     NamedArgs r -> SValue r
+  -- | Generic function for calling a class method.
+  --   Takes the function name, the return type, the class type,
+  --   a list of positional arguments, and a list of named arguments.
+  classMethodCallMixedArgs' :: Label -> VSType r -> VSType r -> [SValue r] ->
+    NamedArgs r -> SValue r
 
 -- | Calling a method. t is the return type of the method, o is the
 --   object, f is the method name, and ps is a list of positional arguments.
@@ -207,6 +213,27 @@ objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
+
+-- | Calling a class method. t is the return type of the method, c is the
+--   class, f is the method name, and ps is a list of positional arguments.
+classMethodCall :: (InternalValueExp r) => VSType r -> VSType r -> Label ->
+  [SValue r] -> SValue r
+classMethodCall t c f ps = classMethodCallMixedArgs' f t c ps []
+
+-- | Calling a class method with named arguments.
+classMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> VSType r -> Label
+  -> NamedArgs r -> SValue r
+classMethodCallNamedArgs t c f = classMethodCallMixedArgs' f t c []
+
+-- | Calling a class method with a mix of positional and named arguments.
+classMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> VSType r -> Label
+  -> [SValue r] -> NamedArgs r -> SValue r
+classMethodCallMixedArgs t c f = classMethodCallMixedArgs' f t c
+
+-- | Calling a class method with no parameters.
+classMethodCallNoParams :: (InternalValueExp r) => VSType r -> VSType r -> Label
+  -> SValue r
+classMethodCallNoParams t c f = classMethodCall t c f []
 
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
   objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r

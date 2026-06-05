@@ -427,6 +427,7 @@ instance ValueElim CSharpCode where
 
 instance InternalValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = undefined
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData

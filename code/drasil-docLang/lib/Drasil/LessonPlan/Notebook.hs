@@ -1,5 +1,5 @@
 -- | Document language for lesson plan notebooks.
-module Drasil.DocumentLanguage.Notebook
+module Drasil.LessonPlan.Notebook
   (mkNb, LsnDesc, LsnChapter(..), LearnObj(..), Review(..), CaseProb(..), Example(..)
   ) where
 
@@ -13,7 +13,7 @@ import Drasil.Metadata.Documentation (notebook)
 
 import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
-import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example,
+import qualified Drasil.LessonPlan.Sections as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
 import Drasil.ExtractLsnDesc (extractLsnPlanBib)
 

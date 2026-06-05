@@ -169,7 +169,7 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar $ NE.toList outs
-      allInputs = nub $ inputs' ++ map quantvar derived
+      allInputs = inputs' ++ map quantvar derived
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,

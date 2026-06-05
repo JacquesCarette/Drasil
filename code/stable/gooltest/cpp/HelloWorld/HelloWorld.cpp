@@ -36,6 +36,8 @@ int main(int argc, const char *argv[]) {
         std::cout << arr.at((int)(arr.size()) - 1);
     }
     std::cout << "]" << std::endl;
+    std::cout << "Length of arr: ";
+    std::cout << (int)(arr.size()) << std::endl;
     vector<int> arr2(3);
     arr2[0] = 4;
     arr2[1] = 5;
@@ -50,7 +52,42 @@ int main(int argc, const char *argv[]) {
         std::cout << arr2.at((int)(arr2.size()) - 1);
     }
     std::cout << "]" << std::endl;
+    std::cout << "Length of arr2: ";
+    std::cout << (int)(arr2.size()) << std::endl;
     vector<double> myOtherList{1.0, 1.5};
+    vector<int> arr_copy(3);
+    arr_copy = arr;
+    std::cout << "Value of arr_copy: ";
+    std::cout << "[";
+    for (int list_i1 = 0; list_i1 < (int)(arr_copy.size()) - 1; list_i1++) {
+        std::cout << arr_copy.at(list_i1);
+        std::cout << ", ";
+    }
+    if ((int)(arr_copy.size()) > 0) {
+        std::cout << arr_copy.at((int)(arr_copy.size()) - 1);
+    }
+    std::cout << "]" << std::endl;
+    arr[1] = 42;
+    std::cout << "Value of arr after modifying arr: ";
+    std::cout << "[";
+    for (int list_i1 = 0; list_i1 < (int)(arr.size()) - 1; list_i1++) {
+        std::cout << arr.at(list_i1);
+        std::cout << ", ";
+    }
+    if ((int)(arr.size()) > 0) {
+        std::cout << arr.at((int)(arr.size()) - 1);
+    }
+    std::cout << "]" << std::endl;
+    std::cout << "Value of arr_copy after modifying arr: ";
+    std::cout << "[";
+    for (int list_i1 = 0; list_i1 < (int)(arr_copy.size()) - 1; list_i1++) {
+        std::cout << arr_copy.at(list_i1);
+        std::cout << ", ";
+    }
+    if ((int)(arr_copy.size()) > 0) {
+        std::cout << arr_copy.at((int)(arr_copy.size()) - 1);
+    }
+    std::cout << "]" << std::endl;
     int oneIndex = find(myOtherList.begin(), myOtherList.end(), 1.0) - myOtherList.begin();
     std::cout << oneIndex << std::endl;
     a = (int)(myOtherList.size());

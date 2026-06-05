@@ -5,15 +5,16 @@ module Drasil.GOOL.InterfaceGOOL (
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
-  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
-  OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
-  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
-  OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, AttachmentSym(..),
-  OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
-  initObserverList, addObserver, StrategyPattern(..), convTypeOO
+  OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), InstanceVarSelfSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
+  objMethodCallNoParams, OOMethodSym(..), privMethod, pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
+  AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..),
+  observerListName, initObserverList, addObserver, StrategyPattern(..),
+  convTypeOO
   ) where
 
 import Drasil.Shared.InterfaceCommon (
@@ -138,23 +139,27 @@ class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   classVar          :: Label -> VSType r -> SVariable r
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
   classConst        :: Label -> VSType r -> SVariable r
-  -- | `self` keyword
-  self              :: SVariable r
   -- | Given a class `C` and a class-level variable `v`, creates `C.v`
   classVarAccess    :: VSType r -> SVariable r -> SVariable r
   -- | Given a class `C` from an external module and a class-level variable `v`,
   -- performs any necessary imports and creates `C.v`
   extClassVarAccess :: VSType r -> SVariable r -> SVariable r
   -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
-  instanceVarAccess :: SVariable r -> SVariable r -> SVariable r
-  -- | Given a variable `v`, creates `self.v`
-  instanceVarSelf   :: SVariable r -> SVariable r
+  instanceVarAccess :: SValue r -> SVariable r -> SVariable r
 
-($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
+($->) :: (OOVariableSym r) => SValue r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = instanceVarAccess
 
-class (VariableValue r, OOVariableSym r) => OOVariableValue r
+class (OOVariableSym r) => SelfSym r where
+  -- | `self` keyword
+  self              :: SVariable r
+
+class (OOVariableSym r) => InstanceVarSelfSym r where
+  -- | Given a variable `v`, creates `self.v`
+  instanceVarSelf   :: SVariable r -> SVariable r
+
+class (VariableValue r, OOVariableSym r, SelfSym r, InstanceVarSelfSym r) => OOVariableValue r
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where

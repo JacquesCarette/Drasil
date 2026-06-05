@@ -23,12 +23,12 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
-  OOValueExpression(..), selfFuncApp, OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
+  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -273,12 +273,16 @@ instance VariableSym PythonCode where
 instance OOVariableSym PythonCode where
   classVar = G.classVar
   classConst n t = mkClassVar n t (R.var (toConstName n))
-  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $
     CP.classVarAccess pyClassVarAccess (toState t) v) c getClassMap
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym PythonCode where
+  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
+
+instance InstanceVarSelfSym PythonCode where
   instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim PythonCode where
@@ -441,6 +445,10 @@ instance IndexTranslator PythonCode where
 
 instance Array PythonCode where
   arrayElem = G.arrayElem
+  arrayLength = listSize
+  arrayCopy arr = let
+    arrTp = onStateValue valueType arr
+    in objMethodCall arrTp arr "copy" []
 
 instance List PythonCode where
   listSize = CS.listSize

@@ -4,7 +4,7 @@ module Drasil.Metadata.Drasil (DrasilMeta(..), drasilMetaCfg) where
 import Data.Maybe (fromMaybe)
 import Data.Aeson (decodeFileStrict, FromJSON, ToJSON)
 import GHC.Generics (Generic)
-import Language.Haskell.TH.Syntax (Lift, addDependentFile)
+import Language.Haskell.TH.Syntax (Lift, addDependentFile, makeRelativeToProject)
 import Language.Haskell.TH (Exp, Q, runIO)
 
 {-
@@ -24,6 +24,7 @@ instance FromJSON DrasilMeta
 drasilMetaCfg :: Q Exp
 drasilMetaCfg = do
   let fp = "lib/Drasil/Metadata/Drasil.json"
-  maybeDM <- runIO (decodeFileStrict fp :: IO (Maybe DrasilMeta))
-  addDependentFile fp
+  absPath <- makeRelativeToProject fp
+  maybeDM <- runIO (decodeFileStrict absPath :: IO (Maybe DrasilMeta))
+  addDependentFile absPath
   [| fromMaybe (error "could not read in the drasil metadata file") maybeDM |]

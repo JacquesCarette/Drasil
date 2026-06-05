@@ -1,4 +1,4 @@
-{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE FlexibleContexts, QuasiQuotes #-}
 
 module Drasil.Generator.Code (
   -- * Generators
@@ -26,7 +26,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   constStructure), ImplementationType(..), LogConfig(logging), Logging,
   Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
   Structure(..), Lang(Julia, Java,
-  Python, CSharp, Cpp, Swift), HasOldCodeSpec(extInputsO))
+  Python, CSharp, Cpp, Swift, Matlab), HasOldCodeSpec(extInputsO))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Drasil.System (SmithEtAlSRS, programName)
 
@@ -43,6 +43,7 @@ genCode syst chs = do
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
       genLangCode Julia = genCallProc Julia unJLC unJLP
+      genLangCode Matlab = error "MatlabRenderer not yet implemented (plumbing only)"
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
       genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr

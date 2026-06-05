@@ -11,7 +11,7 @@ module Language.Drasil.DecoratedReference (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), IsChunk)
 
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Reference (Reference, ref)
@@ -40,9 +40,9 @@ instance HasRefAddress DecRef where getRefAdd (DR r _) = getRefAdd r
 instance HasShortName  DecRef where shortname (DR r _) = shortname r
 
 -- | For creating a decorated reference ('DecRef') with extra reference information ('RefInfo').
-dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
+dRefInfo :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
 dRefInfo r = DR (ref r)
 
 -- | Same as 'ref', but for 'DecRef' instead of 'Reference'.
-dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
+dRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> DecRef
 dRef r = dRefInfo r None

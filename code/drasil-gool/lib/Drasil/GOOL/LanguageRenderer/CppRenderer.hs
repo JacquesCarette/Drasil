@@ -28,11 +28,11 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, InternalValueExp(..), objMethodCall,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
+  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
+  selfFuncApp, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -298,10 +298,14 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   classVar n = pair1 (classVar n) (classVar n)
   classConst n = pair1 (classConst n) (classConst n)
-  self = on2StateValues pair self self
   classVarAccess = pair2 classVarAccess classVarAccess
   extClassVarAccess = pair2 extClassVarAccess extClassVarAccess
   instanceVarAccess = pair2 instanceVarAccess instanceVarAccess
+
+instance (Pair p) => SelfSym (p CppSrcCode CppHdrCode) where
+  self = on2StateValues pair self self
+
+instance (Pair p) => InstanceVarSelfSym (p CppSrcCode CppHdrCode) where
   instanceVarSelf = pair1 instanceVarSelf instanceVarSelf
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
@@ -457,6 +461,8 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
+  arrayLength = pair1 arrayLength arrayLength
+  arrayCopy = pair1 arrayCopy arrayCopy
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
@@ -1223,7 +1229,6 @@ instance VariableSym CppSrcCode where
 instance OOVariableSym CppSrcCode where
   classVar = G.classVar
   classConst = classVar
-  self = C.self
   classVarAccess c' v'= do
     c <- c'
     v <- v'
@@ -1237,6 +1242,11 @@ instance OOVariableSym CppSrcCode where
     maybe id ((>>) . modify . addModuleImportVS)
       (Map.lookup (getTypeString t) cm) $ classVarAccess (pure t) v
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym CppSrcCode where
+  self = C.self
+
+instance InstanceVarSelfSym CppSrcCode where
   instanceVarSelf v' = do
     v <- v'
     mkVar (R.this ++ ptrAccess ++ variableName v)
@@ -1391,6 +1401,8 @@ instance IndexTranslator CppSrcCode where
 
 instance Array CppSrcCode where
   arrayElem = G.arrayElem
+  arrayLength = listSize
+  arrayCopy = id -- C++ automatically copies std::vectors on assignment
 
 instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
@@ -1960,10 +1972,14 @@ instance VariableSym CppHdrCode where
 instance OOVariableSym CppHdrCode where
   classVar = G.classVar
   classConst = classVar
-  self = mkStateVar "" void empty
   classVarAccess _ _ = mkStateVar "" void empty
   extClassVarAccess _ _ = mkStateVar "" void empty
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym CppHdrCode where
+  self = mkStateVar "" void empty
+
+instance InstanceVarSelfSym CppHdrCode where
   instanceVarSelf _ = mkStateVar "" void empty
 
 instance VariableElim CppHdrCode where
@@ -2111,6 +2127,8 @@ instance IndexTranslator CppHdrCode where
 
 instance Array CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
+  arrayLength = listSize
+  arrayCopy = id -- C++ automatically copies std::vectors on assignment
 
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty

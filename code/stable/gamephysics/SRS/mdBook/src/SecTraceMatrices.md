@@ -165,8 +165,8 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 For convenience, the following graphs can be found at the links below:
 
-- [TraceGraphAvsA](../../../../traceygraphs/gamephysics/avsa.svg)
-- [TraceGraphAvsAll](../../../../traceygraphs/gamephysics/avsall.svg)
-- [TraceGraphRefvsRef](../../../../traceygraphs/gamephysics/refvsref.svg)
-- [TraceGraphAllvsR](../../../../traceygraphs/gamephysics/allvsr.svg)
-- [TraceGraphAllvsAll](../../../../traceygraphs/gamephysics/allvsall.svg)
+- [TraceGraphAvsA](../../TraceyGraph/avsa.svg)
+- [TraceGraphAvsAll](../../TraceyGraph/avsall.svg)
+- [TraceGraphRefvsRef](../../TraceyGraph/refvsref.svg)
+- [TraceGraphAllvsR](../../TraceyGraph/allvsr.svg)
+- [TraceGraphAllvsAll](../../TraceyGraph/allvsall.svg)

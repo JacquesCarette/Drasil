@@ -35,7 +35,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
-  OOVariableSym(self, instanceVarAccess), OOFunctionSym(..))
+  SelfSym(self), OOVariableSym(instanceVarAccess), OOFunctionSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
@@ -142,7 +142,7 @@ classVarAccess f c' v'= do
   toState $ classVarAccessCheck vr
 
 instanceVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
-instanceVarSelf = IG.instanceVarAccess IG.self
+instanceVarSelf = IG.instanceVarAccess (IC.valueOf IG.self)
 
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])

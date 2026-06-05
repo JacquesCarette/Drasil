@@ -13,7 +13,7 @@ class TestClass:
         self.a = a
     
     @staticmethod
-    def add(self, t1, t2):
+    def add(t1, t2):
         return TestClass(t1.a + t2.a)
 
 # Initializing variables

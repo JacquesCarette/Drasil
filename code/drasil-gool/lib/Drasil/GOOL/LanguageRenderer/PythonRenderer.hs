@@ -1038,14 +1038,16 @@ pyMethod n attch slf ps b = let
      decorator = case binding attch of
                    ClassLevel -> text "@staticmethod"
                    _          -> empty
+     pms = parameterList ps
+     (implicitParam, implicitComma) = case binding attch of
+                       InstanceLevel -> (RC.variable slf, emptyIfEmpty pms listSep')
+                       _             -> (empty, empty)
+     bodyD | isEmpty (RC.body b) = pyNull'
+           | otherwise = RC.body b
   in vcat [
-    decorator,
-    pyDef <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
-    indent bodyD]
-      where pms = parameterList ps
-            oneParam = emptyIfEmpty pms listSep'
-            bodyD | isEmpty (RC.body b) = pyNull'
-                  | otherwise = RC.body b
+       decorator,
+       pyDef <+> text n <> parens (implicitParam <> implicitComma <> pms) <> colon,
+       indent bodyD]
 
 pyFunction :: (CommonRenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [

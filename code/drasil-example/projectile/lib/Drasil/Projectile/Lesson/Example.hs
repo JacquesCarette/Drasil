@@ -6,6 +6,7 @@ import Data.Drasil.Units.Physics (velU)
 import Drasil.Document.Contents (unlbldCode, foldlSP_)
 import Language.Drasil.ShortHands (cR, lG)
 import Language.Drasil
+import Language.Drasil.Docs
 import qualified Language.Drasil.Sentence.Combinators as S
 
 exampleContent :: [Contents]

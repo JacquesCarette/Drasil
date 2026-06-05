@@ -5,6 +5,7 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB)
 import Language.Drasil
+import Language.Drasil.Docs
 
 import Drasil.GetChunks (resolveBibliography)
 import Drasil.LessonPlan.Core

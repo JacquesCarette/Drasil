@@ -5,6 +5,7 @@ module Drasil.SWHSNoPCM.Requirements (
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Docs
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 

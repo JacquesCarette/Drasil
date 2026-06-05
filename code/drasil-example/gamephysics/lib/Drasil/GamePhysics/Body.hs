@@ -1,6 +1,7 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
-import Language.Drasil hiding (organization, section)
+import Language.Drasil hiding (organization)
+import Language.Drasil.Docs
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS

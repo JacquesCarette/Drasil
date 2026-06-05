@@ -31,7 +31,7 @@ import Data.List (isSuffixOf)
 import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil (MaxWidthPercent)
+import Language.Drasil.Docs (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H

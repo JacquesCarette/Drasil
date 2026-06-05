@@ -9,7 +9,8 @@ import Control.Lens ((^.))
 
 import Drasil.DocLang (mkGraphInfo)
 import Drasil.FileHandling (FileLayout, directory, file, ps)
-import Language.Drasil (Stage(Equational), Document(..), checkToC)
+import Language.Drasil (Stage(Equational))
+import Language.Drasil.Docs (Document(..), checkToC)
 import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)

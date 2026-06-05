@@ -3,6 +3,7 @@ module Drasil.DblPend.Requirements (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Drasil.DocLang.SRS (datCon)
 import Drasil.DocLang (mkPortableNFR, mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S

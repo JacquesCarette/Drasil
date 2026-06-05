@@ -5,8 +5,8 @@ module Main (main) where
 import Data.Maybe (fromMaybe)
 
 import Drasil.Generator (caseStudyMainDrasilWebsite)
-import Language.Drasil (Document(Document), ShowTableOfContents(NoToC),
-  namedRef, Sentence(S))
+import Language.Drasil (namedRef, Sentence(S))
+import Language.Drasil.Docs (Document(Document), ShowTableOfContents(NoToC))
 import System.Environment (getEnv, lookupEnv)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,

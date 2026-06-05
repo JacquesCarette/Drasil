@@ -16,6 +16,7 @@ import Data.Foldable (foldl')
 import Drasil.Database (mkUid)
 import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Sentence.Combinators as S

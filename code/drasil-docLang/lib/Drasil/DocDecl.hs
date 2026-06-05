@@ -16,6 +16,7 @@ import Control.Lens((^.))
 
 -- Generic Drasil
 import Language.Drasil hiding (sec)
+import Language.Drasil.Docs
 import Drasil.Database (HasUID(..), findAll)
 import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), systemdb)
 

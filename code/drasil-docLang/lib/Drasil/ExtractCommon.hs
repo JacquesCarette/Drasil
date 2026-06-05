@@ -9,6 +9,7 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID)
 import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Docs
 import Language.Drasil.Development (lnames)
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.

@@ -12,6 +12,7 @@ import Drasil.PDController.IModel
 import Drasil.PDController.Unitals (inputs)
 
 import Language.Drasil
+import Language.Drasil.Docs
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputValues, verifyInputs, calculateValues, outputValues]

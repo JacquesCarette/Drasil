@@ -2,6 +2,7 @@
 module Drasil.Website.Documentation (docsSec, docRefs) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 
 -- * Haddock Documentation for Drasil Section
 

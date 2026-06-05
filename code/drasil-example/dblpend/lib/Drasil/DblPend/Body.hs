@@ -5,7 +5,9 @@ module Drasil.DblPend.Body (
   userCharacteristicsIntro, tMods
 ) where
 
-import Language.Drasil hiding (organization, section)
+import Language.Drasil hiding (organization)
+import Language.Drasil.Docs (makeURI, ulcc, Section, Contents(..),
+  LabelledContent, RawContent(..))
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRSDocument

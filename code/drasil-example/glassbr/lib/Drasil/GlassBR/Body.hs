@@ -3,7 +3,8 @@ module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Docs
 import qualified Language.Drasil.Development as D
 
 import Drasil.SRSDocument

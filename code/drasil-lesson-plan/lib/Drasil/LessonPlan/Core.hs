@@ -6,7 +6,8 @@ module Drasil.LessonPlan.Core (
 ) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
-import Language.Drasil
+import Language.Drasil ()
+import Language.Drasil.Docs
 
 -- * Lesson Chapter Types
 

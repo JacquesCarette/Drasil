@@ -2,6 +2,7 @@
 module Drasil.DocLang.References (secRefs) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Drasil.DocLang.SRS
 import Drasil.DocumentLanguage.Core (getTraceConfigUID)
 

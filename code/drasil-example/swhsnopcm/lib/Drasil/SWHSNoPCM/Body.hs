@@ -2,7 +2,8 @@ module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil hiding (section)
+import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

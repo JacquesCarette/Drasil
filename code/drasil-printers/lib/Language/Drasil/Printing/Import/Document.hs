@@ -8,6 +8,7 @@ import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil.Docs
 import Drasil.Code.CodeExpr.Development (expr)
 
 import Language.Drasil.Printing.Import.Citation (layCite)

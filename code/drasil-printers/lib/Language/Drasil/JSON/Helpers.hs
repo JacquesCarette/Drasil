@@ -17,7 +17,7 @@ import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
-import Language.Drasil (MaxWidthPercent)
+import Language.Drasil.Docs (MaxWidthPercent)
 import Language.Drasil.HTML.Helpers (img)
 import Numeric (showHex)
 import Language.Drasil.Printing.Helpers (bslash)

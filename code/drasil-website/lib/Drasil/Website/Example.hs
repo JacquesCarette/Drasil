@@ -9,6 +9,7 @@ module Drasil.Website.Example (
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (E)
+import Language.Drasil.Docs
 import Drasil.System (SmithEtAlSRS(..), programName, sysName, purpose)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)

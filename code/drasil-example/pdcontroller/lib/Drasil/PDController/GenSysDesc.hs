@@ -3,6 +3,7 @@ module Drasil.PDController.GenSysDesc (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import Drasil.Document.Contents (foldlSP, foldlSPCol)

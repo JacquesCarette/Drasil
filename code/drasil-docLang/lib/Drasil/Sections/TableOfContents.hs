@@ -4,6 +4,7 @@ module Drasil.Sections.TableOfContents (toToC) where
 
 -- General Drasil
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 

@@ -2,7 +2,8 @@ module Drasil.SWHS.LabelledContent (
   labelledContent, sysCntxtFig, figTank
 ) where
 
-import Language.Drasil hiding (organization, section, variable)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Docs
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)

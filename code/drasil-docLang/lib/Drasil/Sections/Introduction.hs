@@ -7,6 +7,7 @@ import Data.Maybe (maybeToList)
 
 -- Generic Drasil
 import Language.Drasil hiding (organization)
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D

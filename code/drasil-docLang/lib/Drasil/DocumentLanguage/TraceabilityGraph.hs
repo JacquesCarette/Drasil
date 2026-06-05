@@ -9,6 +9,7 @@ import Data.Maybe (fromMaybe)
 
 -- General Drasil
 import Language.Drasil
+import Language.Drasil.Docs
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)

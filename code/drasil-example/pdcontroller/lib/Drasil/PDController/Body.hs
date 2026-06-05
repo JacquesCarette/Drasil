@@ -1,6 +1,7 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)

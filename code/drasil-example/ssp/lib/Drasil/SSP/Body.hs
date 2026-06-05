@@ -4,7 +4,9 @@ module Drasil.SSP.Body (si, mkSRS) where
 import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
-import Language.Drasil hiding (Verb, number, organization, section, variable)
+import Language.Drasil hiding (Verb, number, organization, variable)
+import Language.Drasil.Docs (fig, llccFig, makeURI, ulcc, Contents(..),
+  LabelledContent, RawContent(..))
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)

@@ -15,10 +15,13 @@ module Drasil.Document.Contents (
 import Control.Lens ((^.))
 
 import Language.Drasil
-  ( Definition(..), HasShortName(..), getSentSN, mkRawLC, ulcc, mkParagraph, foldlSent_
+  ( Definition(..), HasShortName(..), getSentSN, foldlSent_
   , foldlSent, foldlSentCol
+  , Expr, Referable(refAdd), ModelExpr, Reference, Sentence (..))
+import Language.Drasil.Docs
+  ( mkRawLC, ulcc, mkParagraph
   , LabelledContent, RawContent(Enumeration, EqnBlock, CodeBlock), Contents(UlC), ListTuple
-  , ItemType(Flat), ListType(Simple), Expr, Referable(refAdd), ModelExpr, Reference, Sentence (..))
+  , ItemType(Flat), ListType(Simple))
 import Drasil.Sentence.Combinators (bulletFlat, mkEnumAbbrevList)
 
 -- | Displays a given expression and attaches a 'Reference' to it.

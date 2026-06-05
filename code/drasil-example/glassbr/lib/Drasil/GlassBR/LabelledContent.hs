@@ -6,6 +6,7 @@ module Drasil.GlassBR.LabelledContent (
 import Control.Lens((^.))
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Development as D (toSent)
 import qualified Language.Drasil.Sentence.Combinators as S (versus)

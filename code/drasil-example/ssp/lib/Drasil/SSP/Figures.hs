@@ -1,6 +1,7 @@
 module Drasil.SSP.Figures (figForceActing) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Data.Drasil.Concepts.Physics (force)
 import Drasil.SSP.Defs (slice)
 

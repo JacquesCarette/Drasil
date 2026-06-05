@@ -1,6 +1,7 @@
 module Drasil.Projectile.Lesson.Figures (figCSandA) where
 
 import Language.Drasil
+import Language.Drasil.Docs
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Development as D
 

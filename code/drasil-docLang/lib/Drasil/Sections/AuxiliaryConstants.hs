@@ -8,6 +8,7 @@ import Control.Lens ((^.))
 -- General Drasil
 import Drasil.Database (HasUID(..))
 import Language.Drasil
+import Language.Drasil.Docs
 import Utils.Drasil (mkTable)
 
 -- Other docLang

@@ -18,7 +18,7 @@ import Language.Drasil
   ( Definition(..), HasShortName(..), getSentSN, foldlSent_
   , foldlSent, foldlSentCol
   , Expr, Referable(refAdd), ModelExpr, Sentence (..))
-import Language.Drasil.Docs
+import Language.Drasil.Document
   ( mkRawLC, ulcc, mkParagraph
   , LabelledContent, RawContent(Enumeration, EqnBlock, CodeBlock), Contents(UlC), ListTuple
   , ItemType(Flat), ListType(Simple), Reference)

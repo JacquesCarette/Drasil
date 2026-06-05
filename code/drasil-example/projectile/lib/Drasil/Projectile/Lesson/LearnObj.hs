@@ -5,7 +5,7 @@ import Data.Drasil.Concepts.Physics (motion)
 import Data.Drasil.Concepts.Math (cartesian, equation)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 
 -- local
 import Drasil.Projectile.Concepts (projMotion)

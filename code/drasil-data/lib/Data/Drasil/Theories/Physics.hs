@@ -2,7 +2,7 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Utils.Drasil (weave)
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S

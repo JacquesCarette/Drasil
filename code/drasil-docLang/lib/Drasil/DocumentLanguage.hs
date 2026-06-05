@@ -19,7 +19,7 @@ import qualified Data.Map.Strict as M
 
 -- General Drasil
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 

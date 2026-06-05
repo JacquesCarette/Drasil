@@ -20,7 +20,7 @@ import qualified Data.List.NonEmpty as NE
 -- Generic Drasil
 import Drasil.Database (HasUID(..))
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D

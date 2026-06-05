@@ -8,7 +8,7 @@ module Drasil.SWHS.Body (
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)

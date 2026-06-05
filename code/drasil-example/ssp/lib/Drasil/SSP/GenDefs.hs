@@ -9,7 +9,7 @@ import Prelude hiding (sin, cos, tan)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

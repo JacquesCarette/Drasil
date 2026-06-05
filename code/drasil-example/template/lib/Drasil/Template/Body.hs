@@ -10,7 +10,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Drasil.System (mkSmithEtAlICO)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
 import Language.Drasil.ShortHands (lT)
 import Drasil.SRSDocument

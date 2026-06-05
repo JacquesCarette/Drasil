@@ -3,7 +3,7 @@ module Drasil.SWHSNoPCM.DataDefs (
 ) where --exports all of it
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, ddENoRefs)
 
 import Drasil.SWHS.Assumptions (assumpVCN)

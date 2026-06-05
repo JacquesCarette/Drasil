@@ -1,7 +1,7 @@
 -- | Collects references common to all SRS documents in one list for easy use.
 module Drasil.DocLang.References (secRefs) where
 
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Drasil.DocLang.SRS
 import Drasil.DocumentLanguage.Core (getTraceConfigUID)
 

@@ -3,7 +3,7 @@ module Drasil.SglPend.Requirements (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang (inReqWTab)
 import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)

@@ -12,7 +12,7 @@ module Theory.Drasil.InstanceModel(
 
 import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Drasil.Metadata.TheoryConcepts (inModel)
 

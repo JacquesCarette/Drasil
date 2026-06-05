@@ -20,7 +20,7 @@ import Numeric (showEFloat)
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', special, checkValidStr, CitationKind(..),
   numList)
-import Language.Drasil.Docs (MaxWidthPercent)
+import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,

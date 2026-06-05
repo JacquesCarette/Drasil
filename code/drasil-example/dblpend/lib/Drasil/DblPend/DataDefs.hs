@@ -10,7 +10,7 @@ import Control.Lens ((^.))
 import Prelude hiding (sin, cos, sqrt)
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 

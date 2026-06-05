@@ -14,7 +14,7 @@ import qualified Data.Map as Map
 import Drasil.Database (UID, HasUID(..))
 import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Drasil.System (SmithEtAlSRS, systemdb, traceLookup, refbyTable, traceTable)
 import qualified Language.Drasil.Sentence.Combinators as S
 

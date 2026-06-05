@@ -3,7 +3,7 @@ module Drasil.GamePhysics.LabelledContent (
 ) where
 
 import Language.Drasil hiding (organization)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)
 

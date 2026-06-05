@@ -9,7 +9,7 @@ import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>)) -- FIXME
 -- Generic Drasil
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                              -- Vector - Name conflict (defined in file)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Drasil.Database (HasUID(..))
 import Utils.Drasil (mkTable)
 

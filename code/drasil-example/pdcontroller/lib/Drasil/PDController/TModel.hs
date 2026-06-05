@@ -7,7 +7,7 @@ module Drasil.PDController.TModel (
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil as DrasilLang
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D

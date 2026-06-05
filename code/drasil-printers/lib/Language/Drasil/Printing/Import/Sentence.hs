@@ -7,7 +7,7 @@ import Data.Maybe (fromMaybe)
 import Language.Drasil (Sentence(..), ShortName, LblType(..),
   NounPhrase(..), getSentSN, checkValidStr, foldNums, (+:+), sParen, IRefProg(..),
   RefInfo(..), SentenceStyle(..))
-import Language.Drasil.Docs (Reference(..))
+import Language.Drasil.Document (Reference(..))
 import Language.Drasil.Development (toSent)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 

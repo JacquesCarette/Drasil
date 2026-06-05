@@ -4,7 +4,7 @@ module Drasil.SglPend.Body (mkSRS, si) where
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument

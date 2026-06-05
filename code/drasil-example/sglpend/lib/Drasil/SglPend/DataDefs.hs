@@ -3,7 +3,7 @@ module Drasil.SglPend.DataDefs (dataDefs, positionIY, positionIX, angFrequencyDD
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddENoRefs)

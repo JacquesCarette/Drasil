@@ -8,7 +8,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Drasil.Database (HasUID(..))
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Theory.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators

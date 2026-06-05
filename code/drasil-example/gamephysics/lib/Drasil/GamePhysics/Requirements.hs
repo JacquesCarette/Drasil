@@ -2,7 +2,7 @@
 module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk) where
 
 import Language.Drasil hiding (organization)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

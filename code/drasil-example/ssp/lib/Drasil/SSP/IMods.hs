@@ -6,7 +6,7 @@ module Drasil.SSP.IMods (
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Theory.Drasil
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators

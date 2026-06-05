@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 -- General Drasil
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Utils.Drasil (mkTable)
 
 -- Vocabulary

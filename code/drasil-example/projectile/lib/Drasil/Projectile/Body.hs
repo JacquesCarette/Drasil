@@ -1,7 +1,7 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)

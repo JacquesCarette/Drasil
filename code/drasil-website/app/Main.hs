@@ -6,7 +6,7 @@ import Data.Maybe (fromMaybe)
 
 import Drasil.Generator (caseStudyMainDrasilWebsite)
 import Language.Drasil (Sentence(S))
-import Language.Drasil.Docs (Document(Document), ShowTableOfContents(NoToC), namedRef)
+import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
 import System.Environment (getEnv, lookupEnv)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,

@@ -14,7 +14,7 @@ import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import Data.Maybe (maybeToList)
 import qualified Data.Set as S
 import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Development (lnames)
 import Drasil.System (SmithEtAlSRS, systemdb)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))

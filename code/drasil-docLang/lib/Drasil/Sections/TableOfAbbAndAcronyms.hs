@@ -9,7 +9,7 @@ import Data.List (sortBy)
 
 -- Generic Drasil
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Development (toSent)
 import Drasil.Database (HasUID(..))
 import Drasil.Database.SearchTools (TermAbbr (shortForm), longForm)

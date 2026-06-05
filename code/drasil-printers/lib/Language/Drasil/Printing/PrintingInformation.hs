@@ -14,7 +14,7 @@ import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, ChunkDB)
 import Language.Drasil (Stage(..))
-import Language.Drasil.Docs (Reference)
+import Language.Drasil.Document (Reference)
 
 -- | Notation can be scientific or for engineering.
 data Notation = Scientific

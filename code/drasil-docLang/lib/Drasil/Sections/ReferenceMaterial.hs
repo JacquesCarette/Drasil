@@ -6,7 +6,7 @@ or simply moving it to Sentence.Combinators since it's highly reusable
 If anything, this could be called by the recipes that need it
 -}
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Sentence.Combinators (are, is)
 
 -- | Default Reference Material section introduction.

@@ -3,7 +3,7 @@ module Drasil.LessonPlan.Sections (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 
 import qualified Drasil.Metadata.Documentation as Doc (caseProb,
   introduction, learnObj,

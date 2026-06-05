@@ -5,7 +5,7 @@ module Language.Drasil.HTML.CSS (
 
 import Text.PrettyPrint (Doc, text, vcat)
 
-import Language.Drasil.Docs (Document)
+import Language.Drasil.Document (Document)
 
 -- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc

@@ -26,7 +26,7 @@ import Data.Maybe (fromMaybe)
 import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
   Constrained, ConstQDef, abrv, DefinedQuantityDict)
-import Language.Drasil.Docs (LabelledContent, Reference)
+import Language.Drasil.Document (LabelledContent, Reference)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 import Utils.Drasil (toPlainName)
 

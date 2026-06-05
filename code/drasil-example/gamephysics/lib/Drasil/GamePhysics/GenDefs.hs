@@ -6,7 +6,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, equationalModel', Derivation, mkDerivName)
 import Utils.Drasil (weave)

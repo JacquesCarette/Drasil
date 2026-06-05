@@ -1,5 +1,5 @@
 -- | Document Description Language.
-module Language.Drasil.Docs (
+module Language.Drasil.Document (
   module Language.Drasil.Document.Core,
   module Language.Drasil.Document.DecoratedReference,
   module Language.Drasil.Document.Reference,

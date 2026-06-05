@@ -4,7 +4,7 @@
 module Drasil.Website.Analysis (analysisSec, analysisRefs) where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 
 -- * Analysis Section
 --

@@ -5,7 +5,7 @@ import Prelude hiding (exp)
 
 import Drasil.Sentence.Combinators (definedIn', definedIn)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

@@ -14,7 +14,7 @@ import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
 import Drasil.Database (UID)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.DocumentLanguage.Definitions (Fields, TraceViewCat)

@@ -21,7 +21,7 @@ import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPat
 import Drasil.LessonPlan (LsnDesc)
 import Drasil.SRSDocument (SRSDecl, mkDoc)
 import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS, programName)
-import Language.Drasil.Docs (Document)
+import Language.Drasil.Document (Document)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 

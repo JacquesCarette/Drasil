@@ -19,7 +19,7 @@ import Data.Maybe (mapMaybe)
 import Drasil.Database (ChunkDB, UID, HasUID(..), find)
 import Drasil.System (SmithEtAlSRS, systemdb, refbyLookup)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD,
   Derivation(Derivation), MayHaveDerivation(derivations))

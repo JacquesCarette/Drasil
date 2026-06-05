@@ -3,7 +3,7 @@ module Drasil.SWHSNoPCM.LabelledContent (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)

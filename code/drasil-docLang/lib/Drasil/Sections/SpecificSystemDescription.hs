@@ -30,7 +30,7 @@ import Data.Maybe
 import Drasil.Database (UID, HasUID(..), showUID)
 import Drasil.System (SmithEtAlSRS)
 import Language.Drasil hiding (variable, sec)
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S

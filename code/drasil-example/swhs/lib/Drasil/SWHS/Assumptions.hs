@@ -3,7 +3,7 @@ module Drasil.SWHS.Assumptions (module Drasil.SWHS.Assumptions) where --all of t
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

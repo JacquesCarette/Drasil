@@ -4,7 +4,7 @@ module Drasil.SWHS.References (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 
 import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
   mLightstone)

@@ -5,7 +5,7 @@ module Drasil.Sections.GeneralSystDesc (
 
 -- General Drasil
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Language.Drasil.Sentence.Combinators
 
 -- Vocabulary

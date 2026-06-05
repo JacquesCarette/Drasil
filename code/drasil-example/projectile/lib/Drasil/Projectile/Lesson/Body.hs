@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
 import Data.List (nub)
 import Language.Drasil
-import Language.Drasil.Docs
+import Language.Drasil.Document
 import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (LessonPlan, mkSystemMeta, mkLessonPlan)

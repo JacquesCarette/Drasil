@@ -7,11 +7,14 @@ import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 
 import Drasil.Database.Chunk (HasChunkRefs(chunkRefs), TypeableChunk, mkChunk,
-  chunkType)
+  chunkType, Chunk)
 import Drasil.Database.ChunkDB (ChunkDB, chunkTypeTable, chunkTable,
-  insertRefsExpectingExistence)
+  insertRefsExpectingExistence, registered)
 import Drasil.Database.Maps (invert)
-import Drasil.Database.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..), UID)
+import Data.List (partition)
+import Debug.Trace (trace)
+import Data.Bifunctor (Bifunctor(first))
 
 -- | Insert 12 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
@@ -63,7 +66,23 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks ls =
     -- Create the list of new chunk types and add them to the previous list of chunk types
     chTys = M.fromList (map (\chs -> (chunkType $ head chs, chs)) altogether)
     chTT = M.unionWith (++) (chunkTypeTable strtr) chTys
-  in
+
     -- Create the updated chunk database, adding the LCs and Rs, ignoring their dependencies.
-    strtr { chunkTable = chTabWDeps
-          , chunkTypeTable = chTT }
+    strtr' = strtr { chunkTable = chTabWDeps
+                   , chunkTypeTable = chTT }
+
+    calt' = map (\x -> (x, chunkRefs x)) $ concat altogether
+    initKnowns = S.fromList $ registered strtr
+    order = insertionOrder initKnowns calt'
+  in
+    trace ("one feasible order: " ++ show order) strtr'
+
+insertionOrder :: S.Set UID -> [(Chunk, S.Set UID)] -> [[(UID, S.Set UID)]]
+insertionOrder _ [] = []
+insertionOrder knowns chkNDeps =
+  let (nextAdditions, notYet) = partition (flip S.isSubsetOf knowns . snd) chkNDeps
+  in case nextAdditions of
+    [] -> error $ "bad insertion, missing chunks for: " ++ show (bimap (^. uid) (S.\\ knowns) <$> notYet)
+    adds -> let knowns' = knowns `S.union` S.fromList ((^. uid) . fst <$> nextAdditions)
+                subOrd = insertionOrder knowns' notYet
+             in (first (^. uid) <$> adds) : subOrd

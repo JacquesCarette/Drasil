@@ -14,9 +14,9 @@ vectorClass = docClass "Vectors of doubles and common vector-related operations.
   [docFunc "Construct a vector from an array of doubles." ["The doubles."] Nothing $
    constructor [param argV] [] (body [
      block [
-       assert (valueOf (instanceVarAccess (valueOf argV) (var "length" int)) ?> litInt 0)
+       assert (arrayLength (valueOf localV) ?> litInt 0)
               (litString "Vector dimension must be > 0."),
-       instanceVarSelf localV &= objMethodCallNoParams (arrayType double) (valueOf argV) "clone"
+       thisV &= arrayCopy (valueOf argV)
      ]
    ])]
   methods
@@ -35,14 +35,14 @@ thisV = instanceVarSelf localV
 dimension :: OOProg r => SMethod r
 dimension = docFunc "Returns the dimension of this vector." [] (Just "The dimension of the vector.") $
   method "dimension" public instanceLevel int [] $ bodyStatements [
-    returnStmt $ valueOf $ instanceVarAccess (valueOf thisV) (var "length" int)
+    returnStmt $ arrayLength (valueOf thisV)
   ]
 
 magnitude :: OOProg r => SMethod r
 magnitude = docFunc "Calculate the Euclidean norm (magnitude) of this vector."
   [] (Just "The magnitude.") $
   pubMethod "magnitude" double [] $ oneLiner $
-    returnStmt (funcApp "Vector.dot" double [valueOf self, valueOf self] #/^)
+    returnStmt (classMethodCall double (obj "Vector") "dot" [valueOf self, valueOf self] #/^)
 
 norm :: OOProg r => SMethod r
 norm = docFunc "Calculate unit vector of this vector."
@@ -63,7 +63,7 @@ dot = docFunc "Calculate the dot product of two vectors."
            (litString "Vector dimensions must match for dot product."),
     varDecDef res local (litDouble 0.0),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf v1) "dimension") (litInt 1) (bodyStatements [
-      res &= valueOf res #+ (listAccess (valueOf (instanceVarAccess (valueOf v1) localV)) (valueOf i) #*
+      res &+= (listAccess (valueOf (instanceVarAccess (valueOf v1) localV)) (valueOf i) #*
                              listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i))
     ]),
     returnStmt $ valueOf res
@@ -80,10 +80,9 @@ add = docFunc "Calculate the resultant vector of two vectors."
     assert (objMethodCallNoParams int (valueOf v1) "dimension" ?==
             objMethodCallNoParams int (valueOf v2) "dimension")
            (litString "Vector dimensions must match for addition."),
-    varDecDef res local (objMethodCallNoParams (arrayType double) (valueOf (instanceVarAccess (valueOf v1) localV)) "clone"),
+    varDecDef res local (arrayCopy (valueOf $ instanceVarAccess (valueOf v1) localV)),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf v1) "dimension") (litInt 1) (bodyStatements [
-      arrayElem (valueOf i) res &= (listAccess (valueOf res) (valueOf i) #+
-                     listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i))
+      arrayElem (valueOf i) res &+= listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i)
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])
   ]
@@ -96,7 +95,7 @@ scale :: OOProg r => SMethod r
 scale = docFunc "Scale this vector by a factor."
   ["Scalar factor."] (Just "A new scaled vector.") $
   pubMethod "scale" (obj "Vector") [param s] $ bodyStatements [
-    varDecDef res local (objMethodCallNoParams (arrayType double) (valueOf thisV) "clone"),
+    varDecDef res local (arrayCopy (valueOf thisV)),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf self) "dimension") (litInt 1) (bodyStatements [
       arrayElem (valueOf i) res &= (valueOf s #* listAccess (valueOf res) (valueOf i))
     ]),
@@ -108,7 +107,7 @@ scale = docFunc "Scale this vector by a factor."
 
 print_ :: OOProg r => SMethod r
 print_ = docFunc "Prints the vector elements to console." [] Nothing $
-  pubMethod "print" void [] $ oneLiner $ printLn (libFuncApp "java.util.Arrays" "Arrays.toString" string [valueOf thisV])
+  pubMethod "print" void [] $ oneLiner $ printLn $ valueOf thisV
 
 main :: OOProg r => SMethod r
 main = mainFunction $ body [
@@ -121,18 +120,16 @@ main = mainFunction $ body [
       printStr "v1: ", valStmt $ objMethodCallNoParams void (valueOf v1) "print",
       printStr "v2: ", valStmt $ objMethodCallNoParams void (valueOf v2) "print",
 
-      varDecDef (var "d" double) mainFn (funcApp "Vector.dot" double [valueOf v1, valueOf v2]),
+      varDecDef (var "d" double) mainFn (classMethodCall (obj "Vector") (obj "Vector") "dot" [valueOf v1, valueOf v2]),
       printStr "Dot product: ", printLn (valueOf $ var "d" double),
 
-      varDecDef (var "m" double) mainFn (objMethodCall double (valueOf v1) "magnitude" []),
+      varDecDef (var "m" double) mainFn (objMethodCallNoParams double (valueOf v1) "magnitude"),
       printStr "Magnitude of v1: ", printLn (valueOf $ var "m" double),
 
-      varDec (var "vAdd" (obj "Vector")) mainFn,
-      var "vAdd" (obj "Vector") &= funcApp "Vector.add" (obj "Vector") [valueOf v1, valueOf v2],
+      varDecDef (var "vAdd" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, valueOf v2]),
       printStr "v1 + v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vAdd" (obj "Vector"))) "print",
 
-      varDec (var "vUnit" (obj "Vector")) mainFn,
-      var "vUnit" (obj "Vector") &= objMethodCall (obj "Vector") (funcApp "Vector.add" (obj "Vector") [valueOf v1, objMethodCall (obj "Vector") (valueOf v2) "scale" [litDouble 2]]) "norm" [],
+      varDecDef (var "vUnit" (obj "Vector")) mainFn (objMethodCall (obj "Vector") (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, objMethodCall (obj "Vector") (valueOf v2) "scale" [litDouble 2]]) "norm" []),
       printStr "Unit vector of v1 + 2 * v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vUnit" (obj "Vector"))) "print"
     ]
   ]

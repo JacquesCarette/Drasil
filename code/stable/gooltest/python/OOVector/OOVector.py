@@ -1,19 +1,17 @@
 import math
 
-import java.util.Arrays
-
 ## \brief Vectors of doubles and common vector-related operations.
 class Vector:
     ## \brief Construct a vector from an array of doubles.
     # \param v The doubles.
     def __init__(self, v):
-        assert v.length > 0, "Vector dimension must be > 0."
-        self.v = v.clone()
+        assert len(v) > 0, "Vector dimension must be > 0."
+        self.v = v.copy()
     
     ## \brief Returns the dimension of this vector.
     # \return The dimension of the vector.
     def dimension(self):
-        return self.v.length
+        return len(self.v)
     
     ## \brief Calculate the Euclidean norm (magnitude) of this vector.
     # \return The magnitude.
@@ -36,7 +34,7 @@ class Vector:
         assert v1.dimension() == v2.dimension(), "Vector dimensions must match for dot product."
         res = 0.0
         for i in range(0, v1.dimension(), 1):
-            res = res + v1.v[i] * v2.v[i]
+            res += v1.v[i] * v2.v[i];
         return res
     
     ## \brief Calculate the resultant vector of two vectors.
@@ -46,23 +44,23 @@ class Vector:
     @staticmethod
     def add(v1, v2):
         assert v1.dimension() == v2.dimension(), "Vector dimensions must match for addition."
-        res = v1.v.clone()
+        res = v1.v.copy()
         for i in range(0, v1.dimension(), 1):
-            res[i] = res[i] + v2.v[i]
+            res[i] += v2.v[i];
         return Vector(res)
     
     ## \brief Scale this vector by a factor.
     # \param s Scalar factor.
     # \return A new scaled vector.
     def scale(self, s):
-        res = self.v.clone()
+        res = self.v.copy()
         for i in range(0, self.dimension(), 1):
             res[i] = s * res[i]
         return Vector(res)
     
     ## \brief Prints the vector elements to console.
     def print(self):
-        print(java.util.Arrays.Arrays.toString(self.v))
+        print(self.v)
 
 ds1 = [1.0, 2.0, 3.0]
 ds2 = [4.0, 5.0, 6.0]

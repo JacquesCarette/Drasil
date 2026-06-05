@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using java.util.Arrays;
 
 public class OOVector {
     
@@ -19,12 +18,10 @@ public class OOVector {
         double m = v1.magnitude();
         Console.Write("Magnitude of v1: ");
         Console.WriteLine(m);
-        Vector vAdd;
-        vAdd = Vector.add(v1, v2);
+        Vector vAdd = Vector.add(v1, v2);
         Console.Write("v1 + v2: ");
         vAdd.print();
-        Vector vUnit;
-        vUnit = Vector.add(v1, v2.scale(2.0)).norm();
+        Vector vUnit = Vector.add(v1, v2.scale(2.0)).norm();
         Console.Write("Unit vector of v1 + 2 * v2: ");
         vUnit.print();
     }
@@ -39,15 +36,15 @@ public class Vector {
         \param v The doubles.
     */
     public Vector(double[] v) {
-        Debug.Assert( v.length > 0 , "Vector dimension must be > 0.");
-        this.v = v.clone();
+        Debug.Assert( v.Length > 0 , "Vector dimension must be > 0.");
+        this.v = (double[])(v.Clone());
     }
     
     /** \brief Returns the dimension of this vector.
         \return The dimension of the vector.
     */
     public int dimension() {
-        return this.v.length;
+        return this.v.Length;
     }
     
     /** \brief Calculate the Euclidean norm (magnitude) of this vector.
@@ -75,7 +72,7 @@ public class Vector {
         Debug.Assert( v1.dimension() == v2.dimension() , "Vector dimensions must match for dot product.");
         double res = 0.0;
         for (int i = 0; i < v1.dimension(); i += 1) {
-            res = res + v1.v[i] * v2.v[i];
+            res += v1.v[i] * v2.v[i];
         }
         return res;
     }
@@ -87,9 +84,9 @@ public class Vector {
     */
     public static Vector add(Vector v1, Vector v2) {
         Debug.Assert( v1.dimension() == v2.dimension() , "Vector dimensions must match for addition.");
-        double[] res = v1.v.clone();
+        double[] res = (double[])(v1.v.Clone());
         for (int i = 0; i < v1.dimension(); i += 1) {
-            res[i] = res[i] + v2.v[i];
+            res[i] += v2.v[i];
         }
         return new Vector(res);
     }
@@ -99,7 +96,7 @@ public class Vector {
         \return A new scaled vector.
     */
     public Vector scale(double s) {
-        double[] res = this.v.clone();
+        double[] res = (double[])(this.v.Clone());
         for (int i = 0; i < this.dimension(); i += 1) {
             res[i] = s * res[i];
         }
@@ -109,6 +106,8 @@ public class Vector {
     /** \brief Prints the vector elements to console.
     */
     public void print() {
-        Console.WriteLine(Arrays.toString(this.v));
+        Console.Write("[");
+        Console.Write(string.Join(", ", this.v));
+        Console.WriteLine("]");
     }
 }

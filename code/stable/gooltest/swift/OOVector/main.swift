@@ -1,5 +1,4 @@
 import Foundation
-import java.util.Arrays
 
 /** Vectors of doubles and common vector-related operations.
 */
@@ -10,15 +9,15 @@ class Vector {
         - Parameter v: The doubles.
     */
     init(_ v: [Double]) {
-        assert( v.length > 0 , "Vector dimension must be > 0.")
-        self.v = v.clone()
+        assert( v.count > 0 , "Vector dimension must be > 0.")
+        self.v = v
     }
     
     /** Returns the dimension of this vector.
         - Returns: The dimension of the vector.
     */
     func dimension() -> Int {
-        return self.v.length
+        return self.v.count
     }
     
     /** Calculate the Euclidean norm (magnitude) of this vector.
@@ -46,7 +45,7 @@ class Vector {
         assert( v1.dimension() == v2.dimension() , "Vector dimensions must match for dot product.")
         var res: Double = 0.0
         for i in [Int](stride(from: 0, to: v1.dimension(), by: 1)) {
-            res = res + v1.v[i] * v2.v[i]
+            res += v1.v[i] * v2.v[i];
         }
         return res
     }
@@ -58,9 +57,9 @@ class Vector {
     */
     static func add(_ v1: Vector, _ v2: Vector) -> Vector {
         assert( v1.dimension() == v2.dimension() , "Vector dimensions must match for addition.")
-        var res: [Double] = v1.v.clone()
+        var res: [Double] = v1.v
         for i in [Int](stride(from: 0, to: v1.dimension(), by: 1)) {
-            res[i] = res[i] + v2.v[i]
+            res[i] += v2.v[i];
         }
         return Vector(res)
     }
@@ -70,7 +69,7 @@ class Vector {
         - Returns: A new scaled vector.
     */
     func scale(_ s: Double) -> Vector {
-        var res: [Double] = self.v.clone()
+        var res: [Double] = self.v
         for i in [Int](stride(from: 0, to: self.dimension(), by: 1)) {
             res[i] = s * res[i]
         }
@@ -80,7 +79,7 @@ class Vector {
     /** Prints the vector elements to console.
     */
     func print() -> Void {
-        print(Arrays.toString(self.v))
+        print(self.v)
     }
 }
 
@@ -98,11 +97,9 @@ print(d)
 var m: Double = v1.magnitude()
 print("Magnitude of v1: ", terminator: "")
 print(m)
-var vAdd: Vector
-vAdd = Vector.add(v1, v2)
+var vAdd: Vector = Vector.add(v1, v2)
 print("v1 + v2: ", terminator: "")
 vAdd.print()
-var vUnit: Vector
-vUnit = Vector.add(v1, v2.scale(2.0)).norm()
+var vUnit: Vector = Vector.add(v1, v2.scale(2.0)).norm()
 print("Unit vector of v1 + 2 * v2: ", terminator: "")
 vUnit.print()

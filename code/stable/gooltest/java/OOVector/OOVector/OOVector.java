@@ -19,12 +19,10 @@ public class OOVector {
         double m = v1.magnitude();
         System.out.print("Magnitude of v1: ");
         System.out.println(m);
-        Vector vAdd;
-        vAdd = Vector.add(v1, v2);
+        Vector vAdd = Vector.add(v1, v2);
         System.out.print("v1 + v2: ");
         vAdd.print();
-        Vector vUnit;
-        vUnit = Vector.add(v1, v2.scale(2.0)).norm();
+        Vector vUnit = Vector.add(v1, v2.scale(2.0)).norm();
         System.out.print("Unit vector of v1 + 2 * v2: ");
         vUnit.print();
     }
@@ -75,7 +73,7 @@ class Vector {
         assert v1.dimension() == v2.dimension() : "Vector dimensions must match for dot product.";
         double res = 0.0;
         for (int i = 0; i < v1.dimension(); i += 1) {
-            res = res + v1.v[i] * v2.v[i];
+            res += v1.v[i] * v2.v[i];
         }
         return res;
     }
@@ -89,7 +87,7 @@ class Vector {
         assert v1.dimension() == v2.dimension() : "Vector dimensions must match for addition.";
         double[] res = v1.v.clone();
         for (int i = 0; i < v1.dimension(); i += 1) {
-            res[i] = res[i] + v2.v[i];
+            res[i] += v2.v[i];
         }
         return new Vector(res);
     }

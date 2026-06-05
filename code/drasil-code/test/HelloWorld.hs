@@ -128,7 +128,7 @@ objectTests = block [comment "Object tests",
     (classMethodCall (obj "TestClass") (obj "TestClass") "add"
       [valueOf $ var "t1" (obj "TestClass"), valueOf $ var "t2" (obj "TestClass")]),
   printStr "Value of t3.a: ",
-  printLn $ valueOf $ instanceVarAccess (valueOf $ (var "t3" (obj "TestClass"))) (var "a" int)]
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int)]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,

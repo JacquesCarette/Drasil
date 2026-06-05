@@ -1390,7 +1390,6 @@ instance InternalValueExp CppSrcCode where
     c <- cls
     RC.call Nothing (Just $ RC.type' c <> text nmSpc) f t vs ns
 
-
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
 

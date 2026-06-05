@@ -1,26 +1,22 @@
-{-# LANGUAGE PatternSynonyms, QuasiQuotes, TupleSections #-}
+{-# LANGUAGE PatternSynonyms, QuasiQuotes, RankNTypes #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import Text.PrettyPrint.HughesPJ (render)
 import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
-import Data.Functor ((<&>))
-import Data.Foldable (traverse_)
-import GHC.IO.Encoding (setLocaleEncoding, utf8)
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import System.FilePath ((</>))
+import qualified Data.Map as M
+import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.FileHandling (OverwritePolicy(..), directory, localPath, ps, writeFiles)
-import Drasil.FileHandling.Legacy (createDirIfMissing, createFile)
-import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
+import Drasil.FileHandling (FileLayout, file, directory, ps, goldenTestingGroup,
+  goldenTest, ps, (</>))
+import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
-  FileData(..), modDoc)
-import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
+  FileData(..), modDoc, GOOLState)
+import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
 import Drasil.GProc (ProcProg, unJLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
+import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
 import Language.Drasil.Code (ImplementationType(..), makeSds)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,
@@ -31,81 +27,103 @@ import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
 import VectorTest (vectorTestOO, vectorTestProc)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
+import Test.Tasty (TestTree, defaultMain, testGroup)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
-main :: IO()
-main = do
-  setLocaleEncoding utf8
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False "java"
-  setCurrentDirectory "java"
-  genCode (classes unJC unJP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "python"
-  setCurrentDirectory "python"
-  genCode (classes unPC unPP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "csharp"
-  setCurrentDirectory "csharp"
-  genCode (classes unCSC unCSP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "cpp"
-  setCurrentDirectory "cpp"
-  genCode (classes unCPPC unCPPP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "swift"
-  setCurrentDirectory "swift"
-  genCode (classes unSC unSP)
-  setCurrentDirectory workingDir
-  createDirIfMissing False "julia"
-  setCurrentDirectory "julia"
-  genCode (jlClasses unJLC unJLP)
-  setCurrentDirectory workingDir
+main :: IO ()
+main = defaultMain codeGenTestGroup
 
--- | Gathers all information needed to generate code, sorts it, and calls the renderers.
-genCode :: [PackageData] -> IO()
-genCode files = do
-  mapM_ (\(PackageData prog aux) -> do
-    let label = progName prog
-        layout = directory [ps|{label}|] aux
-    writeFiles OverwriteAllowed localPath layout
-    ) files
-  createCodeFiles $ files >>= \(PackageData prog _) ->
-    let label = progName prog
-    in progMods prog <&> (label,)
+codeGenTestGroup :: TestTree
+codeGenTestGroup =
+  testGroup
+    "Codegen Test"
+    [ testGroup
+        "GOOL"
+        [ goolTestGroup "HelloWorldOO" helloWorldOO,
+          goolTestGroup "PatternTestOO" patternTest,
+          goolTestGroup "FileTestsOO" fileTestsOO,
+          goolTestGroup "VectorTestOO" vectorTestOO,
+          goolTestGroup "NameGenTestOO" nameGenTestOO
+        ],
+      testGroup
+        "GProc"
+        [ gProcTestGroup "HelloWorldProc" helloWorldProc,
+          gProcTestGroup "FileTestsProc" fileTestsProc,
+          gProcTestGroup "VectorTestProc" vectorTestProc,
+          gProcTestGroup "NameGenTestProc" nameGenTestProc
+        ]
+    ]
 
-classes :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> [PackageData]
-classes unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-                fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
-                                        (gs' ^. mainMod)
-  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
-  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
-  (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
-    fileTestsOO, vectorTestOO, nameGenTestOO])
+goolTestGroup :: String -> (forall r. (OOProg r) => OO.GSProgram r) -> TestTree
+goolTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "java" $ directory [ps|java|] $ genCodeGOOL unJC unJP p,
+      goldenTest "python" $ directory [ps|python|] $ genCodeGOOL unPC unPP p,
+      goldenTest "csharp" $ directory [ps|csharp|] $ genCodeGOOL unCSC unCSP p,
+      goldenTest "cpp" $ directory [ps|cpp|] $ genCodeGOOL unCPPC unCPPP p,
+      goldenTest "swift" $ directory [ps|swift|] $ genCodeGOOL unSC unSP p
+    ]
 
--- Classes that Julia is currently able to render
-jlClasses :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> [PackageData]
-jlClasses unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-                fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources)
-                                        (gs' ^. mainMod)
-  in unRepr' $ package pd [makefile [] Program [] fileInfoState pd])
-  [helloWorldProc, fileTestsProc, vectorTestProc, nameGenTestProc]
-  (map (Proc.unCI . (`evalState` initialState)) [helloWorldProc,
-    fileTestsProc, vectorTestProc, nameGenTestProc])
+gProcTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
+gProcTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
+    ]
 
-------------------
--- IO Functions --
-------------------
+genCodeGOOL :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
+  (r' PackageData -> PackageData) -> (forall s. (OOProg s) => OO.GSProgram s) -> [FileLayout]
+genCodeGOOL unRepr unRepr' p =
+  let
+    gs = OO.unCI (evalState p initialState)
+    (p', gs') = runState p gs
+  in genCode' (unRepr p') gs' unRepr'
 
--- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [(Label, FileData)] -> IO ()
-createCodeFiles = traverse_ $ \(name, file) -> do
-  let path = name </> filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
-  createFile path (render $ modDoc $ fileMod file)
+genCodeProc :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
+  (r' PackageData -> PackageData) -> (forall s. (ProcProg s) => Proc.GSProgram s) -> [FileLayout]
+genCodeProc unRepr unRepr' p =
+  let
+    gs = Proc.unCI (evalState p initialState)
+    (p', gs') = runState p gs
+  in genCode' (unRepr p') gs' unRepr'
+
+genCode' :: (SoftwareDossierSym r', Monad r') => ProgData -> GOOLState ->
+  (r' PackageData -> PackageData) -> [FileLayout]
+genCode' pd gs' unRepr' =
+  let
+    fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
+    (PackageData prog aux) = unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
+  in toFileLayout (progMods prog) ++ aux
+
+-- | Internal: Converts a list of `FileData` to a `FileLayout`.
+toFileLayout :: [FileData] -> [FileLayout]
+toFileLayout fc =
+  let
+    root = foldl (\m f -> insertFile (filePath f, modDoc $ fileMod f) m) M.empty fc
+
+    entryToLayout (n, File d) = file [ps|{n}|] d
+    entryToLayout (n, Folder m) = directory [ps|{n}|] $ map entryToLayout $ M.assocs m
+  in
+    map entryToLayout (M.assocs root)
+
+data Entry a = File a | Folder (M.Map String (Entry a))
+  deriving (Show)
+
+insertFile :: (String, a) -> M.Map String (Entry a) -> M.Map String (Entry a)
+insertFile (p, d) m =
+  if '/' `elem` p
+    then
+      let (fname, rest) = break (== '/') p
+          folderM = case M.findWithDefault (Folder M.empty) fname m of
+                      File _   -> dupError fname
+                      Folder f -> f
+      in M.insert fname (Folder $ insertFile (drop 1 rest, d) folderM) m
+    else M.insertWith (\_ -> dupError p) p (File d) m
+  where
+    dupError fname = error $ "A file or folder with name '" ++ fname ++ "' already exists."

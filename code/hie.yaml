@@ -9,29 +9,8 @@ cradle:
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
 
-    - path: "drasil-code/test/Main.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/FileTests.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/HelloWorld.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/Helper.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GOOL/Observer.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GOOL/PatternTest.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/VectorTest.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/NameGenTest.hs"
-      component: "drasil-code:exe:codegenTest"
+    - path: "drasil-code/test"
+      component: "drasil-code:test:codegenTest"
 
     - path: "drasil-data/lib"
       component: "drasil-data:lib"

@@ -46,7 +46,7 @@ class Vector {
         Vector scale(double s);
         /** \brief Prints the vector elements to console.
         */
-        void print();
+        void printSelf();
     
     private:
         vector<double> &v;

@@ -54,7 +54,7 @@ Vector Vector::scale(double s) {
     return Vector(res);
 }
 
-void Vector::print() {
+void Vector::printSelf() {
     std::cout << "[";
     for (int list_i1 = 0; list_i1 < (int)(this->v.size()) - 1; list_i1++) {
         std::cout << this->v.at(list_i1);
@@ -72,9 +72,9 @@ int main(int argc, const char *argv[]) {
     Vector v1 = Vector(ds1);
     Vector v2 = Vector(ds2);
     std::cout << "v1: ";
-    v1.print();
+    v1.printSelf();
     std::cout << "v2: ";
-    v2.print();
+    v2.printSelf();
     double d = Vector::dot(v1, v2);
     std::cout << "Dot product: ";
     std::cout << d << std::endl;
@@ -83,10 +83,10 @@ int main(int argc, const char *argv[]) {
     std::cout << m << std::endl;
     Vector vAdd = Vector::add(v1, v2);
     std::cout << "v1 + v2: ";
-    vAdd.print();
+    vAdd.printSelf();
     Vector vUnit = Vector::add(v1, v2.scale(2.0)).norm();
     std::cout << "Unit vector of v1 + 2 * v2: ";
-    vUnit.print();
+    vUnit.printSelf();
     
     return 0;
 }

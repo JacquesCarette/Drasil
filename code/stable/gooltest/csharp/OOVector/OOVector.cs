@@ -9,9 +9,9 @@ public class OOVector {
         Vector v1 = new Vector(ds1);
         Vector v2 = new Vector(ds2);
         Console.Write("v1: ");
-        v1.print();
+        v1.printSelf();
         Console.Write("v2: ");
-        v2.print();
+        v2.printSelf();
         double d = Vector.dot(v1, v2);
         Console.Write("Dot product: ");
         Console.WriteLine(d);
@@ -20,10 +20,10 @@ public class OOVector {
         Console.WriteLine(m);
         Vector vAdd = Vector.add(v1, v2);
         Console.Write("v1 + v2: ");
-        vAdd.print();
+        vAdd.printSelf();
         Vector vUnit = Vector.add(v1, v2.scale(2.0)).norm();
         Console.Write("Unit vector of v1 + 2 * v2: ");
-        vUnit.print();
+        vUnit.printSelf();
     }
 }
 
@@ -105,7 +105,7 @@ public class Vector {
     
     /** \brief Prints the vector elements to console.
     */
-    public void print() {
+    public void printSelf() {
         Console.Write("[");
         Console.Write(string.Join(", ", this.v));
         Console.WriteLine("]");

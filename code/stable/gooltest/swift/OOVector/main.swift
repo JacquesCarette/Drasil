@@ -78,7 +78,7 @@ class Vector {
     
     /** Prints the vector elements to console.
     */
-    func print() -> Void {
+    func printSelf() -> Void {
         print(self.v)
     }
 }
@@ -88,9 +88,9 @@ var ds2: [Double] = [4.0, 5.0, 6.0]
 var v1: Vector = Vector(ds1)
 var v2: Vector = Vector(ds2)
 print("v1: ", terminator: "")
-v1.print()
+v1.printSelf()
 print("v2: ", terminator: "")
-v2.print()
+v2.printSelf()
 var d: Double = Vector.dot(v1, v2)
 print("Dot product: ", terminator: "")
 print(d)
@@ -99,7 +99,7 @@ print("Magnitude of v1: ", terminator: "")
 print(m)
 var vAdd: Vector = Vector.add(v1, v2)
 print("v1 + v2: ", terminator: "")
-vAdd.print()
+vAdd.printSelf()
 var vUnit: Vector = Vector.add(v1, v2.scale(2.0)).norm()
 print("Unit vector of v1 + 2 * v2: ", terminator: "")
-vUnit.print()
+vUnit.printSelf()

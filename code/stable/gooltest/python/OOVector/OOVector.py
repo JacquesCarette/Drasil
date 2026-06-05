@@ -59,7 +59,7 @@ class Vector:
         return Vector(res)
     
     ## \brief Prints the vector elements to console.
-    def print(self):
+    def printSelf(self):
         print(self.v)
 
 ds1 = [1.0, 2.0, 3.0]
@@ -67,9 +67,9 @@ ds2 = [4.0, 5.0, 6.0]
 v1 = Vector(ds1)
 v2 = Vector(ds2)
 print("v1: ", end="")
-v1.print()
+v1.printSelf()
 print("v2: ", end="")
-v2.print()
+v2.printSelf()
 d = Vector.dot(v1, v2)
 print("Dot product: ", end="")
 print(d)
@@ -78,7 +78,7 @@ print("Magnitude of v1: ", end="")
 print(m)
 vAdd = Vector.add(v1, v2)
 print("v1 + v2: ", end="")
-vAdd.print()
+vAdd.printSelf()
 vUnit = Vector.add(v1, v2.scale(2.0)).norm()
 print("Unit vector of v1 + 2 * v2: ", end="")
-vUnit.print()
+vUnit.printSelf()

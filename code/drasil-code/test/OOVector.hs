@@ -107,7 +107,7 @@ scale = docFunc "Scale this vector by a factor."
 
 print_ :: OOProg r => SMethod r
 print_ = docFunc "Prints the vector elements to console." [] Nothing $
-  pubMethod "print" void [] $ oneLiner $ printLn $ valueOf thisV
+  pubMethod "printSelf" void [] $ oneLiner $ printLn $ valueOf thisV
 
 main :: OOProg r => SMethod r
 main = mainFunction $ body [
@@ -117,8 +117,8 @@ main = mainFunction $ body [
       varDecDef v1 mainFn $ newObj (obj "Vector") [valueOf ds1],
       varDecDef v2 mainFn $ newObj (obj "Vector") [valueOf ds2],
 
-      printStr "v1: ", valStmt $ objMethodCallNoParams void (valueOf v1) "print",
-      printStr "v2: ", valStmt $ objMethodCallNoParams void (valueOf v2) "print",
+      printStr "v1: ", valStmt $ objMethodCallNoParams void (valueOf v1) "printSelf",
+      printStr "v2: ", valStmt $ objMethodCallNoParams void (valueOf v2) "printSelf",
 
       varDecDef (var "d" double) mainFn (classMethodCall (obj "Vector") (obj "Vector") "dot" [valueOf v1, valueOf v2]),
       printStr "Dot product: ", printLn (valueOf $ var "d" double),
@@ -127,10 +127,10 @@ main = mainFunction $ body [
       printStr "Magnitude of v1: ", printLn (valueOf $ var "m" double),
 
       varDecDef (var "vAdd" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, valueOf v2]),
-      printStr "v1 + v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vAdd" (obj "Vector"))) "print",
+      printStr "v1 + v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vAdd" (obj "Vector"))) "printSelf",
 
       varDecDef (var "vUnit" (obj "Vector")) mainFn (objMethodCall (obj "Vector") (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, objMethodCall (obj "Vector") (valueOf v2) "scale" [litDouble 2]]) "norm" []),
-      printStr "Unit vector of v1 + 2 * v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vUnit" (obj "Vector"))) "print"
+      printStr "Unit vector of v1 + 2 * v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vUnit" (obj "Vector"))) "printSelf"
     ]
   ]
   where ds1 = var "ds1" (arrayType double)

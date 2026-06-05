@@ -10,9 +10,9 @@ public class OOVector {
         Vector v1 = new Vector(ds1);
         Vector v2 = new Vector(ds2);
         System.out.print("v1: ");
-        v1.print();
+        v1.printSelf();
         System.out.print("v2: ");
-        v2.print();
+        v2.printSelf();
         double d = Vector.dot(v1, v2);
         System.out.print("Dot product: ");
         System.out.println(d);
@@ -21,10 +21,10 @@ public class OOVector {
         System.out.println(m);
         Vector vAdd = Vector.add(v1, v2);
         System.out.print("v1 + v2: ");
-        vAdd.print();
+        vAdd.printSelf();
         Vector vUnit = Vector.add(v1, v2.scale(2.0)).norm();
         System.out.print("Unit vector of v1 + 2 * v2: ");
-        vUnit.print();
+        vUnit.printSelf();
     }
 }
 
@@ -106,7 +106,7 @@ class Vector {
     
     /** \brief Prints the vector elements to console.
     */
-    public void print() {
+    public void printSelf() {
         System.out.println(Arrays.toString(this.v));
     }
 }

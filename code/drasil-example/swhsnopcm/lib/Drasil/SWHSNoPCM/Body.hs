@@ -1,5 +1,7 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil hiding (section)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -12,9 +14,9 @@ import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation as Doc (material_)
-import Data.Drasil.Concepts.Math (mathcon', ode)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
@@ -64,7 +66,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
   [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
-  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr outputs
+  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 
 concepts :: [UnitalChunk]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -152,8 +154,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [htTrans, materialProprty] ++
   -- CIs
-  map nw [progName, phsChgMtrl] ++
-  map nw CP.physicCon' ++ map nw mathcon'
+  map nw [progName, phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

@@ -7,9 +7,9 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 
 import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
-  VisibilitySym(..), getType, convType, ScopeSym(Scope))
+  VisibilitySym(..), getType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
-  List(intToIndex), ParameterSym(param))
+  IndexTranslator(intToIndex), ParameterSym(param))
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
@@ -18,7 +18,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.Shared.AST (isSource)
+import Drasil.Shared.AST (isSource, ScopeData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -33,7 +33,7 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.), over)
 import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, render, isEmpty, brackets, (<>))
+import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>))
 
 -- Files --
 
@@ -84,12 +84,12 @@ arrayElem :: (ProcRenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
-  let vName = variableName v ++ "[" ++ render (RCC.value i) ++ "]"
+  let vName = variableName v -- Slight hack; we used to add `++ "[" ++ render (RCC.value i) ++ "]"`
       vType = listInnerType $ return $ variableType v
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
+funcDecDef :: (ProcRenderSym r) => SVariable r -> r ScopeData -> [SVariable r]
   -> MSBody r -> MSStatement r
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Unitals where --whole file is used
+module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
@@ -8,6 +8,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Prelude hiding (log)
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr, probConstr)
@@ -24,10 +26,9 @@ import Drasil.GlassBR.Units (sFlawPU)
 --FIXME: Many of the current terms can be separated into terms and defns?
 
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
-  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++
+symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
   [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
-  unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
+  unitless ++ map dqdWr [probBr, stressDistFac] ++
   map dqdWr derivedInputDataConstraints ++
   map dqdWr mathunitals ++ map dqdWr physicalquants ++ mathquants
 
@@ -42,21 +43,21 @@ glassTypeCon, nomThick :: ConstrConcept
 
 {--}
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
-  map dqdWr inputsNoUncrtn ++ map dqdWr sdVector
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
+  NE.map dqdWr inputsNoUncrtn <> NE.map dqdWr sdVector
 
 --inputs with units and uncertainties
-inputsWUnitsUncrtn :: [UncertQ]
-inputsWUnitsUncrtn = [plateLen, plateWidth, charWeight]
+inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
+inputsWUnitsUncrtn = plateLen :| [plateWidth, charWeight]
 
 --inputs with uncertainties and no units
-inputsWUncrtn :: [UncertQ]
-inputsWUncrtn = [pbTol, tNT]
+inputsWUncrtn :: NE.NonEmpty UncertQ
+inputsWUncrtn = pbTol :| [tNT]
 
 --inputs with no uncertainties
-inputsNoUncrtn :: [ConstrConcept]
-inputsNoUncrtn = map cnstrw' [glassTypeCon, nomThick]
+inputsNoUncrtn :: NE.NonEmpty ConstrConcept
+inputsNoUncrtn = NE.map cnstrw' $ glassTypeCon :| [nomThick]
 
 --derived inputs with units and uncertainties
 derivedInsWUnitsUncrtn :: [UncertQ]
@@ -67,7 +68,7 @@ derivedInsWUncrtn :: [UncertQ]
 derivedInsWUncrtn = [aspectRatio]
 
 inputDataConstraints :: [UncertQ]
-inputDataConstraints = inputsWUnitsUncrtn ++ inputsWUncrtn
+inputDataConstraints = NE.toList $ inputsWUnitsUncrtn <> inputsWUncrtn
 
 derivedInputDataConstraints :: [UncertQ]
 derivedInputDataConstraints = derivedInsWUnitsUncrtn
@@ -119,8 +120,8 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
-outputs :: [DefinedQuantityDict]
-outputs = map dqdWr [isSafePb, isSafeLR] ++ map dqdWr [probBr, stressDistFac]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.map dqdWr (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
@@ -427,8 +428,8 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVector :: [UnitalChunk]
-sdVector = [sdx, sdy, sdz]
+sdVector :: NE.NonEmpty UnitalChunk
+sdVector = sdx :| [sdy, sdz]
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

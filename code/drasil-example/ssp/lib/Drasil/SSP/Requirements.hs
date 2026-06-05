@@ -1,5 +1,7 @@
 module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -93,7 +95,7 @@ usingIMs = foldlList Comma List $ map refS [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent
-inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs)
+inputDataTable = mkInputPropsTable (dqdWr coords NE.<| NE.map dqdWr inputs)
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]

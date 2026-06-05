@@ -4,9 +4,9 @@ Welcome to the Contributor's Guide! This wiki page contains a gentle introductio
 
 Once you've read through this page, you may also take our [Contributor's Test](https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's%20Test/ContributorTest.pdf) to gauge your understanding of git and other Drasil-related topics (**highly recommended** for future contributors).
 
-If you have any questions, please feel free to either file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
+If you have any questions, please file an issue or reach out to the principal investigators ([Dr. Carette](https://github.com/JacquesCarette) and [Dr. Smith](https://github.com/smiths)). We are always looking to expand this page to be a useful guide for all contributors. Any feedback or suggestions are welcome; just file an issue :)
 
-**If you are a summer research student**, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students.md), written by past summer researchers, in addition to the [onboarding](https://github.com/JacquesCarette/Drasil/blob/main/doc/OnBoarding/onBoarding.pdf) document.
+**If you are a summer research student**, please also read the [Letter to Future Summer Students](Letter-to-Summer-Students), written by past summer researchers, in addition to the [onboarding](https://github.com/JacquesCarette/Drasil/blob/main/doc/OnBoarding/onBoarding.pdf) document.
 
 <details>
 <summary>
@@ -67,15 +67,15 @@ As a research project (which Drasil is), developing Drasil means studying the pr
 
 As mentioned earlier, Drasil's development is driven by its case studies, whether it be refining our target series of software artifacts, adding features, or altering Drasil's internal process for generating software. Your primary activity will be developing Haskell code for generating other kinds of software, and then testing said other kinds of software with their respective tooling (e.g., compilers, viewers, interpreters, etc.).
 
-At a high-level, our development framework is very similar to most other git-version-controlled, team-based software projects:
+Our development workflow is very similar to most other git-version-controlled, team-based software projects:
 
-1. *Choose a task to work on.*
-   * If you're new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling. Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
-   * If you're already familiar with Drasil, you'll likely know what you'd like to work on already. That being said, if you don't, that's okay, we have a myriad of [open tickets](https://github.com/JacquesCarette/Drasil/issues).
-2. *Work on said task.* This will involve editing Haskell code.
-   * If you're working on a `newcomers`-designated ticket, the ticket should have a good explanation of what work needs to be done and how it should be done. If it doesn't, you should ask the author of the ticket.
+1. *Choose a task to work on.* We use [`git`](https://git-scm.com/) and [GitHub](https://github.com/JacquesCarette/Drasil) to organize and submit work to the Drasil research project. If you are new to these tools, please review our [Git2Know for Drasil](Git2Know-for-Drasil) wiki page for a breakdown of branching and pull requests.
+   * If you are new to Drasil, you might find it difficult to decide what to work on. Choosing from one of our [`newcomers`-designated tickets](https://github.com/JacquesCarette/Drasil/issues?q=is%3Aissue%20state%3Aopen%20label%3Anewcomers) is good to get the ball rolling. Once you've seen a bit more of Drasil, you'll eventually feel comfortable choosing your own work.
+   * If you are familiar with Drasil, you'll likely know what you want to work on. That being said, if you don't, we have no shortage of [open tickets](https://github.com/JacquesCarette/Drasil/issues)!
+2. *Work on said task.* This will involve editing Drasil's Haskell codebase and compiling and using it through a [`Makefile`](Makefile). If you are unfamiliar with what `Makefile`s are, you should learn a little bit about [what it is](https://opensource.com/article/18/8/what-how-makefile).
+   * If you are working on a `newcomers`-designated ticket, the ticket should come with a concrete work plan. If it doesn't, please ask the author of the ticket.
    * Otherwise, you will need to study Drasil's source code (using our wiki as a supplementary resource) and figure out what needs to be done, just as in any other software project.
-3. *Commit your work and file a PR.* Similar to other open-source projects, whenever you have work you want to contribute upstream (i.e., to the main repository), you will need to commit your code to your own branch/fork of Drasil and file a pull request (PR) from your branch/fork to Drasil's `main` branch. A reviewer (likely one of the principal investigators) will audit your work and provide feedback/request changes whenever necessary until your work can be accepted and merged into the mainline Drasil repo.
+3. *Commit your work and file a PR.* To contribute your work upstream (i.e., to the main repository), you will need to commit your code to your own branch/fork and file a pull request (PR) targeting Drasil's `main` branch. A reviewer (likely one of the principal investigators) will audit your work and provide feedback/request changes whenever necessary until your work can be accepted and merged into the mainline Drasil repo.
    
    In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes.
 
@@ -83,64 +83,65 @@ Unlike typical software projects, however, Drasil's generated software artifacts
 
 ## Guidelines
 
-As mentioned earlier, your workflow revolves around 3 steps: selecting tasks, working on said tasks, and submitting your work. We use [`git`](https://git-scm.com/) and [GitHub](https://github.com/) to organize and submit work to the Drasil research project. If you are unfamiliar with `git` or GitHub, you should read through the [Git2Know for Drasil](Git2Know-for-Drasil) wiki page to learn more about branching, pull requests, merging, and anything else git or GitHub related. We also interact with Drasil through a [`Makefile`](Makefile). If you are unfamiliar with what `Makefile`s are, you should learn a little bit about [what it is](https://opensource.com/article/18/8/what-how-makefile) as it will be the primary way you compile and use Drasil.
+In this section, we will discuss the guidelines regarding contributing to Drasil, including [conduct](#conduct), [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
 
-For the remainder of this section, you will learn about our guidelines regarding [issue tracking](#issue-tracking), [coding style](#coding-style), [git best practices](#git-best-practices), and [editing this wiki](#editing-this-wiki).
+### Conduct
+
+Learning how to conduct yourself is crucial to working well in any team-based setting. Please refer to our [Code of Conduct](https://github.com/JacquesCarette/Drasil/blob/main/CODE_OF_CONDUCT.md) for more information.
 
 ### Issue Tracking
 
-- Please include enough information in your issue so that the reader can respond to the issue without having to track down multiple sources. Some tips on how to do that include the following: 
-    - Include excerpts of PDF/HTML documentation, especially annotated excerpts, when referring to output (desired or generated).
-    - Highlighting specific portions of such screenshots helps text/discrepancies stand out to the reader.
-    - Linking to related issues, pull requests, comments, and commit hashes is also really helpful for easy navigation through related and significant content and discussion in the repo.
-    - If there are certain code segments you want to link to an issue, instead of copy-pasting it, permalink is another option. Please see [Creating a Permanent Link to a Code Snippet](https://help.github.com/articles/creating-a-permanent-link-to-a-code-snippet/) for more information.
-    - Familiarizing yourself with [GitHub-flavoured Markdown](https://github.github.com/gfm/) will be useful for elegantly formatting your text. For instance, when recommending a solution (or otherwise inserting multiline code), mentioning the language of the code allows for syntax highlighting. Click on `Edit` to see the source code for this Haskell excerpt below:
+* **Avoid duplication.** Before filing, please search existing issues to avoid duplicates.
+* **Have a clear, narrow scope.** Your issue should have a clear, narrow scope and objective. Ideally, this coincides with a task that _should be_ resolvable within a reasonable amount of time (e.g., a week).
+* **Be focused.** Avoid introducing unrelated/tangential issues within your issue. Keep discussion focused on your main goal. Instead, file complementary issues and reference them using `#IssueNumber`.
+* **Write a meaningful title.** Use descriptive titles. You want your issue to be discoverable and readable. A well-written title helps prime readers for what to expect as well.
+* **Write clearly and concisely.** Avoid [flowery language](https://www.lib.sfu.ca/about/branches-depts/slc/incommon/flowery-language). Be direct and [frontload your writing](https://digitalcommunications.wp.st-andrews.ac.uk/2017/03/15/web-writing-basics-frontloading/). Avoid writing paragraphs upon paragraphs that make reading a long, burdensome task.
+* **Give context.** Discuss key background information to your issue. Link to related background issues/PRs. However, if your issue relies on 2 or more background comments/discussions/issues/PRs, please copy and paste key excerpts in addition to referencing them.
+* **Use [GitHub-Flavoured Markdown](https://github.github.com/gfm/) to its fullest.** In addition to [basic markdown formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax), you should use rich features whenever appropriate, including:
+    * [Mentioning people (@naming)](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#mentioning-people-and-teams). When you want to draw the attention of specific people to your issues, you can `@` them (e.g., `@JacquesCarette` or `@smiths`) and they will receive a notification on GitHub. _Please do not unnecessarily spam this._
+    * [Linking to related issues, PRs, comments, commits](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls). This eases navigating and helps others find your issues.
+    * [Including screenshots or files](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/attaching-files). You can include excerpts of PDFs or other files, especially annotated excerpts, when discussing generated artifacts. When sending images, you can/should also add highlighting to help make areas stand out to the reader.
+    * [Code permalinks](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet). Instead of copy/pasting code from the codebase, you should use permanent links to specific sections of code from the codebase.
+    * [Highlighted code](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting). When recommending a solution (or otherwise inserting multiline code), mentioning the language of the code allows for syntax highlighting. Click on `Edit` to see the source code for this Haskell excerpt below:
     ```haskell
     var :: String
     var = "Hello"
     ```
-- Create issues that are useful for the present, and for the future, but following these guidelines:
-  - Search the other issues to see if your issue has already been covered.
-  - Use a meaningful title for your issue (this is what people will be reading when they search the issues in the future).
-  - Do not introduce new issues within an existing issue. We should keep the discussion focused so that it relates to the current issue. Once an issue is resolved, it should be closed. Related issues should be created as separate issues, rather than being incorporated into the discussion. (Related issues can be linked to the current issue via a hashtag `#` followed by the number of the other issue.)
-  - Make your issue as specific as possible. Ideally, closing an issue should be possible with a few days of effort. This doesn't always happen, but it is something to strive for.
-- When **closing** an issue, please provide rationale and relevant links to other issues, Pull Requests (PRs), or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
-- In GitHub, Markdown can be used to annotate Issues, Pull Requests, Comments, Wiki pages, and any other documents. Here is a useful [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+    * [Pretty printing Mathematical expressions with LaTeX](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions).
+    * [Diagrams](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams).
+    * [Collapsible sections](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections). This is particularly helpful when attaching long logs to issues!
+* **Closing protocol.** When closing an issue, please provide rationale and relevant links to other issues, PRs, or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
 
 ### Coding Style
 
-- Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
-    ```Haskell
-    top level
-      indent level 1
-        indent level 2
-    ```
-- Regarding variable names:
-  - Use camel case. Ex: `someFunctionFoo`
-  - Make them meaningful. Ex: `htTransCladFuel` as opposed to `hG`.
-  - Try not to make them ridiculously long either - e.g. the package/module where something comes from shouldn't be repeated in a name.
-  - If something is **heavily used**, then a shorter name might be warranted.
-  - If you find that structure in naming variables (e.g., numbering, systematic
-    concatenation, related naming, etc.), there might be missing
-    connections/chunks we can make between the related variables. In this case,
-    it may be beneficial to file an issue discussing your findings, and asking
-    if anything can be done to remedy it. See [Issue 1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
-  - See this [page](https://kowainik.github.io/posts/naming-conventions) for a broader discussion of variable names for Haskell libraries in general.
-- One blank line between top-level definitions. No blank lines between type signatures and function definitions. Please don't add too many blank lines, 1 to 2 are enough!
-- Surround binary operators with a single space on either side. Ex: `x ^. term`
-- Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
-    ```Haskell
-      S "The" +:+ (phrase $ heatTrans ^. term) +:+ 
-      S "is the"
-      ...
-    ```
-- Try to not make 'long' lines (i.e., lines should not be more than 80 characters wide)
-- Bumping up version numbers in the `package.yaml` files:
-    - The version number should be bumped up only by +0.0.1 in most circumstances.
-    - It should be bumped up whenever a major change is (or multiple minor changes are) made to interfaces, such as any change to `Language/Drasil.hs`, or a change to the signature of any function that is exported there.
-    - Please then also bump up the dependencies of the other packages, so that they will pick up the new version.
-- Leave a single trailing newline character at the end of each file.
-- We use Haddock to generate code documentation. Haddock has a specific format to change Haskell's comments into a Haddock document. For example, the syntax `-- |`. The [website](https://haskell-haddock.readthedocs.io/latest/markup.html#markup), gives examples and instructions.
+The Haskell wiki's programming [Guidelines](https://wiki.haskell.org/Programming_guidelines) and [Tips](https://wiki.haskell.org/index.php?title=Haskell_programming_tips) pages are very good reads on writing conventional Haskell. Some basic notes
+
+* **Line Length**. Avoid long lines. Try to keep lines capped at 80 characters wide. Going over 80 is okay when unavoidable.
+* **Documentation**. Use [Haddock](https://haskell-haddock.readthedocs.io/latest/markup.html)-formatted documentation. We try to have good, public [documentation](https://jacquescarette.github.io/Drasil/docs/index.html) (e.g., [`drasil-database`](https://jacquescarette.github.io/Drasil/docs/drasil-database-0.1.1.0/Drasil-Database.html)).
+* **Naming Conventions**: For a comprehensive guide, see Veronika Romashkina's [discussion with examples](https://kowainik.github.io/posts/naming-conventions). We note some common rules here for convenience:
+    * Use `camelCase` for functions and variables (e.g., `someFuncFoo`), and `PascalCase` for types and data constructors (e.g., `data Baz = FooBar`).
+    * Make names meaningful (e.g., `htTransCladFuel` as opposed to `hG`).
+    * Avoid overly long names.
+    * If something is **heavily used**, shorter names are preferred.
+    * If you notice systematic structure in variable names (e.g., numbering, related naming, etc.), there may be something we should be capturing about the related variables. In this case, it is beneficial to file an issue discussing your findings. See [#1848](https://github.com/JacquesCarette/Drasil/issues/1848) for an example ticket and relevant discussion.
+* **Whitespace**:
+    * Use spaces. Do not use tabs.
+    * Prefer 2 spaces per indent level. For example:
+      ```haskell
+      top level
+        indent level 1
+          indent level 2
+      ```
+    * Surround binary operators with a single space on both sides (e.g., `x ^. term`).
+    * Ensure there is a single trailing newline character at the end of each file.
+    * Leave only one empty line between top-level definitions.
+    * Do not leave empty lines between type signatures and their corresponding function definitions.
+    * Do not break operations across lines unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
+      ```Haskell
+        S "The" +:+ (phrase $ heatTrans ^. term) +:+ 
+        S "is the"
+        ...
+      ```
 
 ### Git Best Practices
 
@@ -178,7 +179,7 @@ To maintain a clean, understandable project history and improve collaboration, p
     -  For a good example to understand the value of squashing [this comment](https://github.com/JacquesCarette/Drasil/pull/3705#issuecomment-2148869719) provides some good feedback in the context of a PR
     - **Important:** This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
-### Editing this Wiki
+### Editing This Wiki
 
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
 

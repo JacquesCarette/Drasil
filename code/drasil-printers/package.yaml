@@ -22,9 +22,9 @@ dependencies:
 - MissingH
 - filepath
 - directory
+- drasil-file-handling
 - drasil-database
 - drasil-lang
-- drasil-metadata
 - drasil-theory
 - drasil-utils
 - split
@@ -32,6 +32,7 @@ dependencies:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -Wmissing-export-lists
 
 library:
   source-dirs: lib

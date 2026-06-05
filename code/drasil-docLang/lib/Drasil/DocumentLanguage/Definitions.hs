@@ -62,23 +62,23 @@ type TraceViewCat = [UID] -> SmithEtAlSRS -> [UID]
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).
 tmodel :: Fields -> SmithEtAlSRS -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (ref t)
+tmodel fs m t = mkRawLC (Defini (foldr (mkTMField t m) [] fs)) (ref t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- 'QDefinition' (called automatically by 'SCSSub' program).
 ddefn :: Fields -> SmithEtAlSRS -> DataDefinition -> LabelledContent
-ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (ref d)
+ddefn fs m d = mkRawLC (Defini (foldr (mkDDField d m) [] fs)) (ref d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program).
 gdefn :: Fields -> SmithEtAlSRS -> GenDefn -> LabelledContent
-gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (ref g)
+gdefn fs m g = mkRawLC (Defini (foldr (mkGDField g m) [] fs)) (ref g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program).
 instanceModel :: Fields -> SmithEtAlSRS -> InstanceModel -> LabelledContent
-instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (ref i)
+instanceModel fs m i = mkRawLC (Defini (foldr (mkIMField i m) [] fs)) (ref i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program).

@@ -1,11 +1,18 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language.
-module Language.Drasil.Document where
+module Language.Drasil.Document (
+  section, fig, figNoCap, figWithWidth, figNoCapWithWidth, Section(..),
+  SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
+  ulcc, Document(..), mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..),
+  checkToC, makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI,
+  makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
+) where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid, HasChunkRefs(..))
 import Utils.Drasil (repUnd)
+import qualified Data.Set as Set
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
@@ -22,10 +29,6 @@ import Language.Drasil.Sentence (Sentence(..))
 -- are standard layout objects (see 'Contents').
 data SecCons = Sub Section
              | Con Contents
-
-data Partition = Sections
-                | Part
-                | Chapter
 
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
@@ -48,6 +51,13 @@ data Content   = Content   Contents
 -}
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
+
+instance HasChunkRefs Section where
+  chunkRefs sec = Set.unions
+    [ chunkRefs (tle sec)
+    , chunkRefs (sec ^. lab)
+    ]
+  {-# INLINABLE chunkRefs #-}
 -- | 'Section's are equal if 'UID's are equal.
 instance Eq Section where a == b = a ^. uid == b ^. uid
 -- | Finds the short name of a 'Section'.

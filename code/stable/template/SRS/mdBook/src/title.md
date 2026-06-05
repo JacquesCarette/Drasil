@@ -1,3 +1,3 @@
-# Software Requirements Specification for ProgName {#}
+# Software Requirements Specification for Template {#}
 
 Author Name

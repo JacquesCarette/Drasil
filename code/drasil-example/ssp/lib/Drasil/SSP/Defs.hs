@@ -1,4 +1,10 @@
-module Drasil.SSP.Defs where
+module Drasil.SSP.Defs (
+  plnStrn, slpSrf, slopeSrf, slope,
+  soil, soilPrpty, intrslce, slice, waterTable,
+  crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
+  layer, morPrice, mtrlPrpty, slip,
+  soilLyr, soilMechanics, ssa, stabAnalysis, factorOfSafety, minim,maxim, xCoords,yCoords,
+) where
 
 import Control.Lens ((^.))
 

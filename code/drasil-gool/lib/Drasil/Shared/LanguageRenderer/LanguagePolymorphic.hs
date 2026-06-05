@@ -6,8 +6,8 @@
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec,
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
-  classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString,
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
   listAppend, listAccess, listSet, getFunc, setFunc,
@@ -19,35 +19,35 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   defaultOptSpace, smartAdd, smartSub
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
-  BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
+  BlockSym(Block), TypeElim(getType, getTypeString),
   VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
+  printFileStr, printFileStrLn), ifNoElse, convType, VSBinder, BinderElim(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
-  List(intToIndex), ScopeSym(local))
+  IndexTranslator(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
-  ($.), PermanenceSym(..), convTypeOO)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
-  OOMethodSym(method), OOFunctionSym(func))
+  ($.), AttachmentSym(..), convTypeOO)
+import qualified Drasil.GOOL.InterfaceGOOL as IG (
+  InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType),
   RenderStatement(stmtFromData), StatementElim(statementTerm),
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
-  BlockCommentSym(..))
+  BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
@@ -62,8 +62,8 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.Shared.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
-  ScopeData, sd)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
+  ScopeData, sd, TypeData, BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
@@ -71,10 +71,10 @@ import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName,
   valueList, namedArgList)
 import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
-  addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func,
+  addAssign, subAssign, return', comment, getTerm, var, instanceVarAccess, arg, func,
   objAccess, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec,
+  mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec,
   compEqualPrec, compPrec, addPrec, multPrec)
 import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
@@ -185,26 +185,26 @@ moduloOp = multPrec "%"
 var :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
 var n t = mkStateVar n t (R.var n)
 
-staticVar :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
-staticVar n t = mkStaticVar n t (R.var n)
+classVar :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
+classVar n t = mkClassVar n t (R.var n)
 
--- | To be used in classVar implementations. Throws an error if the variable is
--- not static since classVar is for accessing static variables from a class
-classVarCheckStatic :: (CommonRenderSym r) => r (Variable r) -> r (Variable r)
-classVarCheckStatic v = classVarCS (variableBind v)
-  where classVarCS Dynamic = error
-          "classVar can only be used to access static variables"
-        classVarCS Static = v
+-- | To be used in classVarAccess implementations. Throws an error if the variable is
+-- not class-level since classVarAccess is for accessing class-level variables from a class
+classVarAccessCheck :: (CommonRenderSym r) => r (Variable r) -> r (Variable r)
+classVarAccessCheck v = classVarCS (variableBind v)
+  where classVarCS InstanceLevel = error
+          "classVarAccess can only be used to access class-level variables"
+        classVarCS ClassLevel = v
 
-objVar :: (CommonRenderSym r) => SVariable r -> SVariable r -> SVariable r
-objVar o' v' = do
+instanceVarAccess :: (CommonRenderSym r) => SValue r -> SVariable r -> SVariable r
+instanceVarAccess o' v' = do
   o <- o'
   v <- v'
-  let objVar' Static = error
-        "Cannot access static variables through an object, use classVar instead"
-      objVar' Dynamic = mkVar (variableName o `access` variableName v)
-        (variableType v) (R.objVar (RC.variable o) (RC.variable v))
-  objVar' (variableBind v)
+  let instanceVarAccess' ClassLevel = error
+        "Cannot access class-level variables through an object, use classVarAccess instead"
+      instanceVarAccess' InstanceLevel = mkVar (render (value o) `access` variableName v)
+        (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
+  instanceVarAccess' (variableBind v)
 
 arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
@@ -274,12 +274,12 @@ newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
-lambda :: (CommonRenderSym r) => ([r (Variable r)] -> r (Value r) -> Doc) ->
-  [SVariable r] -> SValue r -> SValue r
+lambda :: (CommonRenderSym r) => ([r BinderD] -> r (Value r) -> Doc) ->
+  [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  let ft = IC.funcType (map (return . variableType) ps) (return $ valueType ex)
+  let ft = IC.funcType (map (return . binderType) ps) (return $ valueType ex)
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (CommonRenderSym r) => SValue r -> VSFunction r -> SValue r
@@ -371,7 +371,7 @@ increment vr' v'= do
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-objDecNew :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SValue r]
+objDecNew :: (OORenderSym r) => SVariable r -> r ScopeData -> [SValue r]
   -> MSStatement r
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
@@ -402,8 +402,7 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
-  where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn
-          prLnFn
+  where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
         print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn prLnFn (convType t)
         print' _ = S.printSt newLn f printFn v
@@ -474,7 +473,7 @@ tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
 
-construct :: (CommonRenderSym r) => Label -> MS (r (Type r))
+construct :: (CommonRenderSym r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (CommonRenderSym r) => (r (Variable r) -> Doc) -> SVariable r ->
@@ -486,26 +485,26 @@ param f v' = do
   modify $ useVarName n
   paramFromData v' $ f v
 
-method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> VSType r
+method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) -> VSType r
   -> [MSParameter r] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
 getMethod :: (OORenderSym r) => SVariable r -> SMethod r
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
-  vr) public dynamic (toState $ variableType vr) [] getBody)
-  where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.objVarSelf v)
+  vr) public instanceLevel (toState $ variableType vr) [] getBody)
+  where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod :: (OORenderSym r) => SVariable r -> SMethod r
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
-  vr) public dynamic IC.void [IC.param v] setBody)
-  where setBody = oneLiner $ IG.objVarSelf v &= IC.valueOf v
+  vr) public instanceLevel IC.void [IC.param v] setBody)
+  where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
 initStmts :: (OORenderSym r) => Initializers r -> MSBody r
-initStmts = bodyStatements . map (\(vr, vl) -> IG.objVarSelf vr &= vl)
+initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function :: (OORenderSym r) => Label -> r (Visibility r) -> VSType r ->
   [MSParameter r] -> MSBody r -> SMethod r
-function n s t = S.intFunc False n s static (mType t)
+function n s t = S.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (CommonRenderSym r) => FuncDocRenderer -> String -> [String] ->
   [String] -> SMethod r -> SMethod r
@@ -531,7 +530,7 @@ implementingClass n is = S.intClass n public (implements is)
 docClass :: (OORenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r
 docClass cdr d = S.commentedClass (docComment $ toState $ cdr d)
 
-commentedClass :: (OORenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r
+commentedClass :: (OORenderSym r, Monad r) => CS (r Doc) -> SClass r
   -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RC.class' cs))

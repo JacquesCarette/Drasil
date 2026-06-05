@@ -1,8 +1,16 @@
 -- | For deriving equations in examples.
-module Theory.Drasil.Components.Derivation where
+module Theory.Drasil.Components.Derivation (
+  -- * Types
+  Derivation(..),
+  -- * Typeclasses
+  MayHaveDerivation(..),
+  -- * Constructors
+  mkDeriv, mkDerivName, mkDerivNoHeader
+) where
+
+import Control.Lens (Lens')
 
 import Language.Drasil (Sentence(EmptyS, S), (+:))
-import Control.Lens (Lens')
 
 -- * Type
 

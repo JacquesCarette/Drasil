@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Body where
+module Drasil.GamePhysics.Body (mkSRS, si) where
 
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
@@ -14,21 +14,21 @@ import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
-  quantity, realtime, section_, simulation, software, softwareSys,
+  realtime, simulation, software, softwareSys,
   system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.Concepts.Theory (dataDefn, inModel)
+import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
-import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
+import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
-  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
-import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon', rightHand, line, point)
+  rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
+import qualified Data.Drasil.Concepts.Math as CM (cartesian,
+  rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -109,8 +109,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- CIs
-  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
-  map nw CP.physicCon'
+  map nw [progName, centreMass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -301,15 +300,6 @@ terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand,
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-generalDefinitionsIntro :: Contents
--- general_definitions_GDefs :: [Contents]
-
-generalDefinitionsIntro = foldlSP
-  [S "This", phrase section_, S "collects the", D.toSent (pluralNP (CM.law `and_PP`
-  CM.equation)), S "that will be used in deriving the",
-  plural dataDefn `sC` S "which in turn will be used to build the",
-  plural inModel]
-
 -- GDefs not yet implemented --
 {-
 general_definitions_GDefs :: [Contents]
@@ -319,10 +309,6 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 ------------------------------
 -- 4.2.4 : Data Definitions --
 ------------------------------
-
-dataDefinitionsIntro :: Sentence
-dataDefinitionsIntro = foldlSent [D.toSent (atStartNP (the CPP.dimension))
-   `S.of_` S "each", phrase quantity, S "is also given"]
 
 -----------------------------
 -- 4.2.5 : Instance Models --

@@ -4,7 +4,7 @@
 module Language.Drasil.Printing.PrintingInformation (
     PrintingInformation
   , Notation(..)
-  , sysdb, refTable, stg, notation, lbldCntnt
+  , sysdb, refTable, stg, notation
   , piSys, refFind
 ) where
 
@@ -13,7 +13,7 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, ChunkDB)
-import Language.Drasil (Stage(..), Reference, LabelledContent)
+import Language.Drasil (Stage(..), Reference)
 
 -- | Notation can be scientific or for engineering.
 data Notation = Scientific
@@ -25,12 +25,11 @@ data PrintingInformation =
      , _refTable :: M.Map UID Reference
      , _stg :: Stage
      , _notation :: Notation
-     , _lbldCntnt :: [LabelledContent]
      }
 makeLenses ''PrintingInformation
 
 -- | Builds a document's printing information based on the system information.
-piSys :: ChunkDB -> M.Map UID Reference -> Stage -> Notation -> [LabelledContent] -> PrintingInformation
+piSys :: ChunkDB -> M.Map UID Reference -> Stage -> Notation -> PrintingInformation
 piSys = PI
 
 refFind :: UID -> PrintingInformation -> Reference

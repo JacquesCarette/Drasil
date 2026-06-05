@@ -10,7 +10,33 @@ import Helper
 
 # Initializing variables
 b = 5
+arr = [1, 2, 3]
+print("Value of arr: ", end="")
+print(arr)
+print("Length of arr: ", end="")
+print(len(arr))
+arr2 = []
+for i in range(0, 3, 1):
+    arr2.append(0)
+arr2[0] = 4
+arr2[1] = 5
+arr2[2] = 6
+print("Value of arr2: ", end="")
+print(arr2)
+print("Length of arr2: ", end="")
+print(len(arr2))
 myOtherList = [1.0, 1.5]
+arr_copy = []
+for i0 in range(0, 3, 1):
+    arr_copy.append(0)
+arr_copy = arr.copy()
+print("Value of arr_copy: ", end="")
+print(arr_copy)
+arr[1] = 42
+print("Value of arr after modifying arr: ", end="")
+print(arr)
+print("Value of arr_copy after modifying arr: ", end="")
+print(arr_copy)
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)
 a = len(myOtherList)

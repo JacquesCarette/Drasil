@@ -20,7 +20,7 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
 import Drasil.GlassBR.Unitals (blast)
 import Drasil.GlassBR.Concepts (glaSlab)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
@@ -73,7 +73,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
+symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl] ++
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
@@ -133,7 +133,7 @@ danPoster = makeURI "danPoster" (danContributionPath
   ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
 wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
-  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
+  ++ "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
@@ -152,7 +152,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-danContributionPath = gitHubInfoURL ++ "/blob/master/People/Dan"
+danContributionPath = gitHubInfoURL ++ "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section

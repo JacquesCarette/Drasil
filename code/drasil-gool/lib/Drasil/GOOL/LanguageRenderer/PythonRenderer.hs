@@ -6,7 +6,7 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   PythonCode(..), pyName, pyVersion
 ) where
 
-import Utils.Drasil (blank, indent)
+import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
@@ -15,20 +15,20 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
+  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
-  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
-  OOValueExpression(..), selfFuncApp, OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
+  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -39,7 +39,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -51,19 +51,19 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, printLabel, listSep, piLabel, access, functionDox, variableList,
+  argv, printLabel, listSep, piLabel, access, functionDox, binderList,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVar, listSetFunc, castObj, dynamic, break, continue, addComments,
+  classVarAccess, listSetFunc, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
-  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
+  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend,
@@ -75,13 +75,13 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
-  notifyObservers')
+  notifyObservers', arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
-  ScopeData)
+  BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -156,10 +156,10 @@ instance ImportSym PythonCode where
 instance ImportElim PythonCode where
   import' = unPC
 
-instance PermanenceSym PythonCode where
-  type Permanence PythonCode = Doc
-  static = toCode empty
-  dynamic = toCode R.dynamic
+instance AttachmentSym PythonCode where
+  type Attachment PythonCode = Doc
+  classLevel = toCode empty
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim PythonCode where
   perm = unPC
@@ -188,7 +188,6 @@ instance BlockElim PythonCode where
   block = unPC
 
 instance TypeSym PythonCode where
-  type Type PythonCode = TypeData
   bool = typeFromData Boolean "" empty
   int = CP.int
   float = error pyFloatError
@@ -219,7 +218,6 @@ instance InternalTypeElim PythonCode where
   type' = typeDoc . unPC
 
 instance UnaryOpSym PythonCode where
-  type UnaryOp PythonCode = OpData
   notOp = pyNotOp
   negateOp = G.negateOp
   sqrtOp = pySqrtOp
@@ -237,7 +235,6 @@ instance UnaryOpSym PythonCode where
   ceilOp = pyCeilOp
 
 instance BinaryOpSym PythonCode where
-  type BinaryOp PythonCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp
@@ -260,7 +257,6 @@ instance OpElim PythonCode where
   bOpPrec = opPrec . unPC
 
 instance ScopeSym PythonCode where
-  type Scope PythonCode = ScopeData
   global = CP.global
   mainFn = global
   local = G.local
@@ -273,18 +269,21 @@ instance VariableSym PythonCode where
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
-  arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
-  staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
-                          else G.staticVar n t
-  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
-  classVar = CP.classVar R.classVar
-  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
+  classVar = G.classVar
+  classConst n t = mkClassVar n t (R.var (toConstName n))
+  classVarAccess = CP.classVarAccess R.classVarAccess
+  extClassVarAccess c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify .
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $
-    CP.classVar pyClassVar (toState t) v) c getClassMap
-  objVar = G.objVar
-  objVarSelf = CP.objVarSelf
+    CP.classVarAccess pyClassVarAccess (toState t) v) c getClassMap
+  instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym PythonCode where
+  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
+
+instance InstanceVarSelfSym PythonCode where
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim PythonCode where
   variableName = varName . unPC
@@ -440,9 +439,18 @@ instance GetSet PythonCode where
   get = G.get
   set = G.set
 
-instance List PythonCode where
+instance IndexTranslator PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array PythonCode where
+  arrayElem = G.arrayElem
+  arrayLength = listSize
+  arrayCopy arr = let
+    arrTp = onStateValue valueType arr
+    in objMethodCall arrTp arr "copy" []
+
+instance List PythonCode where
   listSize = CS.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -472,6 +480,16 @@ instance InternalListFunc PythonCode where
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BinderSym PythonCode where
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim PythonCode where
+  binderName = bindName . unPC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim PythonCode where
+  binderElim = text . bindName . unPC
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
@@ -552,7 +570,7 @@ instance DeclStatement PythonCode where
   setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
-  arrayDec = listDec
+  arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef v scp e = do
     v' <- zoom lensMStoVS v
@@ -725,7 +743,7 @@ instance StateVarSym PythonCode where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
-    (static :: PythonCode (Permanence PythonCode)))
+    (classLevel :: PythonCode (Attachment PythonCode)))
 
 instance StateVarElim PythonCode where
   stateVar = unPC
@@ -781,7 +799,6 @@ instance ModuleElim PythonCode where
   module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
-  type BlockComment PythonCode = Doc
   blockComment lns = toCode $ pyBlockComment lns pyCommentStart
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns pyDocCommentStart
     pyCommentStart)
@@ -931,8 +948,8 @@ readString inSrc = objMethodCall string inSrc pyRstrip []
 range :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
-pyClassVar :: Doc -> Doc -> Doc
-pyClassVar c v = c <> dot <> c <> dot <> v
+pyClassVarAccess :: Doc -> Doc -> Doc
+pyClassVarAccess c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 pyInlineIf c' v1' v2' = do
@@ -942,8 +959,8 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
+pyLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
+pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (CommonRenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)

@@ -1,32 +1,33 @@
+{-# LANGUAGE QuasiQuotes #-}
+
 module Drasil.Generator.SRS.TraceabilityGraphs (outputDot) where
 
 import Prelude hiding ((<>))
 
-import System.Directory (setCurrentDirectory)
-import Text.PrettyPrint.HughesPJ (Doc, render, text, (<>), (<+>), vcat, nest,
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), vcat, nest,
   hsep, empty)
 
-import Drasil.Build.Artifacts (createDirIfMissing)
 import Drasil.Database (UID)
+import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..),
   Label)
 
--- | Creates the directory for output, gathers all individual graph output
--- functions and calls them.
-outputDot :: FilePath -> GraphInfo -> IO ()
-outputDot outputFilePath gi = do
-  createDirIfMissing False outputFilePath
-  setCurrentDirectory outputFilePath
-  mkOutput gi "avsa" edgesAvsA [assumpNF]
-  mkOutput gi "avsall" edgesAvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, chgNF]
-  mkOutput gi "refvsref" edgesRefvsRef [ddNF, tmNF, gdNF, imNF]
-  mkOutput gi "allvsr" edgesAllvsR [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF]
-  mkOutput gi "allvsall" edgesAllvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
+-- | Creates a `FileLayout`s for the generated TraceyGraph directory.
+outputDot :: GraphInfo -> FileLayout
+outputDot gi =
+  directory
+  [ps|TraceyGraph|]
+  [ mkOutput gi "avsa" edgesAvsA [assumpNF],
+    mkOutput gi "avsall" edgesAvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, chgNF],
+    mkOutput gi "refvsref" edgesRefvsRef [ddNF, tmNF, gdNF, imNF],
+    mkOutput gi "allvsr" edgesAllvsR [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF],
+    mkOutput gi "allvsall" edgesAllvsAll [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
+  ]
 
 -- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
-mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> IO ()
+mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> FileLayout
 mkOutput gi ttl getDirections getLabels =
-  writeFile (ttl ++ ".dot") (render $ mkDot ttl (getDirections gi) (map ($ gi) getLabels))
+  file [ps|{ttl}.dot|] (mkDot ttl (getDirections gi) (map ($ gi) getLabels))
 
 -- | Constructs the full DOT document.
 mkDot :: String -> [(UID, [UID])] -> [NodeFamily] -> Doc

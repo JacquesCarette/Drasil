@@ -3,40 +3,41 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, FSModule,
   NamedArgs, SharedProg, ProcProg, ProgramSym(..), FileSym(..), BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, VariableSym(..), ScopeSym(..),
-  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, FunctionSym(..), List(..), Set(..),  listSlice, listIndexExists, at,
-  VisibilitySym(..),ParameterSym(..), MethodSym(..), ModuleSym(..), convType,
-  ProgData(..), FileData(..), ModData(..), VisibilityTag(..), CodeType(..),
-  GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
-  onStateValue, onCodeList, unCI, unJLC, jlName, jlVersion
+  BinderSym(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  VariableSym(..), ScopeSym(..), ScopeData, VariableElim(..), listOf, listVar,
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  libFuncApp, exists, FunctionSym(..), Array(..), List(..), Set(..),  listSlice,
+  listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
+  ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
+  VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
+  mainMod, initialState, onStateValue, onCodeList, unCI, unJLC, jlName,
+  jlVersion, LoggingFor(..)
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, ifNoElse,
-  VariableSym(..), extVar, VariableElim(..), listOf, listVar, ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  TypeElim(..), BinderSym(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  ifNoElse, VariableSym(..), extVar, VariableElim(..), listOf, listVar,
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, List(..), Set(..), listSlice, listIndexExists, at, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
+  libFuncApp, exists, Array(..), List(..), Set(..), listSlice, listIndexExists,
+  at, ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
 import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))
@@ -49,3 +50,4 @@ import Drasil.Shared.Helpers (onStateValue, onCodeList)
 import Drasil.GProc.CodeInfoProc (unCI)
 
 import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
+import Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..))

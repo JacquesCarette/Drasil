@@ -1,9 +1,15 @@
 -- | Defines types similar to content types in "Language.Drasil" but better suited for printing.
-module Language.Drasil.Printing.LayoutObj where
+module Language.Drasil.Printing.LayoutObj (
+  -- * Types
+  Document(..), Project(..), File(..), LayoutObj(..),
+  -- * Type Aliases
+  Author, Contents, Items, Tags, Depth, Width, Height, Filepath, Filename,
+  Caption, RefMap
+) where
 
 import Data.Map (Map)
 
-import Language.Drasil (DType, MaxWidthPercent)
+import Language.Drasil (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
 import Language.Drasil.Printing.Citation (BibRef)
@@ -42,7 +48,7 @@ data LayoutObj =
    | Header Depth Title Label                                        -- ^ Holds all information needed for a header.
    | Paragraph Contents                                              -- ^ Paragraph.
    | EqnBlock Contents                                               -- ^ Equation block.
-   | Definition DType [(String,[LayoutObj])] Label                   -- ^ Definition. Holds the type, contents, and a label.
+   | Definition [(String,[LayoutObj])] Label                         -- ^ Definition. Holds the type, contents, and a label.
    | List ListType                                                   -- ^ List.
    | Figure Label (Maybe Caption) Filepath MaxWidthPercent           -- ^ Holds all information needed for a figure.
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label -- ^ Holds all information needed for a graph.

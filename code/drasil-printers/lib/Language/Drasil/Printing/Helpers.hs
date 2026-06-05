@@ -1,5 +1,21 @@
 -- | General helper functions for printing Drasil documents.
-module Language.Drasil.Printing.Helpers where
+module Language.Drasil.Printing.Helpers (
+  -- * Separation
+  ($^$), vsep,
+  -- * Text Rendering
+  bslash, dbs, assign, eq, lt, gt, leq, geq, dlr, ast, pls, hat, slash, hyph,
+  unders, pipe, emptyline,
+  -- * Brackets and Braces
+  sq, br,
+  -- * Punctuation
+  dot, comm,
+  -- * Word Wrapping
+  dollarDoc, paren, brace, dollar, sqbrac, angbrac,
+  -- * Casing
+  upcase, lowcase,
+  -- * Numeric Suffixes
+  sufx, sufxer, sufxPrint
+) where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, (<>), ($$))

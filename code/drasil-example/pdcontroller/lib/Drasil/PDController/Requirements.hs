@@ -1,4 +1,6 @@
-module Drasil.PDController.Requirements where
+module Drasil.PDController.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
 import Drasil.DocLang.SRS (datCon)

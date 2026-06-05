@@ -195,12 +195,12 @@ module Language.Drasil (
 
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSent
-  , foldlSent_,foldlSentCol, foldlsC, foldOpts, foldNums, numList
+  , foldlSent_,foldlSentCol, foldOpts, foldNums, numList
 
   -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
   -- Language.Drasil.Document
-  , Document(..), ShowTableOfContents(..), DType(..), Section(..)
+  , Document(..), ShowTableOfContents(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
   , mkParagraph, mkRawLC, checkToC
@@ -266,7 +266,7 @@ import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapW
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
-import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
+import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..), HasCaption(..))

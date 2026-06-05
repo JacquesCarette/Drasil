@@ -17,7 +17,7 @@ import qualified
   G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
-  asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
+  asFragment, buildAll, interp, nameOpts, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 -- | Holds a C# project.
@@ -34,7 +34,7 @@ instance Monad CSharpProject where
   CSP x >>= f = f x
 
 instance SoftwareDossierSym CSharpProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = csName,
@@ -60,4 +60,4 @@ csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
 
 -- | Default runnable information for C# files.
 csRunnable :: Maybe Runnable
-csRunnable = nativeBinary
+csRunnable = interp executable nameOpts "mono" []

@@ -19,6 +19,7 @@ module Drasil.System.SmithEtAlSRS (
 
 import Control.Lens (makeClassy, (^.))
 import Data.Char (isSpace)
+import qualified Data.List.NonEmpty as NE
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
@@ -43,8 +44,8 @@ data SmithEtAlSRS where
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
   , _instModels   :: [InstanceModel]
-  , _inputs       :: [h]
-  , _outputs      :: [i]
+  , _inputs       :: NE.NonEmpty h
+  , _outputs      :: NE.NonEmpty i
   , _constraints  :: [j]
   , _constants    :: [ConstQDef]
   -- FIXME: This is a list of all 'quantites' (variables) used/referenced in an
@@ -74,7 +75,7 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   HasUID j, Constrained j) =>
   CI -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [h] -> [i] -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
+    NE.NonEmpty h -> NE.NonEmpty i -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
     [LabelledContent] -> ChunkDB -> [Reference] -> SmithEtAlSRS
 mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs lcs db refs
   = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js

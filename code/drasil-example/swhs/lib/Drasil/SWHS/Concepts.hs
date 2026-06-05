@@ -1,4 +1,7 @@
-module Drasil.SWHS.Concepts where
+module Drasil.SWHS.Concepts (
+  coil, tank, phsChgMtrl, water, perfectInsul, charging, discharging,
+  con, phaseChangeMaterial, sWHT, tankPCM, transient, gaussDiv
+) where
 
 import Control.Lens ((^.))
 

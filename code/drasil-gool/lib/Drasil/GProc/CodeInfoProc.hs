@@ -3,21 +3,23 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
-  SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..))
-import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..))
+import Drasil.Shared.InterfaceCommon (MSBody, SValue, VSType, VSBinder,
+  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
+  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
+  BinderSym(..))
+import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
+  ScopeData(..), ScopeTag (..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
@@ -29,6 +31,7 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
+import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfoProc a = CI {unCI :: a} deriving Eq
 
@@ -74,46 +77,43 @@ instance BlockSym CodeInfoProc where
   block = executeList
 
 instance TypeSym CodeInfoProc where
-  type Type CodeInfoProc = String
-  bool              = noInfoType
-  int               = noInfoType
-  float             = noInfoType
-  double            = noInfoType
-  char              = noInfoType
-  string            = noInfoType
-  infile            = noInfoType
-  outfile           = noInfoType
-  listType      _   = noInfoType
-  setType      _   = noInfoType
-  arrayType     _   = noInfoType
-  listInnerType _   = noInfoType
-  funcType      _ _ = noInfoType
-  void              = noInfoType
+  bool              = noInfoVSType
+  int               = noInfoVSType
+  float             = noInfoVSType
+  double            = noInfoVSType
+  char              = noInfoVSType
+  string            = noInfoVSType
+  infile            = noInfoVSType
+  outfile           = noInfoVSType
+  listType      _   = noInfoVSType
+  setType      _   = noInfoVSType
+  arrayType     _   = noInfoVSType
+  listInnerType _   = noInfoVSType
+  funcType      _ _ = noInfoVSType
+  void              = noInfoVSType
 
 instance TypeElim CodeInfoProc where
   getType _     = Void
-  getTypeString = unCI
+  getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoProc where
-  type Scope CodeInfoProc = ()
-  global = toCode ()
-  mainFn = toCode ()
-  local = toCode ()
+  global = noInfoScope
+  mainFn = noInfoScope
+  local = noInfoScope
 
 instance VariableSym CodeInfoProc where
   type Variable CodeInfoProc = ()
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
-  arrayElem _ _ = noInfo
 
 instance VariableElim CodeInfoProc where
   variableName _ = ""
-  variableType _ = toCode ""
+  variableType _ = noInfoType
 
 instance ValueSym CodeInfoProc where
   type Value CodeInfoProc = ()
-  valueType _ = toCode ""
+  valueType _ = noInfoType
 
 instance Argument CodeInfoProc where
   pointerArg = id
@@ -196,9 +196,16 @@ instance ValueExpression CodeInfoProc where
 instance FunctionSym CodeInfoProc where
   type Function CodeInfoProc = ()
 
-instance List CodeInfoProc where
+instance IndexTranslator CodeInfoProc where
   intToIndex = execute1
   indexToInt = execute1
+
+instance Array CodeInfoProc where
+  arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
+  arrayCopy _ = noInfo
+
+instance List CodeInfoProc where
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2
@@ -218,6 +225,9 @@ instance InternalList CodeInfoProc where
     _ <- vl
     noInfo
 
+instance BinderSym CodeInfoProc where
+  binder _ _ = noInfoBinder
+
 instance ThunkSym CodeInfoProc where
   type Thunk CodeInfoProc = ()
 
@@ -225,7 +235,7 @@ instance ThunkAssign CodeInfoProc where
   thunkAssign _ = zoom lensMStoVS . execute1
 
 instance VectorType CodeInfoProc where
-  vecType _ = noInfoType
+  vecType _ = noInfoVSType
 
 instance VectorDecl CodeInfoProc where
   vecDec  _ _ _ = noInfo
@@ -372,8 +382,20 @@ instance ModuleSym CodeInfoProc where
 noInfo :: State s (CodeInfoProc ())
 noInfo = toState $ toCode ()
 
-noInfoType :: State s (CodeInfoProc String)
-noInfoType = toState $ toCode ""
+emptyType :: TypeData
+emptyType = td Void "" empty -- Hack
+
+noInfoType :: CodeInfoProc TypeData
+noInfoType = return emptyType
+
+noInfoVSType :: VSType CodeInfoProc
+noInfoVSType = return noInfoType
+
+noInfoScope :: CodeInfoProc ScopeData
+noInfoScope = return $ sd Global -- Hack
+
+noInfoBinder :: VSBinder CodeInfoProc
+noInfoBinder = return $ return $ bindFormD "" emptyType
 
 updateMEMandCM :: String -> MSBody CodeInfoProc -> SMethod CodeInfoProc
 updateMEMandCM n b = do

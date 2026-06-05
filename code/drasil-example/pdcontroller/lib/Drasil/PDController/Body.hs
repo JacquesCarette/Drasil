@@ -7,7 +7,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (mkSmithEtAlICO)
 
-import Data.Drasil.Concepts.Math (mathcon', ode)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -110,7 +110,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon'
+  nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

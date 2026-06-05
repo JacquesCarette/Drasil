@@ -1,4 +1,4 @@
-{-# LANGUAGE PatternSynonyms, TupleSections #-}
+{-# LANGUAGE PatternSynonyms, QuasiQuotes, TupleSections #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
@@ -8,14 +8,16 @@ import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
 import Data.Functor ((<&>))
 import Data.Foldable (traverse_)
+import GHC.IO.Encoding (setLocaleEncoding, utf8)
 import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath ((</>))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.Build.Artifacts (FileAndContents(..), hasPathAndDocToFileAndContents,
-  createDirIfMissing, createFile)
+import Drasil.FileHandling (OverwritePolicy(..), directory, localPath, ps, writeFiles)
+import Drasil.FileHandling.Legacy (createDirIfMissing, createFile)
 import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC, unCPPC, unSC,
-  initialState, ProgData(..), headers, sources, mainMod)
+  initialState, ProgData(..), headers, sources, mainMod,
+  FileData(..), modDoc)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..))
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..))
@@ -35,6 +37,7 @@ import NameGenTest (nameGenTestOO, nameGenTestProc)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
 main = do
+  setLocaleEncoding utf8
   workingDir <- getCurrentDirectory
   createDirIfMissing False "java"
   setCurrentDirectory "java"
@@ -63,13 +66,15 @@ main = do
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackageData] -> IO()
-genCode files =
-  createCodeFiles $ files >>= \(PackageData prog aux) ->
+genCode files = do
+  mapM_ (\(PackageData prog aux) -> do
     let label = progName prog
-        modCode = progMods prog <&> \modFileData ->
-          (label, hasPathAndDocToFileAndContents modFileData)
-        auxCode = aux <&> (label,)
-    in modCode ++ auxCode
+        layout = directory [ps|{label}|] aux
+    writeFiles OverwriteAllowed localPath layout
+    ) files
+  createCodeFiles $ files >>= \(PackageData prog _) ->
+    let label = progName prog
+    in progMods prog <&> (label,)
 
 classes :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
   (r' PackageData -> PackageData) -> [PackageData]
@@ -101,7 +106,7 @@ jlClasses unRepr unRepr' = zipWith
 ------------------
 
 -- | Creates the requested 'Code' by producing files.
-createCodeFiles :: [(Label, FileAndContents)] -> IO ()
+createCodeFiles :: [(Label, FileData)] -> IO ()
 createCodeFiles = traverse_ $ \(name, file) -> do
   let path = name </> filePath file -- FIXME [Brandon Bosman, Feb. 10, 2026]: make GOOL allow us to add name to path internally
-  createFile path (render $ fileDoc file)
+  createFile path (render $ modDoc $ fileMod file)

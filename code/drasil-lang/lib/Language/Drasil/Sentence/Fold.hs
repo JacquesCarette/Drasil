@@ -9,7 +9,7 @@ module Language.Drasil.Sentence.Fold (
   foldConstraints,
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSent, foldlSent_,
-  foldlSentCol, foldlsC, foldOpts, foldNums, numList
+  foldlSentCol, foldOpts, foldNums, numList
 ) where
 
 import Language.Drasil.Classes ( Express(express), Quantity )
@@ -43,11 +43,6 @@ foldlSent_ = foldl' (+:+) EmptyS
 -- | 'foldlSent' but ends with colon.
 foldlSentCol :: [Sentence] -> Sentence
 foldlSentCol = foldle (+:+) (+:) EmptyS
-
--- | Folds a list of elements separated by commas, including the last element.
-foldlsC :: [Sentence] -> Sentence
-foldlsC [] = EmptyS
-foldlsC xs = foldl1 sC xs
 
 -- | Folds a list of elements separated forward slashes ("/").
 foldOpts :: [Sentence] -> Sentence

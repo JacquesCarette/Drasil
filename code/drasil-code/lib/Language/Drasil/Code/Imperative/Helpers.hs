@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Helpers (
 
 import Control.Monad.State (State)
 
-import Drasil.GOOL (SharedProg, ScopeSym(..))
+import Drasil.GOOL (SharedProg, ScopeSym(..), ScopeData)
 
 import Language.Drasil.Code.Imperative.DrasilState (ScopeType(..))
 
@@ -13,7 +13,7 @@ liftS :: State a b -> State a [b]
 liftS = fmap (: [])
 
 -- | Converts a 'ScopeType' to a 'Scope'
-convScope :: (SharedProg r) => ScopeType -> r (Scope r)
+convScope :: (SharedProg r) => ScopeType -> r ScopeData
 convScope Local  = local
 convScope Global = global
 convScope MainFn = mainFn

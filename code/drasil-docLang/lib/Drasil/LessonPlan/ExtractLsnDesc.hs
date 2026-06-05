@@ -1,5 +1,5 @@
 -- | Defines functions to extract citation references from Notebook documents.
-module Drasil.ExtractLsnDesc (extractLsnPlanBib) where
+module Drasil.LessonPlan.ExtractLsnDesc (extractLsnPlanBib) where
 
 import qualified Data.Set as S
 

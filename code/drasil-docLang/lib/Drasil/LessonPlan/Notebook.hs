@@ -15,7 +15,7 @@ import Drasil.LessonPlan.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import qualified Drasil.LessonPlan.Sections as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
-import Drasil.ExtractLsnDesc (extractLsnPlanBib)
+import Drasil.LessonPlan.ExtractLsnDesc (extractLsnPlanBib)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LessonPlan -> LsnDesc -> (CI -> CI -> Sentence) -> Document

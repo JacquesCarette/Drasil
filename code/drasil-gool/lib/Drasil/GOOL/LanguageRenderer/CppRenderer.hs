@@ -46,7 +46,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment', InternalBinderElim(binderElim))
+  method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
@@ -1386,7 +1386,10 @@ instance ValueElim CppSrcCode where
 
 instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  classMethodCallMixedArgs' = undefined
+  classMethodCallMixedArgs' f t cls vs ns = do
+    c <- cls
+    RC.call Nothing (Just $ RC.type' c <> text nmSpc) f t vs ns
+
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData

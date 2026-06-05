@@ -142,6 +142,9 @@ int main(int argc, const char *argv[]) {
     // Object tests
     TestClass t1 = TestClass(5);
     TestClass t2 = TestClass(4);
+    TestClass t3 = TestClass::add(t1, t2);
+    std::cout << "Value of t3.a: ";
+    std::cout << t3.a << std::endl;
     
     // List slicing tests
     // Create variables for list slices

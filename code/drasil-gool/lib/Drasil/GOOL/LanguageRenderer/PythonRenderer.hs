@@ -63,15 +63,15 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend,
-  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt,
-  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
-  function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, local)
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
+  objAccess, objMethodCall, classMethodCall, call, funcAppMixedArgs,
+  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd,
+  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
@@ -427,7 +427,7 @@ instance ValueElim PythonCode where
 
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  classMethodCallMixedArgs' = undefined
+  classMethodCallMixedArgs' = G.classMethodCall
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData

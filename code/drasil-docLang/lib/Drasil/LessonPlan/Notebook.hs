@@ -11,7 +11,7 @@ import Language.Drasil (Sentence(S), Section, CI, Document(Notebook), BibRef,
 import Drasil.System (LessonPlan, HasSystemMeta(..))
 import Drasil.Metadata.Documentation (notebook)
 
-import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
+import Drasil.LessonPlan.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import qualified Drasil.LessonPlan.Sections as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)

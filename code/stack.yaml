@@ -30,6 +30,7 @@ packages:
 - drasil-metadata
 - drasil-printers
 - drasil-system
+- drasil-testing-kit
 - drasil-theory
 - drasil-utils
 - drasil-website

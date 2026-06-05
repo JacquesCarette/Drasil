@@ -1,5 +1,5 @@
 spec-version: 0.36.0
-name:         drasil-data-formats
+name:         drasil-testing-kit
 version:      0.0.1
 author:       "Jason Balaci, Daniel Jarabek, Jacques Carette, Spencer Smith"
 maintainer:   "Jacques Carette"
@@ -10,14 +10,18 @@ description:  Please see the README on GitHub at <https://github.com/JacquesCare
 
 language: Haskell2010
 default-extensions:
+- ImportQualifiedPost
 - StrictData
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- prettyprinter
-- text
+- directory
+- drasil-file-handling
+- filepath
+- process
+- tasty
 
 ghc-options:
 - -Wall
@@ -27,16 +31,6 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Data.Formats.CSV
-
-tests:
-  drasil-data-formats-test:
-    source-dirs: test
-    main: Main.hs
-    dependencies:
-    - drasil-file-handling
-    - drasil-data-formats
-    - drasil-testing-kit
-    - filepath
-    - tasty
-    - tasty-hunit
+  - Drasil.TestingKit.FileHandling
+  - Drasil.TestingKit.GoldenTesting
+  - Drasil.TestingKit.TestMain

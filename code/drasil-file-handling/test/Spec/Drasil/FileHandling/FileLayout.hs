@@ -10,8 +10,8 @@ import System.OsPath (osp)
 import Text.PrettyPrint qualified as PLegacy (text)
 import Test.Tasty (TestTree, testGroup)
 
-import Drasil.FileHandling (FileLayout, directory, file, exactFile, goldenTest,
-  goldenTestingGroup, ps)
+import Drasil.TestingKit.FileHandling (FileLayout, directory, file, exactFile, ps)
+import Drasil.TestingKit.GoldenTesting (goldenTest, goldenTestingGroup)
 
 fileLayoutTests :: TestTree
 fileLayoutTests =

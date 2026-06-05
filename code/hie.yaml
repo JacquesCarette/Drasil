@@ -150,6 +150,9 @@ cradle:
     - path: "drasil-system/lib"
       component: "drasil-system:lib"
 
+    - path: "drasil-testing-kit/lib"
+      component: "drasil-testing-kit:lib"
+
     - path: "drasil-theory/lib"
       component: "drasil-theory:lib"
 

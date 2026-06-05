@@ -2,7 +2,7 @@
 
 module Spec.Drasil.FileHandling.FilePath (filePathTests) where
 
-import Drasil.FileHandling (ps, toPath)
+import Drasil.TestingKit.FileHandling (ps, toPath)
 import System.OsPath (OsPath, encodeUtf)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (testCase, (@?=))

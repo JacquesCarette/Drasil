@@ -5,7 +5,8 @@ module Spec.Drasil.Data.Formats.CSV (csvTests) where
 import Drasil.Data.Formats.CSV (CSV, CSVRenderOptions,
   DoubleQuotationPolicy(..), columnCount, csvRenderOpts, header, mkCSV,
   renderCSV, rowCount, rows)
-import Drasil.FileHandling (file, goldenTest, goldenTestingGroup, ps)
+import Drasil.FileHandling (file, ps)
+import Drasil.TestingKit.GoldenTesting (goldenTest, goldenTestingGroup)
 import Data.Text (Text)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)

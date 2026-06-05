@@ -25,9 +25,9 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  SelfSym(..), InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -284,10 +284,14 @@ instance VariableSym JavaCode where
 instance OOVariableSym JavaCode where
   classVar = G.classVar
   classConst = classVar
-  self = C.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym JavaCode where
+  self = C.self
+
+instance InstanceVarSelfSym JavaCode where
   instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim JavaCode where

@@ -1,5 +1,6 @@
 {-# LANGUAGE PostfixOperators, Rank2Types #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
+{-# LANGUAGE FlexibleContexts #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, publicFuncProc, privateMethod, privateFuncProc, publicInOutFunc,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,
@@ -11,7 +12,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Prelude hiding (sin, cos, tan, log, exp)
 import Control.Lens ((^.))
 import qualified Data.Map as Map (lookup)
-import Control.Monad (liftM2,liftM3)
+import Control.Monad (liftM2,liftM3, zipWithM)
 import Control.Monad.State (get, modify)
 import Data.List ((\\), intersect)
 
@@ -50,9 +51,10 @@ import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
-  OOVariableSym(..), VariableElim(..), ($->), ValueSym(..), Literal(..),
+  Initializers, SharedProg, OOProg, LoggingFor, AttachmentSym(..),
+  bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
+  VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..),
+  InstanceVarSelfSym(..), VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
@@ -104,7 +106,8 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
+variable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
@@ -124,7 +127,8 @@ variable s t = do
 -- WithInputs for constant structure, inputs are 'Bundled', and constant
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
-inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r ->
+inputVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => Structure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
@@ -144,8 +148,9 @@ inputVariable Bundled Const v = do
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr ->
-  SVariable r -> GenState (SVariable r)
+constVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => ConstantStructure -> ConstantRepr -> SVariable r ->
+  GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
@@ -164,8 +169,8 @@ constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
 -- and cannot be accessed, so throw an error.
 -- If the variable is exported by the current module, use 'classVarAccess'.
 -- If the variable is exported by a different module, use 'extClassVarAccess'.
-classVariable :: (OOProg r) => SVariable r -> SVariable r ->
-  GenState (SVariable r)
+classVariable :: (OOVariableSym r, VariableElim r) => SVariable r ->
+  SVariable r -> GenState (SVariable r)
 classVariable c v = do
   g <- get
   let checkCurrent m = if currentModule g == m then classVarAccess else extClassVarAccess
@@ -187,7 +192,8 @@ mkVal v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
+mkVar :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
@@ -501,7 +507,8 @@ elementSetBoolBfunc SContains = S.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r) => Mod -> GenState (OO.SFile r)
+genModDef :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
+  Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
@@ -509,17 +516,20 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
                 map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r) => Mod -> [GenState (SMethod r)]
+genModFuncs :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
+  Mod -> [GenState (SMethod r)]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r) => Mod -> [GenState (SClass r)]
+genModClasses :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
+  Mod -> [GenState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
-genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
-  -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
+genClass :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
+  (Name -> Maybe Name -> Description -> [CSStateVar r] ->
+   GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
   M.Class -> GenState (SClass r)
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
@@ -535,9 +545,10 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
-  -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
-  [StateVariable] -> Func -> GenState (SMethod r)
+genFunc :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
+  (Name -> VSType r -> Description -> [ParameterChunk] -> Maybe Description ->
+  [MSBlock r] -> GenState (SMethod r)) -> [StateVariable] -> Func ->
+  GenState (SMethod r)
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -562,31 +573,36 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
   genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
+convStmt :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => FuncStmt ->
+  GenState (MSStatement r)
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
+  vlog <- mkVar v
   v' <- mkVar v
   t <- codeType v
   let listFunc (C.List _) = litList
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
     els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
+  vlog <- mkVar v
   v' <- mkVar v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' e' : l
 convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
+  vlog <- mkVar v
   v' <- mkVar v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
+      vilog = arrayElem (litInt i) vlog
       vi = arrayElem (litInt i) v'
-  l <- maybeLog vi
+  l <- maybeLog vilog vi
   return $ multi $ asgFunc t : l
 convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
@@ -633,8 +649,9 @@ convStmt (FDecDef v (Matrix [[]])) = do
 convStmt (FDecDef v e) = do
   g <- get
   let scp = convScope $ currentScope g
+  vlog <- mkVar v
   v' <- mkVar v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
         let contDecDef (C.List _) = listDecDef
@@ -667,8 +684,8 @@ convStmt (FAppend a b) = do
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
-genDataFunc :: (OOProg r) => Name -> Description -> DataDesc ->
-  GenState (SMethod r)
+genDataFunc :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => Name ->
+  Description -> DataDesc -> GenState (SMethod r)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
@@ -677,7 +694,8 @@ genDataFunc nameTitle desc ddef = do
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
-readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
+readData :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => DataDesc ->
+ GenState [MSBlock r]
 readData ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -689,10 +707,12 @@ readData ddef = do
     listDec 0 var_linetokens localScope ] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r) => Data -> r ScopeData -> GenState [MSStatement r]
+  where inData :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => Data ->
+          r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
+            vlog <- mkVar v
             vv <- mkVar v
-            l <- maybeLog vv
+            l <- maybeLog vlog vv
             return [multi $ getFileInput v_infile vv : l]
         inData JunkData _ = return [discardFileLine v_infile]
         inData (Line lp d) scp = do
@@ -747,17 +767,19 @@ readData ddef = do
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
-  GenState [SVariable r]
+getEntryVars :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
+  VariableValue r) => Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . listInnerType . convTypeOO))
     s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
-getEntryVarLogs :: (OOProg r) => LinePattern -> GenState [MSStatement r]
+getEntryVarLogs :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) =>
+  LinePattern -> GenState [MSStatement r]
 getEntryVarLogs lp = do
+  vlogs <- getEntryVars Nothing lp
   vs <- getEntryVars Nothing lp
-  logs <- mapM maybeLog vs
+  logs <- zipWithM maybeLog vlogs vs
   return $ concat logs
 
 -- Procedural Versions --
@@ -790,7 +812,7 @@ valueProc u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'constant' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variableProc :: (SharedProg r) => Name -> VSType r -> GenState (SVariable r)
+variableProc :: (VariableSym r) => Name -> VSType r -> GenState (SVariable r)
 variableProc s t = do
   g <- get
   let cs = codeSpec g
@@ -806,7 +828,7 @@ variableProc s t = do
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, throw an error, since procedural renderers
 -- don't support 'Bundled' inputs yet.
-inputVariableProc :: (SharedProg r) => Structure -> ConstantRepr -> SVariable r ->
+inputVariableProc :: (VariableSym r) => Structure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
 inputVariableProc Unbundled _ v = return v
 inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
@@ -817,7 +839,7 @@ inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers d
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariableProc :: (SharedProg r) => ConstantStructure -> ConstantRepr ->
+constVariableProc :: (VariableSym r) => ConstantStructure -> ConstantRepr ->
   SVariable r -> GenState (SVariable r)
 constVariableProc (Store Unbundled) _ v = return v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
@@ -836,7 +858,7 @@ mkValProc v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVarProc :: (SharedProg r) => CodeVarChunk -> GenState (SVariable r)
+mkVarProc :: (VariableSym r) => CodeVarChunk -> GenState (SVariable r)
 mkVarProc v = do
   t <- codeType v
   let toGOOLVar Nothing = variableProc (codeName v) (convType t)
@@ -929,8 +951,9 @@ readDataProc ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (SharedProg r) => Data -> r ScopeData -> GenState [MSStatement r]
         inData (Singleton v) _ = do
+            vlog <- mkVarProc v
             vv <- mkVarProc v
-            l <- maybeLog vv
+            l <- maybeLog vlog vv
             return [multi $ getFileInput v_infile vv : l]
         inData JunkData _ = return [discardFileLine v_infile]
         inData (Line lp d) scp = do
@@ -985,7 +1008,7 @@ readDataProc ddef = do
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
+getEntryVarsProc :: (VariableSym r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . listInnerType . convType))
@@ -994,8 +1017,9 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 -- | Get entry variable logs.
 getEntryVarLogsProc :: (SharedProg r) => LinePattern -> GenState [MSStatement r]
 getEntryVarLogsProc lp = do
+  vlogs <- getEntryVarsProc Nothing lp
   vs <- getEntryVarsProc Nothing lp
-  logs <- mapM maybeLog vs
+  logs <- zipWithM maybeLog vlogs vs
   return $ concat logs
 
 -- | Converts an 'Expr' to a GOOL Value.
@@ -1100,28 +1124,32 @@ convCallProc c x ns f libf = do
 convStmtProc :: (SharedProg r) => FuncStmt -> GenState (MSStatement r)
 convStmtProc (FAsg v (Matrix [es])) = do
   els <- mapM convExprProc es
+  vlog <- mkVarProc v
   v' <- mkVarProc v
   t <- codeType v
   let listFunc (C.List _) = litList
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
     els) : l
 convStmtProc (FAsg v e) = do
   e' <- convExprProc e
+  vlog <- mkVarProc v
   v' <- mkVarProc v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   return $ multi $ assign v' e' : l
 convStmtProc (FAsgIndex v i e) = do
   e' <- convExprProc e
+  vlog <- mkVarProc v
   v' <- mkVarProc v
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
+      vilog = arrayElem (litInt i) vlog
       vi = arrayElem (litInt i) v'
-  l <- maybeLog vi
+  l <- maybeLog vilog vi
   return $ multi $ asgFunc t : l
 convStmtProc (FFor v start end step st) = do
   stmts <- mapM convStmtProc st
@@ -1168,8 +1196,9 @@ convStmtProc (FDecDef v (Matrix [[]])) = do
 convStmtProc (FDecDef v e) = do
   g <- get
   let scp = convScope $ currentScope g
+  vlog <- mkVarProc v
   v' <- mkVarProc v
-  l <- maybeLog v'
+  l <- maybeLog vlog v'
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
         let contDecDef (C.List _) = listDecDef

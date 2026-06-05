@@ -24,12 +24,12 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
-  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), objMethodCallNoParams, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -288,11 +288,14 @@ instance VariableSym CSharpCode where
 instance OOVariableSym CSharpCode where
   classVar = G.classVar
   classConst = classVar
-  self = C.self
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
-
   instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym CSharpCode where
+  self = C.self
+
+instance InstanceVarSelfSym CSharpCode where
   instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CSharpCode where

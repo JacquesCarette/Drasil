@@ -1,4 +1,4 @@
-{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE FlexibleContexts, QuasiQuotes #-}
 
 module Drasil.Generator.Code (
   -- * Generators

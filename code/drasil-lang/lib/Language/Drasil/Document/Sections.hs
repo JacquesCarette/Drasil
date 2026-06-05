@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language.
-module Language.Drasil.Document (
+module Language.Drasil.Document.Sections (
   section, fig, figNoCap, figWithWidth, figNoCapWithWidth, Section(..),
   SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
   ulcc, Document(..), mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..),

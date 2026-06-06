@@ -7,9 +7,10 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
-import Drasil.SRSDocument
+import Drasil.DocLang
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
@@ -17,7 +18,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,

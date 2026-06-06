@@ -8,13 +8,13 @@ module Drasil.Template.Body (mkSRS, si) where
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.Database (ChunkDB)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
 import Language.Drasil.ShortHands (lT)
-import Drasil.SRSDocument
-import Drasil.DocLang (inReqWTab)
+import Drasil.DocLang
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)

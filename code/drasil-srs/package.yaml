@@ -1,9 +1,9 @@
 spec-version: 0.36.0
-name:         drasil-docLang
+name:         drasil-srs
 version:      0.1.26.0
 author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:   "Jacques Carette"
-synopsis:     A framework for code and document generation for scientific software - Document Language SubPackage
+synopsis:     A framework for code and document generation for scientific software - SRS Language SubPackage
 github:       JacquesCarette/Drasil
 homepage:     https://jacquescarette.github.io/Drasil/
 description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>

@@ -39,16 +39,6 @@ data Section = Section
              }
 makeLenses ''Section
 
-{-
-data Section = Section
-             { depth  :: Depth
-             , header :: SecHeader
-             , cons   :: Content
-             }
-
-data SecHeader = SecHeader Title Reference
-data Content   = Content   Contents
--}
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 

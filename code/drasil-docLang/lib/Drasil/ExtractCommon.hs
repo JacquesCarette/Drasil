@@ -1,17 +1,21 @@
 module Drasil.ExtractCommon (
   sentToExp, extractMExprs,
   extractSents, extractSents',
-  extractChRefs
+  extractChRefs,
+  getSec,
+  extractSectionsBib
 ) where
 
 import Control.Lens((^.))
 import qualified Data.Set as S
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, ChunkDB)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Document (HasContents(..), RawContent(..), ListType(..),
-  ItemType(..), ListTuple)
+  ItemType(..), ListTuple, Section (..), SecCons (..))
 import Language.Drasil.Development (lnames)
+
+import Drasil.GetChunks (resolveBibliography)
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.
 extractChRefs :: HasContents a => [a] -> S.Set UID
@@ -74,3 +78,20 @@ extractSents = go . (^. accessContents)
 -- | Extracts 'Sentence's from a list of 'Contents'.
 extractSents' :: HasContents a => [a] -> [Sentence]
 extractSents' = concatMap extractSents
+
+-- | Extracts 'Sentence's from a 'Section'.
+getSec :: Section -> [Sentence]
+getSec (Section t sc _ ) = t : concatMap getSecCon sc
+
+-- | Extracts 'Sentence's from section contents.
+getSecCon :: SecCons -> [Sentence]
+getSecCon (Sub s) = getSec s
+getSecCon (Con c) = extractSents c
+
+-- | Extract bibliography entries from generated sections. This version extracts
+-- from fully expanded Sections, capturing citations that are only created
+-- during document generation (like those in orgOfDocIntro).
+extractSectionsBib :: ChunkDB -> [Section] -> BibRef
+extractSectionsBib db = resolveBibliography db . extractAllSecRefs
+  where
+    extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

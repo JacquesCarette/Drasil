@@ -65,9 +65,9 @@ to each target artifact.
 A key advantage of Drasil's architecture is the separation of concerns between
 knowledge and presentation. The structure of generated artifacts can be
 modified (``on the fly") by changing recipes, without altering the underlying 
-knowledge base. For example, generated code can be adapted to include features like logging
-by updating code generation recipes alone. This enhances maintainability,
-traceability, and adaptability of the generated artifacts.
+knowledge base. For example, generated code can be adapted to include features 
+like logging by updating code generation recipes alone. This enhances 
+maintainability, traceability, and adaptability of the generated artifacts.
 
 Drasil also supports the systematic evolution of software families. By
 separating domain knowledge from artifact-specific recipes, Drasil enables
@@ -100,7 +100,7 @@ evolving requirements.
 \subsection{Reproducibility and error visibility}
 \label{sec:dis_reproducibility}
 Artifact generation was deterministic in our case studies: regenerating from
-the same knowledge base produced consistent textual outputs. At the same
+the same knowledge base produced identical textual outputs. At the same
 time, defects in the knowledge base appear across all generated artifacts,
 which increases visibility and simplifies root-cause correction.
 
@@ -223,43 +223,18 @@ flexible modeling, knowledge representation, and recipe design.
 
 \section{Summary and Takeaways}
 
-Drasil's single-source approach delivers several practical benefits. Consistency
-is enforced by projecting a single knowledge base into all artifacts, ensuring
-that local edits yield system-wide corrections and eliminating inconsistencies
-common in manual workflows. Traceability is improved, as provenance for 
-formulae, symbols, and requirements is explicit and changes are automatically 
-propagated across documentation and code. Reproducibility is enhanced by 
-automating artifact generation, reducing the risk of human error and ensuring 
-that supporting materials such as traceability matrices and reference tables 
-are always up-to-date.
+Drasil's single-source approach improves consistency, traceability, and
+reproducibility by centralizing domain knowledge and projecting it into all
+\sfs{}. Across the case studies, this reduced manual duplication, made
+errors easier to detect and correct, and supported efficient adaptation to new
+project variants.
 
-Automation further reduces manual effort, especially when generating new 
-projects or adapting existing ones. Boilerplate text and artifact structure are 
-handled by recipes, allowing contributors to focus on encoding domain 
-knowledge. This approach also supports the systematic evolution of software 
-families: new variants can be created by extending the knowledge base or 
-modifying recipes, minimizing duplication and maintaining consistency across 
-related products.
+These benefits come with a clear tradeoff: contributors must invest more effort
+up front to encode knowledge explicitly and learn the modeling abstractions.
+The practical value of the approach therefore depends on whether those initial
+costs are offset by downstream gains in maintenance, reuse, and reliability.
 
-The primary tradeoff is increased upfront modeling and onboarding effort. The
-benefits of Drasil's approach are most pronounced when a substantial portion of
-domain knowledge can be reused, but even in new projects, the reduction in
-manual duplication and the gains in maintainability are significant. Continued
-investment in authoring tools and onboarding resources will help lower the
-initial ramp-up cost.
-
-Drasil is designed for extensibility. As our mechanisms for knowledge capture
-improve, we will be able to encode more fundamental domain concepts and extend
-the scope of the knowledge base. This extensibility means Drasil can adapt to
-new requirements or scientific advances by incorporating richer or more abstract
-representations, rather than requiring a redesign of the system. Continued
-improvement of knowledge capture tooling and methodologies will directly
-increase the breadth and depth of what Drasil can represent and generate,
-further amplifying its benefits for consistency, traceability, and automation.
-
-The observations in Chapter~\ref{c:results} support these conclusions and point
-to concrete next steps: measure onboarding overhead, report regeneration
-timings, and develop discovery and authoring tools to reduce the initial
-ramp-up. Drasil's architecture positions it well for future growth as both a
-research platform and a practical tool for reliable, maintainable scientific
-software.
+The results in Chapter~\ref{c:results} suggest that this tradeoff is often
+favourable for scientific software, especially where \sfs{} share substantial
+domain knowledge. The next step is to validate that claim more rigorously
+through quantitative studies and provide improved authoring support.

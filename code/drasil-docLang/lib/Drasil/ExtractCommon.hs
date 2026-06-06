@@ -3,19 +3,20 @@ module Drasil.ExtractCommon (
   extractSents, extractSents',
   extractChRefs,
   getSec,
-  extractSectionsBib
+  extractSectionsBib,
+  resolveBibliography
 ) where
 
-import Control.Lens((^.))
+import Control.Lens ((^.))
+import Data.List (sortBy)
+import Data.Maybe (mapMaybe)
 import qualified Data.Set as S
 
-import Drasil.Database (UID, ChunkDB)
+import Drasil.Database (UID, ChunkDB, find)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Document (HasContents(..), RawContent(..), ListType(..),
   ItemType(..), ListTuple, Section (..), SecCons (..))
 import Language.Drasil.Development (lnames)
-
-import Drasil.GetChunks (resolveBibliography)
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.
 extractChRefs :: HasContents a => [a] -> S.Set UID
@@ -95,3 +96,14 @@ extractSectionsBib :: ChunkDB -> [Section] -> BibRef
 extractSectionsBib db = resolveBibliography db . extractAllSecRefs
   where
     extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)
+
+-- | Given a 'ChunkDB' and a set of 'UID's, looks up the corresponding
+-- 'Citation's and returns them sorted by author, year, and title.
+--
+-- FIXME: This function assumes that all 'UID's in the set correspond to
+-- 'Citation's in the database. If a 'UID' does not correspond to a 'Citation',
+-- it is simply ignored. This should rather rely on a set of 'UIDRef Citation's.
+resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
+resolveBibliography db uids = sortBy compareAuthYearTitle cites
+  where
+    cites = mapMaybe (`find` db) (S.toList uids)

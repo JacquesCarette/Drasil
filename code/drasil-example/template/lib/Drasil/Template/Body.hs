@@ -23,7 +23,6 @@ import Data.Drasil.SI_Units (second)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Citations
 import Data.Drasil.Concepts.Theory (inModel)
-import Drasil.DocumentLanguage.TraceabilityGraph
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -140,6 +139,9 @@ symbMap = withCommonKnowledge []
 
 citations :: BibRef
 citations = [parnasClements1986]
+
+resourcePath :: String
+resourcePath = "../../../../datafiles/dblpend/" -- FIXME: Change to your resource path!
 
 figTemp :: LabelledContent
 figTemp = llccFig "dblpend" $ figWithWidth EmptyS

@@ -40,7 +40,6 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
   - Drasil.DocumentLanguage.Units
-  - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.SRSDocument
   - Drasil.GetChunks
   - Drasil.ExtractCommon

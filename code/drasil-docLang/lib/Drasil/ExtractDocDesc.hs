@@ -5,7 +5,7 @@ module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
   sentencePlate,
   getSec,
-  extractDocBib
+  extractSectionsBib
 ) where
 
 import Control.Lens((^.))
@@ -13,10 +13,11 @@ import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import Data.Maybe (maybeToList)
 import qualified Data.Set as S
+
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (getCitations, Manual, Verb)
 import Language.Drasil.Document
 import Language.Drasil.Development (lnames)
-import Drasil.System (SmithEtAlSRS, systemdb)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.DocumentLanguage.Core
@@ -164,7 +165,7 @@ getSecCon (Con c) = extractSents c
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created
 -- during document generation (like those in orgOfDocIntro).
-extractDocBib :: SmithEtAlSRS -> [Section] -> BibRef
-extractDocBib si = resolveBibliography (si ^. systemdb) . extractAllSecRefs
+extractSectionsBib :: ChunkDB -> [Section] -> BibRef
+extractSectionsBib db = resolveBibliography db . extractAllSecRefs
   where
     extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

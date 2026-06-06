@@ -42,6 +42,5 @@ library:
   - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Notebook
   - Drasil.DocumentLanguage.Units
-  - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.Sentence.Combinators
   - Drasil.SRSDocument

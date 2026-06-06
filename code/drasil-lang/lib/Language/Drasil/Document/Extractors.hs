@@ -14,7 +14,6 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB, find)
 import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Document.Contents
 import Language.Drasil.Document.Core
 import Language.Drasil.Document.Sections
 import Language.Drasil.Development (lnames)

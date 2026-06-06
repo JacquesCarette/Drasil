@@ -7,11 +7,9 @@ import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (mkSmithEtAlICO)
 
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,

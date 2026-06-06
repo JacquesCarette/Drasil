@@ -38,7 +38,6 @@ import Drasil.Metadata.Concepts.Math (unit_)
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
-import Drasil.Sentence.Combinators (addPercent)
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section

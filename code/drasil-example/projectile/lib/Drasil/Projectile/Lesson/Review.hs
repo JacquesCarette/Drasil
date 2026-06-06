@@ -8,7 +8,6 @@ import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrec
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Document.Contents (foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 reviewSecs :: [Section]

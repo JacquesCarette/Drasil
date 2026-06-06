@@ -21,7 +21,6 @@ import qualified Language.Drasil.Sentence.Combinators as S
 -- Vocabulary
 import Drasil.Metadata.Documentation (purpose, component, dependency,
   item, reference, traceyMatrix)
-import Drasil.Sentence.Combinators (makeTMatrix, showingCxnBw)
 
 -- Other docLang
 import Drasil.DocumentLanguage.Definitions (helpToRefField, TraceViewCat)

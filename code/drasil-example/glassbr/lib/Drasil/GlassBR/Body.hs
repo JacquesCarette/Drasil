@@ -14,9 +14,6 @@ import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
-  tAndDWSym)
 import Drasil.System (mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)

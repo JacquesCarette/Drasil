@@ -39,10 +39,8 @@ library:
   exposed-modules:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
-  - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
-  - Drasil.Sentence.Combinators
   - Drasil.SRSDocument
   - Drasil.GetChunks
   - Drasil.ExtractCommon

@@ -16,7 +16,6 @@ import Data.Drasil.Concepts.Documentation (coordinate, procedure)
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.ShortHands
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 

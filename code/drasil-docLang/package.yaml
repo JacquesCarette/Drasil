@@ -39,7 +39,6 @@ library:
   exposed-modules:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
-  - Drasil.DocumentLanguage.Units
   - Drasil.SRSDocument
   - Drasil.GetChunks
   - Drasil.ExtractCommon

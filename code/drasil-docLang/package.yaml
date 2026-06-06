@@ -41,5 +41,4 @@ library:
   - Drasil.DocLang.SRS
   - Drasil.SRSDocument
   - Drasil.GetChunks
-  - Drasil.ExtractCommon
   - Drasil.ExtractDocDesc

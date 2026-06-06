@@ -13,11 +13,11 @@ import Data.Maybe (maybeToList)
 
 import Language.Drasil (Sentence, Definition(..), ModelExpr,
   HasAdditionalNotes(..), Express(express))
-import Language.Drasil.Document (HasContents, Section(Section), SecCons(..))
+import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
+  sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.DocumentLanguage.Core
-import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.

@@ -1,4 +1,4 @@
-module Drasil.ExtractCommon (
+module Language.Drasil.Document.Extractors (
   sentToExp, extractMExprs,
   extractSents, extractSents',
   extractChRefs,
@@ -14,8 +14,9 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB, find)
 import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Document (HasContents(..), RawContent(..), ListType(..),
-  ItemType(..), ListTuple, Section (..), SecCons (..))
+import Language.Drasil.Document.Contents
+import Language.Drasil.Document.Core
+import Language.Drasil.Document.Sections
 import Language.Drasil.Development (lnames)
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.

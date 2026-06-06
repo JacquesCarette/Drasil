@@ -15,8 +15,9 @@ import Data.Maybe (maybeToList)
 import qualified Data.Set as S
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Document
+import Language.Drasil (BibRef, Sentence, Definition(..), ModelExpr,
+  HasAdditionalNotes(..), Express(express))
+import Language.Drasil.Document (HasContents, Section(Section), SecCons(..))
 import Language.Drasil.Development (lnames)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 

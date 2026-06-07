@@ -37,7 +37,7 @@ import Drasil.Metadata.Concepts.Math (unit_)
 -- Other docLang
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import qualified Drasil.SRS.SRS as SRS
-import Drasil.DocumentLanguage.Units (toSentence)
+import Drasil.SRS.DocumentLanguage.Units (toSentence)
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section

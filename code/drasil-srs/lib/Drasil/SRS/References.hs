@@ -3,7 +3,7 @@ module Drasil.SRS.References (secRefs) where
 
 import Language.Drasil.Document
 import Drasil.SRS.SRS
-import Drasil.DocumentLanguage.Core (getTraceConfigUID)
+import Drasil.SRS.DocumentLanguage.Core (getTraceConfigUID)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
 import Drasil.Sections.TableOfSymbols (symbTableRef)

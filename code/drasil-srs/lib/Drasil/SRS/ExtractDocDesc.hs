@@ -17,7 +17,7 @@ import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
   sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
-import Drasil.DocumentLanguage.Core
+import Drasil.SRS.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.

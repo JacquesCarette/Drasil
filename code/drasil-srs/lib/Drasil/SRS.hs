@@ -60,16 +60,16 @@ import Drasil.SRS.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
 import Drasil.SRS.DocumentLanguage (mkDoc, findAllRefs)
-import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
+import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
-import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
+import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
---import Drasil.DocumentLanguage.TraceabilityMatrix
-import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
+--import Drasil.SRS.DocumentLanguage.TraceabilityMatrix
+import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)

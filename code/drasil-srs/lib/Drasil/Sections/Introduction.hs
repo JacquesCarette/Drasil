@@ -9,7 +9,7 @@ import Data.Maybe (maybeToList)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
-import Drasil.DocumentLanguage.Definitions(Verbosity(..))
+import Drasil.SRS.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -28,7 +28,7 @@ import Drasil.Metadata.Software.Products (sciCompS)
 -- Other docLang
 import qualified Drasil.SRS.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.DocumentLanguage.Core (IntroSub(..))
+import Drasil.SRS.DocumentLanguage.Core (IntroSub(..))
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 
 -----------------------

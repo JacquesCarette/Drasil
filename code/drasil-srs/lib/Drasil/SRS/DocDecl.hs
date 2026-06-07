@@ -25,9 +25,9 @@ import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 -- Other docLang
-import Drasil.DocumentLanguage.Core (DocDesc)
-import Drasil.DocumentLanguage.Definitions (Fields)
-import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
+import Drasil.SRS.DocumentLanguage.Core (DocDesc)
+import Drasil.SRS.DocumentLanguage.Definitions (Fields)
+import qualified Drasil.SRS.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), SSDSub(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),

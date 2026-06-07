@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators, TupleSections #-}
 -- | Defines functions to create traceability graphs in SRS documents.
-module Drasil.DocumentLanguage.TraceabilityGraph
+module Drasil.SRS.DocumentLanguage.TraceabilityGraph
   (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
 
 -- Haskell stuff
@@ -22,8 +22,8 @@ import Drasil.Metadata.Documentation (traceyGraph, component, dependency, refere
 import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
 
 -- from docLang itself, i.e. other Document information
-import Drasil.DocumentLanguage.Definitions (TraceViewCat)
-import Drasil.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
+import Drasil.SRS.DocumentLanguage.Definitions (TraceViewCat)
+import Drasil.SRS.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
 import qualified Drasil.SRS.SRS as SRS
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,

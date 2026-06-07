@@ -15,7 +15,7 @@ import Drasil.Metadata.Documentation (symbol_, description, tOfUnit)
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
-import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
+import Drasil.SRS.DocumentLanguage.Core (TUIntro(..), RefTab(..))
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 -- | Creates the Table of Units with an "SI Name" column.

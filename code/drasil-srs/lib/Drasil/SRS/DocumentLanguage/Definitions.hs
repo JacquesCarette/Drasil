@@ -1,7 +1,7 @@
 {-# Language GADTs #-}
 -- | Defines helper functions for creating subsections within the Solution Characteristics Specification.
 -- Namely, for theory models, general definitions, data definitions, and instance models.
-module Drasil.DocumentLanguage.Definitions (
+module Drasil.SRS.DocumentLanguage.Definitions (
   -- * Types
   Field(..), Fields, InclUnits(..), Verbosity(..), TraceViewCat,
   -- * Constructors
@@ -26,7 +26,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
 
 -- local
 import Drasil.SRS.GetChunks (vars)
-import Drasil.DocumentLanguage.Units (toSentenceUnitless)
+import Drasil.SRS.DocumentLanguage.Units (toSentenceUnitless)
 
 -- | Synonym for a list of 'Field's.
 type Fields = [Field]

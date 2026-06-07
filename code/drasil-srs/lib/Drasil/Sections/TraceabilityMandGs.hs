@@ -28,9 +28,9 @@ import Drasil.Metadata.Documentation (assumption, assumpDom, chgProbDom,
   unlikelyChg)
 
 -- Other docLang functions
-import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
-import Drasil.DocumentLanguage.Definitions (TraceViewCat)
-import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
+import Drasil.SRS.DocumentLanguage.Core (TraceConfig(TraceConfig))
+import Drasil.SRS.DocumentLanguage.Definitions (TraceViewCat)
+import Drasil.SRS.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
   traceMReferrers, traceView, traceViewCC)
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.

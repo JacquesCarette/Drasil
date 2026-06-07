@@ -48,7 +48,7 @@ import Drasil.Metadata.Concepts.Math (equation, parameter)
 import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
 
 -- other docLang
-import Drasil.DocumentLanguage.Definitions (helperRefs)
+import Drasil.SRS.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.SRS.SRS as SRS
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 

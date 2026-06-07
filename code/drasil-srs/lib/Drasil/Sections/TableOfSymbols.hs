@@ -19,8 +19,8 @@ import Drasil.Metadata.Concepts.Math (unit_)
 
 -- other docLang
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
-import Drasil.DocumentLanguage.Units (toSentence) -- suspicious
-import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
+import Drasil.SRS.DocumentLanguage.Units (toSentence) -- suspicious
+import Drasil.SRS.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns

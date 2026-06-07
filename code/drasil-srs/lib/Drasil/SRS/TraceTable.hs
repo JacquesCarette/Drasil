@@ -12,7 +12,7 @@ import Language.Drasil
 import Language.Drasil.Development (lnames')
 import Theory.Drasil (MayHaveDerivation(derivations), Derivation(..))
 
-import Drasil.DocumentLanguage.Core
+import Drasil.SRS.DocumentLanguage.Core
 
 -- | Creates a dependency plate for 'UID's.
 dependencyPlate :: DLPlate (Constant [(UID, [UID])])

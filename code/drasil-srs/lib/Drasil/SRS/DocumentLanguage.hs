@@ -38,14 +38,14 @@ import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 -- Other docLang
 import Drasil.SRS.DocDecl (SRSDecl, mkDocDesc)
 import qualified Drasil.SRS.DocDecl as DD
-import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
+import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
-import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
+import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.SRS.TraceTable (generateTraceMap)
@@ -71,10 +71,10 @@ import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   tmStub, ddStub, gdStub, imStub, pdStub)
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
-import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
+import qualified Drasil.SRS.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView, traceMHeader, layoutUIDs)
-import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
-import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
+import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
+import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 

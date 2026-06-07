@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
-module Drasil.DocumentLanguage.Core (
+module Drasil.SRS.DocumentLanguage.Core (
   DocDesc, DocSection(..), RefSec(..), IntroSec(..), StkhldrSec(..), GSDSec(..),
   SSDSec(..), SSDSub(..), ProblemDescription(..), PDSub(..), SolChSpec(..),
   SCSSub(..), ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
@@ -17,7 +17,7 @@ import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict.
 import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Drasil.DocumentLanguage.Definitions (Fields, TraceViewCat)
+import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat)
 
 -- * Document Types
 

@@ -56,7 +56,7 @@ module Drasil.SRS (
   secRefs
 ) where
 
-import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
+import Drasil.SRS.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
 import Drasil.DocumentLanguage (mkDoc, findAllRefs)

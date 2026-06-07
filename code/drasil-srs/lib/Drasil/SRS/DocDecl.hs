@@ -5,7 +5,7 @@
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
-module Drasil.DocDecl (
+module Drasil.SRS.DocDecl (
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..), PDSub(..),
   ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..), SolChSpec(..),
   mkDocDesc

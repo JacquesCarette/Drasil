@@ -36,8 +36,8 @@ import Drasil.Metadata.Documentation (likelyChg, section_, software, srs,
 import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 -- Other docLang
-import Drasil.DocDecl (SRSDecl, mkDocDesc)
-import qualified Drasil.DocDecl as DD
+import Drasil.SRS.DocDecl (SRSDecl, mkDocDesc)
+import qualified Drasil.SRS.DocDecl as DD
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),

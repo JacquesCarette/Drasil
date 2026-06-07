@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | Defines functions used to create the Traceability Matrices and Graphs section.
-module Drasil.Sections.TraceabilityMandGs (
+module Drasil.SRS.Sections.TraceabilityMandGs (
   -- * Main Functions
   generateTraceTable, traceMatAssumpAssump, traceMatAssumpOther,
   traceMatRefinement, traceMatOtherReq, traceMatStandard,

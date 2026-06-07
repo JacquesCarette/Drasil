@@ -1,6 +1,6 @@
 {-# Language TupleSections #-}
 -- | Standard code to make a table of contents.
-module Drasil.Sections.TableOfContents (toToC) where
+module Drasil.SRS.Sections.TableOfContents (toToC) where
 
 -- General Drasil
 import Language.Drasil

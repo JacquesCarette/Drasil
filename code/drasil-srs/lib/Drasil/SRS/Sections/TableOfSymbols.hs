@@ -1,5 +1,5 @@
 -- | Standard code to make a table of symbols.
-module Drasil.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
+module Drasil.SRS.Sections.TableOfSymbols (table, symbTableRef, tsymb, tsymb', tsymb'', tsIntro) where
 
 -- Generic Haskell
 import Data.List (nub, (\\))
@@ -18,7 +18,7 @@ import Drasil.Metadata.Documentation (symbol_, description, tOfSymb)
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- other docLang
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
 import Drasil.SRS.DocumentLanguage.Units (toSentence) -- suspicious
 import Drasil.SRS.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
 

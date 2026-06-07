@@ -1,5 +1,5 @@
 -- | Defines helper functions used to make the general system description section.
-module Drasil.Sections.GeneralSystDesc (
+module Drasil.SRS.Sections.GeneralSystDesc (
   genSysIntro, systCon, usrCharsF, sysContxt
 ) where
 
@@ -14,7 +14,7 @@ import Drasil.Metadata.Documentation (interface, system, environment,
 
 -- Other docLang
 import qualified Drasil.SRS.SRS as SRS (sysCon, sysCont, userChar)
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Default General System Description introduction.
 genSysIntro :: Contents

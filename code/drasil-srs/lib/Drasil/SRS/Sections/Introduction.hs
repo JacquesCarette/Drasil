@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | Defines functions used in creating an introduction section.
-module Drasil.Sections.Introduction (orgSec, introductionSection,
+module Drasil.SRS.Sections.Introduction (orgSec, introductionSection,
   purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
 
 import Data.Maybe (maybeToList)
@@ -29,7 +29,7 @@ import Drasil.Metadata.Software.Products (sciCompS)
 import qualified Drasil.SRS.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.SRS.DocumentLanguage.Core (IntroSub(..))
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
+import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 
 -----------------------
 --     Constants     --

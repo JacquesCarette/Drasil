@@ -1,5 +1,5 @@
 -- | Defines functions used to create the Specific System Description section.
-module Drasil.Sections.SpecificSystemDescription (
+module Drasil.SRS.Sections.SpecificSystemDescription (
   -- * Specific System Description
   specSysDescr,
   -- ** Problem Description
@@ -50,7 +50,7 @@ import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
 -- other docLang
 import Drasil.SRS.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.SRS.SRS as SRS
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.

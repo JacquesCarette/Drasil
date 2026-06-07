@@ -1,5 +1,5 @@
 -- | Defines functions used in the Reference Material section.
-module Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing) where
+module Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing) where
 {-
 Depending where this is used, it might be worth combining it with other module(s),
 or simply moving it to Sentence.Combinators since it's highly reusable

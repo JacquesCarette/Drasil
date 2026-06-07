@@ -70,19 +70,19 @@ import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(Inc
   Verbosity(..), ddefn)
 --import Drasil.SRS.DocumentLanguage.TraceabilityMatrix
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
-import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
---import Drasil.Sections.GeneralSystDesc
-import Drasil.Sections.Introduction (purpDoc)
-import Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
-import Drasil.Sections.Requirements (mkInputPropsTable,
+import Drasil.SRS.Sections.AuxiliaryConstants (tableOfConstants)
+--import Drasil.SRS.Sections.GeneralSystDesc
+import Drasil.SRS.Sections.Introduction (purpDoc)
+import Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
+import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR, inReqWTab)
-import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
---import Drasil.Sections.Stakeholders
---import Drasil.Sections.TableOfAbbAndAcronyms
-import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
-import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
-import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
+import Drasil.SRS.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
+--import Drasil.SRS.Sections.Stakeholders
+--import Drasil.SRS.Sections.TableOfAbbAndAcronyms
+import Drasil.SRS.Sections.TableOfSymbols (tsymb, tsymb'')
+import Drasil.SRS.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
+import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.SRS.TraceTable (generateTraceMap)
 import Drasil.SRS.References (secRefs)
 -- Commented out modules aren't used - uncomment if this changes

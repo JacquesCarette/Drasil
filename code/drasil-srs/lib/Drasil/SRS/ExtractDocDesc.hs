@@ -18,7 +18,7 @@ import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.SRS.DocumentLanguage.Core
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
+import Drasil.SRS.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->

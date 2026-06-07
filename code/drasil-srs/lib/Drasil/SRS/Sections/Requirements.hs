@@ -1,5 +1,5 @@
 -- | Defines functions used in the Requirements section.
-module Drasil.Sections.Requirements (
+module Drasil.SRS.Sections.Requirements (
   -- * Requirements
   reqF, reqInputsRef,
   -- * Functional Requirements
@@ -35,7 +35,7 @@ import Drasil.Metadata.Documentation (description, funcReqDom, nonFuncReqDom,
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
 import qualified Drasil.SRS.SRS as SRS
 import Drasil.SRS.DocumentLanguage.Units (toSentence)
 

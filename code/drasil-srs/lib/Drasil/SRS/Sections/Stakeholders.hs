@@ -1,5 +1,5 @@
 -- | Defines helper functions for the Stakeholders section.
-module Drasil.Sections.Stakeholders (stakeholderIntro, tClientF, tCustomerF) where
+module Drasil.SRS.Sections.Stakeholders (stakeholderIntro, tClientF, tCustomerF) where
 
 -- Generic Drasil
 import Language.Drasil

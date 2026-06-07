@@ -26,10 +26,10 @@ import Drasil.SRS.DocumentLanguage.Definitions (TraceViewCat)
 import Drasil.SRS.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
 import qualified Drasil.SRS.SRS as SRS
-import Drasil.Sections.TraceabilityMandGs (tvAssumps,
+import Drasil.SRS.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Functions
 

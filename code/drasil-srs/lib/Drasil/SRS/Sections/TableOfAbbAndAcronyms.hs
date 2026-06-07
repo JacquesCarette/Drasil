@@ -1,5 +1,5 @@
 -- | Standard code to make a table of abbreviations and acronyms.
-module Drasil.Sections.TableOfAbbAndAcronyms
+module Drasil.SRS.Sections.TableOfAbbAndAcronyms
   (tableAbbAccGen, tableAbbAccRef) where
 
 -- Generic Haskell
@@ -19,7 +19,7 @@ import Utils.Drasil (mkTable)
 import Drasil.Metadata.Documentation (abbreviation, fullForm, abbAcc)
 
 -- other docLang
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Create a table of abbreviations from the given 'TermAbbr's. If the list is
 -- empty, it will return a paragraph saying there are no abbreviations or

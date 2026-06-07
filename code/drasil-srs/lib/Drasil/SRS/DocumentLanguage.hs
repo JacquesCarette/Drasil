@@ -50,33 +50,33 @@ import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel
 import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.SRS.TraceTable (generateTraceMap)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
-import Drasil.Sections.TableOfContents (toToC)
-import Drasil.Sections.TableOfSymbols (table, tsIntro)
-import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
+import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
+import Drasil.SRS.Sections.TableOfContents (toToC)
+import Drasil.SRS.Sections.TableOfSymbols (table, tsIntro)
+import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
 import qualified Drasil.SRS.SRS as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
 import Drasil.SRS.References (secRefs)
-import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
-import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
+import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
+import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
-import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
+import qualified Drasil.SRS.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
-import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
+import qualified Drasil.SRS.Sections.Requirements as R (reqF, fReqF, nfReqF)
+import qualified Drasil.SRS.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF, helperCI,
   tmStub, ddStub, gdStub, imStub, pdStub)
-import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
+import qualified Drasil.SRS.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.SRS.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView, traceMHeader, layoutUIDs)
 import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
-import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
+import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
 

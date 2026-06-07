@@ -1,5 +1,5 @@
 -- | Defines helper functions for making the Table of Auxiliary Constants section.
-module Drasil.Sections.AuxiliaryConstants
+module Drasil.SRS.Sections.AuxiliaryConstants
   (valsOfAuxConstantsF, tableOfConstants, tableOfConstantsRef) where
 
 -- General Haskell
@@ -14,7 +14,7 @@ import Utils.Drasil (mkTable)
 -- Other docLang
 import qualified Drasil.SRS.SRS as SRS (valsOfAuxCons)
 import Drasil.SRS.DocumentLanguage.Units (toSentence) -- TODO: suspicious
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (value, description, symbol_, tAuxConsts)

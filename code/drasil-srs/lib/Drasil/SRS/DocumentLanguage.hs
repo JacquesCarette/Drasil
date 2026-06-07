@@ -5,7 +5,7 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
+module Drasil.SRS.DocumentLanguage (mkDoc, findAllRefs) where
 
 -- General Haskell
 import Control.Lens ((^.), set)

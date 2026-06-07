@@ -10,9 +10,9 @@ import Control.Lens ((^.))
 import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
-import Drasil.DocLang
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D

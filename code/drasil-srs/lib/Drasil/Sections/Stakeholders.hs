@@ -13,7 +13,7 @@ import Drasil.Metadata.Documentation (client, customer, endUser, interest,
   product_, section_, stakeholder)
 
 -- other docLang
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.SRS as SRS
 
 -- | General stakeholders introduction.
 stakeholderIntro :: Contents

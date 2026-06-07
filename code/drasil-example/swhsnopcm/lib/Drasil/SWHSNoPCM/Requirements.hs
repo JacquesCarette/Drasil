@@ -9,7 +9,7 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Drasil.DocLang (inReqWTab)
+import Drasil.SRS (inReqWTab)
 
 import Theory.Drasil (InstanceModel)
 

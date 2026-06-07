@@ -25,7 +25,7 @@ import Drasil.Metadata.TraceabilityGraphs (GraphInfo(..), NodeFamily(..))
 import Drasil.DocumentLanguage.Definitions (TraceViewCat)
 import Drasil.DocumentLanguage.TraceabilityMatrix (traceMReferees, traceMReferrers,
   traceMColumns, layoutUIDs, traceMIntro)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.SRS as SRS
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)

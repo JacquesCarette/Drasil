@@ -10,8 +10,8 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.Database (ChunkDB)
-import Drasil.DocLang
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.SRS
+import qualified Drasil.SRS.SRS as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 

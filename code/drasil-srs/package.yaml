@@ -37,5 +37,5 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.DocLang
-  - Drasil.DocLang.SRS
+  - Drasil.SRS
+  - Drasil.SRS.SRS

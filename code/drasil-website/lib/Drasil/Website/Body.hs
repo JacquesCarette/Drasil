@@ -12,7 +12,7 @@ import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
   DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.DocLang (findAllRefs)
+import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)

@@ -14,7 +14,7 @@ import Drasil.Metadata.Documentation (refMat, requirement, tOfCont)
 import qualified Drasil.Metadata.Documentation as Doc
 
 -- Other docLang
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.SRS as SRS
 import Drasil.DocumentLanguage.Core
 
 {- Layout for Table of Contents in SRS documents:

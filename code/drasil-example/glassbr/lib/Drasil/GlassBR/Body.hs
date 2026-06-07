@@ -8,9 +8,9 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
 import Drasil.Database (ChunkDB)
-import Drasil.DocLang
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S

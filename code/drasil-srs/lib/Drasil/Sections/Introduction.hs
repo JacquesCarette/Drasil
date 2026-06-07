@@ -26,7 +26,7 @@ import Drasil.Metadata.Documentation (assumption, characteristic, decision,
 import Drasil.Metadata.Software.Products (sciCompS)
 
 -- Other docLang
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
+import qualified Drasil.SRS.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Core (IntroSub(..))
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)

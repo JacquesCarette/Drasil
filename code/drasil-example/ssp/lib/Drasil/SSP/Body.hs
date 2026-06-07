@@ -10,9 +10,9 @@ import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
   foldlSPCol, bulletNested, bulletFlat)
 import qualified Language.Drasil.Development as D
-import Drasil.DocLang
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
+import qualified Drasil.SRS.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 

@@ -12,9 +12,9 @@ import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   foldlSPCol, bulletNested, bulletFlat)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
-import Drasil.DocLang
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.SRS as SRS
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators

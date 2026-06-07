@@ -1,5 +1,5 @@
 -- | Re-export document language types and functions for easy use in other packages.
-module Drasil.DocLang (
+module Drasil.SRS (
   -- * Document Language
   -- ** SRS
   -- | For generating Software Requirements Specifications.
@@ -84,5 +84,5 @@ import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.TraceTable (generateTraceMap)
-import Drasil.DocLang.References (secRefs)
+import Drasil.SRS.References (secRefs)
 -- Commented out modules aren't used - uncomment if this changes

@@ -1,7 +1,7 @@
 module Drasil.HGHC.Body (si, mkSRS) where
 
 import Drasil.Database (ChunkDB)
-import Drasil.DocLang
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)

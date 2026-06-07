@@ -13,7 +13,7 @@ import Drasil.Metadata.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_, sysCont)
 
 -- Other docLang
-import qualified Drasil.DocLang.SRS as SRS (sysCon, sysCont, userChar)
+import qualified Drasil.SRS.SRS as SRS (sysCon, sysCont, userChar)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Default General System Description introduction.

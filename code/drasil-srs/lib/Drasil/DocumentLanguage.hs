@@ -54,11 +54,11 @@ import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
 import Drasil.Sections.TableOfSymbols (table, tsIntro)
 import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
-import qualified Drasil.DocLang.SRS as SRS (appendix,
+import qualified Drasil.SRS.SRS as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
-import Drasil.DocLang.References (secRefs)
+import Drasil.SRS.References (secRefs)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)

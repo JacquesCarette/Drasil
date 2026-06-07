@@ -7,7 +7,7 @@ module Drasil.Generator.SRS (
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Drasil.DocLang (mkGraphInfo)
+import Drasil.SRS (mkGraphInfo)
 import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)

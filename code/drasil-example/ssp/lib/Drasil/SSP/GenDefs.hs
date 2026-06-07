@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.SRS.SRS as SRS (physSyst)
+import Drasil.SRS.Concepts as SRS (physSyst)
 
 import Data.Drasil.SI_Units (metre, newton)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,

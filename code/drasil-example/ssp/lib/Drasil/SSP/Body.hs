@@ -12,7 +12,7 @@ import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.SRS as SRS (inModel, assumpt,
+import qualified Drasil.SRS.Concepts as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 

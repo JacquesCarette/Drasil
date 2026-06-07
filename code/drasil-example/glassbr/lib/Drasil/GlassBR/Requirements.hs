@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Software (errMsg)
 import Drasil.SRS (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
-import Drasil.SRS.SRS (datCon)
+import Drasil.SRS.Concepts (datCon)
 
 import Theory.Drasil (DataDefinition)
 

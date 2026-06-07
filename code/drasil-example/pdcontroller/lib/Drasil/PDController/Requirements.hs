@@ -3,7 +3,7 @@ module Drasil.PDController.Requirements (
 ) where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
-import Drasil.SRS.SRS (datCon)
+import Drasil.SRS.Concepts (datCon)
 import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
   mkSecurityNFR, inReqWTab)
 

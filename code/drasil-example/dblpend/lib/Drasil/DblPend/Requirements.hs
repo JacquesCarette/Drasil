@@ -4,7 +4,7 @@ module Drasil.DblPend.Requirements (
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS.SRS (datCon)
+import Drasil.SRS.Concepts (datCon)
 import Drasil.SRS (mkPortableNFR, mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S
 

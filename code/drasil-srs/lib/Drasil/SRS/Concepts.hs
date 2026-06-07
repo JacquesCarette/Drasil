@@ -4,7 +4,7 @@
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
-module Drasil.SRS.SRS (
+module Drasil.SRS.Concepts (
   -- * Section Constructors
   -- | For use in an SRS document. Ordered by appearance in a SRS.
   tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,

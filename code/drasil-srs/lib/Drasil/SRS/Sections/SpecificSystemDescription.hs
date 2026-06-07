@@ -49,7 +49,7 @@ import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
 
 -- other docLang
 import Drasil.SRS.DocumentLanguage.Definitions (helperRefs)
-import qualified Drasil.SRS.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
 
 -- Takes the system and subsections.

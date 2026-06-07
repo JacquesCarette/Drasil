@@ -11,7 +11,7 @@ import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.Database (ChunkDB)
 import Drasil.SRS
-import qualified Drasil.SRS.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 

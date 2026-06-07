@@ -20,7 +20,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENo
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
 
-import qualified Drasil.SRS.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Data.Drasil.Citations
 import Data.Drasil.Concepts.Theory (inModel)
 

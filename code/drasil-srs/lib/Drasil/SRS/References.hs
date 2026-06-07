@@ -2,7 +2,7 @@
 module Drasil.SRS.References (secRefs) where
 
 import Language.Drasil.Document
-import Drasil.SRS.SRS
+import Drasil.SRS.Concepts
 import Drasil.SRS.DocumentLanguage.Core (getTraceConfigUID)
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)

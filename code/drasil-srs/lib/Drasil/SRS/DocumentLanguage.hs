@@ -54,7 +54,7 @@ import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.SRS.Sections.TableOfContents (toToC)
 import Drasil.SRS.Sections.TableOfSymbols (table, tsIntro)
 import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
-import qualified Drasil.SRS.SRS as SRS (appendix,
+import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)

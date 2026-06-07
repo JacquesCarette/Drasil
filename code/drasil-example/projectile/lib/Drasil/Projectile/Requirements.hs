@@ -4,7 +4,7 @@ module Drasil.Projectile.Requirements (
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS.SRS (datCon)
+import Drasil.SRS.Concepts (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)

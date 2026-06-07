@@ -38,4 +38,4 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.SRS
-  - Drasil.SRS.SRS
+  - Drasil.SRS.Concepts

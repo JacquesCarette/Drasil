@@ -5,7 +5,7 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Document
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

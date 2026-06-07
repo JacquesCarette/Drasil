@@ -5,7 +5,7 @@ import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 

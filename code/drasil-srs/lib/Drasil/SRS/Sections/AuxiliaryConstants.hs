@@ -12,7 +12,7 @@ import Language.Drasil.Document
 import Utils.Drasil (mkTable)
 
 -- Other docLang
-import qualified Drasil.SRS.SRS as SRS (valsOfAuxCons)
+import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 import Drasil.SRS.DocumentLanguage.Units (toSentence) -- TODO: suspicious
 import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 

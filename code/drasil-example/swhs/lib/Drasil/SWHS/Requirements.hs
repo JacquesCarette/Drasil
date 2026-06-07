@@ -14,7 +14,7 @@ import Theory.Drasil (InstanceModel, HasOutput(output))
 
 import Drasil.SRS (mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR, inReqWTab)
-import Drasil.SRS.SRS (datCon, propCorSol)
+import Drasil.SRS.Concepts (datCon, propCorSol)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (condition, funcReqDom, input_, output_,

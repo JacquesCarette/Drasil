@@ -36,7 +36,7 @@ import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
-import qualified Drasil.SRS.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Drasil.SRS.DocumentLanguage.Units (toSentence)
 
 -- | Wrapper for 'reqIntro'.

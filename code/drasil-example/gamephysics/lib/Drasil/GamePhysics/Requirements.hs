@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import qualified Drasil.SRS.SRS as SRS (solCharSpec)
+import qualified Drasil.SRS.Concepts as SRS (solCharSpec)
 import Drasil.SRS (mkMaintainableNFR)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_,
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)

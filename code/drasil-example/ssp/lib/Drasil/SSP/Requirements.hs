@@ -10,7 +10,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS (mkInputPropsTable, mkMaintainableNFR, mkCorrectNFR,
   mkUnderstandableNFR, mkReusableNFR)
-import Drasil.SRS.SRS (datCon, propCorSol)
+import Drasil.SRS.Concepts (datCon, propCorSol)
 
 import Utils.Drasil (mkTable)
 

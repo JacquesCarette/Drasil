@@ -1,6 +1,6 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
 -- 'UID' and dereference the chunk it refers to.
-module Drasil.GetChunks (
+module Drasil.SRS.GetChunks (
   ccss, ccss', combine, vars
 ) where
 

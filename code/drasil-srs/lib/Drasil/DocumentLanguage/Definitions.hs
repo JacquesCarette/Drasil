@@ -25,7 +25,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
   Derivation(Derivation), MayHaveDerivation(derivations))
 
 -- local
-import Drasil.GetChunks (vars)
+import Drasil.SRS.GetChunks (vars)
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
 -- | Synonym for a list of 'Field's.

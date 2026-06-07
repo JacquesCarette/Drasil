@@ -28,7 +28,7 @@ import Drasil.Database.SearchTools (findAllConcInsts,
   TermAbbr, shortForm, termResolve')
 
 import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
-import Drasil.GetChunks (ccss, ccss')
+import Drasil.SRS.GetChunks (ccss, ccss')
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (likelyChg, section_, software, srs,

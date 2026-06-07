@@ -83,6 +83,6 @@ import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDat
 import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
-import Drasil.TraceTable (generateTraceMap)
+import Drasil.SRS.TraceTable (generateTraceMap)
 import Drasil.SRS.References (secRefs)
 -- Commented out modules aren't used - uncomment if this changes

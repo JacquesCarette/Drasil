@@ -1,6 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
 -- | Defines a DLPlate for tracability between pieces of information.
-module Drasil.TraceTable (generateTraceMap) where
+module Drasil.SRS.TraceTable (generateTraceMap) where
 
 import Control.Lens ((^.))
 import Data.Functor.Constant (Constant(Constant))

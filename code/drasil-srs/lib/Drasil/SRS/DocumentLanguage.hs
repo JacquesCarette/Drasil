@@ -47,7 +47,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.SRS.TraceTable (generateTraceMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)

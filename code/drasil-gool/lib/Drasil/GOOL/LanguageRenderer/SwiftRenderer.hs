@@ -677,7 +677,6 @@ instance ControlStatement SwiftCode where
     dflt <- bod
     mkStmtNoEnd $ R.switch (space <>) st vl dflt (zip vals bods)
 
-
   ifExists = M.ifExists
 
   for _ _ _ _ = error $ CP.forLoopError swiftName

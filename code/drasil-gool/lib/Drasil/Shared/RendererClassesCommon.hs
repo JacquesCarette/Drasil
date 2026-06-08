@@ -1,7 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 module Drasil.Shared.RendererClassesCommon (
-  CommonRenderSym, ImportSym(..), ImportElim(..),
+  CommonRenderSym, UnRepr(..), ImportSym(..), ImportElim(..),
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
   OpElim(..), RenderVariable(..), InternalVarElim(..), InternalBinderElim(..),
@@ -51,6 +52,9 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 
 -- Common Typeclasses --
+
+class UnRepr repr contents where
+  unRepr :: repr contents -> contents
 
 class ImportSym r where
   type Import r

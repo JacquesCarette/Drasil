@@ -1,5 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | The logic to render C# code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
@@ -30,9 +32,9 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, OOFunctionSym(..),
   ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
+  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
+  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
@@ -42,14 +44,15 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..),
   InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+  uOp, bOp, variable, value, function, statement, visibility, parameter, method,
+  blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
+import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
@@ -143,6 +146,9 @@ instance ProgramSym CSharpCode where
 instance CommonRenderSym CSharpCode
 instance OORenderSym CSharpCode
 
+instance UnRepr CSharpCode contents where
+  unRepr = unCSC
+
 instance FileSym CSharpCode where
   type File CSharpCode = FileData
   fileDoc m = do
@@ -230,7 +236,7 @@ instance RenderType CSharpCode where
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim CSharpCode where
-  type' = typeDoc . unCSC
+  type' = renderType
 
 instance UnaryOpSym CSharpCode where
   notOp = C.notOp
@@ -786,13 +792,13 @@ csImport n = text ("using " ++ n) <> endStatement
 csBoolType :: (CommonRenderSym r) => VSType r
 csBoolType = typeFromData Boolean csBool (text csBool)
 
-csFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+csFuncType :: [VSType CSharpCode] -> VSType CSharpCode -> VSType CSharpCode
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
   typeFromData (Func (map getType pts) (getType rt))
     (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
-    (text csFunc <> angles (hicat listSep' $ map RC.type' $ pts ++ [rt]))
+    (text csFunc <> angles (hicat listSep' $ map renderType $ pts ++ [rt]))
 
 csListSize, csForEach, csNamedArgSep, csLambdaSep :: Doc
 csListSize = text "Count"
@@ -847,12 +853,12 @@ csOutfileType :: (CommonRenderSym r) => VSType r
 csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData OutFile csWriter (text csWriter)
 
-csLitList :: (CommonRenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r]
-  -> SValue r
+csLitList :: (VSType CSharpCode -> VSType CSharpCode) -> VSType CSharpCode ->
+  [SValue CSharpCode] -> SValue CSharpCode
 csLitList f t' es' = do
   es <- sequence es'
   lt <- f t'
-  mkVal lt (new' <+> RC.type' lt
+  mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
 csLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
@@ -885,7 +891,7 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
   where csCast' Double String _ v = csDblParse (toState v)
         csCast' Float String _ v = csFloatParse (toState v)
         csCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast
-          (RC.type' t)) (RC.value v))
+          (renderType t)) (RC.value v))
 
 -- This implementation generates a statement lambda to define the function.
 -- C# 7 supports local functions, which would be a cleaner way to implement
@@ -893,8 +899,8 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
-  [SVariable r] -> MSBody r -> MSStatement r
+csFuncDecDef :: SVariable CSharpCode -> CSharpCode ScopeData ->
+  [SVariable CSharpCode] -> MSBody CSharpCode -> MSStatement CSharpCode
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -904,7 +910,7 @@ csFuncDecDef v scp ps bod = do
     (pure $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
-  mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>
+  mkStmt $ renderType t <+> text (variableName vr) <+> equals <+>
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd
 

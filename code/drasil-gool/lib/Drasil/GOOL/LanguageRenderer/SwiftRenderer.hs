@@ -1,5 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | The logic to render Swift code is contained in this module
 module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
@@ -32,18 +34,18 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  UnRepr(..), ImportSym(..), ImportElim, RenderBody(..), BodyElim,
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, binderElim, value, function, statement, visibility,
+  uOp, bOp, variable, binderElim, value, function, statement, visibility,
   parameter, method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -51,6 +53,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar,
   class', module')
+import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
@@ -144,6 +147,9 @@ instance ProgramSym SwiftCode where
 instance CommonRenderSym SwiftCode
 instance OORenderSym SwiftCode
 
+instance UnRepr SwiftCode contents where
+  unRepr = unSC
+
 instance FileSym SwiftCode where
   type File SwiftCode = FileData
   fileDoc m = do
@@ -230,7 +236,7 @@ instance RenderType SwiftCode where
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim SwiftCode where
-  type' = typeDoc . unSC
+  type' = renderType
 
 instance UnaryOpSym SwiftCode where
   notOp = C.notOp
@@ -874,21 +880,21 @@ swiftFileHdlType :: (CommonRenderSym r) => VSType r
 swiftFileHdlType = addFoundationImport $ typeFromData OutFile swiftFileHdl
   (text swiftFileHdl)
 
-swiftListType :: (CommonRenderSym r) => VSType r -> VSType r
+swiftListType :: VSType SwiftCode -> VSType SwiftCode
 swiftListType t' = do
   t <- t'
   typeFromData (List $ getType t) ("[" ++ getTypeString t ++ "]")
-    (brackets $ RC.type' t)
+    (brackets $ renderType t)
 
-swiftFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+swiftFuncType :: [VSType SwiftCode] -> VSType SwiftCode -> VSType SwiftCode
 swiftFuncType ps r = do
   pts <- sequence ps
   rt <- r
   typeFromData (Func (map getType pts) (getType rt))
     ("(" ++ intercalate listSep (map getTypeString pts) ++ ")" ++ " " ++
       swiftRetType ++ " " ++ getTypeString rt)
-    (parens (hicat listSep' $ map RC.type' pts) <+> swiftRetType' <+>
-      RC.type' rt)
+    (parens (hicat listSep' $ map renderType pts) <+> swiftRetType' <+>
+      renderType rt)
 
 swiftVoidType :: (CommonRenderSym r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
@@ -997,23 +1003,23 @@ swiftNumBinExpr f v1' v2' = do
 swiftLitFloat :: (CommonRenderSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
-swiftLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
+swiftLambda :: [SwiftCode BinderD] -> SwiftCode (Value SwiftCode) -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
     (map RC.binderElim ps)
-    (map (RC.type' . binderType) ps)))
-  <+> swiftRetType' <+> RC.type' (valueType ex) <+> inLabel <+> RC.value ex
+    (map (renderType . binderType) ps)))
+  <+> swiftRetType' <+> renderType (valueType ex) <+> inLabel <+> RC.value ex
 
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
 
-swiftCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
+swiftCast :: VSType SwiftCode -> SValue SwiftCode -> SValue SwiftCode
 swiftCast t' v' = do
   t <- t'
   v <- v'
   let unwrap = if getType t `elem` swiftReadableTypes &&
         getType (valueType v) == String then swiftUnwrapVal else id
-  unwrap $ mkStateVal (pure t) (R.castObj (RC.type' t) (RC.value v))
+  unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
@@ -1185,7 +1191,7 @@ swiftVarDec dec v' scp = do
       bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> RC.type' (variableType v))
+    <+> renderType (variableType v))
 
 swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData -> MSStatement SwiftCode
 swiftSetDec dec v' scp = do
@@ -1223,9 +1229,9 @@ swiftAssert condition errorMessage = vcat [
   text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
   ]
 
-swiftParam :: (CommonRenderSym r) => Doc -> r (Variable r) -> Doc
+swiftParam :: Doc -> SwiftCode (Variable SwiftCode) -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
-  <+> RC.type' (variableType v)
+  <+> renderType (variableType v)
 
 swiftMethod :: Label -> SwiftCode (Visibility SwiftCode) ->
   SwiftCode (Attachment SwiftCode) -> MSMthdType SwiftCode ->
@@ -1240,7 +1246,7 @@ swiftMethod n s p t ps b = do
   mthdFromData Pub (vcat [
     RC.visibility s <+> RC.perm p <+> swiftFunc <+> text n <>
       parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+>
-      swiftRetType' <+> RC.type' tp <+> bodyStart,
+      swiftRetType' <+> renderType tp <+> bodyStart,
     indent $ RC.body bod,
     bodyEnd])
 
@@ -1269,7 +1275,7 @@ swiftStringError = do
   str <- zoom lensMStoVS (string :: VSType SwiftCode)
   if tu && not errdef then do
     modify setErrorDefined
-    pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftRetroactive
+    pure (swiftExtension <+> renderType str <> swiftConforms <+> swiftRetroactive
       <+> swiftError <+> bodyStart <> bodyEnd)
   else pure empty
 

@@ -1,6 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | The logic to render Julia code is contained in this module
 module Drasil.GProc.LanguageRenderer.JuliaRenderer (
@@ -27,9 +29,9 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
+  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
+  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
@@ -38,8 +40,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+  uOp, bOp, variable, value, function, statement, visibility, parameter, method,
+  blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
@@ -61,6 +63,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
   argsList, ifCond, smartAdd, local, var, smartSub)
+import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -126,6 +129,9 @@ instance ProgramSym JuliaCode where
 
 instance CommonRenderSym JuliaCode
 instance ProcRenderSym JuliaCode
+
+instance UnRepr JuliaCode inner where
+  unRepr = unJLC
 
 instance FileSym JuliaCode where
   type File JuliaCode = FileData
@@ -207,10 +213,7 @@ instance RenderType JuliaCode where
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim JuliaCode where
-  type' v = let t = typeDoc $ unJLC v in
-    case cType $ unJLC v of
-      (Object _) -> t <> error jlClassError
-      _ -> t
+  type' = renderType
 
 instance UnaryOpSym JuliaCode where
   notOp = C.notOp
@@ -680,22 +683,22 @@ jlClassError = "Classes are not supported in Julia"
 jlLitFloat :: (CommonRenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
-jlLitList :: (CommonRenderSym r) => VSType r -> [SValue r] -> SValue r
+jlLitList :: VSType JuliaCode -> [SValue JuliaCode] -> SValue JuliaCode
 jlLitList t' es = do
   t <- t'
   let lt' = listType t'
   elems <- sequence es
-  let typeDec = if null es then RC.type' t else empty
+  let typeDec = if null es then renderType t else empty
   mkStateVal lt' (typeDec <> brackets (valueList elems))
 
-jlCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
+jlCast :: VSType JuliaCode -> SValue JuliaCode -> SValue JuliaCode
 jlCast t' v' = do
   t <- t'
   v <- v'
   let vTp = getType $ valueType v
       tTp = getType t
       vDoc = RC.value v
-      tDoc = RC.type' t
+      tDoc = renderType t
       jlCast' :: CodeType -> CodeType -> Doc -> Doc -> Doc
       -- Converting string to char
       jlCast' String Char vDoc' _ = text "only" <> parens vDoc'
@@ -947,8 +950,8 @@ jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlParam :: (CommonRenderSym r) => r (Variable r) -> Doc
-jlParam v = RC.variable v <> jlType <> RC.type' (variableType v)
+jlParam :: JuliaCode (Variable JuliaCode) -> Doc
+jlParam v = RC.variable v <> jlType <> renderType (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (CommonRenderSym r) => VSType r

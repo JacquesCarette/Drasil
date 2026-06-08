@@ -1,5 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | The logic to render Java code is contained in this module
 module Drasil.GOOL.LanguageRenderer.JavaRenderer (
@@ -30,9 +32,9 @@ import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   newObj, InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
+  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
+  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
@@ -42,7 +44,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..),
   InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
+  uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -61,6 +63,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   multiStmt, body, printFile, param, listDec, classVarAccess, cast, castObj,
   classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
   addComments, commentedMod, commentedItem)
+import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
@@ -142,6 +145,9 @@ instance ProgramSym JavaCode where
 
 instance CommonRenderSym JavaCode
 instance OORenderSym JavaCode
+
+instance UnRepr JavaCode contents where
+  unRepr = unJC
 
 instance FileSym JavaCode where
   type File JavaCode = FileData
@@ -226,7 +232,7 @@ instance RenderType JavaCode where
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim JavaCode where
-  type' = typeDoc . unJC
+  type' = renderType
 
 instance UnaryOpSym JavaCode where
   notOp = C.notOp
@@ -921,11 +927,11 @@ jSetType t = do
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)
 
-jLitArray :: (CommonRenderSym r) => VSType r -> [SValue r] -> SValue r
+jLitArray :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
 jLitArray t' es' = do
   es <- sequence es'
   lt <- arrayType t'
-  mkVal lt (new' <+> RC.type' lt
+  mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
 jFileType :: (OORenderSym r) => VSType r
@@ -988,28 +994,28 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
   v) t v)
   where jCast' Double String _ v = jParseDblFunc (toState v)
         jCast' Float String _ v = jParseFloatFunc (toState v)
-        jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
+        jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (renderType t))
           (RC.value v))
 
-jConstDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
-  -> MSStatement r
+jConstDecDef :: SVariable JavaCode -> JavaCode ScopeData -> SValue JavaCode ->
+  MSStatement JavaCode
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt $ jFinal <+> RC.type' (variableType v) <+>
+  mkStmt $ jFinal <+> renderType (variableType v) <+>
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
-  [SVariable r] -> MSBody r -> MSStatement r
+jFuncDecDef :: SVariable JavaCode -> JavaCode ScopeData ->
+  [SVariable JavaCode] -> MSBody JavaCode -> MSStatement JavaCode
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+  mkStmt $ renderType (variableType vr) <+> RC.variable vr <+> equals <+>
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
@@ -1063,14 +1069,15 @@ jOpenFileWorA :: (OORenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
-jStringSplit :: (CommonRenderSym r) => SVariable r -> SValue r -> VS Doc
+jStringSplit :: SVariable JavaCode -> SValue JavaCode -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
-  new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
+  new' <+> renderType (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Attachment r)
-  -> r TypeData -> [r (Parameter r)] -> r (Body r) -> Doc
+jMethod :: Label -> [String] -> JavaCode (Visibility JavaCode) ->
+  JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
+  [JavaCode (Parameter JavaCode)] -> JavaCode (Body JavaCode) -> Doc
 jMethod n es s p t ps b = vcat [
-  RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
+  RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>
     text (intercalate listSep (sort es))) <+> lbrace,
   indent $ RC.body b,

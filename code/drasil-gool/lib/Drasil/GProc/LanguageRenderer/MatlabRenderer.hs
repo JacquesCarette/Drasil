@@ -38,12 +38,16 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (import', body,
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
+  comment)
 import Drasil.Shared.AST (Terminator, FileData, FuncData, ModData,
-  MethodData, ParamData, ProgData, TypeData, ValData, VarData, CommonThunk)
+  MethodData, ParamData, ProgData, TypeData, ValData, VarData, CommonThunk,
+  mthdDoc, modDoc)
+import Drasil.Shared.Helpers (toCode)
 import Drasil.Shared.State (VS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc)
+import Text.PrettyPrint.HughesPJ (Doc, empty, text)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -81,7 +85,7 @@ instance ImportSym MatlabCode where
   modImport = undefined
 
 instance ImportElim MatlabCode where
-  import' = undefined
+  import' = unMLC
 
 instance BodySym MatlabCode where
   type Body MatlabCode = Doc
@@ -92,7 +96,7 @@ instance RenderBody MatlabCode where
   multiBody = undefined
 
 instance BodyElim MatlabCode where
-  body = undefined
+  body = unMLC
 
 instance BlockSym MatlabCode where
   type Block MatlabCode = Doc
@@ -102,7 +106,7 @@ instance RenderBlock MatlabCode where
   multiBlock = undefined
 
 instance BlockElim MatlabCode where
-  block = undefined
+  block = unMLC
 
 instance TypeSym MatlabCode where
   bool = undefined
@@ -176,7 +180,7 @@ instance ScopeSym MatlabCode where
   local = undefined
 
 instance ScopeElim MatlabCode where
-  scopeData = undefined
+  scopeData = unMLC
 
 instance VariableSym MatlabCode where
   type Variable MatlabCode = VarData
@@ -433,7 +437,7 @@ instance FuncAppStatement MatlabCode where
   extInOutCall = undefined
 
 instance CommentStatement MatlabCode where
-  comment = undefined
+  comment = G.comment mlCmtStart
 
 instance ControlStatement MatlabCode where
   break = undefined
@@ -452,14 +456,14 @@ instance ControlStatement MatlabCode where
 
 instance VisibilitySym MatlabCode where
   type Visibility MatlabCode = Doc
-  private = undefined
-  public = undefined
+  private = toCode empty
+  public = toCode empty
 
 instance RenderVisibility MatlabCode where
   visibilityFromData = undefined
 
 instance VisibilityElim MatlabCode where
-  visibility = undefined
+  visibility = unMLC
 
 instance MethodTypeSym MatlabCode where
   type MethodType MatlabCode = TypeData
@@ -495,7 +499,7 @@ instance ProcRenderMethod MatlabCode where
   intFunc = undefined
 
 instance MethodElim MatlabCode where
-  method = undefined
+  method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode where
   type Module MatlabCode = ModData
@@ -506,7 +510,7 @@ instance RenderMod MatlabCode where
   updateModuleDoc = undefined
 
 instance ModuleElim MatlabCode where
-  module' = undefined
+  module' = modDoc . unMLC
 
 instance BlockCommentSym MatlabCode where
   blockComment = undefined
@@ -519,3 +523,7 @@ instance BlockCommentElim MatlabCode where
 mlName, mlVersion :: String
 mlName = "MATLAB"
 mlVersion = "R2024b"
+
+-- Comments
+mlCmtStart :: Doc
+mlCmtStart = text "%"

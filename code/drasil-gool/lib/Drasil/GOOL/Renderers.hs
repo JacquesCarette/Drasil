@@ -7,11 +7,12 @@ module Drasil.GOOL.Renderers (
 
 import Drasil.FileHandling.Legacy (indent)
 
-import Drasil.Shared.InterfaceCommon (VariableSym(..), VariableElim (..),
-  ValueSym(..), VisibilitySym(..), ParameterSym(..), BodySym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), VisibilitySym(..), ParameterSym(..),
+  BodySym(..))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  InternalVarElim(..), VisibilityElim(..), ValueElim(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, InternalVarElim(..),
+  VisibilityElim(..), ValueElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, PermElim(..))
 import Drasil.Shared.LanguageRenderer (parameterList, new', constDec')

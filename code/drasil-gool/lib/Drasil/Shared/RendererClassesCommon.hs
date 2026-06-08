@@ -1,17 +1,15 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
 
 module Drasil.Shared.RendererClassesCommon (
-  CommonRenderSym, UnRepr(..), ImportSym(..), ImportElim(..),
-  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
-  VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), OpElim(..),
-  RenderVariable(..), InternalVarElim(..), InternalBinderElim(..),
-  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
-  RenderVisibility(..), VisibilityElim(..), MSMthdType, MethodTypeSym(..),
-  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
-  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
+  CommonRenderSym, ImportSym(..), ImportElim(..), RenderBody(..), BodyElim(..),
+  RenderBlock(..), BlockElim(..), RenderType(..), VSUnOp, UnaryOpSym(..),
+  VSBinOp, BinaryOpSym(..), OpElim(..), RenderVariable(..), InternalVarElim(..),
+  InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MSMthdType,
+  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..),
+  MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
@@ -25,7 +23,6 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..),
   ParameterSym(..), MethodSym(..), BinderElim(..))
-import Drasil.Shared.CodeType (CodeType)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
@@ -51,9 +48,6 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 
 -- Common Typeclasses --
-
-class UnRepr repr contents where
-  unRepr :: repr contents -> contents
 
 class ImportSym r where
   type Import r

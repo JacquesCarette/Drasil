@@ -20,7 +20,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.InterfaceCommon (varDecDef, bool, extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
+  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
   VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
@@ -36,11 +37,10 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   SelfSym(self), OOVariableSym(instanceVarAccess), OOFunctionSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  ImportSym(..), RenderBody(..), RenderType(..), RenderVariable(varFromData),
-  InternalVarElim(variableBind),
-  MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
-  BlockCommentSym(..), ScopeElim(scopeData))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  RenderBody(..), RenderType(..), RenderVariable(varFromData),
+  InternalVarElim(variableBind), MethodTypeSym(mType),
+  RenderMethod(commentedFunc, mthdFromData), BlockCommentSym(..), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S
 import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalVarElim(variable), ValueElim(..),

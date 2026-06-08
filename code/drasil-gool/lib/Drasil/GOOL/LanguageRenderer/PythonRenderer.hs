@@ -11,8 +11,8 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
-  VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
+  VSType, VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -31,17 +31,16 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
+  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
+  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter, method,
   blockComment')

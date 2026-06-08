@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
@@ -7,21 +8,20 @@ module Drasil.Shared.InterfaceCommon (
   MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
   DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
-  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), ScopeSym(..), convScope,
+  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
-  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
+  IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..), listSlice,
+  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..),
-  convType
+  BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -50,6 +50,9 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
+
+class UnRepr repr contents where
+  unRepr :: repr contents -> contents
 
 type MSBody a = MS (a (Body a))
 

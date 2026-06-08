@@ -12,8 +12,8 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
   TypeElim(getType, getTypeString), VariableElim(..), ValueSym(Value, valueType),
   VisibilitySym(..))
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
@@ -22,8 +22,8 @@ import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  UnRepr(..), InternalVarElim(variableBind), RenderValue(valFromData),
-  ValueElim(valuePrec), ScopeElim(scopeData))
+  InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
+  ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),

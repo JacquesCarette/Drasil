@@ -5,10 +5,10 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
   constDecDef, classMethodCall
 ) where
 
-import Drasil.Shared.InterfaceCommon (SVariable, SValue, VSType, MSStatement,
-  NamedArgs, VariableElim(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  ScopeElim(..), RenderValue(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SVariable, SValue, VSType,
+  MSStatement, NamedArgs, VariableElim(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ScopeElim(..),
+  RenderValue(..))
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt)
 import Drasil.Shared.LanguageRenderer (dot)
 import Drasil.GOOL.Renderers (renderType, renderConstDecDef)

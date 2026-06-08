@@ -5,10 +5,10 @@ module Drasil.GProc.Renderers (
   renderType, renderParam, renderListDec, renderConstDecDef
 ) where
 
-import Drasil.Shared.InterfaceCommon (VariableSym(..), VariableElim(..),
-  ValueSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  InternalVarElim(..), ValueElim(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
+  VariableElim(..), ValueSym(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, InternalVarElim(..),
+  ValueElim(..))
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import Drasil.Shared.LanguageRenderer (new', constDec')
 import Drasil.Shared.CodeType (CodeType(..))

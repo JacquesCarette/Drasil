@@ -14,9 +14,9 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
 import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
+  VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
+  NamedArgs, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -36,17 +36,17 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.GOOL.Renderers (renderType, renderParam,)
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  InternalBinderElim(..), RenderValue(..), ValueElim(valuePrec, valueInt),
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
+  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
+  RenderVariable(..), InternalVarElim(variableBind), InternalBinderElim(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment', InternalBinderElim(binderElim), RenderValue(call))

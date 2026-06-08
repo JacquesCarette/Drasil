@@ -13,10 +13,10 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
-  SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
+  SValue, litZero, SVariable, MSStatement, MSBlock, SMethod, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
@@ -29,11 +29,11 @@ import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
-  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
+  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
+  ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),

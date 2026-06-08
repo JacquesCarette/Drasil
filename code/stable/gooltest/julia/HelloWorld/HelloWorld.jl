@@ -153,7 +153,7 @@ elseif b == 5
     global c -= 1
     global b -= 1
     global myList = Int64[]
-    const myConst = "Imconstant";
+    const myConst = "Imconstant"
     println(myConst)
     println(a)
     println(b)

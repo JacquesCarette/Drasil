@@ -52,7 +52,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   break, continue, constDec', assign, subAssign, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
-  typeBinExpr, mkStmt, mkStmtNoEnd)
+  typeBinExpr, mkStmtNoEnd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
@@ -745,7 +745,7 @@ jlConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
-  mkStmt $ decDoc <+> RC.variable v <+> equals <+> RC.value def
+  mkStmtNoEnd $ decDoc <+> RC.variable v <+> equals <+> RC.value def
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label

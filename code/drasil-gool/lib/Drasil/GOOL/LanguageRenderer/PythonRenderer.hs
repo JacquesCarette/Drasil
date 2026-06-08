@@ -33,7 +33,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
+  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
@@ -68,17 +68,18 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, classMethodCall, call, funcAppMixedArgs,
-  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd,
-  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, local)
+  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers', arrayDecAsList)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
@@ -219,9 +220,6 @@ instance TypeElim PythonCode where
 instance RenderType PythonCode where
   multiType _ = typeFromData Void "" empty
   typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim PythonCode where
-  type' = renderType
 
 instance UnaryOpSym PythonCode where
   notOp = pyNotOp
@@ -433,7 +431,7 @@ instance ValueElim PythonCode where
 
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  classMethodCallMixedArgs' = G.classMethodCall
+  classMethodCallMixedArgs' = CG.classMethodCall
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData

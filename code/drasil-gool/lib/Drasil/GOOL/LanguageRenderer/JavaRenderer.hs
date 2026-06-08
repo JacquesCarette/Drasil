@@ -2,6 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The logic to render Java code is contained in this module
 module Drasil.GOOL.LanguageRenderer.JavaRenderer (
@@ -34,7 +35,7 @@ import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
+  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
@@ -60,10 +61,10 @@ import Drasil.Shared.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel
   parameterList, appendToBody, surroundBody, intValue, valueList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
-  multiStmt, body, printFile, param, listDec, classVarAccess, cast, castObj,
+  multiStmt, body, printFile, classVarAccess, cast, castObj,
   classLevel, instanceLevel, break, continue, private, public, blockCmt, docCmt,
   addComments, commentedMod, commentedItem)
-import Drasil.GOOL.Renderers (renderType)
+import Drasil.GOOL.Renderers (renderType, renderParam, renderListDec)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
@@ -72,13 +73,13 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, classMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda,
+  func, get, set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
@@ -89,6 +90,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
@@ -230,9 +232,6 @@ instance TypeElim JavaCode where
 instance RenderType JavaCode where
   multiType _ = error $ C.multiTypeError jName
   typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim JavaCode where
-  type' = renderType
 
 instance UnaryOpSym JavaCode where
   notOp = C.notOp
@@ -459,7 +458,7 @@ instance InternalValueExp JavaCode where
     mem <- getMethodExcMap
     let tp = getTypeString cls
     modify (maybe id addExceptions (Map.lookup (qualName tp f) mem))
-    G.classMethodCall f t c ps ns
+    CG.classMethodCall f t c ps ns
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
@@ -598,7 +597,7 @@ instance DeclStatement JavaCode where
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v')
+  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
     (litInt n) v scp)
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
@@ -708,7 +707,7 @@ instance OOMethodTypeSym JavaCode where
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
-  param = G.param R.param
+  param = G.param renderParam
   pointerParam = param
 
 instance RenderParam JavaCode where
@@ -898,7 +897,7 @@ jSystem = text . access "System"
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
 
-jListType :: (CommonRenderSym r) => VSType r -> VSType r
+jListType :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
 jListType t = do
   modify (addLangImportVS $ utilImport arrayList)
   t >>= (jListType' . getType)
@@ -911,7 +910,7 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
-jSetType :: (OORenderSym r) => VSType r -> VSType r
+jSetType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
 jSetType t = do
   modify (addLangImportVS $ utilImport "Set")
   t >>= (jSetType' . getType)

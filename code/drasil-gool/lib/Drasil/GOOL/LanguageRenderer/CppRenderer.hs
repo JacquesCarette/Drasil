@@ -35,18 +35,18 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   selfFuncApp, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
-import Drasil.GOOL.Renderers (renderType)
+import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..),
-  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  InternalVarElim(variableBind), InternalBinderElim(..), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MSMthdType, MethodTypeSym(..),
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  InternalBinderElim(..), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
@@ -64,7 +64,7 @@ import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
-  body, param, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
+  body, stateVar, constVar, cast, castObj, classLevel, instanceLevel,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
@@ -85,8 +85,9 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef,
-  docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
+  call', listSizeFunc, listAccessFunc', containsInt, string, docInOutFunc,
+  extraClass, intToIndex, indexToInt, global, setMethodCall)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -244,9 +245,6 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
 instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
   multiType = pair1List multiType multiType
   typeFromData t s d = on2StateValues pair (typeFromData t s d) (typeFromData t s d)
-
-instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
-  type' s = renderType $ pfst s
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   notOp = on2StateValues pair notOp notOp
@@ -1182,9 +1180,6 @@ instance RenderType CppSrcCode where
   multiType _ = error $ C.multiTypeError cppName
   typeFromData t s d = toState (toCode $ td t s d)
 
-instance InternalTypeElim CppSrcCode where
-  type' = renderType
-
 instance UnaryOpSym CppSrcCode where
   notOp = C.notOp
   negateOp = G.negateOp
@@ -1550,7 +1545,7 @@ instance DeclStatement CppSrcCode where
     decBase <- arrayDecBase vr scp
     vs <- mapM (zoom lensMStoVS) vals
     mkStmt $ decBase <+> braces (valueList vs)
-  constDecDef = CP.constDecDef
+  constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
 instance OODeclStatement CppSrcCode where
@@ -1681,7 +1676,7 @@ instance OOMethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
-  param = G.param R.param
+  param = G.param renderParam
   pointerParam = G.param cppPointerParamDoc
 
 instance RenderParam CppSrcCode where
@@ -1930,9 +1925,6 @@ instance TypeElim CppHdrCode where
 instance RenderType CppHdrCode where
   multiType _ = error $ C.multiTypeError cppName
   typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim CppHdrCode where
-  type' = renderType
 
 instance UnaryOpSym CppHdrCode where
   notOp = mkOp 0 empty
@@ -2261,7 +2253,7 @@ instance DeclStatement CppHdrCode where
   listDecDef _ _ _ = emptyStmt
   arrayDec _ _ _ = emptyStmt
   arrayDecDef _ _ _ = emptyStmt
-  constDecDef = CP.constDecDef
+  constDecDef = CG.constDecDef
   funcDecDef _ _ _ _ = emptyStmt
 
 instance OODeclStatement CppHdrCode where
@@ -2360,7 +2352,7 @@ instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
   param v' = do
     v <- zoom lensMStoVS v'
-    paramFromData v' (R.param v)
+    paramFromData v' (renderParam v)
   pointerParam v' = do
     v <- zoom lensMStoVS v'
     paramFromData v' (cppPointerParamDoc v)

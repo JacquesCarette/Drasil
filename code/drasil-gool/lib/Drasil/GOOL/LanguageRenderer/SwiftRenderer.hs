@@ -35,15 +35,15 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   UnRepr(..), ImportSym(..), ImportElim, RenderBody(..), BodyElim,
-  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..),
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
-  VisibilityElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
+  RenderBlock(..), BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, binderElim, value, function, statement, visibility,
   parameter, method, blockComment')
@@ -70,14 +70,13 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, classMethodCall, call, funcAppMixedArgs,
-  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd,
-  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
-  implementingClass, docClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, increment, objDecNew, print, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  function, docFunc, buildClass, implementingClass, docClass, commentedClass,
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -92,6 +91,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal, arrayDecAsList)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -234,9 +234,6 @@ instance RenderType SwiftCode where
     let mt = tuple $ map getTypeString typs
     typeFromData Void mt (text mt)
   typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim SwiftCode where
-  type' = renderType
 
 instance UnaryOpSym SwiftCode where
   notOp = C.notOp
@@ -444,7 +441,7 @@ instance ValueElim SwiftCode where
 
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  classMethodCallMixedArgs' = G.classMethodCall
+  classMethodCallMixedArgs' = CG.classMethodCall
 
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData

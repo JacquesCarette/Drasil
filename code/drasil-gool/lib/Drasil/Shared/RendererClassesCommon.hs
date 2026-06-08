@@ -4,8 +4,8 @@
 module Drasil.Shared.RendererClassesCommon (
   CommonRenderSym, UnRepr(..), ImportSym(..), ImportElim(..),
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
-  InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
-  OpElim(..), RenderVariable(..), InternalVarElim(..), InternalBinderElim(..),
+  VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), OpElim(..),
+  RenderVariable(..), InternalVarElim(..), InternalBinderElim(..),
   RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(..),
@@ -42,11 +42,10 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
   ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r,
   InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r,
-  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r,
-  RenderVariable r, InternalVarElim r, InternalBinderElim r, ImportSym r,
-  ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r, RenderMethod r, MethodElim r,
-  ParameterSym r, ScopeElim r
+  RenderType r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r,
+  InternalBinderElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
+  MethodElim r, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
@@ -81,9 +80,6 @@ class BlockElim r where
 class RenderType r where
   multiType :: [VSType r] -> VSType r
   typeFromData :: CodeType -> String -> Doc -> VSType r
-
-class InternalTypeElim r where
-  type' :: r TypeData -> Doc
 
 type VSUnOp a = VS (a OpData)
 

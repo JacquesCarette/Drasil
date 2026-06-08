@@ -1,18 +1,19 @@
+{-# LANGUAGE FlexibleContexts #-}
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVarAccess,
   instanceVarSelf, indexOf, contains, containsInt, listAddFunc, discardFileLine,
   intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec,
   arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', call',
-  listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
-  bindingError, extFuncAppMixedArgs, notNull, listDecDef, destructorError,
-  stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
-  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
-  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
-  forLoopError, mainBody, inOutFunc, docInOutFunc', bool,
-  floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
-  listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
-  varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall) where
+  listSizeFunc, listAccessFunc', string, docInOutFunc, bindingError,
+  extFuncAppMixedArgs, notNull, listDecDef, destructorError, stateVarDef,
+  constVar, litArray, litSet, listSetFunc, litSetFunc, extraClass,
+  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
+  mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
+  string', inherit, implements, listSize, setDecDef, setDec, listAdd, listAppend,
+  intToIndex, indexToInt, intToIndex', indexToInt', varDecDef, openFileR',
+  openFileW', openFileA', argExists, global, setMethodCall) where
 
 import Utils.Drasil (stringList)
 import Drasil.FileHandling.Legacy (indent)
@@ -31,51 +32,40 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), IndexTranslator(intToIndex, indexToInt),
   ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..))
-
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   SelfSym(self), OOVariableSym(instanceVarAccess), OOFunctionSym(..))
-
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  RenderBody(..), RenderType(..), RenderVariable(varFromData),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
+  ImportSym(..), RenderBody(..), RenderType(..), RenderVariable(varFromData),
   InternalVarElim(variableBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..), ScopeElim(scopeData))
-
 import qualified Drasil.Shared.RendererClassesCommon as S
-
 import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
-  BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
+  BodyElim(..), InternalVarElim(variable), ValueElim(..),
   StatementElim(statement), VisibilityElim(..), MethodElim(..), FunctionElim(..))
-
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, onStateList)
-
 import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
   ParentSpec)
-
 import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
   OORenderMethod(intFunc), RenderClass(intClass, inherit),
   RenderMod(modFromData))
-
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..),
   StateVarElim(..), ClassElim(..))
-
 import Drasil.Shared.LanguageRenderer (listAccessFunc, listSetFunc, array', new', args, array, listSep, access,
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
   moduleDox, variableList, valueList, intValue)
-
+import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
-  print, stateVar, stateVarList, constDecDef)
+  print, stateVar, stateVarList)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
-
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
-
-import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
-
+import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
+  TypeData)
 import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -131,14 +121,14 @@ doxMod = docMod moduleDox
 
 -- Python, Java, and C# --
 
-classVarAccess :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
-  SVariable r
+classVarAccess :: (CommonRenderSym r, UnRepr r TypeData) =>
+  (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> SVariable r
 classVarAccess f c' v'= do
   c <- c'
   v <- v'
   vr <- varFromData
     (variableBind v) (getTypeString c `access` variableName v)
-    (toState $ variableType v) (f (RC.type' c) (RC.variable v))
+    (toState $ variableType v) (f (renderType c) (RC.variable v))
   toState $ classVarAccessCheck vr
 
 instanceVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
@@ -190,11 +180,11 @@ buildModule n imps topDoc bot fs cs = S.modFromData n (do
 
 -- Java and C# --
 
-arrayType :: (CommonRenderSym r) => VSType r -> VSType r
+arrayType :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
 arrayType t' = do
   t <- t'
   typeFromData (Array (getType t))
-    (getTypeString t ++ array) (RC.type' t <> brackets empty)
+    (getTypeString t ++ array) (renderType t <> brackets empty)
 
 pi :: (CommonRenderSym r) => SValue r
 pi = mkStateVal IC.double (text $ mathFunc "PI")
@@ -205,8 +195,8 @@ printSt va' vb' = do
   vb <- zoom lensMStoVS vb'
   mkStmt (R.print va vb)
 
-arrayDec :: (CommonRenderSym r) => SValue r -> SVariable r -> r ScopeData
-  -> MSStatement r
+arrayDec :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SVariable r ->
+  r ScopeData -> MSStatement r
 arrayDec n vr scp = do
   sz <- zoom lensMStoVS n
   v <- zoom lensMStoVS vr
@@ -214,8 +204,8 @@ arrayDec n vr scp = do
   modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ listInnerType $ return tp
-  mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+>
-    RC.type' innerTp <> brackets (RC.value sz)
+  mkStmt $ renderType tp <+> RC.variable v <+> equals <+> new' <+>
+    renderType innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SValue r] -> MSStatement r
@@ -228,14 +218,14 @@ openFileA :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r -> SValue 
   SVariable r -> SValue r -> MSStatement r
 openFileA f vr vl = vr &= f vl outfile IC.litTrue
 
-forEach :: (CommonRenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r
-  -> MSBody r -> MSStatement r
+forEach :: (CommonRenderSym r, UnRepr r TypeData) => Doc -> Doc -> Doc -> Doc ->
+  SVariable r -> SValue r -> MSBody r -> MSStatement r
 forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
   mkStmtNoEnd $ vcat [
-    forEachLabel <+> parens (RC.type' (variableType e) <+> RC.variable e <+>
+    forEachLabel <+> parens (renderType (variableType e) <+> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
     bEnd]
@@ -248,10 +238,11 @@ docMain :: (OORenderSym r) => MSBody r -> SMethod r
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
-mainFunction :: (OORenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
+mainFunction :: (OORenderSym r, UnRepr r TypeData) => VSType r -> Label ->
+  MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
-  (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
+  (render (renderType argT) ++ array) (renderType argT <> array'))))]
 
 -- | Used by the language renderers to build the module.
 --   n is the module name
@@ -295,15 +286,6 @@ stringRender = "string"
 
 string :: (CommonRenderSym r) => VSType r
 string = typeFromData String stringRender (text stringRender)
-
-constDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
-  -> MSStatement r
-constDecDef vr' scp v'= do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  modify $ useVarName $ variableName vr
-  modify $ setVarScope (variableName vr) (scopeData scp)
-  mkStmt (R.constDecDef vr v)
 
 docInOutFunc :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->

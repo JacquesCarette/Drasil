@@ -34,7 +34,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
+  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
@@ -52,16 +52,17 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
-import Drasil.GOOL.Renderers (renderType)
+import Drasil.GOOL.Renderers (renderType, renderParam, renderMethod,
+  renderListDec)
 import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel,
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, param, method, listDec, classVarAccess, func, cast, listSetFunc,
-  castObj, classLevel, instanceLevel, break, continue, private, public,
-  blockCmt, docCmt, addComments, commentedMod, commentedItem)
+  printFile, classVarAccess, func, cast, listSetFunc, castObj, classLevel,
+  instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
+  commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
@@ -70,20 +71,22 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, classMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess, constDecDef,
+  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex, listAddFunc,
   listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
+  classMethodCall)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
@@ -234,9 +237,6 @@ instance TypeElim CSharpCode where
 instance RenderType CSharpCode where
   multiType _ = error $ C.multiTypeError csName
   typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim CSharpCode where
-  type' = renderType
 
 instance UnaryOpSym CSharpCode where
   notOp = C.notOp
@@ -433,7 +433,7 @@ instance ValueElim CSharpCode where
 
 instance InternalValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  classMethodCallMixedArgs' = G.classMethodCall
+  classMethodCallMixedArgs' = CG.classMethodCall
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
@@ -572,12 +572,12 @@ instance DeclStatement CSharpCode where
   varDecDef = C.varDecDef Semi
   setDec = varDec
   setDecDef = varDecDef
-  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v')
+  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
     (litInt n) v scp)
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
-  constDecDef = CP.constDecDef
+  constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
 instance OODeclStatement CSharpCode where
@@ -682,7 +682,7 @@ instance OOMethodTypeSym CSharpCode where
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
-  param = G.param R.param
+  param = G.param renderParam
   pointerParam = param
 
 instance RenderParam CSharpCode where
@@ -725,7 +725,7 @@ instance OORenderMethod CSharpCode where
     modify (if m then setCurrMain else id)
     tp <- t
     pms <- sequence ps
-    toCode . mthd . R.method n s p tp pms <$> b
+    toCode . mthd . renderMethod n s p tp pms <$> b
   intFunc = C.intFunc
   destructor _ = error $ CP.destructorError csName
 

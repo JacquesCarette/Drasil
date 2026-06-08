@@ -31,7 +31,7 @@ import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, UnRepr(..),
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim(..), UnaryOpSym(..), BinaryOpSym(..),
+  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
@@ -211,9 +211,6 @@ instance RenderType JuliaCode where
     let mt = jlTuple $ map getTypeString typs
     typeFromData Void mt (text mt)
   typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim JuliaCode where
-  type' = renderType
 
 instance UnaryOpSym JuliaCode where
   notOp = C.notOp

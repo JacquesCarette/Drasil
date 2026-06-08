@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
@@ -21,17 +22,18 @@ import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
-  ValueElim(valuePrec), ScopeElim(scopeData))
+  UnRepr(..), RenderType(..), InternalVarElim(variableBind),
+  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(variable), ValueElim(value),
-  StatementElim(statement))
+  InternalVarElim(variable), ValueElim(value), StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData)
+import Drasil.GOOL.Renderers (renderType)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
+  TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
@@ -66,17 +68,17 @@ double = typeFromData Double doubleRender (text doubleRender)
 char :: (CommonRenderSym r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
-listType :: (CommonRenderSym r) => String -> VSType r -> VSType r
+listType :: (CommonRenderSym r, UnRepr r TypeData) => String -> VSType r -> VSType r
 listType lst t' = do
   t <- t'
   typeFromData (List (getType t)) (lst
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
+    `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (OORenderSym r) => String -> VSType r -> VSType r
+setType :: (OORenderSym r, UnRepr r TypeData) => String -> VSType r -> VSType r
 setType lst t' = do
   t <- t'
   typeFromData (Set (getType t)) (lst
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
+    `containing` getTypeString t) $ text lst <> angles (renderType t)
 
 void :: (CommonRenderSym r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
@@ -145,14 +147,14 @@ decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r) => r (Attachment r) -> r (Attachment r) -> Doc ->
-  SVariable r -> r ScopeData -> MSStatement r
+varDec :: (OORenderSym r, UnRepr r TypeData) => r (Attachment r) ->
+  r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
-    <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
+    <+> renderType (variableType v) <+> (ptrdoc (getType (variableType v)) <>
     RC.variable v))
   where bind ClassLevel = s
         bind InstanceLevel = d

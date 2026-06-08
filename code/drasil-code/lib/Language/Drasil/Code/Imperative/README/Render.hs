@@ -1,5 +1,5 @@
 -- | Markdown file creator for generated GOOL code.
-module Language.Drasil.Code.Imperative.CreateMd (
+module Language.Drasil.Code.Imperative.README.Render (
     -- * Main Function
     makeMd,
     -- * Section Creators
@@ -7,12 +7,12 @@ module Language.Drasil.Code.Imperative.CreateMd (
     where
 
 import Prelude hiding ((<>))
+import Data.Char (toUpper)
 import Data.Maybe (catMaybes, mapMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, empty, vcat, text, (<+>),
     (<>), punctuate, hsep)
 
 import Drasil.FileHandling.Legacy (contSep, listToDoc, Separator)
-import Data.Char (toUpper)
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Maybe Doc] -> Doc

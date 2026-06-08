@@ -64,7 +64,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
-  mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
+  mkStateVal, mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
@@ -99,7 +99,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
-  TypeData(..), td, ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
+  TypeData(..), ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
   commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BinderD(..),
   bindFormD)
@@ -236,7 +236,6 @@ instance TypeElim CSharpCode where
 
 instance RenderType CSharpCode where
   multiType _ = error $ C.multiTypeError csName
-  typeFromData t s d = toState $ toCode $ td t s d
 
 instance UnaryOpSym CSharpCode where
   notOp = C.notOp
@@ -789,7 +788,7 @@ csVersion = "6.0"
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
 
-csBoolType :: (CommonRenderSym r) => VSType r
+csBoolType :: (Monad r) => VSType r
 csBoolType = typeFromData Boolean csBool (text csBool)
 
 csFuncType :: [VSType CSharpCode] -> VSType CSharpCode -> VSType CSharpCode
@@ -845,11 +844,11 @@ csSysAccess = access csSystem
 csUnaryMath :: (Monad r) => String -> VSOp r
 csUnaryMath = addSystemImport . unOpPrec . mathFunc
 
-csInfileType :: (CommonRenderSym r) => VSType r
+csInfileType :: (Monad r) => VSType r
 csInfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData InFile csReader (text csReader)
 
-csOutfileType :: (CommonRenderSym r) => VSType r
+csOutfileType :: (Monad r) => VSType r
 csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData OutFile csWriter (text csWriter)
 

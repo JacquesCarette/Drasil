@@ -52,9 +52,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
   break, continue, constDec', assign, subAssign, addAssign)
-import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
-  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
-  typeBinExpr, mkStmt, mkStmtNoEnd)
+import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal,
+  typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec,
+  typeUnExpr, typeBinExpr, mkStmt, mkStmtNoEnd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
@@ -84,7 +84,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
-  ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
+  ParamData(..), ProgData(..), TypeData(..), ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
   ScopeData(..), sd, BinderD(..), bindFormD)
@@ -210,7 +210,6 @@ instance RenderType JuliaCode where
     typs <- sequence ts
     let mt = jlTuple $ map getTypeString typs
     typeFromData Void mt (text mt)
-  typeFromData t s d = toState $ toCode $ td t s d
 
 instance UnaryOpSym JuliaCode where
   notOp = C.notOp
@@ -951,40 +950,40 @@ jlParam :: JuliaCode (Variable JuliaCode) -> Doc
 jlParam v = RC.variable v <> jlType <> renderType (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
-jlIntType :: (CommonRenderSym r) => VSType r
+jlIntType :: (Monad r) => VSType r
 jlIntType = typeFromData Integer jlIntConc (text jlIntConc)
 
-jlFloatType :: (CommonRenderSym r) => VSType r
+jlFloatType :: (Monad r) => VSType r
 jlFloatType = typeFromData Float jlFloatConc (text jlFloatConc)
 
-jlDoubleType :: (CommonRenderSym r) => VSType r
+jlDoubleType :: (Monad r) => VSType r
 jlDoubleType = typeFromData Double jlDoubleConc (text jlDoubleConc)
 
-jlCharType :: (CommonRenderSym r) => VSType r
+jlCharType :: (Monad r) => VSType r
 jlCharType = typeFromData Char jlCharConc (text jlCharConc)
 
-jlStringType :: (CommonRenderSym r) => VSType r
+jlStringType :: (Monad r) => VSType r
 jlStringType = typeFromData String jlStringConc (text jlStringConc)
 
-jlInfileType :: (CommonRenderSym r) => VSType r
+jlInfileType :: (Monad r) => VSType r
 jlInfileType = typeFromData InFile jlFile (text jlFile)
 
-jlOutfileType :: (CommonRenderSym r) => VSType r
+jlOutfileType :: (Monad r) => VSType r
 jlOutfileType = typeFromData OutFile jlFile (text jlFile)
 
-jlListType :: (CommonRenderSym r) => VSType r -> VSType r
+jlListType :: (CommonRenderSym r, Monad r) => VSType r -> VSType r
 jlListType t' = do
   t <- t'
   let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (List $ getType t) typeName (text typeName)
 
-jlSetType :: (CommonRenderSym r) => VSType r -> VSType r
+jlSetType :: (CommonRenderSym r, Monad r) => VSType r -> VSType r
 jlSetType t' = do
   t <- t'
   let typeName = jlSetConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (Set $ getType t) typeName (text typeName)
 
-jlVoidType :: (CommonRenderSym r) => VSType r
+jlVoidType :: (Monad r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
 
 jlNull :: Label

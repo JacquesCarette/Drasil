@@ -15,11 +15,12 @@ import Drasil.Shared.InterfaceCommon (VSType, SVariable, TypeElim(getType),
   MixedCall, SValue, VSFunction, ValueSym(valueType, Value), MSBody,
   MSStatement, VariableElim(variableName), VariableSym(Variable), Label,
   Library, BodySym(Body))
-import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
+import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
+  RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc)
 import qualified Drasil.Shared.RendererClassesCommon as RC (value, functionType, function)
-import Drasil.Shared.LanguageRenderer.Constructors
+import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, mkVal, typeFromData)
 import Drasil.Shared.Helpers (on2StateValues, onStateValue)
 import Drasil.Shared.State (lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (emptyStmt, assign)
@@ -31,7 +32,7 @@ import Drasil.Shared.AST (ScopeData)
 boolRender :: String
 boolRender = "Bool"
 
-bool :: (CommonRenderSym r) => VSType r
+bool :: (Monad r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
@@ -41,7 +42,7 @@ extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, and Julia --
 
-funcType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+funcType :: (CommonRenderSym r, Monad r) => [VSType r] -> VSType r -> VSType r
 funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'

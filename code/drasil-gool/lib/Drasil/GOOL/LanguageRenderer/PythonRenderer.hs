@@ -61,8 +61,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   commentedMod, commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec,
-  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar)
+  mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
+  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -83,7 +83,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
-  td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
+  ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
   BinderD(..), bindFormD, AttachmentTag(..), AttachmentData(..), ad)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
@@ -219,7 +219,6 @@ instance TypeElim PythonCode where
 
 instance RenderType PythonCode where
   multiType _ = typeFromData Void "" empty
-  typeFromData t s d = toState $ toCode $ td t s d
 
 instance UnaryOpSym PythonCode where
   notOp = pyNotOp
@@ -967,7 +966,7 @@ pyInlineIf c' v1' v2' = do
 pyLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
-pyStringType :: (CommonRenderSym r) => VSType r
+pyStringType :: (Monad r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs :: (CommonRenderSym r) => Library -> MixedCtorCall r

@@ -60,7 +60,7 @@ import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, mkVal, mkVal)
+  mkStateVal, mkStateVar, mkVal, mkVal, typeFromData)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
@@ -100,7 +100,7 @@ global = toCode $ sd Global
 intRender :: String
 intRender = "int"
 
-int :: (CommonRenderSym r) => VSType r
+int :: (Monad r) => VSType r
 int = typeFromData Integer intRender (text intRender)
 
 constructor :: (OORenderSym r) => Label -> [MSParameter r] -> Initializers r ->
@@ -180,7 +180,7 @@ buildModule n imps topDoc bot fs cs = S.modFromData n (do
 
 -- Java and C# --
 
-arrayType :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+arrayType :: (CommonRenderSym r, UnRepr r TypeData, Monad r) => VSType r -> VSType r
 arrayType t' = do
   t <- t'
   typeFromData (Array (getType t))
@@ -238,7 +238,7 @@ docMain :: (OORenderSym r) => MSBody r -> SMethod r
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
-mainFunction :: (OORenderSym r, UnRepr r TypeData) => VSType r -> Label ->
+mainFunction :: (OORenderSym r, UnRepr r TypeData, Monad r) => VSType r -> Label ->
   MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
@@ -284,7 +284,7 @@ listAccessFunc' f t i = IG.func f t [intValue i]
 stringRender :: String
 stringRender = "string"
 
-string :: (CommonRenderSym r) => VSType r
+string :: (Monad r) => VSType r
 string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] ->
@@ -367,7 +367,7 @@ extraClass n = S.intClass n public . S.inherit
 doubleRender :: String
 doubleRender = "Double"
 
-double :: (CommonRenderSym r) => VSType r
+double :: (Monad r) => VSType r
 double = typeFromData Double doubleRender (text doubleRender)
 
 openFileR :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r
@@ -467,13 +467,13 @@ docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
 floatRender :: String
 floatRender = "Float"
 
-float :: (CommonRenderSym r) => VSType r
+float :: (Monad r) => VSType r
 float = typeFromData Float floatRender (text floatRender)
 
 stringRender' :: String
 stringRender' = "String"
 
-string' :: (CommonRenderSym r) => VSType r
+string' :: (Monad r) => VSType r
 string' = typeFromData String stringRender' (text stringRender')
 
 -- C# and Swift --

@@ -79,7 +79,6 @@ class BlockElim r where
 
 class RenderType r where
   multiType :: [VSType r] -> VSType r
-  typeFromData :: CodeType -> String -> Doc -> VSType r
 
 type VSUnOp a = VS (a OpData)
 

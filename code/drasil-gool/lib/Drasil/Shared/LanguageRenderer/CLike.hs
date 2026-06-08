@@ -22,8 +22,8 @@ import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  UnRepr(..), RenderType(..), InternalVarElim(variableBind),
-  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData))
+  UnRepr(..), InternalVarElim(variableBind), RenderValue(valFromData),
+  ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -38,8 +38,8 @@ import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
   decrement, this', this)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
+  mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName, setVarScope)
 
@@ -59,28 +59,30 @@ doubleRender = "double"
 charRender = "char"
 voidRender = "void"
 
-float :: (CommonRenderSym r) => VSType r
+float :: (Monad r) => VSType r
 float = typeFromData Float floatRender (text floatRender)
 
-double :: (CommonRenderSym r) => VSType r
+double :: (Monad r) => VSType r
 double = typeFromData Double doubleRender (text doubleRender)
 
-char :: (CommonRenderSym r) => VSType r
+char :: (Monad r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
-listType :: (CommonRenderSym r, UnRepr r TypeData) => String -> VSType r -> VSType r
+listType :: (CommonRenderSym r, Monad r, UnRepr r TypeData) => String ->
+  VSType r -> VSType r
 listType lst t' = do
   t <- t'
   typeFromData (List (getType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (OORenderSym r, UnRepr r TypeData) => String -> VSType r -> VSType r
+setType :: (OORenderSym r, Monad r, UnRepr r TypeData) => String -> VSType r ->
+  VSType r
 setType lst t' = do
   t <- t'
   typeFromData (Set (getType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-void :: (CommonRenderSym r) => VSType r
+void :: (Monad r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
 
 -- Unary Operators --

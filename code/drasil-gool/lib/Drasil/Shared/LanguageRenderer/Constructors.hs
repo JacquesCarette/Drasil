@@ -1,9 +1,9 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
   mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
-  VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
-  andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
-  binExpr', binExprNumDbl', typeBinExpr
+  typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec,
+  powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr,
+  binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
 import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
@@ -14,7 +14,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
-  TypeData)
+  TypeData, td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (VS)
@@ -56,6 +56,10 @@ mkVar n t = varFromData InstanceLevel n (toState t)
 -- | Constructs a classLevel variable in a stateful context
 mkClassVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkClassVar = varFromData ClassLevel
+
+-- Types --
+typeFromData :: (Monad r) => CodeType -> String -> Doc -> VSType r
+typeFromData t s d = return $ return $ td t s d
 
 -- Operators --
 

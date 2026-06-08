@@ -41,7 +41,7 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   ($.), AttachmentSym(..), convTypeOO)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (
   InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
   InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType),
   RenderStatement(stmtFromData), StatementElim(statementTerm),
@@ -64,8 +64,8 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
   ScopeData, sd, TypeData(..), BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
-  toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
-  on2StateWrapped)
+  toState, onStateValue, on2StateValues, onStateList, getInnerType,
+  getNestDegree, on2StateWrapped)
 import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName,
   valueList, namedArgList)
@@ -73,7 +73,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
   addAssign, subAssign, return', comment, getTerm, var, instanceVarAccess, arg, func,
   objAccess, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec,
+  mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, typeFromData, VSOp, unOpPrec,
   compEqualPrec, compPrec, addPrec, multPrec)
 import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
@@ -106,7 +106,7 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 listInnerType :: (OORenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convTypeOO . getInnerType . getType)
 
-obj :: (CommonRenderSym r) => ClassName -> VSType r
+obj :: (Monad r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
 
 -- Unary Operators --
@@ -472,7 +472,7 @@ tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
 
-construct :: (CommonRenderSym r) => Label -> MS (r TypeData)
+construct :: (Monad r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (CommonRenderSym r) => (r (Variable r) -> Doc) -> SVariable r ->

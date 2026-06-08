@@ -66,8 +66,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   addComments, commentedMod, commentedItem)
 import Drasil.GOOL.Renderers (renderType, renderParam, renderListDec)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
-  VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
-  binExprNumDbl', typeBinExpr)
+  typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl,
+  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -94,7 +94,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
+  ProgData(..), progD, TypeData(..), ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
@@ -231,7 +231,6 @@ instance TypeElim JavaCode where
 
 instance RenderType JavaCode where
   multiType _ = error $ C.multiTypeError jName
-  typeFromData t s d = toState $ toCode $ td t s d
 
 instance UnaryOpSym JavaCode where
   notOp = C.notOp
@@ -822,15 +821,15 @@ jVersion = "14"
 jImport :: Label -> Doc
 jImport n = importLabel <+> text n <> endStatement
 
-jBoolType :: (CommonRenderSym r) => VSType r
+jBoolType :: (Monad r) => VSType r
 jBoolType = typeFromData Boolean jBool (text jBool)
 
-jInfileType :: (CommonRenderSym r) => VSType r
+jInfileType :: (Monad r) => VSType r
 jInfileType = do
   tpf <- typeFromData InFile jScanner jScanner'
   modifyReturn (addLangImportVS $ utilImport jScanner) tpf
 
-jOutfileType :: (CommonRenderSym r) => VSType r
+jOutfileType :: (Monad r) => VSType r
 jOutfileType = do
   tpf <- typeFromData OutFile jPrintWriter (text jPrintWriter)
   modifyReturn (addLangImportVS $ ioImport jPrintWriter) tpf
@@ -897,7 +896,7 @@ jSystem = text . access "System"
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
 
-jListType :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+jListType :: (CommonRenderSym r, UnRepr r TypeData, Monad r) => VSType r -> VSType r
 jListType t = do
   modify (addLangImportVS $ utilImport arrayList)
   t >>= (jListType' . getType)
@@ -910,7 +909,7 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
-jSetType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+jSetType :: (OORenderSym r, UnRepr r TypeData, Monad r) => VSType r -> VSType r
 jSetType t = do
   modify (addLangImportVS $ utilImport "Set")
   t >>= (jSetType' . getType)

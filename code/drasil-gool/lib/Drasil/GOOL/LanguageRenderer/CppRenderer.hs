@@ -68,8 +68,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec,
-  unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
+  mkStateVal, mkVal, mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec,
+  powerPrec, unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -98,7 +98,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
   onAttachment, AttachmentData(..), ad, FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td,
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..),
   ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, CommonThunk,
   pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim, ScopeData)
@@ -244,7 +244,6 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
   multiType = pair1List multiType multiType
-  typeFromData t s d = on2StateValues pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   notOp = on2StateValues pair notOp notOp
@@ -1178,7 +1177,6 @@ instance TypeElim CppSrcCode where
 
 instance RenderType CppSrcCode where
   multiType _ = error $ C.multiTypeError cppName
-  typeFromData t s d = toState (toCode $ td t s d)
 
 instance UnaryOpSym CppSrcCode where
   notOp = C.notOp
@@ -1924,7 +1922,6 @@ instance TypeElim CppHdrCode where
 
 instance RenderType CppHdrCode where
   multiType _ = error $ C.multiTypeError cppName
-  typeFromData t s d = toState $ toCode $ td t s d
 
 instance UnaryOpSym CppHdrCode where
   notOp = mkOp 0 empty
@@ -2741,18 +2738,18 @@ usingNameSpace n Nothing = using <+> namespace <+> text n <> endStatement
 cppInherit :: Maybe Label -> Doc -> Doc
 cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
-cppBoolType :: (CommonRenderSym r) => VSType r
+cppBoolType :: (Monad r) => VSType r
 cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
-cppInfileType :: (CommonRenderSym r) => VSType r
+cppInfileType :: (Monad r) => VSType r
 cppInfileType = do
   t <- typeFromData InFile cppInfile (text cppInfile)
   addFStreamImport t
 
-argvType :: (RenderType r) => VSType r
+argvType :: (Monad r) => VSType r
 argvType = typeFromData (Array String) "const char**" (text "const char**")
 
-cppOutfileType :: (CommonRenderSym r) => VSType r
+cppOutfileType :: (Monad r) => VSType r
 cppOutfileType = do
   t <- typeFromData OutFile cppOutfile (text cppOutfile)
   addFStreamImport t
@@ -2767,7 +2764,7 @@ cppIterType t' = do
 cppClassVarAccess :: Doc -> Doc -> Doc
 cppClassVarAccess c v = c `nmSpcAccess'` v
 
-cppFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+cppFuncType :: (CommonRenderSym r, Monad r) => [VSType r] -> VSType r -> VSType r
 cppFuncType ps' r' =  do
   ps <- sequence ps'
   r <- r'

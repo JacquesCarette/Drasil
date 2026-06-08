@@ -63,8 +63,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp
   classVarAccess, func, listSetFunc, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
-  binExpr', typeBinExpr)
+  mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr,
+  binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -95,7 +95,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), td, ValData(..), vd, AttachmentTag(..), VarData(..), vard,
+  progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
@@ -233,7 +233,6 @@ instance RenderType SwiftCode where
     typs <- sequence ts
     let mt = tuple $ map getTypeString typs
     typeFromData Void mt (text mt)
-  typeFromData t s d = toState $ toCode $ td t s d
 
 instance UnaryOpSym SwiftCode where
   notOp = C.notOp
@@ -863,17 +862,17 @@ swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar
 swiftLineVal = valueOf swiftLineVar
 
-swiftIntType :: (CommonRenderSym r) => VSType r
+swiftIntType :: (Monad r) => VSType r
 swiftIntType = typeFromData Integer swiftInt (text swiftInt)
 
-swiftCharType :: (CommonRenderSym r) => VSType r
+swiftCharType :: (Monad r) => VSType r
 swiftCharType = typeFromData Char swiftChar (text swiftChar)
 
-swiftFileType :: (CommonRenderSym r) => VSType r
+swiftFileType :: (Monad r) => VSType r
 swiftFileType = addFoundationImport $ typeFromData InFile swiftURL
   (text swiftURL)
 
-swiftFileHdlType :: (CommonRenderSym r) => VSType r
+swiftFileHdlType :: (Monad r) => VSType r
 swiftFileHdlType = addFoundationImport $ typeFromData OutFile swiftFileHdl
   (text swiftFileHdl)
 
@@ -893,7 +892,7 @@ swiftFuncType ps r = do
     (parens (hicat listSep' $ map renderType pts) <+> swiftRetType' <+>
       renderType rt)
 
-swiftVoidType :: (CommonRenderSym r) => VSType r
+swiftVoidType :: (Monad r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
@@ -1140,12 +1139,12 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
-swiftOpenFileHdl :: (OORenderSym r) => SValue r -> VSType r -> SValue r
+swiftOpenFileHdl :: (OORenderSym r, Monad r) => SValue r -> VSType r -> SValue r
 swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
 
-swiftOpenFileWA :: (OORenderSym r) => Bool -> SVariable r -> SValue r ->
+swiftOpenFileWA :: (OORenderSym r, Monad r) => Bool -> SVariable r -> SValue r ->
   MSStatement r
 swiftOpenFileWA app f' n' = tryCatch
     (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',

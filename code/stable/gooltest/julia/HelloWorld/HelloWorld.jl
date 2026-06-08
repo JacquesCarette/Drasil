@@ -146,10 +146,10 @@ elseif b == 5
     global d = b
     global d -= a
     global c -= d
-    global b += 17;
-    global c += 17;
-    global a += 1;
-    global d += 1;
+    global b += 17
+    global c += 17
+    global a += 1
+    global d += 1
     global c -= 1
     global b -= 1
     global myList = Int64[]
@@ -219,7 +219,7 @@ for i in 0:1:8
 end
 while a < 13
     println("Hello")
-    global a += 1;
+    global a += 1
 end
 for num in myOtherList
     println(Helper.doubleAndAdd(num, 1.0))

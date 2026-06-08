@@ -728,7 +728,7 @@ jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmt $ jlGlobalDec scpData <+> R.addAssign vr v
+  mkStmtNoEnd $ jlGlobalDec scpData <+> R.addAssign vr v
 
 jlGlobalDec :: ScopeData -> Doc
 jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty

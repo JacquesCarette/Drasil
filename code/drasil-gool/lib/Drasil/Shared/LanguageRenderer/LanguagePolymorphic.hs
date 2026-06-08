@@ -10,13 +10,12 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
-  listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
-  function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
-  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..),
-  defaultOptSpace, smartAdd, smartSub
+  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
+  buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
+  docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -71,11 +70,11 @@ import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName,
   valueList, namedArgList)
 import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
-  addAssign, subAssign, return', comment, getTerm, var, instanceVarAccess, arg, func,
+  subAssign, return', comment, getTerm, var, instanceVarAccess, arg, func,
   objAccess, commentedItem)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec,
-  compEqualPrec, compPrec, addPrec, multPrec)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
+  mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec, compEqualPrec, compPrec,
+  addPrec, multPrec)
 import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
   addParameter, getParameters, useVarName)
@@ -364,12 +363,6 @@ subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.subAssign vr v) t
-
-increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
-increment vr' v'= do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  mkStmt $ R.addAssign vr v
 
 objDecNew :: (OORenderSym r) => SVariable r -> r ScopeData -> [SValue r]
   -> MSStatement r

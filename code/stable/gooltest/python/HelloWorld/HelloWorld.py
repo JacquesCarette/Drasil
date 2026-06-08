@@ -139,10 +139,10 @@ elif b == 5:
     d = b
     d -= a
     c -= d
-    b += 17;
-    c += 17;
-    a += 1;
-    d += 1;
+    b += 17
+    c += 17
+    a += 1
+    d += 1
     c -= 1
     b -= 1
     myList = []
@@ -208,7 +208,7 @@ for i in range(0, 9, 1):
     print(i)
 while a < 13:
     print("Hello")
-    a += 1;
+    a += 1
 for num in myOtherList:
     print(Helper.doubleAndAdd(num, 1.0))
 try:

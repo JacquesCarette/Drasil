@@ -218,7 +218,7 @@ switch a {
         b = 5
     default:
         b = 0
-};
+}
 for i in [Int](stride(from: 0, to: 9, by: 1)) {
     print(i)
 }

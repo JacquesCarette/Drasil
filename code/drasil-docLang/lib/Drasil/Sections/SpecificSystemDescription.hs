@@ -289,6 +289,11 @@ fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 -- | Creates the Properties of a Correct Solution section.
+-- If there are variables in c with any constraints, the table will be generated.
+-- If the second argument con is provided (e.g. a paragraph), it will be placed
+-- immediately after the table. If there are no constraints, but a con, it will
+-- be generated. If neither constraints nor a second argument exist, an empty
+-- section will be generated.
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
 propCorSolF c con
   | any (\x -> not $ null (x ^. constraints)) c = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []

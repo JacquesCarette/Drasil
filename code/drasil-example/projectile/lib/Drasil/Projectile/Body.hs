@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Drasil.SRSDocument
@@ -10,7 +11,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.Document.Contents (foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,

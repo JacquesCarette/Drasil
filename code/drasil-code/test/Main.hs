@@ -5,19 +5,18 @@ module Main (main) where
 
 import Control.Monad.State (evalState, runState)
 import Control.Lens ((^.))
-import qualified Data.Map as M
 import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.FileHandling (FileLayout, file, directory, ps, goldenTestingGroup,
+import Drasil.FileHandling (FileLayout, directory, ps, goldenTestingGroup,
   goldenTest, ps, (</>))
 import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
-  FileData(..), modDoc, GOOLState)
+  GOOLState)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
-import Language.Drasil.Code (ImplementationType(..), makeSds)
+import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
@@ -100,30 +99,3 @@ genCode' pd gs' unRepr' =
     fileInfoState = makeSds (gs' ^. headers) (gs' ^. sources) (gs' ^. mainMod)
     (PackageData prog aux) = unRepr' $ package pd [makefile [] Program [] fileInfoState pd]
   in toFileLayout (progMods prog) ++ aux
-
--- | Internal: Converts a list of `FileData` to a `FileLayout`.
-toFileLayout :: [FileData] -> [FileLayout]
-toFileLayout fc =
-  let
-    root = foldl (\m f -> insertFile (filePath f, modDoc $ fileMod f) m) M.empty fc
-
-    entryToLayout (n, File d) = file [ps|{n}|] d
-    entryToLayout (n, Folder m) = directory [ps|{n}|] $ map entryToLayout $ M.assocs m
-  in
-    map entryToLayout (M.assocs root)
-
-data Entry a = File a | Folder (M.Map String (Entry a))
-  deriving (Show)
-
-insertFile :: (String, a) -> M.Map String (Entry a) -> M.Map String (Entry a)
-insertFile (p, d) m =
-  if '/' `elem` p
-    then
-      let (fname, rest) = break (== '/') p
-          folderM = case M.findWithDefault (Folder M.empty) fname m of
-                      File _   -> dupError fname
-                      Folder f -> f
-      in M.insert fname (Folder $ insertFile (drop 1 rest, d) folderM) m
-    else M.insertWith (\_ -> dupError p) p (File d) m
-  where
-    dupError fname = error $ "A file or folder with name '" ++ fname ++ "' already exists."

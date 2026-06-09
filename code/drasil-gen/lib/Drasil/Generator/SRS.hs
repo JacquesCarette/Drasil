@@ -10,7 +10,7 @@ import Control.Lens ((^.))
 import Drasil.DocLang (mkGraphInfo)
 import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational), Document(..), checkToC)
-import Language.Drasil.Printers (makeCSS, genHTML, genTeX,
+import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
   genJupyterSRS)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
@@ -50,7 +50,7 @@ prntDoc d pinfo fn Jupyter =
   [file [ps|{fn}.ipynb|] $ genJupyterSRS $ makeDocument pinfo d]
 prntDoc d pinfo fn HTML =
   [ file [ps|{fn}.html|] $ genHTML fn $ makeDocument pinfo d,
-    file [ps|{fn}.css|] $ makeCSS d
+    file [ps|{fn}.css|] genericCSS
   ]
 prntDoc d@(Document _ _ st _) pinfo fn TeX =
   [ file [ps|{fn}.tex|] $ genTeX (makeDocument pinfo $ checkToC d) st pinfo,

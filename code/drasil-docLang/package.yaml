@@ -41,7 +41,6 @@ library:
   - Drasil.DocLang.SRS
   - Drasil.Document.Contents
   - Drasil.DocumentLanguage.Units
-  - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.Sentence.Combinators
   - Drasil.SRSDocument
   - Drasil.GetChunks

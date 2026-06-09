@@ -59,9 +59,9 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
-webSys :: FolderLocation -> DrasilWebsite
+webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) . allRefs
+webSys d = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) d . allRefs
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]

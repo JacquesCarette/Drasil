@@ -59,11 +59,9 @@ main = do
             -- but the analysis scripts work nonetheless, so we display it here.
           }
 
-      syst = webSys allFolders
-
       --  FIXME: Author is hack for now to show up in proper spot.
       author = namedRef gitHubRef (S "Link to GitHub Repository")
       websiteDoc = Document (S websiteTitle) author NoToC $ sections allFolders
+      syst = webSys websiteDoc allFolders
 
-  -- generate the html document/website.
-  caseStudyMainDrasilWebsite syst websiteDoc
+  caseStudyMainDrasilWebsite syst

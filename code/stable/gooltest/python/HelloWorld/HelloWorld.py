@@ -67,6 +67,9 @@ assert 7 in s, "Set s should contain 7"
 # Object tests
 t1 = TestClass(5)
 t2 = TestClass(4)
+t3 = TestClass.add(t1, t2)
+print("Value of t3.a: ", end="")
+print(t3.a)
 
 # List slicing tests
 # Create variables for list slices

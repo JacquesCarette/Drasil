@@ -75,6 +75,9 @@ assert( s.contains(7) , "Set s should contain 7")
 // Object tests
 var t1: TestClass = TestClass(5)
 var t2: TestClass = TestClass(4)
+var t3: TestClass = TestClass.add(t1, t2)
+print("Value of t3.a: ", terminator: "")
+print(t3.a)
 
 // List slicing tests
 // Create variables for list slices

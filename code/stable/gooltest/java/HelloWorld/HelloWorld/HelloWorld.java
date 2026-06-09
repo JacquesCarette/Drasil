@@ -63,6 +63,9 @@ public class HelloWorld {
         // Object tests
         TestClass t1 = new TestClass(5);
         TestClass t2 = new TestClass(4);
+        TestClass t3 = TestClass.add(t1, t2);
+        System.out.print("Value of t3.a: ");
+        System.out.println(t3.a);
         
         // List slicing tests
         // Create variables for list slices

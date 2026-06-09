@@ -12,7 +12,8 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, newObj, Array(..), List(..), MethodSym(..),
-  OOMethodSym(..), initializer, OODeclStatement(objDecDef), Set(..), ParameterSym(..))
+  OOMethodSym(..), classMethodCall, initializer, OODeclStatement(objDecDef),
+  Set(..), ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -122,7 +123,12 @@ helloInitVariables = block [comment "Initializing variables",
 objectTests :: (OOProg r) => MSBlock r
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
-  varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4])]
+  varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
+  varDecDef (var "t3" (obj "TestClass")) mainFn
+    (classMethodCall (obj "TestClass") (obj "TestClass") "add"
+      [valueOf $ var "t1" (obj "TestClass"), valueOf $ var "t2" (obj "TestClass")]),
+  printStr "Value of t3.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int)]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,

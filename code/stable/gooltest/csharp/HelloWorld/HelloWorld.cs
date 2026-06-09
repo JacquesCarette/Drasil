@@ -86,6 +86,9 @@ public class HelloWorld {
         // Object tests
         TestClass t1 = new TestClass(5);
         TestClass t2 = new TestClass(4);
+        TestClass t3 = TestClass.add(t1, t2);
+        Console.Write("Value of t3.a: ");
+        Console.WriteLine(t3.a);
         
         // List slicing tests
         // Create variables for list slices

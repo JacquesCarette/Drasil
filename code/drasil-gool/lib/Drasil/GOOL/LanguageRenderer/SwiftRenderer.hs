@@ -65,15 +65,16 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
-  function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
+  objAccess, objMethodCall, classMethodCall, call, funcAppMixedArgs,
+  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd,
+  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
+  implementingClass, docClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -437,6 +438,7 @@ instance ValueElim SwiftCode where
 
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = G.classMethodCall
 
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData

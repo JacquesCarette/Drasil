@@ -2,7 +2,8 @@ module Drasil.GamePhysics.LabelledContent (
   labelledContent, sysCtxFig1
 ) where
 
-import Language.Drasil hiding (organization, section)
+import Language.Drasil hiding (organization)
+import Language.Drasil.Document
 
 import Data.Drasil.Concepts.Documentation as Doc (sysCont)
 

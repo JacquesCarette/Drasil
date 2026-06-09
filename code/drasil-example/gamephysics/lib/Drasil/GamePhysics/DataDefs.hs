@@ -6,6 +6,7 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD,
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Document
 
 import Theory.Drasil
 import Utils.Drasil (weave)

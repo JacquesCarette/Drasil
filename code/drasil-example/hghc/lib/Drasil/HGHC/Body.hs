@@ -1,9 +1,9 @@
 module Drasil.HGHC.Body (si, mkSRS) where
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
+import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,

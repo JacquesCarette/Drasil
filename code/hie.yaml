@@ -24,9 +24,6 @@ cradle:
     - path: "drasil-database/lib"
       component: "drasil-database:lib"
 
-    - path: "drasil-docLang/lib"
-      component: "drasil-docLang:lib"
-
     - path: "drasil-example/dblpend/lib"
       component: "dblpend:lib"
 
@@ -128,6 +125,9 @@ cradle:
 
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
+
+    - path: "drasil-srs/lib"
+      component: "drasil-srs:lib"
 
     - path: "drasil-system/lib"
       component: "drasil-system:lib"

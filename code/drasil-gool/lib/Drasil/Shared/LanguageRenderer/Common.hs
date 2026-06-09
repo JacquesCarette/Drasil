@@ -1,7 +1,7 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.Common (
   boolRender, bool, extVar, funcType, extFuncAppMixedArgs, listAccessFunc,
-  listSetFunc, forEach', varDecDef, listSize
+  listSetFunc, forEach', varDecDef, listSize, increment
 ) where
 
 import Prelude hiding (print, pi, (<>))
@@ -17,7 +17,8 @@ import Drasil.Shared.InterfaceCommon (VSType, SVariable, TypeElim(getType),
   Library, BodySym(Body))
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
-import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc)
+import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
+  addAssign)
 import qualified Drasil.Shared.RendererClassesCommon as RC (value, functionType, function)
 import Drasil.Shared.LanguageRenderer.Constructors
 import Drasil.Shared.Helpers (on2StateValues, onStateValue)
@@ -84,6 +85,14 @@ varDecDef v scp e = do
   where
     def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
+
+-- Python and Swift --
+
+increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment vr' v'= do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  mkStmtNoEnd $ R.addAssign vr v
 
 -- Python, Julia, and MATLAB --
 

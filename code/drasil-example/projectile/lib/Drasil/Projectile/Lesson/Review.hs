@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Math (equation)
 import qualified Drasil.Projectile.Expressions as E (lcrectVel, lcrectPos, lcrectNoTime)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
-import Drasil.Document.Contents (foldlSP, foldlSP_)
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 
 reviewSecs :: [Section]

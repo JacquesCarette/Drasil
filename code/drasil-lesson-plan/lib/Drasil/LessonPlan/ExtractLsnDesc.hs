@@ -5,11 +5,9 @@ import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB)
 import Language.Drasil
+import Language.Drasil.Document
 
-import Drasil.GetChunks (resolveBibliography)
 import Drasil.LessonPlan.Core
-import Drasil.ExtractCommon (extractChRefs)
-import Drasil.ExtractDocDesc (getSec)
 import Language.Drasil.Development (lnames)
 
 findAllInConsSecs :: [Contents] -> [Section] -> S.Set UID

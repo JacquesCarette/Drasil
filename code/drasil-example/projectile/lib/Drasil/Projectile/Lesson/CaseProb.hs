@@ -14,8 +14,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed,
   ixPos, iyPos, xPos, yPos, ixVel, iyVel, xVel, yVel)
 import Data.Drasil.Concepts.Documentation (coordinate, procedure)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.ShortHands
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSP_)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 

@@ -3,6 +3,7 @@ module Drasil.GamePhysics.References (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
 import Data.Drasil.Citations (parnasClements1986, dampingSource, hibbeler2004)
 import Data.Drasil.People (dParnas, wikiAuthors)

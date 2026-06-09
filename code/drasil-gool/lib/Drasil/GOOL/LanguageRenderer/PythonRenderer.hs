@@ -68,7 +68,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, classMethodCall, call, funcAppMixedArgs,
   selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd,
   listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile,
+  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
   method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, local)
@@ -560,7 +560,7 @@ instance StatementSym PythonCode where
 instance AssignStatement PythonCode where
   assign = G.assign Empty
   (&-=) = G.subAssign Empty
-  (&+=) = G.increment
+  (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
 

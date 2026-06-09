@@ -1,8 +1,8 @@
-name:                drasil-gen
-version:             0.1.3.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+name:                drasil-lesson-plan
+version:             0.0.1
+author:              "Ting-Yu (Addie) Wu, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:            A framework for code and document generation for scientific software - Utils SubPackage
+synopsis:            A framework for code and document generation for scientific software - Lesson Plan SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -15,28 +15,17 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- aeson
-- aeson-pretty
-- bytestring
-- pretty
+- Decimal
+- lens
 - containers
-- directory
-- time
-- drasil-code
-- drasil-data
+- pretty
+- transformers
+- multiplate
 - drasil-database
 - drasil-docLang
-- drasil-file-handling
-- drasil-gool
 - drasil-lang
-- drasil-lesson-plan
-- drasil-makefile
 - drasil-metadata
-- drasil-printers
 - drasil-system
-- drasil-theory
-- drasil-utils
-- lens
 
 ghc-options:
 - -Wall
@@ -46,7 +35,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Generator
+  - Drasil.LessonPlan
   when:
   - condition: false
-    other-modules: Paths_drasil_gen
+    other-modules: Paths_drasil_lesson_plan

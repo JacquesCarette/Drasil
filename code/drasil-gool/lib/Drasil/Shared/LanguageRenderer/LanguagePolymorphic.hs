@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Redundant return" #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
@@ -9,11 +10,11 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, objAccess, objMethodCall, classMethodCall, func, get,
-  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
+  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
+  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
   buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
   docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
 ) where
@@ -21,15 +22,15 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
-  MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
-  BlockSym(Block), TypeElim(getType, getTypeString),
-  VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
-  variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
-  sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
-  AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse, convType, VSBinder, BinderElim(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
+  MSBlock, VSFunction, VSType, SVariable, SValue, MSStatement, MSParameter,
+  SMethod, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements,
+  oneLiner, BlockSym(Block), VariableSym(Variable), VisibilitySym(..),
+  VariableElim(variableName, variableType), ValueSym(Value, valueType),
+  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
+  StatementSym(multi), AssignStatement((&++)), (&=),
+  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
+  ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
@@ -41,12 +42,12 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   ($.), AttachmentSym(..), convTypeOO)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (
   InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
-  InternalVarElim(variableBind), InternalTypeElim(type'),
-  RenderValue(valFromData), RenderFunction(funcFromData),
-  FunctionElim(functionType), RenderStatement(stmtFromData),
-  StatementElim(statementTerm), MethodTypeSym(mType), RenderParam(paramFromData),
-  RenderMethod(commentedFunc), BlockCommentSym(..), ValueElim (value))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
+  InternalVarElim(variableBind), RenderValue(valFromData),
+  RenderFunction(funcFromData), FunctionElim(functionType),
+  RenderStatement(stmtFromData), StatementElim(statementTerm),
+  MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
+  BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
@@ -64,8 +65,8 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
   ScopeData, sd, TypeData(..), BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
-  toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
-  on2StateWrapped)
+  toState, onStateValue, on2StateValues, onStateList, getInnerType,
+  getNestDegree, on2StateWrapped)
 import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName,
   valueList, namedArgList)
@@ -74,7 +75,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
   objAccess, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec, compEqualPrec, compPrec,
-  addPrec, multPrec)
+  addPrec, multPrec, typeFromData)
 import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
   addParameter, getParameters, useVarName)
@@ -103,10 +104,10 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
 
-listInnerType :: (OORenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convTypeOO . getInnerType . getType)
+listInnerType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+listInnerType t = t >>= (convTypeOO . getInnerType . getCodeType)
 
-obj :: (CommonRenderSym r) => ClassName -> VSType r
+obj :: (Monad r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
 
 -- Unary Operators --
@@ -114,17 +115,17 @@ obj n = typeFromData (Object n) n (text n)
 negateOp :: (Monad r) => VSOp r
 negateOp = unOpPrec "-"
 
-csc :: (CommonRenderSym r) => SValue r -> SValue r
+csc :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r
 csc v = valOfOne (fmap valueType v) #/ sin v
 
-sec :: (CommonRenderSym r) => SValue r -> SValue r
+sec :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r
 sec v = valOfOne (fmap valueType v) #/ cos v
 
-cot :: (CommonRenderSym r) => SValue r -> SValue r
+cot :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r
 cot v = valOfOne (fmap valueType v) #/ tan v
 
-valOfOne :: (CommonRenderSym r) => VSType r -> SValue r
-valOfOne t = t >>= (getVal . getType)
+valOfOne :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> SValue r
+valOfOne t = t >>= (getVal . getCodeType)
   where getVal Float = IC.litFloat 1.0
         getVal _ = IC.litDouble 1.0
 
@@ -205,7 +206,7 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
-arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
+arrayElem :: (OORenderSym r, UnRepr r TypeData) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
@@ -268,7 +269,7 @@ selfFuncAppMixedArgs d slf n t vs ns = do
   s <- slf
   S.call Nothing (Just $ RC.variable s <> d) n t vs ns
 
-newObjMixedArgs :: (CommonRenderSym r) => String -> MixedCtorCall r
+newObjMixedArgs :: (CommonRenderSym r, UnRepr r TypeData) => String -> MixedCtorCall r
 newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
@@ -290,12 +291,6 @@ objMethodCall :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> [SValue
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing
   (Just $ RC.value o <> dot) f t vs ns)
 
-classMethodCall :: (CommonRenderSym r) => Label -> VSType r -> VSType r ->
-  [SValue r] -> NamedArgs r -> SValue r
-classMethodCall f t cls vs ns = do
-  c <- cls
-  S.call Nothing (Just $ type' c <> dot) f t vs ns
-
 -- Functions --
 
 func :: (CommonRenderSym r) => Label -> VSType r -> [SValue r] -> VSFunction r
@@ -313,7 +308,7 @@ listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd
 listAppend :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
-listAccess :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
+listAccess :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
   let i' = IC.intToIndex i
@@ -323,7 +318,7 @@ listAccess v i = do
       checkType (Array _) = i' >>=
                               (\ix -> funcFromData (brackets (RC.value ix)) t)
       checkType _ = error "listAccess called on non-list-type value"
-  f <- checkType (getType (valueType v'))
+  f <- checkType (getCodeType (valueType v'))
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 listSet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
@@ -398,9 +393,9 @@ printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
+print :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
-print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
+print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
         print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn prLnFn (convType t)
@@ -472,7 +467,7 @@ tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
 
-construct :: (CommonRenderSym r) => Label -> MS (r TypeData)
+construct :: (Monad r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (CommonRenderSym r) => (r (Variable r) -> Doc) -> SVariable r ->

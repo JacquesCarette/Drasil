@@ -1,15 +1,17 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, VSType, VSBinder, SValue,
-  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Array(..), List(..), Set(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
+  SValue, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
+  TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
+  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
@@ -55,6 +57,9 @@ instance Monad CodeInfoOO where
 
 instance SharedProg CodeInfoOO
 instance OOProg CodeInfoOO
+
+instance UnRepr CodeInfoOO contents where
+  unRepr = unCI
 
 instance ProgramSym CodeInfoOO where
   type Program CodeInfoOO = GOOLState
@@ -103,10 +108,6 @@ instance TypeSym CodeInfoOO where
 
 instance OOTypeSym CodeInfoOO where
   obj             _ = noInfoVSType
-
-instance TypeElim CodeInfoOO where
-  getType _     = Void
-  getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoOO where
   global = noInfoScope

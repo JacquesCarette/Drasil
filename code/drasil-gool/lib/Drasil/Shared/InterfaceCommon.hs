@@ -1,4 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
@@ -7,27 +9,26 @@ module Drasil.Shared.InterfaceCommon (
   MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
   DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
-  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  TypeSym(..), getCodeType, getTypeString, VariableSym(..), ScopeSym(..),
+  convScope, VariableElim(..), listOf, listVar, ValueSym(..), Argument(..),
+  Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..),
-  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
+  IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..), listSlice,
+  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..),
-  convType
+  BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
 import qualified Data.Kind as K (Type)
 
-import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData, BinderD)
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -39,17 +40,22 @@ type Library = String
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
-class (VectorType r, VectorDecl r, VectorThunk r,
+-- TODO [Brandon Bosman, 06/09/2026]: UnRepr can be removed from SharedProg
+-- if we can root out its use from drasil-code
+
+class (UnRepr r TypeData, VectorType r, VectorDecl r, VectorThunk r,
   VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r,
-  Array r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r,
-  BinderSym r
+  Array r, List r, Set r, VariableElim r, MethodSym r, ScopeSym r, BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
+
+class UnRepr repr contents where
+  unRepr :: repr contents -> contents
 
 type MSBody a = MS (a (Body a))
 
@@ -91,9 +97,14 @@ class TypeSym r where
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 
-class (TypeSym r) => TypeElim r where
-  getType :: r TypeData -> CodeType
-  getTypeString :: r TypeData -> String
+-- | A helper function for extracting the CodeType from an `r TypeData`
+getCodeType :: (UnRepr r TypeData) => r TypeData -> CodeType
+getCodeType = cType . unRepr
+
+-- TODO [Brandon Bosman, 06/09/2026]: Think about separating GOOL and GProc implementations of this
+-- | A helper function for extracting the String representation from an `r TypeData`
+getTypeString :: (UnRepr r TypeData) => r TypeData -> String
+getTypeString = typeString . unRepr
 
 class ScopeSym r where
   global :: r ScopeData -- Definite global scope
@@ -144,10 +155,10 @@ class (ValueSym r) => Literal r where
   litList   :: VSType r -> [SValue r] -> SValue r
   litSet    :: VSType r -> [SValue r] -> SValue r
 
-litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
+litZero :: (Literal r, UnRepr r TypeData) => VSType r -> SValue r
 litZero t = do
   t' <- t
-  case getType t' of
+  case getCodeType t' of
     Integer -> litInt 0
     Float -> litFloat 0
     Double -> litDouble 0

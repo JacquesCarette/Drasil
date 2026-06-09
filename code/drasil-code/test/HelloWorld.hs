@@ -3,14 +3,16 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
+import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
   SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
-  ControlStatement(..), VariableSym(..), ScopeSym(..), Literal(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  Array(..), List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
+  listSlice, TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  CommentStatement(..), ControlStatement(..), VariableSym(..), OOVariableSym(..),
+  StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
+  VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, newObj, Array(..), List(..), MethodSym(..),
+  OOMethodSym(..), initializer, OODeclStatement(objDecDef), Set(..), ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -25,7 +27,7 @@ import Helper (helperOO, helperProc)
 helloWorldOO :: (OOProg r) => OO.GSProgram r
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
-  [helloWorldMainOO] []), helperOO]
+  [helloWorldMainOO] [helloWorldClass]), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldProc :: (ProcProg r) => GProc.GSProgram r
@@ -44,7 +46,7 @@ myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO :: (OOProg r) => SMethod r
-helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy"),
@@ -116,6 +118,11 @@ helloInitVariables = block [comment "Initializing variables",
   setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
+
+objectTests :: (OOProg r) => MSBlock r
+objectTests = block [comment "Object tests",
+  varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
+  varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4])]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
@@ -355,3 +362,14 @@ helloForEachLoop = forEach i (valueOf myOtherList)
 helloTryCatch :: (SharedProg r) => MSStatement r
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
+
+helloWorldClass :: (OOProg r) => SClass r
+helloWorldClass = extraClass "TestClass" Nothing
+  [stateVar public instanceLevel (var "a" int)]
+  [initializer [param $ var "a" int]
+    [(var "a" int, valueOf (var "a" int))]]
+  [method "add" public classLevel (obj "TestClass")
+    [param $ var "t1" (obj "TestClass"), param $ var "t2" (obj "TestClass")]
+    (oneLiner $ returnStmt $ newObj (obj "TestClass")
+      [valueOf (instanceVarAccess (valueOf (var "t1" (obj "TestClass"))) (var "a" int)) #+
+       valueOf (instanceVarAccess (valueOf (var "t2" (obj "TestClass"))) (var "a" int))])]

@@ -3,9 +3,9 @@ module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, section, variable)
 import qualified Language.Drasil.Development as D
-
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import Drasil.Generator (withCommonKnowledge)
@@ -16,7 +16,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
   tAndDWSym)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,

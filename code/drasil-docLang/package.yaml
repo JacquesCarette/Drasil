@@ -40,6 +40,8 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
   - Drasil.Document.Contents
-  - Drasil.DocumentLanguage.Notebook
   - Drasil.Sentence.Combinators
   - Drasil.SRSDocument
+  - Drasil.GetChunks
+  - Drasil.ExtractCommon
+  - Drasil.ExtractDocDesc

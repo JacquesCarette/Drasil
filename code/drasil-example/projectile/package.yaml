@@ -30,6 +30,7 @@ dependencies:
 - drasil-gen
 - drasil-gool
 - drasil-lang
+- drasil-lesson-plan
 - drasil-printers
 - drasil-system
 - drasil-theory

@@ -2,8 +2,8 @@ module Language.Drasil.Printers (
   -- * HTML
   -- ** Printer
     genHTML
-  -- ** Helpers
-  , makeCSS
+  -- ** CSS
+  , genericCSS
   -- * Markdown
   -- ** Printer
   , makeMd
@@ -24,7 +24,7 @@ module Language.Drasil.Printers (
   , PrintingInformation, piSys, Notation(..)
 ) where
 
-import Language.Drasil.HTML.CSS (makeCSS)
+import Language.Drasil.HTML.CSS (genericCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)

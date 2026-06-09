@@ -63,14 +63,15 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData, local)
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
+  objAccess, objMethodCall, classMethodCall, call, funcAppMixedArgs,
+  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd,
+  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
@@ -80,7 +81,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
-  BinderD(..), bindFormD)
+  BinderD(..), bindFormD, AttachmentTag(..), AttachmentData(..), ad)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -156,13 +157,13 @@ instance ImportElim PythonCode where
   import' = unPC
 
 instance AttachmentSym PythonCode where
-  type Attachment PythonCode = Doc
-  classLevel = toCode empty
-  instanceLevel = toCode R.instanceLevel
+  type Attachment PythonCode = AttachmentData
+  classLevel = toCode $ ad ClassLevel empty
+  instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
 instance PermElim PythonCode where
-  perm = unPC
-  binding = error $ CP.bindingError pyName
+  perm = attachmentDoc . unPC
+  binding = attachment . unPC
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
@@ -426,6 +427,7 @@ instance ValueElim PythonCode where
 
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = G.classMethodCall
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
@@ -722,11 +724,11 @@ instance RenderMethod PythonCode where
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance OORenderMethod PythonCode where
-  intMethod m n _ _ _ ps b = do
+  intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
     pms <- sequence ps
-    toCode . mthd . pyMethod n sl pms <$> b
+    toCode . mthd . pyMethod n a sl pms <$> b
   intFunc m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b
@@ -1031,15 +1033,22 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
-pyMethod :: (CommonRenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
-  r (Body r) -> Doc
-pyMethod n slf ps b = vcat [
-  pyDef <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
-  indent bodyD]
-      where pms = parameterList ps
-            oneParam = emptyIfEmpty pms listSep'
-            bodyD | isEmpty (RC.body b) = pyNull'
-                  | otherwise = RC.body b
+pyMethod :: (CommonRenderSym r, PermElim r) => Label -> r (Attachment r) ->
+  r (Variable r) -> [r (Parameter r)] -> r (Body r) -> Doc
+pyMethod n attch slf ps b = let
+     decorator = case binding attch of
+                   ClassLevel -> text "@staticmethod"
+                   _          -> empty
+     pms = parameterList ps
+     (implicitParam, implicitComma) = case binding attch of
+                       InstanceLevel -> (RC.variable slf, emptyIfEmpty pms listSep')
+                       _             -> (empty, empty)
+     bodyD | isEmpty (RC.body b) = pyNull'
+           | otherwise = RC.body b
+  in vcat [
+       decorator,
+       pyDef <+> text n <> parens (implicitParam <> implicitComma <> pms) <> colon,
+       indent bodyD]
 
 pyFunction :: (CommonRenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [

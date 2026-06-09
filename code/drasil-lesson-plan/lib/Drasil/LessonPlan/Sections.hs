@@ -1,4 +1,4 @@
-module Drasil.DocLang.Notebook (
+module Drasil.LessonPlan.Sections (
   intro, learnObj, caseProb, example, appendix, review, reference, summary
 ) where
 

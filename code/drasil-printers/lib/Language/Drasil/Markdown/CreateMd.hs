@@ -7,31 +7,33 @@ module Language.Drasil.Markdown.CreateMd (
     where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
+import Data.Maybe (catMaybes, mapMaybe)
+import Text.PrettyPrint.HughesPJ (Doc, empty, vcat, text, (<+>),
     (<>), punctuate, hsep)
 
-import Drasil.FileHandling.Legacy (contSep, filterEmpty, listToDoc, Separator)
+import Drasil.FileHandling.Legacy (contSep, listToDoc, Separator)
 
 import Language.Drasil.Printing.Helpers (upcase)
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
-makeMd :: [Doc] -> Doc
-makeMd = vcat . punctuate secSep . filterEmpty
+makeMd :: [Maybe Doc] -> Doc
+makeMd = vcat . punctuate secSep . catMaybes
 
 -- | Example title, authors, and maybe purpose section.
-introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
-introInfo name auths motiv descr = introSec (text name) (listToDoc auths) (length auths)
+introInfo :: String -> [String] -> Maybe String -> Maybe String -> Maybe Doc
+introInfo name auths motiv descr = pure $ introSec (text name) (listToDoc auths) (length auths)
     (maybeSub "Motivation" motiv) (maybeSub "Purpose" descr)
 
 -- | Instruction section, contains 4 paragraphs, Running, Building, Input-Output and Config Files.
 -- The Config file section is only displayed if there are configuration files.
-instDoc :: [String] -> String -> (String, String) -> Doc
-instDoc cfp name inoutn = regularSec (text "Making Examples")
+instDoc :: [String] -> String -> (String, String) -> Maybe Doc
+instDoc cfp name inoutn = pure $ regularSec (text "Making Examples")
     (runInstDoc inoutn <> doubleSep <> makeInstDoc) <> inOutFile name inoutn <> configSec cfp
 
 -- | 'What' section in generated README file, displays description and scope if not empty
-whatInfo :: Maybe String -> Maybe String -> Doc
-whatInfo descr sc = regularSec (text "What") (maybeSub "Background" descr <> maybeSub "Scope" sc)
+whatInfo :: Maybe String -> Maybe String -> Maybe Doc
+whatInfo Nothing Nothing = Nothing
+whatInfo descr sc = pure $ regularSec (text "What") (maybeSub "Background" descr <> maybeSub "Scope" sc)
 
 -- | Helper for creating optional Intro subsection as Doc
 maybeSub :: String -> Maybe String -> Doc
@@ -73,38 +75,37 @@ configSec cfp = doubleSep <> regularSec (text "Configuration Files")
     <> doubleSep <> bkQuote <> listToDoc cfp <> bkQuote)
 
 -- | Language version section.
-verInfo :: String -> String -> Doc
-verInfo pl plv = regularSec (text "Version") (bkQuote <> text pl <+> text plv <> bkQuote)
+verInfo :: String -> String -> Maybe Doc
+verInfo pl plv = pure $ regularSec (text "Version") (bkQuote <> text pl <+> text plv <> bkQuote)
 
 -- | Invalid Operating Systems section, does not display unless atleast 1 invalid OS.
-unsupOS :: Maybe String -> Doc
-unsupOS = maybe empty (\uns-> regularSec (text "Unsupported Operating Systems")
+unsupOS :: Maybe String -> Maybe Doc
+unsupOS = fmap (\uns-> regularSec (text "Unsupported Operating Systems")
     (text $ "- " ++ uns))
 
 -- | External Libraries section. The inputs are a list of name and version pairs
--- and a list of the corresponding version numbers, these are first combined into a
--- list of triplets, and then each printed on a new line.
-extLibSec:: [(String, String)] -> [String]-> Doc
-extLibSec libns libfps =
-    let libs = addListToTuple libns libfps
-        formattedLibs = (hsep . punctuate contSep . filterEmpty .
-            map libStatment) libs
-    in if isEmpty formattedLibs then empty else
-            regularSec (text "External Libraries") formattedLibs
+-- and a list of the corresponding version numbers, these are first combined
+-- into a list of triplets, and then each printed on a new line.
+extLibSec:: [(String, String)] -> [String]-> Maybe Doc
+extLibSec libns libfps = case libs of
+  [] -> Nothing
+  _ -> pure $
+    regularSec (text "External Libraries") (hsep $ punctuate contSep libs)
+  where
+    libs = mapMaybe libStatment $ addListToTuple libns libfps
 
 -- | Helper for formatting the library section.
-libStatment :: (String, String, String) -> Doc
-libStatment ("","", _) = empty
-libStatment (nam,vers, fp) = bkQuote <> text nam <+>
+libStatment :: (String, String, String) -> Maybe Doc
+libStatment ("","", _) = Nothing
+libStatment (nam,vers, fp) = pure $ bkQuote <> text nam <+>
     text vers <> bkQuote <> if fp == "" then empty else
     text ". The local file path to the library is" <+> bkQuote <> text fp <> bkQuote
 
 -- | Helper for converting a list of tuples and another list into a list of triplets.
 addListToTuple :: [(String,String)] -> [String] -> [(String, String, String)]
-addListToTuple [] [] = []
-addListToTuple ((n,v):_) [] = [(n,v,"")]
-addListToTuple ((n,v):xtup) (l:xlst) = (n,v,l):addListToTuple xtup xlst
-addListToTuple _ _ = []
+addListToTuple [] _ = []
+addListToTuple ((n,v):xtup) [] = (n,v,"") : addListToTuple xtup []
+addListToTuple ((n,v):xtup) (l:xlst) = (n,v,l) : addListToTuple xtup xlst
 
 -- TODO: Allow licenses to have updated date information.
 -- | License section.
@@ -113,8 +114,8 @@ license auth = text "Copyright (c) 2021," <+> auth <>
   text ". All rights reserved. Please see the [full license](https://github.com/JacquesCarette/Drasil/blob/4b9ad0a3016fecb3c7a2aa82ab142f9e805b5cc8/LICENSE) for more details."
 
 -- | End section.
-endNote :: Int -> [String] -> Doc
-endNote num auth = text "*This README is a software artifact generated by Drasil.*"
+endNote :: Int -> [String] -> Maybe Doc
+endNote num auth = pure $ text "*This README is a software artifact generated by Drasil.*"
   <> doubleSep <> license (listToDoc auth) <> doubleSep <>
   drasilImage num
 

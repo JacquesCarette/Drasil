@@ -80,7 +80,7 @@ makeRequirements p =
   let
     mCSV = mkCSV (Just 2) (Just ["Original", "Copy"]) (assetMat p)
     csv = either error id mCSV
-  in renderCSV csv (csvRenderOpts Minimal)
+  in renderCSV (csvRenderOpts Minimal) csv
 
 -- | FIXME: HACK: Find all figure assets from a 'Project'. This is a hack
 -- because (a) there can be assets other than figures, (b) we are searching

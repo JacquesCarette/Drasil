@@ -48,7 +48,7 @@ import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, binderElim, value, function, statement, visibility,
-  parameter, method, blockComment')
+  parameter, method, blockComment', stmt)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -63,10 +63,10 @@ import Drasil.Shared.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
   classVarAccess, func, listSetFunc, castObj, classLevel, instanceLevel, break, continue,
-  private, blockCmt, docCmt, addComments, commentedMod, commentedItem)
+  private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr,
-  binExpr, binExpr', typeBinExpr)
+  binExpr, binExpr', typeBinExpr, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -75,10 +75,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, increment, objDecNew, print, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
-  function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  subAssign, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
+  docFunc, buildClass, implementingClass, docClass, commentedClass, modFromData,
+  fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -89,7 +89,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   implements, functionDoc, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
-  listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
+  listSize, varDecDef, setDecDef, extObjDecNew, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal, arrayDecAsList)
@@ -567,7 +567,7 @@ instance StatementSym SwiftCode where
 instance AssignStatement SwiftCode where
   assign = G.assign Empty
   (&-=) = G.subAssign Empty
-  (&+=) = G.increment
+  (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -671,7 +671,13 @@ instance ControlStatement SwiftCode where
     G.throw swiftThrowDoc Empty msg
 
   ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch = C.switch (space <>) emptyStmt
+  switch v cs bod = do
+    st <- RC.stmt emptyStmt
+    vl <- zoom lensMStoVS v
+    vals <- mapM (zoom lensMStoVS . fst) cs
+    bods <- mapM snd cs
+    dflt <- bod
+    mkStmtNoEnd $ R.switch (space <>) st vl dflt (zip vals bods)
 
   ifExists = M.ifExists
 

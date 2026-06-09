@@ -6,8 +6,9 @@ module Drasil.LessonPlan.Notebook
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil (Sentence(S), Section, CI, Document(Notebook), BibRef,
-  foldlList, SepType(Comma), FoldType(List), fullName, Contents(UlC), ulcc, RawContent(Bib))
+import Language.Drasil (Sentence(S), CI, BibRef,
+  foldlList, SepType(Comma), FoldType(List), fullName)
+import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC), ulcc, RawContent(Bib))
 import Drasil.System (LessonPlan, HasSystemMeta(..))
 import Drasil.Metadata.Documentation (notebook)
 

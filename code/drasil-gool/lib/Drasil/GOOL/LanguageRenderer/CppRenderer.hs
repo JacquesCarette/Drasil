@@ -77,11 +77,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
   set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local)
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -91,8 +90,9 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
-  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew, switch,
-  for, while, multiAssignError, multiReturnError, multiTypeError)
+  increment, increment1, decrement1, varDec, setType, varDecDef, listDec,
+  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -1509,7 +1509,7 @@ instance StatementSym CppSrcCode where
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
-  (&+=) = G.increment
+  (&+=) = C.increment
   (&++) = C.increment1
   (&--) = C.decrement1
 

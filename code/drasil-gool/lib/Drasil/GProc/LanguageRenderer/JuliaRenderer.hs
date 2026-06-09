@@ -53,9 +53,9 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
   break, continue, constDec', assign, subAssign, addAssign)
-import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal,
-  typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec,
-  typeUnExpr, typeBinExpr, mkStmt, mkStmtNoEnd)
+import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
+  typeBinExpr, mkStmtNoEnd, typeFromData)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
@@ -718,7 +718,7 @@ jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
-  mkStmt $ jlGlobalDec scpData <+> R.addAssign vr v
+  mkStmtNoEnd $ jlGlobalDec scpData <+> R.addAssign vr v
 
 jlGlobalDec :: ScopeData -> Doc
 jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
@@ -735,7 +735,7 @@ jlConstDecDef v' scp def' = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
-  mkStmt $ decDoc <+> RC.variable v <+> equals <+> RC.value def
+  mkStmtNoEnd $ decDoc <+> RC.variable v <+> equals <+> RC.value def
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label

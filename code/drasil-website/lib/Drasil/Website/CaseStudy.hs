@@ -4,6 +4,7 @@
 module Drasil.Website.CaseStudy (caseStudySec) where
 
 import Language.Drasil hiding (E)
+import Language.Drasil.Document
 import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),

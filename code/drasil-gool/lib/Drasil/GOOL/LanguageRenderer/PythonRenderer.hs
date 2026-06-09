@@ -62,7 +62,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, typeFromData, VSOp, unOpPrec, powerPrec, multPrec, andPrec,
-  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar)
+  orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
+  typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -71,10 +72,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, local)
+  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
@@ -559,7 +560,7 @@ instance StatementSym PythonCode where
 instance AssignStatement PythonCode where
   assign = G.assign Empty
   (&-=) = G.subAssign Empty
-  (&+=) = G.increment
+  (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
 

@@ -26,7 +26,7 @@ dependencies:
 - drasil-code
 - drasil-data
 - drasil-database
-- drasil-docLang
+- drasil-srs
 - drasil-gen
 - drasil-gool
 - drasil-lang

@@ -3,25 +3,21 @@
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.ExtractDocDesc (
   getDocDesc, egetDocDesc,
-  sentencePlate,
-  getSec,
-  extractDocBib
+  sentencePlate
 ) where
 
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 import Data.Maybe (maybeToList)
-import qualified Data.Set as S
-import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Document
-import Language.Drasil.Development (lnames)
-import Drasil.System (SmithEtAlSRS, systemdb)
+
+import Language.Drasil (Sentence, Definition(..), ModelExpr,
+  HasAdditionalNotes(..), Express(express))
+import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
+  sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.DocumentLanguage.Core
-import Drasil.ExtractCommon (sentToExp, extractSents, extractSents', extractMExprs)
-import Drasil.GetChunks (resolveBibliography)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
@@ -151,20 +147,3 @@ getDocDesc = fmGetDocDesc (sentencePlate id)
 -- description), so we use this function. But 'sentencePlate' does not include
 -- all 'Sentence's! Some only appear when rendering (at least, after
 -- `mkSections` is used on a `DocDesc` to create `[Section]`).
-
--- | Extracts 'Sentence's from a 'Section'.
-getSec :: Section -> [Sentence]
-getSec (Section t sc _ ) = t : concatMap getSecCon sc
-
--- | Extracts 'Sentence's from section contents.
-getSecCon :: SecCons -> [Sentence]
-getSecCon (Sub s) = getSec s
-getSecCon (Con c) = extractSents c
-
--- | Extract bibliography entries from generated sections. This version extracts
--- from fully expanded Sections, capturing citations that are only created
--- during document generation (like those in orgOfDocIntro).
-extractDocBib :: SmithEtAlSRS -> [Section] -> BibRef
-extractDocBib si = resolveBibliography (si ^. systemdb) . extractAllSecRefs
-  where
-    extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)

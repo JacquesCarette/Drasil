@@ -1,15 +1,21 @@
-module Drasil.ExtractCommon (
+module Language.Drasil.Document.Extractors (
   sentToExp, extractMExprs,
   extractSents, extractSents',
-  extractChRefs
+  extractChRefs,
+  getSec,
+  extractSectionsBib,
+  resolveBibliography
 ) where
 
-import Control.Lens((^.))
+import Control.Lens ((^.))
+import Data.List (sortBy)
+import Data.Maybe (mapMaybe)
 import qualified Data.Set as S
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, ChunkDB, find)
 import Language.Drasil hiding (getCitations, Manual, Verb)
-import Language.Drasil.Document
+import Language.Drasil.Document.Core
+import Language.Drasil.Document.Sections
 import Language.Drasil.Development (lnames)
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.
@@ -73,3 +79,31 @@ extractSents = go . (^. accessContents)
 -- | Extracts 'Sentence's from a list of 'Contents'.
 extractSents' :: HasContents a => [a] -> [Sentence]
 extractSents' = concatMap extractSents
+
+-- | Extracts 'Sentence's from a 'Section'.
+getSec :: Section -> [Sentence]
+getSec (Section t sc _ ) = t : concatMap getSecCon sc
+
+-- | Extracts 'Sentence's from section contents.
+getSecCon :: SecCons -> [Sentence]
+getSecCon (Sub s) = getSec s
+getSecCon (Con c) = extractSents c
+
+-- | Extract bibliography entries from generated sections. This version extracts
+-- from fully expanded Sections, capturing citations that are only created
+-- during document generation (like those in orgOfDocIntro).
+extractSectionsBib :: ChunkDB -> [Section] -> BibRef
+extractSectionsBib db = resolveBibliography db . extractAllSecRefs
+  where
+    extractAllSecRefs = S.unions . map (S.unions . map lnames . getSec)
+
+-- | Given a 'ChunkDB' and a set of 'UID's, looks up the corresponding
+-- 'Citation's and returns them sorted by author, year, and title.
+--
+-- FIXME: This function assumes that all 'UID's in the set correspond to
+-- 'Citation's in the database. If a 'UID' does not correspond to a 'Citation',
+-- it is simply ignored. This should rather rely on a set of 'UIDRef Citation's.
+resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
+resolveBibliography db uids = sortBy compareAuthYearTitle cites
+  where
+    cites = mapMaybe (`find` db) (S.toList uids)

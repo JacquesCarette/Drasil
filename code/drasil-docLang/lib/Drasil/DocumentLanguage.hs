@@ -47,7 +47,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec, extractDocBib)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -90,7 +90,7 @@ mkDoc si srsDecl headingComb =
       -- well as 'Citation's.
       sections = mkSections si dd Nothing
       -- Extract all referenced 'Citations' from the pre-generated artifact.
-      refdCites = extractDocBib si sections
+      refdCites = extractSectionsBib (si ^. systemdb) sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
       si' = buildTraceMaps dd $ fillReferences sections refdCites si

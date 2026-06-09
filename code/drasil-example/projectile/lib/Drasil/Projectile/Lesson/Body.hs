@@ -7,7 +7,7 @@ import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (LessonPlan, mkSystemMeta, mkLessonPlan)
 
 -- TODO: Add export parameters in a module
-import Drasil.DocumentLanguage.Notebook (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
+import Drasil.LessonPlan (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
   LearnObj(..), Review(..), CaseProb(..), Example(..))
 
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,

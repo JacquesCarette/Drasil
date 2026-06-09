@@ -108,6 +108,9 @@ cradle:
     - path: "drasil-lang/lib"
       component: "drasil-lang:lib"
 
+    - path: "drasil-lesson-plan/lib"
+      component: "drasil-lesson-plan:lib"
+
     - path: "drasil-makefile/lib"
       component: "drasil-makefile:lib"
 

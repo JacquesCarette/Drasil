@@ -1,5 +1,6 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import Drasil.Generator (withCommonKnowledge)
@@ -8,7 +9,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,

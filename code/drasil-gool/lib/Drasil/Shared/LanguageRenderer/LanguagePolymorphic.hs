@@ -9,8 +9,8 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
-  listAppend, listAccess, listSet, getFunc, setFunc,
+  newObjMixedArgs, lambda, objAccess, objMethodCall, classMethodCall, func, get,
+  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
@@ -43,11 +43,11 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
 import qualified Drasil.GOOL.InterfaceGOOL as IG (
   InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
-  InternalVarElim(variableBind), RenderValue(valFromData),
-  RenderFunction(funcFromData), FunctionElim(functionType),
-  RenderStatement(stmtFromData), StatementElim(statementTerm),
-  MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
-  BlockCommentSym(..), ValueElim (value))
+  InternalVarElim(variableBind), InternalTypeElim(type'),
+  RenderValue(valFromData), RenderFunction(funcFromData),
+  FunctionElim(functionType), RenderStatement(stmtFromData),
+  StatementElim(statementTerm), MethodTypeSym(mType), RenderParam(paramFromData),
+  RenderMethod(commentedFunc), BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
@@ -63,7 +63,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
-  ScopeData, sd, TypeData, BinderD)
+  ScopeData, sd, TypeData(..), BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
@@ -290,6 +290,12 @@ objMethodCall :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> [SValue
   -> NamedArgs r -> SValue r
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing
   (Just $ RC.value o <> dot) f t vs ns)
+
+classMethodCall :: (CommonRenderSym r) => Label -> VSType r -> VSType r ->
+  [SValue r] -> NamedArgs r -> SValue r
+classMethodCall f t cls vs ns = do
+  c <- cls
+  S.call Nothing (Just $ type' c <> dot) f t vs ns
 
 -- Functions --
 

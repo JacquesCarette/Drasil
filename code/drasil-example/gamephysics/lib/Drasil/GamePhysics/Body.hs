@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization)
+import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)

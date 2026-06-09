@@ -4,7 +4,6 @@ module Drasil.SRS.GetChunks (
   ccss, ccss', combine, vars
 ) where
 
-import Data.List (nub)
 import qualified Data.Set as Set
 
 import Language.Drasil
@@ -31,11 +30,11 @@ combine' a m = zipWith dqdQd (vars a m) (concpt' a m)
 
 -- | Gets a list of defined quantities ('DefinedQuantityDict's) from 'Sentence's and expressions that are contained in the database ('ChunkDB').
 ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
-ccss s e c = nub $ concatMap (`combine` c) s ++ concatMap (`combine'` c) e
+ccss s e c = concatMap (`combine` c) s ++ concatMap (`combine'` c) e
 
 -- | Gets a list of quantities ('DefinedQuantityDict's) from 'Sentence's and expressions that are contained in the database ('ChunkDB').
 ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
-ccss' s e c = nub $ concatMap (`vars'` c) s ++ concatMap (`vars` c) e
+ccss' s e c = concatMap (`vars'` c) s ++ concatMap (`vars` c) e
 
 -- | Gets a list of concepts ('ConceptChunk') from a 'Sentence' in order to print.
 concpt :: Sentence -> ChunkDB -> [Sentence]

@@ -15,7 +15,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..),ValueSym(..),
   Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -223,10 +223,6 @@ instance TypeSym JavaCode where
 
 instance OOTypeSym JavaCode where
   obj = G.obj
-
-instance TypeElim JavaCode where
-  getType = cType . unJC
-  getTypeString = typeString . unJC
 
 instance RenderType JavaCode where
   multiType _ = error $ C.multiTypeError jName
@@ -895,10 +891,10 @@ jSystem = text . access "System"
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
 
-jListType :: (CommonRenderSym r, UnRepr r TypeData, Monad r) => VSType r -> VSType r
+jListType :: (UnRepr r TypeData, Monad r) => VSType r -> VSType r
 jListType t = do
   modify (addLangImportVS $ utilImport arrayList)
-  t >>= (jListType' . getType)
+  t >>= (jListType' . getCodeType)
   where jListType' Integer = typeFromData (List Integer)
           lstInt (text lstInt)
         jListType' Float = C.listType arrayList CP.float
@@ -908,10 +904,10 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
-jSetType :: (OORenderSym r, UnRepr r TypeData, Monad r) => VSType r -> VSType r
+jSetType :: (UnRepr r TypeData, Monad r) => VSType r -> VSType r
 jSetType t = do
   modify (addLangImportVS $ utilImport "Set")
-  t >>= (jSetType' . getType)
+  t >>= (jSetType' . getCodeType)
   where jSetType' Integer = typeFromData (Set Integer)
           stInt (text stInt)
         jSetType' Float = C.setType "Set" CP.float
@@ -979,7 +975,7 @@ jSplitFunc :: (OORenderSym r) => Char -> VSFunction r
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
-jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
+jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
@@ -987,7 +983,7 @@ jLambda :: [r BinderD] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constr
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
-jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
+jCast = join .: on2StateValues (\t v -> jCast' (getCodeType t) (getCodeType $ valueType
   v) t v)
   where jCast' Double String _ v = jParseDblFunc (toState v)
         jCast' Float String _ v = jParseFloatFunc (toState v)
@@ -1034,9 +1030,9 @@ jAssert condition errorMessage = vcat [
   text "assert" <+> RC.value condition <+> colon <+> RC.value errorMessage
   ]
 
-jOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
-  MSStatement r
-jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
+jOut :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) ->
+  SValue r -> SValue r -> MSStatement r
+jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
         jOut' (Array _) = do
@@ -1057,7 +1053,7 @@ jInput vr inFn = do
       jInput' String = inFn $. jNextLineFunc
       jInput' Char = (inFn $. jNextFunc) $. jCharAtFunc
       jInput' _ = error "Attempt to read value of unreadable type"
-  jInput' (getType $ variableType v)
+  jInput' (getCodeType $ variableType v)
 
 jOpenFileR :: (OORenderSym r) => SValue r -> VSType r -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
@@ -1155,8 +1151,8 @@ addCallExcsCurrMod n = do
   mem <- getMethodExcMap
   modify (maybe id addExceptions (Map.lookup (qualName cm n) mem))
 
-addConstructorCallExcsCurrMod :: (CommonRenderSym r) => VSType r ->
-  (VSType r -> SValue r) -> SValue r
+addConstructorCallExcsCurrMod :: (UnRepr r TypeData) =>
+  VSType r -> (VSType r -> SValue r) -> SValue r
 addConstructorCallExcsCurrMod ot f = do
   t <- ot
   cm <- zoom lensVStoFS getModuleName

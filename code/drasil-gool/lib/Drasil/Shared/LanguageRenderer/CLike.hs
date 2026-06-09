@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
-  TypeElim(getType, getTypeString), VariableElim(..), ValueSym(Value, valueType),
-  VisibilitySym(..))
+  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..), getCodeType,
+  getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
@@ -68,18 +68,18 @@ double = typeFromData Double doubleRender (text doubleRender)
 char :: (Monad r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
-listType :: (CommonRenderSym r, Monad r, UnRepr r TypeData) => String ->
+listType :: (Monad r, UnRepr r TypeData) => String ->
   VSType r -> VSType r
 listType lst t' = do
   t <- t'
-  typeFromData (List (getType t)) (lst
+  typeFromData (List (getCodeType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (OORenderSym r, Monad r, UnRepr r TypeData) => String -> VSType r ->
+setType :: (Monad r, UnRepr r TypeData) => String -> VSType r ->
   VSType r
 setType lst t' = do
   t <- t'
-  typeFromData (Set (getType t)) (lst
+  typeFromData (Set (getCodeType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
 void :: (Monad r) => VSType r
@@ -156,7 +156,7 @@ varDec s d pdoc v' scp = do
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
-    <+> renderType (variableType v) <+> (ptrdoc (getType (variableType v)) <>
+    <+> renderType (variableType v) <+> (ptrdoc (getCodeType (variableType v)) <>
     RC.variable v))
   where bind ClassLevel = s
         bind InstanceLevel = d

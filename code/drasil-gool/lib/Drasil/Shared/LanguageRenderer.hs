@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The structure for a class of renderers is defined here.
 module Drasil.Shared.LanguageRenderer (
@@ -29,9 +30,9 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
-  TypeElim(..), VariableSym(Variable), ValueSym(..),
-  StatementSym(Statement), ParameterSym(Parameter))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, SValue,
+  BodySym(Body), VariableSym(Variable), ValueSym(..), StatementSym(Statement),
+  ParameterSym(Parameter), getCodeType)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(..), ValueElim(..), StatementElim(..),
@@ -431,8 +432,8 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (CommonRenderSym r) => SValue r -> SValue r
-intValue i = i >>= intValue' . getType . valueType
+intValue :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r
+intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"
 

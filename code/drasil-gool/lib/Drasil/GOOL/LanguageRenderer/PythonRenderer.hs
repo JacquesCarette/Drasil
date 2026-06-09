@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The logic to render Python code is contained in this module
 module Drasil.GOOL.LanguageRenderer.PythonRenderer (
@@ -13,9 +14,9 @@ import Drasil.FileHandling.Legacy (blank, indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
   VSType, VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  BlockSym(..), TypeSym(..), getCodeType, getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
   List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
@@ -202,8 +203,8 @@ instance TypeSym PythonCode where
   string = pyStringType
   infile = typeFromData InFile "" empty
   outfile = typeFromData OutFile "" empty
-  listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
-  setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
+  listType t' = t' >>=(\t -> typeFromData (List (getCodeType t)) "" empty)
+  setType t' = t' >>=(\t -> typeFromData (Set (getCodeType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
   funcType = CS.funcType
@@ -211,10 +212,6 @@ instance TypeSym PythonCode where
 
 instance OOTypeSym PythonCode where
   obj = G.obj
-
-instance TypeElim PythonCode where
-  getType = cType . unPC
-  getTypeString = typeString . unPC
 
 instance RenderType PythonCode where
   multiType _ = typeFromData Void "" empty
@@ -348,7 +345,7 @@ instance NumericExpression PythonCode where
     v2 <- v2'
     let pyDivision Integer Integer = binExpr (multPrec pyIntDiv)
         pyDivision _ _ = binExpr divideOp
-    pyDivision (getType $ valueType v1) (getType $ valueType v2) (pure v1)
+    pyDivision (getCodeType $ valueType v1) (getCodeType $ valueType v2) (pure v1)
       (pure v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
@@ -968,7 +965,8 @@ pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 pyStringType :: (Monad r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)
 
-pyExtNewObjMixedArgs :: (CommonRenderSym r) => Library -> MixedCtorCall r
+pyExtNewObjMixedArgs :: (CommonRenderSym r, UnRepr r TypeData) => Library ->
+  MixedCtorCall r
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
   (getTypeString t) (pure t) vs ns)
 
@@ -985,14 +983,14 @@ pyPrint newLn f' p' v' = do
                <> RC.value f
     mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
-pyOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
-  MSStatement r
-pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
+pyOut :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) ->
+  SValue r -> SValue r -> MSStatement r
+pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v
 
 pyInput :: SValue PythonCode -> SVariable PythonCode -> MSStatement PythonCode
-pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
+pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
   where pyInput' Integer = readInt inSrc
         pyInput' Float = readDouble inSrc
         pyInput' Double = readDouble inSrc

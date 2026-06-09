@@ -2,6 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The logic to render C# code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
@@ -14,7 +15,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -228,10 +229,6 @@ instance TypeSym CSharpCode where
 
 instance OOTypeSym CSharpCode where
   obj = G.obj
-
-instance TypeElim CSharpCode where
-  getType = cType . unCSC
-  getTypeString = typeString . unCSC
 
 instance RenderType CSharpCode where
   multiType _ = error $ C.multiTypeError csName
@@ -794,7 +791,7 @@ csFuncType :: [VSType CSharpCode] -> VSType CSharpCode -> VSType CSharpCode
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  typeFromData (Func (map getType pts) (getType rt))
+  typeFromData (Func (map getCodeType pts) (getCodeType rt))
     (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
     (text csFunc <> angles (hicat listSep' $ map renderType $ pts ++ [rt]))
 
@@ -884,7 +881,7 @@ csSplitFunc :: Char -> VSFunction CSharpCode
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
 csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
-csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
+csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
   valueType v) t v)
   where csCast' Double String _ v = csDblParse (toState v)
         csCast' Float String _ v = csFloatParse (toState v)
@@ -939,7 +936,7 @@ csFileInput f = objMethodCallNoParams string f csReadLine
 csInput :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
 csInput tp inFn = do
   t <- tp
-  csInputImport (getType t) (csInput' (getType t) inFn)
+  csInputImport (getCodeType t) (csInput' (getCodeType t) inFn)
   where csInput' Integer = csIntParse
         csInput' Float = csFloatParse
         csInput' Double = csDblParse
@@ -991,9 +988,9 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
-csPrint :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r ->
+csPrint :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) -> SValue r ->
   SValue r -> MSStatement r
-csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getType . valueType
+csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],
           printMaybeNewLn $ litString "]"]

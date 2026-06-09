@@ -6,9 +6,10 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
-  SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
-  VisibilitySym(..), getType, convType)
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, SMethod, MSBody,
+  MSStatement, SValue, SVariable, MSParameter, VSType,
+  VariableElim(variableName, variableType), VisibilitySym(..),
+  getCodeType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
   IndexTranslator(intToIndex), ParameterSym(param))
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
@@ -19,7 +20,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.Shared.AST (isSource, ScopeData)
+import Drasil.Shared.AST (isSource, ScopeData, TypeData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -78,10 +79,11 @@ docMod e d wm a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d wm a 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
-listInnerType :: (ProcRenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getType)
+listInnerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+listInnerType t = t >>= (convType . getInnerType . getCodeType)
 
-arrayElem :: (ProcRenderSym r) => SValue r -> SVariable r -> SVariable r
+arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SValue r ->
+  SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'

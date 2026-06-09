@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
   VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
-  TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
+  getCodeType, getTypeString, VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
   VisibilitySym(..), MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
@@ -180,10 +180,10 @@ buildModule n imps topDoc bot fs cs = S.modFromData n (do
 
 -- Java and C# --
 
-arrayType :: (CommonRenderSym r, UnRepr r TypeData, Monad r) => VSType r -> VSType r
+arrayType :: (UnRepr r TypeData, Monad r) => VSType r -> VSType r
 arrayType t' = do
   t <- t'
-  typeFromData (Array (getType t))
+  typeFromData (Array (getCodeType t))
     (getTypeString t ++ array) (renderType t <> brackets empty)
 
 pi :: (CommonRenderSym r) => SValue r
@@ -275,7 +275,7 @@ namedArgError l = "Named arguments not supported in " ++ l
 listSizeFunc :: (OORenderSym r) => VSFunction r
 listSizeFunc = IG.func "size" IC.int []
 
-listAccessFunc' :: (OORenderSym r) => Label -> VSType r -> SValue r ->
+listAccessFunc' :: (OORenderSym r, UnRepr r TypeData) => Label -> VSType r -> SValue r ->
   VSFunction r
 listAccessFunc' f t i = IG.func f t [intValue i]
 

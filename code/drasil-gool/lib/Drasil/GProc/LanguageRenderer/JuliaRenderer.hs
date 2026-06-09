@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveFunctor #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The logic to render Julia code is contained in this module
 module Drasil.GProc.LanguageRenderer.JuliaRenderer (
@@ -15,17 +16,17 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
   SValue, litZero, SVariable, MSStatement, MSBlock, SMethod, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
-  switchAsIf, convScope)
+  BlockSym(..), TypeSym(..), getCodeType, getTypeString, VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -198,13 +199,6 @@ instance TypeSym JuliaCode where
   funcType = CS.funcType
   void = jlVoidType
 
-instance TypeElim JuliaCode where
-  getType = cType . unJLC
-  getTypeString v = let tp = typeString $ unJLC v in
-    case cType $ unJLC v of
-      (Object _) -> error jlClassError
-      _ -> tp
-
 instance RenderType JuliaCode where
   multiType ts = do
     typs <- sequence ts
@@ -320,7 +314,7 @@ instance NumericExpression JuliaCode where
     v2 <- v2'
     let jlDivision Integer Integer = binExpr (multPrec jlIntDiv)
         jlDivision _ _ = binExpr divideOp
-    jlDivision (getType $ valueType v1) (getType $ valueType v2)
+    jlDivision (getCodeType $ valueType v1) (getCodeType $ valueType v2)
         (pure v1) (pure v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
@@ -672,9 +666,6 @@ jlSetConc = "Set"
 jlFile = "IOStream"
 jlVoid = "Nothing"
 
-jlClassError :: String
-jlClassError = "Classes are not supported in Julia"
-
 -- The only consistent way of creating floats is by casting
 jlLitFloat :: (CommonRenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
@@ -691,8 +682,8 @@ jlCast :: VSType JuliaCode -> SValue JuliaCode -> SValue JuliaCode
 jlCast t' v' = do
   t <- t'
   v <- v'
-  let vTp = getType $ valueType v
-      tTp = getType t
+  let vTp = getCodeType $ valueType v
+      tTp = getCodeType t
       vDoc = RC.value v
       tDoc = renderType t
       jlCast' :: CodeType -> CodeType -> Doc -> Doc -> Doc
@@ -971,17 +962,17 @@ jlInfileType = typeFromData InFile jlFile (text jlFile)
 jlOutfileType :: (Monad r) => VSType r
 jlOutfileType = typeFromData OutFile jlFile (text jlFile)
 
-jlListType :: (CommonRenderSym r, Monad r) => VSType r -> VSType r
+jlListType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
 jlListType t' = do
   t <- t'
   let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
-  typeFromData (List $ getType t) typeName (text typeName)
+  typeFromData (List $ getCodeType t) typeName (text typeName)
 
-jlSetType :: (CommonRenderSym r, Monad r) => VSType r -> VSType r
+jlSetType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
 jlSetType t' = do
   t <- t'
   let typeName = jlSetConc ++ "{" ++ getTypeString t ++ "}"
-  typeFromData (Set $ getType t) typeName (text typeName)
+  typeFromData (Set $ getCodeType t) typeName (text typeName)
 
 jlVoidType :: (Monad r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
@@ -1007,14 +998,14 @@ jlPrint _ f' p' v' = do
   mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
 
 -- jlPrint can handle lists, so don't use G.print for lists
-jlOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
-  MSStatement r
-jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
+jlOut :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) ->
+  SValue r -> SValue r -> MSStatement r
+jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
 
 jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MSStatement JuliaCode
-jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
+jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc
         jlInput' Double = jlParse jlDoubleConc double inSrc

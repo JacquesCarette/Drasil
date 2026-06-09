@@ -112,16 +112,16 @@ renderCSVTests =
         "Golden Tests"
         [
           goldenTest "simpleCSV minimal" $
-            file [ps|simple_m.csv|] $ renderCSV simpleCSV minimal,
+            file [ps|simple_m.csv|] $ renderCSV minimal simpleCSV,
           goldenTest "simpleCSVnoH minimal" $
-            file [ps|simple_m_nh.csv|] $ renderCSV simpleCSVnoH minimal,
+            file [ps|simple_m_nh.csv|] $ renderCSV minimal simpleCSVnoH,
           goldenTest "simpleCSV everywhere" $
-            file [ps|simple_e.csv|] $ renderCSV simpleCSV everywhere,
+            file [ps|simple_e.csv|] $ renderCSV everywhere simpleCSV,
           goldenTest "simpleCSVnoH everywhere" $
-            file [ps|simple_e_nh.csv|] $ renderCSV simpleCSVnoH everywhere,
+            file [ps|simple_e_nh.csv|] $ renderCSV everywhere simpleCSVnoH,
           goldenTest "complexCSV minimal" $
-            file [ps|complex_m.csv|] $ renderCSV complexCSV minimal,
+            file [ps|complex_m.csv|] $ renderCSV minimal complexCSV,
           goldenTest "complexCSV everywhere" $
-            file [ps|complex_e.csv|] $ renderCSV complexCSV everywhere
+            file [ps|complex_e.csv|] $ renderCSV everywhere complexCSV
         ]
     ]

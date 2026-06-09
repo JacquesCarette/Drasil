@@ -25,12 +25,13 @@ dependencies:
 - drasil-code
 - drasil-data
 - drasil-database
-- drasil-docLang
+- drasil-srs
 - drasil-file-handling
 - drasil-gool
+- drasil-lang
+- drasil-lesson-plan
 - drasil-makefile
 - drasil-metadata
-- drasil-lang
 - drasil-printers
 - drasil-system
 - drasil-theory

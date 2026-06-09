@@ -5,7 +5,8 @@ module Drasil.Generator.CommonKnowledge (
 
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
-  DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+  DefinedQuantityDict, UnitDefn)
+import Language.Drasil.Document (LabelledContent, Reference)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource,
   smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -16,7 +17,7 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon')
 import Data.Drasil.SI_Units (siUnits)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 

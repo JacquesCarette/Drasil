@@ -12,6 +12,7 @@ import Numeric (showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L
+import qualified Language.Drasil.Document as L
 import qualified Language.Drasil.Display as LD
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)

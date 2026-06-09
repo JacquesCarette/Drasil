@@ -3,9 +3,9 @@
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1,
-  decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while,
-  intFunc, multiAssignError, multiReturnError, multiTypeError
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
+  increment1, decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew,
+  switch, for, while, intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -34,8 +34,8 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
-  decrement, this', this)
+import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
+  increment, decrement, this', this)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
@@ -134,6 +134,12 @@ listSize :: (OORenderSym r) => SValue r -> SValue r
 listSize v = v $. S.listSizeFunc v
 
 -- Statements --
+
+increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment vr' v'= do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  mkStmt $ R.addAssign vr v
 
 increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
 increment1 vr' = do

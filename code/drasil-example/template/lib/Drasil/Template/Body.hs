@@ -11,16 +11,16 @@ import qualified Data.List.NonEmpty as NE
 import Drasil.Database (ChunkDB)
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
 import Language.Drasil.ShortHands (lT)
-import Drasil.SRSDocument
-import Drasil.DocLang (inReqWTab)
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
 
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Data.Drasil.Citations
 import Data.Drasil.Concepts.Theory (inModel)
 

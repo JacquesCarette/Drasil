@@ -11,7 +11,8 @@ import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
   DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
-import Drasil.DocLang (findAllRefs)
+import Language.Drasil.Document
+import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)

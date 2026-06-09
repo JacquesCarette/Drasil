@@ -3,10 +3,9 @@ module Drasil.PDController.GenSysDesc (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import Drasil.Document.Contents (foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 
 import Data.Drasil.Concepts.Documentation
        (environment, software, softwareSys, sysCont, system, user)

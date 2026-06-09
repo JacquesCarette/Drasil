@@ -4,12 +4,13 @@ module Drasil.SglPend.Body (mkSRS, si) where
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization, section)
+import Language.Drasil hiding (organization)
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)

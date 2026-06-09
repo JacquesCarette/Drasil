@@ -2,9 +2,10 @@ module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
 import Drasil.Database (ChunkDB)
 import Language.Drasil
-import Drasil.SRSDocument
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 

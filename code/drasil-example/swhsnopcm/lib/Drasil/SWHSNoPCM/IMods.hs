@@ -8,8 +8,8 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Drasil.Sentence.Combinators (substitute, unwrap)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

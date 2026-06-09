@@ -11,7 +11,7 @@ import Language.Drasil.Classes (NamedIdea(..), Quantity)
 import Language.Drasil.Development.Sentence (phrase)
 import Language.Drasil.Label.Type (Referable)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
-import Language.Drasil.Reference (refS)
+import Language.Drasil.Document.Reference (refS)
 import Language.Drasil.Sentence (Sentence(S),(+:+), sParen, ch)
 import Language.Drasil.ShortName (HasShortName(..))
 

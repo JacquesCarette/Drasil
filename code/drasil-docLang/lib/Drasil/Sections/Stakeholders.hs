@@ -14,7 +14,6 @@ import Drasil.Metadata.Documentation (client, customer, endUser, interest,
 
 -- other docLang
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.Document.Contents (foldlSP)
 
 -- | General stakeholders introduction.
 stakeholderIntro :: Contents

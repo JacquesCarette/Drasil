@@ -30,8 +30,6 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Core (IntroSub(..))
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
-import Drasil.Sentence.Combinators (refineChain)
-import Drasil.Document.Contents (foldlSP, foldlSP_)
 
 -----------------------
 --     Constants     --

@@ -1,6 +1,6 @@
 -- | General functions that are useful in manipulating some Drasil types into
 -- printable 'Contents'.
-module Drasil.Document.Contents (
+module Language.Drasil.Document.Contents (
   -- * List Creation Functions
   enumBullet, enumBulletU, enumSimple,
   enumSimpleU, mkEnumSimpleD,
@@ -18,11 +18,10 @@ import Language.Drasil
   ( Definition(..), HasShortName(..), getSentSN, foldlSent_
   , foldlSent, foldlSentCol
   , Expr, Referable(refAdd), ModelExpr, Sentence (..))
-import Language.Drasil.Document
-  ( mkRawLC, ulcc, mkParagraph
-  , LabelledContent, RawContent(Enumeration, EqnBlock, CodeBlock), Contents(UlC), ListTuple
-  , ItemType(Flat), ListType(Simple), Reference)
-import Drasil.Sentence.Combinators (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Document.Core
+import Language.Drasil.Document.Reference
+import Language.Drasil.Document.Sections
+import Language.Drasil.Document.SentenceCombinators (bulletFlat, mkEnumAbbrevList)
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent
@@ -101,4 +100,3 @@ foldlSP_ = mkParagraph . foldlSent_
 -- | Same as 'foldlSP' but uses 'foldlSentCol'.
 foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = mkParagraph . foldlSentCol
-

@@ -13,7 +13,6 @@ import Drasil.Metadata.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_, sysCont)
 
 -- Other docLang
-import Drasil.Document.Contents (foldlSP)
 import qualified Drasil.DocLang.SRS as SRS (sysCon, sysCont, userChar)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 

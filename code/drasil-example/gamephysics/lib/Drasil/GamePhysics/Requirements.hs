@@ -12,8 +12,6 @@ import Drasil.DocLang (mkMaintainableNFR)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_,
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)
 
-import Drasil.Sentence.Combinators (addPercent)
-
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity,
   friction, rigidBody, space)
 import qualified Data.Drasil.Concepts.Math as CM (surface)

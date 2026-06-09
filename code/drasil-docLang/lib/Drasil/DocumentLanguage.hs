@@ -47,7 +47,6 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.Document.Contents(mkEnumSimpleD, foldlSP)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec, extractDocBib)
 import Drasil.TraceTable (generateTraceMap)
 

@@ -1,7 +1,7 @@
 {-# Language PostfixOperators, TupleSections #-}
 -- | Miscellaneous utility functions for use in various parts of document creation,
 -- but focused mainly on the 'Sentence' level
-module Drasil.Sentence.Combinators (
+module Language.Drasil.Document.SentenceCombinators (
   -- * Reference-related Functions
   -- | Attach a 'Reference' and a 'Sentence' in different ways.
   chgsStart, definedIn, definedIn', definedIn'', definedIn''',
@@ -30,7 +30,9 @@ import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHav
   , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
   , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
   , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
-import Language.Drasil.Document (Section, ItemType(..), ListType(Bullet), refS, namedRef)
+import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
+import Language.Drasil.Document.Reference (refS, namedRef)
+import Language.Drasil.Document.Sections (Section)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 
 -- Ideally this would create a reference to the equation too.

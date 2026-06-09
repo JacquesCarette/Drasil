@@ -7,10 +7,11 @@ import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
-import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.Database (ChunkDB)
+import Drasil.SRS
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 

@@ -7,14 +7,14 @@ import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.SRSDocument
-import Drasil.DocLang (auxSpecSent, termDefnF')
+import Drasil.Database (ChunkDB)
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,

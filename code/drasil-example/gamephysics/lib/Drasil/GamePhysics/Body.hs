@@ -1,14 +1,15 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,

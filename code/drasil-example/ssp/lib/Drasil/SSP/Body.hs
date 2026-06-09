@@ -4,16 +4,17 @@ module Drasil.SSP.Body (si, mkSRS) where
 import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
   foldlSPCol, bulletNested, bulletFlat)
 import qualified Language.Drasil.Development as D
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
+import qualified Drasil.SRS.Concepts as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

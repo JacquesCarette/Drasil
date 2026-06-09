@@ -12,9 +12,9 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
-import Drasil.DocLang (mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
+import Drasil.SRS (mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR, inReqWTab)
-import Drasil.DocLang.SRS (datCon, propCorSol)
+import Drasil.SRS.Concepts (datCon, propCorSol)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (condition, funcReqDom, input_, output_,

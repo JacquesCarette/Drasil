@@ -9,8 +9,7 @@
 module Spec.Drasil.Assets (assetTests) where
 
 import Drasil.Assets
-import Drasil.FileHandling
-import Drasil.TestingKit.GoldenTesting
+import Drasil.TestingKit.Golden
 import System.OsPath
 import Test.Tasty (TestTree, testGroup)
 

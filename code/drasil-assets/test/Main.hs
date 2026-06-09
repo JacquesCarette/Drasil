@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Drasil.TestingKit.TestMain (testMain)
+import Drasil.TestingKit (testMain)
 import Spec.Drasil.Assets (assetTests)
 
 main :: IO ()

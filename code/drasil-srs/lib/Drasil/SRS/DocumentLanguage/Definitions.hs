@@ -139,7 +139,7 @@ helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. u
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SmithEtAlSRS -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
-mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb $ d ^. defLhs]) : fs
+mkDDField d _ l@Symbol fs = (show l, [mkParagraph . eS' $ d ^. defLhs]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless $ d ^. defLhs]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, toList $ unlbldExpr <$> mexpress d) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
@@ -190,12 +190,12 @@ mkIMField i m l@(Description v u) fs = (show l,
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getDecRefs) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
-  where x = P . eqSymb $ i ^. output
+  where x = eS' $ i ^. output
 mkIMField i _ l@Input fs =
   case map fst (i ^. inputs) of
     [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
     (_:_) -> (show l, [mkParagraph $ foldl1 sC xs]) : fs
-  where xs = map (P . eqSymb . fst) $ i ^. inputs
+  where xs = map (eS' . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
@@ -210,15 +210,17 @@ mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
-firstPair' IgnoreUnits d  = (P $ eqSymb $ d ^. defLhs, Flat $ phrase d, Nothing)
+firstPair' IgnoreUnits d  = (eS' $ d ^. defLhs, Flat $ phrase d, Nothing)
 firstPair' IncludeUnits d =
-  (P $ eqSymb $ d ^. defLhs, Flat $ phrase (d ^. defLhs) +:+ sParen (toSentenceUnitless $ d ^. defLhs), Nothing)
+  ( eS' $ d ^. defLhs,
+    Flat $ phrase (d ^. defLhs) +:+ sParen (toSentenceUnitless $ d ^. defLhs),
+    Nothing )
 
 -- | Creates the descriptions for each symbol in the relation/equation.
-descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
-descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
+descPairs :: (Quantity q, MayHaveUnit q, Express q) => InclUnits -> [q] -> [ListTuple]
+descPairs IgnoreUnits = map (\x -> (eS' x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
+  map (\x -> (eS' x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 -- | Defines 'Field's as 'String's.

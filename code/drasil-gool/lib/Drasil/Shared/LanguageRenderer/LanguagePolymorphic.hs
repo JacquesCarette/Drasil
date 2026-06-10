@@ -302,6 +302,7 @@ get v vToGet = v $. S.getFunc vToGet
 set :: (OORenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
+-- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
 listAccess :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v

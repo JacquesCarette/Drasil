@@ -25,7 +25,7 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
-import Drasil.DblPend.Concepts (concepts, rod)
+import Drasil.DblPend.Concepts (ideaDicts, rod, defs)
 import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.References (citations)
 
@@ -96,17 +96,13 @@ si = mkSmithEtAlICO progName [olu]
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  concepts
-
 cis :: [CI]
 cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   physicalcon ++ [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm]
+  gravitationalConst, gravity, rigidBody, weight, shm] ++ defs
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols

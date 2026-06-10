@@ -14,7 +14,7 @@ import Drasil.LessonPlan.Core (LsnDesc, LsnChapter(..),
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import qualified Drasil.LessonPlan.Sections as Lsn (intro, learnObj, caseProb, example,
   appendix, review, reference, summary)
-import Drasil.LessonPlan.ExtractLsnDesc (extractLsnPlanBib)
+import Drasil.LessonPlan.ExtractBib (extractBib)
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LessonPlan -> LsnDesc -> (CI -> CI -> Sentence) -> Document
@@ -34,7 +34,7 @@ mkSections si dd = map doit dd
     doit (CaseProb cp) = mkCaseProb cp
     doit (Example e)   = mkExample e
     doit (Smmry s)     = mkSmmry s
-    doit BibSec        = mkBib (extractLsnPlanBib si dd)
+    doit BibSec        = mkBib (extractBib si dd)
     doit (Apndx a)     = mkAppndx a
 
 -- | Helper for making the 'Introduction' section.

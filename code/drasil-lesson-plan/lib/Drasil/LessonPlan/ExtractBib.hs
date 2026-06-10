@@ -1,5 +1,5 @@
 -- | Defines functions to extract citation references from Notebook documents.
-module Drasil.LessonPlan.ExtractLsnDesc (extractLsnPlanBib) where
+module Drasil.LessonPlan.ExtractBib (extractBib) where
 
 import qualified Data.Set as S
 
@@ -28,7 +28,7 @@ lsnChapCites (Apndx (ApndxProg cs)) = extractChRefs cs
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in
 -- the database.
-extractLsnPlanBib :: ChunkDB -> LsnDesc -> BibRef
-extractLsnPlanBib db = resolveBibliography db . extractAllRefs
+extractBib :: ChunkDB -> LsnDesc -> BibRef
+extractBib db = resolveBibliography db . extractAllRefs
   where
     extractAllRefs = S.unions . map lsnChapCites

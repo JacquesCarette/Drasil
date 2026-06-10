@@ -1,13 +1,12 @@
 -- | Performs IO actions to get file path information
 -- and then generate an updated Drasil website.
-module Main where
+module Main (main) where
 
-import GHC.IO.Encoding
 import Data.Maybe (fromMaybe)
 
-import Drasil.Generator (exportWebsite)
-import Language.Drasil (Document(Document), ShowTableOfContents(NoToC),
-  namedRef, Sentence(S))
+import Drasil.Generator (caseStudyMainDrasilWebsite)
+import Language.Drasil (Sentence(S))
+import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
 import System.Environment (getEnv, lookupEnv)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
@@ -17,8 +16,6 @@ import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
 -- and generate the Drasil website.
 main :: IO ()
 main = do
-  setLocaleEncoding utf8
-
   -- Require the Makefile (or deploy script as it will usually be) to feed
   -- locations for where to find certain files/groups of files in the staged
   -- deploy folder.
@@ -62,11 +59,9 @@ main = do
             -- but the analysis scripts work nonetheless, so we display it here.
           }
 
-      syst = webSys allFolders
-
       --  FIXME: Author is hack for now to show up in proper spot.
       author = namedRef gitHubRef (S "Link to GitHub Repository")
       websiteDoc = Document (S websiteTitle) author NoToC $ sections allFolders
+      syst = webSys websiteDoc allFolders
 
-  -- generate the html document/website.
-  exportWebsite syst websiteDoc "index"
+  caseStudyMainDrasilWebsite syst

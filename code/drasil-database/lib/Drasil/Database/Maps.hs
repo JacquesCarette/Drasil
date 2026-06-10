@@ -1,6 +1,6 @@
-module Drasil.Database.Maps where
+module Drasil.Database.Maps (invert) where
 
-import Data.Map.Strict
+import Data.Map.Strict (Map, fromListWith, toList)
 
 invert :: Ord v => Map k [v] -> Map v [k]
 invert m = fromListWith (++) vks

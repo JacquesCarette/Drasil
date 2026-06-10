@@ -3,22 +3,22 @@ module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section)
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization)
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.People (olu)
-import Data.Drasil.Concepts.Math (mathcon')
-import Data.Drasil.Concepts.Physics (physicCon', motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
+import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
-import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
@@ -90,8 +90,8 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
-  inputs outputs inConstraints []
-  symbMap allRefs
+  inputs outputs inConstraints [] allSymbols
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
@@ -101,20 +101,24 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw physicCon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   physicalcon ++ [angular, displacement, iPos, pendulum, motion,
-  gravitationalConst, gravity, rigidBody, weight, shm] ++
-  -- Unital Chunks
-  [cw len]
+  gravitationalConst, gravity, rigidBody, weight, shm]
+
+allSymbols :: [DefinedQuantityDict]
+allSymbols = map (^. output) iMods ++ symbols
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] (map (^. output) iMods ++ symbols) ideaDicts
+symbMap = withCommonKnowledge [] allSymbols ideaDicts
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
-  (labelledContent ++ funcReqsTables)
+  labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

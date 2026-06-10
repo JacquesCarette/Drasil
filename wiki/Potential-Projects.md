@@ -22,6 +22,37 @@ The SE4SC repo (not public) provides some additional brainstormed ideas.
 
 Lastly, there may be other potential projects hiding in [Cold Issues](Cold-Issues). Feel free to take a look there!
 
+<details>
+
+<summary><b>Table of Contents</b></sumary>
+
+1. [Incorporate Pandoc into DocLang](#incorporate-pandoc-into-doclang)
+2. [Scientific Knowledge Ontology](#scientific-knowledge-ontology)
+3. [Scientific Project Related Knowledge Ontology](#scientific-project-related-knowledge-ontology)
+4. [Generation of test cases based on data constraints and properties of a correct solution](#generation-of-test-cases-based-on-data-constraints-and-properties-of-a-correct-solution)
+5. [Add 3D Model of the Aorta to Drasil](#add-3d-model-of-the-aorta-to-drasil)
+6. [Generate Jupyter notebooks - probably starting with generating simple physics experiments](#generate-jupyter-notebooks---probably-starting-with-generating-simple-physics-experiments)
+7. [Jupyter Notebooks: Appropriate Use, Refactoring, and Building an Example](#jupyter-notebooks-appropriate-use-refactoring-and-building-an-example)
+8. [Automatic Check for Completeness, Correctness, and Consistency](#automatic-check-for-completeness-correctness-and-consistency)
+9. [Complete and Fix Incomplete Case Studies](#complete-and-fix-incomplete-case-studies)
+10. [Add New Case Studies to Drasil](#add-new-case-studies-to-drasil)
+11. [Correct-by-Construction READMEs](#correct-by-construction-readmes)
+12. [Add A Recipe to Drasil for Generating Papers](#add-a-recipe-to-drasil-for-generating-papers)
+13. [Generate the Drasil Wiki](#generate-the-drasil-wiki)
+14. [Add Support for External Libraries to Drasil](#add-support-for-external-libraries-to-drasil)
+15. [A Sound Type System for Physical  Quantities, Units, and Measurements](#a-sound-type-system-for-physical--quantities-units-and-measurements)
+16. [A domain knowledge and recipes for verifying a cruise control system using Simulink](#a-domain-knowledge-and-recipes-for-verifying-a-cruise-control-system-using-simulink)
+17. [Drasil in Drasil](#drasil-in-drasil)
+18. [Check Drasil and Generated Projects with Checklists](#check-drasil-and-generated-projects-with-checklists)
+19. [Develop a Strategy for Working with Shared External Libraries](#develop-a-strategy-for-working-with-shared-external-libraries)
+20. [Improve Automation of Formatting Long Equations in LaTeX Generated pdfs](#improve-automation-of-formatting-long-equations-in-latex-generated-pdfs)
+21. [Generate Graphs in Drasil](#generate-graphs-in-drasil)
+22. [Visualizing our Case Studies](#visualizing-our-case-studies)
+23. [Investigate / Add Hackage Dimensional Package](#investigate--add-hackage-dimensional-package)
+24. [Generating More Document Types and Formats](#generating-more-document-types-and-formats)
+
+</details>
+
 ## Incorporate Pandoc into DocLang
 
 Pandoc is a Haskell library for converting from one markup format to another.
@@ -153,6 +184,16 @@ possible borrowing ideas from
 Many potential simple physics problems are given at: [My Physics Lab](https://www.myphysicslab.com/).
 Another great place for Physics is [Dyna-Kinematics](https://github.com/diegomacario/Dyna-Kinematics),
 which also has very pretty animations. Would make a good showcase.
+
+## Jupyter Notebooks: Appropriate Use, Refactoring, and Building an Example
+
+_See [#3019](https://github.com/JacquesCarette/Drasil/issues/3019) for more details._
+
+Jupyter notebooks are used for larger software than they are really suited to. When people use notebooks for writing a more complicated program, especially when they are defining their own functions, or including testing and verification steps, quickly lose their focus. A Jupyter notebook is only easy to follow if all the sections follow a nice easy to see sequence. Jupyter notebooks are best when used as a _higher-level view_ of the important parts of a program, using high-level function calls to abstract away non-problem-essential details as much as possible. 
+
+The [projectile motion lesson plan](https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile/projectileLesson) is a great example of a simple, self-contained example of appropriate Jupyter notebook usage. The [3d reconstruction of the aorta](https://github.com/smiths/GeomRecon/blob/master/People/Kailin/src/circle-method.ipynb) project is not (This is a private repo, so the link will only work if the person clicking has been added to the repo.). We used this example to explore the problem, but it is really awkward for "production" software. The goal of this project would be to use Jupyter notebooks _appropriately_, whether it be reusing our current case studies to create interactive views of physics problems or to recreate past projects (such as the aorta).
+
+See [Soorgeon](https://github.com/ploomber/soorgeon) and [Ploomber](https://ploomber.io/) (both now archived projects). The Aorta notebook does fall into some of the pipelines steps that Ploomber uses, like loading data, and something like cleaning the data. We might be able to use it to explore Soorgeon and Ploomber.
 
 ## Automatic Check for Completeness, Correctness, and Consistency
 
@@ -381,7 +422,19 @@ Currently, Drasil has a home-grown 'units' handling module. This project would i
 
 The issue can be reopened and assigned once the project is taken on.
 
+## Generating More Document Types and Formats
 
+_Suggested by: [@balacij](https://github.com/balacij). If pursued, he will be more than happy to help! Especially for ePub/SSML/audiobook generation._
 
+**This project should only be pursued once [\#4989](https://github.com/JacquesCarette/Drasil/issues/4989) has been resolved.**
 
+At time of writing (Fri. May $29^{\text{th}}$, 2026), Drasil supports generating the following document types:
 
+* LaTeX
+* HTML
+* Markdown
+* Jupyter notebooks
+
+Drasil supports generating these through the _generic document language_ that [`drasil-printers`](https://github.com/JacquesCarette/Drasil/blob/cbcf885d07f6dd787eed724b6515e29409375188/code/drasil-printers/lib/Language/Drasil/Printing/LayoutObj.hs#L17-L18) contains (a [similar](https://github.com/JacquesCarette/Drasil/blob/cbcf885d07f6dd787eed724b6515e29409375188/code/drasil-printers/lib/Language/Drasil/Printing/LayoutObj.hs#L46-L59) construction to [`pandoc`](https://hackage-content.haskell.org/package/pandoc-types-1.23.1.1/docs/Text-Pandoc-Definition.html#t:Block)). If/when [\#4989](https://github.com/JacquesCarette/Drasil/issues/4989) is resolved, you should see that ticket for the most relevant information about how documents are generated with Drasil.
+
+The goal of this project is to be creative and generate more kinds of document types and formats. For example, generating: [ePub](https://en.wikipedia.org/wiki/EPUB)s, [Typst](https://en.wikipedia.org/wiki/Typst), and [SSML](https://en.wikipedia.org/wiki/Speech_Synthesis_Markup_Language). Why are these examples worth looking into? ePubs can be used to generate documents (e.g., books, papers, SRS documents even) readable on [eReader](https://en.wikipedia.org/wiki/E-reader)s, Typst is a modern alternative to LaTeX (a showcase of reusable knowledge with different implications), and SSML can be used for generating speech (allowing us to generate audiobooks, for example).

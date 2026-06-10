@@ -14,7 +14,39 @@ public class HelloWorld {
         // Initializing variables
         int a;
         int b = 5;
+        int[] arr = {1, 2, 3};
+        Console.Write("Value of arr: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr));
+        Console.WriteLine("]");
+        Console.Write("Length of arr: ");
+        Console.WriteLine(arr.Length);
+        int[] arr2 = new int[3];
+        arr2[0] = 4;
+        arr2[1] = 5;
+        arr2[2] = 6;
+        Console.Write("Value of arr2: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr2));
+        Console.WriteLine("]");
+        Console.Write("Length of arr2: ");
+        Console.WriteLine(arr2.Length);
         List<double> myOtherList = new List<double> {1.0, 1.5};
+        int[] arr_copy = new int[3];
+        arr_copy = (int[])(arr.Clone());
+        Console.Write("Value of arr_copy: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr_copy));
+        Console.WriteLine("]");
+        arr[1] = 42;
+        Console.Write("Value of arr after modifying arr: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr));
+        Console.WriteLine("]");
+        Console.Write("Value of arr_copy after modifying arr: ");
+        Console.Write("[");
+        Console.Write(string.Join(", ", arr_copy));
+        Console.WriteLine("]");
         int oneIndex = myOtherList.IndexOf(1.0);
         Console.WriteLine(oneIndex);
         a = myOtherList.Count;
@@ -50,6 +82,13 @@ public class HelloWorld {
         Debug.Assert( oneIndex == 0 , "oneIndex should be 0");
         HashSet<int> s = new HashSet<int> {4, 7, 5};
         Debug.Assert( s.Contains(7) , "Set s should contain 7");
+        
+        // Object tests
+        TestClass t1 = new TestClass(5);
+        TestClass t2 = new TestClass(4);
+        TestClass t3 = TestClass.add(t1, t2);
+        Console.Write("Value of t3.a: ");
+        Console.WriteLine(t3.a);
         
         // List slicing tests
         // Create variables for list slices
@@ -388,5 +427,17 @@ public class HelloWorld {
         } catch {
             Console.WriteLine("Caught intentional error");
         }
+    }
+}
+
+public class TestClass {
+    public int a;
+    
+    public TestClass(int a) {
+        this.a = a;
+    }
+    
+    public static TestClass add(TestClass t1, TestClass t2) {
+        return new TestClass(t1.a + t2.a);
     }
 }

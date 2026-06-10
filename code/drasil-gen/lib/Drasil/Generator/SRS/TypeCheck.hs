@@ -10,19 +10,19 @@ import Data.Either (isLeft, lefts)
 import Data.List (partition)
 import qualified Data.Map.Strict as M
 
-import Drasil.Database (UID, HasUID(..), ChunkDB, findAll)
+import Drasil.Database (UID, HasUID(..))
 import Language.Drasil (Expr, Space, temporaryIndent, HasSpace(typ),
-  RequiresChecking(..), TypeError, Typed(check), DefinedQuantityDict)
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(instModels, dataDefns), systemdb)
+  RequiresChecking(..), TypeError, Typed(check))
+import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..))
 
 -- Note: this should be externally configurable wrt verbosity!
 typeCheckSI :: SmithEtAlSRS -> IO ()
 typeCheckSI sys = do
     let ims = sys ^. instModels
         dds = sys ^. dataDefns
-        chks = sys ^. systemdb
+        qts = sys ^. quantities
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) $ findAllDefinedQuantities chks
+    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) qts
 
     -- dump out the list of variables (commented out for now)
     -- putStr "Symbol Table: "
@@ -73,6 +73,3 @@ typeCheckSI sys = do
     -- TODO: When we want to have Drasil panic on type-errors, use the following code:
     -- add back import: Control.Monad (when)
     -- when (any isRight formattedChkd) $ error "Type errors occurred, please check your expressions and adjust accordingly"
-
-findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
-findAllDefinedQuantities = findAll

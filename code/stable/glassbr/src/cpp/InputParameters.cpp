@@ -42,7 +42,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->a;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->a' assigned ";
+    outfile << "var 'self->a' assigned ";
     outfile << this->a;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -50,7 +50,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->b;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->b' assigned ";
+    outfile << "var 'self->b' assigned ";
     outfile << this->b;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -58,7 +58,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->w;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->w' assigned ";
+    outfile << "var 'self->w' assigned ";
     outfile << this->w;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -66,7 +66,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->P_btol;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->P_btol' assigned ";
+    outfile << "var 'self->P_btol' assigned ";
     outfile << this->P_btol;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -74,7 +74,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->TNT;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->TNT' assigned ";
+    outfile << "var 'self->TNT' assigned ";
     outfile << this->TNT;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -82,7 +82,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->g;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->g' assigned ";
+    outfile << "var 'self->g' assigned ";
     outfile << this->g;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -90,7 +90,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->t;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->t' assigned ";
+    outfile << "var 'self->t' assigned ";
     outfile << this->t;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -98,7 +98,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->SD_x;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->SD_x' assigned ";
+    outfile << "var 'self->SD_x' assigned ";
     outfile << this->SD_x;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -106,7 +106,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->SD_y;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->SD_y' assigned ";
+    outfile << "var 'self->SD_y' assigned ";
     outfile << this->SD_y;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -114,7 +114,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->SD_z;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->SD_z' assigned ";
+    outfile << "var 'self->SD_z' assigned ";
     outfile << this->SD_z;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -130,14 +130,14 @@ void InputParameters::derived_values() {
     
     this->h = 1.0 / 1000.0 * (this->t == 2.5 ? 2.16 : this->t == 2.7 ? 2.59 : this->t == 3.0 ? 2.92 : this->t == 4.0 ? 3.78 : this->t == 5.0 ? 4.57 : this->t == 6.0 ? 5.56 : this->t == 8.0 ? 7.42 : this->t == 10.0 ? 9.02 : this->t == 12.0 ? 11.91 : this->t == 16.0 ? 15.09 : this->t == 19.0 ? 18.26 : 21.44);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->h' assigned ";
+    outfile << "var 'self->h' assigned ";
     outfile << this->h;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
     
     this->LDF = pow(3.0 / 60.0, 7.0 / 16.0);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->LDF' assigned ";
+    outfile << "var 'self->LDF' assigned ";
     outfile << this->LDF;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
@@ -145,7 +145,7 @@ void InputParameters::derived_values() {
     if (this->g == "AN") {
         this->GTF = 1;
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'this->GTF' assigned ";
+        outfile << "var 'self->GTF' assigned ";
         outfile << this->GTF;
         outfile << " in module InputParameters" << std::endl;
         outfile.close();
@@ -153,7 +153,7 @@ void InputParameters::derived_values() {
     else if (this->g == "FT") {
         this->GTF = 4;
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'this->GTF' assigned ";
+        outfile << "var 'self->GTF' assigned ";
         outfile << this->GTF;
         outfile << " in module InputParameters" << std::endl;
         outfile.close();
@@ -161,7 +161,7 @@ void InputParameters::derived_values() {
     else if (this->g == "HS") {
         this->GTF = 2;
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'this->GTF' assigned ";
+        outfile << "var 'self->GTF' assigned ";
         outfile << this->GTF;
         outfile << " in module InputParameters" << std::endl;
         outfile.close();
@@ -172,21 +172,21 @@ void InputParameters::derived_values() {
     
     this->SD = sqrt(pow(this->SD_x, 2.0) + pow(this->SD_y, 2.0) + pow(this->SD_z, 2.0));
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->SD' assigned ";
+    outfile << "var 'self->SD' assigned ";
     outfile << this->SD;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
     
     this->AR = this->a / this->b;
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->AR' assigned ";
+    outfile << "var 'self->AR' assigned ";
     outfile << this->AR;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();
     
     this->w_TNT = this->w * this->TNT;
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->w_TNT' assigned ";
+    outfile << "var 'self->w_TNT' assigned ";
     outfile << this->w_TNT;
     outfile << " in module InputParameters" << std::endl;
     outfile.close();

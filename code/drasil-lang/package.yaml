@@ -32,6 +32,7 @@ dependencies:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -Wmissing-export-lists
 
 library:
   source-dirs: lib
@@ -44,6 +45,7 @@ library:
   - Language.Drasil.Chunk.Concept.NamedCombinators
   - Language.Drasil.Development
   - Language.Drasil.Display
+  - Language.Drasil.Document
   - Language.Drasil.Expr.Development
   - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development

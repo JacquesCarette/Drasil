@@ -1,7 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.PDController.DataDefs where
+module Drasil.PDController.DataDefs (
+  dataDefinitions, ddErrSig, ddCtrlVar
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

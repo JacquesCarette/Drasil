@@ -10,7 +10,7 @@ import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
-import Drasil.Build.Artifacts (FileAndContents)
+import Drasil.FileHandling (FileLayout)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile, FileSym(..), ModuleSym(..))
 import Language.Drasil hiding (List)
@@ -25,9 +25,9 @@ import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
-  CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
-  ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
+  CSStateVar, SClass, NamedArgs, SharedProg, OOProg, ValueSym(..), Argument(..),
+  ValueExpression(..), OOValueExpression(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), ClassSym(..), CodeType(..), getCodeType)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -56,23 +56,23 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
-genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Maybe (r FileAndContents))
+genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState -> GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
   let n = codeSpec g ^. pNameO
       cms = g ^. commented
       v = getDoxOutput g
-  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
+  return $ if not (null cms) then doxConfig n s v else Nothing
 
 -- | Generates a README file.
-genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileAndContents))
+genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
   let n = codeSpec g ^. pNameO
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
-getReadMe :: (SoftwareDossierSym r) => [SoftwareDossierFile] -> ReadMeInfo -> Maybe (r FileAndContents)
+getReadMe :: (SoftwareDossierSym r) => [SoftwareDossierFile] -> ReadMeInfo -> Maybe (r FileLayout)
 getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
@@ -118,7 +118,7 @@ mkArg v = do
   let mkArg' (List _) = pointerArg
       mkArg' (Object _) = pointerArg
       mkArg' _ = id
-  mkArg' (getType $ valueType vl) (return vl)
+  mkArg' (getCodeType $ valueType vl) (return vl)
 
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
@@ -199,8 +199,8 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 -- If @m@ is the current module and function is not exported, use GOOL's function for
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
-fAppProc :: (SharedProg r) => Name -> Name -> VSType r -> [SValue r] ->
-  NamedArgs r -> GenState (SValue r)
+fAppProc :: (SharedProg r) => Name -> Name -> VSType r ->
+  [SValue r] -> NamedArgs r -> GenState (SValue r)
 fAppProc m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->

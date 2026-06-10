@@ -18,6 +18,6 @@ using std::vector;
     \param E_W change in heat energy in the water (J)
     \param T_W temperature of the water (degreeC)
 */
-void write_output(double E_W, vector<double> &T_W);
+void write_output(double E_W, vector<vector<double>> &T_W);
 
 #endif

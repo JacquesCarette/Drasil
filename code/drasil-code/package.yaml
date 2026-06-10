@@ -23,11 +23,11 @@ dependencies:
 - directory
 - filepath
 - split
-- drasil-build-artifacts
-- drasil-build
 - drasil-database
+- drasil-file-handling
 - drasil-gool
 - drasil-lang
+- drasil-makefile
 - drasil-metadata
 - drasil-printers
 - drasil-system
@@ -38,6 +38,7 @@ dependencies:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -Wmissing-export-lists
 
 library:
   source-dirs: lib

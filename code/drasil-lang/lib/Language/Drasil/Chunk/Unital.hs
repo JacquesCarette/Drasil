@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
   UnitalChunk(..),
   -- * Constructors
-  uc, uc', ucStaged, ucStaged', ucuc, ucw) where
+  uc, uc', ucStaged, ucStaged') where
 
 import Control.Lens (makeLenses, view, (^.))
 
@@ -12,9 +12,8 @@ import Drasil.Database (HasUID(..), HasChunkRefs(..))
 import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.Concept (dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
-import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Symbol
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Symbol (Symbol, HasSymbol(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
@@ -57,8 +56,6 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 -- | 'UnitalChunk's have a 'Quantity'.
 instance Quantity      UnitalChunk where
--- | Finds the unit definition of a 'UnitalChunk'.
-instance Unitary       UnitalChunk where unit = view uni
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Finds the units used to make the 'UnitalChunk'.
@@ -92,11 +89,3 @@ ucStaged' :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> UnitalChunk
 ucStaged' i t d sym space u = UC (dqd' (dccWDS i t d) sym space (Just un)) un
  where un = unitWrapper u
-
--- | Attach units to a chunk that has a symbol and definition.
-ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
-ucuc c = UC (dqdWr c)
-
--- | Constructs a UnitalChunk from a 'Concept' with 'Units'.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
-ucw c = ucuc c (unit c)

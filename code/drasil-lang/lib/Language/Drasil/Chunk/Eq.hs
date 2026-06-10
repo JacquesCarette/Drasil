@@ -15,7 +15,7 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..))
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk)
 import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
@@ -138,8 +138,8 @@ ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 ec c = QD (dqd' (cc' c EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
 -- | Factored version of 'QDefinition' functions.
-mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
-               HasUID i, HasSymbol i, HasSpace i) =>
+mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
+               IsChunk i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
   (dqd' (cc' (ncUID (f ^. uid) n) s) (symbol f)
@@ -148,16 +148,16 @@ mkFuncDef0 f n s u is = QD
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- resultant units, and a defining Expr
-mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f,
-              HasUID i, HasSymbol i, HasSpace i,
+mkFuncDef :: (IsChunk f, HasSymbol f, HasSpace f,
+              IsChunk i, HasSymbol i, HasSpace i,
               IsUnit u) =>
   f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
 mkFuncDef f n s u = mkFuncDef0 f n s (Just $ unitWrapper u)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- and a defining Expr
-mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f,
-               HasUID i, HasSymbol i, HasSpace i) =>
+mkFuncDef' :: (IsChunk f, HasSymbol f, HasSpace f,
+               IsChunk i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> [i] -> e -> QDefinition e
 mkFuncDef' f n s = mkFuncDef0 f n s Nothing
 

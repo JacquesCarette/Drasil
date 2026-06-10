@@ -29,7 +29,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec(..),  OldCodeSpec(..), getConstraints, systemdbO)
+  CodeSpec,  OldCodeSpec(..), getConstraints, systemdbO)
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)

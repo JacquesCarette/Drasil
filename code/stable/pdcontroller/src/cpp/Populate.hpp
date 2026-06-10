@@ -16,9 +16,9 @@ using std::vector;
 class Populate {
     public:
         /** \brief Constructor for Populate objects
-            \param y_t Process Variable
+            \param y_t Process Variable solution list
         */
-        Populate(vector<double> &y_t);
+        Populate(vector<vector<double>> &y_t);
         /** \brief appends solution point for current ODE solution step
             \param y current dependent variable value in ODE solution
             \param t current independent variable value in ODE solution
@@ -26,7 +26,7 @@ class Populate {
         void operator()(vector<double> &y, double t);
     
     private:
-        vector<double> &y_t;
+        vector<vector<double>> &y_t;
         
 };
 

@@ -1,4 +1,4 @@
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE PatternSynonyms, FlexibleContexts, QuasiQuotes #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode, generateCodeProc
@@ -8,22 +8,21 @@ import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
 import qualified Data.Set as Set (fromList)
 import Data.Map (fromList, member, keys, elems)
+import qualified Data.Map as M
 import Data.Maybe (maybeToList, catMaybes)
-import Data.Foldable (traverse_)
-import System.Directory (setCurrentDirectory, getCurrentDirectory)
-import Text.PrettyPrint.HughesPJ (isEmpty, vcat, render)
+import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
-import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents,
-  hasPathAndDocToFileAndContents, createDirIfMissing, createFile)
+import Drasil.FileHandling (FileLayout, file, directory, exactFile, ps)
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
-  ProgData(..), initialState)
+import Drasil.GOOL (OOProg, LoggingFor, InstanceVarSelfSym(..),
+  VisibilityTag(..), headers, sources, mainMod, ProgData(..), initialState,
+  FileData(..), modDoc)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys, Notation (Scientific))
 import Language.Drasil.Printing.Import (spec)
-import Drasil.System
+import Drasil.System (refTable, HasSystemMeta(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -55,7 +54,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
+import Language.Drasil.CodeSpec (CodeSpec, HasOldCodeSpec(..), getODE)
 
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.
@@ -121,25 +120,50 @@ generator l dt sd chs cs = let
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCode :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
-  Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
-  (packRepr PackageData -> PackageData) ->
-  DrasilState -> IO ()
-generateCode l unReprProg unReprPack g = do
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False (getDir l)
-  setCurrentDirectory (getDir l)
-  let (pckg, ds) = runState (genPackage unReprProg) g
+generateCode :: (OOProg progRepr, InstanceVarSelfSym (LoggingFor progRepr),
+  SoftwareDossierSym packRepr, Monad packRepr) => Lang ->
+  (progRepr (OO.Program progRepr) -> ProgData) ->
+  (packRepr PackageData -> PackageData) -> DrasilState -> FileLayout
+generateCode l unReprProg unReprPack g =
+  let dirName = getDir l
+      (pckg, ds) = runState (genPackage unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg
-      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+      designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
-      initFile = [fileAndContents "__init__.py" mempty | l == Python]
-      dossier = progDossier ++ designLogFile ++ initFile
-      packageFiles = map
-        hasPathAndDocToFileAndContents (progMods prog)
-        ++ dossier
-  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
-  setCurrentDirectory workingDir
+      initFile = [exactFile [ps|__init__.py|] empty | l == Python]
+      packageFiles = toFileLayout (progMods prog) ++ progDossier
+        ++ designLogFile ++ initFile
+  in
+    directory
+      [ps|{dirName}|]
+      packageFiles
+
+-- | Internal: Converts a list of `FileData` to a `FileLayout`.
+toFileLayout :: [FileData] -> [FileLayout]
+toFileLayout fc =
+  let
+    root = foldl (\m f -> insertFile (filePath f, modDoc $ fileMod f) m) M.empty fc
+
+    entryToLayout (n, File d) = file [ps|{n}|] d
+    entryToLayout (n, Folder m) = directory [ps|{n}|] $ map entryToLayout $ M.assocs m
+  in
+    map entryToLayout (M.assocs root)
+
+data Entry a = File a | Folder (M.Map String (Entry a))
+  deriving (Show)
+
+insertFile :: (String, a) -> M.Map String (Entry a) -> M.Map String (Entry a)
+insertFile (p, d) m =
+  if '/' `elem` p
+    then
+      let (fname, rest) = break (== '/') p
+          folderM = case M.findWithDefault (Folder M.empty) fname m of
+                      File _   -> dupError fname
+                      Folder f -> f
+      in M.insert fname (Folder $ insertFile (drop 1 rest, d) folderM) m
+    else M.insertWith (\_ -> dupError p) p (File d) m
+  where
+    dupError fname = error $ "A file or folder with name '" ++ fname ++ "' already exists."
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
 -- configuration file (all subject to the user's choices).
@@ -147,9 +171,9 @@ generateCode l unReprProg unReprPack g = do
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
-  (progRepr (OO.Program progRepr) -> ProgData) ->
-  GenState (packRepr PackageData)
+genPackage :: (OOProg progRepr, InstanceVarSelfSym (LoggingFor progRepr),
+  SoftwareDossierSym packRepr, Monad packRepr) =>
+  (progRepr (OO.Program progRepr) -> ProgData) -> GenState (packRepr PackageData)
 genPackage unRepr = do
   g <- get
   ci <- genProgram
@@ -188,7 +212,7 @@ genPackage unRepr = do
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
-genProgram :: (OOProg r) => GenState (OO.GSProgram r)
+genProgram :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
@@ -198,12 +222,13 @@ genProgram = do
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r) => Modularity -> GenState [OO.SFile r]
+chooseModules :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => Modularity ->
+  GenState [OO.SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r) => GenState (OO.SFile r)
+genUnmodular :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => GenState (OO.SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -222,7 +247,7 @@ genUnmodular = do
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
-genModules :: (OOProg r) => GenState [OO.SFile r]
+genModules :: (OOProg r, InstanceVarSelfSym (LoggingFor r)) => GenState [OO.SFile r]
 genModules = do
   g <- get
   mn     <- genMain
@@ -241,21 +266,19 @@ genModules = do
 generateCodeProc :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
   Lang -> (progRepr (Proc.Program progRepr) -> ProgData) ->
   (packRepr PackageData -> PackageData) ->
-  DrasilState -> IO ()
-generateCodeProc l unReprProg unReprPack g = do
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False (getDir l)
-  setCurrentDirectory (getDir l)
-  let (pckg, ds) = runState (genPackageProc unReprProg) g
+  DrasilState -> FileLayout
+generateCodeProc l unReprProg unReprPack g =
+  let dirName = getDir l
+      (pckg, ds) = runState (genPackageProc unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg
-      designLogFile = [fileAndContents "designLog.txt" (ds ^. designLog) |
+      designLogFile = [file [ps|designLog.txt|] (ds ^. designLog) |
                         not $ isEmpty $ ds ^. designLog]
-      dossier =  progDossier ++ designLogFile
-      packageFiles = map
-        hasPathAndDocToFileAndContents (progMods prog)
-        ++ dossier
-  traverse_ (\file -> createFile (filePath file) (render $ fileDoc file)) packageFiles
-  setCurrentDirectory workingDir
+      packageFiles = toFileLayout (progMods prog) ++ progDossier
+        ++ designLogFile
+  in
+    directory
+      [ps|{dirName}|]
+      packageFiles
 
 -- | Generates a package, including a Makefile, sample input file, and Doxygen
 -- configuration file (all subject to the user's choices).
@@ -356,3 +379,4 @@ getDir Java = "java"
 getDir Python = "python"
 getDir Swift = "swift"
 getDir Julia = "julia"
+getDir Matlab = "matlab"

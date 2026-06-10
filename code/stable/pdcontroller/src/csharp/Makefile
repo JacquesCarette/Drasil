@@ -26,7 +26,7 @@ PDController$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calc
 	$(CSC) -out:PDController$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 
 run: build
-	./PDController$(TARGET_EXTENSION) $(RUNARGS)
+	mono PDController$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig

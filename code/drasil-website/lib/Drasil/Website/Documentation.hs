@@ -1,7 +1,8 @@
 -- | Display Drasil documentation nicely for the website.
-module Drasil.Website.Documentation where
+module Drasil.Website.Documentation (docsSec, docRefs) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
 -- * Haddock Documentation for Drasil Section
 

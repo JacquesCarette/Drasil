@@ -2,7 +2,16 @@
    either! It will need to find a proper home, later. Right now, it needs to be
    'here' because it depends on things defined in this package
 -}
-module Drasil.Database.SearchTools where
+module Drasil.Database.SearchTools (
+  -- * Types
+  TermAbbr, DomDefn,
+  -- * Field Accessors
+  longForm, shortForm, domain, definition,
+  -- * Resolvers
+  termResolve, termResolve',
+  defResolve, defResolve',
+  findAllConcInsts
+) where
 
 import Control.Lens ((^.))
 
@@ -61,6 +70,3 @@ defResolve' = defResolve DomDefn
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll
-
-findAllLabelledContent :: ChunkDB -> [LabelledContent]
-findAllLabelledContent = findAll

@@ -1,43 +1,45 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1,
-  decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while,
-  intFunc, multiAssignError, multiReturnError, multiTypeError
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
+  increment1, decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew,
+  switch, for, while, intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
-  TypeElim(getType, getTypeString), ScopeSym(..),
-  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
+  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..), getCodeType,
+  getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
-import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
-  ValueElim(valuePrec), ScopeElim(scopeData))
+  InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
+  ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(variable), ValueElim(value),
-  StatementElim(statement))
+  InternalVarElim(variable), ValueElim(value), StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.Shared.AST (Binding(..), Terminator(..))
+import Drasil.GOOL.Renderers (renderType)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
+  TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified Drasil.Shared.LanguageRenderer as R (switch, increment,
-  decrement, this', this)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
+  increment, decrement, this', this)
+import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
+  mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName, setVarScope)
 
@@ -57,28 +59,30 @@ doubleRender = "double"
 charRender = "char"
 voidRender = "void"
 
-float :: (CommonRenderSym r) => VSType r
+float :: (Monad r) => VSType r
 float = typeFromData Float floatRender (text floatRender)
 
-double :: (CommonRenderSym r) => VSType r
+double :: (Monad r) => VSType r
 double = typeFromData Double doubleRender (text doubleRender)
 
-char :: (CommonRenderSym r) => VSType r
+char :: (Monad r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
-listType :: (CommonRenderSym r) => String -> VSType r -> VSType r
+listType :: (Monad r, UnRepr r TypeData) => String ->
+  VSType r -> VSType r
 listType lst t' = do
   t <- t'
-  typeFromData (List (getType t)) (lst
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
+  typeFromData (List (getCodeType t)) (lst
+    `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (OORenderSym r) => String -> VSType r -> VSType r
+setType :: (Monad r, UnRepr r TypeData) => String -> VSType r ->
+  VSType r
 setType lst t' = do
   t <- t'
-  typeFromData (Set (getType t)) (lst
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
+  typeFromData (Set (getCodeType t)) (lst
+    `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-void :: (CommonRenderSym r) => VSType r
+void :: (Monad r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
 
 -- Unary Operators --
@@ -135,6 +139,12 @@ listSize v = v $. S.listSizeFunc v
 
 -- Statements --
 
+increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment vr' v'= do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  mkStmt $ R.addAssign vr v
+
 increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
@@ -145,22 +155,22 @@ decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
-  SVariable r -> r (Scope r) -> MSStatement r
+varDec :: (OORenderSym r, UnRepr r TypeData) => r (Attachment r) ->
+  r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
-    <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
+    <+> renderType (variableType v) <+> (ptrdoc (getCodeType (variableType v)) <>
     RC.variable v))
-  where bind Static = s
-        bind Dynamic = d
+  where bind ClassLevel = s
+        bind InstanceLevel = d
         ptrdoc (List _) = pdoc
         ptrdoc (Set _) = pdoc
         ptrdoc _ = empty
 
-varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) ->
+varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r ScopeData ->
   SValue r -> MSStatement r
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
@@ -169,7 +179,7 @@ varDecDef t vr scp vl' = do
       stmtCtor Semi = mkStmt
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
-setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) -> SValue r ->
+setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r ScopeData -> SValue r ->
   MSStatement r
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
@@ -179,13 +189,13 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec :: (CommonRenderSym r) => (r (Value r) -> Doc) -> SValue r ->
-  SVariable r -> r (Scope r) -> MSStatement r
+  SVariable r -> r ScopeData -> MSStatement r
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
-extObjDecNew :: (OORenderSym r) => Library -> SVariable r -> r (Scope r) ->
+extObjDecNew :: (OORenderSym r) => Library -> SVariable r -> r ScopeData ->
   [SValue r] -> MSStatement r
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
@@ -228,7 +238,7 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc :: (OORenderSym r) => Bool -> Label -> r (Visibility  r) ->
-  r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+  r (Attachment r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 intFunc = intMethod
 
 -- Error Messages --

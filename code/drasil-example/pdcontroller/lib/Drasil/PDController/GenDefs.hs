@@ -1,7 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.PDController.GenDefs where
+module Drasil.PDController.GenDefs (
+  genDefns, gdPowerPlant
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

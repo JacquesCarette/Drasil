@@ -1,29 +1,40 @@
+{-# LANGUAGE FlexibleContexts #-}
 -- | Implementations defined here are valid in some, but not all, language renderers
-module Drasil.Shared.LanguageRenderer.Common where
+module Drasil.Shared.LanguageRenderer.Common (
+  boolRender, bool, extVar, funcType, extFuncAppMixedArgs, listAccessFunc,
+  listSetFunc, forEach', varDecDef, listSize, increment
+) where
+
+import Prelude hiding (print, pi, (<>))
+import Control.Lens.Zoom (zoom)
+import Control.Monad (join)
+import Control.Monad.State (modify)
+import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon
-import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
-import Control.Monad (join)
-import Drasil.Shared.LanguageRenderer
-import qualified Drasil.Shared.LanguageRenderer as R
+import Drasil.Shared.InterfaceCommon (UnRepr(..), VSType, SVariable, MixedCall,
+  SValue, VSFunction, ValueSym(valueType, Value), MSBody, MSStatement,
+  VariableElim(variableName), VariableSym(Variable), Label, Library,
+  BodySym(Body), getCodeType)
+import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
+  RenderFunction(funcFromData))
+import Drasil.Shared.LanguageRenderer (access, intValue)
+import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
+  addAssign)
 import qualified Drasil.Shared.RendererClassesCommon as RC (value, functionType, function)
-import Drasil.Shared.LanguageRenderer.Constructors
-import Prelude hiding (print,pi,(<>))
-import Drasil.Shared.Helpers
-import Text.PrettyPrint.HughesPJ (text, empty, Doc)
-import Control.Lens.Zoom (zoom)
-import Drasil.Shared.State
-import qualified Drasil.Shared.InterfaceCommon as IC
-import Control.Monad.State (modify)
-import qualified Drasil.Shared.RendererClassesCommon as S
+import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, mkVal, typeFromData)
+import Drasil.Shared.Helpers (on2StateValues, onStateValue)
+import Drasil.Shared.State (lensMStoVS, useVarName, setVarScope)
+import qualified Drasil.Shared.InterfaceCommon as IC (emptyStmt, assign)
+import qualified Drasil.Shared.RendererClassesCommon as S (listSizeFunc)
+import Drasil.Shared.AST (ScopeData, TypeData)
 
 -- Swift and Julia --
 
 boolRender :: String
 boolRender = "Bool"
 
-bool :: (CommonRenderSym r) => VSType r
+bool :: (Monad r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
@@ -31,13 +42,14 @@ bool = typeFromData Boolean boolRender (text boolRender)
 extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
--- Python, Java, C++, and Julia --
+-- Python, Java, and Julia --
 
-funcType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+funcType :: (Monad r, UnRepr r TypeData) => [VSType r] ->
+              VSType r -> VSType r
 funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'
-  typeFromData (Func (map getType ps) (getType r)) "" empty
+  typeFromData (Func (map getCodeType ps) (getCodeType r)) "" empty
 
 -- Python, Java, C#, Swift, and Julia --
 extFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
@@ -45,10 +57,10 @@ extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
-listAccessFunc :: (CommonRenderSym r) => VSType r -> SValue r -> VSFunction r
+listAccessFunc :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> SValue r -> VSFunction r
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
-listSetFunc :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r ->
+listSetFunc :: (CommonRenderSym r, UnRepr r TypeData) => (Doc -> Doc -> Doc) -> SValue r -> SValue r ->
   SValue r -> VSFunction r
 listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
   (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx)
@@ -66,7 +78,7 @@ forEach' f i' v' b' = do
 
 -- Python and Julia --
 
-varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue r)
+varDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> Maybe (SValue r)
   -> MSStatement r
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
@@ -76,6 +88,14 @@ varDecDef v scp e = do
   where
     def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
+
+-- Python and Swift --
+
+increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment vr' v'= do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  mkStmtNoEnd $ R.addAssign vr v
 
 -- Python, Julia, and MATLAB --
 

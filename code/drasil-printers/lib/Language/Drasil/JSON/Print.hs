@@ -7,7 +7,8 @@ import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import Language.Drasil (checkValidStr, RenderSpecial(..), DType(..), MaxWidthPercent)
+import Language.Drasil (checkValidStr, RenderSpecial(..))
+import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -70,7 +71,7 @@ printLO (EqnBlock contents)              = nbformat mathEqn
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
-printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
+printLO (Definition ssPs l)             = nbformat (text "<br>") $$ makeDefn ssPs (pSpec l)
 printLO (List t)                        = nbformat empty $$ makeList t False
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
@@ -79,12 +80,11 @@ printLO CodeBlock {}                    = empty
 
 -- printLO' is used for generating general notebook (lesson plans)
 printLO' :: LayoutObj -> Doc
-printLO' (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map printLO' layoutObs)
 printLO' (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO' (Cell layoutObs)                 = vcat (map printLO' layoutObs)
 printLO' HDiv {}                          = empty
 printLO' (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
-printLO' (EqnBlock contents)              = nbformat mathEqn
+printLO' (EqnBlock contents)              = markdownCell $ nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$"
@@ -119,6 +119,7 @@ pSpec (Tooltip _ s) = pSpec s
 pSpec (Sp s)    = text $ unPH $ special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
+pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
@@ -234,14 +235,10 @@ count c (x:xs)
   | otherwise = count c xs
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "Empty definition"
-makeDefn dt ps l = refID l $$ table [dtag dt]
+makeDefn :: [(String, [LayoutObj])] -> Doc -> Doc
+makeDefn [] _ = error "Empty definition"
+makeDefn ps l = refID l $$ table ["defn-table"]
   (tr (nbformat (th (text "Refname")) $$ td (nbformat(bold l))) $$ makeDRows ps)
-  where dtag General  = "gdefn"
-        dtag Instance = "idefn"
-        dtag Theory   = "tdefn"
-        dtag Data     = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc

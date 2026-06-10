@@ -1,4 +1,17 @@
-module Drasil.PDController.Unitals where
+module Drasil.PDController.Unitals (
+  symbols, inputs, outputs, inputsUC, inpConstrained,
+  pidConstants,
+  symDampingCoeff, symStifnessCoeff,
+  dqdSetPointTD, dqdPropGain, dqdDerivGain, dqdSimTime, dqdStepTime,
+  dqdProcessErrorFD, dqdSetPointFD, dqdProcessVariableFD, dqdPropControlFD,
+  dqdDerivativeControlFD, dqdFreqDomain, dqdCtrlVarFD, dqdProcessVariableTD,
+  dqdInvLaplaceTransform, dqdLaplaceTransform, dqdFxnTDomain, dqdDampingCoeff,
+  dqdStiffnessCoeff,
+  odeRelTolConst, odeAbsTolConst, opProcessVariable
+) where
+
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
@@ -9,8 +22,8 @@ import Drasil.PDController.Concepts
 import Control.Lens ((^.))
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
-       symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
-       symCT, symCS, symTStep, symTSim, symAbsTol, symRelTol,
+       symYT, symYS, symYrT, symYrS, symES, symPS, symDS,
+       symCS, symTStep, symTSim, symAbsTol, symRelTol,
        symDampingCoeff, symStifnessCoeff :: Symbol
 
 symFS            = sub (variable "F") $ label "s"
@@ -23,12 +36,9 @@ symYrT           = sub (variable "r") $ label "t"
 symYrS           = sub (variable "R") $ label "s"
 symYT            = sub (variable "y") $ label "t"
 symYS            = sub (variable "Y") $ label "s"
-symET            = sub (variable "e") $ label "t"
 symES            = sub (variable "E") $ label "s"
 symPS            = sub (variable "P") $ label "s"
 symDS            = sub (variable "D") $ label "s"
-symHS            = sub (variable "H") $ label "s"
-symCT            = sub (variable "c") $ label "t"
 symCS            = sub (variable "C") $ label "s"
 symTStep         = sub (variable "t") $ label "step"
 symTSim          = sub (variable "t") $ label "sim"
@@ -54,11 +64,11 @@ dqdLaplaceTransform, dqdFreqDomain, dqdFxnTDomain,
                     dqdCtrlVarFD, dqdStepTime,
                     dqdSimTime, dqdDampingCoeff, dqdStiffnessCoeff, dqdAbsTol, dqdRelTol :: DefinedQuantityDict
 
-inputs :: [DefinedQuantityDict]
-inputs = [dqdSetPointTD, dqdDerivGain, dqdPropGain, dqdStepTime, dqdSimTime]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = dqdSetPointTD :| [dqdDerivGain, dqdPropGain, dqdStepTime, dqdSimTime]
 
-outputs :: [DefinedQuantityDict]
-outputs = [dqdProcessVariableTD]
+outputs :: NE.NonEmpty DefinedQuantityDict
+outputs = NE.singleton dqdProcessVariableTD
 
 inputsUC :: [UncertQ]
 inputsUC
@@ -107,9 +117,6 @@ odeAbsTolConst, odeRelTolConst :: ConstQDef
 
 pidConstants :: [ConstQDef]
 pidConstants = [odeAbsTolConst, odeRelTolConst]
-
-pidDqdConstants :: [DefinedQuantityDict]
-pidDqdConstants = [dqdAbsTol, dqdRelTol]
 
 dqdAbsTol = dqdNoUnit ccAbsTolerance symAbsTol Real
 dqdRelTol = dqdNoUnit ccRelTolerance symRelTol Real

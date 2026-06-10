@@ -7,14 +7,13 @@ package PDController;
 */
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import org.apache.commons.math3.ode.sampling.StepHandler;
 import org.apache.commons.math3.ode.sampling.StepInterpolator;
 
 /** \brief Class defining additional behaviour for each step of an ODE solution
 */
 public class ODEStepHandler implements StepHandler {
-    public ArrayList<Double> y_t;
+    public ArrayList<ArrayList<Double>> y_t;
     
     /** \brief initializes step handler with initial conditions
         \param t0 initial time for ODE solving
@@ -22,7 +21,12 @@ public class ODEStepHandler implements StepHandler {
         \param t current independent variable value in ODE solution
     */
     public void init(double t0, double[] y0, double t) {
-        y_t = new ArrayList<Double>(Arrays.asList(y0[0]));
+        y_t = new ArrayList<ArrayList<Double>>();
+        ArrayList<Double> y0List = new ArrayList<Double>(0);
+        for (double y0El : y0) {
+            y0List.add(y0El);
+        }
+        y_t.add(y0List);
     }
     
     /** \brief appends solution point at each ODE solution step
@@ -31,6 +35,10 @@ public class ODEStepHandler implements StepHandler {
     */
     public void handleStep(StepInterpolator interpolator, boolean isLast) {
         double[] curr = interpolator.getInterpolatedState();
-        y_t.add(curr[0]);
+        ArrayList<Double> currList = new ArrayList<Double>(0);
+        for (double currEl : curr) {
+            currList.add(currEl);
+        }
+        y_t.add(currList);
     }
 }

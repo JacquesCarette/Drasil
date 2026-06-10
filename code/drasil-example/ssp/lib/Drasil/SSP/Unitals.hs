@@ -1,6 +1,8 @@
-module Drasil.SSP.Unitals where --export all of it
+module Drasil.SSP.Unitals (module Drasil.SSP.Unitals) where --export all of it
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
@@ -21,16 +23,16 @@ import Data.Drasil.Concepts.Math (cartesian, xCoord, xDir, yCoord, yDir,
   zCoord, zDir)
 import Data.Drasil.Concepts.Physics (gravity)
 
-import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
+import Data.Drasil.Quantities.Math (area, pi_, unitVectj, surface)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
-  vol)
+  vol, len)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ,
-  supMax, supMin, torque, weight, positionVec)
+  supMax, supMin, torque, weight, positionVec, time)
 
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
-  ++ map dqdWr units ++ map dqdWr unitless
+symbols = dqdWr coords : NE.toList inputs ++ map dqdWr (NE.toList outputs)
+  ++ map dqdWr units ++ unitless
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -68,21 +70,21 @@ wiif = "without the influence of interslice forces"
 --------------------------------
 
 constrained :: [ConstrConcept]
-constrained = coords : map cnstrw' inputsWUncrtn ++ outputs
+constrained = coords : map cnstrw' (NE.toList inputsWUncrtn) ++ NE.toList outputs
 
-inputsWUncrtn :: [UncertQ]
-inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip,
+inputsWUncrtn :: NE.NonEmpty UncertQ
+inputsWUncrtn = slopeDist :| [slopeHght, waterDist, waterHght, xMaxExtSlip,
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion,
   fricAngle, dryWeight, satWeight, waterWeight]
 
-inputsNoUncrtn :: [DefinedQuantityDict]
-inputsNoUncrtn = [constF]
+inputsNoUncrtn :: NE.NonEmpty DefinedQuantityDict
+inputsNoUncrtn = constF :| []
 
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.map dqdWr inputsWUncrtn <> NE.map dqdWr inputsNoUncrtn
 
-outputs :: [ConstrConcept]
-outputs = [fs]
+outputs :: NE.NonEmpty ConstrConcept
+outputs = NE.singleton fs
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
@@ -192,7 +194,7 @@ coords = constrainedNRV' (uc' "(x,y)" (cn "cartesian position coordinates")
 ---------------------------
 
 units :: [UnitalChunk]
-units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
+units = [accel, genericMass, genericF, genericA, genericM, genericV,
   genericW, genericSpWght, gravAccel, dens, genericH, genericP, genericR,
   genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords,
   slipDist, mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl,
@@ -201,7 +203,8 @@ units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
   porePressure, sliceHght, sliceHghtW, fx, fy, fn, ft, nrmForceSum, watForceSum,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totNormStress, tangStress,
-  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec]
+  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec,
+  time, surface, len]
 
 accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT,

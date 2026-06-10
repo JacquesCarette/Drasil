@@ -1,5 +1,9 @@
 -- | Defines helper functions for creating Markdown files.
-module Language.Drasil.Markdown.Helpers where
+module Language.Drasil.Markdown.Helpers (
+  ang, bold, em, li, ul, divTag, centeredDiv, centeredDivId,
+  reflink, reflinkInfo, reflinkURI, image, caption, heading, h, h',
+  docLength
+) where
 
 import Prelude hiding ((<>), lookup)
 import Data.Map (lookup)

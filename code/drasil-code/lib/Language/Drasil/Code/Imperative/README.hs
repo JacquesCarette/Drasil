@@ -6,9 +6,9 @@ module Language.Drasil.Code.Imperative.README (
 
 import Prelude hiding ((<>))
 import Data.List.NonEmpty (nonEmpty, toList)
-import Text.PrettyPrint.HughesPJ (Doc, empty)
+import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Build.Artifacts (RelativeFile, relFileToStr)
+import Drasil.FileHandling.Legacy (RelativeFile, relFileToStr)
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
 
@@ -83,8 +83,8 @@ makeReadMe ReadMeInfo {
     endNote number auths] -- add date information to end note for license
 
 -- | Helper for encoding the type of program (either library or controller-based) in a README file.
-makeInstr :: ImplementationType -> [FilePath] -> String -> (String, String) -> Doc
-makeInstr Library _ _ _ = empty
+makeInstr :: ImplementationType -> [FilePath] -> String -> (String, String) -> Maybe Doc
+makeInstr Library _ _ _ = Nothing
 makeInstr Program cfp n inOutf = instDoc cfp n inOutf
 
 -- |Helper that checks if the field is empty; allowing optional content

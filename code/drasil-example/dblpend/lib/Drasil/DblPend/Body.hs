@@ -1,13 +1,21 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.DblPend.Body where
+module Drasil.DblPend.Body (
+  mkSRS, si, justification, externalLinkRef, charsOfReader,
+  sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
+  userCharacteristicsIntro, tMods
+) where
 
-import Language.Drasil hiding (organization, section)
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization)
+import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
+  LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
+  foldlSPCol, bulletNested, bulletFlat)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS
-import Drasil.System (mkSmithEtAlICO)
+import qualified Drasil.SRS.Concepts as SRS
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -22,15 +30,12 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   physical, software, sysCont, softwareConstraint, softwareSys,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
-import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
-import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
+import Data.Drasil.Concepts.Math (cartesian, ode, graph)
+import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
-import Drasil.Document.Contents (foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
@@ -96,9 +101,8 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs inConstraints
-  constants
-  symbMap allRefs
+  inputs outputs inConstraints constants symbols
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -117,19 +121,19 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw physicCon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++
-  -- UnitalChunks
-  [cw len]
+  gravitationalConst, gravity]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
+  dataDefs iMods genDefns tMods concIns citations labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

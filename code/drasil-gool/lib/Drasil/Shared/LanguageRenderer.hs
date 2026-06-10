@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The structure for a class of renderers is defined here.
 module Drasil.Shared.LanguageRenderer (
@@ -14,41 +15,37 @@ module Drasil.Shared.LanguageRenderer (
 
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile,
-  param, method, stateVar, constVar, stateVarList, switch, assign,
-  addAssign, subAssign, increment, decrement, listDec, getTerm, return',
-  comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD,
-  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc,
-  objAccess, castObj, break, continue, static, dynamic, private, public,
-  blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
-  ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod,
-  valueList, variableList, parameterList, namedArgList, prependToBody,
-  appendToBody, surroundBody, getterName, setterName, intValue
+  stateVar, constVar, stateVarList, switch, assign, addAssign, subAssign,
+  increment, decrement, getTerm, return', comment, var, extVar, arg,
+  classVarAccess, instanceVarAccess, unOpDocD, unOpDocD', binOpDocD, binOpDocD',
+  func, cast, listAccessFunc, listSetFunc, objAccess, castObj, break, continue,
+  classLevel, instanceLevel, private, public, blockCmt, docCmt, commentedItem,
+  addComments, FuncDocRenderer, functionDox, ClassDocRenderer, classDox,
+  ModuleDocRenderer, moduleDox, commentedMod, valueList, variableList,
+  binderList, parameterList, namedArgList, prependToBody, appendToBody,
+  surroundBody, getterName, setterName, intValue
 ) where
 
-import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
+import Drasil.FileHandling.Legacy (blank, indent, indentList)
+import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
-  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
-  ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
-  ParameterSym(Parameter))
-import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, SValue,
+  BodySym(Body), VariableSym(Variable), ValueSym(..), StatementSym(Statement),
+  ParameterSym(Parameter), getCodeType)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
-  VisibilityElim(..), ParamElim(..))
-import Drasil.GOOL.RendererClassesOO (OORenderSym)
-import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
+  InternalVarElim(..), ValueElim(..), StatementElim(..),
+  ParamElim(..), InternalBinderElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..))
+  updateMod, TypeData(..), VarData(..), BinderD)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last, intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
   atan,floor,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
-  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
-  comma)
+  brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon, comma)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -204,21 +201,6 @@ print printFn v = RC.value printFn <> parens (RC.value v)
 printFile :: Label -> Doc -> Doc
 printFile fn f = f <> dot <> text fn
 
--- Parameters --
-
-param :: (CommonRenderSym r) => r (Variable r) -> Doc
-param v = RC.type' (variableType v) <+> RC.variable v
-
--- Method --
-
-method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) ->
-  r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
-method n s p t ps b = vcat [
-  RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <>
-    parens (parameterList ps) <+> lbrace,
-  indent (RC.body b),
-  rbrace]
-
 -- StateVar --
 
 stateVar :: Doc -> Doc -> Doc -> Doc
@@ -270,14 +252,6 @@ increment v = RC.variable v <> text "++"
 decrement :: (CommonRenderSym r) => r (Variable r) -> Doc
 decrement v = RC.variable v <> text "--"
 
-listDec :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> new' <+> RC.type' (variableType v)
-  <> parens (RC.value n)
-
-constDecDef :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = constDec' <+> RC.type' (variableType v) <+>
-  RC.variable v <+> equals <+> RC.value def
-
 return' :: (CommonRenderSym r) => [r (Value r)] -> Doc
 return' vs = returnLabel <+> valueList vs
 
@@ -302,11 +276,11 @@ extVar l n = text l <> dot <> text n
 arg :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
 arg n argsList = RC.value argsList <> brackets (RC.value n)
 
-classVar :: Doc -> Doc -> Doc
-classVar c v = c <> dot <> v
+classVarAccess :: Doc -> Doc -> Doc
+classVarAccess c v = c <> dot <> v
 
-objVar :: Doc -> Doc ->  Doc
-objVar n1 n2 = n1 <> dot <> n2
+instanceVarAccess :: Doc -> Doc ->  Doc
+instanceVarAccess n1 n2 = n1 <> dot <> n2
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
@@ -340,13 +314,13 @@ objAccess v f = v <> f
 castObj :: Doc -> Doc -> Doc
 castObj t v = t <> parens v
 
--- Permanence --
+-- Attachment --
 
-static :: Doc
-static = text "static"
+classLevel :: Doc
+classLevel = text "static"
 
-dynamic :: Doc
-dynamic = empty
+instanceLevel :: Doc
+instanceLevel = empty
 
 -- Jumps --
 
@@ -431,6 +405,9 @@ valueList = hicat listSep' . map RC.value
 variableList :: (CommonRenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat listSep' . map RC.variable
 
+binderList :: (CommonRenderSym r) => [r BinderD] -> Doc
+binderList = hicat listSep' . map RC.binderElim
+
 parameterList :: (CommonRenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat listSep' . map RC.parameter
 
@@ -455,8 +432,8 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (CommonRenderSym r) => SValue r -> SValue r
-intValue i = i >>= intValue' . getType . valueType
+intValue :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r
+intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"
 

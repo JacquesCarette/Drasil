@@ -1,0 +1,22 @@
+# mass of the first star (kg)
+2.0e30
+# mass of the second star (kg)
+1.6e30
+# initial x-position of the first star (m)
+7.5e10
+# initial y-position of the first star (m)
+0.0
+# initial x-position of the second star (m)
+-9.375e10
+# initial y-position of the second star (m)
+0.0
+# initial x-velocity of the first star (m/s)
+2000.0
+# initial y-velocity of the first star (m/s)
+9000.0
+# initial x-velocity of the second star (m/s)
+-2500.0
+# initial y-velocity of the second star (m/s)
+-11250.0
+# final time (s)
+100000.0

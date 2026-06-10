@@ -1,4 +1,9 @@
-module Drasil.SglPend.Derivations where
+module Drasil.SglPend.Derivations (
+  angularDisplacementDerivEqns, angFrequencyDerivEqns, periodPendDerivEqns,
+  velocityIXDerivEqns, velocityIYDerivEqns,
+  accelerationIXDerivEqn3, accelerationIXDerivEqn4,
+  accelerationIYDerivEqn3,accelerationIYDerivEqn4, accelerationIDerivEqn1
+) where
 
 import Prelude hiding (sin, cos, tan, sqrt)
 

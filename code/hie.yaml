@@ -1,10 +1,10 @@
 cradle:
   stack:
-    - path: "drasil-build/lib"
-      component: "drasil-build:lib"
+    - path: "drasil-assets/lib"
+      component: "drasil-assets:lib"
 
-    - path: "drasil-build-artifacts/lib"
-      component: "drasil-build-artifacts:lib"
+    - path: "drasil-assets/test"
+      component: "drasil-assets:test:drasil-assets-test"
 
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
@@ -36,11 +36,14 @@ cradle:
     - path: "drasil-data/lib"
       component: "drasil-data:lib"
 
+    - path: "drasil-data-formats/lib"
+      component: "drasil-data-formats:lib"
+
+    - path: "drasil-data-formats/test"
+      component: "drasil-data-formats:test:drasil-data-formats-test"
+
     - path: "drasil-database/lib"
       component: "drasil-database:lib"
-
-    - path: "drasil-docLang/lib"
-      component: "drasil-docLang:lib"
 
     - path: "drasil-example/dblpend/lib"
       component: "dblpend:lib"
@@ -108,6 +111,12 @@ cradle:
     - path: "drasil-example/template/app/Main.hs"
       component: "template:exe:template"
 
+    - path: "drasil-file-handling/lib"
+      component: "drasil-file-handling:lib"
+
+    - path: "drasil-file-handling/test"
+      component: "drasil-file-handling:test:drasil-file-handling-test"
+
     - path: "drasil-gen/lib"
       component: "drasil-gen:lib"
 
@@ -117,11 +126,29 @@ cradle:
     - path: "drasil-lang/lib"
       component: "drasil-lang:lib"
 
+    - path: "drasil-lesson-plan/lib"
+      component: "drasil-lesson-plan:lib"
+
+    - path: "drasil-makefile/lib"
+      component: "drasil-makefile:lib"
+
+    - path: "drasil-meta-analysis/lib"
+      component: "drasil-meta-analysis:lib"
+
+    - path: "drasil-meta-analysis/app/classinstdepgen/ClassInstDepGen.hs"
+      component: "drasil-meta-analysis:exe:classinstdepgen"
+
+    - path: "drasil-meta-analysis/app/typedepgen/TypeDepGen.hs"
+      component: "drasil-meta-analysis:exe:typedepgen"
+
     - path: "drasil-metadata/lib"
       component: "drasil-metadata:lib"
 
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
+
+    - path: "drasil-srs/lib"
+      component: "drasil-srs:lib"
 
     - path: "drasil-system/lib"
       component: "drasil-system:lib"

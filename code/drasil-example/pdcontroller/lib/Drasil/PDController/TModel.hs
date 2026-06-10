@@ -1,9 +1,13 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.PDController.TModel where
+module Drasil.PDController.TModel (
+  theoreticalModels,
+  tmLaplace, tmSOSystem, tmInvLaplace
+) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil as DrasilLang
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D

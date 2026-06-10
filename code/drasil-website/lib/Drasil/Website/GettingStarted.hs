@@ -1,6 +1,7 @@
-module Drasil.Website.GettingStarted where
+module Drasil.Website.GettingStarted (gettingStartedSec) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
 -- * Getting Started Section
 

@@ -1,4 +1,7 @@
-module Drasil.Projectile.Concepts where
+module Drasil.Projectile.Concepts (
+  launcher, projectile, target, projMotion, defs, rectVel, concepts,
+  flightDur, offset, landPos, launAngle, launSpeed, targPos, projSpeed, projPos
+) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

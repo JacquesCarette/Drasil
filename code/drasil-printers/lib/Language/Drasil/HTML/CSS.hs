@@ -1,15 +1,14 @@
 -- | Defines functions to create accompanying .css files for HTML generators.
 module Language.Drasil.HTML.CSS (
-  makeCSS, linkCSS
+  genericCSS, linkCSS
 ) where
 
 import Text.PrettyPrint (Doc, text, vcat)
 
-import Language.Drasil (Document)
-
--- | Generates the CSS selectors necessary for a document.
-makeCSS :: Document -> Doc
-makeCSS _ = vcat [
+-- | Generic CSS used for stylizing the 'LayoutObj' language when outputted in
+-- HTML format.
+genericCSS :: Doc
+genericCSS = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
   text "body {min-width: 400px; max-width: 1400px;}",
   text ".title {text-align: center;}",
@@ -68,8 +67,8 @@ makeCSS _ = vcat [
     text "  margin-left: auto;",
     text "  margin-right: auto;}"],
   text "th, td {border: 1px solid black; padding: 0.5em;}",
-  text ".tdefn, .ddefn, .gdefn, .idefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
-  text ".tdefn th, .ddefn th, .gdefn th, .idefn th {width: 15%;}",
+  text ".defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
+  text ".defn-table th {width: 15%;}",
   text ".section {width: 80%; margin: 0 auto; text-align: left;}",
   vcat [
     text ".code {",

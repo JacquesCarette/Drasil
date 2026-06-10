@@ -1,6 +1,16 @@
-module Language.Drasil.Code.Imperative.Build.AST where
+module Language.Drasil.Code.Imperative.Build.AST (
+  -- * Types
+  CommandFragment, BuildName(..), Ext(..), BuildDependencies(..), BuildConfig(..),
+  RunType(..), Runnable(..), DocConfig(..), NameOpts(..), BuildCommand,
+  InterpreterCommand, InterpreterOption,
+  -- * Constructors
+  nameOpts, asFragment, osClassDefault, buildAll, buildAllAdditionalName,
+  buildSingle, nativeBinary, executable, sharedLibrary, interp, interpMM,
+  mainModule, mainModuleFile, inCodePackage, withExt, cCompiler, cppCompiler,
+  doxygenDocConfig
+) where
 
-import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar,
+import Drasil.Makefile (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar,
   Command, mkCheckedCommand, Dependencies)
 
 -- | Used to build commands. Type synonym of a 'MakeString' for clarity.

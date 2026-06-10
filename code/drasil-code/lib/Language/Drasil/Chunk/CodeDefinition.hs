@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 import Control.Lens ((^.), makeLenses, view)
 import Data.Typeable (Typeable)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..), showUID)
 import Language.Drasil
 
 import Drasil.Code.CodeExpr.Development (CodeExpr, expr, CanGenCode(..))
@@ -75,8 +75,12 @@ qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
 odeDef info = CD
-  (codeChunk $ quantfunc $ depVar info)
+  (codeChunk $ quantfunc odeSolList)
   (matrix [odeSyst info])
   (matrix [initVal info]:
     map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
   ODE
+  where
+    dv = depVar info
+    odeSolList = implVarAU' (showUID dv) (dv ^. term) (dv ^. defn)
+      (getA dv) (Vect $ dv ^. typ) (symbol dv Implementation) (getUnit dv)

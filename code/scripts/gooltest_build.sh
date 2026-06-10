@@ -20,7 +20,7 @@ for lang in */; do
     cd "$test" || exit 1
     # shellcheck disable=SC2086
     "$MAKE" $TARGET
-    RET=$(( "$RET" || $? ))
+    RET=$(( RET || $? ))
     cd "$LANG_DIR" || exit 1
   done
   cd "$E_DIR" || exit 1

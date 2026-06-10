@@ -2,15 +2,16 @@ resolver: lts-22.44
 
 packages:
 - .
-- ../../drasil-build-artifacts
-- ../../drasil-build
 - ../../drasil-code
 - ../../drasil-data
 - ../../drasil-database
-- ../../drasil-docLang
+- ../../drasil-srs
+- ../../drasil-file-handling
 - ../../drasil-gen
 - ../../drasil-gool
 - ../../drasil-lang
+- ../../drasil-lesson-plan
+- ../../drasil-makefile
 - ../../drasil-metadata
 - ../../drasil-printers
 - ../../drasil-system

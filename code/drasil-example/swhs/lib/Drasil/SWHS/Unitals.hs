@@ -1,4 +1,4 @@
-module Drasil.SWHS.Unitals where -- all of this file is exported
+module Drasil.SWHS.Unitals (module Drasil.SWHS.Unitals) where -- all of this file is exported
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect, area)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time)
 import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
@@ -22,6 +22,8 @@ import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
 import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
@@ -32,8 +34,8 @@ symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 -- Symbols with Units --
 
 units :: [UnitalChunk]
-units = map ucw [sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
-  vol, density] ++ map ucw [mass, time] -- ++ [tankLength, diam, coilSA]
+units = [surArea, area, sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
+  vol, density, mass, time]
 
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = units ++ [inSA, outSA, htCapL, htCapS, htCapV,
@@ -236,11 +238,11 @@ aspectRatioMax = dqd' (dcc "aspectRatioMax"
 -----------------
 
 constrained :: [ConstrConcept]
-constrained = map cnstrw' inputConstraints ++ map cnstrw' outputs
+constrained = map cnstrw' inputConstraints ++ map cnstrw' (NE.toList outputs)
 
 -- Input Constraints
-inputs :: [DefinedQuantityDict]
-inputs = map dqdWr inputConstraints ++ map dqdWr [absTol, relTol]
+inputs :: NE.NonEmpty DefinedQuantityDict
+inputs = NE.map dqdWr (absTol :| [relTol]) `NE.appendList` map dqdWr inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
@@ -396,9 +398,9 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   (dbl 0.01) defaultUncrt
 
 -- Output Constraints
-outputs :: [ConstrConcept]
+outputs :: NE.NonEmpty ConstrConcept
 --FIXME: Add typical values or use Nothing if not known
-outputs = [tempW, tempPCM, watE, pcmE]
+outputs = tempW :| [tempPCM, watE, pcmE]
 
 -- Constraint 18
 tempW = cuc' "tempW"

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes, TemplateHaskell #-}
 
 -- | Defines a package extension for GOOL, with the relevant slice of GOOLState
 -- and functions for pairing a GOOL program with
@@ -14,7 +14,7 @@ module Language.Drasil.SoftwareDossier.SoftwareDossierSym (
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Build.Artifacts (FileAndContents(..), fileAndContents)
+import Drasil.FileHandling (FileLayout, file, ps)
 import Drasil.GOOL (ProgData)
 import Language.Drasil.Printers (PrintingInformation)
 
@@ -46,19 +46,19 @@ makeSds headerFiles sourceFiles mainModule = Sds {
 -- omptimize doxygen document, information necessary for a makefile, and
 -- auxiliary helper documents
 class SoftwareDossierSym r where
-  doxConfig :: String -> SoftwareDossierState -> Verbosity -> r FileAndContents
-  readMe ::  ReadMeInfo -> r FileAndContents
+  doxConfig :: String -> SoftwareDossierState -> Verbosity -> Maybe (r FileLayout)
+  readMe ::  ReadMeInfo -> r FileLayout
 
   optimizeDox :: r Doc
 
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> SoftwareDossierState ->
-    ProgData -> r FileAndContents
+    ProgData -> r FileLayout
 
   unReprDoc :: r Doc -> Doc
 
 sampleInput :: (Applicative r) => PrintingInformation -> DataDesc -> [Expr] ->
-  r FileAndContents
+  r FileLayout
 sampleInput db d sd = sdsFromData sampleInputName (makeInputFile db d sd)
 
-sdsFromData :: Applicative r => FilePath -> Doc -> r FileAndContents
-sdsFromData fp d = pure $ fileAndContents fp d
+sdsFromData :: Applicative r => FilePath -> Doc -> r FileLayout
+sdsFromData fp d = pure $ file [ps|{fp}|] d

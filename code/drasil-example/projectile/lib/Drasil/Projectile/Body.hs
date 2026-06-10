@@ -1,16 +1,16 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Drasil.DocLang.SRS as SRS
-import Drasil.Document.Contents (foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
-import Drasil.System (mkSmithEtAlICO)
+import qualified Drasil.SRS.Concepts as SRS
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (gravity, physicCon',
+import Data.Drasil.Concepts.Physics (gravity,
   rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Theory (inModel)
@@ -128,8 +128,11 @@ si = mkSmithEtAlICO progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs (map cnstrw' constrained) constants
-  symbMap allRefs
+  inputs outputs (map cnstrw' constrained) constants symbols
+  labelledContent' symbMap allRefs
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -151,7 +154,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [projMotion, rectVel] ++
   -- CIs
-  nw progName : map nw physicCon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -161,7 +164,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
-  iMods genDefns tMods concIns citations (labelledContent ++ funcReqsTables)
+  iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

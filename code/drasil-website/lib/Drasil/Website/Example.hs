@@ -1,11 +1,15 @@
 {-# LANGUAGE TupleSections #-}
 
 -- | Create the list of Generated Examples for the Drasil website.
-module Drasil.Website.Example where
+module Drasil.Website.Example (
+  Example(..), examples, exName,
+  exampleSec, exampleRefs, allExampleSI
+) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (E)
+import Language.Drasil.Document
 import Drasil.System (SmithEtAlSRS(..), programName, sysName, purpose)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
@@ -180,6 +184,7 @@ convertLang Java = "java"
 convertLang Python = "python"
 convertLang Swift = "swift"
 convertLang Julia = "julia"
+convertLang Matlab = "matlab"
 
 -- | Generate a reference towards the code folder. Uses 'getCodePath' to find the code path.
 getCodeRef :: Example -> Lang -> String -> Reference
@@ -245,7 +250,6 @@ getSRSPath path format ex = path ++ map toLower ex ++ "/SRS/" ++ show format ++ 
     sufx HTML    = ex ++ "_SRS.html"
     sufx TeX     = ex ++ "_SRS.pdf"
     sufx Jupyter = ex ++ "_SRS.html"
-    sufx Plain   = error "Plain SRS display is not supported."
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath

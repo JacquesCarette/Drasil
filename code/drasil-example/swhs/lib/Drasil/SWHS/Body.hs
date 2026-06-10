@@ -1,27 +1,31 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SWHS.Body where
+module Drasil.SWHS.Body (
+  mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
+  externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
+  sysCntxtRespIntro, userChars
+) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
-import Drasil.SRSDocument
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (mkSmithEtAlICO)
-import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
   output_, physical, physics, property, quantity, software, softwareSys,
   solution, sysCont, system, user, value, variable)
 import Data.Drasil.Concepts.Education (calculus, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon)
@@ -29,7 +33,7 @@ import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)
-import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect, area)
+import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
@@ -61,8 +65,8 @@ si = mkSmithEtAlICO
   progName' [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
-  inputs outputs constrained specParamValList
-  symbMap allRefs
+  inputs outputs constrained specParamValList symbols
+  labelledContent' symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -77,20 +81,20 @@ ideaDicts =
   -- Actual IdeaDicts
   materialProprty :
   -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++
-  map nw mathcon'
+  map nw [progName', progName] ++ [nw phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
-  CP.mechEnergy, CP.pressure] ++
-  -- UnitalChunks
-  map cw [surArea, area]
+  CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
-  insModel genDefs tMods concIns citations (labelledContent ++ funcReqsTables)
+  insModel genDefs tMods concIns citations labelledContent'
+
+labelledContent' :: [LabelledContent]
+labelledContent' = labelledContent ++ funcReqsTables
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

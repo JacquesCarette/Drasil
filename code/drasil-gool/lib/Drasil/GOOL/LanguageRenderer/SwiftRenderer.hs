@@ -1,5 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | The logic to render Swift code is contained in this module
 module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
@@ -7,34 +10,34 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
-import Utils.Drasil (indent)
+import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, List(..), Set(..),
-  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
+  MSBlock, VSType, SVariable, SValue, MSStatement, MSParameter, SMethod,
+  BodySym(..), oneLiner, bodyStatements, BlockSym(..), TypeSym(..), getCodeType,
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, extFuncApp, IndexTranslator(..), Array(..), List(..),
+  Set(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope)
+  BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..), Initializers,
-  convTypeOO)
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
@@ -42,59 +45,61 @@ import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+  uOp, bOp, variable, binderElim, value, function, statement, visibility,
+  parameter, method, blockComment', stmt)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar,
   class', module')
+import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
   printLabel, listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
-  classVar, func, listSetFunc, castObj, static, dynamic, break, continue,
-  private, blockCmt, docCmt, addComments, commentedMod, commentedItem)
+  classVarAccess, func, listSetFunc, castObj, classLevel, instanceLevel, break, continue,
+  private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
-  mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
-  binExpr', typeBinExpr)
+  mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr,
+  binExpr, binExpr', typeBinExpr, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
-  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
-  function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
+  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
+  docFunc, buildClass, implementingClass, docClass, commentedClass, modFromData,
+  fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (classVar,
-  objVarSelf, intClass, buildModule, docMod', contains, bindingError,
-  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, extraClass, doubleRender, double, openFileR,
-  openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float,
-  stringRender', string', inherit, implements, functionDoc, intToIndex,
-  indexToInt, global, setMethodCall)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
+  classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
+  bindingError, notNull, listDecDef, destructorError, stateVarDef, constVar,
+  litArray, extraClass, doubleRender, double, openFileR, openFileW, self,
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
+  mainBody, inOutFunc, docInOutFunc', float, stringRender', string', inherit,
+  implements, functionDoc, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
-  listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
+  listSize, varDecDef, setDecDef, extObjDecNew, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
-  makeSetterVal)
+  makeSetterVal, arrayDecAsList)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
+  progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData)
+  commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -144,6 +149,9 @@ instance ProgramSym SwiftCode where
 instance CommonRenderSym SwiftCode
 instance OORenderSym SwiftCode
 
+instance UnRepr SwiftCode contents where
+  unRepr = unSC
+
 instance FileSym SwiftCode where
   type File SwiftCode = FileData
   fileDoc m = do
@@ -168,10 +176,10 @@ instance ImportSym SwiftCode where
 instance ImportElim SwiftCode where
   import' = unSC
 
-instance PermanenceSym SwiftCode where
-  type Permanence SwiftCode = Doc
-  static = toCode R.static
-  dynamic = toCode R.dynamic
+instance AttachmentSym SwiftCode where
+  type Attachment SwiftCode = Doc
+  classLevel = toCode R.classLevel
+  instanceLevel = toCode R.instanceLevel
 
 instance PermElim SwiftCode where
   perm = unSC
@@ -200,7 +208,6 @@ instance BlockElim SwiftCode where
   block = unSC
 
 instance TypeSym SwiftCode where
-  type Type SwiftCode = TypeData
   bool = CS.bool
   int = swiftIntType
   float = CP.float
@@ -219,22 +226,13 @@ instance TypeSym SwiftCode where
 instance OOTypeSym SwiftCode where
   obj = G.obj
 
-instance TypeElim SwiftCode where
-  getType = cType . unSC
-  getTypeString = typeString . unSC
-
 instance RenderType SwiftCode where
   multiType ts = do
     typs <- sequence ts
     let mt = tuple $ map getTypeString typs
     typeFromData Void mt (text mt)
-  typeFromData t s d = toState $ toCode $ td t s d
-
-instance InternalTypeElim SwiftCode where
-  type' = typeDoc . unSC
 
 instance UnaryOpSym SwiftCode where
-  type UnaryOp SwiftCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = swiftUnaryMath R.sqrt
@@ -252,7 +250,6 @@ instance UnaryOpSym SwiftCode where
   ceilOp = swiftUnaryMath R.ceil
 
 instance BinaryOpSym SwiftCode where
-  type BinaryOp SwiftCode = OpData
   equalOp = G.equalOp
   notEqualOp = G.notEqualOp
   greaterOp = G.greaterOp
@@ -275,7 +272,6 @@ instance OpElim SwiftCode where
   bOpPrec = opPrec . unSC
 
 instance ScopeSym SwiftCode where
-  type Scope SwiftCode = ScopeData
   global = CP.global
   mainFn = global
   local = G.local
@@ -288,15 +284,19 @@ instance VariableSym SwiftCode where
   var         = G.var
   constant    = var
   extVar _    = var
-  arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym SwiftCode where
-  staticVar' _ = G.staticVar
+  classVar = G.classVar
+  classConst = classVar
+  classVarAccess = CP.classVarAccess R.classVarAccess
+  extClassVarAccess = classVarAccess
+  instanceVarAccess = G.instanceVarAccess
+
+instance SelfSym SwiftCode where
   self = CP.self
-  classVar = CP.classVar R.classVar
-  extClassVar = classVar
-  objVar = G.objVar
-  objVarSelf = CP.objVarSelf
+
+instance InstanceVarSelfSym SwiftCode where
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim SwiftCode where
   variableName = varName . unSC
@@ -360,7 +360,7 @@ instance NumericExpression SwiftCode where
     let swiftPower Integer Integer b e = cast int $ binExpr' powerOp
           (cast double b) (cast double e)
         swiftPower _ _ b e = binExpr' powerOp b e
-    swiftPower (getType $ valueType v1) (getType $ valueType v2) (pure v1)
+    swiftPower (getCodeType $ valueType v1) (getCodeType $ valueType v2) (pure v1)
       (pure v2)
 
   log = unExpr logOp
@@ -438,6 +438,7 @@ instance ValueElim SwiftCode where
 
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
+  classMethodCallMixedArgs' = CG.classMethodCall
 
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData
@@ -450,9 +451,16 @@ instance GetSet SwiftCode where
   get = G.get
   set = G.set
 
-instance List SwiftCode where
+instance IndexTranslator SwiftCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Array SwiftCode where
+  arrayElem = G.arrayElem
+  arrayLength = listSize
+  arrayCopy = id -- Swift uses value semantics for arrays
+
+instance List SwiftCode where
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -481,6 +489,16 @@ instance InternalListFunc SwiftCode where
   listAppendFunc _ = G.listAppendFunc swiftListAppend
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
+
+instance BinderSym SwiftCode where
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
+
+instance BinderElim SwiftCode where
+  binderName = bindName . unSC
+  binderType = onCodeValue bindType
+
+instance InternalBinderElim SwiftCode where
+  binderElim = text . bindName . unSC
 
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
@@ -549,7 +567,7 @@ instance StatementSym SwiftCode where
 instance AssignStatement SwiftCode where
   assign = G.assign Empty
   (&-=) = G.subAssign Empty
-  (&+=) = G.increment
+  (&+=) = CS.increment
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -560,7 +578,7 @@ instance DeclStatement SwiftCode where
   setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
-  arrayDec = listDec
+  arrayDec = M.arrayDecAsList
   arrayDecDef = listDecDef
   constDecDef vr scp vl' = do
     vdec <- swiftVarDec swiftConst vr scp
@@ -618,12 +636,13 @@ instance IOStatement SwiftCode where
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
     li <- getLineIndex
-    let l = var "l" (listType string)
+    let l_binder = binder "l" (listType string)
+        l_var = var "l" (listType string)
     slc <- listSlice swiftContentsVar swiftContentsVal
       (Just $ litInt (li+1)) Nothing Nothing
     multi [mkStmtNoEnd $ RC.block slc,
       v &= swiftMapFunc swiftContentsVal
-        (lambda [l] (swiftJoinedFunc ' ' (valueOf l)))]
+        (lambda [l_binder] (swiftJoinedFunc ' ' (valueOf l_var)))]
 
 instance StringStatement SwiftCode where
   stringSplit d vnew s = vnew &= swiftSplitFunc d s
@@ -652,7 +671,13 @@ instance ControlStatement SwiftCode where
     G.throw swiftThrowDoc Empty msg
 
   ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
-  switch = C.switch (space <>) emptyStmt
+  switch v cs bod = do
+    st <- RC.stmt emptyStmt
+    vl <- zoom lensMStoVS v
+    vals <- mapM (zoom lensMStoVS . fst) cs
+    bods <- mapM snd cs
+    dflt <- bod
+    mkStmtNoEnd $ R.switch (space <>) st vl dflt (zip vals bods)
 
   ifExists = M.ifExists
 
@@ -735,7 +760,7 @@ instance RenderMethod SwiftCode where
 
 instance OORenderMethod SwiftCode where
   intMethod _ = swiftMethod
-  intFunc _ n s _ = swiftMethod n s dynamic
+  intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName
 
 instance MethodElim SwiftCode where
@@ -745,9 +770,9 @@ instance StateVarSym SwiftCode where
   type StateVar SwiftCode = Doc
   stateVar s p vr = do
     v <- zoom lensCStoVS vr
-    stateVarDef s p vr (typeDfltVal $ getType $ variableType v)
+    stateVarDef s p vr (typeDfltVal $ getCodeType $ variableType v)
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (static :: SwiftCode (Permanence SwiftCode)))
+  constVar = CP.constVar (RC.perm (classLevel :: SwiftCode (Attachment SwiftCode)))
 
 instance StateVarElim SwiftCode where
   stateVar = unSC
@@ -798,7 +823,6 @@ instance ModuleElim SwiftCode where
   module' = modDoc . unSC
 
 instance BlockCommentSym SwiftCode where
-  type BlockComment SwiftCode = Doc
   blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart
     blockCmtEnd)
@@ -842,43 +866,44 @@ swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar
 swiftLineVal = valueOf swiftLineVar
 
-swiftIntType :: (CommonRenderSym r) => VSType r
+swiftIntType :: (Monad r) => VSType r
 swiftIntType = typeFromData Integer swiftInt (text swiftInt)
 
-swiftCharType :: (CommonRenderSym r) => VSType r
+swiftCharType :: (Monad r) => VSType r
 swiftCharType = typeFromData Char swiftChar (text swiftChar)
 
-swiftFileType :: (CommonRenderSym r) => VSType r
+swiftFileType :: (Monad r) => VSType r
 swiftFileType = addFoundationImport $ typeFromData InFile swiftURL
   (text swiftURL)
 
-swiftFileHdlType :: (CommonRenderSym r) => VSType r
+swiftFileHdlType :: (Monad r) => VSType r
 swiftFileHdlType = addFoundationImport $ typeFromData OutFile swiftFileHdl
   (text swiftFileHdl)
 
-swiftListType :: (CommonRenderSym r) => VSType r -> VSType r
+swiftListType :: VSType SwiftCode -> VSType SwiftCode
 swiftListType t' = do
   t <- t'
-  typeFromData (List $ getType t) ("[" ++ getTypeString t ++ "]")
-    (brackets $ RC.type' t)
+  typeFromData (List $ getCodeType t) ("[" ++ getTypeString t ++ "]")
+    (brackets $ renderType t)
 
-swiftFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
+swiftFuncType :: [VSType SwiftCode] -> VSType SwiftCode -> VSType SwiftCode
 swiftFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  typeFromData (Func (map getType pts) (getType rt))
+  typeFromData (Func (map getCodeType pts) (getCodeType rt))
     ("(" ++ intercalate listSep (map getTypeString pts) ++ ")" ++ " " ++
       swiftRetType ++ " " ++ getTypeString rt)
-    (parens (hicat listSep' $ map RC.type' pts) <+> swiftRetType' <+>
-      RC.type' rt)
+    (parens (hicat listSep' $ map renderType pts) <+> swiftRetType' <+>
+      renderType rt)
 
-swiftVoidType :: (CommonRenderSym r) => VSType r
+swiftVoidType :: (Monad r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
   swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError,
-  swiftDocDir, swiftUserMask, swiftInOutArg, swiftNamedArgSep, swiftTypeSpec,
-  swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
+  swiftDocDir, swiftUTF8Enc, swiftUserMask, swiftInOutArg, swiftNamedArgSep,
+  swiftTypeSpec, swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap',
+  swiftRetroactive :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
 swiftFirst = text "first"
@@ -893,6 +918,7 @@ swiftExtension = text "extension"
 swiftInOut = text "inout"
 swiftError = text "Error"
 swiftDocDir = text $ "" `access` "documentDirectory"
+swiftUTF8Enc = text $ "" `access` "utf8"
 swiftUserMask = text $ "" `access` "userDomainMask"
 swiftNamedArgSep = colon <> space
 swiftInOutArg = text "&"
@@ -901,6 +927,7 @@ swiftConforms = colon
 swiftNoLabel = text "_"
 swiftRetType' = text swiftRetType
 swiftUnwrap' = text swiftUnwrap
+swiftRetroactive = text "@retroactive"
 
 swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine,
@@ -960,8 +987,8 @@ swiftUnion = "union"
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec
 
-swiftNumBinExpr :: (CommonRenderSym r) => (SValue r -> SValue r -> SValue r) ->
-  SValue r -> SValue r -> SValue r
+swiftNumBinExpr :: (SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode) ->
+  SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
 swiftNumBinExpr f v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -971,28 +998,28 @@ swiftNumBinExpr f v1' v2' = do
       exprT' Float _  = f (pure v1) (cast float $ pure v2)
       exprT' _ Float  = f (cast float $ pure v1) (pure v2)
       exprT' _ _      = f (pure v1) (pure v2)
-  exprT (getType $ valueType v1) (getType $ valueType v2)
+  exprT (getCodeType $ valueType v1) (getCodeType $ valueType v2)
 
 swiftLitFloat :: (CommonRenderSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
-swiftLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+swiftLambda :: [SwiftCode BinderD] -> SwiftCode (Value SwiftCode) -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
-    (map RC.variable ps)
-    (map (RC.type' . variableType) ps)))
-  <+> swiftRetType' <+> RC.type' (valueType ex) <+> inLabel <+> RC.value ex
+    (map RC.binderElim ps)
+    (map (renderType . binderType) ps)))
+  <+> swiftRetType' <+> renderType (valueType ex) <+> inLabel <+> RC.value ex
 
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
 
-swiftCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
+swiftCast :: VSType SwiftCode -> SValue SwiftCode -> SValue SwiftCode
 swiftCast t' v' = do
   t <- t'
   v <- v'
-  let unwrap = if getType t `elem` swiftReadableTypes &&
-        getType (valueType v) == String then swiftUnwrapVal else id
-  unwrap $ mkStateVal (pure t) (R.castObj (RC.type' t) (RC.value v))
+  let unwrap = if getCodeType t `elem` swiftReadableTypes &&
+        getCodeType (valueType v) == String then swiftUnwrapVal else id
+  unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
@@ -1028,8 +1055,12 @@ swiftReadLineFunc :: (CommonRenderSym r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc :: (CommonRenderSym r) => SValue r -> SValue r
-swiftReadFileFunc v = let contentsArg = var swiftContentsOf infile
-  in swiftTryVal $ funcAppNamedArgs CP.stringRender' string [(contentsArg, v)]
+swiftReadFileFunc v = swiftTryVal $
+  funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]
+  where
+    encVal = mkStateVal string swiftUTF8Enc
+    contentsArg = (var swiftContentsOf infile, v)
+    encodingArg = (var "encoding" string, encVal)
 
 swiftSplitFunc :: (OORenderSym r) => Char -> SValue r -> SValue r
 swiftSplitFunc d s = let sepArg = var swiftSepBy char
@@ -1061,8 +1092,9 @@ swiftListSlice vn vo beg end step = do
   let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) scp
       (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) scp
 
-      i = var "i" int
-      setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
+      i_binder = binder "i" int
+      i_var = var "i" int
+      setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i_binder] (listAccess vo (valueOf i_var)))
   block [
       setBeg,
       setEnd,
@@ -1083,13 +1115,13 @@ swiftPrint newLn (Just f) _ v' = do
       prNewLn = if newLn then valStmt (swiftWriteFunc (litString "\\n") f)
         else emptyStmt
   tryCatch (bodyStatements
-    [valStmt $ swiftWriteFunc (valToPrint $ getType $ valueType v) f, prNewLn])
+    [valStmt $ swiftWriteFunc (valToPrint $ getCodeType $ valueType v) f, prNewLn])
     (oneLiner $ throw "Error printing to file.")
 
 -- swiftPrint can handle lists, so don't use G.print for lists.
-swiftOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r
-  -> MSStatement r
-swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getType . valueType
+swiftOut :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
+  SValue SwiftCode -> MSStatement SwiftCode
+swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getCodeType . valueType
   where swOut (List _) = printSt newLn f printFn v
         swOut _ = G.print newLn f printFn v
 
@@ -1100,7 +1132,7 @@ swiftInput vr vl = do
       swiftInput' ct
         | ct `elem` swiftReadableTypes = cast (pure $ variableType vr') vl
         | otherwise = error "Attempt to read value of unreadable type"
-  swiftInput' (getType $ variableType vr')
+  swiftInput' (getCodeType $ variableType vr')
 
 swiftOpenFile :: (OORenderSym r) => SValue r -> VSType r -> SValue r
 swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
@@ -1111,12 +1143,12 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
-swiftOpenFileHdl :: (OORenderSym r) => SValue r -> VSType r -> SValue r
+swiftOpenFileHdl :: (OORenderSym r, Monad r) => SValue r -> VSType r -> SValue r
 swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
 
-swiftOpenFileWA :: (OORenderSym r) => Bool -> SVariable r -> SValue r ->
+swiftOpenFileWA :: (OORenderSym r, Monad r) => Bool -> SVariable r -> SValue r ->
   MSStatement r
 swiftOpenFileWA app f' n' = tryCatch
     (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',
@@ -1128,7 +1160,7 @@ swiftOpenFileWA app f' n' = tryCatch
     -- will have no guarantees that the file variable has been initialized.
     (oneLiner $ throw "Error opening file.")
 
-swiftCloseFile :: (OORenderSym r) => SValue r -> MSStatement r
+swiftCloseFile :: SValue SwiftCode -> MSStatement SwiftCode
 swiftCloseFile f' = do
   f <- zoom lensMStoVS f'
   -- How I've currently implemented file-reading, files don't need to be
@@ -1138,34 +1170,36 @@ swiftCloseFile f' = do
           objMethodCallNoParams void (pure f) swiftClose)
         (oneLiner $ throw "Error closing file.")
       swClose _ = error "closeFile called on non-file-typed value"
-  swClose (getType $ valueType f)
+  swClose (getCodeType $ valueType f)
 
 swiftReadFile :: (OORenderSym r) => SVariable r -> SValue r -> MSStatement r
-swiftReadFile v f = let l = var "l" string
+swiftReadFile v f =
+  let l_binder = binder "l" string
+      l_var = var "l" string
   in tryCatch
   (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f)
-    (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
+    (lambda [l_binder] (swiftSplitFunc ' ' (valueOf l_var))))
   (oneLiner $ throw "Error reading from file.")
 
-swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)
+swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData
   -> MSStatement SwiftCode
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind Static = static :: SwiftCode (Permanence SwiftCode)
-      bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
+  let bind ClassLevel = classLevel :: SwiftCode (Attachment SwiftCode)
+      bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> RC.type' (variableType v))
+    <+> renderType (variableType v))
 
-swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
+swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData -> MSStatement SwiftCode
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind Static = static :: SwiftCode (Permanence SwiftCode)
-      bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
+  let bind ClassLevel = classLevel :: SwiftCode (Attachment SwiftCode)
+      bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))
@@ -1195,12 +1229,12 @@ swiftAssert condition errorMessage = vcat [
   text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
   ]
 
-swiftParam :: (CommonRenderSym r) => Doc -> r (Variable r) -> Doc
+swiftParam :: Doc -> SwiftCode (Variable SwiftCode) -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
-  <+> RC.type' (variableType v)
+  <+> renderType (variableType v)
 
 swiftMethod :: Label -> SwiftCode (Visibility SwiftCode) ->
-  SwiftCode (Permanence SwiftCode) -> MSMthdType SwiftCode ->
+  SwiftCode (Attachment SwiftCode) -> MSMthdType SwiftCode ->
   [MSParameter SwiftCode] -> MSBody SwiftCode -> SMethod SwiftCode
 swiftMethod n s p t ps b = do
   tp <- t
@@ -1212,7 +1246,7 @@ swiftMethod n s p t ps b = do
   mthdFromData Pub (vcat [
     RC.visibility s <+> RC.perm p <+> swiftFunc <+> text n <>
       parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+>
-      swiftRetType' <+> RC.type' tp <+> bodyStart,
+      swiftRetType' <+> renderType tp <+> bodyStart,
     indent $ RC.body bod,
     bodyEnd])
 
@@ -1241,7 +1275,8 @@ swiftStringError = do
   str <- zoom lensMStoVS (string :: VSType SwiftCode)
   if tu && not errdef then do
     modify setErrorDefined
-    pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftError <+> bodyStart <> bodyEnd)
+    pure (swiftExtension <+> renderType str <> swiftConforms <+> swiftRetroactive
+      <+> swiftError <+> bodyStart <> bodyEnd)
   else pure empty
 
 swiftClassDoc :: ClassDocRenderer

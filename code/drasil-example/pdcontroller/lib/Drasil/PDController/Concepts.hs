@@ -1,4 +1,11 @@
-module Drasil.PDController.Concepts where
+module Drasil.PDController.Concepts (
+  acronyms, concepts, defs, simulation, processError, simulationTime, stepTime,
+  controlVariable, propControl, derControl,
+  pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL, processVariable,
+  ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
+  ccAbsTolerance, ccRelTolerance,
+  secondOrderSystem, summingPt, propGain, derGain, powerPlant, setPoint
+) where
 
 import Language.Drasil (commonIdeaWithDict, dcc, nw, cn', nounPhraseSP, pn, CI,
   ConceptChunk, IdeaDict)

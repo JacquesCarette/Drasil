@@ -8,8 +8,8 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
-import Drasil.Sentence.Combinators (eqN)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -78,7 +78,7 @@ htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
 htFluxPCMFromWaterExpr :: ModelExpr
 htFluxPCMFromWaterExpr = sy pcmHTC $* (apply1 tempW time $- apply1 tempPCM time)
 
-newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
+newtonLawNote :: Quantity q => q -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (refS a), S "This law",
   sParen (S "defined" `S.in_` refS nwtnCooling) `S.is` S "used on",

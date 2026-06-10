@@ -1,11 +1,37 @@
 -- | Defines helper functions used in printing LaTeX documents.
-module Language.Drasil.TeX.Helpers where
+module Language.Drasil.TeX.Helpers (
+  -- * Formatting
+  br, sq, parens, quote, lbrace, rbrace,
+  -- * Commands
+  command0, command, commandD, command1o, command1oD, command1p, command1pD,
+  texSym, command2, command2D, command3,
+  -- * Environments
+  mkEnv, mkEnvArgBr, mkEnvArgSq, mkMinipage, comm, renewcomm, empty,
+  -- * Sectioning
+  genSec, sec,
+  -- * References and Citations
+  ref, sref, hyperref, externalref, snref, href, cite,
+  -- * Document Elements
+  count, mathbb, usepackage, includegraphics, author, caption, item, label,
+  title, bold, item', maketitle, maketoc, newpage, centering, code, itemize,
+  enumerate, description, description', figure, center, document, equation,
+  symbDescription, docclass,
+  -- * Math Symbols
+  subscript, superscript, fraction,
+  -- * Preamble
+  bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum,
+  newline, hyperConfig, useTikz,
+  -- * Equations
+  toEqn,
+  -- * Strings
+  paren, sqbrac
+) where
 
 import Data.List (isSuffixOf)
 import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 
-import Language.Drasil (MaxWidthPercent)
+import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H

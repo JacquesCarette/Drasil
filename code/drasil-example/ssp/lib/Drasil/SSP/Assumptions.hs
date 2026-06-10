@@ -1,7 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.Assumptions where
+module Drasil.SSP.Assumptions (
+  assumptions, assumpSLH, assumpINSFL, assumpENSL, assumpSF, assumpSL,
+  assumpSBSBISL, assumpFOSL, assumpSP, assumpSLI, assumpPSC, assumpWIBE,
+  assumpWISE, assumpNESSS, assumpHFSM, assumpSSC, assumpES
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

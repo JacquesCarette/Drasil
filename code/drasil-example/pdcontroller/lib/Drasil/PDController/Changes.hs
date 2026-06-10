@@ -1,9 +1,9 @@
-module Drasil.PDController.Changes where
+module Drasil.PDController.Changes (likelyChgs) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import Drasil.Sentence.Combinators (fromSources)
+import Language.Drasil.Document (fromSources)
 
 import Data.Drasil.Concepts.Documentation (likeChgDom)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

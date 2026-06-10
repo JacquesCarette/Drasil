@@ -3,8 +3,9 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
   assumptions) where
 
 import Language.Drasil hiding (organization)
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -64,10 +65,10 @@ explainScenarioDesc :: Sentence
 explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the external",
   D.toSent $ phraseNP (combineNINI explosion scenario), S "for its", plural calculation]
 
-standardValuesDesc :: UnitalChunk -> Sentence
-standardValuesDesc mainIdea = foldlSent [D.toSent $ atStartNP' (the value), S "provided in",
-  refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea,
-  sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_`
+standardValuesDesc :: Quantity q => q -> Sentence
+standardValuesDesc q = foldlSent [D.toSent $ atStartNP' (the value), S "provided in",
+  refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase q,
+  sParen (ch q) `sC` S "and the", plural materialProprty `S.of_`
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 
 glassLiteDesc :: Sentence

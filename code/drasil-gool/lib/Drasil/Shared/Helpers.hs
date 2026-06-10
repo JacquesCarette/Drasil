@@ -1,13 +1,10 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
   getNestDegree
 ) where
-
-import Utils.Drasil (blank)
-
-import qualified Drasil.Shared.CodeType as C (CodeType(..))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA3)
@@ -16,6 +13,10 @@ import Control.Monad.State (State)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes,
   (<>), empty, isEmpty)
+
+import Drasil.FileHandling.Legacy (blank)
+
+import qualified Drasil.Shared.CodeType as C (CodeType(..))
 
 angles :: Doc -> Doc
 angles d = char '<' <> d <> char '>'

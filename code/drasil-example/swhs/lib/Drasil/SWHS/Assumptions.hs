@@ -1,8 +1,9 @@
-module Drasil.SWHS.Assumptions where --all of this file is exported
+module Drasil.SWHS.Assumptions (module Drasil.SWHS.Assumptions) where --all of this file is exported
 
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -10,16 +11,15 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model,
   problem, assumpDom)
-
-import Data.Drasil.Quantities.PhysicalProperties (vol)
-import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt, temp)
-
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
   lawConvCooling, heatTrans, thermalEnergy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mechEnergy)
+import Data.Drasil.Quantities.PhysicalProperties (vol)
+import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt, temp)
+import Data.Drasil.SI_Units (centigrade)
 
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
@@ -136,8 +136,8 @@ assumpS18 = foldlSent [
 assumpS19 = foldlSent [
   S "The pressure" `S.inThe` phrase tank `S.is` S "atmospheric" `sC` S "so the",
   D.toSent (phraseNP (meltPt `and_` boilPt)) `S.are` S (show (0 :: Integer)) :+:
-  Sy (unit_symb temp) `S.and_` S (show (100 :: Integer)) :+:
-  Sy (unit_symb temp) `sC` S "respectively"]
+  Sy (usymb centigrade) `S.and_` S (show (100 :: Integer)) :+:
+  Sy (usymb centigrade) `sC` S "respectively"]
 assumpS20 = foldlSent [
   S "When considering the", D.toSent (phraseNP (wVol `inThe` tank))
   `sC` D.toSent (phraseNP (vol `the_ofThe` coil)) `S.is` S "assumed to be negligible"]

@@ -1,27 +1,31 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
-  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), VisibilitySym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
+  SValue, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
+  TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
+  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..))
+  OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
+  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
+  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName)
+import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
+  ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -34,6 +38,7 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
+import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfoOO a = CI {unCI :: a} deriving Eq
 
@@ -53,6 +58,9 @@ instance Monad CodeInfoOO where
 instance SharedProg CodeInfoOO
 instance OOProg CodeInfoOO
 
+instance UnRepr CodeInfoOO contents where
+  unRepr = unCI
+
 instance ProgramSym CodeInfoOO where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
@@ -67,10 +75,10 @@ instance FileSym CodeInfoOO where
 
   docMod _ _ _ _ = execute1
 
-instance PermanenceSym CodeInfoOO where
-  type Permanence CodeInfoOO = ()
-  static  = toCode ()
-  dynamic = toCode ()
+instance AttachmentSym CodeInfoOO where
+  type Attachment CodeInfoOO = ()
+  classLevel  = toCode ()
+  instanceLevel = toCode ()
 
 instance BodySym CodeInfoOO where
   type Body CodeInfoOO = ()
@@ -83,57 +91,55 @@ instance BlockSym CodeInfoOO where
   block = executeList
 
 instance TypeSym CodeInfoOO where
-  type Type CodeInfoOO = String
-  bool              = noInfoType
-  int               = noInfoType
-  float             = noInfoType
-  double            = noInfoType
-  char              = noInfoType
-  string            = noInfoType
-  infile            = noInfoType
-  outfile           = noInfoType
-  setType       _   = noInfoType
-  listType      _   = noInfoType
-  arrayType     _   = noInfoType
-  listInnerType _   = noInfoType
-  funcType      _ _ = noInfoType
-  void              = noInfoType
+  bool              = noInfoVSType
+  int               = noInfoVSType
+  float             = noInfoVSType
+  double            = noInfoVSType
+  char              = noInfoVSType
+  string            = noInfoVSType
+  infile            = noInfoVSType
+  outfile           = noInfoVSType
+  setType       _   = noInfoVSType
+  listType      _   = noInfoVSType
+  arrayType     _   = noInfoVSType
+  listInnerType _   = noInfoVSType
+  funcType      _ _ = noInfoVSType
+  void              = noInfoVSType
 
 instance OOTypeSym CodeInfoOO where
-  obj               = toState . toCode
-
-instance TypeElim CodeInfoOO where
-  getType _     = Void
-  getTypeString = unCI
+  obj             _ = noInfoVSType
 
 instance ScopeSym CodeInfoOO where
-  type Scope CodeInfoOO = ()
-  global = toCode ()
-  mainFn = toCode ()
-  local = toCode ()
+  global = noInfoScope
+  mainFn = noInfoScope
+  local = noInfoScope
 
 instance VariableSym CodeInfoOO where
   type Variable CodeInfoOO = ()
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
-  arrayElem _ _ = noInfo
 
 instance OOVariableSym CodeInfoOO where
-  staticVar'  _ _ _ = noInfo
+  classVar _ _ = noInfo
+  classConst _ _ = noInfo
+  classVarAccess    _ _   = noInfo
+  extClassVarAccess _ _   = noInfo
+  instanceVarAccess      _ _   = noInfo
+
+instance SelfSym CodeInfoOO where
   self              = noInfo
-  classVar    _ _   = noInfo
-  extClassVar _ _   = noInfo
-  objVar      _ _   = noInfo
-  objVarSelf  _     = noInfo
+
+instance InstanceVarSelfSym CodeInfoOO where
+  instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
-  variableType _ = toCode ""
+  variableType _ = noInfoType
 
 instance ValueSym CodeInfoOO where
   type Value CodeInfoOO = ()
-  valueType _ = toCode ""
+  valueType _ = noInfoType
 
 instance OOValueSym CodeInfoOO
 
@@ -231,6 +237,7 @@ instance OOValueExpression CodeInfoOO where
 
 instance InternalValueExp CodeInfoOO where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
+  classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance FunctionSym CodeInfoOO where
   type Function CodeInfoOO = ()
@@ -243,9 +250,16 @@ instance GetSet CodeInfoOO where
   get v _ = execute1 v
   set v _ = execute2 v
 
-instance List CodeInfoOO where
+instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
+
+instance Array CodeInfoOO where
+  arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
+  arrayCopy _ = noInfo
+
+instance List CodeInfoOO where
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2
@@ -265,6 +279,9 @@ instance InternalList CodeInfoOO where
     _ <- vl
     noInfo
 
+instance BinderSym CodeInfoOO where
+  binder _ _ = noInfoBinder
+
 instance ThunkSym CodeInfoOO where
   type Thunk CodeInfoOO = ()
 
@@ -272,7 +289,7 @@ instance ThunkAssign CodeInfoOO where
   thunkAssign _ = zoom lensMStoVS . execute1
 
 instance VectorType CodeInfoOO where
-  vecType _ = noInfoType
+  vecType _ = noInfoVSType
 
 instance VectorDecl CodeInfoOO where
   vecDec  _ _ _ = noInfo
@@ -479,8 +496,20 @@ instance ModuleSym CodeInfoOO where
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
-noInfoType :: State s (CodeInfoOO String)
-noInfoType = toState $ toCode ""
+emptyType :: TypeData
+emptyType = td Void "" empty -- Hack
+
+noInfoType :: CodeInfoOO TypeData
+noInfoType = return emptyType
+
+noInfoVSType :: VSType CodeInfoOO
+noInfoVSType = return noInfoType
+
+noInfoScope :: CodeInfoOO ScopeData
+noInfoScope = return $ sd Global -- Hack
+
+noInfoBinder :: VSBinder CodeInfoOO
+noInfoBinder = return $ return $ bindFormD "" emptyType
 
 updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do

@@ -118,7 +118,7 @@ import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
-  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc )
+  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc)
 
 csExt :: String
 csExt = "cs"
@@ -474,6 +474,7 @@ instance InternalGetSet CSharpCode where
 
 instance InternalListFunc CSharpCode where
   listAccessFunc = CS.listAccessFunc
+  -- Hack! This produces a statement and calls it a value
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where

@@ -29,7 +29,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
   OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
-  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
+  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfMethodCall,
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -394,7 +394,7 @@ instance ValueExpression PythonCode where
   notNull = CP.notNull pyNull
 
 instance OOValueExpression PythonCode where
-  selfFuncAppMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
+  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addModuleImportVS l)
@@ -625,7 +625,7 @@ instance FuncAppStatement PythonCode where
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance OOFuncAppStatement PythonCode where
-  selfInOutCall = CP.inOutCall selfFuncApp
+  selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart

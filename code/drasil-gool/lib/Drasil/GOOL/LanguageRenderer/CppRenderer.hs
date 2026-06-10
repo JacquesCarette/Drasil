@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
   StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  selfFuncApp, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
+  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.GOOL.Renderers (renderType, renderParam,)
@@ -408,9 +408,9 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   notNull = pair1 notNull notNull
 
 instance (Pair p) => OOValueExpression (p CppSrcCode CppHdrCode) where
-  selfFuncAppMixedArgs n = pair1Val3Lists
-    (selfFuncAppMixedArgs n)
-    (selfFuncAppMixedArgs n)
+  selfMethodCallMixedArgs n = pair1Val3Lists
+    (selfMethodCallMixedArgs n)
+    (selfMethodCallMixedArgs n)
   newObjMixedArgs = pair1Val3Lists newObjMixedArgs newObjMixedArgs
   extNewObjMixedArgs l = pair1Val3Lists
     (extNewObjMixedArgs l)
@@ -1351,7 +1351,7 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
-  selfFuncAppMixedArgs fn tp vs ns = do
+  selfMethodCallMixedArgs fn tp vs ns = do
     slf <- self :: SVariable CppSrcCode
     RC.call Nothing (Just $ RC.variable slf <> ptrAccess') fn tp vs ns
   newObjMixedArgs = G.newObjMixedArgs ""
@@ -1609,7 +1609,7 @@ instance FuncAppStatement CppSrcCode where
   extInOutCall m = cppInOutCall (extFuncApp m)
 
 instance OOFuncAppStatement CppSrcCode where
-  selfInOutCall = cppInOutCall selfFuncApp
+  selfInOutCall = cppInOutCall selfMethodCall
 
 instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
@@ -2079,7 +2079,7 @@ instance ValueExpression CppHdrCode where
   notNull _ = mkStateVal void empty
 
 instance OOValueExpression CppHdrCode where
-  selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
+  selfMethodCallMixedArgs _ _ _ _ = mkStateVal void empty
   newObjMixedArgs _ _ _ = mkStateVal void empty
   extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
   libNewObjMixedArgs _ _ _ _ = mkStateVal void empty

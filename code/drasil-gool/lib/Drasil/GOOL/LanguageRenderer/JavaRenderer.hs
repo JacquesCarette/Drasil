@@ -29,7 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..),
-  OOValueSym, OOVariableValue, OOValueExpression(..), objMethodCall, selfFuncApp,
+  OOValueSym, OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall,
   newObj, InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
@@ -403,7 +403,7 @@ instance ValueExpression JavaCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression JavaCode where
-  selfFuncAppMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
+  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t ->
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
@@ -642,7 +642,7 @@ instance FuncAppStatement JavaCode where
   extInOutCall m = jInOutCall (extFuncApp m)
 
 instance OOFuncAppStatement JavaCode where
-  selfInOutCall = jInOutCall selfFuncApp
+  selfInOutCall = jInOutCall selfMethodCall
 
 instance CommentStatement JavaCode where
   comment = G.comment commentStart

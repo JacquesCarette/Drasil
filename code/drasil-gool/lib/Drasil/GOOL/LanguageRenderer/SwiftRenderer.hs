@@ -30,7 +30,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
@@ -403,7 +403,7 @@ instance ValueExpression SwiftCode where
   notNull = CP.notNull swiftNil
 
 instance OOValueExpression SwiftCode where
-  selfFuncAppMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
+  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp
@@ -655,7 +655,7 @@ instance FuncAppStatement SwiftCode where
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance OOFuncAppStatement SwiftCode where
-  selfInOutCall = CP.inOutCall selfFuncApp
+  selfInOutCall = CP.inOutCall selfMethodCall
 
 instance CommentStatement SwiftCode where
   comment = G.comment commentStart

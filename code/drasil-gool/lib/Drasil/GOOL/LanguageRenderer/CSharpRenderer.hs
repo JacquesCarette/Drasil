@@ -29,7 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, OOFunctionSym(..),
   ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
@@ -396,7 +396,7 @@ instance ValueExpression CSharpCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression CSharpCode where
-  selfFuncAppMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
+  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs
@@ -617,7 +617,7 @@ instance FuncAppStatement CSharpCode where
   extInOutCall m = csInOutCall (extFuncApp m)
 
 instance OOFuncAppStatement CSharpCode where
-  selfInOutCall = csInOutCall selfFuncApp
+  selfInOutCall = csInOutCall selfMethodCall
 
 instance CommentStatement CSharpCode where
   comment = G.comment commentStart

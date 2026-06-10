@@ -1,0 +1,18 @@
+digraph "avsa" {
+    "instance:isolated" -> "instance:newtonianGravity";
+    "instance:nonzeroSeparation" -> "instance:newtonianGravity";
+    "instance:nonzeroSeparation" -> "instance:pointMass";
+    "instance:twoBody" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:twoBody"];
+    "instance:isolated" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:isolated"];
+    "instance:newtonianGravity" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:newtonianGravity"];
+    "instance:nonRelativistic" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:nonRelativistic"];
+    "instance:pointMass" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:pointMass"];
+    "instance:constantMass" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:constantMass"];
+    "instance:inertialFrame" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:inertialFrame"];
+    "instance:planar" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:planar"];
+    "instance:nonzeroSeparation" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:nonzeroSeparation"];
+    subgraph "A" {
+        rank="same";
+        "instance:twoBody" "instance:isolated" "instance:newtonianGravity" "instance:nonRelativistic" "instance:pointMass" "instance:constantMass" "instance:inertialFrame" "instance:planar" "instance:nonzeroSeparation";
+    }
+}

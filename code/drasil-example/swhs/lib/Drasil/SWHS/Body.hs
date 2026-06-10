@@ -7,18 +7,18 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
-import Drasil.SRSDocument
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (mkSmithEtAlICO)
-import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,

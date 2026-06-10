@@ -7,7 +7,8 @@ import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import Language.Drasil (checkValidStr, RenderSpecial(..), MaxWidthPercent)
+import Language.Drasil (checkValidStr, RenderSpecial(..))
+import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,

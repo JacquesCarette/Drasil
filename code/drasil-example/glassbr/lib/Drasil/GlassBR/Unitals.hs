@@ -1,6 +1,7 @@
 module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands

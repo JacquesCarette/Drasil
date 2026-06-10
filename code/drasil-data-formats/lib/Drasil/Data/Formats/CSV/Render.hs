@@ -31,8 +31,8 @@ csvRenderOpts :: DoubleQuotationPolicy -> CSVRenderOptions
 csvRenderOpts = CSVRO
 
 -- | Render a 'CSV' to a 'Doc' with the given options.
-renderCSV :: CSV -> CSVRenderOptions -> Doc ann
-renderCSV csv (CSVRO dqp) = vcat $ map renderRow allRs
+renderCSV :: CSVRenderOptions -> CSV -> Doc ann
+renderCSV (CSVRO dqp) csv = vcat $ map renderRow allRs
   where
     rs = rows csv
     allRs = maybe rs (: rs) $ header csv

@@ -11,7 +11,8 @@ import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
   DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
-import Drasil.DocLang (findAllRefs)
+import Language.Drasil.Document
+import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
@@ -59,9 +60,9 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
-webSys :: FolderLocation -> DrasilWebsite
+webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) . allRefs
+webSys d = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) d . allRefs
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]

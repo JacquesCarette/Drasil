@@ -1,0 +1,40 @@
+name:                drasil-lesson-plan
+version:             0.0.1
+author:              "Ting-Yu (Addie) Wu, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:            A framework for code and document generation for scientific software - Lesson Plan SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- Decimal
+- lens
+- containers
+- pretty
+- transformers
+- multiplate
+- drasil-database
+- drasil-lang
+- drasil-metadata
+- drasil-system
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -Wmissing-export-lists
+
+library:
+  source-dirs: lib
+  exposed-modules:
+  - Drasil.LessonPlan
+  when:
+  - condition: false
+    other-modules: Paths_drasil_lesson_plan

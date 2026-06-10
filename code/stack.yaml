@@ -9,7 +9,8 @@ packages:
 - drasil-data
 - drasil-data-formats
 - drasil-database
-- drasil-docLang
+- drasil-srs
+- drasil-example/bss
 - drasil-example/dblpend
 - drasil-example/gamephysics
 - drasil-example/glassbr
@@ -25,6 +26,7 @@ packages:
 - drasil-gen
 - drasil-gool
 - drasil-lang
+- drasil-lesson-plan
 - drasil-makefile
 - drasil-meta-analysis
 - drasil-metadata

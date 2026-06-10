@@ -8,6 +8,14 @@ import sys
 
 import Helper
 
+class TestClass:
+    def __init__(self, a):
+        self.a = a
+    
+    @staticmethod
+    def add(t1, t2):
+        return TestClass(t1.a + t2.a)
+
 # Initializing variables
 b = 5
 arr = [1, 2, 3]
@@ -55,6 +63,13 @@ assert len(myOtherList) == 4, "myOtherList should have 4 elements"
 assert oneIndex == 0, "oneIndex should be 0"
 s = {4, 7, 5}
 assert 7 in s, "Set s should contain 7"
+
+# Object tests
+t1 = TestClass(5)
+t2 = TestClass(4)
+t3 = TestClass.add(t1, t2)
+print("Value of t3.a: ", end="")
+print(t3.a)
 
 # List slicing tests
 # Create variables for list slices
@@ -139,10 +154,10 @@ elif b == 5:
     d = b
     d -= a
     c -= d
-    b += 17;
-    c += 17;
-    a += 1;
-    d += 1;
+    b += 17
+    c += 17
+    a += 1
+    d += 1
     c -= 1
     b -= 1
     myList = []
@@ -208,7 +223,7 @@ for i in range(0, 9, 1):
     print(i)
 while a < 13:
     print("Hello")
-    a += 1;
+    a += 1
 for num in myOtherList:
     print(Helper.doubleAndAdd(num, 1.0))
 try:

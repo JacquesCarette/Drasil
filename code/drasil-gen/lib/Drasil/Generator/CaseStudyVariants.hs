@@ -16,12 +16,11 @@ import Data.Char (toLower)
 import Data.Maybe (maybeToList)
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
-import Drasil.DocumentLanguage.Notebook (LsnDesc)
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.SRSDocument (SRSDecl, mkDoc)
+import Drasil.LessonPlan (LsnDesc)
+import Drasil.SRS (SRSDecl, mkDoc)
 import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS, programName)
-import Language.Drasil (Document)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -84,10 +83,8 @@ caseStudyMainSRSWCodeZooWLsnPlan syst srsDecl srsFileName choices plan nbDecl ls
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).
-caseStudyMainDrasilWebsite :: DrasilWebsite -> Document -> IO ()
-caseStudyMainDrasilWebsite syst websiteDoc = do
+caseStudyMainDrasilWebsite :: DrasilWebsite -> IO ()
+caseStudyMainDrasilWebsite dw = do
   setSystemLocale
   writeFiles OverwriteAllowed localPath $
-    directory
-      [ps|website|] $
-      genWebsite syst websiteDoc
+    directory [ps|website|] $ genWebsite dw

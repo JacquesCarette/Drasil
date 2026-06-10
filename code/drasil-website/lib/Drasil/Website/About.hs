@@ -3,7 +3,7 @@
 module Drasil.Website.About (aboutSec) where
 
 import Language.Drasil
-import Drasil.Document.Contents (enumBulletU)
+import Language.Drasil.Document
 
 -- * About Section
 

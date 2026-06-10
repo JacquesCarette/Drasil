@@ -4,7 +4,7 @@ module Drasil.LessonPlan.Renderer (mkNb) where
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil (Sentence(S), CI, BibRef, foldlList, SepType(Comma),
+import Language.Drasil (Sentence(S), CI, foldlList, SepType(Comma),
   FoldType(List), fullName, Idea, titleize, titleize')
 import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC),
   ulcc, RawContent(Bib), section, makeSecRef)
@@ -25,34 +25,18 @@ mkNb plan dd comb = Notebook nm as $ mkSections (plan ^. systemdb) dd
 
 -- | Helper for creating the notebook sections.
 mkSections :: ChunkDB -> LsnDesc -> [Section]
-mkSections si dd = map doit dd
+mkSections db dd = map doit dd
   where
+    bib = [UlC $ ulcc (Bib $ extractBib db dd)]
     doit :: LsnChapter -> Section
-    doit (Intro i)        = intro i []
-    doit (LearnObj lo)    = learnObj lo []
-    doit (Review r ss)    = review r ss
-    doit (CaseProb cp ss) = caseProb cp ss
-    doit (Example e)      = example e []
-    doit (Smmry s)        = summary s []
-    doit BibSec           = mkBib (extractBib si dd)
-    doit (Apndx a)        = appendix a []
-
--- | Helper for making the 'Bibliography' section.
-mkBib :: BibRef -> Section
-mkBib bib = reference [UlC $ ulcc (Bib bib)] []
-
--- * 'LsnDesc' 'Section' eliminators
-
--- | Section constructors for the 'LsnDesc' sections.
-intro, learnObj, review, caseProb, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
-intro     = mkLsnSec  "Intro"      Doc.introduction
-learnObj  = mkLsnSec' "LearnObj"   Doc.learnObj
-review    = mkLsnSec  "Review"     Doc.review
-caseProb  = mkLsnSec  "CaseProb"   Doc.caseProb
-example   = mkLsnSec  "Example"    Doc.example
-summary   = mkLsnSec  "Summary"    Doc.summary
-appendix  = mkLsnSec  "Appendix"   Doc.appendix
-reference = mkLsnSec' "References" Doc.reference
+    doit (Intro i)        = mkLsnSec  "Intro"      Doc.introduction i   []
+    doit (LearnObj lo)    = mkLsnSec' "LearnObj"   Doc.learnObj     lo  []
+    doit (Review r ss)    = mkLsnSec  "Review"     Doc.review       r   ss
+    doit (CaseProb cp ss) = mkLsnSec  "CaseProb"   Doc.caseProb     cp  ss
+    doit (Example e)      = mkLsnSec  "Example"    Doc.example      e   []
+    doit (Smmry s)        = mkLsnSec  "Summary"    Doc.summary      s   []
+    doit BibSec           = mkLsnSec' "References" Doc.reference    bib []
+    doit (Apndx a)        = mkLsnSec  "Appendix"   Doc.appendix     a   []
 
 -- | Internal: Create a section of the lesson plan. Title is singular.
 mkLsnSec :: Idea c => String -> c -> [Contents] -> [Section] -> Section

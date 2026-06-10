@@ -10,10 +10,9 @@ import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC), ulc
 import Drasil.System (LessonPlan, HasSystemMeta(..))
 import Drasil.Metadata.Documentation (notebook)
 
-import Drasil.LessonPlan.Core (LsnDesc, LsnChapter(..),
-  Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
-import qualified Drasil.LessonPlan.Sections as Lsn (intro, learnObj, caseProb, example,
-  appendix, review, reference, summary)
+import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..), Intro(..),
+  LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..),
+  intro, learnObj, caseProb, example, appendix, review, reference, summary)
 import Drasil.LessonPlan.ExtractBib (extractBib)
 
 -- | Creates a notebook from a lesson description and system information.
@@ -39,32 +38,32 @@ mkSections si dd = map doit dd
 
 -- | Helper for making the 'Introduction' section.
 mkIntro :: Intro -> Section
-mkIntro (IntrodProg i) = Lsn.intro i []
+mkIntro (IntrodProg i) = intro i []
 
 -- | Helper for making the 'Learning Objectives' section.
 mkLearnObj :: LearnObj -> Section
-mkLearnObj (LrnObjProg cs) = Lsn.learnObj cs []
+mkLearnObj (LrnObjProg cs) = learnObj cs []
 
 -- | Helper for making the 'Review' section.
 mkReview :: Review -> Section
-mkReview (ReviewProg r ss) = Lsn.review r ss
+mkReview (ReviewProg r ss) = review r ss
 
 -- | Helper for making the 'Case Problem' section.
 mkCaseProb :: CaseProb -> Section
-mkCaseProb (CaseProbProg cp ss) = Lsn.caseProb cp ss
+mkCaseProb (CaseProbProg cp ss) = caseProb cp ss
 
 -- | Helper for making the 'Example' section.
 mkExample:: Example -> Section
-mkExample (ExampleProg cs) = Lsn.example cs []
+mkExample (ExampleProg cs) = example cs []
 
 -- | Helper for making the 'Summary' section.
 mkSmmry :: Smmry -> Section
-mkSmmry (SmmryProg cs) = Lsn.summary cs []
+mkSmmry (SmmryProg cs) = summary cs []
 
 -- | Helper for making the 'Bibliography' section.
 mkBib :: BibRef -> Section
-mkBib bib = Lsn.reference [UlC $ ulcc (Bib bib)] []
+mkBib bib = reference [UlC $ ulcc (Bib bib)] []
 
 -- | Helper for making the 'Appendix' section.
 mkAppndx :: Apndx -> Section
-mkAppndx (ApndxProg cs) = Lsn.appendix cs []
+mkAppndx (ApndxProg cs) = appendix cs []

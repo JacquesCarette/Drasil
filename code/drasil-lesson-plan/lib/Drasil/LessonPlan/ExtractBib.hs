@@ -7,7 +7,7 @@ import Drasil.Database (UID, ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
 
-import Drasil.LessonPlan.Core
+import Drasil.LessonPlan.Document
 import Language.Drasil.Development (lnames)
 
 findAllInConsSecs :: [Contents] -> [Section] -> S.Set UID

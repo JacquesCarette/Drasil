@@ -4,7 +4,7 @@ module Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables,
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkPortableNFR, mkCorrectNFR, inReqWTab)
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, inReqWTab)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -75,11 +75,7 @@ portable :: ConceptInstance
 portable = mkPortableNFR "portable" ["Linux", "Mac OSX", "Windows"] "Portability"
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable"
-  (S "Routine updates to the software shall be manageable and predictable." +:+
-   S "When changes are made, their impact on the generated artifacts" +:+
-   S "should be clear and traceable" !.)
-  "Maintainability" nonFuncReqDom
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 usable :: ConceptInstance
 usable = cic "usable"

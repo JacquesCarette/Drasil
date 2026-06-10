@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.SRSDocument
 import Drasil.DocLang ()
 import Drasil.Generator (withCommonKnowledge)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (DataDefinition, GenDefn)
 
 import qualified Drasil.DocLang.SRS as SRS
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -19,24 +19,22 @@ import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   softwareSys, system, user, environment, product_, datum)
 import Data.Drasil.Concepts.Education (undergraduate, calculus)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
-import Data.Drasil.Quantities.Physics (energy, gravitationalConst)
-import Data.Drasil.Quantities.PhysicalProperties ()
-import Drasil.DocumentLanguage.TraceabilityGraph ()
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSPCol)
 import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
 
 import Drasil.BinaryStar.MetaConcepts (progName)
-import Drasil.BinaryStar.Concepts (concepts, defs)
+import Drasil.BinaryStar.Concepts (concepts, defs, starOne, starTwo,
+  gravInteraction)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
 import Drasil.BinaryStar.References (citations)
 import Drasil.BinaryStar.Unitals (symbols, inputs, outputs,
-  inConstraints, outConstraints, constants, mass_1, mass_2,
-  xVel_1, yVel_1, xVel_2, yVel_2, sepDist)
+  inConstraints, outConstraints, constants, mass_1, mass_2)
 import Drasil.BinaryStar.Assumptions (assumptions, isolated, constantMass)
 import Drasil.BinaryStar.Goals (goals, goalsInputs)
 import Drasil.BinaryStar.Requirements (funcReqs, funcReqsTables, nonFuncReqs)
 import Drasil.BinaryStar.Changes (likelyChgs, unlikelyChgs)
-import Drasil.BinaryStar.DataDefs (dataDefs)
+import Drasil.BinaryStar.Expressions (energyExpr)
 import Drasil.BinaryStar.IMods (iMods)
 import Drasil.BinaryStar.TMods (tMods)
 
@@ -194,9 +192,9 @@ probDescIntro = foldlSent_
 
 physSystParts :: [Sentence]
 physSystParts = map (!.)
-  [S "The first star with mass" +:+ ch mass_1,
-   S "The second star with mass" +:+ ch mass_2,
-   S "The gravitational interaction between the two stars"]
+  [S "The" +:+ phrase starOne +:+ S "with" +:+ phrase mass +:+ ch mass_1,
+   S "The" +:+ phrase starTwo +:+ S "with" +:+ phrase mass +:+ ch mass_2,
+   S "The" +:+ phrase gravInteraction +:+ S "between the two stars"]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -209,7 +207,7 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO
   progName [authorName]
   [] [] [] []
-  tMods ([] :: [GenDefn]) dataDefs iMods
+  tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols
   (labelledContent ++ funcReqsTables) symbMap []
 
@@ -225,7 +223,7 @@ conceptChunks = defs
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   symbols ideaDicts conceptChunks
-  ([] :: [UnitDefn]) dataDefs iMods
+  ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
   ([] :: [GenDefn]) tMods concIns
   citations (labelledContent ++ funcReqsTables)
 
@@ -249,10 +247,3 @@ corrSolnDesc = foldlSP
 
 corrSolnEqn :: Contents
 corrSolnEqn = unlbldExpr energyExpr
-
--- E = const
-energyExpr :: ModelExpr
-energyExpr = sy energy $=
-  half (sy mass_1 $* (square (sy xVel_1) $+ square (sy yVel_1)))
-  $+ half (sy mass_2 $* (square (sy xVel_2) $+ square (sy yVel_2)))
-  $- (sy gravitationalConst $* sy mass_1 $* sy mass_2 $/ sy sepDist)

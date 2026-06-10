@@ -29,8 +29,9 @@ starTwo = compoundNC second_ star
 ---------------------------------------------------------
 
 defs :: [ConceptChunk]
-defs = [binaryStarSys, starBody, gravInteraction, initialConditions,
-        trajectory, centerOfMass, inertialRefFrame, simTimeSpan]
+defs = [binaryStarSys, starBody, gravInteraction, newtonLUG,
+        initialConditions, trajectory, centerOfMass, inertialRefFrame,
+        simTimeSpan]
 
 -- | T1: binary star system
 binaryStarSys :: ConceptChunk
@@ -46,6 +47,11 @@ starBody = dcc "starBody" (cn' "star")
 gravInteraction :: ConceptChunk
 gravInteraction = dcc "gravInteraction" (nounPhraseSP "gravitational interaction")
   "the mutual attractive force between two masses as described by Newtonian gravity"
+
+-- | T3b: Newton's law of universal gravitation
+newtonLUG :: ConceptChunk
+newtonLUG = dcc "newtonLUG" (nounPhraseSP "Newton's law of universal gravitation")
+  "the law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them"
 
 -- | T4: initial conditions
 initialConditions :: ConceptChunk

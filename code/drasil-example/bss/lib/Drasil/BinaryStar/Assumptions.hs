@@ -10,9 +10,10 @@ import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.Sentence.Combinators (fromSources)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, consVals)
-import Data.Drasil.Concepts.Physics (twoD)
+import Data.Drasil.Concepts.Physics (gravity, twoD)
 import Data.Drasil.Quantities.Physics (gravitationalConst)
 
+import Drasil.BinaryStar.Concepts (gravInteraction, newtonLUG)
 import Drasil.BinaryStar.Unitals (mass_1, mass_2, sepDist)
 
 assumptions :: [ConceptInstance]
@@ -25,20 +26,22 @@ twoBody, isolated, newtonianGravity, nonRelativistic, pointMass,
 twoBody = cic "twoBody"
   (S "The system consists of exactly two stars with masses" +:+
    ch mass_1 `S.and_` ch mass_2 +:+. S "" +:+
-   S "Third-body gravitational perturbations are ignored" !.)
+   S "Perturbations from third-body" +:+ phrase gravity +:+
+   S "are ignored" !.)
   "twoBody" assumpDom
 
 isolated = cic "isolated"
   (S "Non-gravitational forces (e.g., drag, thrust, radiation pressure)" +:+
    S "are neglected; the only interaction modeled" `S.is`
-   S "mutual Newtonian gravitation" +:+
+   S "mutual" +:+ phrase gravity +:+
    S "between the two stars" +:+. fromSource newtonianGravity)
   "isolated" assumpDom
 
 newtonianGravity = cic "newtonianGravity"
-  (S "The gravitational interaction between the stars is modeled using" +:+
-   S "Newton's law of universal gravitation" `sC`
-   S "with the gravitational constant" +:+
+  (S "The" +:+ phrase gravInteraction +:+
+   S "between the stars is modeled using" +:+
+   phrase newtonLUG `sC`
+   S "with the" +:+ phrase gravitationalConst +:+
    ch gravitationalConst +:+ S "provided in" +:+.
    namedRef (SRS.valsOfAuxCons [] []) (titleize consVals))
   "newtonianGravity" assumpDom

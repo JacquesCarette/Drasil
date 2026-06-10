@@ -7,9 +7,7 @@ import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (LessonPlan, mkSystemMeta, mkLessonPlan)
 
--- TODO: Add export parameters in a module
-import Drasil.LessonPlan (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
-  LearnObj(..), Review(..), CaseProb(..), Example(..))
+import Drasil.LessonPlan (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example))
 
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
   speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,
@@ -29,10 +27,10 @@ import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
 nbDecl :: LsnDesc
 nbDecl = [
-    LearnObj $ LrnObjProg [learnObjContext],
-    Review $ ReviewProg [] reviewSecs,
-    CaseProb $ CaseProbProg caseProbCont caseProbSecs,
-    Example $ ExampleProg exampleContent,
+    LearnObj [learnObjContext],
+    Review [] reviewSecs,
+    CaseProb caseProbCont caseProbSecs,
+    Example exampleContent,
     BibSec
   ]
 

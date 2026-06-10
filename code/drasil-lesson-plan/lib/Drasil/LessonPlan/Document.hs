@@ -2,8 +2,6 @@ module Drasil.LessonPlan.Document (
   -- * Lesson Plan
   LsnDesc, LsnChapter(..),
   -- ** Chapter Types
-  Intro(..), LearnObj(..), Review(..), CaseProb(..),
-  Example(..), Smmry(..), Apndx(..),
   -- ** Constructors
   intro, learnObj, caseProb, example, appendix, review, reference, summary
 ) where
@@ -18,37 +16,16 @@ import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
 
 type LsnDesc = [LsnChapter]
 
-data LsnChapter = Intro Intro
-                | LearnObj LearnObj
-                | Review Review
-                | CaseProb CaseProb
-                | Example Example
-                | Smmry Smmry
+data LsnChapter = Intro [Contents]
+                | LearnObj [Contents]
+                | Review [Contents] [Section]
+                | CaseProb [Contents] [Section]
+                | Example [Contents]
+                | Smmry [Contents]
                 | BibSec
-                | Apndx Apndx
+                | Apndx [Contents]
 
 -- TODO: Work on detail structure of Lesson Plan
-
--- ** Introduction
-newtype Intro = IntrodProg [Contents]
-
--- ** Learning Objectives
-newtype LearnObj = LrnObjProg [Contents]
-
--- ** Review Chapter
-data Review = ReviewProg [Contents] [Section]
-
--- ** A Case Problem
-data CaseProb = CaseProbProg [Contents] [Section]
-
--- ** Examples of the lesson
-newtype Example = ExampleProg [Contents]
-
--- ** Summary
-newtype Smmry = SmmryProg [Contents]
-
--- ** Appendix
-newtype Apndx = ApndxProg [Contents]
 
 -- * Section Constructors
 

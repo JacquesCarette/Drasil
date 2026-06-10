@@ -16,14 +16,14 @@ findAllInConsSecs cs ss = S.unions $
 
 -- | Extracts citation reference 'UID's from a lesson chapter.
 lsnChapCites :: LsnChapter -> S.Set UID
-lsnChapCites (Intro (IntrodProg cs)) = extractChRefs cs
-lsnChapCites (LearnObj (LrnObjProg cs)) = extractChRefs cs
-lsnChapCites (Review (ReviewProg cs ss)) = findAllInConsSecs cs ss
-lsnChapCites (CaseProb (CaseProbProg cs ss)) = findAllInConsSecs cs ss
-lsnChapCites (Example (ExampleProg cs)) = extractChRefs cs
-lsnChapCites (Smmry (SmmryProg cs)) = extractChRefs cs
+lsnChapCites (Intro cs) = extractChRefs cs
+lsnChapCites (LearnObj cs) = extractChRefs cs
+lsnChapCites (Review cs ss) = findAllInConsSecs cs ss
+lsnChapCites (CaseProb cs ss) = findAllInConsSecs cs ss
+lsnChapCites (Example cs) = extractChRefs cs
+lsnChapCites (Smmry cs) = extractChRefs cs
 lsnChapCites BibSec = mempty
-lsnChapCites (Apndx (ApndxProg cs)) = extractChRefs cs
+lsnChapCites (Apndx cs) = extractChRefs cs
 
 -- | Extract bibliography entries for a notebook based on the lesson
 -- description. Scans the notebook for citation references and looks them up in

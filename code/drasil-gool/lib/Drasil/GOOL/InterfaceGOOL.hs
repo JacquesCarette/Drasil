@@ -164,6 +164,11 @@ class (VariableValue r, OOVariableSym r, SelfSym r, InstanceVarSelfSym r) => OOV
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
+  -- | Generic function for calling a method on `self`.
+  -- Because of C++, this should always be called rather
+  -- than `objMethodCall` on `self.`
+  -- Takes the function name, the return type, a list of
+  -- positional arguments, and a list of named arguments.
   selfMethodCallMixedArgs ::            MixedCall r
   newObjMixedArgs         ::            MixedCtorCall r
   extNewObjMixedArgs      :: Library -> MixedCtorCall r

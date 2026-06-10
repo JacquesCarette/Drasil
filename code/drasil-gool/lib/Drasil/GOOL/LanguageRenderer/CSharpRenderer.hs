@@ -71,13 +71,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
+  func, get, set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
@@ -397,7 +396,7 @@ instance ValueExpression CSharpCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression CSharpCode where
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
+  selfFuncAppMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs

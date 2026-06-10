@@ -56,10 +56,10 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar,
   class', module')
 import Drasil.GOOL.Renderers (renderType)
-import Drasil.Shared.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
-  docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
-  inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
-  printLabel, listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
+import Drasil.Shared.LanguageRenderer (blockCmtStart, blockCmtEnd, docCmtStart,
+  bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel, inLabel, tryLabel,
+  catchLabel, throwLabel, throwsLabel, importLabel, listSep', printLabel,
+  listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
   classVarAccess, func, listSetFunc, castObj, classLevel, instanceLevel, break, continue,
@@ -72,13 +72,13 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
-  docFunc, buildClass, implementingClass, docClass, commentedClass, modFromData,
-  fileDoc, fileFromData, defaultOptSpace, local)
+  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
+  func, get, set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
+  implementingClass, docClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -403,7 +403,7 @@ instance ValueExpression SwiftCode where
   notNull = CP.notNull swiftNil
 
 instance OOValueExpression SwiftCode where
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
+  selfFuncAppMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp

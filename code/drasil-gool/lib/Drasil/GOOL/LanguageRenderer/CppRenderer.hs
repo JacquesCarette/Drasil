@@ -75,12 +75,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
-  funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
-  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, listAppend,
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt,
+  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -1351,7 +1351,9 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
+  selfFuncAppMixedArgs fn tp vs ns = do
+    slf <- self :: SVariable CppSrcCode
+    RC.call Nothing (Just $ RC.variable slf <> ptrAccess') fn tp vs ns
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
     modify (addModuleImportVS l)

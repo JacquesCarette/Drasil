@@ -67,23 +67,23 @@ mkUid' :: String -> UID
 mkUid' = modelNs . mkUid
 
 -- | Smart constructor for 'NewDEModel's
-newDEModel :: Typeable e => String -> NP -> DifferentialModel -> ModelKind e
+newDEModel :: String -> NP -> DifferentialModel -> ModelKind e
 newDEModel u n dm = MK (NewDEModel dm) (mkUid' u) n
 
 -- | Smart constructor for 'NewDEModel's, deriving UID+Term from the 'DifferentialModel'
-newDEModel' :: Typeable e => DifferentialModel -> ModelKind e
+newDEModel' :: DifferentialModel -> ModelKind e
 newDEModel' dm = MK (NewDEModel dm) (modelNs $ dm ^. uid) (dm ^. term)
 
 -- | Smart constructor for 'DEModel's
-deModel :: Typeable e => String -> NP -> RelationConcept -> ModelKind e
+deModel :: String -> NP -> RelationConcept -> ModelKind e
 deModel u n rc = MK (DEModel rc) (mkUid' u) n
 
 -- | Smart constructor for 'DEModel's, deriving UID+Term from the 'RelationConcept'
-deModel' :: Typeable e => RelationConcept -> ModelKind e
+deModel' :: RelationConcept -> ModelKind e
 deModel' rc = MK (DEModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
 -- | Smart constructor for 'EquationalConstraints'
-equationalConstraints :: Typeable e => String -> NP -> ConstraintSet e -> ModelKind e
+equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
 equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
@@ -91,7 +91,7 @@ equationalConstraints' :: Typeable e => ConstraintSet e -> ModelKind e
 equationalConstraints' qs = MK (EquationalConstraints qs) (modelNs $ qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
-equationalModel :: Typeable e => String -> NP -> QDefinition e -> ModelKind e
+equationalModel :: String -> NP -> QDefinition e -> ModelKind e
 equationalModel u n qd = MK (EquationalModel qd) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
@@ -103,15 +103,15 @@ equationalModelU :: Typeable e => String -> QDefinition e -> ModelKind e
 equationalModelU u qd = MK (EquationalModel qd) (mkUid' u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
-equationalModelN :: Typeable e => NP -> QDefinition e -> ModelKind e
+equationalModelN :: NP -> QDefinition e -> ModelKind e
 equationalModelN n qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) n
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealm :: Typeable e => String -> NP -> MultiDefn e -> ModelKind e
+equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 equationalRealm u n md = MK (EquationalRealm md) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
-equationalRealm' :: Typeable e => Typeable e => MultiDefn e -> ModelKind e
+equationalRealm' :: Typeable e => MultiDefn e -> ModelKind e
 equationalRealm' md = MK (EquationalRealm md) (modelNs $ md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
@@ -119,7 +119,7 @@ equationalRealmU :: Typeable e => String -> MultiDefn e -> ModelKind e
 equationalRealmU u md = MK (EquationalRealm md) (mkUid' u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
-equationalRealmN :: Typeable e => NP -> MultiDefn e -> ModelKind e
+equationalRealmN :: NP -> MultiDefn e -> ModelKind e
 equationalRealmN n md = MK (EquationalRealm md) (modelNs $ md ^. uid) n
 
 -- | Smart constructor for 'OthModel's
@@ -165,7 +165,7 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed
 -- OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
-instance Typeable e => HasChunkRefs (ModelKind e) where
+instance HasChunkRefs (ModelKind e) where
   chunkRefs mkd = mconcat
     [ chunkRefs (mkd ^. mk)
     , chunkRefs (mkd ^. mkTerm)

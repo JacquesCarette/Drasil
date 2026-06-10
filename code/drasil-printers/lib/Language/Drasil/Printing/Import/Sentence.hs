@@ -14,7 +14,7 @@ import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, refFind, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
-import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupSymb, lookupP', lookupS', lookupT')
+import Language.Drasil.Printing.Import.Helpers (lookupSymb, lookupP', lookupS', lookupT')
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 
 -- * Main Function

@@ -2,6 +2,7 @@ module Drasil.BinaryStar.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (first, second_)
+import Data.Drasil.Concepts.Physics (gravity)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 
 ---------------------------------------------------------
@@ -9,9 +10,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 -- These are used when you write `phrase starOne` in sentences
 ---------------------------------------------------------
 
-concepts :: [IdeaDict]
-concepts = map nw [star, starOne, starTwo]
-  ++ map nw defs
+ideaDicts :: [IdeaDict]
+ideaDicts = [star, starOne, starTwo]
 
 star :: IdeaDict
 star = nc "star" (cn' "star")
@@ -28,10 +28,9 @@ starTwo = compoundNC second_ star
 -- Each one needs: unique ID, noun phrase, definition string
 ---------------------------------------------------------
 
-defs :: [ConceptChunk]
-defs = [binaryStarSys, starBody, gravInteraction, newtonLUG,
-        initialConditions, trajectory, centerOfMass, inertialRefFrame,
-        simTimeSpan]
+conceptChunks :: [ConceptChunk]
+conceptChunks = [gravity, binaryStarSys, starBody, gravInteraction, newtonLUG,
+  initialConditions, trajectory, centerOfMass, inertialRefFrame, simTimeSpan]
 
 -- | T1: binary star system
 binaryStarSys :: ConceptChunk

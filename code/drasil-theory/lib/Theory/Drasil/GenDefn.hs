@@ -13,6 +13,7 @@ import Control.Lens ((^.), view, makeLenses)
 
 import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
+import Language.Drasil.Document
 import Drasil.Metadata.TheoryConcepts (genDefn)
 import Theory.Drasil.Components.Derivation (Derivation, MayHaveDerivation(derivations))
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)

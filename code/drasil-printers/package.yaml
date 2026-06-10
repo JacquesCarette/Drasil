@@ -18,16 +18,19 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - pretty
+- prettyprinter
 - containers
 - MissingH
 - filepath
 - directory
-- drasil-file-handling
+- drasil-data-formats
 - drasil-database
+- drasil-file-handling
 - drasil-lang
 - drasil-theory
 - drasil-utils
 - split
+- text
 
 ghc-options:
 - -Wall

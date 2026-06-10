@@ -36,11 +36,14 @@ cradle:
     - path: "drasil-data/lib"
       component: "drasil-data:lib"
 
+    - path: "drasil-data-formats/lib"
+      component: "drasil-data-formats:lib"
+
+    - path: "drasil-data-formats/test"
+      component: "drasil-data-formats:test:drasil-data-formats-test"
+
     - path: "drasil-database/lib"
       component: "drasil-database:lib"
-
-    - path: "drasil-docLang/lib"
-      component: "drasil-docLang:lib"
 
     - path: "drasil-example/dblpend/lib"
       component: "dblpend:lib"
@@ -123,6 +126,9 @@ cradle:
     - path: "drasil-lang/lib"
       component: "drasil-lang:lib"
 
+    - path: "drasil-lesson-plan/lib"
+      component: "drasil-lesson-plan:lib"
+
     - path: "drasil-makefile/lib"
       component: "drasil-makefile:lib"
 
@@ -140,6 +146,9 @@ cradle:
 
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
+
+    - path: "drasil-srs/lib"
+      component: "drasil-srs:lib"
 
     - path: "drasil-system/lib"
       component: "drasil-system:lib"

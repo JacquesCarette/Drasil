@@ -1,15 +1,17 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, VSType, VSBinder, SValue,
-  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Array(..), List(..), Set(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
+  SValue, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
+  TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
+  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
@@ -17,10 +19,10 @@ import Drasil.Shared.InterfaceCommon (MSBody, VSType, VSBinder, SValue,
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..))
+  OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
+  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
+  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
   ScopeData, ScopeTag(..), sd, bindFormD)
@@ -55,6 +57,9 @@ instance Monad CodeInfoOO where
 
 instance SharedProg CodeInfoOO
 instance OOProg CodeInfoOO
+
+instance UnRepr CodeInfoOO contents where
+  unRepr = unCI
 
 instance ProgramSym CodeInfoOO where
   type Program CodeInfoOO = GOOLState
@@ -104,10 +109,6 @@ instance TypeSym CodeInfoOO where
 instance OOTypeSym CodeInfoOO where
   obj             _ = noInfoVSType
 
-instance TypeElim CodeInfoOO where
-  getType _     = Void
-  getTypeString = typeString . unCI
-
 instance ScopeSym CodeInfoOO where
   global = noInfoScope
   mainFn = noInfoScope
@@ -122,10 +123,14 @@ instance VariableSym CodeInfoOO where
 instance OOVariableSym CodeInfoOO where
   classVar _ _ = noInfo
   classConst _ _ = noInfo
-  self              = noInfo
   classVarAccess    _ _   = noInfo
   extClassVarAccess _ _   = noInfo
   instanceVarAccess      _ _   = noInfo
+
+instance SelfSym CodeInfoOO where
+  self              = noInfo
+
+instance InstanceVarSelfSym CodeInfoOO where
   instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
@@ -232,6 +237,7 @@ instance OOValueExpression CodeInfoOO where
 
 instance InternalValueExp CodeInfoOO where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
+  classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance FunctionSym CodeInfoOO where
   type Function CodeInfoOO = ()
@@ -250,6 +256,8 @@ instance IndexTranslator CodeInfoOO where
 
 instance Array CodeInfoOO where
   arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
+  arrayCopy _ = noInfo
 
 instance List CodeInfoOO where
   listSize   = execute1

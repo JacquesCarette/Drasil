@@ -3,8 +3,9 @@ module Drasil.SglPend.Requirements (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang (inReqWTab)
+import Drasil.SRS (inReqWTab)
 import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
 import Drasil.SglPend.IMods (angularDisplacementIM)
 import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle, inputs)

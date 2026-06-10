@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = code data database docLang file-handling gen gool lang makefile metadata meta-analysis printers system theory utils website
+PACKAGES = assets code data data-formats database file-handling gen gool lang lesson-plan makefile metadata meta-analysis printers srs system theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -26,7 +26,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss
 GOOLTEST = codegenTest
 
 # where they live
@@ -42,6 +42,7 @@ GOOLTEST_DIR = gooltest
 DBLPEND_DIR = dblpend
 SGLPEND_DIR = sglpend
 PDCONTROLLER_DIR = pdcontroller
+BSS_DIR = bss
 
 # Directories for examples with multiple src versions
 MULTI_SRC_DIRS = $(PROJECTILE_DIR)
@@ -49,7 +50,7 @@ MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 # All example directories
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(SWHSNOPCM_DIR) \
   $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPEND_DIR)\
-  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR)
+  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR) $(BSS_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -64,6 +65,7 @@ GOOLTEST_EXE = codegenTest
 DBLPEND_EXE = dblpend
 SGLPEND_EXE = sglpend
 PDCONTROLLER_EXE = pdcontroller
+BSS_EXE = bss
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -94,11 +96,6 @@ DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
 MDBOOK_BUILD_EXAMPLES = $(addsuffix $(MDBOOK_BUILD_E_SUFFIX), $(EXAMPLES))
 MDBOOK_SERVER_EXAMPLES = $(addsuffix $(MDBOOK_SERVER_E_SUFFIX), $(EXAMPLES))
 JUPYTER_HTML_EXAMPLES = $(addsuffix $(JUPYTER_HTML_E_SUFFIX), $(EXAMPLES))
-
-# Website names with appropriate suffixes.
-TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
-STABILIZE_WEBSITE = $(addsuffix $(STABILIZE_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
-BC_WEBSITE = $(addsuffix $(BC_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -153,8 +150,8 @@ DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
 TRACEY_GRAPH_FOLDER_NAME = TraceyGraph
 TRACEY_GRAPH_FOLDER = $(TRACEY_GRAPH_FOLDER_NAME)/
 TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
-WEBSITE_FOLDER_NAME = Website
-WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
+WEBSITE_FOLDER_NAME = website
+WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
 
 #####################################
 #--- `make` command line options ---#
@@ -264,7 +261,9 @@ test: code ##@Examples Test examples en masse against stable, only failing at th
 
 # First builds the website and then tests the generated contenst with those in
 # the stable-website folder.
-test_website: $(TEST_WEBSITE) ##@Website Test freshly generated website against last known 'stable' copy.
+test_website: $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website ##@Website Test freshly generated website against last known 'stable' copy.
+	@mkdir -p "$(LOG_FOLDER)"
+	$(call DO_DIFF,$(STABLE_WEBSITE_FOLDER),$(WEBSITE_FOLDER),$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX))
 	@echo ---------------------------------------
 	@echo Testing Website complete, checking logs
 	@echo ---------------------------------------
@@ -279,7 +278,9 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 
 # First build the website, and then overwrite the contents in the stable-website
 # folder with currently generated ones.
-website_stabilize: $(STABILIZE_WEBSITE) ##@Website Stabilize a freshly generated copy of the website artifacts.
+website_stabilize: $(CLEAN_GF_PREFIX)$(WEBSITE_FOLDER_NAME) website ##@Website Stabilize a freshly generated copy of the website artifacts.
+	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
+	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 	@echo ----------------------------
 	@echo Stabilized website artifacts
 	@echo ----------------------------
@@ -362,22 +363,10 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PRE
 	@mkdir -p "$(LOG_FOLDER)"
 	$(call DO_DIFF,$(STABLE_FOLDER)$*/,$(BUILD_FOLDER)$(EDIR)/,$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX))
 
-# Website diff tests. First builds the website and then compares the generated
-# contents in the Website folder to those in the stable-website folder.
-# Target will have the form Website_diff.
-$(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
-	@mkdir -p "$(LOG_FOLDER)"
-	$(call DO_DIFF,$(STABLE_WEBSITE_FOLDER),$(WEBSITE_FOLDER),$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX))
-
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
 	rm -rf "./$(BUILD_FOLDER)$(EDIR)"
-
-# The website build cleans.
-# Target will have the form Website_build_clean
-$(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
-	rm -rf "./$(WEBSITE_FOLDER)"
 
 # Individual example stabilization. First builds all Drasil packages,
 # runs all examples, and then copies contents from the build folder into stable.
@@ -391,15 +380,6 @@ $(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
 	rm -rf "./$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
 	@mkdir -p "$(STABLE_FOLDER)"
 	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
-
-# The website stabilization. First builds the website, and then copies the
-# contents from the website folder into stable-website.
-# Target will have the form Website_stabilize.
-$(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
-	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
-	@mkdir -p "$(STABLE_WEBSITE_FOLDER)"
-	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
-
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
 # then make pdfs from the generated TeX files.

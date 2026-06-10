@@ -20,13 +20,26 @@ public class HelloWorld {
         int[] arr = {1, 2, 3};
         System.out.print("Value of arr: ");
         System.out.println(Arrays.toString(arr));
+        System.out.print("Length of arr: ");
+        System.out.println(arr.length);
         int[] arr2 = new int[3];
         arr2[0] = 4;
         arr2[1] = 5;
         arr2[2] = 6;
         System.out.print("Value of arr2: ");
         System.out.println(Arrays.toString(arr2));
+        System.out.print("Length of arr2: ");
+        System.out.println(arr2.length);
         ArrayList<Double> myOtherList = new ArrayList<Double>(Arrays.asList(1.0, 1.5));
+        int[] arr_copy = new int[3];
+        arr_copy = arr.clone();
+        System.out.print("Value of arr_copy: ");
+        System.out.println(Arrays.toString(arr_copy));
+        arr[1] = 42;
+        System.out.print("Value of arr after modifying arr: ");
+        System.out.println(Arrays.toString(arr));
+        System.out.print("Value of arr_copy after modifying arr: ");
+        System.out.println(Arrays.toString(arr_copy));
         int oneIndex = myOtherList.indexOf(1.0);
         System.out.println(oneIndex);
         a = myOtherList.size();
@@ -46,6 +59,13 @@ public class HelloWorld {
         assert oneIndex == 0 : "oneIndex should be 0";
         Set<Integer> s = Set.of(4, 7, 5);
         assert s.contains(7) : "Set s should contain 7";
+        
+        // Object tests
+        TestClass t1 = new TestClass(5);
+        TestClass t2 = new TestClass(4);
+        TestClass t3 = TestClass.add(t1, t2);
+        System.out.print("Value of t3.a: ");
+        System.out.println(t3.a);
         
         // List slicing tests
         // Create variables for list slices
@@ -272,5 +292,17 @@ public class HelloWorld {
         } catch (Exception exc) {
             System.out.println("Caught intentional error");
         }
+    }
+}
+
+class TestClass {
+    public int a;
+    
+    public TestClass(int a) {
+        this.a = a;
+    }
+    
+    public static TestClass add(TestClass t1, TestClass t2) {
+        return new TestClass(t1.a + t2.a);
     }
 }

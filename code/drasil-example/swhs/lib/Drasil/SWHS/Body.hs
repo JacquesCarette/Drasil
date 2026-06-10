@@ -7,25 +7,25 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
-import Drasil.SRSDocument
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (mkSmithEtAlICO)
-import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
   output_, physical, physics, property, quantity, software, softwareSys,
   solution, sysCont, system, user, value, variable)
 import Data.Drasil.Concepts.Education (calculus, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon)
@@ -81,8 +81,7 @@ ideaDicts =
   -- Actual IdeaDicts
   materialProprty :
   -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++
-  map nw mathcon'
+  map nw [progName', progName] ++ [nw phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

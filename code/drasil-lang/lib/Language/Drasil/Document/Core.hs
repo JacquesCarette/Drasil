@@ -16,7 +16,7 @@ import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
-import Language.Drasil.Reference (Reference)
+import Language.Drasil.Document.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
 
 -- * Lists

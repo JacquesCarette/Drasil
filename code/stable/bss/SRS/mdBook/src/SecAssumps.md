@@ -4,11 +4,11 @@ This section simplifies the original problem and helps in developing the theoret
 
 <div id="twoBody"></div>
 
-twoBody: The system consists of exactly two stars with masses \\({m\_{1}}\\) and \\({m\_{2}}\\) . Third-body gravitational perturbations are ignored. (RefBy: [IM:accelY2](./SecIMs.md#IM:accelY2), [IM:accelY1](./SecIMs.md#IM:accelY1), [IM:accelX2](./SecIMs.md#IM:accelX2), [IM:accelX1](./SecIMs.md#IM:accelX1), and [LC:Derived-Output-Quantities](./SecLCs.md#lcDerivedOutputs).)
+twoBody: The system consists of exactly two stars with masses \\({m\_{1}}\\) and \\({m\_{2}}\\) . Perturbations from third-body gravity are ignored. (RefBy: [IM:accelY2](./SecIMs.md#IM:accelY2), [IM:accelY1](./SecIMs.md#IM:accelY1), [IM:accelX2](./SecIMs.md#IM:accelX2), [IM:accelX1](./SecIMs.md#IM:accelX1), and [LC:Derived-Output-Quantities](./SecLCs.md#lcDerivedOutputs).)
 
 <div id="isolated"></div>
 
-isolated: Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected; the only interaction modeled is mutual Newtonian gravitation between the two stars (from [A:newtonianGravity](./SecAssumps.md#newtonianGravity)). (RefBy: [IM:accelY2](./SecIMs.md#IM:accelY2), [IM:accelY1](./SecIMs.md#IM:accelY1), [IM:accelX2](./SecIMs.md#IM:accelX2), [IM:accelX1](./SecIMs.md#IM:accelX1), and [LC:Derived-Output-Quantities](./SecLCs.md#lcDerivedOutputs).)
+isolated: Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected; the only interaction modeled is mutual gravity between the two stars (from [A:newtonianGravity](./SecAssumps.md#newtonianGravity)). (RefBy: [IM:accelY2](./SecIMs.md#IM:accelY2), [IM:accelY1](./SecIMs.md#IM:accelY1), [IM:accelX2](./SecIMs.md#IM:accelX2), [IM:accelX1](./SecIMs.md#IM:accelX1), and [LC:Derived-Output-Quantities](./SecLCs.md#lcDerivedOutputs).)
 
 <div id="newtonianGravity"></div>
 

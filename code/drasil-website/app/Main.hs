@@ -5,8 +5,8 @@ module Main (main) where
 import Data.Maybe (fromMaybe)
 
 import Drasil.Generator (caseStudyMainDrasilWebsite)
-import Language.Drasil (Document(Document), ShowTableOfContents(NoToC),
-  namedRef, Sentence(S))
+import Language.Drasil (Sentence(S))
+import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
 import System.Environment (getEnv, lookupEnv)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
@@ -59,11 +59,9 @@ main = do
             -- but the analysis scripts work nonetheless, so we display it here.
           }
 
-      syst = webSys allFolders
-
       --  FIXME: Author is hack for now to show up in proper spot.
       author = namedRef gitHubRef (S "Link to GitHub Repository")
       websiteDoc = Document (S websiteTitle) author NoToC $ sections allFolders
+      syst = webSys websiteDoc allFolders
 
-  -- generate the html document/website.
-  caseStudyMainDrasilWebsite syst websiteDoc
+  caseStudyMainDrasilWebsite syst

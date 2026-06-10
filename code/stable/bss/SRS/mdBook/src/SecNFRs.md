@@ -12,7 +12,7 @@ Portability: The code shall be portable to multiple environments, particularly L
 
 <div id="maintainable"></div>
 
-Maintainability: Routine updates to the software shall be manageable and predictable. When changes are made, their impact on the generated artifacts should be clear and traceable.
+Maintainability: If a likely change is made to the finished software, it will take at most 10\\(\\%\\) of the original development time, assuming the same development resources are available.
 
 <div id="usable"></div>
 

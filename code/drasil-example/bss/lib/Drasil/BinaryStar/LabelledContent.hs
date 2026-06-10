@@ -3,6 +3,7 @@ module Drasil.BinaryStar.LabelledContent (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 

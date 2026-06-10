@@ -1,6 +1,7 @@
 module Drasil.BinaryStar.IMods (iMods, accelIM_X1, accelIM_Y1, accelIM_X2, accelIM_Y2) where
 
 import Language.Drasil
+import Language.Drasil.Document (refS)
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 

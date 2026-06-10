@@ -1,6 +1,7 @@
 module Drasil.BinaryStar.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
+import Language.Drasil.Document (refS)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (likeChgDom, unlikeChgDom, output_)

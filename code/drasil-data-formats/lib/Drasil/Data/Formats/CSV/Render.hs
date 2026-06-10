@@ -1,0 +1,67 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+module Drasil.Data.Formats.CSV.Render
+  ( -- ** Rendering
+    CSVRenderOptions,
+    DoubleQuotationPolicy (..),
+    csvRenderOpts,
+    renderCSV,
+  )
+where
+
+import Data.List (intersperse)
+import Data.Text (Text)
+import qualified Data.Text as T (any, replace, splitOn)
+import Drasil.Data.Formats.CSV.Core (CSV, header, rows)
+import Prettyprinter (Doc, Pretty (..), comma, dquotes, hardline, hcat, vcat)
+
+-- | Options for rendering a 'CSV'.
+newtype CSVRenderOptions = CSVRO DoubleQuotationPolicy
+
+-- | Cell-wrapping policy: How often should cells be wrapped in double quotes?
+data DoubleQuotationPolicy
+  = -- | Only when necessary, i.e., a cell contains either double quotes, a comma,
+    -- CR, LF, or CRLF.
+    Minimal
+  | -- | Everywhere.
+    Everywhere
+
+-- | Create 'CSVRenderOptions'.
+csvRenderOpts :: DoubleQuotationPolicy -> CSVRenderOptions
+csvRenderOpts = CSVRO
+
+-- | Render a 'CSV' to a 'Doc' with the given options.
+renderCSV :: CSVRenderOptions -> CSV -> Doc ann
+renderCSV (CSVRO dqp) csv = vcat $ map renderRow allRs
+  where
+    rs = rows csv
+    allRs = maybe rs (: rs) $ header csv
+
+    esc = escapeCellPolicy dqp
+    renderRow = hcat . intersperse comma . map esc
+
+-- | Internal: Escape a cell according to a 'DoubleQuotationPolicy'.
+escapeCellPolicy :: DoubleQuotationPolicy -> Text -> Doc ann
+escapeCellPolicy Minimal t
+  | T.any needsQuote t = quoteAndEscape t
+  | otherwise = escapeHLs t
+escapeCellPolicy Everywhere t = quoteAndEscape t
+
+-- | Internal: Check if a character appearing in a cell indicates that the cell
+-- /must/ be quoted.
+needsQuote :: Char -> Bool
+needsQuote c = c `elem` ['"', ',', '\n', '\r']
+
+-- | Internal: Replace all double-quotes with double-double-quotes in a cell and
+-- wrap the whole cell in double-quotes.
+quoteAndEscape :: Text -> Doc ann
+quoteAndEscape = dquotes . escapeHLs . T.replace "\"" "\"\""
+
+-- | Internal: `prettyprinter` needs us to manually deal with hard linebreaks.
+escapeHLs :: Text -> Doc ann
+escapeHLs =
+  hcat
+    . intersperse hardline
+    . map pretty
+    . T.splitOn "\n"
+    . T.replace "\r\n" "\n"

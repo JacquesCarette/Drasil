@@ -3,6 +3,7 @@ module Drasil.BinaryStar.TMods (tMods, centerOfMassTM, velocityTM, accelTM,
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
+import Language.Drasil.Document (refS)
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Data.List.NonEmpty as NE

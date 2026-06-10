@@ -1,16 +1,20 @@
-{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
 -- | Defines main Markdown printer functions.
 module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
-import Data.List (transpose, intercalate)
+import Data.List (transpose)
 import Data.List.Utils (replace)
 import qualified Data.Set as S
+import qualified Data.Text as T (Text, pack)
+import qualified Prettyprinter as PNew (Doc)
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
+import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
+  mkCSV, renderCSV)
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
@@ -22,7 +26,7 @@ import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (Project(Project),
-  LayoutObj(..), Filename, RefMap, File(File), Filepath)
+  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
@@ -71,17 +75,21 @@ mkTitle rm t = text "\"" <> pSpec rm t <> text "\""
 
 -- | Prints the .csv file mapping the original filepaths of assets to the
 -- location mdBook uses.
-makeRequirements :: Project -> Doc
-makeRequirements p = makeCSV $ ["Original", "Copy"] : assetMat p
+makeRequirements :: Project -> PNew.Doc ann
+makeRequirements p =
+  let
+    mCSV = mkCSV (Just 2) (Just ["Original", "Copy"]) (assetMat p)
+    csv = either error id mCSV
+  in renderCSV (csvRenderOpts Minimal) csv
 
 -- | FIXME: HACK: Find all figure assets from a 'Project'. This is a hack
 -- because (a) there can be assets other than figures, (b) we are searching
 -- _after_ layout onto a list of 'LayoutObj's. This should be a matter of
 -- knowing which artifacts were rendered and when some (new) chunk 'SystemAsset'
 -- is referenced.
-assetMat :: Project -> [[Filepath]]
+assetMat :: Project -> [[T.Text]]
 assetMat (Project _ _ _ files) =
-  [[fp, "src/assets/" ++ takeFileName fp] | fp <- S.toAscList extractedLOs]
+  [[T.pack fp, "src/assets/" P.<> T.pack (takeFileName fp)] | fp <- S.toAscList extractedLOs]
   where
     extractedLOs = S.unions $ map (\(File _ _ _ los) -> S.unions $ map figs los) files
     unionsFigs = S.unions . map figs
@@ -98,25 +106,6 @@ assetMat (Project _ _ _ files) =
     figs Graph{}               = S.empty
     figs CodeBlock{}           = S.empty
     figs Bib{}                 = S.empty
-
--- | Creates a CSV file as a 'Doc' from a 'String' matrix.
-makeCSV :: [[String]] -> Doc
-makeCSV rows = vcat $ map (text . formatRow) rows
-  where
-    -- | Seperates each row item with a comma.
-    formatRow :: [String] -> String
-    formatRow = intercalate "," . map escape
-
-    -- | Adds quotations around the item if it contains ',', '"', \n', or ' '.
-    escape :: String -> String
-    escape s
-      | any (`elem` ",\"\n ") s = "\"" ++ concatMap escapeChar s ++ "\""
-      | otherwise = s
-
-    -- | Escapes double quotes.
-    escapeChar :: Char -> String
-    escapeChar '"' = "\"\""
-    escapeChar c   = [c]
 
 -- | Called by build', uses 'printLO' to render a File
 -- into a single Doc

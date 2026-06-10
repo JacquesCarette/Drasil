@@ -2,10 +2,6 @@
 > Author: Xinlu Yan
 
 ------------------------------------------------------------
-## What 
-
-
-------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:
 In your terminal command line, enter the same directory as this README file. Then enter the following line:

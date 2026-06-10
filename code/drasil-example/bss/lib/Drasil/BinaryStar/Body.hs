@@ -1,16 +1,16 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.Database (ChunkDB)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Drasil.SRSDocument
-import Drasil.DocLang ()
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn)
 
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Math (ode)
@@ -20,8 +20,7 @@ import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
 import Data.Drasil.Concepts.Education (undergraduate, calculus)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
+import Language.Drasil.Document
 
 import Drasil.BinaryStar.MetaConcepts (progName)
 import Drasil.BinaryStar.Concepts (concepts, defs, starOne, starTwo,
@@ -215,7 +214,7 @@ authorName :: Person
 authorName = person "Xinlu" "Yan"
 
 ideaDicts :: [IdeaDict]
-ideaDicts = nw progName : nw ode : nw twoD : nw gravity : concepts
+ideaDicts = nw progName : nw gravity : concepts
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = defs

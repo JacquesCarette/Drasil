@@ -8,11 +8,21 @@ import sys
 
 import Helper
 
+class TestClass:
+    def __init__(self, a):
+        self.a = a
+    
+    @staticmethod
+    def add(t1, t2):
+        return TestClass(t1.a + t2.a)
+
 # Initializing variables
 b = 5
 arr = [1, 2, 3]
 print("Value of arr: ", end="")
 print(arr)
+print("Length of arr: ", end="")
+print(len(arr))
 arr2 = []
 for i in range(0, 3, 1):
     arr2.append(0)
@@ -21,7 +31,20 @@ arr2[1] = 5
 arr2[2] = 6
 print("Value of arr2: ", end="")
 print(arr2)
+print("Length of arr2: ", end="")
+print(len(arr2))
 myOtherList = [1.0, 1.5]
+arr_copy = []
+for i0 in range(0, 3, 1):
+    arr_copy.append(0)
+arr_copy = arr.copy()
+print("Value of arr_copy: ", end="")
+print(arr_copy)
+arr[1] = 42
+print("Value of arr after modifying arr: ", end="")
+print(arr)
+print("Value of arr_copy after modifying arr: ", end="")
+print(arr_copy)
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)
 a = len(myOtherList)
@@ -40,6 +63,13 @@ assert len(myOtherList) == 4, "myOtherList should have 4 elements"
 assert oneIndex == 0, "oneIndex should be 0"
 s = {4, 7, 5}
 assert 7 in s, "Set s should contain 7"
+
+# Object tests
+t1 = TestClass(5)
+t2 = TestClass(4)
+t3 = TestClass.add(t1, t2)
+print("Value of t3.a: ", end="")
+print(t3.a)
 
 # List slicing tests
 # Create variables for list slices
@@ -124,10 +154,10 @@ elif b == 5:
     d = b
     d -= a
     c -= d
-    b += 17;
-    c += 17;
-    a += 1;
-    d += 1;
+    b += 17
+    c += 17
+    a += 1
+    d += 1
     c -= 1
     b -= 1
     myList = []
@@ -193,7 +223,7 @@ for i in range(0, 9, 1):
     print(i)
 while a < 13:
     print("Hello")
-    a += 1;
+    a += 1
 for num in myOtherList:
     print(Helper.doubleAndAdd(num, 1.0))
 try:

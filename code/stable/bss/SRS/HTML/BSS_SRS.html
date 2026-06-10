@@ -595,6 +595,9 @@
                     Gravitational interaction: The mutual attractive force between two masses as described by Newtonian gravity.
                   </li>
                   <li>
+                    Newton's law of universal gravitation: The law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them.
+                  </li>
+                  <li>
                     Initial conditions: The positions and velocities of the stars at the start of the simulation.
                   </li>
                   <li>
@@ -669,12 +672,12 @@
                 <div class="list">
                   <p>
                     <div id="twoBody">
-                      twoBody: The system consists of exactly two stars with masses <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> . Third-body gravitational perturbations are ignored. (<span title="referenced by">RefBy</span>: <a href=#IM:accelY2>IM:accelY2</a>, <a href=#IM:accelY1>IM:accelY1</a>, <a href=#IM:accelX2>IM:accelX2</a>, <a href=#IM:accelX1>IM:accelX1</a>, and <a href=#lcDerivedOutputs>LC:Derived-Output-Quantities</a>.)
+                      twoBody: The system consists of exactly two stars with masses <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> . Perturbations from third-body gravity are ignored. (<span title="referenced by">RefBy</span>: <a href=#IM:accelY2>IM:accelY2</a>, <a href=#IM:accelY1>IM:accelY1</a>, <a href=#IM:accelX2>IM:accelX2</a>, <a href=#IM:accelX1>IM:accelX1</a>, and <a href=#lcDerivedOutputs>LC:Derived-Output-Quantities</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="isolated">
-                      isolated: Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected; the only interaction modeled is mutual Newtonian gravitation between the two stars (from <a href=#newtonianGravity>A:newtonianGravity</a>). (<span title="referenced by">RefBy</span>: <a href=#IM:accelY2>IM:accelY2</a>, <a href=#IM:accelY1>IM:accelY1</a>, <a href=#IM:accelX2>IM:accelX2</a>, <a href=#IM:accelX1>IM:accelX1</a>, and <a href=#lcDerivedOutputs>LC:Derived-Output-Quantities</a>.)
+                      isolated: Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected; the only interaction modeled is mutual gravity between the two stars (from <a href=#newtonianGravity>A:newtonianGravity</a>). (<span title="referenced by">RefBy</span>: <a href=#IM:accelY2>IM:accelY2</a>, <a href=#IM:accelY1>IM:accelY1</a>, <a href=#IM:accelX2>IM:accelX2</a>, <a href=#IM:accelX1>IM:accelX1</a>, and <a href=#lcDerivedOutputs>LC:Derived-Output-Quantities</a>.)
                     </div>
                   </p>
                   <p>
@@ -1730,7 +1733,7 @@
               </p>
               <p>
                 <div id="maintainable">
-                  Maintainability: Routine updates to the software shall be manageable and predictable. When changes are made, their impact on the generated artifacts should be clear and traceable.
+                  Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
               <p>

@@ -3,9 +3,10 @@ module Drasil.Projectile.Requirements (
 ) where
 
 import Language.Drasil
-import Drasil.DocLang.SRS (datCon)
+import Language.Drasil.Document
+import Drasil.SRS.Concepts (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
+import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)
 
 import Data.Drasil.Concepts.Computation (inValue)

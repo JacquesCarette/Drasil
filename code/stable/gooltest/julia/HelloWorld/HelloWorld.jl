@@ -14,6 +14,8 @@ global b = 5
 global arr = [1, 2, 3]
 print("Value of arr: ")
 println(arr)
+print("Length of arr: ")
+println(length(arr))
 global arr2 = Int64[]
 for i in 0:1:2
     append!(arr2, 0)
@@ -23,7 +25,21 @@ global arr2[2] = 5
 global arr2[3] = 6
 print("Value of arr2: ")
 println(arr2)
+print("Length of arr2: ")
+println(length(arr2))
 global myOtherList = [1.0, 1.5]
+global arr_copy = Int64[]
+for i0 in 0:1:2
+    append!(arr_copy, 0)
+end
+global arr_copy = copy(arr)
+print("Value of arr_copy: ")
+println(arr_copy)
+global arr[2] = 42
+print("Value of arr after modifying arr: ")
+println(arr)
+print("Value of arr_copy after modifying arr: ")
+println(arr_copy)
 global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)
 global a = length(myOtherList)
@@ -130,14 +146,14 @@ elseif b == 5
     global d = b
     global d -= a
     global c -= d
-    global b += 17;
-    global c += 17;
-    global a += 1;
-    global d += 1;
+    global b += 17
+    global c += 17
+    global a += 1
+    global d += 1
     global c -= 1
     global b -= 1
     global myList = Int64[]
-    const myConst = "Imconstant";
+    const myConst = "Imconstant"
     println(myConst)
     println(a)
     println(b)
@@ -203,7 +219,7 @@ for i in 0:1:8
 end
 while a < 13
     println("Hello")
-    global a += 1;
+    global a += 1
 end
 for num in myOtherList
     println(Helper.doubleAndAdd(num, 1.0))

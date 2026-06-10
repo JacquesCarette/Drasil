@@ -5,6 +5,7 @@ This subsection provides a list of terms that are used in the subsequent section
 - Binary star system: A system consisting of two stars that orbit around their common center of mass due to gravitational interaction.
 - Star: A massive astronomical object that is treated as a point mass in this context.
 - Gravitational interaction: The mutual attractive force between two masses as described by Newtonian gravity.
+- Newton's law of universal gravitation: The law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them.
 - Initial conditions: The positions and velocities of the stars at the start of the simulation.
 - Trajectory: The path traced by a star in space as a function of time.
 - Center of mass: The point representing the average position of the mass distribution of the system.

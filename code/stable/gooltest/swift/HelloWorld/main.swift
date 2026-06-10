@@ -8,12 +8,26 @@ import Foundation
 
 extension String: @retroactive Error {}
 
+class TestClass {
+    var a: Int = 0
+    
+    init(_ a: Int) {
+        self.a = a
+    }
+    
+    static func add(_ t1: TestClass, _ t2: TestClass) -> TestClass {
+        return TestClass(t1.a + t2.a)
+    }
+}
+
 // Initializing variables
 var a: Int
 var b: Int = 5
 var arr: [Int] = [1, 2, 3]
 print("Value of arr: ", terminator: "")
 print(arr)
+print("Length of arr: ", terminator: "")
+print(arr.count)
 var arr2: [Int] = []
 for i in [Int](stride(from: 0, to: 3, by: 1)) {
     arr2.append(0)
@@ -23,7 +37,21 @@ arr2[1] = 5
 arr2[2] = 6
 print("Value of arr2: ", terminator: "")
 print(arr2)
+print("Length of arr2: ", terminator: "")
+print(arr2.count)
 var myOtherList: [Double] = [1.0, 1.5]
+var arr_copy: [Int] = []
+for i0 in [Int](stride(from: 0, to: 3, by: 1)) {
+    arr_copy.append(0)
+}
+arr_copy = arr
+print("Value of arr_copy: ", terminator: "")
+print(arr_copy)
+arr[1] = 42
+print("Value of arr after modifying arr: ", terminator: "")
+print(arr)
+print("Value of arr_copy after modifying arr: ", terminator: "")
+print(arr_copy)
 var oneIndex: Int = myOtherList.firstIndex(of: 1.0)!
 print(oneIndex)
 a = myOtherList.count
@@ -43,6 +71,13 @@ assert( myOtherList.count == 4 , "myOtherList should have 4 elements")
 assert( oneIndex == 0 , "oneIndex should be 0")
 let s: Set<Int> = [4, 7, 5]
 assert( s.contains(7) , "Set s should contain 7")
+
+// Object tests
+var t1: TestClass = TestClass(5)
+var t2: TestClass = TestClass(4)
+var t3: TestClass = TestClass.add(t1, t2)
+print("Value of t3.a: ", terminator: "")
+print(t3.a)
 
 // List slicing tests
 // Create variables for list slices
@@ -132,10 +167,10 @@ else if b == 5 {
     d = b
     d -= a
     c -= d
-    b += 17;
-    c += 17;
-    a += 1;
-    d += 1;
+    b += 17
+    c += 17
+    a += 1
+    d += 1
     c -= 1
     b -= 1
     var myList: [Int] = []
@@ -202,13 +237,13 @@ switch a {
         b = 5
     default:
         b = 0
-};
+}
 for i in [Int](stride(from: 0, to: 9, by: 1)) {
     print(i)
 }
 while a < 13 {
     print("Hello")
-    a += 1;
+    a += 1
 }
 for num in myOtherList {
     print(doubleAndAdd(num, 1.0))

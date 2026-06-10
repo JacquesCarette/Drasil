@@ -33,10 +33,11 @@ packages:
 - ../drasil-code
 - ../drasil-data
 - ../drasil-database
-- ../drasil-docLang
+- ../drasil-srs
 - ../drasil-file-handling
 - ../drasil-gool
 - ../drasil-lang
+- ../drasil-lesson-plan
 - ../drasil-makefile
 - ../drasil-metadata
 - ../drasil-printers

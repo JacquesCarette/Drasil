@@ -6,8 +6,8 @@ module Drasil.BinaryStar.Assumptions (assumptions,
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
-import Drasil.Sentence.Combinators (fromSources)
+import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
+import Language.Drasil.Document (fromSources, namedRef)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, consVals)
 import Data.Drasil.Concepts.Physics (gravity, twoD)

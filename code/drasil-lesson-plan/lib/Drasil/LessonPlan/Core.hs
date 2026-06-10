@@ -1,4 +1,5 @@
-module Drasil.System.LessonPlan (
+{-# LANGUAGE TemplateHaskell #-}
+module Drasil.LessonPlan.Core (
   LessonPlan,
   mkLessonPlan,
   lsnPlanRefs
@@ -10,7 +11,7 @@ import qualified Data.Map.Strict as M
 import Drasil.Database (UID, uid)
 import Language.Drasil.Document (Reference)
 
-import Drasil.System.Core (SystemMeta, HasSystemMeta(..))
+import Drasil.System (SystemMeta, HasSystemMeta(..))
 
 data LessonPlan = LP {
   _sm :: SystemMeta,

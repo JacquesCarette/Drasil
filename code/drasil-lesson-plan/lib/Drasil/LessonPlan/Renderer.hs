@@ -8,11 +8,12 @@ import Language.Drasil (Sentence(S), CI, foldlList, SepType(Comma),
   FoldType(List), fullName, Idea, titleize, titleize')
 import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC),
   ulcc, RawContent(Bib), section, makeSecRef)
-import Drasil.System (LessonPlan, HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..))
 import Drasil.Metadata.Documentation (notebook)
 import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
   learnObj, review, summary, example, appendix, reference)
 
+import Drasil.LessonPlan.Core (LessonPlan)
 import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..))
 import Drasil.LessonPlan.ExtractBib (extractBib)
 

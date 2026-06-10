@@ -8,13 +8,13 @@ where
 import Control.Lens ((^.))
 
 import Drasil.FileHandling (FileLayout, file, ps)
-import Drasil.LessonPlan (LsnDesc, render)
+import Drasil.LessonPlan (LsnDesc, LessonPlan, render, lsnPlanRefs)
+import Drasil.System (HasSystemMeta(..))
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Printers (Notation (Engineering), piSys)
 import qualified Language.Drasil.Printers as P (genJupyterLessonPlan)
 import Language.Drasil.Printing.Import (makeDocument)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (LessonPlan, lsnPlanRefs, systemdb)
 
 -- | Generate a Lesson Plan (an interactive JupyterNotebook).
 genJupyterLessonPlan :: LessonPlan -> LsnDesc -> String -> FileLayout

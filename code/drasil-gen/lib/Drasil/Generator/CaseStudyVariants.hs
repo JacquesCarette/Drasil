@@ -18,9 +18,9 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.LessonPlan (LsnDesc)
+import Drasil.LessonPlan (LsnDesc, LessonPlan)
 import Drasil.SRS (SRSDecl, mkDoc)
-import Drasil.System (DrasilWebsite, LessonPlan, SmithEtAlSRS, programName)
+import Drasil.System (DrasilWebsite, SmithEtAlSRS, programName)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 

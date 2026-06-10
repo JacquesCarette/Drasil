@@ -60,6 +60,11 @@ mkSRS
        SSDProg
          [SSDProblem $
             PDProg purp []
+              -- FIXME: When removing the manually aggregated list here, expect
+              -- duplicate UID errors! Why? `defs` is a hand-crafted list that
+              -- extends `termDefs` with non-unique chunks containing
+              -- alternative definitions for use in the `Terminology and
+              -- Definitions` section.
               [TermsAndDefs Nothing defs,
                PhySysDesc progName sysParts sysFigure [],
                Goals sysGoalInput],

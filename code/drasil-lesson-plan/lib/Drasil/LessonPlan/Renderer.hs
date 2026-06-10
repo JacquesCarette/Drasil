@@ -1,7 +1,5 @@
 -- | Document language for lesson plan notebooks.
-module Drasil.LessonPlan.Renderer
-  (mkNb, LsnDesc, LsnChapter(..), LearnObj(..), Review(..), CaseProb(..), Example(..)
-  ) where
+module Drasil.LessonPlan.Renderer (mkNb) where
 
 import Control.Lens ((^.))
 

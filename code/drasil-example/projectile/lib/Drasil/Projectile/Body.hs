@@ -150,20 +150,18 @@ tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [projMotion, rectVel] ++
-  -- CIs
-  [nw progName]
+ideaDicts = [projMotion, rectVel]
+
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.

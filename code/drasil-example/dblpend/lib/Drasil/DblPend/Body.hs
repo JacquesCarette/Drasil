@@ -118,10 +118,10 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  concepts ++
-  -- CIs
-  [nw progName]
+  concepts
+
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -129,7 +129,7 @@ conceptChunks =
   gravitationalConst, gravity]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks []
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

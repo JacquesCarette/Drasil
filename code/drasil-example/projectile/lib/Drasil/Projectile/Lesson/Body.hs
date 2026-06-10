@@ -42,10 +42,13 @@ si = mkLessonPlan
   allRefs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] [] [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
+
+cis :: [CI]
+cis = [projectileMotionLesson]
 
 ideaDicts :: [IdeaDict]
-ideaDicts = nw projectileMotionLesson : concepts
+ideaDicts = concepts
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,

@@ -73,12 +73,17 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
-symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl] ++
-  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
+ideaDicts :: [IdeaDict]
+ideaDicts = map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
-  slope, factor]) [] [] [] [] [] [] [] [] []
+  slope, factor]
+
+cis :: [CI]
+cis = [webName, phsChgMtrl]
+
+symbMap :: ChunkDB
+symbMap = withCommonKnowledge [] [] ideaDicts cis [] [] [] [] [] [] [] [] []
 
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: SmithEtAlSRS -> IdeaDict

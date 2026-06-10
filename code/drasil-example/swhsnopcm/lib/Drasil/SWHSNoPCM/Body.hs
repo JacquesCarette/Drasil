@@ -152,20 +152,18 @@ purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [htTrans, materialProprty] ++
-  -- CIs
-  map nw [progName, phsChgMtrl]
+ideaDicts = [htTrans, materialProprty]
+
+cis :: [CI]
+cis = [progName, phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
   meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] NoPCM.dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

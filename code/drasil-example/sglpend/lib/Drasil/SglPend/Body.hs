@@ -98,14 +98,13 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  concepts ++
-  -- CIs
-  [nw progName]
+  concepts
+
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   physicalcon ++ [angular, displacement, iPos, pendulum, motion,
   gravitationalConst, gravity, rigidBody, weight, shm]
 
@@ -113,7 +112,7 @@ allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] allSymbols ideaDicts
+symbMap = withCommonKnowledge [] allSymbols ideaDicts cis
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
 

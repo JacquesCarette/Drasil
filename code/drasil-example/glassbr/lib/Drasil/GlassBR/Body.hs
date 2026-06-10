@@ -112,16 +112,16 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- IdeaDicts
-  [lateralLoad, materialProprty] ++ con' ++
-  -- CIs
-  map nw [progName, iGlass, lGlass]
+  [lateralLoad, materialProprty] ++ con'
+
+cis :: [CI]
+cis = [progName, iGlass, lGlass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts conceptChunks []
+symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts cis conceptChunks []
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]

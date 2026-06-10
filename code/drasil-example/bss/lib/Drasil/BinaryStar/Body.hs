@@ -214,14 +214,17 @@ authorName :: Person
 authorName = person "Xinlu" "Yan"
 
 ideaDicts :: [IdeaDict]
-ideaDicts = nw progName : nw gravity : concepts
+ideaDicts = nw gravity : concepts
+
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = defs
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
-  symbols ideaDicts conceptChunks
+  symbols ideaDicts cis conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
   ([] :: [GenDefn]) tMods concIns
   citations (labelledContent ++ funcReqsTables)

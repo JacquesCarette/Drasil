@@ -108,16 +108,13 @@ orgSecEnd = foldlSent [
   ]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  concepts ++
-  -- CIs
-  nw progName : map nw acronyms
+ideaDicts = concepts
+
+cis :: [CI]
+cis = progName : acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks =
-  -- ConceptChunks
-  physicalcon ++ [linear, angular]
+conceptChunks = physicalcon ++ [linear, angular]
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = map dqdWr physicscon ++ symbols ++
@@ -128,6 +125,7 @@ symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   allSymbols
   ideaDicts
+  cis
   conceptChunks
   ([] :: [UnitDefn])
   dataDefinitions

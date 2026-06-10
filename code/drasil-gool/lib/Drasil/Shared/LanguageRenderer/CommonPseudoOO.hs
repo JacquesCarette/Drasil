@@ -1,19 +1,20 @@
 {-# LANGUAGE FlexibleContexts #-}
 -- | Implementations defined here are valid in some, but not all, language renderers
-module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
-  doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVarAccess,
-  instanceVarSelf, indexOf, contains, containsInt, listAddFunc, discardFileLine,
-  intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec,
-  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', call',
-  listSizeFunc, listAccessFunc', string, docInOutFunc, bindingError,
-  extFuncAppMixedArgs, notNull, listDecDef, destructorError, stateVarDef,
-  constVar, litArray, litSet, listSetFunc, litSetFunc, extraClass,
+module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
+  int, constructor, doxFunc, doxClass, doxMod, docMod', modDoc', functionDoc,
+  extVar, classVarAccess, instanceVarSelf, indexOf, contains, containsInt,
+  listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi,
+  printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
+  buildModule', call', listSizeFunc, listAccessFunc', string, docInOutFunc,
+  bindingError, extFuncAppMixedArgs, notNull, listDecDef, destructorError,
+  stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc, extraClass,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, setDecDef, setDec, listAdd, listAppend,
-  intToIndex, indexToInt, intToIndex', indexToInt', varDecDef, openFileR',
-  openFileW', openFileA', argExists, global, setMethodCall) where
+  string', inherit, implements, listSize, setDecDef, setDec, listAdd, intToIndex,
+  indexToInt, intToIndex', indexToInt', varDecDef, openFileR', openFileW',
+  openFileA', argExists, global, setMethodCall
+) where
 
 import Utils.Drasil (stringList)
 import Drasil.FileHandling.Legacy (indent)
@@ -546,12 +547,6 @@ argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 listAdd :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd l i v = do
   f <- S.listAddFunc l (IC.intToIndex i) v
-  mkVal (RC.functionType f) (RC.function f)
-
--- | Call to append a value to a list in a language where this is not a method.
-listAppend :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
-listAppend l v = do
-  f <- S.listAppendFunc l v
   mkVal (RC.functionType f) (RC.function f)
 
 -- | Convert an integer to an index in a 1-indexed language

@@ -157,8 +157,6 @@ class InternalListFunc r where
   listSizeFunc   :: SValue r -> VSFunction r
   -- | List, Index, Value
   listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-  -- | List, Value
-  listAppendFunc :: SValue r -> SValue r -> VSFunction r
   -- | List, Index
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   -- | List, Index, Value

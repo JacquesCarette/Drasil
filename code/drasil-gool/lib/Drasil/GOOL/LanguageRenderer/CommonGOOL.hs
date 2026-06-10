@@ -2,11 +2,12 @@
 -- | Contains common implementations specific to GOOL
 
 module Drasil.GOOL.LanguageRenderer.CommonGOOL (
-  constDecDef, classMethodCall
+  constDecDef, classMethodCall, listAppend
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SVariable, SValue, VSType,
-  MSStatement, NamedArgs, VariableElim(..))
+  MSStatement, NamedArgs, VariableElim(..), TypeSym(..))
+import Drasil.GOOL.InterfaceGOOL (objMethodCall, InternalValueExp(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ScopeElim(..),
   RenderValue(..))
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt)
@@ -32,3 +33,7 @@ classMethodCall :: (CommonRenderSym r, UnRepr r TypeData) => String ->
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
+
+listAppend :: (InternalValueExp r) => String -> SValue r ->
+  SValue r -> SValue r
+listAppend fnName list val = objMethodCall void list fnName [val]

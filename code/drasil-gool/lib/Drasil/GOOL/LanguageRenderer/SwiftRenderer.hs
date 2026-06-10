@@ -73,12 +73,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
-  docFunc, buildClass, implementingClass, docClass, commentedClass, modFromData,
-  fileDoc, fileFromData, defaultOptSpace, local)
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAccess, listSet, getFunc,
+  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
+  implementingClass, docClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -93,7 +93,8 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal, arrayDecAsList)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
+  listAppend)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -463,7 +464,7 @@ instance Array SwiftCode where
 instance List SwiftCode where
   listSize = C.listSize
   listAdd = G.listAdd
-  listAppend = G.listAppend
+  listAppend = CG.listAppend swiftListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = swiftIndexOf
@@ -486,7 +487,6 @@ instance InternalListFunc SwiftCode where
   listAddFunc _ i v = do
     f <- swiftListAddFunc i v
     funcFromData (R.func (RC.value f)) (pure $ valueType f)
-  listAppendFunc _ = G.listAppendFunc swiftListAppend
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 

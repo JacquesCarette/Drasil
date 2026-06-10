@@ -11,12 +11,12 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
-  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt,
-  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
-  buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
-  docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
+  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
+  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..),
+  defaultOptSpace, smartAdd, smartSub
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -32,7 +32,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
+  string, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
@@ -49,7 +49,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
   BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
-  InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
+  InternalListFunc (listAddFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
@@ -305,9 +305,6 @@ set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 listAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd
 
-listAppend :: (OORenderSym r) => SValue r -> SValue r -> SValue r
-listAppend v vToApp = v $. S.listAppendFunc v vToApp
-
 listAccess :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
@@ -334,9 +331,6 @@ getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
 setFunc :: (OORenderSym r) => VSType r -> SVariable r -> SValue r -> VSFunction r
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
-
-listAppendFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
-listAppendFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
 
 -- Statements --
 

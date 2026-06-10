@@ -76,17 +76,18 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
-  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  set, listAdd, listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt,
+  assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment,
+  throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
+  function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, docInOutFunc,
   extraClass, intToIndex, indexToInt, global, setMethodCall)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
+  listAppend)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -495,7 +496,6 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listSizeFunc = pair1 listSizeFunc listSizeFunc
   listAddFunc = pair3 listAddFunc listAddFunc
-  listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
@@ -1407,7 +1407,7 @@ instance Array CppSrcCode where
 instance List CppSrcCode where
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
-  listAppend = G.listAppend
+  listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
@@ -1428,7 +1428,6 @@ instance InternalGetSet CppSrcCode where
 instance InternalListFunc CppSrcCode where
   listSizeFunc _ = CP.listSizeFunc
   listAddFunc = cppListAddFunc
-  listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CS.listSetFunc cppListSetDoc
 
@@ -2150,7 +2149,6 @@ instance InternalGetSet CppHdrCode where
 instance InternalListFunc CppHdrCode where
   listSizeFunc _ = funcFromData empty void
   listAddFunc _ _ _ = funcFromData empty void
-  listAppendFunc _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 

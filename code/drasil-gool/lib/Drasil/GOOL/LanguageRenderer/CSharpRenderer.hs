@@ -72,12 +72,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAccess, listSet, getFunc,
+  setFunc,  stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
@@ -86,7 +85,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall)
+  classMethodCall, listAppend)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
@@ -455,7 +454,7 @@ instance Array CSharpCode where
 instance List CSharpCode where
   listSize = C.listSize
   listAdd = G.listAdd
-  listAppend = G.listAppend
+  listAppend = CG.listAppend csListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf csIndex
@@ -476,7 +475,6 @@ instance InternalGetSet CSharpCode where
 instance InternalListFunc CSharpCode where
   listSizeFunc _ = funcFromData (R.func csListSize) int
   listAddFunc _ = CP.listAddFunc csListAdd
-  listAppendFunc _ = G.listAppendFunc csListAppend
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 

@@ -1,5 +1,5 @@
 -- | Document language for lesson plan notebooks.
-module Drasil.LessonPlan.Renderer (mkNb) where
+module Drasil.LessonPlan.Renderer (render) where
 
 import Control.Lens ((^.))
 
@@ -16,9 +16,11 @@ import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
 import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..))
 import Drasil.LessonPlan.ExtractBib (extractBib)
 
--- | Creates a notebook from a lesson description and system information.
-mkNb :: LessonPlan -> LsnDesc -> (CI -> CI -> Sentence) -> Document
-mkNb plan dd comb = Notebook nm as $ mkSections (plan ^. systemdb) dd
+-- | Renders a 'LessonPlan' using a 'LsnDesc' (a description of the document
+-- contents and organization) and a title combinator merging "notebook" with the
+-- name of the 'LessonPlan'.
+render :: LessonPlan -> LsnDesc -> (CI -> CI -> Sentence) -> Document
+render plan dd comb = Notebook nm as $ mkSections (plan ^. systemdb) dd
   where
     nm = notebook `comb` (plan ^. sysName)
     as = foldlList Comma List $ map (S . fullName) $ plan ^. authors

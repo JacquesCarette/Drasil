@@ -5,14 +5,8 @@ module Drasil.LessonPlan.Sections (
 import Language.Drasil
 import Language.Drasil.Document
 
-import qualified Drasil.Metadata.Documentation as Doc (caseProb,
-  introduction, learnObj,
-  review, summary, example, appendix, reference)
-
---  Notebook constructor.
--- Create the notebook from given system name, authors, and sections
---doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
---doc  sys = Document (Doc.notebook `S.forTPS` sys)
+import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
+  learnObj, review, summary, example, appendix, reference)
 
 -- * Section Constructors
 

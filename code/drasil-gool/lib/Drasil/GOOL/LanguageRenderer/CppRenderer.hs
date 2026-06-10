@@ -84,8 +84,8 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', containsInt, string, docInOutFunc,
-  extraClass, intToIndex, indexToInt, global, setMethodCall)
+  call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
+  intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
@@ -494,7 +494,6 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
   setFunc = pair3 setFunc setFunc
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
-  listSizeFunc = pair1 listSizeFunc listSizeFunc
   listAddFunc = pair3 listAddFunc listAddFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
@@ -1405,7 +1404,8 @@ instance Array CppSrcCode where
   arrayCopy = id -- C++ automatically copies std::vectors on assignment
 
 instance List CppSrcCode where
-  listSize v = cast int (C.listSize v)
+  -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
+  listSize v = cast int (C.listSize "size" v)
   listAdd = G.listAdd
   listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
@@ -1426,7 +1426,6 @@ instance InternalGetSet CppSrcCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CppSrcCode where
-  listSizeFunc _ = CP.listSizeFunc
   listAddFunc = cppListAddFunc
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CS.listSetFunc cppListSetDoc
@@ -2147,7 +2146,6 @@ instance InternalGetSet CppHdrCode where
   setFunc _ _ _ = funcFromData empty void
 
 instance InternalListFunc CppHdrCode where
-  listSizeFunc _ = funcFromData empty void
   listAddFunc _ _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void

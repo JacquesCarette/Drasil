@@ -13,20 +13,19 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VSType, SVariable, MixedCall,
-  SValue, VSFunction, ValueSym(valueType, Value), MSBody, MSStatement,
+  SValue, VSFunction, ValueSym(valueType, Value), TypeSym(int), MSBody, MSStatement,
   VariableElim(variableName), VariableSym(Variable), Label, Library,
-  BodySym(Body), getCodeType)
+  BodySym(Body), funcApp, getCodeType)
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
   RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
   addAssign)
-import qualified Drasil.Shared.RendererClassesCommon as RC (value, functionType, function)
-import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, mkVal, typeFromData)
+import qualified Drasil.Shared.RendererClassesCommon as RC (value)
+import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, typeFromData)
 import Drasil.Shared.Helpers (on2StateValues, onStateValue)
 import Drasil.Shared.State (lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (emptyStmt, assign)
-import qualified Drasil.Shared.RendererClassesCommon as S (listSizeFunc)
 import Drasil.Shared.AST (ScopeData, TypeData)
 
 -- Swift and Julia --
@@ -99,8 +98,6 @@ increment vr' v'= do
 
 -- Python, Julia, and MATLAB --
 
--- | Call to get the size of a list in a language where this is not a method.
-listSize :: (CommonRenderSym r) => SValue r -> SValue r
-listSize l = do
-  f <- S.listSizeFunc l
-  mkVal (RC.functionType f) (RC.function f)
+-- | Call to get the size of a list as a function call
+listSize :: (CommonRenderSym r) => String -> SValue r -> SValue r
+listSize fnName list = funcApp fnName int [list]

@@ -477,7 +477,7 @@ instance Array JavaCode where
     in objMethodCall arrTp arr "clone" []
 
 instance List JavaCode where
-  listSize = C.listSize
+  listSize = C.listSize "size"
   listAdd = G.listAdd
   listAppend = CG.listAppend jListAdd
   listAccess = G.listAccess
@@ -498,7 +498,6 @@ instance InternalGetSet JavaCode where
   setFunc = G.setFunc
 
 instance InternalListFunc JavaCode where
-  listSizeFunc _ = CP.listSizeFunc
   listAddFunc _ = CP.listAddFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc

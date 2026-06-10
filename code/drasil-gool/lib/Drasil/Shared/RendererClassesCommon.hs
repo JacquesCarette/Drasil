@@ -153,8 +153,6 @@ class ValueElim r where
   value :: r (Value r) -> Doc
 
 class InternalListFunc r where
-  -- | List
-  listSizeFunc   :: SValue r -> VSFunction r
   -- | List, Index, Value
   listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
   -- | List, Index

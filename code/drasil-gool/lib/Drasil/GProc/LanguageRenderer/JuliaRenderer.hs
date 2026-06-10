@@ -392,7 +392,7 @@ instance Array JuliaCode where
     in funcApp "copy" arrTp [arr]
 
 instance List JuliaCode where
-  listSize = CS.listSize
+  listSize = CS.listSize jlListSize
   listAdd = CP.listAdd
   listAppend = A.listAppend jlListAppend
   listAccess = G.listAccess
@@ -409,9 +409,6 @@ instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalListFunc JuliaCode where
-  listSizeFunc l = do
-    f <- funcApp jlListSize int [l]
-    funcFromData (RC.value f) int
   listAddFunc l i v = do
     f <- funcApp jlListAdd void [l, i, v]
     funcFromData (RC.value f) void

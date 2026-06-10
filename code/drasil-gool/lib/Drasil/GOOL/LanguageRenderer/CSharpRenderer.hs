@@ -60,7 +60,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, classVarAccess, func, cast, listSetFunc, castObj, classLevel,
+  printFile, classVarAccess, cast, listSetFunc, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
@@ -89,7 +89,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize', increment,
   increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for,
   while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
@@ -452,7 +452,7 @@ instance Array CSharpCode where
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
 instance List CSharpCode where
-  listSize = C.listSize
+  listSize = C.listSize' csListSize
   listAdd = G.listAdd
   listAppend = CG.listAppend csListAppend
   listAccess = G.listAccess
@@ -473,7 +473,6 @@ instance InternalGetSet CSharpCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CSharpCode where
-  listSizeFunc _ = funcFromData (R.func csListSize) int
   listAddFunc _ = CP.listAddFunc csListAdd
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
@@ -793,16 +792,15 @@ csFuncType ps r = do
     (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
     (text csFunc <> angles (hicat listSep' $ map renderType $ pts ++ [rt]))
 
-csListSize, csForEach, csNamedArgSep, csLambdaSep :: Doc
-csListSize = text "Count"
+csForEach, csNamedArgSep, csLambdaSep :: Doc
 csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
 csSystem, csConsole, csGeneric, csDiagnostics, csIO, csList, csSet, csInt, csFloat, csBool,
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine,
-  csIndex, csContains, csListAdd, csListAppend, csListRemove, csClose, csEOS, csSplit, csMain,
-  csFunc, csUnionWith :: String
+  csIndex, csContains, csListAdd, csListSize, csListAppend, csListRemove,
+  csClose, csEOS, csSplit, csMain, csFunc, csUnionWith :: String
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
@@ -823,6 +821,7 @@ csWriteLine = "WriteLine"
 csIndex = "IndexOf"
 csContains = "Contains"
 csListAdd = "Insert"
+csListSize = "Count"
 csListAppend = "Add"
 csListRemove = "Remove"
 csClose = "Close"

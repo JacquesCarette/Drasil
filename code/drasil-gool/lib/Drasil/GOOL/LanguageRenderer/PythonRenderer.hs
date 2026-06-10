@@ -452,7 +452,7 @@ instance Array PythonCode where
     in objMethodCall arrTp arr "copy" []
 
 instance List PythonCode where
-  listSize = CS.listSize
+  listSize = CS.listSize pyListSize
   listAdd = G.listAdd
   listAppend = CG.listAppend pyAppendFunc
   listAccess = G.listAccess
@@ -474,9 +474,6 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc l = do
-    f <- funcApp pyListSize int [l]
-    funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc

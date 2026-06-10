@@ -89,7 +89,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   implements, functionDoc, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
-  listSize, varDecDef, setDecDef, extObjDecNew, while)
+  listSize', varDecDef, setDecDef, extObjDecNew, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal, arrayDecAsList)
@@ -462,7 +462,7 @@ instance Array SwiftCode where
   arrayCopy = id -- Swift uses value semantics for arrays
 
 instance List SwiftCode where
-  listSize = C.listSize
+  listSize = C.listSize' swiftListSize
   listAdd = G.listAdd
   listAppend = CG.listAppend swiftListAppend
   listAccess = G.listAccess
@@ -483,7 +483,6 @@ instance InternalGetSet SwiftCode where
   setFunc = G.setFunc
 
 instance InternalListFunc SwiftCode where
-  listSizeFunc _ = funcFromData (R.func swiftListSize) int
   listAddFunc _ i v = do
     f <- swiftListAddFunc i v
     funcFromData (R.func (RC.value f)) (pure $ valueType f)
@@ -899,13 +898,12 @@ swiftFuncType ps r = do
 swiftVoidType :: (Monad r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
-swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
+swiftPi, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
   swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError,
   swiftDocDir, swiftUTF8Enc, swiftUserMask, swiftInOutArg, swiftNamedArgSep,
   swiftTypeSpec, swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap',
   swiftRetroactive :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
-swiftListSize = text "count"
 swiftFirst = text "first"
 swiftDesc = text "description"
 swiftUTF8 = text "utf8"
@@ -932,11 +930,12 @@ swiftRetroactive = text "@retroactive"
 swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine,
   swiftSearchDir, swiftPathMask, swiftArgs, swiftWrite, swiftIndex,
-  swiftStride, swiftMap, swiftListAdd, swiftListRemove, swiftListAppend, swiftReadLine,
-  swiftSeekEnd, swiftClose, swiftJoined, swiftAppendPath, swiftUrls, swiftSplit,
-  swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, swiftBy, swiftAt,
-  swiftTerm, swiftFor, swiftIn, swiftContentsOf, swiftWriteTo, swiftSep,
-  swiftSepBy, swiftUnwrap, swiftContains, swiftSet, swiftUnion :: String
+  swiftStride, swiftMap, swiftListAdd, swiftListSize, swiftListRemove,
+  swiftListAppend, swiftReadLine, swiftSeekEnd, swiftClose, swiftJoined,
+  swiftAppendPath, swiftUrls, swiftSplit, swiftData, swiftEncoding, swiftOf,
+  swiftFrom, swiftTo, swiftBy, swiftAt, swiftTerm, swiftFor, swiftIn,
+  swiftContentsOf, swiftWriteTo, swiftSep, swiftSepBy, swiftUnwrap,
+  swiftContains, swiftSet, swiftUnion :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
@@ -956,6 +955,7 @@ swiftIndex = "firstIndex"
 swiftStride = "stride"
 swiftMap = "map"
 swiftListAdd = "insert"
+swiftListSize = "count"
 swiftListRemove = "remove"
 swiftListAppend = "append"
 swiftReadLine = "readLine"

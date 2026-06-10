@@ -31,9 +31,9 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs,
+  objMethodCallNamedArgs, objMethodCallNoParams, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
@@ -73,12 +73,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAccess, listSet, getFunc,
-  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
-  implementingClass, docClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  newObjMixedArgs, lambda, func, get, set, listAccess, listSet, getFunc, setFunc,
+  stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print, returnStmt,
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, initStmts, function, docFunc, buildClass, implementingClass,
+  docClass, commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace,
+  local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -463,7 +463,8 @@ instance Array SwiftCode where
 
 instance List SwiftCode where
   listSize = C.listSize' swiftListSize
-  listAdd = G.listAdd
+  listAdd list idx vl = let atArg = var swiftAt int
+    in objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
   listAppend = CG.listAppend swiftListAppend
   listAccess = G.listAccess
   listSet = G.listSet
@@ -483,9 +484,6 @@ instance InternalGetSet SwiftCode where
   setFunc = G.setFunc
 
 instance InternalListFunc SwiftCode where
-  listAddFunc _ i v = do
-    f <- swiftListAddFunc i v
-    funcFromData (R.func (RC.value f)) (pure $ valueType f)
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 
@@ -1039,11 +1037,6 @@ swiftStrideFunc beg end step = let t = listType int
 
 swiftMapFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
-
-swiftListAddFunc :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
-swiftListAddFunc i v = let atArg = var swiftAt int
-  in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v)
-    [v] [(atArg, i)]
 
 swiftWriteFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)

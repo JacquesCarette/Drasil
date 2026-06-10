@@ -10,13 +10,13 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
-  function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
-  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..),
-  defaultOptSpace, smartAdd, smartSub
+  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAccess,
+  listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
+  docFuncRepr, docFunc, buildClass, implementingClass, docClass, commentedClass,
+  modFromData, fileDoc, docMod, OptionalSpace(..), defaultOptSpace, smartAdd,
+  smartSub
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -49,8 +49,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
   BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
-  InternalListFunc (listAddFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..))
+  InternalListFunc (listAccessFunc, listSetFunc), RenderStatement(stmt),
+  InternalIOStmt(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
@@ -301,9 +301,6 @@ get v vToGet = v $. S.getFunc vToGet
 
 set :: (OORenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
-
-listAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd
 
 listAccess :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r -> SValue r
 listAccess v i = do

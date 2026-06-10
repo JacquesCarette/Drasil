@@ -76,10 +76,10 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
   funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
-  set, listAdd, listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt,
-  assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment,
-  throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
-  function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
@@ -494,7 +494,6 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
   setFunc = pair3 setFunc setFunc
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
-  listAddFunc = pair3 listAddFunc listAddFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
@@ -1406,7 +1405,7 @@ instance Array CppSrcCode where
 instance List CppSrcCode where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
-  listAdd = G.listAdd
+  listAdd list idx vl = objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
   listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
   listSet = G.listSet
@@ -1426,7 +1425,6 @@ instance InternalGetSet CppSrcCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CppSrcCode where
-  listAddFunc = cppListAddFunc
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CS.listSetFunc cppListSetDoc
 
@@ -2146,7 +2144,6 @@ instance InternalGetSet CppHdrCode where
   setFunc _ _ _ = funcFromData empty void
 
 instance InternalListFunc CppHdrCode where
-  listAddFunc _ _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 
@@ -2689,11 +2686,6 @@ strFunc v s = objMethodCall string v cppStr [s]
 
 cppIndexFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppIndexFunc l v = funcApp cppIndex int [iterBegin l, iterEnd l, v]
-
-cppListAddFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
-  -> VSFunction CppSrcCode
-cppListAddFunc l i v = func cppListAdd (onStateValue valueType l)
-    [iterBegin l #+ i, v]
 
 cppIterBeginFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
 cppIterBeginFunc t = func cppIterBegin (iterator t) []

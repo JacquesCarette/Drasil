@@ -73,7 +73,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAdd, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
+  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
   emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
@@ -89,7 +89,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
-  listAppend)
+  listAppend, listAdd)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
@@ -478,7 +478,7 @@ instance Array JavaCode where
 
 instance List JavaCode where
   listSize = C.listSize "size"
-  listAdd = G.listAdd
+  listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
   listAccess = G.listAccess
   listSet = G.listSet
@@ -498,7 +498,6 @@ instance InternalGetSet JavaCode where
   setFunc = G.setFunc
 
 instance InternalListFunc JavaCode where
-  listAddFunc _ = CP.listAddFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
 

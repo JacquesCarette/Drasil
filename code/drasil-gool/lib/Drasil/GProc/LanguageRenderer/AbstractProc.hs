@@ -3,7 +3,7 @@
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   buildModule, docMod, modFromData, listInnerType, arrayElem, listAppend,
-  funcDecDef, function
+  listAdd, funcDecDef, function
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, SMethod, MSBody,
@@ -88,6 +88,10 @@ listInnerType t = t >>= (convType . getInnerType . getCodeType)
 -- | Call to append a value to a list using a function call
 listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r
 listAppend fnName list val = funcApp fnName IC.void [list, val]
+
+-- | Call to insert a value into a list as a function call
+listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> SValue r
+listAdd fnName list idx val = funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SValue r ->
   SVariable r -> SVariable r

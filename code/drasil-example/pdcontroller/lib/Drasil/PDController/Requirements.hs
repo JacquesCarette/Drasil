@@ -2,10 +2,12 @@ module Drasil.PDController.Requirements (
   funcReqs, nonfuncReqs, funcReqsTables
 ) where
 
+import qualified Data.List.NonEmpty as NE (NonEmpty, fromList)
+
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
 import Drasil.SRS.Concepts (datCon)
 import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
-  mkSecurityNFR, inReqWTab)
+  mkSecurityNFR, inReqWTab, mkQRTuple, outReq)
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
@@ -20,18 +22,21 @@ funcReqs = [inputValues, verifyInputs, calculateValues, outputValues]
 funcReqsTables :: [LabelledContent]
 funcReqsTables = [inputValuesTable]
 
-inputValues :: ConceptInstance
+inputValues, outputValues :: ConceptInstance
 inputValuesTable :: LabelledContent
 (inputValues, inputValuesTable) = inReqWTab Nothing inputs
+(outputValues, _) = outReq (Just $ S "over the simulation time") outputsWReqs
 
-verifyInputs, calculateValues, outputValues :: ConceptInstance
+outputsWReqs :: NE.NonEmpty (DefinedQuantityDict, Sentence)
+outputsWReqs = NE.fromList $ mkQRTuple instanceModels
+
+verifyInputs, calculateValues :: ConceptInstance
 verifyInputs
   = cic "verifyInputs" verifyInputsDesc "Verify-Input-Values" funcReqDom
 calculateValues
   = cic "calculateValues" calculateValuesDesc "Calculate-Values" funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values" funcReqDom
 
-verifyInputsDesc, calculateValuesDesc, outputValuesDesc :: Sentence
+verifyInputsDesc, calculateValuesDesc :: Sentence
 
 verifyInputsDesc
   = foldlSent_
@@ -42,11 +47,6 @@ verifyInputsDesc
 calculateValuesDesc
   = foldlSent
       [S "Calculate the", phrase processVariable, fromSource imPD,
-         S "over the simulation time"]
-
-outputValuesDesc
-  = foldlSent
-      [S "Output the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 -----------------------------------------------------------------------------

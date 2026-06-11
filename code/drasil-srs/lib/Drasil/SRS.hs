@@ -44,7 +44,7 @@ module Drasil.SRS (
   unitTableRef, tunit, tunit', tunitNone,
   -- ** Requirements
   -- Drasil.Sections.Requirements
-  inReqWTab, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
+  inReqWTab, outReq, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
   mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR,
   mkCorrectNFR, mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR,
   mkSecurityNFR,
@@ -76,7 +76,7 @@ import Drasil.SRS.Sections.Introduction (purpDoc)
 import Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
 import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
-  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR, inReqWTab)
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR, inReqWTab, outReq)
 import Drasil.SRS.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 --import Drasil.SRS.Sections.Stakeholders
 --import Drasil.SRS.Sections.TableOfAbbAndAcronyms

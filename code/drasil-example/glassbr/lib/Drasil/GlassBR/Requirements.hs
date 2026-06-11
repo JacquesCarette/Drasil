@@ -1,6 +1,8 @@
 module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs) where
 
 import Control.Lens ((^.))
+import qualified Data.List.NonEmpty as NE (fromList)
+import Data.Maybe (maybeToList)
 
 import Language.Drasil
 import Language.Drasil.Document
@@ -17,7 +19,7 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.SRS (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+import Drasil.SRS (inReqWTab, outReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.SRS.Concepts (datCon)
@@ -38,16 +40,16 @@ funcReqs = [inputValues, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownValues, checkGlassSafety, outputValues]
 
 funcReqsTables :: [LabelledContent]
-funcReqsTables = [inputValuesTable, sysSetValsFollowingAssumpsTable, outputValuesTable]
+funcReqsTables = [inputValuesTable, sysSetValsFollowingAssumpsTable]
+  ++ maybeToList outputValuesTable
 
 sysSetValsFollowingAssumps, checkInputWithDataCons,
-  outputValsAndKnownValues, checkGlassSafety, outputValues :: ConceptInstance
+  outputValsAndKnownValues, checkGlassSafety :: ConceptInstance
 
 sysSetValsFollowingAssumps = cic "sysSetValsFollowingAssumps" sysSetValsFollowingAssumpsDesc "System-Set-Values-Following-Assumptions" funcReqDom
 checkInputWithDataCons     = cic "checkInputWithDataCons"     checkInputWithDataConsDesc     "Check-Input-with-Data_Constraints"       funcReqDom
 outputValsAndKnownValues   = cic "outputValsAndKnownValues"   outputValsAndKnownValuesDesc   "Output-Values-and-Known-Values"          funcReqDom
 checkGlassSafety           = cic "checkGlassSafety"           checkGlassSafetyDesc           "Check-Glass-Safety"                      funcReqDom
-outputValues               = cic "outputValues"               outputValuesDesc               "Output-Values"                           funcReqDom
 
 inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
 
@@ -91,12 +93,9 @@ checkGlassSafetyDesc = foldlSent_ [S "If", eS $ sy isSafePb $&& sy isSafeLR,
   S "If the", phrase condition, S "is false, then", phrase output_,
   D.toSent $ phraseNP (the message), Quote (notSafe ^. defn)]
 
-outputValuesDesc :: Sentence
-outputValuesDesc = foldlSent [titleize output_, D.toSent $ pluralNP (the value), S "from the table for", namedRef outputValuesTable (S "Required Outputs")]
-
-outputValuesTable :: LabelledContent
-outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
-                              (S "Required" +:+ titleize' output_)
+outputValuesTable :: Maybe LabelledContent
+outputValues :: ConceptInstance
+(outputValues, outputValuesTable) = outReq Nothing (NE.fromList $ mkQRTuple iMods ++ mkQRTuple r6DDs)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [glaTyFac, hFromt, aspRat]

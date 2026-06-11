@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = code data database docLang file-handling gen gool lang makefile metadata meta-analysis printers system theory utils website
+PACKAGES = assets code data data-formats database file-handling gen gool lang lesson-plan makefile metadata meta-analysis printers srs system theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -26,7 +26,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss
 GOOLTEST = codegenTest
 
 # where they live
@@ -38,10 +38,10 @@ SSP_DIR   = ssp
 GAMEPHYSICS_DIR  = gamephysics
 PROJECTILE_DIR = projectile
 TEMPLATE_DIR = template
-GOOLTEST_DIR = gooltest
 DBLPEND_DIR = dblpend
 SGLPEND_DIR = sglpend
 PDCONTROLLER_DIR = pdcontroller
+BSS_DIR = bss
 
 # Directories for examples with multiple src versions
 MULTI_SRC_DIRS = $(PROJECTILE_DIR)
@@ -49,7 +49,7 @@ MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 # All example directories
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(SWHSNOPCM_DIR) \
   $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPEND_DIR)\
-  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR)
+  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR) $(BSS_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -64,6 +64,7 @@ GOOLTEST_EXE = codegenTest
 DBLPEND_EXE = dblpend
 SGLPEND_EXE = sglpend
 PDCONTROLLER_EXE = pdcontroller
+BSS_EXE = bss
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -94,11 +95,6 @@ DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
 MDBOOK_BUILD_EXAMPLES = $(addsuffix $(MDBOOK_BUILD_E_SUFFIX), $(EXAMPLES))
 MDBOOK_SERVER_EXAMPLES = $(addsuffix $(MDBOOK_SERVER_E_SUFFIX), $(EXAMPLES))
 JUPYTER_HTML_EXAMPLES = $(addsuffix $(JUPYTER_HTML_E_SUFFIX), $(EXAMPLES))
-
-# Website names with appropriate suffixes.
-TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
-STABILIZE_WEBSITE = $(addsuffix $(STABILIZE_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
-BC_WEBSITE = $(addsuffix $(BC_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -153,8 +149,8 @@ DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
 TRACEY_GRAPH_FOLDER_NAME = TraceyGraph
 TRACEY_GRAPH_FOLDER = $(TRACEY_GRAPH_FOLDER_NAME)/
 TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
-WEBSITE_FOLDER_NAME = Website
-WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
+WEBSITE_FOLDER_NAME = website
+WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
 
 #####################################
 #--- `make` command line options ---#
@@ -264,7 +260,9 @@ test: code ##@Examples Test examples en masse against stable, only failing at th
 
 # First builds the website and then tests the generated contenst with those in
 # the stable-website folder.
-test_website: $(TEST_WEBSITE) ##@Website Test freshly generated website against last known 'stable' copy.
+test_website: $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website ##@Website Test freshly generated website against last known 'stable' copy.
+	@mkdir -p "$(LOG_FOLDER)"
+	$(call DO_DIFF,$(STABLE_WEBSITE_FOLDER),$(WEBSITE_FOLDER),$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX))
 	@echo ---------------------------------------
 	@echo Testing Website complete, checking logs
 	@echo ---------------------------------------
@@ -279,7 +277,9 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 
 # First build the website, and then overwrite the contents in the stable-website
 # folder with currently generated ones.
-website_stabilize: $(STABILIZE_WEBSITE) ##@Website Stabilize a freshly generated copy of the website artifacts.
+website_stabilize: $(CLEAN_GF_PREFIX)$(WEBSITE_FOLDER_NAME) website ##@Website Stabilize a freshly generated copy of the website artifacts.
+	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
+	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 	@echo ----------------------------
 	@echo Stabilized website artifacts
 	@echo ----------------------------
@@ -327,16 +327,15 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	cd "$(BUILD_FOLDER)" && $(STACK_EXEC) -- "$(EEXE)"
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
+# We first build the codegenTest to catch any build errors
+# Then we run the codeGenTest, ignoring the exit code and not printing any output,
+# which will write the generated code to the build folder.
 $(GOOLTEST)$(GEN_E_SUFFIX):
-	rm -rf "./$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
-	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	stack build $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --no-run-tests
+	-stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--quiet"
 
-$(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
-	@mkdir -p "$(LOG_FOLDER)"
-	$(call DO_DIFF,$(STABLE_FOLDER)$(GOOLTEST_DIR)/,$(BUILD_FOLDER)$(GOOLTEST_DIR)/,$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX))
-	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
+$(GOOLTEST)$(TEST_E_SUFFIX):
+	stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -362,22 +361,10 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PRE
 	@mkdir -p "$(LOG_FOLDER)"
 	$(call DO_DIFF,$(STABLE_FOLDER)$*/,$(BUILD_FOLDER)$(EDIR)/,$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX))
 
-# Website diff tests. First builds the website and then compares the generated
-# contents in the Website folder to those in the stable-website folder.
-# Target will have the form Website_diff.
-$(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
-	@mkdir -p "$(LOG_FOLDER)"
-	$(call DO_DIFF,$(STABLE_WEBSITE_FOLDER),$(WEBSITE_FOLDER),$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX))
-
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
 	rm -rf "./$(BUILD_FOLDER)$(EDIR)"
-
-# The website build cleans.
-# Target will have the form Website_build_clean
-$(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
-	rm -rf "./$(WEBSITE_FOLDER)"
 
 # Individual example stabilization. First builds all Drasil packages,
 # runs all examples, and then copies contents from the build folder into stable.
@@ -387,18 +374,8 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 	@mkdir -p "$(STABLE_FOLDER)"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
 
-$(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
-	rm -rf "./$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
-	@mkdir -p "$(STABLE_FOLDER)"
-	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
-
-# The website stabilization. First builds the website, and then copies the
-# contents from the website folder into stable-website.
-# Target will have the form Website_stabilize.
-$(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
-	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
-	@mkdir -p "$(STABLE_WEBSITE_FOLDER)"
-	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
+$(GOOLTEST)$(STABILIZE_E_SUFFIX):
+	stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--accept"
 
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
@@ -493,8 +470,8 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)code_build.sh"
 
 # GOOL testing for examples that generate code.
-$(GOOLTEST): $(GOOLTEST)$(TEST_E_SUFFIX)
-	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
+$(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
+	@CODE_DIR="drasil-code/test/build/" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
 gool: $(CODE_EXAMPLES) ##@GOOL Generate code from examples and test each one.

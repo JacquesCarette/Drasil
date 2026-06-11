@@ -13,7 +13,8 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, ChunkDB)
-import Language.Drasil (Stage(..), Reference)
+import Language.Drasil (Stage(..))
+import Language.Drasil.Document (Reference)
 
 -- | Notation can be scientific or for engineering.
 data Notation = Scientific

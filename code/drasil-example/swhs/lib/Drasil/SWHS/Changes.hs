@@ -2,13 +2,13 @@ module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL,
   likeChgTLH, unlikelyChgs) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
-import Drasil.Sentence.Combinators (chgsStart)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
 import Drasil.SWHS.Unitals (tempInit, tempC, tempPCM)

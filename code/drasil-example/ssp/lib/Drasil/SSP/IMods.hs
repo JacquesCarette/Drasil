@@ -6,13 +6,13 @@ module Drasil.SSP.IMods (
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang.SRS (propCorSol)
-import Drasil.Sentence.Combinators (definedIn'', definedIn''', eqN)
+import Drasil.SRS.Concepts (propCorSol)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,

@@ -1,11 +1,11 @@
-{-# LANGUAGE TypeFamilies, Rank2Types #-}
+{-# LANGUAGE TypeFamilies, Rank2Types, FlexibleInstances, MultiParamTypeClasses #-}
 
 -- Performs code analysis on the GOOL code
 module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
-import Drasil.Shared.InterfaceCommon (MSBody, SValue, VSType, VSBinder,
-  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSType,
+  VSBinder, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
+  TypeSym(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
@@ -52,6 +52,9 @@ instance SharedProg CodeInfoProc
 
 instance ProcProg CodeInfoProc
 
+instance UnRepr CodeInfoProc contents where
+  unRepr = unCI
+
 instance ProgramSym CodeInfoProc where
   type Program CodeInfoProc = GOOLState
   prog _ _ fs = do
@@ -91,10 +94,6 @@ instance TypeSym CodeInfoProc where
   listInnerType _   = noInfoVSType
   funcType      _ _ = noInfoVSType
   void              = noInfoVSType
-
-instance TypeElim CodeInfoProc where
-  getType _     = Void
-  getTypeString = typeString . unCI
 
 instance ScopeSym CodeInfoProc where
   global = noInfoScope
@@ -202,6 +201,8 @@ instance IndexTranslator CodeInfoProc where
 
 instance Array CodeInfoProc where
   arrayElem _ _ = noInfo
+  arrayLength _ = noInfo
+  arrayCopy _ = noInfo
 
 instance List CodeInfoProc where
   listSize   = execute1

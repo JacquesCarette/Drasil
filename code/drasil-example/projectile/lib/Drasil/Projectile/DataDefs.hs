@@ -2,6 +2,7 @@ module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Theory.Drasil (DataDefinition, ddENoRefs)

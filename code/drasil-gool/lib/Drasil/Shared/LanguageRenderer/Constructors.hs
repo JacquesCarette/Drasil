@@ -1,20 +1,21 @@
+{-# LANGUAGE FlexibleContexts #-}
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.Shared.LanguageRenderer.Constructors (
   mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkClassVar,
-  VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec,
-  andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
-  binExpr', binExprNumDbl', typeBinExpr
+  typeFromData, VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec,
+  powerPrec, andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr,
+  binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
 import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
-  TypeSym(..), TypeElim(..), ValueSym(..))
+  UnRepr(..), TypeSym(..), ValueSym(..), getCodeType)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
   ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
-  TypeData)
+  TypeData, td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
 import Drasil.Shared.State (VS)
@@ -56,6 +57,10 @@ mkVar n t = varFromData InstanceLevel n (toState t)
 -- | Constructs a classLevel variable in a stateful context
 mkClassVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkClassVar = varFromData ClassLevel
+
+-- Types --
+typeFromData :: (Monad r) => CodeType -> String -> Doc -> VSType r
+typeFromData t s d = return $ return $ td t s d
 
 -- Operators --
 
@@ -120,7 +125,8 @@ mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 -- | To be used in languages where the unary operator returns a double. If the
 -- value passed to the operator is a float, this function preserves that type
 -- by casting the result to a float.
-unExprNumDbl :: (CommonRenderSym r) => VSUnOp r -> SValue r -> SValue r
+unExprNumDbl :: (CommonRenderSym r, UnRepr r TypeData) => VSUnOp r ->
+  SValue r -> SValue r
 unExprNumDbl u' v' = do
   u <- u'
   v <- v'
@@ -128,8 +134,9 @@ unExprNumDbl u' v' = do
   unExprCastFloat (valueType v) w
 
 -- Only used by unExprNumDbl
-unExprCastFloat :: (CommonRenderSym r) => r TypeData -> r (Value r) -> SValue r
-unExprCastFloat t = castType (getType t) . toState
+unExprCastFloat :: (CommonRenderSym r, UnRepr r TypeData) => r TypeData ->
+  r (Value r) -> SValue r
+unExprCastFloat t = castType (getCodeType t) . toState
   where castType Float = cast float
         castType _ = id
 
@@ -144,7 +151,8 @@ typeUnExpr u' t' s' = do
 
 -- | Constructs binary expressions like v + w, for some operator + and values v
 -- and w, parenthesizing v and w if needed.
-binExpr :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
+binExpr :: (CommonRenderSym r, UnRepr r TypeData) => VSBinOp r -> SValue r ->
+  SValue r -> SValue r
 binExpr b' v1' v2'= do
   b <- b'
   exprType <- numType v1' v2'
@@ -153,7 +161,8 @@ binExpr b' v1' v2'= do
 
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
-binExpr' :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
+binExpr' :: (CommonRenderSym r, UnRepr r TypeData) => VSBinOp r -> SValue r ->
+  SValue r -> SValue r
 binExpr' b' v1' v2' = do
   exprType <- numType v1' v2'
   exprRender <- exprRender' binOpDocDRend b' v1' v2'
@@ -162,7 +171,8 @@ binExpr' b' v1' v2' = do
 -- | To be used in languages where the binary operator returns a double. If
 -- either value passed to the operator is a float, this function preserves that
 -- type by casting the result to a float.
-binExprNumDbl' :: (CommonRenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
+binExprNumDbl' :: (CommonRenderSym r, UnRepr r TypeData) => VSBinOp r ->
+  SValue r -> SValue r -> SValue r
 binExprNumDbl' b' v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -172,9 +182,9 @@ binExprNumDbl' b' v1' v2' = do
   binExprCastFloat t1 t2 e
 
 -- Only used by binExprNumDbl'
-binExprCastFloat :: (CommonRenderSym r) => r TypeData -> r TypeData -> r (Value r) ->
-  SValue r
-binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState
+binExprCastFloat :: (CommonRenderSym r, UnRepr r TypeData) => r TypeData ->
+  r TypeData -> r (Value r) -> SValue r
+binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
   where castType Float _ = cast float
         castType _ Float = cast float
         castType _ _ = id
@@ -191,7 +201,7 @@ typeBinExpr b' t' v1' v2' = do
 
 -- For numeric binary expressions, checks that both types are numeric and
 -- returns result type. Selects the type with lowest precision.
-numType :: (CommonRenderSym r) => SValue r-> SValue r -> VSType r
+numType :: (CommonRenderSym r, UnRepr r TypeData) => SValue r-> SValue r -> VSType r
 numType v1' v2' = do
   v1 <- v1'
   v2 <- v2'
@@ -203,7 +213,7 @@ numType v1' v2' = do
       numericType Double _ = t1
       numericType _ Double = t2
       numericType _ _ = error "Numeric types required for numeric expression"
-  toState $ numericType (getType t1) (getType t2)
+  toState $ numericType (getCodeType t1) (getCodeType t2)
 
 exprRender' :: (r OpData -> r (Value r) -> r (Value r) -> Doc) ->
   VSBinOp r -> SValue r -> SValue r -> VS Doc

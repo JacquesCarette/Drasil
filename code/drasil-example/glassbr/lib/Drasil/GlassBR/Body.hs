@@ -3,20 +3,18 @@ module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.SRSDocument
-import Drasil.DocLang (auxSpecSent, termDefnF')
+import Drasil.Database (ChunkDB)
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
-  tAndDWSym)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -25,7 +23,7 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (softwarecon)
@@ -117,7 +115,7 @@ ideaDicts =
   -- IdeaDicts
   [lateralLoad, materialProprty] ++ con' ++
   -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+  map nw [progName, iGlass, lGlass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon

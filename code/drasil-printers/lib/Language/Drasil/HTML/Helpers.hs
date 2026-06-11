@@ -16,7 +16,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest,
   cat)
 
-import Language.Drasil (MaxWidthPercent)
+import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec)
 

@@ -9,7 +9,7 @@ module Language.Drasil.Printing.LayoutObj (
 
 import Data.Map (Map)
 
-import Language.Drasil (MaxWidthPercent)
+import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
 import Language.Drasil.Printing.Citation (BibRef)

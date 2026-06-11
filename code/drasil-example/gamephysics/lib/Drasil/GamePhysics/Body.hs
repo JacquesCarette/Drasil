@@ -1,16 +1,16 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
-import Language.Drasil hiding (organization, section)
-import Drasil.SRSDocument
+import Drasil.Database (ChunkDB)
+import Language.Drasil
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
@@ -26,9 +26,9 @@ import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
-  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
+  rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian,
-  mathcon', rightHand, line, point)
+  rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -109,8 +109,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- CIs
-  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
-  map nw CP.physicCon'
+  map nw [progName, centreMass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

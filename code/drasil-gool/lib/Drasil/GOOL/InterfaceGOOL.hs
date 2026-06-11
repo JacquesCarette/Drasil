@@ -5,15 +5,17 @@ module Drasil.GOOL.InterfaceGOOL (
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
-  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
-  OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
-  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
-  OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, AttachmentSym(..),
-  OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
-  initObserverList, addObserver, StrategyPattern(..), convTypeOO
+  OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), InstanceVarSelfSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
+  extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
+  objMethodCallNoParams, classMethodCall, classMethodCallNamedArgs,
+  classMethodCallMixedArgs, classMethodCallNoParams, OOMethodSym(..), privMethod,
+  pubMethod, initializer, nonInitConstructor, StateVarSym(..), privDVar, pubDVar,
+  pubSVar, AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess,
+  ObserverPattern(..), observerListName, initObserverList, addObserver,
+  StrategyPattern(..), convTypeOO
   ) where
 
 import Drasil.Shared.InterfaceCommon (
@@ -138,33 +140,42 @@ class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   classVar          :: Label -> VSType r -> SVariable r
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
   classConst        :: Label -> VSType r -> SVariable r
-  -- | `self` keyword
-  self              :: SVariable r
   -- | Given a class `C` and a class-level variable `v`, creates `C.v`
   classVarAccess    :: VSType r -> SVariable r -> SVariable r
   -- | Given a class `C` from an external module and a class-level variable `v`,
   -- performs any necessary imports and creates `C.v`
   extClassVarAccess :: VSType r -> SVariable r -> SVariable r
   -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
-  instanceVarAccess :: SVariable r -> SVariable r -> SVariable r
-  -- | Given a variable `v`, creates `self.v`
-  instanceVarSelf   :: SVariable r -> SVariable r
+  instanceVarAccess :: SValue r -> SVariable r -> SVariable r
 
-($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
+($->) :: (OOVariableSym r) => SValue r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = instanceVarAccess
 
-class (VariableValue r, OOVariableSym r) => OOVariableValue r
+class (OOVariableSym r) => SelfSym r where
+  -- | `self` keyword
+  self              :: SVariable r
+
+class (OOVariableSym r) => InstanceVarSelfSym r where
+  -- | Given a variable `v`, creates `self.v`
+  instanceVarSelf   :: SVariable r -> SVariable r
+
+class (VariableValue r, OOVariableSym r, SelfSym r, InstanceVarSelfSym r) => OOVariableValue r
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
-  selfFuncAppMixedArgs ::            MixedCall r
-  newObjMixedArgs      ::            MixedCtorCall r
-  extNewObjMixedArgs   :: Library -> MixedCtorCall r
-  libNewObjMixedArgs   :: Library -> MixedCtorCall r
+  -- | Generic function for calling a method on `self`.
+  -- Because of C++, this should always be called rather
+  -- than `objMethodCall` on `self.`
+  -- Takes the function name, the return type, a list of
+  -- positional arguments, and a list of named arguments.
+  selfMethodCallMixedArgs ::            MixedCall r
+  newObjMixedArgs         ::            MixedCtorCall r
+  extNewObjMixedArgs      :: Library -> MixedCtorCall r
+  libNewObjMixedArgs      :: Library -> MixedCtorCall r
 
-selfFuncApp      :: (OOValueExpression r) =>            PosCall r
-selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
+selfMethodCall   :: (OOValueExpression r) =>            PosCall r
+selfMethodCall n t vs = selfMethodCallMixedArgs n t vs []
 
 newObj           :: (OOValueExpression r) =>            PosCtorCall r
 newObj t vs = newObjMixedArgs t vs []
@@ -180,6 +191,11 @@ class (ValueSym r) => InternalValueExp r where
   --   Takes the function name, the return type, the object, a list of
   --   positional arguments, and a list of named arguments.
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] ->
+    NamedArgs r -> SValue r
+  -- | Generic function for calling a class method.
+  --   Takes the function name, the return type, the class type,
+  --   a list of positional arguments, and a list of named arguments.
+  classMethodCallMixedArgs' :: Label -> VSType r -> VSType r -> [SValue r] ->
     NamedArgs r -> SValue r
 
 -- | Calling a method. t is the return type of the method, o is the
@@ -202,6 +218,27 @@ objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
+
+-- | Calling a class method. t is the return type of the method, c is the
+--   class, f is the method name, and ps is a list of positional arguments.
+classMethodCall :: (InternalValueExp r) => VSType r -> VSType r -> Label ->
+  [SValue r] -> SValue r
+classMethodCall t c f ps = classMethodCallMixedArgs' f t c ps []
+
+-- | Calling a class method with named arguments.
+classMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> VSType r -> Label
+  -> NamedArgs r -> SValue r
+classMethodCallNamedArgs t c f = classMethodCallMixedArgs' f t c []
+
+-- | Calling a class method with a mix of positional and named arguments.
+classMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> VSType r -> Label
+  -> [SValue r] -> NamedArgs r -> SValue r
+classMethodCallMixedArgs t c f = classMethodCallMixedArgs' f t c
+
+-- | Calling a class method with no parameters.
+classMethodCallNoParams :: (InternalValueExp r) => VSType r -> VSType r -> Label
+  -> SValue r
+classMethodCallNoParams t c f = classMethodCall t c f []
 
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
   objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r

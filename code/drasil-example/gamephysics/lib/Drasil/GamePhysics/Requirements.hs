@@ -2,16 +2,15 @@
 module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk) where
 
 import Language.Drasil hiding (organization)
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
-import Drasil.DocLang (mkMaintainableNFR)
+import qualified Drasil.SRS.Concepts as SRS (solCharSpec)
+import Drasil.SRS (mkMaintainableNFR)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_,
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)
-
-import Drasil.Sentence.Combinators (addPercent)
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity,
   friction, rigidBody, space)

@@ -2,13 +2,13 @@
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (definedIn'')
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)

@@ -15,7 +15,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
-import Drasil.Sentence.Combinators (definedIn'')
+import Language.Drasil.Document (definedIn'')
 
 -- local
 import Drasil.DblPend.DataDefs

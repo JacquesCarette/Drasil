@@ -1,7 +1,7 @@
 {-# LANGUAGE PatternSynonyms, FlexibleContexts, QuasiQuotes #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
-  generator, generateCode, generateCodeProc
+  generator, generateCode, generateCodeProc, toFileLayout
 ) where
 
 import Control.Lens ((^.))

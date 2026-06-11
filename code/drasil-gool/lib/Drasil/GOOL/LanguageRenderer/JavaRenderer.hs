@@ -73,11 +73,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAdd, listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc,
-  stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
@@ -88,7 +88,8 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
+  listAppend, listAdd)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
@@ -474,9 +475,9 @@ instance Array JavaCode where
     in objMethodCall arrTp arr "clone" []
 
 instance List JavaCode where
-  listSize = C.listSize
-  listAdd = G.listAdd
-  listAppend = G.listAppend
+  listSize = C.listSize "size"
+  listAdd = CG.listAdd jListAdd
+  listAppend = CG.listAppend jListAdd
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf jIndex
@@ -495,9 +496,6 @@ instance InternalGetSet JavaCode where
   setFunc = G.setFunc
 
 instance InternalListFunc JavaCode where
-  listSizeFunc _ = CP.listSizeFunc
-  listAddFunc _ = CP.listAddFunc jListAdd
-  listAppendFunc _ = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
 

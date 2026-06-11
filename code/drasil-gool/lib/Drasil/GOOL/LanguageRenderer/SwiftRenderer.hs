@@ -31,9 +31,9 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs,
+  objMethodCallNamedArgs, objMethodCallNoParams, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
@@ -73,12 +73,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
   objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, initStmts, function, docFunc, buildClass,
-  implementingClass, docClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
+  emptyStmt, assign, subAssign, objDecNew, print, returnStmt, valStmt, comment,
+  throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
+  initStmts, function, docFunc, buildClass, implementingClass, docClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -89,11 +88,12 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   implements, functionDoc, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
-  listSize, varDecDef, setDecDef, extObjDecNew, while)
+  listSize', varDecDef, setDecDef, extObjDecNew, while)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal, arrayDecAsList)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
+  listAppend)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -461,9 +461,10 @@ instance Array SwiftCode where
   arrayCopy = id -- Swift uses value semantics for arrays
 
 instance List SwiftCode where
-  listSize = C.listSize
-  listAdd = G.listAdd
-  listAppend = G.listAppend
+  listSize = C.listSize' swiftListSize
+  listAdd list idx vl = let atArg = var swiftAt int
+    in objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
+  listAppend = CG.listAppend swiftListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = swiftIndexOf
@@ -482,11 +483,6 @@ instance InternalGetSet SwiftCode where
   setFunc = G.setFunc
 
 instance InternalListFunc SwiftCode where
-  listSizeFunc _ = funcFromData (R.func swiftListSize) int
-  listAddFunc _ i v = do
-    f <- swiftListAddFunc i v
-    funcFromData (R.func (RC.value f)) (pure $ valueType f)
-  listAppendFunc _ = G.listAppendFunc swiftListAppend
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 
@@ -899,13 +895,12 @@ swiftFuncType ps r = do
 swiftVoidType :: (Monad r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
-swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
+swiftPi, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
   swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError,
   swiftDocDir, swiftUTF8Enc, swiftUserMask, swiftInOutArg, swiftNamedArgSep,
   swiftTypeSpec, swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap',
   swiftRetroactive :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
-swiftListSize = text "count"
 swiftFirst = text "first"
 swiftDesc = text "description"
 swiftUTF8 = text "utf8"
@@ -932,11 +927,12 @@ swiftRetroactive = text "@retroactive"
 swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine,
   swiftSearchDir, swiftPathMask, swiftArgs, swiftWrite, swiftIndex,
-  swiftStride, swiftMap, swiftListAdd, swiftListRemove, swiftListAppend, swiftReadLine,
-  swiftSeekEnd, swiftClose, swiftJoined, swiftAppendPath, swiftUrls, swiftSplit,
-  swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, swiftBy, swiftAt,
-  swiftTerm, swiftFor, swiftIn, swiftContentsOf, swiftWriteTo, swiftSep,
-  swiftSepBy, swiftUnwrap, swiftContains, swiftSet, swiftUnion :: String
+  swiftStride, swiftMap, swiftListAdd, swiftListSize, swiftListRemove,
+  swiftListAppend, swiftReadLine, swiftSeekEnd, swiftClose, swiftJoined,
+  swiftAppendPath, swiftUrls, swiftSplit, swiftData, swiftEncoding, swiftOf,
+  swiftFrom, swiftTo, swiftBy, swiftAt, swiftTerm, swiftFor, swiftIn,
+  swiftContentsOf, swiftWriteTo, swiftSep, swiftSepBy, swiftUnwrap,
+  swiftContains, swiftSet, swiftUnion :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
@@ -956,6 +952,7 @@ swiftIndex = "firstIndex"
 swiftStride = "stride"
 swiftMap = "map"
 swiftListAdd = "insert"
+swiftListSize = "count"
 swiftListRemove = "remove"
 swiftListAppend = "append"
 swiftReadLine = "readLine"
@@ -1039,11 +1036,6 @@ swiftStrideFunc beg end step = let t = listType int
 
 swiftMapFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
-
-swiftListAddFunc :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
-swiftListAddFunc i v = let atArg = var swiftAt int
-  in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v)
-    [v] [(atArg, i)]
 
 swiftWriteFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)

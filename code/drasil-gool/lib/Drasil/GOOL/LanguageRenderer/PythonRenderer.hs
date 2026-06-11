@@ -70,16 +70,17 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
   objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, local)
+  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
+  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   notifyObservers', arrayDecAsList)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
+  listAppend, listAdd)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
@@ -451,9 +452,9 @@ instance Array PythonCode where
     in objMethodCall arrTp arr "copy" []
 
 instance List PythonCode where
-  listSize = CS.listSize
-  listAdd = G.listAdd
-  listAppend = G.listAppend
+  listSize = CS.listSize pyListSize
+  listAdd = CG.listAdd pyInsert
+  listAppend = CG.listAppend pyAppendFunc
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf pyIndex
@@ -473,11 +474,6 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc l = do
-    f <- funcApp pyListSize int [l]
-    funcFromData (RC.value f) int
-  listAddFunc _ = CP.listAddFunc pyInsert
-  listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 

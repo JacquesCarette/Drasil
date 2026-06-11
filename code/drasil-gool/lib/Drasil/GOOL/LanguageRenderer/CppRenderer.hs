@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
   StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  selfFuncApp, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
+  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.GOOL.Renderers (renderType, renderParam,)
@@ -75,12 +75,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
-  funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
-  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, listAppend,
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt,
+  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -408,9 +408,9 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   notNull = pair1 notNull notNull
 
 instance (Pair p) => OOValueExpression (p CppSrcCode CppHdrCode) where
-  selfFuncAppMixedArgs n = pair1Val3Lists
-    (selfFuncAppMixedArgs n)
-    (selfFuncAppMixedArgs n)
+  selfMethodCallMixedArgs n = pair1Val3Lists
+    (selfMethodCallMixedArgs n)
+    (selfMethodCallMixedArgs n)
   newObjMixedArgs = pair1Val3Lists newObjMixedArgs newObjMixedArgs
   extNewObjMixedArgs l = pair1Val3Lists
     (extNewObjMixedArgs l)
@@ -1351,7 +1351,9 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
+  selfMethodCallMixedArgs fn tp vs ns = do
+    slf <- self :: SVariable CppSrcCode
+    RC.call Nothing (Just $ RC.variable slf <> ptrAccess') fn tp vs ns
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
     modify (addModuleImportVS l)
@@ -1607,7 +1609,7 @@ instance FuncAppStatement CppSrcCode where
   extInOutCall m = cppInOutCall (extFuncApp m)
 
 instance OOFuncAppStatement CppSrcCode where
-  selfInOutCall = cppInOutCall selfFuncApp
+  selfInOutCall = cppInOutCall selfMethodCall
 
 instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
@@ -2077,7 +2079,7 @@ instance ValueExpression CppHdrCode where
   notNull _ = mkStateVal void empty
 
 instance OOValueExpression CppHdrCode where
-  selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
+  selfMethodCallMixedArgs _ _ _ _ = mkStateVal void empty
   newObjMixedArgs _ _ _ = mkStateVal void empty
   extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
   libNewObjMixedArgs _ _ _ _ = mkStateVal void empty

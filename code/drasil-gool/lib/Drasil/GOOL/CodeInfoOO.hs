@@ -224,7 +224,7 @@ instance ValueExpression CodeInfoOO where
   notNull = execute1
 
 instance OOValueExpression CodeInfoOO where
-  selfFuncAppMixedArgs = funcAppMixedArgs
+  selfMethodCallMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns

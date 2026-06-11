@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | The logic to render MATLAB code is contained in this module.
 module Drasil.GProc.LanguageRenderer.MatlabRenderer (
@@ -8,8 +9,8 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (SharedProg, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, BodySym(..),
+  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..),
@@ -24,7 +25,7 @@ import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+  RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
@@ -33,7 +34,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body,
-  block, type', uOp, bOp, variable, function, statement, visibility, parameter,
+  block, uOp, bOp, variable, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
@@ -67,6 +68,9 @@ instance ProgramSym MatlabCode where
 
 instance CommonRenderSym MatlabCode
 instance ProcRenderSym MatlabCode
+
+instance UnRepr MatlabCode inner where
+  unRepr = unMLC
 
 instance FileSym MatlabCode where
   type File MatlabCode = FileData
@@ -124,16 +128,8 @@ instance TypeSym MatlabCode where
   funcType = undefined
   void = undefined
 
-instance TypeElim MatlabCode where
-  getType = undefined
-  getTypeString = undefined
-
 instance RenderType MatlabCode where
   multiType = undefined
-  typeFromData = undefined
-
-instance InternalTypeElim MatlabCode where
-  type' = undefined
 
 instance UnaryOpSym MatlabCode where
   notOp = undefined
@@ -296,6 +292,8 @@ instance IndexTranslator MatlabCode where
 
 instance Array MatlabCode where
   arrayElem = undefined
+  arrayLength = undefined
+  arrayCopy = undefined
 
 instance List MatlabCode where
   listSize = undefined

@@ -2,7 +2,7 @@
 module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, FSModule,
   NamedArgs, SharedProg, ProcProg, ProgramSym(..), FileSym(..), BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   BinderSym(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),

@@ -16,7 +16,7 @@ import qualified Data.Drasil.Concepts.Physics as CCs (motion, acceleration,
 
 import Data.Drasil.People (spencerSmith)
 
-import Drasil.Projectile.Concepts (concepts)
+import Drasil.Projectile.Concepts (ideaDicts, defs)
 import Drasil.Projectile.Expressions (eqnRefs)
 
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
@@ -44,11 +44,10 @@ symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] [] []
 cis :: [CI]
 cis = [projectileMotionLesson]
 
-ideaDicts :: [IdeaDict]
-ideaDicts = concepts
+
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
+conceptChunks = defs ++ [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
   CCs.verticalMotion, CCs.gravity, CCs.position]
 
 symbols :: [DefinedQuantityDict]

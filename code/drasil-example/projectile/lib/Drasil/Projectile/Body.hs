@@ -38,7 +38,8 @@ import Data.Drasil.Concepts.Education(calculus, undergraduate,
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Changes (likelyChgs)
-import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
+  ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -148,9 +149,6 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
-
-ideaDicts :: [IdeaDict]
-ideaDicts = [projMotion, rectVel]
 
 cis :: [CI]
 cis = [progName]

@@ -61,4 +61,3 @@ launSpeed = cc' launchSpeedNC (D.toSent (phraseNP (iSpeed `the_ofThe` projectile
 offset = cc' offsetNC (S "the offset between the" +:+ D.toSent (phraseNP (targetPosNC `andThe` landingPosNC)))
 targPos = cc' targetPosNC (D.toSent (phraseNP (the distance)) `S.fromThe` D.toSent (phraseNP (launcher `toThe` target)))
 flightDur = cc' flightDurNC (foldlSent_ [D.toSent $ phraseNP (the time), S "when the", phrase projectile, S "lands"])
-

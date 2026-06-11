@@ -8,8 +8,8 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
-  DrasilWebsite, mkDrasilWebsite)
+import Drasil.System (HasSystemMeta(..), mkSystemMeta, DrasilWebsite,
+  mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS (findAllRefs)
@@ -23,14 +23,13 @@ import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
 import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
 import Drasil.GlassBR.Unitals (blast)
-import Drasil.GlassBR.Concepts (glaSlab)
+import Drasil.GlassBR.Concepts (glaSlab, idglass)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
 import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
 import Drasil.PDController.Concepts (pidC)
 import Drasil.Projectile.Concepts (target, projectile)
-import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor)
+import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor, fsConcept)
 import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
-import Drasil.SSP.IMods (fctSfty)
 
 -- * Functions to Generate the Website Through Drasil
 
@@ -74,20 +73,17 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 ideaDicts :: [IdeaDict]
-ideaDicts = map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
-  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
-  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
-  slope, factor]
+ideaDicts = [glaSlab, idglass, intrslce, slope, factor]
 
 cis :: [CI]
-cis = [webName, phsChgMtrl]
+cis = [webName, phsChgMtrl] ++ map (^. sysName) allExampleSI
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
+  pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] ideaDicts cis [] [] [] [] [] [] [] [] []
-
--- | Helper to get the system name as an 'IdeaDict' from 'System'.
-getSysName :: SmithEtAlSRS -> IdeaDict
-getSysName = nw . (^. sysName)
+symbMap = withCommonKnowledge [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

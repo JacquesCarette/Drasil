@@ -14,7 +14,7 @@ import Drasil.Database (HasUID(uid), nsUid)
 import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
+import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, nc, IdeaDict)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 
@@ -44,8 +44,8 @@ cc' :: Idea c => c -> Sentence -> ConceptChunk
 cc' n d = ConDict (nw n) d []
 
 -- | Similar to 'cc'', but allows explicit domain tagging.
-ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk --Explicit tagging
-ccs n d l = ConDict (nw n) d $ map (^. uid) l
+ccs :: Concept d => IdeaDict -> Sentence -> [d] -> ConceptChunk --Explicit tagging
+ccs n d l = ConDict n d $ map (^. uid) l
 
 -- | For projecting out to the 'ConceptChunk' data-type.
 cw :: Concept c => c -> ConceptChunk

@@ -30,11 +30,6 @@ data JSONStyle =
     -- | In a "pretty" human readable way, with given indent size.
   | Pretty Natural
 
--- | Internal: Returns True if the given 'JSONStyle' is 'Pretty'.
-isPretty :: JSONStyle -> Bool
-isPretty (Pretty _) = True
-isPretty _          = False
-
 -- | Create 'JSONRenderOptions'.
 jsonRenderOpts :: JSONStyle -> JSONRenderOptions
 jsonRenderOpts = JSONRO
@@ -43,12 +38,14 @@ jsonRenderOpts = JSONRO
 renderJSON :: JSONRenderOptions -> JSON -> Doc ann
 renderJSON _ (JObject []) = lbrace <> rbrace
 renderJSON opts (JObject m) =
-  case style opts of
+  case sty of
     Minified -> braces (hcat content)
     Pretty i -> vcat [lbrace, indent (fromIntegral i) (vcat content), rbrace]
   where
-    sep = if isPretty (style opts) then colon <> space else colon
-    contents = map (\(k, v) -> renderString k <> sep <> renderJSON opts v) m
+    sty = style opts
+    sep Minified = colon
+    sep (Pretty _) = colon <> space
+    contents = map (\(k, v) -> renderString k <> sep sty <> renderJSON opts v) m
     content = punctuate comma contents
 renderJSON _ (JArray []) = lbracket <> rbracket
 renderJSON opts (JArray a) =

@@ -11,6 +11,8 @@ import Data.String (IsString(..))
 
 -- | A JSON representation.
 data JSON =
+    -- | Note that empty and duplicate keys are allowed,
+    -- and how they are handled is up to the implementation of the reader.
     JObject [(Text, JSON)]
   | JArray [JSON]
   | JString Text

@@ -9,7 +9,8 @@ import qualified Data.Text as T (pack)
 import Data.Scientific (Scientific)
 import Data.String (IsString(..))
 
--- | A JSON representation.
+-- | A JSON representation conformant with
+-- [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259).
 data JSON =
     -- | Note that empty and duplicate keys are allowed,
     -- and how they are handled is up to the implementation of the reader.

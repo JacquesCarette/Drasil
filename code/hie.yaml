@@ -24,6 +24,12 @@ cradle:
     - path: "drasil-database/lib"
       component: "drasil-database:lib"
 
+    - path: "drasil-example/bss/lib"
+      component: "bss:lib"
+
+    - path: "drasil-example/bss/app/Main.hs"
+      component: "bss:exe:bss"
+
     - path: "drasil-example/dblpend/lib"
       component: "dblpend:lib"
 

@@ -9,14 +9,13 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
-  valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAccess,
-  listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
-  docFuncRepr, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, docMod, OptionalSpace(..), defaultOptSpace, smartAdd,
-  smartSub
+  valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
+  objAccess, objMethodCall, func, get, set, listAccess, listSet, getFunc,
+  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
+  param, method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
+  buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
+  docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -263,11 +262,6 @@ call sep lib o n t pas nas = do
 
 funcAppMixedArgs :: (CommonRenderSym r) => MixedCall r
 funcAppMixedArgs = S.call Nothing Nothing
-
-selfFuncAppMixedArgs :: (CommonRenderSym r) => Doc -> SVariable r -> MixedCall r
-selfFuncAppMixedArgs d slf n t vs ns = do
-  s <- slf
-  S.call Nothing (Just $ RC.variable s <> d) n t vs ns
 
 newObjMixedArgs :: (CommonRenderSym r, UnRepr r TypeData) => String -> MixedCtorCall r
 newObjMixedArgs s tp vs ns = do

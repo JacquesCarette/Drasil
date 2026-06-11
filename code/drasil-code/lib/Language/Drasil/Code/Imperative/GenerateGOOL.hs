@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   getDoxOutput, getSoftwareDossierFiles, HasChoices(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
   SoftwareDossierState)
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
@@ -147,7 +147,7 @@ fApp m s t vl ns = do
   fCall (\cm args nargs ->
     if m /= cm then extFuncAppMixedArgs m s t args nargs else
       if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
-      else selfFuncAppMixedArgs s t args nargs) vl ns
+      else selfMethodCallMixedArgs s t args nargs) vl ns
 
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.

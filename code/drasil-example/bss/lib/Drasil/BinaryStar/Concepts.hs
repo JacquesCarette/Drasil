@@ -29,7 +29,10 @@ starTwo = compoundNC second_ star
 ---------------------------------------------------------
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [gravity, binaryStarSys, starBody, gravInteraction, newtonLUG,
+conceptChunks = gravity : ccsFortermsAndDefsTbl
+
+ccsFortermsAndDefsTbl :: [ConceptChunk]
+ccsFortermsAndDefsTbl = [binaryStarSys, starBody, gravInteraction, newtonLUG,
   initialConditions, trajectory, centerOfMass, inertialRefFrame, simTimeSpan]
 
 -- | T1: binary star system

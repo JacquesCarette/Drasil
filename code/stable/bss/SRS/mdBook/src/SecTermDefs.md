@@ -2,7 +2,6 @@
 
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 
-- Gravity: The force that attracts one physical body with mass to another.
 - Binary star system: A system consisting of two stars that orbit around their common center of mass due to gravitational interaction.
 - Star: A massive astronomical object that is treated as a point mass in this context.
 - Gravitational interaction: The mutual attractive force between two masses as described by Newtonian gravity.

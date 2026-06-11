@@ -24,7 +24,7 @@ import Language.Drasil.Document
 
 import Drasil.BinaryStar.MetaConcepts (progName)
 import Drasil.BinaryStar.Concepts (ideaDicts, conceptChunks, starOne, starTwo,
-  gravInteraction)
+  gravInteraction, ccsFortermsAndDefsTbl)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
 import Drasil.BinaryStar.References (citations)
 import Drasil.BinaryStar.Unitals (symbols, inputs, outputs,
@@ -61,7 +61,7 @@ mkSRS = [TableOfContents,
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
-      [ TermsAndDefs Nothing conceptChunks
+      [ TermsAndDefs Nothing ccsFortermsAndDefsTbl
       , PhySysDesc progName physSystParts figBSS []
       , Goals goalsInputs
       ]

@@ -8,7 +8,7 @@ where
 import Control.Lens ((^.))
 
 import Drasil.FileHandling (FileLayout, file, ps)
-import Drasil.LessonPlan (LsnDesc, mkNb)
+import Drasil.LessonPlan (LsnDesc, render)
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Printers (Notation (Engineering), piSys)
 import qualified Language.Drasil.Printers as P (genJupyterLessonPlan)
@@ -21,6 +21,6 @@ genJupyterLessonPlan :: LessonPlan -> LsnDesc -> String -> FileLayout
 genJupyterLessonPlan plan nbDecl lsnFileName =
   file [ps|{lsnFileName}.ipynb|] $ P.genJupyterLessonPlan pd
   where
-    nb = mkNb plan nbDecl S.forT
+    nb = render plan nbDecl S.forT
     printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
     pd = makeDocument printSetting nb

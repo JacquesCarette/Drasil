@@ -1,5 +1,7 @@
 module Drasil.LessonPlan (
-  module Drasil.LessonPlan.Notebook
+  module Drasil.LessonPlan.Document,
+  module Drasil.LessonPlan.Renderer
 ) where
 
-import Drasil.LessonPlan.Notebook
+import Drasil.LessonPlan.Document
+import Drasil.LessonPlan.Renderer

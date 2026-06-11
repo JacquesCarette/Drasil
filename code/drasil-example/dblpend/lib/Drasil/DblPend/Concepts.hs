@@ -1,5 +1,5 @@
 module Drasil.DblPend.Concepts (
-  pendMotion, rod, concepts, firstRod, secondRod, firstObject,
+  pendMotion, rod, ideaDicts, defs, firstRod, secondRod, firstObject,
   secondObject, verticalPos, horizontalPos, horizontalVel, verticalVel,
   horizontalForce, verticalForce, horizontalAccel, verticalAccel, arcLen
 )where
@@ -9,11 +9,10 @@ import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
-concepts :: [IdeaDict]
-concepts = map nw [rod, horizontal, vertical,
+ideaDicts :: [IdeaDict]
+ideaDicts = [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject]
-  ++ map nw defs
 
 rod, horizontal, vertical :: IdeaDict
 rod = nc "rod" (cn' "rod")

@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Type classes
   DefinesQuantity(defLhs),
   -- * Constructors
-  dqd, dqdNoUnit, dqdNoUnit', dqd', dqdQd, dqdWr,
+  dqd, dqdNoUnit, dqdNoUnit', dqd', dqdWr,
   implVar, implVar', implVarAU, implVarAU'
 ) where
 
@@ -18,7 +18,7 @@ import qualified Data.Set as Set
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS, cc')
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
@@ -90,10 +90,6 @@ dqd' = DQD
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
-
--- | When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> DefinedQuantityDict
-dqdQd c cc = DQD (cc' c cc) (symbol c) (c ^. typ) (getUnit c)
 
 -- | Makes a variable that is implementation-only.
 implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict

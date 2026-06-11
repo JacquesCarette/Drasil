@@ -12,7 +12,7 @@ module Drasil.SRS.DocumentLanguage.Core (
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
-import Drasil.Database (UID)
+import Drasil.Database (UID, IsChunk)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -80,13 +80,15 @@ instance Show Emphasis where
   show Italics = "italics"
 
 -- | Types of literature.
-data Literature = Lit Topic -- ^ Literature (with a Topic).
-                | Doc Topic -- ^ Existing documentation for (singular topic).
-                | Doc' Topic -- ^ Existing documentation for (plural version of topic).
-                | Manual Topic -- ^ Manual.
-
--- | Type synonym for clarity.
-type Topic = IdeaDict
+data Literature where
+  -- | Literature (with a topic).
+  Lit :: (IsChunk t, NamedIdea t) => t -> Literature
+  -- | Existing documentation for (singular topic).
+  Doc :: (IsChunk t, NamedIdea t) => t -> Literature
+  -- | Existing documentation for (plural version of topic).
+  Doc' :: (IsChunk t, NamedIdea t) => t -> Literature
+  -- | Manual.
+  Manual :: (IsChunk t, NamedIdea t) => t -> Literature
 
 -- | For creating the table of units introduction.
 data TUIntro = System -- ^ System of units (defaults to SI).

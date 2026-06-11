@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs,
+import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
   pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
@@ -60,6 +60,11 @@ mkSRS
        SSDProg
          [SSDProblem $
             PDProg purp []
+              -- FIXME: When removing the manually aggregated list here, expect
+              -- duplicate UID errors! Why? `defs` is a hand-crafted list that
+              -- extends `termDefs` with non-unique chunks containing
+              -- alternative definitions for use in the `Terminology and
+              -- Definitions` section.
               [TermsAndDefs Nothing defs,
                PhySysDesc progName sysParts sysFigure [],
                Goals sysGoalInput],
@@ -107,14 +112,11 @@ orgSecEnd = foldlSent [
     titleize ode, sParen (short ode), S "that models the", phrase pidC
   ]
 
-ideaDicts :: [IdeaDict]
-ideaDicts = concepts
-
 cis :: [CI]
 cis = progName : acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = physicalcon ++ [linear, angular]
+conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = map dqdWr physicscon ++ symbols ++
@@ -124,7 +126,7 @@ allSymbols = map dqdWr physicscon ++ symbols ++
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   allSymbols
-  ideaDicts
+  []
   cis
   conceptChunks
   ([] :: [UnitDefn])

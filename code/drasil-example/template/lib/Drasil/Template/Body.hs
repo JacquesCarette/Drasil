@@ -119,10 +119,8 @@ si = mkSmithEtAlICO
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList $ inputs <> outputs
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- CIs
-  [nw progName]
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = []
@@ -132,7 +130,7 @@ concIns = [inputValues, outputValues]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
-  symbols ideaDicts conceptChunks
+  symbols [] cis conceptChunks
   ([] :: [UnitDefn]) dataDefs ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
   citations [inputValuesTable]

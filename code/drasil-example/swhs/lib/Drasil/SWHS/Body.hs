@@ -77,20 +77,18 @@ motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  materialProprty :
-  -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl]
+ideaDicts = [materialProprty]
+
+cis :: [CI]
+cis = progName' : progName : [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] SWHS.dataDefs
   insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

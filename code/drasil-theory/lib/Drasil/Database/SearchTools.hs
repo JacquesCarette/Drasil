@@ -30,6 +30,7 @@ data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
 termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
 termResolve f db trg
   | (Just c) <- find trg db :: Maybe IdeaDict            = go f c
+  | (Just c) <- find trg db :: Maybe CI                  = go f c
   | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
   | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c
   | (Just c) <- find trg db :: Maybe UnitDefn            = go f c

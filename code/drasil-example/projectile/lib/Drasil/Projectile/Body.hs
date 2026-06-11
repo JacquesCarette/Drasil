@@ -38,7 +38,8 @@ import Data.Drasil.Concepts.Education(calculus, undergraduate,
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Changes (likelyChgs)
-import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
+  ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -149,21 +150,16 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [projMotion, rectVel] ++
-  -- CIs
-  [nw progName]
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.

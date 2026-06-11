@@ -5,9 +5,8 @@ import Language.Drasil
 import Language.Drasil.Document
 import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (LessonPlan, mkSystemMeta, mkLessonPlan)
-
-import Drasil.LessonPlan (LsnDesc, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example))
+import Drasil.LessonPlan (LessonPlan, mkLessonPlan, LsnDesc, LsnChapter(..))
+import Drasil.System (mkSystemMeta)
 
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
   speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,

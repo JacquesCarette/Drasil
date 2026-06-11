@@ -1,5 +1,5 @@
 module Drasil.Projectile.Concepts (
-  launcher, projectile, target, projMotion, defs, rectVel, concepts,
+  launcher, projectile, target, projMotion, defs, rectVel, ideaDicts,
   flightDur, offset, landPos, launAngle, launSpeed, targPos, projSpeed, projPos
 ) where
 
@@ -13,9 +13,8 @@ import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (oneD, position, speed, motion, distance, iSpeed, time,
   rectilinear, velocity, acceleration)
 
-concepts :: [IdeaDict]
-concepts = projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
-  rectVel] ++ map nw defs
+ideaDicts :: [IdeaDict]
+ideaDicts = [projMotion, launchNC, rectVel]
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel :: IdeaDict

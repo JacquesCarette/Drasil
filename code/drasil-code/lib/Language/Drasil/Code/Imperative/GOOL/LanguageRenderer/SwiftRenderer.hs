@@ -7,7 +7,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 
 import Drasil.GOOL (swiftName, swiftVersion)
 

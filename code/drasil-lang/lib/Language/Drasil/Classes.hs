@@ -13,7 +13,7 @@ module Language.Drasil.Classes (
   , Quantity
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
-  , HasRationale(rationale)
+  , MayHaveRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
@@ -88,7 +88,7 @@ class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
 -- | A chunk that may have a rationale explaining why a value or constraint was chosen.
-class HasRationale c where
+class MayHaveRationale c where
   -- | Provides a 'Lens' to the possible rationale 'Sentence'.
   rationale   :: Lens' c (Maybe Sentence)
 

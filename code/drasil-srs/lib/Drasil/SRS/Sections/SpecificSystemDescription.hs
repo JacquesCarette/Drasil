@@ -201,7 +201,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   namedRef r4 (plural genDefn)]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
-datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, HasRationale c, MayHaveUnit c) =>
+datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) =>
   Sentence -> [c] -> Section
 datConF _ [] = SRS.datCon [mkParagraph $ emptySectSentPlu [datumConstraint]] []
 datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
@@ -256,7 +256,7 @@ mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
 
 -- | Creates the input Data Constraints Table.
 -- If any quantity has a rationale, a Rationale column is included.
-inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, HasRationale c, MayHaveUnit c) =>
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) =>
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable (baseCols ++ rationaleCols ++ uncertCols)
             (inDatumConstraint ^. uid) $ titleize' inDatumConstraint

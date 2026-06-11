@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.Unital (uc')
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasRationale(rationale))
+  IsUnit, Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr(..))
@@ -64,7 +64,7 @@ instance Constrained   ConstrConcept where constraints  = constr'
 -- | Finds a reasonable value for the 'ConstrConcept'.
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 -- | Finds the rationale for the 'ConstrConcept'.
-instance HasRationale  ConstrConcept where rationale    = rationale'
+instance MayHaveRationale  ConstrConcept where rationale    = rationale'
 -- | Equal if 'UID's are equal.
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.

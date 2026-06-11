@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasRationale(rationale))
+  IsUnit, Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr)
@@ -59,7 +59,7 @@ instance Constrained    UncertQ where constraints = coco . constraints
 -- | Finds a reasonable value for the 'ConstrConcept' used to make the 'UncertQ'.
 instance HasReasVal     UncertQ where reasVal = coco . reasVal
 -- | Finds the rationale for the 'ConstrConcept' used to make the 'UncertQ'.
-instance HasRationale   UncertQ where rationale = coco . rationale
+instance MayHaveRationale   UncertQ where rationale = coco . rationale
 -- | Finds definition of the 'ConstrConcept' used to make the 'UncertQ'.
 instance Definition     UncertQ where defn = coco . defn
 -- | Finds the domain contained in the 'ConstrConcept' used to make the 'UncertQ'.

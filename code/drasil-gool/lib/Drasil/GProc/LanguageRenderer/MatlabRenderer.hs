@@ -313,9 +313,6 @@ instance InternalList MatlabCode where
   listSlice' = undefined
 
 instance InternalListFunc MatlabCode where
-  listSizeFunc = undefined
-  listAddFunc = undefined
-  listAppendFunc = undefined
   listAccessFunc = undefined
   listSetFunc = undefined
 

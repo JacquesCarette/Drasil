@@ -8,7 +8,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Drasil.GOOL (pyName, pyVersion)
 
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as

@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   makeSoftwareDossierInfo, makeChoicesInfo, HasChoices(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (makeSds,
   SoftwareDossierSym(..))
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Code.PackageData (PackageData(..), pattern PackageData,
   package)
 import Language.Drasil.SoftwareDossier.FileNames(sampleInputName)

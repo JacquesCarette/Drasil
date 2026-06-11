@@ -18,7 +18,7 @@ import Language.Drasil.SoftwareDossier.FileNames (doxConfigName, makefileName,
   readMeName)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
     SoftwareDossierSym(unReprDoc), sdsFromData, SoftwareDossierState)
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..), makeReadMe)
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..), makeReadMe)
 
 -- | Defines a Doxygen configuration file.
 doxConfig :: (SoftwareDossierSym r, Applicative r) => r Doc -> String ->

@@ -8,5 +8,6 @@ WindowsFix/** linguist-vendored
 code/stable/** linguist-generated
 code/stable-website/** linguist-generated
 code/datafiles/** linguist-vendored
+code/drasil-code/test/golden/** linguist-generated
 doc/** linguist-documentation
 notes/** linguist-documentation

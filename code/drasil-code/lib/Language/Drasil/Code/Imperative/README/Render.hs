@@ -1,5 +1,5 @@
 -- | Markdown file creator for generated GOOL code.
-module Language.Drasil.Markdown.CreateMd (
+module Language.Drasil.Code.Imperative.README.Render (
     -- * Main Function
     makeMd,
     -- * Section Creators
@@ -7,13 +7,12 @@ module Language.Drasil.Markdown.CreateMd (
     where
 
 import Prelude hiding ((<>))
+import Data.Char (toUpper)
 import Data.Maybe (catMaybes, mapMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, empty, vcat, text, (<+>),
     (<>), punctuate, hsep)
 
 import Drasil.FileHandling.Legacy (contSep, listToDoc, Separator)
-
-import Language.Drasil.Printing.Helpers (upcase)
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Maybe Doc] -> Doc
@@ -39,6 +38,11 @@ whatInfo descr sc = pure $ regularSec (text "What") (maybeSub "Background" descr
 maybeSub :: String -> Maybe String -> Doc
 maybeSub role = maybe empty (\content-> doubleSep <> text ("> " ++ role ++ ":")
   <+> upcase content)
+
+-- | Capitalize first letter of string.
+upcase :: String -> Doc
+upcase []      = text []
+upcase (c:cs)  = text $ toUpper c:cs
 
 -- | Helper for giving instructions on the command line.
 commandLine :: Doc

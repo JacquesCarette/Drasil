@@ -24,7 +24,7 @@ si = mkSmithEtAlICO
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
     RefSec $
-    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
+    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit nuclearPhys, Manual fp]]],
     IntroSec $
     IntroProg introPara (phrase progName) [],
     SSDSec $ SSDProg [

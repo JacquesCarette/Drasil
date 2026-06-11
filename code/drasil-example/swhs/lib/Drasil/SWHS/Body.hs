@@ -144,7 +144,7 @@ mkSRS = [TableOfContents,
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
+  [Lit heatTrans, Doc' progName], SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

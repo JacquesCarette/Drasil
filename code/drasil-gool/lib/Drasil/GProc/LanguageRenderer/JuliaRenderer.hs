@@ -68,19 +68,17 @@ import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  listDec, listDecDef,
-  notNull, functionDoc, listAdd,
-  listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
-  openFileR', openFileW', openFileA', multiReturn, multiAssign,
-  inOutCall, mainBody, argExists, litSet)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (listDec,
+  listDecDef, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
+  docInOutFunc', forLoopError, openFileR', openFileW', openFileA', multiReturn,
+  multiAssign, inOutCall, mainBody, argExists, litSet)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
-  fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
-  funcDecDef, function)
+  fileFromData, buildModule, docMod, modFromData, listAppend, listAdd,
+  listInnerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
@@ -394,9 +392,9 @@ instance Array JuliaCode where
     in funcApp "copy" arrTp [arr]
 
 instance List JuliaCode where
-  listSize = CS.listSize
-  listAdd = CP.listAdd
-  listAppend = CP.listAppend
+  listSize = CS.listSize jlListSize
+  listAdd = A.listAdd jlListAdd
+  listAppend = A.listAppend jlListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = jlIndexOf
@@ -411,15 +409,6 @@ instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalListFunc JuliaCode where
-  listSizeFunc l = do
-    f <- funcApp jlListSize int [l]
-    funcFromData (RC.value f) int
-  listAddFunc l i v = do
-    f <- funcApp jlListAdd void [l, i, v]
-    funcFromData (RC.value f) void
-  listAppendFunc l v = do
-    f <- funcApp jlListAppend void [l, v]
-    funcFromData (RC.value f) void
   listAccessFunc = CS.listAccessFunc
   listSetFunc = CS.listSetFunc R.listSetFunc
 

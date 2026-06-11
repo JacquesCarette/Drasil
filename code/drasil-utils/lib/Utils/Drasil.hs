@@ -1,10 +1,10 @@
 -- | Re-exports all utilities.
 module Utils.Drasil (
   module Utils.Drasil.English,
-  module Utils.Drasil.Lists,
-  module Utils.Drasil.Strings,
+  module Data.List.Extras,
+  module Data.String.Extras,
 ) where
 
 import Utils.Drasil.English
-import Utils.Drasil.Lists
-import Utils.Drasil.Strings
+import Data.List.Extras
+import Data.String.Extras

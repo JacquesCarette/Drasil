@@ -44,8 +44,6 @@ symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] [] []
 cis :: [CI]
 cis = [projectileMotionLesson]
 
-
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = defs ++ [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
   CCs.verticalMotion, CCs.gravity, CCs.position]

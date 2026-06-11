@@ -1,19 +1,20 @@
 {-# LANGUAGE FlexibleContexts #-}
 -- | Implementations defined here are valid in some, but not all, language renderers
-module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
-  doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVarAccess,
-  instanceVarSelf, indexOf, contains, containsInt, listAddFunc, discardFileLine,
-  intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec,
-  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', call',
-  listSizeFunc, listAccessFunc', string, docInOutFunc, bindingError,
+module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
+  int, constructor, doxFunc, doxClass, doxMod, docMod', modDoc', functionDoc,
+  extVar, classVarAccess, instanceVarSelf, indexOf, contains, containsInt,
+  discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
+  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule',
+  call', listSizeFunc, listAccessFunc', string, docInOutFunc, bindingError,
   extFuncAppMixedArgs, notNull, listDecDef, destructorError, stateVarDef,
   constVar, litArray, litSet, listSetFunc, litSetFunc, extraClass,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, setDecDef, setDec, listAdd, listAppend,
-  intToIndex, indexToInt, intToIndex', indexToInt', varDecDef, openFileR',
-  openFileW', openFileA', argExists, global, setMethodCall) where
+  string', inherit, implements, listSize, setDecDef, setDec, intToIndex,
+  indexToInt, intToIndex', indexToInt', varDecDef, openFileR', openFileW',
+  openFileA', argExists, global, setMethodCall
+) where
 
 import Utils.Drasil (stringList)
 import Drasil.FileHandling.Legacy (indent)
@@ -28,10 +29,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
   VisibilitySym(..), MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
-  TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
+  TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
-  varDecDef, constDecDef), IndexTranslator(intToIndex, indexToInt),
+  varDecDef, constDecDef), IndexTranslator(indexToInt),
   ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
@@ -44,7 +45,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
 import qualified Drasil.Shared.RendererClassesCommon as S
 import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalVarElim(variable), ValueElim(..),
-  StatementElim(statement), VisibilityElim(..), MethodElim(..), FunctionElim(..))
+  StatementElim(statement), VisibilityElim(..), MethodElim(..))
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, onStateList)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
   ParentSpec)
@@ -60,7 +61,7 @@ import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, mkVal, mkVal, typeFromData)
+  mkStateVal, mkStateVar, typeFromData)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
@@ -142,10 +143,6 @@ contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 containsInt :: (OORenderSym r) => Label -> Label -> SValue r -> SValue r -> SValue r
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
-
-listAddFunc :: (OORenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
-listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v)
-  [i, v]
 
 discardFileLine :: (OORenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n
@@ -541,18 +538,6 @@ argExists :: (CommonRenderSym r) => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
 -- Julia and MATLAB --
-
--- | Call to insert a value into a list in a language where this is not a method.
-listAdd :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listAdd l i v = do
-  f <- S.listAddFunc l (IC.intToIndex i) v
-  mkVal (RC.functionType f) (RC.function f)
-
--- | Call to append a value to a list in a language where this is not a method.
-listAppend :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
-listAppend l v = do
-  f <- S.listAppendFunc l v
-  mkVal (RC.functionType f) (RC.function f)
 
 -- | Convert an integer to an index in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to add 1

@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
   StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  selfFuncApp, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
+  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.GOOL.Renderers (renderType, renderParam,)
@@ -75,18 +75,19 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
-  funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get,
-  set, listAdd, listAppend, listAccess, listSet, getFunc, setFunc,
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, listSet,
+  getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew,
+  print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
+  construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', containsInt, string, docInOutFunc,
-  extraClass, intToIndex, indexToInt, global, setMethodCall)
-import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef)
+  call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
+  intToIndex, indexToInt, global, setMethodCall)
+import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
+  listAppend)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -408,9 +409,9 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   notNull = pair1 notNull notNull
 
 instance (Pair p) => OOValueExpression (p CppSrcCode CppHdrCode) where
-  selfFuncAppMixedArgs n = pair1Val3Lists
-    (selfFuncAppMixedArgs n)
-    (selfFuncAppMixedArgs n)
+  selfMethodCallMixedArgs n = pair1Val3Lists
+    (selfMethodCallMixedArgs n)
+    (selfMethodCallMixedArgs n)
   newObjMixedArgs = pair1Val3Lists newObjMixedArgs newObjMixedArgs
   extNewObjMixedArgs l = pair1Val3Lists
     (extNewObjMixedArgs l)
@@ -493,9 +494,6 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
   setFunc = pair3 setFunc setFunc
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
-  listSizeFunc = pair1 listSizeFunc listSizeFunc
-  listAddFunc = pair3 listAddFunc listAddFunc
-  listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
@@ -1351,7 +1349,9 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
+  selfMethodCallMixedArgs fn tp vs ns = do
+    slf <- self :: SVariable CppSrcCode
+    RC.call Nothing (Just $ RC.variable slf <> ptrAccess') fn tp vs ns
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
     modify (addModuleImportVS l)
@@ -1405,9 +1405,10 @@ instance Array CppSrcCode where
   arrayCopy = id -- C++ automatically copies std::vectors on assignment
 
 instance List CppSrcCode where
-  listSize v = cast int (C.listSize v)
-  listAdd = G.listAdd
-  listAppend = G.listAppend
+  -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
+  listSize v = cast int (C.listSize "size" v)
+  listAdd list idx vl = objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
+  listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
@@ -1426,9 +1427,6 @@ instance InternalGetSet CppSrcCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CppSrcCode where
-  listSizeFunc _ = CP.listSizeFunc
-  listAddFunc = cppListAddFunc
-  listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CS.listSetFunc cppListSetDoc
 
@@ -1607,7 +1605,7 @@ instance FuncAppStatement CppSrcCode where
   extInOutCall m = cppInOutCall (extFuncApp m)
 
 instance OOFuncAppStatement CppSrcCode where
-  selfInOutCall = cppInOutCall selfFuncApp
+  selfInOutCall = cppInOutCall selfMethodCall
 
 instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
@@ -2077,7 +2075,7 @@ instance ValueExpression CppHdrCode where
   notNull _ = mkStateVal void empty
 
 instance OOValueExpression CppHdrCode where
-  selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
+  selfMethodCallMixedArgs _ _ _ _ = mkStateVal void empty
   newObjMixedArgs _ _ _ = mkStateVal void empty
   extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
   libNewObjMixedArgs _ _ _ _ = mkStateVal void empty
@@ -2148,9 +2146,6 @@ instance InternalGetSet CppHdrCode where
   setFunc _ _ _ = funcFromData empty void
 
 instance InternalListFunc CppHdrCode where
-  listSizeFunc _ = funcFromData empty void
-  listAddFunc _ _ _ = funcFromData empty void
-  listAppendFunc _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 
@@ -2693,11 +2688,6 @@ strFunc v s = objMethodCall string v cppStr [s]
 
 cppIndexFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppIndexFunc l v = funcApp cppIndex int [iterBegin l, iterEnd l, v]
-
-cppListAddFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
-  -> VSFunction CppSrcCode
-cppListAddFunc l i v = func cppListAdd (onStateValue valueType l)
-    [iterBegin l #+ i, v]
 
 cppIterBeginFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
 cppIterBeginFunc t = func cppIterBegin (iterator t) []

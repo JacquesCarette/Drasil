@@ -157,5 +157,5 @@ userInput                    = compoundNC user input_
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
+srsDomains = [srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
   assumpDom, chgProbDom, likeChgDom, unlikeChgDom]

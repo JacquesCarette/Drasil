@@ -11,15 +11,12 @@ module Language.Drasil.Printing.Helpers (
   dot, comm,
   -- * Word Wrapping
   dollarDoc, paren, brace, dollar, sqbrac, angbrac,
-  -- * Casing
-  upcase, lowcase,
   -- * Numeric Suffixes
   sufx, sufxer, sufxPrint
 ) where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, (<>), ($$))
-import Data.Char (toUpper, toLower)
 
 import Language.Drasil.Printing.Citation (CiteField(HowPublished), HP (..))
 
@@ -101,15 +98,6 @@ dollar  x = "$" ++ x ++ "$"
 sqbrac  x = "[" ++ x ++ "]"
 -- | Wraps in angular brackets ("<>").
 angbrac x = "<" ++ x ++ ">"
-
--- | Format strings and convert to Doc.
-upcase, lowcase :: String -> Doc
--- | Capitalize first letter of string.
-upcase []      = text []
-upcase (c:cs)  = text $ toUpper c:cs
--- | Make first letter lowercase.
-lowcase []     = text []
-lowcase (c:cs) = text $ toLower c:cs
 
 --FIXME: move this. It is here for not since TeX and HTML
 --       use this for bibliography rendering

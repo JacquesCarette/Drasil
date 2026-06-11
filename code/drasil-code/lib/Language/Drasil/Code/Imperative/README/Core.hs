@@ -1,6 +1,6 @@
 -- | This module defines structures and functions for handling README files,
 -- which are used as auxiliary documentation files for the system.
-module Language.Drasil.Code.Imperative.README (
+module Language.Drasil.Code.Imperative.README.Core (
   ReadMeInfo(..), makeReadMe
 ) where
 
@@ -9,7 +9,7 @@ import Data.List.NonEmpty (nonEmpty, toList)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.FileHandling.Legacy (RelativeFile, relFileToStr)
-import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
+import Language.Drasil.Code.Imperative.README.Render (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
 
 import Language.Drasil.Choices (ImplementationType(..))

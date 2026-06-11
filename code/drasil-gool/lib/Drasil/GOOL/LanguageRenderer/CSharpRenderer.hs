@@ -29,7 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, OOFunctionSym(..),
   ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
@@ -60,7 +60,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, classVarAccess, func, cast, listSetFunc, castObj, classLevel,
+  printFile, classVarAccess, cast, listSetFunc, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
@@ -71,26 +71,25 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs,
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess,
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
+  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
+  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
-  implements, indexOf, indexToInt, inherit, int, intClass, intToIndex, listAddFunc,
+  implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
   listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall)
+  classMethodCall, listAppend, listAdd)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize', increment,
   increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for,
   while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
@@ -119,7 +118,7 @@ import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
-  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc )
+  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc)
 
 csExt :: String
 csExt = "cs"
@@ -397,7 +396,7 @@ instance ValueExpression CSharpCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression CSharpCode where
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
+  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs
@@ -453,9 +452,9 @@ instance Array CSharpCode where
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
 instance List CSharpCode where
-  listSize = C.listSize
-  listAdd = G.listAdd
-  listAppend = G.listAppend
+  listSize = C.listSize' csListSize
+  listAdd = CG.listAdd csListAdd
+  listAppend = CG.listAppend csListAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf csIndex
@@ -474,10 +473,8 @@ instance InternalGetSet CSharpCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CSharpCode where
-  listSizeFunc _ = funcFromData (R.func csListSize) int
-  listAddFunc _ = CP.listAddFunc csListAdd
-  listAppendFunc _ = G.listAppendFunc csListAppend
   listAccessFunc = CS.listAccessFunc
+  -- Hack! This produces a statement and calls it a value
   listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where
@@ -618,7 +615,7 @@ instance FuncAppStatement CSharpCode where
   extInOutCall m = csInOutCall (extFuncApp m)
 
 instance OOFuncAppStatement CSharpCode where
-  selfInOutCall = csInOutCall selfFuncApp
+  selfInOutCall = csInOutCall selfMethodCall
 
 instance CommentStatement CSharpCode where
   comment = G.comment commentStart
@@ -795,16 +792,15 @@ csFuncType ps r = do
     (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
     (text csFunc <> angles (hicat listSep' $ map renderType $ pts ++ [rt]))
 
-csListSize, csForEach, csNamedArgSep, csLambdaSep :: Doc
-csListSize = text "Count"
+csForEach, csNamedArgSep, csLambdaSep :: Doc
 csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
 csSystem, csConsole, csGeneric, csDiagnostics, csIO, csList, csSet, csInt, csFloat, csBool,
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine,
-  csIndex, csContains, csListAdd, csListAppend, csListRemove, csClose, csEOS, csSplit, csMain,
-  csFunc, csUnionWith :: String
+  csIndex, csContains, csListAdd, csListSize, csListAppend, csListRemove,
+  csClose, csEOS, csSplit, csMain, csFunc, csUnionWith :: String
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
@@ -825,6 +821,7 @@ csWriteLine = "WriteLine"
 csIndex = "IndexOf"
 csContains = "Contains"
 csListAdd = "Insert"
+csListSize = "Count"
 csListAppend = "Add"
 csListRemove = "Remove"
 csClose = "Close"

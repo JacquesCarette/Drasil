@@ -4,9 +4,10 @@
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
-  increment1, decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew,
-  switch, for, while, intFunc, multiAssignError, multiReturnError, multiTypeError
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
+  increment, increment1, decrement1, varDec, varDecDef, setDecDef, listDec,
+  extObjDecNew, switch, for, while, intFunc, multiAssignError, multiReturnError,
+  multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
@@ -14,18 +15,19 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
-  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..), getCodeType,
-  getTypeString)
-import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
+  VariableSym(..), VariableValue(..), VariableElim(..),
+  ValueSym(Value, valueType), VisibilitySym(..), getCodeType, getTypeString)
+import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
-import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
+  objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
   ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
-  InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
+  RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(variable), ValueElim(value), StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
@@ -134,8 +136,11 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 
 -- Functions --
 
-listSize :: (OORenderSym r) => SValue r -> SValue r
-listSize v = v $. S.listSizeFunc v
+listSize :: (OORenderSym r) => String -> SValue r -> SValue r
+listSize fnName list = objMethodCallNoParams IC.int list fnName
+
+listSize' :: (OORenderSym r) => String -> SValue r -> SValue r
+listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 

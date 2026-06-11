@@ -23,8 +23,8 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Language.Drasil.Document
 
 import Drasil.BinaryStar.MetaConcepts (progName)
-import Drasil.BinaryStar.Concepts (concepts, defs, starOne, starTwo,
-  gravInteraction)
+import Drasil.BinaryStar.Concepts (ideaDicts, conceptChunks, starOne, starTwo,
+  gravInteraction, ccsFortermsAndDefsTbl)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
 import Drasil.BinaryStar.References (citations)
 import Drasil.BinaryStar.Unitals (symbols, inputs, outputs,
@@ -61,7 +61,7 @@ mkSRS = [TableOfContents,
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
-      [ TermsAndDefs Nothing defs
+      [ TermsAndDefs Nothing ccsFortermsAndDefsTbl
       , PhySysDesc progName physSystParts figBSS []
       , Goals goalsInputs
       ]
@@ -213,15 +213,12 @@ si = mkSmithEtAlICO
 authorName :: Person
 authorName = person "Xinlu" "Yan"
 
-ideaDicts :: [IdeaDict]
-ideaDicts = nw progName : nw gravity : concepts
-
-conceptChunks :: [ConceptChunk]
-conceptChunks = defs
+cis :: [CI]
+cis = [progName]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
-  symbols ideaDicts conceptChunks
+  symbols ideaDicts cis conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
   ([] :: [GenDefn]) tMods concIns
   citations (labelledContent ++ funcReqsTables)

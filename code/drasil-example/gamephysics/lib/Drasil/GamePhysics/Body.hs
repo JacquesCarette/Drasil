@@ -106,20 +106,17 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 --FIXME: All named ideas, not just acronyms.
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- CIs
-  map nw [progName, centreMass]
+cis :: [CI]
+cis = [progName, centreMass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
   CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
   CP.elasticity]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts conceptChunks []
+symbMap = withCommonKnowledge allRefs symbols [] cis conceptChunks []
   dataDefs iMods generalDefns tMods concIns citations labelledContent
 
 -- | Holds all references and links used in the document.

@@ -334,7 +334,7 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = map cw [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
+terms = [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
 -- already in SWHSUnits

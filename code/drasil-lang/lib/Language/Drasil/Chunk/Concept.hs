@@ -74,7 +74,6 @@ cncpt''' ::
   Sentence -> ConceptChunk
 cncpt''' u trm defn = ConDict (idea' u trm) defn []
 
-
 {-# DEPRECATED dccA, dccAWDS, dcc, dccWDS, cc', cw
   "Smart constructors allow externally-known chunk nesting; use one of `cncpt, cncpt', cncpt'', cncpt'''` instead." #-}
 

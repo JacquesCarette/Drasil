@@ -36,6 +36,7 @@ module Drasil.Metadata.Documentation
 import Control.Lens ((^.))
 
 -- General Drasil
+import Drasil.Database (mkUid)
 import Language.Drasil (CI, NP, IdeaDict, nc, cn, cn', cnIES, cnICES, cnUM,
   commonIdeaWithDict, fterms, compoundPhrase, compoundPhraseP1, titleizeNP',
   term, ConceptChunk, cncpt, Sentence(EmptyS), dcc)
@@ -217,14 +218,14 @@ srsDom = dcc "srsDom" (srs ^. term) "srs"
 
 assumpDom, chgProbDom, funcReqDom, goalStmtDom, likeChgDom,
   nonFuncReqDom, reqDom, unlikeChgDom :: ConceptChunk
-assumpDom     = cncpt "assumpDom"     (assumption ^. term)               EmptyS (Just "A")   [srsDom]
-chgProbDom    = cncpt "chgProbDom"    (cn' "change")                     EmptyS  Nothing     [srsDom]
-funcReqDom    = cncpt "funcReqDom"    (functionalRequirement ^. term)    EmptyS (Just "FR")  [reqDom]
-goalStmtDom   = cncpt "goalStmtDom"   (goalStmt ^. term)                 EmptyS (Just "GS")  [srsDom]
-likeChgDom    = cncpt "likeChgDom"    (likelyChg ^. term)                EmptyS (Just "LC")  [chgProbDom]
-nonFuncReqDom = cncpt "nonFuncReqDom" (nonfunctionalRequirement ^. term) EmptyS (Just "NFR") [reqDom]
-reqDom        = cncpt "reqDom"        (requirement ^. term)              EmptyS (Just "R")   [srsDom]
-unlikeChgDom  = cncpt "unlikeChgDom"  (unlikelyChg ^. term)              EmptyS (Just "UC")  [chgProbDom]
+assumpDom     = cncpt (mkUid "assumpDom")     (assumption ^. term)               EmptyS (Just "A")   [srsDom]
+chgProbDom    = cncpt (mkUid "chgProbDom")    (cn' "change")                     EmptyS  Nothing     [srsDom]
+funcReqDom    = cncpt (mkUid "funcReqDom")    (functionalRequirement ^. term)    EmptyS (Just "FR")  [reqDom]
+goalStmtDom   = cncpt (mkUid "goalStmtDom")   (goalStmt ^. term)                 EmptyS (Just "GS")  [srsDom]
+likeChgDom    = cncpt (mkUid "likeChgDom")    (likelyChg ^. term)                EmptyS (Just "LC")  [chgProbDom]
+nonFuncReqDom = cncpt (mkUid "nonFuncReqDom") (nonfunctionalRequirement ^. term) EmptyS (Just "NFR") [reqDom]
+reqDom        = cncpt (mkUid "reqDom")        (requirement ^. term)              EmptyS (Just "R")   [srsDom]
+unlikeChgDom  = cncpt (mkUid "unlikeChgDom")  (unlikelyChg ^. term)              EmptyS (Just "UC")  [chgProbDom]
 
 -- FIXME: Some of the below are duplicated knowledge of the above (above preferred). None should be CIs, too.
 

@@ -10,12 +10,12 @@ module Language.Drasil.Chunk.Concept (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(uid), nsUid)
+import Drasil.Database (HasUID(uid), nsUid, UID)
 
 import Language.Drasil.Classes (Idea, ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, nc)
+import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, nc, idea)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 import qualified Language.Drasil.Classes as D (defn)
@@ -25,7 +25,7 @@ import qualified Language.Drasil.Classes as D (defn)
 -- | Construct a 'ConceptChunk'.
 cncpt :: Concept dom =>
   -- | The 'UID'.
-  String ->
+  UID ->
   -- The 'term' being defined.
   NP ->
   -- | The definition of the 'term'
@@ -34,12 +34,12 @@ cncpt :: Concept dom =>
   Maybe String ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt u trm defn mabbr = ConDict (mkIdea u trm mabbr) defn . map (^. uid)
+cncpt u trm defn mabbr = ConDict (idea u trm mabbr) defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt' ::
   -- | The 'UID'.
-  String ->
+  UID ->
   -- | The 'term' being defined.
   NP ->
   -- | The definition of the 'term'
@@ -51,7 +51,7 @@ cncpt' u trm defn mabbr = cncpt u trm defn mabbr ([] :: [ConceptChunk])
 -- | Construct a 'ConceptChunk'.
 cncpt'' ::
   -- | The 'UID'.
-  String ->
+  UID ->
   -- | The 'term' being defined.
   NP ->
   -- | The definition of the 'term'

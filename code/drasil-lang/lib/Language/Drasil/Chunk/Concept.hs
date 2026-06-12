@@ -11,12 +11,12 @@ module Language.Drasil.Chunk.Concept (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(uid), nsUid, UID)
+import Drasil.Database (HasUID(uid), nsUid, UID, mkUid)
 
 import Language.Drasil.Classes (Idea, ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, nc, idea, idea')
+import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, idea, idea')
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 import qualified Language.Drasil.Classes as D (defn)
@@ -111,5 +111,5 @@ cw c = ConDict (nw c) (c ^. D.defn) (cdom c)
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 cic u d sn dom = ConInst (nsUid "instance" $ icc ^. uid) icc u $ shortname' (S sn)
   where
-    icc = cc (nc u $ pn sn) d [dom]
+    icc = cc (idea' (mkUid u) $ pn sn) d [dom]
     cc n d' l = ConDict n d' $ map (^. uid) l

@@ -13,11 +13,11 @@ module Language.Drasil.Chunk.CommonIdea (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
+import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..), mkUid)
 import qualified Data.Set as Set
 import Data.String.Extras (repUnd)
 
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
@@ -55,7 +55,7 @@ instance ConceptDomain CI where cdom = cdom'
 -- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
 -- ambiguous type variables, punting for now.
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = CI (nc x y) z . map (^.uid)
+commonIdeaWithDict x y z = CI (idea' (mkUid x) y) z . map (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

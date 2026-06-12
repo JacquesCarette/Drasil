@@ -3,6 +3,7 @@ module Drasil.Projectile.Concepts (
   flightDur, offset, landPos, launAngle, launSpeed, targPos, projSpeed, projPos
 ) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -18,12 +19,12 @@ ideaDicts = [projMotion, launchNC, rectVel]
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel :: IdeaDict
-durationNC   = nc "duration" (nounPhraseSP "duration")
-launchNC     = nc "launch"   (nounPhraseSP "launch")
-offsetNC     = nc "offset"   (compoundPhrase (cn "distance between the") (targetPosNC `andThe` landingPosNC))
+durationNC   = idea' (mkUid "duration") (nounPhraseSP "duration")
+launchNC     = idea' (mkUid "launch")   (nounPhraseSP "launch")
+offsetNC     = idea' (mkUid "offset")   (compoundPhrase (cn "distance between the") (targetPosNC `andThe` landingPosNC))
 
-flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
-landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
+flightDurNC   = compoundNC (idea' (mkUid "flight")  (nounPhraseSP "flight" )) durationNC
+landingPosNC  = compoundNC (idea' (mkUid "landing") (nounPhraseSP "landing")) position
 launchAngleNC = compoundNC launchNC angle
 launchSpeedNC = compoundNC launchNC speed
 targetPosNC   = compoundNC target position

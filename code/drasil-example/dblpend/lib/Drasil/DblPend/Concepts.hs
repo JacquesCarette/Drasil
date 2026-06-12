@@ -2,8 +2,9 @@ module Drasil.DblPend.Concepts (
   pendMotion, rod, ideaDicts, defs, firstRod, secondRod, firstObject,
   secondObject, verticalPos, horizontalPos, horizontalVel, verticalVel,
   horizontalForce, verticalForce, horizontalAccel, verticalAccel, arcLen
-)where
+) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
@@ -15,9 +16,9 @@ ideaDicts = [rod, horizontal, vertical,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject]
 
 rod, horizontal, vertical :: IdeaDict
-rod = nc "rod" (cn' "rod")
-horizontal = nc "horizontal" (cn "horizontal")
-vertical = nc "vertical" (cn "vertical")
+rod = idea' (mkUid "rod") (cn' "rod")
+horizontal = idea' (mkUid "horizontal") (cn "horizontal")
+vertical = idea' (mkUid "vertical") (cn "vertical")
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
   horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: IdeaDict

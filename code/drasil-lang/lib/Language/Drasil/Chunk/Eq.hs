@@ -15,7 +15,7 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk)
+import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
 import qualified Data.Set as Set
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
@@ -25,7 +25,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (idea', mkIdea)
+import Language.Drasil.Chunk.NamedIdea (idea')
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
@@ -91,12 +91,12 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
 -- 'Space', unit, and defining expression.
 fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
 fromEqn nm desc def symb sp un =
-  QD (dqd (cc' (mkIdea nm desc Nothing) def) symb sp un) []
+  QD (dqd (cc' (idea' (mkUid nm) desc) def) symb sp un) []
 
 -- | Same as 'fromEqn', but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 fromEqn' nm desc def symb sp =
-  QD (dqd' (cc' (mkIdea nm desc Nothing) def) (const symb) sp Nothing) []
+  QD (dqd' (cc' (idea' (mkUid nm) desc) def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
@@ -113,7 +113,7 @@ fromEqnSt' nm desc def symb sp =
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
   QDefinition e
 fromEqnSt'' nm desc def symb sp =
-  QD (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp Nothing) []
+  QD (dqd' (cc' (idea' (mkUid nm) desc) def) symb sp Nothing) []
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space ->

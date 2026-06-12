@@ -3,7 +3,8 @@
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
-  ConceptChunk, cncpt, cncpt', cncpt'', dcc, dccA, dccAWDS, dccWDS, cc', cw,
+  ConceptChunk, cncpt, cncpt', cncpt'', cncpt''',
+  dcc, dccA, dccAWDS, dccWDS, cc', cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -15,12 +16,15 @@ import Drasil.Database (HasUID(uid), nsUid, UID)
 import Language.Drasil.Classes (Idea, ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, nc, idea)
+import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, nc, idea, idea')
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 import qualified Language.Drasil.Classes as D (defn)
 
---FIXME: Temporary ConceptDomain tag hacking to not break everything.
+-- FIXME: There should only be two smart constructors ultimately for
+-- `ConceptChunk`s. One with an abbreviation, the other without. In other words,
+-- only `cncpt` and `cncpt'` should exist. The other ones should not. The
+-- problem here is that dealing with the other ones requires domain analysis.
 
 -- | Construct a 'ConceptChunk'.
 cncpt :: Concept dom =>
@@ -30,23 +34,23 @@ cncpt :: Concept dom =>
   NP ->
   -- | The definition of the 'term'
   Sentence ->
-  -- | The term's abbreviation, if one exists.
-  Maybe String ->
+  -- | The term's abbreviation.
+  String ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt u trm defn mabbr = ConDict (idea u trm mabbr) defn . map (^. uid)
+cncpt u trm defn accAbbr = ConDict (idea u trm accAbbr) defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
-cncpt' ::
+cncpt' :: Concept dom =>
   -- | The 'UID'.
   UID ->
   -- | The 'term' being defined.
   NP ->
   -- | The definition of the 'term'
   Sentence ->
-  -- | The term's abbreviation, if one exists.
-  Maybe String -> ConceptChunk
-cncpt' u trm defn mabbr = cncpt u trm defn mabbr ([] :: [ConceptChunk])
+  -- | The domain the 'term' belongs to.
+  [dom] -> ConceptChunk
+cncpt' u trm defn = ConDict (idea' u trm) defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt'' ::
@@ -55,11 +59,24 @@ cncpt'' ::
   -- | The 'term' being defined.
   NP ->
   -- | The definition of the 'term'
+  Sentence ->
+  -- | The term's abbreviation.
+  String -> ConceptChunk
+cncpt'' u trm defn accAbbr = cncpt u trm defn accAbbr ([] :: [ConceptChunk])
+
+-- | Construct a 'ConceptChunk'.
+cncpt''' ::
+  -- | The 'UID'.
+  UID ->
+  -- | The 'term' being defined.
+  NP ->
+  -- | The definition of the 'term'
   Sentence -> ConceptChunk
-cncpt'' u trm defn = cncpt' u trm defn Nothing
+cncpt''' u trm defn = ConDict (idea' u trm) defn []
+
 
 {-# DEPRECATED dccA, dccAWDS, dcc, dccWDS, cc', cw
-  "Smart constructors allow externally-known chunk nesting; use one of `cncpt, cncpt', cncpt''` instead." #-}
+  "Smart constructors allow externally-known chunk nesting; use one of `cncpt, cncpt', cncpt'', cncpt'''` instead." #-}
 
 -- | Smart constructor for creating a concept chunks with an abbreviation. Takes
 -- a UID (String), a term (NounPhrase), a definition (String), and an

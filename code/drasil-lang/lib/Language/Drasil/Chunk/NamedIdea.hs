@@ -49,11 +49,11 @@ instance NamedIdea IdeaDict where term = np
 -- | Finds the abbreviation of the 'IdeaDict'.
 instance Idea      IdeaDict where getA = mabbr
 
-idea :: UID -> NP -> Maybe String -> IdeaDict
-idea = IdeaDict
+idea :: UID -> NP -> String -> IdeaDict
+idea u t accAbbr = IdeaDict u t (Just accAbbr)
 
 idea' :: UID -> NP -> IdeaDict
-idea' u t = idea u t Nothing
+idea' u t = IdeaDict u t Nothing
 
 {-# DEPRECATED nc, ncUID, mkIdea
   "Use `idea` or `idea'` instead." #-}

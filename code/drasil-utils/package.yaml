@@ -29,5 +29,4 @@ library:
   - Utils.Drasil
   - Data.List.Extras
   - Data.String.Extras
-  other-modules:
-  - Utils.Drasil.English
+

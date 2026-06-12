@@ -175,14 +175,14 @@ intReaderIntro progName assumed topic asset sectionRef =
 -- be an introduction ('Sentence'), a resource for a bottom up approach
 -- ('NamedIdea'), reference to that resource ('Section'), and any other relevant
 -- information ('Sentence').
-orgSec :: NamedIdea c => c -> Section -> Maybe Sentence -> Section
+orgSec :: Idea c => c -> Section -> Maybe Sentence -> Section
 orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
 
 -- | Helper function that creates the introduction for the Organization of the
 -- Document section. Parameters should be an introduction ('Sentence'), a
 -- resource for a bottom up approach ('NamedIdea'), reference to that resource
 -- ('Section'), and any other relevant information ('Sentence').
-orgIntro :: NamedIdea c => c -> Section -> Maybe Sentence -> [Contents]
+orgIntro :: Idea c => c -> Section -> Maybe Sentence -> [Contents]
 orgIntro bottom bottomSec trailingSentence =
   [ foldlSP [
       orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.

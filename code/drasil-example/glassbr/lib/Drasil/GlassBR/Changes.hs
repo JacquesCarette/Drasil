@@ -32,7 +32,7 @@ accMoreThanSingleLite     = cic "accMoreThanSingleLite"     accMoreThanSingleLit
 accMoreBoundaryConditions = cic "accMoreBoundaryConditions" accMoreBoundaryConditionsDesc         "Accomodate-More-Boundary-Conditions" likeChgDom
 considerMoreThanFlexGlass = cic "considerMoreThanFlexGlass" considerMoreThanFlexGlassDesc         "Consider-More-than-Flexure-Glass"    likeChgDom
 
-calcInternalBlastRiskDesc :: NamedIdea n => n -> Sentence
+calcInternalBlastRiskDesc :: Idea n => n -> Sentence
 varValsOfmkEDesc, accMoreThanSingleLiteDesc, accMoreBoundaryConditionsDesc, considerMoreThanFlexGlassDesc :: Sentence
 
 calcInternalBlastRiskDesc mainConcept = foldlSent [chgsStart assumpES (S "The"),

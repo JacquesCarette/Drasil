@@ -17,6 +17,7 @@ module Theory.Drasil.ModelKinds (
 
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
+import Data.Typeable (Typeable)
 
 import Drasil.Database (UID, HasUID(..), mkUid, nsUid, HasChunkRefs(..))
 import Language.Drasil (NamedIdea(..), NP, QDefinition, Expr,
@@ -86,7 +87,7 @@ equationalConstraints :: String -> NP -> ConstraintSet e -> ModelKind e
 equationalConstraints u n qs = MK (EquationalConstraints qs) (mkUid u) n
 
 -- | Smart constructor for 'EquationalConstraints', deriving UID+Term from the 'ConstraintSet'
-equationalConstraints' :: ConstraintSet e -> ModelKind e
+equationalConstraints' :: Typeable e => ConstraintSet e -> ModelKind e
 equationalConstraints' qs = MK (EquationalConstraints qs) (modelNs $ qs ^. uid) (qs ^. term)
 
 -- | Smart constructor for 'EquationalModel's
@@ -94,11 +95,11 @@ equationalModel :: String -> NP -> QDefinition e -> ModelKind e
 equationalModel u n qd = MK (EquationalModel qd) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
-equationalModel' :: QDefinition e -> ModelKind e
+equationalModel' :: Typeable e => QDefinition e -> ModelKind e
 equationalModel' qd = MK (EquationalModel qd) (modelNs $ qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'
-equationalModelU :: String -> QDefinition e -> ModelKind e
+equationalModelU :: Typeable e => String -> QDefinition e -> ModelKind e
 equationalModelU u qd = MK (EquationalModel qd) (mkUid' u) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving UID from the 'QDefinition'
@@ -110,11 +111,11 @@ equationalRealm :: String -> NP -> MultiDefn e -> ModelKind e
 equationalRealm u n md = MK (EquationalRealm md) (mkUid' u) n
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
-equationalRealm' :: MultiDefn e -> ModelKind e
+equationalRealm' :: Typeable e => MultiDefn e -> ModelKind e
 equationalRealm' md = MK (EquationalRealm md) (modelNs $ md ^. uid) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's
-equationalRealmU :: String -> MultiDefn e -> ModelKind e
+equationalRealmU :: Typeable e => String -> MultiDefn e -> ModelKind e
 equationalRealmU u md = MK (EquationalRealm md) (mkUid' u) (md ^. term)
 
 -- | Smart constructor for 'EquationalRealm's, deriving UID from the 'MultiDefn'
@@ -141,9 +142,9 @@ instance HasChunkRefs (ModelKinds e) where
 -- | Finds the 'UID' of the 'ModelKinds'.
 instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
-instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
+instance Typeable e => NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
 -- | Finds the idea of the 'ModelKinds'.
-instance Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
+instance Typeable e => Idea          (ModelKinds e) where getA    = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
 instance Definition    (ModelKinds e) where defn    = lensMk defn defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
@@ -174,9 +175,9 @@ instance HasChunkRefs (ModelKind e) where
 -- | Finds the 'UID' of the 'ModelKind'.
 instance HasUID        (ModelKind e) where uid     = mkUID
 -- | Finds the term ('NP') of the 'ModelKind'.
-instance NamedIdea     (ModelKind e) where term    = mkTerm
+instance Typeable e => NamedIdea     (ModelKind e) where term    = mkTerm
 -- | Finds the idea of the 'ModelKind'.
-instance Idea          (ModelKind e) where getA    = getA . (^. mk)
+instance Typeable e => Idea          (ModelKind e) where getA    = getA . (^. mk)
 -- | Finds the definition of the 'ModelKind'.
 instance Definition    (ModelKind e) where defn    = mk . defn
 -- | Finds the domain of the 'ModelKind'.

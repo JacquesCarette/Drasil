@@ -19,6 +19,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Data.Typeable (Typeable)
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {
@@ -35,9 +36,9 @@ instance HasChunkRefs (ConstraintSet e) where
 -- | Finds the 'UID' of the 'ConstraintSet'.
 instance HasUID        (ConstraintSet e) where uid  = con . uid
 -- | Finds the term ('NP') of the 'ConstraintSet'.
-instance NamedIdea     (ConstraintSet e) where term = con . term
+instance Typeable e => NamedIdea     (ConstraintSet e) where term = con . term
 -- | Finds the idea of the 'ConstraintSet'.
-instance Idea          (ConstraintSet e) where getA = getA . (^. con)
+instance Typeable e => Idea          (ConstraintSet e) where getA = getA . (^. con)
 -- | Finds the definition of the 'ConstraintSet'.
 instance Definition    (ConstraintSet e) where defn = con . defn
 -- | Finds the domain of the 'ConstraintSet'.

@@ -9,7 +9,6 @@ import Language.Drasil (commonIdeaWithDict, mkIdea, nc, cn', nounPhraseSP, CI, I
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Documentation (response, type_)
 
-{--}
 idglass :: IdeaDict
 idglass = mkIdea  "glass"          (cn' "Glass")                 Nothing
 

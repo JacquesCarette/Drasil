@@ -29,7 +29,7 @@ import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHav
   , ModelExpr
   , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
   , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
-  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
+  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable, Idea)
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
 import Language.Drasil.Document.Reference (refS, namedRef)
 import Language.Drasil.Document.Sections (Section)
@@ -166,7 +166,7 @@ underConsidertn chunk = S "The" +:+ phrase chunk +:+
 
 -- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
 -- Note: Order matters!
-refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+refineChain :: Idea c => [(c, Section)] -> Sentence
 refineChain [x,y] = S "The" +:+ namedRef (snd x) (plural $ fst x) `S.are` S "refined" `S.toThe` plural (fst y)
 refineChain (x:y:xs) = (foldlList Comma List (refineChain [x,y] : rc (y : xs)) !.)
   where

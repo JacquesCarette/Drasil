@@ -32,7 +32,7 @@ unhide (UIDRef u) = find u
 
 -- | Find a chunk by a 'UIDRef', erroring if not found.
 unhideOrErr :: TypeableChunk t => UIDRef t -> ChunkDB -> t
-unhideOrErr tu cdb = fromMaybe (error "Typed UID dereference failed.") (unhide tu cdb)
+unhideOrErr tu cdb = fromMaybe (error $ "Typed UID dereference failed for: " ++ show (raw tu)) (unhide tu cdb)
 
 -- | Get the raw 'UID' from a 'UIDRef'.
 raw :: UIDRef t -> UID

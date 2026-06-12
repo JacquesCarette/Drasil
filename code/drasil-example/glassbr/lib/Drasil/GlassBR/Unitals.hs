@@ -42,8 +42,6 @@ plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
-{--}
-
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
   NE.map dqdWr inputsNoUncrtn <> NE.map dqdWr sdVector
@@ -150,8 +148,6 @@ pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failu
 
   --FIXME: no typical value!
 
-{--}
-
 specParamVals :: [ConstQDef]
 specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
   sdMax, sdMin, stressDistFacMin, stressDistFacMax]
@@ -203,7 +199,6 @@ stressDistFacMax = mkQuantDef (dqdNoUnit (dcc "stressDistFacMax"
   (nounPhraseSP "maximum value for the stress distribution factor")
   "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
-{--}
 
 unitalSymbols :: [UnitalChunk]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,

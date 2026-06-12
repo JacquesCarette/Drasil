@@ -15,7 +15,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
 
 import Language.Drasil (Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (HasSymbol(..))
-import Utils.Drasil (toPlainName)
+import Data.String.Extras (toPlainName)
 
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))

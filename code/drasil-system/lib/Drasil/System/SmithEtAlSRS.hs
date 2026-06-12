@@ -28,7 +28,7 @@ import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
   Constrained, ConstQDef, abrv, DefinedQuantityDict)
 import Language.Drasil.Document (LabelledContent, Reference)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
-import Utils.Drasil (toPlainName)
+import Data.String.Extras (toPlainName)
 
 import Drasil.System.Core (SystemMeta, Background, HasSystemMeta(..),
   mkSystemMeta, Motivation, Purpose, Scope)

@@ -42,7 +42,7 @@ angle       = dcc "angle"        (cn' "angle")                   "the amount of 
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
 axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates"
 calculation = dcc "calculation"  (cn' "calculation")             "a mathematical determination of the size or number of something"
-cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ D.S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
+cartesian   = cncpt'' "cartesian" (pn' "Cartesian coordinate system") $ D.S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
                                                                   D.S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   D.S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   fromSource cartesianWiki
@@ -60,7 +60,7 @@ gradient     = dcc "gradient"     (cn' "gradient")                "degree of ste
 laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integral transform that converts a function of a real variable t " ++
                                                                      "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
-line         = dccWDS "line"      (pn' "line")                    $ D.S "An interval between two points" +:+
+line         = cncpt'' "line"      (pn' "line")                    $ D.S "An interval between two points" +:+
                                                                   fromSource lineSource
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
@@ -75,7 +75,7 @@ posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a
 negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of positive infinity"
 positive     = dcc "positive"     (cn' "positive")               "greater than zero"
 negative     = dcc "negative"     (cn' "negative")               "less than zero"
-point        = dccWDS "point"     (pn' "point")                   $ D.S "An exact location, it has no size, only position" +:+
+point        = cncpt'' "point"     (pn' "point")                   $ D.S "An exact location, it has no size, only position" +:+
                                                                   fromSource pointSource
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"

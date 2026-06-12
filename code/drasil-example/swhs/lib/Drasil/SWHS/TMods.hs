@@ -46,7 +46,7 @@ consThermE = tm (equationalConstraints' consThermECS) [dRef consThemESrc]
 
 consThermECS :: ConstraintSet ModelExpr
 consThermECS = mkConstraintSet consCC rels
-  where consCC = dccWDS "consThermECS"
+  where consCC = cncpt'' "consThermECS"
           (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn)
         rels   = NE.fromList [consThermERel]
 

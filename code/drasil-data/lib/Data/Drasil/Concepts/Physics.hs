@@ -55,29 +55,29 @@ oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics,
 twoD   = commonIdeaWithDict "twoD"   (cn "two-dimensional")   "2D" [mathematics, physics]
 threeD = commonIdeaWithDict "threeD" (cn "three-dimensional") "3D" [mathematics, physics]
 
-acceleration = dccWDS "acceleration" (cn' "acceleration")
+acceleration = cncpt'' "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)
 angular = dcc "angular" (cn' "angular")
   "denoting physical properties or quantities measured with reference to or by means of an angle"
-body = dccWDS "physicsBody" (cnIES "body")
+body = cncpt'' "physicsBody" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
-chgInVelocity = dccWDS "chgInVelocity" (cn desc)
+chgInVelocity = cncpt'' "chgInVelocity" (cn desc)
   (S "the " +:+ S desc +:+ phrase rigidBody)
   where desc = "change in velocity" -- TODO: This is a hack to avoid an infinite loop should we enable strict data.
-chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
+chgMomentum = cncpt'' "chgMomentum" (cn' "change in momentum")
   (S "The rate of change of a body's" +:+ phrase impulseV)
 collision = dcc "collision" (cn' "collision")
   "an encounter between particles resulting in an exchange or transformation of energy"
-cohesion = dccWDS "cohesion" (cn "cohesion")
+cohesion = cncpt'' "cohesion" (cn "cohesion")
   (S "an attractive" +:+ phrase force +:+ S "between adjacent particles that holds the matter together")
-compression = dccWDS "compression" (cn' "compression")
+compression = cncpt'' "compression" (cn' "compression")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body towards its center")
-damping = dccWDS "damping" (pn' "damping")
+damping = cncpt'' "damping" (pn' "damping")
   $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
   S "restricting or preventing its oscillations" +:+ fromSource dampingSource
 dampingCoeff = dcc "dampingCoeff" (cn' "damping coefficient")
  "Quantity that characterizes a second order system's oscillatory response"
-displacement = dccWDS "displacement" (cn' "displacement")
+displacement = cncpt'' "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
 distance = dcc "distance" (cn' "distance")
   "the interval measured along a path connecting two locations"
@@ -104,46 +104,46 @@ gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
   "the empirical physical constant used to show the force between two objects caused by gravity"
 gravitationalMagnitude = dcc "gravitationalMagnitude" (cn "magnitude of gravitational acceleration")
   "the magnitude of the approximate acceleration due to gravity on Earth at sea level"
-height = dccWDS "height" (cn' "height")
+height = cncpt'' "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
-horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")
+horizontalMotion = cncpt'' "horizontalMotion" (cn "horizontal motion")
   (S "the result of the tendency of any object in motion to remain in motion at constant velocity")
-isotropy = dccWDS "isotropy" (cn "isotropy")
+isotropy = cncpt'' "isotropy" (cn "isotropy")
   (S "a condition where the" +:+ (phrase value `S.ofA` phrase property) `S.is`
    S "independent of the direction in which it is measured")
 joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
-kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
+kEnergy = cncpt'' "kEnergy" (cn "kinetic energy")
   (S "measure" `S.the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
-kinematics = dccWDS "kinematics" (cn "kinematics")
+kinematics = cncpt'' "kinematics" (cn "kinematics")
   (S "branch" `S.of_` phrase mechanics +:+ S "that describes the motion" `S.of_`
     S "objects without reference to the causes of motion")
 linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
   "the energy that comes from motion and position"
-momentum = dccWDS "momentum" (cn "momentum")
+momentum = cncpt'' "momentum" (cn "momentum")
   ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
   (phrase QPP.mass `S.and_` phrase velocity))
-moment = dccWDS "moment" (cn' "moment")
+moment = cncpt'' "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
-moment2D = dccWDS "moment2D" (cn' "moment")
+moment2D = cncpt'' "moment2D" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
-motion = dccWDS "motion" (cn "motion")
+motion = cncpt'' "motion" (cn "motion")
   (S "change in position of a physical body over time")
-period = dccWDS "period" (cn' "period")
+period = cncpt'' "period" (cn' "period")
    (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
-pendulum = dccWDS "pendulum" (cn "pendulum")
+pendulum = cncpt'' "pendulum" (cn "pendulum")
  (S "a body suspended from a fixed support so that it swings freely back and forth under the influence"
        `S.of_` phrase gravity)
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
-positionVec = dccWDS "positionVec" (cn' "position vector")
+positionVec = cncpt'' "positionVec" (cn' "position vector")
    (S "a vector from the origin" `S.ofThe` phrase cartesian +:+ S "defined"
     `S.toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
-potEnergy = dccWDS "potEnergy" (cn "potential energy")
+potEnergy = cncpt'' "potEnergy" (cn "potential energy")
   (S "measure" `S.the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
-pressure = dccWDS "pressure" (cn' "pressure")
+pressure = cncpt'' "pressure" (cn' "pressure")
   (S "a" +:+ phrase force +:+ S "exerted over an area")
 rectilinear = dcc "rectilinear" (cn "rectilinear")
   "occurring in one dimension"
@@ -151,33 +151,33 @@ rigidBody = dcc "rigidBody" (cnIES "rigid body")
   "a solid body in which deformation is neglected"
 space = dcc "space" (cn' "space")
   "a two-dimensional extent where objects and events have relative positions and directions"
-scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
+scalarAccel = cncpt'' "scalarAccel" (cn' "scalar acceleration")
   (S "magnitude" `S.the_ofThe` phrase acceleration +:+ S "vector")
-scalarPos = dccWDS "scalarPos" (cn' "scalar position")
+scalarPos = cncpt'' "scalarPos" (cn' "scalar position")
   (S "magnitude" `S.the_ofThe` phrase position +:+ S "vector")
 shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++
                                                         "The motion is sinusoidal in time and demonstrates a" ++
                                                         " single resonant frequency") -- source: Wikipedia
-speed = dccWDS "speed" (cn' "speed")
+speed = cncpt'' "speed" (cn' "speed")
   (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
 stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient")
  "Quantity that characterizes a spring's stiffness"
-strain = dccWDS "strain" (cn' "strain")
+strain = cncpt'' "strain" (cn' "strain")
   (S "a measure of deformation representing the" +:+ phrase displacement +:+
    S "between particles in the body relative to a reference length")
   --definition of strain used in SSP, can be made clearer
 stress = dcc "stress" (cn''' "stress")
   "the ratio of an applied force to a cross-sectional area"
   --definition of stress used in SSP, can be made clearer
-tension = dccWDS "tension" (cn' "tension")
+tension = cncpt'' "tension" (cn' "tension")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body away from its center")
 time = dcc "time" (cn' "time")
   "the indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
 torque = dcc "torque" (cn' "torque")
   "a twisting force that tends to cause rotation"
-velocity = dccWDS "velocity" (cnIES "velocity")
+velocity = cncpt'' "velocity" (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
-verticalMotion = dccWDS "verticalMotion" (cn "vertical motion")
+verticalMotion = cncpt'' "verticalMotion" (cn "vertical motion")
   (S " the movement of the object against the gravitational pull")
 weight = dcc "weight" (cn' "weight")
   "the gravitational force acting on an object"
@@ -186,36 +186,36 @@ weight = dcc "weight" (cn' "weight")
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = dccWDS "xDist" (distance `inThe` xDir) (titleize distance `S.inThe` phrase xDir)
-yDist = dccWDS "yDist" (distance `inThe` yDir) (titleize distance `S.inThe` phrase yDir)
+xDist = cncpt'' "xDist" (distance `inThe` xDir) (titleize distance `S.inThe` phrase xDir)
+yDist = cncpt'' "yDist" (distance `inThe` yDir) (titleize distance `S.inThe` phrase yDir)
 
-iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = dccWDS "xPos" (xComp `of_` position) (S "The" +:+ NP (xComp `of_` position))
-yPos = dccWDS "yPos" (yComp `of_` position) (S "The" +:+ NP (yComp `of_` position))
+iPos = cncpt'' "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
+xPos = cncpt'' "xPos" (xComp `of_` position) (S "The" +:+ NP (xComp `of_` position))
+yPos = cncpt'' "yPos" (yComp `of_` position) (S "The" +:+ NP (yComp `of_` position))
 
-ixPos = dccWDS "ixPos" (xComp `of_` iPos) (S "The" +:+ NP (xComp `of_` iPos))
-iyPos = dccWDS "iyPos" (yComp `of_` iPos) (S "The" +:+ NP (yComp `of_` iPos))
+ixPos = cncpt'' "ixPos" (xComp `of_` iPos) (S "The" +:+ NP (xComp `of_` iPos))
+iyPos = cncpt'' "iyPos" (yComp `of_` iPos) (S "The" +:+ NP (yComp `of_` iPos))
 
-fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
-iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
+fSpeed = cncpt'' "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
+iSpeed = cncpt'' "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
-ixSpeed = dccWDS "ixSpeed" (xComp `of_` iSpeed) (S "The" +:+ NP (xComp `of_` iSpeed))
-iySpeed = dccWDS "iySpeed" (yComp `of_` iSpeed) (S "The" +:+ NP (yComp `of_` iSpeed))
+ixSpeed = cncpt'' "ixSpeed" (xComp `of_` iSpeed) (S "The" +:+ NP (xComp `of_` iSpeed))
+iySpeed = cncpt'' "iySpeed" (yComp `of_` iSpeed) (S "The" +:+ NP (yComp `of_` iSpeed))
 
-fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
-iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = dccWDS "xVel" (xComp `of_` velocity) (S "The" +:+ NP (xComp `of_` velocity))
-yVel = dccWDS "yVel" (yComp `of_` velocity) (S "The" +:+ NP (yComp `of_` velocity))
+fVel = cncpt'' "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
+iVel = cncpt'' "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
+xVel = cncpt'' "xVel" (xComp `of_` velocity) (S "The" +:+ NP (xComp `of_` velocity))
+yVel = cncpt'' "yVel" (yComp `of_` velocity) (S "The" +:+ NP (yComp `of_` velocity))
 
-ixVel = dccWDS "ixVel" (xComp `of_` iVel) (S "The" +:+ NP (xComp `of_` iVel))
-iyVel = dccWDS "iyVel" (yComp `of_` iVel) (S "The" +:+ NP (yComp `of_` iVel))
+ixVel = cncpt'' "ixVel" (xComp `of_` iVel) (S "The" +:+ NP (xComp `of_` iVel))
+iyVel = cncpt'' "iyVel" (yComp `of_` iVel) (S "The" +:+ NP (yComp `of_` iVel))
 
-xAccel = dccWDS "xScalAcc" (xComp `of_` acceleration) (S "The" +:+ NP (xComp `of_` acceleration))
-yAccel = dccWDS "yScalAcc" (yComp `of_` acceleration) (S "The" +:+ NP (yComp `of_` acceleration))
+xAccel = cncpt'' "xScalAcc" (xComp `of_` acceleration) (S "The" +:+ NP (xComp `of_` acceleration))
+yAccel = cncpt'' "yScalAcc" (yComp `of_` acceleration) (S "The" +:+ NP (yComp `of_` acceleration))
 
-constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = dccWDS "xConstAccel" (xComp `of_` constAccel) (S "The" +:+ NP (xComp `of_` constAccel))
-yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ NP (yComp `of_` constAccel))
+constAccelV = cncpt'' "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
+xConstAccel = cncpt'' "xConstAccel" (xComp `of_` constAccel) (S "The" +:+ NP (xComp `of_` constAccel))
+yConstAccel = cncpt'' "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ NP (yComp `of_` constAccel))
 
 --FIXME: COMBINATION HACK (for all below)
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?

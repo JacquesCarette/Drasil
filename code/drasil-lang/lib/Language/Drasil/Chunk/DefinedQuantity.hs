@@ -18,7 +18,7 @@ import qualified Data.Set as Set
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, cncpt'', dccA, dccAWDS)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
@@ -101,7 +101,7 @@ implVar i ter desc sp sym = dqdNoUnit' (dcc i ter desc) f sp
 
 -- | Similar to 'implVar', but takes in a 'Sentence' for the description rather than a 'String'.
 implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
-implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
+implVar' i ter desc sp sym = dqdNoUnit' (cncpt'' i ter desc) f sp
   where
     f :: Stage -> Symbol
     f Implementation = sym

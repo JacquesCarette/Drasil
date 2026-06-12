@@ -10,7 +10,7 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..))
 
-import Language.Drasil.Chunk.Concept (dcc, dccWDS)
+import Language.Drasil.Chunk.Concept (dcc, cncpt'')
 import Language.Drasil.Chunk.Unital (uc')
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd', dqdWr, dqdNoUnit)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
@@ -97,7 +97,7 @@ cuc' nam trm desc sym un space cs rv =
 cucNoUnit' :: String -> NP -> String -> Symbol
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cucNoUnit' nam trm desc sym space cs rv =
-  ConstrConcept (dqdNoUnit (dccWDS nam trm (S desc)) sym space) cs (Just rv) Nothing
+  ConstrConcept (dqdNoUnit (cncpt'' nam trm (S desc)) sym space) cs (Just rv) Nothing
 
 -- | Similar to 'cuc'', but 'Symbol' is dependent on 'Stage'.
 cuc'' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u

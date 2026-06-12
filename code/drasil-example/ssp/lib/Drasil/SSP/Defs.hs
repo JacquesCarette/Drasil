@@ -58,19 +58,19 @@ stabAnalysis = compoundNC stability analysis
 ssa = compoundNC slope stabAnalysis
 
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
-effFandS = dccWDS "effective forces and stresses"
+effFandS = cncpt'' "effective forces and stresses"
   (cn "effective forces and stresses")
   (D.toSent (atStartNP (the normForce)) `S.or_` phrase nrmStrss +:+
   S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
   S "composed of the effective" +:+ phrase force `S.or_` phrase stress `S.andThe`
   phrase force `S.or_` phrase stress +:+ S "exerted by water")
 
-slpSrf = dccWDS "slip surface" (slpSrfCon ^. term)
+slpSrf = cncpt'' "slip surface" (slpSrfCon ^. term)
   (D.toSent (atStartNP (a_ surface)) +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
   S "potential to fail or displace due to load or other" +:+ plural force)
 
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
-plnStrn = dccWDS "plane strain" (cn' "plane strain")
+plnStrn = cncpt'' "plane strain" (cn' "plane strain")
   (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
   S "the directions" `S.ofA` phrase threeD +:+ S "material can be" +:+
   S "approximated as zero. This condition results when a body is" +:+
@@ -80,12 +80,12 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
   S "infinite" +:+ atStart' stress +:+ S "in the direction" `S.ofThe` S "dominant" +:+
   phrase dimension +:+ S "can be approximated as zero")
 
-crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
+crtSlpSrf = cncpt'' "critical slip surface" (cn' "critical slip surface")
   (D.toSent (atStartNP (slpSrf `ofThe` slope)) +:+
   S "that has the lowest" +:+ phrase fsConcept `sC`
   S "and is therefore most likely to experience failure")
 
-fsConcept = dccWDS "FS" factorOfSafety
+fsConcept = cncpt'' "FS" factorOfSafety
   (S "The global stability metric" `S.ofA` D.toSent (phraseNP (slpSrf `ofA` slope)) `sC`
   S "defined as the ratio" `S.of_` phrase shearRes +:+
   S "to" +:+ phrase mobShear)

@@ -253,7 +253,7 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
 --
 momentEqlModel :: ModelKind ModelExpr
 momentEqlModel = equationalConstraints' $
-  mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
+  mkConstraintSet (cncpt'' "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
   NE.fromList [express momEqlExpr]
 
 momEqlExpr :: Expr

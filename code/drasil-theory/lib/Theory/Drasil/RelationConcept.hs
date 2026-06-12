@@ -41,4 +41,4 @@ instance Express       RelationConcept where express = (^. rel)
 
 -- | Create a 'RelationConcept' from a given 'UID', term ('NP'), definition ('Sentence'), and 'Relation'.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn) . express
+makeRC rID rTerm rDefn = RC (cncpt'' rID rTerm rDefn) . express

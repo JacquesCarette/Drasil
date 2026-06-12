@@ -48,7 +48,7 @@ centerOfMassRels =
 
 centerOfMassCS :: ConstraintSet ModelExpr
 centerOfMassCS = mkConstraintSet
-  (dccWDS "centerOfMassCS"
+  (cncpt'' "centerOfMassCS"
     (nounPhraseSP "center-of-mass constraint")
     centerOfMassNote) $
   NE.fromList centerOfMassRels

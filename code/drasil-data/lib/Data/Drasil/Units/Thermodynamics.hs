@@ -1,21 +1,21 @@
 -- | Units related to the field of thermodynamics.
 module Data.Drasil.Units.Thermodynamics where
 
-import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', dcc, Sentence(S),
+import Language.Drasil (cncpt'', cnIES, cn, cn', cn'', dcc, Sentence(S),
   UnitDefn, (/:), (*:), (/$), newUnit, makeDerU)
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
 heatCapacity :: UnitDefn
-heatCapacity = makeDerU (dccWDS "heatCapacity" (cnIES "heat capacity")
+heatCapacity = makeDerU (cncpt'' "heatCapacity" (cnIES "heat capacity")
   (S "heat capacity (constant pressure)")) (joule /: centigrade)
 
 heatCapSpec :: UnitDefn --Specific heat capacity
-heatCapSpec = makeDerU (dccWDS "heatCapSpec" (cn' "specific heat")
+heatCapSpec = makeDerU (cncpt'' "heatCapSpec" (cn' "specific heat")
   (S "heat capacity per unit mass")) (joule /$ (kilogram *: centigrade))
 
 thermalFlux :: UnitDefn
-thermalFlux = makeDerU (dccWDS "thermalFlux" (cn'' "heat flux")
+thermalFlux = makeDerU (cncpt'' "thermalFlux" (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
 heatTransferCoef :: UnitDefn

@@ -17,7 +17,7 @@ import Data.List (find)
 import Drasil.Database (HasUID(uid), HasChunkRefs(..))
 
 import Language.Drasil
-  (ConceptChunk, dccWDS, Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
+  (ConceptChunk, cncpt'', Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
   , ModelExpr, NP, Sentence, Expr, UnitalChunk, ModelExprC(nthderiv, equiv)
   , ExprC(..), columnVec, ConstrConcept, LiteralC(exactDbl, int), RequiresChecking (requiredChecks)
   , Space, HasSpace (..), dqdWr)
@@ -174,7 +174,7 @@ makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
  | not $ isUnknownDescending unks =
   error "The order of giving unknowns need to be descending"
- | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(dccWDS id' term' defn')
+ | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(cncpt'' id' term' defn')
 
 -- | Create a 'DifferentialModel' by the input language
 makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
@@ -183,7 +183,7 @@ makeASingleDE indepVar'' depVar'' lhs const'' id'' term'' defn''
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks [const''](dccWDS id'' term'' defn'')
+ | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks [const''](cncpt'' id'' term'' defn'')
   where unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar''
         coeffs = [createCoefficients lhs unks]
 

@@ -456,7 +456,7 @@ normToShear = dqd' (dcc "lambda" (nounPhraseSP "proportionality constant")
   "the ratio of the interslice normal to the interslice shear force")
   (const lLambda) Real Nothing
 
-scalFunc = dqd' (dccWDS "f_i"
+scalFunc = dqd' (cncpt'' "f_i"
   (nounPhraseSP "interslice normal to shear force ratio variation function")
   (S "a function" `S.of_` D.toSent (phraseNP (distance `inThe` xDir)) +:+
    S "that describes the variation" `S.ofThe` S "interslice normal to shear ratio"))

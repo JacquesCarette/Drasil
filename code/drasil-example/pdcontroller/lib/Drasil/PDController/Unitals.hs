@@ -183,7 +183,7 @@ dqdDampingCoeff
 -- TODO: Create a separate description for the stiffness coefficient to state
 -- that it is the "stiffness coefficient of the spring" (#4275)
 dqdStiffnessCoeff
-  = dqd (dccWDS "dqdStiffnessCoeff" (ccStiffCoeff ^. term) (ccStiffCoeff ^. defn))
+  = dqd (cncpt'' "dqdStiffnessCoeff" (ccStiffCoeff ^. term) (ccStiffCoeff ^. defn))
       symStifnessCoeff
       Real
       second

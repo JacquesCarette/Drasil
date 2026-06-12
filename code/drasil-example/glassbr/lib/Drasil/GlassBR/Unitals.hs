@@ -347,7 +347,7 @@ fTemperedGl   = cc' fullyT
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
   S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
-glassGeo      = dccWDS "glassGeo"    (cnIES "glass geometry")
+glassGeo      = cncpt'' "glassGeo"    (cnIES "glass geometry")
   (S "the glass geometry based inputs include the dimensions of the" +:+
     foldlList Comma List [phrase glaPlane, phrase glassTy, phrase responseTy])
 glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
@@ -391,7 +391,7 @@ nonFactoredL  = cc' nFL
   S "per 1000 for monolithic", short annealed, S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   "For the given input parameters, the glass is NOT considered safe."
-probBreak     = dccWDS "probBr" (nounPhraseSP "probability of breakage")
+probBreak     = cncpt'' "probBr" (nounPhraseSP "probability of breakage")
   (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
   S "first occurrence of a specified load and duration, typically expressed",
   S "in lites per 1000", sParen $ refS astm2016])

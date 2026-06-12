@@ -25,7 +25,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea)
+import Language.Drasil.Chunk.NamedIdea (idea', mkIdea)
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
@@ -102,12 +102,12 @@ fromEqn' nm desc def symb sp =
 fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (dqd' (cc' (ncUID nm desc) def) symb sp (Just $ unitWrapper un)) []
+  QD (dqd' (cc' (idea' nm desc) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 fromEqnSt' nm desc def symb sp =
-  QD (dqd' (cc' (ncUID nm desc) def) symb sp Nothing) []
+  QD (dqd' (cc' (idea' nm desc) def) symb sp Nothing) []
 
 -- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
@@ -141,7 +141,7 @@ mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
                IsChunk i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
-  (dqd' (cc' (ncUID (f ^. uid) n) s) (symbol f)
+  (dqd' (cc' (idea' (f ^. uid) n) s) (symbol f)
     (f ^. typ) u) (map (^. uid) is)
     -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 

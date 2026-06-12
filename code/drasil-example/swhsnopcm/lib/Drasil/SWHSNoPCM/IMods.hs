@@ -15,7 +15,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel',
   Derivation, mkDerivName, DifferentialModel, makeASystemDE)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 -- other parts of SHWS
 import Drasil.SWHS.Concepts (water)

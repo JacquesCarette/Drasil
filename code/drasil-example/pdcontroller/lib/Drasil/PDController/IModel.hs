@@ -9,7 +9,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, im, qwC, newDEModel', Derivation, mkDerivName, DifferentialModel,
   makeASingleDE, ($**), ($^^), ($++))
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts

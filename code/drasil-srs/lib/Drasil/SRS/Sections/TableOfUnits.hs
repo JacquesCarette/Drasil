@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 -- General Drasil
 import Language.Drasil
 import Language.Drasil.Document
-import Utils.Drasil (mkTable)
+import Data.List.Extras (mkTable)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (symbol_, description, tOfUnit)

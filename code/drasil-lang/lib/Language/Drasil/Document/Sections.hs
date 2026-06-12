@@ -11,7 +11,7 @@ module Language.Drasil.Document.Sections (
 import Control.Lens ((^.), makeLenses, view)
 
 import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid, HasChunkRefs(..))
-import Utils.Drasil (repUnd)
+import Data.String.Extras (repUnd)
 import qualified Data.Set as Set
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')

@@ -19,7 +19,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel', Derivation,
   mkDerivName)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.Projectile.Concepts (rectVel)

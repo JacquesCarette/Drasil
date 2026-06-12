@@ -15,7 +15,7 @@ import Control.Lens (makeLenses, (^.), view)
 
 import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
 import qualified Data.Set as Set
-import Utils.Drasil (repUnd)
+import Data.String.Extras (repUnd)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),

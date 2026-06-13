@@ -13,10 +13,10 @@ import Control.Lens ((^.))
 
 import Drasil.Database (HasUID(uid), nsUid, UID, mkUid)
 
-import Language.Drasil.Classes (Idea, ConceptDomain(cdom), Concept)
+import Language.Drasil.Classes (ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(nw, idea, idea')
+import Language.Drasil.Chunk.NamedIdea (idea, idea', NamedIdea (..), Idea (..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 import qualified Language.Drasil.Classes as D (defn)
@@ -74,8 +74,8 @@ cncpt''' ::
   Sentence -> ConceptChunk
 cncpt''' u trm defn = ConDict (idea' u trm) defn []
 
-{-# DEPRECATED dccA, dccAWDS, dcc, dccWDS, cw
-  "Smart constructors allow externally-known chunk nesting; use one of `cncpt, cncpt', cncpt'', cncpt'''` instead." #-}
+{-# DEPRECATED dccA, dccAWDS, dcc, dccWDS
+  "Old smart constructor; use one of `cncpt`, `cncpt'`, `cncpt''`, `cncpt'''` instead." #-}
 
 -- | Smart constructor for creating a concept chunks with an abbreviation. Takes
 -- a UID (String), a term (NounPhrase), a definition (String), and an
@@ -103,9 +103,14 @@ dcc i ter des = dccA i ter des Nothing
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = dccAWDS i t d Nothing
 
+{-# DEPRECATED cw
+  "Chunk down-casting is strongly discouraged. If you want to construct a `ConceptChunk`, use one of its normal constructors." #-}
+
 -- | For projecting out to the 'ConceptChunk' data-type.
 cw :: Concept c => c -> ConceptChunk
-cw c = ConDict (nw c) (c ^. D.defn) (cdom c)
+cw c = ConDict (go $ getA c) (c ^. D.defn) (cdom c)
+  where go (Just accAbbr) = idea  (c ^. uid) (c ^. term) accAbbr
+        go Nothing        = idea' (c ^. uid) (c ^. term)
 
 -- | Constructor for a 'ConceptInstance'. Takes in the Reference Address
 -- ('String'), a definition ('Sentence'), a short name ('String'), and a domain

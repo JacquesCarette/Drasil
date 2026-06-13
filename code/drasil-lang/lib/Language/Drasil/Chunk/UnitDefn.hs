@@ -4,7 +4,6 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Classes
   MayHaveUnit(getUnit),
   IsUnit(getUnits),
-  TempHasUnit(findUnit),
   -- * Chunk Type
   UnitDefn(..),
   -- * Constructors
@@ -71,10 +70,6 @@ instance IsUnit        UnitDefn where
 -- | Types may contain a unit ('UnitDefn').
 class MayHaveUnit u where
    getUnit :: u -> Maybe UnitDefn
-
--- | Temporary class to make sure chunks have a unit (in order to eventually get rid of 'MayHaveUnit').
-class TempHasUnit u where
-   findUnit :: u -> UnitDefn
 
 -- | Takes a contributing unit (['UID']) and a symbol ('USymb').
 data UnitEquation = UE {_contributingUnit :: [UID]

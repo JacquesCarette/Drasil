@@ -80,7 +80,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , cncpt, cncpt', cncpt'', cncpt''', dcc, dccAWDS, dccA, dccWDS, cc', cw, cic
+  , cncpt, cncpt', cncpt'', cncpt''', dcc, dccAWDS, dccA, dccWDS, cw, cic
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq

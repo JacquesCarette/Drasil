@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Classes
   NamedIdea(..), Idea(..),
   -- * Constructors
-  idea, idea', nw
+  idea, idea'
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens')
@@ -66,13 +66,3 @@ idea' ::
   -- | The 'term' being declared.
   NP -> IdeaDict
 idea' u t = IdeaDict u t Nothing
-
-{-# DEPRECATED nw
-  "Should not be down-casting chunks; use `idea` or `idea'` instead." #-}
-
--- | Historical name: nw comes from 'named wrapped' from when
--- 'NamedIdea' exported 'getA' (now in 'Idea'). But there are
--- no more wrappers, instead we have explicit dictionaries. Unwraps
--- an 'Idea' and places its 'UID' and 'NP' into an 'IdeaDict'
-nw :: Idea c => c -> IdeaDict
-nw c = IdeaDict (c ^. uid) (c ^. term) (getA c)

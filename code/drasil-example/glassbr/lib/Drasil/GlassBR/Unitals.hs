@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
-import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
@@ -19,12 +18,13 @@ import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
-  heatS, iGlass, lGlass, lResistance, lShareFac, nFL, responseTy,
-  stdOffDist, lDurFac)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
+import Data.Maybe (fromMaybe)
+import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
+  hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
+  blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo,
+  glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe,
+  probBreak, safeMessage, shortDurLoad, specA, specDeLoad, glassType)
 import Drasil.GlassBR.Units (sFlawPU)
---FIXME: Many of the current terms can be separated into terms and defns?
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
@@ -35,14 +35,10 @@ symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
- -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
-  -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
-
-{--}
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
@@ -109,7 +105,7 @@ tNT = uq (constrained' (dqdNoUnit (dcc "tNT" (nounPhraseSP "TNT equivalent facto
   (variable "TNT") Real)
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
-standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
+standOffDist = uq (constrained' (uc stdOffDist (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -119,7 +115,15 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
   [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
+  -- FIXME: This is a hack for two reasons:
+  -- 1. `fromMaybe`.
+  -- 2. It should have never been using the abbreviation because that's not a
+  --    known _value_. This type-checks at the Haskell level, but not the Drasil level.
+  -- 3. This value is kind of like having `pi` to 4 decimal places. We still call
+  --    it pi, but it corresponds to a specific value. Here is similar where we
+  --    want a Drasil-level constant variable to reference an output-level literal string.
+  -- 4. What we really want here are "enumeration types" (sum types) for `glassType`
+  [sfwrElem $ mkSet String $ map (str . fromMaybe (error "bad fromMaybe; glassTypeCon") . getA . snd) glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = NE.map dqdWr (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
@@ -149,8 +153,6 @@ pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failu
   [probConstr] (dbl 0.008)
 
   --FIXME: no typical value!
-
-{--}
 
 specParamVals :: [ConstQDef]
 specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
@@ -203,7 +205,6 @@ stressDistFacMax = mkQuantDef (dqdNoUnit (dcc "stressDistFacMax"
   (nounPhraseSP "maximum value for the stress distribution factor")
   "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
-{--}
 
 unitalSymbols :: [UnitalChunk]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
@@ -309,111 +310,6 @@ concepts = [glBreakage, lite, annealedGl, fTemperedGl, hStrengthGl, lateral,
   specDeLoad, longDurLoad, glassWL, shortDurLoad, specA, blastResisGla, blast,
   blastTy, glassGeo, safeMessage, notSafe, bomb, explosion]
 
-aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-  glTyFac, lateral, load, specDeLoad, loadDurFac, loadResis, longDurLoad, modE, nonFactoredL,
-  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
-  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
-  explosion :: ConceptChunk
-
-annealedGl    = cc' annealed
-  (S "a flat, monolithic, glass lite which has uniform thickness where" +:+
-  S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
-aspectRatioCon   = cc' aR
-  (S $ "the ratio of the long dimension of the glass to the short dimension of " ++
-    "the glass. For glass supported on four sides, the aspect ratio is " ++
-    "always equal to or greater than 1.0. For glass supported on three " ++
-    "sides, the ratio of the length of one of the supported edges " ++
-    "perpendicular to the free edge, to the length of the free edge, is " ++
-    "equal to or greater than 0.5")
-blast         = dcc "blast"       (cn' "blast")
-  "any kind of man-made explosion"
-blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
-  "glazing that provides protection against air blast pressure generated by explosions"
-blastTy       = dcc "blastTy"     (cn' "blast type")
-  ("the blast type input includes parameters like weight of charge, TNT " ++
-    "equivalent factor, and stand off distance from the point of explosion")
-bomb          = dcc "bomb"        (cn' "bomb") ("a container filled " ++
-  "with a destructive substance designed to exlode on impact or via detonation")
-capacity      = dcc "capacity"    (nounPhraseSP "capacity or load resistance")
-  "load resistance calculated"
-demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)")
-  "3 second duration equivalent pressure"
-eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
-  "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat"
-explosion     = dcc "explosion"   (cn' "explosion")
-  "a destructive shattering of something"
-fTemperedGl   = cc' fullyT
-  (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
-  S "been subjected to a special heat treatment process where the residual",
-  S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
-  S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
-glassGeo      = dccWDS "glassGeo"    (cnIES "glass geometry")
-  (S "the glass geometry based inputs include the dimensions of the" +:+
-    foldlList Comma List [phrase glaPlane, phrase glassTy, phrase responseTy])
-glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
-glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
-  "the dead load component of the glass weight"
-glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
-  "the fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass"
-glTyFac       = cc' glassTypeFac
-  (foldlSent_ [S "a multiplying factor for adjusting the", short lResistance,
-  S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
-  `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
-   S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
-hStrengthGl   = cc' heatS
-  (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
-  S "been subjected to a special heat treatment process where the residual",
-  S "surface compression is not less than 24 MPa (3500psi) or greater than",
-  S "52 MPa (7500 psi), as defined in", refS astm2012])
-lateral       = dcc "lateral"     (nounPhraseSP "lateral")
-  "perpendicular to the glass surface"
-lite          = dcc "lite"        (cn' "lite")
-  "pieces of glass that are cut, prepared, and used to create the window or door"
-load          = dcc "load"        (nounPhraseSP "applied load (demand) or pressure")
-  "a uniformly distributed lateral pressure"
-loadDurFac    = cc' lDurFac (S "factor related to the effect of sustained loading on glass strength")
-loadResis     = cc' lResistance
-  (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
-  S "based upon a given probability of breakage and load duration as defined in",
-  complexRef astm2009 $ Page [1, 53]])
-loadShareFac  = cc' lShareFac
-  (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
-  S "double glazing, of equal or different thicknesses and types (including the",
-  S "layered behaviour of", short lGlass, S "under long duration",
-  S "loads), in a sealed", short iGlass, S "unit"])
-longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
-  "any load lasting approximately 30 days"
-modE = dcc "modElas" (nounPhraseSP "modulus of elasticity of glass")
-  "the ratio of tensile stress to tensile strain of glass"
-nonFactoredL  = cc' nFL
-  (foldlSent_ [S "three second duration uniform load associated with a",
-  S "probability of breakage less than or equal to 8", plural lite,
-  S "per 1000 for monolithic", short annealed, S "glass"])
-notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
-  "For the given input parameters, the glass is NOT considered safe."
-probBreak     = dccWDS "probBr" (nounPhraseSP "probability of breakage")
-  (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
-  S "first occurrence of a specified load and duration, typically expressed",
-  S "in lites per 1000", sParen $ refS astm2016])
-safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
-  "For the given input parameters, the glass is considered safe."
-sD            = cc' stdOffDist
-  (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge")
-shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
-  "any load lasting 3 seconds or less"
-specA         = dcc "specA"       (nounPhraseSP "specifying authority")
-  ("the design professional responsible for interpreting applicable " ++
-    "regulations of authorities having jurisdiction and considering " ++
-    "appropriate site specific factors to determine the appropriate " ++
-    "values used to calculate the specified design load, and furnishing" ++
-    " other information required to perform this practice")
-specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
-  ("the magnitude in Pa (psf), type (for example, wind or snow) and " ++
-    "duration of the load given by the specifying authority")
-
-{--}
-
 --Constants--
 
 constants :: [ConstQDef]
@@ -438,7 +334,7 @@ termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatioCon]
+termsWithAccDefn  = [stdOffDist, loadShareFac, glTyFac, aspectRatioCon]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--
@@ -451,14 +347,7 @@ nominalThicknesses = map fst glassThickness
 glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
-glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map (short . snd) glassType
-
-type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
-
-glassType :: GlassType
-glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 
 glassThickness :: GlassThickness
 glassThickness =

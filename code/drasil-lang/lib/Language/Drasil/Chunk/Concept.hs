@@ -106,9 +106,10 @@ dccWDS i t d = dccAWDS i t d Nothing
 
 -- | For projecting out to the 'ConceptChunk' data-type.
 cw :: Concept c => c -> ConceptChunk
-cw c = ConDict (go $ getA c) (c ^. D.defn) (cdom c)
-  where go (Just accAbbr) = idea  (c ^. uid) (c ^. term) accAbbr
-        go Nothing        = idea' (c ^. uid) (c ^. term)
+cw c = ConDict ideaDict (c ^. D.defn) (cdom c)
+  where
+    ideaDict =
+      maybe (idea' (c ^. uid) (c ^. term)) (idea (c ^. uid) (c ^. term)) $ getA c
 
 -- | Constructor for a 'ConceptInstance'. Takes in the Reference Address
 -- ('String'), a definition ('Sentence'), a short name ('String'), and a domain

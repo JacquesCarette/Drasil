@@ -24,8 +24,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
   ConceptDomain(cdom), Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
-import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (idea')
+import Language.Drasil.Chunk.Concept (cncpt''')
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
@@ -91,29 +90,29 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
 -- 'Space', unit, and defining expression.
 fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
 fromEqn nm desc def symb sp un =
-  QD (dqd (cc' (idea' (mkUid nm) desc) def) symb sp un) []
+  QD (dqd (cncpt''' (mkUid nm) desc def) symb sp un) []
 
 -- | Same as 'fromEqn', but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 fromEqn' nm desc def symb sp =
-  QD (dqd' (cc' (idea' (mkUid nm) desc) def) (const symb) sp Nothing) []
+  QD (dqd' (cncpt''' (mkUid nm) desc def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (dqd' (cc' (idea' nm desc) def) symb sp (Just $ unitWrapper un)) []
+  QD (dqd' (cncpt''' nm desc def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 fromEqnSt' nm desc def symb sp =
-  QD (dqd' (cc' (idea' nm desc) def) symb sp Nothing) []
+  QD (dqd' (cncpt''' nm desc def) symb sp Nothing) []
 
 -- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
   QDefinition e
 fromEqnSt'' nm desc def symb sp =
-  QD (dqd' (cc' (idea' (mkUid nm) desc) def) symb sp Nothing) []
+  QD (dqd' (cncpt''' (mkUid nm) desc def) symb sp Nothing) []
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space ->
@@ -134,16 +133,19 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining
 -- equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-ec c = QD (dqd' (cc' c EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
+ec c = QD
+  (dqd' (cncpt''' (c ^. uid) (c ^. term) EmptyS) (symbol c) (c ^. typ) (getUnit c))
+  []
+
+{-# DEPRECATED ec "`ec` is an unsafe chunk constructor that encourages `UID` double-use." #-}
 
 -- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
                IsChunk i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
-  (dqd' (cc' (idea' (f ^. uid) n) s) (symbol f)
-    (f ^. typ) u) (map (^. uid) is)
-    -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
+  (dqd' (cncpt''' (f ^. uid) n s) (symbol f) (f ^. typ) u)
+  (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- resultant units, and a defining Expr

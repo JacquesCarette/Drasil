@@ -2,7 +2,7 @@
 -- | Defines chunks to add units to a quantity. Similar to 'UnitaryChunk'.
 module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
-  UnitalChunk(..),
+  UnitalChunk,
   -- * Constructors
   uc, uc', ucStaged, ucStaged') where
 

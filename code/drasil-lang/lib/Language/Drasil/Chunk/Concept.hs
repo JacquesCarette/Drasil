@@ -81,18 +81,16 @@ cncpt''' u trm defn = ConDict (idea' u trm) defn []
 -- a UID (String), a term (NounPhrase), a definition (String), and an
 -- abbreviation (Maybe String).
 dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
-dccA i ter def a = ConDict (go a) (S def) []
+dccA i ter def a = ConDict ideaDict (S def) []
   where
     u = mkUid i
-    go (Just accAbbr) = idea u ter accAbbr
-    go Nothing        = idea' u ter
+    ideaDict = maybe (idea' u ter) (idea u ter) a
 
 dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
-dccAWDS i ter def a = ConDict (go a) def []
+dccAWDS i ter def a = ConDict ideaDict def []
   where
     u = mkUid i
-    go (Just accAbbr) = idea u ter accAbbr
-    go Nothing        = idea' u ter
+    ideaDict = maybe (idea' u ter) (idea u ter) a
 
 -- | Smart constructor for creating concept chunks given a 'UID', 'NounPhrase'
 -- ('NP') and definition (as a 'String').

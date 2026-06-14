@@ -4,8 +4,9 @@ module Data.Drasil.Concepts.Computation
   , module Drasil.Metadata.Concepts.Computation
   ) where
 
-import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
-  ConceptChunk, CI, IdeaDict, dccWDS)
+import Drasil.Database (mkUid)
+import Language.Drasil (dcc, cn', commonIdeaWithDict, Sentence,
+  ConceptChunk, CI, IdeaDict, dccWDS, idea')
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
@@ -31,9 +32,9 @@ os :: CI
 ------------------------------------------------------------------------------------
 --  NC      |     |      id       |       term             |  abbreviation | domain
 -------------------------------------------------------------------------------------s
-application = nc   "application"      (cn' "application")
-computer    = nc   "computer"         (cn' "computer")
-structure   = nc   "structure"        (cn' "structure")
+application = idea' (mkUid "application")      (cn' "application")
+computer    = idea' (mkUid "computer")         (cn' "computer")
+structure   = idea' (mkUid "structure")        (cn' "structure")
 os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
 
 dataStruct, dataType, inDatum, outDatum, inParam, inVar, inValue, inQty,

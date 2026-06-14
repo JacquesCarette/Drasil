@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Classes
   NamedIdea(..), Idea(..),
   -- * Constructors
-  idea, idea', nc, nw, mkIdea,
+  idea, idea', nw, mkIdea,
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens')
@@ -67,15 +67,11 @@ idea' ::
   NP -> IdeaDict
 idea' u t = IdeaDict u t Nothing
 
-{-# DEPRECATED nc, mkIdea
+{-# DEPRECATED mkIdea
   "Use `idea` or `idea'` instead." #-}
 
 {-# DEPRECATED nw
   "Should not be down-casting chunks; use `idea` or `idea'` instead." #-}
-
--- | 'IdeaDict' constructor, takes a 'String' for its 'UID' and a term.
-nc :: String -> NP -> IdeaDict
-nc s np' = IdeaDict (mkUid s) np' Nothing
 
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and
 -- an abbreviation in the form of 'Maybe' 'String'.

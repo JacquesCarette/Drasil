@@ -40,7 +40,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database ((+++!))
 
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, ncUID)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (Idea, NamedIdea(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, CapitalizationRule(CapWords, Replace,
   CapFirst), NounPhrase(phraseNP, pluralNP), nounPhrase'', compoundPhrase,
@@ -238,18 +238,18 @@ a_Gen f t = nounPhrase'' (S "a" :+: f t) (S "a" :+: f t) CapFirst CapWords
 -- See 'compoundPhrase' for more on pluralNP behaviour.
 -- /Does not preserve abbreviations/.
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
-compoundNC t1 t2 = ncUID
+compoundNC t1 t2 = idea'
   (t1 +++! t2) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC' but both terms are pluralized for pluralNP case.
 compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
-compoundNCPP t1 t2 = ncUID
+compoundNCPP t1 t2 = idea'
   (t1 +++! t2) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except pluralNP cases are customizable.
 compoundNCGen :: (NamedIdea a, NamedIdea b) =>
   (NP -> NPStruct) -> (NP -> NPStruct) -> a -> b -> IdeaDict
-compoundNCGen f1 f2 t1 t2 = ncUID
+compoundNCGen f1 f2 t1 t2 = idea'
   (t1 +++! t2)
   (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
@@ -261,7 +261,7 @@ compoundNCPS = compoundNCGen D.pluralNP D.phraseNP
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
 -- | Similar to 'compoundNC', but takes a function that is applied to the first term (eg. 'short' or 'plural').
 compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> NPStruct) -> a -> b -> IdeaDict
-compoundNCGenP f1 t1 t2 = ncUID
+compoundNCGenP f1 t1 t2 = idea'
   (t1 +++! t2) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 -- FIXME: Same as above function

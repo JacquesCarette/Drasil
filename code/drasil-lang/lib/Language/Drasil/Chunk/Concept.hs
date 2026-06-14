@@ -16,7 +16,7 @@ import Drasil.Database (HasUID(uid), nsUid, UID, mkUid)
 import Language.Drasil.Classes (Idea, ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea, nw, idea, idea')
+import Language.Drasil.Chunk.NamedIdea(nw, idea, idea')
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 import qualified Language.Drasil.Classes as D (defn)
@@ -81,10 +81,18 @@ cncpt''' u trm defn = ConDict (idea' u trm) defn []
 -- a UID (String), a term (NounPhrase), a definition (String), and an
 -- abbreviation (Maybe String).
 dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
-dccA i ter des a = ConDict (mkIdea i ter a) (S des) []
+dccA i ter def a = ConDict (go a) (S def) []
+  where
+    u = mkUid i
+    go (Just accAbbr) = idea u ter accAbbr
+    go Nothing        = idea' u ter
 
 dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
-dccAWDS i t d a = ConDict (mkIdea i t a) d []
+dccAWDS i ter def a = ConDict (go a) def []
+  where
+    u = mkUid i
+    go (Just accAbbr) = idea u ter accAbbr
+    go Nothing        = idea' u ter
 
 -- | Smart constructor for creating concept chunks given a 'UID', 'NounPhrase'
 -- ('NP') and definition (as a 'String').

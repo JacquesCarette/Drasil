@@ -8,14 +8,14 @@ import Control.Lens ((^.))
 import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import Drasil.FileHandling (FileLayout, directory, ps, goldenTestingGroup,
-  goldenTest, ps, (</>))
+import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
 import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   GOOLState)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
 import Drasil.GProc (ProcProg, unJLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
+import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,

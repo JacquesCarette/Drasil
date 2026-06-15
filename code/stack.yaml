@@ -17,6 +17,7 @@ packages:
 - drasil-example/hghc
 - drasil-example/pdcontroller
 - drasil-example/projectile
+- drasil-example/projectile-lesson
 - drasil-example/sglpend
 - drasil-example/ssp
 - drasil-example/swhs

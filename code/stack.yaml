@@ -113,3 +113,5 @@ require-stack-version: ">=2.3.1"
 # compiler-check: newer-minor
 
 dump-logs: all
+
+notify-if-no-run-tests: false

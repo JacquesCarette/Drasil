@@ -6,13 +6,13 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Classes
   NamedIdea(..), Idea(..),
   -- * Constructors
-  idea, idea', nw, mkIdea,
+  idea, idea', nw
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (mkUid, UID, HasUID(..), declareHasChunkRefs,
-  Generically(..), IsChunk)
+import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..),
+  IsChunk)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as being worthy
@@ -67,16 +67,8 @@ idea' ::
   NP -> IdeaDict
 idea' u t = IdeaDict u t Nothing
 
-{-# DEPRECATED mkIdea
-  "Use `idea` or `idea'` instead." #-}
-
 {-# DEPRECATED nw
   "Should not be down-casting chunks; use `idea` or `idea'` instead." #-}
-
--- | 'IdeaDict' constructor, takes a 'UID', 'NP', and
--- an abbreviation in the form of 'Maybe' 'String'.
-mkIdea :: String -> NP -> Maybe String -> IdeaDict
-mkIdea s = IdeaDict (mkUid s)
 
 -- | Historical name: nw comes from 'named wrapped' from when
 -- 'NamedIdea' exported 'getA' (now in 'Idea'). But there are

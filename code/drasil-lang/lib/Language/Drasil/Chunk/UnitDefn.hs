@@ -24,7 +24,7 @@ import Control.Arrow (second)
 
 import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
+import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cncpt''')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
@@ -120,7 +120,10 @@ unitCon s = dcc s (cn' s) s
 -- | For allowing lists to mix together chunks that are units by projecting them into a 'UnitDefn'.
 -- For now, this only works on 'UnitDefn's.
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cc' u (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
+unitWrapper u = UD (cncpt''' (u ^. uid) (u ^. term) (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
+
+{-# DEPRECATED unitWrapper
+  "`unitWrapper` is an unsafe chunk constructor that encourages `UID` double-use." #-}
 
 -- | Helper to get derived units if they exist.
 getSecondSymb :: UnitDefn -> Maybe USymb

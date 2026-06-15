@@ -72,8 +72,7 @@ module Language.Drasil (
 
   -- *** Basic types
   -- Language.Drasil.Chunk.NamedIdea
-  , IdeaDict, idea, idea', mkIdea
-  , nw -- bad name (historical)
+  , IdeaDict, idea, idea'
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdeaWithDict, prependAbrv
 

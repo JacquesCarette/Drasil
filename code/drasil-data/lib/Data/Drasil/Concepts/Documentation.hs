@@ -130,7 +130,7 @@ video           = idea' (mkUid "video")          (cn'    "video"              )
 year            = idea' (mkUid "year")           (cn'    "year"               )
 scpOfTheProjS   = idea' (mkUid "scpOfTheProj")   (cn'    "scope of the project") -- temporary generated for test
 
-notApp          = mkIdea "notApp" (nounPhraseSP "not applicable")   (Just "N/A")
+notApp          = idea (mkUid "notApp") (nounPhraseSP "not applicable")   "N/A"
 
 methAndAnls, procForAnls :: IdeaDict
 

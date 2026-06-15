@@ -7,6 +7,7 @@ module Drasil.Projectile.Unitals (
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT, vEpsilon)
@@ -52,4 +53,4 @@ targPos   = constrained'    (uc       C.targPos   (subStr lP "target") Real metr
 
 ---
 tol :: ConstQDef
-tol = mkQuantDef (dqdNoUnit' (dcc "tol" (nounPhraseSP "hit tolerance") "the hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)
+tol = mkQuantDef (dqdNoUnit' (cncpt''' (mkUid "tol") (nounPhraseSP "hit tolerance") (S "the hit tolerance")) (autoStage vEpsilon) Real) (perc 2 2)

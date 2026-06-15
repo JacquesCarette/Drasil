@@ -6,12 +6,12 @@ module Drasil.GlassBR.Concepts (
 ) where
 
 import Drasil.Database (mkUid)
-import Language.Drasil (commonIdeaWithDict, mkIdea, cn', nounPhraseSP, CI, IdeaDict, idea')
+import Language.Drasil (commonIdeaWithDict, cn', nounPhraseSP, CI, IdeaDict, idea')
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Documentation (response, type_)
 
 idglass :: IdeaDict
-idglass = mkIdea "glass" (cn' "Glass") Nothing
+idglass = idea' (mkUid "glass") (cn' "Glass")
 
 con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,

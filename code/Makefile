@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = assets code data data-formats database file-handling gen gool lang lesson-plan makefile metadata meta-analysis printers srs system theory utils website
+PACKAGES = assets code data data-formats database file-handling gen gool lang lesson-plan makefile metadata meta-analysis printers srs system testing-kit theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -168,6 +168,7 @@ GHCTHREADS ?= 2
 
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
+override stackBuildArgs += $(stackArgs) --test --no-run-tests
 
 # When running 'stack exec', the following stack arguments should be passed.
 STACK_EXEC_ARGS = --no-nix-pure
@@ -239,7 +240,7 @@ deps: check_stack ##@Dependencies Build only dependencies.
 
 # Build all the Drasil packages.
 code: ##@Examples Build all Drasil packages.
-	stack build $(stackArgs)
+	stack build $(stackBuildArgs)
 
 # First build all the Drasil packages, then run all examples (no traceability graphs).
 examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
@@ -294,7 +295,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
+	@stack dot --prune bss,dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then build the generated mdBook projects.
@@ -315,14 +316,14 @@ jupyter_html: $(JUPYTER_HTML_EXAMPLES) ##@Examples Extract HTML copies from all 
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
-	stack build $(stackArgs) "drasil-$*"
+	stack build $(stackBuildArgs) "drasil-$*"
 
 # First build all Drasil packages, then run individual examples.
 # No traceability graphs will be created, only the dot files.
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
-	stack build $(stackArgs) "$(EEXE)"
+	stack build $(stackBuildArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)"
 	cd "$(BUILD_FOLDER)" && $(STACK_EXEC) -- "$(EEXE)"
 
@@ -331,7 +332,7 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 # Then we run the codeGenTest, ignoring the exit code and not printing any output,
 # which will write the generated code to the build folder.
 $(GOOLTEST)$(GEN_E_SUFFIX):
-	stack build $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --no-run-tests
+	stack build $(stackBuildArgs) drasil-code
 	-stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--quiet"
 
 $(GOOLTEST)$(TEST_E_SUFFIX):
@@ -496,7 +497,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 
 # For more information, see the *.hs files in the drasil-website folder.
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
-	stack build $(stackArgs) "drasil-website"
+	stack build $(stackBuildArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \

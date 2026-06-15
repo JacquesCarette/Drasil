@@ -91,7 +91,7 @@ module Language.Drasil (
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
-  , UnitalChunk(..), uc, uc', ucStaged, ucStaged'
+  , UnitalChunk, uc, uc', ucStaged, ucStaged'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
@@ -265,7 +265,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged')
+import Language.Drasil.Chunk.Unital(UnitalChunk, uc, uc', ucStaged, ucStaged')
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor

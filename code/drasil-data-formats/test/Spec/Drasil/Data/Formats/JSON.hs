@@ -5,7 +5,8 @@ module Spec.Drasil.Data.Formats.JSON (jsonTests) where
 import Drasil.Data.Formats.JSON (JSON(..), jsonRenderOpts, renderJSON,
   JSONRenderOptions, JSONStyle(..))
 
-import Drasil.FileHandling (file, ps, goldenTestingGroup, goldenTest)
+import Drasil.FileHandling (file, ps)
+import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Data.Scientific (scientific)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)

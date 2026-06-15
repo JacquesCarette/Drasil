@@ -24,7 +24,7 @@ si = mkSmithEtAlICO
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
     RefSec $
-    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
+    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit nuclearPhys, Manual fp]]],
     IntroSec $
     IntroProg introPara (phrase progName) [],
     SSDSec $ SSDProg [
@@ -49,11 +49,10 @@ purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [fp, nuclearPhys] ++
-  -- CIs
-  [nw progName]
+ideaDicts = [fp, nuclearPhys]
+
+cis :: [CI]
+cis = [progName]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts [] [] dataDefs [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts cis [] [] dataDefs [] [] [] [] [] []

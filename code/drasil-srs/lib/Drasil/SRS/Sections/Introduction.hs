@@ -186,7 +186,9 @@ orgIntro :: NamedIdea c => c -> Section -> Maybe Sentence -> [Contents]
 orgIntro bottom bottomSec trailingSentence =
   [ foldlSP [
       orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
-      foldlList Comma List (map plural [nw goal, nw theory, nw definition, nw assumption]),
+      -- FIXME: This should be referencing specific sections, if they even
+      -- exist.
+      foldlList Comma List (map plural [goal, theory, definition] ++ [plural assumption]),
       S "For readers that would like a more bottom up approach" `sC`
       S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
       S "trace back to find any additional information they require"

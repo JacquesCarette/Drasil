@@ -26,7 +26,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss
 GOOLTEST = codegenTest
 
 # where they live
@@ -38,10 +38,10 @@ SSP_DIR   = ssp
 GAMEPHYSICS_DIR  = gamephysics
 PROJECTILE_DIR = projectile
 TEMPLATE_DIR = template
-GOOLTEST_DIR = gooltest
 DBLPEND_DIR = dblpend
 SGLPEND_DIR = sglpend
 PDCONTROLLER_DIR = pdcontroller
+BSS_DIR = bss
 
 # Directories for examples with multiple src versions
 MULTI_SRC_DIRS = $(PROJECTILE_DIR)
@@ -49,7 +49,7 @@ MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 # All example directories
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(SWHSNOPCM_DIR) \
   $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPEND_DIR)\
-  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR)
+  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR) $(BSS_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -64,6 +64,7 @@ GOOLTEST_EXE = codegenTest
 DBLPEND_EXE = dblpend
 SGLPEND_EXE = sglpend
 PDCONTROLLER_EXE = pdcontroller
+BSS_EXE = bss
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -293,7 +294,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
+	@stack dot --prune bss,dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then build the generated mdBook projects.
@@ -326,16 +327,15 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	cd "$(BUILD_FOLDER)" && $(STACK_EXEC) -- "$(EEXE)"
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
+# We first build the codegenTest to catch any build errors
+# Then we run the codeGenTest, ignoring the exit code and not printing any output,
+# which will write the generated code to the build folder.
 $(GOOLTEST)$(GEN_E_SUFFIX):
-	rm -rf "./$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
-	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	stack build $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --no-run-tests
+	-stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--quiet"
 
-$(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
-	@mkdir -p "$(LOG_FOLDER)"
-	$(call DO_DIFF,$(STABLE_FOLDER)$(GOOLTEST_DIR)/,$(BUILD_FOLDER)$(GOOLTEST_DIR)/,$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX))
-	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
+$(GOOLTEST)$(TEST_E_SUFFIX):
+	stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -374,10 +374,9 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 	@mkdir -p "$(STABLE_FOLDER)"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
 
-$(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
-	rm -rf "./$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
-	@mkdir -p "$(STABLE_FOLDER)"
-	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
+$(GOOLTEST)$(STABILIZE_E_SUFFIX):
+	stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--accept"
+
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
 # then make pdfs from the generated TeX files.
@@ -471,8 +470,8 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)code_build.sh"
 
 # GOOL testing for examples that generate code.
-$(GOOLTEST): $(GOOLTEST)$(TEST_E_SUFFIX)
-	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
+$(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
+	@CODE_DIR="drasil-code/test/build/" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
 gool: $(CODE_EXAMPLES) ##@GOOL Generate code from examples and test each one.

@@ -127,19 +127,18 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  defs ++
-  -- CIs
-  [nw progName]
+  defs
+
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   defs' ++ softwarecon ++ solidcon ++ physicalcon ++
   [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [degree]
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [degree]
   dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.

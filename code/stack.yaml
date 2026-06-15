@@ -10,6 +10,7 @@ packages:
 - drasil-data-formats
 - drasil-database
 - drasil-srs
+- drasil-example/bss
 - drasil-example/dblpend
 - drasil-example/gamephysics
 - drasil-example/glassbr

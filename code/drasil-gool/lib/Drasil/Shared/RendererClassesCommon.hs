@@ -1,30 +1,27 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module Drasil.Shared.RendererClassesCommon (
-  CommonRenderSym, ImportSym(..), ImportElim(..),
-  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
-  InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
-  OpElim(..), RenderVariable(..), InternalVarElim(..), InternalBinderElim(..),
-  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
-  RenderVisibility(..), VisibilityElim(..), MSMthdType, MethodTypeSym(..),
-  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
-  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
+  CommonRenderSym, ImportSym(..), ImportElim(..), RenderBody(..), BodyElim(..),
+  RenderBlock(..), BlockElim(..), RenderType(..), VSUnOp, UnaryOpSym(..),
+  VSBinOp, BinaryOpSym(..), OpElim(..), RenderVariable(..), InternalVarElim(..),
+  InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MSMthdType,
+  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..),
+  MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  IndexTranslator(..), List(..), InternalList(..), VectorExpression(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), BinderElim(..))
-import Drasil.Shared.CodeType (CodeType)
+  BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
+  InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
@@ -36,16 +33,15 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,
-  List r, InternalList r, VectorExpression r, TypeElim r, VariableElim r,
-  BinderElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
-  InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
-  ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r,
-  InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r,
-  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r,
-  RenderVariable r, InternalVarElim r, InternalBinderElim r, ImportSym r,
-  ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r, RenderMethod r, MethodElim r,
-  ParameterSym r, ScopeElim r
+  List r, InternalList r, VectorExpression r, VariableElim r, BinderElim r,
+  RenderBlock r, BlockElim r, RenderBody r, BodyElim r, InternalListFunc r,
+  RenderFunction r, FunctionElim r, OpElim r, RenderParam r, ParamElim r,
+  RenderVisibility r, VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
+  InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
+  RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r,
+  InternalBinderElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
+  MethodElim r, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
@@ -76,10 +72,6 @@ class BlockElim r where
 
 class RenderType r where
   multiType :: [VSType r] -> VSType r
-  typeFromData :: CodeType -> String -> Doc -> VSType r
-
-class InternalTypeElim r where
-  type' :: r TypeData -> Doc
 
 type VSUnOp a = VS (a OpData)
 
@@ -161,12 +153,6 @@ class ValueElim r where
   value :: r (Value r) -> Doc
 
 class InternalListFunc r where
-  -- | List
-  listSizeFunc   :: SValue r -> VSFunction r
-  -- | List, Index, Value
-  listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-  -- | List, Value
-  listAppendFunc :: SValue r -> SValue r -> VSFunction r
   -- | List, Index
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   -- | List, Index, Value

@@ -5,13 +5,13 @@ module Drasil.GlassBR.Concepts (
   ptOfExplsn, con', iGlass, lGlass, annealed, fullyT, heatS
 ) where
 
-import Language.Drasil (commonIdeaWithDict, mkIdea, nc, cn', nounPhraseSP, CI, IdeaDict)
+import Drasil.Database (mkUid)
+import Language.Drasil (commonIdeaWithDict, mkIdea, cn', nounPhraseSP, CI, IdeaDict, idea')
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Documentation (response, type_)
 
-{--}
 idglass :: IdeaDict
-idglass = mkIdea  "glass"          (cn' "Glass")                 Nothing
+idglass = mkIdea "glass" (cn' "Glass") Nothing
 
 con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
@@ -40,15 +40,15 @@ nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored l
 
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy :: IdeaDict
-beam         = nc "beam"       (cn' "beam")
-blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
-cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
-edge         = nc "edge"       (cn'          "edge")
-glass        = nc "glass"      (nounPhraseSP "glass")
-glaSlab      = nc "glaSlab"    (cn' "glass slab")
-plane        = nc "plane"      (cn' "plane")
+beam         = idea' (mkUid "beam")       (cn' "beam")
+blastRisk    = idea' (mkUid "blastRisk")  (nounPhraseSP "blast risk")
+cantilever   = idea' (mkUid "cantilever") (nounPhraseSP "cantilever")
+edge         = idea' (mkUid "edge")       (cn'          "edge")
+glass        = idea' (mkUid "glass")      (nounPhraseSP "glass")
+glaSlab      = idea' (mkUid "glaSlab")    (cn' "glass slab")
+plane        = idea' (mkUid "plane")      (cn' "plane")
 
-ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")
+ptOfExplsn   = idea' (mkUid "ptOfExplsn") (cn' "point of explosion")
 
 glaPlane     = compoundNC glass plane
 responseTy   = compoundNC response type_

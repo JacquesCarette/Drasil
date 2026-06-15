@@ -23,7 +23,7 @@ import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.SoftwareDossier.FileNames (sampleInputName)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 
 import Control.Lens (makeLenses)
 

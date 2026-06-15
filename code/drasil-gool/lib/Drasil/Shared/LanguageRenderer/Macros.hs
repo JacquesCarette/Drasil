@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Language-polymorphic functions that are defined by GOOL code
 module Drasil.Shared.LanguageRenderer.Macros (
@@ -8,9 +9,9 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(..), listOf, ValueSym(valueType),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, MSBody, MSBlock,
+  VSFunction, VSType, SVariable, SValue, MSStatement, bodyStatements, oneLiner,
+  VariableElim(..), getCodeType, listOf, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
@@ -32,7 +33,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
-import Drasil.Shared.AST (ScopeData)
+import Drasil.Shared.AST (ScopeData, TypeData)
 
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
@@ -138,9 +139,10 @@ makeSetterVal vName step _       _       lb rb  scp =
       theSetter = IC.varDecDef theVar scp $ IC.inlineIf (step ?> IC.litInt 0) lb rb
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
-stringListVals :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListVals :: (CommonRenderSym r, UnRepr r TypeData) => [SVariable r] ->
+  SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
-  (getType $ valueType slst))
+  (getCodeType $ valueType slst))
   where checkList (List String) = assignVals vars 0
         checkList _ = error
           "Value passed to stringListVals must be a list of strings"
@@ -148,13 +150,14 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
         assignVals (v:vs) n = IC.assign v (cast (onStateValue variableType v)
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
-stringListLists :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListLists :: (CommonRenderSym r, UnRepr r TypeData) => [SVariable r] ->
+  SValue r -> MSStatement r
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
   let
     checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals .
-      map (getType . variableType)
+      map (getCodeType . variableType)
     checkList _ = error
       "Value passed to stringListLists must be a list of strings"
     listVals [] = loop
@@ -171,7 +174,7 @@ stringListLists lsts sl = do
     numLists = IC.litInt (toInteger $ length lsts)
     var_i = IC.var l_i IC.int
     v_i = IC.valueOf var_i
-  checkList (getType $ valueType slst)
+  checkList (getCodeType $ valueType slst)
 
 forRange :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r ->
   MSBody r -> MSStatement r

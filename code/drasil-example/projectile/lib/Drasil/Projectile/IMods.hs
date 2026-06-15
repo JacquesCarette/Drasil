@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN,
   Derivation, mkDerivName)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, gravAccelValue,
   launchOrigin, posXDirection, targetXAxis, timeStartZero, yAxisGravity)

@@ -15,12 +15,8 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- Decimal
 - lens
 - containers
-- pretty
-- transformers
-- multiplate
 - drasil-database
 - drasil-lang
 - drasil-metadata

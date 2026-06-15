@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (
   -- * Classes
   NamedIdea(..), Idea(..),
   -- * Constructors
-  nc, ncUID, nw, mkIdea,
+  idea, idea', nw, mkIdea,
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens')
@@ -18,29 +18,14 @@ import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as being worthy
 -- of naming.
 class IsChunk c => NamedIdea c where
-  -- | Lens to the term (a noun phrase).
+  -- | Lens to the term (an 'NP').
   term :: Lens' c NP
 
--- | An 'Idea' is the combination of a 'NamedIdea' and a 'CommonIdea'.
--- In other words, it /may/ have an acronym/abbreviation.
+-- | An 'Idea' is the combination of a 'NamedIdea' and a 'CommonIdea'. In other
+-- words, it /may/ have an acronym/abbreviation.
 class NamedIdea c => Idea c where
-  -- | Gets the acronym/abbreviation.
+  -- | Get the acronym/abbreviation.
   getA :: c -> Maybe String
-  --Get Abbreviation/Acronym? These might need to be separated
-  --depending on contexts, but for now I don't see a problem with it.
-
--- === DATA TYPES/INSTANCES === --
--- TODO: Add in function to check UIDs (see #2788).
--- TODO: Any constructor that takes in a UID should be built off of this one so that
--- the UID may be checked by the first TODO.
-
--- | 'IdeaDict' constructor, takes a 'String' for its 'UID' and a term.
-nc :: String -> NP -> IdeaDict
-nc s np' = IdeaDict (mkUid s) np' Nothing
-
--- | Similar to 'nc', but takes in the 'UID' in the form of a 'UID' rather than a 'String'.
-ncUID :: UID -> NP -> IdeaDict
-ncUID u np' = IdeaDict u np' Nothing
 
 -- Don't export the record accessors.
 -- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
@@ -63,6 +48,30 @@ instance HasUID    IdeaDict where uid = uu
 instance NamedIdea IdeaDict where term = np
 -- | Finds the abbreviation of the 'IdeaDict'.
 instance Idea      IdeaDict where getA = mabbr
+
+-- | Construct an 'IdeaDict' (/with/ an acronym/abbreviation).
+idea ::
+  -- | The 'UID'.
+  UID ->
+  -- | The 'term' being declared.
+  NP ->
+  -- | The 'term's acronym/abbreviation.
+  String -> IdeaDict
+idea u t accAbbr = IdeaDict u t (Just accAbbr)
+
+-- | Construct an 'IdeaDict' (/without/ an acronym/abbreviation).
+idea' ::
+  -- | The 'UID'.
+  UID ->
+  -- | The 'term' being declared.
+  NP -> IdeaDict
+idea' u t = IdeaDict u t Nothing
+
+{-# DEPRECATED mkIdea
+  "Use `idea` or `idea'` instead." #-}
+
+{-# DEPRECATED nw
+  "Should not be down-casting chunks; use `idea` or `idea'` instead." #-}
 
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and
 -- an abbreviation in the form of 'Maybe' 'String'.

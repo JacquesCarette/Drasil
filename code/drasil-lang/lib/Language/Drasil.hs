@@ -56,6 +56,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , Quantity
   , HasReasVal(reasVal)
+  , MayHaveRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
   , IsUnit(getUnits)
@@ -71,7 +72,7 @@ module Language.Drasil (
 
   -- *** Basic types
   -- Language.Drasil.Chunk.NamedIdea
-  , nc, ncUID, IdeaDict , mkIdea
+  , IdeaDict, idea, idea', mkIdea
   , nw -- bad name (historical)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdeaWithDict, prependAbrv
@@ -80,7 +81,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dccAWDS, dccA, dccWDS, cc', ccs, cw, cic
+  , cncpt, cncpt', cncpt'', cncpt''', dcc, dccAWDS, dccA, dccWDS, cc', cw, cic
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
@@ -88,10 +89,10 @@ module Language.Drasil (
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdQd, dqdWr
+  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
-  , UnitalChunk(..), uc, uc', ucStaged, ucStaged'
+  , UnitalChunk, uc, uc', ucStaged, ucStaged'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
@@ -107,10 +108,10 @@ module Language.Drasil (
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
   , ConstrConcept(..)
-  , constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
+  , constrained', constrainedWithRationale, cuc', cuc'', cucNoUnit', constrainedNRV'
   , cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertQ, uq, uqc, uqcND
+  , UncertQ, uq, uqc, uqcND, uqDirect
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
@@ -243,7 +244,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity)
+  HasReasVal(reasVal), MayHaveRationale(rationale), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef
@@ -265,7 +266,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged')
+import Language.Drasil.Chunk.Unital(UnitalChunk, uc, uc', ucStaged, ucStaged')
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor

@@ -1,43 +1,47 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
-  increment1, decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew,
-  switch, for, while, intFunc, multiAssignError, multiReturnError, multiTypeError
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
+  increment, increment1, decrement1, varDec, varDecDef, setDecDef, listDec,
+  extObjDecNew, switch, for, while, intFunc, multiAssignError, multiReturnError,
+  multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
-  TypeElim(getType, getTypeString), VariableElim(..), ValueSym(Value, valueType),
-  VisibilitySym(..))
-import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
+  VariableSym(..), VariableValue(..), VariableElim(..),
+  ValueSym(Value, valueType), VisibilitySym(..), getCodeType, getTypeString)
+import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
-import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj, ($.))
+import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
+  objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
-  ValueElim(valuePrec), ScopeElim(scopeData))
+  InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
+  ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S (
-  InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
+  RenderStatement(stmt, loopStmt))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(variable), ValueElim(value),
-  StatementElim(statement))
+  InternalVarElim(variable), ValueElim(value), StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData)
+import Drasil.GOOL.Renderers (renderType)
+import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
+  TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
   increment, decrement, this', this)
-import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
+  mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName, setVarScope)
 
@@ -57,28 +61,30 @@ doubleRender = "double"
 charRender = "char"
 voidRender = "void"
 
-float :: (CommonRenderSym r) => VSType r
+float :: (Monad r) => VSType r
 float = typeFromData Float floatRender (text floatRender)
 
-double :: (CommonRenderSym r) => VSType r
+double :: (Monad r) => VSType r
 double = typeFromData Double doubleRender (text doubleRender)
 
-char :: (CommonRenderSym r) => VSType r
+char :: (Monad r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
-listType :: (CommonRenderSym r) => String -> VSType r -> VSType r
+listType :: (Monad r, UnRepr r TypeData) => String ->
+  VSType r -> VSType r
 listType lst t' = do
   t <- t'
-  typeFromData (List (getType t)) (lst
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
+  typeFromData (List (getCodeType t)) (lst
+    `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (OORenderSym r) => String -> VSType r -> VSType r
+setType :: (Monad r, UnRepr r TypeData) => String -> VSType r ->
+  VSType r
 setType lst t' = do
   t <- t'
-  typeFromData (Set (getType t)) (lst
-    `containing` getTypeString t) $ text lst <> angles (RC.type' t)
+  typeFromData (Set (getCodeType t)) (lst
+    `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-void :: (CommonRenderSym r) => VSType r
+void :: (Monad r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
 
 -- Unary Operators --
@@ -130,8 +136,11 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 
 -- Functions --
 
-listSize :: (OORenderSym r) => SValue r -> SValue r
-listSize v = v $. S.listSizeFunc v
+listSize :: (OORenderSym r) => String -> SValue r -> SValue r
+listSize fnName list = objMethodCallNoParams IC.int list fnName
+
+listSize' :: (OORenderSym r) => String -> SValue r -> SValue r
+listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
@@ -151,14 +160,14 @@ decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r) => r (Attachment r) -> r (Attachment r) -> Doc ->
-  SVariable r -> r ScopeData -> MSStatement r
+varDec :: (OORenderSym r, UnRepr r TypeData) => r (Attachment r) ->
+  r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MSStatement r
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
-    <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <>
+    <+> renderType (variableType v) <+> (ptrdoc (getCodeType (variableType v)) <>
     RC.variable v))
   where bind ClassLevel = s
         bind InstanceLevel = d

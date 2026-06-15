@@ -1,6 +1,6 @@
 -- | Re-export code-related smart constructors for external code writing and generation.
 module Language.Drasil.Code (
-  generator, generateCode, generateCodeProc,
+  generator, generateCode, generateCodeProc, toFileLayout,
   readWithDataDesc, sampleInputDD,
   Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), makeArchit,
   Architecture(..), DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType,
@@ -49,7 +49,7 @@ import Drasil.Code.CodeExpr (field)
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (
   SoftwareDossierState, makeSds)
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode,
-  generateCodeProc)
+  generateCodeProc, toFileLayout)
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc,
   sampleInputDD)
 

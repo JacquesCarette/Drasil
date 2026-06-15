@@ -14,7 +14,7 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 import Control.Lens ((^.))
 
 import Drasil.Database (HasUID(..), IsChunk)
-import Utils.Drasil (toColumn)
+import Data.List.Extras (toColumn)
 
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang

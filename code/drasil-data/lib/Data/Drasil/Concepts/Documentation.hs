@@ -9,6 +9,7 @@ module Data.Drasil.Concepts.Documentation (
   , module Data.Drasil.Concepts.Documentation
   ) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil hiding (organization, year, label, variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -79,62 +80,62 @@ analysis, aspect, body, class_, company, concept, condition, connection, constan
   result, reviewer, safety, scpOfTheProjS, second_, scenario,
   source, simulation, standard, task, type_, video, year :: IdeaDict
 
-analysis        = nc "analysis"       (cnIS   "analysis"           )
-aspect          = nc "aspect"         (cn'    "aspect"             )
-body            = nc "body"           (cnIES  "body"               )
-class_          = nc "class"          (cn'''  "class"              )
-company         = nc "company"        (cnIES  "company"            )
-concept         = nc "concept"        (cn'    "concept"            )
-condition       = nc "condition"      (cn'    "condition"          )
-connection      = nc "connection"     (cn'    "connection"         )
-constant        = nc "constant"       (cn'    "constant"           )
-consumer        = nc "consumer"       (cn'    "consumer"           )
-coordinate      = nc "coordinate"     (cn'    "coordinate"         )
-effect          = nc "effect"         (cn'    "effect"             )
-emphasis        = nc "emphasis"       (cnIS   "emphasis"           )
-failure         = nc "failure"        (cn'    "failure"            )
-figure          = nc "figure"         (cn'    "figure"             )
-first           = nc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
-game            = nc "game"           (cn'    "game"               )
-instance_       = nc "instance"       (cn'    "instance"           )
-issue           = nc "issue"          (cn'    "issue"              )
-label           = nc "label"          (cn'    "label"              )
-library         = nc "library"        (cnIES  "library"            )
-literacy        = nc "literacy"       (cnIES  "literacy"           )
-loss            = nc "loss"           (cn'''  "loss"               )
-material_       = nc "material"       (cn'    "material"           )
-mainIdea        = nc "mainIdea"       (cn'    "main idea"          )
-message         = nc "message"        (cn'    "message"            )
-method_         = nc "method"         (cn'    "method"             )
-name_           = nc "name"           (cn'    "name"               )
-object          = nc "object"         (cn'    "object"             )
-open            = nc "open"           (cn'    "open"               )
-physics         = nc "physics"        (cn'    "physics"            )
-practice        = nc "practice"       (cn'    "practice"           )
-priority        = nc "priority"       (cnIES  "priority"           )
-procedure       = nc "procedure"      (cn'    "procedure"          )
-realtime        = nc "real-time"      (cn'    "real-time"          )
-response        = nc "response"       (cn'    "response"           )
-result          = nc "result"         (cn'    "result"             )
-reviewer        = nc "reviewer"       (cn'    "reviewer"           )
-safety          = nc "safety"         (cnIES  "safety"             )
-second_         = nc "second"         (cn'    "second"             ) --Does it make sense for this to be here?
-scenario        = nc "scenario"       (cn'    "scenario"           )
-source          = nc "source"         (cn'    "source"             )
-simulation      = nc "simulation"     (cn'    "simulation"         )
-standard        = nc "standard"       (cn'    "standard"           )
-task            = nc "task"           (cn'    "task"               )
-type_           = nc "type"           (cn'    "type"               )
-video           = nc "video"          (cn'    "video"              )
-year            = nc "year"           (cn'    "year"               )
-scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
+analysis        = idea' (mkUid "analysis")       (cnIS   "analysis"           )
+aspect          = idea' (mkUid "aspect")         (cn'    "aspect"             )
+body            = idea' (mkUid "body")           (cnIES  "body"               )
+class_          = idea' (mkUid "class")          (cn'''  "class"              )
+company         = idea' (mkUid "company")        (cnIES  "company"            )
+concept         = idea' (mkUid "concept")        (cn'    "concept"            )
+condition       = idea' (mkUid "condition")      (cn'    "condition"          )
+connection      = idea' (mkUid "connection")     (cn'    "connection"         )
+constant        = idea' (mkUid "constant")       (cn'    "constant"           )
+consumer        = idea' (mkUid "consumer")       (cn'    "consumer"           )
+coordinate      = idea' (mkUid "coordinate")     (cn'    "coordinate"         )
+effect          = idea' (mkUid "effect")         (cn'    "effect"             )
+emphasis        = idea' (mkUid "emphasis")       (cnIS   "emphasis"           )
+failure         = idea' (mkUid "failure")        (cn'    "failure"            )
+figure          = idea' (mkUid "figure")         (cn'    "figure"             )
+first           = idea' (mkUid "first")          (cn'    "first"              ) --Does it make sense for this to be here?
+game            = idea' (mkUid "game")           (cn'    "game"               )
+instance_       = idea' (mkUid "instance")       (cn'    "instance"           )
+issue           = idea' (mkUid "issue")          (cn'    "issue"              )
+label           = idea' (mkUid "label")          (cn'    "label"              )
+library         = idea' (mkUid "library")        (cnIES  "library"            )
+literacy        = idea' (mkUid "literacy")       (cnIES  "literacy"           )
+loss            = idea' (mkUid "loss")           (cn'''  "loss"               )
+material_       = idea' (mkUid "material")       (cn'    "material"           )
+mainIdea        = idea' (mkUid "mainIdea")       (cn'    "main idea"          )
+message         = idea' (mkUid "message")        (cn'    "message"            )
+method_         = idea' (mkUid "method")         (cn'    "method"             )
+name_           = idea' (mkUid "name")           (cn'    "name"               )
+object          = idea' (mkUid "object")         (cn'    "object"             )
+open            = idea' (mkUid "open")           (cn'    "open"               )
+physics         = idea' (mkUid "physics")        (cn'    "physics"            )
+practice        = idea' (mkUid "practice")       (cn'    "practice"           )
+priority        = idea' (mkUid "priority")       (cnIES  "priority"           )
+procedure       = idea' (mkUid "procedure")      (cn'    "procedure"          )
+realtime        = idea' (mkUid "real-time")      (cn'    "real-time"          )
+response        = idea' (mkUid "response")       (cn'    "response"           )
+result          = idea' (mkUid "result")         (cn'    "result"             )
+reviewer        = idea' (mkUid "reviewer")       (cn'    "reviewer"           )
+safety          = idea' (mkUid "safety")         (cnIES  "safety"             )
+second_         = idea' (mkUid "second")         (cn'    "second"             ) --Does it make sense for this to be here?
+scenario        = idea' (mkUid "scenario")       (cn'    "scenario"           )
+source          = idea' (mkUid "source")         (cn'    "source"             )
+simulation      = idea' (mkUid "simulation")     (cn'    "simulation"         )
+standard        = idea' (mkUid "standard")       (cn'    "standard"           )
+task            = idea' (mkUid "task")           (cn'    "task"               )
+type_           = idea' (mkUid "type")           (cn'    "type"               )
+video           = idea' (mkUid "video")          (cn'    "video"              )
+year            = idea' (mkUid "year")           (cn'    "year"               )
+scpOfTheProjS   = idea' (mkUid "scpOfTheProj")   (cn'    "scope of the project") -- temporary generated for test
 
 notApp          = mkIdea "notApp" (nounPhraseSP "not applicable")   (Just "N/A")
 
 methAndAnls, procForAnls :: IdeaDict
 
-methAndAnls         = nc "methAndAnls"        (method_ `and_` analysis)
-procForAnls         = nc "procForAnls"        (procedure `for` analysis)
+methAndAnls         = idea' (mkUid "methAndAnls")        (method_ `and_` analysis)
+procForAnls         = idea' (mkUid "procForAnls")        (procedure `for` analysis)
 
 -- ** Compound Chunks
 
@@ -157,5 +158,5 @@ userInput                    = compoundNC user input_
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
+srsDomains = [srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom,
   assumpDom, chgProbDom, likeChgDom, unlikeChgDom]

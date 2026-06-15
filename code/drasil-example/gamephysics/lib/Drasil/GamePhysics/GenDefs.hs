@@ -9,7 +9,7 @@ import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, equationalModel', Derivation, mkDerivName)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
   rigidTwoDAssump)

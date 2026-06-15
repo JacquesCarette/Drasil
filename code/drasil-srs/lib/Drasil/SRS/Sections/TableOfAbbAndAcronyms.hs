@@ -13,7 +13,7 @@ import Language.Drasil.Document
 import Language.Drasil.Development (toSent)
 import Drasil.Database (HasUID(..))
 import Drasil.Database.SearchTools (TermAbbr (shortForm), longForm)
-import Utils.Drasil (mkTable)
+import Data.List.Extras (mkTable)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (abbreviation, fullForm, abbAcc)

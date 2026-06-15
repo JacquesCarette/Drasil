@@ -1,6 +1,7 @@
 -- | Defines concepts used to describe levels of education.
 module Data.Drasil.Concepts.Education where
 
+import Drasil.Database (mkUid)
 import Language.Drasil hiding (year)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -21,15 +22,15 @@ educon = [calculus, civil, degree_, engineering, structural, mechanics,
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, chemistry :: IdeaDict
 
-calculus      = nc "calculus"       (cn   "calculus"     )
-civil         = nc "civil"          (cn'  "civil"        )--FIXME: Adjective
-degree_       = nc "edu_degree"     (cn'  "degree"       )
-engineering   = nc "engineering"    (cn'  "engineering"  )
-mechanics     = nc "mechanics"      (cn   "mechanics"    )
-structural    = nc "structural"     (cn'  "structural"   )--FIXME: Adjective
-undergraduate = nc "undergraduate"  (cn'  "undergraduate")--FIXME: Functions as adjective
-highSchool    = nc "highSchool"     (cn'  "high school"  )--FIXME: Functions as adjective
-chemistry     = nc "chemistry"      (cn'  "chemistry"    )
+calculus      = idea' (mkUid "calculus")       (cn   "calculus"     )
+civil         = idea' (mkUid "civil")          (cn'  "civil"        )--FIXME: Adjective
+degree_       = idea' (mkUid "edu_degree")     (cn'  "degree"       )
+engineering   = idea' (mkUid "engineering")    (cn'  "engineering"  )
+mechanics     = idea' (mkUid "mechanics")      (cn   "mechanics"    )
+structural    = idea' (mkUid "structural")     (cn'  "structural"   )--FIXME: Adjective
+undergraduate = idea' (mkUid "undergraduate")  (cn'  "undergraduate")--FIXME: Functions as adjective
+highSchool    = idea' (mkUid "highSchool")     (cn'  "high school"  )--FIXME: Functions as adjective
+chemistry     = idea' (mkUid "chemistry")      (cn'  "chemistry"    )
 
 undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,

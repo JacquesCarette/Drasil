@@ -14,7 +14,7 @@ module Drasil.Database.ChunkDB (
   findTypeOf,
   insert, insertAll,
   -- * Temporary functions
-  insertAllOutOfOrder12,
+  insertAllOutOfOrder13,
 ) where
 
 import Control.Lens ((^.))
@@ -179,18 +179,19 @@ insertAll as cdb = foldl' (flip insert) cdb as
 -- Temporary functions
 --------------------------------------------------------------------------------
 
--- | Insert 11 lists of /unique/ chunk types into a 'ChunkDB', assuming the
+-- | Insert 13 lists of /unique/ chunk types into a 'ChunkDB', assuming the
 -- input 'ChunkDB' does not already contain any of the chunks from the chunk
 -- lists.
-insertAllOutOfOrder12 ::
+insertAllOutOfOrder13 ::
   (TypeableChunk a, TypeableChunk b, TypeableChunk c, TypeableChunk d,
    TypeableChunk e, TypeableChunk f, TypeableChunk g, TypeableChunk h,
-   TypeableChunk i, TypeableChunk j, TypeableChunk k, TypeableChunk l) =>
+   TypeableChunk i, TypeableChunk j, TypeableChunk k, TypeableChunk l,
+   TypeableChunk m) =>
    ChunkDB ->
    [a] -> [b] -> [c] -> [d] -> [e] ->
    [f] -> [g] -> [h] -> [i] -> [j] ->
-   [k] -> [l] -> ChunkDB
-insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks ls =
+   [k] -> [l] -> [m] -> ChunkDB
+insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
   let
     -- Box all of our chunks
     as' = map mkChunk as
@@ -205,11 +206,12 @@ insertAllOutOfOrder12 strtr as bs cs ds es fs gs hs is js ks ls =
     js' = map mkChunk js
     ks' = map mkChunk ks
     ls' = map mkChunk ls
+    ms' = map mkChunk ms
 
     -- Put all of our chunks in a list of lists, with each list carrying a
     -- unique type of chunk, filtering out empty lists
     altogether = filter (not . null)
-                  [as', bs', cs', ds', es', fs', gs', hs', is', js', ks', ls']
+      [as', bs', cs', ds', es', fs', gs', hs', is', js', ks', ls', ms']
     calt = concat altogether
 
     -- Calculate what chunks are depended on (i.e., UID -> Dependants)

@@ -25,7 +25,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (HasOutput(output))
-import Utils.Drasil (stringList, mkTable)
+import Utils.Drasil (stringList)
+import Data.List.Extras (mkTable)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (description, funcReqDom, nonFuncReqDom,

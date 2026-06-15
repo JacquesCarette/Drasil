@@ -1,8 +1,9 @@
 module Drasil.Projectile.Concepts (
-  launcher, projectile, target, projMotion, defs, rectVel, concepts,
+  launcher, projectile, target, projMotion, defs, rectVel, ideaDicts,
   flightDur, offset, landPos, launAngle, launSpeed, targPos, projSpeed, projPos
 ) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -13,18 +14,17 @@ import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (oneD, position, speed, motion, distance, iSpeed, time,
   rectilinear, velocity, acceleration)
 
-concepts :: [IdeaDict]
-concepts = projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
-  rectVel] ++ map nw defs
+ideaDicts :: [IdeaDict]
+ideaDicts = [projMotion, launchNC, rectVel]
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel :: IdeaDict
-durationNC   = nc "duration" (nounPhraseSP "duration")
-launchNC     = nc "launch"   (nounPhraseSP "launch")
-offsetNC     = nc "offset"   (compoundPhrase (cn "distance between the") (targetPosNC `andThe` landingPosNC))
+durationNC   = idea' (mkUid "duration") (nounPhraseSP "duration")
+launchNC     = idea' (mkUid "launch")   (nounPhraseSP "launch")
+offsetNC     = idea' (mkUid "offset")   (compoundPhrase (cn "distance between the") (targetPosNC `andThe` landingPosNC))
 
-flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
-landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
+flightDurNC   = compoundNC (idea' (mkUid "flight")  (nounPhraseSP "flight" )) durationNC
+landingPosNC  = compoundNC (idea' (mkUid "landing") (nounPhraseSP "landing")) position
 launchAngleNC = compoundNC launchNC angle
 launchSpeedNC = compoundNC launchNC speed
 targetPosNC   = compoundNC target position
@@ -61,4 +61,3 @@ launSpeed = cc' launchSpeedNC (D.toSent (phraseNP (iSpeed `the_ofThe` projectile
 offset = cc' offsetNC (S "the offset between the" +:+ D.toSent (phraseNP (targetPosNC `andThe` landingPosNC)))
 targPos = cc' targetPosNC (D.toSent (phraseNP (the distance)) `S.fromThe` D.toSent (phraseNP (launcher `toThe` target)))
 flightDur = cc' flightDurNC (foldlSent_ [D.toSent $ phraseNP (the time), S "when the", phrase projectile, S "lands"])
-

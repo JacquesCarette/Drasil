@@ -28,7 +28,7 @@ import Drasil.Database.SearchTools (findAllConcInsts,
   TermAbbr, shortForm, termResolve')
 
 import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
-import Drasil.SRS.GetChunks (ccss, ccss')
+import Drasil.SRS.GetChunks (resolveAllVars)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (likelyChg, section_, software, srs,
@@ -172,7 +172,7 @@ findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnitDeps cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
 -- their units (i.e., what units their units are defined with).
@@ -245,10 +245,10 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ ccss' (getDocDesc dd) (egetDocDesc dd) db))
+                (nub $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) db))
                 atStart] []
     mkSubRef (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) db) f con
+      mkTSymb (resolveAllVars (getDocDesc dd) (egetDocDesc dd) db) f con
 
     mkSubRef TAandA =
       SRS.tOfAbbAcc

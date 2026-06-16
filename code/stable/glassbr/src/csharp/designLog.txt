@@ -1,4 +1,4 @@
-Languages selected as Python Cpp CSharp Java Swift.
+Language selected as CSharp.
 Modularity selected as Modular.
 Input Structure selected as Bundled.
 Constant Structure selected as Inline.

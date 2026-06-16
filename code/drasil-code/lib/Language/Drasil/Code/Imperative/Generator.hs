@@ -111,7 +111,7 @@ generator l dt sd chs cs = let
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
         modules' = (cs ^. modsO) ++ concatMap (^. auxMods) els
-        nonPrefChs = choicesSent chs
+        nonPrefChs = choicesSent l chs
         des = vcat . map (sentenceDoc OneLine . spec pinfo) $
           (nonPrefChs ++ concLog ++ libLog)
 

@@ -48,9 +48,9 @@ norm :: OOProg r => SMethod r
 norm = docFunc "Calculate unit vector of this vector."
   [] (Just "A new unit vector.") $
   pubMethod "norm" (obj "Vector") [] $ bodyStatements [
-    varDecDef mag local (objMethodCall double (valueOf self) "magnitude" []),
+    varDecDef mag local (selfMethodCall "magnitude" double []),
     assert (valueOf mag ?> litDouble 0.0) (litString "Cannot normalize a zero vector."),
-    returnStmt (objMethodCall (obj "Vector") (valueOf self) "scale" [litDouble 1.0 #/ valueOf mag])
+    returnStmt (selfMethodCall "scale" (obj "Vector") [litDouble 1.0 #/ valueOf mag])
   ]
   where mag = var "mag" double
 
@@ -96,7 +96,7 @@ scale = docFunc "Scale this vector by a factor."
   ["Scalar factor."] (Just "A new scaled vector.") $
   pubMethod "scale" (obj "Vector") [param s] $ bodyStatements [
     varDecDef res local (arrayCopy (valueOf thisV)),
-    forRange i (litInt 0) (objMethodCallNoParams int (valueOf self) "dimension") (litInt 1) (bodyStatements [
+    forRange i (litInt 0) (selfMethodCall "dimension" int []) (litInt 1) (bodyStatements [
       arrayElem (valueOf i) res &= (valueOf s #* listAccess (valueOf res) (valueOf i))
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])

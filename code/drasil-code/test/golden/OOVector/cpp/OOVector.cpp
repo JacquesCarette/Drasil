@@ -23,9 +23,9 @@ double Vector::magnitude() {
 }
 
 Vector Vector::norm() {
-    double mag = this.magnitude();
+    double mag = this->magnitude();
     assert(mag > 0.0 && "Cannot normalize a zero vector.");
-    return this.scale(1.0 / mag);
+    return this->scale(1.0 / mag);
 }
 
 double Vector::dot(Vector v1, Vector v2) {
@@ -48,7 +48,7 @@ Vector Vector::add(Vector v1, Vector v2) {
 
 Vector Vector::scale(double s) {
     vector<double> res = this->v;
-    for (int i = 0; i < this.dimension(); i += 1) {
+    for (int i = 0; i < this->dimension(); i += 1) {
         res[i] = s * res.at(i);
     }
     return Vector(res);

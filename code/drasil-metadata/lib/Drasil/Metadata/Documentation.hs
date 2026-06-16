@@ -231,22 +231,22 @@ unlikeChgDom  = cncpt  (mkUid "unlikeChgDom")  (unlikelyChg ^. term)            
 
 assumption, desSpec, goalStmt, learnObj, likelyChg, mg, mis, notebook, physSyst,
   refBy, refName, requirement, sec, srs, typUnc, unlikelyChg :: CI
-assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
-learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
-likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
-mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
-mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
-notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
-refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
-refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
-requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
-sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
-srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
-unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
+assumption  = commonIdeaWithDict (mkUid "assumption")  (cn' "assumption")                                    "A"       [softEng]
+desSpec     = commonIdeaWithDict (mkUid "desSpec")     (combineNINI design specification)                    "DS"      [softEng]
+goalStmt    = commonIdeaWithDict (mkUid "goalStmt")    (combineNINI goal statement)                          "GS"      [softEng]
+learnObj    = commonIdeaWithDict (mkUid "learnObj")    (cn' "learning objective")                            "LO"      [documentc]
+likelyChg   = commonIdeaWithDict (mkUid "likelyChg")   (cn' "likely change")                                 "LC"      [softEng]
+physSyst    = commonIdeaWithDict (mkUid "physSyst")    (combineNINI physicalSystem description)              "PS"      [softEng]
+mg          = commonIdeaWithDict (mkUid "mg")          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
+mis         = commonIdeaWithDict (mkUid "mis")         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
+notebook    = commonIdeaWithDict (mkUid "notebook")    (cn' "notebook")                                      "NB"      [softEng]
+refBy       = commonIdeaWithDict (mkUid "refBy")       (cn  "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdeaWithDict (mkUid "refName")     (cn' "reference name")                                "Refname" [documentc]
+requirement = commonIdeaWithDict (mkUid "requirement") (cn' "requirement")                                   "R"       [softEng]
+sec         = commonIdeaWithDict (mkUid "section")     (cn' "section")                                       "Sec"     [documentc]
+srs         = commonIdeaWithDict (mkUid "srs")         softReqSpec                                           "SRS"     [softEng]
+typUnc      = commonIdeaWithDict (mkUid "typUnc")      (cn' "typical uncertainty")                           "Uncert." [softEng]
+unlikelyChg = commonIdeaWithDict (mkUid "unlikelyChg") (cn' "unlikely change")                               "UC"      [softEng]
 
 scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
 scpOfTheProj oper = idea' (mkUid "scpOfTheProj") (scope `of_NINP` theGen oper project) -- reasonable hack?

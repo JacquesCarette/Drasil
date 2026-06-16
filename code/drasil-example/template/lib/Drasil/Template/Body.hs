@@ -8,7 +8,7 @@ module Drasil.Template.Body (mkSRS, si) where
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import Language.Drasil.Document
@@ -147,7 +147,7 @@ figTemp = llccFig "dblpend" $ figWithWidth EmptyS
 
 -- MOVE TO CONCEPTS
 progName :: CI -- FIXME: Replace "template" with the name of your project!
-progName = commonIdeaWithDict "templateName" (pn "Template") "Template" []
+progName = commonIdeaWithDict (mkUid "templateName") (pn "Template") "Template" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

@@ -7,16 +7,17 @@ module Drasil.PDController.Concepts (
   secondOrderSystem, summingPt, propGain, derGain, powerPlant, setPoint
 ) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil (commonIdeaWithDict, dcc, cn', nounPhraseSP, pn, CI, ConceptChunk)
 
 acronyms :: [CI]
 acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]
 
 pdControllerCI, proportionalCI, piCI, pidCI :: CI
-pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
-proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
-piCI            = commonIdeaWithDict "piCI"            (pn "proportional integral")            "PI"            []
-pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
+pdControllerCI  = commonIdeaWithDict (mkUid "pdControllerCI")  (pn "proportional derivative")          "PD"            []
+proportionalCI  = commonIdeaWithDict (mkUid "proportionalCI")  (pn "proportional")                     "P"             []
+piCI            = commonIdeaWithDict (mkUid "piCI")            (pn "proportional integral")            "PI"            []
+pidCI           = commonIdeaWithDict (mkUid "pidCI")           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, processVariable, setPoint, propGain, derGain,

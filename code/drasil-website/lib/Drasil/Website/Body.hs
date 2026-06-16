@@ -6,7 +6,7 @@ module Drasil.Website.Body (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.System (HasSystemMeta(..), mkSystemMeta, DrasilWebsite,
   mkDrasilWebsite)
@@ -97,7 +97,7 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI
-webName = commonIdeaWithDict "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+webName = commonIdeaWithDict (mkUid "websiteName") (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

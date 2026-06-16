@@ -22,18 +22,18 @@ annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass,
 
 --FIXME: Add compound nounphrases
 
-annealed      = commonIdeaWithDict "annealed"      (nounPhraseSP "annealed")                "AN"       [idglass]
-aR            = commonIdeaWithDict "aR"            (nounPhraseSP "aspect ratio")            "AR"       [idglass]
-fullyT        = commonIdeaWithDict "fullyT"        (nounPhraseSP "fully tempered")          "FT"       [idglass]
-glassTypeFac  = commonIdeaWithDict "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"      [idglass]
-heatS         = commonIdeaWithDict "heatS"         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
-iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating glass")        "IG"       [idglass]
-lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
-lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")         "LR"       [idglass]
-lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      [idglass]
-stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
-lDurFac       = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
-nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]
+annealed      = commonIdeaWithDict (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [idglass]
+aR            = commonIdeaWithDict (mkUid "aR")            (nounPhraseSP "aspect ratio")            "AR"       [idglass]
+fullyT        = commonIdeaWithDict (mkUid "fullyT")        (nounPhraseSP "fully tempered")          "FT"       [idglass]
+glassTypeFac  = commonIdeaWithDict (mkUid "glassTypeFac")  (nounPhraseSP "glass type factor")       "GTF"      [idglass]
+heatS         = commonIdeaWithDict (mkUid "heatS")         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
+iGlass        = commonIdeaWithDict (mkUid "iGlass")        (nounPhraseSP "insulating glass")        "IG"       [idglass]
+lGlass        = commonIdeaWithDict (mkUid "lGlass")        (nounPhraseSP "laminated glass")         "LG"       [idglass]
+lResistance   = commonIdeaWithDict (mkUid "lResistance")   (nounPhraseSP "load resistance")         "LR"       [idglass]
+lShareFac     = commonIdeaWithDict (mkUid "lShareFac")     (nounPhraseSP "load share factor")       "LSF"      [idglass]
+stdOffDist    = commonIdeaWithDict (mkUid "stdOffDist")    (nounPhraseSP "stand off distance")      "SD"       [idglass]
+lDurFac       = commonIdeaWithDict (mkUid "loadDurFactor") (nounPhraseSP "load duration factor")    "LDF"      [idglass]
+nFL           = commonIdeaWithDict (mkUid "nFL")           (nounPhraseSP "non-factored load")       "NFL"      [idglass]
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

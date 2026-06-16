@@ -54,8 +54,8 @@ instance ConceptDomain CI where cdom = cdom'
 -- list of 'IdeaDict' (should be domains).
 -- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
 -- ambiguous type variables, punting for now.
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict x y z = CI (idea' (mkUid x) y) z . map (^.uid)
+commonIdeaWithDict :: UID -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict x y z = CI (idea' x y) z . map (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

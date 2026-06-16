@@ -43,8 +43,6 @@ tests:
     - drasil-assets
     - drasil-file-handling
     - drasil-testing-kit
-    - hedgehog
     - tasty
-    - tasty-hedgehog
     - tasty-hunit
     - prettyprinter

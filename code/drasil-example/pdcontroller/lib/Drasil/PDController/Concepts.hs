@@ -7,7 +7,9 @@ module Drasil.PDController.Concepts (
   secondOrderSystem, summingPt, propGain, derGain, powerPlant, setPoint
 ) where
 
-import Language.Drasil (commonIdeaWithDict, dcc, cn', nounPhraseSP, pn, CI, ConceptChunk)
+import Language.Drasil (commonIdeaWithDict, cn', nounPhraseSP, pn, CI, ConceptChunk,
+  cncpt''', Sentence(..))
+import Drasil.Database (mkUid)
 
 acronyms :: [CI]
 acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]
@@ -24,107 +26,107 @@ pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance,
       ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
-  = dcc "pdCtrlLoop" (nounPhraseSP "PD Control Loop") ("Closed-Loop control " ++
-        "system with PD Controller, Summing Point and Power Plant")
+  = cncpt''' (mkUid "pdCtrlLoop") (nounPhraseSP "PD Control Loop") (S ("Closed-Loop control " ++
+        "system with PD Controller, Summing Point and Power Plant"))
 
 pidC
-  = dcc "pdController" (nounPhraseSP "PD Controller")
-        "Proportional-Derivative Controller"
+  = cncpt''' (mkUid "pdController") (nounPhraseSP "PD Controller")
+        (S "Proportional-Derivative Controller")
 
 summingPt
-  = dcc "summingPoint" (nounPhraseSP "Summing Point") ("Control block where " ++
+  = cncpt''' (mkUid "summingPoint") (nounPhraseSP "Summing Point") (S ("Control block where " ++
         "the difference between the Set-Point and the Process Variable " ++
-        "is computed")
+        "is computed"))
 
 powerPlant
-  = dcc "powerPlant" (nounPhraseSP "Power Plant")
-      "A second order system to be controlled"
+  = cncpt''' (mkUid "powerPlant") (nounPhraseSP "Power Plant")
+      (S "A second order system to be controlled")
 
 secondOrderSystem
-  = dcc "secondOrderSystem" (nounPhraseSP "Second Order System")
-      ("A system whose input-output relationship is denoted by a second-order "
-         ++ "differential equation")
+  = cncpt''' (mkUid "secondOrderSystem") (nounPhraseSP "Second Order System")
+      (S ("A system whose input-output relationship is denoted by a second-order "
+         ++ "differential equation"))
 
 processError
-  = dcc "processError" (nounPhraseSP "Process Error")
-      ("Input to the PID controller. Process Error is the difference between the "
-         ++ "Set-Point and the Process Variable")
+  = cncpt''' (mkUid "processError") (nounPhraseSP "Process Error")
+      (S ("Input to the PID controller. Process Error is the difference between the "
+         ++ "Set-Point and the Process Variable"))
 
-stepTime = dcc "stepTime" (nounPhraseSP "Step Time") "Simulation step time"
+stepTime = cncpt''' (mkUid "stepTime") (nounPhraseSP "Step Time") (S "Simulation step time")
 
 simulationTime
-  = dcc "simulationTime" (nounPhraseSP "Simulation Time")
-      "Total execution time of the PD simulation"
+  = cncpt''' (mkUid "simulationTime") (nounPhraseSP "Simulation Time")
+      (S "Total execution time of the PD simulation")
 
 processVariable
-  = dcc "processVariable" (nounPhraseSP "Process Variable")
-      "The output value from the power plant"
+  = cncpt''' (mkUid "processVariable") (nounPhraseSP "Process Variable")
+      (S "The output value from the power plant")
 
 controlVariable
-  = dcc "controlVariable" (nounPhraseSP "Control Variable")
-      "The Control Variable is the output of the PD controller"
+  = cncpt''' (mkUid "controlVariable") (nounPhraseSP "Control Variable")
+      (S "The Control Variable is the output of the PD controller")
 
 setPoint
-  = dcc "setPoint" (nounPhraseSP "Set-Point")
-      ("The desired value that the control system must reach. This also knows "
-         ++ "as the reference variable")
+  = cncpt''' (mkUid "setPoint") (nounPhraseSP "Set-Point")
+      (S ("The desired value that the control system must reach. This also knows "
+         ++ "as the reference variable"))
 
 propGain
-  = dcc "propGain" (nounPhraseSP "Proportional Gain")
-      "Gain constant of the proportional controller"
+  = cncpt''' (mkUid "propGain") (nounPhraseSP "Proportional Gain")
+      (S "Gain constant of the proportional controller")
 
 derGain
-  = dcc "derGain" (nounPhraseSP "Derivative Gain")
-      "Gain constant of the derivative controller"
+  = cncpt''' (mkUid "derGain") (nounPhraseSP "Derivative Gain")
+      (S "Gain constant of the derivative controller")
 
 propControl
-  = dcc "propControl" (nounPhraseSP "Proportional control")
-      ("A linear feedback control system where correction is applied to the controlled " ++
-      "variable which is proportional to the difference between desired and measured values")
+  = cncpt''' (mkUid "propControl") (nounPhraseSP "Proportional control")
+      (S ("A linear feedback control system where correction is applied to the controlled " ++
+      "variable which is proportional to the difference between desired and measured values"))
 
 derControl
-  = dcc "derControl" (nounPhraseSP "Derivative control")
-      ("Monitors the rate of change of the error signal and contributes a component " ++
-      "of the output signal (proportional to a derivative of the error signal)")
+  = cncpt''' (mkUid "derControl") (nounPhraseSP "Derivative control")
+      (S ("Monitors the rate of change of the error signal and contributes a component " ++
+      "of the output signal (proportional to a derivative of the error signal)"))
 
 simulation
-  = dcc "simulation" (cn' "simulation")
-      "Simulation of the PD controller"
+  = cncpt''' (mkUid "simulation") (cn' "simulation")
+      (S "Simulation of the PD controller")
 
 ccFrequencyDomain
-  = dcc "frequencyDomain" (nounPhraseSP "frequency domain")
-      ("The analysis of mathematical functions in terms of frequency, instead "
-         ++ "of time")
+  = cncpt''' (mkUid "frequencyDomain") (nounPhraseSP "frequency domain")
+      (S ("The analysis of mathematical functions in terms of frequency, instead "
+         ++ "of time"))
 
 ccTimeDomain
-  = dcc "timeDomain" (nounPhraseSP "time domain")
-      "The analysis of mathematical functions in terms of time"
+  = cncpt''' (mkUid "timeDomain") (nounPhraseSP "time domain")
+      (S "The analysis of mathematical functions in terms of time")
 
 ccLaplaceTransform
-  = dcc "laplaceTransform" (cn' "Laplace transform")
-      ("An integral transform that converts a function of a real variable t " ++
-         "(often time) to a function of a complex variable s (complex frequency)")
+  = cncpt''' (mkUid "laplaceTransform") (cn' "Laplace transform")
+      (S ("An integral transform that converts a function of a real variable t " ++
+         "(often time) to a function of a complex variable s (complex frequency)"))
 
 ccAbsTolerance
-  = dcc "absoluteTolerance" (nounPhraseSP "Absolute Tolerance")
-      "Absolute tolerance for the integrator"
+  = cncpt''' (mkUid "absoluteTolerance") (nounPhraseSP "Absolute Tolerance")
+      (S "Absolute tolerance for the integrator")
 
 ccRelTolerance
-  = dcc "relativeTolerance" (nounPhraseSP "Relative Tolerance")
-      "Relative tolerance for the integrator"
+  = cncpt''' (mkUid "relativeTolerance") (nounPhraseSP "Relative Tolerance")
+      (S "Relative tolerance for the integrator")
 
 ccTransferFxn
-  = dcc "transferFxn" (nounPhraseSP "Transfer Function")
-      ("The Transfer Function of a system is the ratio of the output to the input"
-         ++ " functions in the frequency domain")
+  = cncpt''' (mkUid "transferFxn") (nounPhraseSP "Transfer Function")
+      (S ("The Transfer Function of a system is the ratio of the output to the input"
+         ++ " functions in the frequency domain"))
 
 ccDampingCoeff
-  = dcc "dampingCoeff" (nounPhraseSP "Damping Coefficient")
-      "Quantity that characterizes a second order system's oscillatory response"
+  = cncpt''' (mkUid "dampingCoeff") (nounPhraseSP "Damping Coefficient")
+      (S "Quantity that characterizes a second order system's oscillatory response")
 
 ccStiffCoeff
-  = dcc "ccStiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
-      "Quantity that characterizes a spring's stiffness"
+  = cncpt''' (mkUid "ccStiffnessCoeff") (nounPhraseSP "Stiffness coefficient")
+      (S "Quantity that characterizes a spring's stiffness")
 
 defs :: [ConceptChunk]
 defs

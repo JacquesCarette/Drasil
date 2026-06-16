@@ -6,6 +6,7 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Database(mkUid)
 
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
@@ -237,14 +238,14 @@ labely = label "y"
 
 -- | Summation index variable i
 index :: DefinedQuantityDict
-index = dqd' (dcc "index" (nounPhraseSP "index")
-  "a number representing a single body")
+index = dqd' (cncpt''' (mkUid "index") (nounPhraseSP "index")
+  (S "a number representing a single body"))
   (const lI) Integer Nothing
 
 -- | Number of bodies n
 numbBodies :: DefinedQuantityDict
-numbBodies = dqd' (dcc "n" (nounPhraseSP "number of bodies")
-  "the number of point masses in the system")
+numbBodies = dqd' (cncpt''' (mkUid "n") (nounPhraseSP "number of bodies")
+  (S "the number of point masses in the system"))
   (const lN) Integer Nothing
 
 ---------------------------------------------------------

@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
   ConceptChunk, cncpt, cncpt', cncpt'', cncpt''',
-  dcc, dccA, dccAWDS, dccWDS, cw,
+  dccA, dccAWDS, dccWDS, cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -74,7 +74,7 @@ cncpt''' ::
   Sentence -> ConceptChunk
 cncpt''' u trm defn = ConDict (idea' u trm) defn []
 
-{-# DEPRECATED dccA, dccAWDS, dcc, dccWDS
+{-# DEPRECATED dccA, dccAWDS, dccWDS
   "Old smart constructor; use one of `cncpt`, `cncpt'`, `cncpt''`, `cncpt'''` instead." #-}
 
 -- | Smart constructor for creating a concept chunks with an abbreviation. Takes
@@ -91,11 +91,6 @@ dccAWDS i ter def a = ConDict ideaDict def []
   where
     u = mkUid i
     ideaDict = maybe (idea' u ter) (idea u ter) a
-
--- | Smart constructor for creating concept chunks given a 'UID', 'NounPhrase'
--- ('NP') and definition (as a 'String').
-dcc :: String -> NP -> String -> ConceptChunk
-dcc i ter des = dccA i ter des Nothing
 
 -- | Similar to 'dcc', except the definition takes a 'Sentence'.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk

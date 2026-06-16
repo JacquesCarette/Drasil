@@ -39,7 +39,7 @@ import Control.Lens ((^.))
 import Drasil.Database (mkUid)
 import Language.Drasil (CI, NP, IdeaDict, cn, cn', cnIES, cnICES, cnUM,
   commonIdeaWithDict, fterms, compoundPhrase, compoundPhraseP1, titleizeNP',
-  term, ConceptChunk, cncpt, cncpt', Sentence(EmptyS), dcc, idea')
+  term, ConceptChunk, cncpt, cncpt', Sentence(EmptyS), idea', cncpt''', Sentence(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
   (combineNINI, compoundNC, compoundNCPP, of_, of_PS, ofAPS, of_NINP, theGen
   , compoundNCPSPP, and_, and_TGen, and_PP)
@@ -214,7 +214,7 @@ traceyMandG         = idea' (mkUid "traceyMandG")        (and_TGen (\t -> titlei
 
 -- | Root SRS Domain.
 srsDom :: ConceptChunk
-srsDom = dcc "srsDom" (srs ^. term) "srs"
+srsDom = cncpt''' (mkUid "srsDom") (srs ^. term) (S "srs")
 
 assumpDom, chgProbDom, funcReqDom, goalStmtDom, likeChgDom,
   nonFuncReqDom, reqDom, unlikeChgDom :: ConceptChunk

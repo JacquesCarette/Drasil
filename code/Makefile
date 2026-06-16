@@ -384,13 +384,17 @@ $(GOOLTEST)$(STABILIZE_E_SUFFIX):
 # First builds all Drasil packages, runs examples with dot graphs,
 # then make pdfs from the generated TeX files.
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
-	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/PDF" ]; then \
+		EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh ; \
+	fi
 
 # Build individual example mdBook SRSs.
 # Targets will have the form exampleName_mdBook_build.
 $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
-	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
-	mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ]; then \
+		- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+		mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+	fi
 
 # Launch local server for individual example mdBook SRSs.
 # Targets will have the form exampleName_mdBook_server.
@@ -400,7 +404,9 @@ $(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVE
 
 # Targets will have the form exampleName_juphtml.
 $(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E_SUFFIX): %$(GEN_E_SUFFIX)
-	jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb"
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter" ]; then \
+		jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb" ; \
+	fi
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#

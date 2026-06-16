@@ -18,7 +18,7 @@ import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Data.Maybe (fromMaybe)
+
 import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
   hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
   blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo,
@@ -115,35 +115,7 @@ nomThick = cuc' "nomThick" (nounPhraseSP "nominal thickness")
   [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  -- FIXME: The `fromMaybe` usage below is a result of an operational solution
-  -- focused on having the `glassTy` be constrained to being one of the valid
-  -- glass types; `g \in \{A, B, C, D, ...\}`.
-  --
-  -- Explanation:
-  --
-  -- We reuse the Haskell-level data (the raw `String`s used to encode the
-  -- abbreviations of the glass types) instead of Drasil-level data (which would
-  -- have shown up as a UID reference to the glass types). This code only
-  -- type-checks at the Haskell level. What this code really wants to encode is
-  -- that `g` (the variable) is a specific type of glass. Nothing about
-  -- abbreviations needs to be discussed here.
-  --
-  -- This code does two things:
-  --
-  -- 1. For the SRS generator, allows us to show what we want to show the reader
-  -- of the SRS. Note that no types are shown in the SRS. If they were, this
-  -- issue would be a little bit more clear: why is `g` a `String`? See above
-  -- line.
-  --
-  -- 2. For the code generator, where custom types are ill-supported and we have
-  -- no way of encoding these types, we make a concrete choice (a hack) here
-  -- about how "glass types" can be captured and type-checked/enforced in the
-  -- generated programs.
-  --
-  -- So what do we really want? We want to define enumeration types where the
-  -- meaning of the constants is tied to concepts. Then we can make a concrete
-  -- choice about how the names of those constants should be formed.
-  [sfwrElem $ mkSet String $ map (str . fromMaybe (error "bad fromMaybe; glassTypeCon") . getA . snd) glassType]
+  [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = NE.map dqdWr (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])

@@ -4,7 +4,6 @@ module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
 
 import Control.Lens ((^.))
 import Prelude hiding (log, exp, sqrt)
-import Data.Maybe (fromMaybe)
 
 import Language.Drasil
 import Language.Drasil.Document
@@ -56,8 +55,7 @@ loadDFDD = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 glaTyFacEq :: Expr
--- FIXME: See discussion about `fromMaybe` in `Unitals.hs`.
-glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (fromMaybe "bad fromMaybe; glaTyFacEq" . getA . snd) glassType)
+glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (abrv . snd) glassType)
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
 glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)

@@ -18,7 +18,6 @@ import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-
 import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
   hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
   blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo,

@@ -9,7 +9,9 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, VSType, UnRepr(..), SharedProg, BodySym(..),
+import Drasil.Shared.InterfaceCommon (Label, VSType, SValue, SVariable,
+  MSStatement, getCodeType,
+  UnRepr(..), SharedProg, BodySym(..),
   BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -19,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (Label, VSType, UnRepr(..), SharedProg, Bod
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp,
+  (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -41,27 +44,33 @@ import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   docMod, fileFromData, buildModule, modFromData, function)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
-  commentedItem, parameterList, body, addComments, docCmt, multiStmt, sqrt,
-  abs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil)
+  commentedItem, parameterList, body, addComments, multiStmt, sqrt,
+  abs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil,
+  elseIfLabel)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
-  litInt, litString, valStmt, emptyStmt, assign)
+  litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
+  ifCond)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
-  functionDoc, docInOutFunc')
+  functionDoc, docInOutFunc', inOutCall, multiAssign)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp,
   litTrue, litFalse)
-import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef)
+import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
+  extFuncAppMixedArgs)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
   paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
-  valInt, opDoc, opPrec, VarData, varName,
+  valInt, valType, opDoc, opPrec, VarData, varName,
   varType, varBind, varDoc, vard, CommonThunk, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
-  powerPrec, unExpr, unExpr', binExpr)
+  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal,
+  compEqualPrec, typeUnExpr, typeBinExpr)
+import Drasil.Shared.LanguageRenderer (listSep')
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues)
 import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, revFiles, setFileType,
@@ -73,7 +82,7 @@ import Control.Monad.State (modify)
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), vcat, hcat,
-  parens, brackets, equals, punctuate)
+  parens, brackets, braces, equals, punctuate)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -162,7 +171,7 @@ instance RenderType MatlabCode where
   multiType = undefined
 
 instance UnaryOpSym MatlabCode where
-  notOp = undefined
+  notOp = unOpPrec "~"
   negateOp = G.negateOp
   sqrtOp = unOpPrec R.sqrt
   absOp = unOpPrec R.abs
@@ -180,7 +189,7 @@ instance UnaryOpSym MatlabCode where
 
 instance BinaryOpSym MatlabCode where
   equalOp = G.equalOp
-  notEqualOp = undefined
+  notEqualOp = compEqualPrec "~="
   greaterOp = G.greaterOp
   greaterEqualOp = G.greaterEqualOp
   lessOp = G.lessOp
@@ -229,7 +238,7 @@ instance RenderVariable MatlabCode where
 
 instance ValueSym MatlabCode where
   type Value MatlabCode = ValData
-  valueType = undefined
+  valueType v = valType <$> v
 
 instance Argument MatlabCode where
   pointerArg = undefined
@@ -247,14 +256,15 @@ instance Literal MatlabCode where
   litSet = undefined
 
 instance MathConstant MatlabCode where
-  pi = undefined
+  pi = mkStateVal double (text "pi")
 
 instance VariableValue MatlabCode where
   valueOf = G.valueOf
 
 instance CommandLineArgs MatlabCode where
-  arg = undefined
-  argsList = undefined
+  -- Octave exposes command-line args via argv(); cell-indexed with {} (1-based).
+  arg n = mlArg (litInt (n + 1))
+  argsList = mkStateVal (arrayType string) (text "argv()")
   argExists = undefined
 
 instance NumericExpression MatlabCode where
@@ -283,34 +293,34 @@ instance NumericExpression MatlabCode where
   ceil = unExpr ceilOp
 
 instance BooleanExpression MatlabCode where
-  (?!) = undefined
-  (?&&) = undefined
-  (?||) = undefined
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
 instance Comparison MatlabCode where
-  (?<) = undefined
-  (?<=) = undefined
-  (?>) = undefined
-  (?>=) = undefined
-  (?==) = undefined
-  (?!=) = undefined
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
 
 instance ValueExpression MatlabCode where
   inlineIf = undefined
-  funcAppMixedArgs = undefined
-  extFuncAppMixedArgs = undefined
-  libFuncAppMixedArgs = undefined
+  funcAppMixedArgs = G.funcAppMixedArgs
+  extFuncAppMixedArgs = CS.extFuncAppMixedArgs
+  libFuncAppMixedArgs = CS.extFuncAppMixedArgs
   lambda = undefined
   notNull = undefined
 
 instance RenderValue MatlabCode where
   inputFunc = undefined
-  printFunc = undefined
-  printLnFunc = undefined
-  printFileFunc = undefined
-  printFileLnFunc = undefined
+  printFunc = mlPrintFunc
+  printLnFunc = mlPrintFunc
+  printFileFunc _ = mlPrintFunc
+  printFileLnFunc _ = mlPrintFunc
   cast = undefined
-  call = undefined
+  call = G.call equals
   valFromData p i t' d = do
     t <- t'
     toState $ on2CodeValues (vd p i) t (toCode d)
@@ -390,10 +400,10 @@ instance FunctionElim MatlabCode where
   function = undefined
 
 instance InternalAssignStmt MatlabCode where
-  multiAssign = undefined
+  multiAssign = CP.multiAssign brackets
 
 instance InternalIOStmt MatlabCode where
-  printSt = undefined
+  printSt = mlPrint
 
 instance InternalControlStmt MatlabCode where
   multiReturn = undefined
@@ -433,24 +443,24 @@ instance DeclStatement MatlabCode where
   funcDecDef = undefined
 
 instance IOStatement MatlabCode where
-  print = undefined
-  printLn = undefined
-  printStr = undefined
-  printStrLn = undefined
-  printFile = undefined
-  printFileLn = undefined
-  printFileStr = undefined
-  printFileStrLn = undefined
+  print = G.print False Nothing printFunc
+  printLn = G.print True Nothing printLnFunc
+  printStr = G.print False Nothing printFunc . litString
+  printStrLn = G.print True Nothing printLnFunc . litString
+  printFile f = G.print False (Just f) printFunc
+  printFileLn f = G.print True (Just f) printLnFunc
+  printFileStr f = printFile f . litString
+  printFileStrLn f = printFileLn f . litString
   getInput = undefined
   discardInput = undefined
-  getFileInput = undefined
-  discardFileInput = undefined
-  openFileR = undefined
-  openFileW = undefined
-  openFileA = undefined
-  closeFile = undefined
-  getFileInputLine = undefined
-  discardFileLine = undefined
+  getFileInput f = mlInput (mlReadLine f)
+  discardFileInput f = valStmt (mlReadLine f)
+  openFileR f n = f &= funcApp "fopen" infile [n, litString "r"]
+  openFileW f n = f &= funcApp "fopen" outfile [n, litString "w"]
+  openFileA f n = f &= funcApp "fopen" outfile [n, litString "a"]
+  closeFile f = valStmt $ funcApp "fclose" void [f]
+  getFileInputLine = getFileInput
+  discardFileLine = discardFileInput
   getFileInputAll = undefined
 
 instance StringStatement MatlabCode where
@@ -462,7 +472,7 @@ instance FunctionSym MatlabCode where
   type Function MatlabCode = FuncData
 
 instance FuncAppStatement MatlabCode where
-  inOutCall = undefined
+  inOutCall = CP.inOutCall funcApp
   extInOutCall = undefined
 
 instance CommentStatement MatlabCode where
@@ -477,7 +487,7 @@ instance ControlStatement MatlabCode where
     v <- zoom lensMStoVS v'
     stmtFromData (text mlRet <+> equals <+> RC.value v) Semi
   throw = undefined
-  ifCond = undefined
+  ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty (text "end")
   switch = undefined
   ifExists = undefined
   for = undefined
@@ -556,9 +566,11 @@ instance MethodElim MatlabCode where
 
 instance ModuleSym MatlabCode where
   type Module MatlabCode = ModData
-  -- MATLAB single-file first pass: no module wrapper and no import statements
-  -- The main script body goes first, then the local function definitions.
-  buildModule n _ = A.buildModule n getMainDoc (pure empty)
+  -- Single-file Octave layout: a leading `1;` marks the file as a script (so
+  -- the functions are script-local), the local functions come next, and the
+  -- main script body goes last. (Octave does not see local functions when the
+  -- script body precedes them.)
+  buildModule n _ = A.buildModule n (pure (text "1;")) getMainDoc
 
 instance RenderMod MatlabCode where
   modFromData n = A.modFromData n (toCode . md n)
@@ -568,9 +580,8 @@ instance ModuleElim MatlabCode where
   module' = modDoc . unMLC
 
 instance BlockCommentSym MatlabCode where
-  blockComment lns = toCode $ R.docCmt lns mlBlockCmtStart mlBlockCmtEnd
-  docComment = onStateValue (\lns -> toCode $
-    R.docCmt lns mlBlockCmtStart mlBlockCmtEnd)
+  blockComment lns = toCode $ mlLineCmt lns
+  docComment = onStateValue (toCode . mlLineCmt)
 
 instance BlockCommentElim MatlabCode where
   blockComment' = unMLC
@@ -603,7 +614,7 @@ mlParam = RC.variable
 mlFuncDoc :: (CommonRenderSym r) => Label -> [Doc] -> [r (Parameter r)] -> Doc
   -> Doc
 mlFuncDoc n outs pms bod =
-  vcat [text "function" <+> retDoc <> text n <> parens (R.parameterList pms),
+  vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),
         indent bod,
         text "end"]
   where retDoc = case outs of
@@ -615,7 +626,51 @@ mlFuncDoc n outs pms bod =
 mlCmtStart :: Doc
 mlCmtStart = text "%"
 
--- | MATLAB block-comment delimiters.
-mlBlockCmtStart, mlBlockCmtEnd :: Doc
-mlBlockCmtStart = text "%{"
-mlBlockCmtEnd = text "%}"
+-- | Makes a MATLAB comment. Every line starts with %.
+--   (We avoid %{ %} blocks: those need the markers alone on a line.)
+mlLineCmt :: [String] -> Doc
+mlLineCmt = vcat . map ((mlCmtStart <+>) . text)
+
+-- | A stand-in print function. mlPrint never uses it, but it must be a real
+--   value so the print methods type-check.
+mlPrintFunc :: SValue MatlabCode
+mlPrintFunc = mkStateVal void (text "fprintf")
+
+-- | Gets a command-line argument: argv(){n}.
+--   (Octave keeps the args in a cell, so we index with {}.)
+mlArg :: SValue MatlabCode -> SValue MatlabCode
+mlArg n' = do
+  n <- n'
+  s <- string
+  mkVal s (text "argv()" <> braces (RC.value n))
+
+-- | Reads one line from a file as text: fgetl(f).
+mlReadLine :: SValue MatlabCode -> SValue MatlabCode
+mlReadLine f = funcApp "fgetl" string [f]
+
+-- | Reads a value into v. Numbers go through str2double; text is kept as-is.
+--   The type of v says which one to use.
+mlInput :: SValue MatlabCode -> SVariable MatlabCode -> MSStatement MatlabCode
+mlInput inSrc v = v &= (v >>= mlInput' . getCodeType . variableType)
+  where mlInput' Integer = funcApp "str2double" int [inSrc]
+        mlInput' Float   = funcApp "str2double" float [inSrc]
+        mlInput' Double  = funcApp "str2double" double [inSrc]
+        mlInput' String  = inSrc
+        mlInput' _ = error "Attempt to read a value of unreadable type"
+
+-- | Prints a value: fprintf([fid, ]'fmt', value). The format is %s for text
+--   and %g for numbers. A line-print adds \n. A file handle, if given, comes
+--   first. (We always use fprintf, so the print-function argument is ignored.)
+mlPrint :: Bool -> Maybe (SValue MatlabCode) -> SValue MatlabCode
+  -> SValue MatlabCode -> MSStatement MatlabCode
+mlPrint newLn f' _ v' = do
+  v  <- zoom lensMStoVS v'
+  mf <- traverse (zoom lensMStoVS) f'
+  let fmt = case cType (valType (unMLC v)) of
+              String -> "%s"
+              _      -> "%g"
+      nl = if newLn then "\\n" else ""
+      fileArg = maybe empty (\fv -> RC.value fv <> listSep') mf
+  stmtFromData (text "fprintf" <>
+    parens (fileArg <> text ("'" ++ fmt ++ nl ++ "'") <> listSep' <> RC.value v))
+    Semi

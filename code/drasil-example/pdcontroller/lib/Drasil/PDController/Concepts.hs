@@ -1,5 +1,5 @@
 module Drasil.PDController.Concepts (
-  acronyms, concepts, defs, simulation, processError, simulationTime, stepTime,
+  acronyms, termDefs, defs, simulation, processError, simulationTime, stepTime,
   controlVariable, propControl, derControl,
   pdControllerCI, proportionalCI, pidC, piCI, pidCI, pidCL, processVariable,
   ccDampingCoeff, ccStiffCoeff, ccFrequencyDomain, ccLaplaceTransform, ccTransferFxn,
@@ -7,8 +7,7 @@ module Drasil.PDController.Concepts (
   secondOrderSystem, summingPt, propGain, derGain, powerPlant, setPoint
 ) where
 
-import Language.Drasil (commonIdeaWithDict, dcc, nw, cn', nounPhraseSP, pn, CI,
-  ConceptChunk, IdeaDict)
+import Language.Drasil (commonIdeaWithDict, dcc, cn', nounPhraseSP, pn, CI, ConceptChunk)
 
 acronyms :: [CI]
 acronyms = [pdControllerCI, proportionalCI, piCI, pidCI]
@@ -126,9 +125,6 @@ ccDampingCoeff
 ccStiffCoeff
   = dcc "ccStiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
       "Quantity that characterizes a spring's stiffness"
-
-concepts :: [IdeaDict]
-concepts = map nw termDefs
 
 defs :: [ConceptChunk]
 defs

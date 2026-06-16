@@ -12,14 +12,14 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   time, velocity, positionVec, speed)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
-import Drasil.Sentence.Combinators (fromReplace)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel', Derivation,
   mkDerivName)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.Projectile.Concepts (rectVel)

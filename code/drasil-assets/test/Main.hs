@@ -1,7 +1,7 @@
 module Main (main) where
 
-import Test.Tasty (defaultMain)
+import Drasil.TestingKit (testMain)
 import Spec.Drasil.Assets (assetTests)
 
 main :: IO ()
-main = defaultMain assetTests
+main = testMain assetTests

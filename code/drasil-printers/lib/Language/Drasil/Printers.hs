@@ -2,13 +2,11 @@ module Language.Drasil.Printers (
   -- * HTML
   -- ** Printer
     genHTML
-  -- ** Helpers
-  , makeCSS
+  -- ** CSS
+  , genericCSS
   -- * Markdown
   -- ** Printer
-  , makeMd
   -- ** Section Printers
-  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote, whatInfo
   -- * Plain
   -- ** Types
   , SingleLine(..)
@@ -24,12 +22,10 @@ module Language.Drasil.Printers (
   , PrintingInformation, piSys, Notation(..)
 ) where
 
-import Language.Drasil.HTML.CSS (makeCSS)
+import Language.Drasil.HTML.CSS (genericCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)
-import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
-  extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)

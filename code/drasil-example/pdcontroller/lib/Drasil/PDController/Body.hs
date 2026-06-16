@@ -1,11 +1,13 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
-import Drasil.SRSDocument
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)
@@ -17,7 +19,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs,
+import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
   pdControllerCI, proportionalCI, piCI, pidCI)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
@@ -58,6 +60,11 @@ mkSRS
        SSDProg
          [SSDProblem $
             PDProg purp []
+              -- FIXME: When removing the manually aggregated list here, expect
+              -- duplicate UID errors! Why? `defs` is a hand-crafted list that
+              -- extends `termDefs` with non-unique chunks containing
+              -- alternative definitions for use in the `Terminology and
+              -- Definitions` section.
               [TermsAndDefs Nothing defs,
                PhySysDesc progName sysParts sysFigure [],
                Goals sysGoalInput],
@@ -105,17 +112,11 @@ orgSecEnd = foldlSent [
     titleize ode, sParen (short ode), S "that models the", phrase pidC
   ]
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  concepts ++
-  -- CIs
-  nw progName : map nw acronyms
+cis :: [CI]
+cis = progName : acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks =
-  -- ConceptChunks
-  physicalcon ++ [linear, angular]
+conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
 
 allSymbols :: [DefinedQuantityDict]
 allSymbols = map dqdWr physicscon ++ symbols ++
@@ -125,7 +126,8 @@ allSymbols = map dqdWr physicscon ++ symbols ++
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
   allSymbols
-  ideaDicts
+  []
+  cis
   conceptChunks
   ([] :: [UnitDefn])
   dataDefinitions

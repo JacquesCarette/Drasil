@@ -81,10 +81,10 @@ jobs:
         run: make stackArgs="--no-terminal" deps
 
       - name: "Build"
-        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
+        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations"
 
       - name: "Test built artifacts against stable"
-        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
+        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations" NOISY=yes
 
       - name: "Compile GOOL examples"
         run: make codegenTest

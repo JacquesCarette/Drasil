@@ -8,14 +8,14 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 import Theory.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
-import Drasil.Sentence.Combinators (definedIn'')
+import Language.Drasil.Document (definedIn'')
 
 -- local
 import Drasil.DblPend.DataDefs

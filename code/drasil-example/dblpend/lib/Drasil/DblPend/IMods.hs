@@ -4,8 +4,9 @@ module Drasil.DblPend.IMods (iMods, angleIM_1, angleIM_2) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (condition)

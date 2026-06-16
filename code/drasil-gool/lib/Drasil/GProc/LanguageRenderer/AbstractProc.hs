@@ -1,24 +1,27 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
-  buildModule, docMod, modFromData, listInnerType, arrayElem, funcDecDef,
-  function
+  buildModule, docMod, modFromData, listInnerType, arrayElem, listAppend,
+  listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
-  SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
-  VisibilitySym(..), getType, convType)
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, SMethod, MSBody,
+  MSStatement, SValue, SVariable, MSParameter, VSType,
+  VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
+  getCodeType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
-  IndexTranslator(intToIndex), ParameterSym(param))
+  IndexTranslator(intToIndex), ParameterSym(param), TypeSym(..))
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
   BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
   MethodTypeSym(mType), ScopeElim(scopeData))
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.Shared.AST (isSource, ScopeData)
+import Drasil.Shared.AST (isSource, ScopeData, TypeData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -77,10 +80,21 @@ docMod e d wm a dt fl = RCP.commentedMod fl (RCC.docComment $ CP.modDoc' d wm a 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
-listInnerType :: (ProcRenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getType)
+-- Lists and Arrays --
 
-arrayElem :: (ProcRenderSym r) => SValue r -> SVariable r -> SVariable r
+listInnerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+listInnerType t = t >>= (convType . getInnerType . getCodeType)
+
+-- | Call to append a value to a list using a function call
+listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r
+listAppend fnName list val = funcApp fnName IC.void [list, val]
+
+-- | Call to insert a value into a list as a function call
+listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> SValue r
+listAdd fnName list idx val = funcApp fnName IC.void [list, IC.intToIndex idx, val]
+
+arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SValue r ->
+  SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'

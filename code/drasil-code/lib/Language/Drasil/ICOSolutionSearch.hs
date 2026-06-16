@@ -7,7 +7,7 @@ import Data.List ((\\), intercalate, partition)
 
 import Drasil.Database (ChunkDB, showUID, HasUID)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
-import Utils.Drasil (subsetOf)
+import Data.List.Extras (subsetOf)
 
 import Drasil.Code.CodeVar (DefiningCodeExpr(..), CodeVarChunk)
 import Language.Drasil.Chunk.CodeBase (codevars', quantvar)

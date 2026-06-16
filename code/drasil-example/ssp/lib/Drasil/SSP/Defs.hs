@@ -8,6 +8,7 @@ module Drasil.SSP.Defs (
 
 import Control.Lens ((^.))
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -32,18 +33,18 @@ defs' = [slpSrf, crtSlpSrf, plnStrn, waterTable]
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,
   morPrice :: IdeaDict
-intrslce = nc "interslice" (cn' "interslice")
-layer    = nc "layer"      (cn' "layer")
-material = nc "material"   (cn' "material")
-slice    = nc "slice"      (cn' "slice")
-slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun
+intrslce = idea' (mkUid "interslice") (cn' "interslice")
+layer    = idea' (mkUid "layer")      (cn' "layer")
+material = idea' (mkUid "material")   (cn' "material")
+slice    = idea' (mkUid "slice")      (cn' "slice")
+slip     = idea' (mkUid "slip")       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun
                                         --       (an act of sliding unintentionally for a short distance)?
                                         --       (related to issue #129)
-slope    = nc "slope"      (cn' "slope")
-soil     = nc "soil"       (cn  "soil")
-stability = nc "stability" (cn "stability")
+slope    = idea' (mkUid "slope")      (cn' "slope")
+soil     = idea' (mkUid "soil")       (cn  "soil")
+stability = idea' (mkUid "stability") (cn "stability")
 
-morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
+morPrice = idea' (mkUid "morPrice")   (pn  "Morgenstern-Price")
 
 soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics,
   stabAnalysis, ssa, slpSrfCon :: IdeaDict
@@ -98,7 +99,7 @@ waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
 --
 factor :: IdeaDict --FIXME: this is here becuase this phrase is
                      --used in datadefs and instance models
-factor = nc "factor" (cn' "factor") -- possible use this everywhere
+factor = idea' (mkUid "factor") (cn' "factor") -- possible use this everywhere
                                       -- (fs, fs_rc, fsConcept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_PS` safety
@@ -106,8 +107,8 @@ factorOfSafety = factor `of_PS` safety
 ---------
 -- HACK: this belongs in drasil-data
 minim, maxim :: IdeaDict -- else clashes with Prelude
-minim = nc "minimum" (cn' "minimum")
-maxim = nc "maximum" (cn' "maximum")
+minim = idea' (mkUid "minimum") (cn' "minimum")
+maxim = idea' (mkUid "maximum") (cn' "maximum")
 
 -- Some sentences want plurals (because of arrays) of things that are normally singular.
 xCoords, yCoords :: ConceptChunk

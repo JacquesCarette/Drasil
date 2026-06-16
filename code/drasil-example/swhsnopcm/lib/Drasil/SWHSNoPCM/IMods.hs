@@ -8,14 +8,14 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Drasil.Sentence.Combinators (substitute, unwrap)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, newDEModel',
   Derivation, mkDerivName, DifferentialModel, makeASystemDE)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 -- other parts of SHWS
 import Drasil.SWHS.Concepts (water)
@@ -49,7 +49,7 @@ eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
 eBalanceOnWtrRC :: DifferentialModel
 eBalanceOnWtrRC =
   makeASystemDE
-    time
+    (dqdWr time)
     tempW
     coeffs
     unknowns

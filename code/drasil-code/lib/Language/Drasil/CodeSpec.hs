@@ -30,7 +30,7 @@ import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
-import Utils.Drasil (subsetOf)
+import Data.List.Extras (subsetOf)
 
 import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)

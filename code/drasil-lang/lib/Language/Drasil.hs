@@ -56,6 +56,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , Quantity
   , HasReasVal(reasVal)
+  , MayHaveRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
   , IsUnit(getUnits)
@@ -65,16 +66,13 @@ module Language.Drasil (
   -- Language.Drasil.Symbol
   , HasRefAddress(getRefAdd)
   , Referable(..)
-  -- Language.Drasil.Classes
-  , HasReference(getReferences)
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
 
   -- *** Basic types
   -- Language.Drasil.Chunk.NamedIdea
-  , nc, ncUID, IdeaDict , mkIdea
-  , nw -- bad name (historical)
+  , IdeaDict, idea, idea'
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdeaWithDict, prependAbrv
 
@@ -82,7 +80,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dccAWDS, dccA, dccWDS, cc', ccs, cw, cic
+  , cncpt, cncpt', cncpt'', cncpt''', dcc, dccAWDS, dccA, dccWDS, cc', cw, cic
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
@@ -90,10 +88,10 @@ module Language.Drasil (
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdQd, dqdWr
+  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
-  , UnitalChunk(..), uc, uc', ucStaged, ucStaged'
+  , UnitalChunk, uc, uc', ucStaged, ucStaged'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
@@ -109,10 +107,10 @@ module Language.Drasil (
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
   , ConstrConcept(..)
-  , constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
+  , constrained', constrainedWithRationale, cuc', cuc'', cucNoUnit', constrainedNRV'
   , cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertQ, uq, uqc, uqcND
+  , UncertQ, uq, uqc, uqcND, uqDirect
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
@@ -121,10 +119,6 @@ module Language.Drasil (
   -- Language.Drasil.Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
-  -- Language.Drasil.Reference
-  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
-  -- Language.Drasil.Decorated Reference
-  , DecRef(refInfo), dRefInfo, dRef, HasDecRef(..)
 
   -- *** Citations
   -- Language.Drasil.Chunk.Citation
@@ -197,22 +191,6 @@ module Language.Drasil (
   , foldlEnumList, foldlList, foldlSent
   , foldlSent_,foldlSentCol, foldOpts, foldNums, numList
 
-  -- * Basic Document Language
-  -- | Holds all the types and helper functions needed especially in @drasil-docLang@
-  -- Language.Drasil.Document
-  , Document(..), ShowTableOfContents(..), Section(..)
-  , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
-  , mkParagraph, mkRawLC, checkToC
-  , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn', ulcc
-  , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
-  , MaxWidthPercent
-  , HasContents(accessContents)
-  , RawContent(..)
-  , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
-  , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
-
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
 
@@ -261,20 +239,11 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
-import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
-  , Section(..), SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn', ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
-  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
-  , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
-import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
-  , RawContent(..), ListTuple, MaxWidthPercent
-  , HasContents(accessContents)
-  , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity)
+  HasReasVal(reasVal), MayHaveRationale(rationale), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef
@@ -296,7 +265,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged')
+import Language.Drasil.Chunk.Unital(UnitalChunk, uc, uc', ucStaged, ucStaged')
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor
@@ -313,8 +282,6 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitaliza
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
 import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
-import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS, HasReference(..))
-import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef, HasDecRef(..))
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable, sortBySymbol, sortBySymbolTuple)

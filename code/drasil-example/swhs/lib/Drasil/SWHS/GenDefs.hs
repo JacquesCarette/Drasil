@@ -8,14 +8,14 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
-import Drasil.Sentence.Combinators (eqN)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel', Derivation,
   mkDerivName, RelationConcept, makeRC)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
   assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)

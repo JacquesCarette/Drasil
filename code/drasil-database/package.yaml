@@ -21,7 +21,6 @@ dependencies:
 - lens
 - template-haskell
 - text
-- drasil-utils
 
 ghc-options:
 - -Wall

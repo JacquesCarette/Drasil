@@ -26,7 +26,7 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
+symbols = pi_ : map dqdWr units ++ unitless ++ map dqdWr constrained
  ++ map dqdWr unitalChuncks ++ map dqdWr specParamValList ++
    map dqdWr [htFusionMin, htFusionMax, coilSAMax] ++
    map dqdWr [absTol, relTol]

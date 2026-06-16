@@ -47,12 +47,15 @@ library:
   - Language.Drasil.GOOL
   - Data.Drasil.ExternalLibraries.ODELibraries
 
-executables:
+tests:
   codegenTest:
-    main: Main
     source-dirs: test
+    main: Main
     ghc-options:
     - -threaded
     - -O2
     dependencies:
     - drasil-code
+    - drasil-file-handling
+    - drasil-testing-kit
+    - tasty

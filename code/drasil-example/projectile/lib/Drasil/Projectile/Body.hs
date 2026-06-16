@@ -1,16 +1,16 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
+import Drasil.Database (ChunkDB)
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
-import Drasil.SRSDocument
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import qualified Drasil.DocLang.SRS as SRS
-import Drasil.Document.Contents (foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletNested, bulletFlat)
-import Drasil.System (mkSmithEtAlICO)
+import qualified Drasil.SRS.Concepts as SRS
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
@@ -38,7 +38,8 @@ import Data.Drasil.Concepts.Education(calculus, undergraduate,
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Changes (likelyChgs)
-import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
+  ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -149,21 +150,16 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [projMotion, rectVel] ++
-  -- CIs
-  [nw progName]
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.

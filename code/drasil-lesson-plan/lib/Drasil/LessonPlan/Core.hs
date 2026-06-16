@@ -1,0 +1,28 @@
+{-# LANGUAGE TemplateHaskell #-}
+module Drasil.LessonPlan.Core (
+  LessonPlan,
+  mkLessonPlan,
+  lsnPlanRefs
+) where
+
+import Control.Lens (makeLenses, (^.))
+import qualified Data.Map.Strict as M
+
+import Drasil.Database (UID, uid)
+import Language.Drasil.Document (Reference)
+
+import Drasil.System (SystemMeta, HasSystemMeta(..))
+
+data LessonPlan = LP {
+  _sm :: SystemMeta,
+  _lsnPlanRefs :: M.Map UID Reference
+}
+makeLenses ''LessonPlan
+
+instance HasSystemMeta LessonPlan where
+  systemMeta = sm
+
+mkLessonPlan :: SystemMeta -> [Reference] -> LessonPlan
+mkLessonPlan m rs = LP m refs
+  where
+    refs = M.fromList $ map (\r -> (r ^. uid, r)) rs

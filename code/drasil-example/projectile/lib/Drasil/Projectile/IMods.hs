@@ -7,15 +7,15 @@ import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
   ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
-import Drasil.Sentence.Combinators (eqnWSource)
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN,
   Derivation, mkDerivName)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, gravAccelValue,
   launchOrigin, posXDirection, targetXAxis, timeStartZero, yAxisGravity)

@@ -3,9 +3,10 @@ module Drasil.Generator.CommonKnowledge (
   withCommonKnowledge
 ) where
 
-import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder12)
-import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
-  DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13)
+import Language.Drasil (IdeaDict, Citation, ConceptChunk, ConceptInstance,
+  DefinedQuantityDict, UnitDefn, CI)
+import Language.Drasil.Document (LabelledContent, Reference)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource,
   smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -16,19 +17,21 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon')
 import Data.Drasil.SI_Units (siUnits)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
+import Drasil.Metadata.Domains (compScience, softEng, mathematics, progLanguage, civilEng,
+  materialEng, documentc, knowledgemng)
 
 -- | Create a `ChunkDB` containing background knowledge common to all of
 -- Drasil's existing case studies. This means knowledge related to the
 -- SmithEtAl-esque SRS, mathematics, physics, general science, basic software,
 -- and general documentation.
-withCommonKnowledge :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] ->
+withCommonKnowledge :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] -> [CI] ->
     [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
     [LabelledContent] -> ChunkDB
-withCommonKnowledge = insertAllOutOfOrder12 basisCDB
+withCommonKnowledge = insertAllOutOfOrder13 basisCDB
 
 -- | The 'basis' chunk database to all of Drasil's case studies, containing
 -- common background knowledge, including that related to the SRS, mathematics,
@@ -39,6 +42,7 @@ basisCDB =
   $ insertAll siUnits
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
+  $ insertAll basisCIs
   $ insertAll basisIdeaDicts
   $ insertAll basisCitations
     empty
@@ -76,12 +80,14 @@ basisIdeaDicts =
   --  * compcon - Computing related IdeaDicts. Since all of the case studies are
   --              concerned with software, this is included in the basis as the
   --              computing chunks are relevant to all of them.
-  doccon ++ prodtcon ++ educon ++ compcon ++
-  -- CIs
+  doccon ++ prodtcon ++ educon ++ compcon ++ [compScience, softEng, mathematics, progLanguage, civilEng, materialEng, documentc, knowledgemng]
+
+basisCIs :: [CI]
+basisCIs =
   --  * doccon' - A list of CommonIdeas that are added for the same purpose as `doccon`.
-  --  * mathcon' - Math-related CommonIdeas. Used in 8/9 case studies so included in basis.
-  --  * physicCon' - Physics-related CommonIdeas (1D, 2D, 3D). Used in 6/9 case studies.
-  map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
+  --  * mathcon' - Math-related CommonIdeas.
+  --  * physicCon' - Physics-related CommonIdeas (1D, 2D, 3D).
+  concat [doccon', mathcon', physicCon']
 
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =

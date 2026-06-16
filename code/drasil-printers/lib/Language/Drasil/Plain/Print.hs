@@ -15,7 +15,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
 
 import Language.Drasil (Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (HasSymbol(..))
-import Utils.Drasil (toPlainName)
+import Data.String.Extras (toPlainName)
 
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
@@ -54,7 +54,7 @@ pExprDoc _ (Ident s) = text $ toPlainName s
 pExprDoc _ (Label s) = text $ toPlainName s
 pExprDoc _ (Spec s) = specialDoc s
 pExprDoc f (Sub e) = text "_" <> pExprDoc f e
-pExprDoc f (Sup e) = text "^" <> pExprDoc f e
+pExprDoc f (Sup e) = text "_" <> pExprDoc f e
 pExprDoc _ (MO o) = opsDoc o
 pExprDoc f (Over Hat e) = pExprDoc f e <> text "_hat"
 pExprDoc f (Fenced l r e) = fenceDocL l <> pExprDoc f e <> fenceDocR r

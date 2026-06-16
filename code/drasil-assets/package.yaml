@@ -42,6 +42,7 @@ tests:
     dependencies:
     - drasil-assets
     - drasil-file-handling
+    - drasil-testing-kit
     - hedgehog
     - tasty
     - tasty-hedgehog

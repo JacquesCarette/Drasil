@@ -18,16 +18,16 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   getDoxOutput, getSoftwareDossierFiles, HasChoices(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..),
   SoftwareDossierState)
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
-  CSStateVar, SClass, NamedArgs, SharedProg, OOProg, TypeElim(..),
-  ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..))
+  CSStateVar, SClass, NamedArgs, SharedProg, OOProg, ValueSym(..), Argument(..),
+  ValueExpression(..), OOValueExpression(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), ClassSym(..), CodeType(..), getCodeType)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -118,7 +118,7 @@ mkArg v = do
   let mkArg' (List _) = pointerArg
       mkArg' (Object _) = pointerArg
       mkArg' _ = id
-  mkArg' (getType $ valueType vl) (return vl)
+  mkArg' (getCodeType $ valueType vl) (return vl)
 
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
@@ -147,7 +147,7 @@ fApp m s t vl ns = do
   fCall (\cm args nargs ->
     if m /= cm then extFuncAppMixedArgs m s t args nargs else
       if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
-      else selfFuncAppMixedArgs s t args nargs) vl ns
+      else selfMethodCallMixedArgs s t args nargs) vl ns
 
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
@@ -199,8 +199,8 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 -- If @m@ is the current module and function is not exported, use GOOL's function for
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
-fAppProc :: (SharedProg r) => Name -> Name -> VSType r -> [SValue r] ->
-  NamedArgs r -> GenState (SValue r)
+fAppProc :: (SharedProg r) => Name -> Name -> VSType r ->
+  [SValue r] -> NamedArgs r -> GenState (SValue r)
 fAppProc m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->

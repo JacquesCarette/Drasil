@@ -9,13 +9,15 @@ packages:
 - drasil-data
 - drasil-data-formats
 - drasil-database
-- drasil-docLang
+- drasil-srs
+- drasil-example/bss
 - drasil-example/dblpend
 - drasil-example/gamephysics
 - drasil-example/glassbr
 - drasil-example/hghc
 - drasil-example/pdcontroller
 - drasil-example/projectile
+- drasil-example/projectile-lesson
 - drasil-example/sglpend
 - drasil-example/ssp
 - drasil-example/swhs
@@ -25,11 +27,13 @@ packages:
 - drasil-gen
 - drasil-gool
 - drasil-lang
+- drasil-lesson-plan
 - drasil-makefile
 - drasil-meta-analysis
 - drasil-metadata
 - drasil-printers
 - drasil-system
+- drasil-testing-kit
 - drasil-theory
 - drasil-utils
 - drasil-website
@@ -111,3 +115,5 @@ require-stack-version: ">=2.3.1"
 # compiler-check: newer-minor
 
 dump-logs: all
+
+notify-if-no-run-tests: false

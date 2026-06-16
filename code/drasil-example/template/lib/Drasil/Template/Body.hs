@@ -8,21 +8,21 @@ module Drasil.Template.Body (mkSRS, si) where
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.Database (ChunkDB)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
 import Language.Drasil.ShortHands (lT)
-import Drasil.SRSDocument
-import Drasil.DocLang (inReqWTab)
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
 
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.SRS.Concepts as SRS
 import Data.Drasil.Citations
 import Data.Drasil.Concepts.Theory (inModel)
-import Drasil.DocumentLanguage.TraceabilityGraph
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -119,10 +119,8 @@ si = mkSmithEtAlICO
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList $ inputs <> outputs
 
-ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- CIs
-  [nw progName]
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = []
@@ -132,13 +130,16 @@ concIns = [inputValues, outputValues]
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge []
-  symbols ideaDicts conceptChunks
+  symbols [] cis conceptChunks
   ([] :: [UnitDefn]) dataDefs ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
   citations [inputValuesTable]
 
 citations :: BibRef
 citations = [parnasClements1986]
+
+resourcePath :: String
+resourcePath = "../../../../datafiles/dblpend/" -- FIXME: Change to your resource path!
 
 figTemp :: LabelledContent
 figTemp = llccFig "dblpend" $ figWithWidth EmptyS

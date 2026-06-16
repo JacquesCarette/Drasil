@@ -7,18 +7,18 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
-import Drasil.SRSDocument
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (mkSmithEtAlICO)
-import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
@@ -77,20 +77,18 @@ motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  materialProprty :
-  -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl]
+ideaDicts = [materialProprty]
+
+cis :: [CI]
+cis = progName' : progName : [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] SWHS.dataDefs
   insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
@@ -146,7 +144,7 @@ mkSRS = [TableOfContents,
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
+  [Lit heatTrans, Doc' progName], SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -336,7 +334,7 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = map cw [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
+terms = [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
 -- already in SWHSUnits

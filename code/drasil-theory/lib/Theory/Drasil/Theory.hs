@@ -10,6 +10,7 @@ import Control.Lens (view, makeLenses, (^.))
 
 import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
 import Language.Drasil
+import Language.Drasil.Document
 import Drasil.Metadata.TheoryConcepts (thModel)
 
 import Theory.Drasil.ModelKinds

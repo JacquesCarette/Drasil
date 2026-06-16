@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.CommonIdea (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..), mkUid)
+import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
 import qualified Data.Set as Set
 import Data.String.Extras (repUnd)
 

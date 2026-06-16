@@ -234,7 +234,7 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 #----------------------------------------------------------#
 
 deps: check_stack ##@Dependencies Build only dependencies.
-	- stack build $(stackArgs) --only-dependencies
+	- stack build $(stackBuildArgs) --only-dependencies
 
 #-------------------------------------------------#
 #--- Targets that affect all packages/examples ---#

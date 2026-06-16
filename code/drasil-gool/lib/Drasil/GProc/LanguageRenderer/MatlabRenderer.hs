@@ -41,18 +41,19 @@ import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   docMod, fileFromData, buildModule, modFromData, function)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
-  commentedItem, parameterList, body, addComments, docCmt, sqrt, abs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil)
+  commentedItem, parameterList, body, addComments, docCmt, multiStmt, sqrt,
+  abs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
-  litInt, litString)
+  litInt, litString, valStmt, emptyStmt, assign)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc')
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp,
   litTrue, litFalse)
+import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
   paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
@@ -408,20 +409,20 @@ instance StatementElim MatlabCode where
 
 instance StatementSym MatlabCode where
   type Statement MatlabCode = (Doc, Terminator)
-  valStmt = undefined
-  emptyStmt = undefined
-  multi = undefined
+  valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
+  multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement MatlabCode where
-  assign = undefined
+  assign = G.assign Semi
   (&-=) = undefined
   (&+=) = undefined
   (&++) = undefined
   (&--) = undefined
 
 instance DeclStatement MatlabCode where
-  varDec = undefined
-  varDecDef = undefined
+  varDec v scp = CS.varDecDef v scp Nothing
+  varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = undefined
   setDecDef = undefined
   listDec = undefined

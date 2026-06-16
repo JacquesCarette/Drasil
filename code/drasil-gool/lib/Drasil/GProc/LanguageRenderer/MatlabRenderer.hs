@@ -9,7 +9,7 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, UnRepr(..), SharedProg, BodySym(..),
+import Drasil.Shared.InterfaceCommon (Label, VSType, UnRepr(..), SharedProg, BodySym(..),
   BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -34,26 +34,40 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body,
-  block, uOp, bOp, variable, function, statement, visibility, parameter,
+  block, uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
+import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
+  docMod, fileFromData, buildModule, modFromData, function)
+import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
+  commentedItem, parameterList, body, addComments, docCmt, sqrt, abs, log10,
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
-import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (function)
-import qualified Drasil.Shared.LanguageRenderer as R (commentedItem,
-  parameterList)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  comment, param, docFunc)
+  comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
+  negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
+  greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
+  litInt, litString)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc')
-import Drasil.Shared.AST (Terminator, FileData, FuncData, ModData,
-  MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd, ProgData,
-  TypeData, ValData, VarData, CommonThunk, mthdDoc, modDoc)
+import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp,
+  litTrue, litFalse)
+import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
+  FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
+  paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
+  valInt, opDoc, opPrec, VarData, varName,
+  varType, varBind, varDoc, vard, CommonThunk, progD, mthdDoc, modDoc)
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
+  powerPrec, unExpr, unExpr', binExpr)
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
-  on2CodeValues, on2StateValues)
-import Drasil.Shared.State (VS, lensMStoVS)
+  onCodeList, onStateList, on2CodeValues, on2StateValues)
+import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, revFiles, setFileType,
+  getMainDoc)
 
 import Control.Lens.Zoom (zoom)
+import Control.Monad.State (modify)
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -74,7 +88,10 @@ instance ProcProg MatlabCode
 
 instance ProgramSym MatlabCode where
   type Program MatlabCode = ProgData
-  prog = undefined
+  prog n st files = do
+    fs <- mapM (zoom lensGStoFS) files
+    modify revFiles
+    pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym MatlabCode
 instance ProcRenderSym MatlabCode
@@ -84,14 +101,16 @@ instance UnRepr MatlabCode inner where
 
 instance FileSym MatlabCode where
   type File MatlabCode = FileData
-  fileDoc = undefined
-  docMod = undefined
+  fileDoc m = do
+    modify (setFileType Combined)
+    A.fileDoc mlExt m
+  docMod = A.docMod mlExt
 
 instance RenderFile MatlabCode where
-  top = undefined
-  bottom = undefined
-  commentedMod = undefined
-  fileFromData = undefined
+  top _ = toCode empty
+  bottom = toCode empty
+  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
+  fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym MatlabCode where
   type Import MatlabCode = Doc
@@ -103,82 +122,82 @@ instance ImportElim MatlabCode where
 
 instance BodySym MatlabCode where
   type Body MatlabCode = Doc
-  body = undefined
-  addComments = undefined
+  body = onStateList (onCodeList R.body)
+  addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 
 instance RenderBody MatlabCode where
-  multiBody = undefined
+  multiBody = G.multiBody
 
 instance BodyElim MatlabCode where
   body = unMLC
 
 instance BlockSym MatlabCode where
   type Block MatlabCode = Doc
-  block = undefined
+  block = G.block
 
 instance RenderBlock MatlabCode where
-  multiBlock = undefined
+  multiBlock = G.multiBlock
 
 instance BlockElim MatlabCode where
   block = unMLC
 
 instance TypeSym MatlabCode where
-  bool = undefined
-  int = undefined
-  float = undefined
-  double = undefined
-  char = undefined
-  string = undefined
-  infile = undefined
-  outfile = undefined
+  bool = mlTy Boolean "logical"
+  int = mlTy Integer "int"
+  float = mlTy Float "double"
+  double = mlTy Double "double"
+  char = mlTy Char "char"
+  string = mlTy String "string"
+  infile = mlTy InFile "file"
+  outfile = mlTy OutFile "file"
   listType = undefined
   setType = undefined
   arrayType = undefined
   listInnerType = undefined
   funcType = undefined
-  void = undefined
+  void = mlTy Void "void"
 
 instance RenderType MatlabCode where
   multiType = undefined
 
 instance UnaryOpSym MatlabCode where
   notOp = undefined
-  negateOp = undefined
-  sqrtOp = undefined
-  absOp = undefined
-  logOp = undefined
-  lnOp = undefined
-  expOp = undefined
-  sinOp = undefined
-  cosOp = undefined
-  tanOp = undefined
-  asinOp = undefined
-  acosOp = undefined
-  atanOp = undefined
-  floorOp = undefined
-  ceilOp = undefined
+  negateOp = G.negateOp
+  sqrtOp = unOpPrec R.sqrt
+  absOp = unOpPrec R.abs
+  logOp = unOpPrec R.log10
+  lnOp = unOpPrec R.log
+  expOp = unOpPrec R.exp
+  sinOp = unOpPrec R.sin
+  cosOp = unOpPrec R.cos
+  tanOp = unOpPrec R.tan
+  asinOp = unOpPrec R.asin
+  acosOp = unOpPrec R.acos
+  atanOp = unOpPrec R.atan
+  floorOp = unOpPrec R.floor
+  ceilOp = unOpPrec R.ceil
 
 instance BinaryOpSym MatlabCode where
-  equalOp = undefined
+  equalOp = G.equalOp
   notEqualOp = undefined
-  greaterOp = undefined
-  greaterEqualOp = undefined
-  lessOp = undefined
-  lessEqualOp = undefined
-  plusOp = undefined
-  minusOp = undefined
-  multOp = undefined
-  divideOp = undefined
-  powerOp = undefined
+  greaterOp = G.greaterOp
+  greaterEqualOp = G.greaterEqualOp
+  lessOp = G.lessOp
+  lessEqualOp = G.lessEqualOp
+  plusOp = G.plusOp
+  minusOp = G.minusOp
+  multOp = G.multOp
+  divideOp = G.divideOp
+  powerOp = powerPrec "^"
   moduloOp = undefined
-  andOp = undefined
-  orOp = undefined
+  andOp = C.andOp
+  orOp = C.orOp
 
 instance OpElim MatlabCode where
-  uOp = undefined
-  bOp = undefined
-  uOpPrec = undefined
-  bOpPrec = undefined
+  uOp = opDoc . unMLC
+  bOp = opDoc . unMLC
+  uOpPrec = opPrec . unMLC
+  bOpPrec = opPrec . unMLC
 
 instance ScopeSym MatlabCode where
   global = undefined
@@ -190,20 +209,22 @@ instance ScopeElim MatlabCode where
 
 instance VariableSym MatlabCode where
   type Variable MatlabCode = VarData
-  var = undefined
-  constant = undefined
+  var = G.var
+  constant = var
   extVar = undefined
 
 instance VariableElim MatlabCode where
-  variableName = undefined
-  variableType = undefined
+  variableName = varName . unMLC
+  variableType = onCodeValue varType
 
 instance InternalVarElim MatlabCode where
-  variableBind = undefined
-  variable = undefined
+  variableBind = varBind . unMLC
+  variable = varDoc . unMLC
 
 instance RenderVariable MatlabCode where
-  varFromData = undefined
+  varFromData b n t' d = do
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym MatlabCode where
   type Value MatlabCode = ValData
@@ -213,13 +234,13 @@ instance Argument MatlabCode where
   pointerArg = undefined
 
 instance Literal MatlabCode where
-  litTrue = undefined
-  litFalse = undefined
+  litTrue = C.litTrue
+  litFalse = C.litFalse
   litChar = undefined
-  litDouble = undefined
+  litDouble = G.litDouble
   litFloat = undefined
-  litInt = undefined
-  litString = undefined
+  litInt = G.litInt
+  litString = G.litString
   litArray = undefined
   litList = undefined
   litSet = undefined
@@ -228,7 +249,7 @@ instance MathConstant MatlabCode where
   pi = undefined
 
 instance VariableValue MatlabCode where
-  valueOf = undefined
+  valueOf = G.valueOf
 
 instance CommandLineArgs MatlabCode where
   arg = undefined
@@ -236,29 +257,29 @@ instance CommandLineArgs MatlabCode where
   argExists = undefined
 
 instance NumericExpression MatlabCode where
-  (#~) = undefined
-  (#/^) = undefined
-  (#|) = undefined
-  (#+) = undefined
-  (#-) = undefined
-  (#*) = undefined
-  (#/) = undefined
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) = binExpr divideOp
   (#%) = undefined
-  (#^) = undefined
-  log = undefined
-  ln = undefined
-  exp = undefined
-  sin = undefined
-  cos = undefined
-  tan = undefined
-  csc = undefined
-  sec = undefined
-  cot = undefined
-  arcsin = undefined
-  arccos = undefined
-  arctan = undefined
-  floor = undefined
-  ceil = undefined
+  (#^) = binExpr powerOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression MatlabCode where
   (?!) = undefined
@@ -289,12 +310,14 @@ instance RenderValue MatlabCode where
   printFileLnFunc = undefined
   cast = undefined
   call = undefined
-  valFromData = undefined
+  valFromData p i t' d = do
+    t <- t'
+    toState $ on2CodeValues (vd p i) t (toCode d)
 
 instance ValueElim MatlabCode where
-  valuePrec = undefined
-  valueInt = undefined
-  value = undefined
+  valuePrec = valPrec . unMLC
+  valueInt = valInt . unMLC
+  value = val . unMLC
 
 instance IndexTranslator MatlabCode where
   intToIndex = undefined
@@ -375,13 +398,13 @@ instance InternalControlStmt MatlabCode where
   multiReturn = undefined
 
 instance RenderStatement MatlabCode where
-  stmt = undefined
-  loopStmt = undefined
-  stmtFromData = undefined
+  stmt = G.stmt
+  loopStmt = G.loopStmt
+  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim MatlabCode where
-  statement = undefined
-  statementTerm = undefined
+  statement = fst . unMLC
+  statementTerm = snd . unMLC
 
 instance StatementSym MatlabCode where
   type Statement MatlabCode = (Doc, Terminator)
@@ -447,7 +470,11 @@ instance CommentStatement MatlabCode where
 instance ControlStatement MatlabCode where
   break = undefined
   continue = undefined
-  returnStmt = undefined
+  -- MATLAB has no `return <expr>`: a function returns by assigning its named
+  -- output, so a return becomes `result = <value>;`.
+  returnStmt v' = do
+    v <- zoom lensMStoVS v'
+    stmtFromData (text mlRet <+> equals <+> RC.value v) Semi
   throw = undefined
   ifCond = undefined
   switch = undefined
@@ -513,31 +540,57 @@ instance RenderMethod MatlabCode where
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance ProcRenderMethod MatlabCode where
-  intFunc _ n _ _ ps b = do
+  intFunc _ n _ t ps b = do
     pms <- sequence ps
+    tp  <- t
     bod <- b
-    pure $ toCode $ mthd $ mlFuncDoc n [] pms (RC.body bod)
+    -- A function with a non-void return type declares the output variable
+    -- 'result' in its header (function result = name(...)); returnStmt then
+    -- assigns to it. Void functions declare no output.
+    let outs = [text mlRet | cType (unMLC tp) /= Void]
+    pure $ toCode $ mthd $ mlFuncDoc n outs pms (RC.body bod)
 
 instance MethodElim MatlabCode where
   method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode where
   type Module MatlabCode = ModData
-  buildModule = undefined
+  -- MATLAB single-file first pass: no module wrapper and no import statements
+  -- The main script body goes first, then the local function definitions.
+  buildModule n _ = A.buildModule n getMainDoc (pure empty)
 
 instance RenderMod MatlabCode where
-  modFromData = undefined
-  updateModuleDoc = undefined
+  modFromData n = A.modFromData n (toCode . md n)
+  updateModuleDoc f = onCodeValue (updateMod f)
 
 instance ModuleElim MatlabCode where
   module' = modDoc . unMLC
 
 instance BlockCommentSym MatlabCode where
-  blockComment = undefined
-  docComment = undefined
+  blockComment lns = toCode $ R.docCmt lns mlBlockCmtStart mlBlockCmtEnd
+  docComment = onStateValue (\lns -> toCode $
+    R.docCmt lns mlBlockCmtStart mlBlockCmtEnd)
 
 instance BlockCommentElim MatlabCode where
-  blockComment' = undefined
+  blockComment' = unMLC
+
+-- convenience
+mlName, mlVersion :: String
+mlName = "MATLAB"
+mlVersion = "R2024b"
+
+-- | MATLAB source file extension.
+mlExt :: String
+mlExt = "m"
+
+-- | Name of the implicit output variable a value-returning function assigns to.
+mlRet :: String
+mlRet = "result"
+
+-- | Makes a MATLAB type. Only the 'CodeType' tag is used (internally); the
+--   name is never written out, since MATLAB code has no type annotations.
+mlTy :: CodeType -> String -> VSType MatlabCode
+mlTy c s = typeFromData c s (text s)
 
 -- | A MATLAB parameter renders as just the variable name.
 mlParam :: MatlabCode (Variable MatlabCode) -> Doc
@@ -557,11 +610,11 @@ mlFuncDoc n outs pms bod =
           [o] -> o <+> equals <> text " "
           os  -> brackets (hcat (punctuate (text ", ") os)) <+> equals <> text " "
 
--- convenience
-mlName, mlVersion :: String
-mlName = "MATLAB"
-mlVersion = "R2024b"
-
 -- Comments
 mlCmtStart :: Doc
 mlCmtStart = text "%"
+
+-- | MATLAB block-comment delimiters.
+mlBlockCmtStart, mlBlockCmtEnd :: Doc
+mlBlockCmtStart = text "%{"
+mlBlockCmtEnd = text "%}"

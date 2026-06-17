@@ -3,7 +3,10 @@ digraph "allvsr" {
     "instance:calcValues" -> "theory:landingposition";
     "instance:calcValues" -> "theory:offset";
     "instance:outputValues" -> "theory:flightduration";
+    "instance:outputValues" -> "theory:landingposition";
     "instance:outputValues" -> "theory:offset";
+    "instance:outputValues2" -> "theory:flightduration";
+    "instance:outputValues2" -> "theory:offset";
     "instance:twoDMotion" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:twoDMotion"];
     "instance:cartSyst" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:cartSyst"];
     "instance:yAxisGravity" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:yAxisGravity"];
@@ -61,9 +64,10 @@ digraph "allvsr" {
     "instance:reusable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:reusable"];
     "instance:maintainable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainable"];
     "instance:portable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:portable"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:verifyInVals" "instance:calcValues" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable";
+        "instance:inputValues" "instance:verifyInVals" "instance:calcValues" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable" "instance:outputValues2";
     }
     "instance:targetHit" [shape=box, color=black, style=filled, fillcolor="darkgoldenrod1", label="GS:targetHit"];
     subgraph "GS" {

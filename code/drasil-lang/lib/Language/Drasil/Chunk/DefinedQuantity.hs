@@ -17,11 +17,10 @@ import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
-  Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
+  Definition(defn), ConceptDomain(cdom), Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS)
 import Language.Drasil.Expr.Class (sy)
-import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
-  MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
@@ -73,8 +72,8 @@ instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 instance Express       DefinedQuantityDict where express = sy
 
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
-dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
-dqd c s sp = DQD c (const s) sp . Just . unitWrapper
+dqd :: ConceptChunk -> Symbol -> Space -> UnitDefn -> DefinedQuantityDict
+dqd c s sp = DQD c (const s) sp . Just
 
 -- | Similar to 'dqd', but without any units.
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict

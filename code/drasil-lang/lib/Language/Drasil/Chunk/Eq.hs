@@ -18,10 +18,10 @@ import Control.Lens ((^.), view, lens, Lens', to)
 import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
 import qualified Data.Set as Set
 
-import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
+  DefiningExpr(defnExpr), Definition(defn), Quantity,
   ConceptDomain(cdom), Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Concept (cncpt''')
@@ -88,7 +88,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
-fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> e -> QDefinition e
+fromEqn :: String -> NP -> Sentence -> Symbol -> Space -> UnitDefn -> e -> QDefinition e
 fromEqn nm desc def symb sp un =
   QD (dqd (cncpt''' (mkUid nm) desc def) symb sp un) []
 
@@ -98,10 +98,10 @@ fromEqn' nm desc def symb sp =
   QD (dqd' (cncpt''' (mkUid nm) desc def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
-fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
-  Space -> u -> e -> QDefinition e
+fromEqnSt :: UID -> NP -> Sentence -> (Stage -> Symbol) ->
+  Space -> UnitDefn -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (dqd' (cncpt''' nm desc def) symb sp (Just $ unitWrapper un)) []
+  QD (dqd' (cncpt''' nm desc def) symb sp (Just un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
@@ -150,10 +150,9 @@ mkFuncDef0 f n s u is = QD
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- resultant units, and a defining Expr
 mkFuncDef :: (IsChunk f, HasSymbol f, HasSpace f,
-              IsChunk i, HasSymbol i, HasSpace i,
-              IsUnit u) =>
-  f -> NP -> Sentence -> u -> [i] -> e -> QDefinition e
-mkFuncDef f n s u = mkFuncDef0 f n s (Just $ unitWrapper u)
+              IsChunk i, HasSymbol i, HasSpace i) =>
+  f -> NP -> Sentence -> UnitDefn -> [i] -> e -> QDefinition e
+mkFuncDef f n s u = mkFuncDef0 f n s (Just u)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,
 -- and a defining Expr

@@ -1,6 +1,7 @@
 module Drasil.DblPend.MetaConcepts (progName) where
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Data.Drasil.Domains (physics)
 
 progName :: CI
-progName = commonIdeaWithDict "dblPendulum" (pn "Double Pendulum") "DblPend" [physics]
+progName = commonIdeaWithDict (mkUid "dblPendulum") (pn "Double Pendulum") "DblPend" [physics]

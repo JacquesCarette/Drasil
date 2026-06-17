@@ -4,7 +4,7 @@ After reading Jacques draft of an idealized process, I decided to pause on that 
 
 This document is my initial thoughts on an idealized process from the perspective of someone creating research software.  At this time I'm not going to explicitly match up this process with a generative process.  I want to just think about it as if I was doing a new scientific computing problem.  However, I'm going to make an effort to be much more explicit on characterizing and naming the different types of decisions and information.  
 
-I'm assuming that the scientific computing problem is an ICO (input calculate output) problem.  The running example of projectile motion will be used throughout.  The closest document that follows this process for projectile motion is the [SRS of the refined theories version of projectile motion](https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileSRS_RefinedTheories/Projectile_SRS.pdf).
+I'm assuming that the scientific computing problem is an ICO (input calculate output) problem.  The running example of projectile motion will be used throughout.  The closest document that follows this process for projectile motion is the [SRS of the refined theories version of projectile motion](https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileSRS_RefinedTheories/Projectile_SRS.pdf). Inspiration also comes from the little theories version of projectile motion started by Bill Farmer.
 
 This is intended to follow Parnas's faked rational process.  That is, the steps are how they would appear if we had perfect knowledge of where we were going to end up.  This might be different from the idealized process recorded by Jacques.  I can't tell from reviewing Jacques's steps whether the gathering of theories is just the relevant theories, or if the gathering includes theories that *might* be relevant.  In the current case iteration would surely have occurred, but the version presented as ideal is the final version.
 
@@ -62,26 +62,50 @@ I'll go through the ChatGPT steps and make changes, additions and clarifications
 
 ## Problem Formulation
 
-| Step in the Process | Example from Projectile |
+| Step in the Process | Example(s) from Projectile |
 | --- | --- |
 | Identify the scientific question | How far will the projectile go? |
-| Identify context | The projectile is a ball used in sports on Earth |
-| Rationale (Justification) for question and context | Sports are popular; we play them on Earth; the context of sports is a good motivator for teaching physics. |
+| Identify context | The projectile is a ball used in sports on Earth; the software will be used for teaching physics |
+| Rationale (justification) for question and context | Sports are popular; we play them on Earth; the context of sports is a good motivator for teaching physics. |
 | Define goal(s) | Determine the horizontal distance the projectile travels from the target. |
-| Define scope | <ul><li>We don't care about the orientation of the projectile</li><li>We don't care about forces acting on the projectile, only its kinematics</li><li>The projectile will travel a relatively short distance, consistent with the context of ball sports; that is, ballistic trajectories are outside of the scope.</li></ul>|
-| Rationale for scope | |
-| Determine what quantity needs to be predicted | The distance from the launch point|
-| Write problem description document | We don't have an example of this document|
+| Determine what quantity needs to be predicted | The distance from the launch point |
+| Define scope | <ul><li>We don't care about the orientation of the projectile</li><li>We don't care about forces acting on the projectile, only its kinematics</li><li>The projectile will travel a relatively short distance, consistent with the context of ball sports; that is, ballistic trajectories are outside the scope.</li></ul>|
+| Rationale for scope decisions | For teaching purposes the scope is appropriate. |
+| Write problem description document | We don't currently have an example of this document. |
 
 From the ChatGPT process, I've changed the following:
 
 - I say goals instead of objectives, since goals is the terminology used in the SRS template
-- I split the single bullet point of define objectives (goals), assumptions, and scope into separate bullets because separation lets us focus on each item specifically
+- I split the single bullet point of define objectives (goals), assumptions, and scope into separate bullets because separation lets us focus on each item 
 - The "define assumptions" sub-step has been moved to the next step ("Mathematical Modeling")
+- I dropped "explained and optimized", choosing to just focus on "predicted" because the scope of this exercise is currently just for ICO problems.
 
 To the ChatGPT process, I've added the following:
 
 - "define context" is a new sub-step
-- sub-steps related to rationale information
+- sub-steps related to rationale information have been added
+- a written problem description document has been added
 
 ## Mathematical Modeling
+
+| Step in the Process | Example(s) from Projectile |
+| --- | --- |
+| Make modelling decisions | 2D; Cartesian coordinate system; launcher is coincident with the origin; time starts at zero; launch velocity is positive; magnitude and angle representation for the initial velocity vector; etc.|
+| Identify context theories | theory of complete ordered fields; natural, integers and rationals; single-variable calculus; Euclidean space; logarithm and exponential functions; trigonometry|
+| Identify background theories, built on context theories | Kinematic equations relating position, velocity and acceleration in $n$-dimensions
+| Identify generic theories, refined from background theories (there may be multiple levels of theory refinement) | Rectilinear motion of a body in one dimension under constant acceleration; conversion between magnitude/angle representation of a vector to the component representation|
+| Refine generic theories into problem specific theories | Motion of a projectile in two dimensions using the magnitude and angle representation of velocity, gravity is a constant parameter|
+| Refine problem specific theories into final theories | Motion of a projectile in two dimensions, gravity is set to Earth's gravity|
+| Identify theories needed to provide rationale arguments | Error introduced by assuming a flat planet instead of accounting for curvature|
+| Identify background theory assumptions | None |
+| Identify generic theory assumptions | 1D acceleration is constant |
+| Identify problem specific theory assumptions | In $x$ direction acceleration is zero, in $y$ direction acceleration is a constant; no obstructions impede the path of the projectile; the surface of the planet is assumed to be plat |
+| Identify rationale assumptions | We only care about the motion of the centre of the mass of the projectile; the curvature of the celestial boy can be ignored, air drag is neglected, the rotation of the planet can be neglected |
+| Identify data constraints | the magnitude of the launch velocity is greater than zero; the launch angle is between 0 and $\pi$/2.|
+| Identify the properties of a correct solution | the horizontal distance between the launch point and the landing point is greater than zero|
+| Present the rationale for the modelling decisions | rationale for Cartesian coordinate system is that the problem involves rectilinear motion and curvature is not considered, etc.|
+| Present the rationale for the final theory assumptions | the rationale for considering a flat planet is that the scope is for problems with relatively small velocities and distances.  Using the rationale theory related to the error introduced by neglecting curvature shows that for typical values for sports relevant velocities the error is small.|
+
+Compared to the ChatGPT version of the process, the above version adds much more on theory refinement, rationale and the properties of a correct solution.
+
+I will look at the other steps in the ChatGPT SC process after comparing the first steps to what Jacques produced.

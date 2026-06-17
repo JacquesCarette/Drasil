@@ -68,10 +68,10 @@ I'll go through the ChatGPT steps and make changes, additions and clarifications
 | Identify context | The projectile is a ball used in sports on Earth |
 | Rationale (Justification) for question and context | Sports are popular; we play them on Earth; the context of sports is a good motivator for teaching physics. |
 | Define goal(s) | Determine the horizontal distance the projectile travels from the target. |
-| Define scope | |
+| Define scope | <ul><li>We don't care about the orientation of the projectile</li><li>We don't care about forces acting on the projectile, only its kinematics</li><li>The projectile will travel a relatively short distance, consistent with the context of ball sports; that is, ballistic trajectories are outside of the scope.</li></ul>|
 | Rationale for scope | |
-| Determine what quantity needs to be predicted | |
-| Write problem description document | |
+| Determine what quantity needs to be predicted | The distance from the launch point|
+| Write problem description document | We don't have an example of this document|
 
 From the ChatGPT process, I've changed the following:
 

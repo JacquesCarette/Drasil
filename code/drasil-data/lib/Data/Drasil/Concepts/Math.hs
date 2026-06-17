@@ -11,7 +11,6 @@ import qualified Language.Drasil as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))
 import Language.Drasil.ShortHands (lX, lY, lZ)
-import Drasil.Database (mkUid)
 
 -- Othr Vocabulary
 import Drasil.Metadata.Domains (mathematics)

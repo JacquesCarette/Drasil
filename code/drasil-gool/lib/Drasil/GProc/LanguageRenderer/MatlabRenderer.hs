@@ -485,7 +485,7 @@ instance ControlStatement MatlabCode where
   -- output, so a return becomes `result = <value>;`.
   returnStmt v' = do
     v <- zoom lensMStoVS v'
-    stmtFromData (text mlRet <+> equals <+> RC.value v) Semi
+    var mlRet (toState (valueType v)) &= v'
   throw = undefined
   ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty (text "end")
   switch = undefined

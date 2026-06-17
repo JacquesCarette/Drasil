@@ -73,17 +73,17 @@ instance Referable          GenDefn where
   renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 -- | Smart constructor for general definitions.
-gd :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
+gd :: ModelKind ModelExpr -> Maybe UnitDefn ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ showUID mkind ++ " is empty"
 gd mkind u derivs refs sn_ =
-  GD mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
+  GD mkind u derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions with no references.
-gdNoRefs :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
+gdNoRefs :: ModelKind ModelExpr -> Maybe UnitDefn ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs mkind u derivs sn_ =
-  GD mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
+  GD mkind u derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
 getEqModQdsFromGd :: [GenDefn] -> [ModelQDef]

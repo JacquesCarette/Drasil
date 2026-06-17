@@ -5,6 +5,7 @@ module Drasil.SWHS.Concepts (
 
 import Control.Lens ((^.))
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 
@@ -19,7 +20,7 @@ con = [charging, coil, discharging, gaussDiv,
   tankPCM, transient, water, sWHT, tankParam]
 
 phsChgMtrl:: CI
-phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material"
+phsChgMtrl  = commonIdeaWithDict (mkUid "phsChgMtrl") (nounPhrase "phase change material"
   "phase change materials") "PCM" [materialEng]
 
 ---ConceptChunks---

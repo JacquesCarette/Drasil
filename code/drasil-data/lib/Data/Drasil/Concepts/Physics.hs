@@ -2,6 +2,7 @@
 module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
+import Drasil.Database (mkUid)
 import Language.Drasil hiding (space)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -52,9 +53,9 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
-oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
-twoD   = commonIdeaWithDict "twoD"   (cn "two-dimensional")   "2D" [mathematics, physics]
-threeD = commonIdeaWithDict "threeD" (cn "three-dimensional") "3D" [mathematics, physics]
+oneD   = commonIdeaWithDict (mkUid "oneD")   (cn "one-dimensional")   "1D" [mathematics, physics]
+twoD   = commonIdeaWithDict (mkUid "twoD")   (cn "two-dimensional")   "2D" [mathematics, physics]
+threeD = commonIdeaWithDict (mkUid "threeD") (cn "three-dimensional") "3D" [mathematics, physics]
 
 acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)

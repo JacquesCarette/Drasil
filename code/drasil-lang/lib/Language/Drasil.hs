@@ -99,7 +99,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
+  , getCu, MayHaveUnit(getUnit)
 
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
@@ -301,4 +301,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit))
+  , getCu, MayHaveUnit(getUnit))

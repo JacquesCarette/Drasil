@@ -234,7 +234,7 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 #----------------------------------------------------------#
 
 deps: check_stack ##@Dependencies Build only dependencies.
-	- stack build $(stackArgs) --only-dependencies
+	- stack build $(stackBuildArgs) --only-dependencies
 
 #-------------------------------------------------#
 #--- Targets that affect all packages/examples ---#
@@ -312,8 +312,8 @@ jupyter_html: $(JUPYTER_HTML_EXAMPLES) ##@Examples Extract HTML copies from all 
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z- A-Z_)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX) %$(TEX_E_SUFFIX) %$(CODE_E_SUFFIX) %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z- A-Z_)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX) %$(TEX_E_SUFFIX) %$(CODE_E_SUFFIX) %$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
@@ -383,16 +383,18 @@ $(GOOLTEST)$(STABILIZE_E_SUFFIX):
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
 # then make pdfs from the generated TeX files.
-%$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
-	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/PDF" ]; then \
+		EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh ; \
+	fi
 
 # Build individual example mdBook SRSs.
 # Targets will have the form exampleName_mdBook_build.
 $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
-	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
-	mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ]; then \
+		- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+		mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+	fi
 
 # Launch local server for individual example mdBook SRSs.
 # Targets will have the form exampleName_mdBook_server.
@@ -402,7 +404,9 @@ $(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVE
 
 # Targets will have the form exampleName_juphtml.
 $(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E_SUFFIX): %$(GEN_E_SUFFIX)
-	jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb"
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter" ]; then \
+		jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb" ; \
+	fi
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
@@ -464,8 +468,6 @@ docs: check_stack ##@Documentation Create Haddock documentation of all Drasil mo
 #----------------------------#
 
 # Make individual code examples. Targets are of the form exampleName_gool.
-%$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
 	@DF_DIR="$(DF_DIR)" EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" \
 	EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
@@ -484,8 +486,6 @@ doxygen: $(CODE_EXAMPLES) ##@GOOL Generate doxygen documentation for all example
 
 # Find all the code file paths within an example.
 # Targets are of the form exampleName_deploy_code_path.
-%$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \

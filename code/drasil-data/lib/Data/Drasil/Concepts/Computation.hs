@@ -37,7 +37,7 @@ os :: CI
 application = idea' (mkUid "application")      (cn' "application")
 computer    = idea' (mkUid "computer")         (cn' "computer")
 structure   = idea' (mkUid "structure")        (cn' "structure")
-os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
+os          = commonIdeaWithDict (mkUid "os") (cn' "operating system")    "OS"   [compScience]
 
 dataStruct, dataType, inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: IdeaDict

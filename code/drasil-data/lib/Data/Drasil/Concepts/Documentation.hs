@@ -61,9 +61,9 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
 dataConst :: CI
 
 ------------------------------------------------------------------------------------------------------------------------------
--- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
+-- | CI       |                  |    uid              |        term                            | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
-dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
+dataConst   = commonIdeaWithDict (mkUid "dataConst")   (cn' "data constraint")                       "DC"      [softEng]
 
 ---------------------------------------------------------------------
 

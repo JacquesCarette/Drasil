@@ -10,7 +10,6 @@ module Language.Drasil.Chunk.UnitDefn (
   makeDerU, newUnit,
   derUC, derUC', derUC'',
   fund, fund', derCUC, derCUC', derCUC'',
-  unitWrapper,
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
   -- * Unit Relation Functions
@@ -117,14 +116,6 @@ derUC'' a b c s u = UD (cncpt''' (mkUid a) b (S c)) (DerivedSI (US [(s,1)]) (fro
 unitCon :: String -> ConceptChunk
 unitCon s = cncpt''' (mkUid s) (cn' s) (S s)
 ---------------------------------------------------------
-
--- | For allowing lists to mix together chunks that are units by projecting them into a 'UnitDefn'.
--- For now, this only works on 'UnitDefn's.
-unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cncpt''' (u ^. uid) (u ^. term) (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
-
-{-# DEPRECATED unitWrapper
-  "`unitWrapper` is an unsafe chunk constructor that encourages `UID` double-use." #-}
 
 -- | Helper to get derived units if they exist.
 getSecondSymb :: UnitDefn -> Maybe USymb

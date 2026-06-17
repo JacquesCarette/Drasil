@@ -18,9 +18,9 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
+  Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
@@ -77,12 +77,12 @@ uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal) Nothing)
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
 -- | Uncertainty quantity ('uq') but with a constraint.
-uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space
+uqc :: String -> NP -> String -> Symbol -> UnitDefn -> Space
                 -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 uqc nam trm desc sym un space cs val = uq (cuc' nam trm desc sym un space cs val)
 
 -- | Uncertainty quantity constraint ('uqc') without a description.
-uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [ConstraintE]
+uqcND :: String -> NP -> Symbol -> UnitDefn -> Space -> [ConstraintE]
                   -> Expr -> Uncertainty -> UncertQ
 uqcND nam trm sym un space cs val = uq (cuc' nam trm "" sym un space cs val)
 

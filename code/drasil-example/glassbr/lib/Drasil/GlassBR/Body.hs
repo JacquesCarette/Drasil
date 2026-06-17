@@ -33,8 +33,9 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
-  ptOfExplsn, con', glass, iGlass, lGlass)
+import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab, ptOfExplsn, con',
+  glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, load, probBreak,
+  stdOffDist)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
@@ -44,10 +45,9 @@ import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
-import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputs, outputs, specParamVals, glassTy,
-  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
+import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
+  specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
+  termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName
@@ -115,7 +115,7 @@ ideaDicts =
   [lateralLoad, materialProprty] ++ con'
 
 cis :: [CI]
-cis = [progName, iGlass, lGlass]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
@@ -294,7 +294,7 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 physSystParts :: [Sentence]
 physSystParts = [(D.toSent (atStartNP (the glaSlab))!.),
   foldlSent [(D.toSent (atStartNP (the ptOfExplsn)) !.), S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the sD)) `S.isThe`
+  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the stdOffDist)) `S.isThe`
   phrase distance, S "between the", phrase ptOfExplsn `S.and_` D.toSent (phraseNP (the glass))]]
 
 {--Goal Statements--}

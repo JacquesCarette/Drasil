@@ -11,7 +11,7 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
   equationalModel, ModelKind, Derivation, mkDerivName, RelationConcept, makeRC)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Data.Drasil.Citations
 

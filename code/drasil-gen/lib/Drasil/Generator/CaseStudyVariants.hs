@@ -6,7 +6,8 @@
 module Drasil.Generator.CaseStudyVariants
   ( caseStudyMainSRS,
     caseStudyMainSRSWCode,
-    caseStudyMainSRSWCodeZooWLsnPlan,
+    caseStudyMainSRSWCodeZoo,
+    caseStudyMainLsnPlan,
     caseStudyMainDrasilWebsite,
   )
 where
@@ -71,14 +72,19 @@ caseStudyMainSRSWCode syst srsDecl srsFileName choices = do
 
 -- | The same as 'caseStudyMainSRSWCode', except it also produces a
 -- JupyterNotebook-based lesson plan.
-caseStudyMainSRSWCodeZooWLsnPlan :: SmithEtAlSRS -> SRSDecl -> String
-  -> [Choices] -> LessonPlan -> LsnDesc -> String -> IO ()
-caseStudyMainSRSWCodeZooWLsnPlan syst srsDecl srsFileName choices plan nbDecl lsnFileName = do
+caseStudyMainSRSWCodeZoo :: SmithEtAlSRS -> SRSDecl -> String -> [Choices] -> IO ()
+caseStudyMainSRSWCodeZoo syst srsDecl srsFileName choices = do
   setSystemLocale
   (docLayouts, syst', exampleName) <- writeSmithEtAlSrs syst srsDecl srsFileName
   zooLayouts <- genCodeZoo syst' choices
-  let lessonLayout = directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]
-      layout = directory [ps|{exampleName}|] $ lessonLayout : docLayouts ++ zooLayouts
+  let layout = directory [ps|{exampleName}|] $ docLayouts ++ zooLayouts
+  writeFiles OverwriteAllowed localPath layout
+
+caseStudyMainLsnPlan :: String -> LessonPlan -> LsnDesc -> String -> IO ()
+caseStudyMainLsnPlan exampleName plan nbDecl lsnFileName = do
+  setSystemLocale
+  let layout = directory [ps|{exampleName}|]
+        [directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]]
   writeFiles OverwriteAllowed localPath layout
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder

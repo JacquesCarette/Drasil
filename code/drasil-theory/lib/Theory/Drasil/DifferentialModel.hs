@@ -18,9 +18,9 @@ import Drasil.Database (HasUID(uid), HasChunkRefs(..))
 
 import Language.Drasil
   (ConceptChunk, dccWDS, Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
-  , ModelExpr, NP, Sentence, Expr, UnitalChunk, ModelExprC(nthderiv, equiv)
+  , ModelExpr, NP, Sentence, Expr, ModelExprC(nthderiv, equiv), DefinedQuantityDict
   , ExprC(..), columnVec, ConstrConcept, LiteralC(exactDbl, int), RequiresChecking (requiredChecks)
-  , Space, HasSpace (..), dqdWr)
+  , Space, HasSpace (..))
 
 -- | Unknown is nth order of the dependent variable
 type Unknown = Integer
@@ -67,7 +67,7 @@ type LHS = [Term]
 -- | Describe the structural content of a system of linear ODEs with six necessary fields
 data DifferentialModel = SystemOfLinearODEs {
   -- | independent variable, often time
-  _indepVar :: UnitalChunk,
+  _indepVar :: DefinedQuantityDict,
   -- | dependent variable
   _depVar :: ConstrConcept,
   -- | coefficients matrix
@@ -150,12 +150,12 @@ filterZeroCoeff :: [Expr] -> [ModelExpr] -> [(Expr, ModelExpr)]
 filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip es mes
 
 -- | Form all derivatives for the displaying purpose
-formAllUnknown :: [Unknown] -> ConstrConcept -> UnitalChunk -> [ModelExpr]
+formAllUnknown :: [Unknown] -> ConstrConcept -> DefinedQuantityDict -> [ModelExpr]
 formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
 -- | Form a derivative for the displaying purpose
-formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
-formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (dqdWr dep))
+formAUnknown :: Unknown -> ConstrConcept -> DefinedQuantityDict -> ModelExpr
+formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy dep)
 
 -- |   Create a 'DifferentialModel' by giving a independent variable, a dependent variable a canonical matrix form, and conceptChuck.
 {-
@@ -166,7 +166,7 @@ formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (dqdWr dep))
   conceptChuck:
     uid ('String'), term ('NP'), definition ('Sentence').
 -}
-makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
+makeASystemDE :: DefinedQuantityDict -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
 makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
  | length coeffs /= length const' =
   error "Length of coefficients matrix should equal to the length of the constant vector"
@@ -174,16 +174,16 @@ makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
  | not $ isUnknownDescending unks =
   error "The order of giving unknowns need to be descending"
- | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(dccWDS id' term' defn')
+ | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const' (dccWDS id' term' defn')
 
 -- | Create a 'DifferentialModel' by the input language
-makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
+makeASingleDE :: DefinedQuantityDict -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
 makeASingleDE indepVar'' depVar'' lhs const'' id'' term'' defn''
  | length coeffs /= length [const''] =
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks [const''](dccWDS id'' term'' defn'')
+ | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks [const''] (dccWDS id'' term'' defn'')
   where unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar''
         coeffs = [createCoefficients lhs unks]
 

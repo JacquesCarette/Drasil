@@ -31,7 +31,7 @@ import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
 
 import Theory.Drasil
 
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,

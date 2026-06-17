@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = assets code data data-formats database file-handling gen gool lang lesson-plan makefile metadata meta-analysis printers srs system theory utils website
+PACKAGES = assets code data data-formats database file-handling gen gool lang lesson-plan makefile metadata meta-analysis printers srs system testing-kit theory utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -26,7 +26,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss projectile-lesson
 GOOLTEST = codegenTest
 
 # where they live
@@ -42,6 +42,7 @@ DBLPEND_DIR = dblpend
 SGLPEND_DIR = sglpend
 PDCONTROLLER_DIR = pdcontroller
 BSS_DIR = bss
+PROJECTILE_LESSON_DIR = projectile-lesson
 
 # Directories for examples with multiple src versions
 MULTI_SRC_DIRS = $(PROJECTILE_DIR)
@@ -49,7 +50,7 @@ MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 # All example directories
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(SWHSNOPCM_DIR) \
   $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPEND_DIR)\
-  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR) $(BSS_DIR)
+  $(PDCONTROLLER_DIR) $(TEMPLATE_DIR) $(BSS_DIR) $(PROJECTILE_LESSON_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -65,6 +66,7 @@ DBLPEND_EXE = dblpend
 SGLPEND_EXE = sglpend
 PDCONTROLLER_EXE = pdcontroller
 BSS_EXE = bss
+PROJECTILE_LESSON_EXE = projectile-lesson
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -168,6 +170,7 @@ GHCTHREADS ?= 2
 
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
+override stackBuildArgs += $(stackArgs) --test --no-run-tests
 
 # When running 'stack exec', the following stack arguments should be passed.
 STACK_EXEC_ARGS = --no-nix-pure
@@ -239,7 +242,7 @@ deps: check_stack ##@Dependencies Build only dependencies.
 
 # Build all the Drasil packages.
 code: ##@Examples Build all Drasil packages.
-	stack build $(stackArgs)
+	stack build $(stackBuildArgs)
 
 # First build all the Drasil packages, then run all examples (no traceability graphs).
 examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
@@ -294,7 +297,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
+	@stack dot --prune bss,dblpend,gamephysics,glassbr,hghc,projectile-lesson,swhsnopcm,pdcontroller,sglpend,ssp,swhs,template | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then build the generated mdBook projects.
@@ -309,20 +312,20 @@ jupyter_html: $(JUPYTER_HTML_EXAMPLES) ##@Examples Extract HTML copies from all 
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX) %$(TEX_E_SUFFIX) %$(CODE_E_SUFFIX) %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z- A-Z_)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX) %$(TEX_E_SUFFIX) %$(CODE_E_SUFFIX) %$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
-	stack build $(stackArgs) "drasil-$*"
+	stack build $(stackBuildArgs) "drasil-$*"
 
 # First build all Drasil packages, then run individual examples.
 # No traceability graphs will be created, only the dot files.
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
-	stack build $(stackArgs) "$(EEXE)"
+	stack build $(stackBuildArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)"
 	cd "$(BUILD_FOLDER)" && $(STACK_EXEC) -- "$(EEXE)"
 
@@ -331,7 +334,7 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 # Then we run the codeGenTest, ignoring the exit code and not printing any output,
 # which will write the generated code to the build folder.
 $(GOOLTEST)$(GEN_E_SUFFIX):
-	stack build $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --no-run-tests
+	stack build $(stackBuildArgs) drasil-code
 	-stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--quiet"
 
 $(GOOLTEST)$(TEST_E_SUFFIX):
@@ -380,16 +383,18 @@ $(GOOLTEST)$(STABILIZE_E_SUFFIX):
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
 # then make pdfs from the generated TeX files.
-%$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
-	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/PDF" ]; then \
+		EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh ; \
+	fi
 
 # Build individual example mdBook SRSs.
 # Targets will have the form exampleName_mdBook_build.
 $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
-	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
-	mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ]; then \
+		- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+		mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+	fi
 
 # Launch local server for individual example mdBook SRSs.
 # Targets will have the form exampleName_mdBook_server.
@@ -399,7 +404,9 @@ $(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVE
 
 # Targets will have the form exampleName_juphtml.
 $(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E_SUFFIX): %$(GEN_E_SUFFIX)
-	jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb"
+	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter" ]; then \
+		jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb" ; \
+	fi
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
@@ -461,8 +468,6 @@ docs: check_stack ##@Documentation Create Haddock documentation of all Drasil mo
 #----------------------------#
 
 # Make individual code examples. Targets are of the form exampleName_gool.
-%$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
 	@DF_DIR="$(DF_DIR)" EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" \
 	EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
@@ -481,8 +486,6 @@ doxygen: $(CODE_EXAMPLES) ##@GOOL Generate doxygen documentation for all example
 
 # Find all the code file paths within an example.
 # Targets are of the form exampleName_deploy_code_path.
-%$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
@@ -496,7 +499,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 
 # For more information, see the *.hs files in the drasil-website folder.
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
-	stack build $(stackArgs) "drasil-website"
+	stack build $(stackBuildArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \

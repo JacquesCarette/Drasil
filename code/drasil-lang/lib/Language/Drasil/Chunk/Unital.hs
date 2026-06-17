@@ -2,7 +2,7 @@
 -- | Defines chunks to add units to a quantity. Similar to 'UnitaryChunk'.
 module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
-  UnitalChunk(..),
+  UnitalChunk,
   -- * Constructors
   uc, uc', ucStaged, ucStaged') where
 
@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Symbol (Symbol, HasSymbol(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
@@ -58,8 +58,6 @@ instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 instance Quantity      UnitalChunk where
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
--- | Finds the units used to make the 'UnitalChunk'.
-instance TempHasUnit       UnitalChunk where findUnit = view uni
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.

@@ -85,7 +85,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
-  intToIndex, indexToInt, global, setMethodCall)
+  intToIndex, indexToInt, global, setMethodCall, instanceVarSelf)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
@@ -1254,10 +1254,7 @@ instance SelfSym CppSrcCode where
     mkStateVar R.this (referenceType $ obj l) R.this'
 
 instance InstanceVarSelfSym CppSrcCode where
-  instanceVarSelf v' = do
-    v <- v'
-    mkVar (R.this ++ ptrAccess ++ variableName v)
-      (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC

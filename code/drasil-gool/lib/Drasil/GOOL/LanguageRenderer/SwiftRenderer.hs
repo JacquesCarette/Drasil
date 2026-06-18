@@ -216,6 +216,7 @@ instance TypeSym SwiftCode where
   string = CP.string'
   infile = swiftFileType
   outfile = swiftFileHdlType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
   setType = listType

@@ -121,6 +121,10 @@ instance TypeSym (LoggingFor lang) where
   string = string
   infile = infile
   outfile = outfile
+  referenceType = id -- TODO [Brandon Bosman, 06/18/2026]: This should be
+                     -- in a separate typeclass and implemented on a
+                     -- per-language basis, (similar to `self`),
+                     -- but I don't want to do that right now
   listType = listType
   setType = setType
   arrayType = arrayType

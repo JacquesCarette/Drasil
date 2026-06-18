@@ -215,6 +215,7 @@ instance TypeSym CSharpCode where
   string = CP.string
   infile = csInfileType
   outfile = csOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType t = do
     modify (addLangImportVS csGeneric)
     C.listType csList t

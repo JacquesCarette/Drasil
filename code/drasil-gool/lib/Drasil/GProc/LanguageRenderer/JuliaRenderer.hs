@@ -190,6 +190,7 @@ instance TypeSym JuliaCode where
   string = jlStringType
   infile = jlInfileType
   outfile = jlOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = jlListType
   setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python

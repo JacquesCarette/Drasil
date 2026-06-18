@@ -214,6 +214,7 @@ instance TypeSym JavaCode where
   string = CP.string'
   infile = jInfileType
   outfile = jOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = jListType
   setType = jSetType
   arrayType = CP.arrayType

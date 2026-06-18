@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Type classes
   DefinesQuantity(defLhs),
   -- * Constructors
+  quant, quant', quantAU, quantNoUnit, quantNoUnit',
   dqd, dqdNoUnit, dqdNoUnit', dqd', dqdWr,
   implVar, implVar', implVarAU, implVarAU'
 ) where
@@ -70,6 +71,89 @@ instance Quantity      DefinedQuantityDict where
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- | Convert the symbol of the 'DefinedQuantityDict' to a 'ModelExpr'.
 instance Express       DefinedQuantityDict where express = sy
+
+-- | Construct a 'DefinedQuantityDict' (/with/ a unit)
+quant ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity.
+  Symbol ->
+  -- | The 'Space' of the quantity.
+  Space ->
+  -- | The unit of the quantity.
+  UnitDefn -> DefinedQuantityDict
+quant u trm def s sp un = DQD (cncpt''' u trm def) (const s) sp (Just un)
+
+-- | Construct a 'DefinedQuantityDict' (/with/ a unit and a symbol dependent on stage)
+quant' ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity, dependent on the 'Stage'.
+  (Stage -> Symbol) ->
+  -- | The 'Space' of the quantity.
+  Space ->
+  -- | The unit of the quantity.
+  UnitDefn -> DefinedQuantityDict
+quant' u trm def s sp un = DQD (cncpt''' u trm def) s sp (Just un)
+
+-- | Construct a 'DefinedQuantityDict' (/with/ an optional unit, optional
+-- abbreviation and a symbol dependent on stage)
+quantAU ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The (optional) abbreviation for the quantity.
+  Maybe String ->
+  -- | The 'Symbol' used for the quantity, dependent on the 'Stage'.
+  (Stage -> Symbol) ->
+  -- | The 'Space' of the quantity.
+  Space ->
+  -- | The (optional) unit of the quantity.
+  Maybe UnitDefn -> DefinedQuantityDict
+quantAU u trm def a = DQD cc
+  where cc = maybe (cncpt''' u trm def) (cncpt'' u trm def) a
+
+-- | Construct a 'DefinedQuantityDict' (/without/ a unit)
+quantNoUnit ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity.
+  Symbol ->
+  -- | The 'Space' of the quantity.
+  Space -> DefinedQuantityDict
+quantNoUnit u trm def s sp = DQD (cncpt''' u trm def) (const s) sp Nothing
+
+-- | Construct a 'DefinedQuantityDict' (/wihout/ a unit and /with/ a symbol dependent on stage)
+quantNoUnit' ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity, dependent on the 'Stage'.
+  (Stage -> Symbol) ->
+  -- | The 'Space' of the quantity.
+  Space -> DefinedQuantityDict
+quantNoUnit' u trm def s sp = DQD (cncpt''' u trm def) s sp Nothing
+
+{-# DEPRECATED dqd, dqd', dqdNoUnit, dqdNoUnit'
+  "Smart constructors allow externally-known chunk nesting; use one of `quant, quant', quantNoUnit, quantNoUnit'` instead." #-}
 
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: ConceptChunk -> Symbol -> Space -> UnitDefn -> DefinedQuantityDict

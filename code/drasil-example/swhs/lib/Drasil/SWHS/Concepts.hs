@@ -18,7 +18,7 @@ con = [charging, coil, discharging, gaussDiv,
   tankPCM, transient, water, sWHT, tankParam]
 
 phsChgMtrl:: CI
-phsChgMtrl  = commonIdeaWithDict (mkUid "phsChgMtrl") (nounPhrase "phase change material"
+phsChgMtrl  = commonIdea (mkUid "phsChgMtrl") (nounPhrase "phase change material"
   "phase change materials") "PCM" [materialEng]
 
 ---ConceptChunks---

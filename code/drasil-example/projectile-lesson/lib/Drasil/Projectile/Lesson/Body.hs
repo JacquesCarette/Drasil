@@ -55,7 +55,7 @@ symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
   Qs.iPos, Qs.height, horiz_velo]
 
 projectileMotionLesson :: CI
-projectileMotionLesson = commonIdeaWithDict (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "Projectile Motion" []
+projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "Projectile Motion" []
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs)

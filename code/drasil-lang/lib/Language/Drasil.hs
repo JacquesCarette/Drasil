@@ -74,7 +74,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.NamedIdea
   , IdeaDict, idea, idea'
   -- Language.Drasil.Chunk.CommonIdea
-  , CI, commonIdeaWithDict, prependAbrv
+  , CI, commonIdea, prependAbrv
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core

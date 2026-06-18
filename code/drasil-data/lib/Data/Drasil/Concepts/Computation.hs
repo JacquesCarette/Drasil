@@ -5,7 +5,7 @@ module Data.Drasil.Concepts.Computation
   ) where
 
 import Drasil.Database (mkUid)
-import Language.Drasil (dcc, cn', commonIdeaWithDict, Sentence,
+import Language.Drasil (dcc, cn', commonIdea, Sentence,
   ConceptChunk, CI, IdeaDict, dccWDS, idea')
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -35,7 +35,7 @@ os :: CI
 application = idea' (mkUid "application")      (cn' "application")
 computer    = idea' (mkUid "computer")         (cn' "computer")
 structure   = idea' (mkUid "structure")        (cn' "structure")
-os          = commonIdeaWithDict (mkUid "os") (cn' "operating system")    "OS"   [compScience]
+os          = commonIdea (mkUid "os") (cn' "operating system")    "OS"   [compScience]
 
 dataStruct, dataType, inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: IdeaDict

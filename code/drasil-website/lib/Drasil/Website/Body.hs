@@ -96,7 +96,7 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI
-webName = commonIdeaWithDict (mkUid "websiteName") (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

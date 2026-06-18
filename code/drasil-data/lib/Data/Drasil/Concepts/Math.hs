@@ -104,12 +104,12 @@ iAngle = dcc "iAngle" (cn "initial angle")                      "The initial ang
 
 de, leftSide, ode, pde, rightSide :: CI
 --FIXME: use nounphrase instead of cn'
-de  = commonIdeaWithDict (mkUid "de")  (cn' "differential equation")          "DE"  [mathematics]
-ode = commonIdeaWithDict (mkUid "ode") (cn' "ordinary differential equation") "ODE" [mathematics]
-pde = commonIdeaWithDict (mkUid "pde") (cn' "partial differential equation")  "PDE" [mathematics]
+de  = commonIdea (mkUid "de")  (cn' "differential equation")          "DE"  [mathematics]
+ode = commonIdea (mkUid "ode") (cn' "ordinary differential equation") "ODE" [mathematics]
+pde = commonIdea (mkUid "pde") (cn' "partial differential equation")  "PDE" [mathematics]
 
-leftSide  = commonIdeaWithDict (mkUid "leftSide")  (nounPhrase "left-hand side"  "left-hand sides" ) "LHS" [mathematics]
-rightSide = commonIdeaWithDict (mkUid "rightSide") (nounPhrase "right-hand side" "right-hand sides") "RHS" [mathematics]
+leftSide  = commonIdea (mkUid "leftSide")  (nounPhrase "left-hand side"  "left-hand sides" ) "LHS" [mathematics]
+rightSide = commonIdea (mkUid "rightSide") (nounPhrase "right-hand side" "right-hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
 -- do we really need fterms here? Would combineNINI work?

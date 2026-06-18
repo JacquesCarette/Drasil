@@ -52,9 +52,9 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
-oneD   = commonIdeaWithDict (mkUid "oneD")   (cn "one-dimensional")   "1D" [mathematics, physics]
-twoD   = commonIdeaWithDict (mkUid "twoD")   (cn "two-dimensional")   "2D" [mathematics, physics]
-threeD = commonIdeaWithDict (mkUid "threeD") (cn "three-dimensional") "3D" [mathematics, physics]
+oneD   = commonIdea (mkUid "oneD")   (cn "one-dimensional")   "1D" [mathematics, physics]
+twoD   = commonIdea (mkUid "twoD")   (cn "two-dimensional")   "2D" [mathematics, physics]
+threeD = commonIdea (mkUid "threeD") (cn "three-dimensional") "3D" [mathematics, physics]
 
 acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)

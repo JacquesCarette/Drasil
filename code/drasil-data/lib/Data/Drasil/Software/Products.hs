@@ -18,7 +18,7 @@ prodtcon :: [IdeaDict]
 prodtcon = [sciCompS, videoGame, openSource, compPro]
 
 matlab :: CI
-matlab     = commonIdeaWithDict (mkUid "matlab") (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
+matlab     = commonIdea (mkUid "matlab") (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
 
 videoGame, openSource, compPro :: IdeaDict
 videoGame   = compoundNC video game

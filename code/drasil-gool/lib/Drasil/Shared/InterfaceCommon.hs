@@ -93,7 +93,7 @@ class TypeSym r where
   listType      :: VSType r -> VSType r
   setType       :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
-  listInnerType :: VSType r -> VSType r
+  innerType :: VSType r -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 

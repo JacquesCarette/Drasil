@@ -65,7 +65,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   orPrec, inPrec, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkClassVar,
   typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
+  multiBody, block, multiBlock, innerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
@@ -207,7 +207,7 @@ instance TypeSym PythonCode where
   listType t' = t' >>=(\t -> typeFromData (List (getCodeType t)) "" empty)
   setType t' = t' >>=(\t -> typeFromData (Set (getCodeType t)) "" empty)
   arrayType = listType
-  listInnerType = G.listInnerType
+  innerType = G.innerType
   funcType = CS.funcType
   void = typeFromData Void pyVoid (text pyVoid)
 

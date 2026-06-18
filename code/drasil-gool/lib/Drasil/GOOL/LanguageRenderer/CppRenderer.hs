@@ -71,7 +71,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, typeFromData, VSOp, mkOp, unOpPrec,
   powerPrec, unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
+  multiBody, block, multiBlock, innerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
@@ -232,7 +232,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   listType = pair1 listType listType
   setType = pair1 setType setType
   arrayType = pair1 arrayType arrayType
-  listInnerType = pair1 listInnerType listInnerType
+  innerType = pair1 innerType innerType
   funcType = pair1List1Val funcType funcType
   void = on2StateValues pair void void
 
@@ -1154,7 +1154,7 @@ instance TypeSym CppSrcCode where
     modify (addUsing cppSet . addLangImportVS cppSet)
     C.setType cppSet t
   arrayType = listType
-  listInnerType = G.listInnerType
+  innerType = G.innerType
   funcType = cppFuncType
   void = C.void
 
@@ -1898,7 +1898,7 @@ instance TypeSym CppHdrCode where
     modify (addHeaderUsing cppSet . addHeaderLangImport cppSet)
     C.setType cppSet t
   arrayType = listType
-  listInnerType = G.listInnerType
+  innerType = G.innerType
   funcType = CS.funcType
   void = C.void
 
@@ -2520,10 +2520,10 @@ iterator t = do
     cppIterType $ listType t
 
 iterBegin :: SValue CppSrcCode -> SValue CppSrcCode
-iterBegin v = v $. cppIterBeginFunc (G.listInnerType $ onStateValue valueType v)
+iterBegin v = v $. cppIterBeginFunc (G.innerType $ onStateValue valueType v)
 
 iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
-iterEnd v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
+iterEnd v = v $. cppIterEndFunc (G.innerType $ onStateValue valueType v)
 
 arrayDecBase :: SVariable CppSrcCode -> CppSrcCode ScopeData -> MS Doc
 arrayDecBase vr scp = do

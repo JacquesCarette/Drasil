@@ -5,7 +5,7 @@
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
-  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec,
+  multiBody, block, multiBlock, innerType, obj, negateOp, csc, sec,
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
   plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
@@ -31,7 +31,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, arrayType, listInnerType, funcType, void), VariableSym(var),
+  string, arrayType, innerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
@@ -103,8 +103,8 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
 
-listInnerType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
-listInnerType t = t >>= (convTypeOO . getInnerType . getCodeType)
+innerType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+innerType t = t >>= (convTypeOO . getInnerType . getCodeType)
 
 obj :: (Monad r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
@@ -210,7 +210,7 @@ arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = listInnerType $ return $ variableType v
+      vType = innerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
@@ -301,7 +301,7 @@ listAccess :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r -> 
 listAccess v i = do
   v' <- v
   let i' = IC.intToIndex i
-      t  = IC.listInnerType $ return $ valueType v'
+      t  = IC.innerType $ return $ valueType v'
       checkType (List _) = S.listAccessFunc t i'
       checkType (Set _) = S.listAccessFunc t i'
       checkType (Array _) = i' >>=

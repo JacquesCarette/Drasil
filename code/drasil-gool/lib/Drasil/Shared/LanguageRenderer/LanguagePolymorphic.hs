@@ -5,9 +5,9 @@
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
-  multiBody, block, multiBlock, innerType, obj, negateOp, csc, sec,
-  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
+  multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
+  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
   objAccess, objMethodCall, func, get, set, listAccess, listSet, getFunc,
@@ -38,7 +38,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   IndexTranslator(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
-  ($.), AttachmentSym(..), convTypeOO)
+  ($.), AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (
   InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
@@ -64,8 +64,8 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource, ScopeTag(Local),
   ScopeData, sd, TypeData(..), BinderD)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
-  toState, onStateValue, on2StateValues, onStateList, getInnerType,
-  getNestDegree, on2StateWrapped)
+  toState, onStateValue, on2StateValues, onStateList, getNestDegree,
+  on2StateWrapped)
 import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName,
   valueList, namedArgList)
@@ -102,9 +102,6 @@ multiBlock :: (CommonRenderSym r, Monad r) => [MSBlock r] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
-
-innerType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
-innerType t = t >>= (convTypeOO . getInnerType . getCodeType)
 
 obj :: (Monad r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
@@ -205,12 +202,12 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
-arrayElem :: (OORenderSym r, UnRepr r TypeData) => SValue r -> SVariable r -> SVariable r
+arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = innerType $ return $ variableType v
+      vType = IC.innerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
   mkStateVar vName vType vRender
 

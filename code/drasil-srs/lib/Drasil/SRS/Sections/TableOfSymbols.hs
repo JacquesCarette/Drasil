@@ -11,7 +11,7 @@ import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict.
                                              -- Vector - Name conflict (defined in file)
 import Language.Drasil.Document
 import Drasil.Database (HasUID(..))
-import Utils.Drasil (mkTable)
+import Data.List.Extras (mkTable)
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (symbol_, description, tOfSymb)

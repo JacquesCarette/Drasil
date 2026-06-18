@@ -36,10 +36,10 @@ module Drasil.Metadata.Documentation
 import Control.Lens ((^.))
 
 -- General Drasil
-import Language.Drasil (CI, NP, IdeaDict, nc, cn, cn', cnIES, cnICES, cnUM,
+import Drasil.Database (mkUid)
+import Language.Drasil (CI, NP, IdeaDict, cn, cn', cnIES, cnICES, cnUM,
   commonIdeaWithDict, fterms, compoundPhrase, compoundPhraseP1, titleizeNP',
-  term, ConceptChunk,
-  ccs, mkIdea, Sentence(EmptyS), dcc)
+  term, ConceptChunk, cncpt, cncpt', Sentence(EmptyS), dcc, idea')
 import Language.Drasil.Chunk.Concept.NamedCombinators
   (combineNINI, compoundNC, compoundNCPP, of_, of_PS, ofAPS, of_NINP, theGen
   , compoundNCPSPP, and_, and_TGen, and_PP)
@@ -70,106 +70,106 @@ abbAcc, abbreviation, acronym, appendix, caseProb,
   tOfCont, tOfSymb, tOfUnit, traceyGraph, traceyMatrix,
   uncertainty, useCase, user, validation, value, variable, vav, verification :: IdeaDict
 
-abbAcc          = nc "TAbbAcc"        (abbreviation `and_PP` acronym)
-abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
-acronym         = nc "acronym"        (cn'    "acronym"            )
-appendix        = nc "appendix"       (cnICES "appendix"           )
-caseProb        = nc "caseProb"       (cn' "case problem")
-characteristic  = nc "characteristic" (cn'    "characteristic"     )
-charOfIR        = nc "charOfIR"       (characteristic `of_PS` intReader)
-client          = nc "client"         (cn'    "client"             )
-code            = nc "code"           (cn     "code"               )
-column          = nc "column"         (cn'    "column"             ) --general enough to be in Documentation?
-component       = nc "component"      (cn'    "component"          )
-constraint      = nc "constraint"     (cn'    "constraint"         )
-consVals        = nc "consVals"       (cn "values of auxiliary constants")
-content         = nc "content"        (cn'    "content"            )
-context         = nc "context"        (cn'    "context"            )
-corSol          = nc "corSol"         (cn' "correct solution")
-customer        = nc "customer"       (cn'    "customer"           )
-datum           = nc "datum"          (cnUM   "datum"              )
-decision        = nc "decision"       (cn'    "decision"           )
-definition      = nc "definition"     (cn'    "definition"         )
-dependency      = nc "dependency"     (cnIES  "dependency"         )
-description     = nc "description"    (cn'    "description"        )
-design          = nc "design"         (cn'    "design"             )
-document        = nc "document"       (cn'    "document"           )
-documentation   = nc "documentation"  (cn'    "documentation"      )
-endUser         = nc "end user"       (cn'    "end user"           )
-element         = nc "element"        (cn'    "element"            )
-environment     = nc "environment"    (cn'    "environment"        ) -- Is this term in the right spot?
-example         = nc "example"        (cn'    "example"            )
-form            = nc "form"           (cn'    "form"               )
-full            = nc "full"           (cn'    "full"               ) --FIXME: Adjective
-functional      = nc "functional"     (cn'    "functional"         ) --FIXME: Adjective
-general         = nc "general"        (cn'    "general"            ) --FIXME: Adjective
-goal            = nc "goal"           (cn'    "goal"               )
-guide           = nc "guide"          (cn'    "guide"              )
-implementation  = nc "implementation" (cn'    "implementation"     )
-inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint")
-individual      = nc "individual"     (cn'    "individual"         )
-information     = nc "information"    (cn     "information"        )
-input_          = nc "input"          (cn'    "input"              )
-interest        = nc "interest"       (cn'    "interest"           )
-interface       = nc "interface"      (cn'    "interface"          )
-intReader       = nc "intReader"      (cn'    "intended reader"    )
-introduction    = nc "introduction"   (cn'    "introduction"       )
-item            = nc "item"           (cn'    "item"               )
-limitation      = nc "limitation"     (cn'    "limitation"         )
-model           = nc "model"          (cn'    "model"              )
-module_         = nc "module"         (cn'    "module"             )
-nonfunctional   = nc "non-functional" (cn'    "non-functional"     ) --FIXME: Adjective
-offShelf        = nc "Off-the-Shelf"  (cn'    "Off-the-Shelf"      )
-organization    = nc "organization"   (cn'    "organization"       )
-orgOfDoc        = nc "orgOfDoc"       (organization `of_` document)
-output_         = nc "output"         (cn'    "output"             )
-outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
-physical        = nc "physical"       (cn'    "physical"           ) --FIXME: Adjective
-plan            = nc "plan"           (cn'    "plan"               )
-product_        = nc "product"        (cn'    "product"            )
-problem         = nc "problem"        (cn'    "problem"            )
-project         = nc "project"        (cn'    "project"            )
-property        = nc "property"       (cnIES  "property"           )
-propOfCorSol    = nc "propOfCorSol"   (property `ofAPS` corSol     )
-prpsOfDoc       = nc "prpsOfDoc"      (purpose `of_` document      )
-purpose         = nc "purpose"        (cn'    "purpose"            )
-quantity        = nc "quantity"       (cnIES  "quantity"           ) --general enough to be in documentaion.hs?
-reference       = nc "reference"      (cn'    "reference"          )
-refMat          = nc "refMat"         (cn' "reference material"    )
-reqInput        = nc "ReqInputs"      (cn' "required input"        )
-review          = nc "review"         (cn'    "review"             )
-scope           = nc "scope"          (cn'    "scope"              )
-scpOfReq        = nc "scpOfReq"       (scope `of_` requirement     )
-section_        = nc "section"        (cn'    "section"            )
-software        = nc "software"       (cn     "software"           )
-solution        = nc "solution"       (cn'    "solution"           )
-specific        = nc "specific"       (cn'    "specific"           ) --FIXME: Adjective
-specification   = nc "specification"  (cn'    "specification"      )
-stakeholder     = nc "stakeholder"    (cn'    "stakeholder"        )
-statement       = nc "statement"      (cn'    "statement"          )
-summary         = nc "summary"        (cnIES  "summary"            )
-symbol_         = nc "symbol"         (cn'    "symbol"             )
-system          = nc "system"         (cn'    "system"             )
-table_          = nc "table"          (cn'    "table"              )
-tAuxConsts      = nc "TAuxConsts"     (cn' "auxiliary constant")
-template        = nc "template"       (cn'    "template"           )
-term_           = nc "term"           (cn'    "term"               )
-terminology     = nc "terminology"    (cnIES  "terminology"        )
-termAndDef      = nc "termAndDef"     (terminology `and_` definition)
-theory          = nc "theory"         (cnIES  "theory"             )
-tOfCont         = nc "tOfCont"        (table_ `of_` content)
-tOfSymb         = nc "tOfSymb"        (table_ `of_` symbol_)
-tOfUnit         = nc "tOfUnit"        (table_ `of_` unit_)
-traceyGraph     = nc "traceyGraph"    (cn'    "traceability graph" )
-traceyMatrix    = nc "traceyMatrix"   (cnICES "traceability matrix")
-uncertainty     = nc "uncertainty"    (cnIES  "uncertainty"        )
-useCase         = nc "useCase"        (cn'    "use case"           )
-user            = nc "user"           (cn'    "user"               )
-validation      = nc "validation"     (cn'    "validation"         )
-value           = nc "value"          (cn'    "value"              )
-variable        = nc "variable"       (cn'    "variable"           )
-vav             = nc "vav"            (verification `and_` validation)
-verification    = nc "verification"   (cn'    "verification"       )
+abbAcc          = idea' (mkUid "TAbbAcc")        (abbreviation `and_PP` acronym)
+abbreviation    = idea' (mkUid "abbreviation")   (cn'    "abbreviation"       )
+acronym         = idea' (mkUid "acronym")        (cn'    "acronym"            )
+appendix        = idea' (mkUid "appendix")       (cnICES "appendix"           )
+caseProb        = idea' (mkUid "caseProb")       (cn' "case problem")
+characteristic  = idea' (mkUid "characteristic") (cn'    "characteristic"     )
+charOfIR        = idea' (mkUid "charOfIR")       (characteristic `of_PS` intReader)
+client          = idea' (mkUid "client")         (cn'    "client"             )
+code            = idea' (mkUid "code")           (cn     "code"               )
+column          = idea' (mkUid "column")         (cn'    "column"             ) --general enough to be in Documentation?
+component       = idea' (mkUid "component")      (cn'    "component"          )
+constraint      = idea' (mkUid "constraint")     (cn'    "constraint"         )
+consVals        = idea' (mkUid "consVals")       (cn "values of auxiliary constants")
+content         = idea' (mkUid "content")        (cn'    "content"            )
+context         = idea' (mkUid "context")        (cn'    "context"            )
+corSol          = idea' (mkUid "corSol")         (cn' "correct solution")
+customer        = idea' (mkUid "customer")       (cn'    "customer"           )
+datum           = idea' (mkUid "datum")          (cnUM   "datum"              )
+decision        = idea' (mkUid "decision")       (cn'    "decision"           )
+definition      = idea' (mkUid "definition")     (cn'    "definition"         )
+dependency      = idea' (mkUid "dependency")     (cnIES  "dependency"         )
+description     = idea' (mkUid "description")    (cn'    "description"        )
+design          = idea' (mkUid "design")         (cn'    "design"             )
+document        = idea' (mkUid "document")       (cn'    "document"           )
+documentation   = idea' (mkUid "documentation")  (cn'    "documentation"      )
+endUser         = idea' (mkUid "end user")       (cn'    "end user"           )
+element         = idea' (mkUid "element")        (cn'    "element"            )
+environment     = idea' (mkUid "environment")    (cn'    "environment"        ) -- Is this term in the right spot?
+example         = idea' (mkUid "example")        (cn'    "example"            )
+form            = idea' (mkUid "form")           (cn'    "form"               )
+full            = idea' (mkUid "full")           (cn'    "full"               ) --FIXME: Adjective
+functional      = idea' (mkUid "functional")     (cn'    "functional"         ) --FIXME: Adjective
+general         = idea' (mkUid "general")        (cn'    "general"            ) --FIXME: Adjective
+goal            = idea' (mkUid "goal")           (cn'    "goal"               )
+guide           = idea' (mkUid "guide")          (cn'    "guide"              )
+implementation  = idea' (mkUid "implementation") (cn'    "implementation"     )
+inDatumConstraint   = idea' (mkUid "InDataConstraints")  (cn' "input data constraint")
+individual      = idea' (mkUid "individual")     (cn'    "individual"         )
+information     = idea' (mkUid "information")    (cn     "information"        )
+input_          = idea' (mkUid "input")          (cn'    "input"              )
+interest        = idea' (mkUid "interest")       (cn'    "interest"           )
+interface       = idea' (mkUid "interface")      (cn'    "interface"          )
+intReader       = idea' (mkUid "intReader")      (cn'    "intended reader"    )
+introduction    = idea' (mkUid "introduction")   (cn'    "introduction"       )
+item            = idea' (mkUid "item")           (cn'    "item"               )
+limitation      = idea' (mkUid "limitation")     (cn'    "limitation"         )
+model           = idea' (mkUid "model")          (cn'    "model"              )
+module_         = idea' (mkUid "module")         (cn'    "module"             )
+nonfunctional   = idea' (mkUid "non-functional") (cn'    "non-functional"     ) --FIXME: Adjective
+offShelf        = idea' (mkUid "Off-the-Shelf")  (cn'    "Off-the-Shelf"      )
+organization    = idea' (mkUid "organization")   (cn'    "organization"       )
+orgOfDoc        = idea' (mkUid "orgOfDoc")       (organization `of_` document)
+output_         = idea' (mkUid "output")         (cn'    "output"             )
+outDatumConstraint  = idea' (mkUid "OutDataConstraints") (cn' "output data constraint")
+physical        = idea' (mkUid "physical")       (cn'    "physical"           ) --FIXME: Adjective
+plan            = idea' (mkUid "plan")           (cn'    "plan"               )
+product_        = idea' (mkUid "product")        (cn'    "product"            )
+problem         = idea' (mkUid "problem")        (cn'    "problem"            )
+project         = idea' (mkUid "project")        (cn'    "project"            )
+property        = idea' (mkUid "property")       (cnIES  "property"           )
+propOfCorSol    = idea' (mkUid "propOfCorSol")   (property `ofAPS` corSol     )
+prpsOfDoc       = idea' (mkUid "prpsOfDoc")      (purpose `of_` document      )
+purpose         = idea' (mkUid "purpose")        (cn'    "purpose"            )
+quantity        = idea' (mkUid "quantity")       (cnIES  "quantity"           ) --general enough to be in documentaion.hs?
+reference       = idea' (mkUid "reference")      (cn'    "reference"          )
+refMat          = idea' (mkUid "refMat")         (cn' "reference material"    )
+reqInput        = idea' (mkUid "ReqInputs")      (cn' "required input"        )
+review          = idea' (mkUid "review")         (cn'    "review"             )
+scope           = idea' (mkUid "scope")          (cn'    "scope"              )
+scpOfReq        = idea' (mkUid "scpOfReq")       (scope `of_` requirement     )
+section_        = idea' (mkUid "section")        (cn'    "section"            )
+software        = idea' (mkUid "software")       (cn     "software"           )
+solution        = idea' (mkUid "solution")       (cn'    "solution"           )
+specific        = idea' (mkUid "specific")       (cn'    "specific"           ) --FIXME: Adjective
+specification   = idea' (mkUid "specification")  (cn'    "specification"      )
+stakeholder     = idea' (mkUid "stakeholder")    (cn'    "stakeholder"        )
+statement       = idea' (mkUid "statement")      (cn'    "statement"          )
+summary         = idea' (mkUid "summary")        (cnIES  "summary"            )
+symbol_         = idea' (mkUid "symbol")         (cn'    "symbol"             )
+system          = idea' (mkUid "system")         (cn'    "system"             )
+table_          = idea' (mkUid "table")          (cn'    "table"              )
+tAuxConsts      = idea' (mkUid "TAuxConsts")     (cn' "auxiliary constant")
+template        = idea' (mkUid "template")       (cn'    "template"           )
+term_           = idea' (mkUid "term")           (cn'    "term"               )
+terminology     = idea' (mkUid "terminology")    (cnIES  "terminology"        )
+termAndDef      = idea' (mkUid "termAndDef")     (terminology `and_` definition)
+theory          = idea' (mkUid "theory")         (cnIES  "theory"             )
+tOfCont         = idea' (mkUid "tOfCont")        (table_ `of_` content)
+tOfSymb         = idea' (mkUid "tOfSymb")        (table_ `of_` symbol_)
+tOfUnit         = idea' (mkUid "tOfUnit")        (table_ `of_` unit_)
+traceyGraph     = idea' (mkUid "traceyGraph")    (cn'    "traceability graph" )
+traceyMatrix    = idea' (mkUid "traceyMatrix")   (cnICES "traceability matrix")
+uncertainty     = idea' (mkUid "uncertainty")    (cnIES  "uncertainty"        )
+useCase         = idea' (mkUid "useCase")        (cn'    "use case"           )
+user            = idea' (mkUid "user")           (cn'    "user"               )
+validation      = idea' (mkUid "validation")     (cn'    "validation"         )
+value           = idea' (mkUid "value")          (cn'    "value"              )
+variable        = idea' (mkUid "variable")       (cn'    "variable"           )
+vav             = idea' (mkUid "vav")            (verification `and_` validation)
+verification    = idea' (mkUid "verification")   (cn'    "verification"       )
 
 datumConstraint, designDoc, fullForm, functionalRequirement,
   generalSystemDescription, indPRCase, moduleInterface,
@@ -208,7 +208,7 @@ userCharacteristic           = compoundNC user characteristic
 vavPlan                      = compoundNC vav plan
 
 traceyMandG :: IdeaDict
-traceyMandG         = nc "traceyMandG"        (and_TGen (\t -> titleizeNP' (t ^. term)) (\t -> titleizeNP' (t ^. term)) traceyMatrix graph)
+traceyMandG         = idea' (mkUid "traceyMandG")        (and_TGen (\t -> titleizeNP' (t ^. term)) (\t -> titleizeNP' (t ^. term)) traceyMatrix graph)
 
 -- * Domains
 
@@ -218,33 +218,35 @@ srsDom = dcc "srsDom" (srs ^. term) "srs"
 
 assumpDom, chgProbDom, funcReqDom, goalStmtDom, likeChgDom,
   nonFuncReqDom, reqDom, unlikeChgDom :: ConceptChunk
-assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")        EmptyS [srsDom]
-chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                              EmptyS [srsDom]
-funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")       EmptyS [reqDom]
-goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")       EmptyS [srsDom]
-likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")       EmptyS [chgProbDom]
-nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR")      EmptyS [reqDom]
-reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")        EmptyS [srsDom]
-unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")       EmptyS [chgProbDom]
+assumpDom     = cncpt  (mkUid "assumpDom")     (assumption ^. term)               EmptyS "A"   [srsDom]
+chgProbDom    = cncpt' (mkUid "chgProbDom")    (cn' "change")                     EmptyS       [srsDom]
+funcReqDom    = cncpt  (mkUid "funcReqDom")    (functionalRequirement ^. term)    EmptyS "FR"  [reqDom]
+goalStmtDom   = cncpt  (mkUid "goalStmtDom")   (goalStmt ^. term)                 EmptyS "GS"  [srsDom]
+likeChgDom    = cncpt  (mkUid "likeChgDom")    (likelyChg ^. term)                EmptyS "LC"  [chgProbDom]
+nonFuncReqDom = cncpt  (mkUid "nonFuncReqDom") (nonfunctionalRequirement ^. term) EmptyS "NFR" [reqDom]
+reqDom        = cncpt  (mkUid "reqDom")        (requirement ^. term)              EmptyS "R"   [srsDom]
+unlikeChgDom  = cncpt  (mkUid "unlikeChgDom")  (unlikelyChg ^. term)              EmptyS "UC"  [chgProbDom]
+
+-- FIXME: Some of the below are duplicated knowledge of the above (above preferred). None should be CIs, too.
 
 assumption, desSpec, goalStmt, learnObj, likelyChg, mg, mis, notebook, physSyst,
   refBy, refName, requirement, sec, srs, typUnc, unlikelyChg :: CI
-assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
-learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
-likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
-mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
-mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
-notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
-refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
-refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
-requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
-sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
-srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
-unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
+assumption  = commonIdeaWithDict (mkUid "assumption")  (cn' "assumption")                                    "A"       [softEng]
+desSpec     = commonIdeaWithDict (mkUid "desSpec")     (combineNINI design specification)                    "DS"      [softEng]
+goalStmt    = commonIdeaWithDict (mkUid "goalStmt")    (combineNINI goal statement)                          "GS"      [softEng]
+learnObj    = commonIdeaWithDict (mkUid "learnObj")    (cn' "learning objective")                            "LO"      [documentc]
+likelyChg   = commonIdeaWithDict (mkUid "likelyChg")   (cn' "likely change")                                 "LC"      [softEng]
+physSyst    = commonIdeaWithDict (mkUid "physSyst")    (combineNINI physicalSystem description)              "PS"      [softEng]
+mg          = commonIdeaWithDict (mkUid "mg")          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
+mis         = commonIdeaWithDict (mkUid "mis")         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
+notebook    = commonIdeaWithDict (mkUid "notebook")    (cn' "notebook")                                      "NB"      [softEng]
+refBy       = commonIdeaWithDict (mkUid "refBy")       (cn  "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdeaWithDict (mkUid "refName")     (cn' "reference name")                                "Refname" [documentc]
+requirement = commonIdeaWithDict (mkUid "requirement") (cn' "requirement")                                   "R"       [softEng]
+sec         = commonIdeaWithDict (mkUid "section")     (cn' "section")                                       "Sec"     [documentc]
+srs         = commonIdeaWithDict (mkUid "srs")         softReqSpec                                           "SRS"     [softEng]
+typUnc      = commonIdeaWithDict (mkUid "typUnc")      (cn' "typical uncertainty")                           "Uncert." [softEng]
+unlikelyChg = commonIdeaWithDict (mkUid "unlikelyChg") (cn' "unlikely change")                               "UC"      [softEng]
 
 scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
-scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
+scpOfTheProj oper = idea' (mkUid "scpOfTheProj") (scope `of_NINP` theGen oper project) -- reasonable hack?

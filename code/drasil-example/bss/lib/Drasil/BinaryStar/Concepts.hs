@@ -1,5 +1,6 @@
 module Drasil.BinaryStar.Concepts where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (first, second_)
 import Data.Drasil.Concepts.Physics (gravity)
@@ -14,7 +15,7 @@ ideaDicts :: [IdeaDict]
 ideaDicts = [star, starOne, starTwo]
 
 star :: IdeaDict
-star = nc "star" (cn' "star")
+star = idea' (mkUid "star") (cn' "star")
 
 starOne :: IdeaDict
 starOne = compoundNC first star

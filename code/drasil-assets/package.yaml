@@ -42,8 +42,7 @@ tests:
     dependencies:
     - drasil-assets
     - drasil-file-handling
-    - hedgehog
+    - drasil-testing-kit
     - tasty
-    - tasty-hedgehog
     - tasty-hunit
     - prettyprinter

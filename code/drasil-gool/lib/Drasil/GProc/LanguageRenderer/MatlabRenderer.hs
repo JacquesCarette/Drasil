@@ -9,7 +9,7 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, BodySym(..),
+import Drasil.Shared.InterfaceCommon (Label, UnRepr(..), SharedProg, BodySym(..),
   BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -39,16 +39,26 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (import', body,
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
+import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (function)
+import qualified Drasil.Shared.LanguageRenderer as R (commentedItem,
+  parameterList)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  comment)
+  comment, param, docFunc)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
+  functionDoc, docInOutFunc')
 import Drasil.Shared.AST (Terminator, FileData, FuncData, ModData,
-  MethodData, ParamData, ProgData, TypeData, ValData, VarData, CommonThunk,
-  mthdDoc, modDoc)
-import Drasil.Shared.Helpers (toCode)
-import Drasil.Shared.State (VS)
+  MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd, ProgData,
+  TypeData, ValData, VarData, CommonThunk, mthdDoc, modDoc)
+import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
+  on2CodeValues, on2StateValues)
+import Drasil.Shared.State (VS, lensMStoVS)
 
+import Control.Lens.Zoom (zoom)
+
+import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, text)
+import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), vcat, hcat,
+  parens, brackets, equals, punctuate)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -462,36 +472,51 @@ instance VisibilityElim MatlabCode where
 
 instance MethodTypeSym MatlabCode where
   type MethodType MatlabCode = TypeData
-  mType = undefined
+  mType = zoom lensMStoVS
 
 instance ParameterSym MatlabCode where
   type Parameter MatlabCode = ParamData
-  param = undefined
-  pointerParam = undefined
+  -- A MATLAB parameter is just the variable name.
+  param = G.param mlParam
+  pointerParam = param
 
 instance RenderParam MatlabCode where
-  paramFromData = undefined
+  paramFromData v' d = do
+    v <- zoom lensMStoVS v'
+    toState $ on2CodeValues pd v (toCode d)
 
 instance ParamElim MatlabCode where
-  parameterName = undefined
-  parameterType = undefined
-  parameter = undefined
+  parameterName = variableName . onCodeValue paramVar
+  parameterType = variableType . onCodeValue paramVar
+  parameter = paramDoc . unMLC
 
 instance MethodSym MatlabCode where
   type Method MatlabCode = MethodData
-  docMain = undefined
-  function = undefined
-  mainFunction = undefined
-  docFunc = undefined
-  inOutFunc = undefined
-  docInOutFunc = undefined
+  docMain = mainFunction
+  function = A.function
+  mainFunction = CP.mainBody
+  docFunc = G.docFunc CP.functionDoc
+
+  -- MATLAB returns values through the output list in the header
+  -- (function [outs] = name(ins)), not through a return statement, so we build
+  -- the method directly instead of reusing the shared inOutFunc machinery.
+  inOutFunc n _ ins outs both b = do
+    pms  <- mapM param (both ++ ins)
+    rets <- mapM (zoom lensMStoVS) (both ++ outs)
+    bod  <- b
+    pure $ toCode $ mthd $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
+  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod MatlabCode where
-  commentedFunc = undefined
-  mthdFromData = undefined
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
+    (onStateValue (onCodeValue R.commentedItem) cmt)
+  mthdFromData _ d = toState $ toCode $ mthd d
 
 instance ProcRenderMethod MatlabCode where
-  intFunc = undefined
+  intFunc _ n _ _ ps b = do
+    pms <- sequence ps
+    bod <- b
+    pure $ toCode $ mthd $ mlFuncDoc n [] pms (RC.body bod)
 
 instance MethodElim MatlabCode where
   method = mthdDoc . unMLC
@@ -513,6 +538,24 @@ instance BlockCommentSym MatlabCode where
 
 instance BlockCommentElim MatlabCode where
   blockComment' = undefined
+
+-- | A MATLAB parameter renders as just the variable name.
+mlParam :: MatlabCode (Variable MatlabCode) -> Doc
+mlParam = RC.variable
+
+-- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
+--   With no outputs the @[outs] =@ part is dropped; with a single output the
+--   brackets are dropped (@function out = name(ins)@).
+mlFuncDoc :: (CommonRenderSym r) => Label -> [Doc] -> [r (Parameter r)] -> Doc
+  -> Doc
+mlFuncDoc n outs pms bod =
+  vcat [text "function" <+> retDoc <> text n <> parens (R.parameterList pms),
+        indent bod,
+        text "end"]
+  where retDoc = case outs of
+          []  -> empty
+          [o] -> o <+> equals <> text " "
+          os  -> brackets (hcat (punctuate (text ", ") os)) <+> equals <> text " "
 
 -- convenience
 mlName, mlVersion :: String

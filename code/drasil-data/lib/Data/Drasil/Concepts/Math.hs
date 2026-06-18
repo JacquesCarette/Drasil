@@ -5,6 +5,7 @@ module Data.Drasil.Concepts.Math (
   ) where
 
 -- General Drasil
+import Drasil.Database (mkUid)
 import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
 import qualified Language.Drasil as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -103,12 +104,12 @@ iAngle = dcc "iAngle" (cn "initial angle")                      "The initial ang
 
 de, leftSide, ode, pde, rightSide :: CI
 --FIXME: use nounphrase instead of cn'
-de  = commonIdeaWithDict "de"  (cn' "differential equation")          "DE"  [mathematics]
-ode = commonIdeaWithDict "ode" (cn' "ordinary differential equation") "ODE" [mathematics]
-pde = commonIdeaWithDict "pde" (cn' "partial differential equation")  "PDE" [mathematics]
+de  = commonIdeaWithDict (mkUid "de")  (cn' "differential equation")          "DE"  [mathematics]
+ode = commonIdeaWithDict (mkUid "ode") (cn' "ordinary differential equation") "ODE" [mathematics]
+pde = commonIdeaWithDict (mkUid "pde") (cn' "partial differential equation")  "PDE" [mathematics]
 
-leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left-hand side"  "left-hand sides" ) "LHS" [mathematics]
-rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right-hand side" "right-hand sides") "RHS" [mathematics]
+leftSide  = commonIdeaWithDict (mkUid "leftSide")  (nounPhrase "left-hand side"  "left-hand sides" ) "LHS" [mathematics]
+rightSide = commonIdeaWithDict (mkUid "rightSide") (nounPhrase "right-hand side" "right-hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
 -- do we really need fterms here? Would combineNINI work?

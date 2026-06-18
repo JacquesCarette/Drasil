@@ -4,14 +4,12 @@ module Language.Drasil.Chunk.UnitDefn (
   -- * Classes
   MayHaveUnit(getUnit),
   IsUnit(getUnits),
-  TempHasUnit(findUnit),
   -- * Chunk Type
   UnitDefn(..),
   -- * Constructors
   makeDerU, newUnit,
   derUC, derUC', derUC'',
   fund, fund', derCUC, derCUC', derCUC'',
-  unitWrapper,
   -- * Unit Combinators ('UnitEquation's)
   (^:), (/:), (*:), (*$), (/$), (^$),
   -- * Unit Relation Functions
@@ -25,7 +23,7 @@ import Control.Arrow (second)
 
 import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
+import Language.Drasil.Chunk.Concept (ConceptChunk, dcc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (cn,cn',NP)
@@ -72,10 +70,6 @@ instance IsUnit        UnitDefn where
 class MayHaveUnit u where
    getUnit :: u -> Maybe UnitDefn
 
--- | Temporary class to make sure chunks have a unit (in order to eventually get rid of 'MayHaveUnit').
-class TempHasUnit u where
-   findUnit :: u -> UnitDefn
-
 -- | Takes a contributing unit (['UID']) and a symbol ('USymb').
 data UnitEquation = UE {_contributingUnit :: [UID]
                        , _us :: USymb}
@@ -121,11 +115,6 @@ derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 unitCon :: String -> ConceptChunk
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
-
--- | For allowing lists to mix together chunks that are units by projecting them into a 'UnitDefn'.
--- For now, this only works on 'UnitDefn's.
-unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cc' u (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
 
 -- | Helper to get derived units if they exist.
 getSecondSymb :: UnitDefn -> Maybe USymb

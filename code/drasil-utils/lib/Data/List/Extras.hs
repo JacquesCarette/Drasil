@@ -1,5 +1,5 @@
 -- | Functions for working with lists.
-module Utils.Drasil.Lists (
+module Data.List.Extras (
   replaceAll,
   subsetOf, nubSort,
   weave,

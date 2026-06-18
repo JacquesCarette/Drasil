@@ -3,13 +3,12 @@ module Drasil.HGHC.HeatTransfer (module Drasil.HGHC.HeatTransfer) where --whole 
 import Data.List.NonEmpty (NonEmpty ((:|)))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Theory.Drasil (DataDefinition, ddENoRefs)
 
 import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
-
-{--}
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList htOutputs ++ NE.toList htInputs
@@ -74,8 +73,8 @@ htTransCladFuelEq = (exactDbl 2 $* sy cladCond $* sy gapFilmCond) $/ (exactDbl 2
 ---
 
 nuclearPhys, fp :: IdeaDict
-nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
-fp = nc "fp" (cn "FP")
+nuclearPhys = idea' (mkUid "nuclearPhys") (nounPhraseSP "nuclear physics")
+fp = idea' (mkUid "fp") (cn "FP")
 
 lCoolant, lClad, lEffective, lGap :: Symbol
 lCoolant   = label "b"

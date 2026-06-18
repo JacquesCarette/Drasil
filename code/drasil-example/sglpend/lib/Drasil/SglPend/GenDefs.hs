@@ -24,7 +24,7 @@ import Theory.Drasil (GenDefn, gdNoRefs,
     Derivation, mkDerivName,
     equationalModel', equationalModelU, equationalRealmU,
     MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.SglPend.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Drasil.SglPend.Derivations as D

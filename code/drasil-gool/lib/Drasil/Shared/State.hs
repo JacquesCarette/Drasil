@@ -37,7 +37,7 @@ import Drasil.Shared.AST (FileType(..), VisibilityTag(..), ScopeTag(..),
 import Drasil.Shared.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import Drasil.Shared.CodeType (ClassName)
 
-import Utils.Drasil (nubSort)
+import Data.List.Extras (nubSort)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)

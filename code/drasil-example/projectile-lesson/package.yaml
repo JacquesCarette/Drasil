@@ -1,0 +1,51 @@
+spec-version: 0.36.0
+name:         projectile-lesson
+version:      0.1.24.0
+author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:   "Jacques Carette"
+synopsis:     A framework for code and document generation for scientific software - Example SubPackage
+github:       JacquesCarette/Drasil
+homepage:     https://jacquescarette.github.io/Drasil/
+description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -Wmissing-export-lists
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- directory
+- drasil-code
+- drasil-data
+- drasil-database
+- drasil-srs
+- drasil-gen
+- drasil-gool
+- drasil-lang
+- drasil-lesson-plan
+- drasil-printers
+- drasil-system
+- drasil-theory
+- drasil-utils
+- projectile
+
+library:
+  source-dirs: lib
+
+executables:
+  projectile-lesson:
+    main: Main
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -O2
+    dependencies:
+    - projectile-lesson

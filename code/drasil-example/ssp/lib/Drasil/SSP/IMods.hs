@@ -8,7 +8,7 @@ import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Language.Drasil.Document
 import Theory.Drasil
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

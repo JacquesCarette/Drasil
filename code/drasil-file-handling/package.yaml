@@ -26,8 +26,6 @@ dependencies:
 - template-haskell
 - file-io >= 0.1.6
 - os-string
-- process
-- tasty
 - text
 - bytestring
 
@@ -48,8 +46,6 @@ tests:
     source-dirs: test
     main: Main.hs
     dependencies:
-    - drasil-file-handling
-    - hedgehog
+    - drasil-testing-kit
     - tasty
-    - tasty-hedgehog
     - tasty-hunit

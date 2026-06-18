@@ -15,7 +15,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel', Derivation,
   mkDerivName, RelationConcept, makeRC)
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
   assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)

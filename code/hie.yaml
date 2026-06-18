@@ -66,6 +66,12 @@ cradle:
     - path: "drasil-example/projectile/app/Main.hs"
       component: "projectile:exe:projectile"
 
+    - path: "drasil-example/projectile-lesson/lib"
+      component: "projectile-lesson:lib"
+
+    - path: "drasil-example/projectile-lesson/app/Main.hs"
+      component: "projectile-lesson:exe:projectile-lesson"
+
     - path: "drasil-example/sglpend/lib"
       component: "sglpend:lib"
 
@@ -137,6 +143,9 @@ cradle:
 
     - path: "drasil-system/lib"
       component: "drasil-system:lib"
+
+    - path: "drasil-testing-kit/lib"
+      component: "drasil-testing-kit:lib"
 
     - path: "drasil-theory/lib"
       component: "drasil-theory:lib"

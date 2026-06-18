@@ -12,7 +12,7 @@ import Data.List ((\\), nub)
 import Language.Drasil (Space, MayHaveUnit, Quantity, LiteralC(int), Concept)
 import Drasil.Database (ChunkDB)
 import Drasil.GOOL (VisibilityTag(..))
-import Utils.Drasil (toPlainName)
+import Data.String.Extras (toPlainName)
 
 import Drasil.Code.CodeExpr (CodeExpr)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,

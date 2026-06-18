@@ -1,9 +1,9 @@
 -- Contains a function that removes special characters from strings.
-module Utils.Drasil.Strings (
+module Data.String.Extras (
   toPlainName, repUnd
 ) where
 
-import Utils.Drasil.Lists (replaceAll)
+import Data.List.Extras (replaceAll)
 
 -- | Replace occurences of special characters (@",~`-=!@#$%^&*+[]\\;'/|\"<>? "@)
 --   with underscores (@"_"@).

@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 import Drasil.Database (HasUID(..))
 import Language.Drasil
 import Language.Drasil.Document
-import Utils.Drasil (mkTable)
+import Data.List.Extras (mkTable)
 
 -- Other docLang
 import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)

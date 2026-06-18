@@ -12,7 +12,7 @@ import Drasil.SRS (mkInputPropsTable, mkMaintainableNFR, mkCorrectNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.SRS.Concepts (datCon, propCorSol)
 
-import Utils.Drasil (mkTable)
+import Data.List.Extras (mkTable)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_, name_,

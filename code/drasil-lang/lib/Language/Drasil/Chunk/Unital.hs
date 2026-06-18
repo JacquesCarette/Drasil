@@ -2,7 +2,7 @@
 -- | Defines chunks to add units to a quantity. Similar to 'UnitaryChunk'.
 module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
-  UnitalChunk(..),
+  UnitalChunk,
   -- * Constructors
   uc, uc', ucStaged, ucStaged') where
 
@@ -15,8 +15,8 @@ import Language.Drasil.Chunk.Concept (dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Symbol (Symbol, HasSymbol(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
-  Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
+  Definition(defn), ConceptDomain(cdom), Concept, Quantity)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
@@ -58,8 +58,6 @@ instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 instance Quantity      UnitalChunk where
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
--- | Finds the units used to make the 'UnitalChunk'.
-instance TempHasUnit       UnitalChunk where findUnit = view uni
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.
@@ -68,24 +66,20 @@ instance Express       UnitalChunk where express = sy
 --{BEGIN HELPER FUNCTIONS}--
 
 -- | Used to create a 'UnitalChunk' from a 'Concept', 'Symbol', and 'Unit'.
-uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
-uc a sym space c = UC (dqd (cw a) sym space un) un
- where un = unitWrapper c
+uc :: (Concept c) => c -> Symbol -> Space -> UnitDefn -> UnitalChunk
+uc a sym space un = UC (dqd (cw a) sym space un) un
 
 -- | Similar to 'uc', except it builds the 'Concept' portion of the 'UnitalChunk'
 -- from a given 'UID', term, and definition (as a 'Sentence') which are its first three arguments.
-uc' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
-uc' i t d sym space u = UC (dqd (dccWDS i t d) sym space un) un
- where un = unitWrapper u
+uc' :: String -> NP -> Sentence -> Symbol -> Space -> UnitDefn -> UnitalChunk
+uc' i t d sym space un = UC (dqd (dccWDS i t d) sym space un) un
 
 -- | Similar to 'uc', but 'Symbol' is dependent on the 'Stage'.
-ucStaged :: (Concept c, IsUnit u) => c ->  (Stage -> Symbol) ->
-  Space -> u -> UnitalChunk
-ucStaged a sym space u = UC (dqd' (cw a) sym space (Just un)) un
- where un = unitWrapper u
+ucStaged :: (Concept c) => c ->  (Stage -> Symbol) ->
+  Space -> UnitDefn -> UnitalChunk
+ucStaged a sym space un = UC (dqd' (cw a) sym space (Just un)) un
 
 -- | Similar to 'uc'', but 'Symbol' is dependent on the 'Stage'.
-ucStaged' :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
-  Space -> u -> UnitalChunk
-ucStaged' i t d sym space u = UC (dqd' (dccWDS i t d) sym space (Just un)) un
- where un = unitWrapper u
+ucStaged' :: String -> NP -> Sentence -> (Stage -> Symbol) ->
+  Space -> UnitDefn -> UnitalChunk
+ucStaged' i t d sym space un = UC (dqd' (dccWDS i t d) sym space (Just un)) un

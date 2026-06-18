@@ -89,11 +89,10 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
-  double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
-  litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
-  increment, increment1, decrement1, varDec, setType, varDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
-  multiTypeError)
+  double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
+  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew,
+  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -1241,7 +1240,9 @@ instance OOVariableSym CppSrcCode where
   instanceVarAccess = G.instanceVarAccess
 
 instance SelfSym CppSrcCode where
-  self = C.self
+  self = do
+    l <- zoom lensVStoMS getClassName
+    mkStateVar R.this (referenceType $ obj l) R.this'
 
 instance InstanceVarSelfSym CppSrcCode where
   instanceVarSelf v' = do

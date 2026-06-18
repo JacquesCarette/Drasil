@@ -1352,9 +1352,7 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
-  selfMethodCallMixedArgs fn tp vs ns = do
-    slf <- self :: SVariable CppSrcCode
-    RC.call Nothing (Just $ RC.variable slf <> ptrAccess') fn tp vs ns
+  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
     modify (addModuleImportVS l)

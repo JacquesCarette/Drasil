@@ -127,7 +127,7 @@ import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, braces,
-  parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
+  parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi, render)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -1234,7 +1234,19 @@ instance OOVariableSym CppSrcCode where
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS)
       (Map.lookup (getTypeString t) cm) $ classVarAccess (pure t) v
-  instanceVarAccess = G.instanceVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    let objTp = cType $ unRepr $ valueType ob'
+    case objTp of
+      (Reference _) -> let
+          instanceVarAccess' ClassLevel = error
+            "Cannot access class-level variables through an object, use classVarAccess instead"
+          instanceVarAccess' InstanceLevel = mkVar
+            (render (RC.value ob') ++ ptrAccess ++ variableName vr')
+            (variableType vr') (RC.value ob' <> ptrAccess' <> RC.variable vr')
+        in instanceVarAccess' (variableBind vr')
+      _ -> G.instanceVarAccess ob vr
 
 instance SelfSym CppSrcCode where
   self = do

@@ -221,8 +221,8 @@ xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
         (getUnit force) (Just xForceDeriv_1) "xForce1" []
 
 xForceMD_1 :: MultiDefn ModelExpr
-xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (horizontalForce `onThe` firstObject)
+xForceMD_1 = mkMultiDefnForQuant quan EmptyS defns
+    where quan  = dqd' (dccA "force" (horizontalForce `onThe` firstObject)
                     "the horizontal force acting on the first object"
                     Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
@@ -242,8 +242,8 @@ yForceGD_1 = gdNoRefs (equationalRealmU "yForce1" yForceMD_1)
         (getUnit force) (Just yForceDeriv_1) "yForce1" []
 
 yForceMD_1 :: MultiDefn ModelExpr
-yForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (verticalForce `onThe` firstObject)
+yForceMD_1 = mkMultiDefnForQuant quan EmptyS defns
+    where quan  = dqd' (dccA "force" (verticalForce `onThe` firstObject)
                     "the vertical force acting on the first object"
                     Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
@@ -263,8 +263,8 @@ xForceGD_2 = gdNoRefs (equationalRealmU "xForce2" xForceMD_2)
         (getUnit force) (Just xForceDeriv_2) "xForce2" []
 
 xForceMD_2 :: MultiDefn ModelExpr
-xForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (horizontalForce `onThe` secondObject)
+xForceMD_2 = mkMultiDefnForQuant quan EmptyS defns
+    where quan  = dqd' (dccA "force" (horizontalForce `onThe` secondObject)
                     "the horizontal force acting on the second object"
                     Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [
@@ -284,8 +284,8 @@ yForceGD_2 = gdNoRefs (equationalRealmU "yForce2" yForceMD_2)
         (getUnit force) (Just yForceDeriv_2) "yForce2" []
 
 yForceMD_2 :: MultiDefn ModelExpr
-yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
-    where quant = dqd' (dccA "force" (verticalForce `onThe` secondObject)
+yForceMD_2 = mkMultiDefnForQuant quan EmptyS defns
+    where quan  = dqd' (dccA "force" (verticalForce `onThe` secondObject)
                     "the vertical force acting on the second object"
                     Nothing) (symbol force) Real (getUnit force)
           defns = NE.fromList [

@@ -1382,7 +1382,12 @@ instance ValueElim CppSrcCode where
   value = val . unCPPSC
 
 instance InternalValueExp CppSrcCode where
-  objMethodCallMixedArgs' = G.objMethodCall
+  objMethodCallMixedArgs' fn tp ob posArgs nmArgs = do
+    ob' <- ob
+    let objTp = cType $ unRepr $ valueType ob'
+    case objTp of
+      (Reference _) -> RC.call Nothing (Just $ RC.value ob' <> ptrAccess') fn tp posArgs nmArgs
+      _ -> G.objMethodCall fn tp ob posArgs nmArgs
   classMethodCallMixedArgs' f t cls vs ns = do
     c <- cls
     RC.call Nothing (Just $ renderType c <> text nmSpc) f t vs ns

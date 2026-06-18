@@ -82,13 +82,13 @@ instance Show Emphasis where
 -- | Types of literature.
 data Literature where
   -- | Literature (with a topic).
-  Lit :: (IsChunk t, NamedIdea t) => t -> Literature
+  Lit :: (IsChunk t, Idea t) => t -> Literature
   -- | Existing documentation for (singular topic).
-  Doc :: (IsChunk t, NamedIdea t) => t -> Literature
+  Doc :: (IsChunk t, Idea t) => t -> Literature
   -- | Existing documentation for (plural version of topic).
-  Doc' :: (IsChunk t, NamedIdea t) => t -> Literature
+  Doc' :: (IsChunk t, Idea t) => t -> Literature
   -- | Manual.
-  Manual :: (IsChunk t, NamedIdea t) => t -> Literature
+  Manual :: (IsChunk t, Idea t) => t -> Literature
 
 -- | For creating the table of units introduction.
 data TUIntro = System -- ^ System of units (defaults to SI).

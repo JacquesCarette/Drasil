@@ -14,7 +14,7 @@ import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, refFind, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
-import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupSymb)
+import Language.Drasil.Printing.Import.Helpers (lookupSymb, lookupP', lookupS', lookupT')
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 
 -- * Main Function
@@ -34,11 +34,11 @@ spec _  (P s)                   = P.E $ symbol s
 spec sm (SyCh s)                = P.E $ symbol $ lookupSymb sm s
 
 -- First term is the tooltip, second term is the rendered short form
-spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
-  sm s caps) (spec sm $ lookupS sm s caps)
+spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT'
+  sm s caps) (spec sm $ lookupS' sm s caps)
 
-spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
-spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
+spec sm (Ch TermStyle caps s)   = spec sm $ lookupT' sm s caps
+spec sm (Ch PluralTerm caps s) = spec sm $ lookupP' sm s caps
 spec sm (Ref u EmptyS notes)    =
   let reff = refFind u sm in
   case reff of

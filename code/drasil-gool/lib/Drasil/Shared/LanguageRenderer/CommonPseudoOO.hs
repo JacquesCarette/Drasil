@@ -24,7 +24,7 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
   VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
-  MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
+  MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, innerType),
   getCodeType, getTypeString, VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
   VisibilitySym(..), MethodSym(function), funcApp, listSize)
@@ -200,7 +200,7 @@ arrayDec n vr scp = do
   modify $ useVarName $ variableName v
   modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
-  innerTp <- zoom lensMStoVS $ listInnerType $ return tp
+  innerTp <- zoom lensMStoVS $ innerType $ return tp
   mkStmt $ renderType tp <+> RC.variable v <+> equals <+> new' <+>
     renderType innerTp <> brackets (RC.value sz)
 
@@ -307,13 +307,13 @@ listDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData ->
   [SValue r] -> MSStatement r
 listDecDef v scp vals = do
   vr <- zoom lensMStoVS v
-  let lst = IC.litList (listInnerType $ return $ variableType vr) vals
+  let lst = IC.litList (innerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) scp lst
 
 setDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
 setDecDef v scp vals = do
   vr <- zoom lensMStoVS v
-  let st = IC.litSet (listInnerType $ return $ variableType vr) vals
+  let st = IC.litSet (innerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) scp st
 
 setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MSStatement r
@@ -323,7 +323,7 @@ setDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 setMethodCall :: (OORenderSym r) => Label -> SValue r ->  SValue r -> SValue r
-setMethodCall n a b = objMethodCall (listInnerType $ onStateValue valueType a) a n [b]
+setMethodCall n a b = objMethodCall (innerType $ onStateValue valueType a) a n [b]
 
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l

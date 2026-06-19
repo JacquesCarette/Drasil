@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
-  buildModule, docMod, modFromData, listInnerType, arrayElem, listAppend,
+  buildModule, docMod, modFromData, innerType, arrayElem, listAppend,
   listAdd, funcDecDef, function
 ) where
 
@@ -82,8 +82,8 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
 
-listInnerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getCodeType)
+innerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r
@@ -99,7 +99,7 @@ arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v -- Slight hack; we used to add `++ "[" ++ render (RCC.value i) ++ "]"`
-      vType = listInnerType $ return $ variableType v
+      vType = innerType $ return $ variableType v
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 

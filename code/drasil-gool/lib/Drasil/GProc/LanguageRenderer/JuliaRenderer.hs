@@ -78,7 +78,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
 
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listAppend, listAdd,
-  listInnerType, arrayElem, funcDecDef, function)
+  innerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
@@ -193,7 +193,7 @@ instance TypeSym JuliaCode where
   listType = jlListType
   setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python
-  listInnerType = A.listInnerType
+  innerType = A.innerType
   funcType = CS.funcType
   void = jlVoidType
 

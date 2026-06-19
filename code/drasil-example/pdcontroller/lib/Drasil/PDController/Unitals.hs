@@ -13,6 +13,7 @@ module Drasil.PDController.Unitals (
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
@@ -131,52 +132,52 @@ opProcessVariable
 dqdProcessVariableTD = dqdWr opProcessVariable
 
 dqdSetPointFD
-  = dqdNoUnit (dcc "dqdSetPointFD" (setPoint `inThe` ccFrequencyDomain)
-    "the set point in the frequency domain") symYrS Real
+  = dqdNoUnit (cncpt''' (mkUid "dqdSetPointFD") (setPoint `inThe` ccFrequencyDomain)
+    (S "the set point in the frequency domain")) symYrS Real
 
-dqdProcessVariableFD = dqdNoUnit (dcc "dqdProcessVariableFD"
-  (processVariable `inThe` ccFrequencyDomain) "the process variable in the frequency domain") symYS Real
+dqdProcessVariableFD = dqdNoUnit (cncpt''' (mkUid "dqdProcessVariableFD")
+  (processVariable `inThe` ccFrequencyDomain) (S "the process variable in the frequency domain")) symYS Real
 
-dqdProcessErrorFD = dqdNoUnit (dcc "dqdProcessErrorFD" (processError `inThe`
-  ccFrequencyDomain) "the process error in the time domain") symES Real
+dqdProcessErrorFD = dqdNoUnit (cncpt''' (mkUid "dqdProcessErrorFD") (processError `inThe`
+  ccFrequencyDomain) (S "the process error in the time domain")) symES Real
 
-dqdPropControlFD  = dqdNoUnit (dcc "dqdPropControlFD" (propControl `inThe`
-  ccFrequencyDomain) "the proportional control in the frequency domain") symPS Real
+dqdPropControlFD  = dqdNoUnit (cncpt''' (mkUid "dqdPropControlFD") (propControl `inThe`
+  ccFrequencyDomain) (S "the proportional control in the frequency domain")) symPS Real
 
-dqdDerivativeControlFD = dqdNoUnit (dcc "dqdDerivativeControlFD" (derControl `inThe`
-  ccFrequencyDomain) "the derivative control in the frequency domain") symDS Real
+dqdDerivativeControlFD = dqdNoUnit (cncpt''' (mkUid "dqdDerivativeControlFD") (derControl `inThe`
+  ccFrequencyDomain) (S "the derivative control in the frequency domain")) symDS Real
 
-dqdCtrlVarFD = dqdNoUnit (dcc "dqdCtrlVarFD" (controlVariable `inThe`
-  ccFrequencyDomain) "the control variable in the frequency domain") symCS Real
+dqdCtrlVarFD = dqdNoUnit (cncpt''' (mkUid "dqdCtrlVarFD") (controlVariable `inThe`
+  ccFrequencyDomain) (S "the control variable in the frequency domain")) symCS Real
 
 dqdLaplaceTransform
-  = dqdNoUnit (dcc "dqdLaplaceTransform"
+  = dqdNoUnit (cncpt''' (mkUid "dqdLaplaceTransform")
       (pn "Laplace Transform of a function")
-      "the laplace transform of a function")
+      (S "the laplace transform of a function"))
       symFS
       Real
 
 dqdFreqDomain
-  = dqdNoUnit (dcc "dqdFreqDomain" (pn "Complex frequency-domain parameter")
-      "the complex frequency-domain parameter")
+  = dqdNoUnit (cncpt''' (mkUid "dqdFreqDomain") (pn "Complex frequency-domain parameter")
+      (S "the complex frequency-domain parameter"))
       syms
       Real
 
 dqdFxnTDomain
-  = dqdNoUnit (dcc "dqdFxnTDomain" (pn "Function in the time domain")
-      "a function in the time domain") symFt
+  = dqdNoUnit (cncpt''' (mkUid "dqdFxnTDomain") (pn "Function in the time domain")
+      (S "a function in the time domain")) symFt
       Real
 
 dqdInvLaplaceTransform
-  = dqdNoUnit (dcc "dqdInvLaplaceTransform"
+  = dqdNoUnit (cncpt''' (mkUid "dqdInvLaplaceTransform")
       (pn "Inverse Laplace Transform of a function")
-      "the inverse Laplace transform of a function")
+      (S "the inverse Laplace transform of a function"))
       syminvLaplace
       Real
 
 dqdDampingCoeff
-  = dqdNoUnit (dcc "dqdDampingCoeff" (pn "Damping coefficient of the spring")
-      "the damping coefficient of the spring")
+  = dqdNoUnit (cncpt''' (mkUid "dqdDampingCoeff") (pn "Damping coefficient of the spring")
+      (S "the damping coefficient of the spring"))
       symDampingCoeff
       Real
 

@@ -134,7 +134,7 @@ instance TypeSym MatlabCode where
   listType = undefined
   setType = undefined
   arrayType = undefined
-  listInnerType = undefined
+  innerType = undefined
   funcType = undefined
   void = undefined
 

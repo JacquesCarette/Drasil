@@ -40,4 +40,5 @@ defs :: [ConceptChunk]
 defs = [arcLen]
 
 arcLen :: ConceptChunk
-arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
+arcLen = cncpt''' (mkUid "arc length") (nounPhraseSP "arc length")
+  (S "the distance between two points on a curve")

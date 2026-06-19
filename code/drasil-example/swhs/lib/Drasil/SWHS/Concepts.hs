@@ -27,40 +27,40 @@ charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
   tankPCM, transient, water, sWHT, tankParam :: ConceptChunk
 
-charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
+charging = cncpt''' (mkUid "charging") (nounPhraseSP "charging") (S "charging of the tank")
 
-coil = dcc "coil" (cn' "heating coil")
-  "coil in tank that heats by absorbing solar energy"
+coil = cncpt''' (mkUid "coil") (cn' "heating coil")
+  (S "coil in tank that heats by absorbing solar energy")
 
-discharging = dcc "discharging" (nounPhraseSP "discharging")
-  "discharging of the tank"
+discharging = cncpt''' (mkUid "discharging") (nounPhraseSP "discharging")
+  (S "discharging of the tank")
 
-transient = dcc "transient" (nounPhraseSP "transient") "changing with time"
+transient = cncpt''' (mkUid "transient") (nounPhraseSP "transient") (S "changing with time")
 
-gaussDiv = dcc "gaussDiv" (nounPhraseSP "gauss's divergence theorem")
-  ("a result that relates the flow of a vector field through a surface" ++
-  "to the behavior of the vector field inside the surface")
+gaussDiv = cncpt''' (mkUid "gaussDiv") (nounPhraseSP "gauss's divergence theorem")
+  (S ("a result that relates the flow of a vector field through a surface" ++
+  "to the behavior of the vector field inside the surface"))
 --TODO: Physical property.
 
-perfectInsul = dcc "perfectInsul" (nounPhraseSP "perfectly insulated")
-  ("describes the property of a material not allowing" ++
-  "heat transfer through its boundaries")
+perfectInsul = cncpt''' (mkUid "perfectInsul") (nounPhraseSP "perfectly insulated")
+  (S ("describes the property of a material not allowing" ++
+  "heat transfer through its boundaries"))
 
-phaseChangeMaterial = dcc "pcm" (phsChgMtrl ^. term)
-  ("a substance that uses phase changes (such as melting) to absorb or " ++
-  "release large amounts of heat at a constant temperature")
+phaseChangeMaterial = cncpt''' (mkUid "pcm") (phsChgMtrl ^. term)
+  (S ("a substance that uses phase changes (such as melting) to absorb or " ++
+  "release large amounts of heat at a constant temperature"))
 
-tankParam = dcc "tankParam" (compoundPhrase' (tank ^. term)
+tankParam = cncpt''' (mkUid "tankParam") (compoundPhrase' (tank ^. term)
   (parameter ^. term))
-  "values associated with the tank"
+  (S "values associated with the tank")
 
-tank  = dcc "tank"  (cn' "tank") "enclosure containing some kind of substance"
-sWHT  = dcc "sWHT"  (cn' "solar water heating tank") "solar water heating tank"
-water = dcc "water" (cn' "water") "the liquid with which the tank is filled"
+tank  = cncpt''' (mkUid "tank")  (cn' "tank") (S "enclosure containing some kind of substance")
+sWHT  = cncpt''' (mkUid "sWHT")  (cn' "solar water heating tank") (S "solar water heating tank")
+water = cncpt''' (mkUid "water") (cn' "water") (S "the liquid with which the tank is filled")
 
 -- TODO: extract 'PCM' from 'phsChgMtrl' again instead of hard-coding it
-tankPCM = dcc "tankPCM" (nounPhrase''
+tankPCM = cncpt''' (mkUid "tankPCM") (nounPhrase''
   (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
   (phraseNP (sWHT ^. term) NP.:+: NP.S "incorporating PCM")
   CapFirst CapWords)
-  "solar water heating tank incorporating phase change material"
+  (S "solar water heating tank incorporating phase change material")

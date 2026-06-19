@@ -12,6 +12,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Drasil.Database (mkUid)
 import Drasil.SSP.Defs (fsConcept,slpSrf,minim,maxim,waterTable,slope,xCoords,yCoords)
 
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -168,9 +169,9 @@ waterWeight = uqc "gamma_w" (cn "unit weight of water")
   (exactDbl 9800) defaultUncrt
 
 constF :: DefinedQuantityDict
-constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
-  ("a Boolean decision on which form of f the user desires: constant if true," ++
-  " or half-sine if false")) (const (variable "const_f")) Boolean Nothing
+constF = dqd' (cncpt''' (mkUid "const_f") (nounPhraseSP "decision on f")
+  (S ("a Boolean decision on which form of f the user desires: constant if true," ++
+  " or half-sine if false"))) (const (variable "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs, coords :: ConstrConcept
@@ -178,8 +179,8 @@ fs = constrained' (dqd' fsConcept (const $ sub cF lSafety) Real Nothing)
   [gtZeroConstr] (exactDbl 1)
 
 fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety")
-  "the minimum factor of safety associated with the critical slip surface")
+fsMin = dqd' (cncpt''' (mkUid "fsMin") (cn "minimum factor of safety")
+  (S "the minimum factor of safety associated with the critical slip surface"))
   (const $ supMin (eqSymb fs)) Real Nothing
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
@@ -447,13 +448,13 @@ unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction,
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
 
-earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
-  ("the proportionality factor of force that weight pushes outwards; " ++
-   "caused by seismic earth movements"))
+earthqkLoadFctr = dqd' (cncpt''' (mkUid "K_c") (nounPhraseSP "seismic coefficient")
+  (S ("the proportionality factor of force that weight pushes outwards; " ++
+   "caused by seismic earth movements")))
   (const $ sub cK lCoeff) Real Nothing
 
-normToShear = dqd' (dcc "lambda" (nounPhraseSP "proportionality constant")
-  "the ratio of the interslice normal to the interslice shear force")
+normToShear = dqd' (cncpt''' (mkUid "lambda") (nounPhraseSP "proportionality constant")
+  (S "the ratio of the interslice normal to the interslice shear force"))
   (const lLambda) Real Nothing
 
 scalFunc = dqd' (dccWDS "f_i"
@@ -463,38 +464,38 @@ scalFunc = dqd' (dccWDS "f_i"
   (const (vec lF)) Real Nothing
 
 -- As we're going to subtract from this, can't type it 'Natural'.
-numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
-  "the number of slices into which the slip surface is divided")
+numbSlices = dqd' (cncpt''' (mkUid "n") (nounPhraseSP "number of slices")
+  (S "the number of slices into which the slip surface is divided"))
   (const lN) Integer Nothing
 
 -- horrible hack, but it's only used once, so...
-minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
-  "generic minimization function or algorithm")
+minFunction = dqd' (cncpt''' (mkUid "Upsilon") (nounPhraseSP "minimization function")
+  (S "generic minimization function or algorithm"))
   (const cUpsilon) (mkFunction (replicate 10 Real) Real) Nothing
 
-mobShrC = dqd' (dcc "Psi"
+mobShrC = dqd' (cncpt''' (mkUid "Psi")
   (nounPhraseSP "second function for incorporating interslice forces into shear force")
-  ("the function for converting mobile shear " ++ wiif ++
-   ", to a calculation considering the interslice forces"))
+  (S ("the function for converting mobile shear " ++ wiif ++
+   ", to a calculation considering the interslice forces")))
   (const (vec cPsi)) (Vect Real) Nothing
 
-shrResC = dqd' (dcc "Phi"
+shrResC = dqd' (cncpt''' (mkUid "Phi")
   (nounPhraseSP "first function for incorporating interslice forces into shear force")
-  ("the function for converting resistive shear " ++ wiif ++
-   ", to a calculation considering the interslice forces"))
+  (S ("the function for converting resistive shear " ++ wiif ++
+   ", to a calculation considering the interslice forces")))
   (const (vec cPhi)) (Vect Real) Nothing
 
 --------------------
 -- Index Function --
 --------------------
 
-varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
-  "used as a bound variable index in calculations")
+varblV = dqd' (cncpt''' (mkUid "varblV") (nounPhraseSP "local index")
+  (S "used as a bound variable index in calculations"))
   (const lV) Natural Nothing
 
 -- As we do arithmetic on index, must type it 'Integer' right now
-index = dqd' (dcc "index" (nounPhraseSP "index")
-  "a number representing a single slice")
+index = dqd' (cncpt''' (mkUid "index") (nounPhraseSP "index")
+  (S "a number representing a single slice"))
   (const lI) Integer Nothing
 
 -- FIXME: move to drasil-lang

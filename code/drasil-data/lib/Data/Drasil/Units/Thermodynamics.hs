@@ -1,8 +1,9 @@
 -- | Units related to the field of thermodynamics.
 module Data.Drasil.Units.Thermodynamics where
 
-import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', dcc, Sentence(S),
-  UnitDefn, (/:), (*:), (/$), newUnit, makeDerU)
+import Drasil.Database (mkUid)
+import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', Sentence(S),
+  UnitDefn, (/:), (*:), (/$), newUnit, makeDerU, cncpt''')
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
@@ -22,5 +23,5 @@ heatTransferCoef :: UnitDefn
 heatTransferCoef = newUnit "heat transfer coefficient" (watt /$ (m_2 *: centigrade))
 
 volHtGenU :: UnitDefn
-volHtGenU = makeDerU (dcc "volHtGenU" (cn "volumetric heat generation")
-  "the rate of heat energy generation per unit volume") (watt /: m_3)
+volHtGenU = makeDerU (cncpt''' (mkUid "volHtGenU") (cn "volumetric heat generation")
+  (S "the rate of heat energy generation per unit volume")) (watt /: m_3)

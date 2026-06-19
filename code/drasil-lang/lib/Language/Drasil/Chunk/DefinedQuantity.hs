@@ -19,7 +19,7 @@ import qualified Data.Set as Set
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt''', cncpt'')
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt'', cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))

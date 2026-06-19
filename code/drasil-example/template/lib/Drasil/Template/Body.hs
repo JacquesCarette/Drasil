@@ -83,13 +83,13 @@ outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = NE.singleton (dqdWr t1)
 
 t0 :: UnitalChunk
-t0 = uc (dcc "t0" (cn' "start time") "the start time") (sub lT (Integ 0)) Real second
+t0 = uc (cncpt''' (mkUid "t0") (cn' "start time") (S "the start time")) (sub lT (Integ 0)) Real second
 
 t1 :: UnitalChunk
-t1 = uc (dcc "t1" (cn' "end time") "the end time") (sub lT (Integ 1)) Real second
+t1 = uc (cncpt''' (mkUid "t1") (cn' "end time") (S "the end time")) (sub lT (Integ 1)) Real second
 
 dt :: UnitalChunk
-dt = uc (dcc "dt" (cn' "time delta") "the time delta") (Atop Delta lT) Real second
+dt = uc (cncpt''' (mkUid "dt") (cn' "time delta") (S "the time delta")) (Atop Delta lT) Real second
 
 inputValues :: ConceptInstance
 inputValuesTable :: LabelledContent

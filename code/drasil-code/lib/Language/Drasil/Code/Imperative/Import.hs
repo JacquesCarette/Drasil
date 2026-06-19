@@ -584,7 +584,7 @@ convStmt (FAsg v (Matrix [es])) = do
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
   l <- maybeLog vlog v'
-  return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
+  return $ multi $ assign v' (listFunc t (innerType $ fmap variableType v')
     els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
@@ -753,7 +753,7 @@ readData ddef = do
         clearTemp :: (OOProg r) => String -> DataItem -> r ScopeData ->
           GenState (MSStatement r)
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t)) scp []) (codeType v)
+          (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps :: (OOProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
@@ -770,7 +770,7 @@ readData ddef = do
 getEntryVars :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
   VariableValue r) => Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
-  (variable (codeName v ++ st) . listInnerType . convTypeOO))
+  (variable (codeName v ++ st) . innerType . convTypeOO))
     s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
@@ -994,7 +994,7 @@ readDataProc ddef = do
         clearTemp :: (SharedProg r) => String -> DataItem -> r ScopeData ->
           GenState (MSStatement r)
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convType t)) scp []) (codeType v)
+          (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps :: (SharedProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
@@ -1011,7 +1011,7 @@ readDataProc ddef = do
 getEntryVarsProc :: (VariableSym r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
 getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
-  (variableProc (codeName v ++ st) . listInnerType . convType))
+  (variableProc (codeName v ++ st) . innerType . convType))
     s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
@@ -1131,7 +1131,7 @@ convStmtProc (FAsg v (Matrix [es])) = do
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
   l <- maybeLog vlog v'
-  return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
+  return $ multi $ assign v' (listFunc t (innerType $ fmap variableType v')
     els) : l
 convStmtProc (FAsg v e) = do
   e' <- convExprProc e

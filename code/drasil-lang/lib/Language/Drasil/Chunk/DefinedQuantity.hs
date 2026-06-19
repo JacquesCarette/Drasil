@@ -6,19 +6,20 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Type classes
   DefinesQuantity(defLhs),
   -- * Constructors
+  quant, quant', quantAU, quantNoUnit, quantNoUnit',
   dqd, dqdNoUnit, dqdNoUnit', dqd', dqdWr,
   implVar, implVar', implVarAU, implVarAU'
 ) where
 
 import Control.Lens ((^.), makeLenses, view, Getter)
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..), mkUid)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, mkUid)
 import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccA, dccAWDS, cncpt''')
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt'', cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
@@ -71,6 +72,89 @@ instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- | Convert the symbol of the 'DefinedQuantityDict' to a 'ModelExpr'.
 instance Express       DefinedQuantityDict where express = sy
 
+-- | Construct a 'DefinedQuantityDict' (/with/ a unit)
+quant ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity.
+  Symbol ->
+  -- | The 'Space' of the quantity.
+  Space ->
+  -- | The unit of the quantity.
+  UnitDefn -> DefinedQuantityDict
+quant u trm def s sp un = DQD (cncpt''' u trm def) (const s) sp (Just un)
+
+-- | Construct a 'DefinedQuantityDict' (/with/ a unit and a symbol dependent on stage)
+quant' ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity, dependent on the 'Stage'.
+  (Stage -> Symbol) ->
+  -- | The 'Space' of the quantity.
+  Space ->
+  -- | The unit of the quantity.
+  UnitDefn -> DefinedQuantityDict
+quant' u trm def s sp un = DQD (cncpt''' u trm def) s sp (Just un)
+
+-- | Construct a 'DefinedQuantityDict' (/with/ an optional unit, optional
+-- abbreviation and a symbol dependent on stage)
+quantAU ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The (optional) abbreviation for the quantity.
+  Maybe String ->
+  -- | The 'Symbol' used for the quantity, dependent on the 'Stage'.
+  (Stage -> Symbol) ->
+  -- | The 'Space' of the quantity.
+  Space ->
+  -- | The (optional) unit of the quantity.
+  Maybe UnitDefn -> DefinedQuantityDict
+quantAU u trm def a = DQD cc
+  where cc = maybe (cncpt''' u trm def) (cncpt'' u trm def) a
+
+-- | Construct a 'DefinedQuantityDict' (/without/ a unit)
+quantNoUnit ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity.
+  Symbol ->
+  -- | The 'Space' of the quantity.
+  Space -> DefinedQuantityDict
+quantNoUnit u trm def s sp = DQD (cncpt''' u trm def) (const s) sp Nothing
+
+-- | Construct a 'DefinedQuantityDict' (/wihout/ a unit and /with/ a symbol dependent on stage)
+quantNoUnit' ::
+  -- | The 'UID'.
+  UID ->
+  -- | The quantity being defined.
+  NP ->
+  -- | The definition of the quantity.
+  Sentence ->
+  -- | The 'Symbol' used for the quantity, dependent on the 'Stage'.
+  (Stage -> Symbol) ->
+  -- | The 'Space' of the quantity.
+  Space -> DefinedQuantityDict
+quantNoUnit' u trm def s sp = DQD (cncpt''' u trm def) s sp Nothing
+
+{-# DEPRECATED dqd, dqd', dqdNoUnit, dqdNoUnit'
+  "Smart constructors allow externally-known chunk nesting; use one of `quant, quant', quantNoUnit, quantNoUnit'` instead." #-}
+
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: ConceptChunk -> Symbol -> Space -> UnitDefn -> DefinedQuantityDict
 dqd c s sp = DQD c (const s) sp . Just
@@ -92,7 +176,7 @@ dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | Makes a variable that is implementation-only.
 implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
-implVar i ter desc sp sym = dqdNoUnit' (cncpt''' (mkUid i) ter (S desc)) f sp
+implVar i ter desc sp sym = quantNoUnit' (mkUid i) ter (S desc) f sp
   where
     f :: Stage -> Symbol
     f Implementation = sym
@@ -100,7 +184,7 @@ implVar i ter desc sp sym = dqdNoUnit' (cncpt''' (mkUid i) ter (S desc)) f sp
 
 -- | Similar to 'implVar', but takes in a 'Sentence' for the description rather than a 'String'.
 implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
-implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
+implVar' i ter desc sp sym = quantNoUnit' (mkUid i) ter desc f sp
   where
     f :: Stage -> Symbol
     f Implementation = sym
@@ -109,7 +193,7 @@ implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
 -- | Similar to 'implVar' but allows specification of abbreviation and unit.
 implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol ->
   Maybe UnitDefn -> DefinedQuantityDict
-implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
+implVarAU s np desc a t sym = quantAU (mkUid s) np (S desc) a f t
   where f :: Stage -> Symbol
         f Implementation = sym
         f Equational = Empty
@@ -117,7 +201,7 @@ implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
 -- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
 implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol ->
   Maybe UnitDefn -> DefinedQuantityDict
-implVarAU' s np desc a t sym = dqd' (dccAWDS s np desc a) f t
+implVarAU' s np desc a t sym = quantAU (mkUid s) np desc a f t
   where f :: Stage -> Symbol
         f Implementation = sym
         f Equational = Empty

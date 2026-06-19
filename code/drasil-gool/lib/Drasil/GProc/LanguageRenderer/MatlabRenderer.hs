@@ -14,12 +14,11 @@ import Drasil.Shared.InterfaceCommon (Label, UnRepr(..), SharedProg, BodySym(..)
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -48,10 +47,10 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc')
 import Drasil.Shared.AST (Terminator, FileData, FuncData, ModData,
   MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd, ProgData,
-  TypeData, ValData, VarData, CommonThunk, mthdDoc, modDoc)
+  TypeData, ValData, VarData, mthdDoc, modDoc)
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues)
-import Drasil.Shared.State (VS, lensMStoVS)
+import Drasil.Shared.State (lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
 
@@ -335,28 +334,6 @@ instance BinderElim MatlabCode where
 
 instance InternalBinderElim MatlabCode where
   binderElim = undefined
-
-instance ThunkSym MatlabCode where
-  type Thunk MatlabCode = CommonThunk VS
-
-instance ThunkAssign MatlabCode where
-  thunkAssign = undefined
-
-instance VectorType MatlabCode where
-  vecType = undefined
-
-instance VectorDecl MatlabCode where
-  vecDec = undefined
-  vecDecDef = undefined
-
-instance VectorThunk MatlabCode where
-  vecThunk = undefined
-
-instance VectorExpression MatlabCode where
-  vecScale = undefined
-  vecAdd = undefined
-  vecIndex = undefined
-  vecDot = undefined
 
 instance RenderFunction MatlabCode where
   funcFromData = undefined

@@ -24,11 +24,10 @@ import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
-import VectorTest (vectorTestOO, vectorTestProc)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 
--- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- | Renders four GOOL tests (FileTests, HelloWorld, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
 main = defaultMain codeGenTestGroup
@@ -42,14 +41,12 @@ codeGenTestGroup =
         [ goolTestGroup "HelloWorldOO" helloWorldOO,
           goolTestGroup "PatternTestOO" patternTest,
           goolTestGroup "FileTestsOO" fileTestsOO,
-          goolTestGroup "VectorTestOO" vectorTestOO,
           goolTestGroup "NameGenTestOO" nameGenTestOO
         ],
       testGroup
         "GProc"
         [ gProcTestGroup "HelloWorldProc" helloWorldProc,
           gProcTestGroup "FileTestsProc" fileTestsProc,
-          gProcTestGroup "VectorTestProc" vectorTestProc,
           gProcTestGroup "NameGenTestProc" nameGenTestProc
         ]
     ]

@@ -21,8 +21,8 @@ module Drasil.GOOL.InterfaceGOOL (
 import Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
-  MSStatement, NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  MSStatement, NamedArgs, MSParameter, SMethod, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
@@ -164,18 +164,12 @@ class (VariableValue r, OOVariableSym r, SelfSym r, InstanceVarSelfSym r) => OOV
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
-  -- | Generic function for calling a method on `self`.
-  -- Because of C++, this should always be called rather
-  -- than `objMethodCall` on `self.`
-  -- Takes the function name, the return type, a list of
-  -- positional arguments, and a list of named arguments.
-  selfMethodCallMixedArgs ::            MixedCall r
   newObjMixedArgs         ::            MixedCtorCall r
   extNewObjMixedArgs      :: Library -> MixedCtorCall r
   libNewObjMixedArgs      :: Library -> MixedCtorCall r
 
-selfMethodCall   :: (OOValueExpression r) =>            PosCall r
-selfMethodCall n t vs = selfMethodCallMixedArgs n t vs []
+selfMethodCall   :: (InternalValueExp r, VariableValue r, SelfSym r) => PosCall r
+selfMethodCall n t = objMethodCall t (valueOf self) n
 
 newObj           :: (OOValueExpression r) =>            PosCtorCall r
 newObj t vs = newObjMixedArgs t vs []

@@ -89,20 +89,21 @@ instance BlockSym CodeInfoOO where
   block = executeList
 
 instance TypeSym CodeInfoOO where
-  bool              = noInfoVSType
-  int               = noInfoVSType
-  float             = noInfoVSType
-  double            = noInfoVSType
-  char              = noInfoVSType
-  string            = noInfoVSType
-  infile            = noInfoVSType
-  outfile           = noInfoVSType
-  setType       _   = noInfoVSType
-  listType      _   = noInfoVSType
-  arrayType     _   = noInfoVSType
-  innerType _   = noInfoVSType
-  funcType      _ _ = noInfoVSType
-  void              = noInfoVSType
+  bool            = noInfoVSType
+  int             = noInfoVSType
+  float           = noInfoVSType
+  double          = noInfoVSType
+  char            = noInfoVSType
+  string          = noInfoVSType
+  infile          = noInfoVSType
+  outfile         = noInfoVSType
+  referenceType _ = noInfoVSType
+  setType       _ = noInfoVSType
+  listType      _ = noInfoVSType
+  arrayType     _ = noInfoVSType
+  innerType     _ = noInfoVSType
+  funcType    _ _ = noInfoVSType
+  void            = noInfoVSType
 
 instance OOTypeSym CodeInfoOO where
   obj             _ = noInfoVSType
@@ -222,7 +223,6 @@ instance ValueExpression CodeInfoOO where
   notNull = execute1
 
 instance OOValueExpression CodeInfoOO where
-  selfMethodCallMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns

@@ -83,15 +83,14 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
-  intToIndex, indexToInt, global, setMethodCall)
+  intToIndex, indexToInt, global, setMethodCall, instanceVarSelf)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
-  double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
-  litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
-  increment, increment1, decrement1, varDec, setType, varDecDef, listDec,
-  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
-  multiTypeError)
+  double, char, listType, void, notOp, andOp, orOp, litTrue, litFalse, litFloat,
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
+  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew,
+  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
@@ -123,7 +122,7 @@ import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, braces,
-  parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
+  parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi, render)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
@@ -224,6 +223,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   string = on2StateValues pair string string
   infile = on2StateValues pair infile infile
   outfile = on2StateValues pair outfile outfile
+  referenceType = pair1 referenceType referenceType
   listType = pair1 listType listType
   setType = pair1 setType setType
   arrayType = pair1 arrayType arrayType
@@ -404,9 +404,6 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   notNull = pair1 notNull notNull
 
 instance (Pair p) => OOValueExpression (p CppSrcCode CppHdrCode) where
-  selfMethodCallMixedArgs n = pair1Val3Lists
-    (selfMethodCallMixedArgs n)
-    (selfMethodCallMixedArgs n)
   newObjMixedArgs = pair1Val3Lists newObjMixedArgs newObjMixedArgs
   extNewObjMixedArgs l = pair1Val3Lists
     (extNewObjMixedArgs l)
@@ -1118,6 +1115,7 @@ instance TypeSym CppSrcCode where
   outfile = do
     modify (addUsing cppOutfile)
     cppOutfileType
+  referenceType = cppReferenceType
   listType t = do
     modify (addUsing vector . addLangImportVS vector)
     C.listType vector t
@@ -1207,16 +1205,27 @@ instance OOVariableSym CppSrcCode where
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS)
       (Map.lookup (getTypeString t) cm) $ classVarAccess (pure t) v
-  instanceVarAccess = G.instanceVarAccess
+  instanceVarAccess ob vr = do
+    ob' <- ob
+    vr' <- vr
+    let objTp = cType $ unRepr $ valueType ob'
+    case objTp of
+      (Reference _) -> let
+          instanceVarAccess' ClassLevel = error
+            "Cannot access class-level variables through an object, use classVarAccess instead"
+          instanceVarAccess' InstanceLevel = mkVar
+            (render (RC.value ob') ++ ptrAccess ++ variableName vr')
+            (variableType vr') (RC.value ob' <> ptrAccess' <> RC.variable vr')
+        in instanceVarAccess' (variableBind vr')
+      _ -> G.instanceVarAccess ob vr
 
 instance SelfSym CppSrcCode where
-  self = C.self
+  self = do
+    l <- zoom lensVStoMS getClassName
+    mkStateVar R.this (referenceType $ obj l) R.this'
 
 instance InstanceVarSelfSym CppSrcCode where
-  instanceVarSelf v' = do
-    v <- v'
-    mkVar (R.this ++ ptrAccess ++ variableName v)
-      (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
+  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
@@ -1320,9 +1329,6 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
-  selfMethodCallMixedArgs fn tp vs ns = do
-    slf <- self :: SVariable CppSrcCode
-    RC.call Nothing (Just $ RC.variable slf <> ptrAccess') fn tp vs ns
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
     modify (addModuleImportVS l)
@@ -1350,7 +1356,12 @@ instance ValueElim CppSrcCode where
   value = val . unCPPSC
 
 instance InternalValueExp CppSrcCode where
-  objMethodCallMixedArgs' = G.objMethodCall
+  objMethodCallMixedArgs' fn tp ob posArgs nmArgs = do
+    ob' <- ob
+    let objTp = cType $ unRepr $ valueType ob'
+    case objTp of
+      (Reference _) -> RC.call Nothing (Just $ RC.value ob' <> ptrAccess') fn tp posArgs nmArgs
+      _ -> G.objMethodCall fn tp ob posArgs nmArgs
   classMethodCallMixedArgs' f t cls vs ns = do
     c <- cls
     RC.call Nothing (Just $ renderType c <> text nmSpc) f t vs ns
@@ -1829,6 +1840,7 @@ instance TypeSym CppHdrCode where
   outfile = do
     modify (addHeaderUsing cppOutfile)
     cppOutfileType
+  referenceType = cppReferenceType
   listType t = do
     modify (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
@@ -2013,7 +2025,6 @@ instance ValueExpression CppHdrCode where
   notNull _ = mkStateVal void empty
 
 instance OOValueExpression CppHdrCode where
-  selfMethodCallMixedArgs _ _ _ _ = mkStateVal void empty
   newObjMixedArgs _ _ _ = mkStateVal void empty
   extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
   libNewObjMixedArgs _ _ _ _ = mkStateVal void empty
@@ -2448,6 +2459,11 @@ arrayDecBase vr scp = do
   modify $ setVarScope (variableName vr') (scopeData scp)
   return $ renderType (variableType vr') <+> RC.variable vr'
 
+cppReferenceType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
+cppReferenceType t = do
+    t' <- t
+    typeFromData (Reference (getCodeType t')) (getTypeString t' ++ cppDeref') (renderType t' <> cppDeref)
+
 -- convenience
 cppName, cppVersion :: String
 cppName = "C++"
@@ -2465,7 +2481,7 @@ endif = guard <> text "endif"
 using = text "using"
 namespace = text "namespace"
 cppPtr = text "&"
-cppDeref = text "*"
+cppDeref = text cppDeref'
 streamL = text "<<"
 streamR = text ">>"
 cppLambdaDec = text "[]"
@@ -2478,7 +2494,7 @@ nmSpc, ptrAccess, cppFor, std, algorithm, cppString, vector, sstream, stringstre
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
   endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListRemove, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
-  cppStr, mathDefines, cppSet, cppIn, cppConst :: String
+  cppStr, mathDefines, cppSet, cppIn, cppConst, cppDeref' :: String
 nmSpc = "::"
 ptrAccess = "->"
 cppFor = "for"
@@ -2525,6 +2541,7 @@ mathDefines = "_USE_MATH_DEFINES"
 cppSet = "set"
 cppIn = ":"
 cppConst = "const"
+cppDeref' = "*"
 
 nmSpcAccess :: String -> String -> String
 nmSpcAccess ns e = ns ++ nmSpc ++ e

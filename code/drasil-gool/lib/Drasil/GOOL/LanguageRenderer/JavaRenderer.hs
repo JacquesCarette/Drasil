@@ -212,6 +212,7 @@ instance TypeSym JavaCode where
   string = CP.string'
   infile = jInfileType
   outfile = jOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = jListType
   setType = jSetType
   arrayType = CP.arrayType
@@ -402,7 +403,6 @@ instance ValueExpression JavaCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression JavaCode where
-  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t ->
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do

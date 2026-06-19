@@ -201,6 +201,7 @@ instance TypeSym PythonCode where
   string = pyStringType
   infile = typeFromData InFile "" empty
   outfile = typeFromData OutFile "" empty
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType t' = t' >>=(\t -> typeFromData (List (getCodeType t)) "" empty)
   setType t' = t' >>=(\t -> typeFromData (Set (getCodeType t)) "" empty)
   arrayType = listType
@@ -392,7 +393,6 @@ instance ValueExpression PythonCode where
   notNull = CP.notNull pyNull
 
 instance OOValueExpression PythonCode where
-  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addModuleImportVS l)

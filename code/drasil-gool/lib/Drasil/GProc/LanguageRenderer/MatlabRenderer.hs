@@ -130,6 +130,7 @@ instance TypeSym MatlabCode where
   string = undefined
   infile = undefined
   outfile = undefined
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = undefined
   setType = undefined
   arrayType = undefined

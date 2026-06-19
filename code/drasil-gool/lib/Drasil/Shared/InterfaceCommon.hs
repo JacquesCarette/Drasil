@@ -85,10 +85,11 @@ class TypeSym r where
   string        :: VSType r
   infile        :: VSType r
   outfile       :: VSType r
+  referenceType :: VSType r -> VSType r
   listType      :: VSType r -> VSType r
   setType       :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
-  innerType :: VSType r -> VSType r
+  innerType     :: VSType r -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 
@@ -532,6 +533,7 @@ convType Float = float
 convType Double = double
 convType Char = char
 convType String = string
+convType (Reference t) = referenceType (convType t)
 convType (List t) = listType (convType t)
 convType (Set t) = setType (convType t)
 convType (Array t) = arrayType (convType t)

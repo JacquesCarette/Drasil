@@ -27,7 +27,6 @@ using std::string;
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
     double g = 9.8;
-    double epsilon = 2.0e-2;
     double v_launch;
     double theta;
     double p_target;

@@ -93,7 +93,6 @@ class InputParameters:
 ## \brief Structure for holding the constant values
 class Constants:
     G = 9.8
-    EPSILON = 2.0e-2
 
 ## \brief Calculates flight duration (s)
 # \param inParams structure holding the input values

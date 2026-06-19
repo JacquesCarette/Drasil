@@ -14,7 +14,6 @@ Logging selected as LogVar LogFunc.
 Auxiliary Files selected as SampleInput ../datafiles/projectile/sampleInput.txt ReadME.
 Code Concept pi selected as Pi.
 Successfully matched Real with Float.
-Successfully matched Rational with Float.
 Successfully matched String with String.
 Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Actor "Constants" with Object "Constants".

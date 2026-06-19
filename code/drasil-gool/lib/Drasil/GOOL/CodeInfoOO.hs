@@ -102,7 +102,7 @@ instance TypeSym CodeInfoOO where
   setType       _   = noInfoVSType
   listType      _   = noInfoVSType
   arrayType     _   = noInfoVSType
-  listInnerType _   = noInfoVSType
+  innerType _   = noInfoVSType
   funcType      _ _ = noInfoVSType
   void              = noInfoVSType
 

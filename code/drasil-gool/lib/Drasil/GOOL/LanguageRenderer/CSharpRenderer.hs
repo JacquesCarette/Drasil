@@ -67,16 +67,16 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
-  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
+  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
+  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
@@ -85,7 +85,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall, listAppend, listAdd)
+  classMethodCall, listAppend, listAdd, innerType)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
@@ -222,7 +222,7 @@ instance TypeSym CSharpCode where
   setType t = do
     modify (addLangImportVS csGeneric)
     C.setType csSet t
-  listInnerType = G.listInnerType
+  innerType = CG.innerType
   funcType = csFuncType
   void = C.void
 

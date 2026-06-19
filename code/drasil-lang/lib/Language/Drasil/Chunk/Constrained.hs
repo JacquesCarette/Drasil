@@ -8,9 +8,9 @@ module Language.Drasil.Chunk.Constrained (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..), mkUid)
 
-import Language.Drasil.Chunk.Concept (dcc, dccWDS)
+import Language.Drasil.Chunk.Concept (dccWDS, cncpt''')
 import Language.Drasil.Chunk.Unital (uc')
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd', dqdWr, dqdNoUnit)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
@@ -103,7 +103,7 @@ cucNoUnit' nam trm desc sym space cs rv =
 cuc'' :: String -> NP -> String -> (Stage -> Symbol) -> UnitDefn
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc'' nam trm desc sym un space cs rv =
-  ConstrConcept (dqd' (dcc nam trm desc) sym space (Just un)) cs (Just rv) Nothing
+  ConstrConcept (dqd' (cncpt''' (mkUid nam) trm (S desc)) sym space (Just un)) cs (Just rv) Nothing
 
 -- | Similar to 'cnstrw', but types must also have a 'Concept'.
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept

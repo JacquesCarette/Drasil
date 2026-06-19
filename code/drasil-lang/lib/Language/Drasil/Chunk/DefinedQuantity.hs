@@ -12,19 +12,19 @@ module Language.Drasil.Chunk.DefinedQuantity (
 
 import Control.Lens ((^.), makeLenses, view, Getter)
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..))
+import Drasil.Database (HasChunkRefs(..), HasUID(..), mkUid)
 import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccA, dccAWDS, cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
-import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Sentence (Sentence(..))
 
 -- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
 -- Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
@@ -92,7 +92,7 @@ dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | Makes a variable that is implementation-only.
 implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
-implVar i ter desc sp sym = dqdNoUnit' (dcc i ter desc) f sp
+implVar i ter desc sp sym = dqdNoUnit' (cncpt''' (mkUid i) ter (S desc)) f sp
   where
     f :: Stage -> Symbol
     f Implementation = sym

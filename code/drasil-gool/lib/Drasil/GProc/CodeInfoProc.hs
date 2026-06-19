@@ -91,7 +91,7 @@ instance TypeSym CodeInfoProc where
   listType      _   = noInfoVSType
   setType      _   = noInfoVSType
   arrayType     _   = noInfoVSType
-  listInnerType _   = noInfoVSType
+  innerType _   = noInfoVSType
   funcType      _ _ = noInfoVSType
   void              = noInfoVSType
 

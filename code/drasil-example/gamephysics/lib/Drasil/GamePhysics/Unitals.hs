@@ -16,6 +16,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
 import Language.Drasil.ShortHands
+import Drasil.Database(mkUid)
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -303,8 +304,8 @@ unitless :: [DefinedQuantityDict]
 unitless = QM.pi_ : [numParticles]
 
 numParticles :: DefinedQuantityDict
-numParticles = dqdNoUnit (dcc "n" (nounPhraseSP "number of particles in a rigid body")
-  "the number of particles in a rigidbody") lN Integer
+numParticles = dqdNoUnit (cncpt''' (mkUid "n") (nounPhraseSP "number of particles in a rigid body")
+  (S "the number of particles in a rigidbody")) lN Integer
 
 -----------------------
 -- CONSTRAINT CHUNKS --

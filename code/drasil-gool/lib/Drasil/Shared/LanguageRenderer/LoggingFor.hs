@@ -124,7 +124,7 @@ instance TypeSym (LoggingFor lang) where
   listType = listType
   setType = setType
   arrayType = arrayType
-  listInnerType = listInnerType
+  innerType = innerType
   funcType = funcType
   void = void
 

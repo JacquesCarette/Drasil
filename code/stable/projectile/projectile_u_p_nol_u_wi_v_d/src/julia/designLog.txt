@@ -15,4 +15,3 @@ Auxiliary Files selected as SampleInput ../datafiles/projectile/sampleInput.txt 
 Code Concept pi selected as Pi.
 Successfully matched String with String.
 Successfully matched Real with Double.
-Successfully matched Rational with Double.

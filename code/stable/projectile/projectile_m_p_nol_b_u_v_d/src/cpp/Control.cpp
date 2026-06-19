@@ -20,7 +20,6 @@ using std::string;
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
     double g = 9.8;
-    double epsilon = 2.0e-2;
     InputParameters inParams = InputParameters(filename);
     double t_flight = func_t_flight(inParams, g);
     double p_land = func_p_land(inParams, g);

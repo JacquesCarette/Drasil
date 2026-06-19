@@ -18,16 +18,14 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
   NamedArgs, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   getCodeType, getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
-  List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..), BinderSym(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope, BinderElim (..))
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
@@ -100,9 +98,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), AttachmentTag(..),
   onAttachment, AttachmentData(..), ad, FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, OpData(..), ParamData(..), pd,
   ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..),
-  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, CommonThunk,
-  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData)
+  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, ScopeData)
 import Drasil.Shared.Classes (Pair(..))
 import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -117,8 +113,7 @@ import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName,
   setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, useVarName, genLoopIndex, setVarScope,
-  getVarScope)
+  setCurrMainFunc, getCurrMainFunc, useVarName, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -506,30 +501,6 @@ instance (Pair p) => BinderElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalBinderElim (p CppSrcCode CppHdrCode) where
   binderElim b = binderElim $ pfst b
-
-instance ThunkSym (p CppSrcCode CppHdrCode) where
-  type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
-
-instance Pair p => ThunkAssign (p CppSrcCode CppHdrCode) where
-  thunkAssign vr = pair2 thunkAssign thunkAssign (zoom lensMStoVS vr) . zoom lensMStoVS
-
-instance Pair p => VectorType (p CppSrcCode CppHdrCode) where
-  vecType = pair1 vecType vecType
-
-instance Pair p => VectorDecl (p CppSrcCode CppHdrCode) where
-  vecDec n v scp = (pair1 (\v' -> vecDec n v' (pfst scp))
-    (\v' -> vecDec n v' (psnd scp)) . zoom lensMStoVS) v
-  vecDecDef vr scp = pair1Val1List (`vecDecDef` pfst scp)
-    (`vecDecDef` psnd scp) (zoom lensMStoVS vr) . map (zoom lensMStoVS)
-
-instance Pair p => VectorThunk (p CppSrcCode CppHdrCode) where
-  vecThunk = pair1 vecThunk vecThunk
-
-instance Pair p => VectorExpression (p CppSrcCode CppHdrCode) where
-  vecScale = pair2 vecScale vecScale
-  vecAdd = pair2 vecAdd vecAdd
-  vecIndex = pair2 vecIndex vecIndex
-  vecDot = pair2 vecDot vecDot
 
 instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
@@ -1440,39 +1411,6 @@ instance BinderElim CppSrcCode where
 instance InternalBinderElim CppSrcCode where
   binderElim = text . bindName . unCPPSC
 
-instance ThunkSym CppSrcCode where
-  type Thunk CppSrcCode = CommonThunk VS
-
-instance ThunkAssign CppSrcCode where
-  thunkAssign v t = do
-    iName <- genLoopIndex
-    let
-      i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unCPPSC . listSize . fmap pure) . unCPPSC
-      loopInit = zoom lensMStoVS (fmap unCPPSC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
-      loopBody = zoom lensMStoVS (fmap unCPPSC t) >>= commonThunkElim
-        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
-        ((v &+=) . vecIndex (valueOf i) . pure . pure)
-    multi [loopInit,
-      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
-
-instance VectorType CppSrcCode where
-  vecType = listType
-
-instance VectorDecl CppSrcCode where
-  vecDec = listDec
-  vecDecDef = listDecDef
-
-instance VectorThunk CppSrcCode where
-  vecThunk = pure . pure . pureValue . fmap unCPPSC . valueOf
-
-instance VectorExpression CppSrcCode where
-  vecScale k = fmap $ fmap $ vectorize (fmap unCPPSC . (k #*) . fmap pure)
-  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
-  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #* fmap pure v2)
-
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
@@ -2158,28 +2096,6 @@ instance BinderElim CppHdrCode where
 
 instance InternalBinderElim CppHdrCode where
   binderElim = text . bindName . unCPPHC
-
-instance ThunkSym CppHdrCode where
-  type Thunk CppHdrCode = CommonThunk VS
-
-instance ThunkAssign CppHdrCode where
-  thunkAssign _ _ = emptyStmt
-
-instance VectorType CppHdrCode where
-  vecType = listType
-
-instance VectorDecl CppHdrCode where
-  vecDec _ _ _ = emptyStmt
-  vecDecDef _ _ _ = emptyStmt
-
-instance VectorThunk CppHdrCode where
-  vecThunk = pure . pure . pureValue . fmap unCPPHC . valueOf
-
-instance VectorExpression CppHdrCode where
-  vecScale _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
-  vecAdd _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
-  vecIndex _ _ = mkStateVal void empty
-  vecDot _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
 
 instance RenderFunction CppHdrCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

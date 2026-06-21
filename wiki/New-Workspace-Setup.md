@@ -1,24 +1,33 @@
 # System Prerequisites
 
-Collaboratively working on any software, you generally need a few things; a compiler, shell + generally available system tools, version control system, and an IDE. In addition to this, we often construct TeX documents alongside our software, requiring you also have a working LaTeX installation. This guide will give you a simple workspace recommendation for installing Stack (a Haskell development toolkit), VSCode (an IDE), and a basic LaTeX toolkit. Windows users will need to either use Windows WSL (preferred), or install `Cygwin` and `Git` if they don't already have them so that they can have a good BASH shell, common dev utilities, and a Git client. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Windows WSL instead of native Windows installations.
+This guide will provide you with a straightforward workspace recommendation for developing and contributing to Drasil.
 
-In order, you should be installing:
-1. [Basic Development Tools](#basic-development-tools)
-2. [Stack](#stack-via-ghcup)
-3. [VSCode](#vscode) + [Extensions](#extensions)
-4. [LaTeX](#latex)
-5. [Inkscape](#inkscape)
-6. [Graphviz](#graphviz)
+In order, you will be installing the following _bare minimum requirements_ for working with Drasil's Haskell codebase:
 
-Optionally, some functions will be limited without:
-1. [Doxygen](#doxygen)
-2. [ShellCheck](#shellcheck)
-3. [mdBook](#mdBook)
-4. [Jupyter](#jupyter)
+1. [Basic Development Tools](#basic-development-tools): `git`, `GNU Make`, etc.
+2. [Stack](#stack-via-ghcup): A Haskell development toolchain.
+3. [VSCode](#vscode) + [Extensions](#extensions): A commonly used code editor with good Haskell support provided through a [plugin](https://github.com/haskell/haskell-language-server).
 
-**Notes**: 
-1. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Linux on Windows/Windows WSL. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). From experience, installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience.
-2. If you use the `nix` package manager and/or the `NixOS` operating system, you may alternatively use the `shell.nix` ad-hoc development environment provided, however, you should still install [VSCode](#vscode) + [Extensions](#extensions) and [install the `lmodern` and `lmmath` fonts](https://nixos.wiki/wiki/Fonts).
+If you intend to work with the artifacts that Drasil generates, you should also install:
+
+* For **document** artifacts*:
+    1. [Graphviz](#graphviz)
+    2. A [LaTeX](#latex) toolchain
+    3. [Inkscape](#inkscape)
+    4. [mdBook](#mdBook)
+    5. [Jupyter](#jupyter)
+* For **code** artifacts: [Doxygen](#doxygen)
+* For **linting** Drasil's codebase: [ShellCheck](#shellcheck)
+
+<!--
+TODO:
+1. Linting: HLint, Weeder
+2. Code Artifacts: Java, C[++/#], Swift, Julia, Python
+-->
+
+## Windows
+
+**Windows Users**: You have two options for all of these instructions: WSL and Native. WSL is essentially an emulated Linux operating system seamlessly integrated with Windows for which you can do all development through and using. Hence you would be installing Linux-native packages rather than Windows-native ones. From [experience](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398), installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience. However, using WSL requires higher system requirements. Hence, for low-spec devices, you should first attempt to use Windows-native tool installations. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). 
 
 ## Basic Development Tools
 
@@ -26,7 +35,7 @@ We commonly use [`GNU Make`](https://www.gnu.org/software/make/) to simplify man
 
 Git is a version control system for collaboratively building software with others. Using git, you may distribute and contribute software source code, with a full version history of the source project. We use git for collaborating development efforts on Drasil. In addition to the bountiful publicly available [documentation](https://guides.github.com/introduction/git-handbook/) on using `git`, we also have our own primer [Git2Know](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil) document.
  
-If you're using a Mac or Linux based computer, you will likely already have a terminal. Mac users may press `Apple Logo + SPACE` and search for "Terminal" to use it. Linux users may use their terminal and shell of their choice, but should use something that is compatible with BASH or ZSH.
+If you're using a Mac or Linux based computer, you will likely already have a terminal. Mac users may press `Command + Space` and search for "Terminal" to use it. Linux users may use their terminal and shell of their choice, but should use something that is compatible with BASH or ZSH.
 
 ### Installation
 
@@ -36,13 +45,14 @@ Please follow the instructions related to your operating system.
 
 <summary><h4>Windows</h4></summary>
 
-If you're on Windows, there are two options.
-- The simplest option to set up is [WSL2](https://learn.microsoft.com/en-us/windows/wsl/setup/environment), the Windows Subsystem for Linux. With this option, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). WSL2 generally provides excellent compatability and a smooth overall experience. The potential downside of WSL2 is that some users have experienced significant slowdown compared to native tools.
-- The other option is to use bash shell emulator such as Git Bash or Cygwin. These tools require more work to set up, but can have better performance. After installing the shell, you will need to install a git client and common development tools (e.g., GNU Make, rm, sort, rev, etc). Instructions for these are below.
+If you're on Windows, there are [two options](#windows):
 
-[Git Bash](https://git-scm.com/downloads) is a custom terminal for Windows users packaged with `git` and other various generally used *nix system tools (including GNU `grep`). The installation is process is fairly simple; you will need to download their [Git Bash installer](https://git-scm.com/downloads) and run it. The installer will give you a series of steps, please go through them, leaving all options shown default, unless you specifically know what each option does. Once it's been installed, you can open it by pressing the four-flagged Windows key and searching for "Git Bash", clicking on the "Git Bash" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation.
+* The simplest option to set up is [WSL2](https://learn.microsoft.com/en-us/windows/wsl/setup/environment), the Windows Subsystem for Linux. With this option, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). WSL2 generally provides excellent compatibility and a smooth overall experience. The potential downside of WSL2 is that some users have experienced significant slowdown compared to native tools.
+* The other option is to use a bash shell emulator such as [Git Bash](https://git-scm.com) or [Cygwin](https://cygwin.com/). These tools require more work to set up, but can have better performance. After installing the shell, you will need to install a git client and common development tools (e.g., GNU Make, rm, sort, rev, etc). Instructions for these are below.
 
-[Cygwin](https://cygwin.com/) provides a suite of commonly used GNU and Open Source tools in many development workflows. It provides shell tool functionality similar to many Unix-like systems (including GNU `grep`). You should download the [Cygwin Installer](https://cygwin.com/install.html) and run it. It will guide you through your Cygwin installation, where you might need to pick a download mirror. Try to pick a mirror with the same TLD as your country (e.g., '.ca' preferred for Canadians -- this will likely give you a lower latency and generally faster download), but it might still end up taking a bit of time. At the package list window, please make sure to search for "make" and double-click it's "Skip" entry (it should show a specific version and be marked for installation), and then search for "util-linux" and double-click it's "Skip" entry (it should show a specific version and be marked for installation). If you would like to install any other packages you're interested in, please feel free to do so. After having selected the packages, please click "Next" to confirm the list of packages that you're installing, and then "Install" to begin the installation.
+[Git Bash](https://git-scm.com/downloads) is a custom terminal for Windows users packaged with `git` and other various generally used *nix system tools (including GNU `grep`). The installation process is fairly simple; you will need to download their [Git Bash installer](https://git-scm.com/downloads) and run it. The installer will give you a series of steps, please go through them, leaving all options shown default, unless you specifically know what each option does. Once it's been installed, you can open it by pressing the four-flagged Windows key and searching for "Git Bash", clicking on the "Git Bash" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation.
+
+[Cygwin](https://cygwin.com/) provides a suite of commonly used GNU and Open Source tools in many development workflows. It provides shell tool functionality similar to many Unix-like systems (including GNU `grep`). You should download the [Cygwin Installer](https://cygwin.com/install.html) and run it. It will guide you through your Cygwin installation, where you might need to pick a download mirror. Try to pick a mirror with the same TLD as your country (e.g., '.ca' preferred for Canadians -- this will likely give you a lower latency and generally faster download), but it might still end up taking a bit of time. At the package list window, please make sure to search for "make" and double-click its "Skip" entry (it should show a specific version and be marked for installation), and then search for "util-linux" and double-click its "Skip" entry (it should show a specific version and be marked for installation). If you would like to install any other packages you're interested in, please feel free to do so. After having selected the packages, please click "Next" to confirm the list of packages that you're installing, and then "Install" to begin the installation.
 
 Once Cygwin and the packages have been installed, you can access the installed tools by pressing the four-flagged Windows key and searching for "Cygwin", clicking on the "Cygwin" application showing up (this will open up a black terminal window which you can use). From there, you should be able to run "git --version" and get output displaying the Git version of your installation. Additionally, you should also be able to access other common tools, such as `rm`, `rev`, `sort`, and [more](https://cygwin.com/packages/package_list.html).
 
@@ -51,9 +61,11 @@ If you would like to install more *nix tools through Cygwin, you can use the [cy
 The rest of the steps in this guide will assume that you are using Cygwin as your preferred Windows terminal. Git Bash is also very safe to use, but you will need to download [util-linux-ng](https://gnuwin32.sourceforge.net/packages/util-linux-ng.htm), which includes various system utilities (one of our scripts uses `rev`), and add its **bin/** to your PATH.
 
 ##### Unicode Support (Important)
-Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, follow the steps outlined [here](https://stackoverflow.com/a/57134096). Open a fresh terminal window and run `chcp.com` or `chcp` and check that the active code page is `65001`. If that does not resolve the issue, you can also edit the `.bashrc` file(found either at `C:/Users/YOU/cygwin64/home/YOU` for Cygwin or `C:/Users/YOU` for Git Bash) and add the following to end: `chcp.com 65001 > /dev/null` or `chcp.com 65001 > /dev/null`. This simply runs the required command each time the terminal is opened. If you choose not to do either of these, then each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
+
+Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, follow the steps outlined [here](https://stackoverflow.com/a/57134096). Open a fresh terminal window and run `chcp.com` or `chcp` and check that the active code page is `65001`. If that does not resolve the issue, you can also edit the `.bashrc` file (found either at `C:/Users/YOU/cygwin64/home/YOU` for Cygwin or `C:/Users/YOU` for Git Bash) and add the following to end: `chcp.com 65001 > /dev/null` or `chcp.com 65001 > /dev/null`. This simply runs the required command each time the terminal is opened. If you choose not to do either of these, then each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
 
 ##### 7-Zip
+
 If you are using Git Bash you will need [7-Zip](https://www.7-zip.org/). Download and run the installer from their website.
 
 Alternatively, if you have [Chocolatey](https://chocolatey.org/install) installed, you can open up a new command line as an administrator and run the following command:
@@ -73,11 +85,15 @@ The Drasil directory structure relies on symbolic links. Windows 10/11 has suppo
 
 <summary><h4>Mac</h4></summary>
 
-Mac already comes with a shell + good terminal, so you should only need to install `git` and GNU `grep`. You might already have `grep` installed, but the one by default shipped with macOS lacks support for the perl dialect of the extended regular expression language (which we use).
+Mac already comes with a shell + good terminal, so you should only need to install `git` and GNU `grep`. You might already have `grep` installed, but the one by default shipped with macOS lacks support for the perl dialect of the extended regular expression language (which we use). If you haven't used your system for development in the past, you will also need to install [Xcode](https://developer.apple.com/xcode/) and accept its EULA.
+
+##### Xcode
+
+If you're using a recent version of Mac (> Mavericks/10.9), please open up a terminal window (`Command + Space`, then search "Terminal"), type in `xcode-select --install`, and then press Enter. You will be prompted to accept the Apple developer EULA, and then installation will begin. Installation may take a while to run. Please be patient in the meanwhile. Once installed, you should open up a fresh terminal and proceed to the next step, installing `git`.
 
 ##### `git`
 
-If you're using a recent version of Mac (> Mavericks/10.9), please open up a terminal window (`Apple Logo+SPACE`, then search "Terminal"), and type in `git --version` into it, and press enter. A GUI installer will appear prompting you to install Git. Please follow the on-screen steps, leaving all options default. Once the installation is complete, you should be able to type `git --version` into your Terminal window again and receive a version code back instead of having the GUI pop up again. If you're using an older version of Mac, you may follow through the steps of installing Git using any of the [official repositories](https://git-scm.com/download/mac).
+Assuming you use Homebrew, you can use [Homebrew formula](https://formulae.brew.sh/formula/git) to install `git`. That is, you only need to open a terminal and run: `brew install git`. Once it has completed, you should be able to run `git --version` and see a textual version code. Alternatively, if you are not using Homebrew, you can follow the steps for install Git using any of the [official methods](https://git-scm.com/download/mac).
 
 ##### GNU `grep`
 
@@ -173,7 +189,7 @@ If you use GPG, you can also protect your commits by [signing them with GPG](htt
 
 ## Stack (Via GHCup)
 
-Stack is an easy to use toolkit for building, executing, testing, and benchmarking your Haskell software, including tooling for isolated GHC installations and dependency management (similar to Python's `virtualenv` using a [curated listed of packages](https://www.stackage.org/)).
+Stack is an easy to use toolkit for building, executing, testing, and benchmarking your Haskell software, including tooling for isolated GHC installations and dependency management (similar to Python's `virtualenv` using a [curated list of packages](https://www.stackage.org/)).
 
 Stack has an amazing document repository available on their [Read the Docs Official Website](https://docs.haskellstack.org/en/stable/README/). It has an [Installation Guide](https://docs.haskellstack.org/en/stable/README/#how-to-install-stack), [Quickstart Guide](https://docs.haskellstack.org/en/stable/README/#quick-start-guide), [User Guide](https://docs.haskellstack.org/en/stable/GUIDE/), and much more!
 
@@ -181,33 +197,23 @@ The recommended way to install stack is through [GHCup](https://www.haskell.org/
 
 ### Installation
 
-> #### MacOS
-> If you are using MacOS, start by opening your terminal (Apple logo + Space, then search "Terminal"), and running:
-> ```
-> xcode-select --install
-> ```
-> Note: It may take a while to run.
->
-> You can then continue with the instructions below.
+Regardless of your operating system, you should be able to follow the Linux/macOS/Windows [install instructions](https://www.haskell.org/ghcup/install/). For Linux/macOS/WSL, it's as simple as entering this into your terminal:
 
-Regardless of your operating system, you should be able to follow the Linux/MacOS/WSL2 [install instructions](https://www.haskell.org/ghcup/install/). It's as simple as entering this into your terminal:
-
-```
+```shell
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 ```
 
-Follow the prompts, wait for it to finish, then open a fresh terminal and enter `stack --version` to check that it has successfully installed the Haskell compiler.
+For Windows-native users, you will have a longer command that you should get directly from the [GHCup website itself](https://www.haskell.org/ghcup/install/).
 
-### Installing Dependencies
+When running the above code, you will be prompted with questions, you only need to make sure to press "Y" when prompted about Stack. Once you've waited for it to finish, open a fresh terminal and run `stack --version` to ensure that everything worked.
 
-If the GHCup installer fails, the most likely cause is that there are missing dependencies. Scroll to your system's section in the GHCup [System Requirements](https://www.haskell.org/ghcup/install/#system-requirements) page and make sure everything there is installed, then retry the GHCup installer.
+### Common Problem: Missing System Dependencies
 
-### Pinning your Stack Version
-If you later experience issues with `.cabal` files being frequently rebuilt, you may pin your `stack` version against our LTS's preferred version. In your terminal window, please run `stack upgrade --binary-version CURRENT_STACK_VERSION` (e.g., `2.5.1`) and it should stop frequently rebuilding the `.cabal` files.
+If the GHCup installer fails, the most likely cause is missing dependencies. Scroll to your system's section in the GHCup [System Requirements](https://www.haskell.org/ghcup/install/#system-requirements) page and make sure everything there is installed, then retry the GHCup installer.
 
 ## VSCode
 
-VSCode is a code editor with a large repository of plugins that you can use to extend it's functionality. VSCode has support for Haskell via the [`Haskell Language Server`](https://marketplace.visualstudio.com/items?itemName=haskell.haskell) plugin ([github](https://github.com/haskell/haskell-language-server)). If you choose to use VSCode to work with Drasil, you may follow these steps, however, if you prefer to use an alternative IDE, you may want to look for a Haskell Language Server plugin for that IDE for similar support and tooling for Haskell.
+VSCode is a code editor with a large repository of plugins that you can use to extend its functionality. VSCode has support for Haskell via the [`Haskell Language Server`](https://marketplace.visualstudio.com/items?itemName=haskell.haskell) plugin ([github](https://github.com/haskell/haskell-language-server)). If you choose to use VSCode to work with Drasil, you may follow these steps, however, if you prefer to use an alternative IDE, you may want to look for a Haskell Language Server plugin for that IDE for similar support and tooling for Haskell.
 
 ### Installation
 Please download the binary related to your operating system from the [Official VSCode Downloads webpage](https://code.visualstudio.com/Download). Then please follow the related installation instructions for your operating system.
@@ -231,6 +237,7 @@ Once you've downloaded the zip file from the above download link, please open up
 </details>
 
 ### Extensions
+
 The following list of extensions are recommended and are helpful for working with Drasil specifically.
 
 For each of the following plugins/extensions, the same general installation process is followed:
@@ -240,17 +247,18 @@ For each of the following plugins/extensions, the same general installation proc
 4. Click on the target and press "Install". While installing, a little pop up might appear at the bottom right of your screen indicating the progress of the installation (and the installation of the dependencies).
 
 **Recommended Extensions**:
+
 1. [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell) - Please see the [Haskell support section](#haskell-support).
 2. [Language Support (LaTeX, MD, etc)](https://open-vsx.org/extension/valentjn/vscode-ltex)
 3. [Git Support](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) - It's particularly helpful to see how a specific line of code (not just file!) came to be, and observe the history of the repository (often, this is more useful than using GitHub's interface because GitHub has restrictions on many things -- e.g., '--follow' is never enabled!).
 
 **Helpful Extensions/Configurations (all optional):**
+
 1. [Insert Unicode](https://marketplace.visualstudio.com/items?itemName=brunnerh.insert-unicode) - We often use unicode symbols in Drasil, so having a quick way to search unicode symbols by name is very helpful.
-2. [Haskelly](https://marketplace.visualstudio.com/items?itemName=UCL.haskelly) - Some useful GHCi commands for Haskell among other things.
-3. [Nix Environment Selector](https://marketplace.visualstudio.com/items?itemName=arrterian.nix-env-selector) - Automatically use the Drasil `shell.nix`!
-4. If you're interested in using a font that mimics unicode characters for Haskell, consider using the [FiraCode](https://github.com/tonsky/FiraCode) font with ligatures enabled ([installation instructions](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions)). It makes reading Haskell more like reading hand-written simple type theory works.
-5. [TODO Tree](https://open-vsx.org/extension/Gruntfuggly/todo-tree) - Gather your code's TODO notes together in one nice VSCode panel. You need `ripgrep` installed on your machine for this plugin to work. For making sure TODO notes in Haskell source code are gathered correctly, you might need to add "--" to the regular expression used in searching for "TODO" notes in the TODO Tree extension settings.
-7. [Rewrap](https://open-vsx.org/extension/stkb/rewrap) - Hard wrap text in your documents around the 80 character "limit" (configurable).
+2. [Nix Environment Selector](https://marketplace.visualstudio.com/items?itemName=arrterian.nix-env-selector) - Automatically use the Drasil `shell.nix`!
+3. If you're interested in using a font that mimics unicode characters for Haskell, consider using the [FiraCode](https://github.com/tonsky/FiraCode) font with ligatures enabled ([installation instructions](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions)). It makes reading Haskell more like reading hand-written simple type theory works.
+4. [TODO Tree](https://open-vsx.org/extension/Gruntfuggly/todo-tree) - Gather your code's TODO notes together in one nice VSCode panel. You need `ripgrep` installed on your machine for this plugin to work. For making sure TODO notes in Haskell source code are gathered correctly, you might need to add "--" to the regular expression used in searching for "TODO" notes in the TODO Tree extension settings.
+5. [Rewrap](https://open-vsx.org/extension/stkb/rewrap) - Hard wrap text in your documents around the 80 character "limit" (configurable).
 
 Despite most of these above being "optional", if you have a powerful computer, it's best to install all of them.
 
@@ -265,9 +273,11 @@ VSCode with the Haskell Language Server plugin creates a very smooth and powerfu
 You may find that the Haskell extension breaks at times (typically occurs when an update happens, and a file gets corrupted/outdated). The first resolution you should take is to completely clear your `.stack-work` (e.g., in the `code` folder, delete the `.stack-work` folder), and re-compile the entire project and re-open VSCode. If issues persist, it may also be helpful to delete your global Stack cache (on Linux, `~/.stack/`), and continue with another re-compilation of the entire project. If the issue still occurs, you may need to refer to the issue tracker of `haskell-language-server`, or `vscode-haskell`.
 
 ## Using the terminal/PowerShell/Cygwin/Git Bash in VSCode
+
 With VSCode open, please press `` CTRL+SHIFT+` `` (or alternatively, press `Terminal > New Terminal`). It will open up a terminal window in the bottom of your screen.
 
 ### Using an alternative Shell
+
 If you prefer to use a different shell (e.g., Cygwin or Git Bash instead of PowerShell, or bash instead of zsh) as your default in VSCode, after opening a shell, you may [select an alternative shell environment](https://stackoverflow.com/a/50527994) as your default using the dropdown on the right-hand side of the shell window that opens up.
 
 ### General helpful VSCode shortcuts
@@ -291,11 +301,7 @@ If you prefer to use a different shell (e.g., Cygwin or Git Bash instead of Powe
 | `` ALT+ENTER ``              | Select all occurrences of Find match                |
 | `` CTRL+F2 ``                | Select all occurrences of a word                    |
 
- 
-
-#### Note for MacOS users
-
-Switch out CTRL for CMD if you’re using MacOS.
+For macOS users, just make sure to switch out CTRL for Command (CMD).
 
 # Optional Utilities
 
@@ -305,7 +311,7 @@ The following utilities are not required for the core functionality of Drasil, b
 
 LaTeX is a language for typesetting documents, similar to Word and PowerPoint but with much more flexibility. While you might not often handle LaTeX manually while working with Drasil, it may still be a useful piece of software to learn. Feel free to check out some [tutorials](https://latex-tutorial.com/tutorials/), or a [different tutorial with an online editor](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes), or even a [table generator](https://www.tablesgenerator.com/#).
 
-[`MiKTeX`](https://miktex.org/) is an easy to use modern TeX distribution and package manager. It allows you to compile your TeX files with it's tools (e.g., `pdflatex`) and download packages and dependencies on-the-fly (from [CTAN](https://ctan.org/?lang=en) & [it's package list](https://miktex.org/packages)). `MiKTeX` is only one of many possible solutions you may use.
+[`MiKTeX`](https://miktex.org/) is an easy to use modern TeX distribution and package manager. It allows you to compile your TeX files with its tools (e.g., `pdflatex`) and download packages and dependencies on-the-fly (from [CTAN](https://ctan.org/?lang=en) & [its package list](https://miktex.org/packages)). `MiKTeX` is only one of many possible solutions you may use.
 
 ### Installation
 
@@ -341,7 +347,7 @@ Add `texlive.combined.scheme-full` to your nix packages.
 
 If you're using a MacOS-based computer and prefer to use `homebrew` to install your software packages, please skip to [Mac alternative section](#mac-with-homebrew). Alternatively, if you're using Linux-based computer and prefer to use your native package manager, please skip to the [Linux alternative section](#linux-with-your-package-manager).
 
-Check out the installation documents from [`MiKTeX`](https://miktex.org/download). After installing MiKTeX, we recommend that you open up it's GUI, force update your packages, and manually install the `lm-math` package.
+Check out the installation documents from [`MiKTeX`](https://miktex.org/download). After installing MiKTeX, we recommend that you open up its GUI, force update your packages, and manually install the `lm-math` package.
 
 You may also want an IDE, in which case, you can choose from any of your choice VSCode (as installed above), [GNU Kile](https://apps.kde.org/kile/), [Gummi](https://gummi.app/) ([installation](https://github.com/alexandervdm/gummi/wiki/Installing-Gummi#install-for-your-platform)), etc.
 
@@ -394,7 +400,7 @@ On Ubuntu or Debian, enter these two commands:
 sudo apt-get update
 sudo apt-get install inkscape
 ```
-The first command will ensure that all of the packages are up do date, and the second will fetch and automatically install Inkscape for you.
+The first command will ensure that all of the packages are up to date, and the second will fetch and automatically install Inkscape for you.
 
 </details>
 
@@ -402,7 +408,7 @@ The first command will ensure that all of the packages are up do date, and the s
 
 <summary><h4>Windows</h4></summary>
 
-Download the executable installer for Inkscape from their [release page](https://inkscape.org/release/). Run the file and follow the instructions on screen. Make sure you add Inkscape to your `PATH` when the installer asks. If the installer cannot automatically add Inkscape to you `PATH` or if you already have Inkscape without using the `PATH`, please follow [these instructions](https://tex.stackexchange.com/a/523685).
+Download the executable installer for Inkscape from their [release page](https://inkscape.org/release/). Run the file and follow the instructions on screen. Make sure you add Inkscape to your `PATH` when the installer asks. If the installer cannot automatically add Inkscape to your `PATH` or if you already have Inkscape without using the `PATH`, please follow [these instructions](https://tex.stackexchange.com/a/523685).
 
 </details>
 
@@ -605,4 +611,4 @@ Alternatively, you can use copies of Jupyter from other package managers (e.g., 
 To test that your installation is working, you should be able to run `jupyter --help` and see basic usage information.
 
 # Working with Drasil
-Congratulations! Now that you've successfully setup your workspace, you should move on to our [Contributer's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
+Congratulations! Now that you've successfully setup your workspace, you should move on to our [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).

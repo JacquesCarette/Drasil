@@ -14,7 +14,8 @@ module Drasil.Shared.InterfaceCommon (
   Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..), listSlice,
+  IndexTranslator(..), Array(..), List(..), Set(..), NativeVector(..),
+  InternalList(..), listSlice,
   listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
   assignToListIndex, DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
@@ -331,6 +332,23 @@ class (ValueSym r) => Set r where
   -- | Removes a value from a set
   -- Arguments are: Set, Set
   setUnion :: SValue r -> SValue r -> SValue r
+
+-- | Vector operations for languages with native vector support (e.g. MATLAB,
+--   Julia). Expression-based: every operation takes and returns 'SValue's, so
+--   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
+class (IndexTranslator r) => NativeVector r where
+  -- | Scales a vector by a scalar.
+  --   Arguments are: Scalar, Vector
+  vecScale :: SValue r -> SValue r -> SValue r
+  -- | Adds two vectors elementwise.
+  --   Arguments are: Vector, Vector
+  vecAdd :: SValue r -> SValue r -> SValue r
+  -- | Gets the element of a vector at an index.
+  --   Arguments are: Vector, Index
+  vecIndex :: SValue r -> SValue r -> SValue r
+  -- | Dot product of two vectors (returns a scalar).
+  --   Arguments are: Vector, Vector
+  vecDot :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)

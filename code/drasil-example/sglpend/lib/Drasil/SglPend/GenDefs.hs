@@ -14,6 +14,7 @@ import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
@@ -147,9 +148,9 @@ hForceOnPendulumGD = gdNoRefs (equationalRealmU "hForceOnPendulum" hForceOnPendu
 
 hForceOnPendulumMD :: MultiDefn ModelExpr
 hForceOnPendulumMD = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = dqd' (dccA "force" (horizontalForce `onThe` pendulum)
-                    "the horizontal force acting on the pendulum"
-                    Nothing) (symbol force) Real (getUnit force)
+    where quan  = quantAU (mkUid "force") (horizontalForce `onThe` pendulum)
+                    (S "the horizontal force acting on the pendulum")
+                    Nothing (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "hForceOnPendulumViaComponent"
                       [] EmptyS $ express E.hForceOnPendulumViaComponent,
@@ -167,9 +168,9 @@ vForceOnPendulumGD = gdNoRefs (equationalRealmU "vForceOnPendulum" vForceOnPendu
 
 vForceOnPendulumMD :: MultiDefn ModelExpr
 vForceOnPendulumMD = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = dqd' (dccA "force" (verticalForce `onThe` pendulum)
-                    "the vertical force acting on the pendulum"
-                    Nothing) (symbol force) Real (getUnit force)
+    where quan  = quantAU (mkUid "force") (verticalForce `onThe` pendulum)
+                    (S "the vertical force acting on the pendulum")
+                    Nothing (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "vForceOnPendulumViaComponent"
                       [] EmptyS $ express E.vForceOnPendulumViaComponent,

@@ -202,37 +202,37 @@ unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, consTo
 eta, meltFrac, fracMin, consTol, aspectRatio, aspectRatioMin, aspectRatioMax :: DefinedQuantityDict
 
 -- FIXME: should this have units?
-eta = dqd' (cncpt''' (mkUid "eta") (nounPhraseSP "ODE parameter related to decay rate")
-  (S "derived parameter based on rate of change of temperature of water"))
-  (const lEta) Real Nothing
+eta = quantNoUnit (mkUid "eta") (nounPhraseSP "ODE parameter related to decay rate")
+  (S "derived parameter based on rate of change of temperature of water")
+  lEta Real
 
-meltFrac = dqd' (cncpt''' (mkUid "meltFrac") (nounPhraseSP "melt fraction")
-  (S "ratio of thermal energy to amount of mass melted"))
+meltFrac = quantNoUnit (mkUid "meltFrac") (nounPhraseSP "melt fraction")
+  (S "ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (const lPhi) Real Nothing
+  lPhi Real
 
-fracMin = dqd' (cncpt''' (mkUid "fracMin")
+fracMin = quantNoUnit (mkUid "fracMin")
   (nounPhraseSP "minimum fraction of the tank volume taken up by the PCM")
-  (S "minimum fraction of the tank volume taken up by the PCM"))
-   (const $ variable "MINFRACT") Real Nothing
+  (S "minimum fraction of the tank volume taken up by the PCM")
+   (variable "MINFRACT") Real
 
-consTol = dqd' (cncpt''' (mkUid "consTol")
+consTol = quantNoUnit (mkUid "consTol")
   (nounPhraseSP "relative tolerance for conservation of energy")
-  (S "relative tolerance for conservation of energy"))
-  (const $ sub cC lTol) Real Nothing
+  (S "relative tolerance for conservation of energy")
+  (sub cC lTol) Real
 
-aspectRatio = dqd' (cncpt''' (mkUid "aspectRatio")
+aspectRatio = quantNoUnit (mkUid "aspectRatio")
   (nounPhraseSP "aspect ratio")
-  (S "ratio of tank diameter to tank length"))
-   (const $ variable "AR") Real Nothing
+  (S "ratio of tank diameter to tank length")
+   (variable "AR") Real
 
-aspectRatioMin = dqd' (cncpt''' (mkUid "aspectRatioMin")
-  (nounPhraseSP "minimum aspect ratio") (S"minimum aspect ratio"))
-   (const $ subMin (eqSymb aspectRatio)) Real Nothing
+aspectRatioMin = quantNoUnit (mkUid "aspectRatioMin")
+  (nounPhraseSP "minimum aspect ratio") (S"minimum aspect ratio")
+   (subMin (eqSymb aspectRatio)) Real
 
-aspectRatioMax = dqd' (cncpt''' (mkUid "aspectRatioMax")
-  (nounPhraseSP "maximum aspect ratio") (S "maximum aspect ratio"))
-   (const $ subMax (eqSymb aspectRatio)) Real Nothing
+aspectRatioMax = quantNoUnit (mkUid "aspectRatioMax")
+  (nounPhraseSP "maximum aspect ratio") (S "maximum aspect ratio")
+   (subMax (eqSymb aspectRatio)) Real
 
 -----------------
 -- Constraints --
@@ -435,13 +435,13 @@ pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
 
 absTol, relTol :: UncertQ
 
-absTol = uq (constrained' (dqdNoUnit (cncpt''' (mkUid "absTol") (nounPhraseSP "absolute tolerance")
-  (S "the absolute tolerance")) (sub cA lTol) Real)
+absTol = uq (constrained' (quantNoUnit (mkUid "absTol") (nounPhraseSP "absolute tolerance")
+  (S "the absolute tolerance") (sub cA lTol) Real)
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)]
    (dbl (10.0**(-10)))) (uncty 0.01 Nothing)
 
-relTol = uq (constrained' (dqdNoUnit (cncpt''' (mkUid "relTol") (nounPhraseSP "relative tolerance")
-  (S "the relative tolerance")) (sub cR lTol) Real)
+relTol = uq (constrained' (quantNoUnit (mkUid "relTol") (nounPhraseSP "relative tolerance")
+  (S "the relative tolerance") (sub cR lTol) Real)
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)]
   (dbl (10.0**(-10)))) (uncty 0.01 Nothing)
 

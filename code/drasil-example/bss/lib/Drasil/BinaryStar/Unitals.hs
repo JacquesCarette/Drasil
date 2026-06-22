@@ -238,15 +238,15 @@ labely = label "y"
 
 -- | Summation index variable i
 index :: DefinedQuantityDict
-index = dqd' (cncpt''' (mkUid "index") (nounPhraseSP "index")
-  (S "a number representing a single body"))
-  (const lI) Integer Nothing
+index = quantNoUnit (mkUid "index") (nounPhraseSP "index")
+  (S "a number representing a single body")
+  lI Integer
 
 -- | Number of bodies n
 numbBodies :: DefinedQuantityDict
-numbBodies = dqd' (cncpt''' (mkUid "n") (nounPhraseSP "number of bodies")
-  (S "the number of point masses in the system"))
-  (const lN) Integer Nothing
+numbBodies = quantNoUnit (mkUid "n") (nounPhraseSP "number of bodies")
+  (S "the number of point masses in the system")
+  lN Integer
 
 ---------------------------------------------------------
 -- ODE state vector (for code generation)

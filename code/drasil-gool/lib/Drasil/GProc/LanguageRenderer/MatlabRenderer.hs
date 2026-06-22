@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (Label, VSType, SValue, SVariable,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..),
+  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
@@ -353,6 +353,12 @@ instance Set MatlabCode where
   setRemove = undefined
   setUnion = undefined
 
+instance NativeVector MatlabCode where
+  vecScale = binExpr multOp           -- s * v
+  vecAdd   = binExpr plusOp           -- a + b
+  vecIndex = mlVecIndex               -- v(i + 1)
+  vecDot a b = funcApp "dot" double [a, b]   -- dot(a, b)
+
 instance InternalList MatlabCode where
   listSlice' = undefined
 
@@ -630,6 +636,15 @@ mlArg n' = do
   n <- n'
   s <- string
   mkVal s (text "varargin" <> braces (RC.value n))
+
+-- | Indexes into a vector: @v(i + 1)@. MATLAB is 1-indexed while GOOL is
+--   0-indexed, so we shift the index by one.
+mlVecIndex :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlVecIndex v' i' = do
+  v <- v'
+  i <- i' #+ litInt 1
+  d <- double
+  mkVal d (RC.value v <> parens (RC.value i))
 
 -- | Reads one line from a file as text: fgetl(f).
 mlReadLine :: SValue MatlabCode -> SValue MatlabCode

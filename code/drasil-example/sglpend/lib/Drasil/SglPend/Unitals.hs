@@ -26,13 +26,13 @@ import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless ++ NE.toList inputs ++ NE.toList outputs
+symbols = unitalChunks ++ unitless ++ NE.toList inputs ++ NE.toList outputs
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr $ lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
+inputs = lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.singleton $ dqdWr pendDisplacementAngle
+outputs = NE.singleton pendDisplacementAngle
 
 unitalChunks :: [DefinedQuantityDict]
 unitalChunks = [QPP.len, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,

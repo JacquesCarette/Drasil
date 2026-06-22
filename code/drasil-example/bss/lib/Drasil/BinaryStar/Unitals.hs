@@ -31,13 +31,13 @@ import Drasil.BinaryStar.Concepts (starOne, starTwo)
 
 -- | All symbols for the Symbol Table
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
+symbols = [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
   xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
   xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
   tFinal, sepDist,
   massMin, massMax, rMax, vMax, tMax]
-  ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force,
+  ++ [QP.velocity, QP.position, QP.acceleration, QP.force,
      QP.fOfGravity, QP.time, QP.energy, gravitationalConst, QPP.mass]
   ++ [index, numbBodies, dqdWr bssStateVar]
   ++ map dqdWr constants
@@ -49,7 +49,7 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
 
 -- | Input variables (what the user provides)
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr $ mass_1 :| [mass_2, xPos_1_0, yPos_1_0, xPos_2_0,
+inputs = mass_1 :| [mass_2, xPos_1_0, yPos_1_0, xPos_2_0,
   yPos_2_0, xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0, tFinal]
 
 -- | Output variables (what the system calculates)

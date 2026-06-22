@@ -40,16 +40,16 @@ import Data.Drasil.Constraints (gtZeroConstr)
 ----------------------
 
 symbols :: [DefinedQuantityDict]
-symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] ++ unitless ++ map dqdWr unitalSymbols
+symbols = [QP.restitutionCoef, QM.normalVect, QM.perpVect] ++ unitless ++ unitalSymbols
 
 inputSymbols, outputSymbols :: NE.NonEmpty DefinedQuantityDict
 
-inputSymbols = NE.map dqdWr (QP.position :| [QP.velocity, QP.force, QM.orientation,
+inputSymbols = QP.position :| [QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass,
-  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec]) `NE.appendList`
-  [QP.restitutionCoef]
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity,
+  QP.potEnergy, QP.fOfGravity, QP.positionVec, QP.restitutionCoef]
 
-outputSymbols = NE.map dqdWr $ QP.position :| [QP.velocity, QM.orientation,
+outputSymbols = QP.position :| [QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 unitalSymbols :: [DefinedQuantityDict]

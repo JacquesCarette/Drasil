@@ -69,7 +69,7 @@ accelIM_X1 = imNoRefs accelMK_X1
    qwC mass_2 $ UpFrom (Exc, exactDbl 0),
    qwUC xPos_1, qwUC yPos_1,
    qwUC xPos_2, qwUC yPos_2]
-  (dqdWr xAccel_1) []
+  xAccel_1 []
   Nothing "accelX1" (imNotes xAccel_1)
 
 accelMK_X1 :: ModelKind Expr
@@ -90,7 +90,7 @@ accelIM_Y1 = imNoRefs accelMK_Y1
    qwC mass_2 $ UpFrom (Exc, exactDbl 0),
    qwUC xPos_1, qwUC yPos_1,
    qwUC xPos_2, qwUC yPos_2]
-  (dqdWr yAccel_1) []
+  yAccel_1 []
   Nothing "accelY1" (imNotes yAccel_1)
 
 accelMK_Y1 :: ModelKind Expr
@@ -111,7 +111,7 @@ accelIM_X2 = imNoRefs accelMK_X2
    qwC mass_2 $ UpFrom (Exc, exactDbl 0),
    qwUC xPos_1, qwUC yPos_1,
    qwUC xPos_2, qwUC yPos_2]
-  (dqdWr xAccel_2) []
+  xAccel_2 []
   Nothing "accelX2" (imNotes xAccel_2)
 
 accelMK_X2 :: ModelKind Expr
@@ -132,7 +132,7 @@ accelIM_Y2 = imNoRefs accelMK_Y2
    qwC mass_2 $ UpFrom (Exc, exactDbl 0),
    qwUC xPos_1, qwUC yPos_1,
    qwUC xPos_2, qwUC yPos_2]
-  (dqdWr yAccel_2) []
+  yAccel_2 []
   Nothing "accelY2" (imNotes yAccel_2)
 
 accelMK_Y2 :: ModelKind Expr

@@ -23,7 +23,7 @@ htVars :: NE.NonEmpty DefinedQuantityDict
 htVars = cladThick :| [coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: NE.NonEmpty DefinedQuantityDict
-htInputs = NE.map dqdWr htVars
+htInputs = htVars
 htOutputs = NE.map dqdWr qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict

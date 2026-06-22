@@ -32,10 +32,10 @@ import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, 
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
+symbols = unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr $ lenRod_1 :| [lenRod_2, massObj_1, massObj_2]
+inputs = lenRod_1 :| [lenRod_2, massObj_1, massObj_2]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
 outputs = NE.singleton $ dqdWr pendDisAngle

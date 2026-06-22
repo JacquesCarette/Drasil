@@ -33,7 +33,7 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : NE.toList inputs ++ map dqdWr (NE.toList outputs)
-  ++ map dqdWr units ++ unitless
+  ++ units ++ unitless
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -82,7 +82,7 @@ inputsNoUncrtn :: NE.NonEmpty DefinedQuantityDict
 inputsNoUncrtn = constF :| []
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr inputsWUncrtn <> NE.map dqdWr inputsNoUncrtn
+inputs = NE.map dqdWr inputsWUncrtn <> inputsNoUncrtn
 
 outputs :: NE.NonEmpty ConstrConcept
 outputs = NE.singleton fs

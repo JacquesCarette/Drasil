@@ -28,10 +28,10 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
-  [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
+  [modElas] ++ interps ++ unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac] ++
   map dqdWr derivedInputDataConstraints ++
-  map dqdWr mathunitals ++ map dqdWr physicalquants ++ mathquants
+  mathunitals ++ physicalquants ++ mathquants
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
@@ -42,7 +42,7 @@ glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
-  NE.map dqdWr inputsNoUncrtn <> NE.map dqdWr sdVector
+  NE.map dqdWr inputsNoUncrtn <> sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
@@ -118,7 +118,7 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.map dqdWr (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
+outputs = (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]

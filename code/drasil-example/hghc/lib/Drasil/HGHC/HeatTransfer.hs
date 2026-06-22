@@ -27,17 +27,17 @@ htInputs = NE.map dqdWr htVars
 htOutputs = NE.map dqdWr qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict
-cladThick    = dqdNoUnit (cncpt''' (mkUid "cladThick")    (cn''' "clad thickness")
-  (S "the clad thickness"))
+cladThick    = quantNoUnit (mkUid "cladThick")    (cn''' "clad thickness")
+  (S "the clad thickness")
   (sub lTau lClad) Real
-coolFilmCond = dqdNoUnit (cncpt''' (mkUid "coolFilmCond") (cn' "initial coolant film conductance")
-  (S "the initial coolant film conductance"))
+coolFilmCond = quantNoUnit (mkUid "coolFilmCond") (cn' "initial coolant film conductance")
+  (S "the initial coolant film conductance")
   (sub lH lCoolant) Real
-gapFilmCond  = dqdNoUnit (cncpt''' (mkUid "gapFilmCond")  (cn' "initial gap film conductance")
-  (S "the initial gap film conductance"))
+gapFilmCond  = quantNoUnit (mkUid "gapFilmCond")  (cn' "initial gap film conductance")
+  (S "the initial gap film conductance")
   (sub lH lGap) Real
-cladCond     = dqdNoUnit (cncpt''' (mkUid "cladCond")     (cnIES "clad conductivity")
-  (S "the clad conductivity"))
+cladCond     = quantNoUnit (mkUid "cladCond")     (cnIES "clad conductivity")
+  (S "the clad conductivity")
   (sub lK lClad) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr

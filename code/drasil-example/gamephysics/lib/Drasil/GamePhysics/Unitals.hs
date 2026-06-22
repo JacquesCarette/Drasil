@@ -304,8 +304,8 @@ unitless :: [DefinedQuantityDict]
 unitless = QM.pi_ : [numParticles]
 
 numParticles :: DefinedQuantityDict
-numParticles = dqdNoUnit (cncpt''' (mkUid "n") (nounPhraseSP "number of particles in a rigid body")
-  (S "the number of particles in a rigidbody")) lN Integer
+numParticles = quantNoUnit (mkUid "n") (nounPhraseSP "number of particles in a rigid body")
+  (S "the number of particles in a rigidbody") lN Integer
 
 -----------------------
 -- CONSTRAINT CHUNKS --

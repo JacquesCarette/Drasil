@@ -8,11 +8,11 @@ module Language.Drasil.Chunk.Unital (
 
 import Control.Lens (makeLenses, view, (^.))
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..), mkUid)
 import qualified Data.Set as Set
 
-import Language.Drasil.Chunk.Concept (dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.Concept (cw)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', quant, quant')
 import Language.Drasil.Symbol (Symbol, HasSymbol(..))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity)
@@ -72,7 +72,7 @@ uc a sym space un = UC (dqd (cw a) sym space un) un
 -- | Similar to 'uc', except it builds the 'Concept' portion of the 'UnitalChunk'
 -- from a given 'UID', term, and definition (as a 'Sentence') which are its first three arguments.
 uc' :: String -> NP -> Sentence -> Symbol -> Space -> UnitDefn -> UnitalChunk
-uc' i t d sym space un = UC (dqd (dccWDS i t d) sym space un) un
+uc' i t d sym space un = UC (quant (mkUid i) t d sym space un) un
 
 -- | Similar to 'uc', but 'Symbol' is dependent on the 'Stage'.
 ucStaged :: (Concept c) => c ->  (Stage -> Symbol) ->
@@ -82,4 +82,4 @@ ucStaged a sym space un = UC (dqd' (cw a) sym space (Just un)) un
 -- | Similar to 'uc'', but 'Symbol' is dependent on the 'Stage'.
 ucStaged' :: String -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> UnitDefn -> UnitalChunk
-ucStaged' i t d sym space un = UC (dqd' (dccWDS i t d) sym space (Just un)) un
+ucStaged' i t d sym space un = UC (quant' (mkUid i) t d sym space un) un

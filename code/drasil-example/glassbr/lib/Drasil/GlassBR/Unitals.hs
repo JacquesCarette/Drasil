@@ -89,8 +89,8 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
-pbTol = uq (constrained' (dqdNoUnit (cncpt''' (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
-  (S "the tolerable probability of breakage of the glass plate"))
+pbTol = uq (constrained' (quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
+  (S "the tolerable probability of breakage of the glass plate")
   (sub cP (Concat [lBreak, lTol])) Real)
   [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
@@ -100,8 +100,8 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (exactDbl 42) defaultUncrt
 
-tNT = uq (constrained' (dqdNoUnit (cncpt''' (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
-  (S "the TNT equivalent factor"))
+tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
+  (S "the TNT equivalent factor")
   (variable "TNT") Real)
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
@@ -163,9 +163,9 @@ dimMin     = mkQuantDef (uc' "dimMin"
   (S "the minimum value for one of the dimensions of the glass plate")
   (subMin lD) Real metre) (dbl 0.1)
 
-arMax     = mkQuantDef (dqdNoUnit (cncpt''' (mkUid "arMax")
+arMax     = mkQuantDef (quantNoUnit (mkUid "arMax")
   (nounPhraseSP "maximum aspect ratio")
-  (S "the maximum aspect ratio"))
+  (S "the maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
 cWeightMax = mkQuantDef (uc' "cWeightMax"
@@ -188,14 +188,14 @@ sdMin     = mkQuantDef (uc' "sdMin"
   (S "the minimum stand off distance permissible for input")
   (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
 
-stressDistFacMin = mkQuantDef (dqdNoUnit (cncpt''' (mkUid "stressDistFacMin")
+stressDistFacMin = mkQuantDef (quantNoUnit (mkUid "stressDistFacMin")
   (nounPhraseSP "minimum value for the stress distribution factor")
-  (S "the minimum value for the stress distribution factor"))
+  (S "the minimum value for the stress distribution factor")
   (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
 
-stressDistFacMax = mkQuantDef (dqdNoUnit (cncpt''' (mkUid "stressDistFacMax")
+stressDistFacMax = mkQuantDef (quantNoUnit (mkUid "stressDistFacMax")
   (nounPhraseSP "maximum value for the stress distribution factor")
-  (S "the maximum value for the stress distribution factor"))
+  (S "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 
 unitalSymbols :: [UnitalChunk]
@@ -260,36 +260,36 @@ riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
 
 gTF, loadSF, loadDF :: DefinedQuantityDict
 
-dimlessLoad = dqdNoUnit (cncpt''' (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
-  (S "the dimensionless load")) (hat lQ) Real
+dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
+  (S "the dimensionless load") (hat lQ) Real
 
 gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
 
-isSafePb   = dqdNoUnit (cncpt''' (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
-  (S "the probability of glass breakage safety requirement")) (variable "isSafePb") Boolean
-isSafeProb = dqdNoUnit (cncpt''' (mkUid "isSafeProb") (nounPhraseSP "probability of failure safety requirement")
-  (S "the probability of failure safety requirement")) (variable "isSafeProb") Boolean
-isSafeLR   = dqdNoUnit (cncpt''' (mkUid "isSafeLR")   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  (S "the 3 second load equivalent resistance safety requirement")) (variable "isSafeLR") Boolean
-isSafeLoad = dqdNoUnit (cncpt''' (mkUid "isSafeLoad") (nounPhraseSP "load resistance safety requirement")
-  (S "the load resistance safety requirement")) (variable "isSafeLoad") Boolean
+isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
+  (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
+isSafeProb = quantNoUnit (mkUid "isSafeProb") (nounPhraseSP "probability of failure safety requirement")
+  (S "the probability of failure safety requirement") (variable "isSafeProb") Boolean
+isSafeLR   = quantNoUnit (mkUid "isSafeLR")   (nounPhraseSP "3 second load equivalent resistance safety requirement")
+  (S "the 3 second load equivalent resistance safety requirement") (variable "isSafeLR") Boolean
+isSafeLoad = quantNoUnit (mkUid "isSafeLoad") (nounPhraseSP "load resistance safety requirement")
+  (S "the load resistance safety requirement") (variable "isSafeLoad") Boolean
 
-interpY = dqdNoUnit (cncpt''' (mkUid "interpY") (nounPhraseSP "interpY")
-  (S "interpolated y")) (variable "interpY") (mkFunction [String, Real, Real] Real)
-interpZ = dqdNoUnit (cncpt''' (mkUid "interpZ") (nounPhraseSP "interpZ")
-  (S "interpolated z")) (variable "interpZ") (mkFunction [String, Real, Real] Real)
+interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
+  (S "interpolated y") (variable "interpY") (mkFunction [String, Real, Real] Real)
+interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
+  (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
-riskFun = dqdNoUnit (cncpt''' (mkUid "riskFun") (nounPhraseSP "risk of failure")
-  (S "the percentage risk of the glass slab failing to resist the blast")) cB Real
+riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
+  (S "the percentage risk of the glass slab failing to resist the blast") cB Real
 
-sdfTol = dqdNoUnit (cncpt''' (mkUid "sdfTol") (nounPhraseSP "tolerable stress distribution factor")
-  (S "the tolerable stress distribution factor")) (sub (eqSymb stressDistFac) lTol) Real
+sdfTol = quantNoUnit (mkUid "sdfTol") (nounPhraseSP "tolerable stress distribution factor")
+  (S "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real
 
-tolLoad = dqdNoUnit (cncpt''' (mkUid "tolLoad") (nounPhraseSP "tolerable load")
-  (S "the tolerable load")) (sub (eqSymb dimlessLoad) lTol) Real
+tolLoad = quantNoUnit (mkUid "tolLoad") (nounPhraseSP "tolerable load")
+  (S "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
 
 lBreak, lDur, lFail, lTol :: Symbol
 lBreak = label "b"

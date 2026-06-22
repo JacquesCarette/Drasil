@@ -1,6 +1,7 @@
 module Drasil.PDController.MetaConcepts (progName) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 
 progName :: CI
-progName = commonIdeaWithDict "pdControllerApp" (pn "PD Controller") "PD Controller" []
+progName = commonIdea (mkUid "pdControllerApp") (pn "PD Controller") "PD Controller" []

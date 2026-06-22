@@ -9,12 +9,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSType,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  BinderSym(..))
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -80,20 +78,21 @@ instance BlockSym CodeInfoProc where
   block = executeList
 
 instance TypeSym CodeInfoProc where
-  bool              = noInfoVSType
-  int               = noInfoVSType
-  float             = noInfoVSType
-  double            = noInfoVSType
-  char              = noInfoVSType
-  string            = noInfoVSType
-  infile            = noInfoVSType
-  outfile           = noInfoVSType
-  listType      _   = noInfoVSType
-  setType      _   = noInfoVSType
-  arrayType     _   = noInfoVSType
-  listInnerType _   = noInfoVSType
-  funcType      _ _ = noInfoVSType
-  void              = noInfoVSType
+  bool            = noInfoVSType
+  int             = noInfoVSType
+  float           = noInfoVSType
+  double          = noInfoVSType
+  char            = noInfoVSType
+  string          = noInfoVSType
+  infile          = noInfoVSType
+  outfile         = noInfoVSType
+  referenceType _ = noInfoVSType
+  listType      _ = noInfoVSType
+  setType       _ = noInfoVSType
+  arrayType     _ = noInfoVSType
+  innerType     _ = noInfoVSType
+  funcType    _ _ = noInfoVSType
+  void            = noInfoVSType
 
 instance ScopeSym CodeInfoProc where
   global = noInfoScope
@@ -226,28 +225,6 @@ instance InternalList CodeInfoProc where
 
 instance BinderSym CodeInfoProc where
   binder _ _ = noInfoBinder
-
-instance ThunkSym CodeInfoProc where
-  type Thunk CodeInfoProc = ()
-
-instance ThunkAssign CodeInfoProc where
-  thunkAssign _ = zoom lensMStoVS . execute1
-
-instance VectorType CodeInfoProc where
-  vecType _ = noInfoVSType
-
-instance VectorDecl CodeInfoProc where
-  vecDec  _ _ _ = noInfo
-  vecDecDef _ _ = zoom lensMStoVS . executeList
-
-instance VectorThunk CodeInfoProc where
-  vecThunk _ = noInfo
-
-instance VectorExpression CodeInfoProc where
-  vecScale = execute2
-  vecAdd = execute2
-  vecIndex = execute2
-  vecDot = execute2
 
 instance StatementSym CodeInfoProc where
   type Statement CodeInfoProc = ()

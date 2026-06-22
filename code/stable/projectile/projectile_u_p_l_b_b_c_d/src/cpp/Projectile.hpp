@@ -44,7 +44,6 @@ class InputParameters {
 class Constants {
     public:
         static const double g;
-        static const double epsilon;
         
 };
 

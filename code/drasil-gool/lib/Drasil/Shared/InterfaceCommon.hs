@@ -5,9 +5,8 @@
 module Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBinder,
-  SVariable, SValue, VSThunk, MSStatement, MSParameter, SMethod, NamedArgs,
-  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), getCodeType, getTypeString, VariableSym(..), ScopeSym(..),
@@ -16,17 +15,14 @@ module Drasil.Shared.InterfaceCommon (
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..), convType
+  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
+  assignToListIndex, DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
-import qualified Data.Kind as K (Type)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD)
 import Drasil.Shared.CodeType (CodeType(..))
@@ -43,13 +39,12 @@ type Library = String
 -- TODO [Brandon Bosman, 06/09/2026]: UnRepr can be removed from SharedProg
 -- if we can root out its use from drasil-code
 
-class (UnRepr r TypeData, VectorType r, VectorDecl r, VectorThunk r,
-  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
-  IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
-  CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
-  MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, IndexTranslator r,
-  Array r, List r, Set r, VariableElim r, MethodSym r, ScopeSym r, BinderSym r
+class (UnRepr r TypeData, AssignStatement r, DeclStatement r, IOStatement r,
+  StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r,
+  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, ValueExpression r, IndexTranslator r, Array r, List r, Set r,
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -90,10 +85,11 @@ class TypeSym r where
   string        :: VSType r
   infile        :: VSType r
   outfile       :: VSType r
+  referenceType :: VSType r -> VSType r
   listType      :: VSType r -> VSType r
   setType       :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
-  listInnerType :: VSType r -> VSType r
+  innerType     :: VSType r -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 
@@ -359,36 +355,6 @@ listIndexExists lst index = listSize lst ?> index
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
--- Vector Typeclasses --
-
-type VSThunk a = VS (a (Thunk a))
-
-class ThunkSym r where
-  -- K.Type -> K.Type annotation needed because r is not applied here so its
-  -- kind cannot be inferred (whereas for Value, r is applied in the type
-  -- signature of valueType
-  type Thunk (r :: K.Type -> K.Type)
-
-class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
-  thunkAssign :: SVariable r -> VSThunk r -> MSStatement r
-
-class TypeSym r => VectorType r where
-  vecType :: VSType r -> VSType r
-
-class (DeclStatement r) => VectorDecl r where
-  -- First argument is size of the vector
-  vecDec :: Integer -> SVariable r -> r ScopeData -> MSStatement r
-  vecDecDef :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
-
-class (VariableSym r, ThunkSym r) => VectorThunk r where
-  vecThunk :: SVariable r -> VSThunk r
-
-class (ThunkSym r, ValueSym r) => VectorExpression r where
-  vecScale :: SValue r -> VSThunk r -> VSThunk r
-  vecAdd :: VSThunk r -> VSThunk r -> VSThunk r
-  vecIndex :: SValue r -> VSThunk r -> SValue r
-  vecDot :: VSThunk r -> VSThunk r -> VSThunk r
-
 type MSStatement a = MS (a (Statement a))
 
 class (ValueSym r) => StatementSym r where
@@ -567,6 +533,7 @@ convType Float = float
 convType Double = double
 convType Char = char
 convType String = string
+convType (Reference t) = referenceType (convType t)
 convType (List t) = listType (convType t)
 convType (Set t) = setType (convType t)
 convType (Array t) = arrayType (convType t)

@@ -14,8 +14,7 @@ import Data.Drasil.Concepts.PhysicalProperties (flexure)
 
 import Drasil.GlassBR.Assumptions (assumpGC, assumpES, assumpSV, assumpGL,
   assumpBC, assumpRT, assumpLDFC, assumptionConstants)
-import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
-import Drasil.GlassBR.Unitals (explosion, lite)
+import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass, explosion, lite)
 
 {--LIKELY CHANGES--}
 

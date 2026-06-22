@@ -17,12 +17,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   MSBlock, VSType, SVariable, SValue, MSStatement, MSParameter, SMethod,
   BodySym(..), oneLiner, bodyStatements, BlockSym(..), TypeSym(..), getCodeType,
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  funcAppNamedArgs, extFuncApp, IndexTranslator(..), Array(..), List(..),
-  Set(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  IndexTranslator(..), Array(..), List(..), Set(..), listSlice, InternalList(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
@@ -68,16 +66,16 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr,
   binExpr, binExpr', typeBinExpr, typeFromData)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
-  emptyStmt, assign, subAssign, objDecNew, print, returnStmt, valStmt, comment,
-  throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
-  initStmts, function, docFunc, buildClass, implementingClass, docClass,
-  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
+  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
+  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  subAssign, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
+  docFunc, buildClass, implementingClass, docClass, commentedClass, modFromData,
+  fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
@@ -93,13 +91,12 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, decrement
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal, arrayDecAsList)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
-  listAppend)
+  listAppend, innerType)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim, ScopeData, BinderD(..), bindFormD)
+  ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -107,8 +104,8 @@ import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
-  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex,
-  genVarNameIf, setVarScope, getVarScope)
+  getLineIndex, getWordIndex, resetIndices, useVarName, genVarNameIf,
+  setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -216,10 +213,11 @@ instance TypeSym SwiftCode where
   string = CP.string'
   infile = swiftFileType
   outfile = swiftFileHdlType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
   setType = listType
-  listInnerType = G.listInnerType
+  innerType = CG.innerType
   funcType = swiftFuncType
   void = swiftVoidType
 
@@ -403,7 +401,6 @@ instance ValueExpression SwiftCode where
   notNull = CP.notNull swiftNil
 
 instance OOValueExpression SwiftCode where
-  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp
@@ -495,39 +492,6 @@ instance BinderElim SwiftCode where
 
 instance InternalBinderElim SwiftCode where
   binderElim = text . bindName . unSC
-
-instance ThunkSym SwiftCode where
-  type Thunk SwiftCode = CommonThunk VS
-
-instance ThunkAssign SwiftCode where
-  thunkAssign v t = do
-    iName <- genLoopIndex
-    let
-      i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unSC . listSize . fmap pure) . unSC
-      loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
-      loopBody = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
-        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
-        ((v &+=) . vecIndex (valueOf i) . pure . pure)
-    multi [loopInit,
-      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
-
-instance VectorType SwiftCode where
-  vecType = listType
-
-instance VectorDecl SwiftCode where
-  vecDec = listDec
-  vecDecDef = listDecDef
-
-instance VectorThunk SwiftCode where
-  vecThunk = pure . pure . pureValue . fmap unSC . valueOf
-
-instance VectorExpression SwiftCode where
-  vecScale k = fmap $ fmap $ vectorize (fmap unSC . (k #*) . fmap pure)
-  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unSC . flip listAccess i . fmap pure) . unSC)
-  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction SwiftCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

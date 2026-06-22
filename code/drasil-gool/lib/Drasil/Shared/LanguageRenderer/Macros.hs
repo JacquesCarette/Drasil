@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, MSBody, MSBlock,
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block),
-  TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(..),
+  TypeSym(int, innerType), VariableSym(var), ScopeSym(..), Literal(..),
   VariableValue(valueOf), ValueExpression(notNull),
   List(listSize, listAppend, listAccess), IndexTranslator(intToIndex),
   StatementSym(valStmt, emptyStmt), AssignStatement(assign),
@@ -168,7 +168,7 @@ stringListLists lsts sl = do
       (IC.litInt 1) (bodyStatements $ appendLists (map IC.valueOf lsts) 0)
     appendLists [] _ = []
     appendLists (v:vs) n = IC.valStmt (IC.listAppend v (cast
-      (IC.listInnerType $ onStateValue valueType v)
+      (IC.innerType $ onStateValue valueType v)
       (IC.listAccess sl ((v_i #* numLists) #+ IC.litInt n))))
       : appendLists vs (n+1)
     numLists = IC.litInt (toInteger $ length lsts)
@@ -206,7 +206,7 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
 arrayDecAsList :: (CommonRenderSym r) => Integer -> SVariable r -> r ScopeData -> MSStatement r
 arrayDecAsList len vr scp = do
   vr' <- zoom lensMStoVS vr
-  let innerTp = IC.listInnerType $ return $ variableType vr'
+  let innerTp = IC.innerType $ return $ variableType vr'
   i <- genVarName [] "i"
   multi [
     IC.varDecDef vr scp (IC.litList innerTp []),

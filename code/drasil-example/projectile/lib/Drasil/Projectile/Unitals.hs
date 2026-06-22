@@ -1,5 +1,5 @@
 module Drasil.Projectile.Unitals (
-  offset, flightDur, targPos, inputs, outputs, tol,
+  offset, flightDur, targPos, inputs, outputs,
   launAngle, launSpeed, landPos, projSpeed, projPos,
   launAngleUnc, launSpeedUnc, targPosUnc, landPosUnc, offsetUnc, flightDurUnc
 ) where
@@ -7,10 +7,9 @@ module Drasil.Projectile.Unitals (
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT, vEpsilon)
+import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT)
 
 import Data.Drasil.Quantities.Math (pi_)
 
@@ -52,5 +51,3 @@ offset    = constrainedNRV' (uc       C.offset    (subStr lD "offset") Real metr
 targPos   = constrained'    (uc       C.targPos   (subStr lP "target") Real metre ) [gtZeroConstr] (exactDbl 1000)
 
 ---
-tol :: ConstQDef
-tol = mkQuantDef (dqdNoUnit' (cncpt''' (mkUid "tol") (nounPhraseSP "hit tolerance") (S "the hit tolerance")) (autoStage vEpsilon) Real) (perc 2 2)

@@ -18,6 +18,7 @@ import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
 import Drasil.GlassBR.LabelledContent (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
+import Drasil.GlassBR.Concepts (demandq)
 import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
@@ -34,7 +35,7 @@ aspectRatioConstraint = UpFrom (Inc, exactDbl 1)
 probConstraint :: RealInterval Expr Expr
 probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
 
-{--}
+-- ** Risk
 
 risk :: InstanceModel
 risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
@@ -49,7 +50,7 @@ riskQD = mkQuantDef riskFun ((sy sflawParamK $/
   (sy plateLen $* sy plateWidth $^ (sy sflawParamM $- exactDbl 1))) $*
   ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy loadDF $* exp (sy stressDistFac))
 
-{--}
+-- ** Stress Distribution Factor
 
 strDisFac :: InstanceModel
 strDisFac = imNoDeriv (equationalModelN (stressDistFac ^. term) strDisFacQD)
@@ -66,7 +67,7 @@ strDisFacEq :: Expr
 --   [sy dimlessLoad, sy aspectRatio]
 strDisFacEq = apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
-{--}
+-- ** Non-factored Load
 
 nonFL :: InstanceModel
 nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
@@ -81,7 +82,7 @@ nonFLEq = (sy tolLoad $* sy modElas) $* (sy minThick $^ exactDbl 4) $/
 nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
 
-{--}
+-- ** Dimensionless Load
 
 dimLL :: InstanceModel
 dimLL = imNoDeriv (equationalModelN (dimlessLoad ^. term) dimLLQD)
@@ -96,7 +97,7 @@ dimLLEq = sy demand $* square (sy plateLen $* sy plateWidth)
 dimLLQD :: SimpleQDef
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
-{--}
+-- ** Tolerable Load
 
 tolPre :: InstanceModel
 tolPre = imNoDeriv (equationalModelN (tolLoad ^. term) tolPreQD)
@@ -111,7 +112,7 @@ tolPreEq = apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
 tolPreQD :: SimpleQDef
 tolPreQD = mkQuantDef tolLoad tolPreEq
 
-{--}
+-- ** Tolerable Stress Distribution Factor
 
 tolStrDisFac :: InstanceModel
 tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
@@ -126,7 +127,7 @@ tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
     (sy sflawParamK $* ((sy modElas $*
     square (sy minThick)) $^ sy sflawParamM) $* sy loadDF)))
 
-{--}
+-- ** Probability of Breakage
 
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
@@ -136,7 +137,7 @@ probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
 probOfBreakQD :: SimpleQDef
 probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg $ sy $ risk ^. output))
 
-{--}
+-- ** Capacity
 
 calofCapacity :: InstanceModel
 calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
@@ -146,7 +147,7 @@ calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
 calofCapacityQD :: SimpleQDef
 calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) $* sy (glaTyFac ^. defLhs) $* sy loadSF)
 
-{--}
+-- ** Probability of Glass Breakage Safety Requirement
 
 pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD)
@@ -156,7 +157,7 @@ pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD
 pbIsSafeQD :: SimpleQDef
 pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
 
-{--}
+-- ** 3 second load equivalent resistance safety requirement
 
 lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD)

@@ -2,6 +2,7 @@
 module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
+import Drasil.Database (mkUid)
 import Language.Drasil hiding (space)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -51,14 +52,14 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
-oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
-twoD   = commonIdeaWithDict "twoD"   (cn "two-dimensional")   "2D" [mathematics, physics]
-threeD = commonIdeaWithDict "threeD" (cn "three-dimensional") "3D" [mathematics, physics]
+oneD   = commonIdea (mkUid "oneD")   (cn "one-dimensional")   "1D" [mathematics, physics]
+twoD   = commonIdea (mkUid "twoD")   (cn "two-dimensional")   "2D" [mathematics, physics]
+threeD = commonIdea (mkUid "threeD") (cn "three-dimensional") "3D" [mathematics, physics]
 
 acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)
-angular = dcc "angular" (cn' "angular")
-  "denoting physical properties or quantities measured with reference to or by means of an angle"
+angular = cncpt''' (mkUid "angular") (cn' "angular")
+  (S "denoting physical properties or quantities measured with reference to or by means of an angle")
 body = dccWDS "physicsBody" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
 chgInVelocity = dccWDS "chgInVelocity" (cn desc)
@@ -66,8 +67,8 @@ chgInVelocity = dccWDS "chgInVelocity" (cn desc)
   where desc = "change in velocity" -- TODO: This is a hack to avoid an infinite loop should we enable strict data.
 chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
   (S "The rate of change of a body's" +:+ phrase impulseV)
-collision = dcc "collision" (cn' "collision")
-  "an encounter between particles resulting in an exchange or transformation of energy"
+collision = cncpt''' (mkUid "collision") (cn' "collision")
+  (S "an encounter between particles resulting in an exchange or transformation of energy")
 cohesion = dccWDS "cohesion" (cn "cohesion")
   (S "an attractive" +:+ phrase force +:+ S "between adjacent particles that holds the matter together")
 compression = dccWDS "compression" (cn' "compression")
@@ -75,35 +76,35 @@ compression = dccWDS "compression" (cn' "compression")
 damping = dccWDS "damping" (pn' "damping")
   $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
   S "restricting or preventing its oscillations" +:+ fromSource dampingSource
-dampingCoeff = dcc "dampingCoeff" (cn' "damping coefficient")
- "Quantity that characterizes a second order system's oscillatory response"
+dampingCoeff = cncpt''' (mkUid "dampingCoeff") (cn' "damping coefficient")
+ (S "Quantity that characterizes a second order system's oscillatory response")
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
-distance = dcc "distance" (cn' "distance")
-  "the interval measured along a path connecting two locations"
-elasticity = dcc "elasticity" (cnIES "elasticity")
-  "the ratio of the relative velocities of two colliding objects after and before a collision"
-energy = dcc "energy" (cn "energy")
-  "power derived from the utilization of physical or chemical resources"
-fbd = dcc "FBD" (cn' "free body diagram")
-  ("a graphical illustration used to visualize the applied forces, movements, and resulting " ++
-   "reactions on a body in a steady state condition")
-force = dcc "force" (cn' "force")
-  "an interaction that tends to produce change in the motion of an object"
-frequency = dcc "frequency" (cn' "frequency")
-  "the number of occurrences of a repeating event per unit of time"
-friction = dcc "friction" (cn' "friction")
-  "the force resisting the relative motion of two surfaces"
-fOfGravity = dcc "fOfGravity" (cn "force of gravity")
-  "the force exerted by gravity on an object"
-gravity = dcc "gravity" (cn "gravity")
-  "the force that attracts one physical body with mass to another"
-gravitationalAccel = dcc "gravitationalAccel" (cn "gravitational acceleration")
-  "the approximate acceleration due to gravity on Earth at sea level"
-gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
-  "the empirical physical constant used to show the force between two objects caused by gravity"
-gravitationalMagnitude = dcc "gravitationalMagnitude" (cn "magnitude of gravitational acceleration")
-  "the magnitude of the approximate acceleration due to gravity on Earth at sea level"
+distance = cncpt''' (mkUid "distance") (cn' "distance")
+  (S "the interval measured along a path connecting two locations")
+elasticity = cncpt''' (mkUid "elasticity") (cnIES "elasticity")
+  (S "the ratio of the relative velocities of two colliding objects after and before a collision")
+energy = cncpt''' (mkUid "energy") (cn "energy")
+  (S "power derived from the utilization of physical or chemical resources")
+fbd = cncpt''' (mkUid "FBD") (cn' "free body diagram")
+  (S ("a graphical illustration used to visualize the applied forces, movements, and resulting " ++
+   "reactions on a body in a steady state condition"))
+force = cncpt''' (mkUid "force") (cn' "force")
+  (S "an interaction that tends to produce change in the motion of an object")
+frequency = cncpt''' (mkUid "frequency") (cn' "frequency")
+  (S "the number of occurrences of a repeating event per unit of time")
+friction = cncpt''' (mkUid "friction") (cn' "friction")
+  (S "the force resisting the relative motion of two surfaces")
+fOfGravity = cncpt''' (mkUid "fOfGravity") (cn "force of gravity")
+  (S "the force exerted by gravity on an object")
+gravity = cncpt''' (mkUid "gravity") (cn "gravity")
+  (S "the force that attracts one physical body with mass to another")
+gravitationalAccel = cncpt''' (mkUid "gravitationalAccel") (cn "gravitational acceleration")
+  (S "the approximate acceleration due to gravity on Earth at sea level")
+gravitationalConst = cncpt''' (mkUid "gravitationalConst") (cn "gravitational constant")
+  (S "the empirical physical constant used to show the force between two objects caused by gravity")
+gravitationalMagnitude = cncpt''' (mkUid "gravitationalMagnitude") (cn "magnitude of gravitational acceleration")
+  (S "the magnitude of the approximate acceleration due to gravity on Earth at sea level")
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")
@@ -111,17 +112,17 @@ horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")
 isotropy = dccWDS "isotropy" (cn "isotropy")
   (S "a condition where the" +:+ (phrase value `S.ofA` phrase property) `S.is`
    S "independent of the direction in which it is measured")
-joint = dcc "joint" (cn' "joint")
-  "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
+joint = cncpt''' (mkUid "joint") (cn' "joint")
+  (S "a connection between two rigid bodies which allows movement with one or more degrees of freedom")
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
   (S "measure" `S.the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
 kinematics = dccWDS "kinematics" (cn "kinematics")
   (S "branch" `S.of_` phrase mechanics +:+ S "that describes the motion" `S.of_`
     S "objects without reference to the causes of motion")
-linear = dcc "linear" (cn' "linear")
-  "arranged in or extending along a straight or nearly straight line"
-mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
-  "the energy that comes from motion and position"
+linear = cncpt''' (mkUid "linear") (cn' "linear")
+  (S "arranged in or extending along a straight or nearly straight line")
+mechEnergy = cncpt''' (mkUid "mechEnergy") (cn "mechanical energy")
+  (S "the energy that comes from motion and position")
 momentum = dccWDS "momentum" (cn "momentum")
   ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
   (phrase QPP.mass `S.and_` phrase velocity))
@@ -136,8 +137,8 @@ period = dccWDS "period" (cn' "period")
 pendulum = dccWDS "pendulum" (cn "pendulum")
  (S "a body suspended from a fixed support so that it swings freely back and forth under the influence"
        `S.of_` phrase gravity)
-position = dcc "position" (cn' "position")
-  "an object's location relative to a reference point"
+position = cncpt''' (mkUid "position") (cn' "position")
+  (S "an object's location relative to a reference point")
 positionVec = dccWDS "positionVec" (cn' "position vector")
    (S "a vector from the origin" `S.ofThe` phrase cartesian +:+ S "defined"
     `S.toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
@@ -145,42 +146,42 @@ potEnergy = dccWDS "potEnergy" (cn "potential energy")
   (S "measure" `S.the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
 pressure = dccWDS "pressure" (cn' "pressure")
   (S "a" +:+ phrase force +:+ S "exerted over an area")
-rectilinear = dcc "rectilinear" (cn "rectilinear")
-  "occurring in one dimension"
-rigidBody = dcc "rigidBody" (cnIES "rigid body")
-  "a solid body in which deformation is neglected"
-space = dcc "space" (cn' "space")
-  "a two-dimensional extent where objects and events have relative positions and directions"
+rectilinear = cncpt''' (mkUid "rectilinear") (cn "rectilinear")
+  (S "occurring in one dimension")
+rigidBody = cncpt''' (mkUid "rigidBody") (cnIES "rigid body")
+  (S "a solid body in which deformation is neglected")
+space = cncpt''' (mkUid "space") (cn' "space")
+  (S "a two-dimensional extent where objects and events have relative positions and directions")
 scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
   (S "magnitude" `S.the_ofThe` phrase acceleration +:+ S "vector")
 scalarPos = dccWDS "scalarPos" (cn' "scalar position")
   (S "magnitude" `S.the_ofThe` phrase position +:+ S "vector")
-shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++
+shm = cncpt''' (mkUid "SHM") (nounPhraseSP "simple harmonic motion") (S ("Periodic motion through an equilibrium position. " ++
                                                         "The motion is sinusoidal in time and demonstrates a" ++
-                                                        " single resonant frequency") -- source: Wikipedia
+                                                        " single resonant frequency")) -- source: Wikipedia
 speed = dccWDS "speed" (cn' "speed")
   (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
-stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient")
- "Quantity that characterizes a spring's stiffness"
+stiffCoeff = cncpt''' (mkUid "stiffnessCoeff") (cn' "stiffness coefficient")
+  (S "Quantity that characterizes a spring's stiffness")
 strain = dccWDS "strain" (cn' "strain")
   (S "a measure of deformation representing the" +:+ phrase displacement +:+
    S "between particles in the body relative to a reference length")
   --definition of strain used in SSP, can be made clearer
-stress = dcc "stress" (cn''' "stress")
-  "the ratio of an applied force to a cross-sectional area"
+stress = cncpt''' (mkUid "stress") (cn''' "stress")
+  (S "the ratio of an applied force to a cross-sectional area")
   --definition of stress used in SSP, can be made clearer
 tension = dccWDS "tension" (cn' "tension")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body away from its center")
-time = dcc "time" (cn' "time")
-  "the indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
-torque = dcc "torque" (cn' "torque")
-  "a twisting force that tends to cause rotation"
+time = cncpt''' (mkUid "time") (cn' "time")
+  (S "the indefinite continued progress of existence and events in the past, present, and future regarded as a whole")
+torque = cncpt''' (mkUid "torque") (cn' "torque")
+  (S "a twisting force that tends to cause rotation")
 velocity = dccWDS "velocity" (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
 verticalMotion = dccWDS "verticalMotion" (cn "vertical motion")
   (S " the movement of the object against the gravitational pull")
-weight = dcc "weight" (cn' "weight")
-  "the gravitational force acting on an object"
+weight = cncpt''' (mkUid "weight") (cn' "weight")
+  (S "the gravitational force acting on an object")
 
 -- Some variants of distance, speed, velocity, and scalar acceleration
 -- FIXME: Complete all variants?
@@ -219,32 +220,32 @@ yConstAccel = dccWDS "yConstAccel" (yComp `of_` constAccel) (S "The" +:+ NP (yCo
 
 --FIXME: COMBINATION HACK (for all below)
 --FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?
-angDisp = dcc "angularDisplacement" (combineNINI angular displacement)
-  "the angle through which an object moves on a circular path"
-angVelo = dcc "angularVelocity" (combineNINI angular velocity)
-  "the rate of change of angular position of a rotating body"
-angAccel = dcc "angularAcceleration" (combineNINI angular acceleration)
-  "the rate of change of angular velocity"
-constAccel = dcc "constantAcceleration" (cn "constant acceleration")
-  "a one-dimensional acceleration that is constant"
-linDisp = dcc "linearDisplacement" (combineNINI linear displacement)
-  "movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (combineNINI linear velocity)
-  "the speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (combineNINI linear acceleration)
-  "the rate of change of velocity without a change in direction"
+angDisp = cncpt''' (mkUid "angularDisplacement") (combineNINI angular displacement)
+  (S "the angle through which an object moves on a circular path")
+angVelo = cncpt''' (mkUid "angularVelocity") (combineNINI angular velocity)
+  (S "the rate of change of angular position of a rotating body")
+angAccel = cncpt''' (mkUid "angularAcceleration") (combineNINI angular acceleration)
+  (S "the rate of change of angular velocity")
+constAccel = cncpt''' (mkUid "constantAcceleration") (cn "constant acceleration")
+  (S "a one-dimensional acceleration that is constant")
+linDisp = cncpt''' (mkUid "linearDisplacement") (combineNINI linear displacement)
+  (S "movement in one direction along a single axis")
+linVelo = cncpt''' (mkUid "linearVelocity") (combineNINI linear velocity)
+  (S "the speed of a moving object, dependent on the perspective taken")
+linAccel = cncpt''' (mkUid "linearAcceleration") (combineNINI linear acceleration)
+  (S "the rate of change of velocity without a change in direction")
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.
 -- FIXME: plurals below?
-restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
-  "a measure of the restitution of a collision between two objects"
-momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")
-  "a quantity expressing a body's tendency to resist angular acceleration"
-angFreq = dcc "angularFrequency" (cn "angular frequency")
-  "the frequency of a periodic process, wave system etc, per unit time."
+restitutionCoef = cncpt''' (mkUid "restitutionCoef") (cn "coefficient of restitution")
+  (S "a measure of the restitution of a collision between two objects")
+momentOfInertia = cncpt''' (mkUid "momentOfInertia") (cn "moment of inertia")
+  (S "a quantity expressing a body's tendency to resist angular acceleration")
+angFreq = cncpt''' (mkUid "angularFrequency") (cn "angular frequency")
+  (S "the frequency of a periodic process, wave system etc, per unit time.")
 --FIXME: These two should be built off "impulse"
-impulseV = dcc "impulseV" (cn "impulse (vector)")
-  "a force acting briefly on a body and producing a finite change of momentum in a given direction"
-impulseS = dcc "impulseS" (cn "impulse (scalar)")
-  "a force acting briefly on a body and producing a finite change of momentum"
+impulseV = cncpt''' (mkUid "impulseV") (cn "impulse (vector)")
+  (S "a force acting briefly on a body and producing a finite change of momentum in a given direction")
+impulseS = cncpt''' (mkUid "impulseS") (cn "impulse (scalar)")
+  (S "a force acting briefly on a body and producing a finite change of momentum")

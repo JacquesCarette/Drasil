@@ -6,7 +6,6 @@
 function Projectile(varargin)
     filename = varargin{1};
     g = 9.8;
-    epsilon = 2.0e-2;
     [v_launch, theta, p_target] = get_input(filename);
     input_constraints(v_launch, theta, p_target);
     t_flight = func_t_flight(v_launch, theta, g);

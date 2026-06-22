@@ -93,8 +93,8 @@ fsConcept = dccWDS "FS" factorOfSafety
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
 
-waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
-  " saturated zone in the ground")
+waterTable = cncpt''' (mkUid "water table") (cn' "water table") (S ("The upper boundary of a" ++
+  " saturated zone in the ground"))
 
 --
 factor :: IdeaDict --FIXME: this is here becuase this phrase is
@@ -112,5 +112,7 @@ maxim = idea' (mkUid "maximum") (cn' "maximum")
 
 -- Some sentences want plurals (because of arrays) of things that are normally singular.
 xCoords, yCoords :: ConceptChunk
-xCoords = dcc "xCoords" (nounPhraseSent $ D.P lX D.:-: D.S "-coordinates") "the location of the points on the x-axis"
-yCoords = dcc "yCoords" (nounPhraseSent $ D.P lY D.:-: D.S "-coordinates") "the location of the points on the y-axis"
+xCoords = cncpt''' (mkUid "xCoords") (nounPhraseSent $ D.P lX D.:-: D.S "-coordinates")
+  (S "the location of the points on the x-axis")
+yCoords = cncpt''' (mkUid "yCoords") (nounPhraseSent $ D.P lY D.:-: D.S "-coordinates")
+  (S "the location of the points on the y-axis")

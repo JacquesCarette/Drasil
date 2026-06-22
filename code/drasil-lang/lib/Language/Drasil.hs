@@ -74,13 +74,13 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.NamedIdea
   , IdeaDict, idea, idea'
   -- Language.Drasil.Chunk.CommonIdea
-  , CI, commonIdeaWithDict, prependAbrv
+  , CI, commonIdea, prependAbrv
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , cncpt, cncpt', cncpt'', cncpt''', dcc, dccAWDS, dccA, dccWDS, cc', cw, cic
+  , cncpt, cncpt', cncpt'', cncpt''', dccAWDS, dccA, dccWDS, cw, cic
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
@@ -88,7 +88,8 @@ module Language.Drasil (
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
+  , DefinedQuantityDict, quant, quant', quantAU, quantNoUnit, quantNoUnit'
+  , dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk, uc, uc', ucStaged, ucStaged'
@@ -99,7 +100,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
+  , getCu, MayHaveUnit(getUnit)
 
   -- *** Constrained and Uncertain Values
   -- Language.Drasil.Constraint
@@ -301,4 +302,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit))
+  , getCu, MayHaveUnit(getUnit))

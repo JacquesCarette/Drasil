@@ -16,8 +16,7 @@ import Drasil.Shared.InterfaceCommon (Label, VSType, SValue, SVariable,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  Array(..), List(..), Set(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
@@ -64,7 +63,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
   paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
   valInt, valType, opDoc, opPrec, VarData, varName,
-  varType, varBind, varDoc, vard, CommonThunk, progD, mthdDoc, modDoc)
+  varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal,
@@ -73,7 +72,7 @@ import Drasil.Shared.LanguageRenderer (listSep')
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
-import Drasil.Shared.State (VS, FS, lensGStoFS, lensMStoVS, revFiles,
+import Drasil.Shared.State (FS, lensGStoFS, lensMStoVS, revFiles,
   setFileType, getMainDoc)
 
 import Control.Lens.Zoom (zoom)
@@ -160,10 +159,11 @@ instance TypeSym MatlabCode where
   string = mlTy String "string"
   infile = mlTy InFile "file"
   outfile = mlTy OutFile "file"
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = undefined
   setType = undefined
   arrayType = undefined
-  listInnerType = undefined
+  innerType = undefined
   funcType = undefined
   void = mlTy Void "void"
 
@@ -369,28 +369,6 @@ instance BinderElim MatlabCode where
 
 instance InternalBinderElim MatlabCode where
   binderElim = undefined
-
-instance ThunkSym MatlabCode where
-  type Thunk MatlabCode = CommonThunk VS
-
-instance ThunkAssign MatlabCode where
-  thunkAssign = undefined
-
-instance VectorType MatlabCode where
-  vecType = undefined
-
-instance VectorDecl MatlabCode where
-  vecDec = undefined
-  vecDecDef = undefined
-
-instance VectorThunk MatlabCode where
-  vecThunk = undefined
-
-instance VectorExpression MatlabCode where
-  vecScale = undefined
-  vecAdd = undefined
-  vecIndex = undefined
-  vecDot = undefined
 
 instance RenderFunction MatlabCode where
   funcFromData = undefined

@@ -26,8 +26,9 @@ import Drasil.Metadata (watermark)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, SharedProg, OOProg, ValueSym(..), Argument(..),
-  ValueExpression(..), OOValueExpression(..), FuncAppStatement(..),
-  OOFuncAppStatement(..), ClassSym(..), CodeType(..), getCodeType)
+  ValueExpression(..), OOValueExpression(..), SelfSym(..), VariableValue(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
+  objMethodCallMixedArgs, getCodeType)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -147,7 +148,7 @@ fApp m s t vl ns = do
   fCall (\cm args nargs ->
     if m /= cm then extFuncAppMixedArgs m s t args nargs else
       if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
-      else selfMethodCallMixedArgs s t args nargs) vl ns
+      else objMethodCallMixedArgs t (valueOf self) s args nargs) vl ns
 
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.

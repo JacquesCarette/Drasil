@@ -47,7 +47,5 @@ tests:
     main: Main.hs
     dependencies:
     - drasil-testing-kit
-    - hedgehog
     - tasty
-    - tasty-hedgehog
     - tasty-hunit

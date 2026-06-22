@@ -38,8 +38,8 @@ import Control.Lens ((^.))
 -- General Drasil
 import Drasil.Database (mkUid)
 import Language.Drasil (CI, NP, IdeaDict, cn, cn', cnIES, cnICES, cnUM,
-  commonIdeaWithDict, fterms, compoundPhrase, compoundPhraseP1, titleizeNP',
-  term, ConceptChunk, cncpt, cncpt', Sentence(EmptyS), dcc, idea')
+  commonIdea, fterms, compoundPhrase, compoundPhraseP1, titleizeNP',
+  term, ConceptChunk, cncpt, cncpt', Sentence(EmptyS), idea', cncpt''', Sentence(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
   (combineNINI, compoundNC, compoundNCPP, of_, of_PS, ofAPS, of_NINP, theGen
   , compoundNCPSPP, and_, and_TGen, and_PP)
@@ -214,7 +214,7 @@ traceyMandG         = idea' (mkUid "traceyMandG")        (and_TGen (\t -> titlei
 
 -- | Root SRS Domain.
 srsDom :: ConceptChunk
-srsDom = dcc "srsDom" (srs ^. term) "srs"
+srsDom = cncpt''' (mkUid "srsDom") (srs ^. term) (S "srs")
 
 assumpDom, chgProbDom, funcReqDom, goalStmtDom, likeChgDom,
   nonFuncReqDom, reqDom, unlikeChgDom :: ConceptChunk
@@ -231,22 +231,22 @@ unlikeChgDom  = cncpt  (mkUid "unlikeChgDom")  (unlikelyChg ^. term)            
 
 assumption, desSpec, goalStmt, learnObj, likelyChg, mg, mis, notebook, physSyst,
   refBy, refName, requirement, sec, srs, typUnc, unlikelyChg :: CI
-assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
-learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
-likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
-mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
-mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
-notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
-refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
-refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
-requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
-sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
-srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
-unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
+assumption  = commonIdea (mkUid "assumption")  (cn' "assumption")                                    "A"       [softEng]
+desSpec     = commonIdea (mkUid "desSpec")     (combineNINI design specification)                    "DS"      [softEng]
+goalStmt    = commonIdea (mkUid "goalStmt")    (combineNINI goal statement)                          "GS"      [softEng]
+learnObj    = commonIdea (mkUid "learnObj")    (cn' "learning objective")                            "LO"      [documentc]
+likelyChg   = commonIdea (mkUid "likelyChg")   (cn' "likely change")                                 "LC"      [softEng]
+physSyst    = commonIdea (mkUid "physSyst")    (combineNINI physicalSystem description)              "PS"      [softEng]
+mg          = commonIdea (mkUid "mg")          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
+mis         = commonIdea (mkUid "mis")         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
+notebook    = commonIdea (mkUid "notebook")    (cn' "notebook")                                      "NB"      [softEng]
+refBy       = commonIdea (mkUid "refBy")       (cn  "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdea (mkUid "refName")     (cn' "reference name")                                "Refname" [documentc]
+requirement = commonIdea (mkUid "requirement") (cn' "requirement")                                   "R"       [softEng]
+sec         = commonIdea (mkUid "section")     (cn' "section")                                       "Sec"     [documentc]
+srs         = commonIdea (mkUid "srs")         softReqSpec                                           "SRS"     [softEng]
+typUnc      = commonIdea (mkUid "typUnc")      (cn' "typical uncertainty")                           "Uncert." [softEng]
+unlikelyChg = commonIdea (mkUid "unlikelyChg") (cn' "unlikely change")                               "UC"      [softEng]
 
 scpOfTheProj :: (IdeaDict -> NPStruct) -> IdeaDict
 scpOfTheProj oper = idea' (mkUid "scpOfTheProj") (scope `of_NINP` theGen oper project) -- reasonable hack?

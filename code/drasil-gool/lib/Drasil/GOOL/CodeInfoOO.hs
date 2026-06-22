@@ -11,12 +11,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  VisibilitySym(..), BinderSym(..))
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
@@ -91,20 +89,21 @@ instance BlockSym CodeInfoOO where
   block = executeList
 
 instance TypeSym CodeInfoOO where
-  bool              = noInfoVSType
-  int               = noInfoVSType
-  float             = noInfoVSType
-  double            = noInfoVSType
-  char              = noInfoVSType
-  string            = noInfoVSType
-  infile            = noInfoVSType
-  outfile           = noInfoVSType
-  setType       _   = noInfoVSType
-  listType      _   = noInfoVSType
-  arrayType     _   = noInfoVSType
-  listInnerType _   = noInfoVSType
-  funcType      _ _ = noInfoVSType
-  void              = noInfoVSType
+  bool            = noInfoVSType
+  int             = noInfoVSType
+  float           = noInfoVSType
+  double          = noInfoVSType
+  char            = noInfoVSType
+  string          = noInfoVSType
+  infile          = noInfoVSType
+  outfile         = noInfoVSType
+  referenceType _ = noInfoVSType
+  setType       _ = noInfoVSType
+  listType      _ = noInfoVSType
+  arrayType     _ = noInfoVSType
+  innerType     _ = noInfoVSType
+  funcType    _ _ = noInfoVSType
+  void            = noInfoVSType
 
 instance OOTypeSym CodeInfoOO where
   obj             _ = noInfoVSType
@@ -224,7 +223,6 @@ instance ValueExpression CodeInfoOO where
   notNull = execute1
 
 instance OOValueExpression CodeInfoOO where
-  selfMethodCallMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
@@ -281,28 +279,6 @@ instance InternalList CodeInfoOO where
 
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
-
-instance ThunkSym CodeInfoOO where
-  type Thunk CodeInfoOO = ()
-
-instance ThunkAssign CodeInfoOO where
-  thunkAssign _ = zoom lensMStoVS . execute1
-
-instance VectorType CodeInfoOO where
-  vecType _ = noInfoVSType
-
-instance VectorDecl CodeInfoOO where
-  vecDec  _ _ _ = noInfo
-  vecDecDef _ _ = zoom lensMStoVS . executeList
-
-instance VectorThunk CodeInfoOO where
-  vecThunk _ = noInfo
-
-instance VectorExpression CodeInfoOO where
-  vecScale = execute2
-  vecAdd = execute2
-  vecIndex = execute2
-  vecDot = execute2
 
 instance StatementSym CodeInfoOO where
   type Statement CodeInfoOO = ()

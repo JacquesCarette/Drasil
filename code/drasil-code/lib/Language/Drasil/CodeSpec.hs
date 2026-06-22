@@ -25,7 +25,7 @@ import qualified Data.List.NonEmpty as NE
 import Drasil.FileHandling.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
-import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)
+import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
@@ -192,9 +192,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
 -- | Convert a 'Func' to an implementation-stage 'DefinedQuantityDict' representing the
 -- function.
 asVC :: Func -> DefinedQuantityDict
-asVC (FDef (FuncDef n d _ _ _ _)) = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
-asVC (FDef (CtorDef n d _ _ _))   = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
-asVC (FData (FuncData n d _))     = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
+asVC (FDef (FuncDef n d _ _ _ _)) = dqdNoUnit (cncpt''' (mkUid n) (nounPhraseSP n) (S d)) (Variable n) Real
+asVC (FDef (CtorDef n d _ _ _))   = dqdNoUnit (cncpt''' (mkUid n) (nounPhraseSP n) (S d)) (Variable n) Real
+asVC (FData (FuncData n d _))     = dqdNoUnit (cncpt''' (mkUid n) (nounPhraseSP n) (S d)) (Variable n) Real
 
 -- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID

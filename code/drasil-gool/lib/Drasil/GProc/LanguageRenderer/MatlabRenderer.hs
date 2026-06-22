@@ -72,9 +72,9 @@ import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
 import Drasil.Shared.LanguageRenderer (listSep')
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
-  onCodeList, onStateList, on2CodeValues, on2StateValues)
-import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, revFiles, setFileType,
-  getMainDoc)
+  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
+import Drasil.Shared.State (VS, FS, lensGStoFS, lensMStoVS, revFiles,
+  setFileType, getMainDoc)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
@@ -262,9 +262,9 @@ instance VariableValue MatlabCode where
   valueOf = G.valueOf
 
 instance CommandLineArgs MatlabCode where
-  -- Octave exposes command-line args via argv(); cell-indexed with {} (1-based).
+  -- Args come in through the entry function's varargin (1-based, cell-indexed).
   arg n = mlArg (litInt (n + 1))
-  argsList = mkStateVal (arrayType string) (text "argv()")
+  argsList = mkStateVal (arrayType string) (text "varargin")
   argExists = undefined
 
 instance NumericExpression MatlabCode where
@@ -566,11 +566,10 @@ instance MethodElim MatlabCode where
 
 instance ModuleSym MatlabCode where
   type Module MatlabCode = ModData
-  -- Single-file Octave layout: a leading `1;` marks the file as a script (so
-  -- the functions are script-local), the local functions come next, and the
-  -- main script body goes last. (Octave does not see local functions when the
-  -- script body precedes them.)
-  buildModule n _ = A.buildModule n (pure (text "1;")) getMainDoc
+  -- Function-file layout (runs in both MATLAB and Octave): the main code
+  -- becomes the entry function `function <name>(varargin) ... end` and comes
+  -- first, then the local functions. Command-line args map to varargin.
+  buildModule n _ = A.buildModule n (mlMainFunc n) (pure empty)
 
 instance RenderMod MatlabCode where
   modFromData n = A.modFromData n (toCode . md n)
@@ -638,11 +637,21 @@ mlPrintFunc = mkStateVal void (text "fprintf")
 
 -- | Gets a command-line argument: argv(){n}.
 --   (Octave keeps the args in a cell, so we index with {}.)
+-- | Wraps the main body as the entry function: @function <name>(varargin) ...
+--   end@. Empty if there is no main body.
+mlMainFunc :: Label -> FS Doc
+mlMainFunc n = do
+  b <- getMainDoc
+  pure $ emptyIfEmpty b $ vcat
+    [text "function" <+> text n <> parens (text "varargin"),
+     indent b,
+     text "end"]
+
 mlArg :: SValue MatlabCode -> SValue MatlabCode
 mlArg n' = do
   n <- n'
   s <- string
-  mkVal s (text "argv()" <> braces (RC.value n))
+  mkVal s (text "varargin" <> braces (RC.value n))
 
 -- | Reads one line from a file as text: fgetl(f).
 mlReadLine :: SValue MatlabCode -> SValue MatlabCode

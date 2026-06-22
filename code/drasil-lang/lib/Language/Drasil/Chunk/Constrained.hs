@@ -10,8 +10,7 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..), mkUid)
 
-import Language.Drasil.Chunk.Unital (uc')
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr, quantAU, quantNoUnit)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr, quant, quantAU, quantNoUnit)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
@@ -90,7 +89,7 @@ constrainedWithRationale q cs rv r = ConstrConcept (dqdWr q) cs (Just rv) (Just 
 cuc' :: String -> NP -> String -> Symbol -> UnitDefn
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (dqdWr (uc' nam trm (S desc) sym space un)) cs (Just rv) Nothing
+  ConstrConcept (quant (mkUid nam) trm (S desc) sym space un) cs (Just rv) Nothing
 
 -- | Similar to cuc', but does not include a unit.
 cucNoUnit' :: String -> NP -> String -> Symbol

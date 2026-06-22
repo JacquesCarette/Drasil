@@ -105,7 +105,7 @@ tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent 
   (variable "TNT") Real)
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
-standOffDist = uq (constrained' (uc stdOffDist (variable "SD") Real metre)
+standOffDist = uq (constrained' (dqd stdOffDist (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -153,12 +153,12 @@ specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
   sdMin :: ConstQDef
 
-dimMax     = mkQuantDef (uc' "dimMax"
+dimMax     = mkQuantDef (quant (mkUid "dimMax")
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
   (S "the maximum value for one of the dimensions of the glass plate")
   (subMax lD) Real metre) (exactDbl 5)
 
-dimMin     = mkQuantDef (uc' "dimMin"
+dimMin     = mkQuantDef (quant (mkUid "dimMin")
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
   (S "the minimum value for one of the dimensions of the glass plate")
   (subMin lD) Real metre) (dbl 0.1)
@@ -168,22 +168,22 @@ arMax     = mkQuantDef (quantNoUnit (mkUid "arMax")
   (S "the maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
-cWeightMax = mkQuantDef (uc' "cWeightMax"
+cWeightMax = mkQuantDef (quant (mkUid "cWeightMax")
   (nounPhraseSP "maximum permissible input charge weight")
   (S "the maximum permissible input charge weight")
   (subMax (eqSymb charWeight)) Real kilogram) (exactDbl 910)
 
-cWeightMin = mkQuantDef (uc' "cWeightMin"
+cWeightMin = mkQuantDef (quant (mkUid "cWeightMin")
   (nounPhraseSP "minimum permissible input charge weight")
   (S "the minimum permissible input charge weight")
   (subMin (eqSymb charWeight)) Real kilogram) (dbl 4.5)
 
-sdMax     = mkQuantDef (uc' "sdMax"
+sdMax     = mkQuantDef (quant (mkUid "sdMax")
   (nounPhraseSP "maximum stand off distance permissible for input")
   (S "the maximum stand off distance permissible for input")
   (subMax (eqSymb standOffDist)) Real metre) (exactDbl 130)
 
-sdMin     = mkQuantDef (uc' "sdMin"
+sdMin     = mkQuantDef (quant (mkUid "sdMin")
   (nounPhraseSP "minimum stand off distance permissible for input")
   (S "the minimum stand off distance permissible for input")
   (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
@@ -198,52 +198,52 @@ stressDistFacMax = mkQuantDef (quantNoUnit (mkUid "stressDistFacMax")
   (S "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 
-unitalSymbols :: [UnitalChunk]
+unitalSymbols :: [DefinedQuantityDict]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
   sflawParamK, sflawParamM, loadDur, minThick]
 
-sdx, sdy, sdz :: UnitalChunk
+sdx, sdy, sdz :: DefinedQuantityDict
 
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
-  sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
+  sflawParamM, sflawParamK, loadDur, modElas :: DefinedQuantityDict
 
-demand      = uc demandq lQ Real pascal --correct Space used?
+demand      = dqd demandq lQ Real pascal --correct Space used?
 
-tmDemand    = uc load (variable "Load") Real pascal --correct Space used?
+tmDemand    = dqd load (variable "Load") Real pascal --correct Space used?
 
-lRe         = uc loadResis (variable "LR") Real pascal --correct Space used?
+lRe         = dqd loadResis (variable "LR") Real pascal --correct Space used?
 
-tmLRe       = uc capacity (variable "capacity") Real pascal --correct Space used?
+tmLRe       = dqd capacity (variable "capacity") Real pascal --correct Space used?
 
-nonFactorL  = uc nonFactoredL (variable "NFL") Real pascal --correct Space used?
+nonFactorL  = dqd nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
-eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
+eqTNTWeight = dqd eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
 
-modElas     = uc modE cE Real pascal
+modElas     = dqd modE cE Real pascal
 
-minThick    = uc' "minThick" (nounPhraseSP "minimum thickness")
+minThick    = quant (mkUid "minThick") (nounPhraseSP "minimum thickness")
   (S "minimum thickness of the glass plate") lH Real metre
 
-sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
+sflawParamK = quant (mkUid "sflawParamK") (nounPhraseSP "surface flaw parameter") --parameterize?
   (S ("surface flaw parameter related to the coefficient of " ++
     "variation of the glass strength data")) lK Real sFlawPU
 
-sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
+sflawParamM = quant (mkUid "sflawParamM") (nounPhraseSP "surface flaw parameter") --parameterize?
   (S "surface flaw parameter related to the mean of the glass strength data")
   lM Real sFlawPU
 
-loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
+loadDur     = quant (mkUid "loadDur")    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = uc' "sdx" (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
+sdx         = quant (mkUid "sdx") (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
   (S "the x-component of the stand off distance") (subX (eqSymb standOffDist)) Real metre
 
-sdy         = uc' "sdy" (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
+sdy         = quant (mkUid "sdy") (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
   (S "the y-component of the stand off distance") (subY (eqSymb standOffDist)) Real metre
 
-sdz         = uc' "sdz" (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
+sdz         = quant (mkUid "sdz") (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
   (S "the x-component of the stand off distance") (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}
@@ -317,7 +317,7 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVector :: NE.NonEmpty UnitalChunk
+sdVector :: NE.NonEmpty DefinedQuantityDict
 sdVector = sdx :| [sdy, sdz]
 
 --

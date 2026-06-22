@@ -101,11 +101,11 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 --FIXME: add (x,y) when we can index or make related unitals
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
-slopeDist = uq (constrained' (uc' "x_slope,i" ((xCoords ^. term) `NP.of_` the slope)
+slopeDist = uq (constrained' (quant (mkUid "x_slope,i") ((xCoords ^. term) `NP.of_` the slope)
   (plural xCoord `S.of_` S "points on the soil slope")
   (sub (vec lX) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
 
-slopeHght = uq (constrained' (uc' "y_slope,i" ((yCoords ^. term) `NP.of_` the slope)
+slopeHght = uq (constrained' (quant (mkUid "y_slope,i") ((yCoords ^. term) `NP.of_` the slope)
   (plural yCoord `S.of_` S "points on the soil slope")
   (sub (vec lY) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
 
@@ -117,29 +117,29 @@ waterHght = uqc "y_wt,i" ((yCoords ^. term) `NP.of_` the waterTable)
   "heights of the water table"
   (sub (vec lY) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
 
-xMaxExtSlip = uq (constrained' (uc' "x_slip^maxExt" (compoundPhrase (cn "maximum exit") (xCoord ^. term))
+xMaxExtSlip = uq (constrained' (quant (mkUid "x_slip^maxExt") (compoundPhrase (cn "maximum exit") (xCoord ^. term))
   (S "the maximum potential" +:+ phrase xCoord `S.for` S "the exit point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMaxExt) Real metre) [] (exactDbl 100)) defaultUncrt
 
-xMaxEtrSlip = uq (constrained' (uc' "x_slip^maxEtr"
+xMaxEtrSlip = uq (constrained' (quant (mkUid "x_slip^maxEtr")
   (compoundPhrase (cn "maximum entry") (xCoord ^. term))
   (S "the maximum potential" +:+ phrase xCoord `S.for` S "the entry point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMaxEtr) Real metre) [] (exactDbl 20)) defaultUncrt
 
-xMinExtSlip = uq (constrained' (uc' "x_slip^minExt"
+xMinExtSlip = uq (constrained' (quant (mkUid "x_slip^minExt")
   (compoundPhrase (cn "minimum exit") (xCoord ^. term))
   (S "the minimum potential" +:+ phrase xCoord `S.for` S "the exit point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMinExt) Real metre) [] (exactDbl 50)) defaultUncrt
 
-xMinEtrSlip = uq (constrained' (uc' "x_slip^minEtr" (compoundPhrase (cn "minimum entry") (xCoord ^. term))
+xMinEtrSlip = uq (constrained' (quant (mkUid "x_slip^minEtr") (compoundPhrase (cn "minimum entry") (xCoord ^. term))
   (S "the minimum potential" +:+ phrase xCoord `S.for` S "the entry point" `S.ofA` S "slip surface")
   (sup (sub lX lSlip) lMinEtr) Real metre) [] (exactDbl 0)) defaultUncrt
 
-yMaxSlip = uq (constrained' (uc' "y_slip^max" (compoundNC maxim yCoord ^. term)
+yMaxSlip = uq (constrained' (quant (mkUid "y_slip^max") (compoundNC maxim yCoord ^. term)
   (S "the maximum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
   (supMax (sub lY lSlip)) Real metre) [] (exactDbl 30)) defaultUncrt
 
-yMinSlip = uq (constrained' (uc' "y_slip^min" (compoundNC minim yCoord ^. term)
+yMinSlip = uq (constrained' (quant (mkUid "y_slip^min") (compoundNC minim yCoord ^. term)
   (S "the minimum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
   (supMin (sub lY lSlip)) Real metre) [] (exactDbl 0)) defaultUncrt
 
@@ -185,7 +185,7 @@ fsMin = quantNoUnit (mkUid "fsMin") (cn "minimum factor of safety")
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
-coords = constrainedNRV' (uc' "(x,y)" (cn "cartesian position coordinates")
+coords = constrainedNRV' (quant (mkUid "(x,y)") (cn "cartesian position coordinates")
   (P lY +:+ S "is considered parallel to the direction of the force of" +:+
    phrase gravity `S.and_` P lX +:+ S "is considered perpendicular to" +:+ P lY)
   lCoords Real metre) []
@@ -194,7 +194,7 @@ coords = constrainedNRV' (uc' "(x,y)" (cn "cartesian position coordinates")
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-units :: [UnitalChunk]
+units :: [DefinedQuantityDict]
 units = [accel, genericMass, genericF, genericA, genericM, genericV,
   genericW, genericSpWght, gravAccel, dens, genericH, genericP, genericR,
   genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords,
@@ -216,49 +216,49 @@ accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, fx, fy, fn, ft,
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
   intNormForce, shrStress, totNormStress, tangStress, effectiveStress,
-  effNormStress, dryVol, satVol, rotForce, momntArm, posVec :: UnitalChunk
+  effNormStress, dryVol, satVol, rotForce, momntArm, posVec :: DefinedQuantityDict
 
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
 
-intNormForce = uc' "G_i" (cn "interslice normal forces")
+intNormForce = quant (mkUid "G_i") (cn "interslice normal forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+
    S "exerted between each pair" `S.of_` S "adjacent slices")
   (vec cG) (Vect Real) forcePerMeterU
 
-slipHght = uc' "y_slip,i" (yCoords `ofThe` slpSrf)
+slipHght = quant (mkUid "y_slip,i") (yCoords `ofThe` slpSrf)
   (S "heights of the slip surface")
   (sub (vec lY) lSlip) (Vect Real) metre
 
-slipDist = uc' "x_slip,i" (xCoords `ofThe` slpSrf)
+slipDist = quant (mkUid "x_slip,i") (xCoords `ofThe` slpSrf)
   (plural xCoord `S.of_` S "points on the slip surface")
   (sub (vec lX) lSlip) (Vect Real) metre
 
-xi = uc' "x_i" (xCoord ^. term)
+xi = quant (mkUid "x_i") (xCoord ^. term)
   (D.toSent $ phraseNP (NP.the (xCoord `inThe` cartesian))) lX Real metre
 
-yi = uc' "y_i" (yCoord ^. term)
+yi = quant (mkUid "y_i") (yCoord ^. term)
   (D.toSent $ phraseNP (NP.the (yCoord `inThe` cartesian))) lY Real metre
 
-zcoord = uc' "z" (zCoord ^. term)
+zcoord = quant (mkUid "z") (zCoord ^. term)
   (D.toSent (phraseNP (NP.the (zCoord `inThe` cartesian)))) lZ Real metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
-critCoords = uc' "(xcs,ycs)" (cn "critical slip surface coordinates")
+critCoords = quant (mkUid "(xcs,ycs)") (cn "critical slip surface coordinates")
   (S "the set" `S.of_` D.toSent (pluralNP (xCoord `and_PP` yCoord)) +:+
    S "that describe the vertices" `S.ofThe` S "critical slip surface")
   (Concat [sub (vec lX) lCSlip, label ",", sub (vec lY) lCSlip]) Real metre
 
-mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
+mobilizedShear = quant (mkUid "mobilizedShear") (cn' "mobilized shear force")
   (S "the shear force" `S.inThe` S "direction" `S.of_` S "potential motion") cS Real newton
 
-resistiveShear = uc' "resistiveShear" (cn' "resistive shear force")
+resistiveShear = quant (mkUid "resistiveShear") (cn' "resistive shear force")
   (S "the Mohr Coulomb frictional force that describes the limit" `S.of_`
     phrase mobilizedShear +:+ S "that can be withstood before failure")
   cP Real newton
 
-mobShrI = uc' "mobShrFs" (cn' "mobilized shear force")
+mobShrI = quant (mkUid "mobShrFs") (cn' "mobilized shear force")
   (D.toSent (phraseNP (the mobilizedShear)) +:+ S "per meter" `S.inThe` phrase zDir +:+
    S "for each slice")
   (vec cS) Real forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
@@ -266,7 +266,7 @@ mobShrI = uc' "mobShrFs" (cn' "mobilized shear force")
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
 
-shrResI = uc' "shrRes" (cn "resistive shear forces")
+shrResI = quant (mkUid "shrRes") (cn "resistive shear forces")
   (S "the Mohr Coulomb frictional forces per meter" `S.inThe` phrase zDir +:+
    S "for each slice that describe the limit" `S.of_` phrase mobilizedShear +:+
    S "the slice can withstand before failure")
@@ -275,165 +275,165 @@ shrResI = uc' "shrRes" (cn "resistive shear forces")
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
 
-shearFNoIntsl = uc' "T_i" (cn ("mobilized shear forces " ++ wiif))
+shearFNoIntsl = quant (mkUid "T_i") (cn ("mobilized shear forces " ++ wiif))
   (D.toSent (pluralNP (the mobilizedShear)) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir `S.for` S "each slice")
   (vec cT) (Vect Real) forcePerMeterU
 
-shearRNoIntsl = uc' "R_i" (cn ("resistive shear forces " ++ wiif))
+shearRNoIntsl = quant (mkUid "R_i") (cn ("resistive shear forces " ++ wiif))
   (D.toSent (pluralNP (the resistiveShear)) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir `S.for` S "each slice")
   (vec cR) (Vect Real) forcePerMeterU
 
-slcWght = uc' "W_i" (cn "weights")
+slcWght = quant (mkUid "W_i") (cn "weights")
   (S "the downward force per meter" `S.inThe` phrase zDir +:+
    S "on each slice caused by" +:+ phrase gravity)
   (vec cW) (Vect Real) forcePerMeterU
 
-watrForce = uc' "H_i" (cn "interslice normal water forces")
+watrForce = quant (mkUid "H_i") (cn "interslice normal water forces")
   (S "the normal water forces per meter" `S.inThe` phrase zDir +:+
    S "exerted" `S.inThe` phrase xDir +:+ S "between each pair" `S.of_` S "adjacent slices")
   (vec cH) (Vect Real) forcePerMeterU
 
-intShrForce = uc' "X_i" (cn "interslice shear forces")
+intShrForce = quant (mkUid "X_i") (cn "interslice shear forces")
   (S "the shear forces per meter" `S.inThe` phrase zDir +:+ S "exerted between adjacent slices")
   (vec cX) (Vect Real)forcePerMeterU
 
-baseHydroForce = uc' "U_b,i" (cn "base hydrostatic forces")
+baseHydroForce = quant (mkUid "U_b,i") (cn "base hydrostatic forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+ S "from water pressure within each slice")
   (sub (vec cU) lBase) (Vect Real) forcePerMeterU
 
-surfHydroForce = uc' "U_t,i" (cn "surface hydrostatic forces")
+surfHydroForce = quant (mkUid "U_t,i") (cn "surface hydrostatic forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+ S "from water pressure acting" +:+
    S "into each slice from standing water" `S.onThe` S "slope surface")
   (sub (vec cU) lSurface) (Vect Real) forcePerMeterU
 
-totNrmForce = uc' "N_i" (cn "normal forces")
+totNrmForce = quant (mkUid "N_i") (cn "normal forces")
   (S "the total reactive forces per meter" `S.inThe` phrase zDir +:+
    S "for each slice" `S.ofA` S "soil surface subject to a body resting on it")
   (vec cN) (Vect Real) forcePerMeterU
 
-nrmFSubWat = uc' "N'_i" (cn "effective normal forces")
+nrmFSubWat = quant (mkUid "N'_i") (cn "effective normal forces")
   (S "the forces per meter" `S.inThe` phrase zDir `S.for` S "each slice" `S.ofA` S "soil surface" `sC`
    S "subtracting pore water reactive force from total reactive force")
   (vec (prime $ variable "N")) (Vect Real) forcePerMeterU
 
-surfLoad = uc' "Q_i" (cn "external forces")
+surfLoad = quant (mkUid "Q_i") (cn "external forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+
    S "acting into the surface from the midpoint" `S.of_` S "each slice")
   (vec cQ) (Vect Real) forcePerMeterU
 
-baseAngle = uc' "alpha_i" (cn "base angles")
+baseAngle = quant (mkUid "alpha_i") (cn "base angles")
   (S "the angles between the base" `S.of_` S "each slice and the horizontal")
   (vec lAlpha) (Vect Real) degree
 
-surfAngle = uc' "beta_i" (cn "surface angles")
+surfAngle = quant (mkUid "beta_i") (cn "surface angles")
   (S "the angles between the surface" `S.of_` S "each slice and the horizontal")
   (vec lBeta) (Vect Real) degree
 
-impLoadAngle = uc' "omega_i" (cn "imposed load angles")
+impLoadAngle = quant (mkUid "omega_i") (cn "imposed load angles")
   (S "the angles between the external force acting into the surface" `S.of_` S "each slice and the vertical")
   (vec lOmega) (Vect Real) degree
 
-baseWthX = uc' "b_i" (cn "base width of slices")
+baseWthX = quant (mkUid "b_i") (cn "base width of slices")
   (S "the width" `S.of_` S "each slice" `S.inThe` phrase xDir)
   (vec lB) (Vect Real) metre
 
-baseLngth = uc' "l_b,i" (cn "total base lengths of slices")
+baseLngth = quant (mkUid "l_b,i") (cn "total base lengths of slices")
   (S "the lengths of each slice in the direction parallel to the slope of the base")
   (sub (vec cL) lB) (Vect Real) metre
 
-surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
+surfLngth = quant (mkUid "l_s,i") (cn "surface lengths of slices")
   (S "the lengths" `S.of_` S "each slice" `S.inThe` S "direction parallel" `S.toThe` S "slope" `S.ofThe` S "surface")
   (sub (vec cL) lS) (Vect Real) metre
 
-midpntHght = uc' "h_i"
+midpntHght = quant (mkUid "h_i")
   (compoundPhrase (yDir ^. term) (cn "heights of slices"))
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base" `S.of_` S "each slice" `S.toThe`
    S "slope surface" `sC` S "at the" +:+ phrase xDir +:+ S "midpoint" `S.ofThe` S "slice")
   (vec lH) (Vect Real) metre
 
-porePressure = uc' "u" (cn "pore pressure")
+porePressure = quant (mkUid "u") (cn "pore pressure")
   (S "the pressure that comes from water within the soil") lU Real pascal
 
-shrStress = uc' "tau_i" (cn "shear strength")
+shrStress = quant (mkUid "tau_i") (cn "shear strength")
   (S "the strength" `S.ofA` S "material against shear failure") (sup lTau (label "f")) Real pascal
 
-sliceHght = uc' "h_z,i" (cn "heights of interslice normal forces")
+sliceHght = quant (mkUid "h_z,i") (cn "heights of interslice normal forces")
   (D.toSent (pluralNP (height `inThePS` yDir)) `S.the_ofThe` S "interslice normal forces on each slice")
   (subZ (vec lH)) Real metre
 
-sliceHghtW = uc' "h_z,w,i" (cn "heights of the water table")
+sliceHghtW = quant (mkUid "h_z,w,i") (cn "heights of the water table")
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base" `S.of_` S "each slice" `S.toThe` S "water table")
   (sub (vec lH) lHeights) Real metre
 
-nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
+nrmShearNum = quant (mkUid "C_num,i") (cn "proportionality constant numerator")
   (S $ "values for each slice that sum together to form the numerator of the " ++
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lNum) (Vect Real) newton
 
-nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
+nrmShearDen = quant (mkUid "C_den,i") (cn "proportionality constant denominator")
   (S $ "values for each slice that sum together to form the denominator of the " ++
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lDen) (Vect Real) newton
 
-fx = uc' "fx" (xCoord `ofThe` force)
+fx = quant (mkUid "fx") (xCoord `ofThe` force)
   (S "the force acting" `S.inThe` phrase xDir) (subX cF) Real newton
 
-fy = uc' "fy" (yCoord `ofThe` force)
+fy = quant (mkUid "fy") (yCoord `ofThe` force)
   (S "the force acting" `S.inThe` phrase yDir) (subY cF) Real newton
 
-fn = uc' "F_n" (cn "total normal force") (S "component" `S.ofA` S "force" `S.inThe` S "normal direction")
+fn = quant (mkUid "F_n") (cn "total normal force") (S "component" `S.ofA` S "force" `S.inThe` S "normal direction")
   (sub cF (label "n")) Real newton
 
-ft = uc' "F_t" (cn "tangential force") (S "component" `S.ofA` S "force" `S.inThe` S "tangential direction")
+ft = quant (mkUid "F_t") (cn "tangential force") (S "component" `S.ofA` S "force" `S.inThe` S "tangential direction")
   (sub cF (label "t")) Real newton
 
-nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces")
+nrmForceSum = quant (mkUid "F_x^G") (cn "sums of the interslice normal forces")
   (S "the sums" `S.ofThe` S "normal forces acting on each pair" `S.of_` S "adjacent interslice boundaries")
   (sup (subX (vec cF)) lNorm) Real newton
 
-watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces")
+watForceSum = quant (mkUid "F_x^H") (cn "sums of the interslice normal water forces")
   (S "the sums" `S.ofThe` S "normal water forces acting on each pair" `S.of_` S "adjacent interslice boundaries")
   (sup (subX (vec cF)) lNormWat) Real newton
 
-sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices")
+sliceHghtRight = quant (mkUid "h^R") (cn "heights of the right side of slices")
   (S "the heights" `S.ofThe` S "right side" `S.of_` S "each slice" `sC` S "assuming slice surfaces have negative slope")
   (sup (vec lH) lRight) (Vect Real) metre
 
-sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices")
+sliceHghtLeft = quant (mkUid "h^L") (cn "heights of the left side of slices")
   (S "the heights" `S.ofThe` S "left side" `S.of_` S "each slice" `sC` S "assuming slice surfaces have negative slope")
   (sup (vec lH) lLeft) (Vect Real) metre
 
-totNormStress = uc' "sigma" (cn' "total normal stress")
+totNormStress = quant (mkUid "sigma") (cn' "total normal stress")
   (S "the total force per area acting" `S.onThe` S "soil mass") lSigma Real pascal
 
-tangStress = uc' "tau" (cn' "tangential stress")
+tangStress = quant (mkUid "tau") (cn' "tangential stress")
   (S "the shear force per unit area") lTau Real pascal
 
-effectiveStress = uc' "sigma'" (cn' "effective stress")
+effectiveStress = quant (mkUid "sigma'") (cn' "effective stress")
   (S $ "the stress in a soil mass that is effective in causing volume changes " ++
    "and mobilizes the shear strength arising from friction; represents the " ++
    "average stress carried by the soil skeleton")
   (prime lSigma) Real pascal
 
-effNormStress = uc' "sigmaN'" (nounPhraseSP "effective normal stress")
+effNormStress = quant (mkUid "sigmaN'") (nounPhraseSP "effective normal stress")
   (S $ "the normal stress in a soil mass that is effective in causing volume " ++
    "changes; represents the average normal stress carried by the soil skeleton")
   (prime $ sub lSigma cN) Real pascal
 
-dryVol = uc' "V_dry" (cn "volumes of dry soil")
+dryVol = quant (mkUid "V_dry") (cn "volumes of dry soil")
   (S "the amount" `S.of_` S "space occupied by dry soil" `S.for` S "each slice")
   (sub (vec cV) lDry) Real m_3
 
-satVol = uc' "V_sat" (cn "volumes of saturated soil")
+satVol = quant (mkUid "V_sat") (cn "volumes of saturated soil")
   (S "the amount" `S.of_` S "space occupied by saturated soil" `S.for` S "each slice")
   (sub (vec cV) lSat) Real m_3
 
-rotForce = uc' "F_rot" (cn "force causing rotation")
+rotForce = quant (mkUid "F_rot") (cn "force causing rotation")
   (S "a force" `S.inThe` S "direction" `S.of_` S "rotation") (sub cF lRot) Real newton
 
-momntArm = uc' "r" (cn' "length of the moment arm")
+momntArm = quant (mkUid "r") (cn' "length of the moment arm")
   (S "the distance between a force causing rotation and the axis of rotation")
   lR Real metre
 

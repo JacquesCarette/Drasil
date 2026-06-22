@@ -11,13 +11,13 @@ import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
 -- * With Units
 
-elastMod, mobShear, nrmStrss, shearRes, stffness :: UnitalChunk
+elastMod, mobShear, nrmStrss, shearRes, stffness :: DefinedQuantityDict
 
-elastMod = uc CSM.elastMod cE     Real pascal
-mobShear = uc CSM.mobShear cS     Real newton
-shearRes = uc CSM.shearRes cP     Real newton
-stffness = uc CSM.stffness cK     Real stiffnessU
-nrmStrss = uc CSM.nrmStrss lSigma Real pascal
+elastMod = dqd CSM.elastMod cE     Real pascal
+mobShear = dqd CSM.mobShear cS     Real newton
+shearRes = dqd CSM.shearRes cP     Real newton
+stffness = dqd CSM.stffness cK     Real stiffnessU
+nrmStrss = dqd CSM.nrmStrss lSigma Real pascal
 
 -- * Without Units
 

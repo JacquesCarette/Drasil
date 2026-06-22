@@ -24,7 +24,7 @@ iMods :: [InstanceModel]
 iMods = [accelIM_X1, accelIM_Y1, accelIM_X2, accelIM_Y2]
 
 -- | Common notes for all IMs describing the derivation chain and assumptions.
-imNotes :: UnitalChunk -> [Sentence]
+imNotes :: DefinedQuantityDict -> [Sentence]
 imNotes acc = [foldlSent [ch acc `S.is`
     S "calculated by solving the", short ode,
     S "together with the initial", plural condition +:+. S "",

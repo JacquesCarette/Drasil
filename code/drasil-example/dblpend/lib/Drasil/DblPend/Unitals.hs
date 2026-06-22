@@ -11,6 +11,7 @@ module Drasil.DblPend.Unitals (
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import qualified Language.Drasil.Development as D (toSent)
 import Language.Drasil.Display (Symbol(..))
@@ -42,7 +43,7 @@ outputs = NE.singleton $ dqdWr pendDisAngle
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]
 
-unitalChunks :: [UnitalChunk]
+unitalChunks :: [DefinedQuantityDict]
 unitalChunks = [len,
   lenRod_1, lenRod_2, massObj_1, massObj_2,
   pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2,
@@ -55,101 +56,101 @@ lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
   yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2, tension_1, tension_2 :: UnitalChunk
+  angularAccel_1, angularAccel_2, tension_1, tension_2 :: DefinedQuantityDict
 
-lenRod_1 = uc' "l_1" (len `ofThe` firstRod)
+lenRod_1 = quant (mkUid "l_1") (len `ofThe` firstRod)
         (D.toSent $ phraseNP (len `the_ofThe` firstRod)) -- Fix me, can have more information
         (sub cL label1) Real metre
 
-lenRod_2 = uc' "l_2" (len `ofThe` secondRod)
+lenRod_2 = quant (mkUid "l_2") (len `ofThe` secondRod)
         (D.toSent $ phraseNP (len `the_ofThe` secondRod))
         (sub cL label2) Real metre
 
-massObj_1 = uc' "m_1" (mass `ofThe` firstObject)
+massObj_1 = quant (mkUid "m_1") (mass `ofThe` firstObject)
         (D.toSent $ phraseNP (mass `the_ofThe` firstObject))
         (sub lM label1) Real kilogram
 
-massObj_2 = uc' "m_2" (mass `ofThe` secondObject)
+massObj_2 = quant (mkUid "m_2") (mass `ofThe` secondObject)
         (D.toSent $ phraseNP (mass `the_ofThe` secondObject))
         (sub lM label2) Real kilogram
 
-xPos_1 = uc' "p_x1" (horizontalPos `ofThe` firstObject)
+xPos_1 = quant (mkUid "p_x1") (horizontalPos `ofThe` firstObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
         (sub lP (Concat [labelx, label1])) Real metre
 
-xPos_2 = uc' "p_x2" (horizontalPos `ofThe` secondObject)
+xPos_2 = quant (mkUid "p_x2") (horizontalPos `ofThe` secondObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
         (sub lP (Concat [labelx, label2])) Real metre
 
-yPos_1 = uc' "p_y1" (verticalPos `ofThe` firstObject)
+yPos_1 = quant (mkUid "p_y1") (verticalPos `ofThe` firstObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
         (sub lP (Concat [labely, label1])) Real metre
 
-yPos_2 = uc' "p_y2" (verticalPos `ofThe` secondObject)
+yPos_2 = quant (mkUid "p_y2") (verticalPos `ofThe` secondObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
         (sub lP (Concat [labely, label2])) Real metre
 
-xVel_1 = uc' "v_x1" (horizontalVel `ofThe` firstObject)
+xVel_1 = quant (mkUid "v_x1") (horizontalVel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label1])) Real velU
 
-xVel_2 = uc' "v_x2" (horizontalVel `ofThe` secondObject)
+xVel_2 = quant (mkUid "v_x2") (horizontalVel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label2])) Real velU
 
-yVel_1 = uc' "v_y1" (verticalVel `ofThe` firstObject)
+yVel_1 = quant (mkUid "v_y1") (verticalVel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label1])) Real velU
 
-yVel_2 = uc' "v_y2" (verticalVel `ofThe` secondObject)
+yVel_2 = quant (mkUid "v_y2") (verticalVel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label2])) Real velU
 
-xAccel_1 = uc' "a_x1" (horizontalAccel `ofThe` firstObject)
+xAccel_1 = quant (mkUid "a_x1") (horizontalAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
         (sub lA (Concat [labelx, label1])) Real accelU
 
-xAccel_2 = uc' "a_x2" (horizontalAccel `ofThe` secondObject)
+xAccel_2 = quant (mkUid "a_x2") (horizontalAccel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
         (sub lA (Concat [labelx, label2])) Real accelU
 
-yAccel_1 = uc' "a_y1" (verticalAccel `ofThe` firstObject)
+yAccel_1 = quant (mkUid "a_y1") (verticalAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
         (sub lA (Concat [labely, label1])) Real accelU
 
-yAccel_2 = uc' "a_y2" (verticalAccel `ofThe` secondObject)
+yAccel_2 = quant (mkUid "a_y2") (verticalAccel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
         (sub lA (Concat [labely, label2])) Real accelU
 
-angularAccel_1 = uc' "alpha_x1" (QP.angularAccel `ofThe` firstObject)
+angularAccel_1 = quant (mkUid "alpha_x1") (QP.angularAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularAccel `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
         (sub lAlpha label1) Real angAccelU
 
-angularAccel_2 = uc' "alpha_y1" (QP.angularAccel `ofThe` secondObject)
+angularAccel_2 = quant (mkUid "alpha_y1") (QP.angularAccel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.angularAccel `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
         (sub lAlpha label2) Real angAccelU
 
-tension_1 = uc' "T_1" (QP.tension `ofThe` firstObject)
+tension_1 = quant (mkUid "T_1") (QP.tension `ofThe` firstObject)
         (D.toSent $ phraseNP (QP.tension `the_ofThe` firstObject))
         (sub (vec cT) label1) Real newton
 
-tension_2 = uc' "T_2" (QP.tension `ofThe` secondObject)
+tension_2 = quant (mkUid "T_2") (QP.tension `ofThe` secondObject)
         (D.toSent $ phraseNP (QP.tension `the_ofThe` secondObject))
         (sub (vec cT) label2) Real newton
 
-angularVel_1 = uc' "w_1" (QP.angularVelocity `ofThe` firstObject)
+angularVel_1 = quant (mkUid "w_1") (QP.angularVelocity `ofThe` firstObject)
         (D.toSent $ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
         (sub lW label1) Real angVelU
 
-angularVel_2 = uc' "w_2" (QP.angularVelocity `ofThe` secondObject)
+angularVel_2 = quant (mkUid "w_2") (QP.angularVelocity `ofThe` secondObject)
         (D.toSent $ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
         (sub lW label2) Real angVelU
 
-pendDisAngle_1 = uc' "theta_1" (angle `ofThe` firstRod)
+pendDisAngle_1 = quant (mkUid "theta_1") (angle `ofThe` firstRod)
         (D.toSent $ phraseNP (angle `the_ofThe` firstRod))
         (sub lTheta label1) Real radian
 
-pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
+pendDisAngle_2 = quant (mkUid "theta_2") (angle `ofThe` secondRod)
         (D.toSent $ phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
 

@@ -1,6 +1,9 @@
 {-# LANGUAGE PatternSynonyms, FlexibleContexts, QuasiQuotes #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE GADTs #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
+  SomeProgGenerator(..),
   generator, generateCode, generateCodeProc, toFileLayout
 ) where
 
@@ -116,13 +119,16 @@ generator l dt sd chs cs = let
 
 -- OO Versions --
 
+data SomeProgGenerator where
+  SomeProgGenerator :: forall repr. (OOProg repr) => (repr (OO.Program repr) -> ProgData) -> SomeProgGenerator
+
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
-generateCode :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr) =>
-  Lang -> (progRepr (OO.Program progRepr) -> ProgData) ->
+generateCode :: (SoftwareDossierSym packRepr, Monad packRepr) =>
+  Lang -> SomeProgGenerator ->
   (packRepr PackageData -> PackageData) -> DrasilState -> FileLayout
-generateCode l unReprProg unReprPack g =
+generateCode l (SomeProgGenerator unReprProg) unReprPack g =
   let dirName = getDir l
       (pckg, ds) = runState (genPackage unReprProg) g
       (PackageData prog progDossier) = unReprPack pckg

@@ -1,4 +1,3 @@
-Language selected as Java.
 Modularity selected as Unmodular.
 Input Structure selected as Unbundled.
 Constant Structure selected as WithInputs.

@@ -1,4 +1,3 @@
-Language selected as Python.
 Modularity selected as Unmodular.
 Input Structure selected as Bundled.
 Constant Structure selected as Store Bundled.

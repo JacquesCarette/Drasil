@@ -1,4 +1,3 @@
-Language selected as Julia.
 Modularity selected as Modular.
 Input Structure selected as Unbundled.
 Constant Structure selected as Store Unbundled.

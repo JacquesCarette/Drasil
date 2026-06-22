@@ -1,4 +1,3 @@
-Language selected as Cpp.
 Modularity selected as Modular.
 Input Structure selected as Bundled.
 Constant Structure selected as Store Unbundled.

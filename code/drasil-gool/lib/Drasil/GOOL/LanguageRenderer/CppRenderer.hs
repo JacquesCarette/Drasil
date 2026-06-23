@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
+  ParameterSym(..), MethodSym(..), convScope, BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
@@ -55,7 +55,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 
-import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
+import Drasil.Shared.LanguageRenderer (addExt, classDec, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList,
@@ -73,12 +73,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
-  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, listSet,
-  getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew,
-  print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
-  construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local)
+  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
+  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -487,7 +486,6 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAccessFunc = pair2 listAccessFunc listAccessFunc
-  listSetFunc = pair3 listSetFunc listSetFunc
 
 instance Pair p => BinderSym (p CppSrcCode CppHdrCode) where
   binder nm = pair1 (binder nm) (binder nm)
@@ -1392,7 +1390,11 @@ instance List CppSrcCode where
   listAdd list idx vl = objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
   listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet list idx vl = do
+    listAccessVal <- zoom lensMStoVS (listAccess list idx)
+    let listAccessVar =
+          mkVar (render $ RC.value listAccessVal) (valueType listAccessVal) (RC.value listAccessVal)
+    listAccessVar &= vl
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance Set CppSrcCode where
@@ -1410,7 +1412,6 @@ instance InternalGetSet CppSrcCode where
 
 instance InternalListFunc CppSrcCode where
   listAccessFunc = CP.listAccessFunc' cppListAccess
-  listSetFunc = CS.listSetFunc cppListSetDoc
 
 instance BinderSym CppSrcCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -2096,7 +2097,6 @@ instance InternalGetSet CppHdrCode where
 
 instance InternalListFunc CppHdrCode where
   listAccessFunc _ _ = funcFromData empty void
-  listSetFunc _ _ _ = funcFromData empty void
 
 instance BinderSym CppHdrCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -2705,9 +2705,6 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' Float String _ v = stofFunc (toState v)
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
-
-cppListSetDoc :: Doc -> Doc -> Doc
-cppListSetDoc i v = dot <> text cppListAccess <> parens i <+> equals <+> v
 
 cppListDecDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 cppListDecDoc n = parens (RC.value n)

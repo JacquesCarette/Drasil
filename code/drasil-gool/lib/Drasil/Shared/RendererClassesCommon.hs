@@ -155,8 +155,6 @@ class ValueElim r where
 class InternalListFunc r where
   -- | List, Index
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
-  -- | List, Index, Value
-  listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

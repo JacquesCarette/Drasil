@@ -1,4 +1,11 @@
-module Drasil.BinaryStar.Unitals where
+module Drasil.BinaryStar.Unitals (
+  symbols, inputs, outputs, inConstraints, outConstraints, constants,
+  mass_1, mass_2, bssStateVar, index, numbBodies,
+  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
+  xAccel_1, yAccel_1, xAccel_2, yAccel_2,
+  xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0, tFinal,
+  xPos_1, yPos_1, xPos_2, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, sepDist
+) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D

@@ -17,9 +17,10 @@ import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
-import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Theories.Physics (newtonSLR)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,

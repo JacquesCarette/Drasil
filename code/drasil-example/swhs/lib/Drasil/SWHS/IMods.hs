@@ -18,9 +18,10 @@ import Data.Drasil.Citations
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, output_)
 import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng, surArea)
-import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
+import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec,
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp)
+import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,

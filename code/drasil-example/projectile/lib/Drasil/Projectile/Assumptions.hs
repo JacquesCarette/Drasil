@@ -14,8 +14,8 @@ import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, value, consVals)
 import Data.Drasil.Concepts.Math (cartesian, xAxis, xDir, yAxis, yDir, direction, positive)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity, time, twoD)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.Projectile.Concepts (launcher, projectile, target, projMotion)
 

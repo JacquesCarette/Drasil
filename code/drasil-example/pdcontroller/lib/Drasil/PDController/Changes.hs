@@ -6,7 +6,7 @@ import qualified Language.Drasil.Development as D
 import Language.Drasil.Document (fromSources)
 
 import Data.Drasil.Concepts.Documentation (likeChgDom)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts

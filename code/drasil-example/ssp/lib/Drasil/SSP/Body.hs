@@ -27,7 +27,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, shape, surface,
   number)
-import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
   strain, stress, time, twoD, distance, friction, linear, velocity, position)
@@ -35,6 +35,7 @@ import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.SI_Units (degree)

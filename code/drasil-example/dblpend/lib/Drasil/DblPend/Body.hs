@@ -32,10 +32,11 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, graph)
 import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
-import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, ideaDicts, pendMotion, firstRod, secondRod, firstObject, secondObject, defs)

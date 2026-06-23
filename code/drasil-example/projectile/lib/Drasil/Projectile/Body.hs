@@ -19,11 +19,11 @@ import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
   softwareConstraint, output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity,
   rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Theory (inModel)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -155,7 +155,7 @@ cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
+  defs ++ [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
@@ -266,7 +266,7 @@ symbols = pi_ : unitalQuants ++ [dqdWr gravitationalAccelConst] ++
   [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV, projPos, projSpeed]
+  constAccelV, projPos, projSpeed, mass]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst]

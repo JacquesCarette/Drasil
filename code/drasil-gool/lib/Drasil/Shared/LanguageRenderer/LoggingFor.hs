@@ -103,6 +103,47 @@ instance (SharedProg lang) => AssignStatement (LoggingFor lang) where
   (&--) = liftLogging (&--)
   assign x e = liftLogging $ multi $ assign (lowerLogging <$> x) (lowerLogging <$> e) : logVarUpdate x
 
+instance (List lang) => List (LoggingFor lang) where
+  listSize = liftLogging listSize
+  listAdd = liftLogging listAdd
+  listAppend = liftLogging listAppend
+  listAccess = liftLogging listAccess
+  listSet = liftLogging listSet -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  indexOf = liftLogging indexOf
+
+instance (DeclStatement lang) => DeclStatement (LoggingFor lang) where
+  varDec = liftLogging varDec
+  varDecDef = liftLogging varDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  listDec = liftLogging listDec
+  listDecDef = liftLogging listDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  setDec = liftLogging setDec
+  setDecDef = liftLogging setDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  arrayDec = liftLogging arrayDec
+  arrayDecDef = liftLogging arrayDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  constDecDef = liftLogging constDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  funcDecDef = liftLogging funcDecDef
+
+instance (IOStatement lang) => IOStatement (LoggingFor lang) where
+  print = liftLogging print
+  printLn = liftLogging printLn
+  printStr = liftLogging printStr
+  printStrLn = liftLogging printStrLn
+  printFile = liftLogging printFile
+  printFileLn = liftLogging printFileLn
+  printFileStr = liftLogging printFileStr
+  printFileStrLn = liftLogging printFileStrLn
+  getInput = liftLogging getInput -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  discardInput = liftLogging discardInput
+  getFileInput = liftLogging getFileInput -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  discardFileInput = liftLogging discardFileInput
+  openFileR = liftLogging openFileR
+  openFileW = liftLogging openFileW
+  openFileA = liftLogging openFileA
+  closeFile = liftLogging closeFile
+  getFileInputLine = liftLogging getFileInputLine -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  discardFileLine = liftLogging discardFileLine
+  getFileInputAll = liftLogging getFileInputAll -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+
 -- SharedProg Boilerplate
 
 instance (SharedProg lang) => SharedProg (LoggingFor lang)
@@ -201,18 +242,6 @@ instance (ScopeSym lang) => ScopeSym (LoggingFor lang) where
   mainFn = liftLogging mainFn
   local = liftLogging local
 
-instance (DeclStatement lang) => DeclStatement (LoggingFor lang) where
-  varDec = liftLogging varDec
-  varDecDef = liftLogging varDecDef
-  listDec = liftLogging listDec
-  listDecDef = liftLogging listDecDef
-  setDec = liftLogging setDec
-  setDecDef = liftLogging setDecDef
-  arrayDec = liftLogging arrayDec
-  arrayDecDef = liftLogging arrayDecDef
-  constDecDef = liftLogging constDecDef
-  funcDecDef = liftLogging funcDecDef
-
 instance (FuncAppStatement lang) => FuncAppStatement (LoggingFor lang) where
   inOutCall = liftLogging inOutCall
   extInOutCall = liftLogging extInOutCall
@@ -220,37 +249,8 @@ instance (FuncAppStatement lang) => FuncAppStatement (LoggingFor lang) where
 instance (FunctionSym lang) => FunctionSym (LoggingFor lang) where
   type Function (LoggingFor lang) = Function lang
 
-instance (IOStatement lang) => IOStatement (LoggingFor lang) where
-  print = liftLogging print
-  printLn = liftLogging printLn
-  printStr = liftLogging printStr
-  printStrLn = liftLogging printStrLn
-  printFile = liftLogging printFile
-  printFileLn = liftLogging printFileLn
-  printFileStr = liftLogging printFileStr
-  printFileStrLn = liftLogging printFileStrLn
-  getInput = liftLogging getInput
-  discardInput = liftLogging discardInput
-  getFileInput = liftLogging getFileInput
-  discardFileInput = liftLogging discardFileInput
-  openFileR = liftLogging openFileR
-  openFileW = liftLogging openFileW
-  openFileA = liftLogging openFileA
-  closeFile = liftLogging closeFile
-  getFileInputLine = liftLogging getFileInputLine
-  discardFileLine = liftLogging discardFileLine
-  getFileInputAll = liftLogging getFileInputAll
-
 instance (InternalList lang) => InternalList (LoggingFor lang) where
   listSlice' = liftLogging listSlice'
-
-instance (List lang) => List (LoggingFor lang) where
-  listSize = liftLogging listSize
-  listAdd = liftLogging listAdd
-  listAppend = liftLogging listAppend
-  listAccess = liftLogging listAccess
-  listSet = liftLogging listSet
-  indexOf = liftLogging indexOf
 
 instance (Literal lang) => Literal (LoggingFor lang) where
   litTrue = liftLogging litTrue

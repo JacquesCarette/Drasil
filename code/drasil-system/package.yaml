@@ -17,10 +17,11 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- pretty
+- filepath
 - lens
 - containers
 - drasil-database
+- drasil-file-handling
 - drasil-lang
 - drasil-theory
 - drasil-utils

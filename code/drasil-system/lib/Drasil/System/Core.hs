@@ -2,7 +2,7 @@ module Drasil.System.Core (
   Purpose, Background, Scope, Motivation,
   SystemMeta,
   HasSystemMeta(..),
-  mkSystemMeta
+  mkSystemMeta,
 ) where
 
 import Control.Lens (makeClassy)

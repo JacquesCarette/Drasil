@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
   ConceptChunk, cncpt, cncpt', cncpt'', cncpt''',
-  dccA, dccAWDS, dccWDS, cw,
+  dccWDS, cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -74,27 +74,12 @@ cncpt''' ::
   Sentence -> ConceptChunk
 cncpt''' u trm defn = ConDict (idea' u trm) defn []
 
-{-# DEPRECATED dccA, dccAWDS, dccWDS
+{-# DEPRECATED dccWDS
   "Old smart constructor; use one of `cncpt`, `cncpt'`, `cncpt''`, `cncpt'''` instead." #-}
-
--- | Smart constructor for creating a concept chunks with an abbreviation. Takes
--- a UID (String), a term (NounPhrase), a definition (String), and an
--- abbreviation (Maybe String).
-dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
-dccA i ter def a = ConDict ideaDict (S def) []
-  where
-    u = mkUid i
-    ideaDict = maybe (idea' u ter) (idea u ter) a
-
-dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
-dccAWDS i ter def a = ConDict ideaDict def []
-  where
-    u = mkUid i
-    ideaDict = maybe (idea' u ter) (idea u ter) a
 
 -- | Similar to 'dcc', except the definition takes a 'Sentence'.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
-dccWDS i t d = dccAWDS i t d Nothing
+dccWDS i = cncpt''' (mkUid i)
 
 {-# DEPRECATED cw
   "Chunk down-casting is strongly discouraged. If you want to construct a `ConceptChunk`, use one of its normal constructors." #-}

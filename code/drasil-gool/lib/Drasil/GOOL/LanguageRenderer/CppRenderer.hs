@@ -464,7 +464,7 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
   listAccess = pair2 listAccess listAccess
-  listSet = pair3 listSet listSet
+  listSet l i v = pair3 listSet listSet (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   indexOf = pair2 indexOf indexOf
 
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
@@ -2078,7 +2078,7 @@ instance List CppHdrCode where
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty
   listAccess _ _ = mkStateVal void empty
-  listSet _ _ _ = mkStateVal void empty
+  listSet _ _ _ = mkStmtNoEnd empty
   indexOf _ _ = mkStateVal void empty
 
 instance Set CppHdrCode where

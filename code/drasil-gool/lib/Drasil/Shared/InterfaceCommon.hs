@@ -313,7 +313,7 @@ class (IndexTranslator r) => List r where
   listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
-  listSet    :: SValue r -> SValue r -> SValue r -> SValue r
+  listSet    :: SValue r -> SValue r -> SValue r -> MSStatement r
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r

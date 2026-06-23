@@ -204,12 +204,12 @@ instance Array CodeInfoProc where
   arrayCopy _ = noInfo
 
 instance List CodeInfoProc where
-  listSize   = execute1
-  listAdd    = execute3
-  listAppend = execute2
-  listAccess = execute2
-  listSet    = execute3
-  indexOf    = execute2
+  listSize      = execute1
+  listAdd       = execute3
+  listAppend    = execute2
+  listAccess    = execute2
+  listSet l i v = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  indexOf       = execute2
 
 instance Set CodeInfoProc where
  contains = execute2

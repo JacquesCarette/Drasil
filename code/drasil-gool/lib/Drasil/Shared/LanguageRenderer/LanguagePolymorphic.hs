@@ -307,11 +307,12 @@ listAccess v i = do
   f <- checkType (getCodeType (valueType v'))
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
-listSet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+-- TODO [Brandon Bosman, 06/23/2026]: Simplify this, similar to #5115
+listSet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> MSStatement r
 listSet v i toVal = do
-  v' <- v
-  f <- S.listSetFunc v (IC.intToIndex i) toVal
-  mkVal (RC.functionType f) (RC.value v' <> RC.function f)
+  v' <- zoom lensMStoVS v
+  f <- zoom lensMStoVS $ S.listSetFunc v (IC.intToIndex i) toVal
+  IC.valStmt $ mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 getFunc :: (OORenderSym r) => SVariable r -> VSFunction r
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)

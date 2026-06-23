@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   interface, output_, physical, software, sysCont, softwareConstraint,
   softwareSys, system, user, environment, product_, datum)
 import Data.Drasil.Concepts.Education (undergraduate, calculus)
-import Data.Drasil.Concepts.Physics (gravity, twoD)
+import Data.Drasil.Concepts.Physics (gravity, twoD, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Language.Drasil.Document
 
@@ -102,11 +102,8 @@ introBlurb = foldlSent
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_
-  [S "the analysis of the", phrase twoD,
-   S "motion of a binary star system under Newtonian",
-   phrase gravity `sC`
-   S "given the masses, initial positions, initial velocities,",
-   S "and simulation time span"]
+  [phrase twoD, S ", rigid-body mechanics",
+   S"where the only", phrase force , S "is gravitational attraction"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
@@ -205,10 +202,17 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
   progName [authorName]
-  [] [] [] []
+  [probDescIntro] [background] [scope] [motivation]
   tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols
   (labelledContent ++ funcReqsTables) symbMap []
+
+background :: Sentence
+background = foldlSent_ [S "Binary star systems are common in astronomy.",
+  S "Two stars orbit because of", phrase gravity]
+
+motivation :: Sentence
+motivation = foldlSent_ [S "To simulate how a binary star system evolves over time"]
 
 authorName :: Person
 authorName = person "Xinlu" "Yan"

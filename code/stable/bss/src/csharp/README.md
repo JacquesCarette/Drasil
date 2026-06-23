@@ -1,6 +1,18 @@
 # BSS 
 > Author: Xinlu Yan
 
+> Motivation: To simulate how a binary star system evolves over time.
+
+> Purpose: Simulate the motion of a binary star system under mutual gravitational interaction.
+
+------------------------------------------------------------
+## What 
+ 
+
+> Background: Binary star systems are common in astronomy. Two stars orbit because of gravity.
+
+> Scope: Two-dimensional , rigid-body mechanics where the only force is gravitational attraction.
+
 ------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:

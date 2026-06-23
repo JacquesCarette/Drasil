@@ -1,4 +1,4 @@
-module Drasil.BinaryStar.Choices where
+module Drasil.BinaryStar.Choices (choices) where
 
 import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),

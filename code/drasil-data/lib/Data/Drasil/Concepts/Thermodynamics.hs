@@ -50,7 +50,7 @@ lawConvCooling    = cncpt''' (mkUid "lawConvCooling")    (nounPhraseSP "Newton's
 melting           = cncpt''' (mkUid "melting")           (cn "melting")
                       (S "the phase change from solid to liquid")
 meltPt            = cncpt''' (mkUid "meltPt")            (cn' "melting point temperature")
-                      (S "the temperature at which a substance changes from liquid to vapour")
+                      (S "the temperature at which a substance changes from solid to liquid")
 phaseChange       = cncpt''' (mkUid "phaseChange")       (cn' "phase change")
                       (S "a change of state")
 sensHeat          = cncpt''' (mkUid "sensHeat")          (cn' "sensible heat")

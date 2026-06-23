@@ -19,12 +19,8 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  refBy, refName, requirement, srs, typUnc)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, velocity,
   acceleration, energy, force, fOfGravity, time)
-import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Quantities.Physics (gravitationalConst, gravitationalConstValue)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SI_Units (metre, kilogram, second)
@@ -49,11 +45,6 @@ symbols = [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   ++ [index, numbBodies, dqdWr bssStateVar]
   ++ map dqdWr constants
 
--- | Acronyms for the Abbreviations table
-acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc]
-
 -- | Input variables (what the user provides)
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = mass_1 :| [mass_2, xPos_1_0, yPos_1_0, xPos_2_0,
@@ -66,29 +57,6 @@ outputs = dqdWr bssStateVar :| []
 -- | Constants
 constants :: [ConstQDef]
 constants = gravitationalConstValue : specParamValues
-
----------------------------------------------------------
--- Unital chunks (physical quantities with symbols & units)
----------------------------------------------------------
-
-unitalChunks :: [DefinedQuantityDict]
-unitalChunks = [
-  -- masses
-  mass_1, mass_2,
-  -- positions (state variables)
-  xPos_1, yPos_1, xPos_2, yPos_2,
-  -- initial positions
-  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
-  -- velocities (state variables)
-  xVel_1, yVel_1, xVel_2, yVel_2,
-  -- initial velocities
-  xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
-  -- accelerations
-  xAccel_1, yAccel_1, xAccel_2, yAccel_2,
-  -- time
-  tFinal,
-  -- separation distance
-  sepDist]
 
 ---------------------------------------------------------
 -- Mass quantities

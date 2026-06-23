@@ -391,7 +391,6 @@ spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]
 choicesSent chs = map chsFieldSent [
-    (S "Languages",                     foldlSent_ $ map (S . show) $ lang chs),
     (S "Modularity",                    showChs $ modularity $ architecture chs),
     (S "Input Structure",               showChs $ inputStructure $ dataInfo chs),
     (S "Constant Structure",            showChs $ constStructure $ dataInfo chs),

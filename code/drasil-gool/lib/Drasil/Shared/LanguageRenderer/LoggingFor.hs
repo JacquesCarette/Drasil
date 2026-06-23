@@ -83,22 +83,25 @@ valLogFile = valueOf varLogFile
 logName :: (Literal r) => SValue r
 logName = litString "log.txt"
 
+logVarUpdate :: (SharedProg lang) => SVariable (LoggingFor lang) -> [MSStatement lang]
+logVarUpdate x =
+  [ openFileA varLogFile logName
+  , do
+      x' <- variableName . lowerLogging <$> zoom lensMStoVS x
+      printFileStr valLogFile $ "var '" <> x' <> "' assigned "
+  , printFile valLogFile $ valueOf (lowerLogging x)
+  , do
+      modName <- zoom lensMStoFS getModuleName
+      printFileStrLn valLogFile $ " in module " <> modName
+  , closeFile valLogFile
+  ]
+
 instance (SharedProg lang) => AssignStatement (LoggingFor lang) where
   (&-=) = liftLogging (&-=)
   (&+=) = liftLogging (&+=)
   (&++) = liftLogging (&++)
   (&--) = liftLogging (&--)
-  assign x e = do
-    modName <- zoom lensMStoFS getModuleName
-    liftLogging $ multi
-      [ openFileA varLogFile logName
-      , assign (unLC <$> x) (unLC <$> e)
-      , do
-          x' <- variableName . unLC <$> zoom lensMStoVS x
-          printFileStr valLogFile $ "var '" <> x' <> "' assigned"
-      , printFile valLogFile $ valueOf (unLC <$> x)
-      , printLn $ litString $ " in module " <> modName
-      ]
+  assign x e = liftLogging $ multi $ assign (lowerLogging <$> x) (lowerLogging <$> e) : logVarUpdate x
 
 -- SharedProg Boilerplate
 

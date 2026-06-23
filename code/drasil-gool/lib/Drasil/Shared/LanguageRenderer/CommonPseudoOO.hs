@@ -32,8 +32,8 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
-  varDecDef, constDecDef), IndexTranslator(indexToInt),
-  ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..), Array (..))
+  varDecDef, constDecDef), IndexTranslator(indexToInt, intToIndex),
+  ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
@@ -539,12 +539,13 @@ argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
 -- Python, C#, Swift, and Julia
 
-listSet :: (CommonRenderSym r, IC.Array r) => SValue r -> SValue r
+listSet :: (CommonRenderSym r) => SValue r -> SValue r
   -> SValue r -> MSStatement r
 listSet list idx val = do
   list' <- zoom lensMStoVS list
-  let listAsVar = mkVar (render $ RC.value list') (valueType list') (RC.value list') -- hack
-  IC.arrayElem idx listAsVar &= val
+  idx' <- zoom lensMStoVS (IC.intToIndex idx)
+  let listAccessVar = mkVar (render $ RC.value list') (valueType list') (RC.value list' <> brackets (RC.value idx')) -- hack
+  listAccessVar &= val
 
 -- Julia and MATLAB --
 

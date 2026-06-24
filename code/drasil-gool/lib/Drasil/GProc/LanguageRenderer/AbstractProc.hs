@@ -85,8 +85,8 @@ innerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
-listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r
-listAppend fnName list val = funcApp fnName IC.void [list, val]
+listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> MSStatement r
+listAppend fnName list val = IC.valStmt $ funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
 listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> MSStatement r

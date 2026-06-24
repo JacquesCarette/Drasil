@@ -258,12 +258,12 @@ instance Array CodeInfoOO where
   arrayCopy _ = noInfo
 
 instance List CodeInfoOO where
-  listSize      = execute1
-  listAdd l i v = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
-  listAppend    = execute2
-  listAccess    = execute2
-  listSet l i v = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
-  indexOf       = execute2
+  listSize       = execute1
+  listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
+  listAccess     = execute2
+  listSet l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  indexOf        = execute2
 
 instance Set CodeInfoOO where
   contains = execute2

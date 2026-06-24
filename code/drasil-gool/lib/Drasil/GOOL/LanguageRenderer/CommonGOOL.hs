@@ -37,9 +37,8 @@ classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
-listAppend :: (OORenderSym r) => String -> SValue r ->
-  SValue r -> SValue r
-listAppend fnName list val = objMethodCall void list fnName [val]
+listAppend :: (OORenderSym r) => String -> SValue r -> SValue r -> MSStatement r
+listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd :: (OORenderSym r) => String -> SValue r -> SValue r -> SValue r -> MSStatement r
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]

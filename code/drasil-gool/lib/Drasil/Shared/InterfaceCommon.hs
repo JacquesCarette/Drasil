@@ -307,7 +307,7 @@ class (IndexTranslator r) => List r where
   listAdd    :: SValue r -> SValue r -> SValue r -> MSStatement r
   -- | Appens a value to a list.
   --   Arguments are: List, Value
-  listAppend :: SValue r -> SValue r -> SValue r
+  listAppend :: SValue r -> SValue r -> MSStatement r
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r

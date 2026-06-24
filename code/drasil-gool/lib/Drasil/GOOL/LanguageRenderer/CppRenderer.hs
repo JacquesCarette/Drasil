@@ -461,7 +461,7 @@ instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAdd l i v = pair3 listAdd listAdd (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
-  listAppend = pair2 listAppend listAppend
+  listAppend l v = pair2 listAppend listAppend (zoom lensMStoVS l) (zoom lensMStoVS v)
   listAccess = pair2 listAccess listAccess
   listSet l i v = pair3 listSet listSet (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   indexOf = pair2 indexOf indexOf
@@ -1526,7 +1526,7 @@ instance IOStatement CppSrcCode where
         v_line = valueOf var_line
     multi [varDec var_line scp,
       while (getLineFunc f v_line)
-        (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
+        (oneLiner $ listAppend (valueOf v) v_line)]
 
 instance StringStatement CppSrcCode where
   stringSplit d vnew s = do
@@ -1545,7 +1545,7 @@ instance StringStatement CppSrcCode where
         valStmt $ strFunc v_ss s,
         varDec var_word scp,
         while (getLine3ArgFunc v_ss v_word d)
-          (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
+          (oneLiner $ listAppend (valueOf vnew) v_word)
       ]
 
   stringListVals = M.stringListVals
@@ -2078,7 +2078,7 @@ instance Array CppHdrCode where
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStmt empty
-  listAppend _ _ = mkStateVal void empty
+  listAppend _ _ = mkStmt empty
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStmtNoEnd empty
   indexOf _ _ = mkStateVal void empty

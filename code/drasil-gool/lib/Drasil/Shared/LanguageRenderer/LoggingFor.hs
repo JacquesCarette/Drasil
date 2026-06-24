@@ -103,7 +103,7 @@ instance (SharedProg lang) => AssignStatement (LoggingFor lang) where
   (&++) = liftLogging (&++)
   (&--) = liftLogging (&--)
   assign x e = liftLogging $ multi $
-    assign (lowerLogging <$> x) (lowerLogging <$> e)
+    assign (lowerLogging x) (lowerLogging e)
     : logVarUpdate x
 
 instance (List lang) => List (LoggingFor lang) where
@@ -118,18 +118,22 @@ instance (List lang) => List (LoggingFor lang) where
 instance (SharedProg lang) => DeclStatement (LoggingFor lang) where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
-    varDecDef (lowerLogging <$> vr) (lowerLogging scp) (lowerLogging <$> vl)
+    varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
     : logVarUpdate vr
   listDec = liftLogging listDec
-  listDecDef = liftLogging listDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  listDecDef vr scp vls = liftLogging $ multi $
+    listDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vls)
+    : logVarUpdate vr
   setDec = liftLogging setDec
   setDecDef vr scp vl = liftLogging $ multi $
-    setDecDef (lowerLogging <$> vr) (lowerLogging scp) (lowerLogging <$> vl)
+    setDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
     : logVarUpdate vr
   arrayDec = liftLogging arrayDec
-  arrayDecDef = liftLogging arrayDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  arrayDecDef vr scp vls = liftLogging $ multi $
+    arrayDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vls)
+    : logVarUpdate vr
   constDecDef cnst scp vl = liftLogging $ multi $
-    constDecDef (lowerLogging <$> cnst) (lowerLogging scp) (lowerLogging <$> vl)
+    constDecDef (lowerLogging cnst) (lowerLogging scp) (lowerLogging vl)
     : logVarUpdate cnst
   funcDecDef = liftLogging funcDecDef
 
@@ -143,10 +147,10 @@ instance (SharedProg lang) => IOStatement (LoggingFor lang) where
   printFileStr = liftLogging printFileStr
   printFileStrLn = liftLogging printFileStrLn
   getInput vr = liftLogging $ multi $
-    getInput (lowerLogging <$> vr) : logVarUpdate vr
+    getInput (lowerLogging vr) : logVarUpdate vr
   discardInput = liftLogging discardInput
   getFileInput file vr = liftLogging $ multi $
-    getFileInput (lowerLogging <$> file) (lowerLogging <$> vr)
+    getFileInput (lowerLogging file) (lowerLogging vr)
     : logVarUpdate vr
   discardFileInput = liftLogging discardFileInput
   openFileR = liftLogging openFileR
@@ -154,11 +158,11 @@ instance (SharedProg lang) => IOStatement (LoggingFor lang) where
   openFileA = liftLogging openFileA
   closeFile = liftLogging closeFile
   getFileInputLine file vr = liftLogging $ multi $
-    getFileInputLine (lowerLogging <$> file) (lowerLogging <$> vr)
+    getFileInputLine (lowerLogging file) (lowerLogging vr)
     : logVarUpdate vr
   discardFileLine = liftLogging discardFileLine
   getFileInputAll file vr = liftLogging $ multi $
-    getFileInputAll (lowerLogging <$> file) (lowerLogging <$> vr)
+    getFileInputAll (lowerLogging file) (lowerLogging vr)
     : logVarUpdate vr
 
 -- SharedProg Boilerplate

@@ -324,13 +324,13 @@ class (ValueSym r) => Set r where
   contains :: SValue r -> SValue r -> SValue r
   -- | Inserts a value into a set
   -- Arguments are: Set, Value
-  setAdd :: SValue r -> SValue r -> SValue r
+  setAdd :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this MSStatement
   -- | Removes a value from a set
   -- Arguments are: Set, Value
-  setRemove :: SValue r -> SValue r -> SValue r
+  setRemove :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this MSStatement
   -- | Removes a value from a set
   -- Arguments are: Set, Set
-  setUnion :: SValue r -> SValue r -> SValue r
+  setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this MSStatement
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)

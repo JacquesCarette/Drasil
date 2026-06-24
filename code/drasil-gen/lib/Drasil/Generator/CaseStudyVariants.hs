@@ -19,15 +19,14 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.LessonPlan (LsnDesc, LessonPlan)
+import Drasil.LessonPlan (LsnDesc, LessonPlan, Options (Options))
 import Drasil.SRS (SRSDecl, mkDoc)
-import Drasil.System (DrasilWebsite, SmithEtAlSRS, programName)
+import Drasil.System (DrasilWebsite, SmithEtAlSRS, programName, renderSystemRepo')
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Code (genCode, genCodeZoo)
-import Drasil.Generator.LessonPlan (genJupyterLessonPlan)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 import Drasil.Generator.Website (genWebsite)
@@ -80,12 +79,11 @@ caseStudyMainSRSWCodeZoo syst srsDecl srsFileName choices = do
   let layout = directory [ps|{exampleName}|] $ docLayouts ++ zooLayouts
   writeFiles OverwriteAllowed localPath layout
 
-caseStudyMainLsnPlan :: String -> LessonPlan -> LsnDesc -> String -> IO ()
-caseStudyMainLsnPlan exampleName plan nbDecl lsnFileName = do
+caseStudyMainLsnPlan :: LessonPlan -> LsnDesc -> String -> IO ()
+caseStudyMainLsnPlan plan nbDecl lsnFileName = do
   setSystemLocale
-  let layout = directory [ps|{exampleName}|]
-        [directory [ps|Lesson|] [genJupyterLessonPlan plan nbDecl lsnFileName]]
-  writeFiles OverwriteAllowed localPath layout
+  let opts = Options nbDecl S.forT lsnFileName
+  renderSystemRepo' localPath plan opts
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).

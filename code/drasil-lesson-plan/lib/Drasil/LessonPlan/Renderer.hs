@@ -1,30 +1,62 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RecordWildCards #-}
 -- | Document language for lesson plan notebooks.
-module Drasil.LessonPlan.Renderer (render) where
+module Drasil.LessonPlan.Renderer (
+  Options(..),
+  render
+) where
 
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil (Sentence(S), CI, foldlList, SepType(Comma),
-  FoldType(List), fullName, Idea, titleize, titleize')
+import Drasil.FileHandling
+import Language.Drasil hiding (Options)
 import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC),
   ulcc, RawContent(Bib), section, makeSecRef)
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), Render(..))
 import Drasil.Metadata.Documentation (notebook)
 import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
   learnObj, review, summary, example, appendix, reference)
 
-import Drasil.LessonPlan.Core (LessonPlan)
+import Drasil.LessonPlan.Core (LessonPlan, lsnPlanRefs)
 import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..))
 import Drasil.LessonPlan.ExtractBib (extractBib)
+import Language.Drasil.Printers
+import Language.Drasil.Printing.Import
 
--- | Renders a 'LessonPlan' using a 'LsnDesc' (a description of the document
--- contents and organization) and a title combinator merging "notebook" with the
--- name of the 'LessonPlan'.
-render :: LessonPlan -> LsnDesc -> (CI -> CI -> Sentence) -> Document
-render plan dd comb = Notebook nm as $ mkSections (plan ^. systemdb) dd
-  where
-    nm = notebook `comb` (plan ^. sysName)
-    as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
+-- FIXME: Need to rename this to something more LessonPlan-focused.
+data Options = Options {
+  lsnDesc :: LsnDesc,
+  -- FIXME: `titleComb` seems a bit odd. We only use `S.forT`. Two things:
+  --
+  -- 1. We generate `Notebook for Projectile Motion Lesson` as the title for the
+  -- projectile motion lesson plan. This should probably just be "Projectile
+  -- Motion Lesson".
+  -- 2. The title should probably just directly come from the system name.
+  titleComb :: CI -> CI -> Sentence,
+  lsnFileName :: String
+}
+
+instance Render LessonPlan Options where
+  -- | Renders a 'LessonPlan' using a 'LsnDesc' (a description of the document
+  -- contents and organization) and a title combinator merging "notebook" with the
+  -- name of the 'LessonPlan'.
+  render plan Options{..} =
+      [file [ps|{lsnFileName}.ipynb|] $ genJupyterLessonPlan pd]
+    where
+      -- FIXME: We can clean this up using another `instance Render ? ? where`
+      -- here. This might mean we have the wrong design for `Render`. We might
+      -- need a 3rd type parameter for the output type of the 'rendering'
+      -- action.
+      nm = notebook `titleComb` (plan ^. sysName)
+      as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
+      nb = Notebook nm as $ mkSections (plan ^. systemdb) lsnDesc
+      -- FIXME: `piSys` is an "options" constructor. Here is another opportunity
+      -- to create a `Render` instance.
+      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
+      pd = makeDocument printSetting nb
 
 -- | Helper for creating the notebook sections.
 mkSections :: ChunkDB -> LsnDesc -> [Section]

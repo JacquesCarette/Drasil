@@ -6,7 +6,7 @@ module Data.Drasil.Concepts.Computation
 
 import Drasil.Database (mkUid)
 import Language.Drasil (cn', commonIdea, Sentence(..),
-  ConceptChunk, CI, IdeaDict, dccWDS, idea', cncpt''')
+  ConceptChunk, CI, IdeaDict, idea', cncpt''')
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
@@ -20,9 +20,6 @@ absTolerance = cncpt''' (mkUid "absTolerance") (cn' "Absolute tolerance")
   (S "a fixed number that is used to make direct comparisons")
 relTolerance = cncpt''' (mkUid "relTolerance") (cn' "Relative tolerance")
   (S " maximum amount of error that the user is willing to allow in the solution")
-
-modCalcDesc :: Sentence -> ConceptChunk
-modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 -- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [IdeaDict]

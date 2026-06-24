@@ -8,6 +8,7 @@ import Prelude hiding (sin, cos, tan)
 
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
@@ -253,7 +254,7 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
 --
 momentEqlModel :: ModelKind ModelExpr
 momentEqlModel = equationalConstraints' $
-  mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
+  mkConstraintSet (cncpt''' (mkUid "momentEql") (nounPhraseSP "moment equilibrium") momEqlDesc) $
   NE.fromList [express momEqlExpr]
 
 momEqlExpr :: Expr

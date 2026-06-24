@@ -2,6 +2,7 @@ module Drasil.BinaryStar.TMods (tMods, centerOfMassTM, velocityTM, accelTM,
   gravLawTM, relPosTM) where
 
 import Prelude hiding (sin, cos, sqrt)
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Document (refS)
 import Theory.Drasil
@@ -48,7 +49,7 @@ centerOfMassRels =
 
 centerOfMassCS :: ConstraintSet ModelExpr
 centerOfMassCS = mkConstraintSet
-  (dccWDS "centerOfMassCS"
+  (cncpt''' (mkUid "centerOfMassCS")
     (nounPhraseSP "center-of-mass constraint")
     centerOfMassNote) $
   NE.fromList centerOfMassRels

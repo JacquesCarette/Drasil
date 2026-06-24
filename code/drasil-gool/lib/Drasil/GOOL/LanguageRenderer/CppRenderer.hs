@@ -460,7 +460,7 @@ instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
-  listAdd = pair3 listAdd listAdd
+  listAdd l i v = pair3 listAdd listAdd (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend = pair2 listAppend listAppend
   listAccess = pair2 listAccess listAccess
   listSet l i v = pair3 listSet listSet (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
@@ -1387,7 +1387,8 @@ instance Array CppSrcCode where
 instance List CppSrcCode where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
-  listAdd list idx vl = objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
+  listAdd list idx vl = valStmt $
+    objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
   listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
   listSet list idx vl = do
@@ -2076,7 +2077,7 @@ instance Array CppHdrCode where
 
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty
-  listAdd _ _ _ = mkStateVal void empty
+  listAdd _ _ _ = mkStmt empty
   listAppend _ _ = mkStateVal void empty
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStmtNoEnd empty

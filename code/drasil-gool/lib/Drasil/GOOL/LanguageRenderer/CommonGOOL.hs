@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SVariable, SValue, VSType,
   MSStatement, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
-  getCodeType)
+  getCodeType, StatementSym (valStmt))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ScopeElim(..),
   RenderValue(..))
@@ -41,8 +41,8 @@ listAppend :: (OORenderSym r) => String -> SValue r ->
   SValue r -> SValue r
 listAppend fnName list val = objMethodCall void list fnName [val]
 
-listAdd :: (OORenderSym r) => String -> SValue r -> SValue r -> SValue r -> SValue r
-listAdd fnName list idx val = objMethodCall void list fnName [intToIndex idx, val]
+listAdd :: (OORenderSym r) => String -> SValue r -> SValue r -> SValue r -> MSStatement r
+listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType :: (OORenderSym r, UnRepr r TypeData) => VSType r -> VSType r
 innerType t = t >>= (convTypeOO . getInnerType . getCodeType)

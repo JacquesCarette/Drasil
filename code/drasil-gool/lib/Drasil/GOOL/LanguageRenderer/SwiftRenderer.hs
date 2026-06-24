@@ -461,7 +461,7 @@ instance Array SwiftCode where
 instance List SwiftCode where
   listSize = C.listSize' swiftListSize
   listAdd list idx vl = let atArg = var swiftAt int
-    in objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
+    in valStmt $ objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
   listAppend = CG.listAppend swiftListAppend
   listAccess = G.listAccess
   listSet = CP.listSet

@@ -205,7 +205,7 @@ instance Array CodeInfoProc where
 
 instance List CodeInfoProc where
   listSize      = execute1
-  listAdd       = execute3
+  listAdd l i v = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend    = execute2
   listAccess    = execute2
   listSet l i v = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)

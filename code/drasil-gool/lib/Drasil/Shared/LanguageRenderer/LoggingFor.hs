@@ -161,6 +161,15 @@ instance (SharedProg lang) => IOStatement (LoggingFor lang) where
   discardFileLine = liftLogging discardFileLine
   getFileInputAll = liftLogging getFileInputAll
 
+instance (SharedProg lang) => StringStatement (LoggingFor lang) where
+  stringSplit chr vr str  = liftLogging $
+    stringSplit (lowerLogging chr) (lowerLogging vr) (lowerLogging str)
+  stringListVals vrs strs  = liftLogging $
+    stringListVals (lowerLogging vrs) (lowerLogging strs)
+  stringListLists vrs strs = liftLogging $ multi $
+    stringListLists (lowerLogging vrs) (lowerLogging strs)
+    : concatMap logVarUpdate vrs
+
 -- SharedProg Boilerplate
 
 instance (SharedProg lang) => SharedProg (LoggingFor lang)
@@ -280,11 +289,6 @@ instance (Literal lang) => Literal (LoggingFor lang) where
   litArray = liftLogging litArray
   litList = liftLogging litList
   litSet = liftLogging litSet
-
-instance (StringStatement lang) => StringStatement (LoggingFor lang) where
-  stringSplit = liftLogging stringSplit
-  stringListVals = liftLogging stringListVals
-  stringListLists = liftLogging stringListLists
 
 instance (MathConstant lang) => MathConstant (LoggingFor lang) where
   pi = liftLogging pi

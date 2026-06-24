@@ -102,7 +102,7 @@ introBlurb = foldlSent
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_
-  [phrase twoD, S ", rigid-body mechanics",
+  [phrase twoD `sC` S "rigid-body mechanics",
    S"where the only", phrase force , S "is gravitational attraction"]
 
 ----------------------------------------------

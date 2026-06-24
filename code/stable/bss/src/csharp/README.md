@@ -11,7 +11,7 @@
 
 > Background: Binary star systems are common in astronomy. Two stars orbit because of gravity.
 
-> Scope: Two-dimensional , rigid-body mechanics where the only force is gravitational attraction.
+> Scope: Two-dimensional, rigid-body mechanics where the only force is gravitational attraction.
 
 ------------------------------------------------------------
 ## Making Examples 

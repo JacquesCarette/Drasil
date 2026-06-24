@@ -427,8 +427,9 @@ class (VariableSym r, StatementSym r) => IOStatement r where
 class (VariableSym r, StatementSym r) => StringStatement r where
   -- Parameters are: char to split on, variable to store result in, string to split
   stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
-
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
+  -- Given a list of variables and a value containing a list of strings,
+  -- assign the ith element of hte list of strings into the ith variable
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
 
 type VSFunction a = VS (a (Function a))

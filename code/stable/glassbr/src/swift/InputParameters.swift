@@ -737,33 +737,6 @@ class InputParameters {
             throw "InputError"
         }
         let set_g: Set<String> = ["AN", "FT", "HS"]
-        do {
-            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-            try outfile.seekToEnd()
-        } catch {
-            throw "Error opening file."
-        }
-        do {
-            try outfile.write(contentsOf: Data("var 'set_g' assigned ".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data(set_g.description.utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data(" in module InputParameters".utf8))
-            try outfile.write(contentsOf: Data("\n".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.close()
-        } catch {
-            throw "Error closing file."
-        }
         if !(set_g.contains(self.g)) {
             print("g has value ", terminator: "")
             print(self.g, terminator: "")
@@ -774,33 +747,6 @@ class InputParameters {
             throw "InputError"
         }
         let set_t: Set<Double> = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]
-        do {
-            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-            try outfile.seekToEnd()
-        } catch {
-            throw "Error opening file."
-        }
-        do {
-            try outfile.write(contentsOf: Data("var 'set_t' assigned ".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data(set_t.description.utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data(" in module InputParameters".utf8))
-            try outfile.write(contentsOf: Data("\n".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.close()
-        } catch {
-            throw "Error closing file."
-        }
         if !(set_t.contains(self.t)) {
             print("t has value ", terminator: "")
             print(self.t, terminator: "")

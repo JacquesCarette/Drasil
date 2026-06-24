@@ -260,16 +260,6 @@ public class InputParameters {
             throw new Exception("InputError");
         }
         Set<String> set_g = Set.of("AN", "FT", "HS");
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'set_g' assigned ");
-        outfile.print("{ ");
-        for (String set_i1 : set_g) {
-            outfile.print(set_i1);
-            outfile.print(" ");
-        }
-        outfile.print("}");
-        outfile.println(" in module InputParameters");
-        outfile.close();
         if (!(set_g.contains(this.g))) {
             System.out.print("g has value ");
             System.out.print(this.g);
@@ -285,16 +275,6 @@ public class InputParameters {
             throw new Exception("InputError");
         }
         Set<Double> set_t = Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0);
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'set_t' assigned ");
-        outfile.print("{ ");
-        for (double set_i1 : set_t) {
-            outfile.print(set_i1);
-            outfile.print(" ");
-        }
-        outfile.print("}");
-        outfile.println(" in module InputParameters");
-        outfile.close();
         if (!(set_t.contains(this.t))) {
             System.out.print("t has value ");
             System.out.print(this.t);

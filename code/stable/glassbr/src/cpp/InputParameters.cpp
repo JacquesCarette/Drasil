@@ -239,16 +239,6 @@ void InputParameters::input_constraints() {
         throw("InputError");
     }
     set<string> set_g = {"AN", "FT", "HS"};
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'set_g' assigned ";
-    outfile << "{ ";
-    for (const string &set_i1 : set_g) {
-        outfile << set_i1;
-        outfile << " ";
-    }
-    outfile << "}";
-    outfile << " in module InputParameters" << std::endl;
-    outfile.close();
     if (!(set_g.find(this->g) != set_g.end())) {
         std::cout << "g has value ";
         std::cout << this->g;
@@ -264,16 +254,6 @@ void InputParameters::input_constraints() {
         throw("InputError");
     }
     set<double> set_t = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'set_t' assigned ";
-    outfile << "{ ";
-    for (const double &set_i1 : set_t) {
-        outfile << set_i1;
-        outfile << " ";
-    }
-    outfile << "}";
-    outfile << " in module InputParameters" << std::endl;
-    outfile.close();
     if (!(set_t.find(this->t) != set_t.end())) {
         std::cout << "t has value ";
         std::cout << this->t;

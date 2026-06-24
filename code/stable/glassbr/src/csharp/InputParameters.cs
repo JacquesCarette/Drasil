@@ -254,16 +254,6 @@ public class InputParameters {
             throw new Exception("InputError");
         }
         HashSet<string> set_g = new HashSet<string> {"AN", "FT", "HS"};
-        outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'set_g' assigned ");
-        outfile.Write("{ ");
-        foreach (string set_i1 in set_g) {
-            outfile.Write(set_i1);
-            outfile.Write(" ");
-        }
-        outfile.Write("}");
-        outfile.WriteLine(" in module InputParameters");
-        outfile.Close();
         if (!(set_g.Contains(this.g))) {
             Console.Write("g has value ");
             Console.Write(this.g);
@@ -279,16 +269,6 @@ public class InputParameters {
             throw new Exception("InputError");
         }
         HashSet<double> set_t = new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
-        outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'set_t' assigned ");
-        outfile.Write("{ ");
-        foreach (double set_i1 in set_t) {
-            outfile.Write(set_i1);
-            outfile.Write(" ");
-        }
-        outfile.Write("}");
-        outfile.WriteLine(" in module InputParameters");
-        outfile.Close();
         if (!(set_t.Contains(this.t))) {
             Console.Write("t has value ");
             Console.Write(this.t);

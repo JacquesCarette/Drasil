@@ -5,6 +5,7 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DerivingVia #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | MVP renderer for logging statements.
 
@@ -101,7 +102,9 @@ instance (SharedProg lang) => AssignStatement (LoggingFor lang) where
   (&+=) = liftLogging (&+=)
   (&++) = liftLogging (&++)
   (&--) = liftLogging (&--)
-  assign x e = liftLogging $ multi $ assign (lowerLogging <$> x) (lowerLogging <$> e) : logVarUpdate x
+  assign x e = liftLogging $ multi $
+    assign (lowerLogging <$> x) (lowerLogging <$> e)
+    : logVarUpdate x
 
 instance (List lang) => List (LoggingFor lang) where
   listSize = liftLogging listSize
@@ -109,21 +112,28 @@ instance (List lang) => List (LoggingFor lang) where
   listAppend = liftLogging listAppend
   listAccess = liftLogging listAccess
   listSet = liftLogging listSet -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+                                -- (Can't right now because RC.value isn't exposed)
   indexOf = liftLogging indexOf
 
-instance (DeclStatement lang) => DeclStatement (LoggingFor lang) where
+instance (SharedProg lang) => DeclStatement (LoggingFor lang) where
   varDec = liftLogging varDec
-  varDecDef = liftLogging varDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  varDecDef vr scp vl = liftLogging $ multi $
+    varDecDef (lowerLogging <$> vr) (lowerLogging scp) (lowerLogging <$> vl)
+    : logVarUpdate vr
   listDec = liftLogging listDec
   listDecDef = liftLogging listDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
   setDec = liftLogging setDec
-  setDecDef = liftLogging setDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  setDecDef vr scp vl = liftLogging $ multi $
+    setDecDef (lowerLogging <$> vr) (lowerLogging scp) (lowerLogging <$> vl)
+    : logVarUpdate vr
   arrayDec = liftLogging arrayDec
   arrayDecDef = liftLogging arrayDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
-  constDecDef = liftLogging constDecDef -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  constDecDef cnst scp vl = liftLogging $ multi $
+    constDecDef (lowerLogging <$> cnst) (lowerLogging scp) (lowerLogging <$> vl)
+    : logVarUpdate cnst
   funcDecDef = liftLogging funcDecDef
 
-instance (IOStatement lang) => IOStatement (LoggingFor lang) where
+instance (SharedProg lang) => IOStatement (LoggingFor lang) where
   print = liftLogging print
   printLn = liftLogging printLn
   printStr = liftLogging printStr
@@ -132,17 +142,24 @@ instance (IOStatement lang) => IOStatement (LoggingFor lang) where
   printFileLn = liftLogging printFileLn
   printFileStr = liftLogging printFileStr
   printFileStrLn = liftLogging printFileStrLn
-  getInput = liftLogging getInput -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  getInput vr = liftLogging $ multi $
+    getInput (lowerLogging <$> vr) : logVarUpdate vr
   discardInput = liftLogging discardInput
-  getFileInput = liftLogging getFileInput -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  getFileInput file vr = liftLogging $ multi $
+    getFileInput (lowerLogging <$> file) (lowerLogging <$> vr)
+    : logVarUpdate vr
   discardFileInput = liftLogging discardFileInput
   openFileR = liftLogging openFileR
   openFileW = liftLogging openFileW
   openFileA = liftLogging openFileA
   closeFile = liftLogging closeFile
-  getFileInputLine = liftLogging getFileInputLine -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  getFileInputLine file vr = liftLogging $ multi $
+    getFileInputLine (lowerLogging <$> file) (lowerLogging <$> vr)
+    : logVarUpdate vr
   discardFileLine = liftLogging discardFileLine
-  getFileInputAll = liftLogging getFileInputAll -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+  getFileInputAll file vr = liftLogging $ multi $
+    getFileInputAll (lowerLogging <$> file) (lowerLogging <$> vr)
+    : logVarUpdate vr
 
 -- SharedProg Boilerplate
 
@@ -383,7 +400,7 @@ instance (G.OOVariableSym lang) => G.OOVariableSym (LoggingFor lang) where
   extClassVarAccess = liftLogging G.extClassVarAccess
   instanceVarAccess = liftLogging G.instanceVarAccess
 
-instance (G.OODeclStatement lang) => G.OODeclStatement (LoggingFor lang) where
+instance (DeclStatement (LoggingFor lang), G.OODeclStatement lang) => G.OODeclStatement (LoggingFor lang) where
   objDecDef = liftLogging G.objDecDef
   objDecNew = liftLogging G.objDecNew
   extObjDecNew = liftLogging G.extObjDecNew

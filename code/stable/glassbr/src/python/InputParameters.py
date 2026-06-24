@@ -214,6 +214,15 @@ class InputParameters:
             print(".")
             raise Exception("InputError")
         set_g = {"AN", "FT", "HS"}
+        outfile = open("log.txt", "a")
+        print("var 'set_g' assigned ", end="", file=outfile)
+        print("{ ", end="", file=outfile)
+        for set_i1 in set_g:
+            print(set_i1, end="", file=outfile)
+            print(" ", end="", file=outfile)
+        print("}", end="", file=outfile)
+        print(" in module InputParameters", file=outfile)
+        outfile.close()
         if not(self.g in set_g):
             print("g has value ", end="")
             print(self.g, end="")
@@ -227,6 +236,15 @@ class InputParameters:
             print(".")
             raise Exception("InputError")
         set_t = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+        outfile = open("log.txt", "a")
+        print("var 'set_t' assigned ", end="", file=outfile)
+        print("{ ", end="", file=outfile)
+        for set_i1 in set_t:
+            print(set_i1, end="", file=outfile)
+            print(" ", end="", file=outfile)
+        print("}", end="", file=outfile)
+        print(" in module InputParameters", file=outfile)
+        outfile.close()
         if not(self.t in set_t):
             print("t has value ", end="")
             print(self.t, end="")

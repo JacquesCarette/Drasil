@@ -121,17 +121,14 @@ instance (SharedProg lang) => DeclStatement (LoggingFor lang) where
     varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
     : logVarUpdate vr
   listDec = liftLogging listDec
-  listDecDef vr scp vls = liftLogging $ multi $
+  listDecDef vr scp vls = liftLogging $
     listDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vls)
-    : logVarUpdate vr
   setDec = liftLogging setDec
-  setDecDef vr scp vl = liftLogging $ multi $
+  setDecDef vr scp vl = liftLogging $
     setDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
-    : logVarUpdate vr
   arrayDec = liftLogging arrayDec
-  arrayDecDef vr scp vls = liftLogging $ multi $
+  arrayDecDef vr scp vls = liftLogging $
     arrayDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vls)
-    : logVarUpdate vr
   constDecDef cnst scp vl = liftLogging $ multi $
     constDecDef (lowerLogging cnst) (lowerLogging scp) (lowerLogging vl)
     : logVarUpdate cnst

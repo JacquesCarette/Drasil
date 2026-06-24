@@ -49,8 +49,8 @@ import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
   valueList, binderList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
-  break, continue, constDec', assign, subAssign, addAssign)
+  addComments, blockCmt, docCmt, commentedMod, commentedItem, break, continue,
+  constDec', assign, subAssign, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmtNoEnd, typeFromData)
@@ -59,15 +59,15 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var, smartSub)
+  listAccess, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
+  print, comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList,
+  ifCond, smartAdd, local, var, smartSub)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (listDec,
-  listDecDef, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
+  listDecDef, listSet, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
   docInOutFunc', forLoopError, openFileR', openFileW', openFileA', multiReturn,
   multiAssign, inOutCall, mainBody, argExists, litSet)
 
@@ -393,7 +393,7 @@ instance List JuliaCode where
   listAdd = A.listAdd jlListAdd
   listAppend = A.listAppend jlListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = jlIndexOf
 
 instance Set JuliaCode where
@@ -407,7 +407,6 @@ instance InternalList JuliaCode where
 
 instance InternalListFunc JuliaCode where
   listAccessFunc = CS.listAccessFunc
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym JuliaCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp

@@ -16,10 +16,10 @@ module Drasil.Shared.InterfaceCommon (
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..), listSlice,
   listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ifNoElse,
+  switchAsIf, VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
+  BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -313,7 +313,7 @@ class (IndexTranslator r) => List r where
   listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
-  listSet    :: SValue r -> SValue r -> SValue r -> SValue r
+  listSet    :: SValue r -> SValue r -> SValue r -> MSStatement r
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
@@ -378,10 +378,6 @@ class (VariableSym r, StatementSym r) => AssignStatement r where
 (&=) :: (AssignStatement r) => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
 (&=) = assign
-
-assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
-  -> SValue r -> SValue r -> MSStatement r
-assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   -- | Declare a variable without giving it a value.

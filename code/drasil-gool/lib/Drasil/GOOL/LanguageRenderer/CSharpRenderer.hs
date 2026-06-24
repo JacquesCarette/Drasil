@@ -59,7 +59,7 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, classVarAccess, cast, listSetFunc, castObj, classLevel,
+  printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
@@ -71,18 +71,19 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
-  listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
-  pi, printSt, setMethodCall, stateVar, stateVarDef, string)
+  listDecDef, listSet, mainFunction, notNull, instanceVarSelf, openFileA,
+  openFileR, openFileW, pi, printSt, setMethodCall, stateVar, stateVarDef,
+  string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   classMethodCall, listAppend, listAdd, innerType)
 
@@ -115,7 +116,7 @@ import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
-  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc)
+  extFuncAppMixedArgs, extVar, listAccessFunc)
 
 csExt :: String
 csExt = "cs"
@@ -453,7 +454,7 @@ instance List CSharpCode where
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
@@ -471,8 +472,6 @@ instance InternalGetSet CSharpCode where
 
 instance InternalListFunc CSharpCode where
   listAccessFunc = CS.listAccessFunc
-  -- Hack! This produces a statement and calls it a value
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp

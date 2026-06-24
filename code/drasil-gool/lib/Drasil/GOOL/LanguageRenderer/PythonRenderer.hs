@@ -55,7 +55,7 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVarAccess, listSetFunc, castObj, instanceLevel, break, continue, addComments,
+  classVarAccess, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
@@ -68,7 +68,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
   subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
@@ -453,7 +453,7 @@ instance List PythonCode where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
@@ -472,7 +472,6 @@ instance InternalGetSet PythonCode where
 
 instance InternalListFunc PythonCode where
   listAccessFunc = CS.listAccessFunc
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym PythonCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp

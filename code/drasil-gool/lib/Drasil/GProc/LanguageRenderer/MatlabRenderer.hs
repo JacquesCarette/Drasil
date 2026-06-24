@@ -358,7 +358,6 @@ instance InternalList MatlabCode where
 
 instance InternalListFunc MatlabCode where
   listAccessFunc = undefined
-  listSetFunc = undefined
 
 instance BinderSym MatlabCode where
   binder = undefined

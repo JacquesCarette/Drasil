@@ -74,13 +74,13 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.NamedIdea
   , IdeaDict, idea, idea'
   -- Language.Drasil.Chunk.CommonIdea
-  , CI, commonIdeaWithDict, prependAbrv
+  , CI, commonIdea, prependAbrv
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , cncpt, cncpt', cncpt'', cncpt''', dccAWDS, dccA, dccWDS, cw, cic
+  , cncpt, cncpt', cncpt'', cncpt''', dccWDS, cw, cic
 
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Eq
@@ -88,10 +88,9 @@ module Language.Drasil (
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
+  , DefinedQuantityDict, quant, quant', quantAU, quantNoUnit, quantNoUnit'
+  , dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
-  -- Language.Drasil.Chunk.Unital
-  , UnitalChunk, uc, uc', ucStaged, ucStaged'
   -- Language.Drasil.Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
@@ -265,7 +264,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk, uc, uc', ucStaged, ucStaged')
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor

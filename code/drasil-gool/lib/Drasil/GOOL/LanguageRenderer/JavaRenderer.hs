@@ -56,7 +56,7 @@ import Drasil.Shared.LanguageRenderer (new, elseIfLabel, forLabel, tryLabel,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj',
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep,
   access, containing, mathFunc, functionDox, variableList,
-  parameterList, appendToBody, surroundBody, intValue, valueList)
+  parameterList, appendToBody, surroundBody, valueList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
   multiStmt, body, printFile, classVarAccess, cast, castObj,
@@ -72,11 +72,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
@@ -477,7 +477,7 @@ instance List JavaCode where
   listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet list idx vl = valStmt $ objMethodCall void list jListSet [idx, vl]
   indexOf = CP.indexOf jIndex
 
 instance Set JavaCode where
@@ -495,7 +495,6 @@ instance InternalGetSet JavaCode where
 
 instance InternalListFunc JavaCode where
   listAccessFunc = CP.listAccessFunc' jListAccess
-  listSetFunc = jListSetFunc
 
 instance BinderSym JavaCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -911,10 +910,6 @@ jParseDblFunc v = funcApp jParseDbl double [v]
 
 jParseFloatFunc :: SValue JavaCode -> SValue JavaCode
 jParseFloatFunc v = funcApp jParseFloat float [v]
-
-jListSetFunc :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode ->
-  VSFunction JavaCode
-jListSetFunc v i toVal = func jListSet (onStateValue valueType v) [intValue i, toVal]
 
 jNextFunc :: VSFunction JavaCode
 jNextFunc = func jNext string []

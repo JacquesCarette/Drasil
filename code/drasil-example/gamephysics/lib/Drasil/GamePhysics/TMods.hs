@@ -3,6 +3,7 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -55,8 +56,8 @@ newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs newtonLUGModel "UniversalGravLaw" newtonLUGNotes
 
 newtonForceQuant :: DefinedQuantityDict
-newtonForceQuant = dqd' (dccA "force" (nounPhraseSP "Newton's law of universal gravitation")
-                    "the gravitational force between two masses" Nothing) (symbol force) Real Nothing
+newtonForceQuant = quantNoUnit' (mkUid "force") (nounPhraseSP "Newton's law of universal gravitation")
+                    (S "the gravitational force between two masses") (symbol force) Real
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

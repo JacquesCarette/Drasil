@@ -11,15 +11,15 @@ import qualified Data.Drasil.Units.Thermodynamics as UT (heatCapSpec, thermalFlu
 
 -- * With Units
 
-thermoquants :: [UnitalChunk]
+thermoquants :: [DefinedQuantityDict]
 thermoquants = [boilPt, temp, heatCapSpec, htFlux, latentHeat, meltPt, sensHeat]
 
-boilPt, temp, heatCapSpec, htFlux, latentHeat, meltPt, sensHeat :: UnitalChunk
+boilPt, temp, heatCapSpec, htFlux, latentHeat, meltPt, sensHeat :: DefinedQuantityDict
 
-boilPt        = uc CT.boilPt      (sub cT (label "boil")) Real centigrade
-temp          = uc CT.temp        cT                      Real centigrade
-heatCapSpec   = uc CT.heatCapSpec cC                      Real UT.heatCapSpec
-htFlux        = uc CT.htFlux      lQ                      Real UT.thermalFlux
-latentHeat    = uc CT.latentHeat  cQ                      Real joule
-meltPt        = uc CT.meltPt      (sub cT (label "melt")) Real centigrade
-sensHeat      = uc CT.sensHeat    cE                      Real joule
+boilPt        = dqd CT.boilPt      (sub cT (label "boil")) Real centigrade
+temp          = dqd CT.temp        cT                      Real centigrade
+heatCapSpec   = dqd CT.heatCapSpec cC                      Real UT.heatCapSpec
+htFlux        = dqd CT.htFlux      lQ                      Real UT.thermalFlux
+latentHeat    = dqd CT.latentHeat  cQ                      Real joule
+meltPt        = dqd CT.meltPt      (sub cT (label "melt")) Real centigrade
+sensHeat      = dqd CT.sensHeat    cE                      Real joule

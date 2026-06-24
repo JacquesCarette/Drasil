@@ -5,4 +5,4 @@ import Language.Drasil
 import Data.Drasil.Domains (civilEng)
 
 progName :: CI
-progName = commonIdeaWithDict (mkUid "ssp") (pn' "Slope Stability analysis Program") "SSP" [civilEng]
+progName = commonIdea (mkUid "ssp") (pn' "Slope Stability analysis Program") "SSP" [civilEng]

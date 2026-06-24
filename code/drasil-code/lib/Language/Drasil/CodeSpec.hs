@@ -192,9 +192,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
 -- | Convert a 'Func' to an implementation-stage 'DefinedQuantityDict' representing the
 -- function.
 asVC :: Func -> DefinedQuantityDict
-asVC (FDef (FuncDef n d _ _ _ _)) = dqdNoUnit (cncpt''' (mkUid n) (nounPhraseSP n) (S d)) (Variable n) Real
-asVC (FDef (CtorDef n d _ _ _))   = dqdNoUnit (cncpt''' (mkUid n) (nounPhraseSP n) (S d)) (Variable n) Real
-asVC (FData (FuncData n d _))     = dqdNoUnit (cncpt''' (mkUid n) (nounPhraseSP n) (S d)) (Variable n) Real
+asVC (FDef (FuncDef n d _ _ _ _)) = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
+asVC (FDef (CtorDef n d _ _ _))   = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
+asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
 
 -- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID

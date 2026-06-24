@@ -60,7 +60,7 @@ import Drasil.Shared.LanguageRenderer (blockCmtStart, blockCmtEnd, docCmtStart,
   listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
-  classVarAccess, func, listSetFunc, castObj, classLevel, instanceLevel, break, continue,
+  classVarAccess, func, castObj, classLevel, instanceLevel, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem, switch)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr,
@@ -71,19 +71,20 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts, function,
-  docFunc, buildClass, implementingClass, docClass, commentedClass, modFromData,
-  fileDoc, fileFromData, defaultOptSpace, local)
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
+  construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
+  buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
+  fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
   bindingError, notNull, listDecDef, destructorError, stateVarDef, constVar,
   litArray, extraClass, doubleRender, double, openFileR, openFileW, self,
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
-  mainBody, inOutFunc, docInOutFunc', float, stringRender', string', inherit,
-  implements, functionDoc, intToIndex, indexToInt, global, setMethodCall)
+  multiAssign, multiReturn, listDec, listSet, funcDecDef, inOutCall,
+  forLoopError, mainBody, inOutFunc, docInOutFunc', float, stringRender',
+  string', inherit, implements, functionDoc, intToIndex, indexToInt, global,
+  setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize', varDecDef, setDecDef, extObjDecNew, while)
@@ -463,7 +464,7 @@ instance List SwiftCode where
     in objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
   listAppend = CG.listAppend swiftListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = swiftIndexOf
 
 instance Set SwiftCode where
@@ -481,7 +482,6 @@ instance InternalGetSet SwiftCode where
 
 instance InternalListFunc SwiftCode where
   listAccessFunc = CS.listAccessFunc
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym SwiftCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp

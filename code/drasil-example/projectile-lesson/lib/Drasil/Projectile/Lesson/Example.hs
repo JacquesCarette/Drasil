@@ -25,5 +25,5 @@ codeC1 = unlbldCode (sy horiz_velo $= exactDbl 17)
 codeC2 = unlbldCode (sy QP.height $= exactDbl 6)
 codeC3 = unlbldCode (sy QP.gravitationalAccel $= dbl 9.81)
 
-horiz_velo :: UnitalChunk
-horiz_velo = uc horizontalMotion (variable "horiz_velo") Real velU
+horiz_velo :: DefinedQuantityDict
+horiz_velo = dqd horizontalMotion (variable "horiz_velo") Real velU

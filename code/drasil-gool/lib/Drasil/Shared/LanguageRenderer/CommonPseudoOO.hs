@@ -7,13 +7,13 @@ module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule',
   call', listSizeFunc, listAccessFunc', string, docInOutFunc, bindingError,
   extFuncAppMixedArgs, notNull, listDecDef, destructorError, stateVarDef,
-  constVar, litArray, litSet, listSetFunc, litSetFunc, extraClass,
-  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
-  mainBody, inOutFunc, docInOutFunc', bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, setDecDef, setDec, intToIndex,
-  indexToInt, intToIndex', indexToInt', varDecDef, openFileR', openFileW',
-  openFileA', argExists, global, setMethodCall
+  constVar, litArray, litSet, litSetFunc, extraClass, listAccessFunc,
+  doubleRender, double, openFileR, openFileW, stateVar, self, multiAssign,
+  multiReturn, listDec, funcDecDef, inOutCall, forLoopError, mainBody, inOutFunc,
+  docInOutFunc', bool, floatRender, float, stringRender', string', inherit,
+  implements, listSize, listSet, setDecDef, setDec, intToIndex, indexToInt,
+  intToIndex', indexToInt', varDecDef, openFileR', openFileW', openFileA',
+  argExists, global, setMethodCall
 ) where
 
 import Utils.Drasil (stringList)
@@ -32,7 +32,7 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
-  varDecDef, constDecDef), IndexTranslator(indexToInt),
+  varDecDef, constDecDef), IndexTranslator(indexToInt, intToIndex),
   ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
@@ -54,14 +54,14 @@ import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
   RenderMod(modFromData))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..),
   StateVarElim(..), ClassElim(..))
-import Drasil.Shared.LanguageRenderer (listAccessFunc, listSetFunc, array', new', args, array, listSep, access,
+import Drasil.Shared.LanguageRenderer (listAccessFunc, array', new', args, array, listSep, access,
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
   moduleDox, variableList, valueList, intValue)
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
-  mkStateVal, mkStateVar, typeFromData)
+  mkStateVal, mkStateVar, typeFromData, mkVar)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
@@ -536,6 +536,16 @@ openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 
 argExists :: (CommonRenderSym r) => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
+
+-- Python, C#, Swift, and Julia
+
+listSet :: (CommonRenderSym r) => SValue r -> SValue r
+  -> SValue r -> MSStatement r
+listSet list idx val = do
+  list' <- zoom lensMStoVS list
+  idx' <- zoom lensMStoVS (IC.intToIndex idx)
+  let listAccessVar = mkVar (render $ RC.value list') (valueType list') (RC.value list' <> brackets (RC.value idx')) -- hack
+  listAccessVar &= val
 
 -- Julia and MATLAB --
 

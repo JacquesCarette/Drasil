@@ -10,9 +10,7 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Drasil.Database (HasUID(..), HasChunkRefs(..), mkUid)
 
-import Language.Drasil.Chunk.Concept (dccWDS, cncpt''')
-import Language.Drasil.Chunk.Unital (uc')
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd', dqdWr, dqdNoUnit)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr, quant, quantAU, quantNoUnit)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
@@ -91,19 +89,19 @@ constrainedWithRationale q cs rv r = ConstrConcept (dqdWr q) cs (Just rv) (Just 
 cuc' :: String -> NP -> String -> Symbol -> UnitDefn
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (dqdWr (uc' nam trm (S desc) sym space un)) cs (Just rv) Nothing
+  ConstrConcept (quant (mkUid nam) trm (S desc) sym space un) cs (Just rv) Nothing
 
 -- | Similar to cuc', but does not include a unit.
 cucNoUnit' :: String -> NP -> String -> Symbol
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cucNoUnit' nam trm desc sym space cs rv =
-  ConstrConcept (dqdNoUnit (dccWDS nam trm (S desc)) sym space) cs (Just rv) Nothing
+  ConstrConcept (quantNoUnit (mkUid nam) trm (S desc) sym space) cs (Just rv) Nothing
 
 -- | Similar to 'cuc'', but 'Symbol' is dependent on 'Stage'.
 cuc'' :: String -> NP -> String -> (Stage -> Symbol) -> UnitDefn
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc'' nam trm desc sym un space cs rv =
-  ConstrConcept (dqd' (cncpt''' (mkUid nam) trm (S desc)) sym space (Just un)) cs (Just rv) Nothing
+  ConstrConcept (quantAU (mkUid nam) trm (S desc) Nothing sym space (Just un)) cs (Just rv) Nothing
 
 -- | Similar to 'cnstrw', but types must also have a 'Concept'.
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept

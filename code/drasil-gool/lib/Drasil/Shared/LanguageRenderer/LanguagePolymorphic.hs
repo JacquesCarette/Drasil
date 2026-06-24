@@ -10,10 +10,10 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  objAccess, objMethodCall, func, get, set, listAccess, listSet, getFunc,
-  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
+  objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
   buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
   docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
 ) where
@@ -48,7 +48,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
   BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
-  InternalListFunc (listAccessFunc, listSetFunc), RenderStatement(stmt),
+  InternalListFunc (listAccessFunc), RenderStatement(stmt),
   InternalIOStmt(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
@@ -305,12 +305,6 @@ listAccess v i = do
                               (\ix -> funcFromData (brackets (RC.value ix)) t)
       checkType _ = error "listAccess called on non-list-type value"
   f <- checkType (getCodeType (valueType v'))
-  mkVal (RC.functionType f) (RC.value v' <> RC.function f)
-
-listSet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listSet v i toVal = do
-  v' <- v
-  f <- S.listSetFunc v (IC.intToIndex i) toVal
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 getFunc :: (OORenderSym r) => SVariable r -> VSFunction r

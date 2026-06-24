@@ -72,7 +72,7 @@ strDisFacEq = apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 nonFL :: InstanceModel
 nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
   (qwUC tolLoad : qwUC modElas : qwUC minThick : abInputConstraints)
-  (dqdWr nonFactorL) [] [dRef astm2009] "nFL"
+  nonFactorL [] [dRef astm2009] "nFL"
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
 nonFLEq :: Expr
@@ -141,7 +141,7 @@ probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg $ sy $ risk ^. output)
 
 calofCapacity :: InstanceModel
 calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
-  (qwUC (nonFL ^. output) : qwUC (glaTyFac ^. output) : [qwUC loadSF]) (dqdWr lRe) []
+  (qwUC (nonFL ^. output) : qwUC (glaTyFac ^. output) : [qwUC loadSF]) lRe []
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef

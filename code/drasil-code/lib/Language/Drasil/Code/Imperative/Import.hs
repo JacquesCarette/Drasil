@@ -586,7 +586,7 @@ convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
   v' <- mkVar v
   t <- codeType v
-  let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
+  let asgFunc (C.List _) = listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
   return $ asgFunc t
@@ -1094,7 +1094,7 @@ convStmtProc (FAsgIndex v i e) = do
   e' <- convExprProc e
   v' <- mkVarProc v
   t <- codeType v
-  let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
+  let asgFunc (C.List _) = listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
   return $ asgFunc t

@@ -32,7 +32,7 @@ angularDisplacementIM = imNoRefs angularDisplacementMK
   [qwC lenRod $ UpFrom (Exc, exactDbl 0)
   ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
-  (dqdWr pendDisplacementAngle) [UpFrom (Exc, exactDbl 0)]
+  pendDisplacementAngle [UpFrom (Exc, exactDbl 0)]
   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
 
 angularDisplacementMK :: ModelKind Expr

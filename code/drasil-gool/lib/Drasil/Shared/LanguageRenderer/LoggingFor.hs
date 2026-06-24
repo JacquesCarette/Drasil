@@ -157,13 +157,9 @@ instance (SharedProg lang) => IOStatement (LoggingFor lang) where
   openFileW = liftLogging openFileW
   openFileA = liftLogging openFileA
   closeFile = liftLogging closeFile
-  getFileInputLine file vr = liftLogging $ multi $
-    getFileInputLine (lowerLogging file) (lowerLogging vr)
-    : logVarUpdate vr
+  getFileInputLine = liftLogging getFileInputLine
   discardFileLine = liftLogging discardFileLine
-  getFileInputAll file vr = liftLogging $ multi $
-    getFileInputAll (lowerLogging file) (lowerLogging vr)
-    : logVarUpdate vr
+  getFileInputAll = liftLogging getFileInputAll
 
 -- SharedProg Boilerplate
 

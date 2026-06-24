@@ -28,6 +28,7 @@ import Language.Drasil.Printing.Import
 
 -- FIXME: Need to rename this to something more LessonPlan-focused.
 data Options = Options {
+  -- FIXME: I don't think `LsnDesc` should be an option.
   lsnDesc :: LsnDesc,
   -- FIXME: `titleComb` seems a bit odd. We only use `S.forT`. Two things:
   --
@@ -37,6 +38,7 @@ data Options = Options {
   -- 2. The title should probably just directly come from the system name.
   titleComb :: CI -> CI -> Sentence,
   lsnFileName :: String
+  -- FIXME: Output formats? This can be rendered as a literate notebook as well.
 }
 
 instance Render LessonPlan Options where
@@ -54,7 +56,11 @@ instance Render LessonPlan Options where
       as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
       nb = Notebook nm as $ mkSections (plan ^. systemdb) lsnDesc
       -- FIXME: `piSys` is an "options" constructor. Here is another opportunity
-      -- to create a `Render` instance.
+      -- to create a `Render` instance. If we had this, then the `Render
+      -- LessonPlan Options` instance should really nest two options sets: one
+      -- for the `LessonPlan -> Notebook` renderer and one for the `Notebook ->
+      -- Document`. Wait! 3 I suppose. One more for the `Document -> Jupyter`
+      -- final rendering. Wait! Perhaps there should be a 4th! `Jupyter -> Doc`.
       printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
       pd = makeDocument printSetting nb
 

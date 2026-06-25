@@ -26,10 +26,12 @@ import Drasil.LessonPlan.ExtractBib (extractBib)
 import Language.Drasil.Printers
 import Language.Drasil.Printing.Import
 
--- FIXME: Need to rename this to something more LessonPlan-focused.
+
+-- | Options for the single-file-generating Jupyter notebook renderer.
+--
+-- FIXME: Rename to something more LessonPlan-focused?
 data Options = Options {
-  -- FIXME: I don't think `LsnDesc` should be an option. It should probably be a
-  -- field of `LessonPlan`.
+  -- | Describe the organization of the final lesson plan.
   lsnDesc :: LsnDesc,
   -- FIXME: `titleComb` seems a bit odd. We only use `S.forT`. Two things:
   --
@@ -37,15 +39,17 @@ data Options = Options {
   -- projectile motion lesson plan. This should probably just be "Projectile
   -- Motion Lesson".
   -- 2. The title should probably just directly come from the system name.
+  --
+  -- i.e., we should remove this.
   titleComb :: CI -> CI -> Sentence,
+  -- | The name of the output file (no extension, @.ipynb@ is added later).
   lsnFileName :: String
+
   -- FIXME: Output formats? This can be rendered as a literate notebook as well.
 }
 
 instance Render LessonPlan Options where
-  -- | Renders a 'LessonPlan' using a 'LsnDesc' (a description of the document
-  -- contents and organization) and a title combinator merging "notebook" with the
-  -- name of the 'LessonPlan'.
+  -- | Renders a 'LessonPlan' as a single Jupyter notebook file.
   render plan Options{..} = files
     where
       -- Steps:

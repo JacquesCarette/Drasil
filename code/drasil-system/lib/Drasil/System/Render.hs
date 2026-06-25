@@ -17,6 +17,10 @@ import Drasil.System.Core (HasSystemMeta(..))
 -- artifacts. An instance of `Render` is approximately what it means to define a
 -- off-the-shelf software generator.
 class HasSystemMeta sys => Render sys opts | opts -> sys where
+  -- FIXME: Should we try to name renderers? Should we associate them with
+  -- chunks so we can refer to them in code as well? Perhaps this will give us
+  -- usage statistics, if we have a fine-grained enough `Render`-reliant
+  -- scheme and were polymorphic about the output type.
   render ::
     -- | The system.
     sys ->

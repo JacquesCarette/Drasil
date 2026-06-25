@@ -28,7 +28,8 @@ import Language.Drasil.Printing.Import
 
 -- FIXME: Need to rename this to something more LessonPlan-focused.
 data Options = Options {
-  -- FIXME: I don't think `LsnDesc` should be an option.
+  -- FIXME: I don't think `LsnDesc` should be an option. It should probably be a
+  -- field of `LessonPlan`.
   lsnDesc :: LsnDesc,
   -- FIXME: `titleComb` seems a bit odd. We only use `S.forT`. Two things:
   --
@@ -45,24 +46,24 @@ instance Render LessonPlan Options where
   -- | Renders a 'LessonPlan' using a 'LsnDesc' (a description of the document
   -- contents and organization) and a title combinator merging "notebook" with the
   -- name of the 'LessonPlan'.
-  render plan Options{..} =
-      [file [ps|{lsnFileName}.ipynb|] $ genJupyterLessonPlan pd]
+  render plan Options{..} = files
     where
-      -- FIXME: We can clean this up using another `instance Render ? ? where`
-      -- here. This might mean we have the wrong design for `Render`. We might
-      -- need a 3rd type parameter for the output type of the 'rendering'
-      -- action.
+      -- Steps:
+
+      -- 1. Generate SDL (Semantic Document language) using `LessonPlan`.
       nm = notebook `titleComb` (plan ^. sysName)
       as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
       nb = Notebook nm as $ mkSections (plan ^. systemdb) lsnDesc
-      -- FIXME: `piSys` is an "options" constructor. Here is another opportunity
-      -- to create a `Render` instance. If we had this, then the `Render
-      -- LessonPlan Options` instance should really nest two options sets: one
-      -- for the `LessonPlan -> Notebook` renderer and one for the `Notebook ->
-      -- Document`. Wait! 3 I suppose. One more for the `Document -> Jupyter`
-      -- final rendering. Wait! Perhaps there should be a 4th! `Jupyter -> Doc`.
+
+      -- 2. Transpile SDL to TDL (Typesetting Document Language).
       printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
       pd = makeDocument printSetting nb
+
+      -- 3. Generate `Prettyprinter.Doc` body using TDL.
+      doc = genJupyterLessonPlan pd
+
+      -- 4. Emit final files (with `Prettyprinter.Doc` body).
+      files = [file [ps|{lsnFileName}.ipynb|] doc]
 
 -- | Helper for creating the notebook sections.
 mkSections :: ChunkDB -> LsnDesc -> [Section]

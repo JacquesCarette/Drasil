@@ -564,7 +564,7 @@ instance IOStatement CSharpCode where
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine csReadLine
   getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)
-    (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
+    (oneLiner $ listAppend (valueOf v) (csFileInput f))
 
 instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string)

@@ -99,10 +99,8 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf myOtherList),
   assert (valueOf (var "a" int) ?== litInt 2) (litString "List size should be 2"),
-  valStmt (listAdd (valueOf myOtherList)
-    (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf myOtherList)
-    (litDouble 2.5)),
+  listAdd (valueOf myOtherList) (litInt 2) (litDouble 2.0),
+  listAppend (valueOf myOtherList) (litDouble 2.5),
   varDec (var "e" double) mainFn,
   var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
   listSet (valueOf myOtherList) (litInt 1) (litDouble 17.4),

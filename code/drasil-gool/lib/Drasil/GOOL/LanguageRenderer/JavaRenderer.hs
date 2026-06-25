@@ -587,7 +587,7 @@ instance IOStatement JavaCode where
   getFileInputLine f v = v &= f $. jNextLineFunc
   discardFileLine = CP.discardFileLine jNextLine
   getFileInputAll f v = while (f $. jHasNextLineFunc)
-    (oneLiner $ valStmt $ listAppend (valueOf v) (f $. jNextLineFunc))
+    (oneLiner $ listAppend (valueOf v) (f $. jNextLineFunc))
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = do

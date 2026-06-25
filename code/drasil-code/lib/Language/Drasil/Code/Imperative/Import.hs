@@ -663,7 +663,7 @@ convStmt (FMulti ss) = do
 convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ valStmt $ listAppend a' b'
+  return $ listAppend a' b'
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
@@ -738,7 +738,7 @@ readData ddef = do
         ---------------
         appendTemp :: (OOProg r) => String -> DataItem ->
           GenState (MSStatement r)
-        appendTemp sfx v = fmap (\t -> valStmt $ listAppend
+        appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
 
@@ -966,7 +966,7 @@ readDataProc ddef = do
         ---------------
         appendTemp :: (SharedProg r) => String -> DataItem ->
           GenState (MSStatement r)
-        appendTemp sfx v = fmap (\t -> valStmt $ listAppend
+        appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
 
@@ -1171,7 +1171,7 @@ convStmtProc (FMulti ss) = do
 convStmtProc (FAppend a b) = do
   a' <- convExprProc a
   b' <- convExprProc b
-  return $ valStmt $ listAppend a' b'
+  return $ listAppend a' b'
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.

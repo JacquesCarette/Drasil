@@ -50,19 +50,19 @@ instance Render LessonPlan Options where
     where
       -- Steps:
 
-      -- 1. Generate SDL (Semantic Document language) using `LessonPlan`.
+      -- 1. Transform `LessonPlan` into SDL (Semantic Document language).
       nm = notebook `titleComb` (plan ^. sysName)
       as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
       nb = Notebook nm as $ mkSections (plan ^. systemdb) lsnDesc
 
-      -- 2. Transpile SDL to TDL (Typesetting Document Language).
+      -- 2. Transform SDL into TDL (Typesetting Document Language).
       printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
       pd = makeDocument printSetting nb
 
-      -- 3. Generate `Prettyprinter.Doc` body using TDL.
+      -- 3. Transform TDL into `Prettyprinter.Doc`.
       doc = genJupyterLessonPlan pd
 
-      -- 4. Emit final files (with `Prettyprinter.Doc` body).
+      -- 4. Produce final files (with `Prettyprinter.Doc` body).
       files = [file [ps|{lsnFileName}.ipynb|] doc]
 
 -- | Helper for creating the notebook sections.

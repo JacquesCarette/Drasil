@@ -89,6 +89,9 @@ public class HelloWorld {
         TestClass t3 = TestClass.add(t1, t2);
         Console.Write("Value of t3.a: ");
         Console.WriteLine(t3.a);
+        TestClass t4 = t3.addToInstance(t2);
+        Console.Write("Value of t4.a: ");
+        Console.WriteLine(t4.a);
         
         // List slicing tests
         // Create variables for list slices
@@ -439,5 +442,9 @@ public class TestClass {
     
     public static TestClass add(TestClass t1, TestClass t2) {
         return new TestClass(t1.a + t2.a);
+    }
+    
+    public TestClass addToInstance(TestClass t) {
+        return TestClass.add(this, t);
     }
 }

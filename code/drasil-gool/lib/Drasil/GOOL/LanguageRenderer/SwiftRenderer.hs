@@ -27,11 +27,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
-  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs,
-  objMethodCallNamedArgs, objMethodCallNoParams, OOFunctionSym(..), ($.),
-  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
+  objMethodCall, objMethodCallMixedArgs, objMethodCallNamedArgs,
+  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
@@ -78,13 +78,12 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  classVarAccess, instanceVarSelf, intClass, buildModule, docMod', contains,
-  bindingError, notNull, listDecDef, destructorError, stateVarDef, constVar,
-  litArray, extraClass, doubleRender, double, openFileR, openFileW, self,
-  multiAssign, multiReturn, listDec, listSet, funcDecDef, inOutCall,
-  forLoopError, mainBody, inOutFunc, docInOutFunc', float, stringRender',
-  string', inherit, implements, functionDoc, intToIndex, indexToInt, global,
-  setMethodCall)
+  classVarAccess, intClass, buildModule, docMod', contains, bindingError,
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
+  extraClass, doubleRender, double, openFileR, openFileW, self, multiAssign,
+  multiReturn, listDec, listSet, funcDecDef, inOutCall, forLoopError, mainBody,
+  inOutFunc, docInOutFunc', float, stringRender', string', inherit, implements,
+  functionDoc, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize', varDecDef, setDecDef, extObjDecNew, while)
@@ -293,9 +292,6 @@ instance OOVariableSym SwiftCode where
 
 instance SelfSym SwiftCode where
   self = CP.self
-
-instance InstanceVarSelfSym SwiftCode where
-  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim SwiftCode where
   variableName = varName . unSC

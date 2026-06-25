@@ -25,11 +25,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
   ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
-  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfMethodCall,
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
+  OOValueExpression(..), selfMethodCall, OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
@@ -279,9 +279,6 @@ instance OOVariableSym PythonCode where
 
 instance SelfSym PythonCode where
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
-
-instance InstanceVarSelfSym PythonCode where
-  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim PythonCode where
   variableName = varName . unPC

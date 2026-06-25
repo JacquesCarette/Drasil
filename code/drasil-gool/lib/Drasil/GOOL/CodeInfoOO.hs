@@ -17,10 +17,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
   ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
-  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
+  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
   ScopeData, ScopeTag(..), sd, bindFormD)
@@ -128,9 +128,6 @@ instance OOVariableSym CodeInfoOO where
 
 instance SelfSym CodeInfoOO where
   self              = noInfo
-
-instance InstanceVarSelfSym CodeInfoOO where
-  instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""

@@ -3,8 +3,7 @@
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
-  ConceptChunk, cncpt, cncpt', cncpt'', cncpt''',
-  dccWDS, cw,
+  ConceptChunk, cncpt, cncpt', cncpt'', cncpt''', cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -73,13 +72,6 @@ cncpt''' ::
   -- | The definition of the 'term'
   Sentence -> ConceptChunk
 cncpt''' u trm defn = ConDict u trm Nothing defn []
-
-{-# DEPRECATED dccWDS
-  "Old smart constructor; use one of `cncpt`, `cncpt'`, `cncpt''`, `cncpt'''` instead." #-}
-
--- | Similar to 'dcc', except the definition takes a 'Sentence'.
-dccWDS :: String -> NP -> Sentence -> ConceptChunk
-dccWDS i = cncpt''' (mkUid i)
 
 {-# DEPRECATED cw
   "Chunk down-casting is strongly discouraged. If you want to construct a `ConceptChunk`, use one of its normal constructors." #-}

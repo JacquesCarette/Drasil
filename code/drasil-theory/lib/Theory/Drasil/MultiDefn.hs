@@ -92,11 +92,11 @@ instance Express e => Express (MultiDefn e) where
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment. First
 -- argument is the 'String' to become a 'UID'.
-mkMultiDefn :: String -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: UID -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
-  | length des == dupsRemovedLen = MultiDefn (mkUid u) q s des
+  | length des == dupsRemovedLen = MultiDefn u q s des
   | otherwise                    = error $
-      "MultiDefn `" ++ u ++ "` created with non-unique list of expressions"
+      "MultiDefn `" ++ show u ++ "` created with non-unique list of expressions"
   where
     dupsRemovedLen = length $ NE.nub des
 
@@ -104,7 +104,7 @@ mkMultiDefn u q s des
 
 -- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'DefinedQuantityDict'.
 mkMultiDefnForQuant :: DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
-mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
+mkMultiDefnForQuant q = mkMultiDefn (q ^. uid) q
 
 -- | Smart constructor for 'DefiningExpr's.
 mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e

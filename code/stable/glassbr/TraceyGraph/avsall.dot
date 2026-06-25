@@ -66,9 +66,10 @@ digraph "avsall" {
     "instance:reusable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:reusable"];
     "instance:maintainable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainable"];
     "instance:portable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:portable"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:sysSetValsFollowingAssumps" "instance:checkInputWithDataCons" "instance:outputValsAndKnownValues" "instance:checkGlassSafety" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable";
+        "instance:inputValues" "instance:sysSetValsFollowingAssumps" "instance:checkInputWithDataCons" "instance:outputValsAndKnownValues" "instance:checkGlassSafety" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable" "instance:outputValues2";
     }
     "instance:calcInternalBlastRisk" [shape=box, color=black, style=filled, fillcolor="lavender", label="LC:calcInternalBlastRisk"];
     "instance:varValsOfmkE" [shape=box, color=black, style=filled, fillcolor="lavender", label="LC:varValsOfmkE"];

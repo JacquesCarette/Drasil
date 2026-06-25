@@ -61,9 +61,10 @@ digraph "avsall" {
     "instance:security" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:security"];
     "instance:maintainability" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainability"];
     "instance:verifiability" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:verifiability"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:verifyInputs" "instance:calculateValues" "instance:outputValues" "instance:portable" "instance:security" "instance:maintainability" "instance:verifiability";
+        "instance:inputValues" "instance:verifyInputs" "instance:calculateValues" "instance:outputValues" "instance:portable" "instance:security" "instance:maintainability" "instance:verifiability" "instance:outputValues2";
     }
     "instance:likeChgPP" [shape=box, color=black, style=filled, fillcolor="lavender", label="LC:likeChgPP"];
     subgraph "LC" {

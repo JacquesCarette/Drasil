@@ -16,7 +16,11 @@ Calculate-Values: Calculate the following values: \\({t\_{\text{flight}}}\\) (fr
 
 <div id="outputValues"></div>
 
-Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)) and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)).
+Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)), \\({p\_{\text{land}}}\\) (from [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist)), and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)).
+
+<div id="outputValues2"></div>
+
+Output-Values-2: Output \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)) and \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)).
 
 <div id="Table:ReqInputs"></div>
 

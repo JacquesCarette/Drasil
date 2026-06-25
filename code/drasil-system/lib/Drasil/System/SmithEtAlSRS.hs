@@ -23,15 +23,15 @@ import qualified Data.List.NonEmpty as NE
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
-  Constrained, ConstQDef, abrv, DefinedQuantityDict)
-import Language.Drasil.Document (LabelledContent, Reference)
-import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
+import Drasil.Database (UID, HasUID(..), ChunkDB, insert, showUID)
+import Language.Drasil
+import Language.Drasil.Document (LabelledContent, Reference, refS)
+import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel, HasOutput (..))
 import Data.String.Extras (toPlainName)
 
 import Drasil.System.Core (SystemMeta, Background, HasSystemMeta(..),
   mkSystemMeta, Motivation, Purpose, Scope)
+import Data.Drasil.Concepts.Documentation (funcReqDom)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -79,11 +79,28 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
     NE.NonEmpty h -> NE.NonEmpty i -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
     [LabelledContent] -> ChunkDB -> [Reference] -> SmithEtAlSRS
 mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs lcs db refs
-  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
+  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db') progName tms gds dds ims hs is js
       cqds qs lcs refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
     progName = toPlainName $ filter (not . isSpace) $ abrv nm
+
+    -- Create a map of var -> sentences containing references to the IM/DD
+    -- defining the var
+    varSrcRef model = let out = model ^. output in (out ^. uid, refS model)
+    outMap = M.fromList $ map varSrcRef dds ++ map varSrcRef ims -- FIXME: What do if an IM and a DD have the same output?
+
+    -- Calculate where the outputs came from, formatted as strings
+    outSrcRef q = let src = fromMaybe (error $ "no solution for " ++ showUID q) $ M.lookup (q ^. uid) outMap
+                   in ch q +:+ S "(from" +:+ src :+: S ")"
+    outSrcs = outSrcRef <$> is
+
+    -- Create the output FR
+    outFR = cic "outputValues2" desc "Output-Values-2" funcReqDom
+    desc = foldlSent [S "Output", foldlList Comma List $ NE.toList outSrcs]
+
+    -- Insert the output FR into the db
+    db' = insert outFR db
 
 -- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> SmithEtAlSRS -> [UID]

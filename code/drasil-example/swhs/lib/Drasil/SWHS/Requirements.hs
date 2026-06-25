@@ -1,8 +1,10 @@
 module Drasil.SWHS.Requirements (
   funcReqs, nfRequirements, verifyEnergyOutput, funcReqsTables,
   calcValues, checkWithPhysConsts, findMassConstruct, inReqDesc,
-  oIDQConstruct, outputValues
+  oIDQConstruct, outputValues, time
 ) where
+
+import qualified Data.List.NonEmpty as NE (fromList)
 
 import Language.Drasil
 import Language.Drasil.Document
@@ -13,7 +15,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
 import Drasil.SRS (mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR,
-  mkUnderstandableNFR, mkReusableNFR, inReqWTab)
+  mkUnderstandableNFR, mkReusableNFR, inReqWTab, outReq, mkQRTuple)
 import Drasil.SRS.Concepts (datCon, propCorSol)
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -48,8 +50,8 @@ import Control.Lens ((^.))
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputValues, findMass, checkWithPhysConsts, outputInputDerivVals,
-  calcValues swhsOutputs, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd,
-  outputValues swhsOutputs]
+  calcValues, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd,
+  outputValues]
 
 funcReqsTables :: [LabelledContent]
 funcReqsTables = [inputValuesTable]
@@ -63,9 +65,7 @@ inputValuesTable :: LabelledContent
 (inputValues, inputValuesTable) = inReqWTab (Just inReqDesc) inputs
 
 findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
-  calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
-
-calcValues, outputValues :: [InstanceModel] -> ConceptInstance
+  calcPCMMeltBegin, calcPCMMeltEnd, calcValues :: ConceptInstance
 
 --
 findMass = findMassConstruct inputValues (plural mass) iMods
@@ -103,8 +103,9 @@ oIDQVals = map foldlSent_ [
   ]
 
 --
-calcValues l = cic "calcValues" (S "Calculate the following" +: plural value +:+.
-  outputList l) "Calculate-Values" funcReqDom
+calcValues = cic "calcValues" (S "Calculate the following" +: plural value +:+.
+  foldlList Comma List (map (\x -> ch (x ^. output) :+: sParen (ch time) +:+ fromSource x) swhsOutputs))
+  "Calculate-Values" funcReqDom
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
@@ -126,12 +127,9 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
   ch tFinalMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-End-Time" funcReqDom
 --
-outputValues l = cic "outputValues" (titleize output_ +:+. outputList l)
-  "Output-Values" funcReqDom
 
-outputList :: [InstanceModel] -> Sentence
-outputList l = foldlList Comma List $
-  map (\x -> ch (x ^. output) :+: sParen (ch time) +:+ fromSource x) l
+outputValues :: ConceptInstance
+(outputValues, _) = outReq (Just $ S "over" +:+ ch time) (NE.fromList $ mkQRTuple iMods)
 
 swhsOutputs :: [InstanceModel]
 swhsOutputs = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

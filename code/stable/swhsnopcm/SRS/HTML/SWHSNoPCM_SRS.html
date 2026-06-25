@@ -1482,7 +1482,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#outputValues2>FR:Output-Values-2</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1590,7 +1590,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#outputValues2>FR:Output-Values-2</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1783,7 +1783,12 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>) and <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
+                  Output-Values: Output <em>T<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>) and <em>E<sub>W</sub></em> (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>) over <em>t</em>.
+                </div>
+              </p>
+              <p>
+                <div id="outputValues2">
+                  Output-Values-2: Output <em>T<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>) and <em>E<sub>W</sub></em> (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
                 </div>
               </p>
             </div>
@@ -2655,6 +2660,23 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#outputValues2>FR:Output-Values-2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td>
                 <a href=#likeChgTCVOD>LC:Temperature-Coil-Variable-Over-Day</a>
               </td>
@@ -2970,9 +2992,11 @@
               <th><a href=#understandable>NFR:Understandability</a></th>
               <th><a href=#reusable>NFR:Reusability</a></th>
               <th><a href=#maintainable>NFR:Maintainability</a></th>
+              <th><a href=#outputValues2>FR:Output-Values-2</a></th>
             </tr>
             <tr>
               <td><a href=#waterTempGS>GS:Predict-Water-Temperature</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3020,9 +3044,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3070,11 +3096,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#checkWithPhysConsts>FR:Check-Input-with-Physical_Constraints</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3124,6 +3152,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#calcValues>FR:Calculate-Values</a></td>
@@ -3138,6 +3167,7 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3174,9 +3204,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3224,9 +3256,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR:Understandability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3274,6 +3308,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR:Maintainability</a></td>
@@ -3287,6 +3322,33 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues2>FR:Output-Values-2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

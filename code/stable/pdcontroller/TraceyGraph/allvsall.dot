@@ -29,6 +29,7 @@ digraph "allvsall" {
     "theory:imPDRC" -> "theory:gdPowerPlantRC";
     "instance:calculateValues" -> "theory:imPDRC";
     "instance:outputValues" -> "theory:imPDRC";
+    "instance:outputValues2" -> "theory:imPDRC";
     "instance:likeChgPP" -> "instance:massSpring";
     "instance:likeChgPP" -> "instance:dampingCoeffSpring";
     "instance:likeChgPP" -> "instance:stiffnessCoeffSpring";
@@ -80,9 +81,10 @@ digraph "allvsall" {
     "instance:security" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:security"];
     "instance:maintainability" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainability"];
     "instance:verifiability" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:verifiability"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:verifyInputs" "instance:calculateValues" "instance:outputValues" "instance:portable" "instance:security" "instance:maintainability" "instance:verifiability";
+        "instance:inputValues" "instance:verifyInputs" "instance:calculateValues" "instance:outputValues" "instance:portable" "instance:security" "instance:maintainability" "instance:verifiability" "instance:outputValues2";
     }
     "instance:calculateProcessVariable" [shape=box, color=black, style=filled, fillcolor="darkgoldenrod1", label="GS:calculateProcessVariable"];
     subgraph "GS" {

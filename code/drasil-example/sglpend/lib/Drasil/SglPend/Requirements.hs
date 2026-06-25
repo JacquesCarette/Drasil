@@ -2,12 +2,14 @@ module Drasil.SglPend.Requirements (
   funcReqs, funcReqsTables
 ) where
 
+import qualified Data.List.NonEmpty as NE (NonEmpty, fromList)
+
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.SRS (inReqWTab)
+import Drasil.SRS (inReqWTab, mkQRTuple, outReq)
 import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
-import Drasil.SglPend.IMods (angularDisplacementIM)
+import Drasil.SglPend.IMods (angularDisplacementIM, iMods)
 import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle, inputs)
 import Data.Drasil.Quantities.Physics (angularDisplacement)
 import Drasil.DblPend.Requirements(verifyInptVals)
@@ -19,17 +21,19 @@ funcReqs = [inputValues, verifyInptVals, calcAngPos, outputValues]
 funcReqsTables :: [LabelledContent]
 funcReqsTables = [inputValuesTable]
 
-inputValues :: ConceptInstance
+inputValues, outputValues :: ConceptInstance
 inputValuesTable :: LabelledContent
 (inputValues, inputValuesTable) = inReqWTab Nothing inputs
+(outputValues, _) = outReq Nothing outputsWReqs
 
-calcAngPos, outputValues :: ConceptInstance
+outputsWReqs :: NE.NonEmpty (DefinedQuantityDict, Sentence)
+outputsWReqs = NE.fromList $ mkQRTuple iMods
+
+calcAngPos:: ConceptInstance
 
 calcAngPos = cic "calcAngPos" calcAngPosDesc "Calculate-Angular-Position-Of-Mass" funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values" funcReqDom
 
-calcAngPosDesc, outputValuesDesc :: Sentence
+calcAngPosDesc :: Sentence
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
     ch angularDisplacement `S.and_` ch pendDisplacementAngle,
     sParen (S "from" +:+ refS angularDisplacementIM)]
-outputValuesDesc = foldlSent [atStart output_, ch lenRod, sParen (S "from" +:+ refS angularDisplacementIM)]

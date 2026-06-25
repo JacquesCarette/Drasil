@@ -2,12 +2,13 @@ module Drasil.Projectile.Requirements (
   funcReqs, nonfuncReqs, funcReqsTables
 ) where
 
+import qualified Data.List.NonEmpty as NE (NonEmpty, fromList)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS.Concepts (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,
-  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, inReqWTab)
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR, mkQRTuple, inReqWTab, outReq)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint,
@@ -15,7 +16,7 @@ import Data.Drasil.Concepts.Documentation (datumConstraint,
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.Projectile.IMods (landPosIM, offsetIM, timeIM)
+import Drasil.Projectile.IMods (landPosIM, offsetIM, timeIM, iMods)
 import Drasil.Projectile.Unitals (flightDur, landPos, offset, inputs)
 
 {--Functional Requirements--}
@@ -26,17 +27,21 @@ funcReqs = [inputValues, verifyInVals, calcValues, outputValues]
 funcReqsTables :: [LabelledContent]
 funcReqsTables = [inputValuesTable]
 
-inputValues :: ConceptInstance
+inputValues, outputValues :: ConceptInstance
 inputValuesTable :: LabelledContent
-(inputValues, inputValuesTable) = inReqWTab Nothing inputs
 
-verifyInVals, calcValues, outputValues :: ConceptInstance
+(inputValues, inputValuesTable) = inReqWTab Nothing inputs
+(outputValues, _) = outReq Nothing outputsWReqs
+
+outputsWReqs :: NE.NonEmpty (DefinedQuantityDict, Sentence)
+outputsWReqs = NE.fromList $ mkQRTuple iMods
+
+verifyInVals, calcValues :: ConceptInstance
 
 verifyInVals = cic "verifyInVals" verifyParamsDesc "Verify-Input-Values" funcReqDom
 calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"    funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReqDom
 
-verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
+verifyParamsDesc, calcValuesDesc :: Sentence
 verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the" +:+. namedRef (datCon [] []) (plural datumConstraint),
   S "If any" `S.ofThe` plural inValue `S.are` S "out of bounds" `sC`
@@ -47,12 +52,6 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
     ch landPos   +:+ fromSource landPosIM,
     ch offset    +:+ fromSource offsetIM
   ]]
-outputValuesDesc = atStart output_ +:+. outputs
-  where
-    outputs = foldlList Comma List $ map foldlSent_ [
-        [ch flightDur, fromSource timeIM],
-        [ch offset, fromSource offsetIM]
-      ]
 
 {--Nonfunctional Requirements--}
 

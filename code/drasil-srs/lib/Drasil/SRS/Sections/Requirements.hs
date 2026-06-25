@@ -3,7 +3,7 @@ module Drasil.SRS.Sections.Requirements (
   -- * Requirements
   reqF, reqInputsRef,
   -- * Functional Requirements
-  fReqF,
+  fReqF, outReq,
   -- ** Input Requirements
   inReqWTab,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
@@ -16,6 +16,7 @@ module Drasil.SRS.Sections.Requirements (
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
 import qualified Data.List.NonEmpty as NE
+import Data.Maybe (maybeToList)
 
 -- Generic Drasil
 import Drasil.Database (HasUID(..))
@@ -60,6 +61,34 @@ inReqWTab mdesc qs = (ci, tbl)
       ++ maybe [refS tbl] (\d -> [refS tbl `sC` S "which define", d]) mdesc
     ci = cic "inputValues" desc "Input-Values" funcReqDom
 
+-- | Creates an "output-values" functional requirement and optionally an
+-- associated table of output variables from a non-empty list of tuples
+-- containing quantities and their sources. The 'Maybe Sentence' provides an
+-- optional description to append to the end of the requirement sentence.
+--
+-- If the list contains 3 or less items, no table is generated and the
+-- requirement sentence is of the form: "Output @q_1@ (from @src_1@) and
+-- @q_2@ (from @src_2@) @description@."
+--
+-- If the list contains more than 3 items, a table is generated and the
+-- requirement sentence is of the form: "Output the values from @table_ref@
+-- @description@."
+outReq :: (Quantity q, MayHaveUnit q, Concept q) =>
+  Maybe Sentence -> NE.NonEmpty (q, Sentence) -> (ConceptInstance, Maybe LabelledContent)
+outReq mdesc qs = (ci, mTbl)
+  where
+    ci = cic "outputValues" desc "Output-Values" funcReqDom
+    (desc, mTbl)
+      | length qs <= 4 = (sentenceDesc, Nothing)
+      | otherwise      = (tblDesc, Just tbl)
+    sentenceDesc = foldlSent $
+      [S "Output", foldlList Comma List (map (\(q, src) -> ch q +:+ S "(from" +:+ src :+: S ")") (NE.toList qs))]
+      ++ maybeToList mdesc
+    tblDesc = foldlSent $
+      [atStart output_, S "the", plural value, S "from", refS tbl]
+      ++ maybeToList mdesc
+    tbl = mkValsSourceTable (NE.toList qs) "ReqOutputs" (S "Required Outputs")
+    
 -- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
 fReqF :: [Contents] -> Section
 fReqF listOfFReqs = SRS.funcReq (fReqIntro listOfFReqs : listOfFReqs) []

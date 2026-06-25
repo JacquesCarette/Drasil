@@ -26,7 +26,6 @@ import Drasil.LessonPlan.ExtractBib (extractBib)
 import Language.Drasil.Printers
 import Language.Drasil.Printing.Import
 
-
 -- | Options for the single-file-generating Jupyter notebook renderer.
 --
 -- FIXME: Rename to something more LessonPlan-focused?

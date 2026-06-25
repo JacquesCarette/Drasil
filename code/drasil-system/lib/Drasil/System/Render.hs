@@ -55,11 +55,13 @@ renderSystemRepo sys opts = directory [ps|{x}|] $ render sys opts
 renderSystemRepo' :: Render sys opts =>
   -- | The parent path.
   OsPath ->
+  -- | File overwrite policy.
+  OverwritePolicy ->
   -- | The system.
   sys ->
   -- | The rendering options.
   opts ->
   -- | The software artifacts will be rendered about the 'OsPath'.
   IO ()
-renderSystemRepo' basePath sys =
-  writeFiles OverwriteAllowed basePath . renderSystemRepo sys
+renderSystemRepo' basePath pol sys =
+  writeFiles pol basePath . renderSystemRepo sys

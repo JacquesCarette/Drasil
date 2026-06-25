@@ -83,7 +83,7 @@ caseStudyMainLsnPlan :: LessonPlan -> LsnDesc -> String -> IO ()
 caseStudyMainLsnPlan plan nbDecl lsnFileName = do
   setSystemLocale
   let opts = Options nbDecl S.forT lsnFileName
-  renderSystemRepo' localPath plan opts
+  renderSystemRepo' localPath OverwriteAllowed plan opts
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).

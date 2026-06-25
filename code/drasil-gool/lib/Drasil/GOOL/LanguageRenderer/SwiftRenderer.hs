@@ -20,11 +20,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  IndexTranslator(..), Array(..), List(..), Set(..), listSlice, InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..), convScope)
+  IndexTranslator(..), Dereference(..), Array(..), List(..), Set(..), listSlice,
+  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
@@ -452,6 +452,9 @@ instance GetSet SwiftCode where
 instance IndexTranslator SwiftCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
+
+instance Dereference SwiftCode where
+  maybeDeref = id
 
 instance Array SwiftCode where
   arrayElem = G.arrayElem

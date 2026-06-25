@@ -207,6 +207,9 @@ instance StatementSym lang => StatementSym (LoggingFor lang) where
 instance (Argument lang) => Argument (LoggingFor lang) where
   pointerArg = liftLogging pointerArg
 
+instance (Dereference lang) => Dereference (LoggingFor lang) where
+  maybeDeref = liftLogging maybeDeref
+
 instance (Array lang) => Array (LoggingFor lang) where
   arrayElem = liftLogging arrayElem
   arrayLength = liftLogging arrayLength

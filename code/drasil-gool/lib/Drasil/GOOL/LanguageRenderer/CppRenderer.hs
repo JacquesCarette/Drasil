@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..),
+  extFuncApp, IndexTranslator(..), Dereference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
   selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StrategyPattern(..), OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
@@ -452,6 +452,9 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
 instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   intToIndex = pair1 intToIndex intToIndex
   indexToInt = pair1 indexToInt indexToInt
+
+instance (Pair p) => Dereference (p CppSrcCode CppHdrCode) where
+  maybeDeref = pair1 maybeDeref maybeDeref
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
@@ -1379,6 +1382,15 @@ instance IndexTranslator CppSrcCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Dereference CppSrcCode where
+  maybeDeref vl = do
+    vl' <- vl
+    let vlTyp = cType $ unRepr $ valueType vl'
+        vlDoc = RC.value vl'
+    case vlTyp of
+      (Reference tp) -> mkStateVal (convTypeOO tp) (cppDeref <> vlDoc)
+      _ -> vl
+
 instance Array CppSrcCode where
   arrayElem = G.arrayElem
   arrayLength = listSize
@@ -2069,6 +2081,9 @@ instance GetSet CppHdrCode where
 instance IndexTranslator CppHdrCode where
   intToIndex _ = mkStateVal void empty
   indexToInt _ = mkStateVal void empty
+
+instance Dereference CppHdrCode where
+  maybeDeref = id
 
 instance Array CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty

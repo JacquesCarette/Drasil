@@ -10,11 +10,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
   TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Dereference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
@@ -251,6 +252,9 @@ instance GetSet CodeInfoOO where
 instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
+
+instance Dereference CodeInfoOO where
+  maybeDeref = execute1
 
 instance Array CodeInfoOO where
   arrayElem _ _ = noInfo

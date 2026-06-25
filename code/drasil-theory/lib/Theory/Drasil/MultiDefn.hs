@@ -90,8 +90,7 @@ instance RequiresChecking (MultiDefn Expr) Expr Space where
 instance Express e => Express (MultiDefn e) where
   express q = equiv $ sy q : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
 
--- | Smart constructor for MultiDefns, does nothing special at the moment. First
--- argument is the 'String' to become a 'UID'.
+-- | Smart constructor for MultiDefns, does nothing special at the moment.
 mkMultiDefn :: UID -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
   | length des == dupsRemovedLen = MultiDefn u q s des

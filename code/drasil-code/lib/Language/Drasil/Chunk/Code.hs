@@ -2,16 +2,14 @@
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..),
-  VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars',
+  VarOrFunc(..), DefiningCodeExpr(..), obv, quantvar, quantfunc, ccObjVar,
   listToArray, funcPrefix,
-  DefiningCodeExpr(..)
 ) where
 
 import Control.Lens ((^.), view)
 import Text.PrettyPrint.HughesPJ (render)
 
 import Language.Drasil
-import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Printers (symbolDoc)
 
 import Drasil.Code.CodeVar (CodeChunk(..), CodeIdea(..), VarOrFunc(..),

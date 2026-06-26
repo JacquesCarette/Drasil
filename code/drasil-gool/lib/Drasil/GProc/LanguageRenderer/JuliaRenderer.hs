@@ -383,6 +383,7 @@ instance IndexTranslator JuliaCode where
   indexToInt = CP.indexToInt'
 
 instance Reference JuliaCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array JuliaCode where

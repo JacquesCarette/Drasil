@@ -439,6 +439,7 @@ instance IndexTranslator CSharpCode where
   indexToInt = CP.indexToInt
 
 instance Reference CSharpCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array CSharpCode where

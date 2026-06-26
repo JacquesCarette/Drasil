@@ -335,6 +335,7 @@ instance IndexTranslator MatlabCode where
   indexToInt = undefined
 
 instance Reference MatlabCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array MatlabCode where

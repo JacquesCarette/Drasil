@@ -208,6 +208,7 @@ instance (Argument lang) => Argument (LoggingFor lang) where
   pointerArg = liftLogging pointerArg
 
 instance (Reference lang) => Reference (LoggingFor lang) where
+  makeRef = liftLogging makeRef
   maybeDeref = liftLogging maybeDeref
 
 instance (Array lang) => Array (LoggingFor lang) where

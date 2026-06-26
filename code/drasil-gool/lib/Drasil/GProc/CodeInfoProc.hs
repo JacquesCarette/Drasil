@@ -200,6 +200,7 @@ instance IndexTranslator CodeInfoProc where
   indexToInt = execute1
 
 instance Reference CodeInfoProc where
+  makeRef = execute1
   maybeDeref = execute1
 
 instance Array CodeInfoProc where

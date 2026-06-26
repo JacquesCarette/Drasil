@@ -440,6 +440,7 @@ instance IndexTranslator PythonCode where
   indexToInt = CP.indexToInt
 
 instance Reference PythonCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array PythonCode where

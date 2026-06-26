@@ -289,6 +289,8 @@ class (ValueSym r) => IndexTranslator r where
   --   Arguments are: List
 
 class (TypeSym r, ValueSym r) => Reference r where
+  -- | Given a value, convert it to a reference to that value
+  makeRef :: SValue r -> SValue r
   -- | Given a value that may be a reference type,
   -- apply any necessary dereference operation.
   maybeDeref :: SValue r -> SValue r

@@ -450,6 +450,7 @@ instance IndexTranslator SwiftCode where
   indexToInt = CP.indexToInt
 
 instance Reference SwiftCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array SwiftCode where

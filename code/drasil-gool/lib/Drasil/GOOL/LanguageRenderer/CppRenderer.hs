@@ -451,6 +451,7 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   indexToInt = pair1 indexToInt indexToInt
 
 instance (Pair p) => Reference (p CppSrcCode CppHdrCode) where
+  makeRef = pair1 makeRef makeRef
   maybeDeref = pair1 maybeDeref maybeDeref
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
@@ -1377,6 +1378,11 @@ instance IndexTranslator CppSrcCode where
   indexToInt = CP.indexToInt
 
 instance Reference CppSrcCode where
+  makeRef vl = do
+    vl' <- vl
+    let vlTyp = cType $ unRepr $ valueType vl'
+        vlDoc = RC.value vl'
+    mkStateVal (convTypeOO $ Reference vlTyp) (cppPtr <> vlDoc)
   maybeDeref vl = do
     vl' <- vl
     let vlTyp = cType $ unRepr $ valueType vl'
@@ -2074,6 +2080,7 @@ instance IndexTranslator CppHdrCode where
   indexToInt _ = mkStateVal void empty
 
 instance Reference CppHdrCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array CppHdrCode where

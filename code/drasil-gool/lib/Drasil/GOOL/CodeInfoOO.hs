@@ -251,6 +251,7 @@ instance IndexTranslator CodeInfoOO where
   indexToInt = execute1
 
 instance Reference CodeInfoOO where
+  makeRef = execute1
   maybeDeref = execute1
 
 instance Array CodeInfoOO where

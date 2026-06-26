@@ -463,6 +463,7 @@ instance IndexTranslator JavaCode where
   indexToInt = CP.indexToInt
 
 instance Reference JavaCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array JavaCode where

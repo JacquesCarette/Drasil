@@ -1,7 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.Shared.RendererClassesCommon (
-  CommonRenderSym, ImportSym(..), ImportElim(..), RenderBody(..), BodyElim(..),
+  CommonRenderSym, ImportSym(..), import', RenderBody(..), BodyElim(..),
   RenderBlock(..), BlockElim(..), RenderType(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), OpElim(..), RenderVariable(..), InternalVarElim(..),
   InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
@@ -21,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), BinderElim(..))
+  ParameterSym(..), MethodSym(..), BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
@@ -39,7 +40,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
   InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
   RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r,
-  InternalBinderElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  InternalBinderElim r, ImportSym r, UnaryOpSym r, BinaryOpSym r,
   BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
   MethodElim r, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r
@@ -54,8 +55,8 @@ class ImportSym r where
   -- For importing a local (same project) module
   modImport :: Label -> r Doc
 
-class ImportElim r where
-  import' :: r Doc -> Doc
+import' :: (UnRepr r Doc) => r Doc -> Doc
+import' = unRepr
 
 class RenderBody r where
   multiBody :: [MSBody r] -> MSBody r

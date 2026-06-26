@@ -42,7 +42,7 @@ magnitude :: OOProg r => SMethod r
 magnitude = docFunc "Calculate the Euclidean norm (magnitude) of this vector."
   [] (Just "The magnitude.") $
   pubMethod "magnitude" double [] $ oneLiner $
-    returnStmt (classMethodCall double (obj "Vector") "dot" [valueOf self, valueOf self] #/^)
+    returnStmt (classMethodCall double (obj "Vector") "dot" [maybeDeref $ valueOf self, maybeDeref $ valueOf self] #/^)
 
 norm :: OOProg r => SMethod r
 norm = docFunc "Calculate unit vector of this vector."

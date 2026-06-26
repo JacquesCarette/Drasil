@@ -19,7 +19,7 @@ int Vector::dimension() {
 }
 
 double Vector::magnitude() {
-    return sqrt(Vector::dot(this, this));
+    return sqrt(Vector::dot(*this, *this));
 }
 
 Vector Vector::norm() {

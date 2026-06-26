@@ -18,8 +18,7 @@ import Language.Drasil
 import Drasil.System (purpose)
 import Utils.Drasil (stringList)
 
-import Drasil.Code.CodeVar (CodeIdea(..))
-import Language.Drasil.Chunk.CodeBase
+import Drasil.Code.CodeVar (CodeIdea(..), quantvar)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName, HasChoices(..))
 import Language.Drasil.Choices (ImplementationType(..), Structure(..),

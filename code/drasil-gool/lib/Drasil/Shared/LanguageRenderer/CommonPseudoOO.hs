@@ -2,18 +2,17 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, docMod', modDoc', functionDoc,
-  extVar, classVarAccess, instanceVarSelf, indexOf, contains, containsInt,
-  discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
-  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule',
-  call', listSizeFunc, listAccessFunc', string, docInOutFunc, bindingError,
-  extFuncAppMixedArgs, notNull, listDecDef, destructorError, stateVarDef,
-  constVar, litArray, litSet, litSetFunc, extraClass, listAccessFunc,
-  doubleRender, double, openFileR, openFileW, stateVar, self, multiAssign,
-  multiReturn, listDec, funcDecDef, inOutCall, forLoopError, mainBody, inOutFunc,
-  docInOutFunc', bool, floatRender, float, stringRender', string', inherit,
-  implements, listSize, listSet, setDecDef, setDec, intToIndex, indexToInt,
-  intToIndex', indexToInt', varDecDef, openFileR', openFileW', openFileA',
-  argExists, global, setMethodCall
+  extVar, classVarAccess, indexOf, contains, containsInt, discardFileLine,
+  intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec, arrayDecDef,
+  openFileA, forEach, docMain, mainFunction, buildModule', call', listSizeFunc,
+  listAccessFunc', string, docInOutFunc, bindingError, extFuncAppMixedArgs,
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, litSet,
+  litSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
+  openFileW, stateVar, self, multiAssign, multiReturn, listDec, funcDecDef,
+  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, floatRender,
+  float, stringRender', string', inherit, implements, listSize, listSet,
+  setDecDef, setDec, intToIndex, indexToInt, intToIndex', indexToInt', varDecDef,
+  openFileR', openFileW', openFileA', argExists, global, setMethodCall
 ) where
 
 import Utils.Drasil (stringList)
@@ -35,9 +34,10 @@ import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   varDecDef, constDecDef), IndexTranslator(indexToInt, intToIndex),
   ParameterSym(param, pointerParam), MethodSym(mainFunction), ScopeSym(..))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
-  OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
+  OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
+  objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
-  SelfSym(self), OOVariableSym(instanceVarAccess), OOFunctionSym(..))
+  OOFunctionSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
   InternalVarElim(variableBind), MethodTypeSym(mType),
@@ -131,9 +131,6 @@ classVarAccess f c' v'= do
     (variableBind v) (getTypeString c `access` variableName v)
     (toState $ variableType v) (f (renderType c) (RC.variable v))
   toState $ classVarAccessCheck vr
-
-instanceVarSelf :: (OORenderSym r) => SVariable r -> SVariable r
-instanceVarSelf = IG.instanceVarAccess (IC.valueOf IG.self)
 
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])

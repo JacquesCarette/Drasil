@@ -28,11 +28,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   ParameterSym(..), MethodSym(..), convScope, BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
-  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
-  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, InternalValueExp(..),
+  objMethodCall, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
@@ -82,7 +82,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
-  intToIndex, indexToInt, global, setMethodCall, instanceVarSelf)
+  intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
@@ -298,9 +298,6 @@ instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => SelfSym (p CppSrcCode CppHdrCode) where
   self = on2StateValues pair self self
-
-instance (Pair p) => InstanceVarSelfSym (p CppSrcCode CppHdrCode) where
-  instanceVarSelf = pair1 instanceVarSelf instanceVarSelf
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
@@ -1222,9 +1219,6 @@ instance SelfSym CppSrcCode where
     l <- zoom lensVStoMS getClassName
     mkStateVar R.this (referenceType $ obj l) R.this'
 
-instance InstanceVarSelfSym CppSrcCode where
-  instanceVarSelf = CP.instanceVarSelf
-
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
@@ -1923,9 +1917,6 @@ instance OOVariableSym CppHdrCode where
 
 instance SelfSym CppHdrCode where
   self = mkStateVar "" void empty
-
-instance InstanceVarSelfSym CppHdrCode where
-  instanceVarSelf _ = mkStateVar "" void empty
 
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC

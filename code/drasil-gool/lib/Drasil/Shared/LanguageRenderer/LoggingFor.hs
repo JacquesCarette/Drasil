@@ -416,9 +416,6 @@ instance (G.OOValueExpression lang) => G.OOValueExpression (LoggingFor lang) whe
   extNewObjMixedArgs = liftLogging G.extNewObjMixedArgs
   libNewObjMixedArgs = liftLogging G.libNewObjMixedArgs
 
-instance (G.InstanceVarSelfSym lang) => G.InstanceVarSelfSym (LoggingFor lang) where
-  instanceVarSelf = liftLogging G.instanceVarSelf
-
 instance (G.SelfSym lang) => G.SelfSym (LoggingFor lang) where
   self = liftLogging G.self
 

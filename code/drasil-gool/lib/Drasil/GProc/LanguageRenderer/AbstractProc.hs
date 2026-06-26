@@ -92,9 +92,9 @@ listAppend fnName list val = IC.valStmt $ funcApp fnName IC.void [list, val]
 listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> MSStatement r
 listAdd fnName list idx val = IC.valStmt $ funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
-arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SValue r ->
-  SVariable r -> SVariable r
-arrayElem i' v' = do
+arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SVariable r ->
+  SValue r -> SVariable r
+arrayElem v' i' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v -- Slight hack; we used to add `++ "[" ++ render (RCC.value i) ++ "]"`

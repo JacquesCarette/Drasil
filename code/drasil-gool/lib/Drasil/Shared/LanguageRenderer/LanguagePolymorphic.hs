@@ -202,8 +202,8 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
-arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
-arrayElem i' v' = do
+arrayElem :: (OORenderSym r) => SVariable r -> SValue r -> SVariable r
+arrayElem v' i' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"

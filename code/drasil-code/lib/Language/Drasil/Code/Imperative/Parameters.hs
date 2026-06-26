@@ -90,8 +90,8 @@ getConstraintParams = do
       cm = s ^. cMapO
       db = s ^. systemdbO
       varsList = filter (\i -> member (i ^. uid) cm) (s ^. inputsO)
-      reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db)
-        (getConstraints cm varsList))
+      reqdVals = nub $ varsList ++
+        concatMap (`constraintvars` db) (getConstraints cm varsList)
   icName <- genICName InputConstraintsFn
   getParams icName In reqdVals
 

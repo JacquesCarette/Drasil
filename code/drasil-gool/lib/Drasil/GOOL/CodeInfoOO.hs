@@ -10,17 +10,18 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
   TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
-  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
+  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
   ScopeData, ScopeTag(..), sd, bindFormD)
@@ -128,9 +129,6 @@ instance OOVariableSym CodeInfoOO where
 
 instance SelfSym CodeInfoOO where
   self              = noInfo
-
-instance InstanceVarSelfSym CodeInfoOO where
-  instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
@@ -251,6 +249,10 @@ instance GetSet CodeInfoOO where
 instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
+
+instance Reference CodeInfoOO where
+  makeRef = execute1
+  maybeDeref = execute1
 
 instance Array CodeInfoOO where
   arrayElem _ _ = noInfo

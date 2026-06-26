@@ -207,6 +207,10 @@ instance StatementSym lang => StatementSym (LoggingFor lang) where
 instance (Argument lang) => Argument (LoggingFor lang) where
   pointerArg = liftLogging pointerArg
 
+instance (Reference lang) => Reference (LoggingFor lang) where
+  makeRef = liftLogging makeRef
+  maybeDeref = liftLogging maybeDeref
+
 instance (Array lang) => Array (LoggingFor lang) where
   arrayElem = liftLogging arrayElem
   arrayLength = liftLogging arrayLength
@@ -415,9 +419,6 @@ instance (G.OOValueExpression lang) => G.OOValueExpression (LoggingFor lang) whe
   newObjMixedArgs = liftLogging G.newObjMixedArgs
   extNewObjMixedArgs = liftLogging G.extNewObjMixedArgs
   libNewObjMixedArgs = liftLogging G.libNewObjMixedArgs
-
-instance (G.InstanceVarSelfSym lang) => G.InstanceVarSelfSym (LoggingFor lang) where
-  instanceVarSelf = liftLogging G.instanceVarSelf
 
 instance (G.SelfSym lang) => G.SelfSym (LoggingFor lang) where
   self = liftLogging G.self

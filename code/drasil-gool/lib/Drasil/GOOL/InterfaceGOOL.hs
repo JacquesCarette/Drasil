@@ -5,7 +5,7 @@ module Drasil.GOOL.InterfaceGOOL (
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), InstanceVarSelfSym(..),
+  OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
   OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (
   MSStatement, NamedArgs, MSParameter, SMethod, MixedCtorCall, PosCall,
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
+  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym,
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
@@ -156,11 +156,11 @@ class (OOVariableSym r) => SelfSym r where
   -- | `self` keyword
   self              :: SVariable r
 
-class (OOVariableSym r) => InstanceVarSelfSym r where
-  -- | Given a variable `v`, creates `self.v`
-  instanceVarSelf   :: SVariable r -> SVariable r
+-- | Given a variable `v`, creates `self.v`
+instanceVarSelf   :: (SelfSym r, VariableValue r) => SVariable r -> SVariable r
+instanceVarSelf = instanceVarAccess (valueOf self)
 
-class (VariableValue r, OOVariableSym r, SelfSym r, InstanceVarSelfSym r) => OOVariableValue r
+class (VariableValue r, OOVariableSym r, SelfSym r) => OOVariableValue r
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
@@ -291,4 +291,5 @@ class (ValueSym r, VariableSym r) => GetSet r where
 
 convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
 convTypeOO (Object n) = obj n
+convTypeOO (Reference t) = referenceType (convTypeOO t)
 convTypeOO t = convType t

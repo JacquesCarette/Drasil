@@ -8,12 +8,12 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
   listSlice, TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   CommentStatement(..), ControlStatement(..), VariableSym(..), OOVariableSym(..),
-  StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
-  VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
+  SelfSym(..), StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..),
+  VariableValue(..), VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, newObj, Array(..), List(..), MethodSym(..),
-  OOMethodSym(..), classMethodCall, initializer, OODeclStatement(objDecDef),
-  Set(..), ParameterSym(..))
+  ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
+  MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall, initializer,
+  OODeclStatement(objDecDef), Set(..), ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -125,7 +125,16 @@ objectTests = block [comment "Object tests",
     (classMethodCall (obj "TestClass") (obj "TestClass") "add"
       [valueOf $ var "t1" (obj "TestClass"), valueOf $ var "t2" (obj "TestClass")]),
   printStr "Value of t3.a: ",
-  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int)]
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t4" (obj "TestClass")) mainFn (objMethodCall (obj "TestClass")
+    (valueOf (var "t3" (obj "TestClass"))) "addToInstance" [valueOf $ var "t2" (obj "TestClass")]),
+  printStr "Value of t4.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t4" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t5" (obj "TestClass")) mainFn (classMethodCall
+    (obj "TestClass") (obj "TestClass") "addWithReferences"
+    [makeRef $ valueOf $ var "t3" (obj "TestClass"), makeRef $ valueOf $ var "t4" (obj "TestClass")]),
+  printStr "Value of t5.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t5" (obj "TestClass"))) (var "a" int)]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
@@ -371,8 +380,19 @@ helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]
     [(var "a" int, valueOf (var "a" int))]]
-  [method "add" public classLevel (obj "TestClass")
-    [param $ var "t1" (obj "TestClass"), param $ var "t2" (obj "TestClass")]
-    (oneLiner $ returnStmt $ newObj (obj "TestClass")
-      [valueOf (instanceVarAccess (valueOf (var "t1" (obj "TestClass"))) (var "a" int)) #+
-       valueOf (instanceVarAccess (valueOf (var "t2" (obj "TestClass"))) (var "a" int))])]
+  [ method "add" public classLevel (obj "TestClass")
+      [param $ var "t1" (obj "TestClass"), param $ var "t2" (obj "TestClass")]
+      (oneLiner $ returnStmt $ newObj (obj "TestClass")
+        [valueOf (instanceVarAccess (valueOf (var "t1" (obj "TestClass"))) (var "a" int)) #+
+         valueOf (instanceVarAccess (valueOf (var "t2" (obj "TestClass"))) (var "a" int))])
+  , method "addToInstance" public instanceLevel (obj "TestClass")
+      [param $ var "t" (obj "TestClass")]
+      (oneLiner $ returnStmt $ classMethodCall (obj "TestClass") (obj "TestClass")
+       "add" [maybeDeref $ valueOf self, valueOf (var "t" (obj "TestClass"))])
+  , let t1 = var "t1" (referenceType (obj "TestClass"))
+        t2 = var "t2" (referenceType (obj "TestClass"))
+    in method "addWithReferences" public classLevel (obj "TestClass")
+         [param t1, param t2]
+         (oneLiner $ returnStmt $ newObj (obj "TestClass")
+         [valueOf (instanceVarAccess (valueOf t1) (var "a" int)) #+
+          valueOf (instanceVarAccess (valueOf t2) (var "a" int))])]

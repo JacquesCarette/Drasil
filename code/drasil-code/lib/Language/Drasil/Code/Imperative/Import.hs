@@ -55,8 +55,8 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
   BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
   VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..),
-  InstanceVarSelfSym(..), VariableElim(..), ($->), ValueSym(..), Literal(..),
-  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  SelfSym(..), instanceVarSelf, VariableElim(..), ($->), ValueSym(..),
+  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -107,8 +107,8 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
-  VariableValue r) => Name -> VSType r -> GenState (SVariable r)
+variable :: (SelfSym r, VariableElim r, VariableValue r) => Name ->
+  VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
@@ -128,9 +128,8 @@ variable s t = do
 -- WithInputs for constant structure, inputs are 'Bundled', and constant
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
-inputVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
-  VariableValue r) => Structure -> ConstantRepr -> SVariable r ->
-  GenState (SVariable r)
+inputVariable :: (SelfSym r, VariableElim r, VariableValue r) =>
+  Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- get
@@ -149,9 +148,8 @@ inputVariable Bundled Const v = do
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariable :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
-  VariableValue r) => ConstantStructure -> ConstantRepr -> SVariable r ->
-  GenState (SVariable r)
+constVariable :: (SelfSym r, VariableElim r, VariableValue r) =>
+  ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
@@ -193,8 +191,8 @@ mkVal v = do
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
-  VariableValue r) => CodeVarChunk -> GenState (SVariable r)
+mkVar :: (SelfSym r, VariableElim r, VariableValue r) =>
+  CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
@@ -744,8 +742,8 @@ readData ddef = do
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
 
 -- | Get entry variables.
-getEntryVars :: (OOVariableSym r, InstanceVarSelfSym r, VariableElim r,
-  VariableValue r) => Maybe String -> LinePattern -> GenState [SVariable r]
+getEntryVars :: (SelfSym r, VariableElim r, VariableValue r) =>
+  Maybe String -> LinePattern -> GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . innerType . convTypeOO))
     s) (getPatternInputs lp)

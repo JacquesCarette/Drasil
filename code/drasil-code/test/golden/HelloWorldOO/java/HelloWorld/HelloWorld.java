@@ -66,6 +66,12 @@ public class HelloWorld {
         TestClass t3 = TestClass.add(t1, t2);
         System.out.print("Value of t3.a: ");
         System.out.println(t3.a);
+        TestClass t4 = t3.addToInstance(t2);
+        System.out.print("Value of t4.a: ");
+        System.out.println(t4.a);
+        TestClass t5 = TestClass.addWithReferences(t3, t4);
+        System.out.print("Value of t5.a: ");
+        System.out.println(t5.a);
         
         // List slicing tests
         // Create variables for list slices
@@ -303,6 +309,14 @@ class TestClass {
     }
     
     public static TestClass add(TestClass t1, TestClass t2) {
+        return new TestClass(t1.a + t2.a);
+    }
+    
+    public TestClass addToInstance(TestClass t) {
+        return TestClass.add(this, t);
+    }
+    
+    public static TestClass addWithReferences(TestClass t1, TestClass t2) {
         return new TestClass(t1.a + t2.a);
     }
 }

@@ -1,11 +1,11 @@
 module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
-import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Drasil.Database(mkUid)
 
 import Prelude hiding (log)
 import Control.Lens ((^.))
@@ -19,34 +19,30 @@ import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
-  heatS, iGlass, lGlass, lResistance, lShareFac, nFL, responseTy,
-  stdOffDist, lDurFac)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
+import Drasil.GlassBR.Concepts (annealedGl, aspectRatioCon, fTemperedGl, glTyFac,
+  hStrengthGl, loadResis, loadShareFac, nonFactoredL, stdOffDist, loadDurFac, blast,
+  blastResisGla, blastTy, bomb, capacity, demandq, eqTNTChar, explosion, glassGeo,
+  glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe,
+  probBreak, safeMessage, shortDurLoad, specA, specDeLoad, glassType)
 import Drasil.GlassBR.Units (sFlawPU)
---FIXME: Many of the current terms can be separated into terms and defns?
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
-  [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
+  [modElas] ++ interps ++ unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac] ++
   map dqdWr derivedInputDataConstraints ++
-  map dqdWr mathunitals ++ map dqdWr physicalquants ++ mathquants
+  mathunitals ++ physicalquants ++ mathquants
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
- -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
-  -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
-{--}
-
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
-  NE.map dqdWr inputsNoUncrtn <> NE.map dqdWr sdVector
+  NE.map dqdWr inputsNoUncrtn <> sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
@@ -93,8 +89,8 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
-pbTol = uq (constrained' (dqdNoUnit (dcc "pbTol" (nounPhraseSP "tolerable probability of breakage")
-  "the tolerable probability of breakage of the glass plate")
+pbTol = uq (constrained' (quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
+  (S "the tolerable probability of breakage of the glass plate")
   (sub cP (Concat [lBreak, lTol])) Real)
   [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
@@ -104,12 +100,12 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (exactDbl 42) defaultUncrt
 
-tNT = uq (constrained' (dqdNoUnit (dcc "tNT" (nounPhraseSP "TNT equivalent factor")
-  "the TNT equivalent factor")
+tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
+  (S "the TNT equivalent factor")
   (variable "TNT") Real)
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
-standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
+standOffDist = uq (constrained' (dqd stdOffDist (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -122,7 +118,7 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.map dqdWr (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
+outputs = (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
@@ -150,8 +146,6 @@ pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failu
 
   --FIXME: no typical value!
 
-{--}
-
 specParamVals :: [ConstQDef]
 specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
   sdMax, sdMin, stressDistFacMin, stressDistFacMax]
@@ -159,98 +153,97 @@ specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
   sdMin :: ConstQDef
 
-dimMax     = mkQuantDef (uc' "dimMax"
+dimMax     = mkQuantDef (quant (mkUid "dimMax")
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
   (S "the maximum value for one of the dimensions of the glass plate")
   (subMax lD) Real metre) (exactDbl 5)
 
-dimMin     = mkQuantDef (uc' "dimMin"
+dimMin     = mkQuantDef (quant (mkUid "dimMin")
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
   (S "the minimum value for one of the dimensions of the glass plate")
   (subMin lD) Real metre) (dbl 0.1)
 
-arMax     = mkQuantDef (dqdNoUnit (dcc "arMax"
+arMax     = mkQuantDef (quantNoUnit (mkUid "arMax")
   (nounPhraseSP "maximum aspect ratio")
-  "the maximum aspect ratio")
+  (S "the maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
-cWeightMax = mkQuantDef (uc' "cWeightMax"
+cWeightMax = mkQuantDef (quant (mkUid "cWeightMax")
   (nounPhraseSP "maximum permissible input charge weight")
   (S "the maximum permissible input charge weight")
   (subMax (eqSymb charWeight)) Real kilogram) (exactDbl 910)
 
-cWeightMin = mkQuantDef (uc' "cWeightMin"
+cWeightMin = mkQuantDef (quant (mkUid "cWeightMin")
   (nounPhraseSP "minimum permissible input charge weight")
   (S "the minimum permissible input charge weight")
   (subMin (eqSymb charWeight)) Real kilogram) (dbl 4.5)
 
-sdMax     = mkQuantDef (uc' "sdMax"
+sdMax     = mkQuantDef (quant (mkUid "sdMax")
   (nounPhraseSP "maximum stand off distance permissible for input")
   (S "the maximum stand off distance permissible for input")
   (subMax (eqSymb standOffDist)) Real metre) (exactDbl 130)
 
-sdMin     = mkQuantDef (uc' "sdMin"
+sdMin     = mkQuantDef (quant (mkUid "sdMin")
   (nounPhraseSP "minimum stand off distance permissible for input")
   (S "the minimum stand off distance permissible for input")
   (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
 
-stressDistFacMin = mkQuantDef (dqdNoUnit (dcc "stressDistFacMin"
+stressDistFacMin = mkQuantDef (quantNoUnit (mkUid "stressDistFacMin")
   (nounPhraseSP "minimum value for the stress distribution factor")
-  "the minimum value for the stress distribution factor")
+  (S "the minimum value for the stress distribution factor")
   (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
 
-stressDistFacMax = mkQuantDef (dqdNoUnit (dcc "stressDistFacMax"
+stressDistFacMax = mkQuantDef (quantNoUnit (mkUid "stressDistFacMax")
   (nounPhraseSP "maximum value for the stress distribution factor")
-  "the maximum value for the stress distribution factor")
+  (S "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
-{--}
 
-unitalSymbols :: [UnitalChunk]
+unitalSymbols :: [DefinedQuantityDict]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
   sflawParamK, sflawParamM, loadDur, minThick]
 
-sdx, sdy, sdz :: UnitalChunk
+sdx, sdy, sdz :: DefinedQuantityDict
 
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
-  sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
+  sflawParamM, sflawParamK, loadDur, modElas :: DefinedQuantityDict
 
-demand      = uc demandq lQ Real pascal --correct Space used?
+demand      = dqd demandq lQ Real pascal --correct Space used?
 
-tmDemand    = uc load (variable "Load") Real pascal --correct Space used?
+tmDemand    = dqd load (variable "Load") Real pascal --correct Space used?
 
-lRe         = uc loadResis (variable "LR") Real pascal --correct Space used?
+lRe         = dqd loadResis (variable "LR") Real pascal --correct Space used?
 
-tmLRe       = uc capacity (variable "capacity") Real pascal --correct Space used?
+tmLRe       = dqd capacity (variable "capacity") Real pascal --correct Space used?
 
-nonFactorL  = uc nonFactoredL (variable "NFL") Real pascal --correct Space used?
+nonFactorL  = dqd nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
-eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
+eqTNTWeight = dqd eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
 
-modElas     = uc modE cE Real pascal
+modElas     = dqd modE cE Real pascal
 
-minThick    = uc' "minThick" (nounPhraseSP "minimum thickness")
+minThick    = quant (mkUid "minThick") (nounPhraseSP "minimum thickness")
   (S "minimum thickness of the glass plate") lH Real metre
 
-sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
+sflawParamK = quant (mkUid "sflawParamK") (nounPhraseSP "surface flaw parameter") --parameterize?
   (S ("surface flaw parameter related to the coefficient of " ++
     "variation of the glass strength data")) lK Real sFlawPU
 
-sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
+sflawParamM = quant (mkUid "sflawParamM") (nounPhraseSP "surface flaw parameter") --parameterize?
   (S "surface flaw parameter related to the mean of the glass strength data")
   lM Real sFlawPU
 
-loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
+loadDur     = quant (mkUid "loadDur")    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = uc' "sdx" (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
+sdx         = quant (mkUid "sdx") (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
   (S "the x-component of the stand off distance") (subX (eqSymb standOffDist)) Real metre
 
-sdy         = uc' "sdy" (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
+sdy         = quant (mkUid "sdy") (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
   (S "the y-component of the stand off distance") (subY (eqSymb standOffDist)) Real metre
 
-sdz         = uc' "sdz" (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
+sdz         = quant (mkUid "sdz") (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
   (S "the x-component of the stand off distance") (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}
@@ -267,36 +260,36 @@ riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
 
 gTF, loadSF, loadDF :: DefinedQuantityDict
 
-dimlessLoad = dqdNoUnit (dcc "dimlessLoad" (nounPhraseSP "dimensionless load")
-  "the dimensionless load") (hat lQ) Real
+dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
+  (S "the dimensionless load") (hat lQ) Real
 
 gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
 
-isSafePb   = dqdNoUnit (dcc "isSafePb" (nounPhraseSP "probability of glass breakage safety requirement")
-  "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
-isSafeProb = dqdNoUnit (dcc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
-  "the probability of failure safety requirement") (variable "isSafeProb") Boolean
-isSafeLR   = dqdNoUnit (dcc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  "the 3 second load equivalent resistance safety requirement") (variable "isSafeLR") Boolean
-isSafeLoad = dqdNoUnit (dcc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
-  "the load resistance safety requirement") (variable "isSafeLoad") Boolean
+isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
+  (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
+isSafeProb = quantNoUnit (mkUid "isSafeProb") (nounPhraseSP "probability of failure safety requirement")
+  (S "the probability of failure safety requirement") (variable "isSafeProb") Boolean
+isSafeLR   = quantNoUnit (mkUid "isSafeLR")   (nounPhraseSP "3 second load equivalent resistance safety requirement")
+  (S "the 3 second load equivalent resistance safety requirement") (variable "isSafeLR") Boolean
+isSafeLoad = quantNoUnit (mkUid "isSafeLoad") (nounPhraseSP "load resistance safety requirement")
+  (S "the load resistance safety requirement") (variable "isSafeLoad") Boolean
 
-interpY = dqdNoUnit (dcc "interpY" (nounPhraseSP "interpY")
-  "interpolated y") (variable "interpY") (mkFunction [String, Real, Real] Real)
-interpZ = dqdNoUnit (dcc "interpZ" (nounPhraseSP "interpZ")
-  "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
+interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
+  (S "interpolated y") (variable "interpY") (mkFunction [String, Real, Real] Real)
+interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
+  (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
-riskFun = dqdNoUnit (dcc "riskFun" (nounPhraseSP "risk of failure")
-  "the percentage risk of the glass slab failing to resist the blast") cB Real
+riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
+  (S "the percentage risk of the glass slab failing to resist the blast") cB Real
 
-sdfTol = dqdNoUnit (dcc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
-  "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real
+sdfTol = quantNoUnit (mkUid "sdfTol") (nounPhraseSP "tolerable stress distribution factor")
+  (S "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real
 
-tolLoad = dqdNoUnit (dcc "tolLoad" (nounPhraseSP "tolerable load")
-  "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
+tolLoad = quantNoUnit (mkUid "tolLoad") (nounPhraseSP "tolerable load")
+  (S "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
 
 lBreak, lDur, lFail, lTol :: Symbol
 lBreak = label "b"
@@ -308,111 +301,6 @@ concepts :: [ConceptChunk]
 concepts = [glBreakage, lite, annealedGl, fTemperedGl, hStrengthGl, lateral,
   specDeLoad, longDurLoad, glassWL, shortDurLoad, specA, blastResisGla, blast,
   blastTy, glassGeo, safeMessage, notSafe, bomb, explosion]
-
-aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-  glTyFac, lateral, load, specDeLoad, loadDurFac, loadResis, longDurLoad, modE, nonFactoredL,
-  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
-  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
-  explosion :: ConceptChunk
-
-annealedGl    = cc' annealed
-  (S "a flat, monolithic, glass lite which has uniform thickness where" +:+
-  S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
-aspectRatioCon   = cc' aR
-  (S $ "the ratio of the long dimension of the glass to the short dimension of " ++
-    "the glass. For glass supported on four sides, the aspect ratio is " ++
-    "always equal to or greater than 1.0. For glass supported on three " ++
-    "sides, the ratio of the length of one of the supported edges " ++
-    "perpendicular to the free edge, to the length of the free edge, is " ++
-    "equal to or greater than 0.5")
-blast         = dcc "blast"       (cn' "blast")
-  "any kind of man-made explosion"
-blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
-  "glazing that provides protection against air blast pressure generated by explosions"
-blastTy       = dcc "blastTy"     (cn' "blast type")
-  ("the blast type input includes parameters like weight of charge, TNT " ++
-    "equivalent factor, and stand off distance from the point of explosion")
-bomb          = dcc "bomb"        (cn' "bomb") ("a container filled " ++
-  "with a destructive substance designed to exlode on impact or via detonation")
-capacity      = dcc "capacity"    (nounPhraseSP "capacity or load resistance")
-  "load resistance calculated"
-demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)")
-  "3 second duration equivalent pressure"
-eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
-  "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat"
-explosion     = dcc "explosion"   (cn' "explosion")
-  "a destructive shattering of something"
-fTemperedGl   = cc' fullyT
-  (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
-  S "been subjected to a special heat treatment process where the residual",
-  S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
-  S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
-glassGeo      = dccWDS "glassGeo"    (cnIES "glass geometry")
-  (S "the glass geometry based inputs include the dimensions of the" +:+
-    foldlList Comma List [phrase glaPlane, phrase glassTy, phrase responseTy])
-glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
-glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
-  "the dead load component of the glass weight"
-glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
-  "the fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass"
-glTyFac       = cc' glassTypeFac
-  (foldlSent_ [S "a multiplying factor for adjusting the", short lResistance,
-  S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
-  `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
-   S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
-hStrengthGl   = cc' heatS
-  (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
-  S "been subjected to a special heat treatment process where the residual",
-  S "surface compression is not less than 24 MPa (3500psi) or greater than",
-  S "52 MPa (7500 psi), as defined in", refS astm2012])
-lateral       = dcc "lateral"     (nounPhraseSP "lateral")
-  "perpendicular to the glass surface"
-lite          = dcc "lite"        (cn' "lite")
-  "pieces of glass that are cut, prepared, and used to create the window or door"
-load          = dcc "load"        (nounPhraseSP "applied load (demand) or pressure")
-  "a uniformly distributed lateral pressure"
-loadDurFac    = cc' lDurFac (S "factor related to the effect of sustained loading on glass strength")
-loadResis     = cc' lResistance
-  (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
-  S "based upon a given probability of breakage and load duration as defined in",
-  complexRef astm2009 $ Page [1, 53]])
-loadShareFac  = cc' lShareFac
-  (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
-  S "double glazing, of equal or different thicknesses and types (including the",
-  S "layered behaviour of", short lGlass, S "under long duration",
-  S "loads), in a sealed", short iGlass, S "unit"])
-longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
-  "any load lasting approximately 30 days"
-modE = dcc "modElas" (nounPhraseSP "modulus of elasticity of glass")
-  "the ratio of tensile stress to tensile strain of glass"
-nonFactoredL  = cc' nFL
-  (foldlSent_ [S "three second duration uniform load associated with a",
-  S "probability of breakage less than or equal to 8", plural lite,
-  S "per 1000 for monolithic", short annealed, S "glass"])
-notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
-  "For the given input parameters, the glass is NOT considered safe."
-probBreak     = dccWDS "probBr" (nounPhraseSP "probability of breakage")
-  (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
-  S "first occurrence of a specified load and duration, typically expressed",
-  S "in lites per 1000", sParen $ refS astm2016])
-safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
-  "For the given input parameters, the glass is considered safe."
-sD            = cc' stdOffDist
-  (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge")
-shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
-  "any load lasting 3 seconds or less"
-specA         = dcc "specA"       (nounPhraseSP "specifying authority")
-  ("the design professional responsible for interpreting applicable " ++
-    "regulations of authorities having jurisdiction and considering " ++
-    "appropriate site specific factors to determine the appropriate " ++
-    "values used to calculate the specified design load, and furnishing" ++
-    " other information required to perform this practice")
-specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
-  ("the magnitude in Pa (psf), type (for example, wind or snow) and " ++
-    "duration of the load given by the specifying authority")
-
-{--}
 
 --Constants--
 
@@ -429,7 +317,7 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVector :: NE.NonEmpty UnitalChunk
+sdVector :: NE.NonEmpty DefinedQuantityDict
 sdVector = sdx :| [sdy, sdz]
 
 --
@@ -438,7 +326,7 @@ termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatioCon]
+termsWithAccDefn  = [stdOffDist, loadShareFac, glTyFac, aspectRatioCon]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--
@@ -451,14 +339,7 @@ nominalThicknesses = map fst glassThickness
 glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
-glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map (short . snd) glassType
-
-type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
-
-glassType :: GlassType
-glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 
 glassThickness :: GlassThickness
 glassThickness =

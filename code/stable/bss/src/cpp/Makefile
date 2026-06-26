@@ -14,6 +14,9 @@ endif
 
 # Project Name: BSS
 
+# Project Purpose: Simulate the motion of a binary star system under mutual
+# gravitational interaction.
+
 build: BSS$(TARGET_EXTENSION)
 
 BSS$(TARGET_EXTENSION): InputParameters.hpp Constants.hpp Calculations.hpp OutputFormat.hpp Populate.hpp ODE.hpp Control.cpp InputParameters.cpp Constants.cpp Calculations.cpp OutputFormat.cpp Populate.cpp ODE.cpp

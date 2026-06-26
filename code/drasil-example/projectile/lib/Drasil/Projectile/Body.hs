@@ -262,14 +262,14 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
-  map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
+symbols = pi_ : unitalQuants ++ [dqdWr gravitationalAccelConst] ++
+  [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+  iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV]
+  constAccelV, projPos, projSpeed]
 
 constants :: [ConstQDef]
-constants = [gravitationalAccelConst, piConst, tol]
+constants = [gravitationalAccelConst, piConst]
 
 unitalQuants :: [DefinedQuantityDict]
 unitalQuants = map dqdWr constrained

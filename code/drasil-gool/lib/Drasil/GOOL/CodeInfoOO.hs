@@ -10,19 +10,18 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
   TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..),
-  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
+  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
   ScopeData, ScopeTag(..), sd, bindFormD)
@@ -91,20 +90,21 @@ instance BlockSym CodeInfoOO where
   block = executeList
 
 instance TypeSym CodeInfoOO where
-  bool              = noInfoVSType
-  int               = noInfoVSType
-  float             = noInfoVSType
-  double            = noInfoVSType
-  char              = noInfoVSType
-  string            = noInfoVSType
-  infile            = noInfoVSType
-  outfile           = noInfoVSType
-  setType       _   = noInfoVSType
-  listType      _   = noInfoVSType
-  arrayType     _   = noInfoVSType
-  listInnerType _   = noInfoVSType
-  funcType      _ _ = noInfoVSType
-  void              = noInfoVSType
+  bool            = noInfoVSType
+  int             = noInfoVSType
+  float           = noInfoVSType
+  double          = noInfoVSType
+  char            = noInfoVSType
+  string          = noInfoVSType
+  infile          = noInfoVSType
+  outfile         = noInfoVSType
+  referenceType _ = noInfoVSType
+  setType       _ = noInfoVSType
+  listType      _ = noInfoVSType
+  arrayType     _ = noInfoVSType
+  innerType     _ = noInfoVSType
+  funcType    _ _ = noInfoVSType
+  void            = noInfoVSType
 
 instance OOTypeSym CodeInfoOO where
   obj             _ = noInfoVSType
@@ -129,9 +129,6 @@ instance OOVariableSym CodeInfoOO where
 
 instance SelfSym CodeInfoOO where
   self              = noInfo
-
-instance InstanceVarSelfSym CodeInfoOO where
-  instanceVarSelf  _     = noInfo
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
@@ -224,7 +221,6 @@ instance ValueExpression CodeInfoOO where
   notNull = execute1
 
 instance OOValueExpression CodeInfoOO where
-  selfMethodCallMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
@@ -254,18 +250,22 @@ instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
 
+instance Reference CodeInfoOO where
+  makeRef = execute1
+  maybeDeref = execute1
+
 instance Array CodeInfoOO where
   arrayElem _ _ = noInfo
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
 instance List CodeInfoOO where
-  listSize   = execute1
-  listAdd    = execute3
-  listAppend = execute2
-  listAccess = execute2
-  listSet    = execute3
-  indexOf    = execute2
+  listSize       = execute1
+  listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
+  listAccess     = execute2
+  listSet l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  indexOf        = execute2
 
 instance Set CodeInfoOO where
   contains = execute2
@@ -281,28 +281,6 @@ instance InternalList CodeInfoOO where
 
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
-
-instance ThunkSym CodeInfoOO where
-  type Thunk CodeInfoOO = ()
-
-instance ThunkAssign CodeInfoOO where
-  thunkAssign _ = zoom lensMStoVS . execute1
-
-instance VectorType CodeInfoOO where
-  vecType _ = noInfoVSType
-
-instance VectorDecl CodeInfoOO where
-  vecDec  _ _ _ = noInfo
-  vecDecDef _ _ = zoom lensMStoVS . executeList
-
-instance VectorThunk CodeInfoOO where
-  vecThunk _ = noInfo
-
-instance VectorExpression CodeInfoOO where
-  vecScale = execute2
-  vecAdd = execute2
-  vecIndex = execute2
-  vecDot = execute2
 
 instance StatementSym CodeInfoOO where
   type Statement CodeInfoOO = ()

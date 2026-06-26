@@ -6,6 +6,7 @@ module Drasil.SglPend.Unitals (
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.ShortHands
@@ -25,33 +26,33 @@ import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless ++ NE.toList inputs ++ NE.toList outputs
+symbols = unitalChunks ++ unitless ++ NE.toList inputs ++ NE.toList outputs
 
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr $ lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
+inputs = lenRod :| [QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.singleton $ dqdWr pendDisplacementAngle
+outputs = NE.singleton pendDisplacementAngle
 
-unitalChunks :: [UnitalChunk]
+unitalChunks :: [DefinedQuantityDict]
 unitalChunks = [QPP.len, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, initialPendAngle,
    QP.angularFrequency, QP.frequency, QP.period]
 
-lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
+lenRod, pendDisplacementAngle, initialPendAngle :: DefinedQuantityDict
 
-lenRod = uc' "l_rod" (cn "length of the rod")
+lenRod = quant (mkUid "l_rod") (cn "length of the rod")
         (D.toSent $ phraseNP (len `the_ofThe` rod))
         (sub cL lRod) Real metre
 
-pendDisplacementAngle = uc' "pendDisplacementAngle" (cn "displacement angle of the pendulum")
+pendDisplacementAngle = quant (mkUid "pendDisplacementAngle") (cn "displacement angle of the pendulum")
         (D.toSent $ phraseNP (angle `the_ofThe` pendulum))
         (sub lTheta lP) Real radian
         -- (sub lTheta lP) (mkFunction [Real] Real) radian
 
-initialPendAngle = uc' "initialPendAngle" (cn "initial pendulum angle")
+initialPendAngle = quant (mkUid "initialPendAngle") (cn "initial pendulum angle")
         (D.toSent $ phraseNP (NP.the (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) Real radian
 

@@ -1,173 +1,475 @@
-{-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE DerivingVia #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | MVP renderer for logging statements.
 
 module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
-import Drasil.Shared.InterfaceCommon (VSType, TypeSym(..), VariableSym(..),
-  VariableValue(..), ValueSym(..), Literal(..), IndexTranslator(..), Array(..),
-  VariableElim(..))
-import Drasil.GOOL.InterfaceGOOL (OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..))
-import Drasil.Shared.AST (TypeData(..), td)
-import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.GOOL.CodeInfoOO (CodeInfoOO)
-import Drasil.GOOL.LanguageRenderer.JavaRenderer (JavaCode)
-import Drasil.GOOL.LanguageRenderer.CSharpRenderer (CSharpCode)
-import Drasil.GOOL.LanguageRenderer.CppRenderer (CppCode, CppSrcCode, CppHdrCode)
-import Drasil.GOOL.LanguageRenderer.PythonRenderer (PythonCode)
-import Drasil.GOOL.LanguageRenderer.SwiftRenderer (SwiftCode)
-import Drasil.Shared.LanguageRenderer (dot)
+import Drasil.Shared.InterfaceCommon
+import qualified Drasil.GProc.InterfaceProc as P
+import qualified Drasil.GOOL.InterfaceGOOL as G
+import Drasil.Shared.State
 
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, comma, space, brackets,
-  braces, punctuate, hcat)
-import qualified Text.PrettyPrint.HughesPJ as P (char, integer, float, double)
+import Prelude hiding (print, break, pi, log, floor, sin, cos, tan, exp)
+import Control.Lens (zoom)
 import Data.Kind (Type)
+import Control.Monad.State
+import Data.Bifunctor (bimap)
 
-newtype LoggingFor (lang :: Type -> Type) a = LC {unLC :: a} deriving Functor
+newtype LoggingFor (lang :: Type -> Type) a = LC {unLC :: lang a}
+  deriving newtype (Functor, Applicative, Monad)
 
-instance Applicative (LoggingFor lang) where
-  pure = LC
-  (LC f) <*> (LC x) = LC (f x)
+class LiftLogging u l | l -> u where
+  liftLogging :: u -> l
+  lowerLogging :: l -> u
 
-instance Monad (LoggingFor lang) where
-  LC x >>= f = f x
+instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1 -> u2) (l1 -> l2) where
+  liftLogging k = liftLogging . k . lowerLogging
+  lowerLogging k = lowerLogging . k . liftLogging
 
-instance VariableSym (LoggingFor lang) where
-  type Variable (LoggingFor lang) = Doc
-  var n _ = return $ return $ text n
-  constant n _ = return $ return $ text n
-  extVar l n _ = return $ return $ text l <> dot <> text n
+instance LiftLogging (lang a) (LoggingFor lang a) where
+  lowerLogging = unLC
+  liftLogging = LC
 
-instance OOVariableSym (LoggingFor lang) where
-  classVar = var
-  classConst = constant
-  classVarAccess cls vr = do
-    cls' <- cls
-    vr' <- vr
-    let clsDoc = (typeDoc . unLC) cls'
-        vrDoc = unLC vr'
-    return $ return $ clsDoc <> dot <> vrDoc
-  extClassVarAccess = classVarAccess
-  instanceVarAccess ob vr = do
-    ob' <- ob
-    vr' <- vr
-    return $ return $ unLC ob' <> dot <> unLC vr'
+instance (LiftLogging u l) => LiftLogging (State s u) (State s l) where
+  liftLogging = fmap liftLogging
+  lowerLogging = fmap lowerLogging
 
-instance SelfSym (LoggingFor CodeInfoOO) where
-  self = return $ return empty
+instance (LiftLogging u l) => LiftLogging (Maybe u) (Maybe l) where
+  liftLogging = fmap liftLogging
+  lowerLogging = fmap lowerLogging
 
-instance InstanceVarSelfSym (LoggingFor CodeInfoOO) where
-  instanceVarSelf _ = return $ return empty
+instance {-# OVERLAPPABLE #-} (LiftLogging u l) => LiftLogging [u] [l] where
+  liftLogging = fmap liftLogging
+  lowerLogging = fmap lowerLogging
 
-instance SelfSym (LoggingFor JavaCode) where
-  self = return $ return $ text "this"
+instance LiftLogging String String where
+  liftLogging = id
+  lowerLogging = id
 
-instance InstanceVarSelfSym (LoggingFor JavaCode) where
-  instanceVarSelf vr = do
-    vr' <- vr
-    self' <- self @(LoggingFor JavaCode)
-    return $ return $ unLC self' <> dot <> unLC vr'
+instance LiftLogging Integer Integer where
+  liftLogging = id
+  lowerLogging = id
 
-instance SelfSym (LoggingFor CSharpCode) where
-  self = return $ return $ text "this"
+instance LiftLogging Char Char where
+  liftLogging = id
+  lowerLogging = id
 
-instance InstanceVarSelfSym (LoggingFor CSharpCode) where
-  instanceVarSelf vr = do
-    vr' <- vr
-    self' <- self @(LoggingFor CSharpCode)
-    return $ return $ unLC self' <> dot <> unLC vr'
+instance LiftLogging Double Double where
+  liftLogging = id
+  lowerLogging = id
 
-instance SelfSym (LoggingFor (CppCode CppSrcCode CppHdrCode)) where
-  self = return $ return $ text "self"
+instance LiftLogging Float Float where
+  liftLogging = id
+  lowerLogging = id
 
-instance InstanceVarSelfSym (LoggingFor (CppCode CppSrcCode CppHdrCode)) where
-  instanceVarSelf vr = do
-    vr' <- vr
-    self' <- self @(LoggingFor (CppCode CppSrcCode CppHdrCode))
-    return $ return $ unLC self' <> text "->" <> unLC vr'
+instance (LiftLogging u1 l1, LiftLogging u2 l2) => LiftLogging (u1, u2) (l1, l2) where
+  liftLogging = bimap liftLogging liftLogging
+  lowerLogging = bimap lowerLogging lowerLogging
 
-instance SelfSym (LoggingFor PythonCode) where
-  self = return $ return $ text "self"
+-- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
+varLogFile :: (VariableSym r) => SVariable r
+varLogFile = var "outfile" outfile
 
-instance InstanceVarSelfSym (LoggingFor PythonCode) where
-  instanceVarSelf vr = do
-    vr' <- vr
-    self' <- self @(LoggingFor PythonCode)
-    return $ return $ unLC self' <> dot <> unLC vr'
+valLogFile :: (VariableValue r) => SValue r
+valLogFile = valueOf varLogFile
 
-instance SelfSym (LoggingFor SwiftCode) where
-  self = return $ return $ text "self"
+-- TODO [Brandon Bosman, 06/19/2026]: This should be passed down from drasil-code
+logName :: (Literal r) => SValue r
+logName = litString "log.txt"
 
-instance InstanceVarSelfSym (LoggingFor SwiftCode) where
-  instanceVarSelf vr = do
-    vr' <- vr
-    self' <- self @(LoggingFor SwiftCode)
-    return $ return $ unLC self' <> dot <> unLC vr'
+logVarUpdate :: (SharedProg lang) => SVariable (LoggingFor lang) -> [MSStatement lang]
+logVarUpdate x =
+  [ openFileA varLogFile logName
+  , do
+      x' <- variableName . lowerLogging <$> zoom lensMStoVS x
+      printFileStr valLogFile $ "var '" <> x' <> "' assigned "
+  , printFile valLogFile $ valueOf (lowerLogging x)
+  , do
+      modName <- zoom lensMStoFS getModuleName
+      printFileStrLn valLogFile $ " in module " <> modName
+  , closeFile valLogFile
+  ]
 
-instance ValueSym (LoggingFor lang) where
-  type Value (LoggingFor lang) = Doc
-  valueType = error "Not implemented"
+instance (SharedProg lang) => AssignStatement (LoggingFor lang) where
+  (&-=) = liftLogging (&-=)
+  (&+=) = liftLogging (&+=)
+  (&++) = liftLogging (&++)
+  (&--) = liftLogging (&--)
+  assign x e = liftLogging $ multi $
+    assign (lowerLogging x) (lowerLogging e)
+    : logVarUpdate x
 
-instance TypeSym (LoggingFor lang) where
-  bool = bool
-  int = int
-  float = float
-  double = double
-  char = char
-  string = string
-  infile = infile
-  outfile = outfile
-  listType = listType
-  setType = setType
-  arrayType = arrayType
-  listInnerType = listInnerType
-  funcType = funcType
-  void = void
+instance (List lang) => List (LoggingFor lang) where
+  listSize = liftLogging listSize
+  listAdd = liftLogging listAdd
+  listAppend = liftLogging listAppend
+  listAccess = liftLogging listAccess
+  listSet = liftLogging listSet -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+                                -- (Can't right now because RC.value isn't exposed)
+  indexOf = liftLogging indexOf
 
-instance OOTypeSym (LoggingFor lang) where
-  obj nm = typeFromData (Object nm) ("Object<" ++ nm ++ ">")
+instance (SharedProg lang) => DeclStatement (LoggingFor lang) where
+  varDec = liftLogging varDec
+  varDecDef vr scp vl = liftLogging $ multi $
+    varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
+    : logVarUpdate vr
+  listDec = liftLogging listDec
+  listDecDef vr scp vls = liftLogging $
+    listDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vls)
+  setDec = liftLogging setDec
+  setDecDef vr scp vl = liftLogging $
+    setDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
+  arrayDec = liftLogging arrayDec
+  arrayDecDef vr scp vls = liftLogging $
+    arrayDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vls)
+  constDecDef cnst scp vl = liftLogging $ multi $
+    constDecDef (lowerLogging cnst) (lowerLogging scp) (lowerLogging vl)
+    : logVarUpdate cnst
+  funcDecDef = liftLogging funcDecDef
 
-typeFromData :: CodeType -> String -> VSType (LoggingFor lang)
-typeFromData tp str = return $ return $ td tp str (text str)
+instance (SharedProg lang) => IOStatement (LoggingFor lang) where
+  print = liftLogging print
+  printLn = liftLogging printLn
+  printStr = liftLogging printStr
+  printStrLn = liftLogging printStrLn
+  printFile = liftLogging printFile
+  printFileLn = liftLogging printFileLn
+  printFileStr = liftLogging printFileStr
+  printFileStrLn = liftLogging printFileStrLn
+  getInput vr = liftLogging $ multi $
+    getInput (lowerLogging vr) : logVarUpdate vr
+  discardInput = liftLogging discardInput
+  getFileInput file vr = liftLogging $ multi $
+    getFileInput (lowerLogging file) (lowerLogging vr)
+    : logVarUpdate vr
+  discardFileInput = liftLogging discardFileInput
+  openFileR = liftLogging openFileR
+  openFileW = liftLogging openFileW
+  openFileA = liftLogging openFileA
+  closeFile = liftLogging closeFile
+  getFileInputLine = liftLogging getFileInputLine
+  discardFileLine = liftLogging discardFileLine
+  getFileInputAll = liftLogging getFileInputAll
 
-instance Literal (LoggingFor lang) where
-  litTrue = litString "True"
-  litFalse = litString "False"
-  litChar = return . return . P.char
-  litDouble = return . return . P.double
-  litFloat = return . return . P.float
-  litInt = return . return . P.integer
-  litString = return . return . text
-  litArray _ vs = do
-    vs' <- sequence vs
-    let docs = map unLC vs'
-    return $ return $ brackets $ hcat $ punctuate (comma <> space) docs
-  litList = litArray
-  litSet _ vs = do
-    vs' <- sequence vs
-    let docs = map unLC vs'
-    return $ return $ braces $ hcat $ punctuate (comma <> space) docs
+instance (SharedProg lang) => StringStatement (LoggingFor lang) where
+  stringSplit chr vr str  = liftLogging $
+    stringSplit (lowerLogging chr) (lowerLogging vr) (lowerLogging str)
+  stringListVals vrs strs  = liftLogging $
+    stringListVals (lowerLogging vrs) (lowerLogging strs)
+  stringListLists vrs strs = liftLogging $ multi $
+    stringListLists (lowerLogging vrs) (lowerLogging strs)
+    : concatMap logVarUpdate vrs
 
-instance IndexTranslator (LoggingFor lang) where
-  intToIndex = id
-  indexToInt = id
+-- SharedProg Boilerplate
 
-instance Array (LoggingFor lang) where
-  arrayElem idx' vr' = do
-    idx <- idx'
-    vr <- vr'
-    return $ return $ unLC idx <> brackets (unLC vr)
-  arrayLength = undefined
-  arrayCopy = undefined
+instance (SharedProg lang) => SharedProg (LoggingFor lang)
 
--- Not Implemented
-instance VariableElim (LoggingFor lang) where
-  variableName = undefined
-  variableType = undefined
+instance (VariableSym lang) => VariableSym (LoggingFor lang) where
+  type Variable (LoggingFor lang) = Variable lang
+  var = liftLogging var
+  constant = liftLogging constant
+  extVar = liftLogging extVar
 
-instance VariableValue (LoggingFor lang) where
-  valueOf = id
+instance (TypeSym lang) => TypeSym (LoggingFor lang) where
+  bool = liftLogging bool
+  int = liftLogging int
+  float = liftLogging float
+  double = liftLogging double
+  char = liftLogging char
+  string = liftLogging string
+  infile = liftLogging infile
+  outfile = liftLogging outfile
+  referenceType = liftLogging referenceType
+  listType = liftLogging listType
+  setType = liftLogging setType
+  arrayType = liftLogging arrayType
+  innerType = liftLogging innerType
+  funcType = liftLogging funcType
+  void = liftLogging void
+
+instance (ValueSym lang) => ValueSym (LoggingFor lang) where
+  type Value (LoggingFor lang) = Value lang
+  valueType = liftLogging valueType
+
+instance StatementSym lang => StatementSym (LoggingFor lang) where
+  type Statement (LoggingFor lang) = Statement lang
+  valStmt = liftLogging valStmt
+  emptyStmt = liftLogging emptyStmt
+  multi = liftLogging multi
+
+instance (Argument lang) => Argument (LoggingFor lang) where
+  pointerArg = liftLogging pointerArg
+
+instance (Reference lang) => Reference (LoggingFor lang) where
+  makeRef = liftLogging makeRef
+  maybeDeref = liftLogging maybeDeref
+
+instance (Array lang) => Array (LoggingFor lang) where
+  arrayElem = liftLogging arrayElem
+  arrayLength = liftLogging arrayLength
+  arrayCopy = liftLogging arrayCopy
+
+instance (BinderSym lang) => BinderSym (LoggingFor lang) where
+  binder = liftLogging binder
+
+instance (BooleanExpression lang) => BooleanExpression (LoggingFor lang) where
+  (?!) = liftLogging (?!)
+  (?&&) = liftLogging (?&&)
+  (?||) = liftLogging (?||)
+
+instance (CommandLineArgs lang) => CommandLineArgs (LoggingFor lang) where
+  arg = liftLogging arg
+  argsList = liftLogging argsList
+  argExists = liftLogging argExists
+
+instance (CommentStatement lang) => CommentStatement (LoggingFor lang) where
+  comment = liftLogging comment
+
+instance (Comparison lang) => Comparison (LoggingFor lang) where
+  (?<) = liftLogging (?<)
+  (?<=) = liftLogging (?<=)
+  (?>) = liftLogging (?>)
+  (?>=) = liftLogging (?>=)
+  (?==) = liftLogging (?==)
+  (?!=) = liftLogging (?!=)
+
+instance (BlockSym lang) => BlockSym (LoggingFor lang) where
+  type Block (LoggingFor lang) = Block lang
+  block = liftLogging block
+
+instance (BodySym lang) => BodySym (LoggingFor lang) where
+  type Body (LoggingFor lang) = Body lang
+  body = liftLogging body
+  addComments = liftLogging addComments
+
+instance (ControlStatement lang) => ControlStatement (LoggingFor lang) where
+  break = liftLogging break
+  continue = liftLogging continue
+  returnStmt = liftLogging returnStmt
+  throw = liftLogging throw
+  ifCond = liftLogging ifCond
+  switch = liftLogging switch
+  ifExists = liftLogging ifExists
+  for = liftLogging for
+  forRange = liftLogging forRange
+  forEach = liftLogging forEach
+  while = liftLogging while
+  tryCatch = liftLogging tryCatch
+  assert = liftLogging assert
+
+instance (ScopeSym lang) => ScopeSym (LoggingFor lang) where
+  global = liftLogging global
+  mainFn = liftLogging mainFn
+  local = liftLogging local
+
+instance (FuncAppStatement lang) => FuncAppStatement (LoggingFor lang) where
+  inOutCall = liftLogging inOutCall
+  extInOutCall = liftLogging extInOutCall
+
+instance (FunctionSym lang) => FunctionSym (LoggingFor lang) where
+  type Function (LoggingFor lang) = Function lang
+
+instance (InternalList lang) => InternalList (LoggingFor lang) where
+  listSlice' = liftLogging listSlice'
+
+instance (Literal lang) => Literal (LoggingFor lang) where
+  litTrue = liftLogging litTrue
+  litFalse = liftLogging litFalse
+  litChar = liftLogging litChar
+  litDouble = liftLogging litDouble
+  litFloat = liftLogging litFloat
+  litInt = liftLogging litInt
+  litString = liftLogging litString
+  litArray = liftLogging litArray
+  litList = liftLogging litList
+  litSet = liftLogging litSet
+
+instance (MathConstant lang) => MathConstant (LoggingFor lang) where
+  pi = liftLogging pi
+
+instance (ParameterSym lang) => ParameterSym (LoggingFor lang) where
+  type Parameter (LoggingFor lang) = Parameter lang
+  param = liftLogging param
+  pointerParam = liftLogging pointerParam
+
+instance (VisibilitySym lang) => VisibilitySym (LoggingFor lang) where
+  type Visibility (LoggingFor lang) = Visibility lang
+  private = liftLogging private
+  public = liftLogging public
+
+instance (MethodSym lang) => MethodSym (LoggingFor lang) where
+  type Method (LoggingFor lang) = Method lang
+  docMain = liftLogging docMain
+  function = liftLogging function
+  mainFunction = liftLogging mainFunction
+  docFunc = liftLogging docFunc
+  inOutFunc = liftLogging inOutFunc
+  docInOutFunc = liftLogging docInOutFunc
+
+instance (NumericExpression lang) => NumericExpression (LoggingFor lang) where
+  (#~) = liftLogging (#~)
+  (#/^) = liftLogging (#/^)
+  (#|) = liftLogging (#|)
+  (#+) = liftLogging (#+)
+  (#-) = liftLogging (#-)
+  (#*) = liftLogging (#*)
+  (#/) = liftLogging (#/)
+  (#%) = liftLogging (#%)
+  (#^) = liftLogging (#^)
+  log = liftLogging log
+  ln = liftLogging ln
+  exp = liftLogging exp
+  sin = liftLogging sin
+  cos = liftLogging cos
+  tan = liftLogging tan
+  csc = liftLogging csc
+  sec = liftLogging sec
+  cot = liftLogging cot
+  arcsin = liftLogging arcsin
+  arccos = liftLogging arccos
+  arctan = liftLogging arctan
+  floor = liftLogging floor
+  ceil = liftLogging ceil
+
+instance (Set lang) => Set (LoggingFor lang) where
+  contains = liftLogging contains
+  setAdd = liftLogging setAdd
+  setRemove = liftLogging setRemove
+  setUnion = liftLogging setUnion
+
+instance (UnRepr lang contents) => UnRepr (LoggingFor lang) contents where
+  unRepr = unRepr . unLC
+
+instance (ValueExpression lang) => ValueExpression (LoggingFor lang) where
+  inlineIf = liftLogging inlineIf
+  funcAppMixedArgs = liftLogging funcAppMixedArgs
+  extFuncAppMixedArgs = liftLogging extFuncAppMixedArgs
+  libFuncAppMixedArgs = liftLogging libFuncAppMixedArgs
+  lambda = liftLogging lambda
+  notNull = liftLogging notNull
+
+instance (VariableElim lang) => VariableElim (LoggingFor lang) where
+  variableName = liftLogging variableName
+  variableType = liftLogging variableType
+
+instance (VariableValue lang) => VariableValue (LoggingFor lang) where
+  valueOf = liftLogging valueOf
+
+instance (IndexTranslator lang) => IndexTranslator (LoggingFor lang) where
+  intToIndex = liftLogging intToIndex
+  indexToInt = liftLogging indexToInt
+
+-- GProc
+
+instance (P.ProcProg lang) => P.ProcProg (LoggingFor lang)
+
+instance (P.ModuleSym lang) => P.ModuleSym (LoggingFor lang) where
+  type Module (LoggingFor lang) = P.Module lang
+  buildModule = liftLogging P.buildModule
+
+instance (P.FileSym lang) => P.FileSym (LoggingFor lang) where
+  type File (LoggingFor lang) = P.File lang
+  fileDoc = liftLogging P.fileDoc
+  docMod = liftLogging P.docMod
+
+instance (P.ProgramSym lang) => P.ProgramSym (LoggingFor lang) where
+  type Program (LoggingFor lang) = P.Program lang
+  prog = liftLogging P.prog
+
+-- GOOL
+
+instance (G.OOProg lang) => G.OOProg (LoggingFor lang)
+
+instance (G.GetSet lang) => G.GetSet (LoggingFor lang) where
+  get = liftLogging G.get
+  set = liftLogging G.set
+
+instance (G.InternalValueExp lang) => G.InternalValueExp (LoggingFor lang) where
+  objMethodCallMixedArgs' = liftLogging G.objMethodCallMixedArgs'
+  classMethodCallMixedArgs' = liftLogging G.classMethodCallMixedArgs'
+
+instance (G.OOTypeSym lang) => G.OOTypeSym (LoggingFor lang) where
+  obj = liftLogging G.obj
+
+instance (G.OOVariableSym lang) => G.OOVariableSym (LoggingFor lang) where
+  classVar = liftLogging G.classVar
+  classConst = liftLogging G.classConst
+  classVarAccess = liftLogging G.classVarAccess
+  extClassVarAccess = liftLogging G.extClassVarAccess
+  instanceVarAccess = liftLogging G.instanceVarAccess
+
+instance (DeclStatement (LoggingFor lang), G.OODeclStatement lang) => G.OODeclStatement (LoggingFor lang) where
+  objDecDef = liftLogging G.objDecDef
+  objDecNew = liftLogging G.objDecNew
+  extObjDecNew = liftLogging G.extObjDecNew
+
+instance (G.OOFuncAppStatement lang) => G.OOFuncAppStatement (LoggingFor lang) where
+  selfInOutCall = liftLogging G.selfInOutCall
+
+instance (G.OOValueSym lang) => G.OOValueSym (LoggingFor lang) where
+
+instance (G.OOValueExpression lang) => G.OOValueExpression (LoggingFor lang) where
+  newObjMixedArgs = liftLogging G.newObjMixedArgs
+  extNewObjMixedArgs = liftLogging G.extNewObjMixedArgs
+  libNewObjMixedArgs = liftLogging G.libNewObjMixedArgs
+
+instance (G.SelfSym lang) => G.SelfSym (LoggingFor lang) where
+  self = liftLogging G.self
+
+instance (G.OOVariableValue lang) => G.OOVariableValue (LoggingFor lang)
+
+instance (G.OOFunctionSym lang) => G.OOFunctionSym (LoggingFor lang) where
+  func = liftLogging G.func
+  objAccess = liftLogging G.objAccess
+
+instance (G.ObserverPattern lang) => G.ObserverPattern (LoggingFor lang) where
+  notifyObservers = liftLogging G.notifyObservers
+
+instance (G.AttachmentSym lang) => G.AttachmentSym (LoggingFor lang) where
+  type Attachment (LoggingFor lang) = G.Attachment lang
+  classLevel = liftLogging G.classLevel
+  instanceLevel = liftLogging G.instanceLevel
+
+instance (G.OOMethodSym lang) => G.OOMethodSym (LoggingFor lang) where
+  method = liftLogging G.method
+  getMethod = liftLogging G.getMethod
+  setMethod = liftLogging G.setMethod
+  constructor = liftLogging G.constructor
+  inOutMethod = liftLogging G.inOutMethod
+  docInOutMethod = liftLogging G.docInOutMethod
+
+instance (G.StateVarSym lang) => G.StateVarSym (LoggingFor lang) where
+  type StateVar (LoggingFor lang) = G.StateVar lang
+  stateVar = liftLogging G.stateVar
+  stateVarDef = liftLogging G.stateVarDef
+  constVar = liftLogging G.constVar
+
+instance (G.ClassSym lang) => G.ClassSym (LoggingFor lang) where
+  type Class (LoggingFor lang) = G.Class lang
+  buildClass = liftLogging G.buildClass
+  extraClass = liftLogging G.extraClass
+  implementingClass = liftLogging G.implementingClass
+  docClass = liftLogging G.docClass
+
+instance (G.ModuleSym lang) => G.ModuleSym (LoggingFor lang) where
+  type Module (LoggingFor lang) = G.Module lang
+  buildModule = liftLogging G.buildModule
+
+instance (G.FileSym lang) => G.FileSym (LoggingFor lang) where
+  type File (LoggingFor lang) = G.File lang
+  fileDoc = liftLogging G.fileDoc
+  docMod = liftLogging G.docMod
+
+instance (G.ProgramSym lang) => G.ProgramSym (LoggingFor lang) where
+  type Program (LoggingFor lang) = G.Program lang
+  prog = liftLogging G.prog
+
+instance (G.StrategyPattern lang) => G.StrategyPattern (LoggingFor lang) where
+  runStrategy = liftLogging G.runStrategy

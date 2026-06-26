@@ -25,11 +25,10 @@ import Drasil.SRS.Concepts (datCon)
 import Theory.Drasil (DataDefinition)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
-import Drasil.GlassBR.Concepts (glass)
+import Drasil.GlassBR.Concepts (glass, blast, notSafe, safeMessage)
 import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDFDD, standOffDis)
 import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
-import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
-  pbTolfail, safeMessage, inputs)
+import Drasil.GlassBR.Unitals (isSafeLR, isSafePb, loadSF, pbTolfail, inputs)
 
 {--Functional Requirements--}
 

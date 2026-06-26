@@ -124,67 +124,35 @@ public class ReadTable {
                 x_matrix_temp.Add(Double.Parse(linetokens[j * 2 + 0]));
                 y_matrix_temp.Add(Double.Parse(linetokens[j * 2 + 1]));
             }
+            outfile = new StreamWriter("log.txt", true);
+            outfile.Write("var 'x_matrix_temp' assigned ");
+            outfile.Write("[");
+            for (int list_i1 = 0; list_i1 < x_matrix_temp.Count - 1; list_i1++) {
+                outfile.Write(x_matrix_temp[list_i1]);
+                outfile.Write(", ");
+            }
+            if (x_matrix_temp.Count > 0) {
+                outfile.Write(x_matrix_temp[x_matrix_temp.Count - 1]);
+            }
+            outfile.Write("]");
+            outfile.WriteLine(" in module ReadTable");
+            outfile.Close();
+            outfile = new StreamWriter("log.txt", true);
+            outfile.Write("var 'y_matrix_temp' assigned ");
+            outfile.Write("[");
+            for (int list_i1 = 0; list_i1 < y_matrix_temp.Count - 1; list_i1++) {
+                outfile.Write(y_matrix_temp[list_i1]);
+                outfile.Write(", ");
+            }
+            if (y_matrix_temp.Count > 0) {
+                outfile.Write(y_matrix_temp[y_matrix_temp.Count - 1]);
+            }
+            outfile.Write("]");
+            outfile.WriteLine(" in module ReadTable");
+            outfile.Close();
             x_matrix.Add(x_matrix_temp);
             y_matrix.Add(y_matrix_temp);
         }
-        outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'x_matrix' assigned ");
-        outfile.Write("[");
-        for (int list_i2 = 0; list_i2 < x_matrix.Count - 1; list_i2++) {
-            outfile.Write("[");
-            for (int list_i1 = 0; list_i1 < x_matrix[list_i2].Count - 1; list_i1++) {
-                outfile.Write(x_matrix[list_i2][list_i1]);
-                outfile.Write(", ");
-            }
-            if (x_matrix[list_i2].Count > 0) {
-                outfile.Write(x_matrix[list_i2][x_matrix[list_i2].Count - 1]);
-            }
-            outfile.Write("]");
-            outfile.Write(", ");
-        }
-        if (x_matrix.Count > 0) {
-            outfile.Write("[");
-            for (int list_i1 = 0; list_i1 < x_matrix[x_matrix.Count - 1].Count - 1; list_i1++) {
-                outfile.Write(x_matrix[x_matrix.Count - 1][list_i1]);
-                outfile.Write(", ");
-            }
-            if (x_matrix[x_matrix.Count - 1].Count > 0) {
-                outfile.Write(x_matrix[x_matrix.Count - 1][x_matrix[x_matrix.Count - 1].Count - 1]);
-            }
-            outfile.Write("]");
-        }
-        outfile.Write("]");
-        outfile.WriteLine(" in module ReadTable");
-        outfile.Close();
-        outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'y_matrix' assigned ");
-        outfile.Write("[");
-        for (int list_i2 = 0; list_i2 < y_matrix.Count - 1; list_i2++) {
-            outfile.Write("[");
-            for (int list_i1 = 0; list_i1 < y_matrix[list_i2].Count - 1; list_i1++) {
-                outfile.Write(y_matrix[list_i2][list_i1]);
-                outfile.Write(", ");
-            }
-            if (y_matrix[list_i2].Count > 0) {
-                outfile.Write(y_matrix[list_i2][y_matrix[list_i2].Count - 1]);
-            }
-            outfile.Write("]");
-            outfile.Write(", ");
-        }
-        if (y_matrix.Count > 0) {
-            outfile.Write("[");
-            for (int list_i1 = 0; list_i1 < y_matrix[y_matrix.Count - 1].Count - 1; list_i1++) {
-                outfile.Write(y_matrix[y_matrix.Count - 1][list_i1]);
-                outfile.Write(", ");
-            }
-            if (y_matrix[y_matrix.Count - 1].Count > 0) {
-                outfile.Write(y_matrix[y_matrix.Count - 1][y_matrix[y_matrix.Count - 1].Count - 1]);
-            }
-            outfile.Write("]");
-        }
-        outfile.Write("]");
-        outfile.WriteLine(" in module ReadTable");
-        outfile.Close();
         infile.Close();
     }
 }

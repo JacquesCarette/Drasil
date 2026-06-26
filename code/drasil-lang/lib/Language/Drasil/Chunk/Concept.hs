@@ -3,8 +3,7 @@
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
-  ConceptChunk, cncpt, cncpt', cncpt'', cncpt''',
-  dcc, dccA, dccAWDS, dccWDS, cc', cw,
+  ConceptChunk, cncpt, cncpt', cncpt'', cncpt''', cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -13,10 +12,10 @@ import Control.Lens ((^.))
 
 import Drasil.Database (HasUID(uid), nsUid, UID, mkUid)
 
-import Language.Drasil.Classes (Idea, ConceptDomain(cdom), Concept)
+import Language.Drasil.Classes (ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(nw, idea, idea')
+import Language.Drasil.Chunk.NamedIdea (NamedIdea (..), Idea (..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 import qualified Language.Drasil.Classes as D (defn)
@@ -38,7 +37,7 @@ cncpt :: Concept dom =>
   String ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt u trm defn accAbbr = ConDict (idea u trm accAbbr) defn . map (^. uid)
+cncpt u trm defn accAbbr = ConDict u trm (Just accAbbr) defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt' :: Concept dom =>
@@ -50,7 +49,7 @@ cncpt' :: Concept dom =>
   Sentence ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt' u trm defn = ConDict (idea' u trm) defn . map (^. uid)
+cncpt' u trm defn = ConDict u trm Nothing defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt'' ::
@@ -72,44 +71,14 @@ cncpt''' ::
   NP ->
   -- | The definition of the 'term'
   Sentence -> ConceptChunk
-cncpt''' u trm defn = ConDict (idea' u trm) defn []
+cncpt''' u trm defn = ConDict u trm Nothing defn []
 
-{-# DEPRECATED dccA, dccAWDS, dcc, dccWDS, cc', cw
-  "Smart constructors allow externally-known chunk nesting; use one of `cncpt, cncpt', cncpt'', cncpt'''` instead." #-}
-
--- | Smart constructor for creating a concept chunks with an abbreviation. Takes
--- a UID (String), a term (NounPhrase), a definition (String), and an
--- abbreviation (Maybe String).
-dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
-dccA i ter def a = ConDict ideaDict (S def) []
-  where
-    u = mkUid i
-    ideaDict = maybe (idea' u ter) (idea u ter) a
-
-dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
-dccAWDS i ter def a = ConDict ideaDict def []
-  where
-    u = mkUid i
-    ideaDict = maybe (idea' u ter) (idea u ter) a
-
--- | Smart constructor for creating concept chunks given a 'UID', 'NounPhrase'
--- ('NP') and definition (as a 'String').
-dcc :: String -> NP -> String -> ConceptChunk
-dcc i ter des = dccA i ter des Nothing
-
--- | Similar to 'dcc', except the definition takes a 'Sentence'.
-dccWDS :: String -> NP -> Sentence -> ConceptChunk
-dccWDS i t d = dccAWDS i t d Nothing
-
--- | Constructor for projecting an idea into a 'ConceptChunk'. Takes the
--- definition of the 'ConceptChunk' as a 'Sentence. Does not allow concept
--- domain tagging.
-cc' :: Idea c => c -> Sentence -> ConceptChunk
-cc' n d = ConDict (nw n) d []
+{-# DEPRECATED cw
+  "Chunk down-casting is strongly discouraged. If you want to construct a `ConceptChunk`, use one of its normal constructors." #-}
 
 -- | For projecting out to the 'ConceptChunk' data-type.
 cw :: Concept c => c -> ConceptChunk
-cw c = ConDict (nw c) (c ^. D.defn) (cdom c)
+cw c = ConDict (c ^. uid) (c ^. term) (getA c) (c ^. D.defn) (cdom c)
 
 -- | Constructor for a 'ConceptInstance'. Takes in the Reference Address
 -- ('String'), a definition ('Sentence'), a short name ('String'), and a domain
@@ -117,5 +86,5 @@ cw c = ConDict (nw c) (c ^. D.defn) (cdom c)
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 cic u d sn dom = ConInst (nsUid "instance" $ icc ^. uid) icc u $ shortname' (S sn)
   where
-    icc = cc (idea' (mkUid u) $ pn sn) d [dom]
-    cc n d' l = ConDict n d' $ map (^. uid) l
+    icc = cc (mkUid u) (pn sn) d [dom]
+    cc u' n d' l = ConDict u' n Nothing d' $ map (^. uid) l

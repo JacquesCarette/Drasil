@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
-  buildModule, docMod, modFromData, listInnerType, arrayElem, listAppend,
+  buildModule, docMod, modFromData, innerType, arrayElem, listAppend,
   listAdd, funcDecDef, function
 ) where
 
@@ -10,8 +10,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, SMethod, MSBody,
   MSStatement, SValue, SVariable, MSParameter, VSType,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType)
-import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
-  IndexTranslator(intToIndex), ParameterSym(param), TypeSym(..))
+import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
@@ -82,16 +81,16 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
 
-listInnerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getCodeType)
+innerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
-listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r
-listAppend fnName list val = funcApp fnName IC.void [list, val]
+listAppend :: (CommonRenderSym r) => String -> SValue r -> SValue r -> MSStatement r
+listAppend fnName list val = IC.valStmt $ funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
-listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> SValue r
-listAdd fnName list idx val = funcApp fnName IC.void [list, IC.intToIndex idx, val]
+listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> MSStatement r
+listAdd fnName list idx val = IC.valStmt $ funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SValue r ->
   SVariable r -> SVariable r
@@ -99,7 +98,7 @@ arrayElem i' v' = do
   i <- IC.intToIndex i'
   v <- v'
   let vName = variableName v -- Slight hack; we used to add `++ "[" ++ render (RCC.value i) ++ "]"`
-      vType = listInnerType $ return $ variableType v
+      vType = innerType $ return $ variableType v
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 

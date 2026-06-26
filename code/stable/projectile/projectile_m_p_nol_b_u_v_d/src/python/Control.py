@@ -11,7 +11,6 @@ import OutputFormat
 
 filename = sys.argv[1]
 g = 9.8
-epsilon = 2.0e-2
 inParams = InputParameters.InputParameters(filename)
 t_flight = Calculations.func_t_flight(inParams, g)
 p_land = Calculations.func_p_land(inParams, g)

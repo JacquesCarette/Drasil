@@ -8,7 +8,7 @@ module Theory.Drasil.RelationConcept (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..), mkUid)
 
 import Language.Drasil
 
@@ -41,4 +41,4 @@ instance Express       RelationConcept where express = (^. rel)
 
 -- | Create a 'RelationConcept' from a given 'UID', term ('NP'), definition ('Sentence'), and 'Relation'.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn) . express
+makeRC rID rTerm rDefn = RC (cncpt''' (mkUid rID) rTerm rDefn) . express

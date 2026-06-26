@@ -15,18 +15,17 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
-  SValue, litZero, SVariable, MSStatement, MSBlock, SMethod, BodySym(..),
-  BlockSym(..), TypeSym(..), getCodeType, getTypeString, VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+  SValue, SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
+  TypeSym(..), getCodeType, getTypeString, VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
+  switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -51,8 +50,8 @@ import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
   valueList, binderList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
-  break, continue, constDec', assign, subAssign, addAssign)
+  addComments, blockCmt, docCmt, commentedMod, commentedItem, break, continue,
+  constDec', assign, subAssign, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmtNoEnd, typeFromData)
@@ -61,15 +60,15 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var, smartSub)
+  listAccess, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
+  print, comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList,
+  ifCond, smartAdd, local, var, smartSub)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (listDec,
-  listDecDef, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
+  listDecDef, listSet, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
   docInOutFunc', forLoopError, openFileR', openFileW', openFileA', multiReturn,
   multiAssign, inOutCall, mainBody, argExists, litSet)
 
@@ -78,21 +77,19 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
 
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listAppend, listAdd,
-  listInnerType, arrayElem, funcDecDef, function)
+  innerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
 import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), ValData(..), vd, VarData(..),
-  vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
-  vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
-  ScopeData(..), sd, BinderD(..), bindFormD)
+  vard, progD, fd, pd, updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..),
+  bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
+import Drasil.Shared.State (lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getLangImports, getLibImports,
-  addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf,
-  setVarScope, getVarScope)
+  addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe, isNothing)
@@ -190,10 +187,11 @@ instance TypeSym JuliaCode where
   string = jlStringType
   infile = jlInfileType
   outfile = jlOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = jlListType
   setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python
-  listInnerType = A.listInnerType
+  innerType = A.innerType
   funcType = CS.funcType
   void = jlVoidType
 
@@ -384,6 +382,10 @@ instance IndexTranslator JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
 
+instance Reference JuliaCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array JuliaCode where
   arrayElem = A.arrayElem
   arrayLength = listSize
@@ -396,7 +398,7 @@ instance List JuliaCode where
   listAdd = A.listAdd jlListAdd
   listAppend = A.listAppend jlListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = jlIndexOf
 
 instance Set JuliaCode where
@@ -410,7 +412,6 @@ instance InternalList JuliaCode where
 
 instance InternalListFunc JuliaCode where
   listAccessFunc = CS.listAccessFunc
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym JuliaCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -421,39 +422,6 @@ instance BinderElim JuliaCode where
 
 instance InternalBinderElim JuliaCode where
   binderElim = text . bindName . unJLC
-
-instance ThunkSym JuliaCode where
-  type Thunk JuliaCode = CommonThunk VS
-
-instance ThunkAssign JuliaCode where
-  thunkAssign v t = do
-    iName <- genLoopIndex
-    let
-      i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . listSize . fmap pure) . unJLC
-      loopInit = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
-      loopBody = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
-        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
-        ((v &+=) . vecIndex (valueOf i) . pure . pure)
-    multi [loopInit,
-      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
-
-instance VectorType JuliaCode where
-  vecType = listType
-
-instance VectorDecl JuliaCode where
-  vecDec = listDec
-  vecDecDef = listDecDef
-
-instance VectorThunk JuliaCode where
-  vecThunk = pure . pure . pureValue . fmap unJLC . valueOf
-
-instance VectorExpression JuliaCode where
-  vecScale k = fmap $ fmap $ vectorize (fmap unJLC . (k #*) . fmap pure)
-  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unJLC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unJLC . flip listAccess i . fmap pure) . unJLC)
-  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unJLC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction JuliaCode where
   funcFromData d = onStateValue $ onCodeValue (`fd` d)

@@ -18,10 +18,10 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderElim(..))
+  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), BinderElim(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   TypeData, OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
@@ -33,10 +33,10 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,
-  List r, InternalList r, VectorExpression r, VariableElim r, BinderElim r,
-  RenderBlock r, BlockElim r, RenderBody r, BodyElim r, InternalListFunc r,
-  RenderFunction r, FunctionElim r, OpElim r, RenderParam r, ParamElim r,
-  RenderVisibility r, VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
+  List r, InternalList r, VariableElim r, BinderElim r, RenderBlock r,
+  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
+  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r,
+  VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
   InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
   RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r,
   InternalBinderElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
@@ -155,8 +155,6 @@ class ValueElim r where
 class InternalListFunc r where
   -- | List, Index
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
-  -- | List, Index, Value
-  listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

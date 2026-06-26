@@ -3,7 +3,7 @@ module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 import Data.List (nub)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.LessonPlan (LessonPlan, mkLessonPlan, LsnDesc, LsnChapter(..))
 import Drasil.System (mkSystemMeta)
@@ -49,13 +49,13 @@ conceptChunks = defs ++ [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
   CCs.verticalMotion, CCs.gravity, CCs.position]
 
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
+symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
   Qs.gravitationalAccel, Qs.xAccel, Qs.yAccel, Qs.time, Qs.ixPos, Qs.iyPos,
   Qs.xPos, Qs.yPos, Qs.ixVel, Qs.iyVel, Qs.xVel, Qs.yVel, Qs.scalarPos,
-  Qs.iPos, Qs.height, horiz_velo]
+  Qs.iPos, Qs.height]
 
 projectileMotionLesson :: CI
-projectileMotionLesson = commonIdeaWithDict "projMotLsn" (pn "Projectile Motion Lesson") "Projectile Motion" []
+projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "Projectile Motion" []
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs)

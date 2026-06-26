@@ -17,22 +17,21 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
   BodySym(..), oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, OOFunctionSym(..),
-  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
+  objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
@@ -60,32 +59,32 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, classVarAccess, cast, listSetFunc, castObj, classLevel,
+  printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
-  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
+  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
-  listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
+  listDecDef, listSet, mainFunction, notNull, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall, listAppend, listAdd)
+  classMethodCall, listAppend, listAdd, innerType)
 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
@@ -99,15 +98,13 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
   TypeData(..), ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
-  vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BinderD(..),
-  bindFormD)
+  vard, ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
 import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
-  useVarName, genLoopIndex, setVarScope)
+  useVarName, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -118,7 +115,7 @@ import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
-  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc)
+  extFuncAppMixedArgs, extVar, listAccessFunc)
 
 csExt :: String
 csExt = "cs"
@@ -215,6 +212,7 @@ instance TypeSym CSharpCode where
   string = CP.string
   infile = csInfileType
   outfile = csOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType t = do
     modify (addLangImportVS csGeneric)
     C.listType csList t
@@ -222,7 +220,7 @@ instance TypeSym CSharpCode where
   setType t = do
     modify (addLangImportVS csGeneric)
     C.setType csSet t
-  listInnerType = G.listInnerType
+  innerType = CG.innerType
   funcType = csFuncType
   void = C.void
 
@@ -294,9 +292,6 @@ instance OOVariableSym CSharpCode where
 
 instance SelfSym CSharpCode where
   self = C.self
-
-instance InstanceVarSelfSym CSharpCode where
-  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
@@ -396,7 +391,6 @@ instance ValueExpression CSharpCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression CSharpCode where
-  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs
@@ -444,6 +438,10 @@ instance IndexTranslator CSharpCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Reference CSharpCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array CSharpCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "Length" int)
@@ -456,7 +454,7 @@ instance List CSharpCode where
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
@@ -474,8 +472,6 @@ instance InternalGetSet CSharpCode where
 
 instance InternalListFunc CSharpCode where
   listAccessFunc = CS.listAccessFunc
-  -- Hack! This produces a statement and calls it a value
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -486,39 +482,6 @@ instance BinderElim CSharpCode where
 
 instance InternalBinderElim CSharpCode where
   binderElim = text . bindName . unCSC
-
-instance ThunkSym CSharpCode where
-  type Thunk CSharpCode = CommonThunk VS
-
-instance ThunkAssign CSharpCode where
-  thunkAssign v t = do
-    iName <- genLoopIndex
-    let
-      i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
-      loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
-      loopBody = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
-        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
-        ((v &+=) . vecIndex (valueOf i) . pure . pure)
-    multi [loopInit,
-      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
-
-instance VectorType CSharpCode where
-  vecType = listType
-
-instance VectorDecl CSharpCode where
-  vecDec = listDec
-  vecDecDef = listDecDef
-
-instance VectorThunk CSharpCode where
-  vecThunk = pure . pure . pureValue . fmap unCSC . valueOf
-
-instance VectorExpression CSharpCode where
-  vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
-  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
-  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -601,7 +564,7 @@ instance IOStatement CSharpCode where
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine csReadLine
   getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)
-    (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
+    (oneLiner $ listAppend (valueOf v) (csFileInput f))
 
 instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string)

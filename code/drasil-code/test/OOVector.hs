@@ -29,7 +29,7 @@ vecVar v = var v (obj "Vector")
 localV :: VariableSym r => SVariable r
 localV = var "v" (arrayType double)
 
-thisV :: InstanceVarSelfSym r =>SVariable r
+thisV :: (SelfSym r, VariableValue r) =>SVariable r
 thisV = instanceVarSelf localV
 
 dimension :: OOProg r => SMethod r

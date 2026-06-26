@@ -15,7 +15,6 @@ class InputParameters {
     var theta: Float = 0.0
     var p_target: Float = 0.0
     var g: Float = 9.8
-    var epsilon: Float = 2.0e-2
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file

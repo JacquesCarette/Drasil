@@ -5,6 +5,7 @@ module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
 import Control.Lens ((^.))
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
@@ -46,7 +47,7 @@ consThermE = tm (equationalConstraints' consThermECS) [dRef consThemESrc]
 
 consThermECS :: ConstraintSet ModelExpr
 consThermECS = mkConstraintSet consCC rels
-  where consCC = dccWDS "consThermECS"
+  where consCC = cncpt''' (mkUid "consThermECS")
           (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn)
         rels   = NE.fromList [consThermERel]
 

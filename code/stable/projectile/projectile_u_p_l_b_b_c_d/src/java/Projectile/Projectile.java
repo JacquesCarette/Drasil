@@ -233,6 +233,5 @@ class InputParameters {
 */
 class Constants {
     public static final double g = 9.8;
-    public static final double epsilon = 2.0e-2;
     
 }

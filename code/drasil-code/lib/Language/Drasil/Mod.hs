@@ -15,8 +15,8 @@ import Drasil.GOOL (VisibilityTag(..))
 import Data.String.Extras (toPlainName)
 
 import Drasil.Code.CodeExpr (CodeExpr)
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
-  codevars', quantvar)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, quantvar)
+import Language.Drasil.Chunk.CodeBase (codevars, codevars')
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 

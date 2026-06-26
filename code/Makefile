@@ -25,8 +25,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss projectile-lesson
+SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend bss
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend projectile-lesson
 GOOLTEST = codegenTest
 
 # where they live
@@ -234,7 +234,7 @@ graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 #----------------------------------------------------------#
 
 deps: check_stack ##@Dependencies Build only dependencies.
-	- stack build $(stackArgs) --only-dependencies
+	- stack build $(stackBuildArgs) --only-dependencies
 
 #-------------------------------------------------#
 #--- Targets that affect all packages/examples ---#

@@ -59,19 +59,19 @@ stabAnalysis = compoundNC stability analysis
 ssa = compoundNC slope stabAnalysis
 
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
-effFandS = dccWDS "effective forces and stresses"
+effFandS = cncpt''' (mkUid "effective forces and stresses")
   (cn "effective forces and stresses")
   (D.toSent (atStartNP (the normForce)) `S.or_` phrase nrmStrss +:+
   S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
   S "composed of the effective" +:+ phrase force `S.or_` phrase stress `S.andThe`
   phrase force `S.or_` phrase stress +:+ S "exerted by water")
 
-slpSrf = dccWDS "slip surface" (slpSrfCon ^. term)
+slpSrf = cncpt''' (mkUid "slip surface") (slpSrfCon ^. term)
   (D.toSent (atStartNP (a_ surface)) +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
   S "potential to fail or displace due to load or other" +:+ plural force)
 
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
-plnStrn = dccWDS "plane strain" (cn' "plane strain")
+plnStrn = cncpt''' (mkUid "plane strain") (cn' "plane strain")
   (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
   S "the directions" `S.ofA` phrase threeD +:+ S "material can be" +:+
   S "approximated as zero. This condition results when a body is" +:+
@@ -81,20 +81,20 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
   S "infinite" +:+ atStart' stress +:+ S "in the direction" `S.ofThe` S "dominant" +:+
   phrase dimension +:+ S "can be approximated as zero")
 
-crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
+crtSlpSrf = cncpt''' (mkUid "critical slip surface") (cn' "critical slip surface")
   (D.toSent (atStartNP (slpSrf `ofThe` slope)) +:+
   S "that has the lowest" +:+ phrase fsConcept `sC`
   S "and is therefore most likely to experience failure")
 
-fsConcept = dccWDS "FS" factorOfSafety
+fsConcept = cncpt''' (mkUid "FS") factorOfSafety
   (S "The global stability metric" `S.ofA` D.toSent (phraseNP (slpSrf `ofA` slope)) `sC`
   S "defined as the ratio" `S.of_` phrase shearRes +:+
   S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
 
-waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
-  " saturated zone in the ground")
+waterTable = cncpt''' (mkUid "water table") (cn' "water table") (S ("The upper boundary of a" ++
+  " saturated zone in the ground"))
 
 --
 factor :: IdeaDict --FIXME: this is here becuase this phrase is
@@ -112,5 +112,7 @@ maxim = idea' (mkUid "maximum") (cn' "maximum")
 
 -- Some sentences want plurals (because of arrays) of things that are normally singular.
 xCoords, yCoords :: ConceptChunk
-xCoords = dcc "xCoords" (nounPhraseSent $ D.P lX D.:-: D.S "-coordinates") "the location of the points on the x-axis"
-yCoords = dcc "yCoords" (nounPhraseSent $ D.P lY D.:-: D.S "-coordinates") "the location of the points on the y-axis"
+xCoords = cncpt''' (mkUid "xCoords") (nounPhraseSent $ D.P lX D.:-: D.S "-coordinates")
+  (S "the location of the points on the x-axis")
+yCoords = cncpt''' (mkUid "yCoords") (nounPhraseSent $ D.P lY D.:-: D.S "-coordinates")
+  (S "the location of the points on the y-axis")

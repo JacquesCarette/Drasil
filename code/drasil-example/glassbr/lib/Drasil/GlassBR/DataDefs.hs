@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
-import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
+import Drasil.GlassBR.Concepts (annealedGl, fTemperedGl, glass, hStrengthGl, glassType, demandq)
 import Drasil.GlassBR.LabelledContent (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals
@@ -26,7 +26,7 @@ import Drasil.GlassBR.Unitals
 dataDefs :: [DataDefinition]
 dataDefs = [hFromt, loadDFDD, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
 
-{--}
+-- ** Minimum Thickness
 
 hFromtEq :: Relation
 hFromtEq = frac 1 1000 $* incompleteCase (zipWith hFromtHelper
@@ -42,7 +42,7 @@ hFromt :: DataDefinition
 hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick"
   [hMin, S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)) ]
 
-{--}
+-- ** Load Duration Factor
 
 loadDFEq :: Expr
 loadDFEq = (sy loadDur $/ exactDbl 60) $^ (sy sflawParamM $/ exactDbl 16)
@@ -53,8 +53,6 @@ loadDFQD = mkQuantDef loadDF loadDFEq
 loadDFDD :: DataDefinition
 loadDFDD = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
-
-{--}
 
 glaTyFacEq :: Expr
 glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (abrv . snd) glassType)
@@ -69,7 +67,7 @@ glaTyFac :: DataDefinition
 glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
   [anGlass, ftGlass, hsGlass]
 
-{--}
+-- ** Standoff Distance
 
 standOffDisEq :: Expr
 standOffDisEq = sqrt (square (sy sdx) $+ square (sy sdy) $+ square (sy sdz))
@@ -80,7 +78,7 @@ standOffDisQD = mkQuantDef standOffDist standOffDisEq
 standOffDis :: DataDefinition
 standOffDis = ddE standOffDisQD [dRef astm2009] Nothing "standOffDist" []
 
-{--}
+-- ** Aspect Ratio
 
 aspRatEq :: Expr
 aspRatEq = sy plateLen $/ sy plateWidth
@@ -91,7 +89,7 @@ aspRatQD = mkQuantDef aspectRatio aspRatEq
 aspRat :: DataDefinition
 aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
 
-{--}
+-- ** TNT Charge Mass
 
 eqTNTWEq :: Expr
 eqTNTWEq = sy charWeight $* sy tNT
@@ -102,7 +100,7 @@ eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 eqTNTWDD :: DataDefinition
 eqTNTWDD = ddE eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
 
-{--}
+-- ** Applied Load
 
 calofDemandEq :: Expr
 calofDemandEq = apply interpY [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
@@ -120,11 +118,11 @@ aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are`
   sParen (eS $ sy plateLen $>= sy plateWidth)
 
 anGlass, ftGlass, hsGlass :: Sentence
-anGlass = glassTypeHelper annealed
-ftGlass = glassTypeHelper fullyT
-hsGlass = glassTypeHelper heatS
+anGlass = glassTypeHelper annealedGl
+ftGlass = glassTypeHelper fTemperedGl
+hsGlass = glassTypeHelper hStrengthGl
 
-glassTypeHelper :: CI -> Sentence
+glassTypeHelper :: ConceptChunk -> Sentence
 glassTypeHelper t = short t `S.is` phrase t +:+. phrase glass
 
 calofDemandDesc :: Sentence

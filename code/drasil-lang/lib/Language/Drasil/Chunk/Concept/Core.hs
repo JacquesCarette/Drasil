@@ -32,7 +32,7 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
 --
 -- Ex. The concept of "Accuracy" may be defined as the quality or state of being correct or precise.
 data ConceptChunk = ConDict { _uu :: UID -- ^ The 'UID' of the concept.
-                            , _np :: NP -- The term for the concept.
+                            , _np :: NP -- ^ The term for the concept.
                             , mabbr :: Maybe String -- ^ The optional abbreviation for the concept.
                             , _defn' :: Sentence -- ^ The definition of the concept.
                             , cdom' :: [UID] -- ^ Domain of the concept.
@@ -52,7 +52,7 @@ instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance HasUID        ConceptChunk where uid = uu
 -- | Finds term ('NP') of the 'ConceptChunk'.
 instance NamedIdea     ConceptChunk where term = np
--- | Finds abbrevication of the 'ConceptChunk'.
+-- | Finds the abbreviation of the 'ConceptChunk'.
 instance Idea          ConceptChunk where getA = mabbr
 -- | Finds definition of a 'ConceptChunk'.
 instance Definition    ConceptChunk where defn = defn'

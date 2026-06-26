@@ -10,7 +10,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
   TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Dereference(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
@@ -250,7 +250,8 @@ instance IndexTranslator CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
 
-instance Dereference CodeInfoOO where
+instance Reference CodeInfoOO where
+  makeRef = execute1
   maybeDeref = execute1
 
 instance Array CodeInfoOO where

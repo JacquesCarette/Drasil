@@ -20,7 +20,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Dereference(..), Array(..), List(..), Set(..), InternalList(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
@@ -382,7 +382,8 @@ instance IndexTranslator JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
 
-instance Dereference JuliaCode where
+instance Reference JuliaCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array JuliaCode where

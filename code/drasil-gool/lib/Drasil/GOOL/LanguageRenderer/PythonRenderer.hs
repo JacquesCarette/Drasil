@@ -18,7 +18,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Dereference(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -439,7 +439,8 @@ instance IndexTranslator PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
-instance Dereference PythonCode where
+instance Reference PythonCode where
+  makeRef = id
   maybeDeref = id
 
 instance Array PythonCode where

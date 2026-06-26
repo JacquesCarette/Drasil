@@ -92,6 +92,9 @@ public class HelloWorld {
         TestClass t4 = t3.addToInstance(t2);
         Console.Write("Value of t4.a: ");
         Console.WriteLine(t4.a);
+        TestClass t5 = TestClass.addWithReferences(t3, t4);
+        Console.Write("Value of t5.a: ");
+        Console.WriteLine(t5.a);
         
         // List slicing tests
         // Create variables for list slices
@@ -446,5 +449,9 @@ public class TestClass {
     
     public TestClass addToInstance(TestClass t) {
         return TestClass.add(this, t);
+    }
+    
+    public static TestClass addWithReferences(TestClass t1, TestClass t2) {
+        return new TestClass(t1.a + t2.a);
     }
 }

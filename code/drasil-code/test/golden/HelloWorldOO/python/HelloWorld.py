@@ -18,6 +18,10 @@ class TestClass:
     
     def addToInstance(self, t):
         return TestClass.add(self, t)
+    
+    @staticmethod
+    def addWithReferences(t1, t2):
+        return TestClass(t1.a + t2.a)
 
 # Initializing variables
 b = 5
@@ -76,6 +80,9 @@ print(t3.a)
 t4 = t3.addToInstance(t2)
 print("Value of t4.a: ", end="")
 print(t4.a)
+t5 = TestClass.addWithReferences(t3, t4)
+print("Value of t5.a: ", end="")
+print(t5.a)
 
 # List slicing tests
 # Create variables for list slices

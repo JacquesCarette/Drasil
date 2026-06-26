@@ -30,6 +30,10 @@ TestClass TestClass::add(TestClass t1, TestClass t2) {
     return TestClass(t1.a + t2.a);
 }
 
+TestClass TestClass::addToInstance(TestClass t) {
+    return TestClass::add(*this, t);
+}
+
 int main(int argc, const char *argv[]) {
     // Initializing variables
     int a;
@@ -145,6 +149,9 @@ int main(int argc, const char *argv[]) {
     TestClass t3 = TestClass::add(t1, t2);
     std::cout << "Value of t3.a: ";
     std::cout << t3.a << std::endl;
+    TestClass t4 = t3.addToInstance(t2);
+    std::cout << "Value of t4.a: ";
+    std::cout << t4.a << std::endl;
     
     // List slicing tests
     // Create variables for list slices

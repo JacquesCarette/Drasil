@@ -10,12 +10,12 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, FunctionSym(..), Array(..), List(..), Set(..),  listSlice,
-  listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
-  ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
-  VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
-  mainMod, initialState, onStateValue, onCodeList, unCI, unJLC, jlName,
-  jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
+  libFuncApp, exists, FunctionSym(..), Dereference(..), Array(..), List(..),
+  Set(..),  listSlice, listIndexExists, at, VisibilitySym(..),ParameterSym(..),
+  MethodSym(..), ModuleSym(..), convType, ProgData(..), FileData(..),
+  ModData(..), VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS,
+  headers, sources, mainMod, initialState, onStateValue, onCodeList, unCI,
+  unJLC, jlName, jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
   ) where
@@ -30,8 +30,9 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, Array(..), List(..), Set(..), listSlice, listIndexExists,
-  at, ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
+  libFuncApp, exists, Dereference(..), Array(..), List(..), Set(..), listSlice,
+  listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   getCodeType, getTypeString)
 import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,

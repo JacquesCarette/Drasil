@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (Label, VSType, SValue, SVariable,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..),
+  Dereference(..), Array(..), List(..), Set(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
@@ -333,6 +333,9 @@ instance ValueElim MatlabCode where
 instance IndexTranslator MatlabCode where
   intToIndex = undefined
   indexToInt = undefined
+
+instance Dereference MatlabCode where
+  maybeDeref = id
 
 instance Array MatlabCode where
   arrayElem = undefined

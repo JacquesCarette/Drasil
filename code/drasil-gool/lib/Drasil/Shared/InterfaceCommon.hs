@@ -14,11 +14,12 @@ module Drasil.Shared.InterfaceCommon (
   Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Array(..), List(..), Set(..), InternalList(..), listSlice,
-  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ifNoElse,
-  switchAsIf, VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
+  IndexTranslator(..), Dereference(..), Array(..), List(..), Set(..),
+  InternalList(..), listSlice, listIndexExists, at, StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
   BinderElim(..), convType
   ) where
 
@@ -44,7 +45,7 @@ class (UnRepr r TypeData, AssignStatement r, DeclStatement r, IOStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
   Comparison r, ValueExpression r, IndexTranslator r, Array r, List r, Set r,
-  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r, Dereference r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -286,6 +287,11 @@ class (ValueSym r) => IndexTranslator r where
   indexToInt :: SValue r -> SValue r
   -- | Finds the size of a list.
   --   Arguments are: List
+
+class (TypeSym r, ValueSym r) => Dereference r where
+  -- | Given a value that may be a reference type,
+  -- apply any necessary dereference operation.
+  maybeDeref :: SValue r -> SValue r
 
 class (IndexTranslator r) => Array r where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue

@@ -8,11 +8,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSType,
   TypeSym(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Dereference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
+  BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -197,6 +198,9 @@ instance FunctionSym CodeInfoProc where
 instance IndexTranslator CodeInfoProc where
   intToIndex = execute1
   indexToInt = execute1
+
+instance Dereference CodeInfoProc where
+  maybeDeref = execute1
 
 instance Array CodeInfoProc where
   arrayElem _ _ = noInfo

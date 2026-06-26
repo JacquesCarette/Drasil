@@ -32,7 +32,7 @@ import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 
-import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk, quantvar)
+import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
@@ -213,9 +213,7 @@ getDerivedInputs ddefs ins cnsts sm =
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
--- | Get a list of 'CodeChunk's from a constraint.
-constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
-constraintvars (Range _ ri) m =
-  map (codeChunk . varResolve m) $ nub $ eNamesRI ri
-constraintvars (Elem _ ri) m =
-  map (codeChunk . varResolve m) $ eDep ri
+-- | Get a list of 'CodeVarChunk's from a constraint.
+constraintvars :: ConstraintCE -> ChunkDB -> [CodeVarChunk]
+constraintvars (Range _ ri) m = map (varResolve m) $ nub $ eNamesRI ri
+constraintvars (Elem _ ri)  m = map (varResolve m) $ eDep ri

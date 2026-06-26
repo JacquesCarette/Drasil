@@ -32,12 +32,12 @@ import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 
-import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
+import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
   odeLibReqs, odeInfoReqs)
-import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
+import Language.Drasil.Chunk.CodeBase (codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 

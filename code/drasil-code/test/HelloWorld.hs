@@ -129,7 +129,12 @@ objectTests = block [comment "Object tests",
   varDecDef (var "t4" (obj "TestClass")) mainFn (objMethodCall (obj "TestClass")
     (valueOf (var "t3" (obj "TestClass"))) "addToInstance" [valueOf $ var "t2" (obj "TestClass")]),
   printStr "Value of t4.a: ",
-  printLn $ valueOf $ instanceVarAccess (valueOf (var "t4" (obj "TestClass"))) (var "a" int)]
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t4" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t5" (obj "TestClass")) mainFn (classMethodCall
+    (obj "TestClass") (obj "TestClass") "addWithReferences"
+    [makeRef $ valueOf $ var "t3" (obj "TestClass"), makeRef $ valueOf $ var "t4" (obj "TestClass")]),
+  printStr "Value of t5.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t5" (obj "TestClass"))) (var "a" int)]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
@@ -383,4 +388,11 @@ helloWorldClass = extraClass "TestClass" Nothing
   , method "addToInstance" public instanceLevel (obj "TestClass")
       [param $ var "t" (obj "TestClass")]
       (oneLiner $ returnStmt $ classMethodCall (obj "TestClass") (obj "TestClass")
-       "add" [maybeDeref $ valueOf self, valueOf (var "t" (obj "TestClass"))])]
+       "add" [maybeDeref $ valueOf self, valueOf (var "t" (obj "TestClass"))])
+  , let t1 = var "t1" (referenceType (obj "TestClass"))
+        t2 = var "t2" (referenceType (obj "TestClass"))
+    in method "addWithReferences" public classLevel (obj "TestClass")
+         [param t1, param t2]
+         (oneLiner $ returnStmt $ newObj (obj "TestClass")
+         [valueOf (instanceVarAccess (valueOf t1) (var "a" int)) #+
+          valueOf (instanceVarAccess (valueOf t2) (var "a" int))])]

@@ -22,6 +22,7 @@ class TestClass {
         TestClass(int a);
         static TestClass add(TestClass t1, TestClass t2);
         TestClass addToInstance(TestClass t);
+        static TestClass addWithReferences(TestClass* t1, TestClass* t2);
 };
 
 #endif

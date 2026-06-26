@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (
   MSStatement, NamedArgs, MSParameter, SMethod, MixedCtorCall, PosCall,
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
+  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym,
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
@@ -291,4 +291,5 @@ class (ValueSym r, VariableSym r) => GetSet r where
 
 convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
 convTypeOO (Object n) = obj n
+convTypeOO (Reference t) = referenceType (convTypeOO t)
 convTypeOO t = convType t

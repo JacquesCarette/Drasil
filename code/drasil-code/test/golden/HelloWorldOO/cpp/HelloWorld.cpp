@@ -34,6 +34,10 @@ TestClass TestClass::addToInstance(TestClass t) {
     return TestClass::add(*this, t);
 }
 
+TestClass TestClass::addWithReferences(TestClass* t1, TestClass* t2) {
+    return TestClass(t1->a + t2->a);
+}
+
 int main(int argc, const char *argv[]) {
     // Initializing variables
     int a;
@@ -152,6 +156,9 @@ int main(int argc, const char *argv[]) {
     TestClass t4 = t3.addToInstance(t2);
     std::cout << "Value of t4.a: ";
     std::cout << t4.a << std::endl;
+    TestClass t5 = TestClass::addWithReferences(&t3, &t4);
+    std::cout << "Value of t5.a: ";
+    std::cout << t5.a << std::endl;
     
     // List slicing tests
     // Create variables for list slices

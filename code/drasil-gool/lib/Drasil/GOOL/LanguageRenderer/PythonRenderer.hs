@@ -155,7 +155,6 @@ instance RenderFile PythonCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym PythonCode where
-  type Import PythonCode = Doc
   langImport n = toCode $ importLabel <+> text n
   modImport = langImport
 
@@ -744,12 +743,12 @@ instance ModuleSym PythonCode where
     mis <- getModuleImports
     pure $ vibcat [
       vcat (map (RC.import' .
-        (langImport :: Label -> PythonCode (Import PythonCode))) lis),
+        (langImport :: Label -> PythonCode Doc)) lis),
       vcat (map (RC.import' .
-        (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++
+        (langImport :: Label -> PythonCode Doc)) (sort $ is ++
         libis)),
       vcat (map (RC.import' .
-        (modImport :: Label -> PythonCode (Import PythonCode))) mis)])
+        (modImport :: Label -> PythonCode Doc)) mis)])
     (pure empty) getMainDoc
 
 instance RenderMod PythonCode where

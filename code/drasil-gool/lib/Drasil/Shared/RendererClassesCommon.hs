@@ -49,14 +49,13 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
 -- Common Typeclasses --
 
 class ImportSym r where
-  type Import r
   -- For importing an external library
-  langImport :: Label -> r (Import r)
+  langImport :: Label -> r Doc
   -- For importing a local (same project) module
-  modImport :: Label -> r (Import r)
+  modImport :: Label -> r Doc
 
 class ImportElim r where
-  import' :: r (Import r) -> Doc
+  import' :: r Doc -> Doc
 
 class RenderBody r where
   multiBody :: [MSBody r] -> MSBody r

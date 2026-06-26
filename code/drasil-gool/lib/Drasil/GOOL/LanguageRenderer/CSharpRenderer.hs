@@ -165,7 +165,6 @@ instance RenderFile CSharpCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CSharpCode where
-  type Import CSharpCode = Doc
   langImport = toCode . csImport
   modImport = langImport
 

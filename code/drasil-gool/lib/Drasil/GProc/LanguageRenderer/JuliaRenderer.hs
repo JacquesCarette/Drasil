@@ -145,7 +145,6 @@ instance RenderFile JuliaCode where
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JuliaCode where
-  type Import JuliaCode = Doc
   langImport n = let modName = text n
     in toCode $ importLabel <+> modName
   modImport n = let modName = text n
@@ -844,7 +843,7 @@ jlModContents n is = A.buildModule n (do
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
     vcat (map (RC.import' . mi) mis)])
   (do getMainDoc)
-  where mi, li :: Label -> JuliaCode (Import JuliaCode)
+  where mi, li :: Label -> JuliaCode Doc
         mi = modImport
         li = langImport
 

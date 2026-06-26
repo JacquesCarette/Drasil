@@ -122,7 +122,6 @@ instance RenderFile MatlabCode where
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym MatlabCode where
-  type Import MatlabCode = Doc
   langImport = undefined
   modImport = undefined
 

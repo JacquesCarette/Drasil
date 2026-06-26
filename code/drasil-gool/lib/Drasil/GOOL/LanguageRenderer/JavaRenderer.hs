@@ -165,7 +165,6 @@ instance RenderFile JavaCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JavaCode where
-  type Import JavaCode = Doc
   langImport = toCode . jImport
   modImport = langImport
 

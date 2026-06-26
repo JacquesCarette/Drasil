@@ -166,7 +166,6 @@ instance RenderFile SwiftCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym SwiftCode where
-  type Import SwiftCode = Doc
   langImport n = toCode $ importLabel <+> text n
   modImport = langImport
 
@@ -770,7 +769,7 @@ instance ModuleSym SwiftCode where
       lis <- getLangImports
       libis <- getLibImports
       pure $ vcat $ map (RC.import' .
-          (langImport :: Label -> SwiftCode (Import SwiftCode)))
+          (langImport :: Label -> SwiftCode Doc))
           (sort $ lis ++ is ++ libis))
       (zoom lensFStoMS swiftStringError) getMainDoc
         (map pure fns) (map pure cls)

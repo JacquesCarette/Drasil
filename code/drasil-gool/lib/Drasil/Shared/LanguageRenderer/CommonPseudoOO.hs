@@ -38,10 +38,10 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   OOFunctionSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  RenderBody(..), RenderType(..), RenderVariable(varFromData),
-  InternalVarElim(variableBind), MethodTypeSym(mType),
-  RenderMethod(commentedFunc, mthdFromData), BlockCommentSym(..), ScopeElim(scopeData))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
+  RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
+  MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
+  BlockCommentSym(..), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as S
 import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalVarElim(variable), ValueElim(..),
@@ -244,7 +244,7 @@ mainFunction s n = S.intFunc True n public classLevel (mType IC.void)
 --   is is the import statements
 --   ms is the class methods
 --   cs is the classes
-buildModule' :: (OORenderSym r) => Label -> (String -> r (Import r)) -> [Label]
+buildModule' :: (OORenderSym r) => Label -> (String -> r Doc) -> [Label]
   -> [SMethod r] -> [SClass r] -> FSModule r
 buildModule' n inc is ms cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS)

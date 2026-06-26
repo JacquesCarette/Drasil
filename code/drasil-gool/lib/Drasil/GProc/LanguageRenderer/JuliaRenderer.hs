@@ -14,8 +14,8 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
-  SValue, SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, SValue,
+  SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
   TypeSym(..), getCodeType, getTypeString, VariableSym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -87,7 +87,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.Shared.State (lensGStoFS, revFiles, setFileType, lensMStoVS,
+import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
@@ -627,7 +627,7 @@ jlVoid = "Nothing"
 jlLitFloat :: (CommonRenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
-jlLitList :: VSType JuliaCode -> [SValue JuliaCode] -> SValue JuliaCode
+jlLitList :: VS (JuliaCode TypeData) -> [SValue JuliaCode] -> SValue JuliaCode
 jlLitList t' es = do
   t <- t'
   let lt' = listType t'
@@ -635,7 +635,7 @@ jlLitList t' es = do
   let typeDec = if null es then renderType t else empty
   mkStateVal lt' (typeDec <> brackets (valueList elems))
 
-jlCast :: VSType JuliaCode -> SValue JuliaCode -> SValue JuliaCode
+jlCast :: VS (JuliaCode TypeData) -> SValue JuliaCode -> SValue JuliaCode
 jlCast t' v' = do
   t <- t'
   v <- v'
@@ -898,40 +898,40 @@ jlParam :: JuliaCode (Variable JuliaCode) -> Doc
 jlParam v = RC.variable v <> jlType <> renderType (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
-jlIntType :: (Monad r) => VSType r
+jlIntType :: (Monad r) => VS (r TypeData)
 jlIntType = typeFromData Integer jlIntConc (text jlIntConc)
 
-jlFloatType :: (Monad r) => VSType r
+jlFloatType :: (Monad r) => VS (r TypeData)
 jlFloatType = typeFromData Float jlFloatConc (text jlFloatConc)
 
-jlDoubleType :: (Monad r) => VSType r
+jlDoubleType :: (Monad r) => VS (r TypeData)
 jlDoubleType = typeFromData Double jlDoubleConc (text jlDoubleConc)
 
-jlCharType :: (Monad r) => VSType r
+jlCharType :: (Monad r) => VS (r TypeData)
 jlCharType = typeFromData Char jlCharConc (text jlCharConc)
 
-jlStringType :: (Monad r) => VSType r
+jlStringType :: (Monad r) => VS (r TypeData)
 jlStringType = typeFromData String jlStringConc (text jlStringConc)
 
-jlInfileType :: (Monad r) => VSType r
+jlInfileType :: (Monad r) => VS (r TypeData)
 jlInfileType = typeFromData InFile jlFile (text jlFile)
 
-jlOutfileType :: (Monad r) => VSType r
+jlOutfileType :: (Monad r) => VS (r TypeData)
 jlOutfileType = typeFromData OutFile jlFile (text jlFile)
 
-jlListType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
+jlListType :: (Monad r, UnRepr r TypeData) => VS (r TypeData) -> VS (r TypeData)
 jlListType t' = do
   t <- t'
   let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (List $ getCodeType t) typeName (text typeName)
 
-jlSetType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
+jlSetType :: (Monad r, UnRepr r TypeData) => VS (r TypeData) -> VS (r TypeData)
 jlSetType t' = do
   t <- t'
   let typeName = jlSetConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (Set $ getCodeType t) typeName (text typeName)
 
-jlVoidType :: (Monad r) => VSType r
+jlVoidType :: (Monad r) => VS (r TypeData)
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
 
 jlNull :: Label
@@ -986,7 +986,7 @@ jlCloseFunc = "close"
 jlArgs :: Label
 jlArgs = "ARGS"
 
-jlParse :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> SValue r
+jlParse :: (CommonRenderSym r) => Label -> VS (r TypeData) -> SValue r -> SValue r
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]

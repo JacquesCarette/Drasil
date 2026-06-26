@@ -4,9 +4,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, VSBinder,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSFunction, VSBinder, SVariable, SValue,
+  MSStatement, MSParameter, SMethod, NamedArgs, MixedCall, MixedCtorCall,
+  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), getCodeType, getTypeString, VariableSym(..), ScopeSym(..),
@@ -73,26 +73,24 @@ class (StatementSym r) => BlockSym r where
   type Block r
   block   :: [MSStatement r] -> MSBlock r
 
-type VSType a = VS (a TypeData)
-
 class TypeSym r where
-  bool          :: VSType r
-  int           :: VSType r -- This is 32-bit signed ints except in Python,
+  bool          :: VS (r TypeData)
+  int           :: VS (r TypeData) -- This is 32-bit signed ints except in Python,
                             -- which has unlimited precision ints; and Julia,
                             -- Which defaults to 64-bit signed ints
-  float         :: VSType r
-  double        :: VSType r
-  char          :: VSType r
-  string        :: VSType r
-  infile        :: VSType r
-  outfile       :: VSType r
-  referenceType :: VSType r -> VSType r
-  listType      :: VSType r -> VSType r
-  setType       :: VSType r -> VSType r
-  arrayType     :: VSType r -> VSType r
-  innerType     :: VSType r -> VSType r
-  funcType      :: [VSType r] -> VSType r -> VSType r
-  void          :: VSType r
+  float         :: VS (r TypeData)
+  double        :: VS (r TypeData)
+  char          :: VS (r TypeData)
+  string        :: VS (r TypeData)
+  infile        :: VS (r TypeData)
+  outfile       :: VS (r TypeData)
+  referenceType :: VS (r TypeData) -> VS (r TypeData)
+  listType      :: VS (r TypeData) -> VS (r TypeData)
+  setType       :: VS (r TypeData) -> VS (r TypeData)
+  arrayType     :: VS (r TypeData) -> VS (r TypeData)
+  innerType     :: VS (r TypeData) -> VS (r TypeData)
+  funcType      :: [VS (r TypeData)] -> VS (r TypeData) -> VS (r TypeData)
+  void          :: VS (r TypeData)
 
 -- | A helper function for extracting the CodeType from an `r TypeData`
 getCodeType :: (UnRepr r TypeData) => r TypeData -> CodeType
@@ -113,22 +111,22 @@ type SVariable a = VS (a (Variable a))
 class (TypeSym r) => VariableSym r where
   type Variable r
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
-  var       :: Label -> VSType r -> SVariable r
+  var       :: Label -> VS (r TypeData) -> SVariable r
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
-  constant  :: Label -> VSType r -> SVariable r
+  constant  :: Label -> VS (r TypeData) -> SVariable r
   -- | An instance- or module-level variable from an external library.
   -- Given library `Lib`, variable name `v`, and variable type `t`,
   -- it performs the necessary imports and creates `Lib.v`
-  extVar    :: Library -> Label -> VSType r -> SVariable r
+  extVar    :: Library -> Label -> VS (r TypeData) -> SVariable r
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r TypeData
 
-listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+listVar :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
+listOf :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
@@ -148,11 +146,11 @@ class (ValueSym r) => Literal r where
   litFloat  :: Float -> SValue r
   litInt    :: Integer -> SValue r
   litString :: String -> SValue r
-  litArray  :: VSType r -> [SValue r] -> SValue r
-  litList   :: VSType r -> [SValue r] -> SValue r
-  litSet    :: VSType r -> [SValue r] -> SValue r
+  litArray  :: VS (r TypeData) -> [SValue r] -> SValue r
+  litList   :: VS (r TypeData) -> [SValue r] -> SValue r
+  litSet    :: VS (r TypeData) -> [SValue r] -> SValue r
 
-litZero :: (Literal r, UnRepr r TypeData) => VSType r -> SValue r
+litZero :: (Literal r, UnRepr r TypeData) => VS (r TypeData) -> SValue r
 litZero t = do
   t' <- t
   case getCodeType t' of
@@ -231,18 +229,18 @@ class (ValueSym r) => Comparison r where
 
 type NamedArgs r = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments
-type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
+type MixedCall r = Label -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> SValue r
 -- Constructor call with both positional and named arguments
-type MixedCtorCall r = VSType r -> [SValue r] -> NamedArgs r -> SValue r
+type MixedCtorCall r = VS (r TypeData) -> [SValue r] -> NamedArgs r -> SValue r
 -- Function call with only positional arguments
-type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
+type PosCall r = Label -> VS (r TypeData) -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
-type PosCtorCall r = VSType r -> [SValue r] -> SValue r
+type PosCtorCall r = VS (r TypeData) -> [SValue r] -> SValue r
 
 type VSBinder a = VS (a BinderD)
 
 class (TypeSym r) => BinderSym r where
-  binder :: Label -> VSType r -> VSBinder r
+  binder :: Label -> VS (r TypeData) -> VSBinder r
 
 class (BinderSym r) => BinderElim r where
   binderName :: r BinderD -> String
@@ -265,7 +263,7 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
 funcApp          :: (ValueExpression r) =>            PosCall r
 funcApp n t vs = funcAppMixedArgs n t vs []
 
-funcAppNamedArgs :: (ValueExpression r) =>            Label -> VSType r ->
+funcAppNamedArgs :: (ValueExpression r) =>            Label -> VS (r TypeData) ->
   NamedArgs r -> SValue r
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
@@ -519,7 +517,7 @@ class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Visibility r) -> VSType r -> [MSParameter r] ->
+  function :: Label -> r (Visibility r) -> VS (r TypeData) -> [MSParameter r] ->
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions,
@@ -531,7 +529,7 @@ class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
 
 -- Utility
 
-convType :: (TypeSym r) => CodeType -> VSType r
+convType :: (TypeSym r) => CodeType -> VS (r TypeData)
 convType Boolean = bool
 convType Integer = int
 convType Float = float

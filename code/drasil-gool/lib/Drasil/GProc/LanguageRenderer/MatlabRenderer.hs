@@ -9,19 +9,17 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, VSType, SValue, SVariable,
-  MSStatement, getCodeType,
-  UnRepr(..), SharedProg, BodySym(..),
-  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp,
-  (&=))
+import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, MSStatement,
+  getCodeType, UnRepr(..), SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -72,7 +70,7 @@ import Drasil.Shared.LanguageRenderer (listSep')
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
-import Drasil.Shared.State (FS, lensGStoFS, lensMStoVS, revFiles,
+import Drasil.Shared.State (VS, FS, lensGStoFS, lensMStoVS, revFiles,
   setFileType, getMainDoc)
 
 import Control.Lens.Zoom (zoom)
@@ -581,7 +579,7 @@ mlRet = "result"
 
 -- | Makes a MATLAB type. Only the 'CodeType' tag is used (internally); the
 --   name is never written out, since MATLAB code has no type annotations.
-mlTy :: CodeType -> String -> VSType MatlabCode
+mlTy :: CodeType -> String -> VS (MatlabCode TypeData)
 mlTy c s = typeFromData c s (text s)
 
 -- | A MATLAB parameter renders as just the variable name.

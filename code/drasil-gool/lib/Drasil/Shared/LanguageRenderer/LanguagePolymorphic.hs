@@ -22,9 +22,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, VSFunction, VSType, SVariable, SValue, MSStatement, MSParameter,
-  SMethod, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements,
-  oneLiner, BlockSym(Block), VariableSym(Variable), VisibilitySym(..),
+  MSBlock, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
+  NamedArgs, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
+  BlockSym(Block), VariableSym(Variable), VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=),
@@ -75,7 +75,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign,
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, mkVar, mkClassVar, VSOp, unOpPrec, compEqualPrec, compPrec,
   addPrec, multPrec, typeFromData)
-import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
+import Drasil.Shared.State (VS, FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS,
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
   addParameter, getParameters, useVarName)
 
@@ -103,7 +103,7 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
 
-obj :: (Monad r) => ClassName -> VSType r
+obj :: (Monad r) => ClassName -> VS (r TypeData)
 obj n = typeFromData (Object n) n (text n)
 
 -- Unary Operators --
@@ -120,7 +120,7 @@ sec v = valOfOne (fmap valueType v) #/ cos v
 cot :: (CommonRenderSym r, UnRepr r TypeData) => SValue r -> SValue r
 cot v = valOfOne (fmap valueType v) #/ tan v
 
-valOfOne :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> SValue r
+valOfOne :: (CommonRenderSym r, UnRepr r TypeData) => VS (r TypeData) -> SValue r
 valOfOne t = t >>= (getVal . getCodeType)
   where getVal Float = IC.litFloat 1.0
         getVal _ = IC.litDouble 1.0
@@ -178,10 +178,10 @@ moduloOp = multPrec "%"
 
 -- Variables --
 
-var :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
+var :: (CommonRenderSym r) => Label -> VS (r TypeData) -> SVariable r
 var n t = mkStateVar n t (R.var n)
 
-classVar :: (CommonRenderSym r) => Label -> VSType r -> SVariable r
+classVar :: (CommonRenderSym r) => Label -> VS (r TypeData) -> SVariable r
 classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
@@ -277,14 +277,14 @@ objAccess :: (CommonRenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f)
   (R.objAccess (RC.value v) (RC.function f)))
 
-objMethodCall :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> [SValue r]
+objMethodCall :: (CommonRenderSym r) => Label -> VS (r TypeData) -> SValue r -> [SValue r]
   -> NamedArgs r -> SValue r
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing
   (Just $ RC.value o <> dot) f t vs ns)
 
 -- Functions --
 
-func :: (CommonRenderSym r) => Label -> VSType r -> [SValue r] -> VSFunction r
+func :: (CommonRenderSym r) => Label -> VS (r TypeData) -> [SValue r] -> VSFunction r
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get :: (OORenderSym r) => SValue r -> SVariable r -> SValue r
@@ -311,7 +311,7 @@ getFunc :: (OORenderSym r) => SVariable r -> VSFunction r
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
-setFunc :: (OORenderSym r) => VSType r -> SVariable r -> SValue r -> VSFunction r
+setFunc :: (OORenderSym r) => VS (r TypeData) -> SVariable r -> SValue r -> VSFunction r
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 
@@ -359,7 +359,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
         i = IC.var l_i IC.int
 
 printSet :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
-  -> (String -> MSStatement r) -> (String -> MSStatement r) -> VSType r -> MSStatement r
+  -> (String -> MSStatement r) -> (String -> MSStatement r) -> VS (r TypeData) -> MSStatement r
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
@@ -456,7 +456,7 @@ param f v' = do
   modify $ useVarName n
   paramFromData v' $ f v
 
-method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) -> VSType r
+method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Attachment r) -> VS (r TypeData)
   -> [MSParameter r] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
@@ -473,7 +473,7 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
 initStmts :: (OORenderSym r) => Initializers r -> MSBody r
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
-function :: (OORenderSym r) => Label -> r (Visibility r) -> VSType r ->
+function :: (OORenderSym r) => Label -> r (Visibility r) -> VS (r TypeData) ->
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s classLevel (mType t)
 

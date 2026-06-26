@@ -2,7 +2,7 @@
 -- the Observer class both work.
 module GOOL.PatternTest (patternTest) where
 
-import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
+import Drasil.GOOL (GSProgram, SVariable, SValue, SMethod, OOProg, TypeData, VS,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), initObserverList, addObserver, VariableSym(var),
@@ -23,7 +23,7 @@ obs2Name = "obs2"
 nName = "n"
 
 -- | Initialize Observer variables.
-observerType :: (OOTypeSym r) => VSType r
+observerType :: (OOTypeSym r) => VS (r TypeData)
 observerType = obj observerName
 
 -- | Variables used in the generated code.

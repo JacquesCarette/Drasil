@@ -3,17 +3,16 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSType,
-  VSBinder, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
-  TypeSym(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  BinderSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSBinder,
+  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
+  ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -369,7 +368,7 @@ emptyType = td Void "" empty -- Hack
 noInfoType :: CodeInfoProc TypeData
 noInfoType = return emptyType
 
-noInfoVSType :: VSType CodeInfoProc
+noInfoVSType :: VS (CodeInfoProc TypeData)
 noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoProc ScopeData

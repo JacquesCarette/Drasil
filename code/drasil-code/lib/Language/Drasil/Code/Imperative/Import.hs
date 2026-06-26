@@ -49,19 +49,19 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, AttachmentSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
-  VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..),
-  SelfSym(..), instanceVarSelf, VariableElim(..), ($->), ValueSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
-  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
+import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
+  MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializers, SharedProg,
+  OOProg, TypeData, VS, AttachmentSym(..), bodyStatements, BlockSym(..),
+  TypeSym(..), VariableSym(..), VariableElim(..), VariableValue(..),
+  ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..), instanceVarSelf,
+  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, Array(..),
+  List(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
+  privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -85,7 +85,7 @@ spaceCodeType s = do
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-value :: (OOProg r) => UID -> Name -> VSType r -> GenState (SValue r)
+value :: (OOProg r) => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 value u s t = do
   g <- get
   let cs = codeSpec g
@@ -107,7 +107,7 @@ value u s t = do
 -- construct it with 'classConst' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
 variable :: (SelfSym r, VariableElim r, VariableValue r) => Name ->
-  VSType r -> GenState (SVariable r)
+  VS (r TypeData) -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
@@ -210,7 +210,7 @@ mkParam p = do
         paramFunc Val = param
 
 -- | Generates a public function.
-publicFunc :: (OOProg r) => Label -> VSType r -> Description ->
+publicFunc :: (OOProg r) => Label -> VS (r TypeData) -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicFunc n t desc ps r b = do
@@ -218,14 +218,14 @@ publicFunc n t desc ps r b = do
   genMethod (function n public t) n desc ps r b
 
 -- | Generates a public method.
-publicMethod :: (OOProg r) => Label -> VSType r -> Description ->
+publicMethod :: (OOProg r) => Label -> VS (r TypeData) -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicMethod n t = do
   genMethod (method n public instanceLevel t) n
 
 -- | Generates a private method.
-privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
+privateMethod :: (OOProg r) => Label -> VS (r TypeData) -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 privateMethod n t = do
@@ -387,8 +387,8 @@ convExpr (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCall :: (OOProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
-  (Name -> Name -> VSType r -> [SValue r] -> NamedArgs r ->
-  GenState (SValue r)) -> (Name -> Name -> VSType r -> [SValue r]
+  (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r ->
+  GenState (SValue r)) -> (Name -> Name -> VS (r TypeData) -> [SValue r]
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCall c x ns f libf = do
   g <- get
@@ -540,7 +540,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk] ->
+genFunc :: (OOProg r) => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] ->
   Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
   [StateVariable] -> Func -> GenState (SMethod r)
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
@@ -755,7 +755,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-valueProc :: (SharedProg r) => UID -> Name -> VSType r -> GenState (SValue r)
+valueProc :: (SharedProg r) => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 valueProc u s t = do
   g <- get
   let cs = codeSpec g
@@ -777,7 +777,7 @@ valueProc u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'constant' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variableProc :: (VariableSym r) => Name -> VSType r -> GenState (SVariable r)
+variableProc :: (VariableSym r) => Name -> VS (r TypeData) -> GenState (SVariable r)
 variableProc s t = do
   g <- get
   let cs = codeSpec g
@@ -846,7 +846,7 @@ mkParamProc p = do
         paramFunc Val = param
 
 -- | Generates a public function.
-publicFuncProc :: (SharedProg r) => Label -> VSType r -> Description ->
+publicFuncProc :: (SharedProg r) => Label -> VS (r TypeData) -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicFuncProc n t desc ps r b = do
@@ -854,7 +854,7 @@ publicFuncProc n t desc ps r b = do
   genMethodProc (function n public t) n desc ps r b
 
 -- | Generates a private function.
-privateFuncProc :: (SharedProg r) => Label -> VSType r -> Description ->
+privateFuncProc :: (SharedProg r) => Label -> VS (r TypeData) -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 privateFuncProc n t desc ps r b = do
@@ -882,7 +882,7 @@ genMethodProc f n desc p r b = do
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFuncProc :: (SharedProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
+genFuncProc :: (SharedProg r) => (Name -> VS (r TypeData) -> Description -> [ParameterChunk]
   -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
   [StateVariable] -> Func -> GenState (SMethod r)
 genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
@@ -1054,8 +1054,8 @@ convExprProc (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCallProc :: (SharedProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
-  (Name -> Name -> VSType r -> [SValue r] -> NamedArgs r ->
-  GenState (SValue r)) -> (Name -> Name -> VSType r -> [SValue r]
+  (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r ->
+  GenState (SValue r)) -> (Name -> Name -> VS (r TypeData) -> [SValue r]
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCallProc c x ns f libf = do
   g <- get

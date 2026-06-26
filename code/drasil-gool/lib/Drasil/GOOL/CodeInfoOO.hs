@@ -5,17 +5,16 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
-  SValue, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
-  TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  VisibilitySym(..), BinderSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
+  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
+  getTypeString, VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
@@ -480,7 +479,7 @@ emptyType = td Void "" empty -- Hack
 noInfoType :: CodeInfoOO TypeData
 noInfoType = return emptyType
 
-noInfoVSType :: VSType CodeInfoOO
+noInfoVSType :: VS (CodeInfoOO TypeData)
 noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoOO ScopeData
@@ -509,7 +508,7 @@ addCurrModCall n = do
   modify (addCall (qualName mn n))
   noInfo
 
-addCurrModConstructorCall :: VSType CodeInfoOO -> SValue CodeInfoOO
+addCurrModConstructorCall :: VS (CodeInfoOO TypeData) -> SValue CodeInfoOO
 addCurrModConstructorCall ot = do
   t <- ot
   let tp = getTypeString t
@@ -518,7 +517,7 @@ addCurrModConstructorCall ot = do
 addExternalCall :: String -> String -> SValue CodeInfoOO
 addExternalCall l n = modify (addCall (qualName l n)) >> noInfo
 
-addExternalConstructorCall :: String -> VSType CodeInfoOO -> SValue CodeInfoOO
+addExternalConstructorCall :: String -> VS (CodeInfoOO TypeData) -> SValue CodeInfoOO
 addExternalConstructorCall l ot = do
   t <- ot
   let tp = getTypeString t

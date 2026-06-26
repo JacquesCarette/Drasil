@@ -11,8 +11,8 @@ import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), VSType, SVariable, MixedCall,
-  SValue, VSFunction, ValueSym(Value), TypeSym(int), MSBody, MSStatement,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SVariable, MixedCall, SValue,
+  VSFunction, ValueSym(Value), TypeSym(int), MSBody, MSStatement,
   VariableElim(variableName), VariableSym(Variable), Label, Library,
   BodySym(Body), funcApp, getCodeType)
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
@@ -21,7 +21,7 @@ import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
   addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, typeFromData)
-import Drasil.Shared.State (lensMStoVS, useVarName, setVarScope)
+import Drasil.Shared.State (VS, lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (emptyStmt, assign)
 import Drasil.Shared.AST (ScopeData, TypeData)
 
@@ -30,18 +30,18 @@ import Drasil.Shared.AST (ScopeData, TypeData)
 boolRender :: String
 boolRender = "Bool"
 
-bool :: (Monad r) => VSType r
+bool :: (Monad r) => VS (r TypeData)
 bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
 
-extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
+extVar :: (CommonRenderSym r) => Label -> Label -> VS (r TypeData) -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, and Julia --
 
-funcType :: (Monad r, UnRepr r TypeData) => [VSType r] ->
-              VSType r -> VSType r
+funcType :: (Monad r, UnRepr r TypeData) => [VS (r TypeData)] ->
+              VS (r TypeData) -> VS (r TypeData)
 funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'
@@ -53,7 +53,7 @@ extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
-listAccessFunc :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> SValue r -> VSFunction r
+listAccessFunc :: (CommonRenderSym r, UnRepr r TypeData) => VS (r TypeData) -> SValue r -> VSFunction r
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --

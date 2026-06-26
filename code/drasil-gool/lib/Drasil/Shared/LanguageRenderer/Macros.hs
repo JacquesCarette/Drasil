@@ -10,7 +10,7 @@ module Drasil.Shared.LanguageRenderer.Macros (
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, MSBody, MSBlock,
-  VSFunction, VSType, SVariable, SValue, MSStatement, bodyStatements, oneLiner,
+  VSFunction, SVariable, SValue, MSStatement, bodyStatements, oneLiner,
   VariableElim(..), getCodeType, listOf, ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
@@ -31,7 +31,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
-import Drasil.Shared.State (MS, lensMStoVS, genVarName, genLoopIndex,
+import Drasil.Shared.State (VS, MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
 import Drasil.Shared.AST (ScopeData, TypeData)
 
@@ -187,18 +187,18 @@ observerIndex = IC.var "observerIndex" IC.int
 observerIdxVal :: (CommonRenderSym r) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (CommonRenderSym r) => VSType r -> SValue r
+obsList :: (CommonRenderSym r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
-notify :: (OORenderSym r) => VSType r -> VSFunction r -> MSBody r
+notify :: (OORenderSym r) => VS (r TypeData) -> VSFunction r -> MSBody r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
-notifyObservers :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers :: (OORenderSym r) => VSFunction r -> VS (r TypeData) -> MSStatement r
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
-notifyObservers' :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers' :: (OORenderSym r) => VSFunction r -> VS (r TypeData) -> MSStatement r
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0

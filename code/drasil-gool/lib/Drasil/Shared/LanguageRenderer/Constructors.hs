@@ -7,8 +7,8 @@ module Drasil.Shared.LanguageRenderer.Constructors (
   binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
-  UnRepr(..), TypeSym(..), ValueSym(..), getCodeType)
+import Drasil.Shared.InterfaceCommon (MSStatement, SVariable, SValue, UnRepr(..),
+  TypeSym(..), ValueSym(..), getCodeType)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
   ValueElim(valuePrec), RenderStatement(..))
@@ -37,7 +37,7 @@ mkStmtNoEnd = flip stmtFromData Empty
 -- Values --
 
 -- | Constructs a value in a stateful context
-mkStateVal :: (CommonRenderSym r) => VSType r -> Doc -> SValue r
+mkStateVal :: (CommonRenderSym r) => VS (r TypeData) -> Doc -> SValue r
 mkStateVal = valFromData Nothing Nothing
 
 -- | Constructs a value in a non-stateful context
@@ -47,7 +47,7 @@ mkVal t = valFromData Nothing Nothing (toState t)
 -- Variables --
 
 -- | Constructs an instance-level variable in a stateful context
-mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkStateVar :: (CommonRenderSym r) => String -> VS (r TypeData) -> Doc -> SVariable r
 mkStateVar = varFromData InstanceLevel
 
 -- | Constructs an instance-level variable in a non-stateful context
@@ -55,11 +55,11 @@ mkVar :: (CommonRenderSym r) => String -> r TypeData -> Doc -> SVariable r
 mkVar n t = varFromData InstanceLevel n (toState t)
 
 -- | Constructs a classLevel variable in a stateful context
-mkClassVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkClassVar :: (CommonRenderSym r) => String -> VS (r TypeData) -> Doc -> SVariable r
 mkClassVar = varFromData ClassLevel
 
 -- Types --
-typeFromData :: (Monad r) => CodeType -> String -> Doc -> VSType r
+typeFromData :: (Monad r) => CodeType -> String -> Doc -> VS (r TypeData)
 typeFromData t s d = return $ return $ td t s d
 
 -- Operators --
@@ -142,7 +142,7 @@ unExprCastFloat t = castType (getCodeType t) . toState
 
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
-typeUnExpr :: (CommonRenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
+typeUnExpr :: (CommonRenderSym r) => VSUnOp r -> VS (r TypeData) -> SValue r -> SValue r
 typeUnExpr u' t' s' = do
   u <- u'
   t <- t'
@@ -191,7 +191,7 @@ binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
 
 -- | To be used when the types of the values are different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
-typeBinExpr :: (CommonRenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r
+typeBinExpr :: (CommonRenderSym r) => VSBinOp r -> VS (r TypeData) -> SValue r -> SValue r
   -> SValue r
 typeBinExpr b' t' v1' v2' = do
   b <- b'
@@ -201,7 +201,7 @@ typeBinExpr b' t' v1' v2' = do
 
 -- For numeric binary expressions, checks that both types are numeric and
 -- returns result type. Selects the type with lowest precision.
-numType :: (CommonRenderSym r, UnRepr r TypeData) => SValue r-> SValue r -> VSType r
+numType :: (CommonRenderSym r, UnRepr r TypeData) => SValue r-> SValue r -> VS (r TypeData)
 numType v1' v2' = do
   v1 <- v1'
   v2 <- v2'

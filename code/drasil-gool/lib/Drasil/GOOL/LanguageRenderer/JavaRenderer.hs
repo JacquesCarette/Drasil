@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
+  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..),ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -776,15 +776,15 @@ jVersion = "14"
 jImport :: Label -> Doc
 jImport n = importLabel <+> text n <> endStatement
 
-jBoolType :: (Monad r) => VSType r
+jBoolType :: (Monad r) => VS (r TypeData)
 jBoolType = typeFromData Boolean jBool (text jBool)
 
-jInfileType :: (Monad r) => VSType r
+jInfileType :: (Monad r) => VS (r TypeData)
 jInfileType = do
   tpf <- typeFromData InFile jScanner jScanner'
   modifyReturn (addLangImportVS $ utilImport jScanner) tpf
 
-jOutfileType :: (Monad r) => VSType r
+jOutfileType :: (Monad r) => VS (r TypeData)
 jOutfileType = do
   tpf <- typeFromData OutFile jPrintWriter (text jPrintWriter)
   modifyReturn (addLangImportVS $ ioImport jPrintWriter) tpf
@@ -851,7 +851,7 @@ jSystem = text . access "System"
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
 
-jListType :: (UnRepr r TypeData, Monad r) => VSType r -> VSType r
+jListType :: (UnRepr r TypeData, Monad r) => VS (r TypeData) -> VS (r TypeData)
 jListType t = do
   modify (addLangImportVS $ utilImport arrayList)
   t >>= (jListType' . getCodeType)
@@ -864,7 +864,7 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
-jSetType :: (UnRepr r TypeData, Monad r) => VSType r -> VSType r
+jSetType :: (UnRepr r TypeData, Monad r) => VS (r TypeData) -> VS (r TypeData)
 jSetType t = do
   modify (addLangImportVS $ utilImport "Set")
   t >>= (jSetType' . getCodeType)
@@ -877,27 +877,27 @@ jSetType t = do
         stInt = "Set" `containing` jInteger
         stBool = "Set" `containing` jBool'
 
-jArrayType :: VSType JavaCode
+jArrayType :: VS (JavaCode TypeData)
 jArrayType = arrayType (obj jObject)
 
-jLitArray :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
+jLitArray :: VS (JavaCode TypeData) -> [SValue JavaCode] -> SValue JavaCode
 jLitArray t' es' = do
   es <- sequence es'
   lt <- arrayType t'
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-jFileType :: (OORenderSym r) => VSType r
+jFileType :: (OORenderSym r) => VS (r TypeData)
 jFileType = do
   tpf <- obj jFile
   modifyReturn (addLangImportVS $ ioImport jFile) tpf
 
-jFileWriterType :: (OORenderSym r) => VSType r
+jFileWriterType :: (OORenderSym r) => VS (r TypeData)
 jFileWriterType = do
   tpf <- obj jFileWriter
   modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
 
-jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
+jAsListFunc :: VS (JavaCode TypeData) -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
 
 jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
@@ -938,7 +938,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
 jLambda :: [r BinderD] -> r (Value r) -> Doc -- Needs (CommonRenderSym r) constraint
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
-jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
+jCast :: VS (JavaCode TypeData) -> SValue JavaCode -> SValue JavaCode
 jCast = join .: on2StateValues (\t v -> jCast' (getCodeType t) (getCodeType $ valueType
   v) t v)
   where jCast' Double String _ v = jParseDblFunc (toState v)
@@ -1011,10 +1011,10 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getCodeType $ variableType v)
 
-jOpenFileR :: (OORenderSym r) => SValue r -> VSType r -> SValue r
+jOpenFileR :: (OORenderSym r) => SValue r -> VS (r TypeData) -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (OORenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
+jOpenFileWorA :: (OORenderSym r) => SValue r -> VS (r TypeData) -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
@@ -1040,7 +1040,7 @@ jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem (litInt c) outputs)) : jAssignFromArray (c+1) vs
 
-jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] ->
+jInOutCall :: (Label -> VS (JavaCode TypeData) -> [SValue JavaCode] ->
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] ->
   [SVariable JavaCode] -> MSStatement JavaCode
 jInOutCall f n ins [] [] = valStmt $ f n void ins
@@ -1056,7 +1056,7 @@ jInOutCall f n ins outs both = fCall rets
           multi ((if odec then assign else (`varDecDef` local)) outputs
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
-jInOut :: (VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode ->
+jInOut :: (VS (JavaCode TypeData) -> [MSParameter JavaCode] -> MSBody JavaCode ->
     SMethod JavaCode) ->
   [SVariable JavaCode] -> [SVariable JavaCode] -> [SVariable JavaCode] ->
   MSBody JavaCode -> SMethod JavaCode
@@ -1108,7 +1108,7 @@ addCallExcsCurrMod n = do
   modify (maybe id addExceptions (Map.lookup (qualName cm n) mem))
 
 addConstructorCallExcsCurrMod :: (UnRepr r TypeData) =>
-  VSType r -> (VSType r -> SValue r) -> SValue r
+  VS (r TypeData) -> (VS (r TypeData) -> SValue r) -> SValue r
 addConstructorCallExcsCurrMod ot f = do
   t <- ot
   cm <- zoom lensVStoFS getModuleName

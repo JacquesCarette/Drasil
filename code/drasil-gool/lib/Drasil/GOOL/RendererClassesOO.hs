@@ -6,14 +6,14 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, VSType,
-  SVariable, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
+import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, SVariable,
+  SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.Shared.AST (AttachmentTag)
-import Drasil.Shared.State (FS, CS)
+import Drasil.Shared.AST (AttachmentTag, TypeData)
+import Drasil.Shared.State (FS, CS, VS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -46,7 +46,7 @@ class PermElim r where
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r
-  setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
+  setFunc :: VS (r TypeData) -> SVariable r -> SValue r -> VSFunction r
 
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r

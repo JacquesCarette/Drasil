@@ -13,7 +13,7 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
-  VSType, VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
+  VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
   BlockSym(..), TypeSym(..), getCodeType, getTypeString, VariableSym(..),
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -923,7 +923,7 @@ pyInlineIf c' v1' v2' = do
 pyLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
-pyStringType :: (Monad r) => VSType r
+pyStringType :: (Monad r) => VS (r TypeData)
 pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs :: (CommonRenderSym r, UnRepr r TypeData) => Library ->

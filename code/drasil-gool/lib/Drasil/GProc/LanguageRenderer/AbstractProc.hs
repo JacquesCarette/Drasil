@@ -7,7 +7,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, SMethod, MSBody,
-  MSStatement, SValue, SVariable, MSParameter, VSType,
+  MSStatement, SValue, SVariable, MSParameter,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -26,9 +26,9 @@ import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
-import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName,
-  setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
-  currParameters, setVarScope)
+import Drasil.Shared.State (VS, FS, lensFStoGS, lensFStoMS, lensMStoVS,
+  getModuleName, setModuleName, setMainMod, currFileType, currMain, addFile,
+  useVarName, currParameters, setVarScope)
 
 import Prelude hiding ((<>))
 import Control.Monad.State (get, modify)
@@ -81,7 +81,7 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
 
-innerType :: (ProcRenderSym r, UnRepr r TypeData) => VSType r -> VSType r
+innerType :: (ProcRenderSym r, UnRepr r TypeData) => VS (r TypeData) -> VS (r TypeData)
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
@@ -114,6 +114,6 @@ funcDecDef v scp ps b = do
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RCC.method f
 
-function :: (ProcRenderSym r) => Label -> r (Visibility r) -> VSType r ->
+function :: (ProcRenderSym r) => Label -> r (Visibility r) -> VS (r TypeData) ->
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = RCP.intFunc False n s (RCC.mType t)

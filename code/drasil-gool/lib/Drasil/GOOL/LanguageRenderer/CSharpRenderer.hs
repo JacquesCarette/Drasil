@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
+  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -744,10 +744,10 @@ csVersion = "6.0"
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
 
-csBoolType :: (Monad r) => VSType r
+csBoolType :: (Monad r) => VS (r TypeData)
 csBoolType = typeFromData Boolean csBool (text csBool)
 
-csFuncType :: [VSType CSharpCode] -> VSType CSharpCode -> VSType CSharpCode
+csFuncType :: [VS (CSharpCode TypeData)] -> VS (CSharpCode TypeData) -> VS (CSharpCode TypeData)
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
@@ -800,15 +800,15 @@ csSysAccess = access csSystem
 csUnaryMath :: (Monad r) => String -> VSOp r
 csUnaryMath = addSystemImport . unOpPrec . mathFunc
 
-csInfileType :: (Monad r) => VSType r
+csInfileType :: (Monad r) => VS (r TypeData)
 csInfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData InFile csReader (text csReader)
 
-csOutfileType :: (Monad r) => VSType r
+csOutfileType :: (Monad r) => VS (r TypeData)
 csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData OutFile csWriter (text csWriter)
 
-csLitList :: (VSType CSharpCode -> VSType CSharpCode) -> VSType CSharpCode ->
+csLitList :: (VS (CSharpCode TypeData) -> VS (CSharpCode TypeData)) -> VS (CSharpCode TypeData) ->
   [SValue CSharpCode] -> SValue CSharpCode
 csLitList f t' es' = do
   es <- sequence es'
@@ -840,7 +840,7 @@ csCharParse v = extFuncApp csChar csParse char [v]
 csSplitFunc :: Char -> VSFunction CSharpCode
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
-csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
+csCast :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
 csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
   valueType v) t v)
   where csCast' Double String _ v = csDblParse (toState v)
@@ -893,7 +893,7 @@ csDiscardInput = valStmt
 csFileInput :: (OORenderSym r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
-csInput :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
+csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
 csInput tp inFn = do
   t <- tp
   csInputImport (getCodeType t) (csInput' (getCodeType t) inFn)
@@ -907,10 +907,10 @@ csInput tp inFn = do
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char]
           then addSystemImport else id
 
-csOpenFileR :: (OORenderSym r) => SValue r -> VSType r -> SValue r
+csOpenFileR :: (OORenderSym r) => SValue r -> VS (r TypeData) -> SValue r
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (OORenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
+csOpenFileWorA :: (OORenderSym r) => SValue r -> VS (r TypeData) -> SValue r -> SValue r
 csOpenFileWorA n w a = newObj w [n, a]
 
 csRef :: Doc -> Doc
@@ -919,7 +919,7 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> VSType CSharpCode -> [SValue CSharpCode] ->
+csInOutCall :: (Label -> VS (CSharpCode TypeData) -> [SValue CSharpCode] ->
   SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SVariable CSharpCode]
   -> [SVariable CSharpCode] -> MSStatement CSharpCode
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
@@ -934,7 +934,7 @@ csVarDec :: AttachmentTag -> MSStatement CSharpCode -> MSStatement CSharpCode
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
-csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode ->
+csInOut :: (VS (CSharpCode TypeData) -> [MSParameter CSharpCode] -> MSBody CSharpCode ->
     SMethod CSharpCode) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
   MSBody CSharpCode -> SMethod CSharpCode

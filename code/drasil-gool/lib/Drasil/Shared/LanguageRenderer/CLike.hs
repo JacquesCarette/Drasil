@@ -13,7 +13,7 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody, VSType,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall,
   VariableSym(..), VariableValue(..), VariableElim(..),
   ValueSym(Value, valueType), VisibilitySym(..), getCodeType, getTypeString)
@@ -42,8 +42,8 @@ import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
   increment, decrement, this', this)
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
   mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
-  useVarName, setVarScope)
+import Drasil.Shared.State (VS, lensMStoVS, lensVStoMS, addLibImportVS,
+  getClassName, useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))
 import Control.Applicative ((<|>))
@@ -61,30 +61,30 @@ doubleRender = "double"
 charRender = "char"
 voidRender = "void"
 
-float :: (Monad r) => VSType r
+float :: (Monad r) => VS (r TypeData)
 float = typeFromData Float floatRender (text floatRender)
 
-double :: (Monad r) => VSType r
+double :: (Monad r) => VS (r TypeData)
 double = typeFromData Double doubleRender (text doubleRender)
 
-char :: (Monad r) => VSType r
+char :: (Monad r) => VS (r TypeData)
 char = typeFromData Char charRender (text charRender)
 
 listType :: (Monad r, UnRepr r TypeData) => String ->
-  VSType r -> VSType r
+  VS (r TypeData) -> VS (r TypeData)
 listType lst t' = do
   t <- t'
   typeFromData (List (getCodeType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-setType :: (Monad r, UnRepr r TypeData) => String -> VSType r ->
-  VSType r
+setType :: (Monad r, UnRepr r TypeData) => String -> VS (r TypeData) ->
+  VS (r TypeData)
 setType lst t' = do
   t <- t'
   typeFromData (Set (getCodeType t)) (lst
     `containing` getTypeString t) $ text lst <> angles (renderType t)
 
-void :: (Monad r) => VSType r
+void :: (Monad r) => VS (r TypeData)
 void = typeFromData Void voidRender (text voidRender)
 
 -- Unary Operators --

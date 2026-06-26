@@ -24,8 +24,8 @@ import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 
-import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
-  CSStateVar, SClass, NamedArgs, SharedProg, OOProg, ValueSym(..), Argument(..),
+import Drasil.GOOL (SVariable, SValue, MSStatement, SMethod, CSStateVar, SClass,
+  NamedArgs, SharedProg, OOProg, TypeData, VS, ValueSym(..), Argument(..),
   ValueExpression(..), OOValueExpression(..), SelfSym(..), VariableValue(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
   objMethodCallMixedArgs, getCodeType)
@@ -141,7 +141,7 @@ fCall f vl ns = do
 -- If @m@ is the current module and function is not exported, use GOOL's function for
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
-fApp :: (OOProg r) => Name -> Name -> VSType r -> [SValue r] ->
+fApp :: (OOProg r) => Name -> Name -> VS (r TypeData) -> [SValue r] ->
   NamedArgs r -> GenState (SValue r)
 fApp m s t vl ns = do
   g <- get
@@ -152,7 +152,7 @@ fApp m s t vl ns = do
 
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
-ctorCall :: (OOProg r) => Name -> VSType r -> [SValue r] -> NamedArgs r
+ctorCall :: (OOProg r) => Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r
   -> GenState (SValue r)
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
@@ -200,7 +200,7 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 -- If @m@ is the current module and function is not exported, use GOOL's function for
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
-fAppProc :: (SharedProg r) => Name -> Name -> VSType r ->
+fAppProc :: (SharedProg r) => Name -> Name -> VS (r TypeData) ->
   [SValue r] -> NamedArgs r -> GenState (SValue r)
 fAppProc m s t vl ns = do
   g <- get

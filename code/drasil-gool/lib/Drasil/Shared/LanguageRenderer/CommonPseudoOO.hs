@@ -22,11 +22,11 @@ import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
-  VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
-  MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, innerType),
-  getCodeType, getTypeString, VariableElim(variableName, variableType),
-  ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
-  VisibilitySym(..), MethodSym(function), funcApp, listSize)
+  SVariable, Value, SValue, MSStatement, MSParameter, SMethod, MixedCall,
+  bodyStatements, oneLiner, TypeSym(infile, outfile, innerType), getCodeType,
+  getTypeString, VariableElim(variableName, variableType), ValueSym(valueType),
+  Comparison(..), (&=), ControlStatement(returnStmt), VisibilitySym(..),
+  MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
@@ -67,7 +67,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
   TypeData)
-import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
+import Drasil.Shared.State (VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
   useVarName, setVarScope)
@@ -101,7 +101,7 @@ global = toCode $ sd Global
 intRender :: String
 intRender = "int"
 
-int :: (Monad r) => VSType r
+int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor :: (OORenderSym r) => Label -> [MSParameter r] -> Initializers r ->
@@ -123,7 +123,7 @@ doxMod = docMod moduleDox
 -- Python, Java, and C# --
 
 classVarAccess :: (CommonRenderSym r, UnRepr r TypeData) =>
-  (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> SVariable r
+  (Doc -> Doc -> Doc) -> VS (r TypeData) -> SVariable r -> SVariable r
 classVarAccess f c' v'= do
   c <- c'
   v <- v'
@@ -174,7 +174,7 @@ buildModule n imps topDoc bot fs cs = S.modFromData n (do
 
 -- Java and C# --
 
-arrayType :: (UnRepr r TypeData, Monad r) => VSType r -> VSType r
+arrayType :: (UnRepr r TypeData, Monad r) => VS (r TypeData) -> VS (r TypeData)
 arrayType t' = do
   t <- t'
   typeFromData (Array (getCodeType t))
@@ -208,7 +208,7 @@ arrayDecDef v' scp vals' = do
   vd <- IC.varDec v' scp
   mkStmt (RC.statement vd <+> equals <+> braces (valueList vs))
 
-openFileA :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) ->
+openFileA :: (CommonRenderSym r) => (SValue r -> VS (r TypeData) -> SValue r -> SValue r) ->
   SVariable r -> SValue r -> MSStatement r
 openFileA f vr vl = vr &= f vl outfile IC.litTrue
 
@@ -232,7 +232,7 @@ docMain :: (OORenderSym r) => MSBody r -> SMethod r
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
-mainFunction :: (OORenderSym r, UnRepr r TypeData, Monad r) => VSType r -> Label ->
+mainFunction :: (OORenderSym r, UnRepr r TypeData, Monad r) => VS (r TypeData) -> Label ->
   MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
@@ -269,7 +269,7 @@ namedArgError l = "Named arguments not supported in " ++ l
 listSizeFunc :: (OORenderSym r) => VSFunction r
 listSizeFunc = IG.func "size" IC.int []
 
-listAccessFunc' :: (OORenderSym r, UnRepr r TypeData) => Label -> VSType r -> SValue r ->
+listAccessFunc' :: (OORenderSym r, UnRepr r TypeData) => Label -> VS (r TypeData) -> SValue r ->
   VSFunction r
 listAccessFunc' f t i = IG.func f t [intValue i]
 
@@ -278,7 +278,7 @@ listAccessFunc' f t i = IG.func f t [intValue i]
 stringRender :: String
 stringRender = "string"
 
-string :: (Monad r) => VSType r
+string :: (Monad r) => VS (r TypeData)
 string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] ->
@@ -338,15 +338,15 @@ constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 
 -- Python, Java, C++, and Swift --
 
-litArray :: (CommonRenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litArray :: (CommonRenderSym r) => (Doc -> Doc) -> VS (r TypeData) -> [SValue r] -> SValue r
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (f $ valueList elems))
 
-litSet :: (CommonRenderSym r) => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet :: (CommonRenderSym r) => (Doc -> Doc) -> (Doc -> Doc) -> VS (r TypeData) -> [SValue r] -> SValue r
 litSet f1 f2 t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (f1 $ f2 $ valueList elems))
 
-litSetFunc :: (CommonRenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc :: (CommonRenderSym r) => String -> VS (r TypeData) -> [SValue r] -> SValue r
 litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
   (text s <> parens (valueList elems)))
 
@@ -361,14 +361,14 @@ extraClass n = S.intClass n public . S.inherit
 doubleRender :: String
 doubleRender = "Double"
 
-double :: (Monad r) => VSType r
+double :: (Monad r) => VS (r TypeData)
 double = typeFromData Double doubleRender (text doubleRender)
 
-openFileR :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r
+openFileR :: (CommonRenderSym r) => (SValue r -> VS (r TypeData) -> SValue r) -> SVariable r
   -> SValue r -> MSStatement r
 openFileR f vr vl = vr &= f vl infile
 
-openFileW :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) ->
+openFileW :: (CommonRenderSym r) => (SValue r -> VS (r TypeData) -> SValue r -> SValue r) ->
   SVariable r -> SValue r -> MSStatement r
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
@@ -420,7 +420,7 @@ funcDecDef v scp ps b = do
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
-inOutCall :: (CommonRenderSym r) => (Label -> VSType r -> [SValue r] -> SValue r) ->
+inOutCall :: (CommonRenderSym r) => (Label -> VS (r TypeData) -> [SValue r] -> SValue r) ->
   Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
 inOutCall f n ins [] [] = IC.valStmt $ f n IC.void ins
 inOutCall f n ins outs both = S.multiAssign rets [f n IC.void (map IC.valueOf
@@ -438,7 +438,7 @@ mainBody b = do
   modify (setMainDoc $ RC.body bod)
   mthdFromData Pub empty
 
-inOutFunc :: (CommonRenderSym r) => (VSType r -> [MSParameter r] -> MSBody r ->
+inOutFunc :: (CommonRenderSym r) => (VS (r TypeData) -> [MSParameter r] -> MSBody r ->
   SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r ->
   SMethod r
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
@@ -461,13 +461,13 @@ docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
 floatRender :: String
 floatRender = "Float"
 
-float :: (Monad r) => VSType r
+float :: (Monad r) => VS (r TypeData)
 float = typeFromData Float floatRender (text floatRender)
 
 stringRender' :: String
 stringRender' = "String"
 
-string' :: (Monad r) => VSType r
+string' :: (Monad r) => VS (r TypeData)
 string' = typeFromData String stringRender' (text stringRender')
 
 -- C# and Swift --

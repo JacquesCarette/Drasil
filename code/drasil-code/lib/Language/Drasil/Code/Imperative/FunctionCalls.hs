@@ -27,8 +27,9 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, TypeSym(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), convType, convTypeOO)
+import Drasil.GOOL (SValue, MSStatement, SharedProg, OOProg, TypeData, VS,
+  TypeSym(..), VariableValue(..), StatementSym(..), DeclStatement(..), convType,
+  convTypeOO)
 
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
@@ -79,7 +80,7 @@ genOutputCall = do
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
-genFuncCall :: (OOProg r) => Name -> VSType r ->
+genFuncCall :: (OOProg r) => Name -> VS (r TypeData) ->
   GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
 genFuncCall n t funcPs = do
   mm <- genCall n
@@ -178,7 +179,7 @@ genOutputCallProc = do
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
-genFuncCallProc :: (SharedProg r) => Name -> VSType r ->
+genFuncCallProc :: (SharedProg r) => Name -> VS (r TypeData) ->
   GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
 genFuncCallProc n t funcPs = do
   mm <- genCall n

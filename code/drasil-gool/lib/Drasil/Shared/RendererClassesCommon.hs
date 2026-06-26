@@ -13,9 +13,9 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
-  BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, BodySym(..),
+  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
@@ -71,7 +71,7 @@ class BlockElim r where
   block :: r (Block r) -> Doc
 
 class RenderType r where
-  multiType :: [VSType r] -> VSType r
+  multiType :: [VS (r TypeData)] -> VS (r TypeData)
 
 type VSUnOp a = VS (a OpData)
 
@@ -120,7 +120,7 @@ class ScopeElim r where
   scopeData :: r ScopeData -> ScopeData
 
 class RenderVariable r where
-  varFromData :: AttachmentTag -> String -> VSType r -> Doc -> SVariable r
+  varFromData :: AttachmentTag -> String -> VS (r TypeData) -> Doc -> SVariable r
 
 class InternalVarElim r where
   variableBind :: r (Variable r) -> AttachmentTag
@@ -136,7 +136,7 @@ class RenderValue r where
   printFileFunc   :: SValue r -> SValue r
   printFileLnFunc :: SValue r -> SValue r
 
-  cast :: VSType r -> SValue r -> SValue r
+  cast :: VS (r TypeData) -> SValue r -> SValue r
 
   -- | Very generic internal function for generating calls, to reduce repeated
   -- code throughout generators.
@@ -145,7 +145,7 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VS (r TypeData) -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
@@ -154,10 +154,10 @@ class ValueElim r where
 
 class InternalListFunc r where
   -- | List, Index
-  listAccessFunc :: VSType r -> SValue r -> VSFunction r
+  listAccessFunc :: VS (r TypeData) -> SValue r -> VSFunction r
 
 class RenderFunction r where
-  funcFromData :: Doc -> VSType r -> VSFunction r
+  funcFromData :: Doc -> VS (r TypeData) -> VSFunction r
 
 class FunctionElim r where
   functionType :: r (Function r) -> r TypeData
@@ -209,7 +209,7 @@ type MSMthdType a = MS (a (MethodType a))
 
 class (TypeSym r) => MethodTypeSym r where
   type MethodType r
-  mType    :: VSType r -> MSMthdType r
+  mType    :: VS (r TypeData) -> MSMthdType r
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   -- | Takes a BlockComment and a method and generates a function.

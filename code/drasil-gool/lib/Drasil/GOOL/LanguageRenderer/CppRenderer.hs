@@ -15,17 +15,17 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  NamedArgs, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  getCodeType, getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope, BinderElim (..), (&=))
+  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..), getCodeType,
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..), BinderSym(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), convScope, BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym,
@@ -2455,7 +2455,7 @@ addCAssertImport v = do
   modify (addLangImport cassert)
   v
 
-iterator :: VSType CppSrcCode -> VSType CppSrcCode
+iterator :: VS (CppSrcCode TypeData) -> VS (CppSrcCode TypeData)
 iterator t = do
     modify (addLangImportVS cppIterator)
     cppIterType $ listType t
@@ -2473,7 +2473,7 @@ arrayDecBase vr scp = do
   modify $ setVarScope (variableName vr') (scopeData scp)
   return $ renderType (variableType vr') <+> RC.variable vr'
 
-cppReferenceType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
+cppReferenceType :: (Monad r, UnRepr r TypeData) => VS (r TypeData) -> VS (r TypeData)
 cppReferenceType t = do
     t' <- t
     typeFromData (Reference (getCodeType t')) (getTypeString t' ++ cppDeref') (renderType t' <> cppDeref)
@@ -2636,10 +2636,10 @@ strFunc v s = objMethodCall string v cppStr [s]
 cppIndexFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppIndexFunc l v = funcApp cppIndex int [iterBegin l, iterEnd l, v]
 
-cppIterBeginFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
+cppIterBeginFunc :: VS (CppSrcCode TypeData) -> VSFunction CppSrcCode
 cppIterBeginFunc t = func cppIterBegin (iterator t) []
 
-cppIterEndFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
+cppIterEndFunc :: VS (CppSrcCode TypeData) -> VSFunction CppSrcCode
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (CommonRenderSym r) => ([r (Value r)] -> Doc) -> SVariable r ->
@@ -2663,23 +2663,23 @@ usingNameSpace n Nothing = using <+> namespace <+> text n <> endStatement
 cppInherit :: Maybe Label -> Doc -> Doc
 cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
-cppBoolType :: (Monad r) => VSType r
+cppBoolType :: (Monad r) => VS (r TypeData)
 cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
-cppInfileType :: (Monad r) => VSType r
+cppInfileType :: (Monad r) => VS (r TypeData)
 cppInfileType = do
   t <- typeFromData InFile cppInfile (text cppInfile)
   addFStreamImport t
 
-argvType :: (Monad r) => VSType r
+argvType :: (Monad r) => VS (r TypeData)
 argvType = typeFromData (Array String) "const char**" (text "const char**")
 
-cppOutfileType :: (Monad r) => VSType r
+cppOutfileType :: (Monad r) => VS (r TypeData)
 cppOutfileType = do
   t <- typeFromData OutFile cppOutfile (text cppOutfile)
   addFStreamImport t
 
-cppIterType :: VSType CppSrcCode -> VSType CppSrcCode
+cppIterType :: VS (CppSrcCode TypeData) -> VS (CppSrcCode TypeData)
 cppIterType t' = do
   t <- t'
   typeFromData (getCodeType t)
@@ -2689,7 +2689,7 @@ cppIterType t' = do
 cppClassVarAccess :: Doc -> Doc -> Doc
 cppClassVarAccess c v = c `nmSpcAccess'` v
 
-cppFuncType :: (Monad r, UnRepr r TypeData) => [VSType r] -> VSType r -> VSType r
+cppFuncType :: (Monad r, UnRepr r TypeData) => [VS (r TypeData)] -> VS (r TypeData) -> VS (r TypeData)
 cppFuncType ps' r' =  do
   ps <- sequence ps'
   r <- r'
@@ -2712,7 +2712,7 @@ ignoreFunc sep inFn = objMethodCall void inFn cppIgnore [maxFunc, litChar sep]
 maxFunc :: SValue CppSrcCode
 maxFunc = funcApp ((numLimits `containing` streamsize) `nmSpcAccess` max) int []
 
-cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+cppCast :: VS (CppSrcCode TypeData) -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType $
   valueType v) t v)
   where cppCast' Double String _ v = stodFunc (toState v)
@@ -2879,7 +2879,7 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
     indent $ RC.body b,
     bEnd]
 
-cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r]
+cppLitSet :: (OORenderSym r) => (VS (r TypeData) -> VS (r TypeData)) -> VS (r TypeData) -> [SValue r]
     -> SValue r
 cppLitSet f t' es' = do
   es <- sequence es'
@@ -2922,7 +2922,7 @@ cpphClass n ps vars funcs pub priv = let
     indentList indLi,
     bodyEnd <> endStatement]) ps
 
-cppInOutCall :: (Label -> VSType CppSrcCode -> [SValue CppSrcCode] ->
+cppInOutCall :: (Label -> VS (CppSrcCode TypeData) -> [SValue CppSrcCode] ->
   SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode]
   -> [SVariable CppSrcCode] -> MSStatement CppSrcCode
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
@@ -2932,7 +2932,7 @@ cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
 cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins
   ++ map valueOf outs)
 
-cppsInOut :: (VSType CppSrcCode -> [MSParameter CppSrcCode] -> MSBody CppSrcCode ->
+cppsInOut :: (VS (CppSrcCode TypeData) -> [MSParameter CppSrcCode] -> MSBody CppSrcCode ->
     SMethod CppSrcCode) ->
   [SVariable CppSrcCode] -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
   MSBody CppSrcCode -> SMethod CppSrcCode
@@ -2944,7 +2944,7 @@ cppsInOut f ins [] [v] b = f (onStateValue variableType v)
   (returnStmt $ valueOf v))
 cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
-cpphInOut :: (VSType CppHdrCode -> [MSParameter CppHdrCode] -> MSBody CppHdrCode ->
+cpphInOut :: (VS (CppHdrCode TypeData) -> [MSParameter CppHdrCode] -> MSBody CppHdrCode ->
     SMethod CppHdrCode) ->
   [SVariable CppHdrCode] -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
   MSBody CppHdrCode -> SMethod CppHdrCode

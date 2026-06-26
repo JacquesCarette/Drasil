@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  MSBlock, VSType, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  BodySym(..), oneLiner, bodyStatements, BlockSym(..), TypeSym(..), getCodeType,
+  MSBlock, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, bodyStatements, BlockSym(..), TypeSym(..), getCodeType,
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -826,27 +826,27 @@ swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar
 swiftLineVal = valueOf swiftLineVar
 
-swiftIntType :: (Monad r) => VSType r
+swiftIntType :: (Monad r) => VS (r TypeData)
 swiftIntType = typeFromData Integer swiftInt (text swiftInt)
 
-swiftCharType :: (Monad r) => VSType r
+swiftCharType :: (Monad r) => VS (r TypeData)
 swiftCharType = typeFromData Char swiftChar (text swiftChar)
 
-swiftFileType :: (Monad r) => VSType r
+swiftFileType :: (Monad r) => VS (r TypeData)
 swiftFileType = addFoundationImport $ typeFromData InFile swiftURL
   (text swiftURL)
 
-swiftFileHdlType :: (Monad r) => VSType r
+swiftFileHdlType :: (Monad r) => VS (r TypeData)
 swiftFileHdlType = addFoundationImport $ typeFromData OutFile swiftFileHdl
   (text swiftFileHdl)
 
-swiftListType :: VSType SwiftCode -> VSType SwiftCode
+swiftListType :: VS (SwiftCode TypeData) -> VS (SwiftCode TypeData)
 swiftListType t' = do
   t <- t'
   typeFromData (List $ getCodeType t) ("[" ++ getTypeString t ++ "]")
     (brackets $ renderType t)
 
-swiftFuncType :: [VSType SwiftCode] -> VSType SwiftCode -> VSType SwiftCode
+swiftFuncType :: [VS (SwiftCode TypeData)] -> VS (SwiftCode TypeData) -> VS (SwiftCode TypeData)
 swiftFuncType ps r = do
   pts <- sequence ps
   rt <- r
@@ -856,7 +856,7 @@ swiftFuncType ps r = do
     (parens (hicat listSep' $ map renderType pts) <+> swiftRetType' <+>
       renderType rt)
 
-swiftVoidType :: (Monad r) => VSType r
+swiftVoidType :: (Monad r) => VS (r TypeData)
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst,
@@ -974,7 +974,7 @@ swiftLambda ps ex = braces $ parens (hicat listSep'
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
 
-swiftCast :: VSType SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftCast :: VS (SwiftCode TypeData) -> SValue SwiftCode -> SValue SwiftCode
 swiftCast t' v' = do
   t <- t'
   v <- v'
@@ -1090,7 +1090,7 @@ swiftInput vr vl = do
         | otherwise = error "Attempt to read value of unreadable type"
   swiftInput' (getCodeType $ variableType vr')
 
-swiftOpenFile :: (OORenderSym r) => SValue r -> VSType r -> SValue r
+swiftOpenFile :: (OORenderSym r) => SValue r -> VS (r TypeData) -> SValue r
 swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
                         dirVal = mkStateVal (obj swiftSearchDir) swiftDocDir
                         inArg = var swiftIn (obj swiftPathMask)
@@ -1099,7 +1099,7 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
-swiftOpenFileHdl :: (OORenderSym r, Monad r) => SValue r -> VSType r -> SValue r
+swiftOpenFileHdl :: (OORenderSym r, Monad r) => SValue r -> VS (r TypeData) -> SValue r
 swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
@@ -1228,7 +1228,7 @@ swiftStringError :: MS Doc
 swiftStringError = do
   tu <- getThrowUsed
   errdef <- getErrorDefined
-  str <- zoom lensMStoVS (string :: VSType SwiftCode)
+  str <- zoom lensMStoVS (string :: VS (SwiftCode TypeData))
   if tu && not errdef then do
     modify setErrorDefined
     pure (swiftExtension <+> renderType str <> swiftConforms <+> swiftRetroactive

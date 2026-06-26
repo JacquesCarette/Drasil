@@ -11,7 +11,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
   SelfSym(..), StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..),
   VariableValue(..), VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, newObj, Dereference(..), Array(..), List(..),
+  ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
   MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall, initializer,
   OODeclStatement(objDecDef), Set(..), ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),

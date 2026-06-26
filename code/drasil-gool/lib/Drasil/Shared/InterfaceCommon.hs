@@ -14,7 +14,7 @@ module Drasil.Shared.InterfaceCommon (
   Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Dereference(..), Array(..), List(..), Set(..),
+  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), listSlice, listIndexExists, at, StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -45,7 +45,7 @@ class (UnRepr r TypeData, AssignStatement r, DeclStatement r, IOStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
   Comparison r, ValueExpression r, IndexTranslator r, Array r, List r, Set r,
-  VariableElim r, MethodSym r, ScopeSym r, BinderSym r, Dereference r
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r, Reference r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -288,7 +288,7 @@ class (ValueSym r) => IndexTranslator r where
   -- | Finds the size of a list.
   --   Arguments are: List
 
-class (TypeSym r, ValueSym r) => Dereference r where
+class (TypeSym r, ValueSym r) => Reference r where
   -- | Given a value that may be a reference type,
   -- apply any necessary dereference operation.
   maybeDeref :: SValue r -> SValue r

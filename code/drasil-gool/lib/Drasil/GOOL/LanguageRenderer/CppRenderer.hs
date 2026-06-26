@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Dereference(..), Array(..), List(..), Set(..),
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
@@ -450,7 +450,7 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   intToIndex = pair1 intToIndex intToIndex
   indexToInt = pair1 indexToInt indexToInt
 
-instance (Pair p) => Dereference (p CppSrcCode CppHdrCode) where
+instance (Pair p) => Reference (p CppSrcCode CppHdrCode) where
   maybeDeref = pair1 maybeDeref maybeDeref
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
@@ -1376,7 +1376,7 @@ instance IndexTranslator CppSrcCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
-instance Dereference CppSrcCode where
+instance Reference CppSrcCode where
   maybeDeref vl = do
     vl' <- vl
     let vlTyp = cType $ unRepr $ valueType vl'
@@ -2073,7 +2073,7 @@ instance IndexTranslator CppHdrCode where
   intToIndex _ = mkStateVal void empty
   indexToInt _ = mkStateVal void empty
 
-instance Dereference CppHdrCode where
+instance Reference CppHdrCode where
   maybeDeref = id
 
 instance Array CppHdrCode where

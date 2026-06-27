@@ -455,7 +455,7 @@ instance (Pair p) => Reference (p CppSrcCode CppHdrCode) where
   maybeDeref = pair1 maybeDeref maybeDeref
 
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
-  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
+  arrayElem = pair2 arrayElem arrayElem
   arrayLength = pair1 arrayLength arrayLength
   arrayCopy = pair1 arrayCopy arrayCopy
 

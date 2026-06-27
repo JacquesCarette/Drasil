@@ -1038,7 +1038,7 @@ outputs = var "outputs" jArrayType
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
-  (valueOf $ arrayElem (litInt c) outputs)) : jAssignFromArray (c+1) vs
+  (valueOf $ arrayElem (valueOf outputs) (litInt c))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] ->
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] ->
@@ -1078,7 +1078,9 @@ jInOut f ins outs both b = f (returnTp rets)
           ++ [returnStmt (valueOf outputs)])
         assignArray :: Integer -> [SValue JavaCode] -> [MSStatement JavaCode]
         assignArray _ [] = []
-        assignArray c (v:vs) = (arrayElem (litInt c) outputs &= v) : assignArray (c+1) vs
+        assignArray c (v:vs) =
+          (arrayElem (valueOf outputs) (litInt c) &= v)
+          : assignArray (c+1) vs
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 

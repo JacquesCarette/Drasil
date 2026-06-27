@@ -202,13 +202,13 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
-arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
-arrayElem i' v' = do
+arrayElem :: (OORenderSym r) => SValue r -> SValue r -> SVariable r
+arrayElem arr' i' = do
   i <- IC.intToIndex i'
-  v <- v'
-  let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = IC.innerType $ return $ variableType v
-      vRender = RC.variable v <> brackets (RC.value i)
+  arr <- arr'
+  let vName = render (RC.value arr) ++ "[" ++ render (RC.value i) ++ "]"
+      vType = IC.innerType $ return $ valueType arr
+      vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
 -- Scope --

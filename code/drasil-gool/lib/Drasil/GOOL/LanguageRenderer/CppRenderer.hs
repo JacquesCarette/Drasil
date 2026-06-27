@@ -35,16 +35,15 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), InternalBinderElim(..),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), InternalBinderElim(..), RenderValue(..),
+  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  RenderVisibility(..), VisibilityElim, MSMthdType, MethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
@@ -175,12 +174,8 @@ instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
-  type Import (p CppSrcCode CppHdrCode) = Doc
   langImport n = pair (langImport n) (langImport n)
   modImport n = pair (modImport n) (modImport n)
-
-instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
-  import' i = RC.import' $ pfst i
 
 instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) where
   type Attachment (p CppSrcCode CppHdrCode) = AttachmentData
@@ -1060,13 +1055,9 @@ instance RenderFile CppSrcCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppSrcCode where
-  type Import CppSrcCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt
     n)
-
-instance ImportElim CppSrcCode where
-  import' = unCPPSC
 
 instance AttachmentSym CppSrcCode where
   type Attachment CppSrcCode = AttachmentData
@@ -1742,7 +1733,7 @@ instance ModuleSym CppSrcCode where
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)])
     (pure empty) (pure empty) ms cs
-    where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
+    where mi, li :: Label -> CppSrcCode Doc
           mi = modImport
           li = langImport
 
@@ -1801,12 +1792,8 @@ instance RenderFile CppHdrCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppHdrCode where
-  type Import CppHdrCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt n)
-
-instance ImportElim CppHdrCode where
-  import' = unCPPHC
 
 instance AttachmentSym CppHdrCode where
   type Attachment CppHdrCode = AttachmentData
@@ -2386,7 +2373,7 @@ instance ModuleSym CppHdrCode where
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)])
     (pure empty) (pure empty)
-    where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
+    where mi, li :: Label -> CppHdrCode Doc
           mi = modImport
           li = langImport
 

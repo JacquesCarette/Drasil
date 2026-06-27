@@ -33,18 +33,18 @@ import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
-import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
+  bOp, variable, value, function, statement, visibility, parameter, method,
+  blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -165,12 +165,8 @@ instance RenderFile JavaCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JavaCode where
-  type Import JavaCode = Doc
   langImport = toCode . jImport
   modImport = langImport
-
-instance ImportElim JavaCode where
-  import' = unJC
 
 instance AttachmentSym JavaCode where
   type Attachment JavaCode = Doc

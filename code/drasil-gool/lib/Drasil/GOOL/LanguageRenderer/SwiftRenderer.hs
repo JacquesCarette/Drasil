@@ -34,16 +34,15 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..), InternalBinderElim(..))
+  ImportSym(..), RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
+  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
+  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, binderElim, value, function, statement, visibility,
   parameter, method, blockComment', stmt)
@@ -166,12 +165,8 @@ instance RenderFile SwiftCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym SwiftCode where
-  type Import SwiftCode = Doc
   langImport n = toCode $ importLabel <+> text n
   modImport = langImport
-
-instance ImportElim SwiftCode where
-  import' = unSC
 
 instance AttachmentSym SwiftCode where
   type Attachment SwiftCode = Doc
@@ -770,7 +765,7 @@ instance ModuleSym SwiftCode where
       lis <- getLangImports
       libis <- getLibImports
       pure $ vcat $ map (RC.import' .
-          (langImport :: Label -> SwiftCode (Import SwiftCode)))
+          (langImport :: Label -> SwiftCode Doc))
           (sort $ lis ++ is ++ libis))
       (zoom lensFStoMS swiftStringError) getMainDoc
         (map pure fns) (map pure cls)

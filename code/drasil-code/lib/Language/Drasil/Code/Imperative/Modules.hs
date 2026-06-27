@@ -39,6 +39,8 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
 
 import Drasil.Code.CodeExpr.Development
+import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, quantvar,
+  DefiningCodeExpr(..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
@@ -64,8 +66,6 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName, getSoftwareDossierFiles, getSampleData,
   HasChoices(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (sampleInput)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
-  DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType)
 import Language.Drasil.Chunk.ConstraintMap (physLookup, sfwrLookup)

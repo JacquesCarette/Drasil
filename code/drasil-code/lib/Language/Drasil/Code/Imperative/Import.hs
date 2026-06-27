@@ -17,6 +17,8 @@ import Control.Monad.State (get, modify)
 import Data.List ((\\), intersect)
 
 import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
+import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, obv, quantvar,
+  quantfunc, DefiningCodeExpr(..))
 import qualified Drasil.Code.CodeExpr.Development as S (CodeExpr(..))
 import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), EqBinOp(..),
@@ -33,8 +35,7 @@ import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Logging (logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName, lookupC, HasChoices(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
-  quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
+import Language.Drasil.Chunk.Code (ccObjVar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),

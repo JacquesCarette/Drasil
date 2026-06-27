@@ -22,8 +22,8 @@ import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk,
-  quantvar, quantfunc, listToArray)
+import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, quantvar, quantfunc,
+  listToArray)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Code.ExternalLibrary

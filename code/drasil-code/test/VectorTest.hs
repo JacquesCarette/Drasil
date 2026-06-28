@@ -1,11 +1,12 @@
 -- | GProc test program exercising each 'NativeVector' operation once, so we can
--- eyeball the generated MATLAB for vector scaling, addition, indexing, and dot
--- products.
+-- eyeball the generated MATLAB for vector construction, scaling, addition,
+-- indexing, and dot products.
 module VectorTest (vectorTestProc) where
 
 import Drasil.GProc (SMethod, ProcProg, bodyStatements, TypeSym(..),
   VariableSym(..), Literal(..), VariableValue(..), (&=), MethodSym(..),
-  VisibilitySym(..), ParameterSym(..), ControlStatement(..), NativeVector(..))
+  VisibilitySym(..), ParameterSym(..), ControlStatement(..), NativeVector(..),
+  List(..))
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Metadata (watermark)
@@ -24,10 +25,14 @@ vectorOps :: (ProcProg r) => SMethod r
 vectorOps =
   function "vectorOps" public double [param (var "a" double), param (var "b" double)]
   (bodyStatements
-    [ var "scaled" double &= vecScale (litDouble 2.0) a  -- 2.0 * a
+    [ var "made" (listType double) &= litList double [litDouble 1.0, litDouble 2.0, litDouble 3.0]  -- [1.0, 2.0, 3.0]
+    , var "scaled" double &= vecScale (litDouble 2.0) a  -- 2.0 * a
     , var "summed" double &= vecAdd a b                  -- a + b
-    , var "elem"   double &= vecIndex a (litInt 0)       -- a(0 + 1)
+    , var "elem"   double &= vecIndex a (litInt 0)       -- a(1)
     , var "dotted" double &= vecDot a b                  -- dot(a, b)
+    , var "dim"    double &= listSize a                  -- length(a)
+    , var "mag"    double &= vecMag a                    -- norm(a)
+    , var "unit"   (listType double) &= vecUnit a        -- a / norm(a)
     , returnStmt (valueOf (var "dotted" double))
     ])
   where a = valueOf (var "a" double)

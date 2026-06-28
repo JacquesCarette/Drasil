@@ -8,11 +8,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSType,
   TypeSym(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
+  StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
+  BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -198,18 +200,22 @@ instance IndexTranslator CodeInfoProc where
   intToIndex = execute1
   indexToInt = execute1
 
+instance Reference CodeInfoProc where
+  makeRef = execute1
+  maybeDeref = execute1
+
 instance Array CodeInfoProc where
   arrayElem _ _ = noInfo
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
 instance List CodeInfoProc where
-  listSize   = execute1
-  listAdd    = execute3
-  listAppend = execute2
-  listAccess = execute2
-  listSet    = execute3
-  indexOf    = execute2
+  listSize       = execute1
+  listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
+  listAccess     = execute2
+  listSet l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  indexOf        = execute2
 
 instance Set CodeInfoProc where
  contains = execute2

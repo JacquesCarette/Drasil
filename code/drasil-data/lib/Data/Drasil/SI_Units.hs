@@ -107,7 +107,7 @@ millimetre = derUC' "millimetre"
   "millimetre" "length" (label "mm") (scale 0.0001 metre)
 
 newton = derCUC' "newton"
-  "newton" "force" (label "N") (kilogram *$ (second ^: (-2)))
+  "newton" "force" (label "N") (kilogram *$ (metre *$ (second ^: (-2))))
 
 ohm = derCUC' "ohm"
   "ohm" "resistance" cOmega (volt /: ampere)

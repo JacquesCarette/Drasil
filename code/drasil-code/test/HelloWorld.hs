@@ -8,12 +8,12 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
   listSlice, TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   CommentStatement(..), ControlStatement(..), VariableSym(..), OOVariableSym(..),
-  StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
-  VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
+  SelfSym(..), StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..),
+  VariableValue(..), VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, newObj, Array(..), List(..), MethodSym(..),
-  OOMethodSym(..), classMethodCall, initializer, OODeclStatement(objDecDef),
-  Set(..), ParameterSym(..))
+  ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
+  MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall, initializer,
+  OODeclStatement(objDecDef), Set(..), ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -77,9 +77,9 @@ helloInitVariables = block [comment "Initializing variables",
   printStr "Length of arr: ",
   printLn $ arrayLength (valueOf $ var "arr" (arrayType int)),
   arrayDec 3 (var "arr2" (arrayType int)) mainFn,
-  arrayElem (litInt 0) (var "arr2" (arrayType int)) &= litInt 4,
-  arrayElem (litInt 1) (var "arr2" (arrayType int)) &= litInt 5,
-  arrayElem (litInt 2) (var "arr2" (arrayType int)) &= litInt 6,
+  arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 0) &= litInt 4,
+  arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 1) &= litInt 5,
+  arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 2) &= litInt 6,
   printStr "Value of arr2: ",
   printLn $ valueOf (var "arr2" (arrayType int)),
   printStr "Length of arr2: ",
@@ -90,7 +90,7 @@ helloInitVariables = block [comment "Initializing variables",
   var "arr_copy" (arrayType int) &= arrayCopy (valueOf (var "arr" (arrayType int))),
   printStr "Value of arr_copy: ",
   printLn $ valueOf (var "arr_copy" (arrayType int)),
-  arrayElem (litInt 1) (var "arr" (arrayType int)) &= litInt 42,
+  arrayElem (valueOf $ var "arr" (arrayType int)) (litInt 1) &= litInt 42,
   printStr "Value of arr after modifying arr: ",
   printLn $ valueOf (var "arr" (arrayType int)),
   printStr "Value of arr_copy after modifying arr: ",
@@ -99,14 +99,11 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf myOtherList),
   assert (valueOf (var "a" int) ?== litInt 2) (litString "List size should be 2"),
-  valStmt (listAdd (valueOf myOtherList)
-    (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf myOtherList)
-    (litDouble 2.5)),
+  listAdd (valueOf myOtherList) (litInt 2) (litDouble 2.0),
+  listAppend (valueOf myOtherList) (litDouble 2.5),
   varDec (var "e" double) mainFn,
   var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
-  valStmt (listSet (valueOf myOtherList)
-    (litInt 1) (litDouble 17.4)),
+  listSet (valueOf myOtherList) (litInt 1) (litDouble 17.4),
   listDec 7 (var "myName" (listType string)) mainFn,
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
   printLn (valueOf $ var "myName" (listType string)),
@@ -128,7 +125,16 @@ objectTests = block [comment "Object tests",
     (classMethodCall (obj "TestClass") (obj "TestClass") "add"
       [valueOf $ var "t1" (obj "TestClass"), valueOf $ var "t2" (obj "TestClass")]),
   printStr "Value of t3.a: ",
-  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int)]
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t3" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t4" (obj "TestClass")) mainFn (objMethodCall (obj "TestClass")
+    (valueOf (var "t3" (obj "TestClass"))) "addToInstance" [valueOf $ var "t2" (obj "TestClass")]),
+  printStr "Value of t4.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t4" (obj "TestClass"))) (var "a" int),
+  varDecDef (var "t5" (obj "TestClass")) mainFn (classMethodCall
+    (obj "TestClass") (obj "TestClass") "addWithReferences"
+    [makeRef $ valueOf $ var "t3" (obj "TestClass"), makeRef $ valueOf $ var "t4" (obj "TestClass")]),
+  printStr "Value of t5.a: ",
+  printLn $ valueOf $ instanceVarAccess (valueOf (var "t5" (obj "TestClass"))) (var "a" int)]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
@@ -374,8 +380,19 @@ helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]
     [(var "a" int, valueOf (var "a" int))]]
-  [method "add" public classLevel (obj "TestClass")
-    [param $ var "t1" (obj "TestClass"), param $ var "t2" (obj "TestClass")]
-    (oneLiner $ returnStmt $ newObj (obj "TestClass")
-      [valueOf (instanceVarAccess (valueOf (var "t1" (obj "TestClass"))) (var "a" int)) #+
-       valueOf (instanceVarAccess (valueOf (var "t2" (obj "TestClass"))) (var "a" int))])]
+  [ method "add" public classLevel (obj "TestClass")
+      [param $ var "t1" (obj "TestClass"), param $ var "t2" (obj "TestClass")]
+      (oneLiner $ returnStmt $ newObj (obj "TestClass")
+        [valueOf (instanceVarAccess (valueOf (var "t1" (obj "TestClass"))) (var "a" int)) #+
+         valueOf (instanceVarAccess (valueOf (var "t2" (obj "TestClass"))) (var "a" int))])
+  , method "addToInstance" public instanceLevel (obj "TestClass")
+      [param $ var "t" (obj "TestClass")]
+      (oneLiner $ returnStmt $ classMethodCall (obj "TestClass") (obj "TestClass")
+       "add" [maybeDeref $ valueOf self, valueOf (var "t" (obj "TestClass"))])
+  , let t1 = var "t1" (referenceType (obj "TestClass"))
+        t2 = var "t2" (referenceType (obj "TestClass"))
+    in method "addWithReferences" public classLevel (obj "TestClass")
+         [param t1, param t2]
+         (oneLiner $ returnStmt $ newObj (obj "TestClass")
+         [valueOf (instanceVarAccess (valueOf t1) (var "a" int)) #+
+          valueOf (instanceVarAccess (valueOf t2) (var "a" int))])]

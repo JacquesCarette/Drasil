@@ -14,13 +14,13 @@ module Drasil.Shared.InterfaceCommon (
   Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Array(..), List(..), Set(..), NativeVector(..),
-  InternalList(..), listSlice,
-  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
+  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
+  BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -45,7 +45,7 @@ class (UnRepr r TypeData, AssignStatement r, DeclStatement r, IOStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
   Comparison r, ValueExpression r, IndexTranslator r, Array r, List r, Set r,
-  VariableElim r, MethodSym r, ScopeSym r, BinderSym r
+  VariableElim r, MethodSym r, ScopeSym r, BinderSym r, Reference r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -288,10 +288,17 @@ class (ValueSym r) => IndexTranslator r where
   -- | Finds the size of a list.
   --   Arguments are: List
 
+class (TypeSym r, ValueSym r) => Reference r where
+  -- | Given a value, convert it to a reference to that value
+  makeRef :: SValue r -> SValue r
+  -- | Given a value that may be a reference type,
+  -- apply any necessary dereference operation.
+  maybeDeref :: SValue r -> SValue r
+
 class (IndexTranslator r) => Array r where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
   -- | Given array `a` and index `i`, creates `a[i]`
-  arrayElem :: SValue r -> SVariable r -> SVariable r
+  arrayElem :: SValue r -> SValue r -> SVariable r
   -- TODO [Brandon Bosman, 06/03/2026]: Consider switching to a polymorphic `length`
   -- for Array, List, and Set
   -- | Given an array, return its length
@@ -305,16 +312,16 @@ class (IndexTranslator r) => List r where
   listSize   :: SValue r -> SValue r
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
-  listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
+  listAdd    :: SValue r -> SValue r -> SValue r -> MSStatement r
   -- | Appens a value to a list.
   --   Arguments are: List, Value
-  listAppend :: SValue r -> SValue r -> SValue r
+  listAppend :: SValue r -> SValue r -> MSStatement r
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
-  listSet    :: SValue r -> SValue r -> SValue r -> SValue r
+  listSet    :: SValue r -> SValue r -> SValue r -> MSStatement r
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
@@ -325,13 +332,13 @@ class (ValueSym r) => Set r where
   contains :: SValue r -> SValue r -> SValue r
   -- | Inserts a value into a set
   -- Arguments are: Set, Value
-  setAdd :: SValue r -> SValue r -> SValue r
+  setAdd :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this MSStatement
   -- | Removes a value from a set
   -- Arguments are: Set, Value
-  setRemove :: SValue r -> SValue r -> SValue r
+  setRemove :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this MSStatement
   -- | Removes a value from a set
   -- Arguments are: Set, Set
-  setUnion :: SValue r -> SValue r -> SValue r
+  setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this MSStatement
 
 -- | Vector operations for languages with native vector support (e.g. MATLAB,
 --   Julia). Expression-based: every operation takes and returns 'SValue's, so
@@ -403,10 +410,6 @@ class (VariableSym r, StatementSym r) => AssignStatement r where
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
-  -> SValue r -> SValue r -> MSStatement r
-assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
-
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
@@ -455,8 +458,9 @@ class (VariableSym r, StatementSym r) => IOStatement r where
 class (VariableSym r, StatementSym r) => StringStatement r where
   -- Parameters are: char to split on, variable to store result in, string to split
   stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
-
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
+  -- Given a list of variables and a value containing a list of strings,
+  -- assign the ith element of hte list of strings into the ith variable
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
 
 type VSFunction a = VS (a (Function a))

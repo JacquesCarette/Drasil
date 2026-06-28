@@ -20,22 +20,23 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Array(..), List(..), Set(..), NativeVector(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+  Reference(..), Array(..), List(..), Set(..), NativeVector(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
+  switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(..),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
@@ -49,8 +50,8 @@ import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
   valueList, binderList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
-  break, continue, constDec', assign, subAssign, addAssign)
+  addComments, blockCmt, docCmt, commentedMod, commentedItem, break, continue,
+  constDec', assign, subAssign, addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmtNoEnd, typeFromData)
@@ -59,15 +60,15 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
-  listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var, smartSub)
+  listAccess, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
+  print, comment, valStmt, returnStmt, param, docFunc, throw, arg, argsList,
+  ifCond, smartAdd, local, var, smartSub)
 import Drasil.GProc.Renderers (renderType)
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (listDec,
-  listDecDef, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
+  listDecDef, listSet, notNull, functionDoc, intToIndex', indexToInt', inOutFunc,
   docInOutFunc', forLoopError, openFileR', openFileW', openFileA', multiReturn,
   multiAssign, inOutCall, mainBody, argExists, litSet)
 
@@ -144,16 +145,12 @@ instance RenderFile JuliaCode where
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JuliaCode where
-  type Import JuliaCode = Doc
   langImport n = let modName = text n
     in toCode $ importLabel <+> modName
   modImport n = let modName = text n
                     fileName = text $ n ++ '.' : jlExt
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
-
-instance ImportElim JuliaCode where
-  import' = unJLC
 
 instance BodySym JuliaCode where
   type Body JuliaCode = Doc
@@ -381,6 +378,10 @@ instance IndexTranslator JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
 
+instance Reference JuliaCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array JuliaCode where
   arrayElem = A.arrayElem
   arrayLength = listSize
@@ -393,7 +394,7 @@ instance List JuliaCode where
   listAdd = A.listAdd jlListAdd
   listAppend = A.listAppend jlListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = jlIndexOf
 
 instance Set JuliaCode where
@@ -416,7 +417,6 @@ instance InternalList JuliaCode where
 
 instance InternalListFunc JuliaCode where
   listAccessFunc = CS.listAccessFunc
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym JuliaCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -849,7 +849,7 @@ jlModContents n is = A.buildModule n (do
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
     vcat (map (RC.import' . mi) mis)])
   (do getMainDoc)
-  where mi, li :: Label -> JuliaCode (Import JuliaCode)
+  where mi, li :: Label -> JuliaCode Doc
         mi = modImport
         li = langImport
 

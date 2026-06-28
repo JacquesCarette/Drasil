@@ -43,7 +43,7 @@ angle       = cncpt''' (mkUid "angle")       (cn' "angle")               (D.S "t
 area        = cncpt''' (mkUid "area")        (cn' "area")                (D.S "a part of an object or surface")
 axis        = cncpt''' (mkUid "axis")        (cn' "axis")                (D.S "a fixed reference line for the measurement of coordinates")
 calculation = cncpt''' (mkUid "calculation") (cn' "calculation")         (D.S "a mathematical determination of the size or number of something")
-cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ D.S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
+cartesian   = cncpt''' (mkUid "cartesian") (pn' "Cartesian coordinate system") $ D.S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
                                                                   D.S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   D.S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   fromSource cartesianWiki
@@ -61,7 +61,7 @@ gradient     = cncpt'''  (mkUid "gradient")      (cn' "gradient")        (D.S "d
 laplaceTransform = cncpt''' (mkUid "laplaceTransform") (cn' "laplace transform") (D.S ("An integral transform that converts a function of a real variable t "
                                                                          ++ "(often time) to a function of a complex variable s (complex frequency)"))
 law          = cncpt''' (mkUid "law") (cn' "law")                        (D.S "a generalization based on a fact or event perceived to be recurrent")
-line         = dccWDS "line"          (pn' "line")                       $ D.S "An interval between two points" +:+ fromSource lineSource
+line         = cncpt''' (mkUid "line")          (pn' "line")                       $ D.S "An interval between two points" +:+ fromSource lineSource
 matrix       = cncpt''' (mkUid "matrix") (cnICES "matrix")               (D.S ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                          "is treated as a single entity and manipulated according to particular rules"))
 norm         = cncpt''' (mkUid "norm")         (cn' "norm")              (D.S "the positive length or size of a vector")
@@ -75,7 +75,7 @@ posInf       = cncpt''' (mkUid "PosInf")       (cn' "Positive Infinity") (D.S "t
 negInf       = cncpt''' (mkUid "NegInf")       (cn' "Negative Infinity") (D.S "Opposite of positive infinity")
 positive     = cncpt''' (mkUid "positive")     (cn' "positive")          (D.S "greater than zero")
 negative     = cncpt''' (mkUid "negative")     (cn' "negative")          (D.S "less than zero")
-point        = dccWDS "point"     (pn' "point")                   $ D.S "An exact location, it has no size, only position" +:+
+point        = cncpt''' (mkUid "point")     (pn' "point")                   $ D.S "An exact location, it has no size, only position" +:+
                                                                   fromSource pointSource
 probability  = cncpt''' (mkUid "probability")  (cnIES "probability")     (D.S "The likelihood of an event to occur")
 rate         = cncpt''' (mkUid "rate")         (cn' "rate")              (D.S "Ratio that compares two quantities having different units of measure")

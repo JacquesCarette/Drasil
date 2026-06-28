@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (Label, VSType, SValue, SVariable,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..),
-  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
+  Reference(..), Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
@@ -26,18 +26,18 @@ import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..),
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(..),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
-import qualified Drasil.Shared.RendererClassesCommon as RC (import', body,
-  block, uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
+  bOp, variable, value, function, statement, visibility, parameter, method,
+  blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
@@ -122,12 +122,8 @@ instance RenderFile MatlabCode where
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym MatlabCode where
-  type Import MatlabCode = Doc
   langImport = undefined
   modImport = undefined
-
-instance ImportElim MatlabCode where
-  import' = unMLC
 
 instance BodySym MatlabCode where
   type Body MatlabCode = Doc
@@ -334,6 +330,10 @@ instance IndexTranslator MatlabCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
 
+instance Reference MatlabCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array MatlabCode where
   arrayElem = undefined
   arrayLength = undefined
@@ -366,7 +366,6 @@ instance InternalList MatlabCode where
 
 instance InternalListFunc MatlabCode where
   listAccessFunc = undefined
-  listSetFunc = undefined
 
 instance BinderSym MatlabCode where
   binder = undefined

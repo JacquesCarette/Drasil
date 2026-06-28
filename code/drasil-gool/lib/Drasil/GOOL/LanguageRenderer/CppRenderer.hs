@@ -21,30 +21,29 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Array(..), List(..), Set(..),
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope, BinderElim (..))
+  ParameterSym(..), MethodSym(..), convScope, BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), InstanceVarSelfSym(..), AttachmentSym(..), pubMethod,
-  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  selfMethodCall, InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.),
-  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, InternalValueExp(..),
+  objMethodCall, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), InternalBinderElim(..),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
-  ScopeElim(..))
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), InternalBinderElim(..), RenderValue(..),
+  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  RenderVisibility(..), VisibilityElim, MSMthdType, MethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
@@ -55,7 +54,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 
-import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
+import Drasil.Shared.LanguageRenderer (addExt, classDec, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList,
@@ -73,17 +72,16 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, objAccess, objMethodCall,
-  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, listSet,
-  getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew,
-  print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
-  construct, param, method, getMethod, setMethod, function, buildClass,
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local)
+  funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAccess, getFunc,
+  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
+  param, method, getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
-  intToIndex, indexToInt, global, setMethodCall, instanceVarSelf)
+  intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
@@ -176,12 +174,8 @@ instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
-  type Import (p CppSrcCode CppHdrCode) = Doc
   langImport n = pair (langImport n) (langImport n)
   modImport n = pair (modImport n) (modImport n)
-
-instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
-  import' i = RC.import' $ pfst i
 
 instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) where
   type Attachment (p CppSrcCode CppHdrCode) = AttachmentData
@@ -299,9 +293,6 @@ instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => SelfSym (p CppSrcCode CppHdrCode) where
   self = on2StateValues pair self self
-
-instance (Pair p) => InstanceVarSelfSym (p CppSrcCode CppHdrCode) where
-  instanceVarSelf = pair1 instanceVarSelf instanceVarSelf
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
@@ -454,17 +445,21 @@ instance (Pair p) => IndexTranslator (p CppSrcCode CppHdrCode) where
   intToIndex = pair1 intToIndex intToIndex
   indexToInt = pair1 indexToInt indexToInt
 
+instance (Pair p) => Reference (p CppSrcCode CppHdrCode) where
+  makeRef = pair1 makeRef makeRef
+  maybeDeref = pair1 maybeDeref maybeDeref
+
 instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
-  arrayElem i = pair1 (arrayElem (onStateValue pfst i)) (arrayElem (onStateValue psnd i))
+  arrayElem = pair2 arrayElem arrayElem
   arrayLength = pair1 arrayLength arrayLength
   arrayCopy = pair1 arrayCopy arrayCopy
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
-  listAdd = pair3 listAdd listAdd
-  listAppend = pair2 listAppend listAppend
+  listAdd l i v = pair3 listAdd listAdd (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  listAppend l v = pair2 listAppend listAppend (zoom lensMStoVS l) (zoom lensMStoVS v)
   listAccess = pair2 listAccess listAccess
-  listSet = pair3 listSet listSet
+  listSet l i v = pair3 listSet listSet (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   indexOf = pair2 indexOf indexOf
 
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
@@ -487,7 +482,6 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAccessFunc = pair2 listAccessFunc listAccessFunc
-  listSetFunc = pair3 listSetFunc listSetFunc
 
 instance Pair p => BinderSym (p CppSrcCode CppHdrCode) where
   binder nm = pair1 (binder nm) (binder nm)
@@ -1061,13 +1055,9 @@ instance RenderFile CppSrcCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppSrcCode where
-  type Import CppSrcCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt
     n)
-
-instance ImportElim CppSrcCode where
-  import' = unCPPSC
 
 instance AttachmentSym CppSrcCode where
   type Attachment CppSrcCode = AttachmentData
@@ -1224,9 +1214,6 @@ instance SelfSym CppSrcCode where
     l <- zoom lensVStoMS getClassName
     mkStateVar R.this (referenceType $ obj l) R.this'
 
-instance InstanceVarSelfSym CppSrcCode where
-  instanceVarSelf = CP.instanceVarSelf
-
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
@@ -1381,6 +1368,20 @@ instance IndexTranslator CppSrcCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Reference CppSrcCode where
+  makeRef vl = do
+    vl' <- vl
+    let vlTyp = cType $ unRepr $ valueType vl'
+        vlDoc = RC.value vl'
+    mkStateVal (convTypeOO $ Reference vlTyp) (cppPtr <> vlDoc)
+  maybeDeref vl = do
+    vl' <- vl
+    let vlTyp = cType $ unRepr $ valueType vl'
+        vlDoc = RC.value vl'
+    case vlTyp of
+      (Reference tp) -> mkStateVal (convTypeOO tp) (cppDeref <> vlDoc)
+      _ -> vl
+
 instance Array CppSrcCode where
   arrayElem = G.arrayElem
   arrayLength = listSize
@@ -1389,10 +1390,15 @@ instance Array CppSrcCode where
 instance List CppSrcCode where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
-  listAdd list idx vl = objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
+  listAdd list idx vl = valStmt $
+    objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
   listAppend = CG.listAppend cppListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet list idx vl = do
+    listAccessVal <- zoom lensMStoVS (listAccess list idx)
+    let listAccessVar =
+          mkVar (render $ RC.value listAccessVal) (valueType listAccessVal) (RC.value listAccessVal)
+    listAccessVar &= vl
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance Set CppSrcCode where
@@ -1410,7 +1416,6 @@ instance InternalGetSet CppSrcCode where
 
 instance InternalListFunc CppSrcCode where
   listAccessFunc = CP.listAccessFunc' cppListAccess
-  listSetFunc = CS.listSetFunc cppListSetDoc
 
 instance BinderSym CppSrcCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -1524,7 +1529,7 @@ instance IOStatement CppSrcCode where
         v_line = valueOf var_line
     multi [varDec var_line scp,
       while (getLineFunc f v_line)
-        (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
+        (oneLiner $ listAppend (valueOf v) v_line)]
 
 instance StringStatement CppSrcCode where
   stringSplit d vnew s = do
@@ -1543,7 +1548,7 @@ instance StringStatement CppSrcCode where
         valStmt $ strFunc v_ss s,
         varDec var_word scp,
         while (getLine3ArgFunc v_ss v_word d)
-          (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
+          (oneLiner $ listAppend (valueOf vnew) v_word)
       ]
 
   stringListVals = M.stringListVals
@@ -1728,7 +1733,7 @@ instance ModuleSym CppSrcCode where
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)])
     (pure empty) (pure empty) ms cs
-    where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
+    where mi, li :: Label -> CppSrcCode Doc
           mi = modImport
           li = langImport
 
@@ -1787,12 +1792,8 @@ instance RenderFile CppHdrCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppHdrCode where
-  type Import CppHdrCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt n)
-
-instance ImportElim CppHdrCode where
-  import' = unCPPHC
 
 instance AttachmentSym CppHdrCode where
   type Attachment CppHdrCode = AttachmentData
@@ -1921,9 +1922,6 @@ instance OOVariableSym CppHdrCode where
 
 instance SelfSym CppHdrCode where
   self = mkStateVar "" void empty
-
-instance InstanceVarSelfSym CppHdrCode where
-  instanceVarSelf _ = mkStateVar "" void empty
 
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC
@@ -2068,6 +2066,10 @@ instance IndexTranslator CppHdrCode where
   intToIndex _ = mkStateVal void empty
   indexToInt _ = mkStateVal void empty
 
+instance Reference CppHdrCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
   arrayLength = listSize
@@ -2075,10 +2077,10 @@ instance Array CppHdrCode where
 
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty
-  listAdd _ _ _ = mkStateVal void empty
-  listAppend _ _ = mkStateVal void empty
+  listAdd _ _ _ = mkStmt empty
+  listAppend _ _ = mkStmt empty
   listAccess _ _ = mkStateVal void empty
-  listSet _ _ _ = mkStateVal void empty
+  listSet _ _ _ = mkStmtNoEnd empty
   indexOf _ _ = mkStateVal void empty
 
 instance Set CppHdrCode where
@@ -2096,7 +2098,6 @@ instance InternalGetSet CppHdrCode where
 
 instance InternalListFunc CppHdrCode where
   listAccessFunc _ _ = funcFromData empty void
-  listSetFunc _ _ _ = funcFromData empty void
 
 instance BinderSym CppHdrCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -2372,7 +2373,7 @@ instance ModuleSym CppHdrCode where
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)])
     (pure empty) (pure empty)
-    where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
+    where mi, li :: Label -> CppHdrCode Doc
           mi = modImport
           li = langImport
 
@@ -2705,9 +2706,6 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' Float String _ v = stofFunc (toState v)
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
-
-cppListSetDoc :: Doc -> Doc -> Doc
-cppListSetDoc i v = dot <> text cppListAccess <> parens i <+> equals <+> v
 
 cppListDecDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 cppListDecDoc n = parens (RC.value n)

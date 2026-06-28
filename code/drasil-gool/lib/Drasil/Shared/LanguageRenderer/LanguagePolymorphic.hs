@@ -10,10 +10,10 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
   classVarAccessCheck, arrayElem, local, litChar, litDouble, litInt, litString,
   valueOf, arg, argsList, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  objAccess, objMethodCall, func, get, set, listAccess, listSet, getFunc,
-  setFunc, stmt, loopStmt, emptyStmt, assign, subAssign, objDecNew, print,
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
-  param, method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
+  objAccess, objMethodCall, func, get, set, listAccess, getFunc, setFunc, stmt,
+  loopStmt, emptyStmt, assign, subAssign, objDecNew, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, initStmts, function, docFuncRepr, docFunc,
   buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
   docMod, OptionalSpace(..), defaultOptSpace, smartAdd, smartSub
 ) where
@@ -40,7 +40,7 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (
-  InstanceVarSelfSym(..), OOMethodSym(method), OOFunctionSym(func))
+  instanceVarSelf, OOMethodSym(method), OOFunctionSym(func))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
   InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType),
@@ -48,7 +48,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
   BlockCommentSym(..), ValueElim (value))
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
-  InternalListFunc (listAccessFunc, listSetFunc), RenderStatement(stmt),
+  InternalListFunc (listAccessFunc), RenderStatement(stmt),
   InternalIOStmt(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
@@ -202,13 +202,13 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
-arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
-arrayElem i' v' = do
+arrayElem :: (OORenderSym r) => SValue r -> SValue r -> SVariable r
+arrayElem arr' i' = do
   i <- IC.intToIndex i'
-  v <- v'
-  let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = IC.innerType $ return $ variableType v
-      vRender = RC.variable v <> brackets (RC.value i)
+  arr <- arr'
+  let vName = render (RC.value arr) ++ "[" ++ render (RC.value i) ++ "]"
+      vType = IC.innerType $ return $ valueType arr
+      vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
 -- Scope --
@@ -305,12 +305,6 @@ listAccess v i = do
                               (\ix -> funcFromData (brackets (RC.value ix)) t)
       checkType _ = error "listAccess called on non-list-type value"
   f <- checkType (getCodeType (valueType v'))
-  mkVal (RC.functionType f) (RC.value v' <> RC.function f)
-
-listSet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listSet v i toVal = do
-  v' <- v
-  f <- S.listSetFunc v (IC.intToIndex i) toVal
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 getFunc :: (OORenderSym r) => SVariable r -> VSFunction r

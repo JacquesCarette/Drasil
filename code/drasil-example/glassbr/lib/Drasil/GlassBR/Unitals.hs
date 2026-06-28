@@ -28,10 +28,10 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
-  [dqdWr modElas] ++ interps ++ map dqdWr unitalSymbols ++
+  [modElas] ++ interps ++ unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac] ++
   map dqdWr derivedInputDataConstraints ++
-  map dqdWr mathunitals ++ map dqdWr physicalquants ++ mathquants
+  mathunitals ++ physicalquants ++ mathquants
 
 constrained :: [ConstrConcept]
 constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
@@ -42,7 +42,7 @@ glassTypeCon, nomThick :: ConstrConcept
 
 inputs :: NE.NonEmpty DefinedQuantityDict
 inputs = NE.map dqdWr inputsWUnitsUncrtn <> NE.map dqdWr inputsWUncrtn <>
-  NE.map dqdWr inputsNoUncrtn <> NE.map dqdWr sdVector
+  NE.map dqdWr inputsNoUncrtn <> sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: NE.NonEmpty UncertQ
@@ -89,8 +89,8 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
-pbTol = uq (constrained' (dqdNoUnit (cncpt''' (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
-  (S "the tolerable probability of breakage of the glass plate"))
+pbTol = uq (constrained' (quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
+  (S "the tolerable probability of breakage of the glass plate")
   (sub cP (Concat [lBreak, lTol])) Real)
   [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
@@ -100,12 +100,12 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (exactDbl 42) defaultUncrt
 
-tNT = uq (constrained' (dqdNoUnit (cncpt''' (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
-  (S "the TNT equivalent factor"))
+tNT = uq (constrained' (quantNoUnit (mkUid "tNT") (nounPhraseSP "TNT equivalent factor")
+  (S "the TNT equivalent factor")
   (variable "TNT") Real)
   [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
-standOffDist = uq (constrained' (uc stdOffDist (variable "SD") Real metre)
+standOffDist = uq (constrained' (dqd stdOffDist (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -118,7 +118,7 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
 outputs :: NE.NonEmpty DefinedQuantityDict
-outputs = NE.map dqdWr (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
+outputs = (isSafePb :| [isSafeLR]) <> NE.map dqdWr (probBr :| [stressDistFac])
 
 -- | Symbols uniquely relevant to theory models.
 tmSymbols :: [DefinedQuantityDict]
@@ -153,97 +153,97 @@ specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
   sdMin :: ConstQDef
 
-dimMax     = mkQuantDef (uc' "dimMax"
+dimMax     = mkQuantDef (quant (mkUid "dimMax")
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
   (S "the maximum value for one of the dimensions of the glass plate")
   (subMax lD) Real metre) (exactDbl 5)
 
-dimMin     = mkQuantDef (uc' "dimMin"
+dimMin     = mkQuantDef (quant (mkUid "dimMin")
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
   (S "the minimum value for one of the dimensions of the glass plate")
   (subMin lD) Real metre) (dbl 0.1)
 
-arMax     = mkQuantDef (dqdNoUnit (cncpt''' (mkUid "arMax")
+arMax     = mkQuantDef (quantNoUnit (mkUid "arMax")
   (nounPhraseSP "maximum aspect ratio")
-  (S "the maximum aspect ratio"))
+  (S "the maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
-cWeightMax = mkQuantDef (uc' "cWeightMax"
+cWeightMax = mkQuantDef (quant (mkUid "cWeightMax")
   (nounPhraseSP "maximum permissible input charge weight")
   (S "the maximum permissible input charge weight")
   (subMax (eqSymb charWeight)) Real kilogram) (exactDbl 910)
 
-cWeightMin = mkQuantDef (uc' "cWeightMin"
+cWeightMin = mkQuantDef (quant (mkUid "cWeightMin")
   (nounPhraseSP "minimum permissible input charge weight")
   (S "the minimum permissible input charge weight")
   (subMin (eqSymb charWeight)) Real kilogram) (dbl 4.5)
 
-sdMax     = mkQuantDef (uc' "sdMax"
+sdMax     = mkQuantDef (quant (mkUid "sdMax")
   (nounPhraseSP "maximum stand off distance permissible for input")
   (S "the maximum stand off distance permissible for input")
   (subMax (eqSymb standOffDist)) Real metre) (exactDbl 130)
 
-sdMin     = mkQuantDef (uc' "sdMin"
+sdMin     = mkQuantDef (quant (mkUid "sdMin")
   (nounPhraseSP "minimum stand off distance permissible for input")
   (S "the minimum stand off distance permissible for input")
   (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
 
-stressDistFacMin = mkQuantDef (dqdNoUnit (cncpt''' (mkUid "stressDistFacMin")
+stressDistFacMin = mkQuantDef (quantNoUnit (mkUid "stressDistFacMin")
   (nounPhraseSP "minimum value for the stress distribution factor")
-  (S "the minimum value for the stress distribution factor"))
+  (S "the minimum value for the stress distribution factor")
   (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
 
-stressDistFacMax = mkQuantDef (dqdNoUnit (cncpt''' (mkUid "stressDistFacMax")
+stressDistFacMax = mkQuantDef (quantNoUnit (mkUid "stressDistFacMax")
   (nounPhraseSP "maximum value for the stress distribution factor")
-  (S "the maximum value for the stress distribution factor"))
+  (S "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 
-unitalSymbols :: [UnitalChunk]
+unitalSymbols :: [DefinedQuantityDict]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
   sflawParamK, sflawParamM, loadDur, minThick]
 
-sdx, sdy, sdz :: UnitalChunk
+sdx, sdy, sdz :: DefinedQuantityDict
 
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
-  sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
+  sflawParamM, sflawParamK, loadDur, modElas :: DefinedQuantityDict
 
-demand      = uc demandq lQ Real pascal --correct Space used?
+demand      = dqd demandq lQ Real pascal --correct Space used?
 
-tmDemand    = uc load (variable "Load") Real pascal --correct Space used?
+tmDemand    = dqd load (variable "Load") Real pascal --correct Space used?
 
-lRe         = uc loadResis (variable "LR") Real pascal --correct Space used?
+lRe         = dqd loadResis (variable "LR") Real pascal --correct Space used?
 
-tmLRe       = uc capacity (variable "capacity") Real pascal --correct Space used?
+tmLRe       = dqd capacity (variable "capacity") Real pascal --correct Space used?
 
-nonFactorL  = uc nonFactoredL (variable "NFL") Real pascal --correct Space used?
+nonFactorL  = dqd nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
-eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
+eqTNTWeight = dqd eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
 
-modElas     = uc modE cE Real pascal
+modElas     = dqd modE cE Real pascal
 
-minThick    = uc' "minThick" (nounPhraseSP "minimum thickness")
+minThick    = quant (mkUid "minThick") (nounPhraseSP "minimum thickness")
   (S "minimum thickness of the glass plate") lH Real metre
 
-sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
+sflawParamK = quant (mkUid "sflawParamK") (nounPhraseSP "surface flaw parameter") --parameterize?
   (S ("surface flaw parameter related to the coefficient of " ++
     "variation of the glass strength data")) lK Real sFlawPU
 
-sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
+sflawParamM = quant (mkUid "sflawParamM") (nounPhraseSP "surface flaw parameter") --parameterize?
   (S "surface flaw parameter related to the mean of the glass strength data")
   lM Real sFlawPU
 
-loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
+loadDur     = quant (mkUid "loadDur")    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = uc' "sdx" (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
+sdx         = quant (mkUid "sdx") (compoundPhrase (standOffDist ^. term) (parensNP (xComp ^. term)))
   (S "the x-component of the stand off distance") (subX (eqSymb standOffDist)) Real metre
 
-sdy         = uc' "sdy" (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
+sdy         = quant (mkUid "sdy") (compoundPhrase (standOffDist ^. term) (parensNP (yComp ^. term)))
   (S "the y-component of the stand off distance") (subY (eqSymb standOffDist)) Real metre
 
-sdz         = uc' "sdz" (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
+sdz         = quant (mkUid "sdz") (compoundPhrase (standOffDist ^. term) (parensNP (zComp ^. term)))
   (S "the x-component of the stand off distance") (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}
@@ -260,36 +260,36 @@ riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
 
 gTF, loadSF, loadDF :: DefinedQuantityDict
 
-dimlessLoad = dqdNoUnit (cncpt''' (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
-  (S "the dimensionless load")) (hat lQ) Real
+dimlessLoad = quantNoUnit (mkUid "dimlessLoad") (nounPhraseSP "dimensionless load")
+  (S "the dimensionless load") (hat lQ) Real
 
 gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
 
-isSafePb   = dqdNoUnit (cncpt''' (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
-  (S "the probability of glass breakage safety requirement")) (variable "isSafePb") Boolean
-isSafeProb = dqdNoUnit (cncpt''' (mkUid "isSafeProb") (nounPhraseSP "probability of failure safety requirement")
-  (S "the probability of failure safety requirement")) (variable "isSafeProb") Boolean
-isSafeLR   = dqdNoUnit (cncpt''' (mkUid "isSafeLR")   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  (S "the 3 second load equivalent resistance safety requirement")) (variable "isSafeLR") Boolean
-isSafeLoad = dqdNoUnit (cncpt''' (mkUid "isSafeLoad") (nounPhraseSP "load resistance safety requirement")
-  (S "the load resistance safety requirement")) (variable "isSafeLoad") Boolean
+isSafePb   = quantNoUnit (mkUid "isSafePb") (nounPhraseSP "probability of glass breakage safety requirement")
+  (S "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
+isSafeProb = quantNoUnit (mkUid "isSafeProb") (nounPhraseSP "probability of failure safety requirement")
+  (S "the probability of failure safety requirement") (variable "isSafeProb") Boolean
+isSafeLR   = quantNoUnit (mkUid "isSafeLR")   (nounPhraseSP "3 second load equivalent resistance safety requirement")
+  (S "the 3 second load equivalent resistance safety requirement") (variable "isSafeLR") Boolean
+isSafeLoad = quantNoUnit (mkUid "isSafeLoad") (nounPhraseSP "load resistance safety requirement")
+  (S "the load resistance safety requirement") (variable "isSafeLoad") Boolean
 
-interpY = dqdNoUnit (cncpt''' (mkUid "interpY") (nounPhraseSP "interpY")
-  (S "interpolated y")) (variable "interpY") (mkFunction [String, Real, Real] Real)
-interpZ = dqdNoUnit (cncpt''' (mkUid "interpZ") (nounPhraseSP "interpZ")
-  (S "interpolated z")) (variable "interpZ") (mkFunction [String, Real, Real] Real)
+interpY = quantNoUnit (mkUid "interpY") (nounPhraseSP "interpY")
+  (S "interpolated y") (variable "interpY") (mkFunction [String, Real, Real] Real)
+interpZ = quantNoUnit (mkUid "interpZ") (nounPhraseSP "interpZ")
+  (S "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
-riskFun = dqdNoUnit (cncpt''' (mkUid "riskFun") (nounPhraseSP "risk of failure")
-  (S "the percentage risk of the glass slab failing to resist the blast")) cB Real
+riskFun = quantNoUnit (mkUid "riskFun") (nounPhraseSP "risk of failure")
+  (S "the percentage risk of the glass slab failing to resist the blast") cB Real
 
-sdfTol = dqdNoUnit (cncpt''' (mkUid "sdfTol") (nounPhraseSP "tolerable stress distribution factor")
-  (S "the tolerable stress distribution factor")) (sub (eqSymb stressDistFac) lTol) Real
+sdfTol = quantNoUnit (mkUid "sdfTol") (nounPhraseSP "tolerable stress distribution factor")
+  (S "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real
 
-tolLoad = dqdNoUnit (cncpt''' (mkUid "tolLoad") (nounPhraseSP "tolerable load")
-  (S "the tolerable load")) (sub (eqSymb dimlessLoad) lTol) Real
+tolLoad = quantNoUnit (mkUid "tolLoad") (nounPhraseSP "tolerable load")
+  (S "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
 
 lBreak, lDur, lFail, lTol :: Symbol
 lBreak = label "b"
@@ -317,7 +317,7 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVector :: NE.NonEmpty UnitalChunk
+sdVector :: NE.NonEmpty DefinedQuantityDict
 sdVector = sdx :| [sdy, sdz]
 
 --

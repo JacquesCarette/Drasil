@@ -18,6 +18,14 @@ class TestClass {
     static func add(_ t1: TestClass, _ t2: TestClass) -> TestClass {
         return TestClass(t1.a + t2.a)
     }
+    
+    func addToInstance(_ t: TestClass) -> TestClass {
+        return TestClass.add(self, t)
+    }
+    
+    static func addWithReferences(_ t1: TestClass, _ t2: TestClass) -> TestClass {
+        return TestClass(t1.a + t2.a)
+    }
 }
 
 // Initializing variables
@@ -78,6 +86,12 @@ var t2: TestClass = TestClass(4)
 var t3: TestClass = TestClass.add(t1, t2)
 print("Value of t3.a: ", terminator: "")
 print(t3.a)
+var t4: TestClass = t3.addToInstance(t2)
+print("Value of t4.a: ", terminator: "")
+print(t4.a)
+var t5: TestClass = TestClass.addWithReferences(t3, t4)
+print("Value of t5.a: ", terminator: "")
+print(t5.a)
 
 // List slicing tests
 // Create variables for list slices

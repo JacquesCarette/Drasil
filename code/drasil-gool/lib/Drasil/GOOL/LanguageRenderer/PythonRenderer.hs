@@ -18,26 +18,27 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Array(..),
-  List(..), Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
-  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfMethodCall,
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
+  OOValueExpression(..), selfMethodCall, OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
@@ -55,7 +56,7 @@ import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
   parameterList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  classVarAccess, listSetFunc, castObj, instanceLevel, break, continue, addComments,
+  classVarAccess, castObj, instanceLevel, break, continue, addComments,
   commentedMod, commentedItem, var)
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
@@ -68,7 +69,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
   subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
@@ -154,12 +155,8 @@ instance RenderFile PythonCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym PythonCode where
-  type Import PythonCode = Doc
   langImport n = toCode $ importLabel <+> text n
   modImport = langImport
-
-instance ImportElim PythonCode where
-  import' = unPC
 
 instance AttachmentSym PythonCode where
   type Attachment PythonCode = AttachmentData
@@ -279,9 +276,6 @@ instance OOVariableSym PythonCode where
 
 instance SelfSym PythonCode where
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
-
-instance InstanceVarSelfSym PythonCode where
-  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim PythonCode where
   variableName = varName . unPC
@@ -441,6 +435,10 @@ instance IndexTranslator PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Reference PythonCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array PythonCode where
   arrayElem = G.arrayElem
   arrayLength = listSize
@@ -453,7 +451,7 @@ instance List PythonCode where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
@@ -472,7 +470,6 @@ instance InternalGetSet PythonCode where
 
 instance InternalListFunc PythonCode where
   listAccessFunc = CS.listAccessFunc
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym PythonCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -743,12 +740,12 @@ instance ModuleSym PythonCode where
     mis <- getModuleImports
     pure $ vibcat [
       vcat (map (RC.import' .
-        (langImport :: Label -> PythonCode (Import PythonCode))) lis),
+        (langImport :: Label -> PythonCode Doc)) lis),
       vcat (map (RC.import' .
-        (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++
+        (langImport :: Label -> PythonCode Doc)) (sort $ is ++
         libis)),
       vcat (map (RC.import' .
-        (modImport :: Label -> PythonCode (Import PythonCode))) mis)])
+        (modImport :: Label -> PythonCode Doc)) mis)])
     (pure empty) getMainDoc
 
 instance RenderMod PythonCode where

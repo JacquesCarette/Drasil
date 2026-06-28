@@ -1,21 +1,15 @@
 module Language.Drasil.Chunk.CodeBase (
-  quantvar, quantfunc, codevars, codevars', varResolve
+  codevars, codevars', varResolve
 ) where
 
 import Drasil.Database (ChunkDB, findOrErr, UID)
 import Language.Drasil
 
 import Drasil.Code.CodeExpr.Development
-import Drasil.Code.CodeVar (CodeChunk(..), VarOrFunc(..), CodeFuncChunk(..),
-  CodeVarChunk(..))
+import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
 
--- | Construct a 'CodeVarChunk' from a 'Quantity'.
-quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
-quantvar c = CodeVC (CodeC (dqdWr c) Var) Nothing
-
--- | Construct a 'CodeFuncChunk' from a 'Quantity'.
-quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
-quantfunc c = CodeFC $ CodeC (dqdWr c) Func
+-- FIXME: These extractors are crucial to code generation!!! They don't look
+-- like they should be needed at all!
 
 -- | Get a list of 'CodeChunk's from an equation.
 codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]

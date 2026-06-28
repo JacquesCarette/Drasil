@@ -54,7 +54,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
   ifCond)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
-  functionDoc, docInOutFunc', inOutCall, multiAssign)
+  functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt')
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp,
   litTrue, litFalse)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
@@ -331,8 +331,8 @@ instance ValueElim MatlabCode where
   value = val . unMLC
 
 instance IndexTranslator MatlabCode where
-  intToIndex = undefined
-  indexToInt = undefined
+  intToIndex = CP.intToIndex'
+  indexToInt = CP.indexToInt'
 
 instance Array MatlabCode where
   arrayElem = undefined
@@ -642,7 +642,7 @@ mlArg n' = do
 mlVecIndex :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
 mlVecIndex v' i' = do
   v <- v'
-  i <- i' #+ litInt 1
+  i <- intToIndex i'
   d <- double
   mkVal d (RC.value v <> parens (RC.value i))
 

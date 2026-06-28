@@ -84,7 +84,7 @@ gProcMatlabTestGroup n p =
     [ goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
     ]
 
-genCodeProcNoMake :: (ProcProg r, SoftwareDossierSym r', Monad r') =>
+genCodeProcNoMake :: (ProcProg r, Monad r') =>
   (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
   (forall s. (ProcProg s) => Proc.GSProgram s) -> [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =

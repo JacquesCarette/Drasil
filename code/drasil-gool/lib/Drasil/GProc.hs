@@ -10,7 +10,8 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, FunctionSym(..), Array(..), List(..), Set(..),  listSlice,
+  libFuncApp, exists, FunctionSym(..), Array(..), List(..), Set(..),
+  NativeVector(..), listSlice,
   listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
   ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
@@ -30,7 +31,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, Array(..), List(..), Set(..), listSlice, listIndexExists,
+  libFuncApp, exists, Array(..), List(..), Set(..), NativeVector(..), listSlice, listIndexExists,
   at, ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   getCodeType, getTypeString)

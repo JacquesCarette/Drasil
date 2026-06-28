@@ -408,6 +408,8 @@ instance NativeVector JuliaCode where
   vecAdd = undefined
   vecIndex = undefined
   vecDot = undefined
+  vecMag = undefined
+  vecUnit = undefined
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)

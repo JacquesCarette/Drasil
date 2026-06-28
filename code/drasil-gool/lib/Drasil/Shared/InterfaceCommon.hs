@@ -349,6 +349,12 @@ class (IndexTranslator r) => NativeVector r where
   -- | Dot product of two vectors (returns a scalar).
   --   Arguments are: Vector, Vector
   vecDot :: SValue r -> SValue r -> SValue r
+  -- | Euclidean norm (magnitude) of a vector (returns a scalar).
+  --   Argument is: Vector
+  vecMag :: SValue r -> SValue r
+  -- | Unit vector in the direction of a vector (returns a vector).
+  --   Argument is: Vector
+  vecUnit :: SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)

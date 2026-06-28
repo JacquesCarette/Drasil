@@ -68,7 +68,7 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal,
   compEqualPrec, typeUnExpr, typeBinExpr)
-import Drasil.Shared.LanguageRenderer (listSep')
+import Drasil.Shared.LanguageRenderer (listSep', valueList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
@@ -160,9 +160,9 @@ instance TypeSym MatlabCode where
   infile = mlTy InFile "file"
   outfile = mlTy OutFile "file"
   referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
-  listType = undefined
+  listType = mlListType
   setType = undefined
-  arrayType = undefined
+  arrayType = listType -- Treat arrays and lists the same, as in Julia/Python
   innerType = undefined
   funcType = undefined
   void = mlTy Void "void"
@@ -251,8 +251,8 @@ instance Literal MatlabCode where
   litFloat = undefined
   litInt = G.litInt
   litString = G.litString
-  litArray = undefined
-  litList = undefined
+  litArray = litList
+  litList = mlLitList
   litSet = undefined
 
 instance MathConstant MatlabCode where
@@ -340,7 +340,7 @@ instance Array MatlabCode where
   arrayCopy = undefined
 
 instance List MatlabCode where
-  listSize = undefined
+  listSize v = funcApp "length" int [v]   -- length(v)
   listAdd = undefined
   listAppend = undefined
   listAccess = undefined
@@ -358,6 +358,8 @@ instance NativeVector MatlabCode where
   vecAdd   = binExpr plusOp           -- a + b
   vecIndex = mlVecIndex               -- v(i + 1)
   vecDot a b = funcApp "dot" double [a, b]   -- dot(a, b)
+  vecMag a = funcApp "norm" double [a]       -- norm(a)
+  vecUnit a = a #/ vecMag a                  -- a / norm(a)
 
 instance InternalList MatlabCode where
   listSlice' = undefined
@@ -645,6 +647,19 @@ mlVecIndex v' i' = do
   i <- intToIndex i'
   d <- double
   mkVal d (RC.value v <> parens (RC.value i))
+
+-- | A list/vector type. MATLAB never writes types, so only the underlying
+--   'CodeType' matters; arrays and lists share this native vector type.
+mlListType :: VSType MatlabCode -> VSType MatlabCode
+mlListType t' = do
+  t <- t'
+  mlTy (List $ getCodeType t) "vector"
+
+-- | A vector literal, rendered as a MATLAB row vector.
+mlLitList :: VSType MatlabCode -> [SValue MatlabCode] -> SValue MatlabCode
+mlLitList t es = do
+  elems <- sequence es
+  mkStateVal (listType t) (brackets (valueList elems))
 
 -- | Reads one line from a file as text: fgetl(f).
 mlReadLine :: SValue MatlabCode -> SValue MatlabCode

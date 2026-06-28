@@ -222,6 +222,8 @@ instance NativeVector CodeInfoProc where
   vecAdd = execute2
   vecIndex = execute2
   vecDot = execute2
+  vecMag = execute1
+  vecUnit = execute1
 
 instance InternalList CodeInfoProc where
   listSlice' b e s _ vl = zoom lensMStoVS $ do

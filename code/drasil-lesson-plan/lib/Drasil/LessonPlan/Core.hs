@@ -2,6 +2,7 @@
 module Drasil.LessonPlan.Core (
   LessonPlan,
   mkLessonPlan,
+  lessonName,
   lsnPlanRefs
 ) where
 
@@ -15,6 +16,7 @@ import Drasil.System (SystemMeta, HasSystemMeta(..))
 
 data LessonPlan = LP {
   _sm :: SystemMeta,
+  _lessonName :: String,
   _lsnPlanRefs :: M.Map UID Reference
 }
 makeLenses ''LessonPlan
@@ -22,7 +24,9 @@ makeLenses ''LessonPlan
 instance HasSystemMeta LessonPlan where
   systemMeta = sm
 
-mkLessonPlan :: SystemMeta -> [Reference] -> LessonPlan
-mkLessonPlan m rs = LP m refs
+-- | Build a 'LessonPlan'. The 'String' is used to derive an output folder
+-- name for generated lesson artifacts (see 'caseStudyMainLsnPlan').
+mkLessonPlan :: String -> SystemMeta -> [Reference] -> LessonPlan
+mkLessonPlan nm m rs = LP m nm refs
   where
     refs = M.fromList $ map (\r -> (r ^. uid, r)) rs

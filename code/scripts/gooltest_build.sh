@@ -18,9 +18,13 @@ for test in */; do
   TEST_DIR=$(pwd)
   for lang in */; do
     cd "$lang" || exit 1
-    # shellcheck disable=SC2086
-    "$MAKE" $TARGET
-    RET=$(( RET || $? ))
+    # Skip interpreted languages with no build step (e.g. MATLAB), which
+    # generate no Makefile.
+    if [ -f Makefile ]; then
+      # shellcheck disable=SC2086
+      "$MAKE" $TARGET
+      RET=$(( RET || $? ))
+    fi
     cd "$TEST_DIR" || exit 1
   done
   cd "$E_DIR" || exit 1

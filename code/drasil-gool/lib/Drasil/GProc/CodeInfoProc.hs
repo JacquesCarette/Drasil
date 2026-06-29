@@ -9,7 +9,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSType,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
+  StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
@@ -221,6 +222,14 @@ instance Set CodeInfoProc where
  setAdd = execute2
  setRemove = execute2
  setUnion = execute2
+
+instance NativeVector CodeInfoProc where
+  vecScale = execute2
+  vecAdd = execute2
+  vecIndex = execute2
+  vecDot = execute2
+  vecMag = execute1
+  vecUnit = execute1
 
 instance InternalList CodeInfoProc where
   listSlice' b e s _ vl = zoom lensMStoVS $ do

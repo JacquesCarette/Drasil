@@ -13,18 +13,19 @@ import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   GOOLState)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
-import Drasil.GProc (ProcProg, unJLC)
+import Drasil.GProc (ProcProg, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
+import VectorTest (vectorTestProc)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 
 -- | Renders four GOOL tests (FileTests, HelloWorld, PatternTest, and NameGenTest)
@@ -47,7 +48,8 @@ codeGenTestGroup =
         "GProc"
         [ gProcTestGroup "HelloWorldProc" helloWorldProc,
           gProcTestGroup "FileTestsProc" fileTestsProc,
-          gProcTestGroup "NameGenTestProc" nameGenTestProc
+          gProcTestGroup "NameGenTestProc" nameGenTestProc,
+          gProcMatlabTestGroup "VectorTestProc" vectorTestProc
         ]
     ]
 
@@ -72,6 +74,25 @@ gProcTestGroup n p =
     n
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
+
+gProcMatlabTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
+gProcMatlabTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
+    ]
+
+genCodeProcNoMake :: (ProcProg r, Monad r') =>
+  (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
+  (forall s. (ProcProg s) => Proc.GSProgram s) -> [FileLayout]
+genCodeProcNoMake unRepr unRepr' p =
+  let
+    gs = Proc.unCI (evalState p initialState)
+    (p', gs') = runState p gs
+    (PackageData prog aux) = unRepr' $ package (unRepr p') []
+  in seq gs' $ toFileLayout (progMods prog) ++ aux
 
 genCodeGOOL :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
   (r' PackageData -> PackageData) -> (forall s. (OOProg s) => OO.GSProgram s) -> [FileLayout]

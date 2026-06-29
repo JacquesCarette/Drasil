@@ -4,6 +4,7 @@ module Drasil.DblPend.Unitals (
   lenRod_1, lenRod_2, pendDisAngle_1, pendDisAngle_2,
   xPos_1, xPos_2, yPos_1, yPos_2,
   xVel_1, xVel_2, yVel_1, yVel_2, xAccel_1, xAccel_2, yAccel_1, yAccel_2,
+  xForce_1, xForce_2, yForce_1, yForce_2,
   massObj_1, massObj_2, tension_1, tension_2, angularVel_1,  angularVel_2,
   angularAccel_1, angularAccel_2
 ) where
@@ -15,7 +16,7 @@ import Drasil.Database (mkUid)
 import Language.Drasil
 import qualified Language.Drasil.Development as D (toSent)
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.ShortHands (cL, cT, lA, lAlpha, lM, lP, lTheta, lV, lW)
+import Language.Drasil.ShortHands (cF, cL, cT, lA, lAlpha, lM, lP, lTheta, lV, lW)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -29,7 +30,7 @@ import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, horizontalPos,
-  verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
+  verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel, horizontalForce, verticalForce)
 
 symbols:: [DefinedQuantityDict]
 symbols = unitalChunks ++ [dqdWr pendDisAngle] ++ map dqdWr constants
@@ -48,6 +49,7 @@ unitalChunks = [len,
   lenRod_1, lenRod_2, massObj_1, massObj_2,
   pendDisAngle_1, pendDisAngle_2, angularVel_1, angularVel_2,
   xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1,
+  xForce_1, xForce_2, yForce_1, yForce_2,
   yAccel_1, xAccel_2, yAccel_2, angularAccel_1, angularAccel_2, tension_1,
   tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.acceleration,
   QP.time, QP.velocity, QP.position]
@@ -55,7 +57,7 @@ unitalChunks = [len,
 lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
-  yAccel_1, xAccel_2, yAccel_2,
+  yAccel_1, xAccel_2, yAccel_2, xForce_1, xForce_2, yForce_1, yForce_2,
   angularAccel_1, angularAccel_2, tension_1, tension_2 :: DefinedQuantityDict
 
 lenRod_1 = quant (mkUid "l_1") (len `ofThe` firstRod)
@@ -121,6 +123,22 @@ yAccel_1 = quant (mkUid "a_y1") (verticalAccel `ofThe` firstObject)
 yAccel_2 = quant (mkUid "a_y2") (verticalAccel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
         (sub lA (Concat [labely, label2])) Real accelU
+
+xForce_1 = quant (mkUid "F_x1") (horizontalForce `onThe` firstObject)
+        (D.toSent (phraseNP (QP.force `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
+        (sub cF (Concat [labelx, label1])) Real newton
+
+xForce_2 = quant (mkUid "F_x2") (horizontalForce `onThe` secondObject)
+        (D.toSent (phraseNP (QP.force `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
+        (sub cF (Concat [labelx, label2])) Real newton
+
+yForce_1 = quant (mkUid "F_y1") (verticalForce `onThe` firstObject)
+        (D.toSent (phraseNP (QP.force `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
+        (sub cF (Concat [labely, label1])) Real newton
+
+yForce_2 = quant (mkUid "F_y2") (verticalForce `onThe` secondObject)
+        (D.toSent (phraseNP (QP.force `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
+        (sub cF (Concat [labely, label2])) Real newton
 
 angularAccel_1 = quant (mkUid "alpha_x1") (QP.angularAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularAccel `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)

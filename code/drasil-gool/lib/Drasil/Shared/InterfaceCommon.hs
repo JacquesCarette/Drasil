@@ -1,5 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.Shared.InterfaceCommon (
@@ -40,13 +40,14 @@ type Library = String
 -- TODO [Brandon Bosman, 06/09/2026]: UnRepr can be removed from SharedProg
 -- if we can root out its use from drasil-code
 
-class (UnRepr r TypeData, AssignStatement r, DeclStatement r, IOStatement r,
-  StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r,
-  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, ValueExpression r, IndexTranslator r, Array r, List r, Set r,
-  VariableElim r, MethodSym r, ScopeSym r, BinderSym r, Reference r
-  ) => SharedProg r
+class (UnRepr r TypeData, TypeElim r s, AssignStatement r s, DeclStatement r s,
+  IOStatement r s, StringStatement r s, FunctionSym r s, FuncAppStatement r s,
+  CommentStatement r s, ControlStatement r s, InternalList r s, Argument r s,
+  Literal r s, MathConstant r s, VariableValue r s, CommandLineArgs r s,
+  NumericExpression r s, BooleanExpression r s, Comparison r s,
+  ValueExpression r s, IndexTranslator r s, Array r s, List r s, Set r s,
+  VariableElim r s, MethodSym r s, ScopeSym r, BinderSym r s, Reference r s
+  ) => SharedProg r s
 
 -- Shared between OO and Procedural --
 
@@ -55,46 +56,42 @@ class UnRepr repr contents where
 
 type MSBody a = MS (a (Body a))
 
-class (BlockSym r) => BodySym r where
+class (BlockSym r s) => BodySym r s where
   type Body r
   body           :: [MSBlock r] -> MSBody r
 
   addComments :: Label -> MSBody r -> MSBody r
 
-bodyStatements :: (BodySym r) => [MSStatement r] -> MSBody r
+bodyStatements :: (BodySym r s) => [MSStatement r] -> MSBody r
 bodyStatements sts = body [block sts]
 
-oneLiner :: (BodySym r) => MSStatement r -> MSBody r
+oneLiner :: (BodySym r s) => MSStatement r -> MSBody r
 oneLiner s = bodyStatements [s]
 
 type MSBlock a = MS (a (Block a))
 
-class (StatementSym r) => BlockSym r where
+class (StatementSym r s) => BlockSym r s where
   type Block r
   block   :: [MSStatement r] -> MSBlock r
 
-class TypeSym r where
-  bool          :: VS (r TypeData)
-  int           :: VS (r TypeData) -- This is 32-bit signed ints except in Python,
+class TypeSym r s | r -> s where
+  bool          :: VS (r s)
+  int           :: VS (r s) -- This is 32-bit signed ints except in Python,
                             -- which has unlimited precision ints; and Julia,
                             -- Which defaults to 64-bit signed ints
-  float         :: VS (r TypeData)
-  double        :: VS (r TypeData)
-  char          :: VS (r TypeData)
-  string        :: VS (r TypeData)
-  infile        :: VS (r TypeData)
-  outfile       :: VS (r TypeData)
-  referenceType :: VS (r TypeData) -> VS (r TypeData)
-  listType      :: VS (r TypeData) -> VS (r TypeData)
-  setType       :: VS (r TypeData) -> VS (r TypeData)
-  arrayType     :: VS (r TypeData) -> VS (r TypeData)
-  innerType     :: VS (r TypeData) -> VS (r TypeData)
-  funcType      :: [VS (r TypeData)] -> VS (r TypeData) -> VS (r TypeData)
-  void          :: VS (r TypeData)
-
--- | A helper function for extracting the CodeType from an `r TypeData`
-getCodeType :: (UnRepr r TypeData) => r TypeData -> CodeType
-getCodeType = cType . unRepr
+  float         :: VS (r s)
+  double        :: VS (r s)
+  char          :: VS (r s)
+  string        :: VS (r s)
+  infile        :: VS (r s)
+  outfile       :: VS (r s)
+  referenceType :: VS (r s) -> VS (r s)
+  listType      :: VS (r s) -> VS (r s)
+  setType       :: VS (r s) -> VS (r s)
+  arrayType     :: VS (r s) -> VS (r s)
+  innerType     :: VS (r s) -> VS (r s)
+  funcType      :: [VS (r s)] -> VS (r s) -> VS (r s)
+  void          :: VS (r s)
 
 -- TODO [Brandon Bosman, 06/09/2026]: Think about separating GOOL and GProc implementations of this
 -- | A helper function for extracting the String representation from an `r TypeData`
@@ -108,37 +105,40 @@ class ScopeSym r where
 
 type SVariable a = VS (a (Variable a))
 
-class (TypeSym r) => VariableSym r where
+class (TypeSym r s) => VariableSym r s where
   type Variable r
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
-  var       :: Label -> VS (r TypeData) -> SVariable r
+  var       :: Label -> VS (r s) -> SVariable r
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
-  constant  :: Label -> VS (r TypeData) -> SVariable r
+  constant  :: Label -> VS (r s) -> SVariable r
   -- | An instance- or module-level variable from an external library.
   -- Given library `Lib`, variable name `v`, and variable type `t`,
   -- it performs the necessary imports and creates `Lib.v`
-  extVar    :: Library -> Label -> VS (r TypeData) -> SVariable r
+  extVar    :: Library -> Label -> VS (r s) -> SVariable r
 
-class (VariableSym r) => VariableElim r where
+class (VariableSym r s) => VariableElim r s where
   variableName :: r (Variable r) -> String
-  variableType :: r (Variable r) -> r TypeData
+  variableType :: r (Variable r) -> r s
 
-listVar :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
+listVar :: (VariableSym r s) => Label -> VS (r s) -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
+listOf :: (VariableSym r s) => Label -> VS (r s) -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
 
-class (TypeSym r) => ValueSym r where
+class (TypeSym r s) => ValueSym r s where
   type Value r
-  valueType :: r (Value r) -> r TypeData
+  valueType :: r (Value r) -> r s
 
-class (ValueSym r) => Argument r where
+class (TypeSym r s) => TypeElim r s where
+  getCodeType :: r s -> CodeType
+
+class (ValueSym r s) => Argument r s where
   pointerArg :: SValue r -> SValue r
 
-class (ValueSym r) => Literal r where
+class (ValueSym r s) => Literal r s where
   litTrue   :: SValue r
   litFalse  :: SValue r
   litChar   :: Char -> SValue r
@@ -146,11 +146,11 @@ class (ValueSym r) => Literal r where
   litFloat  :: Float -> SValue r
   litInt    :: Integer -> SValue r
   litString :: String -> SValue r
-  litArray  :: VS (r TypeData) -> [SValue r] -> SValue r
-  litList   :: VS (r TypeData) -> [SValue r] -> SValue r
-  litSet    :: VS (r TypeData) -> [SValue r] -> SValue r
+  litArray  :: VS (r s) -> [SValue r] -> SValue r
+  litList   :: VS (r s) -> [SValue r] -> SValue r
+  litSet    :: VS (r s) -> [SValue r] -> SValue r
 
-litZero :: (Literal r, UnRepr r TypeData) => VS (r TypeData) -> SValue r
+litZero :: (Literal r s, TypeElim r s) => VS (r s) -> SValue r
 litZero t = do
   t' <- t
   case getCodeType t' of
@@ -159,18 +159,18 @@ litZero t = do
     Double -> litDouble 0
     _ -> error "litZero expects a numeric type"
 
-class (ValueSym r) => MathConstant r where
+class (ValueSym r s) => MathConstant r s where
   pi :: SValue r
 
-class (VariableSym r, ValueSym r) => VariableValue r where
+class (VariableSym r s, ValueSym r s) => VariableValue r s where
   valueOf       :: SVariable r -> SValue r
 
-class (ValueSym r) => CommandLineArgs r where
+class (ValueSym r s) => CommandLineArgs r s where
   arg          :: Integer -> SValue r
   argsList     :: SValue r
   argExists    :: Integer -> SValue r
 
-class (ValueSym r) => NumericExpression r where
+class (ValueSym r s) => NumericExpression r s where
   (#~)  :: SValue r -> SValue r
   infixl 8 #~ -- Negation
   (#/^) :: SValue r -> SValue r
@@ -205,7 +205,7 @@ class (ValueSym r) => NumericExpression r where
   floor  :: SValue r -> SValue r
   ceil   :: SValue r -> SValue r
 
-class (ValueSym r) => BooleanExpression r where
+class (ValueSym r s) => BooleanExpression r s where
   (?!)  :: SValue r -> SValue r
   infixr 6 ?! -- Boolean 'not'
   (?&&) :: SValue r -> SValue r -> SValue r
@@ -213,7 +213,7 @@ class (ValueSym r) => BooleanExpression r where
   (?||) :: SValue r -> SValue r -> SValue r
   infixl 1 ?||
 
-class (ValueSym r) => Comparison r where
+class (ValueSym r s) => Comparison r s where
   (?<)  :: SValue r -> SValue r -> SValue r
   infixl 4 ?<
   (?<=) :: SValue r -> SValue r -> SValue r
@@ -227,56 +227,56 @@ class (ValueSym r) => Comparison r where
   (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
 
-type NamedArgs r = [(SVariable r, SValue r)]
+type NamedArgs r s = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments
-type MixedCall r = Label -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> SValue r
+type MixedCall r s = Label -> VS (r s) -> [SValue r] -> NamedArgs r s -> SValue r
 -- Constructor call with both positional and named arguments
-type MixedCtorCall r = VS (r TypeData) -> [SValue r] -> NamedArgs r -> SValue r
+type MixedCtorCall r s = VS (r s) -> [SValue r] -> NamedArgs r s -> SValue r
 -- Function call with only positional arguments
-type PosCall r = Label -> VS (r TypeData) -> [SValue r] -> SValue r
+type PosCall r s = Label -> VS (r s) -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
-type PosCtorCall r = VS (r TypeData) -> [SValue r] -> SValue r
+type PosCtorCall r s = VS (r s) -> [SValue r] -> SValue r
 
 type VSBinder a = VS (a BinderD)
 
-class (TypeSym r) => BinderSym r where
-  binder :: Label -> VS (r TypeData) -> VSBinder r
+class (TypeSym r s) => BinderSym r s where
+  binder :: Label -> VS (r s) -> VSBinder r
 
-class (BinderSym r) => BinderElim r where
+class (BinderSym r s) => BinderElim r s where
   binderName :: r BinderD -> String
-  binderType :: r BinderD -> r TypeData
+  binderType :: r BinderD -> r s
 
 -- for values that can include expressions
-class (VariableSym r, ValueSym r) => ValueExpression r where
+class (VariableSym r s, ValueSym r s) => ValueExpression r s where
   -- An inline if-statement, aka the ternary operator.  Inputs:
   -- Condition, True-value, False-value
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
 
-  funcAppMixedArgs     ::            MixedCall r
-  extFuncAppMixedArgs  :: Library -> MixedCall r
-  libFuncAppMixedArgs  :: Library -> MixedCall r
+  funcAppMixedArgs     ::            MixedCall r s
+  extFuncAppMixedArgs  :: Library -> MixedCall r s
+  libFuncAppMixedArgs  :: Library -> MixedCall r s
 
   lambda :: [VSBinder r] -> SValue r -> SValue r
 
   notNull :: SValue r -> SValue r
 
-funcApp          :: (ValueExpression r) =>            PosCall r
+funcApp          :: (ValueExpression r s) =>            PosCall r s
 funcApp n t vs = funcAppMixedArgs n t vs []
 
-funcAppNamedArgs :: (ValueExpression r) =>            Label -> VS (r TypeData) ->
-  NamedArgs r -> SValue r
+funcAppNamedArgs :: (ValueExpression r s) =>            Label -> VS (r s) ->
+  NamedArgs r s -> SValue r
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
-extFuncApp       :: (ValueExpression r) => Library -> PosCall r
+extFuncApp       :: (ValueExpression r s) => Library -> PosCall r s
 extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
-libFuncApp       :: (ValueExpression r) => Library -> PosCall r
+libFuncApp       :: (ValueExpression r s) => Library -> PosCall r s
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-exists :: (ValueExpression r) => SValue r -> SValue r
+exists :: (ValueExpression r s) => SValue r -> SValue r
 exists = notNull
 
-class (ValueSym r) => IndexTranslator r where
+class (ValueSym r s) => IndexTranslator r s where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
   --   the target language's assumptions
   intToIndex :: SValue r -> SValue r
@@ -286,14 +286,14 @@ class (ValueSym r) => IndexTranslator r where
   -- | Finds the size of a list.
   --   Arguments are: List
 
-class (TypeSym r, ValueSym r) => Reference r where
+class (TypeSym r s, ValueSym r s) => Reference r s where
   -- | Given a value, convert it to a reference to that value
   makeRef :: SValue r -> SValue r
   -- | Given a value that may be a reference type,
   -- apply any necessary dereference operation.
   maybeDeref :: SValue r -> SValue r
 
-class (IndexTranslator r) => Array r where
+class (IndexTranslator r s) => Array r s where
   -- TODO [Brandon Bosman, 05/19/2026]: Change return type to SValue
   -- | Given array `a` and index `i`, creates `a[i]`
   arrayElem :: SValue r -> SVariable r -> SVariable r
@@ -306,7 +306,7 @@ class (IndexTranslator r) => Array r where
   -- | Given a source array, create a (shallow) copy of it
   arrayCopy :: SValue r -> SValue r
 
-class (IndexTranslator r) => List r where
+class (IndexTranslator r s) => List r s where
   listSize   :: SValue r -> SValue r
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
@@ -324,7 +324,7 @@ class (IndexTranslator r) => List r where
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
-class (ValueSym r) => Set r where
+class (ValueSym r s) => Set r s where
   -- | Checks membership
   -- Arguments are: Set, Value
   contains :: SValue r -> SValue r -> SValue r
@@ -338,7 +338,7 @@ class (ValueSym r) => Set r where
   -- Arguments are: Set, Set
   setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this MSStatement
 
-class (ValueSym r) => InternalList r where
+class (ValueSym r s) => InternalList r s where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
     -> SVariable r -> SValue r -> MSBlock r
 
@@ -351,25 +351,25 @@ class (ValueSym r) => InternalList r where
 --   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
-listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) ->
+listSlice :: (InternalList r s) => SVariable r -> SValue r -> Maybe (SValue r) ->
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
-listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
+listIndexExists :: (List r s, Comparison r s) => SValue r -> SValue r -> SValue r
 listIndexExists lst index = listSize lst ?> index
 
-at :: (List r) => SValue r -> SValue r -> SValue r
+at :: (List r s) => SValue r -> SValue r -> SValue r
 at = listAccess
 
 type MSStatement a = MS (a (Statement a))
 
-class (ValueSym r) => StatementSym r where
+class (ValueSym r s) => StatementSym r s where
   type Statement r
   valStmt :: SValue r -> MSStatement r -- converts value to statement
   emptyStmt :: MSStatement r
   multi     :: [MSStatement r] -> MSStatement r
 
-class (VariableSym r, StatementSym r) => AssignStatement r where
+class (VariableSym r s, StatementSym r s) => AssignStatement r s where
   (&-=)  :: SVariable r -> SValue r -> MSStatement r
   infixl 1 &-=
   (&+=)  :: SVariable r -> SValue r -> MSStatement r
@@ -381,11 +381,11 @@ class (VariableSym r, StatementSym r) => AssignStatement r where
 
   assign :: SVariable r -> SValue r -> MSStatement r
 
-(&=) :: (AssignStatement r) => SVariable r -> SValue r -> MSStatement r
+(&=) :: (AssignStatement r s) => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
 (&=) = assign
 
-class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
+class (VariableSym r s, StatementSym r s, ScopeSym r) => DeclStatement r s where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
   varDec       :: SVariable r -> r ScopeData -> MSStatement r
@@ -404,7 +404,7 @@ class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MSBody r
     -> MSStatement r
 
-class (VariableSym r, StatementSym r) => IOStatement r where
+class (VariableSym r s, StatementSym r s) => IOStatement r s where
   print      :: SValue r -> MSStatement r
   printLn    :: SValue r -> MSStatement r
   printStr   :: String -> MSStatement r
@@ -430,7 +430,7 @@ class (VariableSym r, StatementSym r) => IOStatement r where
   discardFileLine  :: SValue r -> MSStatement r
   getFileInputAll  :: SValue r -> SVariable r -> MSStatement r
 
-class (VariableSym r, StatementSym r) => StringStatement r where
+class (VariableSym r s, StatementSym r s) => StringStatement r s where
   -- Parameters are: char to split on, variable to store result in, string to split
   stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
@@ -440,21 +440,21 @@ class (VariableSym r, StatementSym r) => StringStatement r where
 
 type VSFunction a = VS (a (Function a))
 
-class (ValueSym r) => FunctionSym r where
+class (ValueSym r s) => FunctionSym r s where
   type Function r
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
   MSStatement r
 
-class (VariableSym r, StatementSym r) => FuncAppStatement r where
+class (VariableSym r s, StatementSym r s) => FuncAppStatement r s where
   inOutCall    ::            InOutCall r
   extInOutCall :: Library -> InOutCall r
 
-class (StatementSym r) => CommentStatement r where
+class (StatementSym r s) => CommentStatement r s where
   comment :: String -> MSStatement r
 
-class (BodySym r, VariableSym r) => ControlStatement r where
+class (BodySym r s, VariableSym r s) => ControlStatement r s where
   break :: MSStatement r
   continue :: MSStatement r
 
@@ -482,10 +482,10 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   assert :: SValue r -> SValue r -> MSStatement r
 
-ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] -> MSStatement r
+ifNoElse :: (ControlStatement r s) => [(SValue r, MSBody r)] -> MSStatement r
 ifNoElse bs = ifCond bs $ body []
 
-switchAsIf :: (ControlStatement r, Comparison r) => SValue r ->
+switchAsIf :: (ControlStatement r s, Comparison r s) => SValue r ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switchAsIf v = ifCond . map (first (v ?==))
 
@@ -496,7 +496,7 @@ class VisibilitySym r where
 
 type MSParameter a = MS (a (Parameter a))
 
-class (VariableSym r) => ParameterSym r where
+class (VariableSym r s) => ParameterSym r s where
   type Parameter r
   param :: SVariable r -> MSParameter r
   pointerParam :: SVariable r -> MSParameter r
@@ -512,12 +512,12 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] ->
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
+class (BodySym r s, ParameterSym r s, VisibilitySym r) => MethodSym r s
   where
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Visibility r) -> VS (r TypeData) -> [MSParameter r] ->
+  function :: Label -> r (Visibility r) -> VS (r s) -> [MSParameter r] ->
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions,
@@ -529,7 +529,7 @@ class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
 
 -- Utility
 
-convType :: (TypeSym r) => CodeType -> VS (r TypeData)
+convType :: (TypeSym r s) => CodeType -> VS (r s)
 convType Boolean = bool
 convType Integer = int
 convType Float = float

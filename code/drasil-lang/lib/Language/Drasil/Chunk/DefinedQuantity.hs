@@ -12,9 +12,9 @@ module Language.Drasil.Chunk.DefinedQuantity (
   referenceToDefinedQuantityDict
 ) where
 
-import Control.Lens ((^.), makeLenses, view, Getter, set)
+import Control.Lens ((^.), makeLenses, view, Getter)
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, (+++))
 import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
@@ -177,7 +177,9 @@ dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | Given a DefinedQuantityDict, change its space to be a Reference to its original space
 referenceToDefinedQuantityDict :: DefinedQuantityDict -> DefinedQuantityDict
-referenceToDefinedQuantityDict quantDict = set spa (Reference (quantDict ^. spa)) quantDict
+referenceToDefinedQuantityDict quantDict = quantAU (quantDict +++ "ref")
+  (quantDict ^. term) (quantDict ^. defn) (getA quantDict) (symbol quantDict)
+  (Reference $ quantDict ^. typ) (getUnit quantDict)
 
 -- | Makes a variable that is implementation-only.
 implVar :: UID -> NP -> String -> Space -> Symbol -> DefinedQuantityDict

@@ -8,5 +8,5 @@ Populate::Populate(vector<vector<double>> &q) : q(&q) {
 }
 
 void Populate::operator()(vector<double> &y, double t) {
-    q.push_back(y);
+    q->push_back(y);
 }

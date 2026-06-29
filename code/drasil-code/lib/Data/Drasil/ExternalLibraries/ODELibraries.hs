@@ -767,4 +767,5 @@ odeInfoChunks info =
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv
                , solListVar info
+               , referenceToCodeVarChunk $ solListVar info
                ]

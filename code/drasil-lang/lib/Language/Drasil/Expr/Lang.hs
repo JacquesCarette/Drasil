@@ -82,7 +82,7 @@ data AssocBoolOper = And | Or
 
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
+  | Arccos | Arctan | Exp | Sqrt | Neg | MakeRef
   deriving (Eq, Show)
 
 -- | @Bool -> Bool@ operators.

@@ -58,7 +58,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   SelfSym(..), instanceVarSelf, VariableElim(..), ($->), ValueSym(..),
   Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Array(..), List(..), StatementSym(..),
+  objMethodCallMixedArgs, Reference(..), Array(..), List(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
   MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
@@ -443,6 +443,7 @@ unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
 unop Neg  = (#~)
+unop MakeRef = makeRef
 
 -- | Similar to 'unop', but for the 'Not' constructor.
 unopB :: (SharedProg r) => UFuncB -> (SValue r -> SValue r)

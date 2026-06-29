@@ -49,7 +49,7 @@ class Vector {
         void printSelf();
     
     private:
-        vector<double> &v;
+        vector<double> v;
         
 };
 

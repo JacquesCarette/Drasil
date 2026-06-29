@@ -30,13 +30,13 @@ import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(..),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
@@ -145,16 +145,12 @@ instance RenderFile JuliaCode where
   fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JuliaCode where
-  type Import JuliaCode = Doc
   langImport n = let modName = text n
     in toCode $ importLabel <+> modName
   modImport n = let modName = text n
                     fileName = text $ n ++ '.' : jlExt
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
-
-instance ImportElim JuliaCode where
-  import' = unJLC
 
 instance BodySym JuliaCode where
   type Body JuliaCode = Doc
@@ -844,7 +840,7 @@ jlModContents n is = A.buildModule n (do
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
     vcat (map (RC.import' . mi) mis)])
   (do getMainDoc)
-  where mi, li :: Label -> JuliaCode (Import JuliaCode)
+  where mi, li :: Label -> JuliaCode Doc
         mi = modImport
         li = langImport
 

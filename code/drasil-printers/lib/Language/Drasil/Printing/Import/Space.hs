@@ -24,6 +24,7 @@ space _  (Array _)      = error "Array space not translated"
 space _  (Actor s)      = P.Ident s
 space _ (Set _ )        = error "Set space not translated"
 space _  Void           = error "Void not translated"
+space _ (Reference _)   = error "Reference not translated"
 space sm (Function i t) = P.Row $
   intersperse (P.MO P.Cross) (map (space sm) $ toList i) ++  -- AxBxC...xY
   [P.MO P.RArrow, space sm t]                                -- -> Z

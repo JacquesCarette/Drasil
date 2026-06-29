@@ -132,6 +132,7 @@ expr (UnaryOp Cot u)          sm = mkCall sm P.Cot u
 expr (UnaryOp Arcsin u)       sm = mkCall sm P.Arcsin u
 expr (UnaryOp Arccos u)       sm = mkCall sm P.Arccos u
 expr (UnaryOp Arctan u)       sm = mkCall sm P.Arctan u
+expr (UnaryOp MakeRef _)      _  = error "expr : UnaryOp MakeRef not implemented"
 expr (UnaryOp Exp u)          sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, expr u sm]

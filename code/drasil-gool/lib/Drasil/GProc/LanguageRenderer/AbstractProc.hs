@@ -15,8 +15,8 @@ import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
-  BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
-  MethodTypeSym(mType), ScopeElim(scopeData))
+  BlockCommentSym(..), ValueElim(value), MethodTypeSym(mType),
+  ScopeElim(scopeData))
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
@@ -35,7 +35,7 @@ import Control.Monad.State (get, modify)
 import Control.Lens ((^.), over)
 import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>))
+import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
 -- Files --
 
@@ -93,13 +93,13 @@ listAdd :: (CommonRenderSym r) => String -> SValue r -> SValue r -> SValue r -> 
 listAdd fnName list idx val = IC.valStmt $ funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem :: (ProcRenderSym r, UnRepr r TypeData) => SValue r ->
-  SVariable r -> SVariable r
-arrayElem i' v' = do
+  SValue r -> SVariable r
+arrayElem arr' i' = do
   i <- IC.intToIndex i'
-  v <- v'
-  let vName = variableName v -- Slight hack; we used to add `++ "[" ++ render (RCC.value i) ++ "]"`
-      vType = innerType $ return $ variableType v
-      vRender = RCC.variable v <> brackets (RCC.value i)
+  arr <- arr'
+  let vName = render $ RCC.value arr
+      vType = innerType $ return $ IC.valueType arr
+      vRender = RCC.value arr <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 
 funcDecDef :: (ProcRenderSym r) => SVariable r -> r ScopeData -> [SVariable r]

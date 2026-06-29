@@ -82,7 +82,7 @@ add = docFunc "Calculate the resultant vector of two vectors."
            (litString "Vector dimensions must match for addition."),
     varDecDef res local (arrayCopy (valueOf $ instanceVarAccess (valueOf v1) localV)),
     forRange i (litInt 0) (objMethodCallNoParams int (valueOf v1) "dimension") (litInt 1) (bodyStatements [
-      arrayElem (valueOf i) res &+= listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i)
+      arrayElem (valueOf res) (valueOf i) &+= listAccess (valueOf (instanceVarAccess (valueOf v2) localV)) (valueOf i)
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])
   ]
@@ -97,7 +97,7 @@ scale = docFunc "Scale this vector by a factor."
   pubMethod "scale" (obj "Vector") [param s] $ bodyStatements [
     varDecDef res local (arrayCopy (valueOf thisV)),
     forRange i (litInt 0) (selfMethodCall "dimension" int []) (litInt 1) (bodyStatements [
-      arrayElem (valueOf i) res &= (valueOf s #* listAccess (valueOf res) (valueOf i))
+      arrayElem (valueOf res) (valueOf i) &= (valueOf s #* listAccess (valueOf res) (valueOf i))
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])
   ]

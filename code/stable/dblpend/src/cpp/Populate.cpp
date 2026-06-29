@@ -4,9 +4,9 @@
 
 using std::vector;
 
-Populate::Populate(vector<vector<double>> &theta) : theta(theta) {
+Populate::Populate(vector<vector<double>> &theta) : theta(&theta) {
 }
 
 void Populate::operator()(vector<double> &y, double t) {
-    theta.push_back(y);
+    theta->push_back(y);
 }

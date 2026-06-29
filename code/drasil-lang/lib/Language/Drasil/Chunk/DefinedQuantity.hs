@@ -8,12 +8,13 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Constructors
   quant, quant', quantAU, quantNoUnit, quantNoUnit',
   dqd, dqdNoUnit, dqdNoUnit', dqd', dqdWr,
-  implVar, implVar', implVarAU, implVarAU'
+  implVar, implVar', implVarAU, implVarAU',
+  referenceToDefinedQuantityDict
 ) where
 
 import Control.Lens ((^.), makeLenses, view, Getter)
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, (+++))
 import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
@@ -22,7 +23,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt'', cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
-import Language.Drasil.Space (Space, HasSpace(..))
+import Language.Drasil.Space (Space (Reference), HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(..))
@@ -173,6 +174,12 @@ dqd' = DQD
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
+
+-- | Given a DefinedQuantityDict, change its space to be a Reference to its original space
+referenceToDefinedQuantityDict :: DefinedQuantityDict -> DefinedQuantityDict
+referenceToDefinedQuantityDict quantDict = quantAU (quantDict +++ "ref")
+  (quantDict ^. term) (quantDict ^. defn) (getA quantDict) (symbol quantDict)
+  (Reference $ quantDict ^. typ) (getUnit quantDict)
 
 -- | Makes a variable that is implementation-only.
 implVar :: UID -> NP -> String -> Space -> Symbol -> DefinedQuantityDict

@@ -16,8 +16,8 @@ import Language.Drasil (HasSpace(typ), getActorName)
 
 import Drasil.Code.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
   msgWithNamedArgs, new, newWithNamedArgs, sy)
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName,
-  ccObjVar)
+import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, codeName)
+import Language.Drasil.Chunk.Code (ccObjVar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name,

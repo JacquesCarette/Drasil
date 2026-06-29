@@ -4,7 +4,7 @@
 
 using std::vector;
 
-Populate::Populate(vector<vector<double>> &y_t) : y_t(y_t) {
+Populate::Populate(vector<vector<double>> &y_t) : y_t(&y_t) {
 }
 
 void Populate::operator()(vector<double> &y, double t) {

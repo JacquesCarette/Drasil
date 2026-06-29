@@ -573,7 +573,7 @@ odeintCall info = externalLibCall [
       stepSize $ odeOpts info] ++ [
     customObjArgFill [privStateVar $ referenceToCodeVarChunk $ solListVar info]
       (customClassFill [constructorInfoFill [unnamedParamFill $ solListVar info]
-         [(referenceToCodeVarChunk $ solListVar info, sy $ solListVar info)] [],
+         [(referenceToCodeVarChunk $ solListVar info, UnaryOp MakeRef (sy $ solListVar info))] [],
          methodInfoFill [] [appendCurrSolFill $ referenceToCodeVarChunk $ solListVar info]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map
           basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])

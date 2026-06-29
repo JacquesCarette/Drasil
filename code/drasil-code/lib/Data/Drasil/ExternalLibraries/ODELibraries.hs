@@ -17,13 +17,13 @@ import Drasil.Database (HasUID(..), (+++), mkUid)
 import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU', referenceToDefinedQuantityDict)
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, quantvar, quantfunc,
-  listToArray)
+import Drasil.Code.CodeVar (CodeVarChunk (..), CodeFuncChunk, quantvar, quantfunc,
+  listToArray, VarOrFunc (..), CodeChunk (..), qc, ccv, obv)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Code.ExternalLibrary
@@ -571,10 +571,10 @@ odeintCall info = externalLibCall [
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [matrix [initVal info], tInit info, tFinal info,
       stepSize $ odeOpts info] ++ [
-    customObjArgFill [privStateVar $ solListVar info] (customClassFill [
-      constructorInfoFill [unnamedParamFill $ solListVar info]
-        [(solListVar info, sy $ solListVar info)] [],
-      methodInfoFill [] [appendCurrSolFill $ solListVar info]])]]
+    customObjArgFill [privStateVar $ referenceToCodeVarChunk $ solListVar info]
+      (customClassFill [constructorInfoFill [unnamedParamFill $ solListVar info]
+         [(referenceToCodeVarChunk $ solListVar info, sy $ solListVar info)] [],
+         methodInfoFill [] [appendCurrSolFill $ referenceToCodeVarChunk $ solListVar info]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map
           basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
         chooseMethod Adams = (1, [callStepFill $ libCallFill []])
@@ -697,6 +697,16 @@ solListVar info = quantvar $ implVarAU' (dv +++ "sol")
   (S "list of solutions for" +:+ (dv ^. defn)) (getA dv)
   (Vect (dv ^. typ)) (symbol dv Implementation) (getUnit dv)
   where dv = depVar info
+
+-- | Given a codeVarChunk, changes its Space to be a Reference to the original Space
+referenceToCodeVarChunk :: CodeVarChunk -> CodeVarChunk
+referenceToCodeVarChunk codeVarChunk = case codeVarChunk ^. obv of
+  (Just _) -> error "referenceToCodeVarChunk not meant for object variables"
+  Nothing  -> let codeChunk = codeVarChunk ^. ccv in
+    case kind codeChunk of
+      Func -> error "referenceToCodeVar not meant for `Func`s"
+      Var -> let newDQD = referenceToDefinedQuantityDict (codeChunk ^. qc) in
+        CodeVC (CodeC newDQD Var) Nothing
 
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk

@@ -26,7 +26,7 @@ class Populate {
         void operator()(vector<double> &y, double t);
     
     private:
-        vector<vector<double>> q;
+        vector<vector<double>>* q;
         
 };
 

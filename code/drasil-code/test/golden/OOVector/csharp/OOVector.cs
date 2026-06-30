@@ -21,7 +21,7 @@ public class OOVector {
         Vector vAdd = Vector.add(v1, v2);
         Console.Write("v1 + v2: ");
         vAdd.printSelf();
-        Vector vUnit = Vector.add(v1, v2.scale(2.0)).norm();
+        Vector vUnit = Vector.norm(Vector.add(v1, Vector.scale(v2, 2.0)));
         Console.Write("Unit vector of v1 + 2 * v2: ");
         vUnit.printSelf();
     }
@@ -57,10 +57,10 @@ public class Vector {
     /** \brief Calculate unit vector of this vector.
         \return A new unit vector.
     */
-    public Vector norm() {
-        double mag = this.magnitude();
+    public static Vector norm(Vector v) {
+        double mag = v.magnitude();
         Debug.Assert( mag > 0.0 , "Cannot normalize a zero vector.");
-        return this.scale(1.0 / mag);
+        return Vector.scale(v, 1.0 / mag);
     }
     
     /** \brief Calculate the dot product of two vectors.
@@ -92,12 +92,12 @@ public class Vector {
     }
     
     /** \brief Scale this vector by a factor.
-        \param s Scalar factor.
+        \param v Scalar factor.
         \return A new scaled vector.
     */
-    public Vector scale(double s) {
-        double[] res = (double[])(this.v.Clone());
-        for (int i = 0; i < this.dimension(); i += 1) {
+    public static Vector scale(Vector v, double s) {
+        double[] res = (double[])(v.v.Clone());
+        for (int i = 0; i < v.dimension(); i += 1) {
             res[i] = s * res[i];
         }
         return new Vector(res);

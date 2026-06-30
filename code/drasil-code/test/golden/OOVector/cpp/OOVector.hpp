@@ -26,7 +26,7 @@ class Vector {
         /** \brief Calculate unit vector of this vector.
             \return A new unit vector.
         */
-        Vector norm();
+        static Vector norm(Vector v);
         /** \brief Calculate the dot product of two vectors.
             \param v1 First vector.
             \param v2 Second vector.
@@ -40,10 +40,10 @@ class Vector {
         */
         static Vector add(Vector v1, Vector v2);
         /** \brief Scale this vector by a factor.
-            \param s Scalar factor.
+            \param v Scalar factor.
             \return A new scaled vector.
         */
-        Vector scale(double s);
+        static Vector scale(Vector v, double s);
         /** \brief Prints the vector elements to console.
         */
         void printSelf();

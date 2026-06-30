@@ -30,10 +30,10 @@ class Vector {
     /** Calculate unit vector of this vector.
         - Returns: A new unit vector.
     */
-    func norm() -> Vector {
-        var mag: Double = self.magnitude()
+    static func norm(_ v: Vector) -> Vector {
+        var mag: Double = v.magnitude()
         assert( mag > 0.0 , "Cannot normalize a zero vector.")
-        return self.scale(1.0 / mag)
+        return Vector.scale(v, 1.0 / mag)
     }
     
     /** Calculate the dot product of two vectors.
@@ -65,12 +65,12 @@ class Vector {
     }
     
     /** Scale this vector by a factor.
-        - Parameter s: Scalar factor.
+        - Parameter v: Scalar factor.
         - Returns: A new scaled vector.
     */
-    func scale(_ s: Double) -> Vector {
-        var res: [Double] = self.v
-        for i in [Int](stride(from: 0, to: self.dimension(), by: 1)) {
+    static func scale(_ v: Vector, _ s: Double) -> Vector {
+        var res: [Double] = v.v
+        for i in [Int](stride(from: 0, to: v.dimension(), by: 1)) {
             res[i] = s * res[i]
         }
         return Vector(res)
@@ -100,6 +100,6 @@ print(m)
 var vAdd: Vector = Vector.add(v1, v2)
 print("v1 + v2: ", terminator: "")
 vAdd.printSelf()
-var vUnit: Vector = Vector.add(v1, v2.scale(2.0)).norm()
+var vUnit: Vector = Vector.norm(Vector.add(v1, Vector.scale(v2, 2.0)))
 print("Unit vector of v1 + 2 * v2: ", terminator: "")
 vUnit.printSelf()

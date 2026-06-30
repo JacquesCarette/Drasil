@@ -47,12 +47,13 @@ magnitude = docFunc "Calculate the Euclidean norm (magnitude) of this vector."
 norm :: OOProg r => SMethod r
 norm = docFunc "Calculate unit vector of this vector."
   [] (Just "A new unit vector.") $
-  pubMethod "norm" (obj "Vector") [] $ bodyStatements [
-    varDecDef mag local (selfMethodCall "magnitude" double []),
+  method "norm" public classLevel (obj "Vector") [param v] $ bodyStatements [
+    varDecDef mag local (objMethodCall double (valueOf v) "magnitude" []),
     assert (valueOf mag ?> litDouble 0.0) (litString "Cannot normalize a zero vector."),
-    returnStmt (selfMethodCall "scale" (obj "Vector") [litDouble 1.0 #/ valueOf mag])
+    returnStmt (classMethodCall (obj "Vector") (obj "Vector") "scale" [valueOf v, litDouble 1.0 #/ valueOf mag])
   ]
-  where mag = var "mag" double
+  where v = vecVar "v"
+        mag = var "mag" double
 
 dot :: OOProg r => SMethod r
 dot = docFunc "Calculate the dot product of two vectors."
@@ -94,14 +95,15 @@ add = docFunc "Calculate the resultant vector of two vectors."
 scale :: OOProg r => SMethod r
 scale = docFunc "Scale this vector by a factor."
   ["Scalar factor."] (Just "A new scaled vector.") $
-  pubMethod "scale" (obj "Vector") [param s] $ bodyStatements [
-    varDecDef res local (arrayCopy (valueOf thisV)),
-    forRange i (litInt 0) (selfMethodCall "dimension" int []) (litInt 1) (bodyStatements [
+  method "scale" public classLevel (obj "Vector") [param v, param s] $ bodyStatements [
+    varDecDef res local (arrayCopy (valueOf (instanceVarAccess (valueOf v) localV))),
+    forRange i (litInt 0) (objMethodCall int (valueOf v) "dimension" []) (litInt 1) (bodyStatements [
       arrayElem (valueOf res) (valueOf i) &= (valueOf s #* listAccess (valueOf res) (valueOf i))
     ]),
     returnStmt (newObj (obj "Vector") [valueOf res])
   ]
-  where s = var "s" double
+  where v = vecVar "v"
+        s = var "s" double
         res = var "res" (arrayType double)
         i = var "i" int
 
@@ -129,7 +131,7 @@ main = mainFunction $ body [
       varDecDef (var "vAdd" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, valueOf v2]),
       printStr "v1 + v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vAdd" (obj "Vector"))) "printSelf",
 
-      varDecDef (var "vUnit" (obj "Vector")) mainFn (objMethodCall (obj "Vector") (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, objMethodCall (obj "Vector") (valueOf v2) "scale" [litDouble 2]]) "norm" []),
+      varDecDef (var "vUnit" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "norm" [(classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, classMethodCall (obj "Vector") (obj "Vector") "scale" [(valueOf v2), litDouble 2]])]),
       printStr "Unit vector of v1 + 2 * v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vUnit" (obj "Vector"))) "printSelf"
     ]
   ]

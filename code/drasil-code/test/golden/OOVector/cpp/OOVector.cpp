@@ -22,10 +22,10 @@ double Vector::magnitude() {
     return sqrt(Vector::dot(*this, *this));
 }
 
-Vector Vector::norm() {
-    double mag = this->magnitude();
+Vector Vector::norm(Vector v) {
+    double mag = v.magnitude();
     assert(mag > 0.0 && "Cannot normalize a zero vector.");
-    return this->scale(1.0 / mag);
+    return Vector::scale(v, 1.0 / mag);
 }
 
 double Vector::dot(Vector v1, Vector v2) {
@@ -46,9 +46,9 @@ Vector Vector::add(Vector v1, Vector v2) {
     return Vector(res);
 }
 
-Vector Vector::scale(double s) {
-    vector<double> res = this->v;
-    for (int i = 0; i < this->dimension(); i += 1) {
+Vector Vector::scale(Vector v, double s) {
+    vector<double> res = v.v;
+    for (int i = 0; i < v.dimension(); i += 1) {
         res[i] = s * res.at(i);
     }
     return Vector(res);
@@ -84,7 +84,7 @@ int main(int argc, const char *argv[]) {
     Vector vAdd = Vector::add(v1, v2);
     std::cout << "v1 + v2: ";
     vAdd.printSelf();
-    Vector vUnit = Vector::add(v1, v2.scale(2.0)).norm();
+    Vector vUnit = Vector::norm(Vector::add(v1, Vector::scale(v2, 2.0)));
     std::cout << "Unit vector of v1 + 2 * v2: ";
     vUnit.printSelf();
     

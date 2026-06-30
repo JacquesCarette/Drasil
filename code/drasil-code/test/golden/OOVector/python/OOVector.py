@@ -20,10 +20,11 @@ class Vector:
     
     ## \brief Calculate unit vector of this vector.
     # \return A new unit vector.
-    def norm(self):
-        mag = self.magnitude()
+    @staticmethod
+    def norm(v):
+        mag = v.magnitude()
         assert mag > 0.0, "Cannot normalize a zero vector."
-        return self.scale(1.0 / mag)
+        return Vector.scale(v, 1.0 / mag)
     
     ## \brief Calculate the dot product of two vectors.
     # \param v1 First vector.
@@ -50,11 +51,12 @@ class Vector:
         return Vector(res)
     
     ## \brief Scale this vector by a factor.
-    # \param s Scalar factor.
+    # \param v Scalar factor.
     # \return A new scaled vector.
-    def scale(self, s):
-        res = self.v.copy()
-        for i in range(0, self.dimension(), 1):
+    @staticmethod
+    def scale(v, s):
+        res = v.v.copy()
+        for i in range(0, v.dimension(), 1):
             res[i] = s * res[i]
         return Vector(res)
     
@@ -79,6 +81,6 @@ print(m)
 vAdd = Vector.add(v1, v2)
 print("v1 + v2: ", end="")
 vAdd.printSelf()
-vUnit = Vector.add(v1, v2.scale(2.0)).norm()
+vUnit = Vector.norm(Vector.add(v1, Vector.scale(v2, 2.0)))
 print("Unit vector of v1 + 2 * v2: ", end="")
 vUnit.printSelf()

@@ -131,7 +131,7 @@ main = mainFunction $ body [
       varDecDef (var "vAdd" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, valueOf v2]),
       printStr "v1 + v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vAdd" (obj "Vector"))) "printSelf",
 
-      varDecDef (var "vUnit" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "norm" [(classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, classMethodCall (obj "Vector") (obj "Vector") "scale" [(valueOf v2), litDouble 2]])]),
+      varDecDef (var "vUnit" (obj "Vector")) mainFn (classMethodCall (obj "Vector") (obj "Vector") "norm" [classMethodCall (obj "Vector") (obj "Vector") "add" [valueOf v1, classMethodCall (obj "Vector") (obj "Vector") "scale" [valueOf v2, litDouble 2]]]),
       printStr "Unit vector of v1 + 2 * v2: ", valStmt $ objMethodCallNoParams void (valueOf (var "vUnit" (obj "Vector"))) "printSelf"
     ]
   ]

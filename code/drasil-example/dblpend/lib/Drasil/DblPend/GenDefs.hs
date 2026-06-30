@@ -6,7 +6,6 @@ module Drasil.DblPend.GenDefs (genDefns, velXGD_1, velYGD_1,
 import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (mkUid)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Data.List.Extras (weave)
@@ -23,9 +22,10 @@ import Drasil.DblPend.DataDefs
 import qualified Drasil.DblPend.Expressions as E
 import qualified Drasil.DblPend.Derivations as D
 import Drasil.DblPend.Unitals (lenRod_1, xVel_1, xVel_2,
-    yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2)
+    yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
+    xForce_1, yForce_1, xForce_2, yForce_2)
 import Drasil.DblPend.Concepts (horizontalPos,
-    verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
+    verticalPos, horizontalVel, verticalVel, firstObject, secondObject)
 import Control.Lens ((^.))
 
 genDefns :: [GenDefn]
@@ -222,11 +222,8 @@ xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
         (getUnit force) (Just xForceDeriv_1) "xForce1" []
 
 xForceMD_1 :: MultiDefn ModelExpr
-xForceMD_1 = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = quantAU (mkUid "force") (horizontalForce `onThe` firstObject)
-                    (S "the horizontal force acting on the first object")
-                    Nothing (symbol force) Real (getUnit force)
-          defns = NE.fromList [
+xForceMD_1 = mkMultiDefnForQuant xForce_1 EmptyS defns
+    where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle1"
@@ -243,11 +240,8 @@ yForceGD_1 = gdNoRefs (equationalRealmU "yForce1" yForceMD_1)
         (getUnit force) (Just yForceDeriv_1) "yForce1" []
 
 yForceMD_1 :: MultiDefn ModelExpr
-yForceMD_1 = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = quantAU (mkUid "force") (verticalForce `onThe` firstObject)
-                    (S "the vertical force acting on the first object")
-                    Nothing (symbol force) Real (getUnit force)
-          defns = NE.fromList [
+yForceMD_1 = mkMultiDefnForQuant yForce_1 EmptyS defns
+    where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "yForceWithAngle1"
@@ -264,11 +258,8 @@ xForceGD_2 = gdNoRefs (equationalRealmU "xForce2" xForceMD_2)
         (getUnit force) (Just xForceDeriv_2) "xForce2" []
 
 xForceMD_2 :: MultiDefn ModelExpr
-xForceMD_2 = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = quantAU (mkUid "force") (horizontalForce `onThe` secondObject)
-                    (S "the horizontal force acting on the second object")
-                    Nothing (symbol force) Real (getUnit force)
-          defns = NE.fromList [
+xForceMD_2 = mkMultiDefnForQuant xForce_2 EmptyS defns
+    where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle2"
@@ -285,11 +276,8 @@ yForceGD_2 = gdNoRefs (equationalRealmU "yForce2" yForceMD_2)
         (getUnit force) (Just yForceDeriv_2) "yForce2" []
 
 yForceMD_2 :: MultiDefn ModelExpr
-yForceMD_2 = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = quantAU (mkUid "force") (verticalForce `onThe` secondObject)
-                    (S "the vertical force acting on the second object")
-                    Nothing (symbol force) Real (getUnit force)
-          defns = NE.fromList [
+yForceMD_2 = mkMultiDefnForQuant yForce_2 EmptyS defns
+    where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
                       [] EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "yForceWithAngle2"

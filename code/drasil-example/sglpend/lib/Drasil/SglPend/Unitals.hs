@@ -47,6 +47,7 @@ lenRod = quant (mkUid "l_rod") (cn "length of the rod")
         (D.toSent $ phraseNP (len `the_ofThe` rod))
         (sub cL lRod) Real metre
 
+-- TODO: This information is duplicated by DblPend, which is a temporary hack
 xForce = quant (mkUid "F_x") (horizontalForce `onThe` pendulum)
         (S "the horizontal force acting on the pendulum")
         (sub cF lX) Real newton

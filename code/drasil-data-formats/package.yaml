@@ -30,6 +30,7 @@ library:
   exposed-modules:
   - Drasil.Data.Formats.CSV
   - Drasil.Data.Formats.JSON
+  - Drasil.Data.Formats.HTML
 
 tests:
   drasil-data-formats-test:

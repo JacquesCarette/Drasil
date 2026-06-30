@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
 
 import Control.Lens ((^.), makeLenses, view, Getter)
 
-import Drasil.Database (HasChunkRefs(..), HasUID(..), UID, (+++))
+import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
@@ -22,7 +22,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt'', cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
-import Language.Drasil.Space (Space (Reference), HasSpace(..))
+import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(..))

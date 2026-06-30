@@ -8,8 +8,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Constructors
   quant, quant', quantAU, quantNoUnit, quantNoUnit',
   dqd, dqdNoUnit, dqdNoUnit', dqd', dqdWr,
-  implVar, implVar', implVarAU, implVarAU',
-  referenceToDefinedQuantityDict
+  implVar, implVar', implVarAU, implVarAU'
 ) where
 
 import Control.Lens ((^.), makeLenses, view, Getter)
@@ -174,12 +173,6 @@ dqd' = DQD
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
-
--- | Given a DefinedQuantityDict, change its space to be a Reference to its original space
-referenceToDefinedQuantityDict :: DefinedQuantityDict -> DefinedQuantityDict
-referenceToDefinedQuantityDict quantDict = quantAU (quantDict +++ "ref")
-  (quantDict ^. term) (quantDict ^. defn) (getA quantDict) (symbol quantDict)
-  (Reference $ quantDict ^. typ) (getUnit quantDict)
 
 -- | Makes a variable that is implementation-only.
 implVar :: UID -> NP -> String -> Space -> Symbol -> DefinedQuantityDict

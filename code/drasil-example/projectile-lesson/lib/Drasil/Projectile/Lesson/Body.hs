@@ -55,7 +55,7 @@ symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAcce
   Qs.iPos, Qs.height]
 
 projectileMotionLesson :: CI
-projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "Projectile Motion" []
+projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "projectile-lesson" []
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs)

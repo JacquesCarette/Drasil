@@ -18,8 +18,10 @@ dependencies:
 - lens
 - containers
 - drasil-database
+- drasil-file-handling
 - drasil-lang
 - drasil-metadata
+- drasil-printers
 - drasil-system
 
 ghc-options:

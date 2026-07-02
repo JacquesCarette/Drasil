@@ -1,38 +1,65 @@
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE QuasiQuotes #-}
-module Drasil.Generator.RenderSystem (
-  writeSystemRepoDir
-) where
+{-# LANGUAGE RecordWildCards #-}
+
+module Drasil.Generator.RenderSystem
+  ( drasilMakefileReqOpts,
+    generateRepo,
+    setSystemLocale,
+  )
+where
 
 import Control.Lens ((^.))
+import GHC.IO.Encoding (setLocaleEncoding, utf8)
 import System.OsPath (OsPath)
 
-import Language.Drasil (CommonIdea(abrv))
+import Drasil.FileHandling (OverwritePolicy (..), directory, localPath, ps, writeFiles)
+import Drasil.System (HasSystemMeta (..), ToFiles (..))
+import Language.Drasil (CommonIdea (abrv))
 
-import Drasil.FileHandling (OverwritePolicy, writeFiles, directory, ps)
-import Drasil.System (HasSystemMeta(..), ToFiles(..))
+-- | Internal: Set system locale encoding to UTF-8.
+setSystemLocale :: IO ()
+setSystemLocale = setLocaleEncoding utf8
 
--- | 'toFiles', but we also write the files to disk (using the system's
--- abbreviation as the assumed repository name).
-writeSystemRepoDir :: ToFiles sys opts =>
-  -- | The parent path.
-  OsPath ->
-  -- | File overwrite policy.
-  OverwritePolicy ->
+-- | Configuration options for writing a repository.
+data WriteOptions = WO {
+  -- | Where should we write to?
+  basePath :: OsPath,
+  -- | Are we allowed to overwrite files or not?
+  overwritePolicy :: OverwritePolicy
+}
+
+-- | These are the default file-writing 'WriteOptions' required or else the main
+-- Makefile will not play well.
+drasilMakefileReqOpts :: WriteOptions
+drasilMakefileReqOpts = WO localPath OverwriteAllowed
+
+-- | Concretize a system into a concrete set of files and write them to disk.
+--
+-- Notes:
+--
+-- 1. Sets system locale to utf8 for cross-platform consistency.
+-- 2. Bundles artifacts together into a single directory. Directory name is
+--    derived from the abbreviation of the system's 'CI' title.
+generateRepo ::
+  (ToFiles sys concOpts) =>
   -- | The system.
   sys ->
-  -- | The generation options.
-  opts ->
-  -- | The software artifacts will be rendered about the 'OsPath'.
+  -- | The concretization options.
+  concOpts ->
+  -- | The file-writing options.
+  WriteOptions ->
+  -- | Files will be written to a local directory named after the abbreviation
+  -- of the system.
   IO ()
-writeSystemRepoDir basePath pol sys =
-  writeFiles pol basePath . directory [ps|{dirName}|] . toFiles sys
+generateRepo sys concOpts WO{..} = do
+  setSystemLocale
+  writeFiles overwritePolicy basePath $ directory [ps|{dirName}|] $ toFiles sys concOpts
   where
     dirName = abrv $ sys ^. systemMeta . sysName
-    -- FIXME: Both `abrv` usage and `sysName` usage here is dubious. We need to
-    -- replace this field with something better, such as project name and
-    -- project shortname (repo name).
-    --
-    -- In some sense, I want to rename `System` to `Project`. Hence,
-    -- `SystemMeta` becomes `ProjectMeta`. This is nice because `SystemRepo`
-    -- then also becomes `ProjectRepo` (which is more commonly understood repo
-    -- and vague in a positive way).
+
+-- FIXME: Both `abrv` usage and `sysName` usage above is dubious. We need to
+-- replace this field with something better, such as project name and project
+-- shortname (repo name).
+--
+-- FIXME: Rename `System` to `Project`?

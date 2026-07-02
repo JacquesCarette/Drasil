@@ -10,8 +10,10 @@ import Data.Text (Text)
 import qualified Data.Text as T
 
 import Drasil.Data.Formats.HTML.Core (
-  HTML(..), HTMLBody(..), HTMLHead(..), Format(..), HLevel(..), Row(..), Cell(..),
-  LItem(..), DItem(..), ListType(..), Attribute(..))
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), Format(..), HLevel(..),
+    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..),
+    boldText, emphasisText, subscriptText, superscriptText, spanText, figureImage
+  )
 
 -- | Render 'HTML' to a 'Doc'
 renderHTML :: HTML -> Doc ann
@@ -28,7 +30,8 @@ renderBodySec bodies = wrapBlock "body" [] (map renderBody bodies)
 
 -- | Render 'head' elements
 renderHead :: HTMLHead -> Doc ann
-renderHead (Link attrs)       = angles ("link" <> renderAttrs attrs)
+renderHead (Link relation file attrs) =
+  angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
 renderHead (Title txt)        = wrapBlock "title" [] [pretty (escapeHTMLText txt)]
 renderHead (Meta attrs)       = angles ("meta" <> renderAttrs attrs)
 renderHead (Script attrs txt) = angles ("script" <> renderAttrs attrs) <> pretty txt <> angles "/script"
@@ -58,11 +61,13 @@ renderBody (FigCaption attrs ch) = renderLine "figcaption" attrs ch
 renderBody (TextFormat fmt attrs ch) = renderLine (fmtTag fmt) attrs ch
 renderBody (Heading lvl attrs ch)    = renderLine (headTag lvl) attrs ch
 renderBody (Anchor url attrs ch)     = renderLine "a" (Attr "href" url : attrs) ch
-renderBody (Img source attrs)        = angles ("img" <> renderAttrs (Attr "src" source : attrs))
+renderBody (Img source altTxt attrs) = angles ("img" <> renderAttrs (Attr "src" source : Attr "alt" altTxt : attrs))
 renderBody (RawText txt)             = pretty (escapeHTMLText txt)
 
-renderBody (CustomTag tagName attrs ch) = renderBlock tagName attrs ch
-renderBody (EmptyCustomTag tagName attrs) = "<" <> pretty tagName <> renderAttrs attrs <> ">"
+renderBody (CustomTag tagName Standard attrs ch) = renderBlock tagName attrs ch
+renderBody (CustomTag tagName Void attrs _)      = angles (pretty tagName <> renderAttrs attrs)
+
+renderBody (Comment cmmnt) = "<!-- " <> pretty cmmnt <> "-->"
 
 -- | Internal: gets tag from text format
 fmtTag :: Format -> Text
@@ -82,31 +87,34 @@ headTag H5 = "h5"
 headTag H6 = "h6"
 
 -- | Render the element and its children in the same line
-renderLine :: Text -> [Attribute] -> [HTMLBody] -> Doc ann
+renderLine :: Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderLine tag attrs = wrapLine tag attrs . map renderBody
 
 -- | Render the children breaking lines
-renderBlock :: Text -> [Attribute] -> [HTMLBody] -> Doc ann
+renderBlock :: Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderBlock tag attrs = wrapBlock tag attrs . map renderBody
 
 -- | Wrap an element with tag and its children breaking lines
-wrapBlock :: Text -> [Attribute] -> [Doc ann] -> Doc ann
+wrapBlock :: Text -> [Attr] -> [Doc ann] -> Doc ann
 wrapBlock tag attrs docs =
   vcat [ angles (pretty tag <> renderAttrs attrs), indent 2 (vcat docs),
   angles ("/" <> pretty tag) ]
 
 -- | Wrap an element with tag and its children in the same line
-wrapLine :: Text -> [Attribute] -> [Doc ann] -> Doc ann
+wrapLine :: Text -> [Attr] -> [Doc ann] -> Doc ann
 wrapLine tag attrs docs =
   angles (pretty tag <> renderAttrs attrs) <> hcat docs <> angles ("/" <> pretty tag)
 
--- | Render attribute in the format 'key="value"' or 'booleanAtribute'
-renderAttrs :: [Attribute] -> Doc ann
+-- | Render attribute in the format 'key="value"'
+renderAttrs :: [Attr] -> Doc ann
 renderAttrs [] = mempty
 renderAttrs attrs = space <> hsep (map rAttr attrs)
   where
-    rAttr (Attr k v)   = pretty k <> equals <> dquotes (pretty v)
-    rAttr (BoolAttr k) = pretty k
+    rAttr (Attr k v) = pretty k <> rValue v
+    rValue value =
+      case value of
+        "" -> mempty
+        _  -> equals <> dquotes (pretty value)
 
 -- | Internal: Escapes a character for encoding in HTML
 escapeHTMLText :: Text -> Text

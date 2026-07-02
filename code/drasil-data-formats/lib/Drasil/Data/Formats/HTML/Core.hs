@@ -1,16 +1,15 @@
 module Drasil.Data.Formats.HTML.Core
   ( -- * JSON
-    HTML(..), HTMLBody(..), HTMLHead(..), Format(..), HLevel(..), Row(..),
-    Cell(..), LItem(..), DItem(..), ListType(..), Attribute(..)
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), Format(..), HLevel(..),
+    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..),
+    boldText, emphasisText, subscriptText, superscriptText, spanText, figureImage
   )
 where
 
 import Data.Text (Text)
 
--- | HTML attributes for tags in the format key="value" and booleanAttribute
-data Attribute =
-    Attr Text Text
-  | BoolAttr Text
+-- | HTML Attrs for tags in the format key="value"
+data Attr = Attr Text Text
   deriving (Show, Eq)
 
 data HTML = HTML [HTMLHead] [HTMLBody]
@@ -18,35 +17,36 @@ data HTML = HTML [HTMLHead] [HTMLBody]
 
 -- | Head elements
 data HTMLHead =
-    Script [Attribute] Text
+    Script [Attr] Text
   | Title Text
-  | Meta [Attribute]
-  | Link [Attribute]
+  | Meta [Attr]
+  | Link Relation File [Attr]
   deriving (Show, Eq)
 
 -- | Body elements
 data HTMLBody =
-  Div [Attribute] [HTMLBody]
-  | Paragraph [Attribute] [HTMLBody]
-  | TextFormat Format [Attribute] [HTMLBody]
-  | Heading HLevel [Attribute] [HTMLBody]
-  | List ListType [Attribute] [LItem]
-  | Table [Attribute] [Row]
-  | DescriptionList [Attribute] [DItem]
-  | Anchor URL [Attribute] [HTMLBody]
-  | Figure [Attribute] [HTMLBody]
-  | FigCaption [Attribute] [HTMLBody]
-  | Img File [Attribute]
-    -- | Raw unescaped text content
+  Div [Attr] [HTMLBody]
+  | Paragraph [Attr] [HTMLBody]
+  | TextFormat Format [Attr] [HTMLBody]
+  | Heading HLevel [Attr] [HTMLBody]
+  | List ListType [Attr] [LItem]
+  | Table [Attr] [Row]
+  | DescriptionList [Attr] [DItem]
+  | Anchor URL [Attr] [HTMLBody]
+  | Figure [Attr] [HTMLBody]
+  | FigCaption [Attr] [HTMLBody]
+  | Img File Text [Attr]
   | RawText Text
-    -- | Custom tag that wraps children elements
-  | CustomTag Text [Attribute] [HTMLBody]
-    -- | Empty/void tags cannot contain children
-  | EmptyCustomTag Text [Attribute]
+  | CustomTag Text TagType [Attr] [HTMLBody]
+  | Comment Text
   deriving (Show, Eq)
 -- TODO: Support more tags
 -- https://www.w3schools.com/tags/default.asp
 
+data TagType = Standard | Void
+  deriving (Show, Eq)
+
+type Relation = Text
 -- | Target link
 type URL = Text
 -- | File name or file path.
@@ -65,20 +65,41 @@ data ListType = Ordered | Unordered
   deriving (Show, Eq)
 
 -- | Ordered/unordered list structure
-data LItem = LItem [Attribute] [HTMLBody]
+data LItem = LItem [Attr] [HTMLBody]
   deriving (Show, Eq)
 
 -- | Description list elements
 data DItem =
-    DTerm [Attribute] [HTMLBody]
-  | DDetails [Attribute] [HTMLBody]
+    DTerm [Attr] [HTMLBody]
+  | DDetails [Attr] [HTMLBody]
   deriving (Show, Eq)
 
 -- | Table structure
-data Row = Row [Attribute] [Cell]
+data Row = Row [Attr] [Cell]
   deriving (Show, Eq)
 
 data Cell =
-    THeader [Attribute] [HTMLBody]
-  | TData [Attribute] [HTMLBody]
+    THeader [Attr] [HTMLBody]
+  | TData [Attr] [HTMLBody]
   deriving (Show, Eq)
+
+-- | Smart Constructors
+
+boldText :: [Attr] -> Text -> HTMLBody
+boldText attrs txt = TextFormat Bold attrs [RawText txt]
+
+emphasisText :: [Attr] -> Text -> HTMLBody
+emphasisText attrs txt = TextFormat Emphasis attrs [RawText txt]
+
+subscriptText :: [Attr] -> Text -> HTMLBody
+subscriptText attrs txt = TextFormat Subscript attrs [RawText txt]
+
+superscriptText :: [Attr] -> Text -> HTMLBody
+superscriptText attrs txt = TextFormat Superscript attrs [RawText txt]
+
+spanText :: [Attr] -> Text -> HTMLBody
+spanText attrs txt = TextFormat Span attrs [RawText txt]
+
+figureImage :: File -> Text -> Text -> HTMLBody
+figureImage src altText captionTxt =
+  Figure [] [ Img src altText [], FigCaption [] [RawText captionTxt]]

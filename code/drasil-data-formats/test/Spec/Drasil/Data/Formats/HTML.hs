@@ -3,8 +3,9 @@
 module Spec.Drasil.Data.Formats.HTML (htmlTests) where
 
 import Drasil.Data.Formats.HTML (
-  HTML(..), HTMLBody(..), HTMLHead(..), Format(..), HLevel(..), Row(..), Cell(..),
-  LItem(..), DItem(..), ListType(..), Attribute(..), renderHTML
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), Format(..), HLevel(..),
+    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML,
+    boldText, emphasisText, subscriptText, superscriptText, spanText, figureImage
   )
 
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
@@ -21,10 +22,10 @@ htmlTests =
 tagsHTMLTest :: HTML
 tagsHTMLTest =
   HTML
-    [ Link   [Attr "href" "style.css"],
+    [ Link   "stylesheet" "style.css" [],
       Title  "Test File", Meta [Attr "charset" "utf-8"],
       Script [] "/* The script should be here */",
-      Script [Attr "src" "source/script.hs", BoolAttr "async"] ""
+      Script [Attr "src" "source/script.hs", Attr "async" ""] ""
     ]
     [ Div [Attr "id" "main-section"]
       [ Heading H1 [Attr "class" "title"] [RawText "tagsHTMLTest"],
@@ -33,11 +34,11 @@ tagsHTMLTest =
 
         Paragraph [Attr "class" "paragraph"]
           [ RawText "Testing paragraph and text formats: ",
-            TextFormat Bold        [Attr "id" "bold"]        [RawText "bold, "],
-            TextFormat Emphasis    [Attr "id" "emphasis"]    [RawText "emphasis, "],
-            TextFormat Subscript   [Attr "id" "subscript"]   [RawText "subscript, "],
-            TextFormat Superscript [Attr "id" "superscript"] [RawText "superscript, "],
-            TextFormat Span        [Attr "id" "span"]        [RawText "span."]
+            boldText        [Attr "id" "bold"]        "bold, ",
+            emphasisText    [Attr "id" "emphasis"]    "emphasis, ",
+            subscriptText   [Attr "id" "subscript"]   "subscript, ",
+            superscriptText [Attr "id" "superscript"] "superscript, ",
+            spanText        [Attr "id" "span"]        "span."
           ],
 
         List Ordered [Attr "id" "ordered-list"]
@@ -68,17 +69,14 @@ tagsHTMLTest =
          ],
 
        Paragraph []
-         [Anchor "https://jacquescarette.github.io/Drasil/" [Attr "id" "ancor"] [RawText "Anchor"]],
+         [Anchor "https://jacquescarette.github.io/Drasil/" [Attr "id" "anchor"] [RawText "Anchor"]],
 
-       Figure [Attr "class" "figure"]
-         [ Img "source.png" [Attr "alt" "Alternative Text"],
-           FigCaption [Attr "class" "figcaption"] [RawText "Figure Caption"]
-         ],
+       figureImage "source.png" "Alternative Text" "Figure Caption",
 
-       CustomTag "blockquote" [Attr "class" "quote"]
+       CustomTag "blockquote" Standard [Attr "class" "quote"]
          [Paragraph [] [RawText "This is a quote."]],
 
-       EmptyCustomTag "input" [Attr "class" "input"]
+       CustomTag "input" Void [Attr "class" "input"] []
       ]
     ]
 

@@ -3,9 +3,7 @@ module Drasil.System.Render (
   ToFiles(..)
 ) where
 
-import Control.Lens ((^.))
-
-import Drasil.FileHandling (FileLayout, directory, ps)
+import Drasil.FileHandling (FileLayout)
 
 import Drasil.System.Core (HasSystemMeta(..))
 

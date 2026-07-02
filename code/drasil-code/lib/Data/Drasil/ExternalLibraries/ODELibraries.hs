@@ -15,14 +15,15 @@ import Control.Lens ((^.), _1, _2, over)
 
 import Drasil.Database (HasUID(..), (+++), mkUid)
 import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
-  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
-  compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
+  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array,
+  Vect, Reference), implVar, implVar', compoundPhrase, nounPhrase, nounPhraseSP,
+  label, sub, Idea(getA), NamedIdea(term), Stage(..), Definition (defn), (+:+),
+  Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, quantvar, quantfunc,
+import Drasil.Code.CodeVar (CodeVarChunk (..), CodeFuncChunk, quantvar, quantfunc,
   listToArray)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -63,10 +64,10 @@ scipyCall info = externalLibCall [
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
       [matrix [initVal info], tInit info],
-    initSolListWithValFill (solListVar info) (matrix [initVal info]),
+    initSolListWithValFill (solListVar info False) (matrix [initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
     (libCallFill [basicArgFill (field r t $+ stepSize (odeOpts info))])
-    (solListVar info)]]
+    (solListVar info False)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
         chooseMethod RK45 = (2, solveMethodFill)
@@ -199,8 +200,8 @@ osloCall info = externalLibCall [
   mandatoryStepsFill [
     callStepFill (libCallFill $ map basicArgFill
       [tInit info, tFinal info, stepSize $ odeOpts info]),
-    StatementF [solListVar info] [],
-    StatementF [solListVar info] [int $ toInteger $ length $ initVal info]
+    StatementF [solListVar info False] [],
+    StatementF [solListVar info False] [int $ toInteger $ length $ initVal info]
     ]]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
@@ -246,7 +247,7 @@ rTol = quantvar $ implVar (mkUid "rTol_oslo") (nounPhrase
   Real (label "RelativeTolerance")
 sol = quantvar $ implVar (mkUid "sol_oslo") (nounPhrase
   "container for ODE information" "containers for ODE information")
-  "the container for ODE information" solT(label "sol")
+  "the container for ODE information" solT (label "sol")
 points = quantvar $ implVar (mkUid "points_oslo") (nounPhrase
   "container holding ODE solution" "containers holding ODE solution")
   "the container holding the ODE solution"
@@ -376,9 +377,9 @@ apacheODECall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill (map (basicArgFill . ($ odeOpts info)) [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
-      customObjArgFill [pubStateVar $ solListVar info] (implementationFill [
-        methodInfoFill [] [initSolListFromArrayFill $ solListVar info], methodInfoFill []
-          [callStepFill $ libCallFill [], appendCurrSolFill $ solListVar info]])],
+      customObjArgFill [pubStateVar $ solListVar info False] (implementationFill [
+        methodInfoFill [] [initSolListFromArrayFill $ solListVar info False], methodInfoFill []
+          [callStepFill $ libCallFill [], appendCurrSolFill $ solListVar info False]])],
     callStepFill $ libCallFill $ customObjArgFill
       (map privStateVar $ otherVars info)
       (implementationFill [
@@ -389,7 +390,7 @@ apacheODECall info = externalLibCall [
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
       : map basicArgFill [tInit info, matrix [initVal info], tFinal info,
         matrix [initVal info]],
-    assignSolFromObjFill $ solListVar info]]
+    assignSolFromObjFill $ solListVar info False]]
   where chooseMethod Adams = 0
         chooseMethod RK45 = 1
         chooseMethod _ = error odeMethodUnavailable
@@ -571,10 +572,10 @@ odeintCall info = externalLibCall [
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [matrix [initVal info], tInit info, tFinal info,
       stepSize $ odeOpts info] ++ [
-    customObjArgFill [privStateVar $ solListVar info] (customClassFill [
-      constructorInfoFill [unnamedParamFill $ solListVar info]
-        [(solListVar info, sy $ solListVar info)] [],
-      methodInfoFill [] [appendCurrSolFill $ solListVar info]])]]
+    customObjArgFill [privStateVar $ solListVar info True]
+      (customClassFill [constructorInfoFill [unnamedParamFill $ solListVar info False]
+         [(solListVar info True, UnaryOp MakeRef (sy $ solListVar info False))] [],
+         methodInfoFill [] [appendCurrSolFill $ solListVar info True]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map
           basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
         chooseMethod Adams = (1, [callStepFill $ libCallFill []])
@@ -691,11 +692,16 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 -- | Solution list chunk constructor. Wraps the dependent variable's type in
 -- an extra 'Vect' so that the generated code declares a list-of-vectors
 -- (e.g. @vector<vector<double>>@) instead of a flat list.
-solListVar :: ODEInfo -> CodeVarChunk
-solListVar info = quantvar $ implVarAU' (dv +++ "sol")
-  (compoundPhrase (dv ^. term) (nounPhraseSP "solution list"))
-  (S "list of solutions for" +:+ (dv ^. defn)) (getA dv)
-  (Vect (dv ^. typ)) (symbol dv Implementation) (getUnit dv)
+solListVar :: ODEInfo -> Bool -> CodeVarChunk
+solListVar info isRef =
+  let suffix  = "sol" ++ if isRef then "ref" else ""
+      np      = (if isRef then "reference to the " else "") ++ "solution list"
+      desc    = (if isRef then "reference to the " else "") ++ "list of solutions for"
+      outerTp = if isRef then Reference . Vect else Vect
+  in quantvar $ implVarAU' (dv +++ suffix)
+    (compoundPhrase (dv ^. term) (nounPhraseSP np))
+    (S desc +:+ (dv ^. defn)) (getA dv)
+    (outerTp (dv ^. typ)) (symbol dv Implementation) (getUnit dv)
   where dv = depVar info
 
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
@@ -756,5 +762,6 @@ odeInfoChunks info =
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv
-               , solListVar info
+               , solListVar info False
+               , solListVar info True
                ]

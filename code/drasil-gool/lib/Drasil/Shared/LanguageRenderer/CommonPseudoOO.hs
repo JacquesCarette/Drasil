@@ -549,7 +549,7 @@ listSet list idx val = do
   list' <- zoom lensMStoVS list
   idx' <- zoom lensMStoVS (IC.intToIndex idx)
   let listAccessVar = mkVar (render $ RC.value list') (valueType list')
-    (RC.value list' <> brackets (RC.value idx')) -- hack
+                        (RC.value list' <> brackets (RC.value idx')) -- hack
   listAccessVar &= val
 
 -- Julia and MATLAB --

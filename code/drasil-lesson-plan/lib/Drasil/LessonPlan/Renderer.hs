@@ -31,14 +31,9 @@ import Language.Drasil.Printing.Import
 data Options = Options {
   -- | Describe the organization of the final lesson plan.
   lsnDesc :: LsnDesc,
-  -- FIXME: `titleComb` seems a bit odd. We only use `S.forT`. Two things:
-  --
-  -- 1. We generate `Notebook for Projectile Motion Lesson` as the title for the
-  -- projectile motion lesson plan. This should probably just be "Projectile
-  -- Motion Lesson".
-  -- 2. The title should probably just directly come from the system name.
-  --
-  -- i.e., we should remove this.
+  -- | A title combinator that mixes 'Notebook' (passed as the first argument)
+  -- with the title of the 'LessonPlan'. To be used as the /actual title/ used
+  -- in the final generated document.
   titleComb :: CI -> CI -> Sentence,
   -- | The name of the output file (no extension, @.ipynb@ is added later).
   lsnFileName :: String

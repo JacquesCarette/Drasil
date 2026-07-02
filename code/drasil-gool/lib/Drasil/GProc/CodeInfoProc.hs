@@ -17,7 +17,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSBinder,
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
+import Drasil.Shared.AST (VisibilityTag(..), qualName, td,
   ScopeData(..), ScopeTag (..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
@@ -47,14 +47,14 @@ instance Applicative CodeInfoProc where
 instance Monad CodeInfoProc where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoProc TypeData
+instance SharedProg CodeInfoProc ()
 
-instance ProcProg CodeInfoProc TypeData
+instance ProcProg CodeInfoProc ()
 
 instance UnRepr CodeInfoProc contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoProc TypeData where
+instance ProgramSym CodeInfoProc () where
   type Program CodeInfoProc = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -62,24 +62,24 @@ instance ProgramSym CodeInfoProc TypeData where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoProc TypeData where
+instance FileSym CodeInfoProc () where
   type File CodeInfoProc = ()
   fileDoc = execute1
 
   docMod _ _ _ _ = execute1
 
-instance BodySym CodeInfoProc TypeData where
+instance BodySym CodeInfoProc () where
   type Body CodeInfoProc = ()
   body = executeList
 
   addComments _ _ = noInfo
 
-instance BlockSym CodeInfoProc TypeData where
+instance BlockSym CodeInfoProc () where
   type Block CodeInfoProc = ()
   block = executeList
 
--- TODO [Brandon Bosman, 06/30/2026]: Replace TypeData with ()
-instance TypeSym CodeInfoProc TypeData where
+-- TODO [Brandon Bosman, 06/30/2026]: Replace () with ()
+instance TypeSym CodeInfoProc () where
   bool            = noInfoVSType
   int             = noInfoVSType
   float           = noInfoVSType
@@ -96,7 +96,7 @@ instance TypeSym CodeInfoProc TypeData where
   funcType    _ _ = noInfoVSType
   void            = noInfoVSType
 
-instance TypeElim CodeInfoProc TypeData where
+instance TypeElim CodeInfoProc () where
   getCodeType _ = Void
 
 instance ScopeSym CodeInfoProc where
@@ -104,24 +104,24 @@ instance ScopeSym CodeInfoProc where
   mainFn = noInfoScope
   local = noInfoScope
 
-instance VariableSym CodeInfoProc TypeData where
+instance VariableSym CodeInfoProc () where
   type Variable CodeInfoProc = ()
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
 
-instance VariableElim CodeInfoProc TypeData where
+instance VariableElim CodeInfoProc () where
   variableName _ = ""
   variableType _ = noInfoType
 
-instance ValueSym CodeInfoProc TypeData where
+instance ValueSym CodeInfoProc () where
   type Value CodeInfoProc = ()
   valueType _ = noInfoType
 
-instance Argument CodeInfoProc TypeData where
+instance Argument CodeInfoProc () where
   pointerArg = id
 
-instance Literal CodeInfoProc TypeData where
+instance Literal CodeInfoProc () where
   litTrue     = noInfo
   litFalse    = noInfo
   litChar   _ = noInfo
@@ -133,18 +133,18 @@ instance Literal CodeInfoProc TypeData where
   litList   _ = executeList
   litSet   _ = executeList
 
-instance MathConstant CodeInfoProc TypeData where
+instance MathConstant CodeInfoProc () where
   pi = noInfo
 
-instance VariableValue CodeInfoProc TypeData where
+instance VariableValue CodeInfoProc () where
   valueOf _ = noInfo
 
-instance CommandLineArgs CodeInfoProc TypeData where
+instance CommandLineArgs CodeInfoProc () where
   arg       _ = noInfo
   argsList    = noInfo
   argExists _ = noInfo
 
-instance NumericExpression CodeInfoProc TypeData where
+instance NumericExpression CodeInfoProc () where
   (#~)  = execute1
   (#/^) = execute1
   (#|)  = execute1
@@ -170,12 +170,12 @@ instance NumericExpression CodeInfoProc TypeData where
   floor  = execute1
   ceil   = execute1
 
-instance BooleanExpression CodeInfoProc TypeData where
+instance BooleanExpression CodeInfoProc () where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
 
-instance Comparison CodeInfoProc TypeData where
+instance Comparison CodeInfoProc () where
   (?<)  = execute2
   (?<=) = execute2
   (?>)  = execute2
@@ -183,7 +183,7 @@ instance Comparison CodeInfoProc TypeData where
   (?==) = execute2
   (?!=) = execute2
 
-instance ValueExpression CodeInfoProc TypeData where
+instance ValueExpression CodeInfoProc () where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
   extFuncAppMixedArgs l n _ vs ns = do
@@ -196,23 +196,23 @@ instance ValueExpression CodeInfoProc TypeData where
 
   notNull = execute1
 
-instance FunctionSym CodeInfoProc TypeData where
+instance FunctionSym CodeInfoProc () where
   type Function CodeInfoProc = ()
 
-instance IndexTranslator CodeInfoProc TypeData where
+instance IndexTranslator CodeInfoProc () where
   intToIndex = execute1
   indexToInt = execute1
 
-instance Reference CodeInfoProc TypeData where
+instance Reference CodeInfoProc () where
   makeRef = execute1
   maybeDeref = execute1
 
-instance Array CodeInfoProc TypeData where
+instance Array CodeInfoProc () where
   arrayElem _ _ = noInfo
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
-instance List CodeInfoProc TypeData where
+instance List CodeInfoProc () where
   listSize       = execute1
   listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
@@ -220,35 +220,35 @@ instance List CodeInfoProc TypeData where
   listSet l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   indexOf        = execute2
 
-instance Set CodeInfoProc TypeData where
+instance Set CodeInfoProc () where
  contains = execute2
  setAdd = execute2
  setRemove = execute2
  setUnion = execute2
 
-instance InternalList CodeInfoProc TypeData where
+instance InternalList CodeInfoProc () where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
 
-instance BinderSym CodeInfoProc TypeData where
+instance BinderSym CodeInfoProc () where
   binder _ _ = noInfoBinder
 
-instance StatementSym CodeInfoProc TypeData where
+instance StatementSym CodeInfoProc () where
   type Statement CodeInfoProc = ()
   valStmt = zoom lensMStoVS . execute1
   emptyStmt = noInfo
   multi    = executeList
 
-instance AssignStatement CodeInfoProc TypeData where
+instance AssignStatement CodeInfoProc () where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
   (&+=)  _ = zoom lensMStoVS . execute1
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoProc TypeData where
+instance DeclStatement CodeInfoProc () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -260,7 +260,7 @@ instance DeclStatement CodeInfoProc TypeData where
   constDecDef          _ _ = zoom lensMStoVS . execute1
   funcDecDef         _ _ _ = execute1
 
-instance IOStatement CodeInfoProc TypeData where
+instance IOStatement CodeInfoProc () where
   print        = zoom lensMStoVS . execute1
   printLn      = zoom lensMStoVS . execute1
   printStr   _ = noInfo
@@ -286,13 +286,13 @@ instance IOStatement CodeInfoProc TypeData where
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)
 
-instance StringStatement CodeInfoProc TypeData where
+instance StringStatement CodeInfoProc () where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-instance FuncAppStatement CodeInfoProc TypeData where
+instance FuncAppStatement CodeInfoProc () where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
@@ -300,10 +300,10 @@ instance FuncAppStatement CodeInfoProc TypeData where
     sequence_ vs
     addExternalCall l n
 
-instance CommentStatement CodeInfoProc TypeData where
+instance CommentStatement CodeInfoProc () where
   comment _ = noInfo
 
-instance ControlStatement CodeInfoProc TypeData where
+instance ControlStatement CodeInfoProc () where
   break    = noInfo
   continue = noInfo
 
@@ -338,12 +338,12 @@ instance VisibilitySym CodeInfoProc where
   private = toCode Priv
   public  = toCode Pub
 
-instance ParameterSym CodeInfoProc TypeData where
+instance ParameterSym CodeInfoProc () where
   type Parameter CodeInfoProc = ()
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoProc TypeData where
+instance MethodSym CodeInfoProc () where
   type Method CodeInfoProc = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -355,7 +355,7 @@ instance MethodSym CodeInfoProc TypeData where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance ModuleSym CodeInfoProc TypeData where
+instance ModuleSym CodeInfoProc () where
   type Module CodeInfoProc = ()
   buildModule n _ funcs = do
     modify (setModuleName n)
@@ -367,20 +367,20 @@ instance ModuleSym CodeInfoProc TypeData where
 noInfo :: State s (CodeInfoProc ())
 noInfo = toState $ toCode ()
 
-emptyType :: TypeData
-emptyType = td Void "" empty -- Hack
+emptyType :: ()
+emptyType = ()
 
-noInfoType :: CodeInfoProc TypeData
+noInfoType :: CodeInfoProc ()
 noInfoType = return emptyType
 
-noInfoVSType :: VS (CodeInfoProc TypeData)
+noInfoVSType :: VS (CodeInfoProc ())
 noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoProc ScopeData
 noInfoScope = return $ sd Global -- Hack
 
 noInfoBinder :: VSBinder CodeInfoProc
-noInfoBinder = return $ return $ bindFormD "" emptyType
+noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) --Hack
 
 updateMEMandCM :: String -> MSBody CodeInfoProc -> SMethod CodeInfoProc
 updateMEMandCM n b = do

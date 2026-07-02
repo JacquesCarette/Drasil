@@ -2,9 +2,9 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Drasil.Generator.RenderSystem
+module Drasil.Generator.WriteSystem
   ( drasilMakefileReqOpts,
-    generateRepo,
+    concretizeAndWrite,
     setSystemLocale,
   )
 where
@@ -41,7 +41,7 @@ drasilMakefileReqOpts = WO localPath OverwriteAllowed
 -- 1. Sets system locale to utf8 for cross-platform consistency.
 -- 2. Bundles artifacts together into a single directory. Directory name is
 --    derived from the abbreviation of the system's 'CI' title.
-generateRepo ::
+concretizeAndWrite ::
   (ToFiles sys concOpts) =>
   -- | The system.
   sys ->
@@ -52,7 +52,7 @@ generateRepo ::
   -- | Files will be written to a local directory named after the abbreviation
   -- of the system.
   IO ()
-generateRepo sys concOpts WO{..} = do
+concretizeAndWrite sys concOpts WO{..} = do
   setSystemLocale
   writeFiles overwritePolicy basePath $ directory [ps|{dirName}|] $ toFiles sys concOpts
   where

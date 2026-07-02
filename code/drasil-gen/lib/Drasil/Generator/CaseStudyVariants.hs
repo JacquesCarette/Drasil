@@ -24,10 +24,10 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Code (genCode, genCodeZoo)
-import Drasil.Generator.RenderSystem (setSystemLocale)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 import Drasil.Generator.Website (genWebsite)
+import Drasil.Generator.WriteSystem (setSystemLocale)
 
 -- | Internal: The `build/` subfolder the Makefile expects each case study will
 -- build in (other than the website).

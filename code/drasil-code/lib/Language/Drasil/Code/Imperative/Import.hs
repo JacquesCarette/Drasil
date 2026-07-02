@@ -17,6 +17,8 @@ import Control.Monad.State (get, modify)
 import Data.List ((\\), intersect)
 
 import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
+import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, obv, quantvar,
+  quantfunc, DefiningCodeExpr(..))
 import qualified Drasil.Code.CodeExpr.Development as S (CodeExpr(..))
 import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), EqBinOp(..),
@@ -33,8 +35,7 @@ import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Logging (logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), genICName, lookupC, HasChoices(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
-  quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
+import Language.Drasil.Chunk.Code (ccObjVar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
@@ -56,12 +57,12 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   OOVariableSym(..), SelfSym(..), instanceVarSelf, VariableElim(..), ($->),
   ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), objMethodCallMixedArgs, Array(..), List(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
-  onStateValue)
+  OOValueExpression(..), objMethodCallMixedArgs, Reference(..), Array(..),
+  List(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
+  privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -443,6 +444,7 @@ unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
 unop Neg  = (#~)
+unop MakeRef = makeRef
 
 -- | Similar to 'unop', but for the 'Not' constructor.
 unopB :: (SharedProg r tp) => UFuncB -> (SValue r -> SValue r)
@@ -586,7 +588,7 @@ convStmt (FAsgIndex v i e) = do
   v' <- mkVar v
   t <- codeType v
   let asgFunc (C.List _) = listSet (valueOf v') (litInt i) e'
-      asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
+      asgFunc (C.Array _) = assign (arrayElem (valueOf v') (litInt i)) e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
   return $ asgFunc t
 convStmt (FFor v start end step st) = do
@@ -1097,7 +1099,7 @@ convStmtProc (FAsgIndex v i e) = do
   v' <- mkVarProc v
   t <- codeType v
   let asgFunc (C.List _) = listSet (valueOf v') (litInt i) e'
-      asgFunc (C.Array _) = assign (arrayElem (litInt i) v') e'
+      asgFunc (C.Array _) = assign (arrayElem (valueOf v') (litInt i)) e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
   return $ asgFunc t
 convStmtProc (FFor v start end step st) = do

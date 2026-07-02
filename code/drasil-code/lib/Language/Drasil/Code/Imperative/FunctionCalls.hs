@@ -12,6 +12,7 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.State (get)
 
+import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
   fAppInOutProc)
 import Language.Drasil.Code.Imperative.Helpers (convScope)
@@ -22,7 +23,6 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))

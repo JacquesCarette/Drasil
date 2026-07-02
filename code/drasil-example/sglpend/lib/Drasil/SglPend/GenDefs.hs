@@ -14,7 +14,6 @@ import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
-import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
@@ -30,9 +29,9 @@ import Data.List.Extras (weave)
 import Drasil.SglPend.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Drasil.SglPend.Derivations as D
 import qualified Drasil.SglPend.Expressions as E
-import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle)
+import Drasil.SglPend.Unitals (lenRod, xForce, yForce, pendDisplacementAngle)
 import Drasil.DblPend.Concepts (arcLen, horizontalPos,
-    verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce)
+    verticalPos, horizontalVel, verticalVel)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
@@ -147,11 +146,8 @@ hForceOnPendulumGD = gdNoRefs (equationalRealmU "hForceOnPendulum" hForceOnPendu
         (getUnit force) (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
 hForceOnPendulumMD :: MultiDefn ModelExpr
-hForceOnPendulumMD = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = quantAU (mkUid "force") (horizontalForce `onThe` pendulum)
-                    (S "the horizontal force acting on the pendulum")
-                    Nothing (symbol force) Real (getUnit force)
-          defns = NE.fromList [
+hForceOnPendulumMD = mkMultiDefnForQuant xForce EmptyS defns
+    where defns = NE.fromList [
                     mkDefiningExpr "hForceOnPendulumViaComponent"
                       [] EmptyS $ express E.hForceOnPendulumViaComponent,
                     mkDefiningExpr "hForceOnPendulumViaAngle"
@@ -167,11 +163,8 @@ vForceOnPendulumGD = gdNoRefs (equationalRealmU "vForceOnPendulum" vForceOnPendu
         (getUnit force) (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
 
 vForceOnPendulumMD :: MultiDefn ModelExpr
-vForceOnPendulumMD = mkMultiDefnForQuant quan EmptyS defns
-    where quan  = quantAU (mkUid "force") (verticalForce `onThe` pendulum)
-                    (S "the vertical force acting on the pendulum")
-                    Nothing (symbol force) Real (getUnit force)
-          defns = NE.fromList [
+vForceOnPendulumMD = mkMultiDefnForQuant yForce EmptyS defns
+    where defns = NE.fromList [
                     mkDefiningExpr "vForceOnPendulumViaComponent"
                       [] EmptyS $ express E.vForceOnPendulumViaComponent,
                     mkDefiningExpr "vForceOnPendulumViaAngle"

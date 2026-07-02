@@ -7,7 +7,7 @@ import Theory.Drasil (makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
 
 import Drasil.Code.CodeExpr.Development
-import Language.Drasil.Chunk.Code (CodeVarChunk, quantvar)
+import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
 
 -- This may be temporary, but need a structure to hold ODE info for now.
 -- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.

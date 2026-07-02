@@ -15,7 +15,7 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 import Drasil.Code.CodeExpr (CodeExpr)
-import Language.Drasil.Chunk.Code (CodeVarChunk)
+import Drasil.Code.CodeVar (CodeVarChunk)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil.Mod (Initializer, StateVariable)

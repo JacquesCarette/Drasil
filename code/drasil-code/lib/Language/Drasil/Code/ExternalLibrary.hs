@@ -14,16 +14,16 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
 
+import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty(..), fromList)
+
 import Drasil.Code.CodeExpr.Development
 import Drasil.Code.CodeExpr
+import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil (Space, HasSpace(typ))
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil.Mod (FuncStmt(..), Description)
-
-import Control.Lens ((^.))
-import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 -- | Condition for loops.
 type Condition = CodeExpr

@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
 -- General Drasil
-import Language.Drasil
+import Language.Drasil hiding (Space(..))
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)

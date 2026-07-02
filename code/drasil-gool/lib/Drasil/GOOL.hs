@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, TypeData, VS,
-  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
+module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
+  SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
   FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
@@ -60,8 +60,8 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), initObserverList,
   addObserver, StrategyPattern(..), convTypeOO)
 
-import Drasil.Shared.AST (TypeData(..), FileData(..), ScopeData(..), ModData(..),
-  ProgData(..), VisibilityTag(..))
+import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
+  VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))
 

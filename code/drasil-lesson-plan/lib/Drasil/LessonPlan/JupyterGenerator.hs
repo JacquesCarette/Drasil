@@ -3,8 +3,8 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
 -- | Document language for lesson plan notebooks.
-module Drasil.LessonPlan.Renderer (
-  Options(..)
+module Drasil.LessonPlan.JupyterGenerator (
+  JupyterGenOptions(..)
 ) where
 
 import Control.Lens ((^.))
@@ -25,25 +25,22 @@ import Drasil.LessonPlan.ExtractBib (extractBib)
 import Language.Drasil.Printers
 import Language.Drasil.Printing.Import
 
--- | Options for the single-file-generating Jupyter notebook renderer.
---
--- FIXME: Rename to something more LessonPlan-focused?
-data Options = Options {
+-- | Single-file-generating Jupyter notebook rendering options.
+data JupyterGenOptions = JupyterGenOptions {
   -- | Describe the organization of the final lesson plan.
   lsnDesc :: LsnDesc,
   -- | A title combinator that mixes 'Notebook' (passed as the first argument)
   -- with the title of the 'LessonPlan'. To be used as the /actual title/ used
   -- in the final generated document.
   titleComb :: CI -> CI -> Sentence,
-  -- | The name of the output file (no extension, @.ipynb@ is added later).
-  lsnFileName :: String
-
-  -- FIXME: Output formats? This can be rendered as a literate notebook as well.
+  -- | The name of the file to be outputted (no extension, @.ipynb@ is added
+  -- later).
+  fileName :: String
 }
 
-instance ToFiles LessonPlan Options where
+instance ToFiles LessonPlan JupyterGenOptions where
   -- | Realize a 'LessonPlan' as a single Jupyter notebook file.
-  toFiles plan Options{..} = files
+  toFiles plan JupyterGenOptions{..} = files
     where
       -- Steps:
 
@@ -60,7 +57,7 @@ instance ToFiles LessonPlan Options where
       doc = genJupyterLessonPlan pd
 
       -- 4. Produce final files (with `Prettyprinter.Doc` body).
-      files = [file [ps|{lsnFileName}.ipynb|] doc]
+      files = [file [ps|{fileName}.ipynb|] doc]
 
 -- | Helper for creating the notebook sections.
 mkSections :: ChunkDB -> LsnDesc -> [Section]

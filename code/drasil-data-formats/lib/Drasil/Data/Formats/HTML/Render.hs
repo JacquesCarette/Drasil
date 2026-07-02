@@ -11,8 +11,7 @@ import qualified Data.Text as T
 
 import Drasil.Data.Formats.HTML.Core (
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), Format(..), HLevel(..),
-    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..),
-    boldText, emphasisText, subscriptText, superscriptText, spanText, figureImage
+    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..)
   )
 
 -- | Render 'HTML' to a 'Doc'

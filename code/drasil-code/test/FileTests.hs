@@ -13,21 +13,21 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 -- | Creates a program in GOOL to test reading and writing to files.
-fileTestsOO :: (OOProg r) => OO.GSProgram r
+fileTestsOO :: (OOProg r tp) => OO.GSProgram r
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
-fileTestsProc :: (ProcProg r) => GProc.GSProgram r
+fileTestsProc :: (ProcProg r tp) => GProc.GSProgram r
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
 
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
-fileTestMethod :: (SharedProg r) => SMethod r
+fileTestMethod :: (SharedProg r tp) => SMethod r
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
 -- | Generates functions that write to the file.
-writeStory :: (SharedProg r) => MSBlock r
+writeStory :: (SharedProg r tp) => MSBlock r
 writeStory = block [
   varDec (var "fileToWrite" outfile) mainFn,
 
@@ -49,13 +49,13 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (SharedProg r) => MSStatement r
+readStory :: (SharedProg r tp) => MSStatement r
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 
 -- | Prints the result of the 'readStory' function. Should be the same as
 -- what was given in 'writeStory'.
-goodBye :: (SharedProg r) => MSBlock r
+goodBye :: (SharedProg r tp) => MSBlock r
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)),
   assert (listSize (valueOf (var "fileContents" (listType string))) ?> litInt 0)

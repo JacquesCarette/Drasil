@@ -51,7 +51,7 @@ codeGenTestGroup =
         ]
     ]
 
-goolTestGroup :: String -> (forall r. (OOProg r) => OO.GSProgram r) -> TestTree
+goolTestGroup :: String -> (forall r tp. (OOProg r tp) => OO.GSProgram r) -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -64,7 +64,7 @@ goolTestGroup n p =
       goldenTest "swift" $ directory [ps|swift|] $ genCodeGOOL unSC unSP p
     ]
 
-gProcTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
+gProcTestGroup :: String -> (forall r tp. (ProcProg r tp) => Proc.GSProgram r) -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -73,16 +73,18 @@ gProcTestGroup n p =
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
 
-genCodeGOOL :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> (forall s. (OOProg s) => OO.GSProgram s) -> [FileLayout]
+genCodeGOOL :: (OOProg r tp, SoftwareDossierSym r', Monad r') =>
+  (r (OO.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
+  (forall s tp'. (OOProg s tp') => OO.GSProgram s) -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let
     gs = OO.unCI (evalState p initialState)
     (p', gs') = runState p gs
   in genCode' (unRepr p') gs' unRepr'
 
-genCodeProc :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> (forall s. (ProcProg s) => Proc.GSProgram s) -> [FileLayout]
+genCodeProc :: (ProcProg r tp, SoftwareDossierSym r', Monad r') =>
+  (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
+  (forall s tp'. (ProcProg s tp') => Proc.GSProgram s) -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let
     gs = Proc.unCI (evalState p initialState)

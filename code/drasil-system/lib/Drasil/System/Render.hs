@@ -2,13 +2,12 @@
 {-# LANGUAGE FunctionalDependencies #-}
 module Drasil.System.Render (
   Render(..),
-  renderSystemRepo, renderSystemRepo'
+  renderRepoDir
 ) where
 
 import Control.Lens ((^.))
-import System.OsPath (OsPath)
 
-import Drasil.FileHandling (FileLayout, directory, ps, writeFiles, OverwritePolicy(..))
+import Drasil.FileHandling (FileLayout, directory, ps)
 import Language.Drasil (CommonIdea(abrv))
 
 import Drasil.System.Core (HasSystemMeta(..))
@@ -31,14 +30,14 @@ class HasSystemMeta sys => Render sys opts | opts -> sys where
 
 -- | Render a "system" as a directory of (human-readable) software artifacts,
 -- where the directory name is the assigned project shortname.
-renderSystemRepo :: Render sys opts =>
+renderRepoDir :: Render sys opts =>
   -- | The system.
   sys ->
   -- | The rendering options.
   opts ->
   -- | The final, rendered software artifacts packaged into a single directory.
   FileLayout
-renderSystemRepo sys opts = directory [ps|{x}|] $ render sys opts
+renderRepoDir sys opts = directory [ps|{x}|] $ render sys opts
   where
     x = abrv $ sys ^. systemMeta . sysName
     -- FIXME: Both `abrv` usage and `sysName` usage here is dubious. We need to
@@ -49,19 +48,3 @@ renderSystemRepo sys opts = directory [ps|{x}|] $ render sys opts
     -- `SystemMeta` becomes `ProjectMeta`. This is nice because `SystemRepo`
     -- then also becomes `ProjectRepo` (which is more commonly understood repo
     -- and vague in a positive way).
-
--- | 'renderSystemRepo', but it also writes the directory to disk (relative to a
--- parent path).
-renderSystemRepo' :: Render sys opts =>
-  -- | The parent path.
-  OsPath ->
-  -- | File overwrite policy.
-  OverwritePolicy ->
-  -- | The system.
-  sys ->
-  -- | The rendering options.
-  opts ->
-  -- | The software artifacts will be rendered about the 'OsPath'.
-  IO ()
-renderSystemRepo' basePath pol sys =
-  writeFiles pol basePath . renderSystemRepo sys

@@ -21,12 +21,13 @@ import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPat
   writeFiles)
 import Drasil.LessonPlan (LsnDesc, LessonPlan, Options (Options))
 import Drasil.SRS (SRSDecl, mkDoc)
-import Drasil.System (DrasilWebsite, SmithEtAlSRS, programName, renderSystemRepo')
+import Drasil.System (DrasilWebsite, SmithEtAlSRS, programName)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Code (genCode, genCodeZoo)
+import Drasil.Generator.RenderSystem (writeSystemRepoDir)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 import Drasil.Generator.Website (genWebsite)
@@ -83,7 +84,7 @@ caseStudyMainLsnPlan :: LessonPlan -> LsnDesc -> String -> IO ()
 caseStudyMainLsnPlan plan nbDecl lsnFileName = do
   setSystemLocale
   let opts = Options nbDecl S.forT lsnFileName
-  renderSystemRepo' localPath OverwriteAllowed plan opts
+  writeSystemRepoDir localPath OverwriteAllowed plan opts
 
 -- | The Drasil website binary is expected to build a `Website/HTML/` folder
 -- containing the actual website artifacts (`index.html` and `index.css`).

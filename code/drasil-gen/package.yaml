@@ -18,6 +18,7 @@ dependencies:
 - aeson
 - aeson-pretty
 - bytestring
+- filepath
 - pretty
 - containers
 - directory

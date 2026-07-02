@@ -6,7 +6,8 @@ In order, you will be installing the following _bare minimum requirements_ for w
 
 1. [Basic Development Tools](#basic-development-tools): `git`, `GNU Make`, etc.
 2. [Stack](#stack-via-ghcup): A Haskell development toolchain.
-3. [VSCode](#vscode) + [Extensions](#extensions): A commonly used code editor with good Haskell support provided through a [plugin](https://github.com/haskell/haskell-language-server).
+
+With the minimum requirements out of the way, having an Integrated Development Environment (IDE), such as [VSCode](#vscode), is highly recommend (with some [Extensions](#extensions)). However, nothing is particularly special about VSCode. You are more than welcome to use other ones, such as Zed, Emacs, Neovim, etc., or none at all in favour of common text editors.
 
 If you intend to work with the artifacts that Drasil generates, you should also install:
 

@@ -32,6 +32,8 @@ data SystemMeta = SystemMeta
 
 makeClassy ''SystemMeta
 
+-- FIXME: Rename `System` to `Project`?
+
 mkSystemMeta :: CI -> People -> Purpose -> Background -> Scope -> Motivation ->
   ChunkDB -> SystemMeta
 mkSystemMeta = SystemMeta

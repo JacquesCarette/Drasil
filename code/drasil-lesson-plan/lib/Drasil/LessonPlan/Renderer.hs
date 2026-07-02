@@ -4,8 +4,7 @@
 {-# LANGUAGE RecordWildCards #-}
 -- | Document language for lesson plan notebooks.
 module Drasil.LessonPlan.Renderer (
-  Options(..),
-  render
+  Options(..)
 ) where
 
 import Control.Lens ((^.))
@@ -15,7 +14,7 @@ import Drasil.FileHandling
 import Language.Drasil hiding (Options)
 import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC),
   ulcc, RawContent(Bib), section, makeSecRef)
-import Drasil.System (HasSystemMeta(..), Render(..))
+import Drasil.System (HasSystemMeta(..), ToFiles(..))
 import Drasil.Metadata.Documentation (notebook)
 import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
   learnObj, review, summary, example, appendix, reference)
@@ -47,9 +46,9 @@ data Options = Options {
   -- FIXME: Output formats? This can be rendered as a literate notebook as well.
 }
 
-instance Render LessonPlan Options where
-  -- | Renders a 'LessonPlan' as a single Jupyter notebook file.
-  render plan Options{..} = files
+instance ToFiles LessonPlan Options where
+  -- | Realize a 'LessonPlan' as a single Jupyter notebook file.
+  toFiles plan Options{..} = files
     where
       -- Steps:
 

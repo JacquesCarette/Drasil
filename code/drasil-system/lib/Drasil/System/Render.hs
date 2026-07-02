@@ -1,50 +1,28 @@
-{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE FunctionalDependencies #-}
 module Drasil.System.Render (
-  Render(..),
-  renderRepoDir
+  ToFiles(..)
 ) where
 
 import Control.Lens ((^.))
 
 import Drasil.FileHandling (FileLayout, directory, ps)
-import Language.Drasil (CommonIdea(abrv))
 
 import Drasil.System.Core (HasSystemMeta(..))
 
--- | A "system" can be rendered into a set of (human-readable) software
--- artifacts. An instance of `Render` is approximately what it means to define a
--- off-the-shelf software generator.
-class HasSystemMeta sys => Render sys opts | opts -> sys where
+-- | The goal of our systems is to be abstractions about human-readable software
+-- artifacts. An instance of this typeclass ('ToFiles') defines a software
+-- generator that explains how said abstractions can be made /fully concrete/
+-- (i.e., made into concrete software artifacts).
+class HasSystemMeta sys => ToFiles sys opts | opts -> sys where
   -- FIXME: Should we try to name renderers? Should we associate them with
   -- chunks so we can refer to them in code as well? Perhaps this will give us
-  -- usage statistics, if we have a fine-grained enough `Render`-reliant
-  -- scheme and were polymorphic about the output type.
-  render ::
+  -- usage statistics, if we have a fine-grained enough `Render`-reliant scheme
+  -- and were polymorphic about the output type. Going monadic here can help
+  -- give us usage statistics on what things went on in the generation pipeline.
+  toFiles ::
     -- | The system.
     sys ->
-    -- | The rendering options.
+    -- | The generation options.
     opts ->
     -- | The final, rendered software artifacts.
     [FileLayout]
-
--- | Render a "system" as a directory of (human-readable) software artifacts,
--- where the directory name is the assigned project shortname.
-renderRepoDir :: Render sys opts =>
-  -- | The system.
-  sys ->
-  -- | The rendering options.
-  opts ->
-  -- | The final, rendered software artifacts packaged into a single directory.
-  FileLayout
-renderRepoDir sys opts = directory [ps|{x}|] $ render sys opts
-  where
-    x = abrv $ sys ^. systemMeta . sysName
-    -- FIXME: Both `abrv` usage and `sysName` usage here is dubious. We need to
-    -- replace this field with something better, such as project name and
-    -- project shortname (repo name).
-    --
-    -- In some sense, I want to rename `System` to `Project`. Hence,
-    -- `SystemMeta` becomes `ProjectMeta`. This is nice because `SystemRepo`
-    -- then also becomes `ProjectRepo` (which is more commonly understood repo
-    -- and vague in a positive way).

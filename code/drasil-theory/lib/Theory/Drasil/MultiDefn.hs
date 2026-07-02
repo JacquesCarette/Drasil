@@ -15,7 +15,7 @@ import Control.Lens (makeLenses, view, (^.))
 import Data.List (union)
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (UID, HasUID(..), mkUid, showUID, HasChunkRefs(..))
+import Drasil.Database (UID, HasUID(..), mkUid, HasChunkRefs(..))
 import Language.Drasil hiding (DefiningExpr)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
@@ -90,13 +90,12 @@ instance RequiresChecking (MultiDefn Expr) Expr Space where
 instance Express e => Express (MultiDefn e) where
   express q = equiv $ sy q : NE.toList (NE.map (express . (^. expr)) (q ^. rvs))
 
--- | Smart constructor for MultiDefns, does nothing special at the moment. First
--- argument is the 'String' to become a 'UID'.
-mkMultiDefn :: String -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+-- | Smart constructor for MultiDefns, does nothing special at the moment.
+mkMultiDefn :: UID -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
-  | length des == dupsRemovedLen = MultiDefn (mkUid u) q s des
+  | length des == dupsRemovedLen = MultiDefn u q s des
   | otherwise                    = error $
-      "MultiDefn `" ++ u ++ "` created with non-unique list of expressions"
+      "MultiDefn `" ++ show u ++ "` created with non-unique list of expressions"
   where
     dupsRemovedLen = length $ NE.nub des
 
@@ -104,7 +103,7 @@ mkMultiDefn u q s des
 
 -- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'DefinedQuantityDict'.
 mkMultiDefnForQuant :: DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
-mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
+mkMultiDefnForQuant q = mkMultiDefn (q ^. uid) q
 
 -- | Smart constructor for 'DefiningExpr's.
 mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e

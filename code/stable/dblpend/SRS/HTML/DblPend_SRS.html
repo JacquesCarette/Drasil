@@ -193,6 +193,26 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
+                  <td><em>F<sub>x1</sub></em></td>
+                  <td>Horizontal force on the first object</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>F<sub>x2</sub></em></td>
+                  <td>Horizontal force on the second object</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>F<sub>y1</sub></em></td>
+                  <td>Vertical force on the first object</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>F<sub>y2</sub></em></td>
+                  <td>Vertical force on the second object</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
                   <td><em><b>F</b></em></td>
                   <td>Force</td>
                   <td><em>N</em></td>
@@ -640,7 +660,7 @@
                   This section focuses on the general equations and laws that <span title="Double Pendulum">DblPend</span> is based on.
                 </p>
                 <div id="TM:acceleration">
-                  <table class="tdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>TM:acceleration</b></td>
@@ -684,7 +704,7 @@
                   </table>
                 </div>
                 <div id="TM:velocity">
-                  <table class="tdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>TM:velocity</b></td>
@@ -724,7 +744,7 @@
                   </table>
                 </div>
                 <div id="TM:NewtonSecLawMot">
-                  <table class="tdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>TM:NewtonSecLawMot</b></td>
@@ -778,7 +798,7 @@
                   This section collects the laws and equations that will be used to build the instance models.
                 </p>
                 <div id="GD:velocityX1">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:velocityX1</b></td>
@@ -856,7 +876,7 @@
                   </div>
                 </div>
                 <div id="GD:velocityY1">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:velocityY1</b></td>
@@ -934,7 +954,7 @@
                   </div>
                 </div>
                 <div id="GD:velocityX2">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:velocityX2</b></td>
@@ -1013,7 +1033,7 @@
                   </div>
                 </div>
                 <div id="GD:velocityY2">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:velocityY2</b></td>
@@ -1090,7 +1110,7 @@
                   </div>
                 </div>
                 <div id="GD:accelerationX1">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:accelerationX1</b></td>
@@ -1171,7 +1191,7 @@
                   </div>
                 </div>
                 <div id="GD:accelerationY1">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:accelerationY1</b></td>
@@ -1252,7 +1272,7 @@
                   </div>
                 </div>
                 <div id="GD:accelerationX2">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:accelerationX2</b></td>
@@ -1334,7 +1354,7 @@
                   </div>
                 </div>
                 <div id="GD:accelerationY2">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:accelerationY2</b></td>
@@ -1416,7 +1436,7 @@
                   </div>
                 </div>
                 <div id="GD:xForce1">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:xForce1</b></td>
@@ -1434,14 +1454,16 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
+                        \[{F_{\text{x}1}}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li>
+                            <em>F<sub>x1</sub></em> is the horizontal force on the first object (<em>N</em>)
+                          </li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
                             <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -1476,11 +1498,11 @@
                 <div id="GD:xForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
+                    \[{F_{\text{x}1}}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:yForce1">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:yForce1</b></td>
@@ -1498,14 +1520,16 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
+                        \[{F_{\text{y}1}}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li>
+                            <em>F<sub>y1</sub></em> is the vertical force on the first object (<em>N</em>)
+                          </li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
                             <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -1546,11 +1570,11 @@
                 <div id="GD:yForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
+                    \[{F_{\text{y}1}}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
                   </div>
                 </div>
                 <div id="GD:xForce2">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:xForce2</b></td>
@@ -1568,14 +1592,16 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
+                        \[{F_{\text{x}2}}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li>
+                            <em>F<sub>x2</sub></em> is the horizontal force on the second object (<em>N</em>)
+                          </li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
                             <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -1604,11 +1630,11 @@
                 <div id="GD:xForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
+                    \[{F_{\text{x}2}}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:yForce2">
-                  <table class="gdefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>GD:yForce2</b></td>
@@ -1626,14 +1652,16 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
+                        \[{F_{\text{y}2}}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li>
+                            <em>F<sub>y2</sub></em> is the vertical force on the second object (<em>N</em>)
+                          </li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
                             <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -1668,7 +1696,7 @@
                 <div id="GD:yForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
+                    \[{F_{\text{y}2}}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
                   </div>
                 </div>
               </div>
@@ -1680,7 +1708,7 @@
                   This section collects and defines all the data needed to build the instance models.
                 </p>
                 <div id="DD:positionGDD">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:positionGDD</b></td>
@@ -1732,7 +1760,7 @@
                   </table>
                 </div>
                 <div id="DD:positionXDD1">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:positionXDD1</b></td>
@@ -1795,7 +1823,7 @@
                   </table>
                 </div>
                 <div id="DD:positionYDD1">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:positionYDD1</b></td>
@@ -1858,7 +1886,7 @@
                   </table>
                 </div>
                 <div id="DD:positionXDD2">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:positionXDD2</b></td>
@@ -1926,7 +1954,7 @@
                   </table>
                 </div>
                 <div id="DD:positionYDD2">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:positionYDD2</b></td>
@@ -1994,7 +2022,7 @@
                   </table>
                 </div>
                 <div id="DD:accelerationGDD">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:accelerationGDD</b></td>
@@ -2044,7 +2072,7 @@
                   </table>
                 </div>
                 <div id="DD:forceGDD">
-                  <table class="ddefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>DD:forceGDD</b></td>
@@ -2096,7 +2124,7 @@
                   This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
                 </p>
                 <div id="IM:calOfAngle1">
-                  <table class="idefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>IM:calOfAngle1</b></td>
@@ -2196,7 +2224,7 @@
                   </table>
                 </div>
                 <div id="IM:calOfAngle2">
-                  <table class="idefn">
+                  <table class="defn-table">
                     <tr>
                       <th>Refname</th>
                       <td><b>IM:calOfAngle2</b></td>
@@ -3715,31 +3743,31 @@
         </p>
         <div id="Figure:TraceGraphAvsA">
           <figure>
-            <img src="../../../../traceygraphs/dblpend/avsa.svg" alt="TraceGraphAvsA" >
+            <img src="../../TraceyGraph/avsa.svg" alt="TraceGraphAvsA" >
             <figcaption>Figure: TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
-            <img src="../../../../traceygraphs/dblpend/avsall.svg" alt="TraceGraphAvsAll" >
+            <img src="../../TraceyGraph/avsall.svg" alt="TraceGraphAvsAll" >
             <figcaption>Figure: TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
-            <img src="../../../../traceygraphs/dblpend/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <img src="../../TraceyGraph/refvsref.svg" alt="TraceGraphRefvsRef" >
             <figcaption>Figure: TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
-            <img src="../../../../traceygraphs/dblpend/allvsr.svg" alt="TraceGraphAllvsR" >
+            <img src="../../TraceyGraph/allvsr.svg" alt="TraceGraphAllvsR" >
             <figcaption>Figure: TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
-            <img src="../../../../traceygraphs/dblpend/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <img src="../../TraceyGraph/allvsall.svg" alt="TraceGraphAllvsAll" >
             <figcaption>Figure: TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
@@ -3747,20 +3775,18 @@
           For convenience, the following graphs can be found at the links below:
         </p>
         <ul class="list">
+          <li><a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a></li>
           <li>
-            <a href="../../../../traceygraphs/dblpend/avsa.svg">TraceGraphAvsA</a>
+            <a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/dblpend/avsall.svg">TraceGraphAvsAll</a>
+            <a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/dblpend/refvsref.svg">TraceGraphRefvsRef</a>
+            <a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/dblpend/allvsr.svg">TraceGraphAllvsR</a>
-          </li>
-          <li>
-            <a href="../../../../traceygraphs/dblpend/allvsall.svg">TraceGraphAllvsAll</a>
+            <a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a>
           </li>
         </ul>
       </div>

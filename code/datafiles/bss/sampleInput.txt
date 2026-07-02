@@ -1,0 +1,22 @@
+# Mass of the first star (kg)
+2.0e30
+# Mass of the second star (kg)
+1.6e30
+# Initial x-position of the first star (m)
+7.5e10
+# Initial y-position of the first star (m)
+0.0
+# Initial x-position of the second star (m)
+-9.375e10
+# Initial y-position of the second star (m)
+0.0
+# Initial x-velocity of the first star (m/s)
+2.0e3
+# Initial y-velocity of the first star (m/s)
+9.0e3
+# Initial x-velocity of the second star (m/s)
+-2.5e3
+# Initial y-velocity of the second star (m/s)
+-1.125e4
+# Final simulation time (s)
+1.0e5

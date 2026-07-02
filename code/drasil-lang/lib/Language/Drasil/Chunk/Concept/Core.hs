@@ -16,9 +16,9 @@ import qualified Data.Set as Set
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
-import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 
 -- | Check if something has one domain. Throws an error if there is more than one.
@@ -31,7 +31,9 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
 -- a definition ('Sentence'), and an associated domain of knowledge (['UID']).
 --
 -- Ex. The concept of "Accuracy" may be defined as the quality or state of being correct or precise.
-data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the concept.
+data ConceptChunk = ConDict { _uu :: UID -- ^ The 'UID' of the concept.
+                            , _np :: NP -- ^ The term for the concept.
+                            , mabbr :: Maybe String -- ^ The optional abbreviation for the concept.
                             , _defn' :: Sentence -- ^ The definition of the concept.
                             , cdom' :: [UID] -- ^ Domain of the concept.
                             }
@@ -39,20 +41,19 @@ makeLenses ''ConceptChunk
 
 instance HasChunkRefs ConceptChunk where
   chunkRefs c = Set.unions
-    [ chunkRefs (c ^. idea)
-    , chunkRefs (c ^. defn')
+    [ chunkRefs (c ^. defn')
     , Set.fromList (cdom c)
     ]
   {-# INLINABLE chunkRefs #-}
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds 'UID' of the 'IdeaDict' used to make the 'ConceptChunk'.
-instance HasUID        ConceptChunk where uid = idea . uid
--- | Finds term ('NP') of the 'IdeaDict' used to make the 'ConceptChunk'.
-instance NamedIdea     ConceptChunk where term = idea . term
--- | Finds the idea contained in the 'IdeaDict' used to make the 'ConceptChunk'.
-instance Idea          ConceptChunk where getA = getA . view idea
+-- | Finds 'UID' of the 'ConceptChunk'.
+instance HasUID        ConceptChunk where uid = uu
+-- | Finds term ('NP') of the 'ConceptChunk'.
+instance NamedIdea     ConceptChunk where term = np
+-- | Finds the abbreviation of the 'ConceptChunk'.
+instance Idea          ConceptChunk where getA = mabbr
 -- | Finds definition of a 'ConceptChunk'.
 instance Definition    ConceptChunk where defn = defn'
 -- | Finds the domain of 'UID's of a 'ConceptChunk'.
@@ -84,9 +85,9 @@ instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. ui
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'ConceptInstance'.
 instance HasUID        ConceptInstance where uid = ciuid
 -- | Finds term ('NP') of the 'ConceptChunk' used to make the 'ConceptInstance'.
-instance NamedIdea     ConceptInstance where term = cc . idea . term
+instance NamedIdea     ConceptInstance where term = cc . term
 -- | Finds the idea contained in the 'ConceptChunk' used to make the 'ConceptInstance'.
-instance Idea          ConceptInstance where getA = getA . view (cc . idea)
+instance Idea          ConceptInstance where getA = getA . view cc
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'ConceptInstance'.
 instance Definition    ConceptInstance where defn = cc . defn'
 -- | Finds the domain contained in the 'ConceptChunk' used to make the 'ConceptInstance'.

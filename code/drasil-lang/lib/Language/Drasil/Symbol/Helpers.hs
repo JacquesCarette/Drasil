@@ -113,4 +113,3 @@ sortBySymbol = sortBy compareBySymbol
 -- | Sorts a tuple list of 'HasSymbols' by first Symbol in the tuple.
 sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
-

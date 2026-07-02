@@ -1,4 +1,7 @@
-module Drasil.SSP.BasicExprs where
+module Drasil.SSP.BasicExprs (
+  eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,
+  eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ
+) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil

@@ -1,6 +1,6 @@
 Original,Copy
-../../../../traceygraphs/progname/avsa.svg,src/assets/avsa.svg
-../../../../traceygraphs/progname/avsall.svg,src/assets/avsall.svg
-../../../../traceygraphs/progname/refvsref.svg,src/assets/refvsref.svg
-../../../../traceygraphs/progname/allvsr.svg,src/assets/allvsr.svg
-../../../../traceygraphs/progname/allvsall.svg,src/assets/allvsall.svg
+../../TraceyGraph/allvsall.svg,src/assets/allvsall.svg
+../../TraceyGraph/allvsr.svg,src/assets/allvsr.svg
+../../TraceyGraph/avsa.svg,src/assets/avsa.svg
+../../TraceyGraph/avsall.svg,src/assets/avsall.svg
+../../TraceyGraph/refvsref.svg,src/assets/refvsref.svg

@@ -1,4 +1,10 @@
-module Drasil.SglPend.Expressions where
+module Drasil.SglPend.Expressions (
+  angularDisplacementExpr,angFrequencyExpr, periodPendExpr,
+  velocityIXExpr, velocityIYExpr,
+  accelerationIXExpr, accelerationIYExpr,
+  hForceOnPendulumViaComponent, hForceOnPendulumViaAngle,
+  vForceOnPendulumViaComponent, vForceOnPendulumViaAngle
+) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil

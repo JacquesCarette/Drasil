@@ -1,46 +1,34 @@
 cradle:
   stack:
-    - path: "drasil-build/lib"
-      component: "drasil-build:lib"
+    - path: "drasil-assets/lib"
+      component: "drasil-assets:lib"
 
-    - path: "drasil-build-artifacts/lib"
-      component: "drasil-build-artifacts:lib"
+    - path: "drasil-assets/test"
+      component: "drasil-assets:test:drasil-assets-test"
 
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
 
-    - path: "drasil-code/test/Main.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/FileTests.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/HelloWorld.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/Helper.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GOOL/Observer.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GOOL/PatternTest.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/VectorTest.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/NameGenTest.hs"
-      component: "drasil-code:exe:codegenTest"
+    - path: "drasil-code/test"
+      component: "drasil-code:test:codegenTest"
 
     - path: "drasil-data/lib"
       component: "drasil-data:lib"
 
+    - path: "drasil-data-formats/lib"
+      component: "drasil-data-formats:lib"
+
+    - path: "drasil-data-formats/test"
+      component: "drasil-data-formats:test:drasil-data-formats-test"
+
     - path: "drasil-database/lib"
       component: "drasil-database:lib"
 
-    - path: "drasil-docLang/lib"
-      component: "drasil-docLang:lib"
+    - path: "drasil-example/bss/lib"
+      component: "bss:lib"
+
+    - path: "drasil-example/bss/app/Main.hs"
+      component: "bss:exe:bss"
 
     - path: "drasil-example/dblpend/lib"
       component: "dblpend:lib"
@@ -78,6 +66,12 @@ cradle:
     - path: "drasil-example/projectile/app/Main.hs"
       component: "projectile:exe:projectile"
 
+    - path: "drasil-example/projectile-lesson/lib"
+      component: "projectile-lesson:lib"
+
+    - path: "drasil-example/projectile-lesson/app/Main.hs"
+      component: "projectile-lesson:exe:projectile-lesson"
+
     - path: "drasil-example/sglpend/lib"
       component: "sglpend:lib"
 
@@ -108,6 +102,12 @@ cradle:
     - path: "drasil-example/template/app/Main.hs"
       component: "template:exe:template"
 
+    - path: "drasil-file-handling/lib"
+      component: "drasil-file-handling:lib"
+
+    - path: "drasil-file-handling/test"
+      component: "drasil-file-handling:test:drasil-file-handling-test"
+
     - path: "drasil-gen/lib"
       component: "drasil-gen:lib"
 
@@ -117,14 +117,35 @@ cradle:
     - path: "drasil-lang/lib"
       component: "drasil-lang:lib"
 
+    - path: "drasil-lesson-plan/lib"
+      component: "drasil-lesson-plan:lib"
+
+    - path: "drasil-makefile/lib"
+      component: "drasil-makefile:lib"
+
+    - path: "drasil-meta-analysis/lib"
+      component: "drasil-meta-analysis:lib"
+
+    - path: "drasil-meta-analysis/app/classinstdepgen/ClassInstDepGen.hs"
+      component: "drasil-meta-analysis:exe:classinstdepgen"
+
+    - path: "drasil-meta-analysis/app/typedepgen/TypeDepGen.hs"
+      component: "drasil-meta-analysis:exe:typedepgen"
+
     - path: "drasil-metadata/lib"
       component: "drasil-metadata:lib"
 
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
 
+    - path: "drasil-srs/lib"
+      component: "drasil-srs:lib"
+
     - path: "drasil-system/lib"
       component: "drasil-system:lib"
+
+    - path: "drasil-testing-kit/lib"
+      component: "drasil-testing-kit:lib"
 
     - path: "drasil-theory/lib"
       component: "drasil-theory:lib"

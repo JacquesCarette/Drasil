@@ -23,11 +23,6 @@ if [ -z "$GRAPH_FOLDER" ]; then
   exit 1
 fi
 
-if [ -z "$TRACEY_GRAPHS_FOLDER" ]; then
-  echo "Missing TRACEY_GRAPHS_FOLDER."
-  exit 1
-fi
-
 if [ -z "$MULTI_SRC_DIRS" ]; then
   echo "Missing MULTI_SRC_DIRS."
   exit 1
@@ -106,6 +101,10 @@ copy_examples() {
       if [ -d "$example/SRS/Jupyter" ]; then
         cp -r "$example/SRS/Jupyter/"*.html "$target_srs_dir/Jupyter"
       fi
+      if [ -d "$example/TraceyGraph" ]; then
+        mkdir -p "$EXAMPLE_DEST$example_name/TraceyGraph"
+        cp -r "$example/TraceyGraph/"*.{png,pdf,svg} "$EXAMPLE_DEST$example_name/TraceyGraph"
+      fi
       if [ -d "$example/src" ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
         for lang in "$example/src/"*; do
@@ -149,17 +148,12 @@ src_stub() {
 copy_images() {
   rm -rf "$CUR_DIR/deploy/images"
   mkdir -p "$CUR_DIR/deploy/images"
-  cp -r "$CUR_DIR/drasil-website/WebInfo/images/" "$CUR_DIR/deploy"
+  cp -r "$CUR_DIR/drasil-website/WebInfo/images/" "$CUR_DIR/deploy/images/"
 }
 
 copy_analysis() {
   rm -rf "$ANALYSIS_FOLDER"
   cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
-}
-
-copy_traceygraphs() {
-  rm -rf "$TRACEY_GRAPHS_FOLDER"
-  cp -r "$CUR_DIR$TRACEY_GRAPHS_FOLDER". "$TRACEY_GRAPHS_FOLDER"
 }
 
 copy_website() {
@@ -178,6 +172,5 @@ copy_datafiles
 copy_examples
 copy_images
 copy_analysis
-copy_traceygraphs
 copy_website
 cd "$CUR_DIR" || exit 1

@@ -1,8 +1,10 @@
-module Drasil.PDController.Requirements where
+module Drasil.PDController.Requirements (
+  funcReqs, nonfuncReqs, funcReqsTables
+) where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, datumConstraint)
-import Drasil.DocLang.SRS (datCon)
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
+import Drasil.SRS.Concepts (datCon)
+import Drasil.SRS (mkMaintainableNFR, mkPortableNFR, mkVerifiableNFR,
   mkSecurityNFR, inReqWTab)
 
 import Drasil.PDController.Concepts
@@ -10,6 +12,7 @@ import Drasil.PDController.IModel
 import Drasil.PDController.Unitals (inputs)
 
 import Language.Drasil
+import Language.Drasil.Document
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputValues, verifyInputs, calculateValues, outputValues]

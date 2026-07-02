@@ -2,7 +2,11 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Language.Drasil.WellTyped where
+module Language.Drasil.WellTyped (
+  RequiresChecking(..), Typed(..), TypingContext,
+  TypeError, inferFromContext, temporaryIndent,
+  typeCheckByInfer, assertAllEq, (~==)
+) where
 
 import Data.List (intercalate)
 import qualified Data.Map.Strict as M

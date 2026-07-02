@@ -4,13 +4,13 @@ module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
   posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
-import Drasil.Sentence.Combinators (fromSources)
+import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, value, consVals)
 import Data.Drasil.Concepts.Math (cartesian, xAxis, xDir, yAxis, yDir, direction, positive)

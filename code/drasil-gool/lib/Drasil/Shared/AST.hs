@@ -1,21 +1,19 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
-  Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
+  AttachmentTag(..), onAttachment, AttachmentData(attachment, attachmentDoc), ad, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
   opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
   ProgData(progName, progPurp, progMods), progD, emptyProg,
   StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
-  updateValDoc, VarData(varBind, varName, varType, varDoc), vard, CommonThunk,
-  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim
-) where
+  updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
+  BinderD(bindName, bindType), bindFormD
+  ) where
 
 import Drasil.Shared.CodeType (CodeType)
 
-import Drasil.Build.Artifacts (HasPathAndDoc(..))
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
@@ -43,29 +41,24 @@ isSource :: FileType -> Bool
 isSource Header = False
 isSource _ = True
 
--- Static means bound at compile-time, Dynamic at run-time, used in BindData
--- and VarData
-data Binding = Static | Dynamic
+-- | Denotes whether a member is bound to the class or its instances
+data AttachmentTag = ClassLevel | InstanceLevel
 
-onBinding :: Binding -> a -> a -> a
-onBinding Static s _ = s
-onBinding Dynamic _ d = d
+onAttachment :: AttachmentTag -> a -> a -> a
+onAttachment ClassLevel s _ = s
+onAttachment InstanceLevel _ d = d
 
--- Used as the underlying data type for Permanence in the C++ renderer
-data BindData = BD {bind :: Binding, bindDoc :: Doc}
+-- Used as the underlying data type for Attachment in the C++ renderer
+data AttachmentData = BD {attachment :: AttachmentTag, attachmentDoc :: Doc}
 
-bd :: Binding -> Doc -> BindData
-bd = BD
+ad :: AttachmentTag -> Doc -> AttachmentData
+ad = BD
 
 -- Used as the underlying data type for Files in all renderers
 data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
 
 fileD :: FilePath -> ModData -> FileData
 fileD = FileD
-
-instance HasPathAndDoc FileData Doc where
-  getPath = filePath
-  getDoc = modDoc . fileMod
 
 -- Replace a FileData's ModData with a new ModData
 updateFileMod :: ModData -> FileData -> FileData
@@ -157,45 +150,15 @@ updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valInt v) (valType v) ((f . val) v)
 
 -- Used as the underlying data type for Variables in all renderers
-data VarData = VarD {varBind :: Binding, varName :: String,
+data VarData = VarD {varBind :: AttachmentTag, varName :: String,
   varType :: TypeData, varDoc :: Doc}
 
-vard :: Binding -> String -> TypeData -> Doc -> VarData
+vard :: AttachmentTag -> String -> TypeData -> Doc -> VarData
 vard = VarD
 
--- Used as the underlying data type for Thunks in all renderers
-data CommonThunk s
-  = PureValue (s ValData)
-  | Vectorize (s ValData -> s ValData) (CommonThunk s)
-  | Vectorize2 (s ValData -> s ValData -> s ValData) (CommonThunk s) (CommonThunk s)
-  | SumComponents (CommonThunk s)
+-- Underlying type of Binder
+data BinderD = BindFormD {bindName :: String, bindType :: TypeData}
 
-pureValue :: s ValData -> CommonThunk s
-pureValue = PureValue
+bindFormD :: String -> TypeData -> BinderD
+bindFormD = BindFormD
 
-vectorize :: (s ValData -> s ValData) -> CommonThunk s -> CommonThunk s
-vectorize = Vectorize
-
-vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
-vectorize2 = Vectorize2
-
-sumComponents :: CommonThunk s -> CommonThunk s
-sumComponents = SumComponents
-
-commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
-commonVecIndex index (PureValue v) = index v
-commonVecIndex index (Vectorize op v) = op (commonVecIndex index v)
-commonVecIndex index (Vectorize2 op v1 v2) = commonVecIndex index v1 `op` commonVecIndex index v2
-commonVecIndex _ (SumComponents _) = error "Indexing into a scalar thunk"
-
-commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
-commonThunkElim _ sumF (SumComponents v) = sumF v
-commonThunkElim vectorF _ v = vectorF v
-
--- The dimension of a vector or the vector underlying a dot product
--- Used to generate thunkAssign loops
-commonThunkDim :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
-commonThunkDim dim (PureValue v) = dim v
-commonThunkDim dim (Vectorize _ v) = commonThunkDim dim v
-commonThunkDim dim (Vectorize2 _ v1 _) = commonThunkDim dim v1
-commonThunkDim dim (SumComponents v) = commonThunkDim dim v

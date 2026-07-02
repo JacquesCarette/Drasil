@@ -1,6 +1,7 @@
 module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil (TheoryModel, tm, equationalModel')
 
 import Drasil.GlassBR.References (astm2009)

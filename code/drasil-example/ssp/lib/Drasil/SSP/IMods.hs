@@ -1,16 +1,18 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.IMods where
+module Drasil.SSP.IMods (
+  instModIntro, iMods, fctSfty, nrmShrFor, intsliceFs, crtSlpId
+) where
 
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang.SRS (propCorSol)
-import Drasil.Sentence.Combinators (definedIn'', definedIn''', eqN)
+import Drasil.SRS.Concepts (propCorSol)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
@@ -464,7 +466,7 @@ nrmShrDerivEqn4 = sy normToShear $= sum1toN
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im (othModel' nrmShrForNumRC) [qwUC slopeDist, qwUC slopeHght, qwUC waterHght,
   qwUC waterWeight, qwUC slipDist, qwUC slipHght]
-  (dqdWr nrmShearNum) [] (map dRef [chen2005, karchewski2012])
+  nrmShearNum [] (map dRef [chen2005, karchewski2012])
   (Just nrmShrFNumDeriv) "nrmShrForNum" [nrmShrFNumDesc]
 
 nrmShrForNumRC :: RelationConcept
@@ -501,7 +503,7 @@ nrmShrFNumDesc = (foldlList Comma List [baseWthX `definedIn'''` lengthB,
 
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im (othModel' nrmShrForDenRC) [qwUC slipDist, qwUC constF]
-  (dqdWr nrmShearDen) [] (map dRef [chen2005, karchewski2012])
+  nrmShearDen [] (map dRef [chen2005, karchewski2012])
   (Just nrmShrFDenDeriv) "nrmShrForDen" [nrmShrFDenDesc]
 
 nrmShrForDenRC :: RelationConcept
@@ -533,7 +535,7 @@ intsliceFs :: InstanceModel
 intsliceFs = im (othModel' intsliceFsRC) [qwUC slopeDist, qwUC slopeHght, qwUC waterHght
   , qwUC effCohesion, qwUC fricAngle, qwUC dryWeight, qwUC satWeight, qwUC waterWeight
   , qwUC slipDist, qwUC slipHght, qwUC constF]
-  (dqdWr intNormForce) [] [dRef chen2005] (Just intrSlcDeriv) "intsliceFs" [sliceFsDesc]
+  intNormForce [] [dRef chen2005] (Just intrSlcDeriv) "intsliceFs" [sliceFsDesc]
 
 intsliceFsRC :: RelationConcept
 intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")

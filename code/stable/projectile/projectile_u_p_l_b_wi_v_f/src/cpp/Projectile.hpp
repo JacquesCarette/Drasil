@@ -24,7 +24,6 @@ class InputParameters {
         float theta;
         float p_target;
         float g = 9.8f;
-        float epsilon = 2.0e-2f;
         
         /** \brief Initializes input object by reading inputs and checking physical constraints on the input
             \param filename name of the input file

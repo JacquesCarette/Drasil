@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
-module Drasil.Code.CodeExpr.Lang where
+module Drasil.Code.CodeExpr.Lang (CodeExpr(..)) where
 
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))

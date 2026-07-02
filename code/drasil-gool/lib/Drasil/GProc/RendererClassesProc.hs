@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 module Drasil.GProc.RendererClassesProc (
   ProcRenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
@@ -16,9 +17,9 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
-class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,
-  ProcRenderMethod r
-  ) => ProcRenderSym r
+class (CommonRenderSym r tp, IP.FileSym r tp, RenderFile r, RenderMod r,
+  ModuleElim r, ProcRenderMethod r tp
+  ) => ProcRenderSym r tp
 
 -- Procedural-Only Typeclasses --
 
@@ -29,7 +30,7 @@ class (BlockCommentSym r) => RenderFile r where
   top :: r (IP.Module r) -> r (Block r)
   bottom :: r (Block r)
 
-  commentedMod :: IP.SFile r -> FS (r (BlockComment r)) -> IP.SFile r
+  commentedMod :: IP.SFile r -> FS (r Doc) -> IP.SFile r
 
   fileFromData :: FilePath -> IP.FSModule r -> IP.SFile r
 
@@ -40,7 +41,7 @@ class RenderMod r where
 class ModuleElim r where
   module' :: r (IP.Module r) -> Doc
 
-class (RenderMethod r) => ProcRenderMethod r where
+class (RenderMethod r tp) => ProcRenderMethod r tp where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
   intFunc     :: Bool -> Label -> r (Visibility r) -> MSMthdType r ->

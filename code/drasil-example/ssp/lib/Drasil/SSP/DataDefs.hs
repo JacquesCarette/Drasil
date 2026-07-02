@@ -5,6 +5,7 @@ module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -12,7 +13,6 @@ import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.Theories.Physics (torqueDD)
-import Drasil.Sentence.Combinators (definedIn''')
 
 import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.Defs (slice)

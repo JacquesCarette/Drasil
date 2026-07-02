@@ -10,16 +10,20 @@ assignees:
  - B-rando1
  - Xinlu-Y
  - JoeZZG
- 
+ - djarabek
+ - camishibata 
 
 ---
 
 **Agenda**
 
-2. Blockers for @B-rando1 
-3. Blockers for @Xinlu-Y 
-4. Blockers for @JoeZZG 
+1. Blockers for @B-rando1 
+2. Blockers for @Xinlu-Y 
+3. Blockers for @djarabek
+4. Blockers for @camishibata 
+
 
 Regrets:
+
 
 Virtual:

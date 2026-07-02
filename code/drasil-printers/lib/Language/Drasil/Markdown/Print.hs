@@ -1,11 +1,21 @@
+{-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
+
 -- | Defines main Markdown printer functions.
 module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
-import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
 import Data.List.Utils (replace)
+import qualified Data.Set as S
+import qualified Data.Text as T (Text, pack)
+import qualified Prettyprinter as PNew (Doc)
+import System.FilePath (takeFileName)
+import Text.PrettyPrint hiding (Str)
+
+import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
+  mkCSV, renderCSV)
+import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
@@ -33,8 +43,12 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText
 -----------------------------------------------------------------
 
 -- | Generate a mdBook SRS
-genMDBook :: Project -> [(Filename, Doc)]
-genMDBook = build'
+genMDBook :: Project -> [FileLayout]
+genMDBook p@(Project t _ rm _) =
+  [ file [ps|book.toml|] (makeBook rm t)
+  , file [ps|.drasil-requirements.csv|] (makeRequirements p)
+  , directory [ps|src|] (map (\(fn, d) -> file [ps|{fn}.md|] d) (build' p))
+  ]
 
 -- | Build the mdBook Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]
@@ -42,6 +56,56 @@ build' p@(Project _ _ rm d) =
   printSummary rm files : map (print' rm) files
   where
     files = createTitleFile p : d
+
+-- | Prints the .toml config file for mdBook.
+makeBook :: RefMap -> Spec -> Doc
+makeBook rm t = vcat [
+  text "[book]",
+  text "language = \"en\"",
+  text "src = \"src\"",
+  text "title =" <+> mkTitle rm t,
+  text "[output.html]",
+  text "smart-punctuation = true",
+  text "mathjax-support = true"
+  ]
+
+-- | Render a title 'Spec'.
+mkTitle :: RefMap -> Spec -> Doc
+mkTitle rm t = text "\"" <> pSpec rm t <> text "\""
+
+-- | Prints the .csv file mapping the original filepaths of assets to the
+-- location mdBook uses.
+makeRequirements :: Project -> PNew.Doc ann
+makeRequirements p =
+  let
+    mCSV = mkCSV (Just 2) (Just ["Original", "Copy"]) (assetMat p)
+    csv = either error id mCSV
+  in renderCSV (csvRenderOpts Minimal) csv
+
+-- | FIXME: HACK: Find all figure assets from a 'Project'. This is a hack
+-- because (a) there can be assets other than figures, (b) we are searching
+-- _after_ layout onto a list of 'LayoutObj's. This should be a matter of
+-- knowing which artifacts were rendered and when some (new) chunk 'SystemAsset'
+-- is referenced.
+assetMat :: Project -> [[T.Text]]
+assetMat (Project _ _ _ files) =
+  [[T.pack fp, "src/assets/" P.<> T.pack (takeFileName fp)] | fp <- S.toAscList extractedLOs]
+  where
+    extractedLOs = S.unions $ map (\(File _ _ _ los) -> S.unions $ map figs los) files
+    unionsFigs = S.unions . map figs
+    figs :: LayoutObj -> S.Set String
+    figs (Figure _ _ fp _)     = S.singleton fp
+    figs (HDiv _ los _)        = unionsFigs los
+    figs (Cell los)            = unionsFigs los
+    figs (Definition slos _)   = S.unions (map (unionsFigs . snd) slos)
+    figs Table{}               = S.empty
+    figs Header{}              = S.empty
+    figs Paragraph{}           = S.empty
+    figs EqnBlock{}            = S.empty
+    figs List{}                = S.empty
+    figs Graph{}               = S.empty
+    figs CodeBlock{}           = S.empty
+    figs Bib{}                 = S.empty
 
 -- | Called by build', uses 'printLO' to render a File
 -- into a single Doc
@@ -86,7 +150,7 @@ printLO rm (EqnBlock contents)   = text "\\\\[" <> rndr contents <> text "\\\\]"
     rndr (E e) = pExpr e
     rndr c = pSpec rm c
 printLO rm (Table _ rows r b t)  = makeTable rm rows (pSpec rm r) b (pSpec rm t)
-printLO rm (Definition _ ssPs l) = makeDefn rm ssPs (pSpec rm l)
+printLO rm (Definition ssPs l)   = makeDefn rm ssPs (pSpec rm l)
 printLO rm (List t)              = makeList rm t 0
 printLO rm (Figure r c f _)      = makeFigure (pSpec rm r) (fmap (pSpec rm) c) (text f)
 printLO rm (Bib bib)             = makeBib rm bib
@@ -121,9 +185,9 @@ pExpr (Str s)        = printMath $ toText $ pure $ lq <> text s <> rq
     lq = text "\\\\(\\``\\\\)"
     rq = text "''"
 pExpr (Div n d)      = printMath $ command2D "frac" (pExpr' n) (pExpr' d)
-pExpr (Case ps)      = printMath $ mkEnv "cases" (P.<>) cases
+pExpr (Case ees)     = printMath $ mkEnv "cases" (P.<>) cases
   where
-    cases = TeX.cases ps hpunctuate lnl pExpr'
+    cases = TeX.cases ees hpunctuate lnl pExpr'
 pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
   where
     matrix = TeX.pMatrix a hpunctuate lnl pExpr'
@@ -214,12 +278,12 @@ makeCell content size = content <> spaces
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: RefMap -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _  [] _ = error "L.Empty definition"
-makeDefn rm ps l =
-  makeDHeaderText rm ps l $^$
+makeDefn rm slos l =
+  makeDHeaderText rm slos l $^$
   makeHeaderCols [text "Refname", l] size $$
   makeRows docDefn size
   where
-    docDefn = mkDocDefn rm ps
+    docDefn = mkDocDefn rm slos
     size = columnSize docDefn
 
 -- | Helper for convering definition to Doc matrix
@@ -228,9 +292,9 @@ mkDocDefn rm = map (\(f, d) -> [text f, makeLO rm (f,d)])
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: RefMap -> [(String, [LayoutObj])] -> Doc -> Doc
-makeDHeaderText rm ps l = centeredDiv header
+makeDHeaderText rm slos l = centeredDiv header
   where
-    lo = lookup "Label" ps
+    lo = lookup "Label" slos
     c = maybe l (\lo' -> makeLO rm ("Label", lo')) lo
     header = h' 2 <+> heading c l
 

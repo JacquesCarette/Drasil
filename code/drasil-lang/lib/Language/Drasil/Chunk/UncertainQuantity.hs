@@ -5,7 +5,9 @@ module Language.Drasil.Chunk.UncertainQuantity (
   UncertQ,
   -- * Constructors
   uq, uqc,
-  uqcND) where
+  uqcND,
+  -- * Direct constructor (preserves ConstrConcept fields)
+  uqDirect) where
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -16,9 +18,9 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
-  IsUnit, Constrained(constraints), HasReasVal(reasVal))
+  Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
@@ -56,6 +58,8 @@ instance HasUncertainty UncertQ where unc = unc''
 instance Constrained    UncertQ where constraints = coco . constraints
 -- | Finds a reasonable value for the 'ConstrConcept' used to make the 'UncertQ'.
 instance HasReasVal     UncertQ where reasVal = coco . reasVal
+-- | Finds the rationale for the 'ConstrConcept' used to make the 'UncertQ'.
+instance MayHaveRationale   UncertQ where rationale = coco . rationale
 -- | Finds definition of the 'ConstrConcept' used to make the 'UncertQ'.
 instance Definition     UncertQ where defn = coco . defn
 -- | Finds the domain contained in the 'ConstrConcept' used to make the 'UncertQ'.
@@ -69,15 +73,19 @@ instance Express        UncertQ where express = sy
 -- | Smart constructor that requires a 'Quantity', a percentage, and a typical value with an 'Uncertainty'.
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
   c -> Uncertainty -> UncertQ
-uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal))
+uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal) Nothing)
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
 -- | Uncertainty quantity ('uq') but with a constraint.
-uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space
+uqc :: String -> NP -> String -> Symbol -> UnitDefn -> Space
                 -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 uqc nam trm desc sym un space cs val = uq (cuc' nam trm desc sym un space cs val)
 
 -- | Uncertainty quantity constraint ('uqc') without a description.
-uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [ConstraintE]
+uqcND :: String -> NP -> Symbol -> UnitDefn -> Space -> [ConstraintE]
                   -> Expr -> Uncertainty -> UncertQ
 uqcND nam trm sym un space cs val = uq (cuc' nam trm "" sym un space cs val)
+
+-- | Directly wraps a 'ConstrConcept' with an 'Uncertainty', preserving all fields (including rationale).
+uqDirect :: ConstrConcept -> Uncertainty -> UncertQ
+uqDirect = UQ

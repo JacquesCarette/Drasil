@@ -1,0 +1,21 @@
+# Data Constraints {#Sec:DataConstraints}
+
+The [Input Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+
+<div id="Table:InDataConstraints"></div>
+
+|Var                         |Physical Constraints            |Software Constraints                                                       |Typical Value                                           |Rationale                                                 |Uncert.     |
+|:---------------------------|:-------------------------------|:--------------------------------------------------------------------------|:-------------------------------------------------------|:---------------------------------------------------------|:-----------|
+|\\({m\_{1}}\\)              |\\({m\_{1}}\gt{}0\\)            |\\({m\_{\text{min}}}\leq{}{m\_{1}}\leq{}{m\_{\text{max}}}\\)               |\\(2.0\cdot{}10^{30}\\) \\({\text{kg}}\\)               |approximately 1 solar mass                                |5.0\\(\\%\\)|
+|\\({m\_{2}}\\)              |\\({m\_{2}}\gt{}0\\)            |\\({m\_{\text{min}}}\leq{}{m\_{2}}\leq{}{m\_{\text{max}}}\\)               |\\(1.6\cdot{}10^{30}\\) \\({\text{kg}}\\)               |approximately 0.8 solar masses                            |5.0\\(\\%\\)|
+|\\({t\_{\text{final}}}\\)   |\\({t\_{\text{final}}}\geq{}0\\)|\\({t\_{\text{final}}}\leq{}{t\_{\text{max}}}\\)                           |\\(100.0\cdot{}10^{3}\\) \\({\text{s}}\\)               |short integration window                                  |0.0\\(\\%\\)|
+|\\({{v\_{\text{x}1}}^{0}}\\)|--                              |\\(-{v\_{\text{max}}}\leq{}{{v\_{\text{x}1}}^{0}}\leq{}{v\_{\text{max}}}\\)|\\(2.0\cdot{}10^{3}\\) \\(\frac{\text{m}}{\text{s}}\\)  |non-zero x-velocity produces a general elliptical orbit   |5.0\\(\\%\\)|
+|\\({{v\_{\text{x}2}}^{0}}\\)|--                              |\\(-{v\_{\text{max}}}\leq{}{{v\_{\text{x}2}}^{0}}\leq{}{v\_{\text{max}}}\\)|\\(-2.0\cdot{}10^{3}\\) \\(\frac{\text{m}}{\text{s}}\\) |derived from COM constraint                               |5.0\\(\\%\\)|
+|\\({{v\_{\text{y}1}}^{0}}\\)|--                              |\\(-{v\_{\text{max}}}\leq{}{{v\_{\text{y}1}}^{0}}\leq{}{v\_{\text{max}}}\\)|\\(9.0\cdot{}10^{3}\\) \\(\frac{\text{m}}{\text{s}}\\)  |yields a bound orbit for the typical masses and separation|5.0\\(\\%\\)|
+|\\({{v\_{\text{y}2}}^{0}}\\)|--                              |\\(-{v\_{\text{max}}}\leq{}{{v\_{\text{y}2}}^{0}}\leq{}{v\_{\text{max}}}\\)|\\(-11.0\cdot{}10^{3}\\) \\(\frac{\text{m}}{\text{s}}\\)|derived from COM constraint                               |5.0\\(\\%\\)|
+|\\({{x\_{1}}^{0}}\\)        |--                              |\\(-{r\_{\text{max}}}\leq{}{{x\_{1}}^{0}}\leq{}{r\_{\text{max}}}\\)        |\\(75.0\cdot{}10^{9}\\) \\({\text{m}}\\)                |approximately 0.5 AU; satisfies COM constraint with star 2|1.0\\(\\%\\)|
+|\\({{x\_{2}}^{0}}\\)        |--                              |\\(-{r\_{\text{max}}}\leq{}{{x\_{2}}^{0}}\leq{}{r\_{\text{max}}}\\)        |\\(-90.0\cdot{}10^{9}\\) \\({\text{m}}\\)               |derived from COM constraint                               |1.0\\(\\%\\)|
+|\\({{y\_{1}}^{0}}\\)        |--                              |\\(-{r\_{\text{max}}}\leq{}{{y\_{1}}^{0}}\leq{}{r\_{\text{max}}}\\)        |\\(0.0\\) \\({\text{m}}\\)                              |stars initially on the x-axis                             |1.0\\(\\%\\)|
+|\\({{y\_{2}}^{0}}\\)        |--                              |\\(-{r\_{\text{max}}}\leq{}{{y\_{2}}^{0}}\leq{}{r\_{\text{max}}}\\)        |\\(0.0\\) \\({\text{m}}\\)                              |stars initially on the x-axis                             |1.0\\(\\%\\)|
+
+**<p align="center">Input Data Constraints</p>**

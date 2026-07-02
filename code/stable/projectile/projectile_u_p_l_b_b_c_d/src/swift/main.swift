@@ -258,7 +258,6 @@ class InputParameters {
 */
 class Constants {
     static let g: Double = 9.8
-    static let epsilon: Double = 2.0e-2
     
 }
 

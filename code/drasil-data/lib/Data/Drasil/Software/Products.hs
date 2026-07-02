@@ -4,6 +4,7 @@ module Data.Drasil.Software.Products
   , module Drasil.Metadata.Software.Products
   ) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -17,7 +18,7 @@ prodtcon :: [IdeaDict]
 prodtcon = [sciCompS, videoGame, openSource, compPro]
 
 matlab :: CI
-matlab     = commonIdeaWithDict "matlab" (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
+matlab     = commonIdea (mkUid "matlab") (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
 
 videoGame, openSource, compPro :: IdeaDict
 videoGame   = compoundNC video game

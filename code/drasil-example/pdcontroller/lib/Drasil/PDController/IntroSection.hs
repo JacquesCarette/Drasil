@@ -1,6 +1,10 @@
-module Drasil.PDController.IntroSection where
+module Drasil.PDController.IntroSection (
+  introPara, introPurposeOfDoc, externalLinkRef, introUserChar1, introUserChar2,
+  introscopeOfReq, scope
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S

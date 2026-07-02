@@ -1,5 +1,7 @@
 -- | Short names are used for displaying references.
-module Language.Drasil.ShortName where
+module Language.Drasil.ShortName (
+  ShortName, shortname', getSentSN, HasShortName(..)
+) where
 
 import Drasil.Database (HasChunkRefs (..))
 

@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Derivations where
+module Drasil.GamePhysics.Derivations (impulseVDerivEqns) where
 
 import Language.Drasil (eqSymb, ModelExprC(..), ExprC(..), ModelExpr, LiteralC(..))
 

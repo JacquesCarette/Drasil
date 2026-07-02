@@ -2,13 +2,13 @@
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (definedIn'')
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)
@@ -42,7 +42,7 @@ transMot = imNoRefs (equationalModel' transMotQD)
   , qwC forcej             $ UpFrom (Exc, exactDbl 0)
   , qwC massj              $ UpFrom (Exc, exactDbl 0)
   ]
-  (dqdWr accj) [] (Just transMotDeriv)
+  accj [] (Just transMotDeriv)
   "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotQD :: SimpleQDef
@@ -87,7 +87,7 @@ rotMot = imNoRefs (equationalModel' rotMotQD)
   , qwC torquej         $ UpFrom (Exc, exactDbl 0)
   , qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
   ]
-  (dqdWr angAccj) [UpFrom (Exc, exactDbl 0)]
+  angAccj [UpFrom (Exc, exactDbl 0)]
   (Just rotMotDeriv) "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
@@ -126,7 +126,7 @@ col2D = imNoDerivNoRefs (equationalModel "col2DIM" col2DNP col2DFD)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  (dqdWr timeC) [UpFrom (Exc, exactDbl 0)] "col2D"
+  timeC [UpFrom (Exc, exactDbl 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 

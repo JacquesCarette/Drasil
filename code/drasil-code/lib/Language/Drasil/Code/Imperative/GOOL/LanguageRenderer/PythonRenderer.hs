@@ -8,7 +8,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Drasil.GOOL (pyName, pyVersion)
 
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
@@ -31,7 +31,7 @@ instance Monad PythonProject where
   PP x >>= f = f x
 
 instance SoftwareDossierSym PythonProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = pyName,

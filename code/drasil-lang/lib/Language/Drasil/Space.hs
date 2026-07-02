@@ -46,6 +46,7 @@ data Space =
   | Array Space
   | Actor String
   | Function (NE.NonEmpty Primitive) Primitive
+  | Reference Space
   | Void
   deriving (Eq, Show)
 
@@ -93,24 +94,26 @@ getActorName _         = error "getActorName called on non-actor space"
 getInnerSpace :: Space -> Space
 getInnerSpace (Vect s) = s
 getInnerSpace (Set s) = s
+getInnerSpace (Reference s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?
 isBasicNumSpace :: Space -> Bool
-isBasicNumSpace Integer     = True
-isBasicNumSpace Rational    = True
-isBasicNumSpace Real        = True
-isBasicNumSpace Natural     = True
-isBasicNumSpace Boolean     = False
-isBasicNumSpace Char        = False
-isBasicNumSpace String      = False
-isBasicNumSpace Set {}      = False
-isBasicNumSpace Vect {}     = False
-isBasicNumSpace Matrix {}   = False
-isBasicNumSpace Array {}    = False
-isBasicNumSpace Actor {}    = False
-isBasicNumSpace Function {} = False
-isBasicNumSpace Void        = False
+isBasicNumSpace Integer      = True
+isBasicNumSpace Rational     = True
+isBasicNumSpace Real         = True
+isBasicNumSpace Natural      = True
+isBasicNumSpace Reference {} = False
+isBasicNumSpace Boolean      = False
+isBasicNumSpace Char         = False
+isBasicNumSpace String       = False
+isBasicNumSpace Set {}       = False
+isBasicNumSpace Vect {}      = False
+isBasicNumSpace Matrix {}    = False
+isBasicNumSpace Array {}     = False
+isBasicNumSpace Actor {}     = False
+isBasicNumSpace Function {}  = False
+isBasicNumSpace Void         = False
 
 -- | Assert that a 'Space' is 'Real' or return a formatted error message.
 assertReal :: Space -> (String -> String) -> Either String ()

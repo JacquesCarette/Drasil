@@ -110,7 +110,6 @@ void InputParameters::input_constraints() {
 }
 
 const double Constants::g = 9.8;
-const double Constants::epsilon = 2.0e-2;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments

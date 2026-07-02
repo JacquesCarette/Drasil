@@ -17,7 +17,7 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List.NonEmpty (toList)
 
-import Drasil.Build.Artifacts (RelativeFile)
+import Drasil.FileHandling.Legacy (RelativeFile)
 import Drasil.Database (UID, HasUID (..))
 import Drasil.GOOL (CodeType(..))
 import Language.Drasil (SimpleQDef, Sentence(..), Space, DefinedQuantityDict,
@@ -384,6 +384,7 @@ spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
 spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
 spaceToCodeType (S.Actor s)      = [Object s]
 spaceToCodeType S.Void           = [Void]
+spaceToCodeType (S.Reference s)  = map Reference (spaceToCodeType s)
 spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
     where trgs = spaceToCodeType t
           ins  = map spaceToCodeType (toList i)

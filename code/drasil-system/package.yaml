@@ -22,7 +22,6 @@ dependencies:
 - containers
 - drasil-database
 - drasil-lang
-- drasil-metadata
 - drasil-theory
 - drasil-utils
 

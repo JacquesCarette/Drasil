@@ -1,4 +1,10 @@
-module Drasil.DblPend.Expressions where
+module Drasil.DblPend.Expressions (
+  velXExpr_2, velYExpr_2, velXExpr_1, velYExpr_1,
+  accelXExpr_1, accelYExpr_1, accelXExpr_2, accelYExpr_2,
+  xForceWithAngle_1, yForceWithAngle_1, xForceWithAngle_2, yForceWithAngle_2,
+  angularAccelExpr_1, angularAccelExpr_2, cosAngleExpr1,
+  cosAngleExpr2, forceDerivExpr1, forceDerivExpr2, sinAngleExpr1, sinAngleExpr2
+) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil

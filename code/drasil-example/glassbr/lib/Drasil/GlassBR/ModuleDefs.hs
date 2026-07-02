@@ -5,7 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
-import Drasil.Database (HasUID)
+import Drasil.Database (IsChunk, mkUid)
 import Language.Drasil (Space(..), nounPhraseSP,
   label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict, implVar)
 import Language.Drasil.Display (Symbol(..))
@@ -45,7 +45,7 @@ one = Integ 1
 two = Integ 2
 
 var :: String -> String -> String -> Symbol -> Space -> DefinedQuantityDict
-var nam np desc sym sp = implVar nam (nounPhraseSP np) desc sp sym
+var nam np desc sym sp = implVar (mkUid nam) (nounPhraseSP np) desc sp sym
 
 y_2, y_1, x_2, x_1, x :: DefinedQuantityDict
 y_1  = var "y1" "lower y-coordinate"
@@ -111,26 +111,26 @@ onLine p1@(x1, y1) p2 x_ = (m $* (x_ $- x1)) $+ y1
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
 
-vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
+vLook :: (HasSymbol a, HasSymbol i, IsChunk a, IsChunk i) => a -> i -> CodeExpr -> CodeExpr
 vLook a i_ p = idx (sy a) (sy i_ $+ p)
 
-aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
+aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, IsChunk a, IsChunk i, IsChunk j) =>
   a -> i -> j -> CodeExpr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
-getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
+getCol :: (HasSymbol a, HasSymbol i, IsChunk a, IsChunk i) => a -> i -> CodeExpr -> CodeExpr
 getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ $+ p]
 
 call :: Func -> [DefinedQuantityDict] -> FuncStmt
 call f l = FVal $ apply (asVC f) $ map sy l
 
-find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
+find :: (IsChunk zv, IsChunk z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
 find zv z_ = apply (asVC findCT) [sy zv, sy z_]
 
 linInterp :: [CodeExpr] -> CodeExpr
 linInterp = apply (asVC linInterpCT)
 
-interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
+interpOver :: (IsChunk ptx, IsChunk pty, IsChunk ind, IsChunk vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
   ptx -> pty -> ind -> vv -> [CodeExpr]
 interpOver ptx pty ind vv =

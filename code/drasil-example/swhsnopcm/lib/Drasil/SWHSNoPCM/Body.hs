@@ -1,20 +1,24 @@
 module Drasil.SWHSNoPCM.Body (si, mkSRS, noPCMODEInfo) where
 
-import Language.Drasil hiding (section)
+import qualified Data.List.NonEmpty as NE
+
+import Language.Drasil
+import Language.Drasil.Document
+import Drasil.Database (ChunkDB)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
-import Drasil.SRSDocument
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import Drasil.SRS
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Documentation as Doc (material_)
-import Data.Drasil.Concepts.Math (mathcon', ode)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
@@ -62,16 +66,16 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
-  [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
-  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr outputs
+symbols = dqdWr watE : concepts ++ map dqdWr constrained ++
+  [gradient, pi_, uNormalVect, surface] ++ symbolConcepts ++
+  map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 
-concepts :: [UnitalChunk]
+concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW,
   surArea, area]
 
-symbolConcepts :: [UnitalChunk]
+symbolConcepts :: [DefinedQuantityDict]
 symbolConcepts = [density, mass, time, vol,
   QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 
@@ -87,7 +91,7 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
-   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
+   tsymb [TSPurpose, SymbConvention [Lit htTrans, Doc' progName], SymbOrder, VectorUnits],
    TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
@@ -148,21 +152,18 @@ purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  [htTrans, materialProprty] ++
-  -- CIs
-  map nw [progName, phsChgMtrl] ++
-  map nw CP.physicCon' ++ map nw mathcon'
+ideaDicts = [htTrans, materialProprty]
+
+cis :: [CI]
+cis = [progName, phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
   meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] NoPCM.dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

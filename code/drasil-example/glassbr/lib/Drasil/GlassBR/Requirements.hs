@@ -3,6 +3,7 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfunc
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -16,19 +17,18 @@ import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Drasil.DocLang (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+import Drasil.SRS (inReqWTab, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR,
   mkUnderstandableNFR, mkReusableNFR)
-import Drasil.DocLang.SRS (datCon)
+import Drasil.SRS.Concepts (datCon)
 
 import Theory.Drasil (DataDefinition)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
-import Drasil.GlassBR.Concepts (glass)
+import Drasil.GlassBR.Concepts (glass, blast, notSafe, safeMessage)
 import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDFDD, standOffDis)
 import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
-import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
-  pbTolfail, safeMessage, inputs)
+import Drasil.GlassBR.Unitals (isSafeLR, isSafePb, loadSF, pbTolfail, inputs)
 
 {--Functional Requirements--}
 

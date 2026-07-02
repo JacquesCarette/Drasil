@@ -20,7 +20,7 @@ digraph "allvsall" {
     "dataDefn:potEnergy" -> "instance:assumpDI";
     "dataDefn:momentOfInertia" -> "instance:assumpOT";
     "theory:newtonSLR" -> "instance:assumpOD";
-    "theory:gravitationalAccel" -> "theory:force";
+    "theory:gravitationalAccel" -> "theory:fOfGravity";
     "theory:impulseS" -> "instance:assumpOT";
     "theory:impulseS" -> "instance:assumpOD";
     "theory:impulseS" -> "instance:assumpAD";
@@ -85,11 +85,11 @@ digraph "allvsall" {
     }
     "theory:newtonSL" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonSecLawMot"];
     "theory:force1" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonThirdLawMot"];
-    "theory:force" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:UniversalGravLaw"];
+    "theory:fOfGravity" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:UniversalGravLaw"];
     "theory:newtonSLR" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonSecLawRotMot"];
     subgraph "TM" {
         rank="same";
-        "theory:newtonSL" "theory:force1" "theory:force" "theory:newtonSLR";
+        "theory:newtonSL" "theory:force1" "theory:fOfGravity" "theory:newtonSLR";
     }
     "theory:gravitationalAccel" [shape=box, color=black, style=filled, fillcolor="palegreen", label="GD:accelGravity"];
     "theory:impulseS" [shape=box, color=black, style=filled, fillcolor="palegreen", label="GD:impulse"];

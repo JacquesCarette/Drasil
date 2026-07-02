@@ -4,12 +4,11 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
 ) where
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (empty)
 
 import Drasil.GProc (jlName, jlVersion)
 
-import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..), sdsFromData)
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (readMe, makefile, noRunIfLib, docIfEnabled)
@@ -29,7 +28,7 @@ instance Monad JuliaProject where
   JLP x >>= f = f x
 
 instance SoftwareDossierSym JuliaProject where
-  doxConfig _ _ _ = sdsFromData "" empty -- Doxygen does not support Julia
+  doxConfig _ _ _ = Nothing -- Doxygen does not support Julia
   readMe rmi = G.readMe rmi {
         langName = jlName,
         langVersion = jlVersion}

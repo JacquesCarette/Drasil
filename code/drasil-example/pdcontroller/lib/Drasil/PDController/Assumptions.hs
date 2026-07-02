@@ -1,6 +1,10 @@
-module Drasil.PDController.Assumptions where
+module Drasil.PDController.Assumptions (
+  assumptions, aSP, aParallelEq, aDecoupled, aExtDisturb, apwrPlantTxFnx,
+  aMass, aDampingCoeff, aStiffnessCoeff, aInitialValue, aUnfilteredDerivative
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -52,7 +56,7 @@ aStiffnessCoeff
   = cic "stiffnessCoeffSpring" aStiffnessCoeffDesc "Spring Stiffness Coefficient"
       assumpDom
 
-pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,
+pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc,
               aInitialValueDesc, aParallelEqDesc, apwrPlantTxFnxDesc,
               aUnfilteredDerivativeDesc, aMassDesc, aDampingCoeffDesc,
               aStiffnessCoeffDesc :: Sentence
@@ -80,10 +84,6 @@ aExtDisturbDesc
   = foldlSent
       [S "There are no external disturbances to the", phrase powerPlant,
          S "during the", phrase simulation]
-
-aManualTuningDesc
-  = foldlSent
-      [S "This model will be used for manual tuning" `S.ofThe` phrase pidC]
 
 aInitialValueDesc
   = foldlSent

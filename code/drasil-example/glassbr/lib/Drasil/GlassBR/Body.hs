@@ -1,43 +1,41 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GlassBR.Body where
+module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.SRSDocument
-import Drasil.DocLang (auxSpecSent, termDefnF')
+import Drasil.Database (ChunkDB)
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Document.Contents (enumBulletU, foldlSP, foldlSPCol)
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested, tAndDOnly, tAndDWAcc, noRefs,
-  tAndDWSym)
-import Drasil.System (mkSmithEtAlICO)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
-  characteristic, company, condition, dataConst, datum,
+  characteristic, company, condition, datum,
   environment, input_, interface, model, physical, problem, product_,
   software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
-import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, portability, softwarecon)
-import Data.Drasil.Concepts.Theory as M (dataDefn, inModel, thModel)
+import Data.Drasil.Concepts.Software (softwarecon)
+import Data.Drasil.Concepts.Theory as M (dataDefn)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
-  ptOfExplsn, con', glass, iGlass, lGlass)
+import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab, ptOfExplsn, con',
+  glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, load, probBreak,
+  stdOffDist)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
@@ -47,10 +45,9 @@ import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
-import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputs, outputs, specParamVals, glassTy,
-  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
+import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
+  specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
+  termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName
@@ -115,16 +112,16 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- IdeaDicts
-  [lateralLoad, materialProprty] ++ con' ++
-  -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw mathcon'
+  [lateralLoad, materialProprty] ++ con'
+
+cis :: [CI]
+cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts conceptChunks []
+symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts cis conceptChunks []
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
@@ -168,17 +165,9 @@ termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. d
   ++
   map tAndDOnly (drop 2 loadTypes)]
 
-solChSpecSubsections :: [CI]
-solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
-
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [ConstQDef]
 auxiliaryConstants = assumptionConstants ++ specParamVals
-
---Used in "Non-Functional Requirements" Section--
-priorityNFReqs :: [ConceptChunk]
-priorityNFReqs = [correctness, verifiability, understandability,
-  reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
 
@@ -305,7 +294,7 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 physSystParts :: [Sentence]
 physSystParts = [(D.toSent (atStartNP (the glaSlab))!.),
   foldlSent [(D.toSent (atStartNP (the ptOfExplsn)) !.), S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the sD)) `S.isThe`
+  S "or", (blast ^. defn) `sC` (S "is located" !.), D.toSent (atStartNP (the stdOffDist)) `S.isThe`
   phrase distance, S "between the", phrase ptOfExplsn `S.and_` D.toSent (phraseNP (the glass))]]
 
 {--Goal Statements--}

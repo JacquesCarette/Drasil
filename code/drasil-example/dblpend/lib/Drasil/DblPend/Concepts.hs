@@ -1,20 +1,24 @@
-module Drasil.DblPend.Concepts where
+module Drasil.DblPend.Concepts (
+  pendMotion, rod, ideaDicts, defs, firstRod, secondRod, firstObject,
+  secondObject, verticalPos, horizontalPos, horizontalVel, verticalVel,
+  horizontalForce, verticalForce, horizontalAccel, verticalAccel, arcLen
+) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
-concepts :: [IdeaDict]
-concepts = map nw [rod, horizontal, vertical,
+ideaDicts :: [IdeaDict]
+ideaDicts = [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject]
-  ++ map nw defs
 
 rod, horizontal, vertical :: IdeaDict
-rod = nc "rod" (cn' "rod")
-horizontal = nc "horizontal" (cn "horizontal")
-vertical = nc "vertical" (cn "vertical")
+rod = idea' (mkUid "rod") (cn' "rod")
+horizontal = idea' (mkUid "horizontal") (cn "horizontal")
+vertical = idea' (mkUid "vertical") (cn "vertical")
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
   horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: IdeaDict
@@ -36,4 +40,5 @@ defs :: [ConceptChunk]
 defs = [arcLen]
 
 arcLen :: ConceptChunk
-arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
+arcLen = cncpt''' (mkUid "arc length") (nounPhraseSP "arc length")
+  (S "the distance between two points on a curve")

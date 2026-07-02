@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
@@ -13,7 +14,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes,
   (<>), empty, isEmpty)
 
-import Drasil.Build.Artifacts (blank)
+import Drasil.FileHandling.Legacy (blank)
 
 import qualified Drasil.Shared.CodeType as C (CodeType(..))
 
@@ -87,6 +88,7 @@ on2StateWrapped f a' b' = do
     f a b
 
 getInnerType :: C.CodeType -> C.CodeType
+getInnerType (C.Reference innerT) = innerT
 getInnerType (C.List innerT) = innerT
 getInnerType (C.Array innerT) = innerT
 getInnerType (C.Set innerT) = innerT

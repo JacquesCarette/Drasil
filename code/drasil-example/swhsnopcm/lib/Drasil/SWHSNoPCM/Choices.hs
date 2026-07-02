@@ -1,4 +1,4 @@
-module Drasil.SWHSNoPCM.Choices where
+module Drasil.SWHSNoPCM.Choices (choices) where
 
 import Language.Drasil.Code (Choices(..), Comments(..), ExtLib(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),
@@ -18,7 +18,7 @@ choices = defaultChoices {
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
-    [SampleInput "../../datafiles/swhsnopcm/sampleInput.txt", ReadME],
+    [SampleInput "../datafiles/swhsnopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
   extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
 }

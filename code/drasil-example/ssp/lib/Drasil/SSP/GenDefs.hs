@@ -8,13 +8,15 @@ import Prelude hiding (sin, cos, tan)
 
 import qualified Data.List.NonEmpty as NE
 
+import Drasil.Database (mkUid)
 import Language.Drasil
+import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.DocLang.SRS as SRS (physSyst)
+import Drasil.SRS.Concepts as SRS (physSyst)
 
 import Data.Drasil.SI_Units (metre, newton)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
@@ -27,11 +29,10 @@ import Data.Drasil.Quantities.PhysicalProperties (specWeight)
 import Data.Drasil.Quantities.Physics (displacement, force, height,
   pressure, torque)
 import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
-import Drasil.Sentence.Combinators (definedIn''')
 
 import Theory.Drasil
 
-import Utils.Drasil (weave)
+import Data.List.Extras (weave)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,
@@ -253,7 +254,7 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
 --
 momentEqlModel :: ModelKind ModelExpr
 momentEqlModel = equationalConstraints' $
-  mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
+  mkConstraintSet (cncpt''' (mkUid "momentEql") (nounPhraseSP "moment equilibrium") momEqlDesc) $
   NE.fromList [express momEqlExpr]
 
 momEqlExpr :: Expr

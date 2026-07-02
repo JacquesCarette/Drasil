@@ -177,8 +177,8 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 For convenience, the following graphs can be found at the links below:
 
-- [TraceGraphAvsA](../../../../traceygraphs/swhs/avsa.svg)
-- [TraceGraphAvsAll](../../../../traceygraphs/swhs/avsall.svg)
-- [TraceGraphRefvsRef](../../../../traceygraphs/swhs/refvsref.svg)
-- [TraceGraphAllvsR](../../../../traceygraphs/swhs/allvsr.svg)
-- [TraceGraphAllvsAll](../../../../traceygraphs/swhs/allvsall.svg)
+- [TraceGraphAvsA](../../TraceyGraph/avsa.svg)
+- [TraceGraphAvsAll](../../TraceyGraph/avsall.svg)
+- [TraceGraphRefvsRef](../../TraceyGraph/refvsref.svg)
+- [TraceGraphAllvsR](../../TraceyGraph/allvsr.svg)
+- [TraceGraphAllvsAll](../../TraceyGraph/allvsall.svg)

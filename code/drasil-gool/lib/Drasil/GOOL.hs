@@ -1,24 +1,24 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
-  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
-  FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
+module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
+  SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
+  FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
   initObserverList, addObserver, ControlStatement(..), ifNoElse, switchAsIf,
-  VariableSym(..), ScopeSym(..), OOVariableSym(..), staticVar, staticConst,
-  VariableElim(..), ($->), listOf, listVar, ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), OOVariableValue,
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..), funcApp,
-  funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj,
-  libNewObj, exists, objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  OOFunctionSym(..), ($.), selfAccess, GetSet(..), List(..),Set(..), listSlice,
+  VariableSym(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
+  instanceVarSelf, VariableElim(..), ($->), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  OOVariableValue, CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..),
+  OOValueExpression(..), funcApp, funcAppNamedArgs, selfMethodCall, extFuncApp,
+  libFuncApp, newObj, extNewObj, libNewObj, exists, objMethodCall,
+  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  classMethodCall, classMethodCallNamedArgs, classMethodCallMixedArgs,
+  classMethodCallNoParams, FunctionSym(..), OOFunctionSym(..), ($.), selfAccess,
+  GetSet(..), Reference(..), Array(..), List(..), Set(..), listSlice,
   listIndexExists, at, ObserverPattern(..), StrategyPattern(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
@@ -27,42 +27,46 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
   onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC, pyName,
   pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion, swiftName,
-  swiftVersion
+  swiftVersion, LoggingFor(..),
+  -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
+  getCodeType, getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction,
   SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  BinderSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ifNoElse,
   VariableSym(..), extVar, VariableElim(..), listOf, listVar, ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, List(..), Set(..), listSlice, listIndexExists, at, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
+  libFuncApp, exists, Reference(..), Array(..), List(..), Set(..), listSlice,
+  listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), convType,
+  -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
+  getCodeType, getTypeString)
 import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   CSStateVar, Initializers, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..),
-  ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), staticVar,
-  staticConst, ($->), PermanenceSym(..), privMethod, pubMethod, initializer,
+  ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod, initializer,
   nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj, extNewObj,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
   libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, OOFunctionSym(..), ($.),
-  selfAccess, ObserverPattern(..), initObserverList, addObserver,
-  StrategyPattern(..), convTypeOO)
+  objMethodCallMixedArgs, objMethodCallNoParams, classMethodCall,
+  classMethodCallNamedArgs, classMethodCallMixedArgs, classMethodCallNoParams,
+  OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), initObserverList,
+  addObserver, StrategyPattern(..), convTypeOO)
 
-import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
-  initialState)
+import Drasil.Shared.State (VS, GOOLState(..), lensMStoVS, headers, sources,
+  mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
 
@@ -73,3 +77,4 @@ import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
 import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
 import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
 import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
+import Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..))

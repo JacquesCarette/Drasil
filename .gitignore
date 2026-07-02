@@ -48,7 +48,7 @@ code/stable/*/src/*/latex
 */Projectile/output.txt
 
 # Website
-code/Website
+code/website
 
 # PDF generation, TeX caches, and misc. file types
 *.aux

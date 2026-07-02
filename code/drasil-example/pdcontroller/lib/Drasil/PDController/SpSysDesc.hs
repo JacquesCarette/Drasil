@@ -1,4 +1,4 @@
-module Drasil.PDController.SpSysDesc where
+module Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

@@ -2,11 +2,9 @@ module Drasil.SWHSNoPCM.References (citations) where
 
 import Language.Drasil
 
-import Data.Drasil.Citations (koothoor2013, parnasClements1986, smithEtAl2007,
-  smithKoothoor2016, smithLai2005)
+import Data.Drasil.Citations (parnasClements1986)
 
 import Drasil.SWHS.References (incroperaEtAl2007)
 
 citations :: BibRef
-citations = [incroperaEtAl2007, koothoor2013, parnasClements1986,
-             smithEtAl2007, smithLai2005, smithKoothoor2016]
+citations = [incroperaEtAl2007, parnasClements1986]

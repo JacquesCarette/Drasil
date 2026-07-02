@@ -4,9 +4,10 @@ module Language.Drasil.Printing.Import.Sentence (spec) where
 import Control.Lens ((^.))
 import Data.Maybe (fromMaybe)
 
-import Language.Drasil (Sentence(..), Reference(..), ShortName, LblType(..),
+import Language.Drasil (Sentence(..), ShortName, LblType(..),
   NounPhrase(..), getSentSN, checkValidStr, foldNums, (+:+), sParen, IRefProg(..),
   RefInfo(..), SentenceStyle(..))
+import Language.Drasil.Document (Reference(..))
 import Language.Drasil.Development (toSent)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 

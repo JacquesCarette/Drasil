@@ -38,7 +38,6 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({{v\_{\text{y}}}^{\text{i}}}\\)   |\\(y\\)-component of initial velocity                        |\\(\frac{\text{m}}{\text{s}}\\)    |
 |\\(\boldsymbol{v}\text{(}t\text{)}\\)|Velocity                                                     |\\(\frac{\text{m}}{\text{s}}\\)    |
 |\\({\boldsymbol{v}^{\text{i}}}\\)    |Initial velocity                                             |\\(\frac{\text{m}}{\text{s}}\\)    |
-|\\(ε\\)                              |Hit tolerance                                                |--                                 |
 |\\(θ\\)                              |Launch angle                                                 |\\({\text{rad}}\\)                 |
 |\\(π\\)                              |Ratio of circumference to diameter for any circle            |--                                 |
 

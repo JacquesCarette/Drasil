@@ -1,6 +1,7 @@
 module Drasil.Projectile.MetaConcepts (progName) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 
 progName :: CI
-progName = commonIdeaWithDict "projectileApp" (pn "Projectile") "Projectile" []
+progName = commonIdea (mkUid "projectileApp") (pn "Projectile") "Projectile" []

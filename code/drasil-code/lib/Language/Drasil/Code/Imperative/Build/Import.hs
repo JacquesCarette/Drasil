@@ -15,9 +15,9 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierState,
   headers, sources, mainMod)
 
-import Build.Drasil (Annotation, (+:+), printMakefile, makeS, MakeString, mkFile, mkRule,
-  mkCheckedCommand, mkFreeVar, mkMakefile)
 import Drasil.GOOL (FileData(..), ProgData(..))
+import Drasil.Makefile (Annotation, (+:+), printMakefile, makeS, MakeString, mkFile, mkRule,
+  mkCheckedCommand, mkFreeVar, mkMakefile)
 import Drasil.Metadata (watermark)
 
 -- | Creates a Makefile.

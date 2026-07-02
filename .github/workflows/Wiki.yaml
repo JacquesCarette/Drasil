@@ -4,7 +4,6 @@ on:
     branches: main
     paths: [wiki/**, .github/workflows/Wiki.yaml]
   pull_request:
-    branches: main
     paths: [wiki/**, .github/workflows/Wiki.yaml]
 permissions:
   contents: write
@@ -14,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -49,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with: # Fetch enough history to resolve HEAD^ -- https://github.com/actions/checkout?tab=readme-ov-file#checkout-head
           fetch-depth: 2
 

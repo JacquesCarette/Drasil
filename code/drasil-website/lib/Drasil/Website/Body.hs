@@ -6,12 +6,13 @@ module Drasil.Website.Body (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (SmithEtAlSRS, HasSystemMeta(..), mkSystemMeta,
-  DrasilWebsite, mkDrasilWebsite)
+import Drasil.System (HasSystemMeta(..), mkSystemMeta, DrasilWebsite,
+  mkDrasilWebsite)
 import Language.Drasil
-import Drasil.DocLang (findAllRefs)
+import Language.Drasil.Document
+import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
@@ -20,16 +21,14 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
-import Drasil.GlassBR.Unitals (blast)
-import Drasil.GlassBR.Concepts (glaSlab)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
+import Drasil.GlassBR.Concepts (glaSlab, idglass, blast)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
 import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
 import Drasil.PDController.Concepts (pidC)
 import Drasil.Projectile.Concepts (target, projectile)
-import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor)
+import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor, fsConcept)
 import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
-import Drasil.SSP.IMods (fctSfty)
 
 -- * Functions to Generate the Website Through Drasil
 
@@ -59,9 +58,9 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
-webSys :: FolderLocation -> DrasilWebsite
+webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) . allRefs
+webSys d = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) d . allRefs
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
@@ -72,16 +71,18 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
-symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] (map nw [webName, phsChgMtrl, twoD] ++
-  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast,
-  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce,
-  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [glaSlab, intrslce,
-  slope, factor]) [] [] [] [] [] [] [] [] []
+ideaDicts :: [IdeaDict]
+ideaDicts = [glaSlab, idglass, intrslce, slope, factor]
 
--- | Helper to get the system name as an 'IdeaDict' from 'System'.
-getSysName :: SmithEtAlSRS -> IdeaDict
-getSysName = nw . (^. sysName)
+cis :: [CI]
+cis = [webName, phsChgMtrl] ++ map (^. sysName) allExampleSI
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
+  pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
+
+symbMap :: ChunkDB
+symbMap = withCommonKnowledge [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
@@ -95,7 +96,7 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI
-webName = commonIdeaWithDict "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 
@@ -133,7 +134,7 @@ danPoster = makeURI "danPoster" (danContributionPath
   ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
 wellUnderstoodPaper :: Reference
 wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL
-  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
+  ++ "/blob/main/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference
@@ -152,7 +153,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath, danContributionPath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-danContributionPath = gitHubInfoURL ++ "/blob/master/People/Dan"
+danContributionPath = gitHubInfoURL ++ "/blob/main/People/Dan"
 imagePath = "./images/Icon.png"
 
 -- * Footer Section

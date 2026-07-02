@@ -1,7 +1,10 @@
 {-# LANGUAGE GADTs #-}
 
 -- | The Drasil Modelling Expression language
-module Language.Drasil.ModelExpr.Lang where
+module Language.Drasil.ModelExpr.Lang (
+  ModelExpr(..), DerivType(..),
+  SpaceBinOp(..), StatBinOp(..), AssocBoolOper(..)
+) where
 
 import Prelude hiding (sqrt)
 
@@ -108,9 +111,6 @@ data ModelExpr where
 
   -- | Universal quantification
   ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
-
--- | The variable type is just a renamed 'String'.
-type Variable = String
 
 -- instance Num Expr where
 --   (Int 0)        + b              = b

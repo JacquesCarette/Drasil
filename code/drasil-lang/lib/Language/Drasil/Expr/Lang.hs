@@ -3,7 +3,12 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | The Drasil Expression language
-module Language.Drasil.Expr.Lang where
+module Language.Drasil.Expr.Lang (
+  Relation, ArithBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..),
+  VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
+  AssocConcatOper(..), AssocArithOper(..), AssocBoolOper(..), UFunc(..),
+  UFuncB(..), UFuncVV(..), UFuncVN(..), Completeness(..), Expr(..)
+) where
 
 import Data.Either (fromRight, rights)
 import qualified Data.Foldable as NE
@@ -24,9 +29,6 @@ import Language.Drasil.WellTyped
 
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
-
--- | The variable type is just a renamed 'String'.
-type Variable = String
 
 -- Binary functions
 
@@ -80,7 +82,7 @@ data AssocBoolOper = And | Or
 
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Neg
+  | Arccos | Arctan | Exp | Sqrt | Neg | MakeRef
   deriving (Eq, Show)
 
 -- | @Bool -> Bool@ operators.

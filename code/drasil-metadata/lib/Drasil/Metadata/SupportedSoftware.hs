@@ -4,8 +4,9 @@ module Drasil.Metadata.SupportedSoftware (
     runnableSoftware, website
 ) where
 
-import Language.Drasil (IdeaDict, cn, nc, mkIdea)
+import Drasil.Database (mkUid)
+import Language.Drasil (IdeaDict, cn, idea, idea')
 
 runnableSoftware, website :: IdeaDict
-runnableSoftware = mkIdea "runnable software" (cn "runnable software") (Just "software")
-website = nc "website" (cn "website")
+runnableSoftware = idea (mkUid "runnable software") (cn "runnable software") "software"
+website = idea' (mkUid "website") (cn "website")

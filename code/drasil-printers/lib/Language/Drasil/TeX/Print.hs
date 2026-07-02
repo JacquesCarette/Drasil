@@ -12,6 +12,7 @@ import Numeric (showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L
+import qualified Language.Drasil.Document as L
 import qualified Language.Drasil.Display as LD
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
@@ -63,7 +64,7 @@ lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents)   _ = toText $ newline (spec contents)
 lo (EqnBlock contents)    _ = makeEquation contents
 lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
+lo (Definition ssPs l)   sm = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _ = toText $ makeList l
 lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (maybe empty spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib

@@ -1,4 +1,13 @@
-module Drasil.DblPend.Derivations where
+module Drasil.DblPend.Derivations (
+  angularAccelDerivEqns,
+  velDerivEqn1, accelDerivEqn1,
+  velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1, velXDerivEqn2_2,
+  velXDerivEqn3_2,
+  velYDerivEqn2_1, velYDerivEqn3_1, velYDerivEqn4_1, velYDerivEqn2_2,
+  velYDerivEqn3_2,
+  accelXDerivEqn3_1, accelXDerivEqn4_1, accelXDerivEqn3_2,
+  accelYDerivEqn3_1, accelYDerivEqn4_1, accelYDerivEqn3_2
+) where
 
 import Prelude hiding (sin, cos)
 import Control.Lens ((^.))

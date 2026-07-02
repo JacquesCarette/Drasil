@@ -1,6 +1,10 @@
+{-# LANGUAGE FlexibleContexts, QuasiQuotes #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE RankNTypes #-}
+
 module Drasil.Generator.Code (
   -- * Generators
-  exportCode, exportCodeZoo,
+  genCode, genCodeZoo,
   -- * Internal Functions
   codedDirName
 ) where
@@ -11,61 +15,79 @@ import Data.Char (toLower)
 import Data.List (intercalate)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
-import System.Directory (getCurrentDirectory, setCurrentDirectory)
 
-import Drasil.Build.Artifacts (createDirIfMissing)
-import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..))
-import Drasil.GProc (unJLC)
-import Language.Drasil (Space(..))
+import Drasil.FileHandling (FileLayout, directory, ps)
+import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
+  OOProg, LoggingFor (unLC))
+import qualified Drasil.GOOL as OO
+import Drasil.GProc (unJLC, unMLC, ProcProg)
+import qualified Drasil.GProc as Proc
+import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   generator, readWithDataDesc, sampleInputDD, codeSpec,
-  Architecture(impType, modularity), Choices(Choices, maps, lang,
-  architecture, optFeats, dataInfo), ConstantRepr(..),
-  ConstantStructure(..), DataInfo(constRepr, inputStructure,
-  constStructure), ImplementationType(..), LogConfig(logging), Logging,
-  Maps(spaceMatch), Modularity(..), OptionalFeatures(logConfig), SpaceMatch,
-  Structure(..), Lang(Julia, Java,
-  Python, CSharp, Cpp, Swift), CodeSpec, HasOldCodeSpec(extInputsO))
-import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+  Architecture(impType, modularity),
+  Choices(Choices, maps, lang, architecture, optFeats, dataInfo),
+  ConstantRepr(..), ConstantStructure(..),
+  DataInfo(constRepr, inputStructure, constStructure), ImplementationType(..),
+  LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
+  OptionalFeatures(logConfig), SpaceMatch, Structure(..),
+  Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
+  HasOldCodeSpec(extInputsO), CodeSpec, SomeProgGenerator(..))
+import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
+  PackageData, SoftwareDossierSym)
 import Drasil.System (SmithEtAlSRS, programName)
 
--- | Internal: Generate an ICO-style executable softifact.
-exportCode :: SmithEtAlSRS -> Choices -> IO ()
-exportCode syst chcs = do
-  let code = codeSpec syst chcs
-  genCode chcs code
+-- | Generate an ICO-style executable software artifact.
+genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
+genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
+  where
+    genLangCode :: Lang -> IO FileLayout
+    genLangCode Java = genCall Java unJC unJP
+    genLangCode Python = genCall Python unPC unPP
+    genLangCode CSharp = genCall CSharp unCSC unCSP
+    genLangCode Cpp = genCall Cpp unCPPC unCPPP
+    genLangCode Swift = genCall Swift unSC unSP
+    genLangCode Julia = genCallProc Julia unJLC unJLP
+    genLangCode Matlab = genCallProc Matlab unMLC unMLP
 
--- | Internal: Generate a zoo of ICO-style executable softifact.
-exportCodeZoo :: SmithEtAlSRS -> [Choices] -> IO ()
-exportCodeZoo syst = mapM_ $ \chcs -> do
-  let dir = map toLower $ codedDirName (syst ^. programName) chcs
-  workingDir <- getCurrentDirectory
-  createDirIfMissing False dir
-  setCurrentDirectory dir
-  exportCode syst chcs
-  setCurrentDirectory workingDir
+    genCall
+      :: (OOProg progRepr tp, SoftwareDossierSym packRepr, Monad packRepr)
+      => Lang
+      -> (progRepr (OO.Program progRepr) -> ProgData)
+      -> (packRepr PackageData -> PackageData)
+      -> IO FileLayout
+    genCall lng unProgRepr unPackRepr = do
+      time <- showGregorian . utctDay <$> getCurrentTime
+      samples <- readSampleData
+      let loggingOpts = logging $ logConfig $ optFeats chs
+      let realUnProgRepr = if LogVar `elem` loggingOpts then SomeProgGenerator (unProgRepr . unLC) else SomeProgGenerator unProgRepr
+      pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
--- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> IO ()
-genCode chs spec = do
-  workingDir <- getCurrentDirectory
-  time <- getCurrentTime
-  sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
-    (spec ^. extInputsO)) (getSampleData chs)
-  createDirIfMissing False "src"
-  setCurrentDirectory "src"
-  let genLangCode Java = genCall Java unJC unJP
-      genLangCode Python = genCall Python unPC unPP
-      genLangCode CSharp = genCall CSharp unCSC unCSP
-      genLangCode Cpp = genCall Cpp unCPPC unCPPP
-      genLangCode Swift = genCall Swift unSC unSP
-      genLangCode Julia = genCallProc Julia unJLC unJLP
-      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
-        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
-      genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr
-        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
-  mapM_ genLangCode (lang chs)
-  setCurrentDirectory workingDir
+    genCallProc
+      :: (ProcProg progRepr tp, SoftwareDossierSym packRepr, Monad packRepr)
+      => Lang
+      -> (progRepr (Proc.Program progRepr) -> ProgData)
+      -> (packRepr PackageData -> PackageData)
+      -> IO FileLayout
+    genCallProc lng unProgRepr unPackRepr = do
+      time <- showGregorian . utctDay <$> getCurrentTime
+      samples <- readSampleData
+      pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
+
+    spec :: CodeSpec
+    spec = codeSpec syst chs
+
+    readSampleData :: IO [Expr]
+    readSampleData =
+      case getSampleData chs of
+        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputsO)
+        Nothing -> pure []
+
+genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]
+genCodeZoo syst = mapM $ \chcs -> do
+    let dir = map toLower $ codedDirName (syst ^. programName) chcs
+    layout <- genCode syst chcs
+    return $ directory [ps|{dir}|] [layout]
 
 -- | Find name of folders created for a "zoo" of executable softifacts.
 --
@@ -107,7 +129,7 @@ codedConRepr Var = "V"
 codedConRepr Const = "C"
 
 codedSpaceMatch :: SpaceMatch -> String
-codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
-                                     [Float, Double] -> "F"
-                                     _ -> error
-                                       "Unexpected SpaceMatch for Projectile"
+codedSpaceMatch sm = case sm Real of
+  [Double, Float] -> "D"
+  [Float, Double] -> "F"
+  _ -> error "Unexpected SpaceMatch for Projectile"

@@ -1,4 +1,6 @@
-module Drasil.GamePhysics.Expressions where
+module Drasil.GamePhysics.Expressions (
+    transMotExpr, transMotExprDeriv1, rotMotExpr, rotMotExprDeriv1
+) where
 
 import Language.Drasil
 

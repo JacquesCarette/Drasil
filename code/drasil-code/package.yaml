@@ -23,11 +23,11 @@ dependencies:
 - directory
 - filepath
 - split
-- drasil-build-artifacts
-- drasil-build
 - drasil-database
+- drasil-file-handling
 - drasil-gool
 - drasil-lang
+- drasil-makefile
 - drasil-metadata
 - drasil-printers
 - drasil-system
@@ -47,20 +47,15 @@ library:
   - Language.Drasil.GOOL
   - Data.Drasil.ExternalLibraries.ODELibraries
 
-executables:
+tests:
   codegenTest:
-    main: Main
     source-dirs: test
-    other-modules:
-    - FileTests
-    - HelloWorld
-    - Helper
-    - GOOL.Observer
-    - GOOL.PatternTest
-    - VectorTest
-    - NameGenTest
+    main: Main
     ghc-options:
     - -threaded
     - -O2
     dependencies:
     - drasil-code
+    - drasil-file-handling
+    - drasil-testing-kit
+    - tasty

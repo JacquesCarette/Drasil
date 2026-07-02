@@ -25,7 +25,7 @@ DblPend$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculati
 	$(CSC) -out:DblPend$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 
 run: build
-	./DblPend$(TARGET_EXTENSION) $(RUNARGS)
+	mono DblPend$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig

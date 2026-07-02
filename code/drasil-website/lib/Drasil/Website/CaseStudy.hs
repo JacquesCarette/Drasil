@@ -1,9 +1,10 @@
 {-# LANGUAGE TupleSections #-}
 -- | Case Studies table for the different choices available when generating code from Drasil.
 -- To be used in the Drasil website.
-module Drasil.Website.CaseStudy where
+module Drasil.Website.CaseStudy (caseStudySec) where
 
 import Language.Drasil hiding (E)
+import Language.Drasil.Document
 import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),

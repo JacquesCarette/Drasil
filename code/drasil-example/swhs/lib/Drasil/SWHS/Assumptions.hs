@@ -1,8 +1,9 @@
-module Drasil.SWHS.Assumptions where --all of this file is exported
+module Drasil.SWHS.Assumptions (module Drasil.SWHS.Assumptions) where --all of this file is exported
 
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

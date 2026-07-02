@@ -1,7 +1,8 @@
 module Drasil.GamePhysics.MetaConcepts (progName) where
 
+import Drasil.Database (mkUid)
 import Language.Drasil
 import Data.Drasil.Domains (physics)
 
 progName :: CI
-progName = commonIdeaWithDict "gamePhysics" (pn "GamePhysics") "GamePhysics" [physics]
+progName = commonIdea (mkUid "gamePhysics") (pn "GamePhysics") "GamePhysics" [physics]

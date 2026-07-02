@@ -11,7 +11,7 @@ import Drasil.GOOL (jName, jVersion)
 
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..))
-import Language.Drasil.Code.Imperative.README (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import qualified
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (doxConfig, readMe, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
@@ -42,7 +42,7 @@ instance Monad JavaProject where
   JP x >>= f = f x
 
 instance SoftwareDossierSym JavaProject where
-  doxConfig = G.doxConfig optimizeDox
+  doxConfig n s v = Just $ G.doxConfig optimizeDox n s v
   readMe rmi =
     G.readMe rmi {
         langName = jName,

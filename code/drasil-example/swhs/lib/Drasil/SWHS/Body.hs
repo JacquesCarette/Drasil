@@ -1,27 +1,31 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SWHS.Body where
+module Drasil.SWHS.Body (
+  mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
+  externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
+  sysCntxtRespIntro, userChars
+) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, section, variable)
-import Drasil.SRSDocument
+import Drasil.Database (ChunkDB)
+import Language.Drasil hiding (organization, variable)
+import Language.Drasil.Document
+import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sentence.Combinators (bulletFlat, bulletNested)
-import Drasil.System (mkSmithEtAlICO)
-import Drasil.Document.Contents (unlbldExpr, foldlSP, foldlSP_, foldlSPCol)
+import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
   output_, physical, physics, property, quantity, software, softwareSys,
   solution, sysCont, system, user, value, variable)
 import Data.Drasil.Concepts.Education (calculus, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon)
@@ -73,21 +77,18 @@ motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 ideaDicts :: [IdeaDict]
-ideaDicts =
-  -- Actual IdeaDicts
-  materialProprty :
-  -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++
-  map nw mathcon'
+ideaDicts = [materialProprty]
+
+cis :: [CI]
+cis = progName' : progName : [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
-  -- ConceptChunks
   thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts conceptChunks [] SWHS.dataDefs
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] SWHS.dataDefs
   insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
@@ -143,7 +144,7 @@ mkSRS = [TableOfContents,
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
+  [Lit heatTrans, Doc' progName], SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -333,7 +334,7 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = map cw [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
+terms = [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
 -- already in SWHSUnits
@@ -350,7 +351,7 @@ physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFlux
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
 physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
 
-physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
+physSyst2 :: ConceptChunk -> ConceptChunk -> DefinedQuantityDict -> [Sentence]
 physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
   sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
 
@@ -483,7 +484,7 @@ propsDeriv = [
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> DefinedQuantityDict ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
   foldlSPCol [D.toSent (atStartNP (a_ corSol)), S "must exhibit" +:+.
@@ -505,7 +506,7 @@ propCorSolDeriv2 = unlbldExpr
   (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: NamedIdea a => a -> DefinedQuantityDict -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_ `S.toThe` short pcmat,

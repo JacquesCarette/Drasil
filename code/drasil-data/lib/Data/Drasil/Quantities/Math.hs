@@ -15,7 +15,7 @@ mathquants :: [DefinedQuantityDict]
 mathquants = [gradient, normalVect, unitVect, perpVect,
   pi_, posInf, negInf, euclidNorm]
 
-mathunitals :: [UnitalChunk]
+mathunitals :: [DefinedQuantityDict]
 mathunitals = [area, diameter, surface, surArea, orientation]
 
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
@@ -34,13 +34,13 @@ euclidNorm  = dqdNoUnit CM.euclidN  (Atop Magnitude $ vec lD) Real
 
 -- * With Units
 
-area, diameter, surface, surArea, orientation :: UnitalChunk
+area, diameter, surface, surArea, orientation :: DefinedQuantityDict
 
-area        = uc CM.area     cA   Real m_2
-diameter    = uc CM.diameter lD   Real metre
-surface     = uc CM.surface  cS   Real m_2
-surArea     = uc CM.surArea  cA   Real m_2
-orientation = uc CM.orient   lPhi Real radian
+area        = dqd CM.area     cA   Real m_2
+diameter    = dqd CM.diameter lD   Real metre
+surface     = dqd CM.surface  cS   Real m_2
+surArea     = dqd CM.surArea  cA   Real m_2
+orientation = dqd CM.orient   lPhi Real radian
 
 -- * Constants
 

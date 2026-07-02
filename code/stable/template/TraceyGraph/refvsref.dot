@@ -1,2 +1,7 @@
 digraph "refvsref" {
+    "dataDefn:t1" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:t1"];
+    subgraph "DD" {
+        rank="same";
+        "dataDefn:t1";
+    }
 }

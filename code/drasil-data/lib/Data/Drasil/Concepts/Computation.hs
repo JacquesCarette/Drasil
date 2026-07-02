@@ -4,8 +4,9 @@ module Data.Drasil.Concepts.Computation
   , module Drasil.Metadata.Concepts.Computation
   ) where
 
-import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
-  ConceptChunk, CI, IdeaDict, dccWDS)
+import Drasil.Database (mkUid)
+import Language.Drasil (cn', commonIdea, Sentence(..),
+  ConceptChunk, CI, IdeaDict, idea', cncpt''')
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
@@ -15,11 +16,10 @@ import Drasil.Metadata.Concepts.Computation (algorithm)
 import Drasil.Metadata.Domains (compScience)
 
 absTolerance, relTolerance:: ConceptChunk
-absTolerance = dcc "absTolerance"   (cn' "Absolute tolerance") "a fixed number that is used to make direct comparisons"
-relTolerance = dcc "relTolerance"   (cn' "Relative tolerance") " maximum amount of error that the user is willing to allow in the solution"
-
-modCalcDesc :: Sentence -> ConceptChunk
-modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
+absTolerance = cncpt''' (mkUid "absTolerance") (cn' "Absolute tolerance")
+  (S "a fixed number that is used to make direct comparisons")
+relTolerance = cncpt''' (mkUid "relTolerance") (cn' "Relative tolerance")
+  (S " maximum amount of error that the user is willing to allow in the solution")
 
 -- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [IdeaDict]
@@ -31,10 +31,10 @@ os :: CI
 ------------------------------------------------------------------------------------
 --  NC      |     |      id       |       term             |  abbreviation | domain
 -------------------------------------------------------------------------------------s
-application = nc   "application"      (cn' "application")
-computer    = nc   "computer"         (cn' "computer")
-structure   = nc   "structure"        (cn' "structure")
-os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
+application = idea' (mkUid "application")      (cn' "application")
+computer    = idea' (mkUid "computer")         (cn' "computer")
+structure   = idea' (mkUid "structure")        (cn' "structure")
+os          = commonIdea (mkUid "os") (cn' "operating system")    "OS"   [compScience]
 
 dataStruct, dataType, inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: IdeaDict

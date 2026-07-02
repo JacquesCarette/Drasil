@@ -1,9 +1,11 @@
-module Drasil.GamePhysics.References where
+module Drasil.GamePhysics.References (
+  citations, uriReferences, chaslesWiki, accelGravitySrc, impulseSrc
+) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
-import Data.Drasil.Citations (koothoor2013, parnasClements1986, smithEtAl2007,
-  smithLai2005, smithKoothoor2016, dampingSource, hibbeler2004)
+import Data.Drasil.Citations (parnasClements1986, dampingSource, hibbeler2004)
 import Data.Drasil.People (dParnas, wikiAuthors)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -11,7 +13,6 @@ chaslesWiki, parnas1978 :: Citation
 
 citations :: BibRef
 citations = [parnas1978, chaslesWiki, parnasClements1986,
-  koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016,
   dampingSource, hibbeler2004]
 
 --FIXME: check for references made within document

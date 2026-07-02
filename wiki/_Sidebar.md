@@ -26,7 +26,6 @@
 * [Readings](Readings)
 * Misc.
   * [Journals and Societies](Journals-and-Societies)
-  * [Miscellaneous Ideas](Miscellaneous-ideas)
   * [Open Science](Open-Science)
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)

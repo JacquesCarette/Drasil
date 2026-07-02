@@ -3,6 +3,7 @@ module Drasil.SglPend.LabelledContent (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 

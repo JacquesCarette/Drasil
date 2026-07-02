@@ -3,7 +3,8 @@ module Data.Drasil.Units.Physics where
 
 import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
   m_2, m_3, newton)
-import Language.Drasil (cn, dcc, newUnit, UnitDefn, (/:), (/$), (*:), makeDerU)
+import Language.Drasil (cn, newUnit, UnitDefn, (/:), (/$), (*:), makeDerU, cncpt''', Sentence(..))
+import Drasil.Database (mkUid)
 
 accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU,
  impulseU, springConstU, torqueU, velU :: UnitDefn
@@ -21,5 +22,5 @@ velU            = newUnit "velocity"             $ metre /: second
 
 gravConstU :: UnitDefn
 
-gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
-  "universal gravitational constant") (m_3 /$ (kilogram *: s_2))
+gravConstU = makeDerU (cncpt''' (mkUid "gravConstU") (cn "gravitational constant")
+  (S "universal gravitational constant")) (m_3 /$ (kilogram *: s_2))

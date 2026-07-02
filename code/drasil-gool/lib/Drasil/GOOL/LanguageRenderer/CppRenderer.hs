@@ -2321,7 +2321,7 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel (text "&") v local
+    dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
     emptS <- zoom lensCStoMS emptyStmt
     pure $ on3CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS

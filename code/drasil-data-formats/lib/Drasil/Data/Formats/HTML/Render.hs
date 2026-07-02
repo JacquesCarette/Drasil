@@ -14,6 +14,26 @@ import Drasil.Data.Formats.HTML.Core (
     Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..)
   )
 
+-- | A 'CustomTag' is either (a) an ill-supported HTML-spec. node (ill-supported
+-- by 'HTMLBody', that is) or (b) a purely custom one.
+newtype CustomTag = CT Text
+
+customTag :: Text -> CustomTag
+customTag t
+  -- | tag names are used within element start tags and end tags to give the
+  -- element’s name. HTML elements all have names that only use characters in
+  -- the range 0–9, a–z, and A–Z.
+  | isSanitary t = CT t
+  | otherwise = error "bad custom tag name"
+
+data HTMLRenderOptions = HTMLRO {
+  -- | What 'TagType' is each 'CustomTag'?
+  customElementTagTypes :: M.Map CustomTag TagType.
+
+  -- FIXME: All referenced 'CustomTag's need to (a) be in this map and (b)
+  -- declare whether the custom tag is 'Void' or 'Standard'.
+}
+
 -- | Render 'HTML' to a 'Doc'
 renderHTML :: HTML -> Doc ann
 renderHTML (HTML heads bodies) =

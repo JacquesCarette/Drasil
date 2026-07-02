@@ -37,7 +37,7 @@ data HTMLBody =
   | FigCaption [Attr] [HTMLBody]
   | Img File Text [Attr]
   | RawText Text
-  | CustomTag Text TagType [Attr] [HTMLBody]
+  | Custom CustomTag [Attr] [HTMLBody]
   | Comment Text
   deriving (Show, Eq)
 -- TODO: Support more tags

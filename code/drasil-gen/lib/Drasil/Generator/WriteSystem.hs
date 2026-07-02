@@ -26,7 +26,7 @@ setSystemLocale = setLocaleEncoding utf8
 {-# DEPRECATED setSystemLocale
   "Use `concretizeAndWrite` instead of directly setting system locale before file-writing." #-}
 
--- | Configuration options for writing a repository.
+-- | Configuration options for writing a repository of software artifacts.
 data WriteOptions = WO
   { -- | Where should we write to?
     basePath :: OsPath,

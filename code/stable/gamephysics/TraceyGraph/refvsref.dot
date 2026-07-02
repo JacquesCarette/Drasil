@@ -1,5 +1,5 @@
 digraph "refvsref" {
-    "theory:gravitationalAccel" -> "theory:force";
+    "theory:gravitationalAccel" -> "theory:fOfGravity";
     "theory:accj" -> "dataDefn:p_CM";
     "theory:accj" -> "dataDefn:linearDisplacement";
     "theory:accj" -> "dataDefn:linearVelocity";
@@ -33,11 +33,11 @@ digraph "refvsref" {
     }
     "theory:newtonSL" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonSecLawMot"];
     "theory:force1" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonThirdLawMot"];
-    "theory:force" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:UniversalGravLaw"];
+    "theory:fOfGravity" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:UniversalGravLaw"];
     "theory:newtonSLR" [shape=box, color=black, style=filled, fillcolor="pink", label="TM:NewtonSecLawRotMot"];
     subgraph "TM" {
         rank="same";
-        "theory:newtonSL" "theory:force1" "theory:force" "theory:newtonSLR";
+        "theory:newtonSL" "theory:force1" "theory:fOfGravity" "theory:newtonSLR";
     }
     "theory:gravitationalAccel" [shape=box, color=black, style=filled, fillcolor="palegreen", label="GD:accelGravity"];
     "theory:impulseS" [shape=box, color=black, style=filled, fillcolor="palegreen", label="GD:impulse"];

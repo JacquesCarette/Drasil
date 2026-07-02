@@ -3,7 +3,6 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (mkUid)
 import Language.Drasil
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -16,7 +15,7 @@ import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (angularAccel,
-  force, gravitationalConst, momentOfInertia, torque)
+  force, fOfGravity, gravitationalConst, momentOfInertia, torque)
 import Data.Drasil.Theories.Physics (newtonSL)
 
 ----- Theoretical Models -----
@@ -47,17 +46,14 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 
 -- FIXME: Missing ConceptDomain!
 newtonLUGModel :: ModelKind ModelExpr
-newtonLUGModel = equationalRealm' $ mkMultiDefnForQuant newtonForceQuant EmptyS $ NE.fromList [
+newtonLUGModel = equationalRealmN (nounPhraseSP "Newton's law of universal gravitation") $
+  mkMultiDefnForQuant fOfGravity EmptyS $ NE.fromList [
     mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* sy dVect),
     mkDefiningExpr "newtonLUGviaForm"  [] EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs newtonLUGModel "UniversalGravLaw" newtonLUGNotes
-
-newtonForceQuant :: DefinedQuantityDict
-newtonForceQuant = quantNoUnit' (mkUid "force") (nounPhraseSP "Newton's law of universal gravitation")
-                    (S "the gravitational force between two masses") (symbol force) Real
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

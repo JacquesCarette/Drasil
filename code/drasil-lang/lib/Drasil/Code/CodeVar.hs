@@ -3,7 +3,7 @@
 module Drasil.Code.CodeVar (
   CodeIdea(..), DefiningCodeExpr(..), VarOrFunc(..), CodeChunk(..), qc,
   CodeVarChunk(..), ccv, obv, CodeFuncChunk(..),  ccf,
-  funcPrefix, listToArray
+  funcPrefix, listToArray, quantvar, quantfunc
 ) where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
@@ -12,12 +12,13 @@ import Drasil.Database (HasUID(uid), (+++), HasChunkRefs(..))
 
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Definition (defn), ConceptDomain (cdom))
+import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Concept,
+  Definition(defn), ConceptDomain (cdom))
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU', dqdWr)
 
 -- | A 'CodeIdea' must include some code and its name.
 class CodeIdea c where
@@ -104,6 +105,19 @@ instance Eq            CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance MayHaveUnit   CodeVarChunk where getUnit = getUnit . view ccv
 
+-- | Construct a 'CodeVarChunk' from a 'Quantity'.
+quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
+quantvar c = CodeVC (CodeC (dqdWr c) Var) Nothing
+
+-- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
+-- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
+listToArray :: CodeVarChunk -> CodeVarChunk
+listToArray c = newSpc (c ^. typ)
+  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (c +++ "_array")
+          (c ^. term) (c ^. defn) (getA c)
+          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
+        newSpc _ = c
+
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
@@ -135,11 +149,6 @@ instance Eq            CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance MayHaveUnit   CodeFuncChunk where getUnit = getUnit . view ccf
 
--- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
--- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
-listToArray :: CodeVarChunk -> CodeVarChunk
-listToArray c = newSpc (c ^. typ)
-  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (c +++ "_array")
-          (c ^. term) (c ^. defn) (getA c)
-          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
-        newSpc _ = c
+-- | Construct a 'CodeFuncChunk' from a 'Quantity'.
+quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
+quantfunc c = CodeFC $ CodeC (dqdWr c) Func

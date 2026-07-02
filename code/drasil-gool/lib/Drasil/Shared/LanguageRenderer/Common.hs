@@ -2,18 +2,17 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.Common (
   boolRender, bool, extVar, funcType, extFuncAppMixedArgs, listAccessFunc,
-  listSetFunc, forEach', varDecDef, listSize, increment
+  forEach', varDecDef, listSize, increment
 ) where
 
 import Prelude hiding (print, pi, (<>))
 import Control.Lens.Zoom (zoom)
-import Control.Monad (join)
 import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VSType, SVariable, MixedCall,
-  SValue, VSFunction, ValueSym(valueType, Value), TypeSym(int), MSBody, MSStatement,
+  SValue, VSFunction, ValueSym(Value), TypeSym(int), MSBody, MSStatement,
   VariableElim(variableName), VariableSym(Variable), Label, Library,
   BodySym(Body), funcApp, getCodeType)
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
@@ -21,9 +20,7 @@ import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
 import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
   addAssign)
-import qualified Drasil.Shared.RendererClassesCommon as RC (value)
 import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, typeFromData)
-import Drasil.Shared.Helpers (on2StateValues, onStateValue)
 import Drasil.Shared.State (lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC (emptyStmt, assign)
 import Drasil.Shared.AST (ScopeData, TypeData)
@@ -58,12 +55,6 @@ extFuncAppMixedArgs l = call (Just l) Nothing
 
 listAccessFunc :: (CommonRenderSym r, UnRepr r TypeData) => VSType r -> SValue r -> VSFunction r
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
-
-listSetFunc :: (CommonRenderSym r, UnRepr r TypeData) => (Doc -> Doc -> Doc) -> SValue r -> SValue r ->
-  SValue r -> VSFunction r
-listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
-  (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx)
-  setVal
 
 -- Python, Swift, and Julia --
 

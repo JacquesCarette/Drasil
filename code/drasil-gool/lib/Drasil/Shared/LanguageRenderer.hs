@@ -18,12 +18,12 @@ module Drasil.Shared.LanguageRenderer (
   stateVar, constVar, stateVarList, switch, assign, addAssign, subAssign,
   increment, decrement, getTerm, return', comment, var, extVar, arg,
   classVarAccess, instanceVarAccess, unOpDocD, unOpDocD', binOpDocD, binOpDocD',
-  func, cast, listAccessFunc, listSetFunc, objAccess, castObj, break, continue,
-  classLevel, instanceLevel, private, public, blockCmt, docCmt, commentedItem,
-  addComments, FuncDocRenderer, functionDox, ClassDocRenderer, classDox,
-  ModuleDocRenderer, moduleDox, commentedMod, valueList, variableList,
-  binderList, parameterList, namedArgList, prependToBody, appendToBody,
-  surroundBody, getterName, setterName, intValue
+  func, cast, listAccessFunc, objAccess, castObj, break, continue, classLevel,
+  instanceLevel, private, public, blockCmt, docCmt, commentedItem, addComments,
+  FuncDocRenderer, functionDox, ClassDocRenderer, classDox, ModuleDocRenderer,
+  moduleDox, commentedMod, valueList, variableList, binderList, parameterList,
+  namedArgList, prependToBody, appendToBody, surroundBody, getterName,
+  setterName, intValue
 ) where
 
 import Drasil.FileHandling.Legacy (blank, indent, indentList)
@@ -304,9 +304,6 @@ cast = parens
 
 listAccessFunc :: (CommonRenderSym r) => r (Value r) -> Doc
 listAccessFunc v = brackets $ RC.value v
-
-listSetFunc :: Doc -> Doc -> Doc
-listSetFunc i v = brackets i <+> equals <+> v
 
 objAccess :: Doc -> Doc -> Doc
 objAccess v f = v <> f

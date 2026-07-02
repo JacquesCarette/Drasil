@@ -3,7 +3,7 @@ module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   AttachmentSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
-  InstanceVarSelfSym(..), Literal(..), VariableValue(..), OOVariableValue,
+  SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
   VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -26,7 +26,7 @@ x :: (VariableSym r) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (InstanceVarSelfSym r) => SVariable r
+selfX :: (SelfSym r, VariableValue r) => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.

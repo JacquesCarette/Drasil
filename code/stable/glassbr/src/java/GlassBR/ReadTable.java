@@ -67,19 +67,19 @@ public class ReadTable {
                 x_matrix_temp.add(Double.parseDouble(linetokens.get(j * 2 + 0)));
                 y_matrix_temp.add(Double.parseDouble(linetokens.get(j * 2 + 1)));
             }
+            outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+            outfile.print("var 'x_matrix_temp' assigned ");
+            outfile.print(x_matrix_temp);
+            outfile.println(" in module ReadTable");
+            outfile.close();
+            outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+            outfile.print("var 'y_matrix_temp' assigned ");
+            outfile.print(y_matrix_temp);
+            outfile.println(" in module ReadTable");
+            outfile.close();
             x_matrix.add(x_matrix_temp);
             y_matrix.add(y_matrix_temp);
         }
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'x_matrix' assigned ");
-        outfile.print(x_matrix);
-        outfile.println(" in module ReadTable");
-        outfile.close();
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'y_matrix' assigned ");
-        outfile.print(y_matrix);
-        outfile.println(" in module ReadTable");
-        outfile.close();
         infile.close();
     }
 }

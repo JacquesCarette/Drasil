@@ -1,42 +1,18 @@
 module Language.Drasil.Code.Imperative.Logging (
-  maybeLog, logBody, loggedMethod, varLogFile
+  logBody, loggedMethod, varLogFile
 ) where
 
 import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (get)
 
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  HasChoices(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
-  SharedProg, BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..),
-  Literal(..), VariableValue(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), lensMStoVS, ScopeSym(..), LoggingFor(..))
-
-import Text.PrettyPrint.HughesPJ (render)
-
--- | Generates a statement that logs the given variable's value, if the user
--- chose to turn on logging of variable assignments.
-maybeLog :: (SharedProg r) => SVariable (LoggingFor r) -> SVariable r -> GenState [MSStatement r]
-maybeLog vlog v = do
-  g <- get
-  sequence [loggedVar vlog v | LogVar `elem` g ^. logKind]
-
--- | Generates a statement that logs the name of the given variable, its current
--- value, and the current module name.
-loggedVar :: (SharedProg r) => SVariable (LoggingFor r) -> SVariable r -> GenState (MSStatement r)
-loggedVar vlog v = do
-  g <- get
-  return $ multi [
-    openFileA varLogFile (litString $ g ^. logName),
-    do
-      vlog' <- zoom lensMStoVS vlog
-      printFileStr valLogFile ("var '" ++ (render . unLC) vlog' ++ "' assigned "),
-    printFile valLogFile (valueOf v),
-    printFileStrLn valLogFile (" in module " ++ currentModule g),
-    closeFile valLogFile]
+import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SharedProg,
+  BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
+  VariableValue(..), StatementSym(..), DeclStatement(..), IOStatement(..),
+  lensMStoVS, ScopeSym(..))
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of

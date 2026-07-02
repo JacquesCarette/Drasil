@@ -20,31 +20,31 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..),
-  OOValueSym, OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall,
-  newObj, InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
+  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
-import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, blockComment')
+import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
+  bOp, variable, value, function, statement, visibility, parameter, method,
+  blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
   OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
@@ -56,7 +56,7 @@ import Drasil.Shared.LanguageRenderer (new, elseIfLabel, forLabel, tryLabel,
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj',
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep,
   access, containing, mathFunc, functionDox, variableList,
-  parameterList, appendToBody, surroundBody, intValue, valueList)
+  parameterList, appendToBody, surroundBody, valueList)
 import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class',
   multiStmt, body, printFile, classVarAccess, cast, castObj,
@@ -72,11 +72,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
-  listAccess, listSet, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign,
-  subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
@@ -165,12 +165,8 @@ instance RenderFile JavaCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JavaCode where
-  type Import JavaCode = Doc
   langImport = toCode . jImport
   modImport = langImport
-
-instance ImportElim JavaCode where
-  import' = unJC
 
 instance AttachmentSym JavaCode where
   type Attachment JavaCode = Doc
@@ -288,9 +284,6 @@ instance OOVariableSym JavaCode where
 
 instance SelfSym JavaCode where
   self = C.self
-
-instance InstanceVarSelfSym JavaCode where
-  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim JavaCode where
   variableName = varName . unJC
@@ -465,6 +458,10 @@ instance IndexTranslator JavaCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Reference JavaCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array JavaCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "length" int)
@@ -477,7 +474,7 @@ instance List JavaCode where
   listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet list idx vl = valStmt $ objMethodCall void list jListSet [idx, vl]
   indexOf = CP.indexOf jIndex
 
 instance Set JavaCode where
@@ -495,7 +492,6 @@ instance InternalGetSet JavaCode where
 
 instance InternalListFunc JavaCode where
   listAccessFunc = CP.listAccessFunc' jListAccess
-  listSetFunc = jListSetFunc
 
 instance BinderSym JavaCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -588,7 +584,7 @@ instance IOStatement JavaCode where
   getFileInputLine f v = v &= f $. jNextLineFunc
   discardFileLine = CP.discardFileLine jNextLine
   getFileInputAll f v = while (f $. jHasNextLineFunc)
-    (oneLiner $ valStmt $ listAppend (valueOf v) (f $. jNextLineFunc))
+    (oneLiner $ listAppend (valueOf v) (f $. jNextLineFunc))
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = do
@@ -912,10 +908,6 @@ jParseDblFunc v = funcApp jParseDbl double [v]
 jParseFloatFunc :: SValue JavaCode -> SValue JavaCode
 jParseFloatFunc v = funcApp jParseFloat float [v]
 
-jListSetFunc :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode ->
-  VSFunction JavaCode
-jListSetFunc v i toVal = func jListSet (onStateValue valueType v) [intValue i, toVal]
-
 jNextFunc :: VSFunction JavaCode
 jNextFunc = func jNext string []
 
@@ -1042,7 +1034,7 @@ outputs = var "outputs" jArrayType
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
-  (valueOf $ arrayElem (litInt c) outputs)) : jAssignFromArray (c+1) vs
+  (valueOf $ arrayElem (valueOf outputs) (litInt c))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] ->
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] ->
@@ -1082,7 +1074,9 @@ jInOut f ins outs both b = f (returnTp rets)
           ++ [returnStmt (valueOf outputs)])
         assignArray :: Integer -> [SValue JavaCode] -> [MSStatement JavaCode]
         assignArray _ [] = []
-        assignArray c (v:vs) = (arrayElem (litInt c) outputs &= v) : assignArray (c+1) vs
+        assignArray c (v:vs) =
+          (arrayElem (valueOf outputs) (litInt c) &= v)
+          : assignArray (c+1) vs
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 

@@ -12,25 +12,23 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.State (get)
 
+import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
   fAppInOutProc)
 import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkValProc,
   mkVar, mkVarProc)
-import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, LoggingFor,
-  InstanceVarSelfSym(..), TypeSym(..), VariableValue(..), StatementSym(..),
-  DeclStatement(..), convType, convTypeOO)
+import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg, TypeSym(..),
+  VariableValue(..), StatementSym(..), DeclStatement(..), convType, convTypeOO)
 
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
@@ -63,18 +61,14 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r,
-  InstanceVarSelfSym (LoggingFor r)) => CodeDefinition ->
-  GenState (Maybe (MSStatement r))
+genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
 genCalcCall c = do
   g <- get
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
-  vlog <- mkVar (quantvar c)
   v <- mkVar (quantvar c)
-  l <- maybeLog vlog v
-  return $ fmap (multi . (: l) . varDecDef v scp) val
+  return $ fmap (varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
@@ -172,10 +166,8 @@ genCalcCallProc c = do
   let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
-  vlog <- mkVarProc (quantvar c)
   v <- mkVarProc (quantvar c)
-  l <- maybeLog vlog v
-  return $ fmap (multi . (: l) . (`varDecDef` scp) v) val
+  return $ fmap ((`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))

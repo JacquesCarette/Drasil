@@ -2,21 +2,21 @@
 module Data.Drasil.Units.Thermodynamics where
 
 import Drasil.Database (mkUid)
-import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', Sentence(S),
+import Language.Drasil (cnIES, cn, cn', cn'', Sentence(S),
   UnitDefn, (/:), (*:), (/$), newUnit, makeDerU, cncpt''')
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
 heatCapacity :: UnitDefn
-heatCapacity = makeDerU (dccWDS "heatCapacity" (cnIES "heat capacity")
+heatCapacity = makeDerU (cncpt''' (mkUid "heatCapacity") (cnIES "heat capacity")
   (S "heat capacity (constant pressure)")) (joule /: centigrade)
 
 heatCapSpec :: UnitDefn --Specific heat capacity
-heatCapSpec = makeDerU (dccWDS "heatCapSpec" (cn' "specific heat")
+heatCapSpec = makeDerU (cncpt''' (mkUid "heatCapSpec") (cn' "specific heat")
   (S "heat capacity per unit mass")) (joule /$ (kilogram *: centigrade))
 
 thermalFlux :: UnitDefn
-thermalFlux = makeDerU (dccWDS "thermalFlux" (cn'' "heat flux")
+thermalFlux = makeDerU (cncpt''' (mkUid "thermalFlux") (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
 heatTransferCoef :: UnitDefn

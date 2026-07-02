@@ -1,4 +1,7 @@
-module Drasil.BinaryStar.Concepts where
+module Drasil.BinaryStar.Concepts (
+  ideaDicts, conceptChunks, starOne, starTwo, gravInteraction,
+  ccsFortermsAndDefsTbl, newtonLUG
+) where
 
 import Drasil.Database (mkUid)
 import Language.Drasil

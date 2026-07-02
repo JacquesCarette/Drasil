@@ -6,11 +6,11 @@ import Control.Monad.State (State, modify)
 
 import Language.Drasil (Sentence(..), (+:+.))
 
+import Drasil.Code.CodeVar (codeName)
 import Language.Drasil.Choices (ODE(..))
 import Language.Drasil.Code.ExtLibImport (ExtLibState(..),
   genExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))

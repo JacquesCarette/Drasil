@@ -9,7 +9,8 @@ import Drasil.Database (HasUID(..), HasChunkRefs(..))
 import Language.Drasil
 
 import Drasil.Code.CodeExpr.Development (CodeExpr, expr, CanGenCode(..))
-import Language.Drasil.Chunk.Code
+import Drasil.Code.CodeVar
+import Language.Drasil.Chunk.Code () -- Importing for the instances.
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 -- | The definition may be specialized to use ODEs.

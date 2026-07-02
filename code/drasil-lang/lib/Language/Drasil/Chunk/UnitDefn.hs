@@ -21,7 +21,7 @@ module Language.Drasil.Chunk.UnitDefn (
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
 
-import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid)
+import Drasil.Database (HasChunkRefs(..), UID, HasUID(..), mkUid, nsUid)
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cncpt''')
 import Language.Drasil.Sentence (Sentence(..))
@@ -184,13 +184,13 @@ newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit.
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (cncpt''' (mkUid name) (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) [mkUid name]
-  where name = "unit:" ++ nam
+fund nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(Label sym, 1)]) [u]
+  where u = nsUid "unit" (mkUid nam)
 
 -- | Variant of the 'fund', useful for degree.
 fund' :: String -> String -> Symbol -> UnitDefn
-fund' nam desc sym = UD (cncpt''' (mkUid name) (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) [mkUid name]
-  where name = "unit:" ++ nam
+fund' nam desc sym = UD (cncpt''' u (cn' nam) (S desc)) (BaseSI $ US [(sym, 1)]) [u]
+  where u = nsUid "unit" (mkUid nam)
 
 -- | We don't want an Ord on units, but this still allows us to compare them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering

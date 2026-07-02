@@ -34,7 +34,7 @@ nbDecl = [
   ]
 
 si :: LessonPlan
-si = mkLessonPlan "projectile-lesson"
+si = mkLessonPlan
   (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
   allRefs
 

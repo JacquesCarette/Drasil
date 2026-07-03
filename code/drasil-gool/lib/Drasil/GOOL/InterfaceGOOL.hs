@@ -34,20 +34,20 @@ import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, VS)
 import Drasil.Shared.AST (ScopeData)
 
-class (SharedProg r tp, ProgramSym r tp, OOVariableValue r tp,
+class (SharedProg r tp vis, ProgramSym r tp vis, OOVariableValue r tp,
   OODeclStatement r tp, OOFuncAppStatement r tp, OOValueExpression r tp,
   InternalValueExp r tp, GetSet r tp, ObserverPattern r tp, StrategyPattern r tp
-  ) => OOProg r tp
+  ) => OOProg r tp vis
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym r tp) => ProgramSym r tp where
+class (FileSym r tp vis) => ProgramSym r tp vis where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r tp) => FileSym r tp where
+class (ModuleSym r tp vis) => FileSym r tp vis where
   type File r
   fileDoc :: FSModule r -> SFile r
 
@@ -56,14 +56,14 @@ class (ModuleSym r tp) => FileSym r tp where
 
 type FSModule a = FS (a (Module a))
 
-class (ClassSym r tp) => ModuleSym r tp where
+class (ClassSym r tp vis) => ModuleSym r tp vis where
   type Module r
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 type SClass a = CS (a (Class a))
 
-class (OOMethodSym r tp, StateVarSym r tp) => ClassSym r tp where
+class (OOMethodSym r tp vis, StateVarSym r tp vis) => ClassSym r tp vis where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
@@ -82,47 +82,46 @@ class (OOMethodSym r tp, StateVarSym r tp) => ClassSym r tp where
 
 type Initializers r tp = [(SVariable r, SValue r)]
 
-class (MethodSym r tp, AttachmentSym r) => OOMethodSym r tp where
-  method      :: Label -> r (Visibility r) -> r (Attachment r) -> VS (r tp) ->
+class (MethodSym r tp vis, AttachmentSym r) => OOMethodSym r tp vis where
+  method      :: Label -> r vis -> r (Attachment r) -> VS (r tp) ->
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r
   constructor :: [MSParameter r] -> Initializers r tp -> MSBody r -> SMethod r
 
   -- inOutMethod and docInOutMethod both need the Attachment parameter
-  inOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> InOutFunc r
-  docInOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> DocInOutFunc r
+  inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r
+  docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r
 
-privMethod :: (OOMethodSym r tp) => Label -> VS (r tp) -> [MSParameter r] ->
+privMethod :: (OOMethodSym r tp vis) => Label -> VS (r tp) -> [MSParameter r] ->
   MSBody r -> SMethod r
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r tp) => Label -> VS (r tp) -> [MSParameter r] ->
+pubMethod :: (OOMethodSym r tp vis) => Label -> VS (r tp) -> [MSParameter r] ->
   MSBody r -> SMethod r
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r tp) => [MSParameter r] -> Initializers r tp -> SMethod r
+initializer :: (OOMethodSym r tp vis) => [MSParameter r] -> Initializers r tp -> SMethod r
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r tp) => [MSParameter r] -> MSBody r -> SMethod r
+nonInitConstructor :: (OOMethodSym r tp vis) => [MSParameter r] -> MSBody r -> SMethod r
 nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (VisibilitySym r, AttachmentSym r, VariableSym r tp) => StateVarSym r tp where
+class (VisibilitySym r vis, AttachmentSym r, VariableSym r tp) => StateVarSym r tp vis where
   type StateVar r
-  stateVar :: r (Visibility r) -> r (Attachment r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Visibility r) -> r (Attachment r) -> SVariable r ->
-    SValue r -> CSStateVar r
-  constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
+  stateVar :: r vis -> r (Attachment r) -> SVariable r -> CSStateVar r
+  stateVarDef :: r vis -> r (Attachment r) -> SVariable r -> SValue r -> CSStateVar r
+  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r
 
-privDVar :: (StateVarSym r tp) => SVariable r -> CSStateVar r
+privDVar :: (StateVarSym r tp vis) => SVariable r -> CSStateVar r
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r tp) => SVariable r -> CSStateVar r
+pubDVar :: (StateVarSym r tp vis) => SVariable r -> CSStateVar r
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r tp) => SVariable r -> CSStateVar r
+pubSVar :: (StateVarSym r tp vis) => SVariable r -> CSStateVar r
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance

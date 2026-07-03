@@ -12,15 +12,15 @@ import qualified Drasil.GProc as GProc (SFile, FileSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.
-helperOO :: (OOProg r tp) => OO.SFile r
+helperOO :: (OOProg r tp vis) => OO.SFile r
 helperOO = OO.fileDoc (OO.buildModule "Helper" [] [doubleAndAdd] [])
 
 -- | Creates Helper module that contains an addition function.
-helperProc :: (ProcProg r tp) => GProc.SFile r
+helperProc :: (ProcProg r tp vis) => GProc.SFile r
 helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 
 -- | Creates a function that doubles the arguments and adds them together.
-doubleAndAdd :: (SharedProg r tp) => SMethod r
+doubleAndAdd :: (SharedProg r tp vis) => SMethod r
 doubleAndAdd = docFunc "This function adds two numbers"
   ["First number to add", "Second number to add"] (Just "Sum") $
   function "doubleAndAdd"  public double

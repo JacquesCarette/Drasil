@@ -90,23 +90,23 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode TypeData
-instance ProcProg MatlabCode TypeData
+instance SharedProg MatlabCode TypeData Doc
+instance ProcProg MatlabCode TypeData Doc
 
-instance ProgramSym MatlabCode TypeData where
+instance ProgramSym MatlabCode TypeData Doc where
   type Program MatlabCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode TypeData
-instance ProcRenderSym MatlabCode TypeData
+instance CommonRenderSym MatlabCode TypeData Doc
+instance ProcRenderSym MatlabCode TypeData Doc
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode TypeData where
+instance FileSym MatlabCode TypeData Doc where
   type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -475,15 +475,14 @@ instance ControlStatement MatlabCode TypeData where
   tryCatch = undefined
   assert = undefined
 
-instance VisibilitySym MatlabCode where
-  type Visibility MatlabCode = Doc
+instance VisibilitySym MatlabCode Doc where
   private = toCode empty
   public = toCode empty
 
-instance RenderVisibility MatlabCode where
+instance RenderVisibility MatlabCode Doc where
   visibilityFromData = undefined
 
-instance VisibilityElim MatlabCode where
+instance VisibilityElim MatlabCode Doc where
   visibility = unMLC
 
 instance MethodTypeSym MatlabCode TypeData where
@@ -506,7 +505,7 @@ instance ParamElim MatlabCode TypeData where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode TypeData where
+instance MethodSym MatlabCode TypeData Doc where
   type Method MatlabCode = MethodData
   docMain = mainFunction
   function = A.function
@@ -528,7 +527,7 @@ instance RenderMethod MatlabCode TypeData where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance ProcRenderMethod MatlabCode TypeData where
+instance ProcRenderMethod MatlabCode TypeData Doc where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
@@ -542,7 +541,7 @@ instance ProcRenderMethod MatlabCode TypeData where
 instance MethodElim MatlabCode where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode TypeData where
+instance ModuleSym MatlabCode TypeData Doc where
   type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
@@ -588,7 +587,7 @@ mlParam = RC.variable
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
-mlFuncDoc :: (CommonRenderSym r TypeData) => Label -> [Doc] ->
+mlFuncDoc :: (CommonRenderSym r TypeData vis) => Label -> [Doc] ->
   [r (Parameter r)] -> Doc -> Doc
 mlFuncDoc n outs pms bod =
   vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),

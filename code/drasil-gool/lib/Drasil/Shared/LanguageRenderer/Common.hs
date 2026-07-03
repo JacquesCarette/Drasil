@@ -34,7 +34,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 
 -- Python, Java, C#, and Julia --
 
-extVar :: (CommonRenderSym r tp) => Label -> Label -> VS (r tp) -> SVariable r
+extVar :: (CommonRenderSym r tp vis) => Label -> Label -> VS (r tp) -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 -- Python, Java, and Julia --
@@ -47,18 +47,18 @@ funcType ps' r' =  do
   typeFromData (Func (map getCodeType ps) (getCodeType r)) "" empty
 
 -- Python, Java, C#, Swift, and Julia --
-extFuncAppMixedArgs :: (CommonRenderSym r tp) => Library -> MixedCall r tp
+extFuncAppMixedArgs :: (CommonRenderSym r tp vis) => Library -> MixedCall r tp
 extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
-listAccessFunc :: (CommonRenderSym r tp, IC.TypeElim r tp) => VS (r tp) ->
+listAccessFunc :: (CommonRenderSym r tp vis, IC.TypeElim r tp) => VS (r tp) ->
   SValue r -> VSFunction r
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
-forEach' :: (CommonRenderSym r tp) => (r (Variable r) -> r (Value r) ->
+forEach' :: (CommonRenderSym r tp vis) => (r (Variable r) -> r (Value r) ->
   r (Body r) -> Doc) -> SVariable r -> SValue r -> MSBody r -> MSStatement r
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
@@ -68,7 +68,7 @@ forEach' f i' v' b' = do
 
 -- Python and Julia --
 
-varDecDef :: (CommonRenderSym r tp) => SVariable r -> r ScopeData ->
+varDecDef :: (CommonRenderSym r tp vis) => SVariable r -> r ScopeData ->
   Maybe (SValue r) -> MSStatement r
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
@@ -81,7 +81,7 @@ varDecDef v scp e = do
 
 -- Python and Swift --
 
-increment :: (CommonRenderSym r tp) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> MSStatement r
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -90,5 +90,5 @@ increment vr' v'= do
 -- Python, Julia, and MATLAB --
 
 -- | Call to get the size of a list as a function call
-listSize :: (CommonRenderSym r tp) => String -> SValue r -> SValue r
+listSize :: (CommonRenderSym r tp vis) => String -> SValue r -> SValue r
 listSize fnName list = funcApp fnName int [list]

@@ -34,20 +34,21 @@ import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData)
 
-class (SharedProg r tp vis, ProgramSym r tp vis, OOVariableValue r tp,
-  OODeclStatement r tp, OOFuncAppStatement r tp, OOValueExpression r tp,
-  InternalValueExp r tp, GetSet r tp, ObserverPattern r tp, StrategyPattern r tp
-  ) => OOProg r tp vis
+class (SharedProg r tp vis smt, ProgramSym r tp vis smt, OOVariableValue r tp,
+  OODeclStatement r tp smt, OOFuncAppStatement r tp smt, OOValueExpression r tp,
+  InternalValueExp r tp, GetSet r tp, ObserverPattern r tp smt,
+  StrategyPattern r tp smt
+  ) => OOProg r tp vis smt
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym r tp vis) => ProgramSym r tp vis where
+class (FileSym r tp vis smt) => ProgramSym r tp vis smt where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r tp vis) => FileSym r tp vis where
+class (ModuleSym r tp vis smt) => FileSym r tp vis smt where
   type File r
   fileDoc :: FSModule r -> SFile r
 
@@ -56,14 +57,14 @@ class (ModuleSym r tp vis) => FileSym r tp vis where
 
 type FSModule a = FS (a (Module a))
 
-class (ClassSym r tp vis) => ModuleSym r tp vis where
+class (ClassSym r tp vis smt) => ModuleSym r tp vis smt where
   type Module r
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 type SClass a = CS (a (Class a))
 
-class (OOMethodSym r tp vis, StateVarSym r tp vis) => ClassSym r tp vis where
+class (OOMethodSym r tp vis smt, StateVarSym r tp vis) => ClassSym r tp vis smt where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
@@ -82,7 +83,7 @@ class (OOMethodSym r tp vis, StateVarSym r tp vis) => ClassSym r tp vis where
 
 type Initializers r tp = [(SVariable r, SValue r)]
 
-class (MethodSym r tp vis, AttachmentSym r) => OOMethodSym r tp vis where
+class (MethodSym r tp vis smt, AttachmentSym r) => OOMethodSym r tp vis smt where
   method      :: Label -> r vis -> r (Attachment r) -> VS (r tp) ->
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
@@ -93,18 +94,20 @@ class (MethodSym r tp vis, AttachmentSym r) => OOMethodSym r tp vis where
   inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r
   docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r
 
-privMethod :: (OOMethodSym r tp vis) => Label -> VS (r tp) -> [MSParameter r] ->
-  MSBody r -> SMethod r
+privMethod :: (OOMethodSym r tp vis smt) => Label -> VS (r tp) ->
+  [MSParameter r] -> MSBody r -> SMethod r
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r tp vis) => Label -> VS (r tp) -> [MSParameter r] ->
-  MSBody r -> SMethod r
+pubMethod :: (OOMethodSym r tp vis smt) => Label -> VS (r tp) ->
+  [MSParameter r] -> MSBody r -> SMethod r
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r tp vis) => [MSParameter r] -> Initializers r tp -> SMethod r
+initializer :: (OOMethodSym r tp vis smt) => [MSParameter r] ->
+  Initializers r tp -> SMethod r
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r tp vis) => [MSParameter r] -> MSBody r -> SMethod r
+nonInitConstructor :: (OOMethodSym r tp vis smt) => [MSParameter r] ->
+  MSBody r -> SMethod r
 nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
@@ -234,43 +237,42 @@ classMethodCallNoParams :: (InternalValueExp r tp) => VS (r tp) -> VS (r tp) ->
   Label -> SValue r
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class (DeclStatement r tp, OOVariableSym r tp) => OODeclStatement r tp where
-  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r (Statement r))
+class (DeclStatement r tp smt, OOVariableSym r tp) => OODeclStatement r tp smt where
+  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r (Statement r))
+  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
   extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
-    -> MS (r (Statement r))
+    -> MS (r smt)
 
-objDecNewNoParams :: (OODeclStatement r tp) => SVariable r -> r ScopeData
-  -> MS (r (Statement r))
+objDecNewNoParams :: (OODeclStatement r tp smt) => SVariable r -> r ScopeData
+  -> MS (r smt)
 objDecNewNoParams v tp = objDecNew v tp []
 
-extObjDecNewNoParams :: (OODeclStatement r tp) => Library -> SVariable r ->
-  r ScopeData -> MS (r (Statement r))
+extObjDecNewNoParams :: (OODeclStatement r tp smt) => Library -> SVariable r ->
+  r ScopeData -> MS (r smt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
-class (FuncAppStatement r tp, OOVariableSym r tp) => OOFuncAppStatement r tp where
-  selfInOutCall :: InOutCall r
+class (FuncAppStatement r tp smt, OOVariableSym r tp) => OOFuncAppStatement r tp smt where
+  selfInOutCall :: InOutCall r smt
 
-class (StatementSym r tp, OOFunctionSym r tp) => ObserverPattern r tp where
-  notifyObservers :: VSFunction r -> VS (r tp) -> MS (r (Statement r))
+class (StatementSym r tp smt, OOFunctionSym r tp) => ObserverPattern r tp smt where
+  notifyObservers :: VSFunction r -> VS (r tp) -> MS (r smt)
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r tp) => VS (r tp) -> [SValue r] -> r ScopeData
-  -> MS (r (Statement r))
+initObserverList :: (DeclStatement r tp smt) => VS (r tp) -> [SValue r] ->
+  r ScopeData -> MS (r smt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (StatementSym r tp, OOVariableValue r tp, List r tp) => SValue r
-  -> MS (r (Statement r))
+addObserver :: (OOVariableValue r tp, List r tp smt) => SValue r -> MS (r smt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (BodySym r tp, VariableSym r tp) => StrategyPattern r tp where
+class (BodySym r tp smt, VariableSym r tp) => StrategyPattern r tp smt where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MSBlock r
 

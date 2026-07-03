@@ -4,8 +4,8 @@
 -- | Language-polymorphic functions that are defined by GOOL code
 module Drasil.Shared.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy,
-  listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
-  notifyObservers', arrayDecAsList
+  listSlice, makeSetterVal, stringListVals, stringListLists, forRange,
+  notifyObservers, notifyObservers', arrayDecAsList
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
@@ -34,24 +34,24 @@ import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
-ifExists :: (CommonRenderSym r tp) => SValue r -> MSBody r -> MSBody r -> MSStatement r
+ifExists :: (CommonRenderSym r tp vis) => SValue r -> MSBody r -> MSBody r -> MSStatement r
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
-decrement1 :: (CommonRenderSym r tp) => SVariable r -> MSStatement r
+decrement1 :: (CommonRenderSym r tp vis) => SVariable r -> MSStatement r
 decrement1 v = v &-= IC.litInt 1
 
-increment :: (CommonRenderSym r tp) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> MSStatement r
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
-increment1 :: (CommonRenderSym r tp) => SVariable r -> MSStatement r
+increment1 :: (CommonRenderSym r tp vis) => SVariable r -> MSStatement r
 increment1 vr = vr &+= IC.litInt 1
 
-strat :: (CommonRenderSym r tp, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
+strat :: (CommonRenderSym r tp vis, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
   RC.statement result])
 
-runStrategy :: (CommonRenderSym r tp, Monad r) => Label -> [(Label, MSBody r)] ->
-  Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
+runStrategy :: (CommonRenderSym r tp vis, Monad r) => Label ->
+  [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy")
   (strat (S.stmt resultState)) (lookup l strats)
@@ -60,8 +60,8 @@ runStrategy l strats rv av = maybe
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSlice :: (CommonRenderSym r tp) => Maybe (SValue r) -> Maybe (SValue r) ->
-  Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+listSlice :: (CommonRenderSym r tp vis) => Maybe (SValue r) ->
+  Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 listSlice beg end step vnew vold = do
 
   l_temp <- genVarName [] "temp"
@@ -123,8 +123,8 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is positive
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (MSStatement, SValue): (setter, value) of bound
-makeSetterVal :: (CommonRenderSym r tp) => Label -> SValue r -> Maybe Integer ->
-  Maybe (SValue r) -> SValue r -> SValue r -> r ScopeData ->
+makeSetterVal :: (CommonRenderSym r tp vis) => Label -> SValue r ->
+  Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> r ScopeData ->
   (MSStatement r, SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)
@@ -133,7 +133,7 @@ makeSetterVal vName step _       _       lb rb  scp =
       theSetter = IC.varDecDef theVar scp $ IC.inlineIf (step ?> IC.litInt 0) lb rb
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
-stringListVals :: (CommonRenderSym r tp, IC.TypeElim r tp) =>
+stringListVals :: (CommonRenderSym r tp vis, IC.TypeElim r tp) =>
   [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getCodeType $ valueType slst))
@@ -144,7 +144,7 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
         assignVals (v:vs) n = IC.assign v (cast (onStateValue variableType v)
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
-stringListLists :: (CommonRenderSym r tp, IC.TypeElim r tp) =>
+stringListLists :: (CommonRenderSym r tp vis, IC.TypeElim r tp) =>
   [SVariable r] -> SValue r -> MSStatement r
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
@@ -170,34 +170,34 @@ stringListLists lsts sl = do
     v_i = IC.valueOf var_i
   checkList (getCodeType $ valueType slst)
 
-forRange :: (CommonRenderSym r tp) => SVariable r -> SValue r -> SValue r ->
+forRange :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> SValue r ->
   SValue r -> MSBody r -> MSStatement r
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
-observerIndex :: (CommonRenderSym r tp) => SVariable r
+observerIndex :: (CommonRenderSym r tp vis) => SVariable r
 observerIndex = IC.var "observerIndex" IC.int
 
-observerIdxVal :: (CommonRenderSym r tp) => SValue r
+observerIdxVal :: (CommonRenderSym r tp vis) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (CommonRenderSym r tp) => VS (r tp) -> SValue r
+obsList :: (CommonRenderSym r tp vis) => VS (r tp) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
-notify :: (OORenderSym r tp) => VS (r tp) -> VSFunction r -> MSBody r
+notify :: (OORenderSym r tp vis) => VS (r tp) -> VSFunction r -> MSBody r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
-notifyObservers :: (OORenderSym r tp) => VSFunction r -> VS (r tp) -> MSStatement r
+notifyObservers :: (OORenderSym r tp vis) => VSFunction r -> VS (r tp) -> MSStatement r
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
-notifyObservers' :: (OORenderSym r tp) => VSFunction r -> VS (r tp) -> MSStatement r
+notifyObservers' :: (OORenderSym r tp vis) => VSFunction r -> VS (r tp) -> MSStatement r
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0
 
-arrayDecAsList :: (CommonRenderSym r tp) => Integer -> SVariable r ->
+arrayDecAsList :: (CommonRenderSym r tp vis) => Integer -> SVariable r ->
   r ScopeData -> MSStatement r
 arrayDecAsList len vr scp = do
   vr' <- zoom lensMStoVS vr

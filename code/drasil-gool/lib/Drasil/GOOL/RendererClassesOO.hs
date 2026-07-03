@@ -21,12 +21,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r tp vis, IG.FileSym r tp vis, IG.InternalValueExp r tp,
-  IG.GetSet r tp, IG.ObserverPattern r tp, IG.StrategyPattern r tp,
-  IG.OOVariableValue r tp, IG.OOValueExpression r tp, RenderClass r vis, ClassElim r,
-  RenderFile r, InternalGetSet r tp, OORenderMethod r tp vis, RenderMod r,
-  ModuleElim r, StateVarElim r, PermElim r
-  ) => OORenderSym r tp vis
+class (CommonRenderSym r tp vis smt, IG.FileSym r tp vis smt,
+  IG.InternalValueExp r tp, IG.GetSet r tp, IG.ObserverPattern r tp smt,
+  IG.StrategyPattern r tp smt, IG.OOVariableValue r tp,
+  IG.OOValueExpression r tp, RenderClass r vis, ClassElim r, RenderFile r,
+  InternalGetSet r tp, OORenderMethod r tp vis, RenderMod r, ModuleElim r,
+  StateVarElim r, PermElim r
+  ) => OORenderSym r tp vis smt
 
 -- OO-Only Typeclasses --
 

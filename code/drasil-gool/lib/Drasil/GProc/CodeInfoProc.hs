@@ -46,14 +46,14 @@ instance Applicative CodeInfoProc where
 instance Monad CodeInfoProc where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoProc () ()
+instance SharedProg CodeInfoProc () () ()
 
-instance ProcProg CodeInfoProc () ()
+instance ProcProg CodeInfoProc () () ()
 
 instance UnRepr CodeInfoProc contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoProc () () where
+instance ProgramSym CodeInfoProc () () () where
   type Program CodeInfoProc = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -61,19 +61,19 @@ instance ProgramSym CodeInfoProc () () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoProc () () where
+instance FileSym CodeInfoProc () () () where
   type File CodeInfoProc = ()
   fileDoc = execute1
 
   docMod _ _ _ _ = execute1
 
-instance BodySym CodeInfoProc () where
+instance BodySym CodeInfoProc () () where
   type Body CodeInfoProc = ()
   body = executeList
 
   addComments _ _ = noInfo
 
-instance BlockSym CodeInfoProc () where
+instance BlockSym CodeInfoProc () () where
   type Block CodeInfoProc = ()
   block = executeList
 
@@ -211,7 +211,7 @@ instance Array CodeInfoProc () where
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
-instance List CodeInfoProc () where
+instance List CodeInfoProc () () where
   listSize       = execute1
   listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
@@ -234,20 +234,19 @@ instance InternalList CodeInfoProc () where
 instance BinderSym CodeInfoProc () where
   binder _ _ = noInfoBinder
 
-instance StatementSym CodeInfoProc () where
-  type Statement CodeInfoProc = ()
+instance StatementSym CodeInfoProc () () where
   valStmt = zoom lensMStoVS . execute1
   emptyStmt = noInfo
   multi    = executeList
 
-instance AssignStatement CodeInfoProc () where
+instance AssignStatement CodeInfoProc () () where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
   (&+=)  _ = zoom lensMStoVS . execute1
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoProc () where
+instance DeclStatement CodeInfoProc () () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -259,7 +258,7 @@ instance DeclStatement CodeInfoProc () where
   constDecDef          _ _ = zoom lensMStoVS . execute1
   funcDecDef         _ _ _ = execute1
 
-instance IOStatement CodeInfoProc () where
+instance IOStatement CodeInfoProc () () where
   print        = zoom lensMStoVS . execute1
   printLn      = zoom lensMStoVS . execute1
   printStr   _ = noInfo
@@ -285,13 +284,13 @@ instance IOStatement CodeInfoProc () where
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)
 
-instance StringStatement CodeInfoProc () where
+instance StringStatement CodeInfoProc () () where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-instance FuncAppStatement CodeInfoProc () where
+instance FuncAppStatement CodeInfoProc () () where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
@@ -299,10 +298,10 @@ instance FuncAppStatement CodeInfoProc () where
     sequence_ vs
     addExternalCall l n
 
-instance CommentStatement CodeInfoProc () where
+instance CommentStatement CodeInfoProc () () where
   comment _ = noInfo
 
-instance ControlStatement CodeInfoProc () where
+instance ControlStatement CodeInfoProc () () where
   break    = noInfo
   continue = noInfo
 
@@ -341,7 +340,7 @@ instance ParameterSym CodeInfoProc () where
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoProc () () where
+instance MethodSym CodeInfoProc () () () where
   type Method CodeInfoProc = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -353,7 +352,7 @@ instance MethodSym CodeInfoProc () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance ModuleSym CodeInfoProc () () where
+instance ModuleSym CodeInfoProc () () () where
   type Module CodeInfoProc = ()
   buildModule n _ funcs = do
     modify (setModuleName n)
@@ -387,7 +386,7 @@ updateMEMandCM n b = do
   noInfo
 
 evalConds :: [(SValue CodeInfoProc, MSBody CodeInfoProc)] ->
-  MSBody CodeInfoProc -> MS (CodeInfoProc (Statement CodeInfoProc))
+  MSBody CodeInfoProc -> MS (CodeInfoProc ())
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs

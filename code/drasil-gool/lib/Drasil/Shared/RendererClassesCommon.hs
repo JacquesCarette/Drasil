@@ -20,10 +20,10 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   Literal(..), MathConstant(..), VariableValue(..), ValueExpression(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), IndexTranslator(..), List(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), MethodSym(..),
-  BinderElim(..), UnRepr(..))
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ParameterSym(..), MethodSym(..), BinderElim(..),
+  UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
@@ -31,21 +31,22 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (AssignStatement r tp, DeclStatement r tp, IOStatement r tp,
-  StringStatement r tp, FuncAppStatement r tp, CommentStatement r tp,
-  ControlStatement r tp, Argument r tp, Literal r tp, MathConstant r tp,
+class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
+  StringStatement r tp smt, FuncAppStatement r tp smt, CommentStatement r tp smt,
+  ControlStatement r tp smt, Argument r tp, Literal r tp, MathConstant r tp,
   VariableValue r tp, CommandLineArgs r tp, NumericExpression r tp,
-  BooleanExpression r tp, Comparison r tp, IndexTranslator r tp, List r tp,
+  BooleanExpression r tp, Comparison r tp, IndexTranslator r tp, List r tp smt,
   InternalList r tp, VariableElim r tp, BinderElim r tp, RenderBlock r,
   BlockElim r, RenderBody r, BodyElim r, InternalListFunc r tp,
   RenderFunction r tp, FunctionElim r tp, OpElim r, RenderParam r,
-  ParamElim r tp, RenderVisibility r vis, VisibilityElim r vis, InternalAssignStmt r,
-  InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r,
-  RenderType r tp, RenderValue r tp, ValueElim r, RenderVariable r tp,
-  InternalVarElim r, InternalBinderElim r, ImportSym r, UnaryOpSym r,
-  BinaryOpSym r, BlockCommentSym r, BlockCommentElim r, ValueExpression r tp,
-  RenderMethod r tp, MethodElim r, ParameterSym r tp, ScopeElim r
-  ) => CommonRenderSym r tp vis
+  ParamElim r tp, RenderVisibility r vis, VisibilityElim r vis,
+  InternalAssignStmt r smt, InternalIOStmt r, InternalControlStmt r smt,
+  RenderStatement r smt, StatementElim r smt, RenderType r tp, RenderValue r tp,
+  ValueElim r, RenderVariable r tp, InternalVarElim r, InternalBinderElim r,
+  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
+  BlockCommentElim r, ValueExpression r tp, RenderMethod r tp, MethodElim r,
+  ParameterSym r tp, ScopeElim r
+  ) => CommonRenderSym r tp vis smt
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 
@@ -165,25 +166,25 @@ class FunctionElim r tp | r -> tp where
   functionType :: r (Function r) -> r tp
   function :: r (Function r) -> Doc
 
-class InternalAssignStmt r where
-  multiAssign       :: [SVariable r] -> [SValue r] -> MS (r (Statement r))
+class InternalAssignStmt r smt | r -> smt where
+  multiAssign       :: [SVariable r] -> [SValue r] -> MS (r smt)
 
 class InternalIOStmt r where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r (Statement r))
+  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 
-class InternalControlStmt r where
-  multiReturn :: [SValue r] -> MS (r (Statement r))
+class InternalControlStmt r smt | r -> smt where
+  multiReturn :: [SValue r] -> MS (r smt)
 
-class RenderStatement r where
-  stmt     :: MS (r (Statement r)) -> MS (r (Statement r))
-  loopStmt :: MS (r (Statement r)) -> MS (r (Statement r))
+class RenderStatement r smt | r -> smt where
+  stmt     :: MS (r smt) -> MS (r smt)
+  loopStmt :: MS (r smt) -> MS (r smt)
 
-  stmtFromData :: Doc -> Terminator -> MS (r (Statement r))
+  stmtFromData :: Doc -> Terminator -> MS (r smt)
 
-class StatementElim r where
-  statement :: r (Statement r) -> Doc
-  statementTerm :: r (Statement r) -> Terminator
+class StatementElim r smt | r -> smt where
+  statement :: r smt -> Doc
+  statementTerm :: r smt -> Terminator
 
 class RenderVisibility r vis | r -> vis where
   visibilityFromData :: VisibilityTag -> Doc -> r vis

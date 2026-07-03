@@ -22,8 +22,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName, td, ScopeData,
-  ScopeTag(..), sd, bindFormD)
+import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -53,13 +52,13 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () VisibilityTag
-instance OOProg CodeInfoOO () VisibilityTag
+instance SharedProg CodeInfoOO () ()
+instance OOProg CodeInfoOO () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () VisibilityTag where
+instance ProgramSym CodeInfoOO () () where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -67,7 +66,7 @@ instance ProgramSym CodeInfoOO () VisibilityTag where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO () VisibilityTag where
+instance FileSym CodeInfoOO () () where
   type File CodeInfoOO = ()
   fileDoc = execute1
 
@@ -402,17 +401,16 @@ instance StrategyPattern CodeInfoOO () where
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
--- TODO [Brandon Bosman, 07/03/2026]: See if VisibilityTag is actually needed here
-instance VisibilitySym CodeInfoOO VisibilityTag where
-  private = toCode Priv
-  public  = toCode Pub
+instance VisibilitySym CodeInfoOO () where
+  private = return ()
+  public  = return ()
 
 instance ParameterSym CodeInfoOO () where
   type Parameter CodeInfoOO = ()
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoOO () VisibilityTag where
+instance MethodSym CodeInfoOO () () where
   type Method CodeInfoOO = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -424,7 +422,7 @@ instance MethodSym CodeInfoOO () VisibilityTag where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () VisibilityTag where
+instance OOMethodSym CodeInfoOO () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -438,13 +436,13 @@ instance OOMethodSym CodeInfoOO () VisibilityTag where
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-instance StateVarSym CodeInfoOO () VisibilityTag where
+instance StateVarSym CodeInfoOO () () where
   type StateVar CodeInfoOO = ()
   stateVar    _ _ _   = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () VisibilityTag where
+instance ClassSym CodeInfoOO () () where
   type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
@@ -464,7 +462,7 @@ instance ClassSym CodeInfoOO () VisibilityTag where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfoOO () VisibilityTag where
+instance ModuleSym CodeInfoOO () () where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)

@@ -40,7 +40,7 @@ class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
   BlockElim r, RenderBody r, BodyElim r, InternalListFunc r tp,
   RenderFunction r tp, FunctionElim r tp, OpElim r, RenderParam r,
   ParamElim r tp, RenderVisibility r vis, VisibilityElim r vis,
-  InternalAssignStmt r smt, InternalIOStmt r, InternalControlStmt r smt,
+  InternalAssignStmt r smt, InternalIOStmt r smt, InternalControlStmt r smt,
   RenderStatement r smt, StatementElim r smt, RenderType r tp, RenderValue r tp,
   ValueElim r, RenderVariable r tp, InternalVarElim r, InternalBinderElim r,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
@@ -169,7 +169,7 @@ class FunctionElim r tp | r -> tp where
 class InternalAssignStmt r smt | r -> smt where
   multiAssign       :: [SVariable r] -> [SValue r] -> MS (r smt)
 
-class InternalIOStmt r where
+class InternalIOStmt r smt | r -> smt where
   -- newLn, maybe a file to print to, printFunc, value to print
   printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 

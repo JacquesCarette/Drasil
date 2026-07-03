@@ -3,14 +3,18 @@
 module Spec.Drasil.Data.Formats.HTML (htmlTests) where
 
 import Drasil.Data.Formats.HTML (
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HLevel(..),
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HLevel(..), CustomTag(..),
     Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML,
-    boldText, emphasisText, subscriptText, superscriptText, spanText, figureImage
+    bold, emphasis, subscript, superscript, figureImage, customTag,
+    HTMLRenderOptions(..)
   )
+
+import qualified Drasil.Data.Formats.HTML as HTML (span)
 
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
+import qualified Data.Map as M
 
 htmlTests :: TestTree
 htmlTests =
@@ -18,6 +22,16 @@ htmlTests =
     "Drasil.Data.Formats.HTML"
     [ renderHTMLTests
     ]
+
+blockquoteTag, inputTag :: CustomTag
+blockquoteTag = customTag "blockquote"
+inputTag      = customTag "input"
+
+testRenderOptions :: HTMLRenderOptions
+testRenderOptions = HTMLRO $ M.fromList [
+    (blockquoteTag, Standard),
+    (inputTag, Void)
+  ]
 
 tagsHTMLTest :: HTML
 tagsHTMLTest =
@@ -34,11 +48,11 @@ tagsHTMLTest =
 
         Paragraph [Attr "class" "paragraph"]
           [ RawText "Testing paragraph and text formats: ",
-            boldText        [Attr "id" "bold"]        "bold, ",
-            emphasisText    [Attr "id" "emphasis"]    "emphasis, ",
-            subscriptText   [Attr "id" "subscript"]   "subscript, ",
-            superscriptText [Attr "id" "superscript"] "superscript, ",
-            spanText        [Attr "id" "span"]        "span."
+            bold        [Attr "id" "bold"]        "bold, ",
+            emphasis    [Attr "id" "emphasis"]    "emphasis, ",
+            subscript   [Attr "id" "subscript"]   "subscript, ",
+            superscript [Attr "id" "superscript"] "superscript, ",
+            HTML.span   [Attr "id" "span"]        "span."
           ],
 
         List Ordered [Attr "id" "ordered-list"]
@@ -71,12 +85,12 @@ tagsHTMLTest =
        Paragraph []
          [Anchor "https://jacquescarette.github.io/Drasil/" [Attr "id" "anchor"] [RawText "Anchor"]],
 
-       figureImage "source.png" "Alternative Text" "Figure Caption",
+       figureImage [Attr "id" "figure-image"] "source.png" "Alternative Text" "Figure Caption",
 
-       CustomTag "blockquote" Standard [Attr "class" "quote"]
+       Custom blockquoteTag [Attr "class" "quote"]
          [Paragraph [] [RawText "This is a quote."]],
 
-       CustomTag "input" Void [Attr "class" "input"] []
+       Custom inputTag [Attr "class" "input"] []
       ]
     ]
 
@@ -96,9 +110,9 @@ renderHTMLTests =
       [osp|test/golden/html|]
       "Golden Tests"
       [ goldenTest "tagsHTMLTest" $
-          file [ps|tags.html|] $ renderHTML tagsHTMLTest,
+          file [ps|tags.html|] $ renderHTML testRenderOptions tagsHTMLTest,
 
         goldenTest "escapingHTMLTest" $
-          file [ps|escaping.html|] $ renderHTML escapingHTMLTest
+          file [ps|escaping.html|] $ renderHTML testRenderOptions  escapingHTMLTest
       ]
     ]

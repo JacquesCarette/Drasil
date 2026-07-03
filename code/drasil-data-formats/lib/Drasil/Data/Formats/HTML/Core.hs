@@ -1,12 +1,15 @@
 module Drasil.Data.Formats.HTML.Core
   ( -- * JSON
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), Format(..), HLevel(..),
-    Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..),
-    boldText, emphasisText, subscriptText, superscriptText, spanText, figureImage
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
+    Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
+    Attr(..), bold, emphasis, subscript, superscript, span, figureImage
   )
 where
 
+import Prelude hiding (span)
 import Data.Text (Text)
+import qualified Data.Text as T
+import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
 
 -- | HTML Attrs for tags in the format key="value"
 data Attr = Attr Text Text
@@ -42,9 +45,6 @@ data HTMLBody =
   deriving (Show, Eq)
 -- TODO: Support more tags
 -- https://www.w3schools.com/tags/default.asp
-
-data TagType = Standard | Void
-  deriving (Show, Eq)
 
 type Relation = Text
 -- | Target link
@@ -83,23 +83,46 @@ data Cell =
   | TData [Attr] [HTMLBody]
   deriving (Show, Eq)
 
+-- | A 'CustomTag' is either (a) an ill-supported HTML-spec. node (ill-supported
+-- by 'HTMLBody', that is) or (b) a purely custom one.
+newtype CustomTag = CT Text
+  deriving (Show, Eq, Ord)
+
+data TagType = Standard | Void
+  deriving (Show, Eq)
+
+customTag :: Text -> CustomTag
+customTag t
+  -- | Tag names are used within element start tags and end tags to give the
+  -- element’s name. HTML elements all have names that only use characters in
+  -- the range 0–9, a–z, and A–Z.
+  | isSanitary t = CT t
+  | otherwise    = error "Bad custom tag name"
+
+isSanitary :: Text -> Bool
+isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar t
+  where
+    -- The first character must be a letter
+    isAsciiLetter c = isAsciiLower c || isAsciiUpper c
+    isAllowedChar c = isAsciiLetter c || isDigit c || c == '-'
+
 -- | Smart Constructors
 
-boldText :: [Attr] -> Text -> HTMLBody
-boldText attrs txt = TextFormat Bold attrs [RawText txt]
+bold :: [Attr] -> Text -> HTMLBody
+bold attrs txt = TextFormat Bold attrs [RawText txt]
 
-emphasisText :: [Attr] -> Text -> HTMLBody
-emphasisText attrs txt = TextFormat Emphasis attrs [RawText txt]
+emphasis :: [Attr] -> Text -> HTMLBody
+emphasis attrs txt = TextFormat Emphasis attrs [RawText txt]
 
-subscriptText :: [Attr] -> Text -> HTMLBody
-subscriptText attrs txt = TextFormat Subscript attrs [RawText txt]
+subscript :: [Attr] -> Text -> HTMLBody
+subscript attrs txt = TextFormat Subscript attrs [RawText txt]
 
-superscriptText :: [Attr] -> Text -> HTMLBody
-superscriptText attrs txt = TextFormat Superscript attrs [RawText txt]
+superscript :: [Attr] -> Text -> HTMLBody
+superscript attrs txt = TextFormat Superscript attrs [RawText txt]
 
-spanText :: [Attr] -> Text -> HTMLBody
-spanText attrs txt = TextFormat Span attrs [RawText txt]
+span :: [Attr] -> Text -> HTMLBody
+span attrs txt = TextFormat Span attrs [RawText txt]
 
-figureImage :: File -> Text -> Text -> HTMLBody
-figureImage src altText captionTxt =
-  Figure [] [ Img src altText [], FigCaption [] [RawText captionTxt]]
+figureImage :: [Attr] -> File -> Text -> Text -> HTMLBody
+figureImage attrs src altText captionTxt =
+  Figure attrs [Img src altText [], FigCaption [] [RawText captionTxt]]

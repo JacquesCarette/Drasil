@@ -19,6 +19,7 @@ dependencies:
 - prettyprinter
 - scientific
 - text
+- containers
 
 ghc-options:
 - -Wall

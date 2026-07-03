@@ -17,14 +17,12 @@ If you intend to work with the artifacts that Drasil generates, you should also 
     3. [Inkscape](#inkscape)
     4. [mdBook](#mdBook)
     5. [Jupyter](#jupyter)
-* For **code** artifacts: [Doxygen](#doxygen)
-* For **linting** Drasil's codebase: [ShellCheck](#shellcheck)
-
-<!--
-TODO:
-1. Linting: HLint, Weeder
-2. Code Artifacts: Java, C[++/#], Swift, Julia, Python
--->
+* For **code** artifacts: 
+    1. [Doxygen](#doxygen)
+    2. [Compilers for Generated Languages](#compilers-for-generated-languages)
+* For **linting** Drasil's codebase: 
+    1. [ShellCheck](#shellcheck) for the shell scripts
+    2. [HLint, Weeder, and Stan](#hlint-weeder-and-stan) for Haskell code
 
 ## Windows
 
@@ -502,6 +500,58 @@ The [Doxygen download page](https://www.doxygen.nl/download.html) has a disk ima
 
 </details>
 
+## Compilers for Generated Languages
+
+Drasil generates code in a variety of programming languages. If you are working on the code generation capabilities of Drasil or wish to execute the artifacts it generates, you will need their respective compilers/interpreters.
+
+### Java
+
+To compile and run generated Java code, you will need the Java Development Kit (JDK). You may choose a JDK from any of:
+
+* [Adoptium / Eclipse Temurin (OpenJDK)](https://adoptium.net/)
+* [Amazon Corretto](https://aws.amazon.com/corretto/)
+* [OpenJDK](https://openjdk.org/)
+
+Installers and package manager instructions are available on their respective sites.
+
+### C++
+
+To compile generated C++ code, you will need a C++ compiler (like `g++` or `clang++`).
+
+* **Linux:** A C++ compiler is typically installed via `build-essential` (e.g., `sudo apt install build-essential`).
+* **Mac:** The clang compiler is included with the Xcode Command Line Tools (`xcode-select --install`).
+* **Windows:** You can install the C++ build tools through [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) or by installing [MinGW-w64](https://www.mingw-w64.org/).
+
+### C#
+
+To compile generated C# code, you may choose from one of two options:
+
+* [.NET SDK](https://dotnet.microsoft.com/download)
+* [Mono](https://www.mono-project.com/)
+
+The standard .NET SDK is preferred
+
+### Swift
+
+To compile generated Swift code, you will need the Swift toolchain.
+
+* **Mac:** Swift is included with Xcode.
+* **Linux / Windows:** Download the official Swift toolchain for your platform from the [Swift website](https://www.swift.org/download/).
+
+### Julia
+
+To execute generated Julia code, you need the Julia language runtime.
+
+* **Windows / Mac / Linux:** Download and install the latest version from the [Julia downloads page](https://julialang.org/downloads/). We recommend using [`juliaup`](https://github.com/JuliaLang/juliaup) as the preferred installation method across all platforms.
+
+### Python
+
+To execute generated Python code, you will need Python 3.
+
+* **Windows / Mac:** Download the official installer from the [Python website](https://www.python.org/downloads/).
+* **Mac (via Homebrew):** Run `brew install python`. 
+* **Linux:** Python 3 is pre-installed on most modern Linux distributions. If not, you can install it via your package manager (e.g., `sudo apt install python3`).
+
 ## ShellCheck
 
 ShellCheck is integrated into our GitHub CI pipeline, providing static analysis of shell scripts. ShellCheck is required to execute the `make shellcheck` target in our primary `Makefile` to statically analyze shell scripts locally.
@@ -548,6 +598,22 @@ sudo port install shellcheck
 ```
 
 </details>
+
+## HLint, Weeder, and Stan
+
+[HLint](https://github.com/ndmitchell/hlint), [Weeder](https://github.com/ocharles/weeder), and [Stan](https://github.com/kowainik/stan) are Haskell linting and static analysis tools. They are used to find common code smells, dead code, and anti-patterns Haskell codebases.
+
+### Installation Instructions
+
+All these tools can be installed easily using `stack`, which was installed earlier as a requirement. 
+
+In your terminal, simply run the following command to install the tools:
+
+```shell
+stack install hlint weeder stan
+```
+
+Once installed, you can use these tools via `make hlint`, `make weeder`, and/or `make stan` in the `code/` directory.
 
 ## mdBook
 

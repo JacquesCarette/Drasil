@@ -47,14 +47,14 @@ instance Applicative CodeInfoProc where
 instance Monad CodeInfoProc where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoProc ()
+instance SharedProg CodeInfoProc () VisibilityTag
 
-instance ProcProg CodeInfoProc ()
+instance ProcProg CodeInfoProc () VisibilityTag
 
 instance UnRepr CodeInfoProc contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoProc () where
+instance ProgramSym CodeInfoProc () VisibilityTag where
   type Program CodeInfoProc = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -62,7 +62,7 @@ instance ProgramSym CodeInfoProc () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoProc () where
+instance FileSym CodeInfoProc () VisibilityTag where
   type File CodeInfoProc = ()
   fileDoc = execute1
 
@@ -333,8 +333,8 @@ instance ControlStatement CodeInfoProc () where
     _ <- zoom lensMStoVS msg
     noInfo
 
-instance VisibilitySym CodeInfoProc where
-  type Visibility CodeInfoProc = VisibilityTag
+-- TODO [Brandon Bosman, 07/03/2026]: See if VisibilityTag is actually needed here
+instance VisibilitySym CodeInfoProc VisibilityTag where
   private = toCode Priv
   public  = toCode Pub
 
@@ -343,7 +343,7 @@ instance ParameterSym CodeInfoProc () where
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoProc () where
+instance MethodSym CodeInfoProc () VisibilityTag where
   type Method CodeInfoProc = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -355,7 +355,7 @@ instance MethodSym CodeInfoProc () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance ModuleSym CodeInfoProc () where
+instance ModuleSym CodeInfoProc () VisibilityTag where
   type Module CodeInfoProc = ()
   buildModule n _ funcs = do
     modify (setModuleName n)

@@ -53,13 +53,13 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO ()
-instance OOProg CodeInfoOO ()
+instance SharedProg CodeInfoOO () VisibilityTag
+instance OOProg CodeInfoOO () VisibilityTag
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () where
+instance ProgramSym CodeInfoOO () VisibilityTag where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -67,7 +67,7 @@ instance ProgramSym CodeInfoOO () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO () where
+instance FileSym CodeInfoOO () VisibilityTag where
   type File CodeInfoOO = ()
   fileDoc = execute1
 
@@ -402,8 +402,8 @@ instance StrategyPattern CodeInfoOO () where
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
-instance VisibilitySym CodeInfoOO where
-  type Visibility CodeInfoOO = VisibilityTag
+-- TODO [Brandon Bosman, 07/03/2026]: See if VisibilityTag is actually needed here
+instance VisibilitySym CodeInfoOO VisibilityTag where
   private = toCode Priv
   public  = toCode Pub
 
@@ -412,7 +412,7 @@ instance ParameterSym CodeInfoOO () where
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoOO () where
+instance MethodSym CodeInfoOO () VisibilityTag where
   type Method CodeInfoOO = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -424,7 +424,7 @@ instance MethodSym CodeInfoOO () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () where
+instance OOMethodSym CodeInfoOO () VisibilityTag where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -438,13 +438,13 @@ instance OOMethodSym CodeInfoOO () where
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-instance StateVarSym CodeInfoOO () where
+instance StateVarSym CodeInfoOO () VisibilityTag where
   type StateVar CodeInfoOO = ()
   stateVar    _ _ _   = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () where
+instance ClassSym CodeInfoOO () VisibilityTag where
   type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
@@ -464,7 +464,7 @@ instance ClassSym CodeInfoOO () where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfoOO () where
+instance ModuleSym CodeInfoOO () VisibilityTag where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)

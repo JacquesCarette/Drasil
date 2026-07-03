@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GOOL.RendererClassesOO (
   OORenderSym, RenderFile(..), PermElim(..), InternalGetSet(..),
@@ -6,26 +7,26 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, VSType,
-  SVariable, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
+import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, SVariable,
+  SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag)
-import Drasil.Shared.State (FS, CS)
+import Drasil.Shared.State (FS, CS, VS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r, IG.FileSym r, IG.InternalValueExp r, IG.GetSet r,
-  IG.ObserverPattern r, IG.StrategyPattern r, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r, RenderMod r, ModuleElim r,
-  StateVarElim r, PermElim r
-  ) => OORenderSym r
+class (CommonRenderSym r tp, IG.FileSym r tp, IG.InternalValueExp r tp,
+  IG.GetSet r tp, IG.ObserverPattern r tp, IG.StrategyPattern r tp,
+  IG.OOVariableValue r tp, IG.OOValueExpression r tp, RenderClass r, ClassElim r,
+  RenderFile r, InternalGetSet r tp, OORenderMethod r tp, RenderMod r,
+  ModuleElim r, StateVarElim r, PermElim r
+  ) => OORenderSym r tp
 
 -- OO-Only Typeclasses --
 
@@ -44,14 +45,14 @@ class PermElim r where
   perm :: r (IG.Attachment r) -> Doc
   binding :: r (IG.Attachment r) -> AttachmentTag
 
-class InternalGetSet r where
+class InternalGetSet r tp | r -> tp where
   getFunc :: SVariable r -> VSFunction r
-  setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
+  setFunc :: VS (r tp) -> SVariable r -> SValue r -> VSFunction r
 
-class (MethodTypeSym r) => OOMethodTypeSym r where
+class (MethodTypeSym r tp) => OOMethodTypeSym r tp where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
+class (RenderMethod r tp, OOMethodTypeSym r tp) => OORenderMethod r tp where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Attachment r) ->

@@ -47,8 +47,8 @@ class (UnRepr r TypeData, TypeElim r tp, AssignStatement r tp,
   VariableValue r tp, CommandLineArgs r tp, NumericExpression r tp,
   BooleanExpression r tp, Comparison r tp, ValueExpression r tp,
   IndexTranslator r tp, Array r tp, List r tp, Set r tp, VariableElim r tp,
-  MethodSym r tp, ScopeSym r, BinderSym r tp, Reference r tp, VariableValue r tp
-  ) => SharedProg r tp
+  MethodSym r tp vis, ScopeSym r, BinderSym r tp, Reference r tp, VariableValue r tp
+  ) => SharedProg r tp vis
 
 -- Shared between OO and Procedural --
 
@@ -490,10 +490,9 @@ switchAsIf :: (ControlStatement r tp, Comparison r tp) => SValue r ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switchAsIf v = ifCond . map (first (v ?==))
 
-class VisibilitySym r where
-  type Visibility r
-  private :: r (Visibility r)
-  public  :: r (Visibility r)
+class VisibilitySym r vis | r -> vis where
+  private :: r vis
+  public  :: r vis
 
 type MSParameter a = MS (a (Parameter a))
 
@@ -513,20 +512,20 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] ->
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r tp, ParameterSym r tp, VisibilitySym r) => MethodSym r tp
+class (BodySym r tp, ParameterSym r tp, VisibilitySym r vis) => MethodSym r tp vis
   where
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Visibility r) -> VS (r tp) -> [MSParameter r] ->
+  function :: Label -> r vis -> VS (r tp) -> [MSParameter r] ->
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
-  inOutFunc :: Label -> r (Visibility r) -> InOutFunc r
-  docInOutFunc :: Label -> r (Visibility r) -> DocInOutFunc r
+  inOutFunc :: Label -> r vis -> InOutFunc r
+  docInOutFunc :: Label -> r vis -> DocInOutFunc r
 
 -- Utility
 

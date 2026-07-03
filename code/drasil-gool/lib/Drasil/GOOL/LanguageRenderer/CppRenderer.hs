@@ -15,8 +15,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  VSFunction, SVariable, SValue, MSParameter, SMethod, NamedArgs, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -2653,7 +2653,7 @@ cppIterEndFunc :: VS (CppSrcCode TypeData) -> VSFunction CppSrcCode
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (CommonRenderSym r tp vis) => ([r (Value r)] -> Doc) ->
-  SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  SVariable r -> r ScopeData -> [SValue r] -> MS (r (Statement r))
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2738,7 +2738,7 @@ cppListDecDefDoc :: (CommonRenderSym r tp vis) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppFuncDecDef :: SVariable CppSrcCode -> CppSrcCode ScopeData ->
-  [SVariable CppSrcCode] -> MSBody CppSrcCode -> MSStatement CppSrcCode
+  [SVariable CppSrcCode] -> MSBody CppSrcCode -> MS (CppSrcCode (Statement CppSrcCode))
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -2750,7 +2750,7 @@ cppFuncDecDef v scp ps bod = do
     variableType) pms) (map RC.variable pms)) <+>  bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
-cppPrint :: (CommonRenderSym r tp vis) => Bool -> SValue r -> SValue r -> MSStatement r
+cppPrint :: (CommonRenderSym r tp vis) => Bool -> SValue r -> SValue r -> MS (r (Statement r))
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf
@@ -2776,17 +2776,17 @@ cppAssert condition errorMessage = vcat [
   text "assert(" <> RC.value condition <+> text "&&" <+> RC.value errorMessage <> text ")" <> semi
   ]
 
-cppDiscardInput :: Char -> SValue CppSrcCode -> MSStatement CppSrcCode
+cppDiscardInput :: Char -> SValue CppSrcCode -> MS (CppSrcCode (Statement CppSrcCode))
 cppDiscardInput sep inFn = valStmt $ ignoreFunc sep inFn
 
-cppInput :: SVariable CppSrcCode -> SValue CppSrcCode -> MSStatement CppSrcCode
+cppInput :: SVariable CppSrcCode -> SValue CppSrcCode -> MS (CppSrcCode (Statement CppSrcCode))
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
   multi [mkStmt (RC.value inFn <+> streamR <+> RC.variable v),
     valStmt $ ignoreFunc '\n' i]
 
-cppOpenFile :: (OORenderSym r tp vis) => Label -> SVariable r -> SValue r -> MSStatement r
+cppOpenFile :: (OORenderSym r tp vis) => Label -> SVariable r -> SValue r -> MS (r (Statement r))
 cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
   mkStateVal void $ text mode]
 
@@ -2880,7 +2880,7 @@ cppsStateVarDef cns s p vr' vl' = do
     emptS
 
 cppForEach :: Doc -> Doc -> Doc -> Doc -> SVariable CppSrcCode -> SValue CppSrcCode
-  -> MSBody CppSrcCode -> MSStatement CppSrcCode
+  -> MSBody CppSrcCode -> MS (CppSrcCode (Statement CppSrcCode))
 cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
@@ -2936,7 +2936,7 @@ cpphClass n ps vars funcs pub priv = let
 
 cppInOutCall :: (Label -> VS (CppSrcCode TypeData) -> [SValue CppSrcCode] ->
   SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode]
-  -> [SVariable CppSrcCode] -> MSStatement CppSrcCode
+  -> [SVariable CppSrcCode] -> MS (CppSrcCode (Statement CppSrcCode))
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)

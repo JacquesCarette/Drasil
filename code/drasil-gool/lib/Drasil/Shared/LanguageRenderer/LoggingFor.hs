@@ -89,7 +89,7 @@ valLogFile = valueOf varLogFile
 logName :: (Literal r tp) => SValue r
 logName = litString "log.txt"
 
-logVarUpdate :: (SharedProg r tp vis) => SVariable (LoggingFor r) -> [MSStatement r]
+logVarUpdate :: (SharedProg r tp vis) => SVariable (LoggingFor r) -> [MS (r (Statement r))]
 logVarUpdate x =
   [ openFileA varLogFile logName
   , do

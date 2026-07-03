@@ -10,10 +10,10 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, MSStatement,
-  getCodeType, UnRepr(..), SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
+  UnRepr(..), SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
@@ -70,7 +70,7 @@ import Drasil.Shared.LanguageRenderer (listSep')
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
-import Drasil.Shared.State (VS, FS, lensGStoFS, lensMStoVS, revFiles,
+import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensMStoVS, revFiles,
   setFileType, getMainDoc)
 
 import Control.Lens.Zoom (zoom)
@@ -636,7 +636,7 @@ mlReadLine f = funcApp "fgetl" string [f]
 
 -- | Reads a value into v. Numbers go through str2double; text is kept as-is.
 --   The type of v says which one to use.
-mlInput :: SValue MatlabCode -> SVariable MatlabCode -> MSStatement MatlabCode
+mlInput :: SValue MatlabCode -> SVariable MatlabCode -> MS (MatlabCode (Statement MatlabCode))
 mlInput inSrc v = v &= (v >>= mlInput' . getCodeType . variableType)
   where mlInput' Integer = funcApp "str2double" int [inSrc]
         mlInput' Float   = funcApp "str2double" float [inSrc]
@@ -648,7 +648,7 @@ mlInput inSrc v = v &= (v >>= mlInput' . getCodeType . variableType)
 --   and %g for numbers. A line-print adds \n. A file handle, if given, comes
 --   first. (We always use fprintf, so the print-function argument is ignored.)
 mlPrint :: Bool -> Maybe (SValue MatlabCode) -> SValue MatlabCode
-  -> SValue MatlabCode -> MSStatement MatlabCode
+  -> SValue MatlabCode -> MS (MatlabCode (Statement MatlabCode))
 mlPrint newLn f' _ v' = do
   v  <- zoom lensMStoVS v'
   mf <- traverse (zoom lensMStoVS) f'

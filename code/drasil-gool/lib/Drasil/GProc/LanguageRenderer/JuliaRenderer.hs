@@ -15,9 +15,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, SValue,
-  SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  SVariable, MSBlock, SMethod, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), InternalList(..),
@@ -87,8 +87,8 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
-  getModuleImports, addModuleImportVS, getLangImports, getLibImports,
+import Drasil.Shared.State (MS, VS, lensGStoFS, revFiles, setFileType,
+  lensMStoVS, getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -654,21 +654,21 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlAssign :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r -> MSStatement r
+jlAssign :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r -> MS (r (Statement r))
 jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
 
-jlSubAssign :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r -> MSStatement r
+jlSubAssign :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r -> MS (r (Statement r))
 jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
 
-jlIncrement :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r -> MSStatement r
+jlIncrement :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r -> MS (r (Statement r))
 jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -682,7 +682,7 @@ jlGlobal :: Doc
 jlGlobal = text "global"
 
 jlConstDecDef :: (CommonRenderSym r TypeData vis) => SVariable r ->
-  r ScopeData -> SValue r -> MSStatement r
+  r ScopeData -> SValue r -> MS (r (Statement r))
 jlConstDecDef v' scp def' = do
   let scpData = scopeData scp
   v <- zoom lensMStoVS v'
@@ -759,7 +759,7 @@ jlListSlice vn vo beg end step = do
     ]
 
 jlListSlice' :: (CommonRenderSym r TypeData vis) => SVariable r -> SValue r ->
-  SValue r -> SValue r -> SValue r -> Maybe Integer -> MSStatement r
+  SValue r -> SValue r -> SValue r -> Maybe Integer -> MS (r (Statement r))
 jlListSlice' vn vo beg end step mStep = do
   vold  <- zoom lensMStoVS vo
   beg'  <- zoom lensMStoVS beg
@@ -945,7 +945,7 @@ jlModStart n = jlMod <+> text n
 
 -- IO
 jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->
-  SValue JuliaCode -> MSStatement JuliaCode
+  SValue JuliaCode -> MS (JuliaCode (Statement JuliaCode))
 -- Printing to console
 jlPrint _ f' p' v' = do
   f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f' -- The file to print to
@@ -956,12 +956,12 @@ jlPrint _ f' p' v' = do
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut :: (CommonRenderSym r TypeData vis, TypeElim r TypeData) => Bool ->
-  Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
+  Maybe (SValue r) -> SValue r -> SValue r -> MS (r (Statement r))
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
 
-jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MSStatement JuliaCode
+jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MS (JuliaCode (Statement JuliaCode))
 jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc

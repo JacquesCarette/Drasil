@@ -27,13 +27,13 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, MSStatement, SharedProg, OOProg, VS, TypeSym(..),
+import Drasil.GOOL (SValue, SharedProg, OOProg, MS, VS, TypeSym(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), convType, convTypeOO)
 
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-genAllInputCalls :: (OOProg r tp vis) => GenState [MSStatement r]
+genAllInputCalls :: (OOProg r tp vis) => GenState [MS (r (Statement r))]
 genAllInputCalls = do
   gi <- genInputCall
   dv <- genDerivedCall
@@ -41,19 +41,19 @@ genAllInputCalls = do
   return $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-genInputCall :: (OOProg r tp vis) => GenState (Maybe (MSStatement r))
+genInputCall :: (OOProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genInputCall = do
   giName <- genICName GetInput
   genInOutCall giName getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
-genDerivedCall :: (OOProg r tp vis) => GenState (Maybe (MSStatement r))
+genDerivedCall :: (OOProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genDerivedCall = do
   dvName <- genICName DerivedValuesFn
   genInOutCall dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
-genConstraintCall :: (OOProg r tp vis) => GenState (Maybe (MSStatement r))
+genConstraintCall :: (OOProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genConstraintCall = do
   icName <- genICName InputConstraintsFn
   val <- genFuncCall icName void getConstraintParams
@@ -61,7 +61,7 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r tp vis) => CodeDefinition -> GenState (Maybe (MSStatement r))
+genCalcCall :: (OOProg r tp vis) => CodeDefinition -> GenState (Maybe (MS (r (Statement r))))
 genCalcCall c = do
   g <- get
   let scp = convScope $ currentScope g
@@ -71,7 +71,7 @@ genCalcCall c = do
   return $ fmap (varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
-genOutputCall :: (OOProg r tp vis) => GenState (Maybe (MSStatement r))
+genOutputCall :: (OOProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genOutputCall = do
   woName <- genICName WriteOutput
   val <- genFuncCall woName void getOutputParams
@@ -94,7 +94,7 @@ genFuncCall n t funcPs = do
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
 genInOutCall :: (OOProg r tp vis) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
+  GenState [CodeVarChunk] -> GenState (Maybe (MS (r (Statement r))))
 genInOutCall n inFunc outFunc = do
   mm <- genCall n
   let genInOutCall' Nothing = return Nothing
@@ -131,7 +131,7 @@ genCall n = do
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-genAllInputCallsProc :: (SharedProg r tp vis) => GenState [MSStatement r]
+genAllInputCallsProc :: (SharedProg r tp vis) => GenState [MS (r (Statement r))]
 genAllInputCallsProc = do
   gi <- genInputCallProc
   dv <- genDerivedCallProc
@@ -139,19 +139,19 @@ genAllInputCallsProc = do
   return $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-genInputCallProc:: (SharedProg r tp vis) => GenState (Maybe (MSStatement r))
+genInputCallProc:: (SharedProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genInputCallProc = do
   giName <- genICName GetInput
   genInOutCallProc giName getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
-genDerivedCallProc :: (SharedProg r tp vis) => GenState (Maybe (MSStatement r))
+genDerivedCallProc :: (SharedProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genDerivedCallProc = do
   dvName <- genICName DerivedValuesFn
   genInOutCallProc dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
-genConstraintCallProc :: (SharedProg r tp vis) => GenState (Maybe (MSStatement r))
+genConstraintCallProc :: (SharedProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genConstraintCallProc = do
   icName <- genICName InputConstraintsFn
   val <- genFuncCallProc icName void getConstraintParams
@@ -160,7 +160,7 @@ genConstraintCallProc = do
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
 genCalcCallProc :: (SharedProg r tp vis) => CodeDefinition ->
-  GenState (Maybe (MSStatement r))
+  GenState (Maybe (MS (r (Statement r))))
 genCalcCallProc c = do
   g <- get
   let scp = convScope $ currentScope g
@@ -170,7 +170,7 @@ genCalcCallProc c = do
   return $ fmap ((`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.
-genOutputCallProc :: (SharedProg r tp vis) => GenState (Maybe (MSStatement r))
+genOutputCallProc :: (SharedProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 genOutputCallProc = do
   woName <- genICName WriteOutput
   val <- genFuncCallProc woName void getOutputParams
@@ -193,7 +193,7 @@ genFuncCallProc n t funcPs = do
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
 genInOutCallProc :: (SharedProg r tp vis) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
+  GenState [CodeVarChunk] -> GenState (Maybe (MS (r (Statement r))))
 genInOutCallProc n inFunc outFunc = do
   mm <- genCall n
   let genInOutCall' Nothing = return Nothing

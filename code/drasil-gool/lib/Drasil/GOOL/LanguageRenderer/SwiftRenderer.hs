@@ -14,10 +14,10 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  MSBlock, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..),
-  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  MSBlock, SVariable, SValue, MSParameter, SMethod, BodySym(..), oneLiner,
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
+  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
@@ -1055,7 +1055,7 @@ swiftListSlice vn vo beg end step = do
     ]
 
 swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
-  SValue SwiftCode -> MSStatement SwiftCode
+  SValue SwiftCode -> MS (SwiftCode (Statement SwiftCode))
 swiftPrint newLn Nothing _ v = do
   let s = litString "" :: SValue SwiftCode
       nl = [(var swiftTerm string, s) | not newLn]
@@ -1073,7 +1073,7 @@ swiftPrint newLn (Just f) _ v' = do
 
 -- swiftPrint can handle lists, so don't use G.print for lists.
 swiftOut :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
-  SValue SwiftCode -> MSStatement SwiftCode
+  SValue SwiftCode -> MS (SwiftCode (Statement SwiftCode))
 swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getCodeType . valueType
   where swOut (List _) = printSt newLn f printFn v
         swOut _ = G.print newLn f printFn v
@@ -1103,7 +1103,7 @@ swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
     [(forWritingArg, swiftOpenFile n t)]
 
 swiftOpenFileWA :: (OORenderSym r TypeData vis, Monad r) => Bool ->
-  SVariable r -> SValue r -> MSStatement r
+  SVariable r -> SValue r -> MS (r (Statement r))
 swiftOpenFileWA app f' n' = tryCatch
     (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',
       if app
@@ -1114,7 +1114,7 @@ swiftOpenFileWA app f' n' = tryCatch
     -- will have no guarantees that the file variable has been initialized.
     (oneLiner $ throw "Error opening file.")
 
-swiftCloseFile :: SValue SwiftCode -> MSStatement SwiftCode
+swiftCloseFile :: SValue SwiftCode -> MS (SwiftCode (Statement SwiftCode))
 swiftCloseFile f' = do
   f <- zoom lensMStoVS f'
   -- How I've currently implemented file-reading, files don't need to be
@@ -1126,7 +1126,7 @@ swiftCloseFile f' = do
       swClose _ = error "closeFile called on non-file-typed value"
   swClose (getCodeType $ valueType f)
 
-swiftReadFile :: (OORenderSym r TypeData vis) => SVariable r -> SValue r -> MSStatement r
+swiftReadFile :: (OORenderSym r TypeData vis) => SVariable r -> SValue r -> MS (r (Statement r))
 swiftReadFile v f =
   let l_binder = binder "l" string
       l_var = var "l" string
@@ -1136,7 +1136,7 @@ swiftReadFile v f =
   (oneLiner $ throw "Error reading from file.")
 
 swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData
-  -> MSStatement SwiftCode
+  -> MS (SwiftCode (Statement SwiftCode))
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -1147,7 +1147,7 @@ swiftVarDec dec v' scp = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> renderType (variableType v))
 
-swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData -> MSStatement SwiftCode
+swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData -> MS (SwiftCode (Statement SwiftCode))
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)

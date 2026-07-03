@@ -14,15 +14,15 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..),ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  VSFunction, SVariable, SValue, MSParameter, SMethod, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
@@ -99,10 +99,10 @@ import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateWrapped)
-import Drasil.Shared.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
-  lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths,
-  addLangImport, addLangImportVS, addExceptionImports, getModuleName,
-  setFileType, getClassName, setCurrMain, setOutputsDeclared,
+import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoFS, lensMStoVS,
+  lensVStoFS, lensVStoMS, modifyReturn, modifyReturnList, revFiles,
+  addProgNameToPaths, addLangImport, addLangImportVS, addExceptionImports,
+  getModuleName, setFileType, getClassName, setCurrMain, setOutputsDeclared,
   isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions, useVarName,
   setVarScope)
 
@@ -947,7 +947,7 @@ jCast = join .: on2StateValues
           (RC.value v))
 
 jConstDecDef :: SVariable JavaCode -> JavaCode ScopeData -> SValue JavaCode ->
-  MSStatement JavaCode
+  MS (JavaCode (Statement JavaCode))
 jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
@@ -957,7 +957,7 @@ jConstDecDef v' scp def' = do
     RC.variable v <+> equals <+> RC.value def
 
 jFuncDecDef :: SVariable JavaCode -> JavaCode ScopeData ->
-  [SVariable JavaCode] -> MSBody JavaCode -> MSStatement JavaCode
+  [SVariable JavaCode] -> MSBody JavaCode -> MS (JavaCode (Statement JavaCode))
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -987,7 +987,7 @@ jAssert condition errorMessage = vcat [
   ]
 
 jOut :: (CommonRenderSym r TypeData vis, TypeElim r TypeData) =>
-  Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
+  Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r (Statement r))
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
@@ -996,7 +996,7 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
           printSt newLn f printFn (extFuncApp jArrays "toString" string [v])
         jOut' _ = G.print newLn f printFn v
 
-jDiscardInput :: SValue JavaCode -> MSStatement JavaCode
+jDiscardInput :: SValue JavaCode -> MS (JavaCode (Statement JavaCode))
 jDiscardInput inFn = valStmt $ inFn $. jNextFunc
 
 jInput :: SVariable JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -1036,14 +1036,14 @@ jMethod n es s p t ps b = vcat [
 outputs :: SVariable JavaCode
 outputs = var "outputs" jArrayType
 
-jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
+jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MS (JavaCode (Statement JavaCode))]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem (valueOf outputs) (litInt c))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> VS (JavaCode TypeData) -> [SValue JavaCode] ->
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] ->
-  [SVariable JavaCode] -> MSStatement JavaCode
+  [SVariable JavaCode] -> MS (JavaCode (Statement JavaCode))
 jInOutCall f n ins [] [] = valStmt $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
@@ -1076,7 +1076,7 @@ jInOut f ins outs both b = f (returnTp rets)
         returnSt _ = multi (arrayDec (toInteger $ length rets) outputs local
           : assignArray 0 (map valueOf rets)
           ++ [returnStmt (valueOf outputs)])
-        assignArray :: Integer -> [SValue JavaCode] -> [MSStatement JavaCode]
+        assignArray :: Integer -> [SValue JavaCode] -> [MS (JavaCode (Statement JavaCode))]
         assignArray _ [] = []
         assignArray c (v:vs) =
           (arrayElem (valueOf outputs) (litInt c) &= v)

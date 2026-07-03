@@ -14,9 +14,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  TypeElim(..), SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
-  MixedCtorCall, VariableSym(..), VariableValue(..), VariableElim(..),
-  ValueSym(Value, valueType), getCodeType, getTypeString)
+  TypeElim(..), SVariable, SValue, MSParameter, SMethod, MixedCall,
+  MixedCtorCall, StatementSym(..), VariableSym(..), VariableValue(..),
+  VariableElim(..), ValueSym(Value, valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
@@ -42,7 +42,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
   increment, decrement, this', this)
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
   mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import Drasil.Shared.State (VS, lensMStoVS, lensVStoMS, addLibImportVS,
+import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
   getClassName, useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))
@@ -144,24 +144,24 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
-increment :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> MS (r (Statement r))
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-increment1 :: (CommonRenderSym r tp vis) => SVariable r -> MSStatement r
+increment1 :: (CommonRenderSym r tp vis) => SVariable r -> MS (r (Statement r))
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
-decrement1 :: (CommonRenderSym r tp vis) => SVariable r -> MSStatement r
+decrement1 :: (CommonRenderSym r tp vis) => SVariable r -> MS (r (Statement r))
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
 varDec :: (OORenderSym r TypeData vis, UnRepr r TypeData, TypeElim r TypeData) =>
-  r (Attachment r) -> r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MSStatement r
+  r (Attachment r) -> r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MS (r (Statement r))
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -176,7 +176,7 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef :: (CommonRenderSym r tp vis) => Terminator -> SVariable r ->
-  r ScopeData -> SValue r -> MSStatement r
+  r ScopeData -> SValue r -> MS (r (Statement r))
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -185,7 +185,7 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef :: (CommonRenderSym r tp vis) => Terminator -> SVariable r ->
-  r ScopeData -> SValue r -> MSStatement r
+  r ScopeData -> SValue r -> MS (r (Statement r))
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -194,21 +194,21 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec :: (CommonRenderSym r tp vis) => (r (Value r) -> Doc) -> SValue r ->
-  SVariable r -> r ScopeData -> MSStatement r
+  SVariable r -> r ScopeData -> MS (r (Statement r))
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
 extObjDecNew :: (OORenderSym r tp vis) => Library -> SVariable r ->
-  r ScopeData -> [SValue r] -> MSStatement r
+  r ScopeData -> [SValue r] -> MS (r (Statement r))
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with
-switch :: (CommonRenderSym r tp vis) => (Doc -> Doc) -> MSStatement r ->
-  SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+switch :: (CommonRenderSym r tp vis) => (Doc -> Doc) -> MS (r (Statement r)) ->
+  SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MS (r (Statement r))
 switch f st v cs bod = do
   s <- S.stmt st
   val <- zoom lensMStoVS v
@@ -217,8 +217,8 @@ switch f st v cs bod = do
   dflt <- bod
   mkStmt $ R.switch f s val dflt (zip vals bods)
 
-for :: (CommonRenderSym r tp vis) => Doc -> Doc -> MSStatement r -> SValue r ->
-  MSStatement r -> MSBody r -> MSStatement r
+for :: (CommonRenderSym r tp vis) => Doc -> Doc -> MS (r (Statement r)) -> SValue r ->
+  MS (r (Statement r)) -> MSBody r -> MS (r (Statement r))
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- S.loopStmt sInit
   guard <- zoom lensMStoVS vGuard
@@ -232,7 +232,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while :: (CommonRenderSym r tp vis) => (Doc -> Doc) -> Doc -> Doc -> SValue r ->
-  MSBody r -> MSStatement r
+  MSBody r -> MS (r (Statement r))
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'

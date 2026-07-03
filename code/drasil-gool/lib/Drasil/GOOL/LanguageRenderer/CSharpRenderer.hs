@@ -14,15 +14,15 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  VSFunction, SVariable, SValue, MSParameter, SMethod, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -103,9 +103,9 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
-import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
-  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
-  useVarName, setVarScope)
+import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn,
+  revFiles, addLangImport, addLangImportVS, setFileType, getClassName,
+  setCurrMain, useVarName, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -854,7 +854,7 @@ csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
 csFuncDecDef :: SVariable CSharpCode -> CSharpCode ScopeData ->
-  [SVariable CSharpCode] -> MSBody CSharpCode -> MSStatement CSharpCode
+  [SVariable CSharpCode] -> MSBody CSharpCode -> MS (CSharpCode (Statement CSharpCode))
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -886,7 +886,7 @@ csAssert condition errorMessage = vcat [
   text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
   ]
 
-csDiscardInput :: SValue CSharpCode -> MSStatement CSharpCode
+csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Statement CSharpCode))
 csDiscardInput = valStmt
 
 csFileInput :: (OORenderSym r TypeData vis) => SValue r -> SValue r
@@ -921,7 +921,7 @@ csOut p = text "out" <+> p
 
 csInOutCall :: (Label -> VS (CSharpCode TypeData) -> [SValue CSharpCode] ->
   SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SVariable CSharpCode]
-  -> [SVariable CSharpCode] -> MSStatement CSharpCode
+  -> [SVariable CSharpCode] -> MS (CSharpCode (Statement CSharpCode))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
@@ -930,7 +930,7 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: AttachmentTag -> MSStatement CSharpCode -> MSStatement CSharpCode
+csVarDec :: AttachmentTag -> MS (CSharpCode (Statement CSharpCode)) -> MS (CSharpCode (Statement CSharpCode))
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
@@ -949,7 +949,7 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
 csPrint :: (CommonRenderSym r TypeData vis, TypeElim r TypeData) => Bool ->
-  Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
+  Maybe (SValue r) -> SValue r -> SValue r -> MS (r (Statement r))
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

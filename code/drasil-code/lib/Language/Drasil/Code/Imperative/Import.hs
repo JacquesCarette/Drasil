@@ -50,9 +50,9 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
-  MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializers, SharedProg,
-  OOProg, VS, AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..),
+import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSParameter,
+  SMethod, CSStateVar, SClass, NamedArgs, Initializers, SharedProg, OOProg, MS,
+  VS, AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..),
   VariableSym(..), VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
   OOVariableSym(..), SelfSym(..), instanceVarSelf, VariableElim(..), ($->),
   ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..),
@@ -570,7 +570,7 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
   genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmt :: (OOProg r tp vis) => FuncStmt -> GenState (MSStatement r)
+convStmt :: (OOProg r tp vis) => FuncStmt -> GenState (MS (r (Statement r)))
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
   v' <- mkVar v
@@ -676,7 +676,7 @@ genDataFunc nameTitle desc ddef = do
     Nothing bod
 
 -- this is really ugly!!
--- | Read from a data description into a 'MSBlock' of 'MSStatement's.
+-- | Read from a data description into a 'MSBlock' of 'MS Statement's.
 readData :: (OOProg r tp vis) => DataDesc -> GenState [MSBlock r]
 readData ddef = do
   g <- get
@@ -689,7 +689,7 @@ readData ddef = do
     listDec 0 var_linetokens localScope ] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r tp vis) => Data -> r ScopeData -> GenState [MSStatement r]
+  where inData :: (OOProg r tp vis) => Data -> r ScopeData -> GenState [MS (r (Statement r))]
         inData (Singleton v) _ = do
             vv <- mkVar v
             return [getFileInput v_infile vv]
@@ -713,7 +713,7 @@ readData ddef = do
           return $ readLines ls
         ---------------
         lineData :: (OOProg r tp vis) => Maybe String -> LinePattern -> r ScopeData ->
-          GenState [MSStatement r]
+          GenState [MS (r (Statement r))]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
           return [stringListVals vs v_linetokens]
@@ -723,22 +723,22 @@ readData ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps :: (OOProg r tp vis) => Maybe String -> [DataItem] -> r ScopeData ->
-          [GenState (MSStatement r)]
+          [GenState (MS (r (Statement r)))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp :: (OOProg r tp vis) => String -> DataItem -> r ScopeData ->
-          GenState (MSStatement r)
+          GenState (MS (r (Statement r)))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps :: (OOProg r tp vis) => Maybe String -> [DataItem]
-          -> [GenState (MSStatement r)]
+          -> [GenState (MS (r (Statement r)))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp :: (OOProg r tp vis) => String -> DataItem ->
-          GenState (MSStatement r)
+          GenState (MS (r (Statement r)))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
@@ -904,7 +904,7 @@ genModFuncsProc :: (SharedProg r tp vis) => Mod -> [GenState (SMethod r)]
 genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 
 -- this is really ugly!!
--- | Read from a data description into a 'MSBlock' of 'MSStatement's.
+-- | Read from a data description into a 'MSBlock' of 'MS Statement's.
 readDataProc :: (SharedProg r tp vis) => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
@@ -917,7 +917,7 @@ readDataProc ddef = do
     listDec 0 var_linetokens localScope] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (SharedProg r tp vis) => Data -> r ScopeData -> GenState [MSStatement r]
+  where inData :: (SharedProg r tp vis) => Data -> r ScopeData -> GenState [MS (r (Statement r))]
         inData (Singleton v) _ = do
             vv <- mkVarProc v
             return [getFileInput v_infile vv]
@@ -941,7 +941,7 @@ readDataProc ddef = do
           return $ readLines ls
         ---------------
         lineData :: (SharedProg r tp vis) => Maybe String -> LinePattern ->
-          r ScopeData -> GenState [MSStatement r]
+          r ScopeData -> GenState [MS (r (Statement r))]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
           return [stringListVals vs v_linetokens]
@@ -951,22 +951,22 @@ readDataProc ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps :: (SharedProg r tp vis) => Maybe String -> [DataItem] ->
-          r ScopeData -> [GenState (MSStatement r)]
+          r ScopeData -> [GenState (MS (r (Statement r)))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp :: (SharedProg r tp vis) => String -> DataItem -> r ScopeData ->
-          GenState (MSStatement r)
+          GenState (MS (r (Statement r)))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps :: (SharedProg r tp vis) => Maybe String -> [DataItem]
-          -> [GenState (MSStatement r)]
+          -> [GenState (MS (r (Statement r)))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp :: (SharedProg r tp vis) => String -> DataItem ->
-          GenState (MSStatement r)
+          GenState (MS (r (Statement r)))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
@@ -1080,7 +1080,7 @@ convCallProc c x ns f libf = do
     (Map.lookup funcNm mem)
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmtProc :: (SharedProg r tp vis) => FuncStmt -> GenState (MSStatement r)
+convStmtProc :: (SharedProg r tp vis) => FuncStmt -> GenState (MS (r (Statement r)))
 convStmtProc (FAsg v (Matrix [es])) = do
   els <- mapM convExprProc es
   v' <- mkVarProc v

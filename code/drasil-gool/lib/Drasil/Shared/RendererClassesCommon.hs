@@ -15,13 +15,13 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, BodySym(..),
-  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  SVariable, SValue, MSParameter, SMethod, MixedCall, BodySym(..), BlockSym(..),
+  TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), ValueExpression(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), IndexTranslator(..), List(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ParameterSym(..), MethodSym(..),
   BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
@@ -166,20 +166,20 @@ class FunctionElim r tp | r -> tp where
   function :: r (Function r) -> Doc
 
 class InternalAssignStmt r where
-  multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r
+  multiAssign       :: [SVariable r] -> [SValue r] -> MS (r (Statement r))
 
 class InternalIOStmt r where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
+  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r (Statement r))
 
 class InternalControlStmt r where
-  multiReturn :: [SValue r] -> MSStatement r
+  multiReturn :: [SValue r] -> MS (r (Statement r))
 
 class RenderStatement r where
-  stmt     :: MSStatement r -> MSStatement r
-  loopStmt :: MSStatement r -> MSStatement r
+  stmt     :: MS (r (Statement r)) -> MS (r (Statement r))
+  loopStmt :: MS (r (Statement r)) -> MS (r (Statement r))
 
-  stmtFromData :: Doc -> Terminator -> MSStatement r
+  stmtFromData :: Doc -> Terminator -> MS (r (Statement r))
 
 class StatementElim r where
   statement :: r (Statement r) -> Doc

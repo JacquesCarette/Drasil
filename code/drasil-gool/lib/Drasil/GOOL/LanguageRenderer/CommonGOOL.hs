@@ -6,8 +6,8 @@ module Drasil.GOOL.LanguageRenderer.CommonGOOL (
 ) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), SVariable,
-  SValue, MSStatement, NamedArgs, VariableElim(..), TypeSym(void),
-  IndexTranslator(..), getCodeType, StatementSym (valStmt))
+  SValue, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
+  getCodeType, StatementSym (valStmt), StatementSym(..))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ScopeElim(..),
   RenderValue(..))
@@ -16,14 +16,14 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt)
 import Drasil.Shared.LanguageRenderer (dot)
 import Drasil.GOOL.Renderers (renderType, renderConstDecDef)
 import Drasil.Shared.AST (TypeData, ScopeData)
-import Drasil.Shared.State (VS, lensMStoVS, useVarName, setVarScope)
+import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
 import Drasil.Shared.Helpers (getInnerType)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
 constDecDef :: (CommonRenderSym r TypeData vis, UnRepr r TypeData) =>
-  SVariable r -> r ScopeData -> SValue r -> MSStatement r
+  SVariable r -> r ScopeData -> SValue r -> MS (r (Statement r))
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -38,10 +38,10 @@ classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
-listAppend :: (OORenderSym r tp vis) => String -> SValue r -> SValue r -> MSStatement r
+listAppend :: (OORenderSym r tp vis) => String -> SValue r -> SValue r -> MS (r (Statement r))
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
-listAdd :: (OORenderSym r tp vis) => String -> SValue r -> SValue r -> SValue r -> MSStatement r
+listAdd :: (OORenderSym r tp vis) => String -> SValue r -> SValue r -> SValue r -> MS (r (Statement r))
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType :: (OORenderSym r TypeData vis, TypeElim r TypeData) =>

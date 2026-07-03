@@ -4,16 +4,15 @@
 module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSBinder,
-  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  BinderSym(..))
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
@@ -21,10 +20,10 @@ import Drasil.Shared.AST (qualName, td, ScopeData(..), ScopeTag (..), sd,
   bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
-import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
-  lensVStoFS, modifyReturn, setModuleName, getModuleName, updateClassMap,
-  addException, updateMethodExcMap, updateCallMap, addCall, callMapTransClosure,
-  updateMEMWithCalls)
+import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoMS,
+  lensMStoVS, lensVStoFS, modifyReturn, setModuleName, getModuleName,
+  updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall,
+  callMapTransClosure, updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
@@ -388,7 +387,7 @@ updateMEMandCM n b = do
   noInfo
 
 evalConds :: [(SValue CodeInfoProc, MSBody CodeInfoProc)] ->
-  MSBody CodeInfoProc -> MSStatement CodeInfoProc
+  MSBody CodeInfoProc -> MS (CodeInfoProc (Statement CodeInfoProc))
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs

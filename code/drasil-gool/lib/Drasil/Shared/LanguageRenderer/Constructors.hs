@@ -7,7 +7,7 @@ module Drasil.Shared.LanguageRenderer.Constructors (
   binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.Shared.InterfaceCommon (MSStatement, SVariable, SValue,
+import Drasil.Shared.InterfaceCommon (SVariable, SValue, StatementSym(..),
   TypeSym(..), ValueSym(..), getCodeType, TypeElim)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
@@ -18,7 +18,7 @@ import Drasil.Shared.AST (Terminator(..), AttachmentTag(..), OpData, od,
   TypeData, td)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
-import Drasil.Shared.State (VS)
+import Drasil.Shared.State (MS, VS)
 
 import Text.PrettyPrint.HughesPJ (Doc, parens, text)
 import Data.Composition ((.:))
@@ -27,11 +27,11 @@ import Control.Monad (join)
 -- Statements
 
 -- | Constructs a statement terminated by a semi-colon
-mkStmt :: (CommonRenderSym r tp vis) => Doc -> MSStatement r
+mkStmt :: (CommonRenderSym r tp vis) => Doc -> MS (r (Statement r))
 mkStmt = flip stmtFromData Semi
 
 -- | Constructs a statement without a termination character
-mkStmtNoEnd :: (CommonRenderSym r tp vis) => Doc -> MSStatement r
+mkStmtNoEnd :: (CommonRenderSym r tp vis) => Doc -> MS (r (Statement r))
 mkStmtNoEnd = flip stmtFromData Empty
 
 -- Values --

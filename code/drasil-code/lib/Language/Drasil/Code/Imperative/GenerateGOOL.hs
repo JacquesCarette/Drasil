@@ -24,10 +24,10 @@ import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 
-import Drasil.GOOL (SVariable, SValue, MSStatement, SMethod, CSStateVar, SClass,
-  NamedArgs, SharedProg, OOProg, VS, ValueSym(..), Argument(..),
-  ValueExpression(..), OOValueExpression(..), SelfSym(..), VariableValue(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
+import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
+  SharedProg, OOProg, MS, VS, ValueSym(..), Argument(..), ValueExpression(..),
+  OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), ClassSym(..), StatementSym(..), CodeType(..),
   objMethodCallMixedArgs, getCodeType)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
@@ -159,7 +159,7 @@ ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOut :: (OOProg r tp vis) => Name -> Name -> [SValue r] ->
-  [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
+  [SVariable r] -> [SVariable r] -> GenState (MS (r (Statement r)))
 fAppInOut m n ins outs both = do
   g <- get
   let cm = currentModule g
@@ -211,7 +211,7 @@ fAppProc m s t vl ns = do
 
 -- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOutProc :: (SharedProg r tp vis) => Name -> Name -> [SValue r] ->
-  [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
+  [SVariable r] -> [SVariable r] -> GenState (MS (r (Statement r)))
 fAppInOutProc m n ins outs both = do
   g <- get
   let cm = currentModule g

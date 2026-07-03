@@ -22,12 +22,12 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
+  MSBlock, VSFunction, SVariable, SValue, MSParameter, SMethod,
   NamedArgs, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), VariableSym(Variable), VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
+  StatementSym(Statement, multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
@@ -95,7 +95,7 @@ multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
 
-block :: (CommonRenderSym r tp vis, Monad r) => [MSStatement r] -> MS (r Doc)
+block :: (CommonRenderSym r tp vis, Monad r) => [MS (r (Statement r))] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map S.stmt sts)
 
 multiBlock :: (CommonRenderSym r tp vis, Monad r) => [MSBlock r] -> MS (r Doc)
@@ -321,38 +321,38 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 -- Statements --
 
-stmt :: (CommonRenderSym r tp vis) => MSStatement r -> MSStatement r
+stmt :: (CommonRenderSym r tp vis) => MS (r (Statement r)) -> MS (r (Statement r))
 stmt s' = do
   s <- s'
   mkStmtNoEnd (RC.statement s <> R.getTerm (statementTerm s))
 
-loopStmt :: (CommonRenderSym r tp vis) => MSStatement r -> MSStatement r
+loopStmt :: (CommonRenderSym r tp vis) => MS (r (Statement r)) -> MS (r (Statement r))
 loopStmt = S.stmt . setEmpty
 
-emptyStmt :: (CommonRenderSym r tp vis) => MSStatement r
+emptyStmt :: (CommonRenderSym r tp vis) => MS (r (Statement r))
 emptyStmt = mkStmtNoEnd empty
 
 assign :: (CommonRenderSym r tp vis) => Terminator -> SVariable r -> SValue r ->
-  MSStatement r
+  MS (r (Statement r))
 assign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.assign vr v) t
 
 subAssign :: (CommonRenderSym r tp vis) => Terminator -> SVariable r ->
-  SValue r -> MSStatement r
+  SValue r -> MS (r (Statement r))
 subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.subAssign vr v) t
 
 objDecNew :: (OORenderSym r tp vis) => SVariable r -> r ScopeData -> [SValue r]
-  -> MSStatement r
+  -> MS (r (Statement r))
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList :: (CommonRenderSym r tp vis) => Integer -> SValue r ->
-  (SValue r -> MSStatement r) -> (String -> MSStatement r) ->
-  (String -> MSStatement r) -> MSStatement r
+  (SValue r -> MS (r (Statement r))) -> (String -> MS (r (Statement r))) ->
+  (String -> MS (r (Statement r))) -> MS (r (Statement r))
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   IC.for (IC.varDecDef i IC.local (IC.litInt 0))
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++)
@@ -364,8 +364,8 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
         i = IC.var l_i IC.int
 
 printSet :: (CommonRenderSym r tp vis) => Integer -> SValue r ->
-  (SValue r -> MSStatement r) -> (String -> MSStatement r) ->
-  (String -> MSStatement r) -> VS (r tp) -> MSStatement r
+  (SValue r -> MS (r (Statement r))) -> (String -> MS (r (Statement r))) ->
+  (String -> MS (r (Statement r))) -> VS (r tp) -> MS (r (Statement r))
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
@@ -373,11 +373,11 @@ printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   where set_i = "set_i" ++ show n
         i = IC.var set_i s
 
-printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
+printObj :: ClassName -> (String -> MS (r (Statement r))) -> MS (r (Statement r))
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print :: (CommonRenderSym r tp vis, TypeElim r tp) => Bool -> Maybe (SValue r) ->
-  SValue r -> SValue r -> MSStatement r
+  SValue r -> SValue r -> MS (r (Statement r))
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
@@ -388,24 +388,24 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe
           printStr printFileStr f
 
-closeFile :: (OORenderSym r tp vis) => Label -> SValue r -> MSStatement r
+closeFile :: (OORenderSym r tp vis) => Label -> SValue r -> MS (r (Statement r))
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
-returnStmt :: (CommonRenderSym r tp vis) => Terminator -> SValue r -> MSStatement r
+returnStmt :: (CommonRenderSym r tp vis) => Terminator -> SValue r -> MS (r (Statement r))
 returnStmt t v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (R.return' [v]) t
 
-valStmt :: (CommonRenderSym r tp vis) => Terminator -> SValue r -> MSStatement r
+valStmt :: (CommonRenderSym r tp vis) => Terminator -> SValue r -> MS (r (Statement r))
 valStmt t v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (RC.value v) t
 
-comment :: (CommonRenderSym r tp vis) => Doc -> Label -> MSStatement r
+comment :: (CommonRenderSym r tp vis) => Doc -> Label -> MS (r (Statement r))
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
 throw :: (CommonRenderSym r tp vis) => (r (Value r) -> Doc) -> Terminator ->
-  Label -> MSStatement r
+  Label -> MS (r (Statement r))
 throw f t l = do
   msg <- zoom lensMStoVS (IC.litString l)
   stmtFromData (f msg) t
@@ -426,7 +426,7 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 4th parameter is the syntax for ending a block in an if-condition
 -- 5th parameter is the syntax for ending an if-statement
 ifCond :: (CommonRenderSym r tp vis) => (Doc -> Doc) -> Doc -> OptionalSpace ->
-  Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+  Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MS (r (Statement r))
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -445,7 +445,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
       >>= (mkStmtNoEnd . vcat)
 
 tryCatch :: (CommonRenderSym r tp vis) => (r (Body r) -> r (Body r) -> Doc) ->
-  MSBody r -> MSBody r -> MSStatement r
+  MSBody r -> MSBody r -> MS (r (Statement r))
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
@@ -558,5 +558,5 @@ fileFromData f fpath mdl' = do
 
 -- Helper functions
 
-setEmpty :: (CommonRenderSym r tp vis) => MSStatement r -> MSStatement r
+setEmpty :: (CommonRenderSym r tp vis) => MS (r (Statement r)) -> MS (r (Statement r))
 setEmpty s' = s' >>= mkStmtNoEnd . RC.statement

@@ -6,8 +6,8 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement,
-  SValue, SVariable, MSParameter, VariableElim(variableName, variableType),
+import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, SValue, SVariable,
+  MSParameter, StatementSym(Statement), VariableElim(variableName, variableType),
   VisibilitySym(..), funcApp, getCodeType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
@@ -25,7 +25,7 @@ import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
 import Drasil.Shared.LanguageRenderer (addExt)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
-import Drasil.Shared.State (VS, FS, lensFStoGS, lensFStoMS, lensMStoVS,
+import Drasil.Shared.State (MS, VS, FS, lensFStoGS, lensFStoMS, lensMStoVS,
   getModuleName, setModuleName, setMainMod, currFileType, currMain, addFile,
   useVarName, currParameters, setVarScope)
 
@@ -84,13 +84,13 @@ innerType :: (IC.TypeElim r TypeData) => VS (r TypeData) -> VS (r TypeData)
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
-listAppend :: (CommonRenderSym r tp vis) => String -> SValue r -> SValue r -> MSStatement r
+listAppend :: (CommonRenderSym r tp vis) => String -> SValue r -> SValue r -> MS (r (Statement r))
 listAppend fnName list val = IC.valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
 listAdd :: (CommonRenderSym r tp vis) => String -> SValue r -> SValue r ->
-  SValue r -> MSStatement r
+  SValue r -> MS (r (Statement r))
 listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
@@ -105,7 +105,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef :: (ProcRenderSym r tp vis) => SVariable r -> r ScopeData ->
-  [SVariable r] -> MSBody r -> MSStatement r
+  [SVariable r] -> MSBody r -> MS (r (Statement r))
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr

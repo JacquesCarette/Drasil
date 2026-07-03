@@ -27,8 +27,8 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc,
   showHasSymbImpl, PrintingInformation)
 import qualified Language.Drasil.Printing.Import as PI (codeExpr)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement, SMethod,
-  CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
+import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, SMethod, CSStateVar,
+  SClass, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
   ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
@@ -127,7 +127,7 @@ genMainFunc = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDecl :: (OOProg r tp vis) => GenState (Maybe (MSStatement r))
+getInputDecl :: (OOProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 getInputDecl = do
   g <- get
   let scp = convScope $ currentScope g
@@ -162,7 +162,7 @@ getInputDecl = do
 -- If constants are 'Bundled' 'WithInputs', do 'Nothing'; declaration of the 'inParams'
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
-initConsts :: (OOProg r tp vis) => GenState (Maybe (MSStatement r))
+initConsts :: (OOProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 initConsts = do
   g <- get
   let scp = convScope $ currentScope g
@@ -189,7 +189,7 @@ initConsts = do
 
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
-initLogFileVar :: (SharedProg r tp vis) => [Logging] -> r ScopeData -> [MSStatement r]
+initLogFileVar :: (SharedProg r tp vis) => [Logging] -> r ScopeData -> [MS (r (Statement r))]
 initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 ------- INPUT ----------
@@ -327,7 +327,7 @@ genInputConstraints s = do
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r tp vis) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MSStatement r]
+  GenState [MS (r (Statement r))]
 sfwrCBody cs = do
   g <- get
   let cb = g ^. onSfwrC
@@ -335,7 +335,7 @@ sfwrCBody cs = do
 
 -- | Generates input constraints code block for checking physical constraints.
 physCBody :: (OOProg r tp vis) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MSStatement r]
+  GenState [MS (r (Statement r))]
 physCBody cs = do
   g <- get
   let cb = g ^. onPhysC
@@ -344,7 +344,7 @@ physCBody cs = do
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r tp vis) => ConstraintBehaviour ->
-  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
+  [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r (Statement r))]
 chooseConstr cb cs = do
   let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
   -- Generate variable declarations based on constraints
@@ -384,7 +384,7 @@ constrExc c = do
 
 -- | Generates set variable dec
 constrVarDec :: (OOProg r tp vis) => CodeVarChunk -> CodeExpr ->
-  GenState (MSStatement r)
+  GenState (MS (r (Statement r)))
 constrVarDec v e = do
   lb <- convExpr e
   t <- codeType v
@@ -395,7 +395,7 @@ constrVarDec v e = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsg :: (OOProg r tp vis) => CodeVarChunk -> String ->
-  ConstraintCE -> GenState [MSStatement r]
+  ConstraintCE -> GenState [MS (r (Statement r))]
 constraintViolatedMsg q s c = do
   pc <- printConstraint (showHasSymbImpl q) c
   v <- mkVal (quantvar q)
@@ -407,12 +407,12 @@ constraintViolatedMsg q s c = do
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
 printConstraint :: (OOProg r tp vis) => String -> ConstraintCE ->
-  GenState [MSStatement r]
+  GenState [MS (r (Statement r))]
 printConstraint v c = do
   g <- get
   let db = printfo g
       printConstraint' :: (OOProg r tp vis) => String -> ConstraintCE -> GenState
-        [MSStatement r]
+        [MS (r (Statement r))]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
@@ -433,7 +433,7 @@ printConstraint v c = do
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (SharedProg r tp vis) => CodeExpr -> PrintingInformation -> [MSStatement r]
+printExpr :: (SharedProg r tp vis) => CodeExpr -> PrintingInformation -> [MS (r (Statement r))]
 printExpr Lit{} _  = []
 printExpr e     db = [printStr $ " (" ++ render (codeExprDoc OneLine $ PI.codeExpr db e) ++ ")"]
 
@@ -666,7 +666,7 @@ genMainFuncProc = do
 -- If constants are 'Bundled' 'WithInputs', do 'Nothing'; declaration of the 'inParams'
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
-initConstsProc :: (SharedProg r tp vis) => GenState (Maybe (MSStatement r))
+initConstsProc :: (SharedProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 initConstsProc = do
   g <- get
   let scp = convScope $ currentScope g
@@ -734,7 +734,7 @@ checkInputClass = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDeclProc :: (SharedProg r tp vis) => GenState (Maybe (MSStatement r))
+getInputDeclProc :: (SharedProg r tp vis) => GenState (Maybe (MS (r (Statement r))))
 getInputDeclProc = do
   g <- get
   let scp = convScope $ currentScope g
@@ -889,7 +889,7 @@ genInputConstraintsProc s = do
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBodyProc :: (SharedProg r tp vis) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MSStatement r]
+  GenState [MS (r (Statement r))]
 sfwrCBodyProc cs = do
   g <- get
   let cb = g ^. onSfwrC
@@ -897,7 +897,7 @@ sfwrCBodyProc cs = do
 
 -- | Generates input constraints code block for checking physical constraints.
 physCBodyProc :: (SharedProg r tp vis) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MSStatement r]
+  GenState [MS (r (Statement r))]
 physCBodyProc cs = do
   g <- get
   let cb = g ^. onPhysC
@@ -906,7 +906,7 @@ physCBodyProc cs = do
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstrProc :: (SharedProg r tp vis) => ConstraintBehaviour ->
-  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
+  [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r (Statement r))]
 chooseConstrProc cb cs = do
   let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
   -- Generate variable declarations based on constraints
@@ -944,7 +944,7 @@ constrExcProc c = do
 
 -- | Generate a set variable dec
 constrVarDecProc :: (SharedProg r tp vis) => CodeVarChunk -> CodeExpr ->
-  GenState (MSStatement r)
+  GenState (MS (r (Statement r)))
 constrVarDecProc v e = do
   lb <- convExprProc e
   t <- codeType v
@@ -955,7 +955,7 @@ constrVarDecProc v e = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsgProc :: (SharedProg r tp vis) => CodeVarChunk -> String ->
-  ConstraintCE -> GenState [MSStatement r]
+  ConstraintCE -> GenState [MS (r (Statement r))]
 constraintViolatedMsgProc q s c = do
   pc <- printConstraintProc c
   v <- mkValProc (quantvar q)
@@ -967,12 +967,12 @@ constraintViolatedMsgProc q s c = do
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
 printConstraintProc :: (SharedProg r tp vis) => ConstraintCE ->
-  GenState [MSStatement r]
+  GenState [MS (r (Statement r))]
 printConstraintProc c = do
   g <- get
   let db = printfo g
       printConstraint' :: (SharedProg r tp vis) => ConstraintCE -> GenState
-        [MSStatement r]
+        [MS (r (Statement r))]
       printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExprProc e1
         ub <- convExprProc e2
@@ -1025,7 +1025,7 @@ genOutputFormatProc = do
         return $ Just mthd
   genOutput $ Map.lookup woName (eMap g)
 
-writeOutputValue :: (SharedProg r tp vis) => SValue r -> SValue r -> Space -> [MSStatement r]
+writeOutputValue :: (SharedProg r tp vis) => SValue r -> SValue r -> Space -> [MS (r (Statement r))]
 writeOutputValue out = writeTop
   where
     writeTop curr (Vect inner) =

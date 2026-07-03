@@ -3,13 +3,13 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
-  SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  listSlice, TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  CommentStatement(..), ControlStatement(..), VariableSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..),
-  VariableValue(..), VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
+import Drasil.GOOL (MSBody, MSBlock, SMethod, SClass, SVariable, MS, SharedProg,
+  OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice,
+  TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
+  ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
+  VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
   MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall, initializer,
@@ -342,36 +342,36 @@ helloElseBody :: (SharedProg r tp vis) => MSBody r
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
-helloIfExists :: (SharedProg r tp vis) => MSStatement r
+helloIfExists :: (SharedProg r tp vis) => MS (r (Statement r))
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
-helloSwitch :: (SharedProg r tp vis) => MSStatement r
+helloSwitch :: (SharedProg r tp vis) => MS (r (Statement r))
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
 -- | Creates a for loop.
-helloForLoop :: (SharedProg r tp vis) => MSStatement r
+helloForLoop :: (SharedProg r tp vis) => MS (r (Statement r))
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
   where i = var "i" int
 
 -- | Creates a while loop.
-helloWhileLoop :: (SharedProg r tp vis) => MSStatement r
+helloWhileLoop :: (SharedProg r tp vis) => MS (r (Statement r))
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (var "a" int)])
 
 -- | Creates a for-each loop.
-helloForEachLoop :: (SharedProg r tp vis) => MSStatement r
+helloForEachLoop :: (SharedProg r tp vis) => MS (r (Statement r))
 helloForEachLoop = forEach i (valueOf myOtherList)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
   where i = var "num" double
 
 -- | Creates a try statement to catch an intentional error.
-helloTryCatch :: (SharedProg r tp vis) => MSStatement r
+helloTryCatch :: (SharedProg r tp vis) => MS (r (Statement r))
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 

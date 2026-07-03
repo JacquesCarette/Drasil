@@ -2,10 +2,10 @@
 -- and write to files. See stable/gooltest for more details on what is generated through this.
 module FileTests (fileTestsOO, fileTestsProc) where
 
-import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
-  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..),
-  ControlStatement(..), VariableSym(var), Literal(..), VariableValue(..),
-  Comparison(..), List(..), MethodSym(..), ScopeSym(..))
+import Drasil.GOOL (MSBlock, SMethod, MS, SharedProg, OOProg,
+  BodySym(..), BlockSym(..), TypeSym(..), StatementSym(..), DeclStatement(..),
+  IOStatement(..), ControlStatement(..), VariableSym(var), Literal(..),
+  VariableValue(..), Comparison(..), List(..), MethodSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -49,7 +49,7 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (SharedProg r tp vis) => MSStatement r
+readStory :: (SharedProg r tp vis) => MS (r (Statement r))
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 

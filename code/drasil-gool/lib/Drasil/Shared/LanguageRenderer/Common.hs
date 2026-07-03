@@ -12,15 +12,16 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SVariable, MixedCall, SValue, VSFunction,
-  ValueSym(Value), TypeSym(int), MSBody, MSStatement, VariableElim(variableName),
-  VariableSym(Variable), Label, Library, BodySym(Body), funcApp, getCodeType)
+  ValueSym(Value), TypeSym(int), MSBody, StatementSym(..),
+  VariableElim(variableName), VariableSym(Variable), Label, Library,
+  BodySym(Body), funcApp, getCodeType)
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
   RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
 import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
   addAssign)
 import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, typeFromData)
-import Drasil.Shared.State (VS, lensMStoVS, useVarName, setVarScope)
+import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.Shared.AST (ScopeData, TypeData)
 
@@ -59,7 +60,7 @@ listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 -- Python, Swift, and Julia --
 
 forEach' :: (CommonRenderSym r tp vis) => (r (Variable r) -> r (Value r) ->
-  r (Body r) -> Doc) -> SVariable r -> SValue r -> MSBody r -> MSStatement r
+  r (Body r) -> Doc) -> SVariable r -> SValue r -> MSBody r -> MS (r (Statement r))
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -69,7 +70,7 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef :: (CommonRenderSym r tp vis) => SVariable r -> r ScopeData ->
-  Maybe (SValue r) -> MSStatement r
+  Maybe (SValue r) -> MS (r (Statement r))
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
@@ -81,7 +82,7 @@ varDecDef v scp e = do
 
 -- Python and Swift --
 
-increment :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r tp vis) => SVariable r -> SValue r -> MS (r (Statement r))
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'

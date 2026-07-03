@@ -5,8 +5,8 @@
 module Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSBinder, SVariable, SValue,
-  MSStatement, MSParameter, SMethod, NamedArgs, MixedCall, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  MSParameter, SMethod, NamedArgs, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..),
@@ -63,17 +63,17 @@ class (BlockSym r tp) => BodySym r tp where
 
   addComments :: Label -> MSBody r -> MSBody r
 
-bodyStatements :: (BodySym r tp) => [MSStatement r] -> MSBody r
+bodyStatements :: (BodySym r tp) => [MS (r (Statement r))] -> MSBody r
 bodyStatements sts = body [block sts]
 
-oneLiner :: (BodySym r tp) => MSStatement r -> MSBody r
+oneLiner :: (BodySym r tp) => MS (r (Statement r)) -> MSBody r
 oneLiner tp = bodyStatements [tp]
 
 type MSBlock a = MS (a (Block a))
 
 class (StatementSym r tp) => BlockSym r tp where
   type Block r
-  block   :: [MSStatement r] -> MSBlock r
+  block   :: [MS (r (Statement r))] -> MSBlock r
 
 class TypeSym r tp | r -> tp where
   bool          :: VS (r tp)
@@ -311,16 +311,16 @@ class (IndexTranslator r tp) => List r tp where
   listSize   :: SValue r -> SValue r
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
-  listAdd    :: SValue r -> SValue r -> SValue r -> MSStatement r
+  listAdd    :: SValue r -> SValue r -> SValue r -> MS (r (Statement r))
   -- | Appens a value to a list.
   --   Arguments are: List, Value
-  listAppend :: SValue r -> SValue r -> MSStatement r
+  listAppend :: SValue r -> SValue r -> MS (r (Statement r))
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
-  listSet    :: SValue r -> SValue r -> SValue r -> MSStatement r
+  listSet    :: SValue r -> SValue r -> SValue r -> MS (r (Statement r))
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
@@ -331,13 +331,13 @@ class (ValueSym r tp) => Set r tp where
   contains :: SValue r -> SValue r -> SValue r
   -- | Inserts a value into a set
   -- Arguments are: Set, Value
-  setAdd :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this MSStatement
+  setAdd :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this a Statement
   -- | Removes a value from a set
   -- Arguments are: Set, Value
-  setRemove :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this MSStatement
+  setRemove :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: Make this a SStatement
   -- | Removes a value from a set
   -- Arguments are: Set, Set
-  setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this MSStatement
+  setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this a Statement
 
 class (ValueSym r tp) => InternalList r tp where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
@@ -362,82 +362,80 @@ listIndexExists lst index = listSize lst ?> index
 at :: (List r tp) => SValue r -> SValue r -> SValue r
 at = listAccess
 
-type MSStatement a = MS (a (Statement a))
-
 class (ValueSym r tp) => StatementSym r tp where
   type Statement r
-  valStmt :: SValue r -> MSStatement r -- converts value to statement
-  emptyStmt :: MSStatement r
-  multi     :: [MSStatement r] -> MSStatement r
+  valStmt :: SValue r -> MS (r (Statement r)) -- converts value to statement
+  emptyStmt :: MS (r (Statement r))
+  multi     :: [MS (r (Statement r))] -> MS (r (Statement r))
 
 class (VariableSym r tp, StatementSym r tp) => AssignStatement r tp where
-  (&-=)  :: SVariable r -> SValue r -> MSStatement r
+  (&-=)  :: SVariable r -> SValue r -> MS (r (Statement r))
   infixl 1 &-=
-  (&+=)  :: SVariable r -> SValue r -> MSStatement r
+  (&+=)  :: SVariable r -> SValue r -> MS (r (Statement r))
   infixl 1 &+=
-  (&++)  :: SVariable r -> MSStatement r
+  (&++)  :: SVariable r -> MS (r (Statement r))
   infixl 8 &++
-  (&--)  :: SVariable r -> MSStatement r
+  (&--)  :: SVariable r -> MS (r (Statement r))
   infixl 8 &--
 
-  assign :: SVariable r -> SValue r -> MSStatement r
+  assign :: SVariable r -> SValue r -> MS (r (Statement r))
 
-(&=) :: (AssignStatement r tp) => SVariable r -> SValue r -> MSStatement r
+(&=) :: (AssignStatement r tp) => SVariable r -> SValue r -> MS (r (Statement r))
 infixr 1 &=
 (&=) = assign
 
 class (VariableSym r tp, StatementSym r tp, ScopeSym r) => DeclStatement r tp where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
-  varDec       :: SVariable r -> r ScopeData -> MSStatement r
+  varDec       :: SVariable r -> r ScopeData -> MS (r (Statement r))
   -- | Declare a variable and give it a value.
   -- Not for use with arrays; use `arrayDecDef` instead.
-  varDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
+  varDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r (Statement r))
   -- First argument is size of the list
-  listDec      :: Integer -> SVariable r -> r ScopeData -> MSStatement r
-  listDecDef   :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
-  setDec       :: SVariable r -> r ScopeData -> MSStatement r
-  setDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> r ScopeData -> MS (r (Statement r))
+  listDecDef   :: SVariable r -> r ScopeData -> [SValue r] -> MS (r (Statement r))
+  setDec       :: SVariable r -> r ScopeData -> MS (r (Statement r))
+  setDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r (Statement r))
   -- First argument is size of the array
-  arrayDec     :: Integer -> SVariable r -> r ScopeData -> MSStatement r
-  arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
-  constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
+  arrayDec     :: Integer -> SVariable r -> r ScopeData -> MS (r (Statement r))
+  arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MS (r (Statement r))
+  constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MS (r (Statement r))
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MSBody r
-    -> MSStatement r
+    -> MS (r (Statement r))
 
 class (VariableSym r tp, StatementSym r tp) => IOStatement r tp where
-  print      :: SValue r -> MSStatement r
-  printLn    :: SValue r -> MSStatement r
-  printStr   :: String -> MSStatement r
-  printStrLn :: String -> MSStatement r
+  print      :: SValue r -> MS (r (Statement r))
+  printLn    :: SValue r -> MS (r (Statement r))
+  printStr   :: String -> MS (r (Statement r))
+  printStrLn :: String -> MS (r (Statement r))
 
   -- First argument is file handle, second argument is value to print
-  printFile      :: SValue r -> SValue r -> MSStatement r
-  printFileLn    :: SValue r -> SValue r -> MSStatement r
-  printFileStr   :: SValue r -> String -> MSStatement r
-  printFileStrLn :: SValue r -> String -> MSStatement r
+  printFile      :: SValue r -> SValue r -> MS (r (Statement r))
+  printFileLn    :: SValue r -> SValue r -> MS (r (Statement r))
+  printFileStr   :: SValue r -> String -> MS (r (Statement r))
+  printFileStrLn :: SValue r -> String -> MS (r (Statement r))
 
-  getInput         :: SVariable r -> MSStatement r
-  discardInput     :: MSStatement r
-  getFileInput     :: SValue r -> SVariable r -> MSStatement r
-  discardFileInput :: SValue r -> MSStatement r
+  getInput         :: SVariable r -> MS (r (Statement r))
+  discardInput     :: MS (r (Statement r))
+  getFileInput     :: SValue r -> SVariable r -> MS (r (Statement r))
+  discardFileInput :: SValue r -> MS (r (Statement r))
 
-  openFileR :: SVariable r -> SValue r -> MSStatement r
-  openFileW :: SVariable r -> SValue r -> MSStatement r
-  openFileA :: SVariable r -> SValue r -> MSStatement r
-  closeFile :: SValue r -> MSStatement r
+  openFileR :: SVariable r -> SValue r -> MS (r (Statement r))
+  openFileW :: SVariable r -> SValue r -> MS (r (Statement r))
+  openFileA :: SVariable r -> SValue r -> MS (r (Statement r))
+  closeFile :: SValue r -> MS (r (Statement r))
 
-  getFileInputLine :: SValue r -> SVariable r -> MSStatement r
-  discardFileLine  :: SValue r -> MSStatement r
-  getFileInputAll  :: SValue r -> SVariable r -> MSStatement r
+  getFileInputLine :: SValue r -> SVariable r -> MS (r (Statement r))
+  discardFileLine  :: SValue r -> MS (r (Statement r))
+  getFileInputAll  :: SValue r -> SVariable r -> MS (r (Statement r))
 
 class (VariableSym r tp, StatementSym r tp) => StringStatement r tp where
   -- Parameters are: char to split on, variable to store result in, string to split
-  stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
-  stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
+  stringSplit :: Char -> SVariable r -> SValue r -> MS (r (Statement r))
+  stringListVals  :: [SVariable r] -> SValue r -> MS (r (Statement r))
   -- Given a list of variables and a value containing a list of strings,
   -- assign the ith element of hte list of strings into the ith variable
-  stringListLists :: [SVariable r] -> SValue r -> MSStatement r
+  stringListLists :: [SVariable r] -> SValue r -> MS (r (Statement r))
 
 type VSFunction a = VS (a (Function a))
 
@@ -446,48 +444,48 @@ class (ValueSym r tp) => FunctionSym r tp where
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
-  MSStatement r
+  MS (r (Statement r))
 
 class (VariableSym r tp, StatementSym r tp) => FuncAppStatement r tp where
   inOutCall    ::            InOutCall r
   extInOutCall :: Library -> InOutCall r
 
 class (StatementSym r tp) => CommentStatement r tp where
-  comment :: String -> MSStatement r
+  comment :: String -> MS (r (Statement r))
 
 class (BodySym r tp, VariableSym r tp) => ControlStatement r tp where
-  break :: MSStatement r
-  continue :: MSStatement r
+  break :: MS (r (Statement r))
+  continue :: MS (r (Statement r))
 
-  returnStmt :: SValue r -> MSStatement r
+  returnStmt :: SValue r -> MS (r (Statement r))
 
-  throw :: Label -> MSStatement r
+  throw :: Label -> MS (r (Statement r))
 
   -- | String of if-else statements.
   --   Arguments: List of predicates and bodies (if this then that),
   --   Body for else branch
-  ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+  ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MS (r (Statement r))
+  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MS (r (Statement r))
 
-  ifExists :: SValue r -> MSBody r -> MSBody r -> MSStatement r
+  ifExists :: SValue r -> MSBody r -> MSBody r -> MS (r (Statement r))
 
-  for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r ->
-    MSStatement r
+  for      :: MS (r (Statement r)) -> SValue r -> MS (r (Statement r)) -> MSBody r ->
+    MS (r (Statement r))
   -- Iterator variable, start value, end value, step value, loop body
   forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r ->
-    MSStatement r
-  forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r
-  while    :: SValue r -> MSBody r -> MSStatement r
+    MS (r (Statement r))
+  forEach  :: SVariable r -> SValue r -> MSBody r -> MS (r (Statement r))
+  while    :: SValue r -> MSBody r -> MS (r (Statement r))
 
-  tryCatch :: MSBody r -> MSBody r -> MSStatement r
+  tryCatch :: MSBody r -> MSBody r -> MS (r (Statement r))
 
-  assert :: SValue r -> SValue r -> MSStatement r
+  assert :: SValue r -> SValue r -> MS (r (Statement r))
 
-ifNoElse :: (ControlStatement r tp) => [(SValue r, MSBody r)] -> MSStatement r
+ifNoElse :: (ControlStatement r tp) => [(SValue r, MSBody r)] -> MS (r (Statement r))
 ifNoElse bs = ifCond bs $ body []
 
 switchAsIf :: (ControlStatement r tp, Comparison r tp) => SValue r ->
-  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+  [(SValue r, MSBody r)] -> MSBody r -> MS (r (Statement r))
 switchAsIf v = ifCond . map (first (v ?==))
 
 class VisibilitySym r vis | r -> vis where

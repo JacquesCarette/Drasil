@@ -13,7 +13,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text,
   vcat, render)
 
-import Language.Drasil (Special(..), Stage(..), Symbol, USymb(..), codeSymb)
+import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
 import qualified Language.Drasil as L (HasSymbol(..))
 import Data.String.Extras (toPlainName)
 

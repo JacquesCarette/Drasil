@@ -14,14 +14,14 @@ import Drasil.Metadata (watermark)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | A program with one function that applies each vector operation.
-vectorTestProc :: (ProcProg r) => GProc.GSProgram r
+vectorTestProc :: (ProcProg r tp vis smt) => GProc.GSProgram r
 vectorTestProc = GProc.prog "VectorTest" ""
   [GProc.docMod "Tests native vector operations." watermark ["Drasil"] "" $
     GProc.fileDoc (GProc.buildModule "VectorTest" [] [vectorOps])]
 
 -- | Takes two vectors and stores each vector operation's result, returning
 -- their dot product.
-vectorOps :: (ProcProg r) => SMethod r
+vectorOps :: (ProcProg r tp vis smt) => SMethod r
 vectorOps =
   function "vectorOps" public double [param (var "a" double), param (var "b" double)]
   (bodyStatements

@@ -142,6 +142,7 @@ codeExpr sm (UnaryOpVN Norm u)          = P.Fenced P.Norm P.Norm $ codeExpr sm u
 codeExpr sm (UnaryOpVN Dim u)           = mkCall sm P.Dim u
 codeExpr sm (UnaryOp Sqrt u)            = P.Sqrt $ codeExpr sm u
 codeExpr sm (UnaryOp Neg u)             = neg sm u
+codeExpr _  (UnaryOp MakeRef _)         = error "codeExpr UnaryOp MakeRef not implemented"
 codeExpr sm (UnaryOpVV NegV u)          = neg sm u
 codeExpr sm (ArithBinaryOp Frac a b)    = P.Div (codeExpr sm a) (codeExpr sm b)
 codeExpr sm (ArithBinaryOp Pow a b)     = pow sm a b

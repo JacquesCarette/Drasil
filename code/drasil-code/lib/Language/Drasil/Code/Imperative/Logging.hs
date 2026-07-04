@@ -18,7 +18,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SharedProg,
 -- and blocks to include in the body. If the user chose to turn on logging of
 -- function calls, statements that log how the function was called are added to
 -- the beginning of the body.
-logBody :: (SharedProg r) => Label -> [SVariable r] -> [MSBlock r] ->
+logBody :: (SharedProg r tp vis smt) => Label -> [SVariable r] -> [MSBlock r] ->
   GenState (MSBody r)
 logBody n vars b = do
   g <- get
@@ -29,7 +29,7 @@ logBody n vars b = do
 -- and the names and values of the passed list of variables. Intended to be
 -- used as the first block in the function, to log that it was called and what
 -- inputs it was called with.
-loggedMethod :: (SharedProg r) => FilePath -> Label -> [SVariable r] -> MSBlock r
+loggedMethod :: (SharedProg r tp vis smt) => FilePath -> Label -> [SVariable r] -> MSBlock r
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),
@@ -50,9 +50,9 @@ loggedMethod lName n vars = block [
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (SharedProg r) => SVariable r
+varLogFile :: (SharedProg r tp vis smt) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (SharedProg r) => SValue r
+valLogFile :: (SharedProg r tp vis smt) => SValue r
 valLogFile = valueOf varLogFile

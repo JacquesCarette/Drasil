@@ -2,7 +2,7 @@
 -- the Observer class both work.
 module GOOL.PatternTest (patternTest) where
 
-import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
+import Drasil.GOOL (GSProgram, SVariable, SValue, SMethod, OOProg, VS,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), initObserverList, addObserver, VariableSym(var),
@@ -23,26 +23,26 @@ obs2Name = "obs2"
 nName = "n"
 
 -- | Initialize Observer variables.
-observerType :: (OOTypeSym r) => VSType r
+observerType :: (OOTypeSym r tp) => VS (r tp)
 observerType = obj observerName
 
 -- | Variables used in the generated code.
-n, obs1, obs2 :: (OOVariableSym r) => SVariable r
+n, obs1, obs2 :: (OOVariableSym r tp) => SVariable r
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (OOValueExpression r) => SValue r
+newObserver :: (OOValueExpression r tp) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
-patternTest :: (OOProg r) => GSProgram r
+patternTest :: (OOProg r tp vis smt) => GSProgram r
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.
-patternTestMainMethod :: (OOProg r) => SMethod r
+patternTestMainMethod :: (OOProg r tp vis smt) => SMethod r
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],
 

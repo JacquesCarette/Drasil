@@ -12,5 +12,7 @@ function result = vectorOps(a, b)
     dim = length(a);
     mag = norm(a);
     unit = a / norm(a);
+    combo1 = 2.0 * a + b;
+    combo2 = 2.0 * (a + b);
     result = dotted;
 end

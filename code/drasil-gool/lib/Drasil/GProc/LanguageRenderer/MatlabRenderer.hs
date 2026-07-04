@@ -58,7 +58,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp,
   litTrue, litFalse)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extFuncAppMixedArgs)
+  extFuncAppMixedArgs, listSize)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
   paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
@@ -340,7 +340,7 @@ instance Array MatlabCode where
   arrayCopy = undefined
 
 instance List MatlabCode where
-  listSize v = funcApp "length" int [v]   -- length(v)
+  listSize = CS.listSize "length"   -- length(v)
   listAdd = undefined
   listAppend = undefined
   listAccess = undefined
@@ -356,7 +356,7 @@ instance Set MatlabCode where
 instance NativeVector MatlabCode where
   vecScale = binExpr multOp           -- s * v
   vecAdd   = binExpr plusOp           -- a + b
-  vecIndex = mlVecIndex               -- v(i + 1)
+  vecIndex = mlVecIndex               -- a(1) / a(i + 1)
   vecDot a b = funcApp "dot" double [a, b]   -- dot(a, b)
   vecMag a = funcApp "norm" double [a]       -- norm(a)
   vecUnit a = a #/ vecMag a                  -- a / norm(a)
@@ -638,8 +638,9 @@ mlArg n' = do
   s <- string
   mkVal s (text "varargin" <> braces (RC.value n))
 
--- | Indexes into a vector: @v(i + 1)@. MATLAB is 1-indexed while GOOL is
---   0-indexed, so we shift the index by one.
+-- | Indexes into a vector. MATLAB is 1-indexed while GOOL is 0-indexed, so the
+--   index is translated with 'intToIndex' (which folds constants, e.g. @a(1)@
+--   for index 0, and yields @a(i + 1)@ for a variable @i@).
 mlVecIndex :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
 mlVecIndex v' i' = do
   v <- v'

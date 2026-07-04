@@ -343,7 +343,18 @@ class (ValueSym r) => Set r where
 -- | Vector operations for languages with native vector support (e.g. MATLAB,
 --   Julia). Expression-based: every operation takes and returns 'SValue's, so
 --   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
-class (IndexTranslator r) => NativeVector r where
+--   Vectors have their own 'vecType' and 'litVec' so callers don't depend on
+--   how vectors are represented; these default to 'listType' and 'litList'.
+class (IndexTranslator r, Literal r) => NativeVector r where
+  -- | The type of a vector with the given element type.
+  --   Defaults to 'listType'; a language may override it to use a distinct
+  --   vector representation.
+  vecType :: VSType r -> VSType r
+  vecType = listType
+  -- | A vector literal with the given element type and elements.
+  --   Defaults to 'litList'.
+  litVec :: VSType r -> [SValue r] -> SValue r
+  litVec = litList
   -- | Scales a vector by a scalar.
   --   Arguments are: Scalar, Vector
   vecScale :: SValue r -> SValue r -> SValue r

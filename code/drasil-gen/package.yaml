@@ -26,17 +26,15 @@ dependencies:
 - drasil-code
 - drasil-data
 - drasil-database
-- drasil-srs
 - drasil-file-handling
 - drasil-gool
 - drasil-lang
-- drasil-lesson-plan
 - drasil-makefile
 - drasil-metadata
 - drasil-printers
+- drasil-srs
 - drasil-system
 - drasil-theory
-- drasil-utils
 - lens
 
 ghc-options:

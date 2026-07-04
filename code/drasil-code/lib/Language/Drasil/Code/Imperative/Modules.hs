@@ -434,7 +434,7 @@ printConstraint v c = do
 -- If expression is more than just a literal, print it in parentheses.
 printExpr :: (SharedProg r tp vis) => CodeExpr -> PrintingInformation -> [MSStatement r]
 printExpr Lit{} _     = []
-printExpr e     pinfo = [printStr $ " " ++ (render $ parens (oneLineCodeExprDoc pinfo e))]
+printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pinfo e))]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r tp vis) => VisibilityTag -> GenState (Maybe (SMethod r))

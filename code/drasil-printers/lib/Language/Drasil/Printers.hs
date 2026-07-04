@@ -1,12 +1,11 @@
 module Language.Drasil.Printers (
+  -- * Document
+    makeDocument, makeProject
   -- * HTML
   -- ** Printer
-    genHTML
+  , genHTML
   -- ** CSS
   , genericCSS
-  -- * Markdown
-  -- ** Printer
-  -- ** Section Printers
   -- * Plain
   -- ** Types
   , SingleLine(..)
@@ -31,5 +30,6 @@ import Language.Drasil.Markdown.Print (genMDBook)
 import Language.Drasil.Plain.Print (SingleLine(..), showHasSymbImpl,
   oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc)
 import Language.Drasil.TeX.Print (genTeX)
+import Language.Drasil.Printing.Import.Document (makeDocument, makeProject)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   Notation(..), piSys)

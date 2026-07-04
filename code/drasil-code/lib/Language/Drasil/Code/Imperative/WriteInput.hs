@@ -87,5 +87,3 @@ orderMtxs ms = transpose $ map getMtxLists ms
 getMtxLists :: Expr -> [[Expr]]
 getMtxLists (Matrix l) = l
 getMtxLists _ = error "makeInputFile encountered unexpected type, expected matrix"
-
-

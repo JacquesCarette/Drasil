@@ -27,7 +27,7 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
   Author, Address), Citation(Cite), BibRef)
-import Language.Drasil.Printing.Import (symbol)
+import Language.Drasil.Printing.Import.Symbol (symbol)
 import qualified Language.Drasil.Printing.Import.Sentence as I (spec)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)

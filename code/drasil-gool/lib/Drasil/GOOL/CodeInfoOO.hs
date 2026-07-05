@@ -6,9 +6,9 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
-  MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
@@ -25,8 +25,8 @@ import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
-import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn,
+import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS,
+  lensFStoMS, lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn,
   setClassName, getClassName, setModuleName, getModuleName, addClass,
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall,
   callMapTransClosure, updateMEMWithCalls)
@@ -52,13 +52,13 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () ()
-instance OOProg CodeInfoOO () ()
+instance SharedProg CodeInfoOO () () ()
+instance OOProg CodeInfoOO () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () () where
+instance ProgramSym CodeInfoOO () () () where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -66,7 +66,7 @@ instance ProgramSym CodeInfoOO () () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO () () where
+instance FileSym CodeInfoOO () () () where
   type File CodeInfoOO = ()
   fileDoc = execute1
 
@@ -77,13 +77,13 @@ instance AttachmentSym CodeInfoOO where
   classLevel  = toCode ()
   instanceLevel = toCode ()
 
-instance BodySym CodeInfoOO () where
+instance BodySym CodeInfoOO () () where
   type Body CodeInfoOO = ()
   body = executeList
 
   addComments _ _ = noInfo
 
-instance BlockSym CodeInfoOO () where
+instance BlockSym CodeInfoOO () () where
   type Block CodeInfoOO = ()
   block = executeList
 
@@ -261,7 +261,7 @@ instance Array CodeInfoOO () where
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
-instance List CodeInfoOO () where
+instance List CodeInfoOO () () where
   listSize       = execute1
   listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
@@ -284,20 +284,19 @@ instance InternalList CodeInfoOO () where
 instance BinderSym CodeInfoOO () where
   binder _ _ = noInfoBinder
 
-instance StatementSym CodeInfoOO () where
-  type Statement CodeInfoOO = ()
+instance StatementSym CodeInfoOO () () where
   valStmt = zoom lensMStoVS . execute1
   emptyStmt = noInfo
   multi    = executeList
 
-instance AssignStatement CodeInfoOO () where
+instance AssignStatement CodeInfoOO () () where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
   (&+=)  _ = zoom lensMStoVS . execute1
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoOO () where
+instance DeclStatement CodeInfoOO () () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -309,12 +308,12 @@ instance DeclStatement CodeInfoOO () where
   constDecDef          _ _ = zoom lensMStoVS . execute1
   funcDecDef         _ _ _ = execute1
 
-instance OODeclStatement CodeInfoOO () where
+instance OODeclStatement CodeInfoOO () () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeList
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeList
 
-instance IOStatement CodeInfoOO () where
+instance IOStatement CodeInfoOO () () where
   print        = zoom lensMStoVS . execute1
   printLn      = zoom lensMStoVS . execute1
   printStr   _ = noInfo
@@ -340,13 +339,13 @@ instance IOStatement CodeInfoOO () where
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)
 
-instance StringStatement CodeInfoOO () where
+instance StringStatement CodeInfoOO () () where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-instance FuncAppStatement CodeInfoOO () where
+instance FuncAppStatement CodeInfoOO () () where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
@@ -354,15 +353,15 @@ instance FuncAppStatement CodeInfoOO () where
     sequence_ vs
     addExternalCall l n
 
-instance OOFuncAppStatement CodeInfoOO () where
+instance OOFuncAppStatement CodeInfoOO () () where
   selfInOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
 
-instance CommentStatement CodeInfoOO () where
+instance CommentStatement CodeInfoOO () () where
   comment _ = noInfo
 
-instance ControlStatement CodeInfoOO () where
+instance ControlStatement CodeInfoOO () () where
   break    = noInfo
   continue = noInfo
 
@@ -392,10 +391,10 @@ instance ControlStatement CodeInfoOO () where
     _ <- zoom lensMStoVS msg
     noInfo
 
-instance ObserverPattern CodeInfoOO () where
+instance ObserverPattern CodeInfoOO () () where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
 
-instance StrategyPattern CodeInfoOO () where
+instance StrategyPattern CodeInfoOO () () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
@@ -410,7 +409,7 @@ instance ParameterSym CodeInfoOO () where
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoOO () () where
+instance MethodSym CodeInfoOO () () () where
   type Method CodeInfoOO = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -422,7 +421,7 @@ instance MethodSym CodeInfoOO () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () where
+instance OOMethodSym CodeInfoOO () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -442,7 +441,7 @@ instance StateVarSym CodeInfoOO () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () where
+instance ClassSym CodeInfoOO () () () where
   type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
@@ -462,7 +461,7 @@ instance ClassSym CodeInfoOO () () where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfoOO () () where
+instance ModuleSym CodeInfoOO () () () where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
@@ -494,7 +493,7 @@ updateMEMandCM n b = do
   noInfo
 
 evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO ->
-  MSStatement CodeInfoOO
+  MS (CodeInfoOO ())
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs

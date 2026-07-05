@@ -13,7 +13,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text,
   vcat, render)
 
-import Language.Drasil (Special(..), Stage(..), Symbol, USymb(..))
+import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
 import qualified Language.Drasil as L (HasSymbol(..))
 import Data.String.Extras (toPlainName)
 
@@ -186,4 +186,4 @@ fenceDocR Abs = text "|"
 
 -- | Helper for printing a HasSymbol in Implementation Stage
 showHasSymbImpl :: L.HasSymbol x => x -> String
-showHasSymbImpl x = render $ symbolDoc (L.symbol x Implementation)
+showHasSymbImpl = render . symbolDoc . codeSymb

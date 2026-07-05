@@ -27,7 +27,7 @@ doubleAndAdd = docFunc "This function adds two numbers"
   [param $ var "num1" double, param $ var "num2" double]
   (bodyStatements [
     varDec (var "doubledSum" double) local,
-    var "doubledSum" double &= ((litDouble 2.0 #*
-      valueOf (var "num1" double)) #+
-      (litDouble 2.0 #* valueOf (var "num2" double))),
+    var "doubledSum" double &=
+      (litDouble 2.0 #* valueOf (var "num1" double)) #+
+      (litDouble 2.0 #* valueOf (var "num2" double)),
     returnStmt (valueOf (var "doubledSum" double))])

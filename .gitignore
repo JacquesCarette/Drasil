@@ -7,6 +7,7 @@ desktop.ini
 .idea
 .vscode
 .direnv
+.projectile
 
 # Drasil/Haskell
 *.cabal

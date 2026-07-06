@@ -53,8 +53,10 @@ codeGenTestGroup =
         ]
     ]
 
-goolTestGroup :: String ->
-  (forall r tp vis smt. (OOProg r tp vis smt) => OO.GSProgram r) -> TestTree
+goolTestGroup
+  :: String
+  -> (forall r tp vis smt par. (OOProg r tp vis smt par) => OO.GSProgram r)
+  -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -67,8 +69,10 @@ goolTestGroup n p =
       goldenTest "swift" $ directory [ps|swift|] $ genCodeGOOL unSC unSP p
     ]
 
-gProcTestGroup :: String ->
-  (forall r tp vis smt. (ProcProg r tp vis smt) => Proc.GSProgram r) -> TestTree
+gProcTestGroup
+  :: String
+  -> (forall r tp vis smt par. (ProcProg r tp vis smt par) => Proc.GSProgram r)
+  -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -77,18 +81,24 @@ gProcTestGroup n p =
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
 
-genCodeGOOL :: (OOProg r tp vis smt, SoftwareDossierSym r', Monad r') =>
-  (r (OO.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
-  (forall s tp' vis' smt'. (OOProg s tp' vis' smt') => OO.GSProgram s) -> [FileLayout]
+genCodeGOOL
+  :: (OOProg r tp vis smt par, SoftwareDossierSym r', Monad r')
+  => (r (OO.Program r) -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> (forall s tp' vis' smt' par'. (OOProg s tp' vis' smt' par') => OO.GSProgram s)
+  -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let
     gs = OO.unCI (evalState p initialState)
     (p', gs') = runState p gs
   in genCode' (unRepr p') gs' unRepr'
 
-genCodeProc :: (ProcProg r tp vis smt, SoftwareDossierSym r', Monad r') =>
-  (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
-  (forall s tp' vis' smt'. (ProcProg s tp' vis' smt') => Proc.GSProgram s) -> [FileLayout]
+genCodeProc
+  :: (ProcProg r tp vis smt par, SoftwareDossierSym r', Monad r')
+  => (r (Proc.Program r) -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> (forall s tp' vis' smt' par'. (ProcProg s tp' vis' smt' par') => Proc.GSProgram s)
+  -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let
     gs = Proc.unCI (evalState p initialState)

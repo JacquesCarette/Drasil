@@ -25,7 +25,7 @@ class (CommonRenderSym r tp vis smt par, IG.FileSym r tp vis smt par,
   IG.InternalValueExp r tp, IG.GetSet r tp, IG.ObserverPattern r tp smt,
   IG.StrategyPattern r tp smt, IG.OOVariableValue r tp,
   IG.OOValueExpression r tp, RenderClass r vis, ClassElim r, RenderFile r,
-  InternalGetSet r tp, OORenderMethod r tp vis, RenderMod r, ModuleElim r,
+  InternalGetSet r tp, OORenderMethod r tp vis par, RenderMod r, ModuleElim r,
   StateVarElim r, PermElim r
   ) => OORenderSym r tp vis smt par
 
@@ -53,7 +53,7 @@ class InternalGetSet r tp | r -> tp where
 class (MethodTypeSym r tp) => OOMethodTypeSym r tp where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r tp, OOMethodTypeSym r tp) => OORenderMethod r tp vis | r -> vis where
+class (RenderMethod r tp, OOMethodTypeSym r tp) => OORenderMethod r tp vis par | r -> vis par where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->

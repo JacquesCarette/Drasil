@@ -22,8 +22,12 @@ import Drasil.Shared.Helpers (getInnerType)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
-constDecDef :: (CommonRenderSym r TypeData vis smt, UnRepr r TypeData) =>
-  SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+constDecDef
+  :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  => SVariable r
+  -> r ScopeData
+  -> SValue r
+  -> MS (r smt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -31,19 +35,37 @@ constDecDef vr' scp v'= do
   modify $ setVarScope (variableName vr) (scopeData scp)
   mkStmt (renderConstDecDef vr v)
 
-classMethodCall :: (CommonRenderSym r TypeData vis smt, UnRepr r TypeData) =>
-  String -> VS (r TypeData) -> VS (r TypeData) -> [SValue r] ->
-  NamedArgs r TypeData -> SValue r
+classMethodCall
+  :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  => String
+  -> VS (r TypeData)
+  -> VS (r TypeData)
+  -> [SValue r]
+  -> NamedArgs r TypeData
+  -> SValue r
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
-listAppend :: (OORenderSym r tp vis smt) => String -> SValue r -> SValue r -> MS (r smt)
+listAppend
+  :: (OORenderSym r tp vis smt par)
+  => String
+  -> SValue r
+  -> SValue r
+  -> MS (r smt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
-listAdd :: (OORenderSym r tp vis smt) => String -> SValue r -> SValue r -> SValue r -> MS (r smt)
+listAdd
+  :: (OORenderSym r tp vis smt par)
+  => String
+  -> SValue r
+  -> SValue r
+  -> SValue r
+  -> MS (r smt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
-innerType :: (OORenderSym r TypeData vis smt, TypeElim r TypeData) =>
-  VS (r TypeData) -> VS (r TypeData)
+innerType
+  :: (OORenderSym r TypeData vis smt par, TypeElim r TypeData)
+  => VS (r TypeData)
+  -> VS (r TypeData)
 innerType t = t >>= (convTypeOO . getInnerType . getCodeType)

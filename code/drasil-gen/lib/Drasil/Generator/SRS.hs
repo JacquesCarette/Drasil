@@ -13,11 +13,10 @@ import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
 import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
-  genJupyterSRS)
+  genJupyterSRS, makeDocument, makeProject)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Drasil.System (SmithEtAlSRS, refTable, systemdb)
 
 import Drasil.Generator.Formats (Filename, Format(..))

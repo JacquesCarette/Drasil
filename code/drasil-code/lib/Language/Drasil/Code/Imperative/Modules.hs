@@ -17,16 +17,15 @@ import Data.Maybe (maybeToList, catMaybes)
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets, modify)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (render)
+import Text.PrettyPrint.HughesPJ (render, parens)
 import Data.Deriving.Internal (interleave)
 
 import Drasil.FileHandling (FileLayout)
 import Drasil.Database (HasUID(..))
 import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc,
-  showHasSymbImpl, PrintingInformation)
-import qualified Language.Drasil.Printing.Import as PI (codeExpr)
+import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
+  oneLineCodeExprDoc)
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, SMethod, CSStateVar,
   SClass, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
@@ -434,8 +433,8 @@ printConstraint v c = do
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
 printExpr :: (SharedProg r tp vis smt) => CodeExpr -> PrintingInformation -> [MS (r smt)]
-printExpr Lit{} _  = []
-printExpr e     db = [printStr $ " (" ++ render (codeExprDoc OneLine $ PI.codeExpr db e) ++ ")"]
+printExpr Lit{} _     = []
+printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pinfo e))]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r tp vis smt) => VisibilityTag -> GenState (Maybe (SMethod r))

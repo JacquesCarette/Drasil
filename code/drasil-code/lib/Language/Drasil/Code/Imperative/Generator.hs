@@ -22,9 +22,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, piSys,
-  Notation (Scientific))
-import Language.Drasil.Printing.Import (spec)
+import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
 import Drasil.System (refTable, HasSystemMeta(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
@@ -115,8 +113,8 @@ generator l dt sd chs cs = let
         cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
         modules' = (cs ^. modsO) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc OneLine . spec pinfo) $
-          (nonPrefChs ++ concLog ++ libLog)
+        des = vcat $
+          map (oneLineSentenceDoc pinfo) (nonPrefChs ++ concLog ++ libLog)
 
 -- OO Versions --
 
@@ -190,12 +188,12 @@ genPackage unRepr = do
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
       as = map fullName (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
-      db = printfo g
+      pinfo = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
-      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
+      prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
@@ -222,7 +220,8 @@ genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
+  -- FIXME: The below code does `Doc -> String` conversion!
+  let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -303,11 +302,11 @@ genPackageProc unRepr = do
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
       as = map fullName (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
-      db = printfo g
-      prps = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ sentenceDoc OneLine $ spec db (foldlSent $ codeSpec g ^. scope)
+      pinfo = printfo g
+      prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)
+      bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
@@ -334,7 +333,7 @@ genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc OneLine $ spec (printfo g) $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

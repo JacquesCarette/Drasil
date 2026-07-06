@@ -45,8 +45,8 @@ class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
   ValueElim r, RenderVariable r tp, InternalVarElim r, InternalBinderElim r,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
   BlockCommentElim r, ValueExpression r tp, RenderMethod r tp, MethodElim r,
-  ParameterSym r tp, ScopeElim r
-  ) => CommonRenderSym r tp vis smt
+  ParameterSym r tp par, ScopeElim r
+  ) => CommonRenderSym r tp vis smt par
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 
@@ -193,12 +193,12 @@ class VisibilityElim r vis | r -> vis where
   visibility :: r vis -> Doc
 
 class RenderParam r where
-  paramFromData :: SVariable r -> Doc -> MS (r (Parameter r))
+  paramFromData :: SVariable r -> Doc -> MS (r par)
 
 class ParamElim r tp | r -> tp where
-  parameterName :: r (Parameter r) -> Label
-  parameterType :: r (Parameter r) -> r tp
-  parameter     :: r (Parameter r) -> Doc
+  parameterName :: r par -> Label
+  parameterType :: r par -> r tp
+  parameter     :: r par -> Doc
 
 class BlockCommentSym r where
   blockComment :: [String] -> r Doc

@@ -46,14 +46,14 @@ instance Applicative CodeInfoProc where
 instance Monad CodeInfoProc where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoProc () () ()
+instance SharedProg CodeInfoProc () () () ()
 
-instance ProcProg CodeInfoProc () () ()
+instance ProcProg CodeInfoProc () () () ()
 
 instance UnRepr CodeInfoProc contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoProc () () () where
+instance ProgramSym CodeInfoProc () () () () where
   type Program CodeInfoProc = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -61,7 +61,7 @@ instance ProgramSym CodeInfoProc () () () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoProc () () () where
+instance FileSym CodeInfoProc () () () () where
   type File CodeInfoProc = ()
   fileDoc = execute1
 
@@ -335,12 +335,11 @@ instance VisibilitySym CodeInfoProc () where
   private = toCode ()
   public  = toCode ()
 
-instance ParameterSym CodeInfoProc () where
-  type Parameter CodeInfoProc = ()
+instance ParameterSym CodeInfoProc () () where
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoProc () () () where
+instance MethodSym CodeInfoProc () () () () where
   type Method CodeInfoProc = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -352,7 +351,7 @@ instance MethodSym CodeInfoProc () () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance ModuleSym CodeInfoProc () () () where
+instance ModuleSym CodeInfoProc () () () () where
   type Module CodeInfoProc = ()
   buildModule n _ funcs = do
     modify (setModuleName n)

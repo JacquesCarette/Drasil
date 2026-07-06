@@ -8,7 +8,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, SVariable,
-  SValue, SMethod, BlockSym(..), ParameterSym(..))
+  SValue, SMethod, BlockSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
@@ -21,13 +21,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r tp vis smt, IG.FileSym r tp vis smt,
+class (CommonRenderSym r tp vis smt par, IG.FileSym r tp vis smt par,
   IG.InternalValueExp r tp, IG.GetSet r tp, IG.ObserverPattern r tp smt,
   IG.StrategyPattern r tp smt, IG.OOVariableValue r tp,
   IG.OOValueExpression r tp, RenderClass r vis, ClassElim r, RenderFile r,
   InternalGetSet r tp, OORenderMethod r tp vis, RenderMod r, ModuleElim r,
   StateVarElim r, PermElim r
-  ) => OORenderSym r tp vis smt
+  ) => OORenderSym r tp vis smt par
 
 -- OO-Only Typeclasses --
 
@@ -57,11 +57,11 @@ class (RenderMethod r tp, OOMethodTypeSym r tp) => OORenderMethod r tp vis | r -
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->
-    MSMthdType r -> [MS (r (Parameter r))] -> MSBody r -> SMethod r
+    MSMthdType r -> [MS (r par)] -> MSBody r -> SMethod r
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r (IG.Attachment r)
-    -> MSMthdType r -> [MS (r (Parameter r))] -> MSBody r -> SMethod r
+    -> MSMthdType r -> [MS (r par)] -> MSBody r -> SMethod r
 
   destructor :: [IG.CSStateVar r] -> SMethod r
 

@@ -47,9 +47,9 @@ class (UnRepr r TypeData, TypeElim r tp, AssignStatement r tp smt,
   MathConstant r tp, VariableValue r tp, CommandLineArgs r tp,
   NumericExpression r tp, BooleanExpression r tp, Comparison r tp,
   ValueExpression r tp, IndexTranslator r tp, Array r tp, List r tp smt,
-  Set r tp, VariableElim r tp, MethodSym r tp vis smt, ScopeSym r,
+  Set r tp, VariableElim r tp, MethodSym r tp vis smt par, ScopeSym r,
   BinderSym r tp, Reference r tp, VariableValue r tp
-  ) => SharedProg r tp vis smt
+  ) => SharedProg r tp vis smt par
 
 -- Shared between OO and Procedural --
 
@@ -492,10 +492,9 @@ class VisibilitySym r vis | r -> vis where
   private :: r vis
   public  :: r vis
 
-class (VariableSym r tp) => ParameterSym r tp where
-  type Parameter r
-  param :: SVariable r -> MS (r (Parameter r))
-  pointerParam :: SVariable r -> MS (r (Parameter r))
+class (VariableSym r tp) => ParameterSym r tp par | r -> par where
+  param :: SVariable r -> MS (r par)
+  pointerParam :: SVariable r -> MS (r par)
 
 type SMethod a = MS (a (Method a))
 
@@ -508,12 +507,17 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] ->
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r tp smt, ParameterSym r tp, VisibilitySym r vis) => MethodSym r tp vis smt
+class
+  ( BodySym r tp smt
+  , ParameterSym r tp par
+  , VisibilitySym r vis
+  ) =>
+  MethodSym r tp vis smt par
   where
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r vis -> VS (r tp) -> [MS (r (Parameter r))] ->
+  function :: Label -> r vis -> VS (r tp) -> [MS (r par)] ->
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions,

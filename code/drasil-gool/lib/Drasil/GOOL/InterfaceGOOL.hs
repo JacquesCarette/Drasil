@@ -26,30 +26,37 @@ import Drasil.Shared.InterfaceCommon (
   DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
-  ParameterSym(..), VariableSym(var), ValueSym(valueType),
-  VariableValue(valueOf), ValueExpression, List(listSize, listAdd), listOf,
-  StatementSym(..), DeclStatement(listDecDef), FuncAppStatement,
-  VisibilitySym(..), convType)
+  VariableSym(var), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
+  List(listSize, listAdd), listOf, StatementSym(..), DeclStatement(listDecDef),
+  FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData)
 
-class (SharedProg r tp vis smt, ProgramSym r tp vis smt, OOVariableValue r tp,
-  OODeclStatement r tp smt, OOFuncAppStatement r tp smt, OOValueExpression r tp,
-  InternalValueExp r tp, GetSet r tp, ObserverPattern r tp smt,
-  StrategyPattern r tp smt
-  ) => OOProg r tp vis smt
+class
+  ( SharedProg r tp vis smt par
+  , ProgramSym r tp vis smt par
+  , OOVariableValue r tp
+  , OODeclStatement r tp smt
+  , OOFuncAppStatement r tp smt
+  , OOValueExpression r tp
+  , InternalValueExp r tp
+  , GetSet r tp
+  , ObserverPattern r tp smt
+  , StrategyPattern r tp smt
+  ) =>
+  OOProg r tp vis smt par
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym r tp vis smt) => ProgramSym r tp vis smt where
+class (FileSym r tp vis smt par) => ProgramSym r tp vis smt par where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r tp vis smt) => FileSym r tp vis smt where
+class (ModuleSym r tp vis smt par) => FileSym r tp vis smt par where
   type File r
   fileDoc :: FSModule r -> SFile r
 
@@ -58,14 +65,19 @@ class (ModuleSym r tp vis smt) => FileSym r tp vis smt where
 
 type FSModule a = FS (a (Module a))
 
-class (ClassSym r tp vis smt) => ModuleSym r tp vis smt where
+class (ClassSym r tp vis smt par) => ModuleSym r tp vis smt par where
   type Module r
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 type SClass a = CS (a (Class a))
 
-class (OOMethodSym r tp vis smt, StateVarSym r tp vis) => ClassSym r tp vis smt where
+class
+  ( OOMethodSym r tp vis smt par
+  , StateVarSym r tp vis
+  ) =>
+  ClassSym r tp vis smt par
+  where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
@@ -84,30 +96,35 @@ class (OOMethodSym r tp vis smt, StateVarSym r tp vis) => ClassSym r tp vis smt 
 
 type Initializers r tp = [(SVariable r, SValue r)]
 
-class (MethodSym r tp vis smt, AttachmentSym r) => OOMethodSym r tp vis smt where
+class
+  ( MethodSym r tp vis smt par
+  , AttachmentSym r
+  ) =>
+  OOMethodSym r tp vis smt par
+  where
   method      :: Label -> r vis -> r (Attachment r) -> VS (r tp) ->
-    [MS (r (Parameter r))] -> MSBody r -> SMethod r
+    [MS (r par)] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r
-  constructor :: [MS (r (Parameter r))] -> Initializers r tp -> MSBody r -> SMethod r
+  constructor :: [MS (r par)] -> Initializers r tp -> MSBody r -> SMethod r
 
   -- inOutMethod and docInOutMethod both need the Attachment parameter
   inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r
   docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r
 
-privMethod :: (OOMethodSym r tp vis smt) => Label -> VS (r tp) ->
-  [MS (r (Parameter r))] -> MSBody r -> SMethod r
+privMethod :: (OOMethodSym r tp vis smt par) => Label -> VS (r tp) ->
+  [MS (r par)] -> MSBody r -> SMethod r
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r tp vis smt) => Label -> VS (r tp) ->
-  [MS (r (Parameter r))] -> MSBody r -> SMethod r
+pubMethod :: (OOMethodSym r tp vis smt par) => Label -> VS (r tp) ->
+  [MS (r par)] -> MSBody r -> SMethod r
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r tp vis smt) => [MS (r (Parameter r))] ->
+initializer :: (OOMethodSym r tp vis smt par) => [MS (r par)] ->
   Initializers r tp -> SMethod r
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r tp vis smt) => [MS (r (Parameter r))] ->
+nonInitConstructor :: (OOMethodSym r tp vis smt par) => [MS (r par)] ->
   MSBody r -> SMethod r
 nonInitConstructor ps = constructor ps []
 

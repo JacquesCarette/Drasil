@@ -1,34 +1,36 @@
 module Drasil.Data.Formats.HTML.Core
-  ( -- * JSON
+  ( -- * HTML
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
     Attr(..), bold, emphasis, subscript, superscript, span, figureImage
   )
 where
 
-import Prelude hiding (span)
+import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
+import Prelude hiding (span)
 
 -- | HTML Attrs for tags in the format key="value"
-data Attr = Attr Text Text
+data Attr = Attr
+  Text -- ^ Key
+  Text -- ^ Value
   deriving (Show, Eq)
 
 data HTML = HTML [HTMLHead] [HTMLBody]
   deriving (Show, Eq)
 
 -- | Head elements
-data HTMLHead =
-    Script [Attr] Text
+data HTMLHead
+  = Script [Attr] Text
   | Title Text
   | Meta [Attr]
   | Link Relation File [Attr]
   deriving (Show, Eq)
 
 -- | Body elements
-data HTMLBody =
-  Div [Attr] [HTMLBody]
+data HTMLBody
+  = Div [Attr] [HTMLBody]
   | Paragraph [Attr] [HTMLBody]
   | TextFormat Format [Attr] [HTMLBody]
   | Heading HLevel [Attr] [HTMLBody]
@@ -43,12 +45,15 @@ data HTMLBody =
   | Custom CustomTag [Attr] [HTMLBody]
   | Comment Text
   deriving (Show, Eq)
+
 -- TODO: Support more tags
 -- https://www.w3schools.com/tags/default.asp
 
 type Relation = Text
+
 -- | Target link
 type URL = Text
+
 -- | File name or file path.
 type File = Text
 
@@ -69,8 +74,8 @@ data LItem = LItem [Attr] [HTMLBody]
   deriving (Show, Eq)
 
 -- | Description list elements
-data DItem =
-    DTerm [Attr] [HTMLBody]
+data DItem
+  = DTerm [Attr] [HTMLBody]
   | DDetails [Attr] [HTMLBody]
   deriving (Show, Eq)
 
@@ -78,8 +83,8 @@ data DItem =
 data Row = Row [Attr] [Cell]
   deriving (Show, Eq)
 
-data Cell =
-    THeader [Attr] [HTMLBody]
+data Cell
+  = THeader [Attr] [HTMLBody]
   | TData [Attr] [HTMLBody]
   deriving (Show, Eq)
 
@@ -91,13 +96,13 @@ newtype CustomTag = CT Text
 data TagType = Standard | Void
   deriving (Show, Eq)
 
+-- | Tag names are used within element start tags and end tags to give the
+-- element’s name. HTML elements all have names that only use characters in
+-- the range 0–9, a–z, and A–Z.
 customTag :: Text -> CustomTag
 customTag t
-  -- | Tag names are used within element start tags and end tags to give the
-  -- element’s name. HTML elements all have names that only use characters in
-  -- the range 0–9, a–z, and A–Z.
   | isSanitary t = CT t
-  | otherwise    = error "Bad custom tag name"
+  | otherwise = error "Bad custom tag name"
 
 isSanitary :: Text -> Bool
 isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar t
@@ -107,7 +112,6 @@ isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar
     isAllowedChar c = isAsciiLetter c || isDigit c || c == '-'
 
 -- | Smart Constructors
-
 bold :: [Attr] -> Text -> HTMLBody
 bold attrs txt = TextFormat Bold attrs [RawText txt]
 
@@ -123,6 +127,8 @@ superscript attrs txt = TextFormat Superscript attrs [RawText txt]
 span :: [Attr] -> Text -> HTMLBody
 span attrs txt = TextFormat Span attrs [RawText txt]
 
+-- | Creates a figure containing an image and a caption.
+-- The provided attributes are applied to the Figure
 figureImage :: [Attr] -> File -> Text -> Text -> HTMLBody
 figureImage attrs src altText captionTxt =
   Figure attrs [Img src altText [], FigCaption [] [RawText captionTxt]]

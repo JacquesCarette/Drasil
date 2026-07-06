@@ -23,7 +23,6 @@ import Drasil.LessonPlan.Core (LessonPlan, lsnPlanRefs)
 import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..))
 import Drasil.LessonPlan.ExtractBib (extractBib)
 import Language.Drasil.Printers
-import Language.Drasil.Printing.Import
 
 -- | Single-file-generating Jupyter notebook rendering options.
 data JupyterGenOptions = JupyterGenOptions {

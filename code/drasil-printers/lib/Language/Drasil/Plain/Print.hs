@@ -3,8 +3,9 @@ module Language.Drasil.Plain.Print (
   -- * Types
   SingleLine(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc,
-  showHasSymbImpl
+  showHasSymbImpl,
+  -- * Renderers
+  oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc
 ) where
 
 import Prelude hiding ((<>))
@@ -14,12 +15,17 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
   vcat, render)
 
 import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
-import qualified Language.Drasil as L (HasSymbol(..))
+import qualified Language.Drasil as L (HasSymbol(..), Sentence, Expr)
 import Data.String.Extras (toPlainName)
 
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Import.Expr (expr)
+import Language.Drasil.Printing.Import.Sentence (spec)
 import Language.Drasil.Printing.Import.Symbol (symbol)
+import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
+import Drasil.Code.CodeExpr (CodeExpr)
 
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
@@ -187,3 +193,18 @@ fenceDocR Abs = text "|"
 -- | Helper for printing a HasSymbol in Implementation Stage
 showHasSymbImpl :: L.HasSymbol x => x -> String
 showHasSymbImpl = render . symbolDoc . codeSymb
+
+-- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
+oneLineSentenceDoc :: PrintingInformation -> L.Sentence -> Doc
+oneLineSentenceDoc pinfo = sentenceDoc OneLine . spec pinfo
+
+-- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
+oneLineExprDoc :: PrintingInformation -> L.Expr -> Doc
+oneLineExprDoc pinfo e = exprDoc OneLine (expr e pinfo)
+
+oneLineCodeExprDoc :: PrintingInformation -> CodeExpr -> Doc
+oneLineCodeExprDoc pinfo = codeExprDoc OneLine . codeExpr pinfo
+
+-- | Creates a 'OneLine' 'unitDoc'.
+oneLineUnitDoc :: USymb -> Doc
+oneLineUnitDoc = unitDoc OneLine

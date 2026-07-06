@@ -46,7 +46,7 @@ class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
   BlockCommentElim r, ValueExpression r tp, RenderMethod r tp, MethodElim r,
   ParameterSym r tp par, ScopeElim r
-  ) => CommonRenderSym r tp vis smt par
+  ) => CommonRenderSym r tp vis smt par | r -> tp vis smt par
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 

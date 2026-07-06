@@ -4,7 +4,8 @@
 module VectorTest (vectorTestProc) where
 
 import Drasil.GProc (SMethod, ProcProg, bodyStatements, TypeSym(..),
-  VariableSym(..), Literal(..), VariableValue(..), (&=), MethodSym(..),
+  VariableSym(..), Literal(..), VariableValue(..), DeclStatement(..),
+  ScopeSym(..), MethodSym(..),
   VisibilitySym(..), ParameterSym(..), ControlStatement(..), NativeVector(..),
   List(..))
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
@@ -14,28 +15,28 @@ import Drasil.Metadata (watermark)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | A program with one function that applies each vector operation.
-vectorTestProc :: (ProcProg r tp vis smt) => GProc.GSProgram r
+vectorTestProc :: (ProcProg r tp vis smt, NativeVector r tp) => GProc.GSProgram r
 vectorTestProc = GProc.prog "VectorTest" ""
   [GProc.docMod "Tests native vector operations." watermark ["Drasil"] "" $
     GProc.fileDoc (GProc.buildModule "VectorTest" [] [vectorOps])]
 
 -- | Takes two vectors and stores each vector operation's result, returning
 -- their dot product.
-vectorOps :: (ProcProg r tp vis smt) => SMethod r
+vectorOps :: (ProcProg r tp vis smt, NativeVector r tp) => SMethod r
 vectorOps =
   function "vectorOps" public double [param (var "a" double), param (var "b" double)]
   (bodyStatements
-    [ var "made" (vecType double) &= litVec double [litDouble 1.0, litDouble 2.0, litDouble 3.0]  -- [1.0, 2.0, 3.0]
-    , var "scaled" double &= vecScale (litDouble 2.0) a  -- 2.0 * a
-    , var "summed" double &= vecAdd a b                  -- a + b
-    , var "elem"   double &= vecIndex a (litInt 0)       -- a(1)
-    , var "dotted" double &= vecDot a b                  -- dot(a, b)
-    , var "dim"    double &= listSize a                  -- length(a)
-    , var "mag"    double &= vecMag a                    -- norm(a)
-    , var "unit"   (vecType double) &= vecUnit a         -- a / norm(a)
+    [ varDecDef (var "made" (vecType double)) local (litVec double [litDouble 1.0, litDouble 2.0, litDouble 3.0])  -- [1.0, 2.0, 3.0]
+    , varDecDef (var "scaled" double) local (vecScale (litDouble 2.0) a)  -- 2.0 * a
+    , varDecDef (var "summed" double) local (vecAdd a b)                  -- a + b
+    , varDecDef (var "elem"   double) local (vecIndex a (litInt 0))       -- a(1)
+    , varDecDef (var "dotted" double) local (vecDot a b)                  -- dot(a, b)
+    , varDecDef (var "dim"    double) local (listSize a)                  -- length(a)
+    , varDecDef (var "mag"    double) local (vecMag a)                    -- norm(a)
+    , varDecDef (var "unit"   (vecType double)) local (vecUnit a)         -- a / norm(a)
     -- Composed operations: check precedence/parenthesization.
-    , var "combo1" (vecType double) &= vecAdd (vecScale (litDouble 2.0) a) b  -- 2.0 * a + b
-    , var "combo2" (vecType double) &= vecScale (litDouble 2.0) (vecAdd a b)  -- 2.0 * (a + b)
+    , varDecDef (var "combo1" (vecType double)) local (vecAdd (vecScale (litDouble 2.0) a) b)  -- 2.0 * a + b
+    , varDecDef (var "combo2" (vecType double)) local (vecScale (litDouble 2.0) (vecAdd a b))  -- 2.0 * (a + b)
     , returnStmt (valueOf (var "dotted" double))
     ])
   where a = valueOf (var "a" double)

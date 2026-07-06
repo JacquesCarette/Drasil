@@ -13,7 +13,7 @@ import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   GOOLState)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
-import Drasil.GProc (ProcProg, unJLC, unMLC)
+import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
@@ -78,7 +78,8 @@ gProcTestGroup n p =
     ]
 
 gProcMatlabTestGroup :: String ->
-  (forall r tp vis smt. (ProcProg r tp vis smt) => Proc.GSProgram r) -> TestTree
+  (forall r tp vis smt. (ProcProg r tp vis smt, NativeVector r tp) =>
+    Proc.GSProgram r) -> TestTree
 gProcMatlabTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -87,9 +88,10 @@ gProcMatlabTestGroup n p =
     [ goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
     ]
 
-genCodeProcNoMake :: (ProcProg r tp vis smt, Monad r') =>
+genCodeProcNoMake :: (ProcProg r tp vis smt, NativeVector r tp, Monad r') =>
   (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
-  (forall s tp' vis' smt'. (ProcProg s tp' vis' smt') => Proc.GSProgram s) ->
+  (forall s tp' vis' smt'. (ProcProg s tp' vis' smt', NativeVector s tp') =>
+    Proc.GSProgram s) ->
   [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =
   let

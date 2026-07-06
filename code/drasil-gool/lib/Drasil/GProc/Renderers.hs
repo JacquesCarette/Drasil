@@ -22,15 +22,16 @@ renderType tp = case cType $ unRepr tp of
     (Object _) -> error "Classes are not supported in procedural languages"
     _ -> typeDoc $ unRepr tp
 
-renderParam :: (ProcRenderSym r, UnRepr r TypeData) => r (Variable r) -> Doc
+renderParam :: (ProcRenderSym r TypeData vis smt, UnRepr r TypeData) =>
+  r (Variable r) -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
-renderListDec :: (CommonRenderSym r, UnRepr r TypeData) => r (Variable r) ->
-  r (Value r) -> Doc
+renderListDec :: (CommonRenderSym r TypeData vis smt, UnRepr r TypeData) =>
+  r (Variable r) -> r (Value r) -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
-renderConstDecDef :: (CommonRenderSym r, UnRepr r TypeData) => r (Variable r) ->
-  r (Value r) -> Doc
+renderConstDecDef :: (CommonRenderSym r TypeData vis smt, UnRepr r TypeData) =>
+  r (Variable r) -> r (Value r) -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

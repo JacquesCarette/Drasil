@@ -24,10 +24,11 @@ import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
+import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 
--- | Renders four GOOL tests (FileTests, HelloWorld, PatternTest, and NameGenTest)
+-- | Renders five GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
 main = defaultMain codeGenTestGroup
@@ -41,7 +42,8 @@ codeGenTestGroup =
         [ goolTestGroup "HelloWorldOO" helloWorldOO,
           goolTestGroup "PatternTestOO" patternTest,
           goolTestGroup "FileTestsOO" fileTestsOO,
-          goolTestGroup "NameGenTestOO" nameGenTestOO
+          goolTestGroup "NameGenTestOO" nameGenTestOO,
+          goolTestGroup "OOVector" ooVector
         ],
       testGroup
         "GProc"
@@ -51,7 +53,8 @@ codeGenTestGroup =
         ]
     ]
 
-goolTestGroup :: String -> (forall r. (OOProg r) => OO.GSProgram r) -> TestTree
+goolTestGroup :: String ->
+  (forall r tp vis smt. (OOProg r tp vis smt) => OO.GSProgram r) -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -64,7 +67,8 @@ goolTestGroup n p =
       goldenTest "swift" $ directory [ps|swift|] $ genCodeGOOL unSC unSP p
     ]
 
-gProcTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
+gProcTestGroup :: String ->
+  (forall r tp vis smt. (ProcProg r tp vis smt) => Proc.GSProgram r) -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -73,16 +77,18 @@ gProcTestGroup n p =
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
 
-genCodeGOOL :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> (forall s. (OOProg s) => OO.GSProgram s) -> [FileLayout]
+genCodeGOOL :: (OOProg r tp vis smt, SoftwareDossierSym r', Monad r') =>
+  (r (OO.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
+  (forall s tp' vis' smt'. (OOProg s tp' vis' smt') => OO.GSProgram s) -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let
     gs = OO.unCI (evalState p initialState)
     (p', gs') = runState p gs
   in genCode' (unRepr p') gs' unRepr'
 
-genCodeProc :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> (forall s. (ProcProg s) => Proc.GSProgram s) -> [FileLayout]
+genCodeProc :: (ProcProg r tp vis smt, SoftwareDossierSym r', Monad r') =>
+  (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
+  (forall s tp' vis' smt'. (ProcProg s tp' vis' smt') => Proc.GSProgram s) -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let
     gs = Proc.unCI (evalState p initialState)

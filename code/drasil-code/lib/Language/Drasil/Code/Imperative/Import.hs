@@ -50,10 +50,10 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSParameter,
-  SMethod, CSStateVar, SClass, NamedArgs, Initializers, SharedProg, OOProg, MS,
-  VS, AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..),
-  VariableSym(..), VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
+import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SMethod,
+  CSStateVar, SClass, NamedArgs, Initializers, SharedProg, OOProg, MS, VS,
+  AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
+  VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
   OOVariableSym(..), SelfSym(..), instanceVarSelf, VariableElim(..), ($->),
   ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
@@ -204,7 +204,7 @@ mkVar v = do
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParam :: (OOProg r vis smt) => ParameterChunk -> GenState (MSParameter r)
+mkParam :: (OOProg r vis smt) => ParameterChunk -> GenState (MS (r (Parameter r)))
 mkParam p = do
   v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
@@ -259,7 +259,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethod :: (OOProg r vis smt) => ([MSParameter r] -> MSBody r -> SMethod r) ->
+genMethod :: (OOProg r vis smt) => ([MS (r (Parameter r))] -> MSBody r -> SMethod r) ->
   Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 genMethod f n desc p r b = do
@@ -842,7 +842,7 @@ genModDefProc (Mod n desc is cs fs) = case cs of
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParamProc :: (SharedProg r vis smt) => ParameterChunk -> GenState (MSParameter r)
+mkParamProc :: (SharedProg r vis smt) => ParameterChunk -> GenState (MS (r (Parameter r)))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
   return $ paramFunc (passBy p) v
@@ -868,7 +868,7 @@ privateFuncProc n t desc ps r b = do
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethodProc :: (SharedProg r vis smt) => ([MSParameter r] -> MSBody r -> SMethod r) ->
+genMethodProc :: (SharedProg r vis smt) => ([MS (r (Parameter r))] -> MSBody r -> SMethod r) ->
   Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r]
   -> GenState (SMethod r)
 genMethodProc f n desc p r b = do

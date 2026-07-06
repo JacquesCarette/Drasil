@@ -15,7 +15,7 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  SVariable, SValue, MSParameter, SMethod, MixedCall, BodySym(..), BlockSym(..),
+  SVariable, SValue, SMethod, MixedCall, BodySym(..), BlockSym(..),
   TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), ValueExpression(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -193,7 +193,7 @@ class VisibilityElim r vis | r -> vis where
   visibility :: r vis -> Doc
 
 class RenderParam r where
-  paramFromData :: SVariable r -> Doc -> MSParameter r
+  paramFromData :: SVariable r -> Doc -> MS (r (Parameter r))
 
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label

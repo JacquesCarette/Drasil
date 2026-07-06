@@ -22,10 +22,10 @@ import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
-  SVariable, Value, SValue, MSParameter, SMethod, MixedCall, bodyStatements,
-  oneLiner, TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType,
-  getTypeString, VariableElim(variableName, variableType), ValueSym(valueType),
-  Comparison(..), (&=), ControlStatement(returnStmt), VisibilitySym(..),
+  SVariable, Value, SValue, SMethod, MixedCall, bodyStatements, oneLiner,
+  TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
+  VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
+  (&=), ControlStatement(returnStmt), VisibilitySym(..), ParameterSym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
@@ -105,7 +105,7 @@ intRender = "int"
 int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
-constructor :: (OORenderSym r vis smt) => Label -> [MSParameter r] ->
+constructor :: (OORenderSym r vis smt) => Label -> [MS (r (Parameter r))] ->
   Initializers r -> MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (S.construct c) ps (S.multiBody [initStmts is, b]))
@@ -447,7 +447,7 @@ mainBody b = do
   mthdFromData Pub empty
 
 inOutFunc :: (CommonRenderSym r vis smt) =>
-  (VS (r TypeData) -> [MSParameter r] -> MSBody r -> SMethod r) ->
+  (VS (r TypeData) -> [MS (r (Parameter r))] -> MSBody r -> SMethod r) ->
   [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
 inOutFunc f ins outs both b = f

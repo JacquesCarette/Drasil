@@ -5,8 +5,8 @@
 module Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSBinder, SVariable, SValue,
-  MSParameter, SMethod, NamedArgs, MixedCall, MixedCtorCall, PosCall,
-  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  SMethod, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
+  InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..),
@@ -526,12 +526,10 @@ class VisibilitySym r vis | r -> vis where
   private :: r vis
   public  :: r vis
 
-type MSParameter a = MS (a (Parameter a))
-
 class (VariableSym r) => ParameterSym r where
   type Parameter r
-  param :: SVariable r -> MSParameter r
-  pointerParam :: SVariable r -> MSParameter r
+  param :: SVariable r -> MS (r (Parameter r))
+  pointerParam :: SVariable r -> MS (r (Parameter r))
 
 type SMethod a = MS (a (Method a))
 
@@ -549,7 +547,7 @@ class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis sm
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r vis -> VS (r TypeData) -> [MSParameter r] ->
+  function :: Label -> r vis -> VS (r TypeData) -> [MS (r (Parameter r))] ->
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions,

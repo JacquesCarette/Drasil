@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  TypeElim(..), SVariable, SValue, MSParameter, SMethod, MixedCall,
-  MixedCtorCall, VariableSym(..), VariableValue(..), VariableElim(..),
+  TypeElim(..), SVariable, SValue, SMethod, MixedCall, MixedCtorCall,
+  VariableSym(..), VariableValue(..), VariableElim(..), ParameterSym(..),
   ValueSym(Value, valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
@@ -243,7 +243,8 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc :: (OORenderSym r vis smt) => Bool -> Label -> r vis ->
-  r (Attachment r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+  r (Attachment r) -> MSMthdType r -> [MS (r (Parameter r))] -> MSBody r ->
+  SMethod r
 intFunc = intMethod
 
 -- Error Messages --

@@ -6,11 +6,11 @@ module Drasil.GProc.RendererClassesProc (
   ProcRenderMethod(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSParameter,
-  MSBody, BlockSym(..))
+import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, BlockSym(..),
+  ParameterSym(..))
 import qualified Drasil.GProc.InterfaceProc as IP (SFile, FSModule, FileSym(..),
   ModuleSym(..))
-import Drasil.Shared.State (FS)
+import Drasil.Shared.State (FS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -45,4 +45,4 @@ class (RenderMethod r) => ProcRenderMethod r vis | r -> vis where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
   intFunc     :: Bool -> Label -> r vis -> MSMthdType r ->
-    [MSParameter r] -> MSBody r -> SMethod r
+    [MS (r (Parameter r))] -> MSBody r -> SMethod r

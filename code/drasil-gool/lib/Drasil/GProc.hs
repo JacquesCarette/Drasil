@@ -1,27 +1,27 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
-  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, FSModule,
-  NamedArgs, SharedProg, ProcProg, ProgramSym(..), FileSym(..), BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  BinderSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VariableSym(..), ScopeSym(..), ScopeData, VariableElim(..), listOf, listVar,
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, FunctionSym(..), Reference(..), Array(..), List(..),
-  Set(..),  listSlice, listIndexExists, at, VisibilitySym(..),ParameterSym(..),
-  MethodSym(..), ModuleSym(..), convType, ProgData(..), FileData(..),
-  ModData(..), VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS,
-  headers, sources, mainMod, initialState, onStateValue, onCodeList, unCI,
-  unJLC, jlName, jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
+module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
+  SValue, VSFunction, MSParameter, SMethod, FSModule, NamedArgs,
+  SharedProg, ProcProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VariableSym(..), ScopeSym(..),
+  ScopeData, VariableElim(..), listOf, listVar, ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
+  FunctionSym(..), Reference(..), Array(..), List(..), Set(..),  listSlice,
+  listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
+  ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
+  VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
+  mainMod, initialState, onStateValue, onCodeList, unCI, unJLC, jlName,
+  jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction,
+  SVariable, SValue, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   BinderSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -43,8 +43,8 @@ import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
-  initialState)
+import Drasil.Shared.State (VS, GOOLState(..), lensMStoVS, headers, sources,
+  mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
 

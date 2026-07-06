@@ -29,5 +29,5 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ map
             return c
 
 -- | Translates a 'CodeConcept' into GOOL.
-conceptToGOOL :: (SharedProg r) => CodeConcept -> SValue r
+conceptToGOOL :: (SharedProg r tp vis smt) => CodeConcept -> SValue r
 conceptToGOOL Pi = pi

@@ -17,28 +17,30 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r) => SFile r
+observer :: (OOProg r tp vis smt) => SFile r
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 -- | Makes a variable @x@.
-x :: (VariableSym r) => SVariable r
+x :: (VariableSym r tp) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (SelfSym r, VariableValue r) => SVariable r
+selfX :: (SelfSym r tp, VariableValue r tp) => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
-helperClass :: (ClassSym r, IOStatement r, Literal r, OOVariableValue r) => SClass r
+helperClass :: (ClassSym r tp vis smt, IOStatement r tp smt, Literal r tp,
+  OOVariableValue r tp) => SClass r
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (OOMethodSym r, Literal r) => SMethod r
+observerConstructor :: (OOMethodSym r tp vis smt, Literal r tp) => SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (OOMethodSym r, IOStatement r, OOVariableValue r) => SMethod r
+printNumMethod :: (OOMethodSym r tp vis smt, IOStatement r tp smt,
+  OOVariableValue r tp) => SMethod r
 printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

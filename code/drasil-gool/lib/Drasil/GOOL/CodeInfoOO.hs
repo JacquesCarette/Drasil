@@ -5,30 +5,28 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSType, VSBinder,
-  SValue, MSStatement, SMethod, SharedProg, BodySym(..), BlockSym(..),
-  TypeSym(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  VisibilitySym(..), BinderSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..))
+  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), InternalValueExp(..), OOFunctionSym(..), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (VisibilityTag(..), qualName, TypeData(..), td,
-  ScopeData, ScopeTag(..), sd, bindFormD)
+import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
-import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn,
+import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS,
+  lensFStoMS, lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn,
   setClassName, getClassName, setModuleName, getModuleName, addClass,
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall,
   callMapTransClosure, updateMEMWithCalls)
@@ -54,13 +52,13 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO
-instance OOProg CodeInfoOO
+instance SharedProg CodeInfoOO () () ()
+instance OOProg CodeInfoOO () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO where
+instance ProgramSym CodeInfoOO () () () where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -68,7 +66,7 @@ instance ProgramSym CodeInfoOO where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO where
+instance FileSym CodeInfoOO () () () where
   type File CodeInfoOO = ()
   fileDoc = execute1
 
@@ -79,17 +77,18 @@ instance AttachmentSym CodeInfoOO where
   classLevel  = toCode ()
   instanceLevel = toCode ()
 
-instance BodySym CodeInfoOO where
+instance BodySym CodeInfoOO () () where
   type Body CodeInfoOO = ()
   body = executeList
 
   addComments _ _ = noInfo
 
-instance BlockSym CodeInfoOO where
+instance BlockSym CodeInfoOO () () where
   type Block CodeInfoOO = ()
   block = executeList
 
-instance TypeSym CodeInfoOO where
+-- TODO [Brandon Bosman, 06/30/2026]: Change () to ()
+instance TypeSym CodeInfoOO () where
   bool            = noInfoVSType
   int             = noInfoVSType
   float           = noInfoVSType
@@ -106,44 +105,47 @@ instance TypeSym CodeInfoOO where
   funcType    _ _ = noInfoVSType
   void            = noInfoVSType
 
-instance OOTypeSym CodeInfoOO where
+instance OOTypeSym CodeInfoOO () where
   obj             _ = noInfoVSType
+
+instance TypeElim CodeInfoOO () where
+  getCodeType _ = Void
 
 instance ScopeSym CodeInfoOO where
   global = noInfoScope
   mainFn = noInfoScope
   local = noInfoScope
 
-instance VariableSym CodeInfoOO where
+instance VariableSym CodeInfoOO () where
   type Variable CodeInfoOO = ()
   var       _ _ = noInfo
   constant  _ _ = noInfo
   extVar  _ _ _ = noInfo
 
-instance OOVariableSym CodeInfoOO where
+instance OOVariableSym CodeInfoOO () where
   classVar _ _ = noInfo
   classConst _ _ = noInfo
   classVarAccess    _ _   = noInfo
   extClassVarAccess _ _   = noInfo
   instanceVarAccess      _ _   = noInfo
 
-instance SelfSym CodeInfoOO where
+instance SelfSym CodeInfoOO () where
   self              = noInfo
 
-instance VariableElim CodeInfoOO where
+instance VariableElim CodeInfoOO () where
   variableName _ = ""
   variableType _ = noInfoType
 
-instance ValueSym CodeInfoOO where
+instance ValueSym CodeInfoOO () where
   type Value CodeInfoOO = ()
   valueType _ = noInfoType
 
-instance OOValueSym CodeInfoOO
+instance OOValueSym CodeInfoOO ()
 
-instance Argument CodeInfoOO where
+instance Argument CodeInfoOO () where
   pointerArg = id
 
-instance Literal CodeInfoOO where
+instance Literal CodeInfoOO () where
   litTrue     = noInfo
   litFalse    = noInfo
   litChar   _ = noInfo
@@ -155,20 +157,20 @@ instance Literal CodeInfoOO where
   litList   _ = executeList
   litSet   _ = executeList
 
-instance MathConstant CodeInfoOO where
+instance MathConstant CodeInfoOO () where
   pi = noInfo
 
-instance VariableValue CodeInfoOO where
+instance VariableValue CodeInfoOO () where
   valueOf _ = noInfo
 
-instance OOVariableValue CodeInfoOO
+instance OOVariableValue CodeInfoOO ()
 
-instance CommandLineArgs CodeInfoOO where
+instance CommandLineArgs CodeInfoOO () where
   arg       _ = noInfo
   argsList    = noInfo
   argExists _ = noInfo
 
-instance NumericExpression CodeInfoOO where
+instance NumericExpression CodeInfoOO () where
   (#~)  = execute1
   (#/^) = execute1
   (#|)  = execute1
@@ -194,12 +196,12 @@ instance NumericExpression CodeInfoOO where
   floor  = execute1
   ceil   = execute1
 
-instance BooleanExpression CodeInfoOO where
+instance BooleanExpression CodeInfoOO () where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
 
-instance Comparison CodeInfoOO where
+instance Comparison CodeInfoOO () where
   (?<)  = execute2
   (?<=) = execute2
   (?>)  = execute2
@@ -207,7 +209,7 @@ instance Comparison CodeInfoOO where
   (?==) = execute2
   (?!=) = execute2
 
-instance ValueExpression CodeInfoOO where
+instance ValueExpression CodeInfoOO () where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
   extFuncAppMixedArgs l n _ vs ns = do
@@ -220,46 +222,46 @@ instance ValueExpression CodeInfoOO where
 
   notNull = execute1
 
-instance OOValueExpression CodeInfoOO where
-  newObjMixedArgs ot vs ns = do
+instance OOValueExpression CodeInfoOO () where
+  newObjMixedArgs _ vs ns = do
     sequence_ vs
     executePairList ns
-    addCurrModConstructorCall ot
-  extNewObjMixedArgs l ot vs ns = do
+    return $ return ()
+  extNewObjMixedArgs _ _ vs ns = do
     sequence_ vs
     executePairList ns
-    addExternalConstructorCall l ot
+    return $ return ()
   libNewObjMixedArgs = extNewObjMixedArgs
 
-instance InternalValueExp CodeInfoOO where
+instance InternalValueExp CodeInfoOO () where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
-instance FunctionSym CodeInfoOO where
+instance FunctionSym CodeInfoOO () where
   type Function CodeInfoOO = ()
 
-instance OOFunctionSym CodeInfoOO where
+instance OOFunctionSym CodeInfoOO () where
   func  _ _ = executeList
   objAccess = execute2
 
-instance GetSet CodeInfoOO where
+instance GetSet CodeInfoOO () where
   get v _ = execute1 v
   set v _ = execute2 v
 
-instance IndexTranslator CodeInfoOO where
+instance IndexTranslator CodeInfoOO () where
   intToIndex = execute1
   indexToInt = execute1
 
-instance Reference CodeInfoOO where
+instance Reference CodeInfoOO () where
   makeRef = execute1
   maybeDeref = execute1
 
-instance Array CodeInfoOO where
+instance Array CodeInfoOO () where
   arrayElem _ _ = noInfo
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
-instance List CodeInfoOO where
+instance List CodeInfoOO () () where
   listSize       = execute1
   listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
@@ -267,35 +269,34 @@ instance List CodeInfoOO where
   listSet l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   indexOf        = execute2
 
-instance Set CodeInfoOO where
+instance Set CodeInfoOO () where
   contains = execute2
   setAdd = execute2
   setRemove = execute2
   setUnion = execute2
 
-instance InternalList CodeInfoOO where
+instance InternalList CodeInfoOO () where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
 
-instance BinderSym CodeInfoOO where
+instance BinderSym CodeInfoOO () where
   binder _ _ = noInfoBinder
 
-instance StatementSym CodeInfoOO where
-  type Statement CodeInfoOO = ()
+instance StatementSym CodeInfoOO () () where
   valStmt = zoom lensMStoVS . execute1
   emptyStmt = noInfo
   multi    = executeList
 
-instance AssignStatement CodeInfoOO where
+instance AssignStatement CodeInfoOO () () where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
   (&+=)  _ = zoom lensMStoVS . execute1
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoOO where
+instance DeclStatement CodeInfoOO () () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -307,12 +308,12 @@ instance DeclStatement CodeInfoOO where
   constDecDef          _ _ = zoom lensMStoVS . execute1
   funcDecDef         _ _ _ = execute1
 
-instance OODeclStatement CodeInfoOO where
+instance OODeclStatement CodeInfoOO () () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeList
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeList
 
-instance IOStatement CodeInfoOO where
+instance IOStatement CodeInfoOO () () where
   print        = zoom lensMStoVS . execute1
   printLn      = zoom lensMStoVS . execute1
   printStr   _ = noInfo
@@ -338,13 +339,13 @@ instance IOStatement CodeInfoOO where
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)
 
-instance StringStatement CodeInfoOO where
+instance StringStatement CodeInfoOO () () where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-instance FuncAppStatement CodeInfoOO where
+instance FuncAppStatement CodeInfoOO () () where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
@@ -352,15 +353,15 @@ instance FuncAppStatement CodeInfoOO where
     sequence_ vs
     addExternalCall l n
 
-instance OOFuncAppStatement CodeInfoOO where
+instance OOFuncAppStatement CodeInfoOO () () where
   selfInOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
 
-instance CommentStatement CodeInfoOO where
+instance CommentStatement CodeInfoOO () () where
   comment _ = noInfo
 
-instance ControlStatement CodeInfoOO where
+instance ControlStatement CodeInfoOO () () where
   break    = noInfo
   continue = noInfo
 
@@ -390,26 +391,25 @@ instance ControlStatement CodeInfoOO where
     _ <- zoom lensMStoVS msg
     noInfo
 
-instance ObserverPattern CodeInfoOO where
+instance ObserverPattern CodeInfoOO () () where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
 
-instance StrategyPattern CodeInfoOO where
+instance StrategyPattern CodeInfoOO () () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
-instance VisibilitySym CodeInfoOO where
-  type Visibility CodeInfoOO = VisibilityTag
-  private = toCode Priv
-  public  = toCode Pub
+instance VisibilitySym CodeInfoOO () where
+  private = return ()
+  public  = return ()
 
-instance ParameterSym CodeInfoOO where
+instance ParameterSym CodeInfoOO () where
   type Parameter CodeInfoOO = ()
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfoOO where
+instance MethodSym CodeInfoOO () () () where
   type Method CodeInfoOO = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
@@ -421,7 +421,7 @@ instance MethodSym CodeInfoOO where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO where
+instance OOMethodSym CodeInfoOO () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -435,13 +435,13 @@ instance OOMethodSym CodeInfoOO where
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-instance StateVarSym CodeInfoOO where
+instance StateVarSym CodeInfoOO () () where
   type StateVar CodeInfoOO = ()
   stateVar    _ _ _   = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO where
+instance ClassSym CodeInfoOO () () () where
   type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
@@ -461,7 +461,7 @@ instance ClassSym CodeInfoOO where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfoOO where
+instance ModuleSym CodeInfoOO () () () where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
@@ -474,20 +474,17 @@ instance ModuleSym CodeInfoOO where
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
-emptyType :: TypeData
-emptyType = td Void "" empty -- Hack
+noInfoType :: CodeInfoOO ()
+noInfoType = return ()
 
-noInfoType :: CodeInfoOO TypeData
-noInfoType = return emptyType
-
-noInfoVSType :: VSType CodeInfoOO
+noInfoVSType :: VS (CodeInfoOO ())
 noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoOO ScopeData
 noInfoScope = return $ sd Global -- Hack
 
 noInfoBinder :: VSBinder CodeInfoOO
-noInfoBinder = return $ return $ bindFormD "" emptyType
+noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
 
 updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do
@@ -496,7 +493,7 @@ updateMEMandCM n b = do
   noInfo
 
 evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO ->
-  MSStatement CodeInfoOO
+  MS (CodeInfoOO ())
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs
@@ -509,21 +506,8 @@ addCurrModCall n = do
   modify (addCall (qualName mn n))
   noInfo
 
-addCurrModConstructorCall :: VSType CodeInfoOO -> SValue CodeInfoOO
-addCurrModConstructorCall ot = do
-  t <- ot
-  let tp = getTypeString t
-  addCurrModCall tp
-
 addExternalCall :: String -> String -> SValue CodeInfoOO
 addExternalCall l n = modify (addCall (qualName l n)) >> noInfo
-
-addExternalConstructorCall :: String -> VSType CodeInfoOO -> SValue CodeInfoOO
-addExternalConstructorCall l ot = do
-  t <- ot
-  let tp = getTypeString t
-  addExternalCall l tp
-
 execute1 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
 execute1 s = do
   _ <- s

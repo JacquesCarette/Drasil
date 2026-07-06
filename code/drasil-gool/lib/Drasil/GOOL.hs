@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
-  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
+module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
+  SValue, VSFunction, MSParameter, SMethod, CSStateVar, SClass,
+  FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
   FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
@@ -32,8 +32,8 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   getCodeType, getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction,
+  SVariable, SValue, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   BinderSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -65,8 +65,8 @@ import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
-  initialState)
+import Drasil.Shared.State (MS, VS, GOOLState(..), lensMStoVS, headers, sources,
+  mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
 

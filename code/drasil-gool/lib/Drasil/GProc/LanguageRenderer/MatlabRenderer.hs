@@ -10,13 +10,15 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
+import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
+  getCodeType,
   UnRepr(..), SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  Set(..), NativeVector(..), InternalList(..), StatementSym(..),
+  AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
@@ -52,11 +54,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
   ifCond)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
-  functionDoc, docInOutFunc', inOutCall, multiAssign)
+  functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt')
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extFuncAppMixedArgs)
+  extFuncAppMixedArgs, listSize)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
   paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
@@ -66,7 +68,7 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
   typeUnExpr, typeBinExpr)
-import Drasil.Shared.LanguageRenderer (listSep')
+import Drasil.Shared.LanguageRenderer (listSep', valueList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
@@ -154,9 +156,9 @@ instance TypeSym MatlabCode TypeData where
   infile = mlTy InFile "file"
   outfile = mlTy OutFile "file"
   referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
-  listType = undefined
+  listType = mlListType
   setType = undefined
-  arrayType = undefined
+  arrayType = listType -- Treat arrays and lists the same, as in Julia/Python
   innerType = undefined
   funcType = undefined
   void = mlTy Void "void"
@@ -248,8 +250,8 @@ instance Literal MatlabCode TypeData where
   litFloat = undefined
   litInt = G.litInt
   litString = G.litString
-  litArray = undefined
-  litList = undefined
+  litArray = litList
+  litList = mlLitList
   litSet = undefined
 
 instance MathConstant MatlabCode TypeData where
@@ -328,8 +330,8 @@ instance ValueElim MatlabCode where
   value = val . unMLC
 
 instance IndexTranslator MatlabCode TypeData where
-  intToIndex = undefined
-  indexToInt = undefined
+  intToIndex = CP.intToIndex'
+  indexToInt = CP.indexToInt'
 
 instance Reference MatlabCode TypeData where
   makeRef = id
@@ -341,7 +343,7 @@ instance Array MatlabCode TypeData where
   arrayCopy = undefined
 
 instance List MatlabCode TypeData (Doc, Terminator) where
-  listSize = undefined
+  listSize = CS.listSize "length"   -- length(v)
   listAdd = undefined
   listAppend = undefined
   listAccess = undefined
@@ -353,6 +355,14 @@ instance Set MatlabCode TypeData where
   setAdd = undefined
   setRemove = undefined
   setUnion = undefined
+
+instance NativeVector MatlabCode TypeData where
+  vecScale = binExpr multOp           -- s * v
+  vecAdd   = binExpr plusOp           -- a + b
+  vecIndex = mlVecIndex               -- a(1) / a(i + 1)
+  vecDot a b = funcApp "dot" double [a, b]   -- dot(a, b)
+  vecMag a = funcApp "norm" double [a]       -- norm(a)
+  vecUnit a = a #/ vecMag a                  -- a / norm(a)
 
 instance InternalList MatlabCode TypeData where
   listSlice' = undefined
@@ -628,6 +638,29 @@ mlArg n' = do
   n <- n'
   s <- string
   mkVal s (text "varargin" <> braces (RC.value n))
+
+-- | Indexes into a vector. MATLAB is 1-indexed while GOOL is 0-indexed, so the
+--   index is translated with 'intToIndex' (which folds constants, e.g. @a(1)@
+--   for index 0, and yields @a(i + 1)@ for a variable @i@).
+mlVecIndex :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlVecIndex v' i' = do
+  v <- v'
+  i <- intToIndex i'
+  d <- double
+  mkVal d (RC.value v <> parens (RC.value i))
+
+-- | A list/vector type. MATLAB never writes types, so only the underlying
+--   'CodeType' matters; arrays and lists share this native vector type.
+mlListType :: VS (MatlabCode TypeData) -> VS (MatlabCode TypeData)
+mlListType t' = do
+  t <- t'
+  mlTy (List $ getCodeType t) "vector"
+
+-- | A vector literal, rendered as a MATLAB row vector.
+mlLitList :: VS (MatlabCode TypeData) -> [SValue MatlabCode] -> SValue MatlabCode
+mlLitList t es = do
+  elems <- sequence es
+  mkStateVal (listType t) (brackets (valueList elems))
 
 -- | Reads one line from a file as text: fgetl(f).
 mlReadLine :: SValue MatlabCode -> SValue MatlabCode

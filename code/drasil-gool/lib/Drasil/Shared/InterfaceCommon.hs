@@ -15,8 +15,8 @@ module Drasil.Shared.InterfaceCommon (
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), listSlice, listIndexExists, at, StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
@@ -339,6 +339,40 @@ class (ValueSym r tp) => Set r tp where
   -- | Removes a value from a set
   -- Arguments are: Set, Set
   setUnion :: SValue r -> SValue r -> SValue r -- TODO [Brandon Bosman, 06/24/2026]: See if we should make this a Statement
+
+-- | Vector operations for languages with native vector support (e.g. MATLAB,
+--   Julia). Expression-based: every operation takes and returns 'SValue's, so
+--   operations compose like math (e.g. @vecAdd (vecScale s a) b@).
+--   Vectors have their own 'vecType' and 'litVec' so callers don't depend on
+--   how vectors are represented; these default to 'listType' and 'litList'.
+class (IndexTranslator r tp, Literal r tp) => NativeVector r tp where
+  -- | The type of a vector with the given element type.
+  --   Defaults to 'listType'; a language may override it to use a distinct
+  --   vector representation.
+  vecType :: VS (r tp) -> VS (r tp)
+  vecType = listType
+  -- | A vector literal with the given element type and elements.
+  --   Defaults to 'litList'.
+  litVec :: VS (r tp) -> [SValue r] -> SValue r
+  litVec = litList
+  -- | Scales a vector by a scalar.
+  --   Arguments are: Scalar, Vector
+  vecScale :: SValue r -> SValue r -> SValue r
+  -- | Adds two vectors elementwise.
+  --   Arguments are: Vector, Vector
+  vecAdd :: SValue r -> SValue r -> SValue r
+  -- | Gets the element of a vector at an index.
+  --   Arguments are: Vector, Index
+  vecIndex :: SValue r -> SValue r -> SValue r
+  -- | Dot product of two vectors (returns a scalar).
+  --   Arguments are: Vector, Vector
+  vecDot :: SValue r -> SValue r -> SValue r
+  -- | Euclidean norm (magnitude) of a vector (returns a scalar).
+  --   Argument is: Vector
+  vecMag :: SValue r -> SValue r
+  -- | Unit vector in the direction of a vector (returns a vector).
+  --   Argument is: Vector
+  vecUnit :: SValue r -> SValue r
 
 class (ValueSym r tp) => InternalList r tp where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)

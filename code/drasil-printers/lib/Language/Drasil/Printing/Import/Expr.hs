@@ -79,23 +79,23 @@ call sm f ps = P.Row [
 eopAdds :: PrintingInformation -> DomainDesc t Expr Expr -> Expr -> P.Expr
 eopAdds sm (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
-         P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
+         P.Row [expr' sm (precA Add + 1) e], P.Spc P.Thin, P.Ident "d", symbol v]
 eopAdds sm (AllDD v Continuous) e =
-  P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin,
+  P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr' sm (precA Add + 1) e], P.Spc P.Thin,
          P.Ident "d", symbol v]
 eopAdds sm (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Summ, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
-         P.Row [expr e sm]]
-eopAdds sm (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
+         P.Row [expr' sm (precA Add + 1) e]]
+eopAdds sm (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr' sm (precA Add + 1) e]]
 
 -- | Helper function for multiplicative 'EOperator's.
 eopMuls :: PrintingInformation -> DomainDesc t Expr Expr -> Expr -> P.Expr
 eopMuls sm (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
-         P.Row [expr e sm]]
-eopMuls sm (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row [expr e sm]]
-eopMuls _ (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
-eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
+         P.Row [expr' sm (precA Add + 1) e]]
+eopMuls sm (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row [expr' sm (precA Add + 1) e]]
+eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing.Import.Expr.eopMuls: Continuous products are not supported"
+eopMuls _ (AllDD _ Continuous) _ = error "Printing.Import.Expr.eopMuls: Continuous products are not supported"
 
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t Expr Expr -> Expr -> P.Expr

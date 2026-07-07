@@ -119,7 +119,7 @@ digraph "allvsall" {
         "instance:assumpTEO" "instance:assumpHTCC" "instance:assumpCWTAT" "instance:assumpTPCAV" "instance:assumpDWPCoV" "instance:assumpSHECov" "instance:assumpLCCCW" "instance:assumpTHCCoT" "instance:assumpTHCCoL" "instance:assumpLCCWP" "instance:assumpCTNOD" "instance:assumpSITWP" "instance:assumpPIS" "instance:assumpWAL" "instance:assumpPIT" "instance:assumpNIHGBWP" "instance:assumpVCMPN" "instance:assumpNGSP" "instance:assumpAPT" "instance:assumpVCN";
     }
     "dataDefn:wMass" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterMass"];
-    "dataDefn:wVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterVolume.pcm"];
+    "dataDefn:wVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterVolume_pcm"];
     "dataDefn:tankVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:tankVolume"];
     "dataDefn:tauW" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:balanceDecayRate"];
     "dataDefn:eta" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:balanceDecayTime"];

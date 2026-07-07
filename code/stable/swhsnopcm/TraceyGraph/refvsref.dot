@@ -8,7 +8,7 @@ digraph "refvsref" {
     "theory:eBalanceOnWtrRC" -> "theory:htFluxC";
     "theory:heatEInWtrIM" -> "theory:sensHeat";
     "dataDefn:wMass" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterMass"];
-    "dataDefn:wVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterVolume.nopcm"];
+    "dataDefn:wVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterVolume_nopcm"];
     "dataDefn:tankVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:tankVolume"];
     "dataDefn:tauW" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:balanceDecayRate"];
     subgraph "DD" {

@@ -12,8 +12,8 @@ import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
   MethodSym)
 import Drasil.Shared.State (GS, FS)
 
-class (SharedProg r tp vis smt par, ProgramSym r tp vis smt par
-  ) => ProcProg r tp vis smt par
+class (SharedProg r tp vis smt par fun, ProgramSym r tp vis smt par
+  ) => ProcProg r tp vis smt par fun
 
 type GSProgram a = GS (a (Program a))
 

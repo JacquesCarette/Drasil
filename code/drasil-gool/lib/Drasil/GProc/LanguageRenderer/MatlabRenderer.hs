@@ -19,7 +19,7 @@ import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), NativeVector(..), InternalList(..), StatementSym(..),
   AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), funcApp, (&=))

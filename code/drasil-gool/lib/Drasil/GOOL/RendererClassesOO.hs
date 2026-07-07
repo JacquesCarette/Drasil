@@ -8,7 +8,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue, SMethod,
-  BlockSym(..), FunctionSym(..))
+  BlockSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
@@ -21,13 +21,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r tp vis smt par, IG.FileSym r tp vis smt par,
-  IG.InternalValueExp r tp, IG.GetSet r tp, IG.ObserverPattern r tp smt,
+class (CommonRenderSym r tp vis smt par fun, IG.FileSym r tp vis smt par,
+  IG.InternalValueExp r tp, IG.GetSet r tp, IG.ObserverPattern r tp smt fun,
   IG.StrategyPattern r tp smt, IG.OOVariableValue r tp,
   IG.OOValueExpression r tp, RenderClass r vis, ClassElim r, RenderFile r,
-  InternalGetSet r tp, OORenderMethod r tp vis par, RenderMod r, ModuleElim r,
+  InternalGetSet r tp fun, OORenderMethod r tp vis par, RenderMod r, ModuleElim r,
   StateVarElim r, PermElim r
-  ) => OORenderSym r tp vis smt par
+  ) => OORenderSym r tp vis smt par fun
 
 -- OO-Only Typeclasses --
 
@@ -46,9 +46,9 @@ class PermElim r where
   perm :: r (IG.Attachment r) -> Doc
   binding :: r (IG.Attachment r) -> AttachmentTag
 
-class InternalGetSet r tp | r -> tp where
-  getFunc :: SVariable r -> VS (r (Function r))
-  setFunc :: VS (r tp) -> SVariable r -> SValue r -> VS (r (Function r))
+class InternalGetSet r tp fun | r -> tp fun where
+  getFunc :: SVariable r -> VS (r fun)
+  setFunc :: VS (r tp) -> SVariable r -> SValue r -> VS (r fun)
 
 class (MethodTypeSym r tp) => OOMethodTypeSym r tp where
   construct :: Label -> MSMthdType r

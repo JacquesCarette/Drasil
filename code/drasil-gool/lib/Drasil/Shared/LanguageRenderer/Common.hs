@@ -12,9 +12,8 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (SVariable, MixedCall, SValue,
-  FunctionSym(..), ValueSym(Value), TypeSym(int), MSBody,
-  VariableElim(variableName), VariableSym(Variable), Label, Library,
-  BodySym(Body), funcApp, getCodeType)
+  ValueSym(Value), TypeSym(int), MSBody, VariableElim(variableName),
+  VariableSym(Variable), Label, Library, BodySym(Body), funcApp, getCodeType)
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
   RenderFunction(funcFromData))
 import Drasil.Shared.LanguageRenderer (access, intValue)
@@ -36,7 +35,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 -- Python, Java, C#, and Julia --
 
 extVar
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Label
   -> Label
   -> VS (r tp)
@@ -54,7 +53,7 @@ funcType ps' r' =  do
 
 -- Python, Java, C#, Swift, and Julia --
 extFuncAppMixedArgs
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Library
   -> MixedCall r tp
 extFuncAppMixedArgs l = call (Just l) Nothing
@@ -62,16 +61,16 @@ extFuncAppMixedArgs l = call (Just l) Nothing
 -- Python, C#, Swift, and Julia --
 
 listAccessFunc
-  :: (CommonRenderSym r tp vis smt par, IC.TypeElim r tp)
+  :: (CommonRenderSym r tp vis smt par fun, IC.TypeElim r tp)
   => VS (r tp)
   -> SValue r
-  -> VS (r (Function r))
+  -> VS (r fun)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
 forEach'
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc)
   -> SVariable r
   -> SValue r
@@ -86,7 +85,7 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SVariable r
   -> r ScopeData
   -> Maybe (SValue r)
@@ -103,7 +102,7 @@ varDecDef v scp e = do
 -- Python and Swift --
 
 increment
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SVariable r
   -> SValue r
   -> MS (r smt)
@@ -116,7 +115,7 @@ increment vr' v'= do
 
 -- | Call to get the size of a list as a function call
 listSize
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r

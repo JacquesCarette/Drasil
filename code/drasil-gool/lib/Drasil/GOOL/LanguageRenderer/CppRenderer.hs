@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym(..), FuncAppStatement(..), BinderSym(..), CommentStatement(..),
+  FunctionSym, FuncAppStatement(..), BinderSym(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), convScope,
   BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),

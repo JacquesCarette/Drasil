@@ -89,7 +89,7 @@ valLogFile = valueOf varLogFile
 logName :: (Literal r tp) => SValue r
 logName = litString "log.txt"
 
-logVarUpdate :: (SharedProg r tp vis smt par) => SVariable (LoggingFor r) -> [MS (r smt)]
+logVarUpdate :: (SharedProg r tp vis smt par fun) => SVariable (LoggingFor r) -> [MS (r smt)]
 logVarUpdate x =
   [ openFileA varLogFile logName
   , do
@@ -102,7 +102,7 @@ logVarUpdate x =
   , closeFile valLogFile
   ]
 
-instance (SharedProg r tp vis smt par) => AssignStatement (LoggingFor r) tp smt where
+instance (SharedProg r tp vis smt par fun) => AssignStatement (LoggingFor r) tp smt where
   (&-=) = liftLogging (&-=)
   (&+=) = liftLogging (&+=)
   (&++) = liftLogging (&++)
@@ -120,7 +120,7 @@ instance (List r tp smt) => List (LoggingFor r) tp smt where
                                 -- (Can't right now because RC.value isn't exposed)
   indexOf = liftLogging indexOf
 
-instance (SharedProg r tp vis smt par) => DeclStatement (LoggingFor r) tp smt where
+instance (SharedProg r tp vis smt par fun) => DeclStatement (LoggingFor r) tp smt where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
     varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
@@ -139,7 +139,7 @@ instance (SharedProg r tp vis smt par) => DeclStatement (LoggingFor r) tp smt wh
     : logVarUpdate cnst
   funcDecDef = liftLogging funcDecDef
 
-instance (SharedProg r tp vis smt par) => IOStatement (LoggingFor r) tp smt where
+instance (SharedProg r tp vis smt par fun) => IOStatement (LoggingFor r) tp smt where
   print = liftLogging print
   printLn = liftLogging printLn
   printStr = liftLogging printStr
@@ -163,7 +163,7 @@ instance (SharedProg r tp vis smt par) => IOStatement (LoggingFor r) tp smt wher
   discardFileLine = liftLogging discardFileLine
   getFileInputAll = liftLogging getFileInputAll
 
-instance (SharedProg r tp vis smt par) => StringStatement (LoggingFor r) tp smt where
+instance (SharedProg r tp vis smt par fun) => StringStatement (LoggingFor r) tp smt where
   stringSplit chr vr str  = liftLogging $
     stringSplit (lowerLogging chr) (lowerLogging vr) (lowerLogging str)
   stringListVals vrs strs  = liftLogging $
@@ -174,7 +174,7 @@ instance (SharedProg r tp vis smt par) => StringStatement (LoggingFor r) tp smt 
 
 -- SharedProg Boilerplate
 
-instance (SharedProg r tp vis smt par) => SharedProg (LoggingFor r) tp vis smt par
+instance (SharedProg r tp vis smt par fun) => SharedProg (LoggingFor r) tp vis smt par fun
 
 instance (VariableSym r tp) => VariableSym (LoggingFor r) tp where
   type Variable (LoggingFor r) = Variable r
@@ -280,8 +280,7 @@ instance (FuncAppStatement r tp smt) => FuncAppStatement (LoggingFor r) tp smt w
   inOutCall = liftLogging inOutCall
   extInOutCall = liftLogging extInOutCall
 
-instance (FunctionSym r tp) => FunctionSym (LoggingFor r) tp where
-  type Function (LoggingFor r) = Function r
+instance (FunctionSym r tp fun) => FunctionSym (LoggingFor r) tp fun where
 
 instance (InternalList r tp) => InternalList (LoggingFor r) tp where
   listSlice' = liftLogging listSlice'
@@ -381,7 +380,7 @@ instance (NativeVector lang tp) => NativeVector (LoggingFor lang) tp where
 
 -- GProc
 
-instance (P.ProcProg r tp vis smt par) => P.ProcProg (LoggingFor r) tp vis smt par
+instance (P.ProcProg r tp vis smt par fun) => P.ProcProg (LoggingFor r) tp vis smt par fun
 
 instance (P.ModuleSym r tp vis smt par) => P.ModuleSym (LoggingFor r) tp vis smt par where
   type Module (LoggingFor r) = P.Module r
@@ -398,7 +397,7 @@ instance (P.ProgramSym r tp vis smt par) => P.ProgramSym (LoggingFor r) tp vis s
 
 -- GOOL
 
-instance (G.OOProg r tp vis smt par) => G.OOProg (LoggingFor r) tp vis smt par
+instance (G.OOProg r tp vis smt par fun) => G.OOProg (LoggingFor r) tp vis smt par fun
 
 instance (G.GetSet r tp) => G.GetSet (LoggingFor r) tp where
   get = liftLogging G.get
@@ -439,11 +438,11 @@ instance (G.SelfSym r tp) => G.SelfSym (LoggingFor r) tp where
 
 instance (G.OOVariableValue r tp) => G.OOVariableValue (LoggingFor r) tp
 
-instance (G.OOFunctionSym r tp) => G.OOFunctionSym (LoggingFor r) tp where
+instance (G.OOFunctionSym r tp fun) => G.OOFunctionSym (LoggingFor r) tp fun where
   func = liftLogging G.func
   objAccess = liftLogging G.objAccess
 
-instance (G.ObserverPattern r tp smt) => G.ObserverPattern (LoggingFor r) tp smt where
+instance (G.ObserverPattern r tp smt fun) => G.ObserverPattern (LoggingFor r) tp smt fun where
   notifyObservers = liftLogging G.notifyObservers
 
 instance (G.AttachmentSym r) => G.AttachmentSym (LoggingFor r) where

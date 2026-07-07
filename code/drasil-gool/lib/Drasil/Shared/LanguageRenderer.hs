@@ -195,7 +195,7 @@ body bs = vibcat $ filter (not . isEmpty) bs
 -- IO --
 
 print
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Value r)
   -> r (Value r)
   -> Doc
@@ -219,7 +219,7 @@ stateVarList = vcat
 -- Controls --
 
 switch
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => (Doc -> Doc)
   -> r smt
   -> r (Value r)
@@ -247,40 +247,40 @@ switch f st v defBody cs =
 -- Statements --
 
 assign
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Variable r)
   -> r (Value r)
   -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
 addAssign
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Variable r)
   -> r (Value r)
   -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
 subAssign
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Variable r)
   -> r (Value r)
   -> Doc
 subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
 increment
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Variable r)
   -> Doc
 increment v = RC.variable v <> text "++"
 
 decrement
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Variable r)
   -> Doc
 decrement v = RC.variable v <> text "--"
 
 return'
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => [r (Value r)]
   -> Doc
 return' vs = returnLabel <+> valueList vs
@@ -304,7 +304,7 @@ extVar :: Library -> Label -> Doc
 extVar l n = text l <> dot <> text n
 
 arg
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Value r)
   -> r (Value r)
   -> Doc
@@ -337,7 +337,7 @@ cast :: Doc -> Doc
 cast = parens
 
 listAccessFunc
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => r (Value r)
   -> Doc
 listAccessFunc v = brackets $ RC.value v
@@ -434,31 +434,31 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 -- Helper Functions --
 
 valueList
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => [r (Value r)]
   -> Doc
 valueList = hicat listSep' . map RC.value
 
 variableList
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => [r (Variable r)]
   -> Doc
 variableList = hicat listSep' . map RC.variable
 
 binderList
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => [r BinderD]
   -> Doc
 binderList = hicat listSep' . map RC.binderElim
 
 parameterList
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => [r par]
   -> Doc
 parameterList = hicat listSep' . map RC.parameter
 
 namedArgList
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Doc
   -> [(r (Variable r), r (Value r))]
   -> Doc
@@ -483,7 +483,7 @@ setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
 intValue
-  :: (CommonRenderSym r tp vis smt par, TypeElim r tp)
+  :: (CommonRenderSym r tp vis smt par fun, TypeElim r tp)
   => SValue r
   -> SValue r
 intValue i = i >>= intValue' . getCodeType . valueType

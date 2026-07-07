@@ -11,7 +11,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, SValue, VSBinder,
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), NativeVector(..), InternalList(..), StatementSym(..),
   AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
@@ -47,9 +47,9 @@ instance Applicative CodeInfoProc where
 instance Monad CodeInfoProc where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoProc () () () ()
+instance SharedProg CodeInfoProc () () () () ()
 
-instance ProcProg CodeInfoProc () () () ()
+instance ProcProg CodeInfoProc () () () () ()
 
 instance UnRepr CodeInfoProc contents where
   unRepr = unCI
@@ -196,8 +196,7 @@ instance ValueExpression CodeInfoProc () where
 
   notNull = execute1
 
-instance FunctionSym CodeInfoProc () where
-  type Function CodeInfoProc = ()
+instance FunctionSym CodeInfoProc () () where
 
 instance IndexTranslator CodeInfoProc () where
   intToIndex = execute1

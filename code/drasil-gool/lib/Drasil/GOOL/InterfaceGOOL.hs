@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, SMethod,
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(..), FunctionSym(..), MethodSym,
+  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
   List(listSize, listAdd), listOf, StatementSym(..), DeclStatement(listDecDef),
   FuncAppStatement, VisibilitySym(..), convType)
@@ -34,7 +34,7 @@ import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData)
 
 class
-  ( SharedProg r tp vis smt par
+  ( SharedProg r tp vis smt par fun
   , ProgramSym r tp vis smt par
   , OOVariableValue r tp
   , OODeclStatement r tp smt
@@ -42,10 +42,10 @@ class
   , OOValueExpression r tp
   , InternalValueExp r tp
   , GetSet r tp
-  , ObserverPattern r tp smt
+  , ObserverPattern r tp smt fun
   , StrategyPattern r tp smt
   ) =>
-  OOProg r tp vis smt par
+  OOProg r tp vis smt par fun
 
 type GSProgram a = GS (a (Program a))
 
@@ -274,8 +274,8 @@ extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 class (FuncAppStatement r tp smt, OOVariableSym r tp) => OOFuncAppStatement r tp smt where
   selfInOutCall :: InOutCall r smt
 
-class (StatementSym r tp smt, OOFunctionSym r tp) => ObserverPattern r tp smt where
-  notifyObservers :: VS (r (Function r)) -> VS (r tp) -> MS (r smt)
+class (StatementSym r tp smt, OOFunctionSym r tp fun) => ObserverPattern r tp smt fun where
+  notifyObservers :: VS (r fun) -> VS (r tp) -> MS (r smt)
 
 observerListName :: Label
 observerListName = "observerList"
@@ -293,15 +293,15 @@ class (BodySym r tp smt, VariableSym r tp) => StrategyPattern r tp smt where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MSBlock r
 
-class (FunctionSym r tp) => OOFunctionSym r tp where
-  func :: Label -> VS (r tp) -> [SValue r] -> VS (r (Function r))
-  objAccess :: SValue r -> VS (r (Function r)) -> SValue r
+class (FunctionSym r tp fun) => OOFunctionSym r tp fun where
+  func :: Label -> VS (r tp) -> [SValue r] -> VS (r fun)
+  objAccess :: SValue r -> VS (r fun) -> SValue r
 
-($.) :: (OOFunctionSym r tp) => SValue r -> VS (r (Function r)) -> SValue r
+($.) :: (OOFunctionSym r tp fun) => SValue r -> VS (r fun) -> SValue r
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (OOVariableValue r tp, OOFunctionSym r tp) => VS (r (Function r)) -> SValue r
+selfAccess :: (OOVariableValue r tp, OOFunctionSym r tp fun) => VS (r fun) -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r tp, VariableSym r tp) => GetSet r tp where

@@ -23,7 +23,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
 constDecDef
-  :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  :: (CommonRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => SVariable r
   -> r ScopeData
   -> SValue r
@@ -36,7 +36,7 @@ constDecDef vr' scp v'= do
   mkStmt (renderConstDecDef vr v)
 
 classMethodCall
-  :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  :: (CommonRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => String
   -> VS (r TypeData)
   -> VS (r TypeData)
@@ -48,7 +48,7 @@ classMethodCall f t cls vs ns = do
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r
@@ -56,7 +56,7 @@ listAppend
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r
@@ -65,7 +65,7 @@ listAdd
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType
-  :: (OORenderSym r TypeData vis smt par, TypeElim r TypeData)
+  :: (OORenderSym r TypeData vis smt par fun, TypeElim r TypeData)
   => VS (r TypeData)
   -> VS (r TypeData)
 innerType t = t >>= (convTypeOO . getInnerType . getCodeType)

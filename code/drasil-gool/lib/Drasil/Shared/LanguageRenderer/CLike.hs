@@ -102,7 +102,7 @@ orOp = orPrec "||"
 -- Variables --
 
 self
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => SVariable r
 self = do
   l <- zoom lensVStoMS getClassName
@@ -111,23 +111,23 @@ self = do
 -- Values --
 
 litTrue
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SValue r
 litTrue = mkStateVal IC.bool (text "true")
 
 litFalse
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SValue r
 litFalse = mkStateVal IC.bool (text "false")
 
 litFloat
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Float
   -> SValue r
 litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SValue r
   -> SValue r
   -> SValue r
@@ -141,14 +141,14 @@ inlineIf c' v1' v2' = do
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Library
   -> MixedCall r tp
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
 libNewObjMixedArgs
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => Library
   -> MixedCtorCall r tp
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
@@ -157,14 +157,14 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 -- Functions --
 
 listSize
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
 listSize'
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r
@@ -173,7 +173,7 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 -- Statements --
 
 increment
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SVariable r
   -> SValue r
   -> MS (r smt)
@@ -183,7 +183,7 @@ increment vr' v'= do
   mkStmt $ R.addAssign vr v
 
 increment1
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SVariable r
   -> MS (r smt)
 increment1 vr' = do
@@ -191,7 +191,7 @@ increment1 vr' = do
   (mkStmt . R.increment) vr
 
 decrement1
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => SVariable r
   -> MS (r smt)
 decrement1 vr' = do
@@ -199,7 +199,7 @@ decrement1 vr' = do
   (mkStmt . R.decrement) vr
 
 varDec
-  :: ( OORenderSym r TypeData vis smt par
+  :: ( OORenderSym r TypeData vis smt par fun
      , UnRepr r TypeData
      , TypeElim r TypeData)
   => r (Attachment r)
@@ -222,7 +222,7 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Terminator
   -> SVariable r
   -> r ScopeData
@@ -236,7 +236,7 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Terminator
   -> SVariable r
   -> r ScopeData
@@ -250,7 +250,7 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => (r (Value r) -> Doc)
   -> SValue r
   -> SVariable r
@@ -262,7 +262,7 @@ listDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 extObjDecNew
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => Library
   -> SVariable r
   -> r ScopeData
@@ -274,7 +274,7 @@ extObjDecNew l v scp vs = IC.varDecDef v scp
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with
 switch
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => (Doc -> Doc)
   -> MS (r smt)
   -> SValue r
@@ -290,7 +290,7 @@ switch f st v cs bod = do
   mkStmt $ R.switch f s val dflt (zip vals bods)
 
 for
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => Doc
   -> Doc
   -> MS (r smt)
@@ -311,7 +311,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => (Doc -> Doc)
   -> Doc
   -> Doc
@@ -328,7 +328,7 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc
-  :: (OORenderSym r tp vis smt par)
+  :: (OORenderSym r tp vis smt par fun)
   => Bool
   -> Label
   -> r vis

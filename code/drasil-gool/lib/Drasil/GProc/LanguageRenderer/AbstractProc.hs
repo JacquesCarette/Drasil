@@ -39,7 +39,7 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 -- Files --
 
 fileDoc
-  :: (ProcRenderSym r tp vis smt par)
+  :: (ProcRenderSym r tp vis smt par fun)
   => String
   -> FSModule r
   -> SFile r
@@ -50,7 +50,7 @@ fileDoc ext md = do
   RCP.fileFromData fp (toState m)
 
 fileFromData
-  :: (ProcRenderSym r tp vis smt par)
+  :: (ProcRenderSym r tp vis smt par fun)
   => (FilePath
   -> r (Module r)
   -> r (File r))
@@ -72,7 +72,7 @@ fileFromData f fpath mdl' = do
 -- Parameters: Module name, Doc for imports, Doc to put at bottom of module,
 -- methods
 buildModule
-  :: (ProcRenderSym r tp vis smt par)
+  :: (ProcRenderSym r tp vis smt par fun)
   => Label
   -> FS Doc
   -> FS Doc
@@ -86,7 +86,7 @@ buildModule n imps bot fs = RCP.modFromData n (do
   return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
-  :: (ProcRenderSym r tp vis smt par)
+  :: (ProcRenderSym r tp vis smt par fun)
   => String
   -> String
   -> String
@@ -107,7 +107,7 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r
@@ -117,7 +117,7 @@ listAppend fnName list val = IC.valStmt $
 
 -- | Call to insert a value into a list as a function call
 listAdd
-  :: (CommonRenderSym r tp vis smt par)
+  :: (CommonRenderSym r tp vis smt par fun)
   => String
   -> SValue r
   -> SValue r
@@ -127,7 +127,7 @@ listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
 arrayElem
-  :: (ProcRenderSym r TypeData vis smt par, IC.TypeElim r TypeData)
+  :: (ProcRenderSym r TypeData vis smt par fun, IC.TypeElim r TypeData)
   => SValue r
   -> SValue r
   -> SVariable r
@@ -140,7 +140,7 @@ arrayElem arr' i' = do
   mkStateVar vName vType vRender
 
 funcDecDef
-  :: (ProcRenderSym r tp vis smt par)
+  :: (ProcRenderSym r tp vis smt par fun)
   => SVariable r
   -> r ScopeData
   -> [SVariable r]
@@ -157,7 +157,7 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RCC.method f
 
 function
-  :: (ProcRenderSym r tp vis smt par)
+  :: (ProcRenderSym r tp vis smt par fun)
   => Label
   -> r vis
   -> VS (r tp)

@@ -23,12 +23,12 @@ renderType tp = case cType $ unRepr tp of
     _ -> typeDoc $ unRepr tp
 
 renderParam
-  :: (ProcRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  :: (ProcRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => r (Variable r)
   -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
-renderListDec :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+renderListDec :: (CommonRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => r (Variable r)
   -> r (Value r)
   -> Doc
@@ -36,7 +36,7 @@ renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
 renderConstDecDef ::
-  (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  (CommonRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => r (Variable r)
   -> r (Value r)
   -> Doc

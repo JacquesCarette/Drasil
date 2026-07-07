@@ -25,13 +25,13 @@ renderType :: (UnRepr r TypeData) => r TypeData -> Doc
 renderType = typeDoc . unRepr
 
 renderParam
-  :: (OORenderSym r TypeData vis smt par, UnRepr r TypeData)
+  :: (OORenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => r (Variable r)
   -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
 renderMethod
-  :: (OORenderSym r tp vis smt par, UnRepr r TypeData)
+  :: (OORenderSym r tp vis smt par fun, UnRepr r TypeData)
   => String
   -> r vis
   -> r (Attachment r)
@@ -46,7 +46,7 @@ renderMethod n s p t ps b = vcat [
   rbrace]
 
 renderListDec
-  :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  :: (CommonRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => r (Variable r)
   -> r (Value r)
   -> Doc
@@ -54,7 +54,7 @@ renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
 renderConstDecDef
-  :: (CommonRenderSym r TypeData vis smt par, UnRepr r TypeData)
+  :: (CommonRenderSym r TypeData vis smt par fun, UnRepr r TypeData)
   => r (Variable r)
   -> r (Value r)
   -> Doc

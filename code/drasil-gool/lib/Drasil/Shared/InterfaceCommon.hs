@@ -17,10 +17,9 @@ module Drasil.Shared.InterfaceCommon (
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..), convType
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -42,14 +41,14 @@ type Library = String
 
 class (UnRepr r TypeData, TypeElim r tp, AssignStatement r tp smt,
   DeclStatement r tp smt, IOStatement r tp smt, StringStatement r tp smt,
-  FunctionSym r tp, FuncAppStatement r tp smt, CommentStatement r tp smt,
+  FunctionSym r tp fun, FuncAppStatement r tp smt, CommentStatement r tp smt,
   ControlStatement r tp smt, InternalList r tp, Argument r tp, Literal r tp,
   MathConstant r tp, VariableValue r tp, CommandLineArgs r tp,
   NumericExpression r tp, BooleanExpression r tp, Comparison r tp,
   ValueExpression r tp, IndexTranslator r tp, Array r tp, List r tp smt,
   Set r tp, VariableElim r tp, MethodSym r tp vis smt par, ScopeSym r,
   BinderSym r tp, Reference r tp, VariableValue r tp
-  ) => SharedProg r tp vis smt par
+  ) => SharedProg r tp vis smt par fun
 
 -- Shared between OO and Procedural --
 
@@ -471,8 +470,7 @@ class (VariableSym r tp, StatementSym r tp smt) => StringStatement r tp smt wher
   -- assign the ith element of hte list of strings into the ith variable
   stringListLists :: [SVariable r] -> SValue r -> MS (r smt)
 
-class (ValueSym r tp) => FunctionSym r tp where
-  type Function r
+class (ValueSym r tp) => FunctionSym r tp fun | r -> fun where
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r smt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->

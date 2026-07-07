@@ -20,9 +20,9 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, SVariable
   MathConstant(..), VariableValue(..), ValueExpression(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ParameterSym(..), MethodSym(..), BinderElim(..), UnRepr(..))
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ParameterSym(..), MethodSym(..),
+  BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD)
 import Drasil.Shared.State (MS, VS)
@@ -36,7 +36,7 @@ class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
   VariableValue r tp, CommandLineArgs r tp, NumericExpression r tp,
   BooleanExpression r tp, Comparison r tp, IndexTranslator r tp, List r tp smt,
   InternalList r tp, VariableElim r tp, BinderElim r tp, RenderBlock r,
-  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r tp,
+  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r tp fun,
   RenderFunction r tp, FunctionElim r tp, OpElim r, RenderParam r par,
   ParamElim r tp par, RenderVisibility r vis, VisibilityElim r vis,
   InternalAssignStmt r smt, InternalIOStmt r smt, InternalControlStmt r smt,
@@ -45,7 +45,7 @@ class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
   BlockCommentElim r, ValueExpression r tp, RenderMethod r tp, MethodElim r,
   ParameterSym r tp par, ScopeElim r
-  ) => CommonRenderSym r tp vis smt par | r -> tp vis smt par
+  ) => CommonRenderSym r tp vis smt par fun | r -> tp vis smt par fun
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 
@@ -154,16 +154,16 @@ class ValueElim r where
   valueInt :: r (Value r) -> Maybe Integer
   value :: r (Value r) -> Doc
 
-class InternalListFunc r tp where
+class InternalListFunc r tp fun | r -> tp fun where
   -- | List, Index
-  listAccessFunc :: VS (r tp) -> SValue r -> VS (r (Function r))
+  listAccessFunc :: VS (r tp) -> SValue r -> VS (r fun)
 
 class RenderFunction r tp where
-  funcFromData :: Doc -> VS (r tp) -> VS (r (Function r))
+  funcFromData :: Doc -> VS (r tp) -> VS (r fun)
 
 class FunctionElim r tp | r -> tp where
-  functionType :: r (Function r) -> r tp
-  function :: r (Function r) -> Doc
+  functionType :: r fun -> r tp
+  function :: r fun -> Doc
 
 class InternalAssignStmt r smt | r -> smt where
   multiAssign       :: [SVariable r] -> [SValue r] -> MS (r smt)

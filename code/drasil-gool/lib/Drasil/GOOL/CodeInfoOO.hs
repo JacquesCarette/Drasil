@@ -12,7 +12,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -52,8 +52,8 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () () () ()
-instance OOProg CodeInfoOO () () () ()
+instance SharedProg CodeInfoOO () () () () ()
+instance OOProg CodeInfoOO () () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -237,10 +237,9 @@ instance InternalValueExp CodeInfoOO () where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
-instance FunctionSym CodeInfoOO () where
-  type Function CodeInfoOO = ()
+instance FunctionSym CodeInfoOO () () where
 
-instance OOFunctionSym CodeInfoOO () where
+instance OOFunctionSym CodeInfoOO () () where
   func  _ _ = executeList
   objAccess = execute2
 
@@ -391,7 +390,7 @@ instance ControlStatement CodeInfoOO () () where
     _ <- zoom lensMStoVS msg
     noInfo
 
-instance ObserverPattern CodeInfoOO () () where
+instance ObserverPattern CodeInfoOO () () () where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
 
 instance StrategyPattern CodeInfoOO () () where

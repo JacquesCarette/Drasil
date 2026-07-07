@@ -132,8 +132,8 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance SharedProg CSharpCode TypeData Doc (Doc, Terminator) ParamData
-instance OOProg CSharpCode TypeData Doc (Doc, Terminator) ParamData
+instance SharedProg CSharpCode TypeData Doc (Doc, Terminator) ParamData FuncData
+instance OOProg CSharpCode TypeData Doc (Doc, Terminator) ParamData FuncData
 
 instance ProgramSym CSharpCode TypeData Doc (Doc, Terminator) ParamData where
   type Program CSharpCode = ProgData
@@ -142,8 +142,8 @@ instance ProgramSym CSharpCode TypeData Doc (Doc, Terminator) ParamData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode TypeData Doc (Doc, Terminator) ParamData
-instance OORenderSym CSharpCode TypeData Doc (Doc, Terminator) ParamData
+instance CommonRenderSym CSharpCode TypeData Doc (Doc, Terminator) ParamData FuncData
+instance OORenderSym CSharpCode TypeData Doc (Doc, Terminator) ParamData FuncData
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -422,10 +422,9 @@ instance InternalValueExp CSharpCode TypeData where
   objMethodCallMixedArgs' = G.objMethodCall
   classMethodCallMixedArgs' = CG.classMethodCall
 
-instance FunctionSym CSharpCode TypeData where
-  type Function CSharpCode = FuncData
+instance FunctionSym CSharpCode TypeData FuncData where
 
-instance OOFunctionSym CSharpCode TypeData where
+instance OOFunctionSym CSharpCode TypeData FuncData where
   func = G.func
   objAccess = G.objAccess
 
@@ -465,11 +464,11 @@ instance Set CSharpCode TypeData where
 instance InternalList CSharpCode TypeData where
   listSlice' = M.listSlice
 
-instance InternalGetSet CSharpCode TypeData where
+instance InternalGetSet CSharpCode TypeData FuncData where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-instance InternalListFunc CSharpCode TypeData where
+instance InternalListFunc CSharpCode TypeData FuncData where
   listAccessFunc = CS.listAccessFunc
 
 instance BinderSym CSharpCode TypeData where
@@ -482,10 +481,10 @@ instance BinderElim CSharpCode TypeData where
 instance InternalBinderElim CSharpCode where
   binderElim = text . bindName . unCSC
 
-instance RenderFunction CSharpCode TypeData where
+instance RenderFunction CSharpCode TypeData FuncData where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance FunctionElim CSharpCode TypeData where
+instance FunctionElim CSharpCode TypeData FuncData where
   functionType = onCodeValue fType
   function = funcDoc . unCSC
 
@@ -609,7 +608,7 @@ instance ControlStatement CSharpCode TypeData (Doc, Terminator) where
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (csAssert cond errMsg)
 
-instance ObserverPattern CSharpCode TypeData (Doc, Terminator) where
+instance ObserverPattern CSharpCode TypeData (Doc, Terminator) FuncData where
   notifyObservers = M.notifyObservers
 
 instance StrategyPattern CSharpCode TypeData (Doc, Terminator) where
@@ -812,7 +811,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r TypeData vis smt par) => [r BinderD] -> r (Value r) -> Doc
+csLambda :: (CommonRenderSym r TypeData vis smt par fun) => [r BinderD] -> r (Value r) -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
@@ -833,7 +832,7 @@ csBoolParse v = extFuncApp csBool csParse bool [v]
 csCharParse :: SValue CSharpCode -> SValue CSharpCode
 csCharParse v = extFuncApp csChar csParse char [v]
 
-csSplitFunc :: Char -> VS (CSharpCode (Function CSharpCode))
+csSplitFunc :: Char -> VS (CSharpCode FuncData)
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
 csCast :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
@@ -869,12 +868,12 @@ csFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
-csThrowDoc :: (CommonRenderSym r TypeData vis smt par) => r (Value r) -> Doc
+csThrowDoc :: (CommonRenderSym r TypeData vis smt par fun) => r (Value r) -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
 csTryCatch
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => r (Body r)
   -> r (Body r)
   -> Doc
@@ -887,7 +886,7 @@ csTryCatch tb cb = vcat [
   rbrace]
 
 csAssert
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => r (Value r)
   -> r (Value r)
   -> Doc
@@ -898,7 +897,7 @@ csAssert condition errorMessage = vcat [
 csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (OORenderSym r TypeData vis smt par) => SValue r -> SValue r
+csFileInput :: (OORenderSym r TypeData vis smt par fun) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
 csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
@@ -916,14 +915,14 @@ csInput tp inFn = do
           then addSystemImport else id
 
 csOpenFileR
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> VS (r TypeData)
   -> SValue r
 csOpenFileR n r = newObj r [n]
 
 csOpenFileWorA
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> VS (r TypeData)
   -> SValue r
@@ -979,7 +978,7 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
 csPrint
-  :: (CommonRenderSym r TypeData vis smt par, TypeElim r TypeData)
+  :: (CommonRenderSym r TypeData vis smt par fun, TypeElim r TypeData)
   => Bool
   -> Maybe (SValue r)
   -> SValue r

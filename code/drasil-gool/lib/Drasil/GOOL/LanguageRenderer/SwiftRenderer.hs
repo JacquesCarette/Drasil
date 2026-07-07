@@ -132,8 +132,8 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance SharedProg SwiftCode TypeData Doc (Doc, Terminator) ParamData
-instance OOProg SwiftCode TypeData Doc (Doc, Terminator) ParamData
+instance SharedProg SwiftCode TypeData Doc (Doc, Terminator) ParamData FuncData
+instance OOProg SwiftCode TypeData Doc (Doc, Terminator) ParamData FuncData
 
 instance ProgramSym SwiftCode TypeData Doc (Doc, Terminator) ParamData where
   type Program SwiftCode = ProgData
@@ -142,8 +142,8 @@ instance ProgramSym SwiftCode TypeData Doc (Doc, Terminator) ParamData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode TypeData Doc (Doc, Terminator) ParamData
-instance OORenderSym SwiftCode TypeData Doc (Doc, Terminator) ParamData
+instance CommonRenderSym SwiftCode TypeData Doc (Doc, Terminator) ParamData FuncData
+instance OORenderSym SwiftCode TypeData Doc (Doc, Terminator) ParamData FuncData
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
@@ -432,10 +432,9 @@ instance InternalValueExp SwiftCode TypeData where
   objMethodCallMixedArgs' = G.objMethodCall
   classMethodCallMixedArgs' = CG.classMethodCall
 
-instance FunctionSym SwiftCode TypeData where
-  type Function SwiftCode = FuncData
+instance FunctionSym SwiftCode TypeData FuncData where
 
-instance OOFunctionSym SwiftCode TypeData where
+instance OOFunctionSym SwiftCode TypeData FuncData where
   func = G.func
   objAccess = G.objAccess
 
@@ -474,11 +473,11 @@ instance Set SwiftCode TypeData where
 instance InternalList SwiftCode TypeData where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
 
-instance InternalGetSet SwiftCode TypeData where
+instance InternalGetSet SwiftCode TypeData FuncData where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-instance InternalListFunc SwiftCode TypeData where
+instance InternalListFunc SwiftCode TypeData FuncData where
   listAccessFunc = CS.listAccessFunc
 
 instance BinderSym SwiftCode TypeData where
@@ -491,10 +490,10 @@ instance BinderElim SwiftCode TypeData where
 instance InternalBinderElim SwiftCode where
   binderElim = text . bindName . unSC
 
-instance RenderFunction SwiftCode TypeData where
+instance RenderFunction SwiftCode TypeData FuncData where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance FunctionElim SwiftCode TypeData where
+instance FunctionElim SwiftCode TypeData FuncData where
   functionType = onCodeValue fType
   function = funcDoc . unSC
 
@@ -650,7 +649,7 @@ instance ControlStatement SwiftCode TypeData (Doc, Terminator) where
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (swiftAssert cond errMsg)
 
-instance ObserverPattern SwiftCode TypeData (Doc, Terminator) where
+instance ObserverPattern SwiftCode TypeData (Doc, Terminator) FuncData where
   notifyObservers = M.notifyObservers'
 
 instance StrategyPattern SwiftCode TypeData (Doc, Terminator) where
@@ -795,17 +794,17 @@ swiftName, swiftVersion :: String
 swiftName = "Swift"
 swiftVersion = "5.2.4"
 
-swiftUnwrapVal :: (CommonRenderSym r TypeData vis smt par) => SValue r -> SValue r
+swiftUnwrapVal :: (CommonRenderSym r TypeData vis smt par fun) => SValue r -> SValue r
 swiftUnwrapVal v' = do
   v <- v'
   mkVal (valueType v) (RC.value v <> swiftUnwrap')
 
-swiftTryVal :: (CommonRenderSym r TypeData vis smt par) => SValue r -> SValue r
+swiftTryVal :: (CommonRenderSym r TypeData vis smt par fun) => SValue r -> SValue r
 swiftTryVal v' = do
   v <- v'
   mkVal (valueType v) (tryLabel <+> RC.value v)
 
-swiftArgVal :: (CommonRenderSym r TypeData vis smt par) => SValue r -> SValue r
+swiftArgVal :: (CommonRenderSym r TypeData vis smt par fun) => SValue r -> SValue r
 swiftArgVal v' = do
   v <- v'
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
@@ -956,7 +955,7 @@ swiftNumBinExpr f v1' v2' = do
       exprT' _ _      = f (pure v1) (pure v2)
   exprT (getCodeType $ valueType v1) (getCodeType $ valueType v2)
 
-swiftLitFloat :: (CommonRenderSym r TypeData vis smt par) => Float -> SValue r
+swiftLitFloat :: (CommonRenderSym r TypeData vis smt par fun) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
 swiftLambda :: [SwiftCode BinderD] -> SwiftCode (Value SwiftCode) -> Doc
@@ -978,7 +977,7 @@ swiftCast t' v' = do
   unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> SValue r
   -> SValue r
@@ -989,7 +988,7 @@ swiftIndexFunc l v' = do
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => SValue r
   -> SValue r
   -> SValue r
@@ -1002,14 +1001,14 @@ swiftStrideFunc beg end step = let t = listType int
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
 swiftMapFunc
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> SValue r
   -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftWriteFunc
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> SValue r
   -> SValue r
@@ -1018,11 +1017,11 @@ swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
     (obj swiftEncoding)])]
 
-swiftReadLineFunc :: (CommonRenderSym r TypeData vis smt par) => SValue r
+swiftReadLineFunc :: (CommonRenderSym r TypeData vis smt par fun) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => SValue r
   -> SValue r
 swiftReadFileFunc v = swiftTryVal $
@@ -1033,7 +1032,7 @@ swiftReadFileFunc v = swiftTryVal $
     encodingArg = (var "encoding" string, encVal)
 
 swiftSplitFunc
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => Char
   -> SValue r
   -> SValue r
@@ -1041,7 +1040,7 @@ swiftSplitFunc d s = let sepArg = var swiftSepBy char
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
 swiftJoinedFunc
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => Char
   -> SValue r
   -> SValue r
@@ -1049,7 +1048,7 @@ swiftJoinedFunc d s = let sepArg = var swiftSep char
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]
 
 swiftIndexOf
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> SValue r
   -> SValue r
@@ -1057,7 +1056,7 @@ swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
 swiftListSlice
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SVariable r
   -> SValue r
   -> Maybe (SValue r)
@@ -1123,7 +1122,7 @@ swiftInput vr vl = do
   swiftInput' (getCodeType $ variableType vr')
 
 swiftOpenFile
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => SValue r
   -> VS (r TypeData)
   -> SValue r
@@ -1136,7 +1135,7 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
 swiftOpenFileHdl
-  :: (OORenderSym r TypeData vis smt par, Monad r)
+  :: (OORenderSym r TypeData vis smt par fun, Monad r)
   => SValue r
   -> VS (r TypeData)
   -> SValue r
@@ -1145,7 +1144,7 @@ swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
     [(forWritingArg, swiftOpenFile n t)]
 
 swiftOpenFileWA
-  :: (OORenderSym r TypeData vis smt par, Monad r)
+  :: (OORenderSym r TypeData vis smt par fun, Monad r)
   => Bool
   -> SVariable r
   -> SValue r
@@ -1173,7 +1172,7 @@ swiftCloseFile f' = do
   swClose (getCodeType $ valueType f)
 
 swiftReadFile
-  :: (OORenderSym r TypeData vis (Doc, Terminator) par)
+  :: (OORenderSym r TypeData vis (Doc, Terminator) par fun)
   => SVariable r
   -> SValue r
   -> MS (r (Doc, Terminator))
@@ -1213,13 +1212,13 @@ replaceBrackets :: String -> String
 replaceBrackets str = "<" ++ (init . tail) str ++ ">"
 
 swiftThrowDoc
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => r (Value r)
   -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => r (Variable r)
   -> r (Value r) -> r (Body r) -> Doc
 swiftForEach i lstVar b = vcat [
@@ -1228,7 +1227,7 @@ swiftForEach i lstVar b = vcat [
   bodyEnd]
 
 swiftTryCatch
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => r (Body r)
   -> r (Body r)
   -> Doc
@@ -1240,7 +1239,7 @@ swiftTryCatch tb cb = vcat [
   rbrace]
 
 swiftAssert
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => r (Value r)
   -> r (Value r)
   -> Doc
@@ -1275,7 +1274,7 @@ swiftMethod n s p t ps b = do
     bodyEnd])
 
 swiftConstructor
-  :: (OORenderSym r TypeData vis smt par)
+  :: (OORenderSym r TypeData vis smt par fun)
   => [MS (r par)]
   -> Initializers r TypeData
   -> MSBody r
@@ -1310,7 +1309,7 @@ swiftStringError = do
 swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
 
-typeDfltVal :: (OORenderSym r TypeData vis smt par) => CodeType -> SValue r
+typeDfltVal :: (OORenderSym r TypeData vis smt par fun) => CodeType -> SValue r
 typeDfltVal Boolean = litFalse
 typeDfltVal Integer = litInt 0
 typeDfltVal Float = litFloat 0.0

@@ -92,8 +92,8 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode TypeData Doc (Doc, Terminator) ParamData
-instance ProcProg MatlabCode TypeData Doc (Doc, Terminator) ParamData
+instance SharedProg MatlabCode TypeData Doc (Doc, Terminator) ParamData FuncData
+instance ProcProg MatlabCode TypeData Doc (Doc, Terminator) ParamData FuncData
 
 instance ProgramSym MatlabCode TypeData Doc (Doc, Terminator) ParamData where
   type Program MatlabCode = ProgData
@@ -102,8 +102,8 @@ instance ProgramSym MatlabCode TypeData Doc (Doc, Terminator) ParamData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode TypeData Doc (Doc, Terminator) ParamData
-instance ProcRenderSym MatlabCode TypeData Doc (Doc, Terminator) ParamData
+instance CommonRenderSym MatlabCode TypeData Doc (Doc, Terminator) ParamData FuncData
+instance ProcRenderSym MatlabCode TypeData Doc (Doc, Terminator) ParamData FuncData
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -367,7 +367,7 @@ instance NativeVector MatlabCode TypeData where
 instance InternalList MatlabCode TypeData where
   listSlice' = undefined
 
-instance InternalListFunc MatlabCode TypeData where
+instance InternalListFunc MatlabCode TypeData FuncData where
   listAccessFunc = undefined
 
 instance BinderSym MatlabCode TypeData where
@@ -380,10 +380,10 @@ instance BinderElim MatlabCode TypeData where
 instance InternalBinderElim MatlabCode where
   binderElim = undefined
 
-instance RenderFunction MatlabCode TypeData where
+instance RenderFunction MatlabCode TypeData FuncData where
   funcFromData = undefined
 
-instance FunctionElim MatlabCode TypeData where
+instance FunctionElim MatlabCode TypeData FuncData where
   functionType = undefined
   function = undefined
 
@@ -455,8 +455,7 @@ instance StringStatement MatlabCode TypeData (Doc, Terminator) where
   stringListVals = undefined
   stringListLists = undefined
 
-instance FunctionSym MatlabCode TypeData where
-  type Function MatlabCode = FuncData
+instance FunctionSym MatlabCode TypeData FuncData where
 
 instance FuncAppStatement MatlabCode TypeData (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp
@@ -596,7 +595,7 @@ mlParam = RC.variable
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
 mlFuncDoc
-  :: (CommonRenderSym r TypeData vis smt par)
+  :: (CommonRenderSym r TypeData vis smt par fun)
   => Label
   -> [Doc]
   -> [r par]

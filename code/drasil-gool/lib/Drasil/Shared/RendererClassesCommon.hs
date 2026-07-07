@@ -37,7 +37,7 @@ class (AssignStatement r tp smt, DeclStatement r tp smt, IOStatement r tp smt,
   BooleanExpression r tp, Comparison r tp, IndexTranslator r tp, List r tp smt,
   InternalList r tp, VariableElim r tp, BinderElim r tp, RenderBlock r,
   BlockElim r, RenderBody r, BodyElim r, InternalListFunc r tp fun,
-  RenderFunction r tp, FunctionElim r tp, OpElim r, RenderParam r par,
+  RenderFunction r tp fun, FunctionElim r tp fun, OpElim r, RenderParam r par,
   ParamElim r tp par, RenderVisibility r vis, VisibilityElim r vis,
   InternalAssignStmt r smt, InternalIOStmt r smt, InternalControlStmt r smt,
   RenderStatement r smt, StatementElim r smt, RenderType r tp, RenderValue r tp,
@@ -158,10 +158,10 @@ class InternalListFunc r tp fun | r -> tp fun where
   -- | List, Index
   listAccessFunc :: VS (r tp) -> SValue r -> VS (r fun)
 
-class RenderFunction r tp where
+class RenderFunction r tp fun | r -> tp fun where
   funcFromData :: Doc -> VS (r tp) -> VS (r fun)
 
-class FunctionElim r tp | r -> tp where
+class FunctionElim r tp fun | r -> tp fun where
   functionType :: r fun -> r tp
   function :: r fun -> Doc
 

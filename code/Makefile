@@ -392,7 +392,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 # Targets will have the form exampleName_mdBook_build.
 $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
 	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ]; then \
-		- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+		"$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
 		mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
 	fi
 

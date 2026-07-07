@@ -4,8 +4,8 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSBinder, SVariable, SValue,
-  SMethod, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
+  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, SMethod,
+  NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
   InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
@@ -470,8 +470,6 @@ class (VariableSym r tp, StatementSym r tp smt) => StringStatement r tp smt wher
   -- Given a list of variables and a value containing a list of strings,
   -- assign the ith element of hte list of strings into the ith variable
   stringListLists :: [SVariable r] -> SValue r -> MS (r smt)
-
-type VSFunction a = VS (a (Function a))
 
 class (ValueSym r tp) => FunctionSym r tp where
   type Function r

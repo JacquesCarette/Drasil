@@ -21,11 +21,10 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, SVariable, SValue, NamedArgs,
-  SMethod, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, SMethod,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
+  SharedProg, BodySym(body), TypeSym(..), FunctionSym(..), MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
   List(listSize, listAdd), listOf, StatementSym(..), DeclStatement(listDecDef),
   FuncAppStatement, VisibilitySym(..), convType)
@@ -276,7 +275,7 @@ class (FuncAppStatement r tp smt, OOVariableSym r tp) => OOFuncAppStatement r tp
   selfInOutCall :: InOutCall r smt
 
 class (StatementSym r tp smt, OOFunctionSym r tp) => ObserverPattern r tp smt where
-  notifyObservers :: VSFunction r -> VS (r tp) -> MS (r smt)
+  notifyObservers :: VS (r (Function r)) -> VS (r tp) -> MS (r smt)
 
 observerListName :: Label
 observerListName = "observerList"
@@ -295,14 +294,14 @@ class (BodySym r tp smt, VariableSym r tp) => StrategyPattern r tp smt where
     Maybe (SVariable r) -> MSBlock r
 
 class (FunctionSym r tp) => OOFunctionSym r tp where
-  func :: Label -> VS (r tp) -> [SValue r] -> VSFunction r
-  objAccess :: SValue r -> VSFunction r -> SValue r
+  func :: Label -> VS (r tp) -> [SValue r] -> VS (r (Function r))
+  objAccess :: SValue r -> VS (r (Function r)) -> SValue r
 
-($.) :: (OOFunctionSym r tp) => SValue r -> VSFunction r -> SValue r
+($.) :: (OOFunctionSym r tp) => SValue r -> VS (r (Function r)) -> SValue r
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (OOVariableValue r tp, OOFunctionSym r tp) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r tp, OOFunctionSym r tp) => VS (r (Function r)) -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r tp, VariableSym r tp) => GetSet r tp where

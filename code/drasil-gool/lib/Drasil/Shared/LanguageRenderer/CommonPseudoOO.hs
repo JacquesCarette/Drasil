@@ -21,12 +21,12 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
-  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
-  SVariable, Value, SValue, SMethod, MixedCall, bodyStatements, oneLiner,
+  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, SVariable, Value,
+  SValue, SMethod, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
-  funcApp, listSize)
+  FunctionSym(..), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
@@ -373,7 +373,7 @@ namedArgError l = "Named arguments not supported in " ++ l
 
 listSizeFunc
   :: (OORenderSym r TypeData vis smt par)
-  => VSFunction r
+  => VS (r (Function r))
 listSizeFunc = IG.func "size" IC.int []
 
 listAccessFunc'
@@ -381,7 +381,7 @@ listAccessFunc'
   => Label
   -> VS (r TypeData)
   -> SValue r
-  -> VSFunction r
+  -> VS (r (Function r))
 listAccessFunc' f t i = IG.func f t [intValue i]
 
 -- C# and C++ --

@@ -22,9 +22,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, VSFunction, SVariable, SValue, SMethod, NamedArgs, MixedCall,
-  MixedCtorCall, BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
-  VariableSym(Variable), VisibilitySym(..),
+  MSBlock, SVariable, SValue, SMethod, NamedArgs, MixedCall, MixedCtorCall,
+  BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
+  VariableSym(Variable), VisibilitySym(..), FunctionSym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
@@ -361,7 +361,7 @@ lambda f ps' ex' = do
 objAccess
   :: (CommonRenderSym r tp vis smt par)
   => SValue r
-  -> VSFunction r
+  -> VS (r (Function r))
   -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f)
   (R.objAccess (RC.value v) (RC.function f)))
@@ -384,7 +384,7 @@ func
   => Label
   -> VS (r tp)
   -> [SValue r]
-  -> VSFunction r
+  -> VS (r (Function r))
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get
@@ -423,7 +423,7 @@ listAccess v i = do
 getFunc
   :: (OORenderSym r tp vis smt par)
   => SVariable r
-  -> VSFunction r
+  -> VS (r (Function r))
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
@@ -432,7 +432,7 @@ setFunc
   => VS (r tp)
   -> SVariable r
   -> SValue r
-  -> VSFunction r
+  -> VS (r (Function r))
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 

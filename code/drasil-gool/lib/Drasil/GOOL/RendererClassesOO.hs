@@ -7,8 +7,8 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, SVariable,
-  SValue, SMethod, BlockSym(..))
+import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue, SMethod,
+  BlockSym(..), FunctionSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
@@ -47,8 +47,8 @@ class PermElim r where
   binding :: r (IG.Attachment r) -> AttachmentTag
 
 class InternalGetSet r tp | r -> tp where
-  getFunc :: SVariable r -> VSFunction r
-  setFunc :: VS (r tp) -> SVariable r -> SValue r -> VSFunction r
+  getFunc :: SVariable r -> VS (r (Function r))
+  setFunc :: VS (r tp) -> SVariable r -> SValue r -> VS (r (Function r))
 
 class (MethodTypeSym r tp) => OOMethodTypeSym r tp where
   construct :: Label -> MSMthdType r

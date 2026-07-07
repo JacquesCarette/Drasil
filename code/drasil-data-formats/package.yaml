@@ -1,7 +1,7 @@
 spec-version: 0.36.0
 name:         drasil-data-formats
 version:      0.0.1
-author:       "Jason Balaci, Daniel Jarabek, Jacques Carette, Spencer Smith"
+author:       "Jason Balaci, Daphne Jarabek, Camila Shibata, Jacques Carette, Spencer Smith"
 maintainer:   "Jacques Carette"
 synopsis:     A framework for code and document generation for scientific software
 github:       JacquesCarette/Drasil
@@ -19,6 +19,7 @@ dependencies:
 - prettyprinter
 - scientific
 - text
+- containers
 
 ghc-options:
 - -Wall
@@ -30,6 +31,7 @@ library:
   exposed-modules:
   - Drasil.Data.Formats.CSV
   - Drasil.Data.Formats.JSON
+  - Drasil.Data.Formats.HTML
 
 tests:
   drasil-data-formats-test:

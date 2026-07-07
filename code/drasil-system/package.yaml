@@ -17,11 +17,13 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- pretty
-- lens
 - containers
+- lens
+- pretty
 - drasil-database
+- drasil-file-handling
 - drasil-lang
+- drasil-printers
 - drasil-theory
 - drasil-utils
 

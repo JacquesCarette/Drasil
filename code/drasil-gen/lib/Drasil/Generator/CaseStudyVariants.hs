@@ -7,34 +7,25 @@ module Drasil.Generator.CaseStudyVariants
   ( caseStudyMainSRS,
     caseStudyMainSRSWCode,
     caseStudyMainSRSWCodeZoo,
-    caseStudyMainLsnPlan,
-    caseStudyMainDrasilWebsite,
   )
 where
 
 import Control.Lens ((^.))
 import Data.Char (toLower)
 import Data.Maybe (maybeToList)
-import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.LessonPlan (LsnDesc, LessonPlan, lessonName)
 import Drasil.SRS (SRSDecl, mkDoc)
-import Drasil.System (DrasilWebsite, SmithEtAlSRS, programName)
+import Drasil.System (SmithEtAlSRS, programName)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Code (genCode, genCodeZoo)
-import Drasil.Generator.LessonPlan (genJupyterLessonPlan)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
-import Drasil.Generator.Website (genWebsite)
-
--- | Internal: Set system locale encoding to UTF-8.
-setSystemLocale :: IO ()
-setSystemLocale = setLocaleEncoding utf8
+import Drasil.Generator.WriteSystem (setSystemLocale)
 
 -- | Internal: The `build/` subfolder the Makefile expects each case study will
 -- build in (other than the website).
@@ -79,19 +70,3 @@ caseStudyMainSRSWCodeZoo syst srsDecl srsFileName choices = do
   zooLayouts <- genCodeZoo syst' choices
   let layout = directory [ps|{exampleName}|] $ docLayouts ++ zooLayouts
   writeFiles OverwriteAllowed localPath layout
-
--- | A case study that generates a JupyterNotebook-based lesson plan.
-caseStudyMainLsnPlan :: LessonPlan -> LsnDesc -> String -> IO ()
-caseStudyMainLsnPlan plan nbDecl lsnFileName = do
-  setSystemLocale
-  let exampleName = plan ^. lessonName
-      layout = directory [ps|{exampleName}|] [genJupyterLessonPlan plan nbDecl lsnFileName]
-  writeFiles OverwriteAllowed localPath layout
-
--- | The Drasil website binary is expected to build a `Website/HTML/` folder
--- containing the actual website artifacts (`index.html` and `index.css`).
-caseStudyMainDrasilWebsite :: DrasilWebsite -> IO ()
-caseStudyMainDrasilWebsite dw = do
-  setSystemLocale
-  writeFiles OverwriteAllowed localPath $
-    directory [ps|website|] $ genWebsite dw

@@ -3,6 +3,10 @@ digraph "allvsr" {
     "instance:outputValsAndKnownValues" -> "instance:sysSetValsFollowingAssumps";
     "instance:checkGlassSafety" -> "theory:isSafePb";
     "instance:checkGlassSafety" -> "theory:isSafeLR";
+    "instance:outputValues2" -> "theory:stressDistFac";
+    "instance:outputValues2" -> "theory:probBr";
+    "instance:outputValues2" -> "theory:isSafePb";
+    "instance:outputValues2" -> "theory:isSafeLR";
     "instance:assumpGT" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:assumpGT"];
     "instance:assumpGC" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:assumpGC"];
     "instance:assumpES" [shape=box, color=black, style=filled, fillcolor="mistyrose", label="A:assumpES"];
@@ -58,9 +62,10 @@ digraph "allvsr" {
     "instance:reusable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:reusable"];
     "instance:maintainable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainable"];
     "instance:portable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:portable"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:sysSetValsFollowingAssumps" "instance:checkInputWithDataCons" "instance:outputValsAndKnownValues" "instance:checkGlassSafety" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable";
+        "instance:inputValues" "instance:sysSetValsFollowingAssumps" "instance:checkInputWithDataCons" "instance:outputValsAndKnownValues" "instance:checkGlassSafety" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable" "instance:outputValues2";
     }
     "instance:willBreakGS" [shape=box, color=black, style=filled, fillcolor="darkgoldenrod1", label="GS:willBreakGS"];
     subgraph "GS" {

@@ -20,6 +20,7 @@ dependencies:
 - pretty
 - lens
 - containers
+- drasil-data
 - drasil-database
 - drasil-lang
 - drasil-theory

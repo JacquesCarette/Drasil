@@ -641,7 +641,7 @@ Description & \begin{symbDescription}
 Source & \cite{abbasi2015} and \cite{johnson2008}
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]{FR:Calculate-Values}
+RefBy & \hyperref[outputValues2]{FR:Output-Values-2}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[calculateValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -701,7 +701,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInputs}]{Ensure that the input values are within the limits specified in the \hyperref[Sec:DataConstraints]{data constraints}.}
 \item[Calculate-Values:\phantomsection\label{calculateValues}]{Calculate the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${y_{\text{t}}}$ (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
+\item[Output-Values-2:\phantomsection\label{outputValues2}]{Output ${y_{\text{t}}}$ (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}).}
 \end{description}
 \begin{longtblr}
 [caption={Required Inputs}]
@@ -807,6 +808,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[outputValues2]{FR:Output-Values-2} &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[likeChgPP]{LC:DC Gain and Time Constant} &  &  &  &  &  &  &  &  & X & X & X
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
@@ -836,26 +839,28 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:ddProcessError]{DD:ddProcessError}} & \textbf{\hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}} & \textbf{\hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}} & \textbf{\hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}} & \textbf{\hyperref[TM:laplaceTransform]{TM:laplaceTransform}} & \textbf{\hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}} & \textbf{\hyperref[TM:tmSOSystem]{TM:tmSOSystem}} & \textbf{\hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}} & \textbf{\hyperref[IM:pdEquationIM]{IM:pdEquationIM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInputs]{FR:Verify-Input-Values}} & \textbf{\hyperref[calculateValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[security]{NFR:Security}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}} & \textbf{\hyperref[verifiability]{NFR:Verifiability}}
+{colspec={l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:ddProcessError]{DD:ddProcessError}} & \textbf{\hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}} & \textbf{\hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}} & \textbf{\hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}} & \textbf{\hyperref[TM:laplaceTransform]{TM:laplaceTransform}} & \textbf{\hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}} & \textbf{\hyperref[TM:tmSOSystem]{TM:tmSOSystem}} & \textbf{\hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}} & \textbf{\hyperref[IM:pdEquationIM]{IM:pdEquationIM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInputs]{FR:Verify-Input-Values}} & \textbf{\hyperref[calculateValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[security]{NFR:Security}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}} & \textbf{\hyperref[verifiability]{NFR:Verifiability}} & \textbf{\hyperref[outputValues2]{FR:Output-Values-2}}
 \\
-\hyperref[calculateProcessVariable]{GS:Process-Variable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateProcessVariable]{GS:Process-Variable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[security]{NFR:Security} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[security]{NFR:Security} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues2]{FR:Output-Values-2} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definition, and instance model. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

@@ -16,7 +16,11 @@ Calculate-Values: Calculate the Process Variable (from [IM:pdEquationIM](./SecIM
 
 <div id="outputValues"></div>
 
-Output-Values: Output the Process Variable (from [IM:pdEquationIM](./SecIMs.md#IM:pdEquationIM)) over the simulation time.
+Output-Values: Output \\({y\_{\text{t}}}\\) (from [IM:pdEquationIM](./SecIMs.md#IM:pdEquationIM)) over the simulation time.
+
+<div id="outputValues2"></div>
+
+Output-Values-2: Output \\({y\_{\text{t}}}\\) (from [IM:pdEquationIM](./SecIMs.md#IM:pdEquationIM)).
 
 <div id="Table:ReqInputs"></div>
 

@@ -24,7 +24,11 @@ Check-Glass-Safety: If \\(\mathit{isSafePb}\land{}\mathit{isSafeLR}\\) (from [IM
 
 <div id="outputValues"></div>
 
-Output-Values: Output the values from the table for [Required Outputs](./SecFRs.md#Table:ReqOutputs).
+Output-Values: Output the values from [Tab:ReqOutputs](./SecFRs.md#Table:ReqOutputs).
+
+<div id="outputValues2"></div>
+
+Output-Values-2: Output \\(\mathit{isSafePb}\\) (from [IM:isSafePb](./SecIMs.md#IM:isSafePb)), \\(\mathit{isSafeLR}\\) (from [IM:isSafeLR](./SecIMs.md#IM:isSafeLR)), \\({P\_{\text{b}}}\\) (from [IM:probOfBreak](./SecIMs.md#IM:probOfBreak)), and \\(J\\) (from [IM:stressDistFac](./SecIMs.md#IM:stressDistFac)).
 
 <div id="Table:ReqInputs"></div>
 

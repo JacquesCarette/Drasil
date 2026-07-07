@@ -1415,7 +1415,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#outputValues2>FR:Output-Values-2</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1522,7 +1522,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:offsetIM>IM:offsetIM</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1623,7 +1623,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#outputValues2>FR:Output-Values-2</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1735,7 +1735,12 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>) and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
+                  Output-Values: Output <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>), and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
+                </div>
+              </p>
+              <p>
+                <div id="outputValues2">
+                  Output-Values-2: Output <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>) and <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>).
                 </div>
               </p>
             </div>
@@ -2539,6 +2544,24 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#outputValues2>FR:Output-Values-2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#considerAirDrag>LC:Consider-Air-Drag</a></td>
               <td></td>
               <td></td>
@@ -2789,9 +2812,11 @@
               <th><a href=#reusable>NFR:Reusability</a></th>
               <th><a href=#maintainable>NFR:Maintainability</a></th>
               <th><a href=#portable>NFR:Portability</a></th>
+              <th><a href=#outputValues2>FR:Output-Values-2</a></th>
             </tr>
             <tr>
               <td><a href=#targetHit>GS:targetHit</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2839,9 +2864,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInVals>FR:Verify-Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2889,6 +2916,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
@@ -2902,8 +2930,9 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
               <td>X</td>
+              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2917,6 +2946,7 @@
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correctness</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2964,9 +2994,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR:Understandability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3014,9 +3046,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR:Maintainability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3053,6 +3087,33 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues2>FR:Output-Values-2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

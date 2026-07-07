@@ -33,6 +33,10 @@ digraph "allvsall" {
     "instance:outputValsAndKnownValues" -> "instance:sysSetValsFollowingAssumps";
     "instance:checkGlassSafety" -> "theory:isSafePb";
     "instance:checkGlassSafety" -> "theory:isSafeLR";
+    "instance:outputValues2" -> "theory:stressDistFac";
+    "instance:outputValues2" -> "theory:probBr";
+    "instance:outputValues2" -> "theory:isSafePb";
+    "instance:outputValues2" -> "theory:isSafeLR";
     "instance:calcInternalBlastRisk" -> "instance:assumpES";
     "instance:varValsOfmkE" -> "instance:assumpSV";
     "instance:varValsOfmkE" -> "instance:assumpLDFC";
@@ -95,9 +99,10 @@ digraph "allvsall" {
     "instance:reusable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:reusable"];
     "instance:maintainable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainable"];
     "instance:portable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:portable"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:sysSetValsFollowingAssumps" "instance:checkInputWithDataCons" "instance:outputValsAndKnownValues" "instance:checkGlassSafety" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable";
+        "instance:inputValues" "instance:sysSetValsFollowingAssumps" "instance:checkInputWithDataCons" "instance:outputValsAndKnownValues" "instance:checkGlassSafety" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:portable" "instance:outputValues2";
     }
     "instance:willBreakGS" [shape=box, color=black, style=filled, fillcolor="darkgoldenrod1", label="GS:willBreakGS"];
     subgraph "GS" {

@@ -24,7 +24,11 @@ Calculate-Values: Calculate the following values: \\({T\_{\text{W}}}\\)(\\(t\\))
 
 <div id="outputValues"></div>
 
-Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)) and \\({E\_{\text{W}}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)).
+Output-Values: Output \\({T\_{\text{W}}}\\) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)) and \\({E\_{\text{W}}}\\) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)) over \\(t\\).
+
+<div id="outputValues2"></div>
+
+Output-Values-2: Output \\({T\_{\text{W}}}\\) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)) and \\({E\_{\text{W}}}\\) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)).
 
 <div id="Table:ReqInputs"></div>
 

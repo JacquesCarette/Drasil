@@ -75,9 +75,10 @@ digraph "avsall" {
     "instance:understandable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:understandable"];
     "instance:reusable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:reusable"];
     "instance:maintainable" [shape=box, color=black, style=filled, fillcolor="ivory", label="NFR:maintainable"];
+    "instance:outputValues2" [shape=box, color=black, style=filled, fillcolor="ivory", label="FR:outputValues2"];
     subgraph "FR" {
         rank="same";
-        "instance:inputValues" "instance:findMass" "instance:checkWithPhysConsts" "instance:outputInputDerivVals" "instance:calcValues" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable";
+        "instance:inputValues" "instance:findMass" "instance:checkWithPhysConsts" "instance:outputInputDerivVals" "instance:calcValues" "instance:outputValues" "instance:correct" "instance:verifiable" "instance:understandable" "instance:reusable" "instance:maintainable" "instance:outputValues2";
     }
     "instance:likeChgTCVOD" [shape=box, color=black, style=filled, fillcolor="lavender", label="LC:likeChgTCVOD"];
     "instance:likeChgTCVOL" [shape=box, color=black, style=filled, fillcolor="lavender", label="LC:likeChgTCVOL"];

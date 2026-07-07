@@ -1585,7 +1585,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:riskFun>IM:riskFun</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:riskFun>IM:riskFun</a> and <a href=#outputValues2>FR:Output-Values-2</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2015,7 +2017,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#outputValues2>FR:Output-Values-2</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2164,7 +2168,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:isSafeLR>IM:isSafeLR</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                          <a href=#IM:isSafeLR>IM:isSafeLR</a>, <a href=#outputValues2>FR:Output-Values-2</a>, and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
                         </p>
                       </td>
                     </tr>
@@ -2237,7 +2241,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                          <a href=#IM:isSafePb>IM:isSafePb</a>, <a href=#outputValues2>FR:Output-Values-2</a>, and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
                         </p>
                       </td>
                     </tr>
@@ -2399,7 +2403,12 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output the values from the table for <a href=#Table:ReqOutputs>Required Outputs</a>.
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Tab:ReqOutputs</a>.
+                </div>
+              </p>
+              <p>
+                <div id="outputValues2">
+                  Output-Values-2: Output <em>isSafePb</em> (from <a href=#IM:isSafePb>IM:isSafePb</a>), <em>isSafeLR</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>), <em>P<sub>b</sub></em> (from <a href=#IM:probOfBreak>IM:probOfBreak</a>), and <em>J</em> (from <a href=#IM:stressDistFac>IM:stressDistFac</a>).
                 </div>
               </p>
             </div>
@@ -3193,6 +3202,17 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#outputValues2>FR:Output-Values-2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td>
                 <a href=#calcInternalBlastRisk>LC:Calculate-Internal-Blast-Risk</a>
               </td>
@@ -3772,6 +3792,7 @@
               <th><a href=#reusable>NFR:Reusability</a></th>
               <th><a href=#maintainable>NFR:Maintainability</a></th>
               <th><a href=#portable>NFR:Portablity</a></th>
+              <th><a href=#outputValues2>FR:Output-Values-2</a></th>
             </tr>
             <tr>
               <td>
@@ -3808,9 +3829,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3878,11 +3901,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#checkInputWithDataCons>FR:Check-Input-with-Data_Constraints</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3950,6 +3975,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#checkGlassSafety>FR:Check-Glass-Safety</a></td>
@@ -3984,9 +4010,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4052,9 +4080,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR:Verifiability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4120,9 +4150,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR:Reusability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4188,6 +4220,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR:Portablity</a></td>
@@ -4209,6 +4242,42 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues2>FR:Output-Values-2</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

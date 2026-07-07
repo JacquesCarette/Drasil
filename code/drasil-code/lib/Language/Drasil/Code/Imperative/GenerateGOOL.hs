@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> Description
   -> [Import]
@@ -57,7 +57,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> Description
   -> [GenState (Maybe (SMethod r))]
@@ -92,7 +92,7 @@ data ClassType = Primary | Auxiliary
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
 mkClass
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => ClassType
   -> Name
   -> Maybe Name
@@ -118,7 +118,7 @@ mkClass s n l desc vs cstrs mths = do
 
 -- | Generates a primary class.
 primaryClass
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> Maybe Name
   -> Description
@@ -130,7 +130,7 @@ primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
 auxClass
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> Maybe Name
   -> Description
@@ -143,7 +143,7 @@ auxClass = mkClass Auxiliary
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
 mkArg
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => SValue r
   -> SValue r
 mkArg v = do
@@ -156,7 +156,7 @@ mkArg v = do
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
 fCall
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => (Name -> [SValue r] -> NamedArgs r tp -> SValue r)
   -> [SValue r]
   -> NamedArgs r tp
@@ -178,7 +178,7 @@ fCall f vl ns = do
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
 fApp
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> Name
   -> VS (r tp)
@@ -195,7 +195,7 @@ fApp m s t vl ns = do
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> VS (r tp)
   -> [SValue r]
@@ -204,7 +204,7 @@ ctorCall
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOut :: (OOProg r tp vis smt par) => Name -> Name -> [SValue r] ->
+fAppInOut :: (OOProg r tp vis smt par fun) => Name -> Name -> [SValue r] ->
   [SVariable r] -> [SVariable r] -> GenState (MS (r smt))
 fAppInOut m n ins outs both = do
   g <- get
@@ -221,7 +221,7 @@ fAppInOut m n ins outs both = do
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImportsProc
-  :: (ProcProg r tp vis smt par)
+  :: (ProcProg r tp vis smt par fun)
   => Name
   -> Description
   -> [Import]
@@ -239,7 +239,7 @@ genModuleWithImportsProc n desc is maybeMs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModuleProc
-  :: (ProcProg r tp vis smt par)
+  :: (ProcProg r tp vis smt par fun)
   => Name
   -> Description
   -> [GenState (Maybe (SMethod r))]
@@ -256,7 +256,7 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
 fAppProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => Name
   -> Name
   -> VS (r tp)
@@ -271,7 +271,7 @@ fAppProc m s t vl ns = do
       else error "fAppProc: Procedural languages do not support method calls.") vl ns
 
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOutProc :: (SharedProg r tp vis smt par) => Name
+fAppInOutProc :: (SharedProg r tp vis smt par fun) => Name
   -> Name
   -> [SValue r]
   -> [SVariable r]

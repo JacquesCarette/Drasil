@@ -87,7 +87,7 @@ spaceCodeType s = do
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
 value
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => UID
   -> Name
   -> VS (r tp)
@@ -185,7 +185,7 @@ classVariable c v = do
       checkCurrent (Map.lookup nm (eMap g)) (onStateValue variableType c) v
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
-mkVal :: (OOProg r tp vis smt par) => CodeVarChunk -> GenState (SValue r)
+mkVal :: (OOProg r tp vis smt par fun) => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
@@ -208,7 +208,7 @@ mkVar v = do
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParam :: (OOProg r tp vis smt par) => ParameterChunk -> GenState (MS (r par))
+mkParam :: (OOProg r tp vis smt par fun) => ParameterChunk -> GenState (MS (r par))
 mkParam p = do
   v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
@@ -217,7 +217,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> VS (r tp)
   -> Description
@@ -231,7 +231,7 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> VS (r tp)
   -> Description
@@ -244,7 +244,7 @@ publicMethod n t = do
 
 -- | Generates a private method.
 privateMethod
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> VS (r tp)
   -> Description
@@ -257,7 +257,7 @@ privateMethod n t = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -268,7 +268,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -280,7 +280,7 @@ privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
 
 -- | Generates a constructor.
 genConstructor
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -291,7 +291,7 @@ genConstructor n desc p = do
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -305,7 +305,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => ([MS (r par)] -> MSBody r -> SMethod r)
   -> Label
   -> Description
@@ -328,7 +328,7 @@ genMethod f n desc p r b = do
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
   -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
       [(String, SVariable r)] -> MSBody r -> SMethod r)
@@ -357,7 +357,7 @@ genInOutFunc f docf n desc ins' outs' b = do
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExpr
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => CodeExpr
   -> GenState (SValue r)
 convExpr (Lit (Dbl d)) = do
@@ -449,7 +449,7 @@ convExpr (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCall
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
@@ -492,7 +492,7 @@ renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
 renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
-unop :: (SharedProg r tp vis smt par) => UFunc -> (SValue r -> SValue r)
+unop :: (SharedProg r tp vis smt par fun) => UFunc -> (SValue r -> SValue r)
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -511,21 +511,21 @@ unop Neg  = (#~)
 unop MakeRef = makeRef
 
 -- | Similar to 'unop', but for the 'Not' constructor.
-unopB :: (SharedProg r tp vis smt par) => UFuncB -> (SValue r -> SValue r)
+unopB :: (SharedProg r tp vis smt par fun) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (SharedProg r tp vis smt par) => UFuncVN -> (SValue r -> SValue r)
+unopVN :: (SharedProg r tp vis smt par fun) => UFuncVN -> (SValue r -> SValue r)
 unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (SharedProg r tp vis smt par) => UFuncVV -> (SValue r -> SValue r)
+unopVV :: (SharedProg r tp vis smt par fun) => UFuncVV -> (SValue r -> SValue r)
 unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => ArithBinOp
   -> (SValue r -> SValue r -> SValue r)
 arithBfunc Pow  = (#^)
@@ -534,7 +534,7 @@ arithBfunc Frac = (#/)
 
 -- Maps an 'EqBinOp' to it's corresponding GOOL binary function.
 eqBfunc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => EqBinOp
   -> (SValue r -> SValue r -> SValue r)
 eqBfunc Eq  = (?==)
@@ -542,7 +542,7 @@ eqBfunc NEq = (?!=)
 
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
 laBfunc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => LABinOp
   -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
@@ -550,7 +550,7 @@ laBfunc IndexOf = indexOf
 
 -- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
 ordBfunc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => OrdBinOp
   -> (SValue r -> SValue r -> SValue r)
 ordBfunc Gt  = (?>)
@@ -574,7 +574,7 @@ numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
 
 -- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
 elementSetSetBfunc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => ESSBinOp
   -> (SValue r -> SValue r -> SValue r)
 elementSetSetBfunc SAdd = S.setAdd
@@ -582,7 +582,7 @@ elementSetSetBfunc SRemove = S.setRemove
 
 -- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
 elementSetBoolBfunc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => ESBBinOp
   -> (SValue r -> SValue r -> SValue r)
 elementSetBoolBfunc SContains = S.contains
@@ -590,7 +590,7 @@ elementSetBoolBfunc SContains = S.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r tp vis smt par) => Mod -> GenState (OO.SFile r)
+genModDef :: (OOProg r tp vis smt par fun) => Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
@@ -598,17 +598,17 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
                 map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r tp vis smt par) => Mod -> [GenState (SMethod r)]
+genModFuncs :: (OOProg r tp vis smt par fun) => Mod -> [GenState (SMethod r)]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r tp vis smt par) => Mod -> [GenState (SClass r)]
+genModClasses :: (OOProg r tp vis smt par fun) => Mod -> [GenState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => (Name -> Maybe Name -> Description -> [CSStateVar r] ->
       GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r))
   -> M.Class
@@ -628,7 +628,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFunc
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => (Name -> VS (r tp) -> Description -> [ParameterChunk] ->
       Maybe Description -> [MSBlock r] -> GenState (SMethod r))
   -> [StateVariable]
@@ -658,7 +658,7 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
   genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmt :: (OOProg r tp vis smt par) => FuncStmt -> GenState (MS (r smt))
+convStmt :: (OOProg r tp vis smt par fun) => FuncStmt -> GenState (MS (r smt))
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
   v' <- mkVar v
@@ -757,7 +757,7 @@ convStmt (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFunc
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => Name
   -> Description
   -> DataDesc
@@ -771,7 +771,7 @@ genDataFunc nameTitle desc ddef = do
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MS Statement's.
 readData
-  :: (OOProg r tp vis smt par)
+  :: (OOProg r tp vis smt par fun)
   => DataDesc
   -> GenState [MSBlock r]
 readData ddef = do
@@ -786,7 +786,7 @@ readData ddef = do
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
-          :: (OOProg r tp vis smt par)
+          :: (OOProg r tp vis smt par fun)
           => Data
           -> r ScopeData
           -> GenState [MS (r smt)]
@@ -813,7 +813,7 @@ readData ddef = do
           return $ readLines ls
         ---------------
         lineData
-          :: (OOProg r tp vis smt par)
+          :: (OOProg r tp vis smt par fun)
           => Maybe String
           -> LinePattern
           -> r ScopeData
@@ -827,7 +827,7 @@ readData ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
-          :: (OOProg r tp vis smt par)
+          :: (OOProg r tp vis smt par fun)
           => Maybe String
           -> [DataItem]
           -> r ScopeData
@@ -836,7 +836,7 @@ readData ddef = do
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
-          :: (OOProg r tp vis smt par)
+          :: (OOProg r tp vis smt par fun)
           => String
           -> DataItem
           -> r ScopeData
@@ -845,7 +845,7 @@ readData ddef = do
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (OOProg r tp vis smt par)
+          :: (OOProg r tp vis smt par fun)
           => Maybe String
           -> [DataItem]
           -> [GenState (MS (r smt))]
@@ -853,7 +853,7 @@ readData ddef = do
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (OOProg r tp vis smt par)
+          :: (OOProg r tp vis smt par fun)
           => String
           -> DataItem
           -> GenState (MS (r smt))
@@ -877,7 +877,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
 valueProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => UID
   -> Name
   -> VS (r tp)
@@ -942,7 +942,7 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkValProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => CodeVarChunk
   -> GenState (SValue r)
 mkValProc v = do
@@ -961,7 +961,7 @@ mkVarProc v = do
 
 -- | Converts a 'Mod' to GOOL.
 genModDefProc
-  :: (ProcProg r tp vis smt par)
+  :: (ProcProg r tp vis smt par fun)
   => Mod
   -> GenState (Proc.SFile r)
 genModDefProc (Mod n desc is cs fs) = case cs of
@@ -971,7 +971,7 @@ genModDefProc (Mod n desc is cs fs) = case cs of
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParamProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => ParameterChunk
   -> GenState (MS (r par))
 mkParamProc p = do
@@ -982,7 +982,7 @@ mkParamProc p = do
 
 -- | Generates a public function.
 publicFuncProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => Label
   -> VS (r tp)
   -> Description
@@ -996,7 +996,7 @@ publicFuncProc n t desc ps r b = do
 
 -- | Generates a private function.
 privateFuncProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => Label
   -> VS (r tp)
   -> Description
@@ -1012,7 +1012,7 @@ privateFuncProc n t desc ps r b = do
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethodProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => ([MS (r par)] -> MSBody r -> SMethod r)
   -> Label
   -> Description
@@ -1036,7 +1036,7 @@ genMethodProc f n desc p r b = do
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFuncProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => (Name -> VS (r tp) -> Description -> [ParameterChunk] ->
       Maybe Description -> [MSBlock r] -> GenState (SMethod r))
   -> [StateVariable]
@@ -1055,7 +1055,7 @@ genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncsProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => Mod
   -> [GenState (SMethod r)]
 genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
@@ -1063,7 +1063,7 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MS Statement's.
 readDataProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => DataDesc
   -> GenState [MSBlock r]
 readDataProc ddef = do
@@ -1078,7 +1078,7 @@ readDataProc ddef = do
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
-          :: (SharedProg r tp vis smt par)
+          :: (SharedProg r tp vis smt par fun)
           => Data
           -> r ScopeData
           -> GenState [MS (r smt)]
@@ -1105,7 +1105,7 @@ readDataProc ddef = do
           return $ readLines ls
         ---------------
         lineData
-          :: (SharedProg r tp vis smt par)
+          :: (SharedProg r tp vis smt par fun)
           => Maybe String
           -> LinePattern
           -> r ScopeData
@@ -1119,7 +1119,7 @@ readDataProc ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
-          :: (SharedProg r tp vis smt par)
+          :: (SharedProg r tp vis smt par fun)
           => Maybe String
           -> [DataItem]
           -> r ScopeData
@@ -1128,7 +1128,7 @@ readDataProc ddef = do
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
-          :: (SharedProg r tp vis smt par)
+          :: (SharedProg r tp vis smt par fun)
           => String
           -> DataItem
           -> r ScopeData
@@ -1137,7 +1137,7 @@ readDataProc ddef = do
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (SharedProg r tp vis smt par)
+          :: (SharedProg r tp vis smt par fun)
           => Maybe String
           -> [DataItem]
           -> [GenState (MS (r smt))]
@@ -1145,7 +1145,7 @@ readDataProc ddef = do
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (SharedProg r tp vis smt par)
+          :: (SharedProg r tp vis smt par fun)
           => String
           -> DataItem
           -> GenState (MS (r smt))
@@ -1162,7 +1162,7 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExprProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => CodeExpr
   -> GenState (SValue r)
 convExprProc (Lit (Dbl d)) = do
@@ -1242,7 +1242,7 @@ convExprProc (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCallProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
@@ -1267,7 +1267,7 @@ convCallProc c x ns f libf = do
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmtProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => FuncStmt
   -> GenState (MS (r smt))
 convStmtProc (FAsg v (Matrix [es])) = do
@@ -1369,7 +1369,7 @@ convStmtProc (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFuncProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => Name
   -> Description
   -> DataDesc
@@ -1382,7 +1382,7 @@ genDataFuncProc nameTitle desc ddef = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFuncProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -1392,7 +1392,7 @@ publicInOutFuncProc
 publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private function, defined by its inputs and outputs.
-privateInOutFuncProc :: (SharedProg r tp vis smt par) => Label
+privateInOutFuncProc :: (SharedProg r tp vis smt par fun) => Label
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
@@ -1405,7 +1405,7 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFuncProc
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
   -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
       [(String, SVariable r)] -> MSBody r -> SMethod r)
@@ -1435,10 +1435,10 @@ genInOutFuncProc f docf n desc ins' outs' b = do
 -- Used for readData and readDataProc
 l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => SVariable r
 v_line, v_lines, v_linetokens, v_infile, v_i
-  :: (SharedProg r tp vis smt par)
+  :: (SharedProg r tp vis smt par fun)
   => SValue r
 l_line = "line"
 var_line = var l_line string

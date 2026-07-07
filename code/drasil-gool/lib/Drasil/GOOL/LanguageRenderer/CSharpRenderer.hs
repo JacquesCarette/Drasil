@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
@@ -833,7 +833,7 @@ csBoolParse v = extFuncApp csBool csParse bool [v]
 csCharParse :: SValue CSharpCode -> SValue CSharpCode
 csCharParse v = extFuncApp csChar csParse char [v]
 
-csSplitFunc :: Char -> VSFunction CSharpCode
+csSplitFunc :: Char -> VS (CSharpCode (Function CSharpCode))
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
 csCast :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode

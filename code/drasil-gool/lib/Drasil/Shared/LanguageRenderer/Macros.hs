@@ -9,9 +9,9 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction,
-  SVariable, SValue, bodyStatements, oneLiner, VariableElim(..),
-  getCodeType, listOf, ValueSym(valueType),
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
+  bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
+  FunctionSym(..), ValueSym(valueType),
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(..),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
@@ -184,15 +184,27 @@ observerIdxVal = IC.valueOf observerIndex
 obsList :: (CommonRenderSym r vis smt) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
-notify :: (OORenderSym r vis smt) => VS (r TypeData) -> VSFunction r -> MSBody r
+notify
+  :: (OORenderSym r vis smt)
+  => VS (r TypeData)
+  -> VS (r (Function r))
+  -> MSBody r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
-notifyObservers :: (OORenderSym r vis smt) => VSFunction r -> VS (r TypeData) -> MS (r smt)
+notifyObservers
+  :: (OORenderSym r vis smt)
+  => VS (r (Function r))
+  -> VS (r TypeData)
+  -> MS (r smt)
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
-notifyObservers' :: (OORenderSym r vis smt) => VSFunction r -> VS (r TypeData) -> MS (r smt)
+notifyObservers'
+  :: (OORenderSym r vis smt)
+  => VS (r (Function r))
+  -> VS (r TypeData)
+  -> MS (r smt)
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0

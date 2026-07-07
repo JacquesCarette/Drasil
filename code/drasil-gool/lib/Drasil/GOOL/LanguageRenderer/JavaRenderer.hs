@@ -14,8 +14,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
@@ -897,7 +897,7 @@ jFileWriterType = do
 jAsListFunc :: VS (JavaCode TypeData) -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
 
-jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
+jEqualsFunc :: SValue JavaCode -> VS (JavaCode (Function JavaCode))
 jEqualsFunc v = func jEquals bool [v]
 
 jParseIntFunc :: SValue JavaCode -> SValue JavaCode
@@ -909,22 +909,22 @@ jParseDblFunc v = funcApp jParseDbl double [v]
 jParseFloatFunc :: SValue JavaCode -> SValue JavaCode
 jParseFloatFunc v = funcApp jParseFloat float [v]
 
-jNextFunc :: VSFunction JavaCode
+jNextFunc :: VS (JavaCode (Function JavaCode))
 jNextFunc = func jNext string []
 
-jNextLineFunc :: VSFunction JavaCode
+jNextLineFunc :: VS (JavaCode (Function JavaCode))
 jNextLineFunc = func jNextLine string []
 
-jNextBoolFunc :: VSFunction JavaCode
+jNextBoolFunc :: VS (JavaCode (Function JavaCode))
 jNextBoolFunc = func jNextBool bool []
 
-jHasNextLineFunc :: VSFunction JavaCode
+jHasNextLineFunc :: VS (JavaCode (Function JavaCode))
 jHasNextLineFunc = func jHasNextLine bool []
 
-jCharAtFunc :: VSFunction JavaCode
+jCharAtFunc :: VS (JavaCode (Function JavaCode))
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (OORenderSym r vis smt) => Char -> VSFunction r
+jSplitFunc :: (OORenderSym r vis smt) => Char -> VS (r (Function r))
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode

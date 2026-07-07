@@ -21,11 +21,10 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, SVariable, SValue, NamedArgs,
-  SMethod, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, SMethod,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
+  SharedProg, BodySym(body), TypeSym(..), FunctionSym(..), MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
@@ -258,7 +257,7 @@ class (FuncAppStatement r smt, OOVariableSym r) => OOFuncAppStatement r smt wher
   selfInOutCall :: InOutCall r smt
 
 class (StatementSym r smt, OOFunctionSym r) => ObserverPattern r smt where
-  notifyObservers :: VSFunction r -> VS (r TypeData) -> MS (r smt)
+  notifyObservers :: VS (r (Function r)) -> VS (r TypeData) -> MS (r smt)
 
 observerListName :: Label
 observerListName = "observerList"
@@ -277,14 +276,14 @@ class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
     Maybe (SVariable r) -> MSBlock r
 
 class (FunctionSym r) => OOFunctionSym r where
-  func :: Label -> VS (r TypeData) -> [SValue r] -> VSFunction r
-  objAccess :: SValue r -> VSFunction r -> SValue r
+  func :: Label -> VS (r TypeData) -> [SValue r] -> VS (r (Function r))
+  objAccess :: SValue r -> VS (r (Function r)) -> SValue r
 
-($.) :: (OOFunctionSym r) => SValue r -> VSFunction r -> SValue r
+($.) :: (OOFunctionSym r) => SValue r -> VS (r (Function r)) -> SValue r
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, OOFunctionSym r) => VS (r (Function r)) -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r, VariableSym r) => GetSet r where

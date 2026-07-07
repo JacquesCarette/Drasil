@@ -371,6 +371,14 @@ instance (IndexTranslator r tp) => IndexTranslator (LoggingFor r) tp where
   intToIndex = liftLogging intToIndex
   indexToInt = liftLogging indexToInt
 
+instance (NativeVector lang tp) => NativeVector (LoggingFor lang) tp where
+  vecScale = liftLogging vecScale
+  vecAdd = liftLogging vecAdd
+  vecIndex = liftLogging vecIndex
+  vecDot = liftLogging vecDot
+  vecMag = liftLogging vecMag
+  vecUnit = liftLogging vecUnit
+
 -- GProc
 
 instance (P.ProcProg r tp vis smt par) => P.ProcProg (LoggingFor r) tp vis smt par

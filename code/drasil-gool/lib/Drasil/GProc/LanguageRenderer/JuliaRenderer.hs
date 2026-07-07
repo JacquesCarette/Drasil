@@ -20,9 +20,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, SValue,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  Reference(..), Array(..), List(..), Set(..), NativeVector(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
   switchAsIf, convScope)
@@ -405,6 +405,15 @@ instance Set JuliaCode TypeData where
   setAdd s e = funcApp "push!" void [s, e]
   setRemove s e = funcApp "delete!" void [s, e]
   setUnion a b = funcApp "union!" void [a, b]
+
+-- TODO: implement native vector operations for Julia (currently MATLAB-only).
+instance NativeVector JuliaCode TypeData where
+  vecScale = undefined
+  vecAdd = undefined
+  vecIndex = undefined
+  vecDot = undefined
+  vecMag = undefined
+  vecUnit = undefined
 
 instance InternalList JuliaCode TypeData where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)

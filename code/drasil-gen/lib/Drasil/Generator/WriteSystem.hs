@@ -28,9 +28,7 @@ setSystemLocale = setLocaleEncoding utf8
 
 -- | Configuration options for writing a repository of software artifacts.
 data WriteOptions = WO
-  { -- | Where should we write to?
-    basePath :: OsPath,
-    -- | Are we allowed to overwrite files or not?
+  { -- | Are we allowed to overwrite files or not?
     overwritePolicy :: OverwritePolicy,
     -- | What is the name of the subfolder to be created?
     localDirName :: forall sys. HasSystemMeta sys => sys -> PathSegment,
@@ -43,12 +41,11 @@ data WriteOptions = WO
 --
 -- Options:
 --
--- 1. 'basePath': Always generate to local path.
--- 2. 'overwritePolicy': Always allow file-overwriting.
--- 3. 'dirName': The example's abbreviation.
--- 4. 'textEncoding': UTF-8.
+-- 1. 'overwritePolicy': Always allow file-overwriting.
+-- 2. 'dirName': The example's abbreviation.
+-- 3. 'textEncoding': UTF-8.
 drasilMakefileReqOpts :: WriteOptions
-drasilMakefileReqOpts = WO localPath OverwriteAllowed dirName utf8
+drasilMakefileReqOpts = WO OverwriteAllowed dirName utf8
   where
     dirName sys = let ab = abrv $ sys ^. systemMeta . sysName
                    in [ps|{ab}|]
@@ -59,7 +56,7 @@ drasilMakefileReqOpts = WO localPath OverwriteAllowed dirName utf8
 
 -- | Concretize a system into a concrete set of files and write them to disk.
 --
--- Note: Sets system locale to utf8 for cross-platform consistency.
+-- Note: Writes files to a subdirectory of the current working directory.
 concretizeAndWrite ::
   (ToFiles sys concOpts) =>
   -- | The system.
@@ -73,4 +70,4 @@ concretizeAndWrite ::
   IO ()
 concretizeAndWrite sys concOpts WO {..} = do
   setLocaleEncoding textEncoding
-  writeFiles overwritePolicy basePath $ directory (localDirName sys) $ toFiles sys concOpts
+  writeFiles overwritePolicy localPath $ directory (localDirName sys) $ toFiles sys concOpts

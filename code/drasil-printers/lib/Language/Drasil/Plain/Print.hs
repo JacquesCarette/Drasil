@@ -16,7 +16,6 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
 
 import Language.Drasil (Special(..), Symbol, USymb(..), codeSymb)
 import qualified Language.Drasil as L (HasSymbol(..), Sentence, Expr)
-import Data.String.Extras (toPlainName)
 
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..),
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
@@ -56,8 +55,8 @@ pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
 pExprDoc f (Row es) = hcat $ map (pExprDoc f) es
 pExprDoc f (Set es) = hcat $ map (pExprDoc f) es
-pExprDoc _ (Ident s) = text $ toPlainName s
-pExprDoc _ (Label s) = text $ toPlainName s
+pExprDoc _ (Ident s) = text s
+pExprDoc _ (Label s) = text s
 pExprDoc _ (Spec s) = specialDoc s
 pExprDoc f (Sub e) = text "_" <> pExprDoc f e
 pExprDoc f (Sup e) = text "_" <> pExprDoc f e

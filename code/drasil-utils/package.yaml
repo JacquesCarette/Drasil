@@ -28,5 +28,3 @@ library:
   exposed-modules:
   - Utils.Drasil
   - Data.List.Extras
-  - Data.String.Extras
-

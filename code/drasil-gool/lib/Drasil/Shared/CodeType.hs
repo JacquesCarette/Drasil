@@ -14,6 +14,7 @@ data CodeType = Boolean
               | String
               | InFile
               | OutFile
+              | Reference CodeType
               | List CodeType
               | Set CodeType
               | Array CodeType

@@ -2,7 +2,7 @@
 module Drasil.Metadata.TheoryConcepts where
 
 import Drasil.Database (mkUid)
-import Language.Drasil (cn', CI, commonIdeaWithDict)
+import Language.Drasil (cn', CI, commonIdea)
 
 import Drasil.Metadata.Domains (softEng)
 
@@ -10,10 +10,10 @@ import Drasil.Metadata.Domains (softEng)
 -- same time as theories.
 dataDefn, genDefn, inModel, thModel :: CI
 -- | Data definition.
-dataDefn = commonIdeaWithDict (mkUid "dataDefn") (cn' "data definition")    "DD"  [softEng]
+dataDefn = commonIdea (mkUid "dataDefn") (cn' "data definition")    "DD"  [softEng]
 -- | General definition.
-genDefn  = commonIdeaWithDict (mkUid "genDefn")  (cn' "general definition") "GD"  [softEng]
+genDefn  = commonIdea (mkUid "genDefn")  (cn' "general definition") "GD"  [softEng]
 -- | Instance model.
-inModel  = commonIdeaWithDict (mkUid "inModel")  (cn' "instance model")     "IM"  [softEng]
+inModel  = commonIdea (mkUid "inModel")  (cn' "instance model")     "IM"  [softEng]
 -- | Theoretical model.
-thModel  = commonIdeaWithDict (mkUid "thModel")  (cn' "theoretical model")  "TM"  [softEng]
+thModel  = commonIdea (mkUid "thModel")  (cn' "theoretical model")  "TM"  [softEng]

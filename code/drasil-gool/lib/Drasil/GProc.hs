@@ -1,18 +1,16 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
-  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, FSModule,
-  NamedArgs, SharedProg, ProcProg, ProgramSym(..), FileSym(..), BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  BinderSym(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VariableSym(..), ScopeSym(..), ScopeData, VariableElim(..), listOf, listVar,
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, FunctionSym(..), Array(..), List(..), Set(..),  listSlice,
+module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
+  SValue, VSFunction, MSParameter, SMethod, FSModule, NamedArgs,
+  SharedProg, ProcProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VariableSym(..), ScopeSym(..),
+  ScopeData, VariableElim(..), listOf, listVar, ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
+  FunctionSym(..), Reference(..), Array(..), List(..), Set(..),  listSlice,
   listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
   ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
@@ -22,20 +20,19 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   getCodeType, getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction,
+  SVariable, SValue, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  BinderSym(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  BinderSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ifNoElse,
   VariableSym(..), extVar, VariableElim(..), listOf, listVar, ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, Array(..), List(..), Set(..), listSlice, listIndexExists,
-  at, ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
+  libFuncApp, exists, Reference(..), Array(..), List(..), Set(..), listSlice,
+  listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   getCodeType, getTypeString)
 import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
@@ -46,8 +43,8 @@ import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
-  initialState)
+import Drasil.Shared.State (VS, GOOLState(..), lensMStoVS, headers, sources,
+  mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
 

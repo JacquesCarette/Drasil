@@ -351,7 +351,7 @@ physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFlux
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
 physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
 
-physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
+physSyst2 :: ConceptChunk -> ConceptChunk -> DefinedQuantityDict -> [Sentence]
 physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
   sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
 
@@ -484,7 +484,7 @@ propsDeriv = [
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> DefinedQuantityDict ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
   foldlSPCol [D.toSent (atStartNP (a_ corSol)), S "must exhibit" +:+.
@@ -506,7 +506,7 @@ propCorSolDeriv2 = unlbldExpr
   (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: NamedIdea a => a -> DefinedQuantityDict -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_ `S.toThe` short pcmat,

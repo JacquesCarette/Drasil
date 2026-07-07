@@ -49,7 +49,7 @@ eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
 eBalanceOnWtrRC :: DifferentialModel
 eBalanceOnWtrRC =
   makeASystemDE
-    (dqdWr time)
+    time
     tempW
     coeffs
     unknowns

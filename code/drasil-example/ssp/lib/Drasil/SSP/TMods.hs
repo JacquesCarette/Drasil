@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Prelude hiding (tan)
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (HasUID(..))
+import Drasil.Database (HasUID(..), mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import Theory.Drasil
@@ -60,7 +60,7 @@ equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, generic
 -- FIXME: variable "i" is a hack. But we need to sum over something!
 equilibriumCS :: ConstraintSet ModelExpr
 equilibriumCS = mkConstraintSet
-  (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
+  (cncpt''' (mkUid "equilibriumCS") (nounPhraseSP "equilibrium") eqDesc) $
   NE.fromList equilibriumRels
 -- makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 

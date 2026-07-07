@@ -13,7 +13,7 @@ liftS :: State a b -> State a [b]
 liftS = fmap (: [])
 
 -- | Converts a 'ScopeType' to a 'Scope'
-convScope :: (SharedProg r) => ScopeType -> r ScopeData
+convScope :: (SharedProg r tp vis smt) => ScopeType -> r ScopeData
 convScope Local  = local
 convScope Global = global
 convScope MainFn = mainFn

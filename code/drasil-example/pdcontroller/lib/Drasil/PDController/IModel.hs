@@ -39,7 +39,7 @@ imPD
 imPDRC :: DifferentialModel
 imPDRC
   = makeASingleDE
-      (dqdWr time)
+      time
       opProcessVariable
       lhs
       rhs

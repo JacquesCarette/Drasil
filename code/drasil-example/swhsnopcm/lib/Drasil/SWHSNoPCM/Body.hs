@@ -66,16 +66,16 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
-  [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
+symbols = dqdWr watE : concepts ++ map dqdWr constrained ++
+  [gradient, pi_, uNormalVect, surface] ++ symbolConcepts ++
   map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 
-concepts :: [UnitalChunk]
+concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW,
   surArea, area]
 
-symbolConcepts :: [UnitalChunk]
+symbolConcepts :: [DefinedQuantityDict]
 symbolConcepts = [density, mass, time, vol,
   QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 

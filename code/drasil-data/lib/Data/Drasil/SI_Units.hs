@@ -4,6 +4,7 @@ module Data.Drasil.SI_Units where
 import Language.Drasil
 import Language.Drasil.Display
 import Language.Drasil.ShortHands (cOmega)
+import Drasil.Database (mkUid)
 
 -- * Lists of Units
 
@@ -106,7 +107,7 @@ millimetre = derUC' "millimetre"
   "millimetre" "length" (label "mm") (scale 0.0001 metre)
 
 newton = derCUC' "newton"
-  "newton" "force" (label "N") (kilogram *$ (second ^: (-2)))
+  "newton" "force" (label "N") (kilogram *$ (metre *$ (second ^: (-2))))
 
 ohm = derCUC' "ohm"
   "ohm" "resistance" cOmega (volt /: ampere)
@@ -141,12 +142,12 @@ weber = derCUC' "weber"
   "weber" "magnetic flux" (label "Wb") (volt *: second)
 
 specificE :: UnitDefn
-specificE = makeDerU (dcc "specificE" (cnIES "specific energy")
-  "energy per unit mass") (joule /: kilogram)
+specificE = makeDerU (cncpt''' (mkUid "specificE") (cnIES "specific energy")
+  (S "energy per unit mass")) (joule /: kilogram)
 
 specificWeight :: UnitDefn
-specificWeight = makeDerU (dcc "specificWeight" (cn' "specific weight")
-  "weight per unit volume") (newton *$ (metre ^: (-3)))
+specificWeight = makeDerU (cncpt''' (mkUid "specificWeight") (cn' "specific weight")
+  (S "weight per unit volume")) (newton *$ (metre ^: (-3)))
 
 -- FIXME: Need to add pi
 --degrees = DUC

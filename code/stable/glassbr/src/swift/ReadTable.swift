@@ -152,61 +152,61 @@ func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inou
             x_matrix_temp.append(Double(linetokens[j * 2 + 0])!)
             y_matrix_temp.append(Double(linetokens[j * 2 + 1])!)
         }
+        do {
+            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+            try outfile.seekToEnd()
+        } catch {
+            throw "Error opening file."
+        }
+        do {
+            try outfile.write(contentsOf: Data("var 'x_matrix_temp' assigned ".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(x_matrix_temp.description.utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(" in module ReadTable".utf8))
+            try outfile.write(contentsOf: Data("\n".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.close()
+        } catch {
+            throw "Error closing file."
+        }
+        do {
+            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+            try outfile.seekToEnd()
+        } catch {
+            throw "Error opening file."
+        }
+        do {
+            try outfile.write(contentsOf: Data("var 'y_matrix_temp' assigned ".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(y_matrix_temp.description.utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(" in module ReadTable".utf8))
+            try outfile.write(contentsOf: Data("\n".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.close()
+        } catch {
+            throw "Error closing file."
+        }
         x_matrix.append(x_matrix_temp)
         y_matrix.append(y_matrix_temp)
-    }
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("var 'x_matrix' assigned ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(x_matrix.description.utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(" in module ReadTable".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("var 'y_matrix' assigned ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(y_matrix.description.utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(" in module ReadTable".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
     }
 }

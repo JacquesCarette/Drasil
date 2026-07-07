@@ -8,7 +8,8 @@ import Control.Lens ((^.), makeLenses, view)
 import Drasil.Database (HasUID(..), HasChunkRefs(..))
 import Language.Drasil hiding (Ref)
 
-import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
+import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk)
+import Language.Drasil.Chunk.Code () -- Importing for the instances.
 
 -- | Determines whether a parameter is passed by value or by reference.
 data PassBy = Val | Ref

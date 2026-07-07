@@ -5,4 +5,4 @@ import Language.Drasil
 import Data.Drasil.Domains (physics)
 
 progName :: CI
-progName = commonIdeaWithDict (mkUid "gamePhysics") (pn "GamePhysics") "GamePhysics" [physics]
+progName = commonIdea (mkUid "gamePhysics") (pn "GamePhysics") "GamePhysics" [physics]

@@ -4,4 +4,4 @@ import Language.Drasil
 import Data.Drasil.Domains (physics)
 
 progName :: CI
-progName = commonIdeaWithDict (mkUid "dblPendulum") (pn "Double Pendulum") "DblPend" [physics]
+progName = commonIdea (mkUid "dblPendulum") (pn "Double Pendulum") "DblPend" [physics]

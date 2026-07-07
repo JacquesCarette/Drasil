@@ -41,8 +41,12 @@ instance Show UID where
   show u = intercalate ":" $ u ^. namespace ++ [u ^. baseName]
 
 -- | Smart constructor for 'UID's from raw 'String's.
+-- The raw string must not contain a colon (':'), as they are reserved
+-- for displaying namespaced 'UID's (see 'nsUid').
 mkUid :: String -> UID
-mkUid s = UID { _namespace = [], _baseName = s }
+mkUid s = if ':' `elem` s
+  then error $ "Invalid uid '" ++ s ++ "'. UIDs must not have colons."
+  else UID { _namespace = [], _baseName = s }
 
 -- | Nest a 'UID' under a namespace.
 nsUid :: String -> UID -> UID

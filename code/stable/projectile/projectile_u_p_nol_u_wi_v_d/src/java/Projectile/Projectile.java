@@ -21,7 +21,6 @@ public class Projectile {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
         double g = 9.8;
-        double epsilon = 2.0e-2;
         double v_launch;
         double theta;
         double p_target;

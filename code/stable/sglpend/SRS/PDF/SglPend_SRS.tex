@@ -75,6 +75,10 @@ ${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}
 \\
 $\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
+${F_{x}}$ & Horizontal force on the pendulum & ${\text{N}}$
+\\
+${F_{y}}$ & Vertical force on the pendulum & ${\text{N}}$
+\\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
 $f$ & Frequency & ${\text{Hz}}$
@@ -666,11 +670,11 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
+           \resizeExpression{{F_{x}}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{${F_{x}}$ is the horizontal force on the pendulum (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{T}$ is the tension (${\text{N}}$)}
@@ -688,7 +692,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:hForceOnPendulumDeriv}
 \begin{displaymath}
-\resizeExpression{\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{{F_{x}}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -705,11 +709,11 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
+           \resizeExpression{{F_{y}}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{${F_{y}}$ is the vertical force on the pendulum (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{T}$ is the tension (${\text{N}}$)}
@@ -728,7 +732,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:vForceOnPendulumDeriv}
 \begin{displaymath}
-\resizeExpression{\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
+\resizeExpression{{F_{y}}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -1203,7 +1207,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance model.
 
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
@@ -1335,7 +1339,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance model. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}[H]
 \begin{center}

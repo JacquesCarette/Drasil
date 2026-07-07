@@ -18,16 +18,14 @@ import Language.Drasil
 import Drasil.System (purpose)
 import Utils.Drasil (stringList)
 
-import Drasil.Code.CodeVar (CodeIdea(..))
-import Language.Drasil.Chunk.CodeBase
+import Drasil.Code.CodeVar (CodeIdea(..), quantvar)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName, HasChoices(..))
 import Language.Drasil.Choices (ImplementationType(..), Structure(..),
   InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Description)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-import Language.Drasil.Printing.Import (spec)
+import Language.Drasil.Printers (oneLineSentenceDoc)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
@@ -42,7 +40,7 @@ unmodularDesc = do
   g <- get
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc OneLine $ spec (printfo g) $ capSent $ foldlSent
+  return $ show $ oneLineSentenceDoc (printfo g) $ capSent $ foldlSent
       ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.

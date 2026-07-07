@@ -176,9 +176,9 @@ glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map (short . snd) glassType
 
 annealed, fullyT, heatS :: CI
-annealed      = commonIdeaWithDict (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [idglass]
-fullyT        = commonIdeaWithDict (mkUid "fullyT")        (nounPhraseSP "fully tempered")          "FT"       [idglass]
-heatS         = commonIdeaWithDict (mkUid "heatS")         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
+annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [idglass]
+fullyT        = commonIdea (mkUid "fullyT")        (nounPhraseSP "fully tempered")          "FT"       [idglass]
+heatS         = commonIdea (mkUid "heatS")         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
 
 glassType :: [(Integer, CI)]
 glassType = [(1, annealed), (4, fullyT), (2, heatS)]

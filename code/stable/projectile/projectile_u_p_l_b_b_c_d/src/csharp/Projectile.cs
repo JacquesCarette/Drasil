@@ -227,6 +227,5 @@ public class InputParameters {
 */
 public class Constants {
     public const double g = 9.8;
-    public const double epsilon = 2.0e-2;
     
 }

@@ -119,8 +119,8 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
 
 allSymbols :: [DefinedQuantityDict]
-allSymbols = map dqdWr physicscon ++ symbols ++
-  [dqdWr mass, posInf, negInf] ++
+allSymbols = physicscon ++ symbols ++
+  [mass, posInf, negInf] ++
   map dqdWr pidConstants
 
 symbMap :: ChunkDB

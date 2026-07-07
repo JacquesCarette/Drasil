@@ -96,7 +96,7 @@ usingIMs = foldlList Comma List $ map refS [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent
-inputDataTable = mkInputPropsTable (dqdWr coords NE.<| NE.map dqdWr inputs)
+inputDataTable = mkInputPropsTable (dqdWr coords NE.<| inputs)
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]

@@ -25,8 +25,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss projectile-lesson
+SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend bss
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend projectile-lesson
 GOOLTEST = codegenTest
 
 # where they live

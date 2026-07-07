@@ -25,19 +25,19 @@ import qualified Data.List.NonEmpty as NE
 import Drasil.FileHandling.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
-import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll)
+import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
 import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 
-import Drasil.Code.CodeVar (CodeChunk, CodeIdea(codeChunk), CodeVarChunk)
+import Drasil.Code.CodeVar (CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
   odeLibReqs, odeInfoReqs)
-import Language.Drasil.Chunk.CodeBase (quantvar, codevars, varResolve)
+import Language.Drasil.Chunk.CodeBase (codevars, varResolve)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
@@ -192,9 +192,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
 -- | Convert a 'Func' to an implementation-stage 'DefinedQuantityDict' representing the
 -- function.
 asVC :: Func -> DefinedQuantityDict
-asVC (FDef (FuncDef n d _ _ _ _)) = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
-asVC (FDef (CtorDef n d _ _ _))   = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
-asVC (FData (FuncData n d _))     = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
+asVC (FDef (FuncDef n d _ _ _ _)) = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
+asVC (FDef (CtorDef n d _ _ _))   = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
+asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
 
 -- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID
@@ -213,9 +213,7 @@ getDerivedInputs ddefs ins cnsts sm =
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
--- | Get a list of 'CodeChunk's from a constraint.
-constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
-constraintvars (Range _ ri) m =
-  map (codeChunk . varResolve m) $ nub $ eNamesRI ri
-constraintvars (Elem _ ri) m =
-  map (codeChunk . varResolve m) $ eDep ri
+-- | Get a list of 'CodeVarChunk's from a constraint.
+constraintvars :: ConstraintCE -> ChunkDB -> [CodeVarChunk]
+constraintvars (Range _ ri) m = map (varResolve m) $ nub $ eNamesRI ri
+constraintvars (Elem _ ri)  m = map (varResolve m) $ eDep ri

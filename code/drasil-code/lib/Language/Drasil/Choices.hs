@@ -384,6 +384,7 @@ spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
 spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
 spaceToCodeType (S.Actor s)      = [Object s]
 spaceToCodeType S.Void           = [Void]
+spaceToCodeType (S.Reference s)  = map Reference (spaceToCodeType s)
 spaceToCodeType (S.Function i t) = [Func is ts | is <- ins, ts <- trgs]
     where trgs = spaceToCodeType t
           ins  = map spaceToCodeType (toList i)

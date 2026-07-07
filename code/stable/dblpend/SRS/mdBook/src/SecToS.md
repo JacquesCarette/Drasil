@@ -11,6 +11,10 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({a\_{\text{y}1}}\\)               |Vertical acceleration of the first object   |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\({a\_{\text{y}2}}\\)               |Vertical acceleration of the second object  |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{a}\text{(}t\text{)}\\)|Acceleration                                |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
+|\\({F\_{\text{x}1}}\\)               |Horizontal force on the first object        |\\({\text{N}}\\)                     |
+|\\({F\_{\text{x}2}}\\)               |Horizontal force on the second object       |\\({\text{N}}\\)                     |
+|\\({F\_{\text{y}1}}\\)               |Vertical force on the first object          |\\({\text{N}}\\)                     |
+|\\({F\_{\text{y}2}}\\)               |Vertical force on the second object         |\\({\text{N}}\\)                     |
 |\\(\boldsymbol{F}\\)                 |Force                                       |\\({\text{N}}\\)                     |
 |\\(g\\)                              |Magnitude of gravitational acceleration     |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |
 |\\(\boldsymbol{g}\\)                 |Gravitational acceleration                  |\\(\frac{\text{m}}{\text{s}^{2}}\\)  |

@@ -47,7 +47,7 @@ global a = length(myOtherList)
 insert!(myOtherList, 3, 2.0)
 append!(myOtherList, 2.5)
 global e = myOtherList[2]
-myOtherList[2] = 17.4
+global myOtherList[2] = 17.4
 global myName = String[]
 global myName = split("Brooks Mac", " ")
 println(myName)

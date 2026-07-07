@@ -88,6 +88,7 @@ on2StateWrapped f a' b' = do
     f a b
 
 getInnerType :: C.CodeType -> C.CodeType
+getInnerType (C.Reference innerT) = innerT
 getInnerType (C.List innerT) = innerT
 getInnerType (C.Array innerT) = innerT
 getInnerType (C.Set innerT) = innerT

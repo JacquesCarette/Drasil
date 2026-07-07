@@ -13,7 +13,6 @@ where
 
 import Control.Lens ((^.))
 import GHC.IO.Encoding (setLocaleEncoding, utf8, TextEncoding)
-import System.OsPath (OsPath)
 
 import Drasil.FileHandling (OverwritePolicy (..), PathSegment, directory, localPath, ps, writeFiles)
 import Drasil.System (HasSystemMeta (..), ToFiles (..))

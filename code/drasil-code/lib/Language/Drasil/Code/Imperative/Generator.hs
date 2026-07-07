@@ -21,7 +21,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
   ProgData(..), initialState, FileData(..), modDoc)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
+import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..))
 import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
 import Drasil.System (refTable, HasSystemMeta(..))
 
@@ -293,10 +293,8 @@ genPackageProc :: (ProcProg progRepr tp vis smt, SoftwareDossierSym packRepr, Mo
   GenState (packRepr PackageData)
 genPackageProc unRepr = do
   g <- get
-  ci <- genProgramProc
   p <- genProgramProc
-  let info = Proc.unCI $ evalState ci initialState
-      (reprPD, s) = runState p info
+  let (reprPD, s) = runState p initialState
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd

@@ -733,7 +733,7 @@ checkInputClass = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDeclProc :: (SharedProg r tp vis smt, NativeVector r tp) => GenState (Maybe (MS (r smt)))
+getInputDeclProc :: (SharedProg r tp vis smt) => GenState (Maybe (MS (r smt)))
 getInputDeclProc = do
   g <- get
   let scp = convScope $ currentScope g

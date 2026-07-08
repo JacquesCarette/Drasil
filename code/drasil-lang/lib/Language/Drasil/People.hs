@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Defines types and functions to encode people, names, and naming convention.
 -- Used for referencing and authorship of work.
 module Language.Drasil.People (
@@ -13,6 +14,8 @@ module Language.Drasil.People (
   , rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople --For sorting references
   ) where
+
+import Drasil.Database (declareHasChunkRefs, Generically(..))
 
 -- | A person can have a given name, middle name(s), and surname, as well
 -- as the naming convention they use.
@@ -31,6 +34,9 @@ data Conv = Western -- ^ Western style conventions are given name followed
                     -- followed by given name.
           | Mono  -- ^ Mononyms are for those people who have only one name (ex. Madonna).
           deriving (Eq)
+
+declareHasChunkRefs ''Conv
+declareHasChunkRefs ''Person
 
 -- | Orderes different groups of 'Person's. If two lists are the same up to a point, the citation with more 'Person's will go last.
 comparePeople :: [Person] -> [Person] -> Ordering

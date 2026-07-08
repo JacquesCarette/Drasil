@@ -20,9 +20,9 @@ import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..
   SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
+import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))
 
 import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
   SharedProg, OOProg, MS, VS, TypeData, ValueSym(..), Argument(..),
@@ -42,7 +42,7 @@ genModuleWithImports :: (OOProg r vis smt) => Name -> Description ->
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map fullName (codeSpec g ^. authorsO )
+  let as = map fullName (g ^. authors)
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = OO.docMod desc watermark as (g ^. date)
@@ -61,7 +61,7 @@ genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState ->
   GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
-  let n = codeSpec g ^. pNameO
+  let n = g ^. programName
       cms = g ^. commented
       v = getDoxOutput g
   return $ if not (null cms) then doxConfig n s v else Nothing
@@ -70,7 +70,7 @@ genDoxConfig s = do
 genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
-  let n = codeSpec g ^. pNameO
+  let n = g ^. programName
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
@@ -179,7 +179,7 @@ genModuleWithImportsProc :: (ProcProg r vis smt) => Name -> Description ->
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map fullName (codeSpec g ^. authorsO )
+  let as = map fullName (g ^. authors)
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = Proc.docMod desc watermark as (g ^. date)
               | CommentFunc `elem` g ^. commented && not (null ms) = Proc.docMod "" watermark [] ""

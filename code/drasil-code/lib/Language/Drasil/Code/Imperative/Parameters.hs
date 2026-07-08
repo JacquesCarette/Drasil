@@ -11,6 +11,7 @@ import qualified Data.Map as Map (fromList, lookup)
 
 import Language.Drasil hiding (isIn)
 import Drasil.Database (HasUID(..), UID)
+import Drasil.System (systemdb)
 
 import Drasil.Code.CodeVar (CodeIdea(..), DefiningCodeExpr(..), CodeVarChunk,
   quantvar)
@@ -21,7 +22,7 @@ import Language.Drasil.Choices (Structure(..), ConstantStructure(..),
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName, HasChoices(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..), constraintvars, getConstraints)
+import Language.Drasil.CodeSpec (HasCodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
 -- | Parameters may be inputs or outputs.
@@ -60,16 +61,16 @@ getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
   g <- get
   giName <- genICName GetInput
-  getParams giName Out $ codeSpec g ^. extInputsO
+  getParams giName Out $ g ^. extInputs
 
 -- | The inputs to the function for calculating derived inputs are any variables
 -- used in the equations for the derived inputs.
 getDerivedIns :: GenState [CodeVarChunk]
 getDerivedIns = do
   g <- get
-  let s = codeSpec g
-      dvals = s ^. derivedInputsO
-      reqdVals = concatMap (flip codevars (s ^. systemdbO) . (^. codeExpr)) dvals
+  let s = g
+      dvals = s ^. derivedInputs
+      reqdVals = concatMap (flip codevars (s ^. systemdb) . (^. codeExpr)) dvals
   dvName <- genICName DerivedValuesFn
   getParams dvName In reqdVals
 
@@ -78,7 +79,7 @@ getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
   dvName <- genICName DerivedValuesFn
-  getParams dvName Out $ map codeChunk $ codeSpec g ^. derivedInputsO
+  getParams dvName Out $ map codeChunk $ g ^. derivedInputs
 
 -- | The parameters to the function for checking constraints on the inputs are
 -- any inputs with constraints, and any variables used in the expressions of
@@ -86,10 +87,10 @@ getDerivedOuts = do
 getConstraintParams :: GenState [CodeVarChunk]
 getConstraintParams = do
   g <- get
-  let s = codeSpec g
-      cm = s ^. cMapO
-      db = s ^. systemdbO
-      varsList = filter (\i -> member (i ^. uid) cm) (s ^. inputsO)
+  let s = g
+      cm = s ^. cMap
+      db = s ^. systemdb
+      varsList = filter (\i -> member (i ^. uid) cm) (s ^. inputs)
       reqdVals = nub $ varsList ++
         concatMap (`constraintvars` db) (getConstraints cm varsList)
   icName <- genICName InputConstraintsFn
@@ -101,14 +102,14 @@ getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
 getCalcParams c = do
   g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'`
-    (codeSpec g ^. systemdbO)) (c ^. codeExpr : c ^. auxExprs)
+    (g ^. systemdb)) (c ^. codeExpr : c ^. auxExprs)
 
 -- | The parameters to the function for printing outputs are the outputs.
 getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
   woName <- genICName WriteOutput
-  getParams woName In $ map (resolveOutputDefType g) (codeSpec g ^. outputsO)
+  getParams woName In $ map (resolveOutputDefType g) (g ^. outputs)
 
 -- | Prefer the calculated definition's type when an output is produced by a
 -- generated definition (notably ODE outputs, whose solved result may have a
@@ -119,7 +120,7 @@ resolveOutputDefType g out =
     Map.lookup (out ^. uid) (Map.fromList defsByUID)
   where
     defsByUID :: [(UID, CodeDefinition)]
-    defsByUID = map (\d -> (d ^. uid, d)) (codeSpec g ^. execOrderO)
+    defsByUID = map (\d -> (d ^. uid, d)) (g ^. execOrder)
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.
@@ -129,10 +130,10 @@ getParams :: (Quantity c, MayHaveUnit c, Concept c) => Name -> ParamType -> [c] 
   GenState [CodeVarChunk]
 getParams n pt cs' = do
   g <- get
-  let s = codeSpec g
+  let s = g
       cs = map quantvar cs'
-      ins = s ^. inputsO
-      cnsnts = map quantvar $ s ^. constantsO
+      ins = s ^. inputs
+      cnsnts = map quantvar $ s ^. constDefns
       inpVars = filter (`elem` ins) cs
       conVars = filter (`elem` cnsnts) cs
       csSubIns = filter ((`notMember` (g ^. concMatches)) . (^. uid))

@@ -77,7 +77,7 @@ import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
+import Language.Drasil.CodeSpec (HasCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 
 type ConstraintCE = Constraint CodeExpr
@@ -104,7 +104,7 @@ genMainFunc = do
           co <- initConsts
           ip <- getInputDecl
           ics <- genAllInputCalls
-          varDef <- mapM genCalcCall (codeSpec g ^. execOrderO)
+          varDef <- mapM genCalcCall (g ^. execOrder)
           wo <- genOutputCall
           return $ Just $
             (if CommentFunc `elem` g ^. commented
@@ -135,7 +135,7 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   cname <- genICName InputParameters
   let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
-        codeName) (map quantvar $ codeSpec g ^. constantsO)) (g ^. conRepr)
+        codeName) (map quantvar $ g ^. constDefns)) (g ^. conRepr)
         (g ^. conStruct)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
@@ -150,7 +150,7 @@ getInputDecl = do
       constIns cs Var WithInputs = getDecl cs
       constIns _ _ _ = return Nothing
   getDecl (partition (flip member (eMap g) . codeName)
-    (codeSpec g ^. inputsO))
+    (g ^. inputs))
 
 -- | If constants are 'Unbundled', declare them individually using 'varDecDef' if
 -- representation is 'Var' and 'constDecDef' if representation is 'Const'.
@@ -167,7 +167,7 @@ initConsts = do
   let scp = convScope $ currentScope g
   v_consts <- mkVar (quantvar consts)
   cname <- genICName Constants
-  let cs = codeSpec g ^. constantsO
+  let cs = g ^. constDefns
       getDecl (Store Unbundled) _ = declVars
       getDecl (Store Bundled) _ = gets (\s -> declObj cs (s ^. conRepr))
       getDecl WithInputs Unbundled = declVars
@@ -225,8 +225,8 @@ genInputClass scp = do
   g <- get
   modify (\st -> st {currentScope = Local})
   cname <- genICName InputParameters
-  let ins = codeSpec g ^. inputsO
-      cs = codeSpec g ^. constantsO
+  let ins = g ^. inputs
+      cs = g ^. constDefns
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       constructors :: (OOProg r vis smt) => GenState [SMethod r]
@@ -284,7 +284,7 @@ genInputDerived s = do
   g <- get
   modify (\st -> st {currentScope = Local})
   dvName <- genICName DerivedValuesFn
-  let dvals = codeSpec g ^. derivedInputsO
+  let dvals = g ^. derivedInputs
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genDerived :: (OOProg r vis smt) => Bool -> GenState (Maybe (SMethod r))
@@ -305,7 +305,7 @@ genInputConstraints s = do
   g <- get
   modify (\st -> st {currentScope = Local})
   icName <- genICName InputConstraintsFn
-  let cm = codeSpec g ^. cMapO
+  let cm = g ^. cMap
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints :: (OOProg r vis smt) => Bool -> GenState
@@ -313,7 +313,7 @@ genInputConstraints s = do
       genConstraints False = return Nothing
       genConstraints _ = do
         parms <- getConstraintParams
-        let varsList = filter (\i -> member (i ^. uid) cm) (codeSpec g ^. inputsO)
+        let varsList = filter (\i -> member (i ^. uid) cm) (g ^. inputs)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
         sf <- sfwrCBody sfwrCs
@@ -463,7 +463,7 @@ genDataDesc :: GenState DataDesc
 genDataDesc = do
   g <- get
   return $ junkLine :
-    intersperse junkLine (map singleton (codeSpec g ^. extInputsO))
+    intersperse junkLine (map singleton (g ^. extInputs))
 
 -- | Generates a sample input file compatible with the generated program,
 -- if the user chose to.
@@ -491,7 +491,7 @@ genConstClass scp = do
   g <- get
   modify (\st -> st {currentScope = Local})
   cname <- genICName Constants
-  let cs = codeSpec g ^. constantsO
+  let cs = g ^. constDefns
       genClass :: (OOProg r vis smt) => [CodeDefinition] -> GenState
         (Maybe (SClass r))
       genClass [] = return Nothing
@@ -518,7 +518,7 @@ genCalcMod = do
   cName <- genICName Calculations
   let elmap = extLibMap g
   genModuleWithImports cName calcModDesc (concatMap (^. imports) $
-    elems elmap) (map (fmap Just . genCalcFunc) (codeSpec g ^. execOrderO)) []
+    elems elmap) (map (fmap Just . genCalcFunc) (g ^. execOrder)) []
 
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
@@ -606,7 +606,7 @@ genOutputFormat = do
             var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
-        let outs = map (resolveOutputDefType g) (codeSpec g ^. outputsO)
+        let outs = map (resolveOutputDefType g) (g ^. outputs)
         outp <- mapM (\x -> do
           v <- mkVal x
           return $
@@ -643,7 +643,7 @@ genMainFuncProc = do
           co <- initConstsProc
           ip <- getInputDeclProc
           ics <- genAllInputCallsProc
-          varDef <- mapM genCalcCallProc (codeSpec g ^. execOrderO)
+          varDef <- mapM genCalcCallProc (g ^. execOrder)
           wo <- genOutputCallProc
           return $ Just $
             (if CommentFunc `elem` g ^. commented
@@ -669,7 +669,7 @@ initConstsProc :: (SharedProg r vis smt, NativeVector r) => GenState (Maybe (MS 
 initConstsProc = do
   g <- get
   let scp = convScope $ currentScope g
-      cs = codeSpec g ^. constantsO
+      cs = g ^. constDefns
       getDecl (Store Unbundled) _ = declVars
       getDecl (Store Bundled) _ = error "initConstsProc: Procedural renderers do not support bundled constants."
       getDecl WithInputs Unbundled = declVars
@@ -690,7 +690,7 @@ checkConstClass :: GenState Bool
 checkConstClass = do
   g <- get
   cName <- genICName Constants
-  let cs = codeSpec g ^. constantsO
+  let cs = g ^. constDefns
       checkClass :: [CodeDefinition] -> GenState Bool
       checkClass [] = return False
       checkClass _ = return True
@@ -717,8 +717,8 @@ checkInputClass :: GenState Bool
 checkInputClass = do
   g <- get
   cname <- genICName InputParameters
-  let ins = codeSpec g ^. inputsO
-      cs = codeSpec g ^. constantsO
+  let ins = g ^. inputs
+      cs = g ^. constDefns
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       checkClass :: [CodeVarChunk] -> [CodeDefinition] -> GenState Bool
@@ -743,7 +743,7 @@ getInputDeclProc = do
         return $ Just $ multi $ map (`varDec` scp) vars
       getDecl _ = error "getInputDeclProc: Procedural renderers do not support bundled inputs"
   getDecl (partition (flip member (eMap g) . codeName)
-    (codeSpec g ^. inputsO))
+    (g ^. inputs))
 
 -- | Generates a module containing calculation functions.
 genCalcModProc :: (ProcProg r vis smt) => GenState (Proc.SFile r)
@@ -752,7 +752,7 @@ genCalcModProc = do
   cName <- genICName Calculations
   let elmap = extLibMap g
   genModuleWithImportsProc cName calcModDesc (concatMap (^. imports) $
-    elems elmap) (map (fmap Just . genCalcFuncProc) (codeSpec g ^. execOrderO))
+    elems elmap) (map (fmap Just . genCalcFuncProc) (g ^. execOrder))
 
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
@@ -845,7 +845,7 @@ genInputDerivedProc s = do
   g <- get
   modify (\st -> st {currentScope = Local})
   dvName <- genICName DerivedValuesFn
-  let dvals = codeSpec g ^. derivedInputsO
+  let dvals = g ^. derivedInputs
       getFunc Pub = publicInOutFuncProc
       getFunc Priv = privateInOutFuncProc
       genDerived :: (SharedProg r vis smt, NativeVector r) => Bool -> GenState
@@ -867,7 +867,7 @@ genInputConstraintsProc s = do
   g <- get
   modify (\st -> st {currentScope = Local})
   icName <- genICName InputConstraintsFn
-  let cm = codeSpec g ^. cMapO
+  let cm = g ^. cMap
       getFunc Pub = publicFuncProc
       getFunc Priv = privateFuncProc
       genConstraints :: (SharedProg r vis smt, NativeVector r) => Bool -> GenState
@@ -875,7 +875,7 @@ genInputConstraintsProc s = do
       genConstraints False = return Nothing
       genConstraints _ = do
         parms <- getConstraintParams
-        let varsList = filter (\i -> member (i ^. uid) cm) (codeSpec g ^. inputsO)
+        let varsList = filter (\i -> member (i ^. uid) cm) (g ^. inputs)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
         sf <- sfwrCBodyProc sfwrCs
@@ -1009,7 +1009,7 @@ genOutputFormatProc = do
             var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
-        let outs = map (resolveOutputDefType g) (codeSpec g ^. outputsO)
+        let outs = map (resolveOutputDefType g) (g ^. outputs)
         outp <- mapM (\x -> do
           v <- mkValProc x
           return $

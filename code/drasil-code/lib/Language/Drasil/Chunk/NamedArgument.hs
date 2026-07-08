@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.NamedArgument (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), declareHasChunkRefs, Generically(..))
 import Language.Drasil (HasSpace(..), HasSymbol(..),
   Idea(..), MayHaveUnit(..), NamedIdea(..), Quantity,
   DefinedQuantityDict, Concept, dqdWr, Definition (defn), ConceptDomain (cdom))
@@ -19,10 +19,7 @@ import Drasil.Code.Classes (IsArgumentName)
 -- but with more of a focus on generating code arguments.
 newtype NamedArgument = NA {_qtd :: DefinedQuantityDict}
 makeLenses ''NamedArgument
-
-instance HasChunkRefs NamedArgument where
-  chunkRefs na = chunkRefs (na ^. qtd)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''NamedArgument
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'NamedArgument'.
 instance HasUID         NamedArgument where uid = qtd . uid

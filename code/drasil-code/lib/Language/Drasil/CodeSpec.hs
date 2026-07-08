@@ -56,8 +56,6 @@ type ConstantMap = Map.Map UID CodeDefinition
 data OldCodeSpec = OldCodeSpec {
   -- | Program name.
   _pName :: Name,
-  -- | Authors.
-  _authors :: People,
   -- | All inputs.
   _inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -86,7 +84,6 @@ data OldCodeSpec = OldCodeSpec {
 
 makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
   [   ("_pName", "pNameO")
-    , ("_authors", "authorsO")
     , ("_inputs", "inputsO")
     , ("_extInputs", "extInputsO")
     , ("_derivedInputs", "derivedInputsO")
@@ -173,7 +170,6 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
-        _authors = sys ^. authors,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,

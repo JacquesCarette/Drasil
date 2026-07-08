@@ -186,7 +186,7 @@ genPackage unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map fullName (codeSpec g ^. authorsO)
+      as = map fullName (codeSpec g ^. authors)
       cfp = codeSpec g ^. configFilesO
       pinfo = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
@@ -300,7 +300,7 @@ genPackageProc unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map fullName (codeSpec g ^. authorsO)
+      as = map fullName (codeSpec g ^. authors)
       cfp = codeSpec g ^. configFilesO
       pinfo = printfo g
       prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)

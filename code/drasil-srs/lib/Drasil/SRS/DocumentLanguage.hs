@@ -409,9 +409,9 @@ mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
+    notNull xs = not (null (header (TM.layoutUIDs xs si) si))
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
-      not $ null (header (TM.layoutUIDs rows si) si)
-         || null (header (TM.layoutUIDs cols si) si)) progs
+      notNull rows && notNull cols) progs
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]

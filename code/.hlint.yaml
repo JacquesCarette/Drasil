@@ -31,6 +31,7 @@
 # - functions:
 #   - {name: unsafePerformIO, within: []} # unsafePerformIO can only appear in no modules
 
+- group: {name: teaching, enabled: true}
 
 # Add custom hints for this project
 #

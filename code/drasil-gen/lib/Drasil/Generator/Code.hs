@@ -24,7 +24,7 @@ import Drasil.GProc (unJLC, unMLC, ProcProg)
 import qualified Drasil.GProc as Proc
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
-  generator, readWithDataDesc, sampleInputDD, codeSpec,
+  generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
   Architecture(impType, modularity),
   Choices(Choices, maps, lang, architecture, optFeats, dataInfo),
   ConstantRepr(..), ConstantStructure(..),
@@ -32,7 +32,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
   OptionalFeatures(logConfig), SpaceMatch, Structure(..),
   Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
-  HasOldCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
+  HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.System (SmithEtAlSRS, programName)
@@ -75,7 +75,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
 
     spec :: CodeSpec
-    spec = codeSpec syst chs
+    spec = mkCodeSpec syst chs
 
     readSampleData :: IO [Expr]
     readSampleData =

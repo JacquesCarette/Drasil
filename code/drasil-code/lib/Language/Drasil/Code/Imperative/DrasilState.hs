@@ -30,7 +30,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec, HasOldCodeSpec(..), getConstraints)
+  CodeSpec, HasCodeSpec(..), getConstraints)
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
@@ -170,8 +170,8 @@ instance HasChoices DrasilState where
   logKind = choices . logKind
   dsICNames = choices . dsICNames
 
-instance HasOldCodeSpec DrasilState where
-  oldCodeSpec = dsCodeSpec . oldCodeSpec
+instance HasCodeSpec DrasilState where
+  codeSpec = dsCodeSpec
 
 instance HasSystemMeta DrasilState where
   systemMeta = dsCodeSpec . systemMeta

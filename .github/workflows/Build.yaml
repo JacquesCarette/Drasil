@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tex: ${{ steps.changes.outputs.tex}}
-      md: ${{ steps.changes.outputs.md }}
+      mdbook: ${{ steps.changes.outputs.mdbook }}
+      jupyter: ${{ steps.changes.outputs.jupyter }}
       gencode: ${{ steps.changes.outputs.gencode }}
     steps:
       - uses: actions/checkout@v7
@@ -34,11 +35,13 @@ jobs:
               - 'code/scripts/**'
             tex:
               - *build
-              - 'code/stable/**/*.tex'
-            md:
+              - 'code/stable/*/SRS/PDF/**'
+            mdbook:
               - *build
-              - code/stable/**/*.md
-              - code/stable/**/book.toml
+              - 'code/stable/*/SRS/mdBook/**'
+            jupyter:
+              - *build
+              - 'code/stable/**/*.ipynb'
             gencode:
               - *build
               - 'code/stable/**/src/**'
@@ -166,7 +169,7 @@ jobs:
     name: mdBook
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.md == 'true' }}
+    if: ${{ needs.build.outputs.mdbook == 'true' }}
     env:
       SKIP_GEN: 1
     steps:
@@ -199,3 +202,25 @@ jobs:
 
       - name: "Build mdBook Examples"
         run: make mdbook_build
+
+  jupyter:
+    name: Jupyter
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.outputs.jupyter == 'true' }}
+    env:
+      SKIP_GEN: 1
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: "Install Jupyter"
+        run: pip install jupyterlab
+
+      - name: "Download generated artifacts"
+        uses: actions/download-artifact@v8
+        with:
+          name: generated
+          path: code/build
+
+      - name: "Extract HTML copies of Jupyter Notebooks"
+        run: make jupyter_html

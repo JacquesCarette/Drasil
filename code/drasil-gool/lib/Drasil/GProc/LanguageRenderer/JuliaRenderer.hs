@@ -704,7 +704,11 @@ jlListAdd    = "insert!"
 jlListAppend = "append!"
 jlListAbsdex = "findfirst"
 
-jlIndexOf :: (SharedProg r vis smt) => SValue r -> SValue r -> SValue r
+jlIndexOf
+  :: (IndexTranslator r, ValueExpression r, BinderSym r, VariableValue r, Comparison r)
+  => SValue r
+  -> SValue r
+  -> SValue r
 jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'

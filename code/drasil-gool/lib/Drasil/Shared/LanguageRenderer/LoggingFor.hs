@@ -89,7 +89,10 @@ valLogFile = valueOf varLogFile
 logName :: (Literal r) => SValue r
 logName = litString "log.txt"
 
-logVarUpdate :: (SharedProg r vis smt) => SVariable (LoggingFor r) -> [MS (r smt)]
+logVarUpdate
+  :: (IOStatement r smt, VariableValue r, VariableElim r, Literal r)
+  => SVariable (LoggingFor r)
+  -> [MS (r smt)]
 logVarUpdate x =
   [ openFileA varLogFile logName
   , do
@@ -102,7 +105,8 @@ logVarUpdate x =
   , closeFile valLogFile
   ]
 
-instance (SharedProg r vis smt) => AssignStatement (LoggingFor r) smt where
+instance (AssignStatement r smt, IOStatement r smt, VariableValue r, VariableElim r, Literal r)
+  => AssignStatement (LoggingFor r) smt where
   (&-=) = liftLogging (&-=)
   (&+=) = liftLogging (&+=)
   (&++) = liftLogging (&++)
@@ -120,7 +124,8 @@ instance (List r smt) => List (LoggingFor r) smt where
                                 -- (Can't right now because RC.value isn't exposed)
   indexOf = liftLogging indexOf
 
-instance (SharedProg r vis smt) => DeclStatement (LoggingFor r) smt where
+instance (DeclStatement r smt, IOStatement r smt, VariableValue r, VariableElim r, Literal r)
+  => DeclStatement (LoggingFor r) smt where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
     varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
@@ -139,7 +144,8 @@ instance (SharedProg r vis smt) => DeclStatement (LoggingFor r) smt where
     : logVarUpdate cnst
   funcDecDef = liftLogging funcDecDef
 
-instance (SharedProg r vis smt) => IOStatement (LoggingFor r) smt where
+instance (IOStatement r smt, VariableValue r, VariableElim r, Literal r)
+  => IOStatement (LoggingFor r) smt where
   print = liftLogging print
   printLn = liftLogging printLn
   printStr = liftLogging printStr
@@ -163,7 +169,8 @@ instance (SharedProg r vis smt) => IOStatement (LoggingFor r) smt where
   discardFileLine = liftLogging discardFileLine
   getFileInputAll = liftLogging getFileInputAll
 
-instance (SharedProg r vis smt) => StringStatement (LoggingFor r) smt where
+instance (StringStatement r smt, IOStatement r smt, VariableValue r, VariableElim r, Literal r)
+  => StringStatement (LoggingFor r) smt where
   stringSplit chr vr str  = liftLogging $
     stringSplit (lowerLogging chr) (lowerLogging vr) (lowerLogging str)
   stringListVals vrs strs  = liftLogging $

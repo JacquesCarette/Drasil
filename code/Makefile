@@ -271,6 +271,9 @@ test_website: $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website ##@Website Test fresh
 	@echo ---------------------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
+stack_test: code ##@General Run stack tests
+	stack test $(stackArgs) --no-interleaved-output
+
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then overwrite contents in the stable folder with currently generated ones.
 stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with up-to-date artifacts.
@@ -325,17 +328,21 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
+ifneq ($(SKIP_GEN), 1)
 	stack build $(stackBuildArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)"
 	cd "$(BUILD_FOLDER)" && $(STACK_EXEC) -- "$(EEXE)"
+endif
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 # We first build the codegenTest to catch any build errors
 # Then we run the codeGenTest, ignoring the exit code and not printing any output,
 # which will write the generated code to the build folder.
 $(GOOLTEST)$(GEN_E_SUFFIX):
+ifneq ($(SKIP_GEN), 1)
 	stack build $(stackBuildArgs) drasil-code
 	-stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--quiet"
+endif
 
 $(GOOLTEST)$(TEST_E_SUFFIX):
 	stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)"
@@ -347,7 +354,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 # Same as above targets; run individual examples but create traceability graphs
 # for each example run. Needs Graphviz to run. Graphs generate in svg, pdf, and png formats.
 # Specific example targets will have the name exampleName_trace_graph.
-$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): %$(GEN_E_SUFFIX) graphmod
+$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): %$(GEN_E_SUFFIX)
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
 		cd "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" && for graph in $(TRACEY_GRAPH_NAMES); do \

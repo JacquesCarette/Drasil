@@ -13,69 +13,43 @@ defaults:
 jobs:
   build:
     name: "Build & Test"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
+    outputs:
+      tex: ${{ steps.changes.outputs.tex}}
+      md: ${{ steps.changes.outputs.md }}
+      gencode: ${{ steps.changes.outputs.gencode }}
     steps:
       - uses: actions/checkout@v7
 
-      - name: "Search changes for applicable tests"
+      - name: "Detect changes"
         uses: dorny/paths-filter@v4
         id: changes
         with:
           filters: |
+            # This section is referenced in all the below sections
+            # Paths added here are core/build files that should trigger all optional steps
+            build: &build
+              - '.github/workflows/Build.yaml'
+              - 'code/Makefile'
+              - 'code/scripts/**'
             tex:
+              - *build
               - 'code/stable/**/*.tex'
             md:
+              - *build
               - code/stable/**/*.md
               - code/stable/**/book.toml
-            artifacts:
+            gencode:
+              - *build
               - 'code/stable/**/src/**'
-
-      - name: "Update apt package list"
-        run: |
-          sudo apt-get update
-
-      - name: "Install core system requirements"
-        run: |
-          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz g++ default-jdk mono-devel
-
-      - name: "Install TeX requirements"
-        if: ${{ steps.changes.outputs.tex == 'true' }}
-        run: |
-          sudo apt-get install -y --fix-missing fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex inkscape
-
-      - name: "Install mdBook"
-        if: ${{ steps.changes.outputs.md == 'true' }}
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          cargo install mdbook
-
-      - name: "Update PATH"
-        run: |
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-
-      - name: "Install Stack"
-        uses: haskell-actions/setup@v2
-        with:
-          enable-stack: true
-          stack-no-global: true
-          stack-version: 'latest'
+              - 'code/drasil-code/test/golden/**'
 
       - name: "Cache dependencies"
         uses: actions/cache@v6
         with:
           path: |
             ~/.stack
-            ~/.cabal/packages
-            ~/.cabal/store
-            code/.stack-work/
-            code/website/.stack-work/
-            ~/.local/bin/graphmod
-          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
-
-      - name: "Clean previous run"
-        run: make clean
+          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
@@ -83,29 +57,139 @@ jobs:
       - name: "Build"
         run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations"
 
+      - name: "Stack Test"
+        run: make stack_test stackArgs="--no-terminal"
+
       - name: "Test built artifacts against stable"
-        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror -Wwarn=deprecations" NOISY=yes
+        run: make test test_website NOISY=yes
 
-      - name: "Compile GOOL examples"
-        run: make codegenTest
+      - name: "Upload logs on failure"
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: diff-logs
+          path: code/logs
 
-      - name: "Compile generated TeX artifacts"
-        run: make -j tex SUMMARIZE_TEX=yes
-        if: ${{ steps.changes.outputs.tex == 'true' }}
+      - name: "Upload generated artifacts"
+        uses: actions/upload-artifact@v7
+        with:
+          name: generated
+          path: code/build
+          include-hidden-files: true
 
-      - name: "Compile generated software artifacts"
-        if: ${{ steps.changes.outputs.artifacts == 'true' }}
-        run: make gool
+      - name: "Upload gooltest artifacts"
+        uses: actions/upload-artifact@v7
+        with:
+          name: generated-gooltest
+          path: code/drasil-code/test/build
+
+  haddock:
+    name: Haddock
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: "Restore dependency cache"
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.stack
+          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Generate Haddock docs (as test)"
         run: make docs
 
+  gooltest:
+    name: "Compile GOOL"
+    needs: build
+    runs-on: ubuntu-24.04
+    if: ${{ needs.build.outputs.gencode == 'true' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: "Update apt package list"
+        run: |
+          sudo apt-get update
+
+      - name: "Install requirements"
+        run: |
+          sudo apt-get install -y default-jdk-headless mono-devel
+
+      - name: "Download generated artifacts"
+        uses: actions/download-artifact@v8
+        with:
+          name: generated
+          path: code/build
+
+      - name: "Download gooltest artifacts"
+        uses: actions/download-artifact@v8
+        with:
+          name: generated-gooltest
+          path: code/drasil-code/test/build
+
+      - name: "Compile GOOL Examples"
+        run: make codegenTest SKIP_GEN=1
+      
+      - name: "Compile generated software artifacts"
+        run: make gool SKIP_GEN=1
+
+  latex:
+    name: LaTeX
+    needs: build
+    runs-on: ubuntu-26.04 # Ubuntu 26 has newer TeX packages that are significantly faster
+    if: ${{ needs.build.outputs.tex == 'true' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: "Update apt package list"
+        run: |
+          sudo apt-get update
+
+      - name: "Install TeX requirements"
+        run: |
+          sudo apt-get install -y graphviz fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-luatex inkscape
+
+      - name: "Download generated artifacts"
+        uses: actions/download-artifact@v8
+        with:
+          name: generated
+          path: code/build
+
+      - name: "Compile generated TeX artifacts"
+        run: make -j4 tex SKIP_GEN=1 SUMMARIZE_TEX=yes
+
+  mdbook:
+    name: mdBook
+    needs: build
+    runs-on: ubuntu-24.04
+    if: ${{ needs.build.outputs.md == 'true' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: "Update apt package list"
+        run: |
+          sudo apt-get update
+
+      - name: "Install requirements"
+        run: |
+          sudo apt-get install -y graphviz
+
+      - name: "Install mdBook"
+        env:
+          MDBOOK_VERSION: 0.5.4
+        working-directory: ${{ runner.temp }}
+        run: |
+          curl -L -O https://github.com/rust-lang/mdBook/releases/download/v$MDBOOK_VERSION/mdbook-v$MDBOOK_VERSION-x86_64-unknown-linux-gnu.tar.gz
+          tar zxf mdbook-v$MDBOOK_VERSION-x86_64-unknown-linux-gnu.tar.gz
+          mkdir -p ~/.local/bin
+          mv mdbook ~/.local/bin
+          mdbook --version
+
+      - name: "Download generated artifacts"
+        uses: actions/download-artifact@v8
+        with:
+          name: generated
+          path: code/build
+
       - name: "Build mdBook Examples"
-        run: make mdbook_build
-        if: ${{ steps.changes.outputs.md == 'true' }}
-
-      - name: "Build website generator"
-        run: make website
-
-      - name: "Test Built Website against Stable Version"
-        run: make test_website NOISY=yes
+        run: make mdbook_build SKIP_GEN=1

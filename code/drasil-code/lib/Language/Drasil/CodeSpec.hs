@@ -28,7 +28,7 @@ import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
+import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 
@@ -38,7 +38,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
   odeLibReqs, odeInfoReqs)
 import Language.Drasil.Chunk.CodeBase (codevars, varResolve)
-import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
+import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..))
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
 -- | Program input.
@@ -54,8 +54,6 @@ type ConstantMap = Map.Map UID CodeDefinition
 
 -- | Old Code specifications. Holds information needed to generate code.
 data OldCodeSpec = OldCodeSpec {
-  -- | Program name.
-  _pName :: Name,
   -- | All inputs.
   _inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -137,7 +135,6 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
                      , S._constraints = cs
                      , S._constants = cnsts } chs =
   let ddefs = sys ^. dataDefns
-      n = sys ^. programName
       db = sys ^. systemdb
       inputs' = map quantvar $ NE.toList ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
@@ -152,7 +149,6 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
       allInputs = inputs' ++ map quantvar derived
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
-        _pName = n,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,

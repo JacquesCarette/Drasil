@@ -23,7 +23,7 @@ import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))
 
 import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
   SharedProg, OOProg, MS, VS, ValueSym(..), Argument(..), ValueExpression(..),
@@ -43,7 +43,7 @@ genModuleWithImports :: (OOProg r tp vis smt) => Name -> Description ->
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map fullName (codeSpec g ^. authors)
+  let as = map fullName (g ^. authors)
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = OO.docMod desc watermark as (g ^. date)
@@ -62,7 +62,7 @@ genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState ->
   GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
-  let n = codeSpec g ^. pName
+  let n = g ^. programName
       cms = g ^. commented
       v = getDoxOutput g
   return $ if not (null cms) then doxConfig n s v else Nothing
@@ -71,7 +71,7 @@ genDoxConfig s = do
 genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
-  let n = codeSpec g ^. pName
+  let n = g ^. programName
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
@@ -180,7 +180,7 @@ genModuleWithImportsProc :: (ProcProg r tp vis smt) => Name -> Description ->
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  let as = map fullName (codeSpec g ^. authors)
+  let as = map fullName (g ^. authors)
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` g ^. commented                   = Proc.docMod desc watermark as (g ^. date)
               | CommentFunc `elem` g ^. commented && not (null ms) = Proc.docMod "" watermark [] ""

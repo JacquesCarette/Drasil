@@ -90,7 +90,7 @@ spaceCodeType s = do
 value :: (OOProg r tp vis smt) => UID -> Name -> VS (r tp) -> GenState (SValue r)
 value u s t = do
   g <- get
-  let cs = codeSpec g
+  let cs = g
       mm = cs ^. constMap
       constDef = do
         cd <- Map.lookup u mm
@@ -112,7 +112,7 @@ variable :: (SelfSym r tp, VariableElim r tp, VariableValue r tp) => Name ->
   VS (r tp) -> GenState (SVariable r)
 variable s t = do
   g <- get
-  let cs = codeSpec g
+  let cs = g
       defFunc Var = var
       defFunc Const = classConst
   if s `elem` map codeName (cs ^. inputs)
@@ -551,7 +551,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdb) s
+  vars <- mapM mkVar (fstdecl (g ^. systemdb) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
@@ -562,7 +562,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO)
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdb) s
+  vars <- mapM mkVar (fstdecl (g ^. systemdb) s
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
     [block $ map (`varDec` local) vars, block stmts]
@@ -762,7 +762,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 valueProc :: (SharedProg r tp vis smt, NativeVector r tp) => UID -> Name -> VS (r tp) -> GenState (SValue r)
 valueProc u s t = do
   g <- get
-  let cs = codeSpec g
+  let cs = g
       mm = cs ^. constMap
       constDef = do
         cd <- Map.lookup u mm
@@ -784,7 +784,7 @@ valueProc u s t = do
 variableProc :: (VariableSym r tp) => Name -> VS (r tp) -> GenState (SVariable r)
 variableProc s t = do
   g <- get
-  let cs = codeSpec g
+  let cs = g
       defFunc Var = var
       defFunc Const = constant -- This might be wrong
   if s `elem` map codeName (cs ^. inputs)
@@ -893,7 +893,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
-  vars <- mapM mkVarProc (fstdecl (codeSpec g ^. systemdb) s
+  vars <- mapM mkVarProc (fstdecl (g ^. systemdb) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]

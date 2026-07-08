@@ -61,14 +61,14 @@ getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
   g <- get
   giName <- genICName GetInput
-  getParams giName Out $ codeSpec g ^. extInputs
+  getParams giName Out $ g ^. extInputs
 
 -- | The inputs to the function for calculating derived inputs are any variables
 -- used in the equations for the derived inputs.
 getDerivedIns :: GenState [CodeVarChunk]
 getDerivedIns = do
   g <- get
-  let s = codeSpec g
+  let s = g
       dvals = s ^. derivedInputs
       reqdVals = concatMap (flip codevars (s ^. systemdb) . (^. codeExpr)) dvals
   dvName <- genICName DerivedValuesFn
@@ -79,7 +79,7 @@ getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
   dvName <- genICName DerivedValuesFn
-  getParams dvName Out $ map codeChunk $ codeSpec g ^. derivedInputs
+  getParams dvName Out $ map codeChunk $ g ^. derivedInputs
 
 -- | The parameters to the function for checking constraints on the inputs are
 -- any inputs with constraints, and any variables used in the expressions of
@@ -87,7 +87,7 @@ getDerivedOuts = do
 getConstraintParams :: GenState [CodeVarChunk]
 getConstraintParams = do
   g <- get
-  let s = codeSpec g
+  let s = g
       cm = s ^. cMap
       db = s ^. systemdb
       varsList = filter (\i -> member (i ^. uid) cm) (s ^. inputs)
@@ -102,14 +102,14 @@ getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
 getCalcParams c = do
   g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'`
-    (codeSpec g ^. systemdb)) (c ^. codeExpr : c ^. auxExprs)
+    (g ^. systemdb)) (c ^. codeExpr : c ^. auxExprs)
 
 -- | The parameters to the function for printing outputs are the outputs.
 getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
   woName <- genICName WriteOutput
-  getParams woName In $ map (resolveOutputDefType g) (codeSpec g ^. outputs)
+  getParams woName In $ map (resolveOutputDefType g) (g ^. outputs)
 
 -- | Prefer the calculated definition's type when an output is produced by a
 -- generated definition (notably ODE outputs, whose solved result may have a
@@ -120,7 +120,7 @@ resolveOutputDefType g out =
     Map.lookup (out ^. uid) (Map.fromList defsByUID)
   where
     defsByUID :: [(UID, CodeDefinition)]
-    defsByUID = map (\d -> (d ^. uid, d)) (codeSpec g ^. execOrder)
+    defsByUID = map (\d -> (d ^. uid, d)) (g ^. execOrder)
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.
@@ -130,7 +130,7 @@ getParams :: (Quantity c, MayHaveUnit c, Concept c) => Name -> ParamType -> [c] 
   GenState [CodeVarChunk]
 getParams n pt cs' = do
   g <- get
-  let s = codeSpec g
+  let s = g
       cs = map quantvar cs'
       ins = s ^. inputs
       cnsnts = map quantvar $ s ^. constDefns

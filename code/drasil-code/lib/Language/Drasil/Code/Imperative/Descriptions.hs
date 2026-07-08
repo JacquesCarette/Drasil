@@ -41,7 +41,7 @@ unmodularDesc = do
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
   return $ show $ oneLineSentenceDoc (printfo g) $ capSent $ foldlSent
-      ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ codeSpec g ^. purpose)
+      ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
@@ -122,7 +122,7 @@ constModDesc = do
   let cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
   return $ cDesc $ filter (flip member (Map.filter (cname ==)
-    (clsMap g)) . codeName) (codeSpec g ^. constDefns)
+    (clsMap g)) . codeName) (g ^. constDefns)
 
 -- | Returns a description of what is contained in the Output Format module,
 -- if it exists.
@@ -146,9 +146,9 @@ inputClassDesc = do
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [
-        inPs $ inIPMap $ codeSpec g ^. extInputs,
-        dVs $ inIPMap $ map quantvar $ codeSpec g ^. derivedInputs,
-        cVs $ inIPMap $ map quantvar $ codeSpec g ^. constDefns]
+        inPs $ inIPMap $ g ^. extInputs,
+        dVs $ inIPMap $ map quantvar $ g ^. derivedInputs,
+        cVs $ inIPMap $ map quantvar $ g ^. constDefns]
       inPs [] = ""
       inPs _ = "input values"
       dVs [] = ""
@@ -167,7 +167,7 @@ constClassDesc = do
   let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
   return $ ccDesc $ filter (flip member (Map.filter (cname ==)
-    (clsMap g)) . codeName) (codeSpec g ^. constDefns)
+    (clsMap g)) . codeName) (g ^. constDefns)
 
 -- | Returns a description for the generated function that reads input from a
 -- file, if it exists.
@@ -221,8 +221,8 @@ woFuncDesc = do
 physAndSfwrCons :: GenState Description
 physAndSfwrCons = do
   g <- get
-  let cns = concat $ mapMaybe ((`Map.lookup` (codeSpec g ^. cMap)) . (^. uid))
-        (codeSpec g ^. inputs)
+  let cns = concat $ mapMaybe ((`Map.lookup` (g ^. cMap)) . (^. uid))
+        (g ^. inputs)
   return $ stringList [
     if not (any isPhysC cns) then "" else "physical constraints",
     if not (any isSfwrC cns) then "" else "software constraints"]

@@ -23,7 +23,7 @@ import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
-import Drasil.System (refTable, HasSystemMeta(..))
+import Drasil.System (refTable, HasSystemMeta(..), HasSmithEtAlSRS(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -81,7 +81,7 @@ generator l dt sd chs cs = let
     (icNames chs)
   in DrasilState {
   -- constants
-  codeSpec = cs,
+  _dsCodeSpec = cs,
   printfo = pinfo,
   _choices = choices,
   modules = modules',
@@ -108,9 +108,9 @@ generator l dt sd chs cs = let
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
         els = map snd elmap
         nms = [lname]
-        mem = modExportMap (cs ^. oldCodeSpec) chs modules'
+        mem = modExportMap cs chs modules'
         lem = fromList (concatMap (^. modExports) els)
-        cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
+        cdm = clsDefMap cs chs modules'
         modules' = (cs ^. mods) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
         des = vcat $
@@ -186,14 +186,14 @@ genPackage unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map fullName (codeSpec g ^. authors)
-      cfp = codeSpec g ^. configFiles
+      as = map fullName (g ^. authors)
+      cfp = g ^. configFiles
       pinfo = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
-      prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. scope)
+      prps = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. purpose)
+      bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. background)
+      mtvtn = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. motivation)
+      scp = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
@@ -219,9 +219,9 @@ genProgram :: (OOProg r tp vis smt) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
-  let n = codeSpec g ^. pName
+  let n = g ^. programName
   -- FIXME: The below code does `Doc -> String` conversion!
-  let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -238,11 +238,11 @@ genUnmodular = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = codeSpec g ^. pName
+  let n = g ^. programName
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
-      : map (fmap Just) (map genCalcFunc (codeSpec g ^. execOrder)
+      : map (fmap Just) (map genCalcFunc (g ^. execOrder)
         ++ concatMap genModFuncs (modules g))
       ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
         genInputConstraints Pub]) ++ [genOutputFormat]))
@@ -300,13 +300,13 @@ genPackageProc unRepr = do
       fileInfoState = makeSds (s ^. headers) (s ^. sources) (s ^. mainMod)
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
-      as = map fullName (codeSpec g ^. authors)
-      cfp = codeSpec g ^. configFiles
+      as = map fullName (g ^. authors)
+      cfp = g ^. configFiles
       pinfo = printfo g
-      prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)
-      bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. background)
-      mtvtn = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. motivation)
-      scp = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. scope)
+      prps = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. purpose)
+      bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. background)
+      mtvtn = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. motivation)
+      scp = show $ oneLineSentenceDoc pinfo (foldlSent $ g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig fileInfoState
   rm <- genReadMe ReadMeInfo {
@@ -332,8 +332,8 @@ genProgramProc :: (ProcProg r tp vis smt) => GenState (Proc.GSProgram r)
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
-  let n = codeSpec g ^. pName
-  let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ codeSpec g ^. purpose
+  let n = g ^. programName
+  let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -350,12 +350,12 @@ genUnmodularProc = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = codeSpec g ^. pName
+  let n = g ^. programName
       cls = any (`member` clsMap g) [giName, dvName, icName]
   if cls then error "genUnmodularProc: Procedural renderers do not support classes"
   else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))
         (genMainFuncProc
-          : map (fmap Just) (map genCalcFuncProc (codeSpec g ^. execOrder)
+          : map (fmap Just) (map genCalcFuncProc (g ^. execOrder)
             ++ concatMap genModFuncsProc (modules g))
           ++ ([genInputFormatProc Pub, genInputDerivedProc Pub,
               genInputConstraintsProc Pub] ++ [genOutputFormatProc]))

@@ -27,7 +27,7 @@ getTermDoc c = do
 getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
-  let db = codeSpec g ^. systemdb
+  let db = g ^. systemdb
   return $ ((<+>) colon . oneLineSentenceDoc (printfo g))
     (definition $ defResolve' db (codeChunk c ^. uid))
 

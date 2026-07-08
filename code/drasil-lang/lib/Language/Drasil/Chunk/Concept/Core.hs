@@ -10,8 +10,7 @@ module Language.Drasil.Chunk.Concept.Core(
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (HasChunkRefs(..), UID, HasUID(..))
-import qualified Data.Set as Set
+import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -38,13 +37,7 @@ data ConceptChunk = ConDict { _uu :: UID -- ^ The 'UID' of the concept.
                             , cdom' :: [UID] -- ^ Domain of the concept.
                             }
 makeLenses ''ConceptChunk
-
-instance HasChunkRefs ConceptChunk where
-  chunkRefs c = Set.unions
-    [ chunkRefs (c ^. defn')
-    , Set.fromList (cdom c)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''ConceptChunk
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -71,14 +64,7 @@ data ConceptInstance = ConInst { _ciuid :: UID
                                , ra :: String
                                , shnm :: ShortName}
 makeLenses ''ConceptInstance
-
-instance HasChunkRefs ConceptInstance where
-  chunkRefs c = Set.unions
-    [ chunkRefs (c ^. cc)
-    , chunkRefs (shortname c)
-    , Set.fromList (cdom c)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''ConceptInstance
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

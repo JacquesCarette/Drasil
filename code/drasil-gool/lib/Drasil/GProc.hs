@@ -11,12 +11,12 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   FunctionSym(..), Reference(..), Array(..), List(..), Set(..), NativeVector(..),
-  listSlice,
-  listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
-  ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..), TypeData(..),
-  VisibilityTag(..), ParamData, CodeType(..), GOOLState(..), lensMStoVS, headers,
-  sources, mainMod, initialState, onStateValue, onCodeList, unJLC, jlName,
-  jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
+  listSlice, listIndexExists, at, VisibilitySym(..),ParameterSym(..),
+  MethodSym(..), ModuleSym(..), convType, ProgData(..), FileData(..),
+  ModData(..), TypeData(..), VisibilityTag(..), ParamData, CodeType(..),
+  GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
+  onStateValue, onCodeList, unJLC, jlName, jlVersion, unMLC, mlName, mlVersion,
+  LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
   ) where

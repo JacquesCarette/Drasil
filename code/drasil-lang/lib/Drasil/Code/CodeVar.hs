@@ -8,7 +8,7 @@ module Drasil.Code.CodeVar (
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Drasil.Database (HasUID(uid), (+++), HasChunkRefs(..))
+import Drasil.Database (HasUID(uid), (+++), declareHasChunkRefs, Generically(..))
 
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
@@ -45,10 +45,8 @@ data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
                        , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
 makeLenses ''CodeChunk
-
-instance HasChunkRefs CodeChunk where
-  chunkRefs cc = chunkRefs (cc ^. qc)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''VarOrFunc
+declareHasChunkRefs ''CodeChunk
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasUID        CodeChunk where uid = qc . uid
@@ -76,13 +74,7 @@ instance MayHaveUnit   CodeChunk where getUnit = getUnit . view qc
 data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
                             _obv :: Maybe CodeChunk}
 makeLenses ''CodeVarChunk
-
-instance HasChunkRefs CodeVarChunk where
-  chunkRefs cvc = mconcat
-    [ chunkRefs (cvc ^. ccv)
-    , chunkRefs (cvc ^. obv)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CodeVarChunk
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasUID        CodeVarChunk where uid = ccv . uid
@@ -121,10 +113,7 @@ listToArray c = newSpc (c ^. typ)
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
-
-instance HasChunkRefs CodeFuncChunk where
-  chunkRefs cfc = chunkRefs (cfc ^. ccf)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CodeFuncChunk
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasUID        CodeFuncChunk where uid = ccf . uid

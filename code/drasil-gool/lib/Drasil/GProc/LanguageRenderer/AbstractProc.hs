@@ -7,8 +7,8 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, SValue, SVariable,
-  VariableElim(variableName, variableType), VisibilitySym(..), ParameterSym(..),
-  funcApp, getCodeType, convType)
+  VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
+  getCodeType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
@@ -19,7 +19,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.Shared.AST (isSource, ScopeData, TypeData)
+import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -117,5 +117,5 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RCC.method f
 
 function :: (ProcRenderSym r vis smt) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r (Parameter r))] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> SMethod r
 function n s t = RCP.intFunc False n s (RCC.mType t)

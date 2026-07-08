@@ -656,7 +656,6 @@ instance OOMethodTypeSym JavaCode where
   construct = G.construct
 
 instance ParameterSym JavaCode where
-  type Parameter JavaCode = ParamData
   param = G.param renderParam
   pointerParam = param
 
@@ -1023,7 +1022,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
 
 jMethod :: Label -> [String] -> JavaCode Doc ->
   JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
-  [JavaCode (Parameter JavaCode)] -> JavaCode (Body JavaCode) -> Doc
+  [JavaCode ParamData] -> JavaCode (Body JavaCode) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>
@@ -1055,7 +1054,7 @@ jInOutCall f n ins outs both = fCall rets
           multi ((if odec then assign else (`varDecDef` local)) outputs
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
-jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode (Parameter JavaCode))] ->
+jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
   MSBody JavaCode -> SMethod JavaCode) -> [SVariable JavaCode] ->
   [SVariable JavaCode] -> [SVariable JavaCode] -> MSBody JavaCode ->
   SMethod JavaCode

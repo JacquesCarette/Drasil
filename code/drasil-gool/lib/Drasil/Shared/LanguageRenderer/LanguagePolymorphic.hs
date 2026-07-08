@@ -29,8 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, convType, VSBinder, BinderElim(..), ParameterSym(Parameter),
-  getCodeType, getTypeString)
+  ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, arrayType, innerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
@@ -63,7 +62,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -455,7 +454,7 @@ construct :: (Monad r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (CommonRenderSym r vis smt) => (r (Variable r) -> Doc) -> SVariable r ->
-  MS (r (Parameter r))
+  MS (r ParamData)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
@@ -464,7 +463,7 @@ param f v' = do
   paramFromData v' $ f v
 
 method :: (OORenderSym r vis smt) => Label -> r vis -> r (Attachment r) ->
-  VS (r TypeData) -> [MS (r (Parameter r))] -> MSBody r -> SMethod r
+  VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
 getMethod :: (OORenderSym r vis smt) => SVariable r -> SMethod r
@@ -481,7 +480,7 @@ initStmts :: (OORenderSym r vis smt) => Initializers r -> MSBody r
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function :: (OORenderSym r vis smt) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r (Parameter r))] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (CommonRenderSym r vis smt) => FuncDocRenderer -> String ->

@@ -15,7 +15,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   TypeElim(..), SVariable, SValue, SMethod, MixedCall, MixedCtorCall,
-  VariableSym(..), VariableValue(..), VariableElim(..), ParameterSym(..),
+  VariableSym(..), VariableValue(..), VariableElim(..), 
   ValueSym(Value, valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
@@ -35,7 +35,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym,
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.GOOL.Renderers (renderType)
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
-  TypeData)
+  TypeData, ParamData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
@@ -243,7 +243,7 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc :: (OORenderSym r vis smt) => Bool -> Label -> r vis ->
-  r (Attachment r) -> MSMthdType r -> [MS (r (Parameter r))] -> MSBody r ->
+  r (Attachment r) -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
   SMethod r
 intFunc = intMethod
 

@@ -633,7 +633,6 @@ instance OOMethodTypeSym CSharpCode where
   construct = G.construct
 
 instance ParameterSym CSharpCode where
-  type Parameter CSharpCode = ParamData
   param = G.param renderParam
   pointerParam = param
 
@@ -932,7 +931,7 @@ csVarDec :: AttachmentTag -> MS (CSharpCode smt) -> MS (CSharpCode smt)
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
-csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode (Parameter CSharpCode))] ->
+csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
   MSBody CSharpCode -> SMethod CSharpCode) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
   MSBody CSharpCode -> SMethod CSharpCode

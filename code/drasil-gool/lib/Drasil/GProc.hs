@@ -14,9 +14,9 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
   listSlice,
   listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
   ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
-  TypeData(..), VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS,
-  headers, sources, mainMod, initialState, onStateValue, onCodeList, unCI, unJLC,
-  jlName, jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
+  TypeData(..), VisibilityTag(..), ParamData, CodeType(..), GOOLState(..),
+  lensMStoVS, headers, sources, mainMod, initialState, onStateValue, onCodeList,
+  unCI, unJLC, jlName, jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
   ) where
@@ -41,7 +41,7 @@ import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  TypeData(..), VisibilityTag(..))
+  TypeData(..), VisibilityTag(..), ParamData)
 
 import Drasil.Shared.CodeType (CodeType(..))
 

@@ -674,7 +674,6 @@ instance OOMethodTypeSym SwiftCode where
   construct = G.construct
 
 instance ParameterSym SwiftCode where
-  type Parameter SwiftCode = ParamData
   param = G.param (swiftParam empty)
   pointerParam = G.param (swiftParam swiftInOut)
 
@@ -1192,7 +1191,7 @@ swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
 
 swiftMethod :: Label -> SwiftCode Doc ->
   SwiftCode (Attachment SwiftCode) -> MSMthdType SwiftCode ->
-  [MS (SwiftCode (Parameter SwiftCode))] -> MSBody SwiftCode -> SMethod SwiftCode
+  [MS (SwiftCode ParamData)] -> MSBody SwiftCode -> SMethod SwiftCode
 swiftMethod n s p t ps b = do
   tp <- t
   pms <- sequence ps
@@ -1207,7 +1206,7 @@ swiftMethod n s p t ps b = do
     indent $ RC.body bod,
     bodyEnd])
 
-swiftConstructor :: (OORenderSym r vis smt) => [MS (r (Parameter r))] ->
+swiftConstructor :: (OORenderSym r vis smt) => [MS (r ParamData)] ->
   Initializers r -> MSBody r -> SMethod r
 swiftConstructor ps is b = do
   pms <- sequence ps

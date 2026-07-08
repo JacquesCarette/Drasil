@@ -8,14 +8,14 @@ module Drasil.GOOL.Renderers (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), ParameterSym(..), BodySym(..))
+  VariableElim(..), ValueSym(..), BodySym(..))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, InternalVarElim(..),
   VisibilityElim(..), ValueElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, PermElim(..))
 import Drasil.Shared.LanguageRenderer (parameterList, new', constDec')
-import Drasil.Shared.AST (TypeData(..))
+import Drasil.Shared.AST (TypeData(..), ParamData)
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), (<>), vcat, text, lbrace, rbrace,
@@ -29,7 +29,7 @@ renderParam :: (OORenderSym r vis smt, UnRepr r TypeData) =>
 renderParam v = renderType (variableType v) <+> variable v
 
 renderMethod :: (OORenderSym r vis smt, UnRepr r TypeData) => String ->
-  r vis -> r (Attachment r) -> r TypeData -> [r (Parameter r)] ->
+  r vis -> r (Attachment r) -> r TypeData -> [r ParamData] ->
   r (Body r) -> Doc
 renderMethod n s p t ps b = vcat [
   visibility s <+> perm p <+> renderType t <+> text n <>

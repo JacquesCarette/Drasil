@@ -302,7 +302,6 @@ instance (MathConstant r) => MathConstant (LoggingFor r) where
   pi = liftLogging pi
 
 instance (ParameterSym r) => ParameterSym (LoggingFor r) where
-  type Parameter (LoggingFor r) = Parameter r
   param = liftLogging param
   pointerParam = liftLogging pointerParam
 

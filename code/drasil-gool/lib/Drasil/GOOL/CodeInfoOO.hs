@@ -22,7 +22,8 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
+import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD,
+  TypeData, VarData, ParamData, AttachmentTag (..), vard, pd)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS,
@@ -404,9 +405,8 @@ instance VisibilitySym CodeInfoOO () where
   public  = return ()
 
 instance ParameterSym CodeInfoOO where
-  type Parameter CodeInfoOO = ()
-  param        _ = noInfo
-  pointerParam _ = noInfo
+  param        _ = return $ return emptyParam
+  pointerParam _ = return $ return emptyParam
 
 instance MethodSym CodeInfoOO () () where
   type Method CodeInfoOO = ()
@@ -472,6 +472,15 @@ instance ModuleSym CodeInfoOO () () where
 
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
+
+emptyVar :: VarData
+emptyVar = vard ClassLevel "" emptyType empty -- Hack
+
+emptyParam :: ParamData
+emptyParam = pd emptyVar empty -- Hack
+
+emptyType :: TypeData
+emptyType = td Void "" empty -- Hack
 
 noInfoScope :: CodeInfoOO ScopeData
 noInfoScope = return $ sd Global -- Hack

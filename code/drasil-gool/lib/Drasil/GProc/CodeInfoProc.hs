@@ -18,7 +18,7 @@ import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData(..), ScopeTag (..), sd,
-  bindFormD)
+  bindFormD, TypeData, ParamData, pd, vard, VarData, AttachmentTag (..))
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoMS,
@@ -345,9 +345,8 @@ instance VisibilitySym CodeInfoProc () where
   public  = toCode ()
 
 instance ParameterSym CodeInfoProc where
-  type Parameter CodeInfoProc = ()
-  param        _ = noInfo
-  pointerParam _ = noInfo
+  param        _ = return $ return emptyParam
+  pointerParam _ = return $ return emptyParam
 
 instance MethodSym CodeInfoProc () () where
   type Method CodeInfoProc = ()
@@ -373,6 +372,14 @@ instance ModuleSym CodeInfoProc () () where
 noInfo :: State s (CodeInfoProc ())
 noInfo = toState $ toCode ()
 
+emptyVar :: VarData
+emptyVar = vard ClassLevel "" emptyType empty -- Hack
+
+emptyParam :: ParamData
+emptyParam = pd emptyVar empty -- Hack
+
+emptyType :: TypeData
+emptyType = td Void "" empty -- Hack
 noInfoScope :: CodeInfoProc ScopeData
 noInfoScope = return $ sd Global -- Hack
 

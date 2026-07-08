@@ -25,8 +25,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   SVariable, Value, SValue, SMethod, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), VisibilitySym(..), ParameterSym(..),
-  MethodSym(function), funcApp, listSize)
+  (&=), ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
+  funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
@@ -67,7 +67,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData)
+  TypeData, ParamData)
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -105,7 +105,7 @@ intRender = "int"
 int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
-constructor :: (OORenderSym r vis smt) => Label -> [MS (r (Parameter r))] ->
+constructor :: (OORenderSym r vis smt) => Label -> [MS (r ParamData)] ->
   Initializers r -> MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (S.construct c) ps (S.multiBody [initStmts is, b]))
@@ -447,7 +447,7 @@ mainBody b = do
   mthdFromData Pub empty
 
 inOutFunc :: (CommonRenderSym r vis smt) =>
-  (VS (r TypeData) -> [MS (r (Parameter r))] -> MSBody r -> SMethod r) ->
+  (VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r) ->
   [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
 inOutFunc f ins outs both b = f

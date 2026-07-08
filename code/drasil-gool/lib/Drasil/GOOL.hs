@@ -24,7 +24,7 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
   privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType, convTypeOO,
   ProgData(..), FileData(..), ModData(..), TypeData(..), VisibilityTag(..),
-  CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
+  ParamData, CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
   initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC,
   pyName, pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion,
   swiftName, swiftVersion, LoggingFor(..),
@@ -61,7 +61,7 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   addObserver, StrategyPattern(..), convTypeOO)
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  TypeData(..), VisibilityTag(..))
+  TypeData(..), VisibilityTag(..), ParamData)
 
 import Drasil.Shared.CodeType (CodeType(..))
 

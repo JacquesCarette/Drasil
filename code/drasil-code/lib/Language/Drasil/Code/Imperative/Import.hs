@@ -62,7 +62,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SMethod,
   IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
   privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue, TypeData)
+  CodeType(..), onStateValue, TypeData, ParamData)
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -204,7 +204,7 @@ mkVar v = do
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParam :: (OOProg r vis smt) => ParameterChunk -> GenState (MS (r (Parameter r)))
+mkParam :: (OOProg r vis smt) => ParameterChunk -> GenState (MS (r ParamData))
 mkParam p = do
   v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
@@ -259,7 +259,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethod :: (OOProg r vis smt) => ([MS (r (Parameter r))] -> MSBody r -> SMethod r) ->
+genMethod :: (OOProg r vis smt) => ([MS (r ParamData)] -> MSBody r -> SMethod r) ->
   Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 genMethod f n desc p r b = do
@@ -842,7 +842,7 @@ genModDefProc (Mod n desc is cs fs) = case cs of
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParamProc :: (SharedProg r vis smt) => ParameterChunk -> GenState (MS (r (Parameter r)))
+mkParamProc :: (SharedProg r vis smt) => ParameterChunk -> GenState (MS (r ParamData))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
   return $ paramFunc (passBy p) v
@@ -868,7 +868,7 @@ privateFuncProc n t desc ps r b = do
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethodProc :: (SharedProg r vis smt) => ([MS (r (Parameter r))] -> MSBody r -> SMethod r) ->
+genMethodProc :: (SharedProg r vis smt) => ([MS (r ParamData)] -> MSBody r -> SMethod r) ->
   Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r]
   -> GenState (SMethod r)
 genMethodProc f n desc p r b = do

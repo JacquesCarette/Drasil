@@ -20,7 +20,6 @@ import Language.Drasil.SoftwareDossier.SoftwareDossierSym (SoftwareDossierSym(..
   SoftwareDossierState)
 import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))

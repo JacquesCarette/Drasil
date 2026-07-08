@@ -104,6 +104,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: ${{ needs.build.outputs.gencode == 'true' }}
+    env:
+      SKIP_GEN: 1
     steps:
       - uses: actions/checkout@v7
 
@@ -128,16 +130,18 @@ jobs:
           path: code/drasil-code/test/build
 
       - name: "Compile GOOL Examples"
-        run: make codegenTest SKIP_GEN=1
+        run: make codegenTest
       
       - name: "Compile generated software artifacts"
-        run: make gool SKIP_GEN=1
+        run: make gool
 
   latex:
     name: LaTeX
     needs: build
     runs-on: ubuntu-26.04 # Ubuntu 26 has newer TeX packages that are significantly faster
     if: ${{ needs.build.outputs.tex == 'true' }}
+    env:
+      SKIP_GEN: 1
     steps:
       - uses: actions/checkout@v7
 
@@ -156,13 +160,15 @@ jobs:
           path: code/build
 
       - name: "Compile generated TeX artifacts"
-        run: make -j4 tex SKIP_GEN=1 SUMMARIZE_TEX=yes
+        run: make -j4 tex SUMMARIZE_TEX=yes
 
   mdbook:
     name: mdBook
     needs: build
     runs-on: ubuntu-latest
     if: ${{ needs.build.outputs.md == 'true' }}
+    env:
+      SKIP_GEN: 1
     steps:
       - uses: actions/checkout@v7
 
@@ -192,4 +198,4 @@ jobs:
           path: code/build
 
       - name: "Build mdBook Examples"
-        run: make mdbook_build SKIP_GEN=1
+        run: make mdbook_build

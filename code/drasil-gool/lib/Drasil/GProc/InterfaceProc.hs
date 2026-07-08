@@ -9,11 +9,11 @@ module Drasil.GProc.InterfaceProc (
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
-  MethodSym)
+  MethodSym, NativeVector)
 import Drasil.Shared.State (GS, FS)
 
-class (SharedProg r tp vis smt, ProgramSym r tp vis smt
-  ) => ProcProg r tp vis smt
+class (SharedProg r tp vis smt, ProgramSym r tp vis smt,
+  NativeVector r tp) => ProcProg r tp vis smt
 
 type GSProgram a = GS (a (Program a))
 

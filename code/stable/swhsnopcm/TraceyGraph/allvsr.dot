@@ -30,7 +30,7 @@ digraph "allvsr" {
         "instance:assumpTEO" "instance:assumpHTCC" "instance:assumpCWTAT" "instance:assumpDWCoW" "instance:assumpSHECoW" "instance:assumpLCCCW" "instance:assumpTHCCoT" "instance:assumpTHCCoL" "instance:assumpCTNTD" "instance:assumpWAL" "instance:assumpPIT" "instance:assumpNIHGBW" "instance:assumpAPT" "instance:assumpVCN";
     }
     "dataDefn:wMass" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterMass"];
-    "dataDefn:wVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterVolume.nopcm"];
+    "dataDefn:wVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:waterVolume_nopcm"];
     "dataDefn:tankVol" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:tankVolume"];
     "dataDefn:tauW" [shape=box, color=black, style=filled, fillcolor="paleturquoise1", label="DD:balanceDecayRate"];
     subgraph "DD" {

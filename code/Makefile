@@ -210,7 +210,7 @@ debug: setup_debug_vars test ##@Examples Run test target with better debugging t
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
 pr_ready: stackArgs += --force-dirty
-pr_ready: GHCFLAGS += -Werror -fforce-recomp
+pr_ready: GHCFLAGS += -Werror -Wwarn=deprecations -fforce-recomp
 pr_ready: all stan hlint check_whitespace ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
@@ -392,7 +392,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 # Targets will have the form exampleName_mdBook_build.
 $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
 	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ]; then \
-		- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+		"$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
 		mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
 	fi
 

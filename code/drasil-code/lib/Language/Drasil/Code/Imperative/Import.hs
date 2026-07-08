@@ -66,7 +66,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSParameter,
 import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
-import Drasil.GProc (ProcProg)
+import Drasil.GProc (ProcProg, NativeVector(..))
 import qualified Drasil.GProc as Proc (SFile)
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
@@ -758,7 +758,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-valueProc :: (SharedProg r tp vis smt) => UID -> Name -> VS (r tp) -> GenState (SValue r)
+valueProc :: (SharedProg r tp vis smt, NativeVector r tp) => UID -> Name -> VS (r tp) -> GenState (SValue r)
 valueProc u s t = do
   g <- get
   let cs = codeSpec g
@@ -818,7 +818,7 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
   "chose to Inline constants. Generator has a bug."
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
-mkValProc :: (SharedProg r tp vis smt) => CodeVarChunk -> GenState (SValue r)
+mkValProc :: (SharedProg r tp vis smt, NativeVector r tp) => CodeVarChunk -> GenState (SValue r)
 mkValProc v = do
   t <- codeType v
   let toGOOLVal Nothing = valueProc (v ^. uid) (codeName v) (convType t)
@@ -885,7 +885,7 @@ genMethodProc f n desc p r b = do
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFuncProc :: (SharedProg r tp vis smt) => (Name -> VS (r tp) ->
+genFuncProc :: (SharedProg r tp vis smt, NativeVector r tp) => (Name -> VS (r tp) ->
   Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)) -> [StateVariable] -> Func -> GenState (SMethod r)
 genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
@@ -900,12 +900,12 @@ genFuncProc _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers d
 genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncsProc :: (SharedProg r tp vis smt) => Mod -> [GenState (SMethod r)]
+genModFuncsProc :: (SharedProg r tp vis smt, NativeVector r tp) => Mod -> [GenState (SMethod r)]
 genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MS Statement's.
-readDataProc :: (SharedProg r tp vis smt) => DataDesc -> GenState [MSBlock r]
+readDataProc :: (SharedProg r tp vis smt, NativeVector r tp) => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -979,7 +979,7 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
     s) (getPatternInputs lp)
 
 -- | Converts an 'Expr' to a GOOL Value.
-convExprProc :: (SharedProg r tp vis smt) => CodeExpr -> GenState (SValue r)
+convExprProc :: (SharedProg r tp vis smt, NativeVector r tp) => CodeExpr -> GenState (SValue r)
 convExprProc (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
@@ -1010,8 +1010,9 @@ convExprProc (Message {}) = error "convExprProc: Procedural renderers do not sup
 convExprProc (Field _ _) = error "convExprProc: Procedural renderers do not support object field access"
 convExprProc (UnaryOp o u)    = fmap (unop o) (convExprProc u)
 convExprProc (UnaryOpB o u)   = fmap (unopB o) (convExprProc u)
-convExprProc (UnaryOpVV o u)  = fmap (unopVV o) (convExprProc u)
-convExprProc (UnaryOpVN o u)  = fmap (unopVN o) (convExprProc u)
+convExprProc (UnaryOpVV NegV u) = fmap (vecScale (litDouble (-1))) (convExprProc u)
+convExprProc (UnaryOpVN Dim u)  = fmap listSize (convExprProc u)
+convExprProc (UnaryOpVN Norm u) = fmap vecMag (convExprProc u)
 convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -1022,9 +1023,11 @@ convExprProc (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExprProc a) (con
 convExprProc (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (VVVBinaryOp VAdd a b)  = liftM2 vecAdd (convExprProc a) (convExprProc b)
+convExprProc (VVVBinaryOp VSub a b) = liftM2 (\x y -> vecAdd x (vecScale (litDouble (-1)) y)) (convExprProc a) (convExprProc b)
+convExprProc (VVVBinaryOp Cross _ _) = error "convExprProc: Cross product not implemented"
+convExprProc (VVNBinaryOp Dot a b)   = liftM2 vecDot (convExprProc a) (convExprProc b)
+convExprProc (NVVBinaryOp Scale a b) = liftM2 vecScale (convExprProc a) (convExprProc b)
 convExprProc (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal
@@ -1056,7 +1059,7 @@ convExprProc (RealI c ri)  = do
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
-convCallProc :: (SharedProg r tp vis smt) => UID -> [CodeExpr] ->
+convCallProc :: (SharedProg r tp vis smt, NativeVector r tp) => UID -> [CodeExpr] ->
   [(UID, CodeExpr)] ->
   (Name -> Name -> VS (r tp) -> [SValue r] -> NamedArgs r tp ->
     GenState (SValue r)) ->
@@ -1080,7 +1083,7 @@ convCallProc c x ns f libf = do
     (Map.lookup funcNm mem)
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmtProc :: (SharedProg r tp vis smt) => FuncStmt -> GenState (MS (r smt))
+convStmtProc :: (SharedProg r tp vis smt, NativeVector r tp) => FuncStmt -> GenState (MS (r smt))
 convStmtProc (FAsg v (Matrix [es])) = do
   els <- mapM convExprProc es
   v' <- mkVarProc v
@@ -1179,7 +1182,7 @@ convStmtProc (FAppend a b) = do
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
-genDataFuncProc :: (SharedProg r tp vis smt) => Name -> Description -> DataDesc ->
+genDataFuncProc :: (SharedProg r tp vis smt, NativeVector r tp) => Name -> Description -> DataDesc ->
   GenState (SMethod r)
 genDataFuncProc nameTitle desc ddef = do
   let parms = getInputs ddef

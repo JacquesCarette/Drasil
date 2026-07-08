@@ -59,20 +59,20 @@ buildStd sm toC (Document t a c) =
 -- clean until here; lo needs its sub-functions fixed first though
 -- | Helper for converting layout objects into a more printable form.
 lo :: LayoutObj -> PrintingInformation -> D
-lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
+lo (Header d t l)         _ = sec d (spec t) %% label (lspec l)
 lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents)   _ = toText $ newline (spec contents)
 lo (EqnBlock contents)    _ = makeEquation contents
-lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition ssPs l)   sm = toText $ makeDefn sm ssPs $ spec l
+lo (Table _ rows r bl t)  _ = toText $ makeTable rows (lspec r) bl (spec t)
+lo (Definition ssPs l)   sm = toText $ makeDefn sm ssPs l
 lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (maybe empty spec c) f wp
+lo (Figure r c f wp)      _ = toText $ makeFigure (lspec r) (maybe empty spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)    _  = toText $ makeGraph
   (map (bimap spec spec) ps)
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
-  (spec c) (spec l)
+  (spec c) (lspec l)
 lo (Cell _) _               = empty
 lo (CodeBlock _) _          = empty
 
@@ -333,16 +333,16 @@ pUnit (L.US ls) = formatu t b
 -----------------------------------------------------------------
 
 -- | Prints a (data) definition.
-makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
+makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> Spec -> D
 makeDefn _  [] _ = error "Empty definition"
 makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 -- | Helper that creates the definition and associated table.
-makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
+makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> Spec -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
-  command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
-  command0 "phantomsection ", label l,
+  command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold (spec l), --shortname instead of refname?
+  command0 "phantomsection ", label (lspec l),
   makeDRows sm ps,
   pure $ dbs <+> text "\\bottomrule"
   ]

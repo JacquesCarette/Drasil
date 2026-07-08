@@ -23,11 +23,11 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
   privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType, convTypeOO,
-  ProgData(..), FileData(..), ModData(..), VisibilityTag(..), CodeType(..),
-  GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
-  onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC, pyName,
-  pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion, swiftName,
-  swiftVersion, LoggingFor(..),
+  ProgData(..), FileData(..), ModData(..), TypeData(..), VisibilityTag(..),
+  CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
+  initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC,
+  pyName, pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion,
+  swiftName, swiftVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
   ) where
@@ -61,7 +61,7 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   addObserver, StrategyPattern(..), convTypeOO)
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  VisibilityTag(..))
+  TypeData(..), VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))
 

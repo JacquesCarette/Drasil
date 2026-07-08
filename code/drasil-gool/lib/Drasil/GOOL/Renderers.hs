@@ -24,11 +24,11 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), (<>), vcat, text, lbrace, rbrace,
 renderType :: (UnRepr r TypeData) => r TypeData -> Doc
 renderType = typeDoc . unRepr
 
-renderParam :: (OORenderSym r TypeData vis smt, UnRepr r TypeData) =>
+renderParam :: (OORenderSym r vis smt, UnRepr r TypeData) =>
   r (Variable r) -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
-renderMethod :: (OORenderSym r tp vis smt, UnRepr r TypeData) => String ->
+renderMethod :: (OORenderSym r vis smt, UnRepr r TypeData) => String ->
   r vis -> r (Attachment r) -> r TypeData -> [r (Parameter r)] ->
   r (Body r) -> Doc
 renderMethod n s p t ps b = vcat [
@@ -37,12 +37,12 @@ renderMethod n s p t ps b = vcat [
   indent (RC.body b),
   rbrace]
 
-renderListDec :: (CommonRenderSym r TypeData vis smt, UnRepr r TypeData) =>
+renderListDec :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
   r (Variable r) -> r (Value r) -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
-renderConstDecDef :: (CommonRenderSym r TypeData vis smt, UnRepr r TypeData) =>
+renderConstDecDef :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
   r (Variable r) -> r (Value r) -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

@@ -22,7 +22,7 @@ import Language.Drasil.Choices (Structure(..), ConstantStructure(..),
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName, HasChoices(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..), constraintvars, getConstraints)
+import Language.Drasil.CodeSpec (HasCodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
 -- | Parameters may be inputs or outputs.

@@ -77,7 +77,7 @@ import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
+import Language.Drasil.CodeSpec (HasCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 
 type ConstraintCE = Constraint CodeExpr

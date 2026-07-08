@@ -66,8 +66,8 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..))
-import Language.Drasil.CodeSpec (CodeSpec, OldCodeSpec(..), HasOldCodeSpec(..),
-  codeSpec, funcUID, asVC)
+import Language.Drasil.CodeSpec (CodeSpec, HasCodeSpec(..),
+  mkCodeSpec, funcUID, asVC)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 import Language.Drasil.Chunk.Code (ccObjVar)

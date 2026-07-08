@@ -11,7 +11,7 @@ module Theory.Drasil.GenDefn (
 
 import Control.Lens ((^.), view, makeLenses)
 
-import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
+import Drasil.Database (HasUID(..), showUID, declareHasChunkRefs, Generically(..))
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.Metadata.TheoryConcepts (genDefn)
@@ -29,15 +29,7 @@ data GenDefn = GD { _mk    :: ModelKind ModelExpr
                   , _notes :: [Sentence]
                   }
 makeLenses ''GenDefn
-
-instance HasChunkRefs GenDefn where
-  chunkRefs gdn = mconcat
-    [ chunkRefs (gdn ^. mk)
-    , chunkRefs (gdUnit gdn)
-    , chunkRefs (gdn ^. sn)
-    , chunkRefs (gdn ^. notes)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''GenDefn
 
 -- | Finds the 'UID' of a 'GenDefn'.
 instance HasUID             GenDefn where uid         = mk . uid

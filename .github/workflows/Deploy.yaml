@@ -50,12 +50,7 @@ jobs:
         with:
           path: |
             ~/.stack
-            ~/.cabal/packages
-            ~/.cabal/store
-            code/.stack-work/
-            code/website/.stack-work/
-            ~/.local/bin/graphmod
-          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
+          key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
 
       - name: "Clean previous run"
         run: make clean

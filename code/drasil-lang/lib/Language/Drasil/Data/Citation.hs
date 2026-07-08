@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Contains all necessary types and constructors for citing sources in Drasil.
 module Language.Drasil.Data.Citation (
   -- * Types
@@ -24,7 +25,7 @@ module Language.Drasil.Data.Citation (
 import Control.Lens (Lens', (^.))
 import Data.Maybe (mapMaybe)
 
-import Drasil.Database (HasChunkRefs (..))
+import Drasil.Database (declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Data.Date (Month(..))
@@ -52,10 +53,6 @@ data CiteField = Address      String
                | Volume       Int
                | Year         Int
 
-instance HasChunkRefs CiteField where
-  chunkRefs = const mempty
-  {-# INLINABLE chunkRefs #-}
-
 -- | 'Citation's should have a fields ('CiteField').
 class HasFields c where
   -- | Provides a 'Lens' to 'CiteField's.
@@ -81,9 +78,9 @@ data CitationKind = Article
                   | TechReport
                   | Unpublished
 
-instance HasChunkRefs CitationKind where
-  chunkRefs = const mempty
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''HP
+declareHasChunkRefs ''CiteField
+declareHasChunkRefs ''CitationKind
 
 -- | Smart field constructor for a 'CiteField'.
 author, editor :: People -> CiteField

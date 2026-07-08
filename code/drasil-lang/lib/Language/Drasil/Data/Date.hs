@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Custom type for dates, in this case Month.
 -- This should, in time, be switched out in favour of a proper package
 -- designed to handle all the complexities of dates.
@@ -5,6 +6,8 @@ module Language.Drasil.Data.Date
   ( -- * Type
     Month(..)
   ) where
+
+import Drasil.Database (declareHasChunkRefs, Generically(..))
 
 -- | Custom type for months (abbreviated).
 data Month = Jan
@@ -20,6 +23,7 @@ data Month = Jan
            | Nov
            | Dec deriving (Eq, Ord)
 
+declareHasChunkRefs ''Month
 instance Show Month where
   show Jan = "January"
   show Feb = "February"

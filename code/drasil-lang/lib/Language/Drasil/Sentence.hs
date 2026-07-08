@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, PostfixOperators #-}
+{-# LANGUAGE GADTs, PostfixOperators, TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers functions.
 module Language.Drasil.Sentence (
@@ -16,7 +16,8 @@ module Language.Drasil.Sentence (
 
 import Data.Char (toUpper)
 
-import Drasil.Database (HasChunkRefs(..), UID, IsChunk, UIDRef, hide, raw)
+import Drasil.Database (HasChunkRefs(..), UID, IsChunk, UIDRef, hide, raw,
+  declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Chunk.NamedIdea (Idea)
 import Language.Drasil.ExprClasses (Express(express))
@@ -46,6 +47,8 @@ data RefInfo = None
              | Equation [Int]
              | Page [Int]
              | RefNote String
+
+declareHasChunkRefs ''RefInfo
 
 -- | For writing 'Sentence's via combining smaller elements.
 -- 'Sentence's are made up of some known vocabulary of things:

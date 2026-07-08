@@ -12,18 +12,18 @@ import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
   MethodSym, NativeVector)
 import Drasil.Shared.State (GS, FS)
 
-class (SharedProg r tp vis smt, ProgramSym r tp vis smt,
-  NativeVector r tp) => ProcProg r tp vis smt
+class (SharedProg r vis smt, ProgramSym r vis smt,
+  NativeVector r) => ProcProg r vis smt
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym r tp vis smt) => ProgramSym r tp vis smt where
+class (FileSym r vis smt) => ProgramSym r vis smt where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r tp vis smt) => FileSym r tp vis smt where
+class (ModuleSym r vis smt) => FileSym r vis smt where
   type File r
   fileDoc :: FSModule r -> SFile r
 
@@ -32,7 +32,7 @@ class (ModuleSym r tp vis smt) => FileSym r tp vis smt where
 
 type FSModule a = FS (a (Module a))
 
-class (MethodSym r tp vis smt) => ModuleSym r tp vis smt where
+class (MethodSym r vis smt) => ModuleSym r vis smt where
   type Module r
   -- Module name, import names, module functions
   buildModule :: Label -> [Label] -> [SMethod r] -> FSModule r

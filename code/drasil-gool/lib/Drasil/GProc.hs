@@ -41,7 +41,7 @@ import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  VisibilityTag(..))
+  TypeData(..), VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))
 

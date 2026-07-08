@@ -133,22 +133,22 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance SharedProg JavaCode TypeData Doc (Doc, Terminator)
-instance OOProg JavaCode TypeData Doc (Doc, Terminator)
+instance SharedProg JavaCode Doc (Doc, Terminator)
+instance OOProg JavaCode Doc (Doc, Terminator)
 
-instance ProgramSym JavaCode TypeData Doc (Doc, Terminator) where
+instance ProgramSym JavaCode Doc (Doc, Terminator) where
   type Program JavaCode = ProgData
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode TypeData Doc (Doc, Terminator)
-instance OORenderSym JavaCode TypeData Doc (Doc, Terminator)
+instance CommonRenderSym JavaCode Doc (Doc, Terminator)
+instance OORenderSym JavaCode Doc (Doc, Terminator)
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode TypeData Doc (Doc, Terminator) where
+instance FileSym JavaCode Doc (Doc, Terminator) where
   type File JavaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -177,7 +177,7 @@ instance PermElim JavaCode where
   perm = unJC
   binding = error $ CP.bindingError jName
 
-instance BodySym JavaCode TypeData (Doc, Terminator) where
+instance BodySym JavaCode (Doc, Terminator) where
   type Body JavaCode = Doc
   body = onStateList (onCodeList R.body)
 
@@ -189,7 +189,7 @@ instance RenderBody JavaCode where
 instance BodyElim JavaCode where
   body = unJC
 
-instance BlockSym JavaCode TypeData (Doc, Terminator) where
+instance BlockSym JavaCode (Doc, Terminator) where
   type Block JavaCode = Doc
   block = G.block
 
@@ -199,7 +199,7 @@ instance RenderBlock JavaCode where
 instance BlockElim JavaCode where
   block = unJC
 
-instance TypeSym JavaCode TypeData where
+instance TypeSym JavaCode where
   bool = jBoolType
   int = CP.int
   float = C.float
@@ -216,13 +216,13 @@ instance TypeSym JavaCode TypeData where
   funcType = CS.funcType -- TODO [Brandon Bosman, 05/11/2026]: fix this to work with lambda types
   void = C.void
 
-instance TypeElim JavaCode TypeData where
+instance TypeElim JavaCode where
   getCodeType = cType . unJC
 
-instance OOTypeSym JavaCode TypeData where
+instance OOTypeSym JavaCode where
   obj = G.obj
 
-instance RenderType JavaCode TypeData where
+instance RenderType JavaCode where
   multiType _ = error $ C.multiTypeError jName
 
 instance UnaryOpSym JavaCode where
@@ -272,23 +272,23 @@ instance ScopeSym JavaCode where
 instance ScopeElim JavaCode where
   scopeData = unJC
 
-instance VariableSym JavaCode TypeData where
+instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
 
-instance OOVariableSym JavaCode TypeData where
+instance OOVariableSym JavaCode where
   classVar = G.classVar
   classConst = classVar
   classVarAccess = CP.classVarAccess R.classVarAccess
   extClassVarAccess = classVarAccess
   instanceVarAccess = G.instanceVarAccess
 
-instance SelfSym JavaCode TypeData where
+instance SelfSym JavaCode where
   self = C.self
 
-instance VariableElim JavaCode TypeData where
+instance VariableElim JavaCode where
   variableName = varName . unJC
   variableType = onCodeValue varType
 
@@ -296,21 +296,21 @@ instance InternalVarElim JavaCode where
   variableBind = varBind . unJC
   variable = varDoc . unJC
 
-instance RenderVariable JavaCode TypeData where
+instance RenderVariable JavaCode where
   varFromData b n t' d =  do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
 
-instance ValueSym JavaCode TypeData where
+instance ValueSym JavaCode where
   type Value JavaCode = ValData
   valueType = onCodeValue valType
 
-instance OOValueSym JavaCode TypeData
+instance OOValueSym JavaCode
 
-instance Argument JavaCode TypeData where
+instance Argument JavaCode where
   pointerArg = id
 
-instance Literal JavaCode TypeData where
+instance Literal JavaCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
   litChar = G.litChar quotes
@@ -326,20 +326,20 @@ instance Literal JavaCode TypeData where
       jArrays)
     newObj (listType t) [jAsListFunc t es | not (null es)]
 
-instance MathConstant JavaCode TypeData where
+instance MathConstant JavaCode where
   pi = CP.pi
 
-instance VariableValue JavaCode TypeData where
+instance VariableValue JavaCode where
   valueOf = G.valueOf
 
-instance OOVariableValue JavaCode TypeData
+instance OOVariableValue JavaCode
 
-instance CommandLineArgs JavaCode TypeData where
+instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
   argsList = G.argsList args
   argExists i = listSize argsList ?> litInt (fromIntegral i)
 
-instance NumericExpression JavaCode TypeData where
+instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
   (#/^) = unExprNumDbl sqrtOp
   (#|) = unExpr absOp
@@ -365,12 +365,12 @@ instance NumericExpression JavaCode TypeData where
   floor = unExpr floorOp
   ceil = unExpr ceilOp
 
-instance BooleanExpression JavaCode TypeData where
+instance BooleanExpression JavaCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
-instance Comparison JavaCode TypeData where
+instance Comparison JavaCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -378,7 +378,7 @@ instance Comparison JavaCode TypeData where
   (?==) = jEquality
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression JavaCode TypeData where
+instance ValueExpression JavaCode where
   inlineIf = C.inlineIf
 
   -- Exceptions from function/method calls should already be in the exception
@@ -398,7 +398,7 @@ instance ValueExpression JavaCode TypeData where
 
   notNull = CP.notNull nullLabel
 
-instance OOValueExpression JavaCode TypeData where
+instance OOValueExpression JavaCode where
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t ->
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
@@ -409,7 +409,7 @@ instance OOValueExpression JavaCode TypeData where
     newObjMixedArgs (toState t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
-instance RenderValue JavaCode TypeData where
+instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal
     (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
   printFunc = mkStateVal void (jSystem (jStdOut `access` printLabel))
@@ -432,7 +432,7 @@ instance ValueElim JavaCode where
   valueInt = valInt . unJC
   value = val . unJC
 
-instance InternalValueExp JavaCode TypeData where
+instance InternalValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
     ob <- o
     mem <- getMethodExcMap
@@ -446,33 +446,33 @@ instance InternalValueExp JavaCode TypeData where
     modify (maybe id addExceptions (Map.lookup (qualName tp f) mem))
     CG.classMethodCall f t c ps ns
 
-instance FunctionSym JavaCode TypeData where
+instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
 
-instance OOFunctionSym JavaCode TypeData where
+instance OOFunctionSym JavaCode where
   func = G.func
   objAccess = G.objAccess
 
-instance GetSet JavaCode TypeData where
+instance GetSet JavaCode where
   get = G.get
   set = G.set
 
-instance IndexTranslator JavaCode TypeData where
+instance IndexTranslator JavaCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
-instance Reference JavaCode TypeData where
+instance Reference JavaCode where
   makeRef = id
   maybeDeref = id
 
-instance Array JavaCode TypeData where
+instance Array JavaCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "length" int)
   arrayCopy arr = let
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "clone" []
 
-instance List JavaCode TypeData (Doc, Terminator) where
+instance List JavaCode (Doc, Terminator) where
   listSize = C.listSize "size"
   listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
@@ -480,36 +480,36 @@ instance List JavaCode TypeData (Doc, Terminator) where
   listSet list idx vl = valStmt $ objMethodCall void list jListSet [idx, vl]
   indexOf = CP.indexOf jIndex
 
-instance Set JavaCode TypeData where
+instance Set JavaCode where
   contains = CP.contains jContains
   setAdd = CP.setMethodCall jListAdd
   setRemove = CP.setMethodCall jListRemove
   setUnion = CP.setMethodCall jListUnion
 
-instance InternalList JavaCode TypeData where
+instance InternalList JavaCode where
   listSlice' = M.listSlice
 
-instance InternalGetSet JavaCode TypeData where
+instance InternalGetSet JavaCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-instance InternalListFunc JavaCode TypeData where
+instance InternalListFunc JavaCode where
   listAccessFunc = CP.listAccessFunc' jListAccess
 
-instance BinderSym JavaCode TypeData where
+instance BinderSym JavaCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
-instance BinderElim JavaCode TypeData where
+instance BinderElim JavaCode where
   binderName = bindName . unJC
   binderType = onCodeValue bindType
 
 instance InternalBinderElim JavaCode where
   binderElim = text . bindName . unJC
 
-instance RenderFunction JavaCode TypeData where
+instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance FunctionElim JavaCode TypeData where
+instance FunctionElim JavaCode where
   functionType = onCodeValue fType
   function = funcDoc . unJC
 
@@ -531,20 +531,20 @@ instance StatementElim JavaCode (Doc, Terminator) where
   statement = fst . unJC
   statementTerm = snd . unJC
 
-instance StatementSym JavaCode TypeData (Doc, Terminator) where
+instance StatementSym JavaCode (Doc, Terminator) where
   -- Terminator determines how statements end
   valStmt = G.valStmt Semi
   emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
-instance AssignStatement JavaCode TypeData (Doc, Terminator) where
+instance AssignStatement JavaCode (Doc, Terminator) where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
   (&+=) = C.increment
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement JavaCode TypeData (Doc, Terminator) where
+instance DeclStatement JavaCode (Doc, Terminator) where
   varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
@@ -557,12 +557,12 @@ instance DeclStatement JavaCode TypeData (Doc, Terminator) where
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 
-instance OODeclStatement JavaCode TypeData (Doc, Terminator) where
+instance OODeclStatement JavaCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement JavaCode TypeData (Doc, Terminator) where
+instance IOStatement JavaCode (Doc, Terminator) where
   print      = jOut False Nothing printFunc
   printLn    = jOut True  Nothing printLnFunc
   printStr   = jOut False Nothing printFunc   . litString
@@ -588,7 +588,7 @@ instance IOStatement JavaCode TypeData (Doc, Terminator) where
   getFileInputAll f v = while (f $. jHasNextLineFunc)
     (oneLiner $ listAppend (valueOf v) (f $. jNextLineFunc))
 
-instance StringStatement JavaCode TypeData (Doc, Terminator) where
+instance StringStatement JavaCode (Doc, Terminator) where
   stringSplit d vnew s = do
     modify (addLangImport $ utilImport jArrays)
     ss <- zoom lensMStoVS $
@@ -598,17 +598,17 @@ instance StringStatement JavaCode TypeData (Doc, Terminator) where
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement JavaCode TypeData (Doc, Terminator) where
+instance FuncAppStatement JavaCode (Doc, Terminator) where
   inOutCall = jInOutCall funcApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
-instance OOFuncAppStatement JavaCode TypeData (Doc, Terminator) where
+instance OOFuncAppStatement JavaCode (Doc, Terminator) where
   selfInOutCall = jInOutCall selfMethodCall
 
-instance CommentStatement JavaCode TypeData (Doc, Terminator) where
+instance CommentStatement JavaCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement JavaCode TypeData (Doc, Terminator) where
+instance ControlStatement JavaCode (Doc, Terminator) where
   break = mkStmt R.break
   continue = mkStmt R.continue
 
@@ -633,10 +633,10 @@ instance ControlStatement JavaCode TypeData (Doc, Terminator) where
     errMsg <- zoom lensMStoVS errorMessage
     mkStmt (jAssert cond errMsg)
 
-instance ObserverPattern JavaCode TypeData (Doc, Terminator) where
+instance ObserverPattern JavaCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern JavaCode TypeData (Doc, Terminator) where
+instance StrategyPattern JavaCode (Doc, Terminator) where
   runStrategy = M.runStrategy
 
 instance VisibilitySym JavaCode Doc where
@@ -649,14 +649,14 @@ instance RenderVisibility JavaCode Doc where
 instance VisibilityElim JavaCode Doc where
   visibility = unJC
 
-instance MethodTypeSym JavaCode TypeData where
+instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType = zoom lensMStoVS
 
-instance OOMethodTypeSym JavaCode TypeData where
+instance OOMethodTypeSym JavaCode where
   construct = G.construct
 
-instance ParameterSym JavaCode TypeData where
+instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
   param = G.param renderParam
   pointerParam = param
@@ -666,12 +666,12 @@ instance RenderParam JavaCode where
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim JavaCode TypeData where
+instance ParamElim JavaCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode TypeData Doc (Doc, Terminator) where
+instance MethodSym JavaCode Doc (Doc, Terminator) where
   type Method JavaCode = MethodData
   docMain = CP.docMain
   function = G.function
@@ -681,7 +681,7 @@ instance MethodSym JavaCode TypeData Doc (Doc, Terminator) where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode TypeData Doc (Doc, Terminator) where
+instance OOMethodSym JavaCode Doc (Doc, Terminator) where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -690,13 +690,13 @@ instance OOMethodSym JavaCode TypeData Doc (Doc, Terminator) where
   inOutMethod n s p = jInOut (method n s p)
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
 
-instance RenderMethod JavaCode TypeData where
+instance RenderMethod JavaCode where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod JavaCode TypeData Doc where
+instance OORenderMethod JavaCode Doc where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -714,7 +714,7 @@ instance OORenderMethod JavaCode TypeData Doc where
 instance MethodElim JavaCode where
   method = mthdDoc . unJC
 
-instance StateVarSym JavaCode TypeData Doc where
+instance StateVarSym JavaCode Doc where
   type StateVar JavaCode = Doc
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
@@ -723,7 +723,7 @@ instance StateVarSym JavaCode TypeData Doc where
 instance StateVarElim JavaCode where
   stateVar = unJC
 
-instance ClassSym JavaCode TypeData Doc (Doc, Terminator) where
+instance ClassSym JavaCode Doc (Doc, Terminator) where
   type Class JavaCode = Doc
   buildClass = G.buildClass
   extraClass = jExtraClass
@@ -742,7 +742,7 @@ instance RenderClass JavaCode Doc where
 instance ClassElim JavaCode where
   class' = unJC
 
-instance ModuleSym JavaCode TypeData Doc (Doc, Terminator) where
+instance ModuleSym JavaCode Doc (Doc, Terminator) where
   type Module JavaCode = ModData
   buildModule n = CP.buildModule' n langImport
 
@@ -848,7 +848,7 @@ jSystem = text . access "System"
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
 
-jListType :: (TypeElim r TypeData, UnRepr r TypeData, Monad r) =>
+jListType :: (TypeElim r, UnRepr r TypeData, Monad r) =>
   VS (r TypeData) -> VS (r TypeData)
 jListType t = do
   modify (addLangImportVS $ utilImport arrayList)
@@ -862,7 +862,7 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
-jSetType :: (TypeElim r TypeData, UnRepr r TypeData, Monad r) =>
+jSetType :: (TypeElim r, UnRepr r TypeData, Monad r) =>
   VS (r TypeData) -> VS (r TypeData)
 jSetType t = do
   modify (addLangImportVS $ utilImport "Set")
@@ -886,12 +886,12 @@ jLitArray t' es' = do
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-jFileType :: (OORenderSym r TypeData vis smt) => VS (r TypeData)
+jFileType :: (OORenderSym r vis smt) => VS (r TypeData)
 jFileType = do
   tpf <- obj jFile
   modifyReturn (addLangImportVS $ ioImport jFile) tpf
 
-jFileWriterType :: (OORenderSym r TypeData vis smt) => VS (r TypeData)
+jFileWriterType :: (OORenderSym r vis smt) => VS (r TypeData)
 jFileWriterType = do
   tpf <- obj jFileWriter
   modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
@@ -926,7 +926,7 @@ jHasNextLineFunc = func jHasNextLine bool []
 jCharAtFunc :: VSFunction JavaCode
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (OORenderSym r TypeData vis smt) => Char -> VSFunction r
+jSplitFunc :: (OORenderSym r vis smt) => Char -> VSFunction r
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -967,11 +967,11 @@ jFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
-jThrowDoc :: (CommonRenderSym r TypeData vis smt) => r (Value r) -> Doc
+jThrowDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-jTryCatch :: (CommonRenderSym r TypeData vis smt) => r (Body r) -> r (Body r) -> Doc
+jTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -980,12 +980,12 @@ jTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-jAssert :: (CommonRenderSym r TypeData vis smt) => r (Value r) -> r (Value r) -> Doc
+jAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
 jAssert condition errorMessage = vcat [
   text "assert" <+> RC.value condition <+> colon <+> RC.value errorMessage
   ]
 
-jOut :: (CommonRenderSym r TypeData vis smt, TypeElim r TypeData) =>
+jOut :: (CommonRenderSym r vis smt, TypeElim r) =>
   Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
@@ -1010,10 +1010,10 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getCodeType $ variableType v)
 
-jOpenFileR :: (OORenderSym r TypeData vis smt) => SValue r -> VS (r TypeData) -> SValue r
+jOpenFileR :: (OORenderSym r vis smt) => SValue r -> VS (r TypeData) -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (OORenderSym r TypeData vis smt) => SValue r -> VS (r TypeData) ->
+jOpenFileWorA :: (OORenderSym r vis smt) => SValue r -> VS (r TypeData) ->
   SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
@@ -1083,7 +1083,7 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (CommonRenderSym r TypeData vis smt) => ([SVariable r] ->
+jDocInOut :: (CommonRenderSym r vis smt) => ([SVariable r] ->
   [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] ->
   [(String, SVariable r)] -> MSBody r -> SMethod r
@@ -1098,7 +1098,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
   where rets = "array containing the following values:" : map fst bs ++
           map fst os
 
-jExtraClass :: (OORenderSym r TypeData vis smt) => Label -> Maybe Label ->
+jExtraClass :: (OORenderSym r vis smt) => Label -> Maybe Label ->
   [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 

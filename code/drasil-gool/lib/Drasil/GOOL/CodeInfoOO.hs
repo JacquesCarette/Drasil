@@ -22,7 +22,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD, TypeData)
+import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS,
@@ -87,26 +87,25 @@ instance BlockSym CodeInfoOO () where
   type Block CodeInfoOO = ()
   block = executeList
 
--- TODO [Brandon Bosman, 06/30/2026]: Change () to ()
 instance TypeSym CodeInfoOO where
-  bool            = noInfoVSType
-  int             = noInfoVSType
-  float           = noInfoVSType
-  double          = noInfoVSType
-  char            = noInfoVSType
-  string          = noInfoVSType
-  infile          = noInfoVSType
-  outfile         = noInfoVSType
-  referenceType _ = noInfoVSType
-  setType       _ = noInfoVSType
-  listType      _ = noInfoVSType
-  arrayType     _ = noInfoVSType
-  innerType     _ = noInfoVSType
-  funcType    _ _ = noInfoVSType
-  void            = noInfoVSType
+  bool            = return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  int             = return $ return $ error "[int] The return value of this isn't used, and the thunk shouldn't fire."
+  float           = return $ return $ error "[float] The return value of this isn't used, and the thunk shouldn't fire."
+  double          = return $ return $ error "[double] The return value of this isn't used, and the thunk shouldn't fire."
+  char            = return $ return $ error "[char] The return value of this isn't used, and the thunk shouldn't fire."
+  string          = return $ return $ error "[string] The return value of this isn't used, and the thunk shouldn't fire."
+  infile          = return $ return $ error "[infile] The return value of this isn't used, and the thunk shouldn't fire."
+  outfile         = return $ return $ error "[outfile] The return value of this isn't used, and the thunk shouldn't fire."
+  referenceType _ = return $ return $ error "[referenceType] The return value of this isn't used, and the thunk shouldn't fire."
+  setType       _ = return $ return $ error "[setType] The return value of this isn't used, and the thunk shouldn't fire."
+  listType      _ = return $ return $ error "[listType] The return value of this isn't used, and the thunk shouldn't fire."
+  arrayType     _ = return $ return $ error "[arrayType] The return value of this isn't used, and the thunk shouldn't fire."
+  innerType     _ = return $ return $ error "[innerType] The return value of this isn't used, and the thunk shouldn't fire."
+  funcType    _ _ = return $ return $ error "[funcType] The return value of this isn't used, and the thunk shouldn't fire."
+  void            = return $ return $ error "[void] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OOTypeSym CodeInfoOO where
-  obj             _ = noInfoVSType
+  obj             _ = return $ return $ error "[obj] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance TypeElim CodeInfoOO where
   getCodeType _ = Void
@@ -134,11 +133,11 @@ instance SelfSym CodeInfoOO where
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
-  variableType _ = noInfoType
+  variableType _ = return $ error "[variableType] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance ValueSym CodeInfoOO where
   type Value CodeInfoOO = ()
-  valueType _ = noInfoType
+  valueType _ = return $ error "[valueType] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OOValueSym CodeInfoOO
 
@@ -473,15 +472,6 @@ instance ModuleSym CodeInfoOO () () where
 
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
-
-emptyType :: TypeData
-emptyType = td Void "" empty -- Hack
-
-noInfoType :: CodeInfoOO TypeData
-noInfoType = return emptyType
-
-noInfoVSType :: VS (CodeInfoOO TypeData)
-noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoOO ScopeData
 noInfoScope = return $ sd Global -- Hack

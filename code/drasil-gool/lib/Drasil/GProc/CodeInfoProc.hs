@@ -18,7 +18,7 @@ import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData(..), ScopeTag (..), sd,
-  bindFormD, TypeData)
+  bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, MS, VS, lensGStoFS, lensFStoMS,
@@ -80,21 +80,21 @@ instance BlockSym CodeInfoProc () where
 
 -- TODO [Brandon Bosman, 06/30/2026]: Replace () with ()
 instance TypeSym CodeInfoProc where
-  bool            = noInfoVSType
-  int             = noInfoVSType
-  float           = noInfoVSType
-  double          = noInfoVSType
-  char            = noInfoVSType
-  string          = noInfoVSType
-  infile          = noInfoVSType
-  outfile         = noInfoVSType
-  referenceType _ = noInfoVSType
-  listType      _ = noInfoVSType
-  setType       _ = noInfoVSType
-  arrayType     _ = noInfoVSType
-  innerType     _ = noInfoVSType
-  funcType    _ _ = noInfoVSType
-  void            = noInfoVSType
+  bool            = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  int             = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  float           = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  double          = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  char            = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  string          = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  infile          = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  outfile         = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  referenceType _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  listType      _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  setType       _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  arrayType     _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  innerType     _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  funcType    _ _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  void            = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance TypeElim CodeInfoProc where
   getCodeType _ = Void
@@ -112,11 +112,11 @@ instance VariableSym CodeInfoProc where
 
 instance VariableElim CodeInfoProc where
   variableName _ = ""
-  variableType _ = noInfoType
+  variableType _ = return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance ValueSym CodeInfoProc where
   type Value CodeInfoProc = ()
-  valueType _ = noInfoType
+  valueType _ = return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance Argument CodeInfoProc where
   pointerArg = id
@@ -372,15 +372,6 @@ instance ModuleSym CodeInfoProc () () where
 
 noInfo :: State s (CodeInfoProc ())
 noInfo = toState $ toCode ()
-
-emptyType :: TypeData
-emptyType = td Void "" empty -- Hack
-
-noInfoType :: CodeInfoProc TypeData
-noInfoType = return emptyType
-
-noInfoVSType :: VS (CodeInfoProc TypeData)
-noInfoVSType = return noInfoType
 
 noInfoScope :: CodeInfoProc ScopeData
 noInfoScope = return $ sd Global -- Hack

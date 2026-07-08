@@ -11,7 +11,7 @@ module Language.Drasil.Document.Reference (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk)
+import Drasil.Database (UID, HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
@@ -30,9 +30,7 @@ class HasReference c where
   -- | Provides a 'Lens' to the 'Reference's.
   getReferences :: Lens' c [Reference]
 
-instance HasChunkRefs Reference where
-  chunkRefs r = chunkRefs (shortname r)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''Reference
 
 -- | Equal if 'UID's are equal.
 instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)

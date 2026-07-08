@@ -1,9 +1,10 @@
+{-# LANGUAGE TemplateHaskell #-}
 -- | Short names are used for displaying references.
 module Language.Drasil.ShortName (
   ShortName, shortname', getSentSN, HasShortName(..)
 ) where
 
-import Drasil.Database (HasChunkRefs (..))
+import Drasil.Database (declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Sentence (Sentence)
 
@@ -12,9 +13,7 @@ import Language.Drasil.Sentence (Sentence)
 -- | Used for holding the short form of a name (as a 'Sentence' with a wrapper).
 newtype ShortName = ShortNm Sentence
 
-instance HasChunkRefs ShortName where
-  chunkRefs (ShortNm s) = chunkRefs s
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''ShortName
 
 -- * Class
 

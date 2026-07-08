@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | For deriving equations in examples.
 module Theory.Drasil.Components.Derivation (
   -- * Types
@@ -11,6 +12,7 @@ module Theory.Drasil.Components.Derivation (
 import Control.Lens (Lens')
 
 import Language.Drasil (Sentence(EmptyS, S), (+:))
+import Drasil.Database (declareHasChunkRefs, Generically(..))
 
 -- * Type
 
@@ -18,6 +20,8 @@ import Language.Drasil (Sentence(EmptyS, S), (+:))
 -- They are rendered in order as paragraphs and equation blocks to display
 -- the derivation.
 data Derivation = Derivation Sentence [Sentence]
+
+declareHasChunkRefs ''Derivation
 
 -- * Class
 

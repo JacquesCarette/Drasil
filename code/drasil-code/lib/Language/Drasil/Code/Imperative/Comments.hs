@@ -12,8 +12,8 @@ import Drasil.Database (HasUID(..))
 import Drasil.Database.SearchTools (DomDefn (definition), defResolve')
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
+import Drasil.System (systemdb)
 
 -- | Gets a plain renderering of the term for a chunk.
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
@@ -27,7 +27,7 @@ getTermDoc c = do
 getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
-  let db = codeSpec g ^. systemdbO
+  let db = codeSpec g ^. systemdb
   return $ ((<+>) colon . oneLineSentenceDoc (printfo g))
     (definition $ defResolve' db (codeChunk c ^. uid))
 

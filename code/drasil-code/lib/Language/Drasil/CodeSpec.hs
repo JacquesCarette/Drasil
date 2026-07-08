@@ -16,7 +16,7 @@ module Language.Drasil.CodeSpec (
 ) where
 
 import Prelude hiding (const)
-import Control.Lens ((^.), makeLenses, Lens', makeClassyFor, set)
+import Control.Lens ((^.), makeLenses, makeClassy, set)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
@@ -72,30 +72,15 @@ data OldCodeSpec = OldCodeSpec {
   -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
   _cMap :: ConstraintCEMap,
   -- | List of all constants used in the problem.
-  _constants :: [Const],
+  _constDefns :: [Const],
   -- | Map containing all constants used in the problem.
   _constMap :: ConstantMap,
   -- | Additional modules required in the generated code, which Drasil cannot yet
   -- automatically define.
-  _mods :: [Mod],  -- medium hack
-  -- | The database of all chunks used in the problem.
-  _systemdb :: ChunkDB
+  _mods :: [Mod]  -- medium hack
   }
 
-makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
-  [   ("_pName", "pNameO")
-    , ("_inputs", "inputsO")
-    , ("_extInputs", "extInputsO")
-    , ("_derivedInputs", "derivedInputsO")
-    , ("_outputs", "outputsO")
-    , ("_configFiles", "configFilesO")
-    , ("_execOrder", "execOrderO")
-    , ("_cMap", "cMapO")
-    , ("_constants", "constantsO")
-    , ("_constMap", "constMapO")
-    , ("_mods", "modsO")
-    , ("_systemdb", "systemdbO")
-    ] ''OldCodeSpec
+makeClassy ''OldCodeSpec
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
@@ -105,14 +90,12 @@ data CodeSpec = CS {
 makeLenses ''CodeSpec
 
 instance HasSmithEtAlSRS CodeSpec where
-  smithEtAlSRS :: Lens' CodeSpec S.SmithEtAlSRS
   smithEtAlSRS = system'
 
 instance HasSystemMeta CodeSpec where
   systemMeta = system' . systemMeta
 
 instance HasOldCodeSpec CodeSpec where
-  oldCodeSpec :: Lens' CodeSpec OldCodeSpec
   oldCodeSpec = oldCode
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
@@ -177,10 +160,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
         _configFiles = defaultConfigFiles chs,
         _execOrder = exOrder,
         _cMap = constraintMap cs,
-        _constants = const',
+        _constDefns = const',
         _constMap = assocToMap const',
-        _mods = extraMods chs,
-        _systemdb = db
+        _mods = extraMods chs
       }
 
 -- medium hacks ---

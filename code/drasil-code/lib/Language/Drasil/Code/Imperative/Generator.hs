@@ -111,7 +111,7 @@ generator l dt sd chs cs = let
         mem = modExportMap (cs ^. oldCodeSpec) chs modules'
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap (cs ^. oldCodeSpec) chs modules'
-        modules' = (cs ^. modsO) ++ concatMap (^. auxMods) els
+        modules' = (cs ^. mods) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
         des = vcat $
           map (oneLineSentenceDoc pinfo) (nonPrefChs ++ concLog ++ libLog)
@@ -187,7 +187,7 @@ genPackage unRepr = do
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
       as = map fullName (codeSpec g ^. authors)
-      cfp = codeSpec g ^. configFilesO
+      cfp = codeSpec g ^. configFiles
       pinfo = printfo g
       -- FIXME: The below code does `Doc -> String` conversion.
       prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)
@@ -219,7 +219,7 @@ genProgram :: (OOProg r tp vis smt) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
-  let n = codeSpec g ^. pNameO
+  let n = codeSpec g ^. pName
   -- FIXME: The below code does `Doc -> String` conversion!
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
@@ -238,11 +238,11 @@ genUnmodular = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = codeSpec g ^. pNameO
+  let n = codeSpec g ^. pName
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
-      : map (fmap Just) (map genCalcFunc (codeSpec g ^. execOrderO)
+      : map (fmap Just) (map genCalcFunc (codeSpec g ^. execOrder)
         ++ concatMap genModFuncs (modules g))
       ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
         genInputConstraints Pub]) ++ [genOutputFormat]))
@@ -301,7 +301,7 @@ genPackageProc unRepr = do
       pd = unRepr reprPD
       m = makefile (libPaths g) (g ^. implType) (g ^. commented) fileInfoState pd
       as = map fullName (codeSpec g ^. authors)
-      cfp = codeSpec g ^. configFilesO
+      cfp = codeSpec g ^. configFiles
       pinfo = printfo g
       prps = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. purpose)
       bckgrnd = show $ oneLineSentenceDoc pinfo (foldlSent $ codeSpec g ^. background)
@@ -332,7 +332,7 @@ genProgramProc :: (ProcProg r tp vis smt) => GenState (Proc.GSProgram r)
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
-  let n = codeSpec g ^. pNameO
+  let n = codeSpec g ^. pName
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
@@ -350,12 +350,12 @@ genUnmodularProc = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = codeSpec g ^. pNameO
+  let n = codeSpec g ^. pName
       cls = any (`member` clsMap g) [giName, dvName, icName]
   if cls then error "genUnmodularProc: Procedural renderers do not support classes"
   else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))
         (genMainFuncProc
-          : map (fmap Just) (map genCalcFuncProc (codeSpec g ^. execOrderO)
+          : map (fmap Just) (map genCalcFuncProc (codeSpec g ^. execOrder)
             ++ concatMap genModFuncsProc (modules g))
           ++ ([genInputFormatProc Pub, genInputDerivedProc Pub,
               genInputConstraintsProc Pub] ++ [genOutputFormatProc]))

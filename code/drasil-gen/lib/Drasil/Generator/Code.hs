@@ -32,7 +32,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
   OptionalFeatures(logConfig), SpaceMatch, Structure(..),
   Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
-  HasOldCodeSpec(extInputsO), CodeSpec, SomeProgGenerator(..))
+  HasOldCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.System (SmithEtAlSRS, programName)
@@ -80,7 +80,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
     readSampleData :: IO [Expr]
     readSampleData =
       case getSampleData chs of
-        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputsO)
+        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputs)
         Nothing -> pure []
 
 genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]

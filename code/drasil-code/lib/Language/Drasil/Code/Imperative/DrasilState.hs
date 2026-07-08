@@ -20,6 +20,7 @@ import Drasil.Database (UID, findOrErr)
 import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
+import Drasil.System (systemdb)
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
@@ -29,7 +30,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec,  OldCodeSpec(..), getConstraints, systemdbO)
+  CodeSpec,  OldCodeSpec(..), getConstraints)
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
@@ -188,7 +189,7 @@ modExportMap cs@OldCodeSpec {
   _inputs = ins,
   _extInputs = extIns,
   _derivedInputs = ds,
-  _constants = cns
+  _constDefns = cns
   } chs@Choices {
     architecture = m
   } ms = fromList $ nubOrd $ concatMap mpair ms
@@ -214,7 +215,7 @@ clsDefMap cs@OldCodeSpec {
   _inputs = ins,
   _extInputs = extIns,
   _derivedInputs = ds,
-  _constants = cns
+  _constDefns = cns
   } chs ms = fromList $ nub $ concatMap modClasses ms
     ++ getInputCls chs ins
     ++ getConstantsCls chs cns
@@ -376,4 +377,4 @@ genICName ic = do
 
 -- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict
-lookupC g u = findOrErr u (codeSpec g ^. systemdbO)
+lookupC g u = findOrErr u (codeSpec g ^. systemdb)

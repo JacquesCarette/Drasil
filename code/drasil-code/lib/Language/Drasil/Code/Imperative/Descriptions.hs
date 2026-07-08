@@ -122,7 +122,7 @@ constModDesc = do
   let cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
   return $ cDesc $ filter (flip member (Map.filter (cname ==)
-    (clsMap g)) . codeName) (codeSpec g ^. constantsO)
+    (clsMap g)) . codeName) (codeSpec g ^. constDefns)
 
 -- | Returns a description of what is contained in the Output Format module,
 -- if it exists.
@@ -146,9 +146,9 @@ inputClassDesc = do
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [
-        inPs $ inIPMap $ codeSpec g ^. extInputsO,
-        dVs $ inIPMap $ map quantvar $ codeSpec g ^. derivedInputsO,
-        cVs $ inIPMap $ map quantvar $ codeSpec g ^. constantsO]
+        inPs $ inIPMap $ codeSpec g ^. extInputs,
+        dVs $ inIPMap $ map quantvar $ codeSpec g ^. derivedInputs,
+        cVs $ inIPMap $ map quantvar $ codeSpec g ^. constDefns]
       inPs [] = ""
       inPs _ = "input values"
       dVs [] = ""
@@ -167,7 +167,7 @@ constClassDesc = do
   let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
   return $ ccDesc $ filter (flip member (Map.filter (cname ==)
-    (clsMap g)) . codeName) (codeSpec g ^. constantsO)
+    (clsMap g)) . codeName) (codeSpec g ^. constDefns)
 
 -- | Returns a description for the generated function that reads input from a
 -- file, if it exists.
@@ -221,8 +221,8 @@ woFuncDesc = do
 physAndSfwrCons :: GenState Description
 physAndSfwrCons = do
   g <- get
-  let cns = concat $ mapMaybe ((`Map.lookup` (codeSpec g ^. cMapO)) . (^. uid))
-        (codeSpec g ^. inputsO)
+  let cns = concat $ mapMaybe ((`Map.lookup` (codeSpec g ^. cMap)) . (^. uid))
+        (codeSpec g ^. inputs)
   return $ stringList [
     if not (any isPhysC cns) then "" else "physical constraints",
     if not (any isSfwrC cns) then "" else "software constraints"]

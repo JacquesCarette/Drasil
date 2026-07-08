@@ -68,6 +68,7 @@ import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg, NativeVector(..))
 import qualified Drasil.GProc as Proc (SFile)
+import Drasil.System (systemdb)
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
 -- match the chunk's 'Space' to.
@@ -90,7 +91,7 @@ value :: (OOProg r tp vis smt) => UID -> Name -> VS (r tp) -> GenState (SValue r
 value u s t = do
   g <- get
   let cs = codeSpec g
-      mm = cs ^. constMapO
+      mm = cs ^. constMap
       constDef = do
         cd <- Map.lookup u mm
         maybeInline (g ^. conStruct) cd
@@ -114,9 +115,9 @@ variable s t = do
   let cs = codeSpec g
       defFunc Var = var
       defFunc Const = classConst
-  if s `elem` map codeName (cs ^. inputsO)
+  if s `elem` map codeName (cs ^. inputs)
     then inputVariable (g ^. inStruct) Var (var s t)
-    else if s `elem` map codeName (cs ^. constantsO)
+    else if s `elem` map codeName (cs ^. constDefns)
       then constVariable (g ^. conStruct) (g ^. conRepr)
               ((defFunc $ g ^. conRepr) s t)
       else return $ var s t
@@ -550,7 +551,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdbO) s
+  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdb) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
@@ -561,7 +562,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO)
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdbO) s
+  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdb) s
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
     [block $ map (`varDec` local) vars, block stmts]
@@ -762,7 +763,7 @@ valueProc :: (SharedProg r tp vis smt, NativeVector r tp) => UID -> Name -> VS (
 valueProc u s t = do
   g <- get
   let cs = codeSpec g
-      mm = cs ^. constMapO
+      mm = cs ^. constMap
       constDef = do
         cd <- Map.lookup u mm
         maybeInline (g ^. conStruct) cd
@@ -786,9 +787,9 @@ variableProc s t = do
   let cs = codeSpec g
       defFunc Var = var
       defFunc Const = constant -- This might be wrong
-  if s `elem` map codeName (cs ^. inputsO)
+  if s `elem` map codeName (cs ^. inputs)
     then inputVariableProc (g ^. inStruct) Var (var s t)
-    else if s `elem` map codeName (cs ^. constantsO)
+    else if s `elem` map codeName (cs ^. constDefns)
       then constVariableProc (g ^. conStruct) (g ^. conRepr)
               ((defFunc $ g ^. conRepr) s t)
       else return $ var s t
@@ -892,7 +893,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
-  vars <- mapM mkVarProc (fstdecl (codeSpec g ^. systemdbO) s
+  vars <- mapM mkVarProc (fstdecl (codeSpec g ^. systemdb) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]

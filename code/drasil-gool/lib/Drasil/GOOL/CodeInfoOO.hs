@@ -405,8 +405,8 @@ instance VisibilitySym CodeInfoOO () where
   public  = return ()
 
 instance ParameterSym CodeInfoOO where
-  param        _ = return $ return emptyParam
-  pointerParam _ = return $ return emptyParam
+  param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance MethodSym CodeInfoOO () () where
   type Method CodeInfoOO = ()
@@ -472,15 +472,6 @@ instance ModuleSym CodeInfoOO () () where
 
 noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
-
-emptyVar :: VarData
-emptyVar = vard ClassLevel "" emptyType empty -- Hack
-
-emptyParam :: ParamData
-emptyParam = pd emptyVar empty -- Hack
-
-emptyType :: TypeData
-emptyType = td Void "" empty -- Hack
 
 noInfoScope :: CodeInfoOO ScopeData
 noInfoScope = return $ sd Global -- Hack

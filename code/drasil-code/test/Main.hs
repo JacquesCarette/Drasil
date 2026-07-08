@@ -13,8 +13,8 @@ import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   GOOLState)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
-import Drasil.GProc (ProcProg, unJLC, unMLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
+import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
+import qualified Drasil.GProc as Proc (ProgramSym(..), GSProgram)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
@@ -80,7 +80,7 @@ gProcTestGroup n p =
     ]
 
 gProcMatlabTestGroup :: String ->
-  (forall r tp vis smt. (ProcProg r tp vis smt) =>
+  (forall r tp vis smt. (ProcProg r tp vis smt, NativeVector r tp) =>
     Proc.GSProgram r) -> TestTree
 gProcMatlabTestGroup n p =
   goldenTestingGroup
@@ -92,13 +92,12 @@ gProcMatlabTestGroup n p =
 
 genCodeProcNoMake :: (ProcProg r tp vis smt, Monad r') =>
   (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
-  (forall s tp' vis' smt'. (ProcProg s tp' vis' smt') =>
+  (forall s tp' vis' smt'. (ProcProg s tp' vis' smt', NativeVector s tp') =>
     Proc.GSProgram s) ->
   [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =
   let
-    gs = Proc.unCI (evalState p initialState)
-    (p', gs') = runState p gs
+    (p', gs') = runState p initialState
     (PackageData prog aux) = unRepr' $ package (unRepr p') []
   in seq gs' $ toFileLayout (progMods prog) ++ aux
 
@@ -116,8 +115,7 @@ genCodeProc :: (ProcProg r tp vis smt, SoftwareDossierSym r', Monad r') =>
   (forall s tp' vis' smt'. (ProcProg s tp' vis' smt') => Proc.GSProgram s) -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let
-    gs = Proc.unCI (evalState p initialState)
-    (p', gs') = runState p gs
+    (p', gs') = runState p initialState
   in genCode' (unRepr p') gs' unRepr'
 
 genCode' :: (SoftwareDossierSym r', Monad r') => ProgData -> GOOLState ->

@@ -15,8 +15,8 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
   listIndexExists, at, VisibilitySym(..),ParameterSym(..), MethodSym(..),
   ModuleSym(..), convType, ProgData(..), FileData(..), ModData(..),
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
-  mainMod, initialState, onStateValue, onCodeList, unCI, unJLC, jlName,
-  jlVersion, unMLC, mlName, mlVersion, LoggingFor(..),
+  mainMod, initialState, onStateValue, onCodeList, unJLC, jlName, jlVersion,
+  unMLC, mlName, mlVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
   ) where
@@ -49,8 +49,6 @@ import Drasil.Shared.State (VS, GOOLState(..), lensMStoVS, headers, sources,
   mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
-
-import Drasil.GProc.CodeInfoProc (unCI)
 
 import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
 import Drasil.GProc.LanguageRenderer.MatlabRenderer (unMLC, mlName, mlVersion)

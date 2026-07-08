@@ -15,7 +15,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   TypeElim(..), SVariable, SValue, SMethod, MixedCall, MixedCtorCall,
-  VariableSym(..), VariableValue(..), VariableElim(..), 
+  VariableSym(..), VariableValue(..), VariableElim(..),
   ValueSym(Value, valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))

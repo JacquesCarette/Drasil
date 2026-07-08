@@ -20,6 +20,7 @@ import Drasil.Database (UID, findOrErr)
 import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
+import Drasil.System (systemdb, HasSystemMeta(..), HasSmithEtAlSRS(..))
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
@@ -29,7 +30,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging,
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output,
-  CodeSpec,  OldCodeSpec(..), getConstraints, systemdbO)
+  CodeSpec, HasOldCodeSpec(..), getConstraints)
 import Language.Drasil.ICOSolutionSearch (Def)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
@@ -85,7 +86,7 @@ type GenState = State DrasilState
 
 -- | Private State, used to push these options around the generator.
 data DrasilState = DrasilState {
-  codeSpec :: CodeSpec,
+  _dsCodeSpec :: CodeSpec,
   printfo :: PrintingInformation,
   -- Choices
   _choices :: ChoicesInfo,
@@ -169,6 +170,15 @@ instance HasChoices DrasilState where
   logKind = choices . logKind
   dsICNames = choices . dsICNames
 
+instance HasOldCodeSpec DrasilState where
+  oldCodeSpec = dsCodeSpec . oldCodeSpec
+
+instance HasSystemMeta DrasilState where
+  systemMeta = dsCodeSpec . systemMeta
+
+instance HasSmithEtAlSRS DrasilState where
+  smithEtAlSRS = dsCodeSpec . smithEtAlSRS
+
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
 addToDesignLog :: Space -> CodeType -> Doc -> DrasilState -> DrasilState
@@ -182,24 +192,23 @@ addLoggedSpace s t = over loggedSpaces ((s,t):)
 
 -- | Builds the module export map, mapping each function and state variable name
 -- in the generated code to the name of the generated module that exports it.
-modExportMap :: OldCodeSpec -> Choices -> [Mod] -> ModExportMap
-modExportMap cs@OldCodeSpec {
-  _pName = prn,
-  _inputs = ins,
-  _extInputs = extIns,
-  _derivedInputs = ds,
-  _constants = cns
-  } chs@Choices {
+modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
+modExportMap cs chs@Choices {
     architecture = m
   } ms = fromList $ nubOrd $ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
     ++ getExpDerived prn chs ds
-    ++ getExpConstraints prn chs (getConstraints (_cMap cs) ins)
+    ++ getExpConstraints prn chs (getConstraints (cs ^. cMap) ins)
     ++ getExpInputFormat prn chs extIns
-    ++ getExpCalcs prn chs (_execOrder cs)
-    ++ getExpOutput prn chs (_outputs cs)
-  where mpair (Mod n _ _ cls fs) = map
+    ++ getExpCalcs prn chs (cs ^. execOrder)
+    ++ getExpOutput prn chs (cs ^. outputs)
+  where prn = cs ^. programName
+        ins = cs ^. inputs
+        extIns = cs ^. extInputs
+        ds = cs ^. derivedInputs
+        cns = cs ^. constDefns
+        mpair (Mod n _ _ cls fs) = map
           (, defModName (modularity m) n)
           (map className cls
             ++ concatMap (map (codeName . stVar) . filter ((== Pub) . svVisibility) . stateVars) cls
@@ -209,19 +218,18 @@ modExportMap cs@OldCodeSpec {
 
 -- | Builds the class definition map, mapping each generated method and state
 -- variable name to the name of the generated class where it is defined.
-clsDefMap :: OldCodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
-clsDefMap cs@OldCodeSpec {
-  _inputs = ins,
-  _extInputs = extIns,
-  _derivedInputs = ds,
-  _constants = cns
-  } chs ms = fromList $ nub $ concatMap modClasses ms
+clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
+clsDefMap cs chs ms = fromList $ nub $ concatMap modClasses ms
     ++ getInputCls chs ins
     ++ getConstantsCls chs cns
     ++ getDerivedCls chs ds
-    ++ getConstraintsCls chs (getConstraints (_cMap cs) ins)
+    ++ getConstraintsCls chs (getConstraints (cs ^. cMap) ins)
     ++ getInputFormatCls chs extIns
-    where modClasses (Mod _ _ _ cls _) = concatMap (\cl ->
+    where ins = cs ^. inputs
+          extIns = cs ^. extInputs
+          ds = cs ^. derivedInputs
+          cns = cs ^. constDefns
+          modClasses (Mod _ _ _ cls _) = concatMap (\cl ->
             let cln = className cl in
             (cln, cln) : map (\sv -> (codeName (stVar sv), cln)) (stateVars cl)
               ++ map (\m -> (fname m, cln)) (methods cl)) cls
@@ -376,4 +384,4 @@ genICName ic = do
 
 -- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict
-lookupC g u = findOrErr u (codeSpec g ^. systemdbO)
+lookupC g u = findOrErr u $ g ^. systemdb

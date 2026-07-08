@@ -16,7 +16,7 @@ module Language.Drasil.CodeSpec (
 ) where
 
 import Prelude hiding (const)
-import Control.Lens ((^.), makeLenses, Lens', makeClassyFor, set)
+import Control.Lens ((^.), makeLenses, makeClassy, set)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
@@ -28,7 +28,7 @@ import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.System as S
-import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
+import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 
@@ -38,7 +38,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
   odeLibReqs, odeInfoReqs)
 import Language.Drasil.Chunk.CodeBase (codevars, varResolve)
-import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
+import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..))
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
 -- | Program input.
@@ -54,10 +54,6 @@ type ConstantMap = Map.Map UID CodeDefinition
 
 -- | Old Code specifications. Holds information needed to generate code.
 data OldCodeSpec = OldCodeSpec {
-  -- | Program name.
-  _pName :: Name,
-  -- | Authors.
-  _authors :: People,
   -- | All inputs.
   _inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -74,31 +70,15 @@ data OldCodeSpec = OldCodeSpec {
   -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
   _cMap :: ConstraintCEMap,
   -- | List of all constants used in the problem.
-  _constants :: [Const],
+  _constDefns :: [Const],
   -- | Map containing all constants used in the problem.
   _constMap :: ConstantMap,
   -- | Additional modules required in the generated code, which Drasil cannot yet
   -- automatically define.
-  _mods :: [Mod],  -- medium hack
-  -- | The database of all chunks used in the problem.
-  _systemdb :: ChunkDB
+  _mods :: [Mod]  -- medium hack
   }
 
-makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
-  [   ("_pName", "pNameO")
-    , ("_authors", "authorsO")
-    , ("_inputs", "inputsO")
-    , ("_extInputs", "extInputsO")
-    , ("_derivedInputs", "derivedInputsO")
-    , ("_outputs", "outputsO")
-    , ("_configFiles", "configFilesO")
-    , ("_execOrder", "execOrderO")
-    , ("_cMap", "cMapO")
-    , ("_constants", "constantsO")
-    , ("_constMap", "constMapO")
-    , ("_mods", "modsO")
-    , ("_systemdb", "systemdbO")
-    ] ''OldCodeSpec
+makeClassy ''OldCodeSpec
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
@@ -108,14 +88,12 @@ data CodeSpec = CS {
 makeLenses ''CodeSpec
 
 instance HasSmithEtAlSRS CodeSpec where
-  smithEtAlSRS :: Lens' CodeSpec S.SmithEtAlSRS
   smithEtAlSRS = system'
 
 instance HasSystemMeta CodeSpec where
   systemMeta = system' . systemMeta
 
 instance HasOldCodeSpec CodeSpec where
-  oldCodeSpec :: Lens' CodeSpec OldCodeSpec
   oldCodeSpec = oldCode
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
@@ -157,7 +135,6 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
                      , S._constraints = cs
                      , S._constants = cnsts } chs =
   let ddefs = sys ^. dataDefns
-      n = sys ^. programName
       db = sys ^. systemdb
       inputs' = map quantvar $ NE.toList ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
@@ -172,8 +149,6 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
       allInputs = inputs' ++ map quantvar derived
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in OldCodeSpec {
-        _pName = n,
-        _authors = sys ^. authors,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,
@@ -181,10 +156,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
         _configFiles = defaultConfigFiles chs,
         _execOrder = exOrder,
         _cMap = constraintMap cs,
-        _constants = const',
+        _constDefns = const',
         _constMap = assocToMap const',
-        _mods = extraMods chs,
-        _systemdb = db
+        _mods = extraMods chs
       }
 
 -- medium hacks ---

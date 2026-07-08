@@ -9,12 +9,12 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, FunctionSym, Reference(..), Array(..), List(..),
+  libFuncApp, exists, FunctionSym(..), Reference(..), Array(..), List(..),
   Set(..), NativeVector(..), listSlice, listIndexExists, at, VisibilitySym(..),
   ParameterSym(..), MethodSym(..), ModuleSym(..), convType, ProgData(..),
   FileData(..), ModData(..), TypeData(..), VisibilityTag(..), ParamData,
   CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
-  initialState, onStateValue, onCodeList, unCI, unJLC, jlName, jlVersion, unMLC,
+  initialState, onStateValue, onCodeList, unJLC, jlName, jlVersion, unMLC,
   mlName, mlVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
   getCodeType, getTypeString
@@ -47,8 +47,6 @@ import Drasil.Shared.State (VS, GOOLState(..), lensMStoVS, headers, sources,
   mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
-
-import Drasil.GProc.CodeInfoProc (unCI)
 
 import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
 import Drasil.GProc.LanguageRenderer.MatlabRenderer (unMLC, mlName, mlVersion)

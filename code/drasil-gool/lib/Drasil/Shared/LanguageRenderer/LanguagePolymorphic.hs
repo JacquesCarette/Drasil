@@ -24,7 +24,7 @@ import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   MSBlock, SVariable, SValue, SMethod, NamedArgs, MixedCall, MixedCtorCall,
   BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
-  VariableSym(Variable), VisibilitySym(..), FunctionSym(..),
+  VariableSym(Variable), VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
@@ -62,7 +62,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData, FuncData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -279,7 +279,7 @@ lambda f ps' ex' = do
 objAccess
   :: (CommonRenderSym r vis smt)
   => SValue r
-  -> VS (r (Function r))
+  -> VS (r FuncData)
   -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f)
   (R.objAccess (RC.value v) (RC.function f)))
@@ -296,7 +296,7 @@ func
   => Label
   -> VS (r TypeData)
   -> [SValue r]
-  -> VS (r (Function r))
+  -> VS (r FuncData)
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get :: (OORenderSym r vis smt) => SValue r -> SVariable r -> SValue r
@@ -323,7 +323,7 @@ listAccess v i = do
 getFunc
   :: (OORenderSym r vis smt)
   => SVariable r
-  -> VS (r (Function r))
+  -> VS (r FuncData)
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
@@ -332,7 +332,7 @@ setFunc
   => VS (r TypeData)
   -> SVariable r
   -> SValue r
-  -> VS (r (Function r))
+  -> VS (r FuncData)
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 

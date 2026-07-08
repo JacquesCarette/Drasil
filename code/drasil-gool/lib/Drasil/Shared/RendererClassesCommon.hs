@@ -20,11 +20,11 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, SVariable
   MathConstant(..), VariableValue(..), ValueExpression(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ParameterSym(..), MethodSym(..), BinderElim(..), UnRepr(..))
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ParameterSym(..), MethodSym(..),
+  BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
-  OpData, BinderD, TypeData, ParamData)
+  OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -156,14 +156,14 @@ class ValueElim r where
 
 class InternalListFunc r where
   -- | List, Index
-  listAccessFunc :: VS (r TypeData) -> SValue r -> VS (r (Function r))
+  listAccessFunc :: VS (r TypeData) -> SValue r -> VS (r FuncData)
 
 class RenderFunction r where
-  funcFromData :: Doc -> VS (r TypeData) -> VS (r (Function r))
+  funcFromData :: Doc -> VS (r TypeData) -> VS (r FuncData)
 
 class FunctionElim r where
-  functionType :: r (Function r) -> r TypeData
-  function :: r (Function r) -> Doc
+  functionType :: r FuncData -> r TypeData
+  function :: r FuncData -> Doc
 
 class InternalAssignStmt r smt | r -> smt where
   multiAssign       :: [SVariable r] -> [SValue r] -> MS (r smt)

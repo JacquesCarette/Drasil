@@ -26,7 +26,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
-  FunctionSym(..), funcApp, listSize)
+  funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
@@ -67,7 +67,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData, ParamData)
+  TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -271,7 +271,7 @@ namedArgError l = "Named arguments not supported in " ++ l
 
 listSizeFunc
   :: (OORenderSym r vis smt)
-  => VS (r (Function r))
+  => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
 
 listAccessFunc'
@@ -279,7 +279,7 @@ listAccessFunc'
   => Label
   -> VS (r TypeData)
   -> SValue r
-  -> VS (r (Function r))
+  -> VS (r FuncData)
 listAccessFunc' f t i = IG.func f t [intValue i]
 
 -- C# and C++ --

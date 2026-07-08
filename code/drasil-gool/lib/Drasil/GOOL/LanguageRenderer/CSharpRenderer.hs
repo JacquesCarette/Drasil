@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -423,7 +423,6 @@ instance InternalValueExp CSharpCode where
   classMethodCallMixedArgs' = CG.classMethodCall
 
 instance FunctionSym CSharpCode where
-  type Function CSharpCode = FuncData
 
 instance OOFunctionSym CSharpCode where
   func = G.func
@@ -833,7 +832,7 @@ csBoolParse v = extFuncApp csBool csParse bool [v]
 csCharParse :: SValue CSharpCode -> SValue CSharpCode
 csCharParse v = extFuncApp csChar csParse char [v]
 
-csSplitFunc :: Char -> VS (CSharpCode (Function CSharpCode))
+csSplitFunc :: Char -> VS (CSharpCode FuncData)
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
 csCast :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode

@@ -12,7 +12,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
@@ -237,11 +237,15 @@ instance InternalValueExp CodeInfoOO where
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance FunctionSym CodeInfoOO where
-  type Function CodeInfoOO = ()
 
 instance OOFunctionSym CodeInfoOO where
-  func  _ _ = executeList
-  objAccess = execute2
+  func  _ _ l = do
+    sequence_ l
+    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  objAccess s1 s2 = do
+    _ <- s1
+    _ <- s2
+    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance GetSet CodeInfoOO where
   get v _ = execute1 v
@@ -391,7 +395,9 @@ instance ControlStatement CodeInfoOO () where
     noInfo
 
 instance ObserverPattern CodeInfoOO () where
-  notifyObservers f _ = execute1 (zoom lensMStoVS f)
+  notifyObservers f _ = do
+    _ <- zoom lensMStoVS f
+    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance StrategyPattern CodeInfoOO () where
   runStrategy _ ss vl _ = do

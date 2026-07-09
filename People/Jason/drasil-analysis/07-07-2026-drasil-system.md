@@ -65,7 +65,20 @@ data DrasilWebsite = DW
 makeLenses ''DrasilWebsite
 ```
 
+`DrasilWebsite` is a fairly 'low-level' encoding of the Drasil website, containing only a fully-written `Document` that will be rendered as the `index.html` page. For example, it can include:
+
+1. The list of examples to be shown on the website.
+2. A list of relevant papers to be shown on the website.
+
+I'm sure there are other things that it can include as well.
+
+`webRefs` is a (known) wart; a result of [#4862](https://github.com/JacquesCarette/Drasil/pull/4862) and [#4488](https://github.com/JacquesCarette/Drasil/pull/4488). It is to be dealt with partially in [#4688](https://github.com/JacquesCarette/Drasil/issues/4688), but we also need another ticket to investigate what's going on with `Reference`.
+
+TODOs:
+
 * [ ] Needs to be moved to `drasil-website`.
+* [ ] Needs to be fleshed out more. A 'higher-level' encoding of the Drasil website would be nice to see.
+* [ ] Investigate `Reference`s and how they work.
 
 ## `drasil-system/lib/Drasil/System/SmithEtAlSRS.hs`
 
@@ -107,6 +120,8 @@ data SmithEtAlSRS where
 makeClassy ''SmithEtAlSRS
 ```
 
+TODOs:
+
 * [ ] Needs to be moved to `drasil-srs`.
 * [X] Needs to be rebuilt, but that's out of scope in this document.
 
@@ -128,3 +143,23 @@ class (HasSystemMeta sys) => ToFiles sys opts | opts -> sys where
     -- | The final, rendered software artifacts.
     [FileLayout]
 ```
+
+`ToFiles` is currently only instantiated for `LessonPlan` and `DrasilWebsite`:
+
+* https://github.com/JacquesCarette/Drasil/blob/b99972de32aa418d1eb2a47bb95f242f19804599/code/drasil-system/lib/Drasil/System/DrasilWebsite.hs#L55-L69
+* https://github.com/JacquesCarette/Drasil/blob/b99972de32aa418d1eb2a47bb95f242f19804599/code/drasil-lesson-plan/lib/Drasil/LessonPlan/JupyterGenerator.hs#L40-L59
+
+`ToFiles` is exclusively used in `WriteSystem.hs`:
+
+https://github.com/JacquesCarette/Drasil/blob/b99972de32aa418d1eb2a47bb95f242f19804599/code/drasil-gen/lib/Drasil/Generator/WriteSystem.hs#L56-L72
+
+`WriteSystem.hs` wraps together all assumptions the `code/Makefile` makes about the way artifacts are written to disk. This is useful because this code is reusable in each of our case studies.
+
+One oddity about `WriteSystem` is that it uses the `CI` from the `SystemMeta`-information that each "system" is expected to instantiate. Each "system" is given a `CI` which contains its title and an abbreviation. This abbreviation is currently used as the name of the folder that Drasil generates. This is a known issue; [#4884](https://github.com/JacquesCarette/Drasil/issues/4884).
+
+TODOs:
+
+* [ ] Instantiate `ToFiles` for our remaining two case study variants:
+    * [ ] `SmithEtAlSRS`
+    * [ ] `CodeSpec`
+* [ ] Deal with [#4884](https://github.com/JacquesCarette/Drasil/issues/4884).

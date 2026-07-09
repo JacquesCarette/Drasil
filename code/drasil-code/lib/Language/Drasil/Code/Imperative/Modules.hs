@@ -34,7 +34,8 @@ import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, SMethod, CSStateVar,
   StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
   objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), ControlStatement(..),
   ifNoElse, VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-  convTypeOO, VisibilityTag(..), SharedStatement, TypeElim)
+  convTypeOO, VisibilityTag(..), SharedStatement, TypeElim, VariableElim,
+  OOStatement)
 import qualified Drasil.GOOL as OO (SFile)
 import Drasil.GProc (ProcProg, NativeVector)
 import qualified Drasil.GProc as Proc (SFile)
@@ -126,7 +127,9 @@ genMainFunc = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDecl :: (OOProg r vis smt) => GenState (Maybe (MS (r smt)))
+getInputDecl
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => GenState (Maybe (MS (r smt)))
 getInputDecl = do
   g <- get
   let scp = convScope $ currentScope g
@@ -161,7 +164,9 @@ getInputDecl = do
 -- If constants are 'Bundled' 'WithInputs', do 'Nothing'; declaration of the 'inParams'
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
-initConsts :: (OOProg r vis smt) => GenState (Maybe (MS (r smt)))
+initConsts
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => GenState (Maybe (MS (r smt)))
 initConsts = do
   g <- get
   let scp = convScope $ currentScope g
@@ -209,7 +214,7 @@ genInputMod = do
 -- Either generates a declare-define statement for a regular state variable
 -- (if user chose 'Var'),
 -- or a declare-define statement for a constant variable (if user chose 'Const').
-constVarFunc :: (OOProg r vis smt) => ConstantRepr ->
+constVarFunc :: (StateVarSym r vis) => ConstantRepr ->
   (SVariable r -> SValue r -> CSStateVar r)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
@@ -325,16 +330,18 @@ genInputConstraints s = do
   genConstraints $ icName `elem` defSet g
 
 -- | Generates input constraints code block for checking software constraints.
-sfwrCBody :: (OOProg r vis smt) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MS (r smt)]
+sfwrCBody
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r smt)]
 sfwrCBody cs = do
   g <- get
   let cb = g ^. onSfwrC
   chooseConstr cb cs
 
 -- | Generates input constraints code block for checking physical constraints.
-physCBody :: (OOProg r vis smt) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MS (r smt)]
+physCBody
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r smt)]
 physCBody cs = do
   g <- get
   let cb = g ^. onPhysC
@@ -342,8 +349,11 @@ physCBody cs = do
 
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
-chooseConstr :: (OOProg r vis smt) => ConstraintBehaviour ->
-  [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r smt)]
+chooseConstr
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => ConstraintBehaviour
+  -> [(CodeVarChunk, [ConstraintCE])]
+  -> GenState [MS (r smt)]
 chooseConstr cb cs = do
   let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
   -- Generate variable declarations based on constraints
@@ -362,8 +372,9 @@ chooseConstr cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
-constrWarn :: (OOProg r vis smt) => (CodeVarChunk, [ConstraintCE]) ->
-  GenState [MSBody r]
+constrWarn
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
 constrWarn c = do
   let q = fst c
       cs = snd c
@@ -373,8 +384,9 @@ constrWarn c = do
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
-constrExc :: (OOProg r vis smt) => (CodeVarChunk, [ConstraintCE]) ->
-  GenState [MSBody r]
+constrExc
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
 constrExc c = do
   let q = fst c
       cs = snd c
@@ -382,8 +394,9 @@ constrExc c = do
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
 -- | Generates set variable dec
-constrVarDec :: (OOProg r vis smt) => CodeVarChunk -> CodeExpr ->
-  GenState (MS (r smt))
+constrVarDec
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => CodeVarChunk -> CodeExpr -> GenState (MS (r smt))
 constrVarDec v e = do
   lb <- convExpr e
   t <- codeType v
@@ -393,8 +406,9 @@ constrVarDec v e = do
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
-constraintViolatedMsg :: (OOProg r vis smt) => CodeVarChunk -> String ->
-  ConstraintCE -> GenState [MS (r smt)]
+constraintViolatedMsg
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r smt)]
 constraintViolatedMsg q s c = do
   pc <- printConstraint (showHasSymbImpl q) c
   v <- mkVal (quantvar q)
@@ -405,13 +419,15 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraint :: (OOProg r vis smt) => String -> ConstraintCE ->
-  GenState [MS (r smt)]
+printConstraint
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => String -> ConstraintCE -> GenState [MS (r smt)]
 printConstraint v c = do
   g <- get
   let db = printfo g
-      printConstraint' :: (OOProg r vis smt) => String -> ConstraintCE -> GenState
-        [MS (r smt)]
+      printConstraint'
+        :: (OOStatement r smt, TypeElim r, VariableElim r)
+        => String -> ConstraintCE -> GenState [MS (r smt)]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
@@ -485,15 +501,17 @@ genConstMod = do
 
 -- | Generates a class to store constants, if constants are mapped to the
 -- Constants class in the class definition map, otherwise returns Nothing.
-genConstClass :: (OOProg r vis smt) => ClassType ->
-  GenState (Maybe (SClass r))
+genConstClass
+  :: (OOProg r vis smt)
+  => ClassType -> GenState (Maybe (SClass r))
 genConstClass scp = do
   g <- get
   modify (\st -> st {currentScope = Local})
   cname <- genICName Constants
   let cs = g ^. constDefns
-      genClass :: (OOProg r vis smt) => [CodeDefinition] -> GenState
-        (Maybe (SClass r))
+      genClass
+        :: (OOProg r vis smt)
+        => [CodeDefinition] -> GenState (Maybe (SClass r))
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
@@ -557,8 +575,9 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
-genCalcBlock :: (OOProg r vis smt) => CalcType -> CodeDefinition ->
-  CodeExpr -> GenState (MSBlock r)
+genCalcBlock
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
   vv <- mkVar (quantvar v)
@@ -569,8 +588,13 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- | Generates a calculation block for a value defined by cases.
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
-genCaseBlock :: (OOProg r vis smt) => CalcType -> CodeDefinition ->
-  Completeness -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
+genCaseBlock
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => CalcType
+  -> CodeDefinition
+  -> Completeness
+  -> [(CodeExpr, CodeExpr)]
+  -> GenState (MSBlock r)
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlock t v c cs = do

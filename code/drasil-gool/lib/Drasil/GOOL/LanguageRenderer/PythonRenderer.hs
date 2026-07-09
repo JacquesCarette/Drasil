@@ -23,9 +23,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
   ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
   OOValueExpression(..), selfMethodCall, OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -123,6 +123,7 @@ instance Monad PythonCode where
 
 instance SharedProg PythonCode Doc (Doc, Terminator)
 instance SharedStatement PythonCode (Doc, Terminator)
+instance OOStatement PythonCode (Doc, Terminator)
 instance OOProg PythonCode Doc (Doc, Terminator)
 
 instance ProgramSym PythonCode Doc (Doc, Terminator) where

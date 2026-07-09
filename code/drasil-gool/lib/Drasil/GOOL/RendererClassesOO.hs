@@ -8,13 +8,13 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, SVariable,
-  SValue, MSParameter, SMethod, BlockSym(..))
+  SValue, SMethod, BlockSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.Shared.AST (AttachmentTag, TypeData)
-import Drasil.Shared.State (FS, CS, VS)
+import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData)
+import Drasil.Shared.State (FS, CS, VS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -57,11 +57,11 @@ class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r vis | r -> vis whe
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->
-    MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> SMethod r
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r (IG.Attachment r)
-    -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> SMethod r
 
   destructor :: [IG.CSStateVar r] -> SMethod r
 

@@ -31,13 +31,13 @@ import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
-  VariableSym(Variable), ValueSym(..), ParameterSym(Parameter), TypeElim(..))
+  VariableSym(Variable), ValueSym(..), TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(..), ValueElim(..), StatementElim(..),
   ParamElim(..), InternalBinderElim(..))
 import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod,
-  updateMod, TypeData(..), VarData(..), BinderD)
+  updateMod, TypeData(..), VarData(..), BinderD, ParamData)
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last, intercalate)
@@ -404,7 +404,7 @@ variableList = hicat listSep' . map RC.variable
 binderList :: (CommonRenderSym r vis smt) => [r BinderD] -> Doc
 binderList = hicat listSep' . map RC.binderElim
 
-parameterList :: (CommonRenderSym r vis smt) => [r (Parameter r)] -> Doc
+parameterList :: (CommonRenderSym r vis smt) => [r ParamData] -> Doc
 parameterList = hicat listSep' . map RC.parameter
 
 namedArgList :: (CommonRenderSym r vis smt) => Doc -> [(r (Variable r), r (Value r))] -> Doc

@@ -499,7 +499,6 @@ instance MethodTypeSym MatlabCode where
   mType = zoom lensMStoVS
 
 instance ParameterSym MatlabCode where
-  type Parameter MatlabCode = ParamData
   -- A MATLAB parameter is just the variable name.
   param = G.param mlParam
   pointerParam = param
@@ -597,7 +596,7 @@ mlParam = RC.variable
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
 mlFuncDoc :: (CommonRenderSym r vis smt) => Label -> [Doc] ->
-  [r (Parameter r)] -> Doc -> Doc
+  [r ParamData] -> Doc -> Doc
 mlFuncDoc n outs pms bod =
   vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),
         indent bod,

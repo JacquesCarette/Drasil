@@ -22,8 +22,8 @@ module Drasil.GOOL.InterfaceGOOL (
 import Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, SVariable, SValue, NamedArgs,
-  MSParameter, SMethod, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
-  InOutFunc, DocInOutFunc,
+  SMethod, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
   VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
@@ -32,7 +32,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, TypeData)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData)
 
 class (SharedProg r vis smt, ProgramSym r vis smt, OOVariableValue r,
   OODeclStatement r smt, OOFuncAppStatement r smt, OOValueExpression r,
@@ -85,28 +85,28 @@ type Initializers r = [(SVariable r, SValue r)]
 
 class (MethodSym r vis smt, AttachmentSym r) => OOMethodSym r vis smt where
   method      :: Label -> r vis -> r (Attachment r) -> VS (r TypeData) ->
-    [MSParameter r] -> MSBody r -> SMethod r
+    [MS (r ParamData)] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r
-  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
+  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> SMethod r
 
   -- inOutMethod and docInOutMethod both need the Attachment parameter
   inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r
   docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r
 
 privMethod :: (OOMethodSym r vis smt) => Label -> VS (r TypeData) ->
-  [MSParameter r] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> SMethod r
 privMethod n = method n private instanceLevel
 
 pubMethod :: (OOMethodSym r vis smt) => Label -> VS (r TypeData) ->
-  [MSParameter r] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> SMethod r
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis smt) => [MSParameter r] ->
+initializer :: (OOMethodSym r vis smt) => [MS (r ParamData)] ->
   Initializers r -> SMethod r
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis smt) => [MSParameter r] ->
+nonInitConstructor :: (OOMethodSym r vis smt) => [MS (r ParamData)] ->
   MSBody r -> SMethod r
 nonInitConstructor ps = constructor ps []
 

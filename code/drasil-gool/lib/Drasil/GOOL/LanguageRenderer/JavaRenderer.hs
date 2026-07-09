@@ -14,17 +14,16 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
+  VSFunction, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -657,7 +656,6 @@ instance OOMethodTypeSym JavaCode where
   construct = G.construct
 
 instance ParameterSym JavaCode where
-  type Parameter JavaCode = ParamData
   param = G.param renderParam
   pointerParam = param
 
@@ -1024,7 +1022,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
 
 jMethod :: Label -> [String] -> JavaCode Doc ->
   JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
-  [JavaCode (Parameter JavaCode)] -> JavaCode (Body JavaCode) -> Doc
+  [JavaCode ParamData] -> JavaCode (Body JavaCode) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>
@@ -1056,9 +1054,10 @@ jInOutCall f n ins outs both = fCall rets
           multi ((if odec then assign else (`varDecDef` local)) outputs
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
-jInOut :: (VS (JavaCode TypeData) -> [MSParameter JavaCode] -> MSBody JavaCode ->
-  SMethod JavaCode) -> [SVariable JavaCode] -> [SVariable JavaCode]
-  -> [SVariable JavaCode] -> MSBody JavaCode -> SMethod JavaCode
+jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
+  MSBody JavaCode -> SMethod JavaCode) -> [SVariable JavaCode] ->
+  [SVariable JavaCode] -> [SVariable JavaCode] -> MSBody JavaCode ->
+  SMethod JavaCode
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $

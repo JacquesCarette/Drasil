@@ -15,7 +15,7 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
-  SVariable, SValue, MSParameter, SMethod, MixedCall, BodySym(..), BlockSym(..),
+  SVariable, SValue, SMethod, MixedCall, BodySym(..), BlockSym(..),
   TypeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), ValueExpression(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunctio
   ControlStatement(..), ParameterSym(..), MethodSym(..), BinderElim(..),
   UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
-  OpData, BinderD, TypeData)
+  OpData, BinderD, TypeData, ParamData)
 import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -193,12 +193,12 @@ class VisibilityElim r vis | r -> vis where
   visibility :: r vis -> Doc
 
 class RenderParam r where
-  paramFromData :: SVariable r -> Doc -> MSParameter r
+  paramFromData :: SVariable r -> Doc -> MS (r ParamData)
 
 class ParamElim r where
-  parameterName :: r (Parameter r) -> Label
-  parameterType :: r (Parameter r) -> r TypeData
-  parameter     :: r (Parameter r) -> Doc
+  parameterName :: r ParamData -> Label
+  parameterType :: r ParamData -> r TypeData
+  parameter     :: r ParamData -> Doc
 
 class BlockCommentSym r where
   blockComment :: [String] -> r Doc

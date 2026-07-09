@@ -404,9 +404,8 @@ instance VisibilitySym CodeInfoOO () where
   public  = return ()
 
 instance ParameterSym CodeInfoOO where
-  type Parameter CodeInfoOO = ()
-  param        _ = noInfo
-  pointerParam _ = noInfo
+  param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
 instance MethodSym CodeInfoOO () () where
   type Method CodeInfoOO = ()

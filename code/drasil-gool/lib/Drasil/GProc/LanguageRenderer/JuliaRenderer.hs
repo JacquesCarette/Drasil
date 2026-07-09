@@ -553,8 +553,6 @@ instance MethodTypeSym JuliaCode where
   mType = zoom lensMStoVS
 
 instance ParameterSym JuliaCode where
-  type Parameter JuliaCode = ParamData
-
   param = G.param jlParam
   pointerParam = param
 
@@ -859,7 +857,7 @@ jlModContents n is = A.buildModule n (do
 -- | Creates a function.  n is function name, pms is list of parameters, and
 --   bod is body.
 jlIntFunc :: (CommonRenderSym r vis smt) => Label ->
-  [r (Parameter r)] -> r (Body r) -> Doc
+  [r ParamData] -> r (Body r) -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,

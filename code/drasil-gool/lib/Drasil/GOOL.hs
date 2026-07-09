@@ -1,9 +1,9 @@
 -- | re-export smart constructors for external code writing
 module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
-  SValue, VSFunction, MSParameter, SMethod, CSStateVar, SClass,
-  FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
-  FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
+  SValue, VSFunction, SMethod, CSStateVar, SClass, FSModule, NamedArgs,
+  Initializers, SharedProg, OOProg, ProgramSym(..), FileSym(..),
+  AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
   objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
@@ -24,7 +24,7 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
   privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType, convTypeOO,
   ProgData(..), FileData(..), ModData(..), TypeData(..), VisibilityTag(..),
-  CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
+  ParamData, CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
   initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC,
   pyName, pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion,
   swiftName, swiftVersion, LoggingFor(..),
@@ -33,10 +33,10 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction,
-  SVariable, SValue, MSParameter, SMethod, NamedArgs, SharedProg,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  BinderSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  SVariable, SValue, SMethod, NamedArgs, SharedProg, BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ifNoElse,
   VariableSym(..), extVar, VariableElim(..), listOf, listVar, ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -61,7 +61,7 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   addObserver, StrategyPattern(..), convTypeOO)
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
-  TypeData(..), VisibilityTag(..))
+  TypeData(..), VisibilityTag(..), ParamData)
 
 import Drasil.Shared.CodeType (CodeType(..))
 

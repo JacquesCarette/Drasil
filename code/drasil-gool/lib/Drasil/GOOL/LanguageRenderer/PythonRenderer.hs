@@ -640,7 +640,6 @@ instance OOMethodTypeSym PythonCode where
   construct = G.construct
 
 instance ParameterSym PythonCode where
-  type Parameter PythonCode = ParamData
   param = G.param RC.variable
   pointerParam = param
 
@@ -993,7 +992,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (CommonRenderSym r vis smt, PermElim r) => Label ->
-  r (Attachment r) -> r (Variable r) -> [r (Parameter r)] -> r (Body r) -> Doc
+  r (Attachment r) -> r (Variable r) -> [r ParamData] -> r (Body r) -> Doc
 pyMethod n attch slf ps b = let
      decorator = case binding attch of
                    ClassLevel -> text "@staticmethod"
@@ -1010,7 +1009,7 @@ pyMethod n attch slf ps b = let
        indent bodyD]
 
 pyFunction :: (CommonRenderSym r vis smt) => Label ->
-  [r (Parameter r)] -> r (Body r) -> Doc
+  [r ParamData] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

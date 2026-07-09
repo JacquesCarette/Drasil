@@ -42,15 +42,15 @@ type Library = String
 -- if we can root out its use from drasil-code
 
 class (UnRepr r TypeData, SharedStatement r smt, FunctionSym r, InternalList r,
-  VariableValue r, CommandLineArgs r, IndexTranslator r, VariableElim r,
-  MethodSym r vis smt, ScopeSym r, BinderSym r
+  VariableValue r, CommandLineArgs r, IndexTranslator r, TypeElim r,
+  VariableElim r, MethodSym r vis smt, ScopeSym r, BinderSym r
   ) => SharedProg r vis smt
 
 class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
   CommentStatement r smt, Comparison r, ControlStatement r smt,
   DeclStatement r smt, FuncAppStatement r smt, IOStatement r smt, List r smt,
   Literal r, MathConstant r, NumericExpression r, Reference r, Set r,
-  StringStatement r smt, TypeElim r, ValueExpression r, VariableValue r
+  StringStatement r smt, ValueExpression r, VariableValue r
   ) => SharedStatement r smt
 
 -- Shared between OO and Procedural --

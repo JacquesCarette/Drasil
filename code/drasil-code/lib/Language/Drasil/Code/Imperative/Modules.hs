@@ -34,7 +34,7 @@ import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, SMethod, CSStateVar,
   StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
   objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), ControlStatement(..),
   ifNoElse, VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-  convTypeOO, VisibilityTag(..), SharedStatement)
+  convTypeOO, VisibilityTag(..), SharedStatement, TypeElim)
 import qualified Drasil.GOOL as OO (SFile)
 import Drasil.GProc (ProcProg, NativeVector)
 import qualified Drasil.GProc as Proc (SFile)
@@ -668,7 +668,7 @@ genMainFuncProc = do
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
 initConstsProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => GenState (Maybe (MS (r smt)))
 initConstsProc = do
   g <- get
@@ -795,7 +795,7 @@ genCalcFuncProc cdef = do
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlockProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MSBlock r)
 genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
 genCalcBlockProc CalcAssign v e = do
@@ -808,7 +808,7 @@ genCalcBlockProc CalcReturn _ e = block <$> liftS (returnStmt <$> convExprProc e
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlockProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CalcType
   -> CodeDefinition
   -> Completeness
@@ -899,7 +899,7 @@ genInputConstraintsProc s = do
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBodyProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
  => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r smt)]
 sfwrCBodyProc cs = do
   g <- get
@@ -908,7 +908,7 @@ sfwrCBodyProc cs = do
 
 -- | Generates input constraints code block for checking physical constraints.
 physCBodyProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r smt)]
 physCBodyProc cs = do
   g <- get
@@ -918,7 +918,7 @@ physCBodyProc cs = do
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstrProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => ConstraintBehaviour -> [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r smt)]
 chooseConstrProc cb cs = do
   let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
@@ -937,7 +937,7 @@ chooseConstrProc cb cs = do
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
 constrWarnProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
 constrWarnProc c = do
   let q = fst c
@@ -949,7 +949,7 @@ constrWarnProc c = do
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
 constrExcProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
 constrExcProc c = do
   let q = fst c
@@ -959,7 +959,7 @@ constrExcProc c = do
 
 -- | Generate a set variable dec
 constrVarDecProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CodeVarChunk -> CodeExpr ->
   GenState (MS (r smt))
 constrVarDecProc v e = do
@@ -972,7 +972,7 @@ constrVarDecProc v e = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsgProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r smt)]
 constraintViolatedMsgProc q s c = do
   pc <- printConstraintProc c
@@ -985,13 +985,13 @@ constraintViolatedMsgProc q s c = do
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
 printConstraintProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => ConstraintCE -> GenState [MS (r smt)]
 printConstraintProc c = do
   g <- get
   let db = printfo g
       printConstraint'
-        :: (NativeVector r, SharedStatement r smt)
+        :: (NativeVector r, SharedStatement r smt, TypeElim r)
         => ConstraintCE -> GenState [MS (r smt)]
       printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExprProc e1

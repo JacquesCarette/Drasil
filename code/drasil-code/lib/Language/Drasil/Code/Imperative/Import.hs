@@ -62,7 +62,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SMethod,
   IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
   privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue, TypeData, ParamData, SharedStatement)
+  CodeType(..), onStateValue, TypeData, ParamData, SharedStatement, TypeElim)
 import qualified Drasil.GOOL as S (Set(..)) -- TODO [Brandon Bosman, 07/09/2026]: Merge this with OO
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -760,7 +760,7 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
 valueProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 valueProc u s t = do
   g <- get
@@ -822,7 +822,7 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkValProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CodeVarChunk -> GenState (SValue r)
 mkValProc v = do
   t <- codeType v
@@ -917,7 +917,7 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MS Statement's.
 readDataProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
@@ -1000,7 +1000,7 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExprProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CodeExpr -> GenState (SValue r)
 convExprProc (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
@@ -1082,7 +1082,7 @@ convExprProc (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCallProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
@@ -1107,7 +1107,7 @@ convCallProc c x ns f libf = do
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmtProc
-  :: (NativeVector r, SharedStatement r smt, VariableElim r)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r, VariableElim r)
   => FuncStmt -> GenState (MS (r smt))
 convStmtProc (FAsg v (Matrix [es])) = do
   els <- mapM convExprProc es

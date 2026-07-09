@@ -29,7 +29,7 @@ import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (SValue, SharedStatement, OOProg, MS, VS, TypeSym(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), convType, convTypeOO,
-  TypeData, FuncAppStatement)
+  TypeData, FuncAppStatement, TypeElim)
 import Drasil.GProc (NativeVector)
 
 -- | Generates calls to all of the input-related functions. First is the call to
@@ -134,7 +134,7 @@ genCall n = do
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
 genAllInputCallsProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => GenState [MS (r smt)]
 genAllInputCallsProc = do
   gi <- genInputCallProc
@@ -159,7 +159,7 @@ genDerivedCallProc = do
 
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCallProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => GenState (Maybe (MS (r smt)))
 genConstraintCallProc = do
   icName <- genICName InputConstraintsFn
@@ -169,7 +169,7 @@ genConstraintCallProc = do
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
 genCalcCallProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => CodeDefinition -> GenState (Maybe (MS (r smt)))
 genCalcCallProc c = do
   g <- get
@@ -181,7 +181,7 @@ genCalcCallProc c = do
 
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => GenState (Maybe (MS (r smt)))
 genOutputCallProc = do
   woName <- genICName WriteOutput
@@ -191,7 +191,7 @@ genOutputCallProc = do
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
 genFuncCallProc
-  :: (NativeVector r, SharedStatement r smt)
+  :: (NativeVector r, SharedStatement r smt, TypeElim r)
   => Name
   -> VS (r TypeData)
   -> GenState [CodeVarChunk]

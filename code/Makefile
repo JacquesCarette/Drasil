@@ -506,6 +506,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 
 # For more information, see the *.hs files in the drasil-website folder.
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
+ifneq ($(SKIP_GEN), 1)
 	stack build $(stackBuildArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \
@@ -519,6 +520,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
 	$(STACK_EXEC) -- "website"
+endif
 
 # Prepares a website folder deployable to GitHub Pages using existing artifacts.
 deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.

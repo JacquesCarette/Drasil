@@ -13,8 +13,7 @@ module Language.Drasil.Chunk.CommonIdea (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(uid), HasChunkRefs(..))
-import qualified Data.Set as Set
+import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -29,13 +28,7 @@ import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 -- Ex. The term "Operating System" has the abbreviation "OS" and comes from the domain of computer science.
 data CI = CI { _nc' :: IdeaDict, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
-
-instance HasChunkRefs CI where
-  chunkRefs c = Set.unions
-    [ chunkRefs (c ^. nc')
-    , Set.fromList (cdom c)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CI
 
 -- | Finds 'UID' of the 'IdeaDict' used to make the 'CI'.
 instance HasUID        CI where uid  = nc' . uid

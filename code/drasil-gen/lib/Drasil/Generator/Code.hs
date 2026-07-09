@@ -24,7 +24,7 @@ import Drasil.GProc (unJLC, unMLC, ProcProg)
 import qualified Drasil.GProc as Proc
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
-  generator, readWithDataDesc, sampleInputDD, codeSpec,
+  generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
   Architecture(impType, modularity),
   Choices(Choices, maps, lang, architecture, optFeats, dataInfo),
   ConstantRepr(..), ConstantStructure(..),
@@ -32,7 +32,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
   OptionalFeatures(logConfig), SpaceMatch, Structure(..),
   Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
-  HasOldCodeSpec(extInputsO), CodeSpec, SomeProgGenerator(..))
+  HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.System (SmithEtAlSRS, programName)
@@ -51,7 +51,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
     genLangCode Matlab = genCallProc Matlab unMLC unMLP
 
     genCall
-      :: (OOProg progRepr tp vis smt, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (OOProg progRepr vis smt, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr (OO.Program progRepr) -> ProgData)
       -> (packRepr PackageData -> PackageData)
@@ -64,7 +64,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
     genCallProc
-      :: (ProcProg progRepr tp vis smt, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (ProcProg progRepr vis smt, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr (Proc.Program progRepr) -> ProgData)
       -> (packRepr PackageData -> PackageData)
@@ -75,12 +75,12 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
 
     spec :: CodeSpec
-    spec = codeSpec syst chs
+    spec = mkCodeSpec syst chs
 
     readSampleData :: IO [Expr]
     readSampleData =
       case getSampleData chs of
-        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputsO)
+        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputs)
         Nothing -> pure []
 
 genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]

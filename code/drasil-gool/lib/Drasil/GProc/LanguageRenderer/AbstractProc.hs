@@ -7,8 +7,8 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, SValue, SVariable,
-  MSParameter, VariableElim(variableName, variableType), VisibilitySym(..),
-  funcApp, getCodeType, convType)
+  VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
+  getCodeType, convType)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
@@ -19,7 +19,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.Shared.AST (isSource, ScopeData, TypeData)
+import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -38,14 +38,14 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
 -- Files --
 
-fileDoc :: (ProcRenderSym r tp vis smt) => String -> FSModule r -> SFile r
+fileDoc :: (ProcRenderSym r vis smt) => String -> FSModule r -> SFile r
 fileDoc ext md = do
   m <- md
   nm <- getModuleName
   let fp = addExt ext nm
   RCP.fileFromData fp (toState m)
 
-fileFromData :: (ProcRenderSym r tp vis smt) => (FilePath -> r (Module r) ->
+fileFromData :: (ProcRenderSym r vis smt) => (FilePath -> r (Module r) ->
   r (File r)) -> FilePath -> FSModule r -> SFile r
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
@@ -61,7 +61,7 @@ fileFromData f fpath mdl' = do
 
 -- Parameters: Module name, Doc for imports, Doc to put at bottom of module,
 -- methods
-buildModule :: (ProcRenderSym r tp vis smt) => Label -> FS Doc -> FS Doc ->
+buildModule :: (ProcRenderSym r vis smt) => Label -> FS Doc -> FS Doc ->
   [SMethod r] -> FSModule r
 buildModule n imps bot fs = RCP.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
@@ -70,7 +70,7 @@ buildModule n imps bot fs = RCP.modFromData n (do
   let fnDocs = vibcat (map RCC.method fns ++ [bt])
   return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
-docMod :: (ProcRenderSym r tp vis smt) => String -> String -> String -> [String] ->
+docMod :: (ProcRenderSym r vis smt) => String -> String -> String -> [String] ->
   String -> SFile r -> SFile r
 docMod e d wm a dt fl = RCP.commentedMod fl
   (RCC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)
@@ -80,21 +80,21 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
 
-innerType :: (IC.TypeElim r TypeData) => VS (r TypeData) -> VS (r TypeData)
+innerType :: (IC.TypeElim r) => VS (r TypeData) -> VS (r TypeData)
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
-listAppend :: (CommonRenderSym r tp vis smt) => String -> SValue r -> SValue r -> MS (r smt)
+listAppend :: (CommonRenderSym r vis smt) => String -> SValue r -> SValue r -> MS (r smt)
 listAppend fnName list val = IC.valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
-listAdd :: (CommonRenderSym r tp vis smt) => String -> SValue r -> SValue r ->
+listAdd :: (CommonRenderSym r vis smt) => String -> SValue r -> SValue r ->
   SValue r -> MS (r smt)
 listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
-arrayElem :: (ProcRenderSym r TypeData vis smt, IC.TypeElim r TypeData) =>
+arrayElem :: (ProcRenderSym r vis smt, IC.TypeElim r) =>
   SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
@@ -104,7 +104,7 @@ arrayElem arr' i' = do
       vRender = RCC.value arr <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (ProcRenderSym r tp vis smt) => SVariable r -> r ScopeData ->
+funcDecDef :: (ProcRenderSym r vis smt) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MS (r smt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
@@ -116,6 +116,6 @@ funcDecDef v scp ps b = do
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RCC.method f
 
-function :: (ProcRenderSym r tp vis smt) => Label -> r vis -> VS (r tp) ->
-  [MSParameter r] -> MSBody r -> SMethod r
+function :: (ProcRenderSym r vis smt) => Label -> r vis -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MSBody r -> SMethod r
 function n s t = RCP.intFunc False n s (RCC.mType t)

@@ -28,7 +28,6 @@ import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
   Constrained, ConstQDef, abrv, DefinedQuantityDict)
 import Language.Drasil.Document (LabelledContent, Reference)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
-import Data.String.Extras (toPlainName)
 
 import Drasil.System.Core (SystemMeta, Background, HasSystemMeta(..),
   mkSystemMeta, Motivation, Purpose, Scope)
@@ -83,7 +82,7 @@ mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs lcs
       cqds qs lcs refsMap mempty mempty
   where
     refsMap = M.fromList $ map (\x -> (x ^. uid, x)) refs
-    progName = toPlainName $ filter (not . isSpace) $ abrv nm
+    progName = filter (not . isSpace) $ abrv nm
 
 -- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> SmithEtAlSRS -> [UID]

@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Even though we do not have 'Label's per se, here we define the
 -- different ways of construction  ways to mark labels.
 module Language.Drasil.Label.Type(
@@ -11,7 +12,7 @@ module Language.Drasil.Label.Type(
   , name, (+::+), raw, defer, prepend
 ) where
 
-import Drasil.Database (UID, IsChunk)
+import Drasil.Database (UID, IsChunk, declareHasChunkRefs, Generically(..))
 
 -- | Applying different pieces of information for a reference.
 -- An RP is a decorated internal reference.
@@ -28,6 +29,9 @@ data IRefProg =
   | RS String                   -- ^ Lifts a 'String' into a 'RefProg'.
   | RConcat IRefProg IRefProg   -- ^ Concatenates with two subprograms.
   | Name                        -- ^ The 'Symbol' to insert the 'ShortName' directly.
+
+declareHasChunkRefs ''IRefProg
+declareHasChunkRefs '' LblType
 
 -- | Members must have a reference address.
 class HasRefAddress b where

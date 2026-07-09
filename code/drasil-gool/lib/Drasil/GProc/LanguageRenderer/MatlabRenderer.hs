@@ -19,7 +19,7 @@ import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), NativeVector(..), InternalList(..), StatementSym(..),
   AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), funcApp, (&=))
@@ -60,10 +60,10 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
-  paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
-  valInt, valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc,
-  vard, progD, mthdDoc, modDoc)
+  ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
+  paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
+  valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc, vard,
+  progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
@@ -92,23 +92,23 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode TypeData Doc (Doc, Terminator)
-instance ProcProg MatlabCode TypeData Doc (Doc, Terminator)
+instance SharedProg MatlabCode Doc (Doc, Terminator)
+instance ProcProg MatlabCode Doc (Doc, Terminator)
 
-instance ProgramSym MatlabCode TypeData Doc (Doc, Terminator) where
+instance ProgramSym MatlabCode Doc (Doc, Terminator) where
   type Program MatlabCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode TypeData Doc (Doc, Terminator)
-instance ProcRenderSym MatlabCode TypeData Doc (Doc, Terminator)
+instance CommonRenderSym MatlabCode Doc (Doc, Terminator)
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator)
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode TypeData Doc (Doc, Terminator) where
+instance FileSym MatlabCode Doc (Doc, Terminator) where
   type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -125,7 +125,7 @@ instance ImportSym MatlabCode where
   langImport = undefined
   modImport = undefined
 
-instance BodySym MatlabCode TypeData (Doc, Terminator) where
+instance BodySym MatlabCode (Doc, Terminator) where
   type Body MatlabCode = Doc
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
@@ -136,7 +136,7 @@ instance RenderBody MatlabCode where
 instance BodyElim MatlabCode where
   body = unMLC
 
-instance BlockSym MatlabCode TypeData (Doc, Terminator) where
+instance BlockSym MatlabCode (Doc, Terminator) where
   type Block MatlabCode = Doc
   block = G.block
 
@@ -146,7 +146,7 @@ instance RenderBlock MatlabCode where
 instance BlockElim MatlabCode where
   block = unMLC
 
-instance TypeSym MatlabCode TypeData where
+instance TypeSym MatlabCode where
   bool = mlTy Boolean "logical"
   int = mlTy Integer "int"
   float = mlTy Float "double"
@@ -163,10 +163,10 @@ instance TypeSym MatlabCode TypeData where
   funcType = undefined
   void = mlTy Void "void"
 
-instance TypeElim MatlabCode TypeData where
+instance TypeElim MatlabCode where
   getCodeType = cType . unMLC
 
-instance RenderType MatlabCode TypeData where
+instance RenderType MatlabCode where
   multiType = undefined
 
 instance UnaryOpSym MatlabCode where
@@ -216,13 +216,13 @@ instance ScopeSym MatlabCode where
 instance ScopeElim MatlabCode where
   scopeData = unMLC
 
-instance VariableSym MatlabCode TypeData where
+instance VariableSym MatlabCode where
   type Variable MatlabCode = VarData
   var = G.var
   constant = var
   extVar = undefined
 
-instance VariableElim MatlabCode TypeData where
+instance VariableElim MatlabCode where
   variableName = varName . unMLC
   variableType = onCodeValue varType
 
@@ -230,19 +230,19 @@ instance InternalVarElim MatlabCode where
   variableBind = varBind . unMLC
   variable = varDoc . unMLC
 
-instance RenderVariable MatlabCode TypeData where
+instance RenderVariable MatlabCode where
   varFromData b n t' d = do
     t <- t'
     toState $ on2CodeValues (vard b n) t (toCode d)
 
-instance ValueSym MatlabCode TypeData where
+instance ValueSym MatlabCode where
   type Value MatlabCode = ValData
   valueType v = valType <$> v
 
-instance Argument MatlabCode TypeData where
+instance Argument MatlabCode where
   pointerArg = undefined
 
-instance Literal MatlabCode TypeData where
+instance Literal MatlabCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
   litChar = undefined
@@ -254,19 +254,19 @@ instance Literal MatlabCode TypeData where
   litList = mlLitList
   litSet = undefined
 
-instance MathConstant MatlabCode TypeData where
+instance MathConstant MatlabCode where
   pi = mkStateVal double (text "pi")
 
-instance VariableValue MatlabCode TypeData where
+instance VariableValue MatlabCode where
   valueOf = G.valueOf
 
-instance CommandLineArgs MatlabCode TypeData where
+instance CommandLineArgs MatlabCode where
   -- Args come in through the entry function's varargin (1-based, cell-indexed).
   arg n = mlArg (litInt (n + 1))
   argsList = mkStateVal (arrayType string) (text "varargin")
   argExists = undefined
 
-instance NumericExpression MatlabCode TypeData where
+instance NumericExpression MatlabCode where
   (#~) = unExpr' negateOp
   (#/^) = unExpr sqrtOp
   (#|) = unExpr absOp
@@ -291,12 +291,12 @@ instance NumericExpression MatlabCode TypeData where
   floor = unExpr floorOp
   ceil = unExpr ceilOp
 
-instance BooleanExpression MatlabCode TypeData where
+instance BooleanExpression MatlabCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
-instance Comparison MatlabCode TypeData where
+instance Comparison MatlabCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -304,7 +304,7 @@ instance Comparison MatlabCode TypeData where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance ValueExpression MatlabCode TypeData where
+instance ValueExpression MatlabCode where
   inlineIf = undefined
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs = CS.extFuncAppMixedArgs
@@ -312,7 +312,7 @@ instance ValueExpression MatlabCode TypeData where
   lambda = undefined
   notNull = undefined
 
-instance RenderValue MatlabCode TypeData where
+instance RenderValue MatlabCode where
   inputFunc = undefined
   printFunc = mlPrintFunc
   printLnFunc = mlPrintFunc
@@ -329,20 +329,20 @@ instance ValueElim MatlabCode where
   valueInt = valInt . unMLC
   value = val . unMLC
 
-instance IndexTranslator MatlabCode TypeData where
+instance IndexTranslator MatlabCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
 
-instance Reference MatlabCode TypeData where
+instance Reference MatlabCode where
   makeRef = id
   maybeDeref = id
 
-instance Array MatlabCode TypeData where
+instance Array MatlabCode where
   arrayElem = undefined
   arrayLength = undefined
   arrayCopy = undefined
 
-instance List MatlabCode TypeData (Doc, Terminator) where
+instance List MatlabCode (Doc, Terminator) where
   listSize = CS.listSize "length"   -- length(v)
   listAdd = undefined
   listAppend = undefined
@@ -350,13 +350,13 @@ instance List MatlabCode TypeData (Doc, Terminator) where
   listSet = undefined
   indexOf = undefined
 
-instance Set MatlabCode TypeData where
+instance Set MatlabCode where
   contains = undefined
   setAdd = undefined
   setRemove = undefined
   setUnion = undefined
 
-instance NativeVector MatlabCode TypeData where
+instance NativeVector MatlabCode where
   vecScale = binExpr multOp           -- s * v
   vecAdd   = binExpr plusOp           -- a + b
   vecIndex = mlVecIndex               -- a(1) / a(i + 1)
@@ -364,26 +364,26 @@ instance NativeVector MatlabCode TypeData where
   vecMag a = funcApp "norm" double [a]       -- norm(a)
   vecUnit a = a #/ vecMag a                  -- a / norm(a)
 
-instance InternalList MatlabCode TypeData where
+instance InternalList MatlabCode where
   listSlice' = undefined
 
-instance InternalListFunc MatlabCode TypeData where
+instance InternalListFunc MatlabCode where
   listAccessFunc = undefined
 
-instance BinderSym MatlabCode TypeData where
+instance BinderSym MatlabCode where
   binder = undefined
 
-instance BinderElim MatlabCode TypeData where
+instance BinderElim MatlabCode where
   binderName = undefined
   binderType = undefined
 
 instance InternalBinderElim MatlabCode where
   binderElim = undefined
 
-instance RenderFunction MatlabCode TypeData where
+instance RenderFunction MatlabCode where
   funcFromData = undefined
 
-instance FunctionElim MatlabCode TypeData where
+instance FunctionElim MatlabCode where
   functionType = undefined
   function = undefined
 
@@ -405,19 +405,19 @@ instance StatementElim MatlabCode (Doc, Terminator) where
   statement = fst . unMLC
   statementTerm = snd . unMLC
 
-instance StatementSym MatlabCode TypeData (Doc, Terminator) where
+instance StatementSym MatlabCode (Doc, Terminator) where
   valStmt = G.valStmt Semi
   emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
-instance AssignStatement MatlabCode TypeData (Doc, Terminator) where
+instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi
   (&-=) = undefined
   (&+=) = undefined
   (&++) = undefined
   (&--) = undefined
 
-instance DeclStatement MatlabCode TypeData (Doc, Terminator) where
+instance DeclStatement MatlabCode (Doc, Terminator) where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = undefined
@@ -429,7 +429,7 @@ instance DeclStatement MatlabCode TypeData (Doc, Terminator) where
   constDecDef = undefined
   funcDecDef = undefined
 
-instance IOStatement MatlabCode TypeData (Doc, Terminator) where
+instance IOStatement MatlabCode (Doc, Terminator) where
   print = G.print False Nothing printFunc
   printLn = G.print True Nothing printLnFunc
   printStr = G.print False Nothing printFunc . litString
@@ -450,22 +450,21 @@ instance IOStatement MatlabCode TypeData (Doc, Terminator) where
   discardFileLine = discardFileInput
   getFileInputAll = undefined
 
-instance StringStatement MatlabCode TypeData (Doc, Terminator) where
+instance StringStatement MatlabCode (Doc, Terminator) where
   stringSplit = undefined
   stringListVals = undefined
   stringListLists = undefined
 
-instance FunctionSym MatlabCode TypeData where
-  type Function MatlabCode = FuncData
+instance FunctionSym MatlabCode where
 
-instance FuncAppStatement MatlabCode TypeData (Doc, Terminator) where
+instance FuncAppStatement MatlabCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp
   extInOutCall = undefined
 
-instance CommentStatement MatlabCode TypeData (Doc, Terminator) where
+instance CommentStatement MatlabCode (Doc, Terminator) where
   comment = G.comment mlCmtStart
 
-instance ControlStatement MatlabCode TypeData (Doc, Terminator) where
+instance ControlStatement MatlabCode (Doc, Terminator) where
   break = undefined
   continue = undefined
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
@@ -494,12 +493,11 @@ instance RenderVisibility MatlabCode Doc where
 instance VisibilityElim MatlabCode Doc where
   visibility = unMLC
 
-instance MethodTypeSym MatlabCode TypeData where
+instance MethodTypeSym MatlabCode where
   type MethodType MatlabCode = TypeData
   mType = zoom lensMStoVS
 
-instance ParameterSym MatlabCode TypeData where
-  type Parameter MatlabCode = ParamData
+instance ParameterSym MatlabCode where
   -- A MATLAB parameter is just the variable name.
   param = G.param mlParam
   pointerParam = param
@@ -509,12 +507,12 @@ instance RenderParam MatlabCode where
     v <- zoom lensMStoVS v'
     toState $ on2CodeValues pd v (toCode d)
 
-instance ParamElim MatlabCode TypeData where
+instance ParamElim MatlabCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode TypeData Doc (Doc, Terminator) where
+instance MethodSym MatlabCode Doc (Doc, Terminator) where
   type Method MatlabCode = MethodData
   docMain = mainFunction
   function = A.function
@@ -531,12 +529,12 @@ instance MethodSym MatlabCode TypeData Doc (Doc, Terminator) where
     pure $ toCode $ mthd $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod MatlabCode TypeData where
+instance RenderMethod MatlabCode where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance ProcRenderMethod MatlabCode TypeData Doc where
+instance ProcRenderMethod MatlabCode Doc where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
@@ -550,7 +548,7 @@ instance ProcRenderMethod MatlabCode TypeData Doc where
 instance MethodElim MatlabCode where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode TypeData Doc (Doc, Terminator) where
+instance ModuleSym MatlabCode Doc (Doc, Terminator) where
   type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
@@ -596,8 +594,8 @@ mlParam = RC.variable
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
-mlFuncDoc :: (CommonRenderSym r TypeData vis smt) => Label -> [Doc] ->
-  [r (Parameter r)] -> Doc -> Doc
+mlFuncDoc :: (CommonRenderSym r vis smt) => Label -> [Doc] ->
+  [r ParamData] -> Doc -> Doc
 mlFuncDoc n outs pms bod =
   vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),
         indent bod,

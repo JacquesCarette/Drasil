@@ -1,11 +1,11 @@
 -- | re-export smart constructors for external code writing
 module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   SValue, SMethod, CSStateVar, SClass, FSModule, NamedArgs, Initializers,
-  SharedProg, OOProg, ProgramSym(..), FileSym(..), AttachmentSym(..),
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  OOTypeSym(..), BinderSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
+  SharedProg, SharedStatement, OOProg, ProgramSym(..), FileSym(..),
+  AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
   initObserverList, addObserver, ControlStatement(..), ifNoElse, switchAsIf,
   VariableSym(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
@@ -29,24 +29,23 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   pyName, pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion,
   swiftName, swiftVersion, LoggingFor(..),
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these from external interface
-  getCodeType, getTypeString
+  TypeElim(..), getTypeString
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
-  SMethod, NamedArgs, SharedProg, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
+  SMethod, NamedArgs, SharedProg, SharedStatement, BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, ifNoElse,
-  VariableSym(..), extVar, VariableElim(..), listOf, listVar, ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, Reference(..), Array(..), List(..), Set(..), listSlice,
-  listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..),
-  VisibilitySym(..), convType,
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), extVar,
+  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
+  Reference(..), Array(..), List(..), Set(..), listSlice, listIndexExists, at,
+  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
-  getCodeType, getTypeString)
+  TypeElim(..), getTypeString)
 import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   CSStateVar, Initializers, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..),
   ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),

@@ -62,8 +62,8 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SMethod,
   IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
   privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue, TypeData, ParamData)
-import qualified Drasil.GOOL as S (Set(..))
+  CodeType(..), onStateValue, TypeData, ParamData, SharedStatement)
+import qualified Drasil.GOOL as S (Set(..)) -- TODO [Brandon Bosman, 07/09/2026]: Merge this with OO
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg, NativeVector(..))
@@ -429,7 +429,7 @@ renderSet :: (IsChunk c, HasSymbol c) => c -> CodeExpr -> CodeExpr
 renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
-unop :: (SharedProg r vis smt) => UFunc -> (SValue r -> SValue r)
+unop :: (NumericExpression r, Reference r) => UFunc -> (SValue r -> SValue r)
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -448,36 +448,36 @@ unop Neg  = (#~)
 unop MakeRef = makeRef
 
 -- | Similar to 'unop', but for the 'Not' constructor.
-unopB :: (SharedProg r vis smt) => UFuncB -> (SValue r -> SValue r)
+unopB :: (BooleanExpression r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (SharedProg r vis smt) => UFuncVN -> (SValue r -> SValue r)
+unopVN :: (List r smt) => UFuncVN -> (SValue r -> SValue r)
 unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (SharedProg r vis smt) => UFuncVV -> (SValue r -> SValue r)
+unopVV :: (ValueSym r) => UFuncVV -> (SValue r -> SValue r)
 unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
-arithBfunc :: (SharedProg r vis smt) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
+arithBfunc :: (NumericExpression r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
 arithBfunc Pow  = (#^)
 arithBfunc Subt = (#-)
 arithBfunc Frac = (#/)
 
 -- Maps an 'EqBinOp' to it's corresponding GOOL binary function.
-eqBfunc :: (SharedProg r vis smt) => EqBinOp -> (SValue r -> SValue r -> SValue r)
+eqBfunc :: (Comparison r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
 eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
-laBfunc :: (SharedProg r vis smt) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc :: (List r smt) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
 laBfunc IndexOf = indexOf
 
 -- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
-ordBfunc :: (SharedProg r vis smt) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
+ordBfunc :: (Comparison r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
 ordBfunc Gt  = (?>)
 ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
@@ -498,12 +498,12 @@ numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
 numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
 
 -- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
-elementSetSetBfunc :: (SharedProg r vis smt) => ESSBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetSetBfunc :: (S.Set r) => ESSBinOp -> (SValue r -> SValue r -> SValue r)
 elementSetSetBfunc SAdd = S.setAdd
 elementSetSetBfunc SRemove = S.setRemove
 
 -- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
-elementSetBoolBfunc :: (SharedProg r vis smt) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetBoolBfunc :: (S.Set r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
 elementSetBoolBfunc SContains = S.contains
 
 -- medium hacks --
@@ -759,7 +759,9 @@ getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-valueProc :: (SharedProg r vis smt, NativeVector r) => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
+valueProc
+  :: (NativeVector r, SharedStatement r smt)
+  => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 valueProc u s t = do
   g <- get
   let cs = g
@@ -819,7 +821,9 @@ constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " +
   "chose to Inline constants. Generator has a bug."
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
-mkValProc :: (SharedProg r vis smt, NativeVector r) => CodeVarChunk -> GenState (SValue r)
+mkValProc
+  :: (NativeVector r, SharedStatement r smt)
+  => CodeVarChunk -> GenState (SValue r)
 mkValProc v = do
   t <- codeType v
   let toGOOLVal Nothing = valueProc (v ^. uid) (codeName v) (convType t)
@@ -842,7 +846,7 @@ genModDefProc (Mod n desc is cs fs) = case cs of
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParamProc :: (SharedProg r vis smt) => ParameterChunk -> GenState (MS (r ParamData))
+mkParamProc :: (ParameterSym r) => ParameterChunk -> GenState (MS (r ParamData))
 mkParamProc p = do
   v <- mkVarProc (quantvar p)
   return $ paramFunc (passBy p) v
@@ -850,9 +854,15 @@ mkParamProc p = do
         paramFunc Val = param
 
 -- | Generates a public function.
-publicFuncProc :: (SharedProg r vis smt) => Label -> VS (r TypeData) -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
-  GenState (SMethod r)
+publicFuncProc
+  :: (SharedProg r vis smt)
+  => Label
+  -> VS (r TypeData)
+  -> Description
+  -> [ParameterChunk]
+  -> Maybe Description
+  -> [MSBlock r]
+  -> GenState (SMethod r)
 publicFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
   genMethodProc (function n public t) n desc ps r b
@@ -906,7 +916,9 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MS Statement's.
-readDataProc :: (SharedProg r vis smt, NativeVector r) => DataDesc -> GenState [MSBlock r]
+readDataProc
+  :: (NativeVector r, SharedStatement r smt)
+  => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -918,7 +930,9 @@ readDataProc ddef = do
     listDec 0 var_linetokens localScope] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (SharedProg r vis smt) => Data -> r ScopeData -> GenState [MS (r smt)]
+  where inData
+          :: (NativeVector r, SharedStatement r smt)
+          => Data -> r ScopeData -> GenState [MS (r smt)]
         inData (Singleton v) _ = do
             vv <- mkVarProc v
             return [getFileInput v_infile vv]
@@ -941,8 +955,9 @@ readDataProc ddef = do
                   ] ++ lnV)]
           return $ readLines ls
         ---------------
-        lineData :: (SharedProg r vis smt) => Maybe String -> LinePattern ->
-          r ScopeData -> GenState [MS (r smt)]
+        lineData
+          :: (NativeVector r, SharedStatement r smt) => Maybe String
+          -> LinePattern -> r ScopeData -> GenState [MS (r smt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
           return [stringListVals vs v_linetokens]
@@ -951,23 +966,27 @@ readDataProc ddef = do
           sequence $ clearTemps s ds scp ++ return
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
-        clearTemps :: (SharedProg r vis smt) => Maybe String -> [DataItem] ->
-          r ScopeData -> [GenState (MS (r smt))]
+        clearTemps
+          :: (DeclStatement r smt)
+          => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r smt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (SharedProg r vis smt) => String -> DataItem -> r ScopeData ->
-          GenState (MS (r smt))
+        clearTemp
+          :: (DeclStatement r smt)
+          => String -> DataItem -> r ScopeData -> GenState (MS (r smt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
-        appendTemps :: (SharedProg r vis smt) => Maybe String -> [DataItem]
-          -> [GenState (MS (r smt))]
+        appendTemps
+          :: (List r smt, VariableValue r)
+          => Maybe String -> [DataItem] -> [GenState (MS (r smt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (SharedProg r vis smt) => String -> DataItem ->
-          GenState (MS (r smt))
+        appendTemp
+          :: (List r smt, VariableValue r)
+          => String -> DataItem -> GenState (MS (r smt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
@@ -980,7 +999,9 @@ getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
     s) (getPatternInputs lp)
 
 -- | Converts an 'Expr' to a GOOL Value.
-convExprProc :: (SharedProg r vis smt, NativeVector r) => CodeExpr -> GenState (SValue r)
+convExprProc
+  :: (NativeVector r, SharedStatement r smt)
+  => CodeExpr -> GenState (SValue r)
 convExprProc (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
@@ -1060,13 +1081,14 @@ convExprProc (RealI c ri)  = do
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
-convCallProc :: (SharedProg r vis smt, NativeVector r) => UID -> [CodeExpr] ->
-  [(UID, CodeExpr)] ->
-  (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r ->
-    GenState (SValue r)) ->
-  (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r ->
-     SValue r) ->
-  GenState (SValue r)
+convCallProc
+  :: (NativeVector r, SharedStatement r smt)
+  => UID
+  -> [CodeExpr]
+  -> [(UID, CodeExpr)]
+  -> (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r))
+  -> (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> SValue r)
+  -> GenState (SValue r)
 convCallProc c x ns f libf = do
   g <- get
   let mem = eMap g
@@ -1084,7 +1106,9 @@ convCallProc c x ns f libf = do
     (Map.lookup funcNm mem)
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmtProc :: (SharedProg r vis smt, NativeVector r) => FuncStmt -> GenState (MS (r smt))
+convStmtProc
+  :: (NativeVector r, SharedStatement r smt, VariableElim r)
+  => FuncStmt -> GenState (MS (r smt))
 convStmtProc (FAsg v (Matrix [es])) = do
   els <- mapM convExprProc es
   v' <- mkVarProc v
@@ -1205,12 +1229,16 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
-genInOutFuncProc :: (SharedProg r vis smt) => ([SVariable r] -> [SVariable r] ->
-    [SVariable r] -> MSBody r -> SMethod r) ->
-  (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
-    [(String, SVariable r)] -> MSBody r -> SMethod r)
-  -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
-  [MSBlock r] -> GenState (SMethod r)
+genInOutFuncProc
+  :: (SharedStatement r smt, VariableElim r)
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
+  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r)
+  -> Label
+  -> Description
+  -> [CodeVarChunk]
+  -> [CodeVarChunk]
+  -> [MSBlock r]
+  -> GenState (SMethod r)
 genInOutFuncProc f docf n desc ins' outs' b = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -1231,9 +1259,9 @@ genInOutFuncProc f docf n desc ins' outs' b = do
 -- Used for readData and readDataProc
 l_line, l_lines, l_linetokens, l_infile, l_i :: Label
 var_line, var_lines, var_linetokens, var_infile, var_i ::
-  (SharedProg r vis smt) => SVariable r
+  (VariableSym r) => SVariable r
 v_line, v_lines, v_linetokens, v_infile, v_i ::
-  (SharedProg r vis smt) => SValue r
+  (VariableValue r) => SValue r
 l_line = "line"
 var_line = var l_line string
 v_line = valueOf var_line

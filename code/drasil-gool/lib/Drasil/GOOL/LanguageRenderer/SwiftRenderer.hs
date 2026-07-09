@@ -13,13 +13,13 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  MSBlock, SVariable, SValue, SMethod, BodySym(..), oneLiner, bodyStatements,
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
+  Label, MSBody, MSBlock, SVariable, SValue, SMethod, BodySym(..), oneLiner,
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
+  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
@@ -133,6 +133,7 @@ instance Monad SwiftCode where
   SC x >>= f = f x
 
 instance SharedProg SwiftCode Doc (Doc, Terminator)
+instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOProg SwiftCode Doc (Doc, Terminator)
 
 instance ProgramSym SwiftCode Doc (Doc, Terminator) where

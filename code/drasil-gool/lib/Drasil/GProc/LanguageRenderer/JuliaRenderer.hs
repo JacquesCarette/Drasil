@@ -14,10 +14,10 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, SValue,
-  SVariable, MSBlock, SMethod, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
+  Label, SValue, SVariable, MSBlock, SMethod, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), NativeVector(..),
@@ -114,6 +114,7 @@ instance Monad JuliaCode where
   JLC x >>= f = f x
 
 instance SharedProg JuliaCode Doc (Doc, Terminator)
+instance SharedStatement JuliaCode (Doc, Terminator)
 instance ProcProg JuliaCode Doc (Doc, Terminator)
 
 instance ProgramSym JuliaCode Doc (Doc, Terminator) where

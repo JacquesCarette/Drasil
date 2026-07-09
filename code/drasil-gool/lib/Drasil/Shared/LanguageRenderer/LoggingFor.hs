@@ -182,6 +182,7 @@ instance (StringStatement r smt, IOStatement r smt, VariableValue r, VariableEli
 -- SharedProg Boilerplate
 
 instance (SharedProg r vis smt) => SharedProg (LoggingFor r) vis smt
+instance (SharedStatement r smt, VariableElim r) => SharedStatement (LoggingFor r) smt
 
 instance (VariableSym r) => VariableSym (LoggingFor r) where
   type Variable (LoggingFor r) = Variable r

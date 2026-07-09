@@ -25,10 +25,10 @@ import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))
 
 import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
-  SharedProg, OOProg, MS, VS, TypeData, ValueSym(..), Argument(..),
-  ValueExpression(..), OOValueExpression(..), SelfSym(..), VariableValue(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
-  objMethodCallMixedArgs, getCodeType)
+  OOProg, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
+  OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
+  objMethodCallMixedArgs)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -114,7 +114,7 @@ auxClass = mkClass Auxiliary
 
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
-mkArg :: (SharedProg r vis smt) => SValue r -> SValue r
+mkArg :: (Argument r, TypeElim r) => SValue r -> SValue r
 mkArg v = do
   vl <- v
   let mkArg' (List _) = pointerArg
@@ -124,7 +124,7 @@ mkArg v = do
 
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
-fCall :: (SharedProg r vis smt) => (Name -> [SValue r] -> NamedArgs r ->
+fCall :: (Argument r, TypeElim r) => (Name -> [SValue r] -> NamedArgs r ->
   SValue r) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 fCall f vl ns = do
   g <- get
@@ -200,8 +200,13 @@ genModuleProc n desc = genModuleWithImportsProc n desc []
 -- If @m@ is the current module and function is not exported, use GOOL's function for
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
-fAppProc :: (SharedProg r vis smt) => Name -> Name -> VS (r TypeData) ->
-  [SValue r] -> NamedArgs r -> GenState (SValue r)
+fAppProc
+  :: (Argument r, TypeElim r, ValueExpression r) => Name
+  -> Name
+  -> VS (r TypeData)
+  -> [SValue r]
+  -> NamedArgs r
+  -> GenState (SValue r)
 fAppProc m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->
@@ -210,7 +215,7 @@ fAppProc m s t vl ns = do
       else error "fAppProc: Procedural languages do not support method calls.") vl ns
 
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOutProc :: (SharedProg r vis smt) => Name -> Name -> [SValue r] ->
+fAppInOutProc :: (FuncAppStatement r smt) => Name -> Name -> [SValue r] ->
   [SVariable r] -> [SVariable r] -> GenState (MS (r smt))
 fAppInOutProc m n ins outs both = do
   g <- get

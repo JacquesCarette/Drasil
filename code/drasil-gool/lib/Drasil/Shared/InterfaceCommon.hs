@@ -8,16 +8,16 @@ module Drasil.Shared.InterfaceCommon (
   NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
   InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..),
-  convScope, VariableElim(..), listOf, listVar, ValueSym(..), Argument(..),
-  Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..),
+  SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  ScopeSym(..), convScope, VariableElim(..), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  libFuncApp, exists, IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
   BinderElim(..), convType
@@ -41,16 +41,17 @@ type Library = String
 -- TODO [Brandon Bosman, 06/09/2026]: UnRepr can be removed from SharedProg
 -- if we can root out its use from drasil-code
 
-class (UnRepr r TypeData, TypeElim r, AssignStatement r smt,
-  DeclStatement r smt, IOStatement r smt, StringStatement r smt,
-  FunctionSym r, FuncAppStatement r smt, CommentStatement r smt,
-  ControlStatement r smt, InternalList r, Argument r, Literal r,
-  MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r,
-  ValueExpression r, IndexTranslator r, Array r, List r smt,
-  Set r, VariableElim r, MethodSym r vis smt, ScopeSym r,
-  BinderSym r, Reference r, VariableValue r
+class (UnRepr r TypeData, SharedStatement r smt, FunctionSym r, InternalList r,
+  VariableValue r, CommandLineArgs r, IndexTranslator r, VariableElim r,
+  MethodSym r vis smt, ScopeSym r, BinderSym r
   ) => SharedProg r vis smt
+
+class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
+  CommentStatement r smt, Comparison r, ControlStatement r smt,
+  DeclStatement r smt, FuncAppStatement r smt, IOStatement r smt, List r smt,
+  Literal r, MathConstant r, NumericExpression r, Reference r, Set r,
+  StringStatement r smt, TypeElim r, ValueExpression r, VariableValue r
+  ) => SharedStatement r smt
 
 -- Shared between OO and Procedural --
 

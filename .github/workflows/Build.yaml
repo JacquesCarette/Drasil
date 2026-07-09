@@ -145,8 +145,6 @@ jobs:
     if: ${{ needs.build.outputs.tex == 'true' }}
     env:
       SKIP_GEN: 1
-      # Workaround rare inkscape crash: https://gitlab.com/inkscape/inkscape/-/work_items/4716#note_1898150983
-      SELF_CALL: 1
     steps:
       - uses: actions/checkout@v7
 

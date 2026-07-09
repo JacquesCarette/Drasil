@@ -22,6 +22,9 @@ else
   IMODE=nonstopmode
 fi
 
+# Workaround rare inkscape crash: https://gitlab.com/inkscape/inkscape/-/work_items/4716#note_1898150983
+export SELF_CALL=1
+
 GEN_NAME_SUFFIX=_SRS
 
 cd "$BUILD_FOLDER$EDIR"/SRS/PDF || exit 1

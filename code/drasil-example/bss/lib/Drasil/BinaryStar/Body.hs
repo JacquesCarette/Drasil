@@ -2,11 +2,10 @@
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
 import Drasil.Database (ChunkDB)
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Drasil.SRS
+import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn)
 

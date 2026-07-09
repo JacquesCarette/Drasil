@@ -13,7 +13,8 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
-import Drasil.System (SmithEtAlSRS, systemdb)
+import Drasil.System (systemdb)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
 
 -- Vocabulary (from Metadata)

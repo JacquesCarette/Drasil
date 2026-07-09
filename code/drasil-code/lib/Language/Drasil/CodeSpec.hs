@@ -27,8 +27,9 @@ import Language.Drasil hiding (None)
 import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
-import qualified Drasil.System as S
-import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..))
+import qualified Drasil.SRS as S
+import Drasil.System (HasSystemMeta(..))
+import Drasil.SRS (HasSmithEtAlSRS(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 

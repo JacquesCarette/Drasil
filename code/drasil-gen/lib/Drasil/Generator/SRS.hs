@@ -7,7 +7,6 @@ module Drasil.Generator.SRS (
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Drasil.SRS (mkGraphInfo)
 import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
@@ -17,7 +16,8 @@ import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.System (SmithEtAlSRS, refTable, systemdb)
+import Drasil.SRS (mkGraphInfo, SmithEtAlSRS, refTable)
+import Drasil.System (systemdb)
 
 import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)

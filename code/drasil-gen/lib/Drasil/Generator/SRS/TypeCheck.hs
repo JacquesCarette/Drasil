@@ -13,7 +13,7 @@ import qualified Data.Map.Strict as M
 import Drasil.Database (UID, HasUID(..))
 import Language.Drasil (Expr, Space, temporaryIndent, HasSpace(typ),
   RequiresChecking(..), TypeError, Typed(check))
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..))
+import Drasil.SRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 
 -- Note: this should be externally configurable wrt verbosity!
 typeCheckSI :: SmithEtAlSRS -> IO ()

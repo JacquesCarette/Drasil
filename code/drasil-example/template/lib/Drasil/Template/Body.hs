@@ -9,7 +9,6 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Drasil.Database (ChunkDB, mkUid)
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))

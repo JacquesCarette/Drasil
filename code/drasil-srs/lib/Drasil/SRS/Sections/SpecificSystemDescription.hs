@@ -28,7 +28,7 @@ import Data.Maybe
 
 -- General Drasil
 import Drasil.Database (UID, HasUID(..), showUID)
-import Drasil.System (SmithEtAlSRS)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Language.Drasil hiding (variable, sec)
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators

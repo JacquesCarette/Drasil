@@ -4,13 +4,12 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
-import Drasil.SRS
+import Drasil.SRS hiding (constants, genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.SRS.Concepts as SRS
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,

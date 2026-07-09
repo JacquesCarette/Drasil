@@ -10,7 +10,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
-import Drasil.System (SmithEtAlSRS(..), programName, sysName, purpose)
+import Drasil.System (sysName, purpose)
+import Drasil.SRS (SmithEtAlSRS(..), programName)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Drasil.Generator (codedDirName, Format(..))

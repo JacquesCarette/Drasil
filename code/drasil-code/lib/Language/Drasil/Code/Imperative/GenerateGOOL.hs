@@ -22,7 +22,8 @@ import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
-import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))
+import Drasil.System (HasSystemMeta(..))
+import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
   SharedProg, OOProg, MS, VS, TypeData, ValueSym(..), Argument(..),

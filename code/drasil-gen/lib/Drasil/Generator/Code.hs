@@ -35,7 +35,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
-import Drasil.System (SmithEtAlSRS, programName)
+import Drasil.SRS (SmithEtAlSRS, programName)
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout

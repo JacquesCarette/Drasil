@@ -8,8 +8,8 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(..), mkSystemMeta, DrasilWebsite,
-  mkDrasilWebsite)
+import Drasil.System (HasSystemMeta(..), mkSystemMeta)
+import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS (findAllRefs)

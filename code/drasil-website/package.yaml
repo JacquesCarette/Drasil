@@ -20,11 +20,14 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - lens
 - split
 - directory
+- pretty
 - drasil-data
 - drasil-database
+- drasil-file-handling
 - drasil-srs
 - drasil-code
 - drasil-gool

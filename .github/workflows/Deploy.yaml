@@ -216,7 +216,7 @@ jobs:
         run: tar zxf $RUNNER_TEMP/website-artifacts.tar.gz
 
       - name: "Prepare full website deployment environment"
-        run: make deploy_lite SKIP_GEN=1
+        run: make deploy_lite
 
       - name: "Upload static website as artifact"
         uses: actions/upload-pages-artifact@v5

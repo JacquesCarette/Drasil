@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, SValue,
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), NativeVector(..),
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
   switchAsIf, convScope)
@@ -509,7 +509,6 @@ instance StringStatement JuliaCode (Doc, Terminator) where
   stringListLists = M.stringListLists
 
 instance FunctionSym JuliaCode where
-  type Function JuliaCode = FuncData
 
 instance FuncAppStatement JuliaCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp

@@ -11,7 +11,7 @@ import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (SVariable, MixedCall, SValue, VSFunction,
+import Drasil.Shared.InterfaceCommon (SVariable, MixedCall, SValue,
   ValueSym(Value), TypeSym(int), MSBody, VariableElim(variableName),
   VariableSym(Variable), Label, Library, BodySym(Body), funcApp, getCodeType)
 import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, call,
@@ -22,7 +22,7 @@ import qualified Drasil.Shared.LanguageRenderer as R (extVar, listAccessFunc,
 import Drasil.Shared.LanguageRenderer.Constructors(mkStmtNoEnd, mkStateVar, typeFromData)
 import Drasil.Shared.State (MS, VS, lensMStoVS, useVarName, setVarScope)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.Shared.AST (ScopeData, TypeData)
+import Drasil.Shared.AST (ScopeData, TypeData, FuncData)
 
 -- Swift and Julia --
 
@@ -52,8 +52,11 @@ extFuncAppMixedArgs l = call (Just l) Nothing
 
 -- Python, C#, Swift, and Julia --
 
-listAccessFunc :: (CommonRenderSym r vis smt, IC.TypeElim r) => VS (r TypeData) ->
-  SValue r -> VSFunction r
+listAccessFunc
+  :: (CommonRenderSym r vis smt, IC.TypeElim r)
+  => VS (r TypeData)
+  -> SValue r
+  -> VS (r FuncData)
 listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --

@@ -19,7 +19,7 @@ import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), NativeVector(..), InternalList(..), StatementSym(..),
   AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), funcApp, (&=))
@@ -60,10 +60,10 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  FuncData, ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData,
-  paramVar, paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec,
-  valInt, valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc,
-  vard, progD, mthdDoc, modDoc)
+  ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
+  paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
+  valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc, vard,
+  progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
@@ -456,7 +456,6 @@ instance StringStatement MatlabCode (Doc, Terminator) where
   stringListLists = undefined
 
 instance FunctionSym MatlabCode where
-  type Function MatlabCode = FuncData
 
 instance FuncAppStatement MatlabCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp

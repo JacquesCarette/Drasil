@@ -21,8 +21,8 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
-  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
-  SVariable, Value, SValue, SMethod, MixedCall, bodyStatements, oneLiner,
+  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, SVariable, Value,
+  SValue, SMethod, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
@@ -67,7 +67,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (
   classVarAccessCheck, call, initStmts, docFunc, docFuncRepr, docClass,
   docMod, smartAdd, smartSub)
 import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd,
-  TypeData, ParamData)
+  TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS, FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -269,11 +269,17 @@ call' _ l o n t ps ns = call empty l o n t ps ns
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l
 
-listSizeFunc :: (OORenderSym r vis smt) => VSFunction r
+listSizeFunc
+  :: (OORenderSym r vis smt)
+  => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
 
-listAccessFunc' :: (OORenderSym r vis smt, TypeElim r) => Label ->
-  VS (r TypeData) -> SValue r -> VSFunction r
+listAccessFunc'
+  :: (OORenderSym r vis smt, TypeElim r)
+  => Label
+  -> VS (r TypeData)
+  -> SValue r
+  -> VS (r FuncData)
 listAccessFunc' f t i = IG.func f t [intValue i]
 
 -- C# and C++ --

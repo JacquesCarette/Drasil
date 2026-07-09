@@ -22,8 +22,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, VSFunction, SVariable, SValue, SMethod, NamedArgs, MixedCall,
-  MixedCtorCall, BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
+  MSBlock, SVariable, SValue, SMethod, NamedArgs, MixedCall, MixedCtorCall,
+  BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
   VariableSym(Variable), VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
@@ -62,7 +62,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData, FuncData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -276,7 +276,11 @@ lambda f ps' ex' = do
   let ft = IC.funcType (map (return . binderType) ps) (return $ valueType ex)
   valFromData (Just 0) Nothing ft (f ps ex)
 
-objAccess :: (CommonRenderSym r vis smt) => SValue r -> VSFunction r -> SValue r
+objAccess
+  :: (CommonRenderSym r vis smt)
+  => SValue r
+  -> VS (r FuncData)
+  -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f)
   (R.objAccess (RC.value v) (RC.function f)))
 
@@ -287,7 +291,12 @@ objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing
 
 -- Functions --
 
-func :: (CommonRenderSym r vis smt) => Label -> VS (r TypeData) -> [SValue r] -> VSFunction r
+func
+  :: (CommonRenderSym r vis smt)
+  => Label
+  -> VS (r TypeData)
+  -> [SValue r]
+  -> VS (r FuncData)
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get :: (OORenderSym r vis smt) => SValue r -> SVariable r -> SValue r
@@ -311,11 +320,19 @@ listAccess v i = do
   f <- checkType (getCodeType (valueType v'))
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
-getFunc :: (OORenderSym r vis smt) => SVariable r -> VSFunction r
+getFunc
+  :: (OORenderSym r vis smt)
+  => SVariable r
+  -> VS (r FuncData)
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
-setFunc :: (OORenderSym r vis smt) => VS (r TypeData) -> SVariable r -> SValue r -> VSFunction r
+setFunc
+  :: (OORenderSym r vis smt)
+  => VS (r TypeData)
+  -> SVariable r
+  -> SValue r
+  -> VS (r FuncData)
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 

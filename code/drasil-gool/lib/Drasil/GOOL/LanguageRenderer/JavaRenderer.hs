@@ -14,14 +14,14 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSFunction, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
@@ -446,7 +446,6 @@ instance InternalValueExp JavaCode where
     CG.classMethodCall f t c ps ns
 
 instance FunctionSym JavaCode where
-  type Function JavaCode = FuncData
 
 instance OOFunctionSym JavaCode where
   func = G.func
@@ -897,7 +896,7 @@ jFileWriterType = do
 jAsListFunc :: VS (JavaCode TypeData) -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
 
-jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
+jEqualsFunc :: SValue JavaCode -> VS (JavaCode FuncData)
 jEqualsFunc v = func jEquals bool [v]
 
 jParseIntFunc :: SValue JavaCode -> SValue JavaCode
@@ -909,22 +908,22 @@ jParseDblFunc v = funcApp jParseDbl double [v]
 jParseFloatFunc :: SValue JavaCode -> SValue JavaCode
 jParseFloatFunc v = funcApp jParseFloat float [v]
 
-jNextFunc :: VSFunction JavaCode
+jNextFunc :: VS (JavaCode FuncData)
 jNextFunc = func jNext string []
 
-jNextLineFunc :: VSFunction JavaCode
+jNextLineFunc :: VS (JavaCode FuncData)
 jNextLineFunc = func jNextLine string []
 
-jNextBoolFunc :: VSFunction JavaCode
+jNextBoolFunc :: VS (JavaCode FuncData)
 jNextBoolFunc = func jNextBool bool []
 
-jHasNextLineFunc :: VSFunction JavaCode
+jHasNextLineFunc :: VS (JavaCode FuncData)
 jHasNextLineFunc = func jHasNextLine bool []
 
-jCharAtFunc :: VSFunction JavaCode
+jCharAtFunc :: VS (JavaCode FuncData)
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (OORenderSym r vis smt) => Char -> VSFunction r
+jSplitFunc :: (OORenderSym r vis smt) => Char -> VS (r FuncData)
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode

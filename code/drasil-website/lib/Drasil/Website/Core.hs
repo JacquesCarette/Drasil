@@ -2,8 +2,9 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-module Drasil.System.DrasilWebsite
+module Drasil.Website.Core
   ( DrasilWebsite,
     mkDrasilWebsite,
     indexDoc,
@@ -23,8 +24,7 @@ import Language.Drasil.Document (Document, Reference)
 import Language.Drasil.Printers (Notation (Engineering), genHTML, genericCSS,
   piSys, makeDocument)
 
-import Drasil.System.Core (HasSystemMeta (..), SystemMeta)
-import Drasil.System.Transformations (ToFiles (..))
+import Drasil.System (HasSystemMeta (..), SystemMeta, ToFiles (..))
 
 data DrasilWebsite = DW
   { _sm :: SystemMeta,

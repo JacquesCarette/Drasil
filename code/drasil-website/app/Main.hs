@@ -8,7 +8,7 @@ import System.Environment (getEnv, lookupEnv)
 import Drasil.Generator (concretizeAndWrite, drasilMakefileReqOpts)
 import Language.Drasil (Sentence(S))
 import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
-import Drasil.System (defaultDrasilWebsiteGenOpts)
+import Drasil.Website.Core (defaultDrasilWebsiteGenOpts)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
   websiteTitle, webSys)

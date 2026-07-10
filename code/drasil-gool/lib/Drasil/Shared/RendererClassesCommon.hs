@@ -47,8 +47,6 @@ class (AssignStatement r smt, DeclStatement r smt, IOStatement r smt,
   ParameterSym r, ScopeElim r
   ) => CommonRenderSym r vis smt
 
--- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
-
 -- Common Typeclasses --
 
 class ImportSym r where

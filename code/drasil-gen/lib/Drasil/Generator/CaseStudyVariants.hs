@@ -16,8 +16,7 @@ import Data.Maybe (maybeToList)
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.SRS (SRSDecl, mkDoc)
-import Drasil.System (SmithEtAlSRS, programName)
+import Drasil.SRS (SRSDecl, mkDoc, SmithEtAlSRS, programName)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 

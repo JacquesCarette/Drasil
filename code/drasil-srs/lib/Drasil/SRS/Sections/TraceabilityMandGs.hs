@@ -14,7 +14,7 @@ import Data.Foldable (foldl')
 
 -- General Drasil
 import Drasil.Database (mkUid)
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..))
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC

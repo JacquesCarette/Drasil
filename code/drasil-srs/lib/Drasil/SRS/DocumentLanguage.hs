@@ -27,7 +27,8 @@ import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts,
   TermAbbr, shortForm, termResolve')
 
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..))
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Drasil.SRS.GetChunks (resolveAllVars)
 
 -- Vocabulary

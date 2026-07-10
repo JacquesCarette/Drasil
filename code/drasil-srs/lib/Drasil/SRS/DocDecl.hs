@@ -18,7 +18,8 @@ import Control.Lens((^.))
 import Language.Drasil hiding (sec)
 import Language.Drasil.Document
 import Drasil.Database (HasUID(..), findAll)
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), systemdb)
+import Drasil.System (systemdb)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,

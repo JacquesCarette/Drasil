@@ -33,6 +33,7 @@ dependencies:
 - drasil-makefile
 - drasil-metadata
 - drasil-printers
+- drasil-srs
 - drasil-system
 - drasil-theory
 - drasil-utils

@@ -1,10 +1,10 @@
-{-# LANGUAGE GADTs, RankNTypes #-}
+{-# LANGUAGE GADTs, RankNTypes, TemplateHaskell #-}
 -- | Define types and functions related to creating a system information database.
 
 -- Changes to System should be reflected in the 'Creating Your Project in
 -- Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-module Drasil.System.SmithEtAlSRS (
+module Drasil.SRS.SmithEtAlSRS (
   -- * System
   -- ** Types
   SmithEtAlSRS(..),
@@ -29,7 +29,7 @@ import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
 import Language.Drasil.Document (LabelledContent, Reference)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
-import Drasil.System.Core (SystemMeta, Background, HasSystemMeta(..),
+import Drasil.System (SystemMeta, Background, HasSystemMeta(..),
   mkSystemMeta, Motivation, Purpose, Scope)
 
 -- | Data structure for holding all of the requisite information about a system

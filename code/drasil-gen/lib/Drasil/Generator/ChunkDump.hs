@@ -12,7 +12,8 @@ import System.Environment (lookupEnv)
 
 import Drasil.Database (dumpChunkDB)
 import Drasil.FileHandling (FileLayout, PathSegment, directory, file, ps)
-import Drasil.System (SmithEtAlSRS, systemdb, traceTable, refbyTable)
+import Drasil.System (systemdb)
+import Drasil.SRS (SmithEtAlSRS, traceTable, refbyTable)
 
 -- | Builds the `.drasil` chunk dump directory if the `DEBUG_ENV` environment
 -- variable is non-empty.

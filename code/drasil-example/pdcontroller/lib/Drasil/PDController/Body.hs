@@ -3,11 +3,10 @@ module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS
+import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)

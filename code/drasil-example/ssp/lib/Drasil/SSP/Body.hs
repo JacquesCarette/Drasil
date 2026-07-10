@@ -14,7 +14,6 @@ import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP

@@ -39,7 +39,7 @@ class (SharedProg r vis smt, OOStatement r smt, ProgramSym r vis smt,
 
 class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
   OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
-  OOValueExpression r
+  OOFunctionSym r, OOValueExpression r
   ) => OOStatement r smt
 
 type GSProgram a = GS (a (Program a))

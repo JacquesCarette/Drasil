@@ -885,12 +885,12 @@ jLitArray t' es' = do
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-jFileType :: (OORenderSym r vis smt) => VS (r TypeData)
+jFileType :: (OOTypeSym r) => VS (r TypeData)
 jFileType = do
   tpf <- obj jFile
   modifyReturn (addLangImportVS $ ioImport jFile) tpf
 
-jFileWriterType :: (OORenderSym r vis smt) => VS (r TypeData)
+jFileWriterType :: (OOTypeSym r) => VS (r TypeData)
 jFileWriterType = do
   tpf <- obj jFileWriter
   modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
@@ -925,7 +925,7 @@ jHasNextLineFunc = func jHasNextLine bool []
 jCharAtFunc :: VS (JavaCode FuncData)
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (OORenderSym r vis smt) => Char -> VS (r FuncData)
+jSplitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -1010,10 +1010,10 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getCodeType $ variableType v)
 
-jOpenFileR :: (OORenderSym r vis smt) => SValue r -> VS (r TypeData) -> SValue r
+jOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (OORenderSym r vis smt) => SValue r -> VS (r TypeData) ->
+jOpenFileWorA :: (OOValueExpression r) => SValue r -> VS (r TypeData) ->
   SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
@@ -1099,8 +1099,9 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
   where rets = "array containing the following values:" : map fst bs ++
           map fst os
 
-jExtraClass :: (OORenderSym r vis smt) => Label -> Maybe Label ->
-  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+jExtraClass
+  :: (RenderClass r vis, RenderVisibility r vis)
+  => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

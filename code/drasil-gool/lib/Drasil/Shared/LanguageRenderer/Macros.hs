@@ -15,14 +15,13 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
   BooleanExpression((?&&), (?||)), at, StatementSym(..),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
+import Drasil.GOOL.InterfaceGOOL (($.), observerListName, OOStatement)
 import Drasil.Shared.RendererClassesCommon (RenderValue(cast),
   ValueElim(valueInt))
 import qualified Drasil.Shared.RendererClassesCommon as S (
   RenderStatement(stmt), RenderValue)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
-import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.Shared.State (MS, VS, MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
@@ -218,26 +217,20 @@ obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
-  :: (OORenderSym r vis smt)
-  => VS (r TypeData)
-  -> VS (r FuncData)
-  -> MSBody r
+  :: (OOStatement r smt)
+  => VS (r TypeData) -> VS (r FuncData) -> MSBody r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
-  :: (OORenderSym r vis smt)
-  => VS (r FuncData)
-  -> VS (r TypeData)
-  -> MS (r smt)
+  :: (OOStatement r smt)
+  => VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
 notifyObservers'
-  :: (OORenderSym r vis smt)
-  => VS (r FuncData)
-  -> VS (r TypeData)
-  -> MS (r smt)
+  :: (OOStatement r smt)
+  => VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0

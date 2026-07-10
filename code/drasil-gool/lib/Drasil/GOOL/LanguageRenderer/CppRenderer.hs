@@ -1047,6 +1047,7 @@ instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) where
   type Program CppSrcCode = ProgData
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 instance SharedStatement CppSrcCode (Doc, Terminator) where
+instance OOStatement CppSrcCode (Doc, Terminator) where
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator)
 instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator)
@@ -1786,6 +1787,8 @@ instance Monad CppHdrCode where
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator)
 instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator)
+instance SharedStatement CppHdrCode (Doc, Terminator) where
+instance OOStatement CppHdrCode (Doc, Terminator) where
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
@@ -2788,7 +2791,11 @@ cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   multi [mkStmt (RC.value inFn <+> streamR <+> RC.variable v),
     valStmt $ ignoreFunc '\n' i]
 
-cppOpenFile :: (OORenderSym r vis smt) => Label -> SVariable r -> SValue r -> MS (r smt)
+cppOpenFile
+  ::  Label
+  -> SVariable CppSrcCode
+  -> SValue CppSrcCode
+  -> MS (CppSrcCode (Doc, Terminator))
 cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
   mkStateVal void $ text mode]
 
@@ -2895,15 +2902,19 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
     indent $ RC.body b,
     bEnd]
 
-cppLitSet :: (OORenderSym r vis smt) => (VS (r TypeData) -> VS (r TypeData)) ->
-  VS (r TypeData) -> [SValue r] -> SValue r
+cppLitSet
+  :: (RenderValue r, ValueElim r)
+  => (VS (r TypeData) -> VS (r TypeData)) -> VS (r TypeData) -> [SValue r] -> SValue r
 cppLitSet f t' es' = do
   es <- sequence es'
   lt <- f t'
   mkVal lt ( braces (valueList es))
 
-cpphStateVarDef :: (OORenderSym r vis smt) => Doc -> r (Attachment r) ->
-  SVariable r -> SValue r -> CS Doc
+cpphStateVarDef
+  :: Doc
+  -> CppHdrCode (Attachment CppHdrCode)
+  -> SVariable CppHdrCode
+  -> SValue CppHdrCode -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))

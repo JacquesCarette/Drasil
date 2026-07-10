@@ -73,11 +73,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
   construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
-  buildClass, implementingClass, docClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace, local)
+  buildClass, implementingClass, docClass, commentedClass, modFromData, docMod,
+  fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
-  classVarAccess, intClass, buildModule, docMod', contains, bindingError,
+  classVarAccess, intClass, buildModule, modDoc', contains, bindingError,
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
   extraClass, doubleRender, double, openFileR, openFileW, self, multiAssign,
   multiReturn, listDec, listSet, funcDecDef, inOutCall, forLoopError, mainBody,
@@ -156,7 +156,7 @@ instance FileSym SwiftCode Doc (Doc, Terminator) where
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
 
-  docMod = CP.docMod' swiftExt
+  docMod = G.docMod CP.modDoc' swiftExt
 
 instance RenderFile SwiftCode where
   top _ = toCode empty
@@ -978,7 +978,8 @@ swiftCast t' v' = do
         getCodeType (valueType v) == String then swiftUnwrapVal else id
   unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
-swiftIndexFunc :: (OORenderSym r vis smt) => SValue r -> SValue r -> SValue r
+swiftIndexFunc
+  :: (InternalValueExp r, VariableSym r) => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
   let t = pure $ valueType v
@@ -998,7 +999,7 @@ swiftStrideFunc beg end step = let t = listType int
 swiftMapFunc :: (InternalValueExp r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
-swiftWriteFunc :: (OORenderSym r vis smt) => SValue r -> SValue r -> SValue r
+swiftWriteFunc :: SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
 swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
   in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
@@ -1017,15 +1018,19 @@ swiftReadFileFunc v = swiftTryVal $
     contentsArg = (var swiftContentsOf infile, v)
     encodingArg = (var "encoding" string, encVal)
 
-swiftSplitFunc :: (OORenderSym r vis smt) => Char -> SValue r -> SValue r
+swiftSplitFunc
+  :: (InternalValueExp r, Literal r, VariableSym r)
+  => Char -> SValue r -> SValue r
 swiftSplitFunc d s = let sepArg = var swiftSepBy char
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
-swiftJoinedFunc :: (OORenderSym r vis smt) => Char -> SValue r -> SValue r
+swiftJoinedFunc
+  :: (InternalValueExp r, Literal r, VariableSym r)
+  => Char -> SValue r -> SValue r
 swiftJoinedFunc d s = let sepArg = var swiftSep char
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]
 
-swiftIndexOf :: (OORenderSym r vis smt) => SValue r -> SValue r -> SValue r
+swiftIndexOf :: SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
@@ -1094,8 +1099,7 @@ swiftInput vr vl = do
         | otherwise = error "Attempt to read value of unreadable type"
   swiftInput' (getCodeType $ variableType vr')
 
-swiftOpenFile :: (OORenderSym r vis smt) => SValue r ->
-  VS (r TypeData) -> SValue r
+swiftOpenFile :: SValue SwiftCode -> VS (SwiftCode TypeData) -> SValue SwiftCode
 swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
                         dirVal = mkStateVal (obj swiftSearchDir) swiftDocDir
                         inArg = var swiftIn (obj swiftPathMask)
@@ -1104,14 +1108,13 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
-swiftOpenFileHdl :: (OORenderSym r vis smt, Monad r) => SValue r ->
-  VS (r TypeData) -> SValue r
+swiftOpenFileHdl :: SValue SwiftCode -> VS (SwiftCode TypeData) -> SValue SwiftCode
 swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
 
-swiftOpenFileWA :: (OORenderSym r vis smt, Monad r) => Bool ->
-  SVariable r -> SValue r -> MS (r smt)
+swiftOpenFileWA
+  :: Bool -> SVariable SwiftCode -> SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
 swiftOpenFileWA app f' n' = tryCatch
     (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',
       if app
@@ -1134,8 +1137,8 @@ swiftCloseFile f' = do
       swClose _ = error "closeFile called on non-file-typed value"
   swClose (getCodeType $ valueType f)
 
-swiftReadFile :: (OORenderSym r vis (Doc, Terminator)) => SVariable r ->
-  SValue r -> MS (r (Doc, Terminator))
+swiftReadFile
+  :: SVariable SwiftCode -> SValue SwiftCode -> MS (SwiftCode (Doc, Terminator))
 swiftReadFile v f =
   let l_binder = binder "l" string
       l_var = var "l" string
@@ -1216,8 +1219,11 @@ swiftMethod n s p t ps b = do
     indent $ RC.body bod,
     bodyEnd])
 
-swiftConstructor :: (OORenderSym r vis smt) => [MS (r ParamData)] ->
-  Initializers r -> MSBody r -> SMethod r
+swiftConstructor
+  :: [MS (SwiftCode ParamData)]
+  -> Initializers SwiftCode
+  -> MSBody SwiftCode
+  -> SMethod SwiftCode
 swiftConstructor ps is b = do
   pms <- sequence ps
   bod <- multiBody [G.initStmts is, b]
@@ -1248,7 +1254,7 @@ swiftStringError = do
 swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
 
-typeDfltVal :: (OORenderSym r vis smt) => CodeType -> SValue r
+typeDfltVal :: (Literal r, OOTypeSym r) => CodeType -> SValue r
 typeDfltVal Boolean = litFalse
 typeDfltVal Integer = litInt 0
 typeDfltVal Float = litFloat 0.0

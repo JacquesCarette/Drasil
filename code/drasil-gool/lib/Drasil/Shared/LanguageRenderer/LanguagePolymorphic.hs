@@ -32,9 +32,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
-  CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
-  ($.), AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOStatement, SFile, FSModule, SClass,
+  Initializers, CSStateVar, FileSym(File), ModuleSym(Module), newObj,
+  objMethodCallNoParams, ($.), AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -194,7 +194,9 @@ instanceVarAccess o' v' = do
         (variableType v) (R.instanceVarAccess (RC.value o) (RC.variable v))
   instanceVarAccess' (variableBind v)
 
-arrayElem :: (OORenderSym r vis smt) => SValue r -> SValue r -> SVariable r
+arrayElem
+  :: (IC.IndexTranslator r, RenderVariable r, ValueElim r)
+  => SValue r -> SValue r -> SVariable r
 arrayElem arr' i' = do
   i <- IC.intToIndex i'
   arr <- arr'
@@ -293,10 +295,12 @@ func
   => Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
-get :: (OORenderSym r vis smt) => SValue r -> SVariable r -> SValue r
+get
+  :: (RO.InternalGetSet r, IG.OOFunctionSym r)
+  => SValue r -> SVariable r -> SValue r
 get v vToGet = v $. RO.getFunc vToGet
 
-set :: (OORenderSym r vis smt) => SValue r -> SVariable r -> SValue r -> SValue r
+set :: (RO.InternalGetSet r, IG.OOFunctionSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
@@ -323,18 +327,14 @@ listAccess v i = do
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 getFunc
-  :: (OORenderSym r vis smt)
-  => SVariable r
-  -> VS (r FuncData)
+  :: (IG.OOFunctionSym r, VariableElim r)
+  => SVariable r -> VS (r FuncData)
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr)
   (toState $ variableType vr) [])
 
 setFunc
-  :: (OORenderSym r vis smt)
-  => VS (r TypeData)
-  -> SVariable r
-  -> SValue r
-  -> VS (r FuncData)
+  :: (IG.OOFunctionSym r, VariableElim r)
+  => VS (r TypeData) -> SVariable r -> SValue r -> VS (r FuncData)
 setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
   [toVal])
 
@@ -371,8 +371,9 @@ subAssign t vr' v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (R.subAssign vr v) t
 
-objDecNew :: (OORenderSym r vis smt) => SVariable r -> r ScopeData -> [SValue r]
-  -> MS (r smt)
+objDecNew
+  :: (IC.DeclStatement r smt, IG.OOValueExpression r, VariableElim r)
+  => SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList :: (IC.SharedStatement r smt) => Integer -> SValue r ->
@@ -414,7 +415,9 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe
           printStr printFileStr f
 
-closeFile :: (OORenderSym r vis smt) => Label -> SValue r -> MS (r smt)
+closeFile
+  :: (IG.InternalValueExp r, StatementSym r smt)
+  => Label -> SValue r -> MS (r smt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
 returnStmt
@@ -500,8 +503,15 @@ param f v' = do
   modify $ useVarName n
   paramFromData v' $ f v
 
-method :: (OORenderSym r vis smt) => Label -> r vis -> r (Attachment r) ->
-  VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r
+method
+  :: (OORenderMethod r vis)
+  => Label
+  -> r vis
+  -> r (Attachment r)
+  -> VS (r TypeData)
+  -> [MS (r ParamData)]
+  -> MSBody r
+  -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
 getMethod :: (OORenderSym r vis smt) => SVariable r -> SMethod r
@@ -514,11 +524,12 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
-initStmts :: (OORenderSym r vis smt) => Initializers r -> MSBody r
+initStmts :: (OOStatement r smt) => Initializers r -> MSBody r
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
-function :: (OORenderSym r vis smt) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+function
+  :: (AttachmentSym r, OORenderMethod r vis)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (RenderMethod r) => FuncDocRenderer -> String ->
@@ -532,21 +543,25 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 
-buildClass :: (OORenderSym r vis smt) =>  Maybe Label -> [CSStateVar r] ->
-  [SMethod r] -> [SMethod r] -> SClass r
+buildClass
+  :: (RenderClass r vis, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (OORenderSym r vis smt) => Label -> [Label] ->
+implementingClass :: (RenderClass r vis, VisibilitySym r vis) => Label -> [Label] ->
   [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 implementingClass n is = RO.intClass n public (implements is)
 
-docClass :: (OORenderSym r vis smt) => ClassDocRenderer -> String -> SClass r -> SClass r
+docClass
+  :: (RenderClass r vis)
+  => ClassDocRenderer -> String -> SClass r -> SClass r
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
-commentedClass :: (OORenderSym r vis smt, Monad r) => CS (r Doc) -> SClass r
-  -> CS (r Doc)
+commentedClass
+  :: (RC.BlockCommentElim r, RO.ClassElim r, Monad r)
+  => CS (r Doc) -> SClass r -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RO.class' cs))
 
@@ -557,8 +572,9 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
-fileDoc :: (OORenderSym r vis smt) => String -> (r (Module r) -> r (Block r)) ->
-  r (Block r) -> FSModule r -> SFile r
+fileDoc
+  :: (RC.BlockElim r, RenderMod r, RenderFile r)
+  => String -> (r (Module r) -> r (Block r)) -> r (Block r) -> FSModule r -> SFile r
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -575,13 +591,22 @@ fileDoc ext topb botb mdl = do
 --   a is a list of authors
 --   dt is the date
 --   fl is the file
-docMod :: (OORenderSym r vis smt) => ModuleDocRenderer -> String -> String ->
-  String -> [String] -> String -> SFile r -> SFile r
+docMod
+  :: (RenderFile r)
+  => ModuleDocRenderer
+  -> String
+  -> String
+  -> String
+  -> [String]
+  -> String
+  -> SFile r
+  -> SFile r
 docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt e
   <$> getModuleName)
 
-fileFromData :: (OORenderSym r vis smt) => (FilePath -> r (Module r) ->
-  r (File r)) -> FilePath -> FSModule r -> SFile r
+fileFromData
+  :: (RO.ModuleElim r)
+  => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

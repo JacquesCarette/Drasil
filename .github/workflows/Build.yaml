@@ -54,6 +54,15 @@ jobs:
             ~/.stack
           key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
 
+      - name: "Restore stack work cache"
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            code/.stack-work
+            code/**/.stack-work
+            code/**/.hie
+          key: ${{ runner.os }}-stack-work
+
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
 
@@ -98,6 +107,15 @@ jobs:
           path: |
             ~/.stack
           key: ${{ runner.os }}-stack-${{ hashFiles('code/stack.yaml') }}
+
+      - name: "Restore stack work cache"
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            code/.stack-work
+            code/**/.stack-work
+            code/**/.hie
+          key: ${{ runner.os }}-stack-work-haddock
 
       - name: "Generate Haddock docs (as test)"
         run: make docs

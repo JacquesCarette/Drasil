@@ -76,6 +76,15 @@ jobs:
           path: ${{ runner.temp }}/website-artifacts.tar.gz
           archive: false
 
+      - name: "Cache stack work"
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            code/.stack-work
+            code/**/.stack-work
+            code/**/.hie
+          key: ${{ runner.os }}-stack-work
+
   haddock:
     name: Haddock
     runs-on: ubuntu-latest
@@ -97,6 +106,15 @@ jobs:
         with:
           name: haddock-docs
           path: code/docs
+
+      - name: "Cache stack work"
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            code/.stack-work
+            code/**/.stack-work
+            code/**/.hie
+          key: ${{ runner.os }}-stack-work-haddock
 
   gooltest:
     name: "Compile GOOL"

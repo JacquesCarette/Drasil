@@ -593,7 +593,7 @@ mlParam = RC.variable
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
-mlFuncDoc :: (CommonRenderSym r vis smt) => Label -> [Doc] ->
+mlFuncDoc :: (ParamElim r) => Label -> [Doc] ->
   [r ParamData] -> Doc -> Doc
 mlFuncDoc n outs pms bod =
   vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),

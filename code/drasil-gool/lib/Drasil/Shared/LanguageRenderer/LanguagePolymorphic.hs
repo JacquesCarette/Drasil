@@ -29,24 +29,26 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
+  ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
+  ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, arrayType, innerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach),
-  ParameterSym(param), IndexTranslator(intToIndex), ScopeSym(local))
+  ParameterSym(param), IndexTranslator(intToIndex), ScopeSym(local),
+  NumericExpression, SharedStatement)
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (
   instanceVarSelf, OOMethodSym(method), OOFunctionSym(func))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym,
-  InternalVarElim(variableBind), RenderValue(valFromData),
-  RenderFunction(funcFromData), FunctionElim(functionType),
-  RenderStatement(stmtFromData), StatementElim(statementTerm),
-  MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
-  BlockCommentSym(..), ValueElim (value))
+import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
+  RenderValue(valFromData), RenderFunction(funcFromData),
+  FunctionElim(functionType), RenderStatement(stmtFromData),
+  StatementElim(statementTerm), MethodTypeSym(mType), RenderParam(paramFromData),
+  RenderMethod(commentedFunc), BlockCommentSym(..), ValueElim (value),
+  RenderVariable)
 import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAccessFunc), RenderStatement(stmt),
   InternalIOStmt(..))
@@ -90,15 +92,17 @@ import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
 
-multiBody :: (CommonRenderSym r vis smt, Monad r) => [MSBody r] -> MS (r Doc)
+multiBody :: (RC.BodyElim r, Monad r) => [MSBody r] -> MS (r Doc)
 multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
 
-block :: (CommonRenderSym r vis smt, Monad r) => [MS (r smt)] -> MS (r Doc)
+block
+  :: (Monad r, RenderStatement r smt, StatementElim r smt)
+  => [MS (r smt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map S.stmt sts)
 
-multiBlock :: (CommonRenderSym r vis smt, Monad r) => [MSBlock r] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r, Monad r) => [MSBlock r] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
@@ -111,24 +115,25 @@ obj n = typeFromData (Object n) n (text n)
 negateOp :: (Monad r) => VSOp r
 negateOp = unOpPrec "-"
 
-csc :: (CommonRenderSym r vis smt, TypeElim r) => SValue r -> SValue r
+csc :: (IC.Literal r, IC.NumericExpression r, TypeElim r) => SValue r -> SValue r
 csc v = valOfOne (fmap valueType v) #/ sin v
 
-sec :: (CommonRenderSym r vis smt, TypeElim r) => SValue r -> SValue r
+sec :: (IC.Literal r, IC.NumericExpression r, TypeElim r) => SValue r -> SValue r
 sec v = valOfOne (fmap valueType v) #/ cos v
 
-cot :: (CommonRenderSym r vis smt, TypeElim r) => SValue r -> SValue r
+cot :: (IC.Literal r, IC.NumericExpression r, TypeElim r) => SValue r -> SValue r
 cot v = valOfOne (fmap valueType v) #/ tan v
 
-valOfOne :: (CommonRenderSym r vis smt, TypeElim r) =>
-  VS (r TypeData) -> SValue r
+valOfOne :: (IC.Literal r, TypeElim r) => VS (r TypeData) -> SValue r
 valOfOne t = t >>= (getVal . getCodeType)
   where getVal Float = IC.litFloat 1.0
         getVal _ = IC.litDouble 1.0
 
 -- Binary Operators --
 
-smartAdd :: (CommonRenderSym r vis smt) => SValue r -> SValue r -> SValue r
+smartAdd
+  :: (IC.Literal r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  => SValue r -> SValue r -> SValue r
 smartAdd v1 v2 = do
   v1' <- v1
   v2' <- v2
@@ -136,7 +141,9 @@ smartAdd v1 v2 = do
     (Just i1, Just i2) -> litInt (i1 + i2)
     _                  -> v1 #+ v2
 
-smartSub :: (CommonRenderSym r vis smt) => SValue r -> SValue r -> SValue r
+smartSub
+  :: (IC.Literal r, IC.NumericExpression r, RenderValue r, ValueElim r)
+  => SValue r -> SValue r -> SValue r
 smartSub v1 v2 = do
   v1' <- v1
   v2' <- v2
@@ -179,21 +186,23 @@ moduloOp = multPrec "%"
 
 -- Variables --
 
-var :: (CommonRenderSym r vis smt) => Label -> VS (r TypeData) -> SVariable r
+var :: (RenderVariable r) => Label -> VS (r TypeData) -> SVariable r
 var n t = mkStateVar n t (R.var n)
 
-classVar :: (CommonRenderSym r vis smt) => Label -> VS (r TypeData) -> SVariable r
+classVar :: (RenderVariable r) => Label -> VS (r TypeData) -> SVariable r
 classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
 -- not class-level since classVarAccess is for accessing class-level variables from a class
-classVarAccessCheck :: (CommonRenderSym r vis smt) => r (Variable r) -> r (Variable r)
+classVarAccessCheck :: (InternalVarElim r) => r (Variable r) -> r (Variable r)
 classVarAccessCheck v = classVarCS (variableBind v)
   where classVarCS InstanceLevel = error
           "classVarAccess can only be used to access class-level variables"
         classVarCS ClassLevel = v
 
-instanceVarAccess :: (CommonRenderSym r vis smt) => SValue r -> SVariable r -> SVariable r
+instanceVarAccess
+  :: (InternalVarElim r, RenderVariable r, ValueElim r, VariableElim r)
+  => SValue r -> SVariable r -> SVariable r
 instanceVarAccess o' v' = do
   o <- o'
   v <- v'
@@ -218,37 +227,42 @@ local = toCode $ sd Local
 
 -- Values --
 
-litChar :: (CommonRenderSym r vis smt) => (Doc -> Doc) -> Char -> SValue r
+litChar :: (RenderValue r, IC.TypeSym r) => (Doc -> Doc) -> Char -> SValue r
 litChar f c = mkStateVal IC.char (f $ if c == '\n' then text "\\n" else D.char c)
 
-litDouble :: (CommonRenderSym r vis smt) => Double -> SValue r
+litDouble :: (RenderValue r, IC.TypeSym r) => Double -> SValue r
 litDouble d = mkStateVal IC.double (D.double d)
 
-litInt :: (CommonRenderSym r vis smt) => Integer -> SValue r
+litInt :: (RenderValue r, IC.TypeSym r) => Integer -> SValue r
 litInt i = valFromData Nothing (Just i) IC.int (integer i)
 
-litString :: (CommonRenderSym r vis smt) => String -> SValue r
+litString :: (RenderValue r, IC.TypeSym r) => String -> SValue r
 litString s = mkStateVal IC.string (doubleQuotedText s)
 
-valueOf :: (CommonRenderSym r vis smt) => SVariable r -> SValue r
+valueOf
+  :: (InternalVarElim r, RenderValue r, VariableElim r)
+  => SVariable r -> SValue r
 valueOf v' = do
   v <- v'
   mkVal (variableType v) (RC.variable v)
 
-arg :: (CommonRenderSym r vis smt) => SValue r -> SValue r -> SValue r
+arg
+  :: (RenderValue r, IC.TypeSym r, ValueElim r)
+  => SValue r -> SValue r -> SValue r
 arg n' args' = do
   n <- n'
   args <- args'
   s <- IC.string
   mkVal s (R.arg n args)
 
-argsList :: (CommonRenderSym r vis smt) => String -> SValue r
+argsList :: (RenderValue r, IC.TypeSym r) => String -> SValue r
 argsList l = mkStateVal (IC.arrayType IC.string) (text l)
 
 -- | First parameter is separator between name and value for named arguments,
 -- rest similar to call from RendererClasses
-call :: (CommonRenderSym r vis smt) => Doc -> Maybe Library -> Maybe Doc ->
-  MixedCall r
+call
+  :: (InternalVarElim r, RenderValue r, ValueElim r)
+  => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
 call sep lib o n t pas nas = do
   pargs <- sequence pas
   nms <- mapM fst nas
@@ -259,17 +273,19 @@ call sep lib o n t pas nas = do
     (if null pas || null nas then empty else comma) <+> namedArgList sep
     (zip nms nargs))
 
-funcAppMixedArgs :: (CommonRenderSym r vis smt) => MixedCall r
+funcAppMixedArgs :: (RenderValue r) => MixedCall r
 funcAppMixedArgs = S.call Nothing Nothing
 
-newObjMixedArgs :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  String -> MixedCtorCall r
+newObjMixedArgs
+  :: (RenderValue r, UnRepr r TypeData)
+  => String -> MixedCtorCall r
 newObjMixedArgs s tp vs ns = do
   t <- tp
   S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
-lambda :: (CommonRenderSym r vis smt) => ([r BinderD] -> r (Value r) -> Doc) ->
-  [VSBinder r] -> SValue r -> SValue r
+lambda
+  :: (BinderElim r, RenderValue r, ValueSym r)
+  => ([r BinderD] -> r (Value r) -> Doc) -> [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
@@ -277,26 +293,22 @@ lambda f ps' ex' = do
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess
-  :: (CommonRenderSym r vis smt)
-  => SValue r
-  -> VS (r FuncData)
-  -> SValue r
+  :: (FunctionElim r, RenderValue r, ValueElim r)
+  => SValue r -> VS (r FuncData) -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f)
   (R.objAccess (RC.value v) (RC.function f)))
 
-objMethodCall :: (CommonRenderSym r vis smt) => Label -> VS (r TypeData) -> SValue r ->
-  [SValue r] -> NamedArgs r -> SValue r
+objMethodCall
+  :: (RenderValue r, ValueElim r)
+  => Label -> VS (r TypeData) -> SValue r -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing
   (Just $ RC.value o <> dot) f t vs ns)
 
 -- Functions --
 
 func
-  :: (CommonRenderSym r vis smt)
-  => Label
-  -> VS (r TypeData)
-  -> [SValue r]
-  -> VS (r FuncData)
+  :: (RenderFunction r, ValueElim r, ValueExpression r)
+  => Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)
 func l t vs = funcApp l t vs >>= ((`funcFromData` t) . R.func . RC.value)
 
 get :: (OORenderSym r vis smt) => SValue r -> SVariable r -> SValue r
@@ -306,8 +318,16 @@ set :: (OORenderSym r vis smt) => SValue r -> SVariable r -> SValue r -> SValue 
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
-listAccess :: (CommonRenderSym r vis smt, TypeElim r) => SValue r ->
-  SValue r -> SValue r
+listAccess
+  :: ( IC.IndexTranslator r
+     , S.InternalListFunc r
+     , FunctionElim r
+     , RenderFunction r
+     , RenderValue r
+     , TypeElim r
+     , ValueElim r
+     )
+  => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
   let i' = IC.intToIndex i
@@ -338,26 +358,32 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 -- Statements --
 
-stmt :: (CommonRenderSym r vis smt) => MS (r smt) -> MS (r smt)
+stmt
+  :: (RenderStatement r smt, StatementElim r smt)
+  => MS (r smt) -> MS (r smt)
 stmt s' = do
   s <- s'
   mkStmtNoEnd (RC.statement s <> R.getTerm (statementTerm s))
 
-loopStmt :: (CommonRenderSym r vis smt) => MS (r smt) -> MS (r smt)
+loopStmt
+  :: (RenderStatement r smt, StatementElim r smt)
+  => MS (r smt) -> MS (r smt)
 loopStmt = S.stmt . setEmpty
 
-emptyStmt :: (CommonRenderSym r vis smt) => MS (r smt)
+emptyStmt :: (RenderStatement r smt) => MS (r smt)
 emptyStmt = mkStmtNoEnd empty
 
-assign :: (CommonRenderSym r vis smt) => Terminator -> SVariable r -> SValue r ->
-  MS (r smt)
+assign
+  :: (InternalVarElim r, RenderStatement r smt, ValueElim r)
+  => Terminator -> SVariable r -> SValue r -> MS (r smt)
 assign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.assign vr v) t
 
-subAssign :: (CommonRenderSym r vis smt) => Terminator -> SVariable r ->
-  SValue r -> MS (r smt)
+subAssign
+  :: (InternalVarElim r, RenderStatement r smt, ValueElim r)
+  => Terminator -> SVariable r -> SValue r -> MS (r smt)
 subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -367,7 +393,7 @@ objDecNew :: (OORenderSym r vis smt) => SVariable r -> r ScopeData -> [SValue r]
   -> MS (r smt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
-printList :: (CommonRenderSym r vis smt) => Integer -> SValue r ->
+printList :: (IC.SharedStatement r smt) => Integer -> SValue r ->
   (SValue r -> MS (r smt)) -> (String -> MS (r smt)) ->
   (String -> MS (r smt)) -> MS (r smt)
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
@@ -380,7 +406,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int
 
-printSet :: (CommonRenderSym r vis smt) => Integer -> SValue r ->
+printSet :: (IC.SharedStatement r smt) => Integer -> SValue r ->
   (SValue r -> MS (r smt)) -> (String -> MS (r smt)) ->
   (String -> MS (r smt)) -> VS (r TypeData) -> MS (r smt)
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
@@ -393,8 +419,9 @@ printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
 printObj :: ClassName -> (String -> MS (r smt)) -> MS (r smt)
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-print :: (CommonRenderSym r vis smt, TypeElim r) => Bool -> Maybe (SValue r) ->
-  SValue r -> SValue r -> MS (r smt)
+print
+  :: (S.InternalIOStmt r smt, IC.SharedStatement r smt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
@@ -408,20 +435,22 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
 closeFile :: (OORenderSym r vis smt) => Label -> SValue r -> MS (r smt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
-returnStmt :: (CommonRenderSym r vis smt) => Terminator -> SValue r -> MS (r smt)
+returnStmt
+  :: (RenderStatement r smt, ValueElim r)
+  => Terminator -> SValue r -> MS (r smt)
 returnStmt t v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (R.return' [v]) t
 
-valStmt :: (CommonRenderSym r vis smt) => Terminator -> SValue r -> MS (r smt)
+valStmt :: (RenderStatement r smt, ValueElim r) => Terminator -> SValue r -> MS (r smt)
 valStmt t v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (RC.value v) t
 
-comment :: (CommonRenderSym r vis smt) => Doc -> Label -> MS (r smt)
+comment :: (RenderStatement r smt) => Doc -> Label -> MS (r smt)
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
-throw :: (CommonRenderSym r vis smt) => (r (Value r) -> Doc) -> Terminator ->
+throw :: (IC.Literal r, RenderStatement r smt) => (r (Value r) -> Doc) -> Terminator ->
   Label -> MS (r smt)
 throw f t l = do
   msg <- zoom lensMStoVS (IC.litString l)
@@ -442,8 +471,17 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 3rd parameter is the keyword for an else-if statement
 -- 4th parameter is the syntax for ending a block in an if-condition
 -- 5th parameter is the syntax for ending an if-statement
-ifCond :: (CommonRenderSym r vis smt) => (Doc -> Doc) -> Doc -> OptionalSpace ->
-  Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MS (r smt)
+ifCond
+  :: (RC.BodyElim r, RenderStatement r smt, ValueElim r)
+  => (Doc -> Doc)
+  -> Doc
+  -> OptionalSpace
+  -> Doc
+  -> Doc
+  -> Doc
+  -> [(SValue r, MSBody r)]
+  -> MSBody r
+  -> MS (r smt)
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -461,7 +499,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (CommonRenderSym r vis smt) => (r (Body r) -> r (Body r) -> Doc) ->
+tryCatch :: (RenderStatement r smt) => (r (Body r) -> r (Body r) -> Doc) ->
   MSBody r -> MSBody r -> MS (r smt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
@@ -470,8 +508,9 @@ tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 construct :: (Monad r) => Label -> MS (r TypeData)
 construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
-param :: (CommonRenderSym r vis smt) => (r (Variable r) -> Doc) -> SVariable r ->
-  MS (r ParamData)
+param
+  :: (RenderParam r, VariableElim r)
+  => (r (Variable r) -> Doc) -> SVariable r -> MS (r ParamData)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
@@ -500,12 +539,12 @@ function :: (OORenderSym r vis smt) => Label -> r vis -> VS (r TypeData) ->
   [MS (r ParamData)] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (CommonRenderSym r vis smt) => FuncDocRenderer -> String ->
+docFuncRepr :: (RenderMethod r) => FuncDocRenderer -> String ->
   [String] -> [String] -> SMethod r -> SMethod r
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (CommonRenderSym r vis smt) => FuncDocRenderer -> String -> [String] ->
+docFunc :: (RenderMethod r) => FuncDocRenderer -> String -> [String] ->
   Maybe String -> SMethod r -> SMethod r
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
@@ -575,5 +614,5 @@ fileFromData f fpath mdl' = do
 
 -- Helper functions
 
-setEmpty :: (CommonRenderSym r vis smt) => MS (r smt) -> MS (r smt)
+setEmpty :: (RenderStatement r smt, StatementElim r smt) => MS (r smt) -> MS (r smt)
 setEmpty s' = s' >>= mkStmtNoEnd . RC.statement

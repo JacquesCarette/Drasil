@@ -1046,6 +1046,7 @@ instance Monad CppSrcCode where
 instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) where
   type Program CppSrcCode = ProgData
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
+instance SharedStatement CppSrcCode (Doc, Terminator) where
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator)
 instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator)
@@ -2411,8 +2412,9 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: (CommonRenderSym r vis smt, TypeElim r) =>
-  SVariable r -> MS (r ParamData)
+getParam
+  :: (ParameterSym r, TypeElim r, VariableElim r)
+  => SVariable r -> MS (r ParamData)
 getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getCodeType .
   variableType) v') v)
   where getParamFunc (List _) = pointerParam
@@ -2645,8 +2647,13 @@ cppIterBeginFunc t = func cppIterBegin (iterator t) []
 cppIterEndFunc :: VS (CppSrcCode TypeData) -> VS (CppSrcCode FuncData)
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
-cppListDecDef :: (CommonRenderSym r vis smt) => ([r (Value r)] -> Doc) ->
-  SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
+cppListDecDef
+  :: (DeclStatement r smt, RenderStatement r smt, StatementElim r smt)
+  => ([r (Value r)] -> Doc)
+  -> SVariable r
+  -> r ScopeData
+  -> [SValue r]
+  -> MS (r smt)
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2724,10 +2731,10 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
 
-cppListDecDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+cppListDecDoc :: (ValueElim r) => r (Value r) -> Doc
 cppListDecDoc n = parens (RC.value n)
 
-cppListDecDefDoc :: (CommonRenderSym r vis smt) => [r (Value r)] -> Doc
+cppListDecDefDoc :: (ValueElim r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppFuncDecDef :: SVariable CppSrcCode -> CppSrcCode ScopeData ->
@@ -2743,7 +2750,9 @@ cppFuncDecDef v scp ps bod = do
     variableType) pms) (map RC.variable pms)) <+>  bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
-cppPrint :: (CommonRenderSym r vis smt) => Bool -> SValue r -> SValue r -> MS (r smt)
+cppPrint
+  :: (RenderStatement r smt, ValueElim r)
+  => Bool -> SValue r -> SValue r -> MS (r smt)
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf
@@ -2753,10 +2762,10 @@ cppPrint newLn pf vl = do
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
 
-cppThrowDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+cppThrowDoc :: (ValueElim r) => r (Value r) -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
-cppTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+cppTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
 cppTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -2764,7 +2773,7 @@ cppTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-cppAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+cppAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
 cppAssert condition errorMessage = vcat [
   text "assert(" <> RC.value condition <+> text "&&" <+> RC.value errorMessage <> text ")" <> semi
   ]
@@ -2783,8 +2792,9 @@ cppOpenFile :: (OORenderSym r vis smt) => Label -> SVariable r -> SValue r -> MS
 cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
   mkStateVal void $ text mode]
 
-cppPointerParamDoc :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> Doc
+cppPointerParamDoc
+  :: (InternalVarElim r, UnRepr r TypeData, VariableElim r)
+  => r (Variable r) -> Doc
 cppPointerParamDoc v = renderType (variableType v) <+> cppPtr <> RC.variable v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode)
@@ -2833,7 +2843,7 @@ cpphIntFunc n s _ t ps _ = do
     pms <- sequence ps
     pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphFunc n tp pms
 
-cpphFunc :: (CommonRenderSym r vis smt) => Label -> CppHdrCode TypeData ->
+cpphFunc :: (ParamElim r) => Label -> CppHdrCode TypeData ->
   [r ParamData] -> Doc
 cpphFunc n t ps = (if isDtor n then empty else renderType t) <+>
   text n <> parens (parameterList ps) <> endStatement
@@ -2844,8 +2854,9 @@ cpphMethod n t a ps = let attchDoc = RC.perm a
   in attchDoc <+> (if isDtor n then empty else renderType t) <+> text n
     <> parens (parameterList ps) <> endStatement
 
-cppCommentedFunc :: (CommonRenderSym r vis smt, Monad r) => FileType ->
-  MS (r Doc) -> MS (r MethodData) -> MS (r MethodData)
+cppCommentedFunc
+  :: (BlockCommentElim r, Monad r)
+  => FileType -> MS (r Doc) -> MS (r MethodData) -> MS (r MethodData)
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
@@ -2959,7 +2970,7 @@ cpphInOut f ins [] [v] b = f (onStateValue variableType v)
   (cppInOutParams ins [] [v]) b
 cpphInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
-cppInOutParams :: (CommonRenderSym r vis smt, TypeElim r) =>
+cppInOutParams :: (ParameterSym r, TypeElim r, VariableElim r) =>
   [SVariable r] -> [SVariable r] -> [SVariable r] -> [MS (r ParamData)]
 cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins

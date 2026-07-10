@@ -796,17 +796,17 @@ swiftName, swiftVersion :: String
 swiftName = "Swift"
 swiftVersion = "5.2.4"
 
-swiftUnwrapVal :: (CommonRenderSym r vis smt) => SValue r -> SValue r
+swiftUnwrapVal :: (RenderValue r, ValueElim r, ValueSym r) => SValue r -> SValue r
 swiftUnwrapVal v' = do
   v <- v'
   mkVal (valueType v) (RC.value v <> swiftUnwrap')
 
-swiftTryVal :: (CommonRenderSym r vis smt) => SValue r -> SValue r
+swiftTryVal :: (RenderValue r, ValueElim r, ValueSym r) => SValue r -> SValue r
 swiftTryVal v' = do
   v <- v'
   mkVal (valueType v) (tryLabel <+> RC.value v)
 
-swiftArgVal :: (CommonRenderSym r vis smt) => SValue r -> SValue r
+swiftArgVal :: (RenderValue r, ValueElim r, ValueSym r) => SValue r -> SValue r
 swiftArgVal v' = do
   v <- v'
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
@@ -957,7 +957,7 @@ swiftNumBinExpr f v1' v2' = do
       exprT' _ _      = f (pure v1) (pure v2)
   exprT (getCodeType $ valueType v1) (getCodeType $ valueType v2)
 
-swiftLitFloat :: (CommonRenderSym r vis smt) => Float -> SValue r
+swiftLitFloat :: (RenderValue r, TypeSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
 swiftLambda :: [SwiftCode BinderD] -> SwiftCode (Value SwiftCode) -> Doc
@@ -985,8 +985,9 @@ swiftIndexFunc l v' = do
       ofArg = var swiftOf t
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
-swiftStrideFunc :: (CommonRenderSym r vis smt) => SValue r ->
-  SValue r -> SValue r -> SValue r
+swiftStrideFunc
+  :: (RenderValue r, ValueExpression r)
+  => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
                                    toArg = var swiftTo int
@@ -994,7 +995,7 @@ swiftStrideFunc beg end step = let t = listType int
   in cast t (funcAppNamedArgs swiftStride t
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
-swiftMapFunc :: (OORenderSym r vis smt) => SValue r -> SValue r -> SValue r
+swiftMapFunc :: (InternalValueExp r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftWriteFunc :: (OORenderSym r vis smt) => SValue r -> SValue r -> SValue r
@@ -1003,10 +1004,12 @@ swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
     (obj swiftEncoding)])]
 
-swiftReadLineFunc :: (CommonRenderSym r vis smt) => SValue r
+swiftReadLineFunc :: (RenderValue r, ValueElim r, ValueExpression r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
-swiftReadFileFunc :: (CommonRenderSym r vis smt) => SValue r -> SValue r
+swiftReadFileFunc
+  :: (RenderValue r, ValueElim r, ValueExpression r)
+  => SValue r -> SValue r
 swiftReadFileFunc v = swiftTryVal $
   funcAppNamedArgs CP.stringRender' string [contentsArg, encodingArg]
   where
@@ -1026,8 +1029,13 @@ swiftIndexOf :: (OORenderSym r vis smt) => SValue r -> SValue r -> SValue r
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
-swiftListSlice :: (OORenderSym r vis smt) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
+swiftListSlice
+  :: SVariable SwiftCode
+  -> SValue SwiftCode
+  -> Maybe (SValue SwiftCode)
+  -> Maybe (SValue SwiftCode)
+  -> SValue SwiftCode
+  -> MSBlock SwiftCode
 swiftListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn
@@ -1163,17 +1171,18 @@ swiftSetDec dec v' scp = do
 replaceBrackets :: String -> String
 replaceBrackets str = "<" ++ (init . tail) str ++ ">"
 
-swiftThrowDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+swiftThrowDoc :: (ValueElim r) => r (Value r) -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
-swiftForEach :: (CommonRenderSym r vis smt) => r (Variable r) ->
-  r (Value r) -> r (Body r) -> Doc
+swiftForEach
+  :: (BodyElim r, InternalVarElim r, ValueElim r)
+  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
   bodyEnd]
 
-swiftTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+swiftTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
 swiftTryCatch tb cb = vcat [
   swiftDo <+> lbrace,
   indent $ RC.body tb,
@@ -1181,7 +1190,7 @@ swiftTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-swiftAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+swiftAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
 swiftAssert condition errorMessage = vcat [
   text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
   ]

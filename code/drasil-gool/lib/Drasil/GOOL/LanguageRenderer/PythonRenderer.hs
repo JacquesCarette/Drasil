@@ -902,14 +902,15 @@ readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
-range :: (CommonRenderSym r vis smt) => SValue r -> SValue r -> SValue r -> SValue r
+range :: (ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
 pyClassVarAccess :: Doc -> Doc -> Doc
 pyClassVarAccess c v = c <> dot <> c <> dot <> v
 
-pyInlineIf :: (CommonRenderSym r vis smt) => SValue r -> SValue r ->
-  SValue r -> SValue r
+pyInlineIf
+  :: (RenderValue r, ValueElim r, ValueSym r)
+  => SValue r -> SValue r -> SValue r -> SValue r
 pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
@@ -917,14 +918,17 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1)
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (CommonRenderSym r vis smt) => [r BinderD] -> r (Value r) -> Doc
+pyLambda
+  :: (InternalBinderElim r, ValueElim r)
+  => [r BinderD] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (Monad r) => VS (r TypeData)
 pyStringType = typeFromData String pyString (text pyString)
 
-pyExtNewObjMixedArgs :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  Library -> MixedCtorCall r
+pyExtNewObjMixedArgs
+  :: (RenderValue r, UnRepr r TypeData)
+  => Library -> MixedCtorCall r
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
   (getTypeString t) (pure t) vs ns)
 
@@ -941,8 +945,9 @@ pyPrint newLn f' p' v' = do
                <> RC.value f
     mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
-pyOut :: (CommonRenderSym r vis smt, TypeElim r) => Bool ->
-  Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+pyOut
+  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v
@@ -957,31 +962,32 @@ pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+pyThrow :: (ValueElim r) => r (Value r) -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
-pyForEach :: (CommonRenderSym r vis smt) => r (Variable r) ->
-  r (Value r) -> r (Body r) -> Doc
+pyForEach
+  :: (BodyElim r, InternalVarElim r, ValueElim r)
+  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (CommonRenderSym r vis smt) => r (Value r) -> r (Body r) -> Doc
+pyWhile :: (BodyElim r, ValueElim r) => r (Value r) -> r (Body r) -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
 
-pyTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+pyTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
   tryLabel <> colon,
   indent $ RC.body tryB,
   pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
 
-pyAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+pyAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
 pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
-pyListSlice :: (CommonRenderSym r vis smt, Monad r) => SVariable r ->
+pyListSlice :: (InternalVarElim r, Monad r, ValueElim r) => SVariable r ->
   SValue r -> SValue r -> SValue r -> SValue r -> MS (r Doc)
 pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   vnew <- vn
@@ -992,8 +998,13 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
-pyMethod :: (CommonRenderSym r vis smt, PermElim r) => Label ->
-  r (Attachment r) -> r (Variable r) -> [r ParamData] -> r (Body r) -> Doc
+pyMethod
+  :: Label
+  -> PythonCode (Attachment PythonCode)
+  -> PythonCode (Variable PythonCode)
+  -> [PythonCode ParamData]
+  -> PythonCode (Body PythonCode)
+  -> Doc
 pyMethod n attch slf ps b = let
      decorator = case binding attch of
                    ClassLevel -> text "@staticmethod"
@@ -1009,7 +1020,7 @@ pyMethod n attch slf ps b = let
        pyDef <+> text n <> parens (implicitParam <> implicitComma <> pms) <> colon,
        indent bodyD]
 
-pyFunction :: (CommonRenderSym r vis smt) => Label ->
+pyFunction :: (BodyElim r, ParamElim r) => Label ->
   [r ParamData] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,

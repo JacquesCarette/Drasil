@@ -813,7 +813,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r vis smt) => [r BinderD] -> r (Value r) -> Doc
+csLambda :: [CSharpCode BinderD] -> CSharpCode (Value CSharpCode) -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
@@ -866,11 +866,11 @@ csFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
-csThrowDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+csThrowDoc :: CSharpCode (Value CSharpCode) -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-csTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+csTryCatch :: CSharpCode (Body CSharpCode) -> CSharpCode (Body CSharpCode) -> Doc
 csTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -879,7 +879,7 @@ csTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-csAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+csAssert :: CSharpCode (Value CSharpCode) -> CSharpCode (Value CSharpCode) -> Doc
 csAssert condition errorMessage = vcat [
   text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
   ]
@@ -946,8 +946,9 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
-csPrint :: (CommonRenderSym r vis smt, TypeElim r) => Bool ->
-  Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+csPrint
+  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

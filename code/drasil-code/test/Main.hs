@@ -13,7 +13,7 @@ import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   GOOLState)
 import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
-import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
+import Drasil.GProc (ProcProg, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (ProgramSym(..), GSProgram)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
@@ -51,7 +51,7 @@ codeGenTestGroup =
         [ gProcTestGroup "HelloWorldProc" helloWorldProc,
           gProcTestGroup "FileTestsProc" fileTestsProc,
           gProcTestGroup "NameGenTestProc" nameGenTestProc,
-          gProcMatlabTestGroup "VectorTestProc" vectorTestProc
+          gProcVectorTestGroup "VectorTestProc" vectorTestProc
         ]
     ]
 
@@ -79,20 +79,21 @@ gProcTestGroup n p =
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
 
-gProcMatlabTestGroup :: String ->
-  (forall r vis smt. (ProcProg r vis smt, NativeVector r) =>
+gProcVectorTestGroup :: String ->
+  (forall r vis smt. (ProcProg r vis smt) =>
     Proc.GSProgram r) -> TestTree
-gProcMatlabTestGroup n p =
+gProcVectorTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
     ([osp|test/golden|] </> [ps|{n}|])
     n
-    [ goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProcNoMake unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
     ]
 
 genCodeProcNoMake :: (ProcProg r vis smt, Monad r') =>
   (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
-  (forall s vis' smt'. (ProcProg s vis' smt', NativeVector s) =>
+  (forall s vis' smt'. (ProcProg s vis' smt') =>
     Proc.GSProgram s) ->
   [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =

@@ -21,6 +21,7 @@ import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
   AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  switchAsIf,
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
@@ -45,20 +46,22 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   docMod, fileFromData, buildModule, modFromData, function)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, elseIfLabel)
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue,
+  elseIfLabel)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
   litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
-  ifCond)
+  ifCond, tryCatch)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt')
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
-  litFalse)
+  litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extFuncAppMixedArgs, listSize)
+  extFuncAppMixedArgs, listSize, forEach')
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
   paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
@@ -66,8 +69,8 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
-  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
-  typeUnExpr, typeBinExpr)
+  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStmtNoEnd,
+  compEqualPrec, typeUnExpr, typeBinExpr)
 import Drasil.Shared.LanguageRenderer (listSep', valueList)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
@@ -465,23 +468,27 @@ instance CommentStatement MatlabCode (Doc, Terminator) where
   comment = G.comment mlCmtStart
 
 instance ControlStatement MatlabCode (Doc, Terminator) where
-  break = undefined
-  continue = undefined
+  break = mkStmtNoEnd R.break
+  continue = mkStmtNoEnd R.continue
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
   -- output, so a return becomes `result = <value>;`.
   returnStmt v' = do
     v <- zoom lensMStoVS v'
     var mlRet (toState (valueType v)) &= v'
-  throw = undefined
-  ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty (text "end")
-  switch = undefined
-  ifExists = undefined
-  for = undefined
-  forRange = undefined
-  forEach = undefined
-  while = undefined
-  tryCatch = undefined
-  assert = undefined
+  throw errMsg =
+    mkStmtNoEnd (text "error" <> parens (text ("'" ++ errMsg ++ "'")))
+  ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty mlEnd
+  switch = switchAsIf
+  ifExists = M.ifExists
+  for _ _ _ _ = error "MATLAB does not support C-style for loops; use forRange"
+  forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
+  forEach = CS.forEach' mlForEach
+  while = C.while id empty mlEnd
+  tryCatch = G.tryCatch mlTryCatch
+  assert condition errorMessage = do
+    cond <- zoom lensMStoVS condition
+    errMsg <- zoom lensMStoVS errorMessage
+    mkStmtNoEnd (text "assert" <> parens (RC.value cond <> text ", " <> RC.value errMsg))
 
 instance VisibilitySym MatlabCode Doc where
   private = toCode empty
@@ -690,3 +697,30 @@ mlPrint newLn f' _ v' = do
   stmtFromData (text "fprintf" <>
     parens (fileArg <> text ("'" ++ fmt ++ nl ++ "'") <> listSep' <> RC.value v))
     Semi
+
+mlEnd :: Doc
+mlEnd = text "end"
+
+mlForEach :: (CommonRenderSym r vis smt) => r (Variable r) ->
+  r (Value r) -> r (Body r) -> Doc
+mlForEach i lstVar b = vcat [
+  text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
+  indent $ RC.body b,
+  mlEnd]
+
+mlRange :: (CommonRenderSym r vis smt) => SValue r -> SValue r ->
+  SValue r -> SValue r
+mlRange initv finalv stepv = do
+  ini <- initv
+  fin <- finalv
+  stp <- stepv
+  d <- double
+  mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
+
+mlTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+mlTryCatch tryB catchB = vcat [
+  text "try",
+  indent $ RC.body tryB,
+  text "catch" <+> text "e",
+  indent $ RC.body catchB,
+  mlEnd]

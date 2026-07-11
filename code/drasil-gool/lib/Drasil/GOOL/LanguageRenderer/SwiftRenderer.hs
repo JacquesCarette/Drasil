@@ -25,9 +25,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
-import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallMixedArgs, objMethodCallNamedArgs,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
@@ -134,6 +134,7 @@ instance Monad SwiftCode where
 
 instance SharedProg SwiftCode Doc (Doc, Terminator)
 instance SharedStatement SwiftCode (Doc, Terminator)
+instance OOStatement SwiftCode (Doc, Terminator)
 instance OOProg SwiftCode Doc (Doc, Terminator)
 
 instance ProgramSym SwiftCode Doc (Doc, Terminator) where

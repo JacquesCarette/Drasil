@@ -62,7 +62,8 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SMethod,
   IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
   privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue, TypeData, ParamData, SharedStatement, TypeElim)
+  CodeType(..), onStateValue, TypeData, ParamData, SharedStatement, TypeElim,
+  OODeclStatement, OOVariableValue, OOStatement)
 import qualified Drasil.GOOL as S (Set(..)) -- TODO [Brandon Bosman, 07/09/2026]: Merge this with OO
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
@@ -87,7 +88,9 @@ spaceCodeType s = do
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-value :: (OOProg r vis smt) => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
+value
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 value u s t = do
   g <- get
   let cs = g
@@ -181,7 +184,9 @@ classVariable c v = do
       checkCurrent (Map.lookup nm (eMap g)) (onStateValue variableType c) v
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
-mkVal :: (OOProg r vis smt) => CodeVarChunk -> GenState (SValue r)
+mkVal
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
@@ -204,7 +209,9 @@ mkVar v = do
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParam :: (OOProg r vis smt) => ParameterChunk -> GenState (MS (r ParamData))
+mkParam
+  :: (OOStatement r smt, VariableElim r)
+  => ParameterChunk -> GenState (MS (r ParamData))
 mkParam p = do
   v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
@@ -259,9 +266,15 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethod :: (OOProg r vis smt) => ([MS (r ParamData)] -> MSBody r -> SMethod r) ->
-  Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
-  GenState (SMethod r)
+genMethod
+  :: (OOProg r vis smt)
+  => ([MS (r ParamData)] -> MSBody r -> SMethod r)
+  -> Label
+  -> Description
+  -> [ParameterChunk]
+  -> Maybe Description
+  -> [MSBlock r]
+  -> GenState (SMethod r)
 genMethod f n desc p r b = do
   g <- get
   vars <- mapM (mkVar . quantvar) p
@@ -276,12 +289,16 @@ genMethod f n desc p r b = do
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
-genInOutFunc :: (OOProg r vis smt) => ([SVariable r] -> [SVariable r] ->
-    [SVariable r] -> MSBody r -> SMethod r) ->
-  (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
-    [(String, SVariable r)] -> MSBody r -> SMethod r) ->
-  Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
-  [MSBlock r] -> GenState (SMethod r)
+genInOutFunc
+  :: (OOStatement r smt, VariableElim r)
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
+  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r)
+  -> Label
+  -> Description
+  -> [CodeVarChunk]
+  -> [CodeVarChunk]
+  -> [MSBlock r]
+  -> GenState (SMethod r)
 genInOutFunc f docf n desc ins' outs' b = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -300,7 +317,9 @@ genInOutFunc f docf n desc ins' outs' b = do
     bComms bothVs) bod else f inVs outVs bothVs bod
 
 -- | Converts an 'Expr' to a GOOL Value.
-convExpr :: (OOProg r vis smt) => CodeExpr -> GenState (SValue r)
+convExpr
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => CodeExpr -> GenState (SValue r)
 convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
@@ -389,10 +408,14 @@ convExpr (RealI c ri)  = do
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
-convCall :: (OOProg r vis smt) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
-  (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r ->
-  GenState (SValue r)) -> (Name -> Name -> VS (r TypeData) -> [SValue r]
-  -> NamedArgs r -> SValue r) -> GenState (SValue r)
+convCall
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => UID
+  -> [CodeExpr]
+  -> [(UID, CodeExpr)]
+  -> (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r))
+  -> (Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> SValue r)
+  -> GenState (SValue r)
 convCall c x ns f libf = do
   g <- get
   let mem = eMap g
@@ -571,7 +594,9 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
   genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
-convStmt :: (OOProg r vis smt) => FuncStmt -> GenState (MS (r smt))
+convStmt
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => FuncStmt -> GenState (MS (r smt))
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
   v' <- mkVar v
@@ -678,7 +703,9 @@ genDataFunc nameTitle desc ddef = do
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MS Statement's.
-readData :: (OOProg r vis smt) => DataDesc -> GenState [MSBlock r]
+readData
+  :: (OOStatement r smt, TypeElim r, VariableElim r)
+  => DataDesc -> GenState [MSBlock r]
 readData ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -690,7 +717,9 @@ readData ddef = do
     listDec 0 var_linetokens localScope ] else []) ++
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
-  where inData :: (OOProg r vis smt) => Data -> r ScopeData -> GenState [MS (r smt)]
+  where inData
+          :: (OOStatement r smt, VariableElim r)
+          => Data -> r ScopeData -> GenState [MS (r smt)]
         inData (Singleton v) _ = do
             vv <- mkVar v
             return [getFileInput v_infile vv]
@@ -713,8 +742,9 @@ readData ddef = do
                   ] ++ lnV)]
           return $ readLines ls
         ---------------
-        lineData :: (OOProg r vis smt) => Maybe String -> LinePattern -> r ScopeData ->
-          GenState [MS (r smt)]
+        lineData
+          :: (OOStatement r smt, VariableElim r)
+          => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r smt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
           return [stringListVals vs v_linetokens]
@@ -723,23 +753,27 @@ readData ddef = do
           sequence $ clearTemps s ds scp ++ return
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
-        clearTemps :: (OOProg r vis smt) => Maybe String -> [DataItem] -> r ScopeData ->
-          [GenState (MS (r smt))]
+        clearTemps
+          :: (OODeclStatement r smt)
+          => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r smt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (OOProg r vis smt) => String -> DataItem -> r ScopeData ->
-          GenState (MS (r smt))
+        clearTemp
+          :: (OODeclStatement r smt)
+          => String -> DataItem -> r ScopeData -> GenState (MS (r smt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
-        appendTemps :: (OOProg r vis smt) => Maybe String -> [DataItem]
-          -> [GenState (MS (r smt))]
+        appendTemps
+          :: (List r smt, OOVariableValue r)
+          => Maybe String -> [DataItem] -> [GenState (MS (r smt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (OOProg r vis smt) => String -> DataItem ->
-          GenState (MS (r smt))
+        appendTemp
+          :: (List r smt, OOVariableValue r)
+          => String -> DataItem -> GenState (MS (r smt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
           (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)

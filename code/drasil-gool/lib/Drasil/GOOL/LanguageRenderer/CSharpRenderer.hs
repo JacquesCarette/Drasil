@@ -24,9 +24,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
@@ -134,6 +134,7 @@ instance Monad CSharpCode where
 
 instance SharedProg CSharpCode Doc (Doc, Terminator)
 instance SharedStatement CSharpCode (Doc, Terminator)
+instance OOStatement CSharpCode (Doc, Terminator)
 instance OOProg CSharpCode Doc (Doc, Terminator)
 
 instance ProgramSym CSharpCode Doc (Doc, Terminator) where

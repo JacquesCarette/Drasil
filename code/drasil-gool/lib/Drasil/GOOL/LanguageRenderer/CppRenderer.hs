@@ -26,13 +26,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   StringStatement(..), FunctionSym, FuncAppStatement(..), BinderSym(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), convScope, BinderElim (..), (&=))
-import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfMethodCall, InternalValueExp(..),
-  objMethodCall, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..), convTypeOO)
+import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, OOStatement,
+  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
+  OOVariableSym(..), SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall,
+  InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -144,6 +144,7 @@ hdrToSrc (CPPHC a) = CPPSC a
 instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
   (Doc, VisibilityTag) (Doc, Terminator)
 instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
+instance (Pair p) => OOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
   (Doc, VisibilityTag) (Doc, Terminator)
 

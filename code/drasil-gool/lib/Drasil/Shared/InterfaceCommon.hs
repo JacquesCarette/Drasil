@@ -49,8 +49,8 @@ class (UnRepr r TypeData, SharedStatement r smt, FunctionSym r, InternalList r,
 class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
   CommentStatement r smt, Comparison r, ControlStatement r smt,
   DeclStatement r smt, FuncAppStatement r smt, IOStatement r smt, List r smt,
-  Literal r, MathConstant r, NumericExpression r, Reference r, Set r,
-  StringStatement r smt, ValueExpression r, VariableValue r
+  Literal r, MathConstant r, NumericExpression r, ParameterSym r,
+  Reference r, Set r, StringStatement r smt, ValueExpression r, VariableValue r
   ) => SharedStatement r smt
 
 -- Shared between OO and Procedural --

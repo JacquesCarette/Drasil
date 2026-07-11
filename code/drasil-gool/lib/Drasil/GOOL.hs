@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
 module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   SValue, SMethod, CSStateVar, SClass, FSModule, NamedArgs, Initializers,
-  SharedProg, SharedStatement, OOProg, ProgramSym(..), FileSym(..),
+  SharedProg, SharedStatement, OOProg, OOStatement, ProgramSym(..), FileSym(..),
   AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
@@ -47,10 +47,10 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
 import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
-  CSStateVar, Initializers, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..),
-  ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
+  CSStateVar, Initializers, OOProg, OOStatement, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod,
+  initializer, nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
   OOVariableValue, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
   libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), objMethodCall, objMethodCallNamedArgs,

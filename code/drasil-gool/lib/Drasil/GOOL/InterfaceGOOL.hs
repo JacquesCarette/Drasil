@@ -5,7 +5,7 @@ module Drasil.GOOL.InterfaceGOOL (
   -- Types
   GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
-  OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
   OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
@@ -24,8 +24,8 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, SMethod,
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym,
-  VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
+  SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
+  MethodSym, VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
@@ -33,11 +33,14 @@ import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData)
 
-class (SharedProg r vis smt, ProgramSym r vis smt, OOVariableValue r,
-  OODeclStatement r smt, OOFuncAppStatement r smt, OOValueExpression r,
-  InternalValueExp r, GetSet r, ObserverPattern r smt,
-  StrategyPattern r smt
+class (SharedProg r vis smt, OOStatement r smt, ProgramSym r vis smt,
+  ObserverPattern r smt, StrategyPattern r smt
   ) => OOProg r vis smt
+
+class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
+  OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
+  OOValueExpression r
+  ) => OOStatement r smt
 
 type GSProgram a = GS (a (Program a))
 

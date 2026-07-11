@@ -29,7 +29,7 @@ import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
   OOProg, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
   OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
   OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
-  objMethodCallMixedArgs)
+  objMethodCallMixedArgs, OOStatement)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -83,7 +83,7 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (OOProg r vis smt) => ClassType -> Name -> Maybe Name ->
+mkClass :: (ClassSym r vis smt) => ClassType -> Name -> Maybe Name ->
   Description -> [CSStateVar r] -> GenState [SMethod r] ->
     GenState [SMethod r] -> GenState (SClass r)
 mkClass s n l desc vs cstrs mths = do
@@ -102,13 +102,13 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (OOProg r vis smt) => Name -> Maybe Name -> Description ->
+primaryClass :: (ClassSym r vis smt) => Name -> Maybe Name -> Description ->
   [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
   GenState (SClass r)
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (OOProg r vis smt) => Name -> Maybe Name -> Description ->
+auxClass :: (ClassSym r vis smt) => Name -> Maybe Name -> Description ->
   [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
@@ -143,8 +143,9 @@ fCall f vl ns = do
 -- If @m@ is the current module and function is not exported, use GOOL's function for
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
-fApp :: (OOProg r vis smt) => Name -> Name -> VS (r TypeData) -> [SValue r] ->
-  NamedArgs r -> GenState (SValue r)
+fApp
+  :: (OOStatement r smt, TypeElim r)
+  => Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 fApp m s t vl ns = do
   g <- get
   fCall (\cm args nargs ->
@@ -154,12 +155,14 @@ fApp m s t vl ns = do
 
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
-ctorCall :: (OOProg r vis smt) => Name -> VS (r TypeData) -> [SValue r] ->
-  NamedArgs r -> GenState (SValue r)
+ctorCall
+  :: (OOStatement r smt, TypeElim r)
+  => Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
+
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOut :: (OOProg r vis smt) => Name -> Name -> [SValue r] ->
+fAppInOut :: (OOFuncAppStatement r smt) => Name -> Name -> [SValue r] ->
   [SVariable r] -> [SVariable r] -> GenState (MS (r smt))
 fAppInOut m n ins outs both = do
   g <- get

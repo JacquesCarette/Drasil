@@ -111,7 +111,7 @@ dependants u cdb = do
 -- | Find all chunks that depend on a specific one, throwing a hard error if the
 -- dependency chunk is not found.
 dependantsOrErr :: UID -> ChunkDB -> [UID]
-dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
+dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . dependants u
 
 -- | List all chunks with dependants.
 allDependants :: ChunkDB -> M.Map UID [UID]

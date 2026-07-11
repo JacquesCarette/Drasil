@@ -153,7 +153,7 @@ insert0 cdb c = cdb'
 -- chunk).
 insert :: TypeableChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
-  | c ^. uid `elem` chunkRefs c =
+  | S.member (c ^. uid) $ chunkRefs c =
       error $ "Chunk `" ++ show (c ^. uid) ++ "` cannot reference itself as a dependancy."
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."

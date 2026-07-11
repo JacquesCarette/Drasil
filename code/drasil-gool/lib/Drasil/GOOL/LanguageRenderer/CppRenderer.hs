@@ -14,18 +14,18 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
 import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  SVariable, SValue, SMethod, NamedArgs, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), BinderSym(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), convScope,
-  BinderElim (..), (&=))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
+  Label, MSBody, SVariable, SValue, SMethod, NamedArgs, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), BinderSym(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), convScope, BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..), OOValueSym,
@@ -143,6 +143,7 @@ hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
   (Doc, VisibilityTag) (Doc, Terminator)
+instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
   (Doc, VisibilityTag) (Doc, Terminator)
 

@@ -10,19 +10,17 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
-  getCodeType,
-  UnRepr(..), SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), StatementSym(..),
-  AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), funcApp, (&=))
+import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
+  UnRepr(..), SharedProg, SharedStatement, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -93,6 +91,7 @@ instance Monad MatlabCode where
   MLC x >>= f = f x
 
 instance SharedProg MatlabCode Doc (Doc, Terminator)
+instance SharedStatement MatlabCode (Doc, Terminator)
 instance ProcProg MatlabCode Doc (Doc, Terminator)
 
 instance ProgramSym MatlabCode Doc (Doc, Terminator) where

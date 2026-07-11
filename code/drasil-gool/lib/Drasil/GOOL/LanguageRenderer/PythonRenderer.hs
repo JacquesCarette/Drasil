@@ -12,9 +12,9 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
-  SVariable, SValue, MixedCtorCall, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
+  Label, Library, SVariable, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
@@ -122,6 +122,7 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance SharedProg PythonCode Doc (Doc, Terminator)
+instance SharedStatement PythonCode (Doc, Terminator)
 instance OOProg PythonCode Doc (Doc, Terminator)
 
 instance ProgramSym PythonCode Doc (Doc, Terminator) where

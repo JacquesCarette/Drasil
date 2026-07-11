@@ -128,8 +128,7 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
-    in set lbldCntnt (si ^. lbldCntnt ++ tglcs)
-     $ set systemdb (insertAll tglcs db)
+    in set systemdb (insertAll tglcs db)
      $ set traceTable tdb
      $ set refbyTable (invert tdb) si
   | otherwise = si
@@ -152,14 +151,13 @@ fillReferences allSections cites si = si2
     gdefs   = si ^. genDefns
     imods   = si ^. instModels
     tmods   = si ^. theoryModels
-    lblCon  = si ^. lbldCntnt
     concIns = findAllConcInsts chkdb
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
-      ++ map ref tmods ++ map ref concIns ++ map ref lblCon
+      ++ map ref tmods ++ map ref concIns
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').

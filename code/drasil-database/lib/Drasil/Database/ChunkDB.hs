@@ -10,7 +10,7 @@ module Drasil.Database.ChunkDB (
   findUnused,
   find, findOrErr,
   findAll, findAll',
-  dependants, dependantsOrErr,
+  dependants, dependantsOrErr, allDependants,
   findTypeOf,
   insert, insertAll,
   -- * Temporary functions
@@ -112,6 +112,10 @@ dependants u cdb = do
 -- dependency chunk is not found.
 dependantsOrErr :: UID -> ChunkDB -> [UID]
 dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
+
+-- | List all chunks with dependants.
+allDependants :: ChunkDB -> M.Map UID [UID]
+allDependants = M.filter (not . null) . M.map snd . chunkTable
 
 -- | Find the type of a chunk by its 'UID'.
 findTypeOf :: UID -> ChunkDB -> Maybe TypeRep

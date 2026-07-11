@@ -5,7 +5,7 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.SRS.DocumentLanguage (mkDoc, findAllRefs) where
+module Drasil.SRS.DocumentLanguage (mkDoc) where
 
 -- General Haskell
 import Control.Lens ((^.), set)
@@ -145,7 +145,7 @@ fillReferences allSections cites si = si2
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
     -- get refs from SRSDecl. Should include all section labels and labelled content.
-    refsFromSRS = concatMap findAllRefs allSections
+    refsFromSRS = concatMap extractRefs allSections
     -- get refs from the stuff already inside the chunk database
     ddefs   = si ^. dataDefns
     gdefs   = si ^. genDefns
@@ -159,15 +159,6 @@ fillReferences allSections cites si = si2
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
-
--- | Recursively find all references in a section (meant for getting at 'LabelledContent').
-findAllRefs :: Section -> [Reference]
-findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
-  where
-    findRefSecCons :: SecCons -> [Reference]
-    findRefSecCons (Sub s) = findAllRefs s
-    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
-    findRefSecCons _ = []
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]

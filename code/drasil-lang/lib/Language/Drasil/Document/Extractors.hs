@@ -4,7 +4,8 @@ module Language.Drasil.Document.Extractors (
   extractChRefs,
   getSec,
   extractSectionsBib,
-  resolveBibliography
+  resolveBibliography,
+  extractRefs
 ) where
 
 import Control.Lens ((^.))
@@ -13,10 +14,14 @@ import Data.Maybe (mapMaybe)
 import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB, find)
-import Language.Drasil hiding (getCitations, Manual, Verb)
+import Language.Drasil.Chunk.Citation (Citation, BibRef)
+import Language.Drasil.Data.Citation (compareAuthYearTitle)
+import Language.Drasil.Development (lnames)
 import Language.Drasil.Document.Core
 import Language.Drasil.Document.Sections
-import Language.Drasil.Development (lnames)
+import Language.Drasil.Document.Reference
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.Sentence (Sentence(..), eS, eS')
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.
 extractChRefs :: HasContents a => [a] -> S.Set UID
@@ -107,3 +112,12 @@ resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
 resolveBibliography db uids = sortBy compareAuthYearTitle cites
   where
     cites = mapMaybe (`find` db) (S.toList uids)
+
+-- | Recursively find all references in a section (meant for getting at 'LabelledContent').
+extractRefs :: Section -> [Reference]
+extractRefs (Section _ cs r) = r : concatMap findRefSecCons cs
+  where
+    findRefSecCons :: SecCons -> [Reference]
+    findRefSecCons (Sub s) = extractRefs s
+    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
+    findRefSecCons _ = []

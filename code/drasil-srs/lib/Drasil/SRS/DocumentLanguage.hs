@@ -12,7 +12,7 @@ import Control.Lens ((^.), set)
 import Data.Either (rights)
 import Data.Function (on)
 import Data.List (nub, sortBy, (\\))
-import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
+import Data.Maybe (maybeToList, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
 import qualified Data.Map.Strict as M
@@ -23,7 +23,7 @@ import Language.Drasil.Document
 import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts,
   TermAbbr, shortForm, termResolve')
 
@@ -48,7 +48,7 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
 import Drasil.SRS.TraceTable (generateTraceMap)
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -159,18 +159,6 @@ fillReferences allSections cites si = si2
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
-
--- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
-extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
-
--- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
--- their units (i.e., what units their units are defined with).
-collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
-
-getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- * Section Creator Functions
 

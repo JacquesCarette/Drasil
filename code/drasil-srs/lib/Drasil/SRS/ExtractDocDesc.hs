@@ -3,21 +3,24 @@
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.SRS.ExtractDocDesc (
   getDocDesc, egetDocDesc,
-  sentencePlate
+  sentencePlate,
+  extractUnits
 ) where
 
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, mapMaybe)
 
-import Language.Drasil (Sentence, Definition(..), ModelExpr,
-  HasAdditionalNotes(..), Express(express))
+import Drasil.Database (ChunkDB, HasUID (..), findOrErr)
+import Language.Drasil (Sentence, Definition(..), ModelExpr, HasAdditionalNotes(..),
+  Express(express), DefinedQuantityDict, UnitDefn, Quantity, MayHaveUnit(..), IsUnit(..))
 import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
   sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.SRS.DocumentLanguage.Core
+import Drasil.SRS.GetChunks (resolveAllVars)
 import Drasil.SRS.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
@@ -147,3 +150,15 @@ getDocDesc = fmGetDocDesc (sentencePlate id)
 -- description), so we use this function. But 'sentencePlate' does not include
 -- all 'Sentence's! Some only appear when rendering (at least, after
 -- `mkSections` is used on a `DocDesc` to create `[Section]`).
+
+-- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
+extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
+extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
+
+-- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
+-- their units (i.e., what units their units are defined with).
+collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
+
+getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
+getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

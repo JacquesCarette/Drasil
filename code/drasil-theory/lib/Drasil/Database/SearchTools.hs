@@ -10,6 +10,7 @@ module Drasil.Database.SearchTools (
   -- * Resolvers
   termResolve, termResolve',
   defResolve, defResolve',
+  refResolve,
   findAllConcInsts
 ) where
 
@@ -17,6 +18,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, UID, find, findAll)
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil.DataDefinition (DataDefinition)
 import Theory.Drasil.InstanceModel (InstanceModel)
 import Theory.Drasil.GenDefn (GenDefn)
@@ -50,8 +52,8 @@ termResolve' = termResolve TermAbbr
 
 data DomDefn = DomDefn { domain :: [UID], definition :: Sentence }
 
--- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing
--- is found, an error is thrown.
+-- | Looks up a 'UID' in the 'ChunkDB' for a chunk's definition concept domain
+-- and definition. If nothing is found, an error is thrown.
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve f db trg
   | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
@@ -68,6 +70,18 @@ defResolve f db trg
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn
+
+-- | Looks up a 'UID' in a 'ChunkDB' with a /referrable/ handle.
+refResolve :: ChunkDB -> UID -> Maybe Reference
+refResolve db trg
+  | (Just c) <- find trg db :: Maybe DataDefinition      = Just $ ref c
+  | (Just c) <- find trg db :: Maybe InstanceModel       = Just $ ref c
+  | (Just c) <- find trg db :: Maybe GenDefn             = Just $ ref c
+  | (Just c) <- find trg db :: Maybe TheoryModel         = Just $ ref c
+  | (Just c) <- find trg db :: Maybe ConceptInstance     = Just $ ref c
+  | (Just c) <- find trg db :: Maybe LabelledContent     = Just $ ref c
+  | (Just c) <- find trg db :: Maybe Citation            = Just $ ref c
+  | otherwise = Nothing
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll

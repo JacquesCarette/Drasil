@@ -8,11 +8,13 @@ module Language.Drasil.Printing.PrintingInformation (
   , piSys, refFind
 ) where
 
+import Control.Applicative (Alternative(..))
 import Control.Lens (makeLenses, (^.))
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, ChunkDB)
+import Drasil.Database.SearchTools (refResolve)
 import Language.Drasil (Stage(..))
 import Language.Drasil.Document (Reference)
 
@@ -34,5 +36,6 @@ piSys :: ChunkDB -> M.Map UID Reference -> Stage -> Notation -> PrintingInformat
 piSys = PI
 
 refFind :: UID -> PrintingInformation -> Reference
-refFind u pinfo = fromMaybe (error $ "`" ++ show u ++ "` not found in Reference table!!!")
-  $ M.lookup u $ pinfo ^. refTable
+refFind u pinfo = go $ M.lookup u (pinfo ^. refTable)
+                   <|> refResolve (pinfo ^. sysdb) u
+  where go = fromMaybe (error $ "`" ++ show u ++ "` not found in Reference table!!!")

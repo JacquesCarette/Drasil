@@ -194,7 +194,7 @@ traceyGraphPath :: String -> String
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
 traceyGraphPaths = map (\x -> resourcePath ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
+traceyGraphGetRefs = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference x (URI y) (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
 -- for actual use in creating the graph figures
 traceyGraphPath f = resourcePath ++ "/" ++ f ++ ".svg"
 
@@ -204,4 +204,4 @@ resourcePath = "../../TraceyGraph"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]
-folderList' = map (Flat . (\x -> Ref (x +++. "Link") EmptyS None)) traceGUIDs
+folderList' = map (Flat . (\x -> Ref x EmptyS None)) traceGUIDs

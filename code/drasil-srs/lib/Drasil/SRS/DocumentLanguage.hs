@@ -141,10 +141,13 @@ buildTraceMaps sd si
 fillReferences :: SmithEtAlSRS -> SmithEtAlSRS
 fillReferences si = si2
   where
+    traceGs = map (ref . makeTabRef' . getTraceConfigUID) $ traceMatStandard si
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $
-         map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
+      -- TRACEABILITY GRAPHS ===================================================
+         traceGs -- Document-INTERNAL traceability graph LABELS
+      ++ traceyGraphGetRefs -- Document-EXTERNAL traceability graph FILE URIs
+      -- SECTIONS ==============================================================
       ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
 
 -- * Section Creator Functions

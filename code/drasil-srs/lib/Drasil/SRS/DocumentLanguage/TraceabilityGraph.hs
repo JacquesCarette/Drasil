@@ -11,7 +11,7 @@ import Data.Maybe (fromMaybe)
 import Language.Drasil hiding (Space(..))
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
+import Drasil.Database (UID, find, isRegistered, mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System (systemdb)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
@@ -194,7 +194,7 @@ traceyGraphPath :: String -> String
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
 traceyGraphPaths = map (\x -> resourcePath ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference x (URI y) (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
+traceyGraphGetRefs = zipWith (\x y -> Reference x (URI y) (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
 -- for actual use in creating the graph figures
 traceyGraphPath f = resourcePath ++ "/" ++ f ++ ".svg"
 

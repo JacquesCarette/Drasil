@@ -122,5 +122,5 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
 traceMatStandard :: SmithEtAlSRS -> [TraceConfig]
-traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
-  traceMatOtherReq]
+-- FIXME: This is used in an order-specific fashion...
+traceMatStandard s = [traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement, traceMatOtherReq s]

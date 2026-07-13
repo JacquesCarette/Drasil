@@ -4,9 +4,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, SMethod,
-  NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
-  InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -43,8 +43,8 @@ type Library = String
 
 class (UnRepr r TypeData, SharedStatement r smt, FunctionSym r, InternalList r,
   VariableValue r, IndexTranslator r, TypeElim r,
-  VariableElim r, MethodSym r vis smt, ScopeSym r, BinderSym r
-  ) => SharedProg r vis smt
+  VariableElim r, MethodSym r vis smt md, ScopeSym r, BinderSym r
+  ) => SharedProg r vis smt md
 
 class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
   CommandLineArgs r, CommentStatement r smt, Comparison r,
@@ -530,31 +530,28 @@ class (VariableSym r) => ParameterSym r where
   param :: SVariable r -> MS (r ParamData)
   pointerParam :: SVariable r -> MS (r ParamData)
 
-type SMethod a = MS (a (Method a))
-
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
-  MSBody r -> SMethod r
+type InOutFunc r md = [SVariable r] -> [SVariable r] -> [SVariable r] ->
+  MSBody r -> MS (r md)
 -- Parameters are: brief description of function, input descriptions and
 -- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
-type DocInOutFunc r = String -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
+type DocInOutFunc r md = String -> [(String, SVariable r)] ->
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> MS (r md)
 
-class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis smt
+class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis smt md | r -> md
   where
-  type Method r
-  docMain :: MSBody r -> SMethod r
+  docMain :: MSBody r -> MS (r md)
 
   function :: Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] ->
-    MSBody r -> SMethod r
-  mainFunction  :: MSBody r -> SMethod r
+    MSBody r -> MS (r md)
+  mainFunction  :: MSBody r -> MS (r md)
   -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
-  docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
+  docFunc :: String -> [String] -> Maybe String -> MS (r md) -> MS (r md)
 
-  inOutFunc :: Label -> r vis -> InOutFunc r
-  docInOutFunc :: Label -> r vis -> DocInOutFunc r
+  inOutFunc :: Label -> r vis -> InOutFunc r md
+  docInOutFunc :: Label -> r vis -> DocInOutFunc r md
 
 -- Utility
 

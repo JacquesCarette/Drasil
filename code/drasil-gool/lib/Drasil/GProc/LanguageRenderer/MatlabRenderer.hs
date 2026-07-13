@@ -90,24 +90,24 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode Doc (Doc, Terminator)
+instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
 instance SharedStatement MatlabCode (Doc, Terminator)
-instance ProcProg MatlabCode Doc (Doc, Terminator)
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) where
+instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData where
   type Program MatlabCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc (Doc, Terminator)
-instance ProcRenderSym MatlabCode Doc (Doc, Terminator)
+instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode Doc (Doc, Terminator) where
+instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
   type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -511,8 +511,7 @@ instance ParamElim MatlabCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc (Doc, Terminator) where
-  type Method MatlabCode = MethodData
+instance MethodSym MatlabCode Doc (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -528,12 +527,12 @@ instance MethodSym MatlabCode Doc (Doc, Terminator) where
     pure $ toCode $ mthd $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod MatlabCode where
+instance RenderMethod MatlabCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance ProcRenderMethod MatlabCode Doc where
+instance ProcRenderMethod MatlabCode Doc MethodData where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
@@ -544,10 +543,10 @@ instance ProcRenderMethod MatlabCode Doc where
     let outs = [text mlRet | cType (unMLC tp) /= Void]
     pure $ toCode $ mthd $ mlFuncDoc n outs pms (RC.body bod)
 
-instance MethodElim MatlabCode where
+instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode Doc (Doc, Terminator) where
+instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
   type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes

@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
+  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -132,24 +132,24 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance SharedProg JavaCode Doc (Doc, Terminator)
+instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JavaCode (Doc, Terminator)
 instance OOStatement JavaCode (Doc, Terminator)
-instance OOProg JavaCode Doc (Doc, Terminator)
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym JavaCode Doc (Doc, Terminator) where
+instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData where
   type Program JavaCode = ProgData
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode Doc (Doc, Terminator)
-instance OORenderSym JavaCode Doc (Doc, Terminator)
+instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode Doc (Doc, Terminator) where
+instance FileSym JavaCode Doc (Doc, Terminator) MethodData where
   type File JavaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -670,8 +670,7 @@ instance ParamElim JavaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode Doc (Doc, Terminator) where
-  type Method JavaCode = MethodData
+instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string mainFunc
@@ -680,7 +679,7 @@ instance MethodSym JavaCode Doc (Doc, Terminator) where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode Doc (Doc, Terminator) where
+instance OOMethodSym JavaCode Doc (Doc, Terminator) MethodData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -689,13 +688,13 @@ instance OOMethodSym JavaCode Doc (Doc, Terminator) where
   inOutMethod n s p = jInOut (method n s p)
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
 
-instance RenderMethod JavaCode where
+instance RenderMethod JavaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod JavaCode Doc where
+instance OORenderMethod JavaCode Doc MethodData where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -710,7 +709,7 @@ instance OORenderMethod JavaCode Doc where
   intFunc = C.intFunc
   destructor _ = error $ CP.destructorError jName
 
-instance MethodElim JavaCode where
+instance MethodElim JavaCode MethodData where
   method = mthdDoc . unJC
 
 instance StateVarSym JavaCode Doc where
@@ -722,7 +721,7 @@ instance StateVarSym JavaCode Doc where
 instance StateVarElim JavaCode where
   stateVar = unJC
 
-instance ClassSym JavaCode Doc (Doc, Terminator) where
+instance ClassSym JavaCode Doc (Doc, Terminator) MethodData where
   type Class JavaCode = Doc
   buildClass = G.buildClass
   extraClass = jExtraClass
@@ -730,7 +729,7 @@ instance ClassSym JavaCode Doc (Doc, Terminator) where
 
   docClass = CP.doxClass
 
-instance RenderClass JavaCode Doc where
+instance RenderClass JavaCode Doc MethodData where
   intClass = CP.intClass R.class'
 
   inherit n = toCode $ maybe empty ((jExtends <+>) . text) n
@@ -741,7 +740,7 @@ instance RenderClass JavaCode Doc where
 instance ClassElim JavaCode where
   class' = unJC
 
-instance ModuleSym JavaCode Doc (Doc, Terminator) where
+instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData where
   type Module JavaCode = ModData
   buildModule n = CP.buildModule' n langImport
 
@@ -1057,9 +1056,9 @@ jInOutCall f n ins outs both = fCall rets
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
 jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
-  MSBody JavaCode -> SMethod JavaCode) -> [SVariable JavaCode] ->
+  MSBody JavaCode -> MS (JavaCode md)) -> [SVariable JavaCode] ->
   [SVariable JavaCode] -> [SVariable JavaCode] -> MSBody JavaCode ->
-  SMethod JavaCode
+  MS (JavaCode md)
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
@@ -1084,10 +1083,10 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (RenderMethod r) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String ->
+jDocInOut :: (RenderMethod r md) => ([SVariable r] ->
+  [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md)) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MSBody r -> SMethod r
+  [(String, SVariable r)] -> MSBody r -> MS (r md)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
@@ -1100,8 +1099,8 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass
-  :: (RenderClass r vis, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  :: (RenderClass r vis md, RenderVisibility r vis)
+  => Label -> Maybe Label -> [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

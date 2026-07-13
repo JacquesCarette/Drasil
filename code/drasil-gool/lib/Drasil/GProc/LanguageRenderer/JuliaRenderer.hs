@@ -15,9 +15,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, SValue, SVariable, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  Label, SValue, SVariable, MSBlock, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), NativeVector(..),
@@ -113,24 +113,24 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance SharedProg JuliaCode Doc (Doc, Terminator)
+instance SharedProg JuliaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JuliaCode (Doc, Terminator)
-instance ProcProg JuliaCode Doc (Doc, Terminator)
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) where
+instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData where
   type Program JuliaCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc (Doc, Terminator)
-instance ProcRenderSym JuliaCode Doc (Doc, Terminator)
+instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
-instance FileSym JuliaCode Doc (Doc, Terminator) where
+instance FileSym JuliaCode Doc (Doc, Terminator) MethodData where
   type File JuliaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -566,8 +566,7 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc (Doc, Terminator) where
-  type Method JuliaCode = MethodData
+instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -576,20 +575,20 @@ instance MethodSym JuliaCode Doc (Doc, Terminator) where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod JuliaCode where
+instance RenderMethod JuliaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance ProcRenderMethod JuliaCode Doc where
+instance ProcRenderMethod JuliaCode Doc MethodData where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
     toCode . mthd . jlIntFunc n pms <$> b
 
-instance MethodElim JuliaCode where
+instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
-instance ModuleSym JuliaCode Doc (Doc, Terminator) where
+instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData where
   type Module JuliaCode = ModData
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
@@ -857,7 +856,8 @@ jlForEach i lstVar b = vcat [
   jlEnd]
 
 -- | Creates the contents of a module in Julia
-jlModContents :: Label -> [Label] -> [SMethod JuliaCode] -> FSModule JuliaCode
+jlModContents
+  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FSModule JuliaCode
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports

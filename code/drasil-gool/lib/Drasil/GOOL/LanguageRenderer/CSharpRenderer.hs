@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
+  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -132,25 +132,25 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance SharedProg CSharpCode Doc (Doc, Terminator)
+instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
 instance SharedStatement CSharpCode (Doc, Terminator)
 instance OOStatement CSharpCode (Doc, Terminator)
-instance OOProg CSharpCode Doc (Doc, Terminator)
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) where
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData where
   type Program CSharpCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc (Doc, Terminator)
-instance OORenderSym CSharpCode Doc (Doc, Terminator)
+instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) where
+instance FileSym CSharpCode Doc (Doc, Terminator) MethodData where
   type File CSharpCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -647,8 +647,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc (Doc, Terminator) where
-  type Method CSharpCode = MethodData
+instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -657,7 +656,7 @@ instance MethodSym CSharpCode Doc (Doc, Terminator) where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc (Doc, Terminator) where
+instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -666,13 +665,13 @@ instance OOMethodSym CSharpCode Doc (Doc, Terminator) where
   inOutMethod n s p = csInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CSharpCode where
+instance RenderMethod CSharpCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod CSharpCode Doc where
+instance OORenderMethod CSharpCode Doc MethodData where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
@@ -681,7 +680,7 @@ instance OORenderMethod CSharpCode Doc where
   intFunc = C.intFunc
   destructor _ = error $ CP.destructorError csName
 
-instance MethodElim CSharpCode where
+instance MethodElim CSharpCode MethodData where
   method = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode Doc where
@@ -693,7 +692,7 @@ instance StateVarSym CSharpCode Doc where
 instance StateVarElim CSharpCode where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc (Doc, Terminator) where
+instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
@@ -701,7 +700,7 @@ instance ClassSym CSharpCode Doc (Doc, Terminator) where
 
   docClass = CP.doxClass
 
-instance RenderClass CSharpCode Doc where
+instance RenderClass CSharpCode Doc MethodData where
   intClass = CP.intClass R.class'
 
   inherit = CP.inherit
@@ -712,7 +711,7 @@ instance RenderClass CSharpCode Doc where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) where
+instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData where
   type Module CSharpCode = ModData
   buildModule n = CP.buildModule' n langImport
 
@@ -933,9 +932,9 @@ csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MSBody CSharpCode -> SMethod CSharpCode) ->
+  MSBody CSharpCode -> MS (CSharpCode md)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MSBody CSharpCode -> SMethod CSharpCode
+  MSBody CSharpCode -> MS (CSharpCode md)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))

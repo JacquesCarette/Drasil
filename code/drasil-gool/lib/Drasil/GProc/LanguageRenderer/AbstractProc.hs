@@ -6,7 +6,7 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, SValue, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -58,8 +58,8 @@ fileFromData f fpath mdl' = do
 -- Parameters: Module name, Doc for imports, Doc to put at bottom of module,
 -- methods
 buildModule
-  :: (RC.MethodElim r, RP.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> [SMethod r] -> FSModule r
+  :: (RC.MethodElim r md, RP.RenderMod r)
+  => Label -> FS Doc -> FS Doc -> [MS (r md)] -> FSModule r
 buildModule n imps bot fs = RP.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
@@ -106,7 +106,7 @@ arrayElem arr' i' = do
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (RP.ProcRenderSym r vis smt) => SVariable r -> r ScopeData ->
+funcDecDef :: (RP.ProcRenderSym r vis smt md) => SVariable r -> r ScopeData ->
   [SVariable r] -> MSBody r -> MS (r smt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
@@ -118,6 +118,6 @@ funcDecDef v scp ps b = do
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
-function :: (RP.ProcRenderMethod r vis) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+function :: (RP.ProcRenderMethod r vis md) => Label -> r vis -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MSBody r -> MS (r md)
 function n s t = RP.intFunc False n s (RC.mType t)

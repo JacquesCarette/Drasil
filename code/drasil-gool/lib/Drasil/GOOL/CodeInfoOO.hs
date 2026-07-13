@@ -6,7 +6,7 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
-  SMethod, SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
+  SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -52,15 +52,15 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () ()
+instance SharedProg CodeInfoOO () () ()
 instance SharedStatement CodeInfoOO ()
 instance OOStatement CodeInfoOO ()
-instance OOProg CodeInfoOO () ()
+instance OOProg CodeInfoOO () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () () where
+instance ProgramSym CodeInfoOO () () () where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -68,7 +68,7 @@ instance ProgramSym CodeInfoOO () () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO () () where
+instance FileSym CodeInfoOO () () () where
   type File CodeInfoOO = ()
   fileDoc = execute1
 
@@ -415,8 +415,7 @@ instance ParameterSym CodeInfoOO where
   param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () where
-  type Method CodeInfoOO = ()
+instance MethodSym CodeInfoOO () () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -427,7 +426,7 @@ instance MethodSym CodeInfoOO () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () where
+instance OOMethodSym CodeInfoOO () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -447,7 +446,7 @@ instance StateVarSym CodeInfoOO () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () where
+instance ClassSym CodeInfoOO () () () where
   type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
@@ -467,7 +466,7 @@ instance ClassSym CodeInfoOO () () where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfoOO () () where
+instance ModuleSym CodeInfoOO () () () where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
@@ -486,7 +485,7 @@ noInfoScope = return $ sd Global -- Hack
 noInfoBinder :: VSBinder CodeInfoOO
 noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
 
-updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
+updateMEMandCM :: String -> MSBody CodeInfoOO -> MS (CodeInfoOO ())
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)

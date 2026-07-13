@@ -22,12 +22,12 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, SVariable, SValue, SMethod, NamedArgs, MixedCall, MixedCtorCall,
-  BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
-  VariableSym(Variable), VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(Value, valueType),
-  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
+  MSBlock, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body),
+  bodyStatements, oneLiner, BlockSym(Block), VariableSym(Variable),
+  VisibilitySym(..), VariableElim(variableName, variableType),
+  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
+  TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
@@ -504,22 +504,22 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis)
+  :: (OORenderMethod r vis md)
   => Label
   -> r vis
   -> r (Attachment r)
   -> VS (r TypeData)
   -> [MS (r ParamData)]
   -> MSBody r
-  -> SMethod r
+  -> MS (r md)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis smt) => SVariable r -> SMethod r
+getMethod :: (OORenderSym r vis smt md) => SVariable r -> MS (r md)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis smt) => SVariable r -> SMethod r
+setMethod :: (OORenderSym r vis smt md) => SVariable r -> MS (r md)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -528,34 +528,34 @@ initStmts :: (OOStatement r smt) => Initializers r -> MSBody r
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r, OORenderMethod r vis)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r
+  :: (AttachmentSym r, OORenderMethod r vis md)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r md)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (RenderMethod r) => FuncDocRenderer -> String ->
-  [String] -> [String] -> SMethod r -> SMethod r
+docFuncRepr :: (RenderMethod r md) => FuncDocRenderer -> String ->
+  [String] -> [String] -> MS (r md) -> MS (r md)
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderMethod r) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> SMethod r -> SMethod r
+docFunc :: (RenderMethod r md) => FuncDocRenderer -> String -> [String] ->
+  Maybe String -> MS (r md) -> MS (r md)
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  :: (RenderClass r vis md, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+implementingClass :: (RenderClass r vis md, VisibilitySym r vis) => Label -> [Label] ->
+  [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis)
+  :: (RenderClass r vis md)
   => ClassDocRenderer -> String -> SClass r -> SClass r
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 

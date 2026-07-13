@@ -21,11 +21,11 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, SMethod,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
+  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
-  MethodSym, VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
+  MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
@@ -33,9 +33,9 @@ import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData)
 
-class (SharedProg r vis smt, OOStatement r smt, ProgramSym r vis smt,
+class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
   ObserverPattern r smt, StrategyPattern r smt
-  ) => OOProg r vis smt
+  ) => OOProg r vis smt md
 
 class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
   OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
@@ -44,13 +44,13 @@ class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym r vis smt) => ProgramSym r vis smt where
+class (FileSym r vis smt md) => ProgramSym r vis smt md where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
-class (ModuleSym r vis smt) => FileSym r vis smt where
+class (ModuleSym r vis smt md) => FileSym r vis smt md where
   type File r
   fileDoc :: FSModule r -> SFile r
 
@@ -59,57 +59,57 @@ class (ModuleSym r vis smt) => FileSym r vis smt where
 
 type FSModule a = FS (a (Module a))
 
-class (ClassSym r vis smt) => ModuleSym r vis smt where
+class (ClassSym r vis smt md) => ModuleSym r vis smt md where
   type Module r
   -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
 
 type SClass a = CS (a (Class a))
 
-class (OOMethodSym r vis smt, StateVarSym r vis) => ClassSym r vis smt where
+class (OOMethodSym r vis smt md, StateVarSym r vis) => ClassSym r vis smt md where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  buildClass :: Maybe Label -> [CSStateVar r] -> [MS (r md)] ->
+    [MS (r md)] -> SClass r
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [MS (r md)] ->
+    [MS (r md)] -> SClass r
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [MS (r md)] ->
+    [MS (r md)] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis smt, AttachmentSym r) => OOMethodSym r vis smt where
+class (MethodSym r vis smt md, AttachmentSym r) => OOMethodSym r vis smt md where
   method      :: Label -> r vis -> r (Attachment r) -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MSBody r -> SMethod r
-  getMethod   :: SVariable r -> SMethod r
-  setMethod   :: SVariable r -> SMethod r
-  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> SMethod r
+    [MS (r ParamData)] -> MSBody r -> MS (r md)
+  getMethod   :: SVariable r -> MS (r md)
+  setMethod   :: SVariable r -> MS (r md)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
 
   -- inOutMethod and docInOutMethod both need the Attachment parameter
-  inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r
-  docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r
+  inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r md
+  docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r md
 
-privMethod :: (OOMethodSym r vis smt) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+privMethod :: (OOMethodSym r vis smt md) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MSBody r -> MS (r md)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis smt) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+pubMethod :: (OOMethodSym r vis smt md) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MSBody r -> MS (r md)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis smt) => [MS (r ParamData)] ->
-  Initializers r -> SMethod r
+initializer :: (OOMethodSym r vis smt md) => [MS (r ParamData)] ->
+  Initializers r -> MS (r md)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis smt) => [MS (r ParamData)] ->
-  MSBody r -> SMethod r
+nonInitConstructor :: (OOMethodSym r vis smt md) => [MS (r ParamData)] ->
+  MSBody r -> MS (r md)
 nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))

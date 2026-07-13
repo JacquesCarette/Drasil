@@ -91,7 +91,7 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ exampleRefs (repoRt fl) (exRt fl)
   ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
-  ++ concatMap extractRefs (sections fl)
+  ++ concatMap extractLCRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI

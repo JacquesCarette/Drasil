@@ -145,7 +145,7 @@ fillReferences allSections cites si = si2
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
     -- get refs from SRSDecl. Should include all section labels and labelled content.
-    refsFromSRS = concatMap extractRefs allSections
+    refsFromSRS = concatMap extractLCRefs allSections
     -- get refs from the stuff already inside the chunk database
     ddefs   = si ^. dataDefns
     gdefs   = si ^. genDefns

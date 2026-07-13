@@ -191,7 +191,6 @@ instance BodyElim JavaCode where
   body = unJC
 
 instance BlockSym JavaCode (Doc, Terminator) where
-  type Block JavaCode = Doc
   block = G.block
 
 instance RenderBlock JavaCode where

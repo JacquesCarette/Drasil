@@ -81,13 +81,17 @@ instance AttachmentSym CodeInfoOO where
 
 instance BodySym CodeInfoOO () where
   type Body CodeInfoOO = ()
-  body = executeList
+  body b = do
+    sequence_ b
+    return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
   addComments _ _ = noInfo
 
 instance BlockSym CodeInfoOO () where
-  type Block CodeInfoOO = ()
-  block = executeList
+  block b = do
+    sequence_ b
+    return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
+
 
 instance TypeSym CodeInfoOO where
   bool            = return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
@@ -284,7 +288,7 @@ instance InternalList CodeInfoOO where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
-    noInfo
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
@@ -405,7 +409,7 @@ instance StrategyPattern CodeInfoOO () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
-    noInfo
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VisibilitySym CodeInfoOO () where
   private = return ()

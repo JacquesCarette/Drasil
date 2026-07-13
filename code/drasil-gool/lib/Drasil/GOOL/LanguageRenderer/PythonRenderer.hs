@@ -181,7 +181,6 @@ instance BodyElim PythonCode where
   body = unPC
 
 instance BlockSym PythonCode (Doc, Terminator) where
-  type Block PythonCode = Doc
   block = G.block
 
 instance RenderBlock PythonCode where

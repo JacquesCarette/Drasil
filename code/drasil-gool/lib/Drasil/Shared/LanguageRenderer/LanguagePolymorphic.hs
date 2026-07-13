@@ -22,12 +22,12 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, SVariable, SValue, SMethod, NamedArgs, MixedCall, MixedCtorCall,
-  BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
-  VariableSym(Variable), VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(Value, valueType),
-  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
+  MSBlock, Block, SVariable, SValue, SMethod, NamedArgs, MixedCall,
+  MixedCtorCall, BodySym(Body), bodyStatements, oneLiner, VariableSym(Variable),
+  VisibilitySym(..), VariableElim(variableName, variableType),
+  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
+  TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
@@ -536,8 +536,8 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
-fileDoc :: (OORenderSym r vis smt) => String -> (r (Module r) -> r (Block r)) ->
-  r (Block r) -> FSModule r -> SFile r
+fileDoc :: (OORenderSym r vis smt) => String -> (r (Module r) -> r Block) ->
+  r Block -> FSModule r -> SFile r
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName

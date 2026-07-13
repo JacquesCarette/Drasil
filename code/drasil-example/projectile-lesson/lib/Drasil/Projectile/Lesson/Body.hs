@@ -1,6 +1,5 @@
 module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
-import Data.List (nub)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.Database (ChunkDB, mkUid)
@@ -58,4 +57,4 @@ projectileMotionLesson :: CI
 projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "projectile-lesson" []
 
 allRefs :: [Reference]
-allRefs = nub (figRefs ++ eqnRefs)
+allRefs = figRefs ++ eqnRefs

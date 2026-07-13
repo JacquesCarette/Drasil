@@ -1,4 +1,3 @@
-
 % VectorTest.m
 % Tests native vector operations.
 % - Authors: Drasil

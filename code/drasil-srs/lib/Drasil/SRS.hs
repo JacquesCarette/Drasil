@@ -18,7 +18,7 @@ module Drasil.SRS (
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- *** Functions
   -- Drasil.DocumentLanguage
-  mkDoc, findAllRefs,
+  mkDoc,
   -- * Subsection Functions
   -- ** Definitions and Models
   -- Drasil.DocumentLanguage.Definitions
@@ -60,7 +60,7 @@ module Drasil.SRS (
 import Drasil.SRS.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.SRS.DocumentLanguage (mkDoc, findAllRefs)
+import Drasil.SRS.DocumentLanguage (mkDoc)
 import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),

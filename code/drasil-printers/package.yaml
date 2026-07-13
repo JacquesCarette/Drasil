@@ -28,7 +28,6 @@ dependencies:
 - drasil-file-handling
 - drasil-lang
 - drasil-theory
-- drasil-utils
 - prettyprinter
 - split
 - text

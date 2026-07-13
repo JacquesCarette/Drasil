@@ -12,7 +12,6 @@ where
 
 import Control.Lens ((^.))
 import Data.Char (toLower)
-import Data.Maybe (maybeToList)
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
@@ -20,7 +19,6 @@ import Drasil.SRS (SRSDecl, mkDoc, SmithEtAlSRS, programName)
 import Language.Drasil.Code (Choices)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.Generator.ChunkDump (buildDebugData)
 import Drasil.Generator.Code (genCode, genCodeZoo)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
@@ -37,10 +35,8 @@ writeSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ([FileLayout], Smit
 writeSmithEtAlSrs syst srsDecl srsFileName = do
   let exampleName = caseStudyBuildFolder syst
       (srs, syst') = mkDoc syst srsDecl S.forT
-  mDbgData <- buildDebugData syst'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
-  let dbgData = maybeToList mDbgData
-      layout = dbgData ++ genSmithEtAlSrs syst' srs srsFileName
+  let layout = genSmithEtAlSrs syst' srs srsFileName
   pure (layout, syst', exampleName)
 
 -- | A case study that only outputs an SRS in each of our supported variants.

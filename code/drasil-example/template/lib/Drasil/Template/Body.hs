@@ -113,7 +113,7 @@ si = mkSmithEtAlICO
   ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs ([] :: [InstanceModel])
   inputs outputs
   ([] :: [ConstrConcept]) ([] :: [ConstQDef]) symbols
-  [] symbMap []
+  symbMap []
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList $ inputs <> outputs

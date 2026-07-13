@@ -15,14 +15,14 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, SVariable,
-  SValue, SMethod, MixedCall, BodySym(..), BlockSym(..), TypeSym(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  SValue, MixedCall, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), MethodSym(..),
-  BinderElim(..), UnRepr(..))
+  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
+  UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -43,11 +43,9 @@ class (AssignStatement r smt, DeclStatement r smt, IOStatement r smt,
   RenderStatement r smt, StatementElim r smt, RenderType r, RenderValue r,
   ValueElim r, RenderVariable r, InternalVarElim r, InternalBinderElim r,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r, RenderMethod r, MethodElim r,
+  BlockCommentElim r, ValueExpression r, RenderMethod r md, MethodElim r md,
   ParameterSym r, ScopeElim r
-  ) => CommonRenderSym r vis smt
-
--- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
+  ) => CommonRenderSym r vis smt md
 
 -- Common Typeclasses --
 
@@ -213,10 +211,10 @@ class (TypeSym r) => MethodTypeSym r where
   type MethodType r
   mType    :: VS (r TypeData) -> MSMthdType r
 
-class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
+class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r md | r -> md where
   -- | Takes a BlockComment and a method and generates a function.
-  commentedFunc :: MS (r Doc) -> SMethod r -> SMethod r
-  mthdFromData :: VisibilityTag -> Doc -> SMethod r
+  commentedFunc :: MS (r Doc) -> MS (r md) -> MS (r md)
+  mthdFromData :: VisibilityTag -> Doc -> MS (r md)
 
-class MethodElim r where
-  method :: r (Method r) -> Doc
+class MethodElim r md | r -> md where
+  method :: r md -> Doc

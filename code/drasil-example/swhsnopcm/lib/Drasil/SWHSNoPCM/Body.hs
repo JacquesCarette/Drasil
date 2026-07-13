@@ -145,7 +145,7 @@ si = mkSmithEtAlICO
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
   (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList) symbols
-  labelledContent' symbMap allRefs
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]

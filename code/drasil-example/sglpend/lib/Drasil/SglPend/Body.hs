@@ -90,7 +90,7 @@ si = mkSmithEtAlICO progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints [] allSymbols
-  labelledContent' symbMap allRefs
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]

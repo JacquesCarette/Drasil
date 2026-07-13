@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
+  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -132,25 +132,25 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance SharedProg CSharpCode Doc (Doc, Terminator)
+instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
 instance SharedStatement CSharpCode (Doc, Terminator)
 instance OOStatement CSharpCode (Doc, Terminator)
-instance OOProg CSharpCode Doc (Doc, Terminator)
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) where
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData where
   type Program CSharpCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc (Doc, Terminator)
-instance OORenderSym CSharpCode Doc (Doc, Terminator)
+instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) where
+instance FileSym CSharpCode Doc (Doc, Terminator) MethodData where
   type File CSharpCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -646,8 +646,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc (Doc, Terminator) where
-  type Method CSharpCode = MethodData
+instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -656,7 +655,7 @@ instance MethodSym CSharpCode Doc (Doc, Terminator) where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc (Doc, Terminator) where
+instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -665,13 +664,13 @@ instance OOMethodSym CSharpCode Doc (Doc, Terminator) where
   inOutMethod n s p = csInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CSharpCode where
+instance RenderMethod CSharpCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod CSharpCode Doc where
+instance OORenderMethod CSharpCode Doc MethodData where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
@@ -680,7 +679,7 @@ instance OORenderMethod CSharpCode Doc where
   intFunc = C.intFunc
   destructor _ = error $ CP.destructorError csName
 
-instance MethodElim CSharpCode where
+instance MethodElim CSharpCode MethodData where
   method = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode Doc where
@@ -692,7 +691,7 @@ instance StateVarSym CSharpCode Doc where
 instance StateVarElim CSharpCode where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc (Doc, Terminator) where
+instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
@@ -700,7 +699,7 @@ instance ClassSym CSharpCode Doc (Doc, Terminator) where
 
   docClass = CP.doxClass
 
-instance RenderClass CSharpCode Doc where
+instance RenderClass CSharpCode Doc MethodData where
   intClass = CP.intClass R.class'
 
   inherit = CP.inherit
@@ -711,7 +710,7 @@ instance RenderClass CSharpCode Doc where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) where
+instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData where
   type Module CSharpCode = ModData
   buildModule n = CP.buildModule' n langImport
 
@@ -812,7 +811,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r vis smt) => [r BinderD] -> r (Value r) -> Doc
+csLambda :: [CSharpCode BinderD] -> CSharpCode (Value CSharpCode) -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
@@ -865,11 +864,11 @@ csFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
-csThrowDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+csThrowDoc :: CSharpCode (Value CSharpCode) -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-csTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+csTryCatch :: CSharpCode (Body CSharpCode) -> CSharpCode (Body CSharpCode) -> Doc
 csTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -878,7 +877,7 @@ csTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-csAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+csAssert :: CSharpCode (Value CSharpCode) -> CSharpCode (Value CSharpCode) -> Doc
 csAssert condition errorMessage = vcat [
   text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
   ]
@@ -886,7 +885,7 @@ csAssert condition errorMessage = vcat [
 csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (OORenderSym r vis smt) => SValue r -> SValue r
+csFileInput :: (InternalValueExp r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
 csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
@@ -903,10 +902,10 @@ csInput tp inFn = do
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char]
           then addSystemImport else id
 
-csOpenFileR :: (OORenderSym r vis smt) => SValue r -> VS (r TypeData) -> SValue r
+csOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (OORenderSym r vis smt) => SValue r ->
+csOpenFileWorA :: (OOValueExpression r) => SValue r ->
   VS (r TypeData) -> SValue r -> SValue r
 csOpenFileWorA n w a = newObj w [n, a]
 
@@ -932,9 +931,9 @@ csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MSBody CSharpCode -> SMethod CSharpCode) ->
+  MSBody CSharpCode -> MS (CSharpCode md)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MSBody CSharpCode -> SMethod CSharpCode
+  MSBody CSharpCode -> MS (CSharpCode md)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
@@ -945,8 +944,9 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
-csPrint :: (CommonRenderSym r vis smt, TypeElim r) => Bool ->
-  Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+csPrint
+  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

@@ -63,7 +63,7 @@ si = mkSmithEtAlICO
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
   inputs outputs constrained [] symbols
-  labCon symbMap allRefs
+  symbMap allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

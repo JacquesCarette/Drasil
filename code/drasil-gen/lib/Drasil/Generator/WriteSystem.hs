@@ -64,6 +64,8 @@ data WriteOptions = WO
 -- 1. 'overwritePolicy': Always allow file-overwriting.
 -- 2. 'dirName': The example's abbreviation.
 -- 3. 'textEncoding': UTF-8.
+-- 4. 'debugDataPolicy': Dependant on `DEBUG_ENV` environment variable being
+--    set, writing to a nested `.drasil` folder.
 drasilMakefileReqOpts :: WriteOptions
 drasilMakefileReqOpts =
   WO OverwriteAllowed dirName utf8 (CheckEnvVar "DEBUG_ENV" [ps|.drasil|])

@@ -2,14 +2,13 @@
 -- the Observer class both work.
 module GOOL.PatternTest (patternTest) where
 
-import Drasil.GOOL (GSProgram, SVariable, SValue, SMethod, OOProg, VS,
-  ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), initObserverList, addObserver, VariableSym(var),
-  OOVariableSym(..), ScopeSym(..), Literal(..), VariableValue(..),
-  OOValueExpression(..), extNewObj, OOFunctionSym(..), GetSet(..),
-  ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..),
-  TypeData)
+import Drasil.GOOL (GSProgram, SVariable, SValue, OOProg, MS, VS, ProgramSym(..),
+  FileSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
+  StatementSym(..), DeclStatement(..), IOStatement(..), initObserverList,
+  addObserver, VariableSym(var), OOVariableSym(..), ScopeSym(..), Literal(..),
+  VariableValue(..), OOValueExpression(..), extNewObj, OOFunctionSym(..),
+  GetSet(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),
+  ModuleSym(..), TypeData)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import GOOL.Observer (observer, observerName, printNum, x)
 
@@ -38,12 +37,12 @@ newObserver :: (OOValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
-patternTest :: (OOProg r vis smt) => GSProgram r
+patternTest :: (OOProg r vis smt md) => GSProgram r
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.
-patternTestMainMethod :: (OOProg r vis smt) => SMethod r
+patternTestMainMethod :: (OOProg r vis smt md) => MS (r md)
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],
 

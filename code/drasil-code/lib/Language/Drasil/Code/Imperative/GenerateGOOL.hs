@@ -27,8 +27,8 @@ import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))
 import Drasil.GOOL (SVariable, SValue, CSStateVar, SClass, NamedArgs,
   OOProg, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
   OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
-  OOFuncAppStatement(..), ClassSym(..), MethodSym(..), CodeType(..),
-  TypeElim(..), objMethodCallMixedArgs, OOStatement)
+  OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
+  objMethodCallMixedArgs, OOStatement)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -36,8 +36,8 @@ import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImports :: (OOProg r vis smt) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r (Method r))))] -> [GenState (Maybe (SClass r))] ->
+genModuleWithImports :: (OOProg r vis smt md) => Name -> Description ->
+  [Import] -> [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
@@ -51,8 +51,8 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModule :: (OOProg r vis smt) => Name -> Description ->
-  [GenState (Maybe (MS (r (Method r))))] -> [GenState (Maybe (SClass r))] ->
+genModule :: (OOProg r vis smt md) => Name -> Description ->
+  [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModule n desc = genModuleWithImports n desc []
 
@@ -82,9 +82,9 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (ClassSym r vis smt) => ClassType -> Name -> Maybe Name ->
-  Description -> [CSStateVar r] -> GenState [MS (r (Method r))] ->
-    GenState [MS (r (Method r))] -> GenState (SClass r)
+mkClass :: (ClassSym r vis smt md) => ClassType -> Name -> Maybe Name ->
+  Description -> [CSStateVar r] -> GenState [MS (r md)] ->
+    GenState [MS (r md)] -> GenState (SClass r)
 mkClass s n l desc vs cstrs mths = do
   g <- get
   modify (\ds -> ds {currentClass = n})
@@ -101,14 +101,14 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (ClassSym r vis smt) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [MS (r (Method r))] -> GenState [MS (r (Method r))] ->
+primaryClass :: (ClassSym r vis smt md) => Name -> Maybe Name -> Description ->
+  [CSStateVar r] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
   GenState (SClass r)
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (ClassSym r vis smt) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [MS (r (Method r))] -> GenState [MS (r (Method r))] ->
+auxClass :: (ClassSym r vis smt md) => Name -> Maybe Name -> Description ->
+  [CSStateVar r] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
 
@@ -177,8 +177,8 @@ fAppInOut m n ins outs both = do
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImportsProc :: (ProcProg r vis smt) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r (Method r))))] -> GenState (Proc.SFile r)
+genModuleWithImportsProc :: (ProcProg r vis smt md) => Name -> Description ->
+  [Import] -> [GenState (Maybe (MS (r md)))] -> GenState (Proc.SFile r)
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -190,8 +190,8 @@ genModuleWithImportsProc n desc is maybeMs = do
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModuleProc :: (ProcProg r vis smt) => Name -> Description ->
-  [GenState (Maybe (MS (r (Method r))))] -> GenState (Proc.SFile r)
+genModuleProc :: (ProcProg r vis smt md) => Name -> Description ->
+  [GenState (Maybe (MS (r md)))] -> GenState (Proc.SFile r)
 genModuleProc n desc = genModuleWithImportsProc n desc []
 
 -- | Function call generator.

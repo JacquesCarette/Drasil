@@ -8,7 +8,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue,
-  BlockSym(..), MethodSym(..))
+  BlockSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
@@ -21,13 +21,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis smt, IG.FileSym r vis smt,
+class (CommonRenderSym r vis smt md, IG.FileSym r vis smt md,
   IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r smt,
   IG.StrategyPattern r smt, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r vis, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r vis, RenderMod r, ModuleElim r,
+  IG.OOValueExpression r, RenderClass r vis md, ClassElim r, RenderFile r,
+  InternalGetSet r, OORenderMethod r vis md, RenderMod r, ModuleElim r,
   StateVarElim r, PermElim r
-  ) => OORenderSym r vis smt
+  ) => OORenderSym r vis smt md
 
 -- OO-Only Typeclasses --
 
@@ -53,27 +53,27 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r vis | r -> vis where
+class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md | r -> vis where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->
-    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
+    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r (IG.Attachment r)
-    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
+    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
 
-  destructor :: [IG.CSStateVar r] -> MS (r (Method r))
+  destructor :: [IG.CSStateVar r] -> MS (r md)
 
 class StateVarElim r where
   stateVar :: r (IG.StateVar r) -> Doc
 
 type ParentSpec = Doc
 
-class (BlockCommentSym r) => RenderClass r vis | r -> vis where
+class (BlockCommentSym r) => RenderClass r vis md | r -> vis md where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r]
-    -> [MS (r (Method r))] -> [MS (r (Method r))] -> IG.SClass r
+    -> [MS (r md)] -> [MS (r md)] -> IG.SClass r
 
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec

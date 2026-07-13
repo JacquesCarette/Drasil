@@ -132,25 +132,25 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance SharedProg SwiftCode Doc (Doc, Terminator)
+instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
 instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOStatement SwiftCode (Doc, Terminator)
-instance OOProg SwiftCode Doc (Doc, Terminator)
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) where
+instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData where
   type Program SwiftCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc (Doc, Terminator)
-instance OORenderSym SwiftCode Doc (Doc, Terminator)
+instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) where
+instance FileSym SwiftCode Doc (Doc, Terminator) MethodData where
   type File SwiftCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -688,8 +688,7 @@ instance ParamElim SwiftCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc (Doc, Terminator) where
-  type Method SwiftCode = MethodData
+instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -699,7 +698,7 @@ instance MethodSym SwiftCode Doc (Doc, Terminator) where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc (Doc, Terminator) where
+instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -708,18 +707,18 @@ instance OOMethodSym SwiftCode Doc (Doc, Terminator) where
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
 
-instance RenderMethod SwiftCode where
+instance RenderMethod SwiftCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod SwiftCode Doc where
+instance OORenderMethod SwiftCode Doc MethodData where
   intMethod _ = swiftMethod
   intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName
 
-instance MethodElim SwiftCode where
+instance MethodElim SwiftCode MethodData where
   method = mthdDoc . unSC
 
 instance StateVarSym SwiftCode Doc where
@@ -733,7 +732,7 @@ instance StateVarSym SwiftCode Doc where
 instance StateVarElim SwiftCode where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc (Doc, Terminator) where
+instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData where
   type Class SwiftCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
@@ -741,7 +740,7 @@ instance ClassSym SwiftCode Doc (Doc, Terminator) where
 
   docClass = G.docClass swiftClassDoc
 
-instance RenderClass SwiftCode Doc where
+instance RenderClass SwiftCode Doc MethodData where
   intClass = CP.intClass R.class'
 
   inherit = CP.inherit
@@ -752,7 +751,7 @@ instance RenderClass SwiftCode Doc where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) where
+instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData where
   type Module SwiftCode = ModData
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
@@ -1204,7 +1203,7 @@ swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
 
 swiftMethod :: Label -> SwiftCode Doc ->
   SwiftCode (Attachment SwiftCode) -> MSMthdType SwiftCode ->
-  [MS (SwiftCode ParamData)] -> MSBody SwiftCode -> MS (SwiftCode (Method SwiftCode))
+  [MS (SwiftCode ParamData)] -> MSBody SwiftCode -> MS (SwiftCode MethodData)
 swiftMethod n s p t ps b = do
   tp <- t
   pms <- sequence ps
@@ -1223,7 +1222,7 @@ swiftConstructor
   :: [MS (SwiftCode ParamData)]
   -> Initializers SwiftCode
   -> MSBody SwiftCode
-  -> MS (SwiftCode (Method SwiftCode))
+  -> MS (SwiftCode MethodData)
 swiftConstructor ps is b = do
   pms <- sequence ps
   bod <- multiBody [G.initStmts is, b]

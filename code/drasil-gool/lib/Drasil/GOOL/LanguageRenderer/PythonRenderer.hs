@@ -121,25 +121,25 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance SharedProg PythonCode Doc (Doc, Terminator)
+instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
 instance SharedStatement PythonCode (Doc, Terminator)
 instance OOStatement PythonCode (Doc, Terminator)
-instance OOProg PythonCode Doc (Doc, Terminator)
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) where
+instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData where
   type Program PythonCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc (Doc, Terminator)
-instance OORenderSym PythonCode Doc (Doc, Terminator)
+instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
 
-instance FileSym PythonCode Doc (Doc, Terminator) where
+instance FileSym PythonCode Doc (Doc, Terminator) MethodData where
   type File PythonCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -654,8 +654,7 @@ instance ParamElim PythonCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc (Doc, Terminator) where
-  type Method PythonCode = MethodData
+instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -664,7 +663,7 @@ instance MethodSym PythonCode Doc (Doc, Terminator) where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc (Doc, Terminator) where
+instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -673,13 +672,13 @@ instance OOMethodSym PythonCode Doc (Doc, Terminator) where
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
-instance RenderMethod PythonCode where
+instance RenderMethod PythonCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod PythonCode Doc where
+instance OORenderMethod PythonCode Doc MethodData where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -692,7 +691,7 @@ instance OORenderMethod PythonCode Doc where
     pure $ toCode $ mthd $ pyFunction n pms bd
   destructor _ = error $ CP.destructorError pyName
 
-instance MethodElim PythonCode where
+instance MethodElim PythonCode MethodData where
   method = mthdDoc . unPC
 
 instance StateVarSym PythonCode Doc where
@@ -705,7 +704,7 @@ instance StateVarSym PythonCode Doc where
 instance StateVarElim PythonCode where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc (Doc, Terminator) where
+instance ClassSym PythonCode Doc (Doc, Terminator) MethodData where
   type Class PythonCode = Doc
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
@@ -721,7 +720,7 @@ instance ClassSym PythonCode Doc (Doc, Terminator) where
 
   docClass = CP.doxClass
 
-instance RenderClass PythonCode Doc where
+instance RenderClass PythonCode Doc MethodData where
   intClass = CP.intClass pyClass
 
   inherit n = toCode $ maybe empty (parens . text) n
@@ -732,7 +731,7 @@ instance RenderClass PythonCode Doc where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) where
+instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData where
   type Module PythonCode = ModData
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports

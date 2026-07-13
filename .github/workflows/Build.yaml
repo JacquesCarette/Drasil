@@ -1,3 +1,5 @@
+# Additional documentation located in .github/workflows/README.md
+
 on:
   pull_request:
     paths: [code/**, .github/workflows/Build.yaml]

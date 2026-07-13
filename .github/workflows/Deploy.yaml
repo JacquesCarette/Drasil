@@ -1,3 +1,5 @@
+# Additional documentation located in .github/workflows/README.md
+
 on:
   push:
     branches: main

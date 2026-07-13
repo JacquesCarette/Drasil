@@ -409,7 +409,7 @@ instance Set JuliaCode where
 instance NativeVector JuliaCode where
   vecScale = binExpr multOp
   vecAdd   = binExpr plusOp
-  vecIndex = jlVecIndex
+  vecIndex = G.listAccess
   vecDot a b = libFuncApp "LinearAlgebra" "dot" double [a, b]
   vecMag a   = libFuncApp "LinearAlgebra" "norm" double [a]
   vecUnit a  = a #/ vecMag a
@@ -998,9 +998,4 @@ jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]
 
-jlVecIndex :: SValue JuliaCode -> SValue JuliaCode -> SValue JuliaCode
-jlVecIndex v' i' = do
-  v <- v'
-  i <- intToIndex i'
-  d <- double
-  mkVal d (RC.value v <> brackets (RC.value i))
+

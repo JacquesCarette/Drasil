@@ -8,7 +8,7 @@ module VectorTest
 
 import LinearAlgebra
 
-function vectorOps(a::Float64, b::Float64)
+function vectorOps(a::Array{Float64}, b::Array{Float64})
     made = [1.0, 2.0, 3.0]
     scaled = 2.0 * a
     summed = a + b

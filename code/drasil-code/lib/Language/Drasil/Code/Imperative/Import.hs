@@ -15,6 +15,7 @@ import qualified Data.Map as Map (lookup)
 import Control.Monad (liftM2,liftM3)
 import Control.Monad.State (get, modify)
 import Data.List ((\\), intersect)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, obv, quantvar,
@@ -220,7 +221,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc :: (OOProg r vis smt md) => Label -> VS (r TypeData) -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MS (r (Block r))] ->
+  [ParameterChunk] -> Maybe Description -> [MS (r Doc)] ->
   GenState (MS (r md))
 publicFunc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
@@ -228,38 +229,38 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod :: (OOProg r vis smt md) => Label -> VS (r TypeData) -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MS (r (Block r))] ->
+  [ParameterChunk] -> Maybe Description -> [MS (r Doc)] ->
   GenState (MS (r md))
 publicMethod n t = do
   genMethod (method n public instanceLevel t) n
 
 -- | Generates a private method.
 privateMethod :: (OOProg r vis smt md) => Label -> VS (r TypeData) -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MS (r (Block r))] ->
+  [ParameterChunk] -> Maybe Description -> [MS (r Doc)] ->
   GenState (MS (r md))
 privateMethod n t = do
   genMethod (method n private instanceLevel t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: (OOProg r vis smt md) => Label -> Description -> [CodeVarChunk] ->
-  [CodeVarChunk] -> [MS (r (Block r))] -> GenState (MS (r md))
+  [CodeVarChunk] -> [MS (r Doc)] -> GenState (MS (r md))
 publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod :: (OOProg r vis smt md) => Label -> Description -> [CodeVarChunk] ->
-  [CodeVarChunk] -> [MS (r (Block r))] -> GenState (MS (r md))
+  [CodeVarChunk] -> [MS (r Doc)] -> GenState (MS (r md))
 privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
   (docInOutMethod n private instanceLevel) n
 
 -- | Generates a constructor.
 genConstructor :: (OOProg r vis smt md) => Label -> Description -> [ParameterChunk] ->
-  [MS (r (Block r))] -> GenState (MS (r md))
+  [MS (r Doc)] -> GenState (MS (r md))
 genConstructor n desc p = do
   genMethod nonInitConstructor n desc p Nothing
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor :: (OOProg r vis smt md) => Label -> Description -> [ParameterChunk]
-  -> Initializers r -> [MS (r (Block r))] -> GenState (MS (r md))
+  -> Initializers r -> [MS (r Doc)] -> GenState (MS (r md))
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
   Nothing
 
@@ -273,7 +274,7 @@ genMethod
   -> Description
   -> [ParameterChunk]
   -> Maybe Description
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 genMethod f n desc p r b = do
   g <- get
@@ -297,7 +298,7 @@ genInOutFunc
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 genInOutFunc f docf n desc ins' outs' b = do
   g <- get
@@ -571,7 +572,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- declared variables.
 genFunc
   :: (OOProg r vis smt md)
-  => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r (Block r))] -> GenState (MS (r md)))
+  => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r Doc)] -> GenState (MS (r md)))
   -> [StateVariable]
   -> Func
   -> GenState (MS (r md))
@@ -712,7 +713,7 @@ genDataFunc nameTitle desc ddef = do
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readData
   :: (OOStatement r smt, TypeElim r, VariableElim r)
-  => DataDesc -> GenState [MS (r (Block r))]
+  => DataDesc -> GenState [MS (r Doc)]
 readData ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -902,7 +903,7 @@ publicFuncProc
   -> Description
   -> [ParameterChunk]
   -> Maybe Description
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 publicFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
@@ -916,7 +917,7 @@ privateFuncProc
   -> Description
   -> [ParameterChunk]
   -> Maybe Description
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 privateFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
@@ -932,7 +933,7 @@ genMethodProc
   -> Description
   -> [ParameterChunk]
   -> Maybe Description
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 genMethodProc f n desc p r b = do
   g <- get
@@ -951,7 +952,7 @@ genMethodProc f n desc p r b = do
 -- declared variables.
 genFuncProc
   :: (SharedProg r vis smt md, NativeVector r)
-  => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r (Block r))] -> GenState (MS (r md)))
+  => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r Doc)] -> GenState (MS (r md)))
   -> [StateVariable]
   -> Func
   -> GenState (MS (r md))
@@ -976,7 +977,7 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readDataProc
   :: (NativeVector r, SharedStatement r smt, TypeElim r)
-  => DataDesc -> GenState [MS (r (Block r))]
+  => DataDesc -> GenState [MS (r Doc)]
 readDataProc ddef = do
   g <- get
   let localScope = convScope $ currentScope g
@@ -1281,7 +1282,7 @@ publicInOutFuncProc
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n public) n
 
@@ -1292,7 +1293,7 @@ privateInOutFuncProc
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n private) n
 
@@ -1308,7 +1309,7 @@ genInOutFuncProc
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
-  -> [MS (r (Block r))]
+  -> [MS (r Doc)]
   -> GenState (MS (r md))
 genInOutFuncProc f docf n desc ins' outs' b = do
   g <- get

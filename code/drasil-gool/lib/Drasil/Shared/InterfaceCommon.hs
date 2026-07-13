@@ -23,6 +23,7 @@ module Drasil.Shared.InterfaceCommon (
   ) where
 
 import Data.Bifunctor (first)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD,
   ParamData)
@@ -62,7 +63,7 @@ type MSBody a = MS (a (Body a))
 
 class (BlockSym r smt) => BodySym r smt where
   type Body r
-  body           :: [MS (r (Block r))] -> MSBody r
+  body           :: [MS (r Doc)] -> MSBody r
 
   addComments :: Label -> MSBody r -> MSBody r
 
@@ -73,8 +74,7 @@ oneLiner :: (BodySym r smt) => MS (r smt) -> MSBody r
 oneLiner tp = bodyStatements [tp]
 
 class (StatementSym r smt) => BlockSym r smt where
-  type Block r
-  block   :: [MS (r smt)] -> MS (r (Block r))
+  block   :: [MS (r smt)] -> MS (r Doc)
 
 class TypeSym r where
   bool          :: VS (r TypeData)
@@ -376,7 +376,7 @@ class (IndexTranslator r, Literal r) => NativeVector r where
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
-    -> SVariable r -> SValue r -> MS (r (Block r))
+    -> SVariable r -> SValue r -> MS (r Doc)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -388,7 +388,7 @@ class (ValueSym r) => InternalList r where
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r (Block r))
+  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r Doc)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
 listIndexExists :: (List r smt, Comparison r) => SValue r -> SValue r -> SValue r

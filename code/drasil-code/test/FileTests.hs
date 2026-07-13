@@ -11,6 +11,7 @@ import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
+import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO :: (OOProg r vis smt md) => OO.GSProgram r
@@ -27,7 +28,7 @@ fileTestMethod :: (SharedProg r vis smt md) => MS (r md)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
 -- | Generates functions that write to the file.
-writeStory :: (SharedProg r vis smt md) => MS (r (Block r))
+writeStory :: (SharedProg r vis smt md) => MS (r Doc)
 writeStory = block [
   varDec (var "fileToWrite" outfile) mainFn,
 
@@ -55,7 +56,7 @@ readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
 
 -- | Prints the result of the 'readStory' function. Should be the same as
 -- what was given in 'writeStory'.
-goodBye :: (SharedProg r vis smt md) => MS (r (Block r))
+goodBye :: (SharedProg r vis smt md) => MS (r Doc)
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)),
   assert (listSize (valueOf (var "fileContents" (listType string))) ?> litInt 0)

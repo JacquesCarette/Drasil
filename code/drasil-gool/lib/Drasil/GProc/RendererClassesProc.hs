@@ -6,7 +6,7 @@ module Drasil.GProc.RendererClassesProc (
   ProcRenderMethod(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, BlockSym(..))
+import Drasil.Shared.InterfaceCommon (Label, MSBody)
 import qualified Drasil.GProc.InterfaceProc as IP (SFile, FSModule, FileSym(..),
   ModuleSym(..))
 import Drasil.Shared.State (FS, MS)
@@ -26,8 +26,8 @@ class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IP.Module r) -> r (Block r)
-  bottom :: r (Block r)
+  top :: r (IP.Module r) -> r Doc
+  bottom :: r Doc
 
   commentedMod :: IP.SFile r -> FS (r Doc) -> IP.SFile r
 

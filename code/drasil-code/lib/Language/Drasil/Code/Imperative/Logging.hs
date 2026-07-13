@@ -5,6 +5,7 @@ module Language.Drasil.Code.Imperative.Logging (
 import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (get)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
@@ -20,7 +21,7 @@ import Drasil.GOOL (Label, MSBody, SVariable, SValue, MS, BodySym(..),
 -- the beginning of the body.
 logBody
   :: (SharedStatement r smt, VariableElim r)
-  => Label -> [SVariable r] -> [MS (r (Block r))] -> GenState (MSBody r)
+  => Label -> [SVariable r] -> [MS (r Doc)] -> GenState (MSBody r)
 logBody n vars b = do
   g <- get
   return $ body $
@@ -32,7 +33,7 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod
   :: (SharedStatement r smt, VariableElim r)
-  => FilePath -> Label -> [SVariable r] -> MS (r (Block r))
+  => FilePath -> Label -> [SVariable r] -> MS (r Doc)
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),

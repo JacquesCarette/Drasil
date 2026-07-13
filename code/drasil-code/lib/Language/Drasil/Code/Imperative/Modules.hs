@@ -17,7 +17,7 @@ import Data.Maybe (maybeToList, catMaybes)
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets, modify)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (render, parens)
+import Text.PrettyPrint.HughesPJ (Doc, render, parens)
 import Data.Deriving.Internal (interleave)
 
 import Drasil.FileHandling (FileLayout)
@@ -580,7 +580,7 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
   :: (OOStatement r smt, TypeElim r, VariableElim r)
-   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r (Block r)))
+   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Doc))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
   vv <- mkVar (quantvar v)
@@ -597,7 +597,7 @@ genCaseBlock
   -> CodeDefinition
   -> Completeness
   -> [(CodeExpr, CodeExpr)]
-  -> GenState (MS (r (Block r)))
+  -> GenState (MS (r Doc))
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlock t v c cs = do
@@ -825,7 +825,7 @@ genCalcFuncProc cdef = do
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlockProc
   :: (NativeVector r, SharedStatement r smt, TypeElim r)
-  => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r (Block r)))
+  => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Doc))
 genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
 genCalcBlockProc CalcAssign v e = do
   vv <- mkVarProc (quantvar v)
@@ -842,7 +842,7 @@ genCaseBlockProc
   -> CodeDefinition
   -> Completeness
   -> [(CodeExpr, CodeExpr)]
-  -> GenState (MS (r (Block r)))
+  -> GenState (MS (r Doc))
 genCaseBlockProc _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlockProc t v c cs = do

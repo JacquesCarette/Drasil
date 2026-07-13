@@ -23,11 +23,10 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body),
-  bodyStatements, oneLiner, BlockSym(Block), VariableSym(Variable),
-  VisibilitySym(..), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
-  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
-  TypeElim(..),
+  bodyStatements, oneLiner, VariableSym(Variable), VisibilitySym(..),
+  VariableElim(variableName, variableType), ValueSym(Value, valueType),
+  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
+  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
@@ -84,7 +83,7 @@ block
   => [MS (r smt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MS (r (Block r))] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Doc)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
@@ -574,7 +573,7 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 fileDoc
   :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r (Module r) -> r (Block r)) -> r (Block r) -> FSModule r -> SFile r
+  => String -> (r (Module r) -> r Doc) -> r Doc -> FSModule r -> SFile r
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName

@@ -81,13 +81,16 @@ instance AttachmentSym CodeInfoOO where
 
 instance BodySym CodeInfoOO () where
   type Body CodeInfoOO = ()
-  body = executeList
+  body b = do
+    sequence_ b
+    noInfo
 
   addComments _ _ = noInfo
 
 instance BlockSym CodeInfoOO () where
-  type Block CodeInfoOO = ()
-  block = executeList
+  block b = do
+    sequence_ b
+    return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance TypeSym CodeInfoOO where
   bool            = return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
@@ -243,11 +246,11 @@ instance FunctionSym CodeInfoOO where
 instance OOFunctionSym CodeInfoOO where
   func  _ _ l = do
     sequence_ l
-    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+    return $ return $ error "[func] The return value of this isn't used, and the thunk shouldn't fire."
   objAccess s1 s2 = do
     _ <- s1
     _ <- s2
-    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+    return $ return $ error "[objAccess] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance GetSet CodeInfoOO where
   get v _ = execute1 v
@@ -284,7 +287,7 @@ instance InternalList CodeInfoOO where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
-    noInfo
+    return $ return $ error "[listSlice'] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
@@ -399,21 +402,21 @@ instance ControlStatement CodeInfoOO () where
 instance ObserverPattern CodeInfoOO () where
   notifyObservers f _ = do
     _ <- zoom lensMStoVS f
-    return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+    return $ return $ error "[notifyObservers] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance StrategyPattern CodeInfoOO () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
-    noInfo
+    return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VisibilitySym CodeInfoOO () where
   private = return ()
   public  = return ()
 
 instance ParameterSym CodeInfoOO where
-  param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
-  pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
+  param        _ = return $ return $ error "[param] The return value of this isn't used, and the thunk shouldn't fire."
+  pointerParam _ = return $ return $ error "[pointerParam] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance MethodSym CodeInfoOO () () () where
   docMain = updateMEMandCM "main"

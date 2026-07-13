@@ -257,7 +257,6 @@ instance (Comparison r) => Comparison (LoggingFor r) where
   (?!=) = liftLogging (?!=)
 
 instance (BlockSym r smt) => BlockSym (LoggingFor r) smt where
-  type Block (LoggingFor r) = Block r
   block = liftLogging block
 
 instance (BodySym r smt) => BodySym (LoggingFor r) smt where

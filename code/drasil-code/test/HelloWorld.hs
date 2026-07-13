@@ -20,9 +20,10 @@ import Drasil.GProc (ProcProg)
 import Drasil.Metadata (watermark)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
+import Helper (helperOO, helperProc)
 
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import Helper (helperOO, helperProc)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorldOO :: (OOProg r vis smt md) => OO.GSProgram r
@@ -67,7 +68,7 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
-helloInitVariables :: (SharedProg r vis smt md) => MS (r (Block r))
+helloInitVariables :: (SharedProg r vis smt md) => MS (r Doc)
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
@@ -117,7 +118,7 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis smt md) => MS (r (Block r))
+objectTests :: (OOProg r vis smt md) => MS (r Doc)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -151,7 +152,7 @@ mySlicedList9 = var "mySlicedList9" (listType double)
 mySlicedList10 = var "mySlicedList10" (listType double)
 mySlicedList11 = var "mySlicedList11" (listType double)
 
-listSliceTests :: (SharedProg r vis smt md) => [MS (r (Block r))]
+listSliceTests :: (SharedProg r vis smt md) => [MS (r Doc)]
 listSliceTests = [
 
   -- | Declare variables for list slices

@@ -165,7 +165,6 @@ instance BodyElim JuliaCode where
   body = unJLC
 
 instance BlockSym JuliaCode (Doc, Terminator) where
-  type Block JuliaCode = Doc
   block = G.block
 
 instance RenderBlock JuliaCode where
@@ -725,7 +724,7 @@ jlListSlice
   -> Maybe (SValue JuliaCode)
   -> Maybe (SValue JuliaCode)
   -> SValue JuliaCode
-  -> MS (JuliaCode (Block JuliaCode))
+  -> MS (JuliaCode Doc)
 jlListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn

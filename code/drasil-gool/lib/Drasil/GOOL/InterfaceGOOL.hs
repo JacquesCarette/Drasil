@@ -24,14 +24,16 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, MSBody, SVariable, SValue, NamedArgs, MixedCtorCall, PosCall,
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc, SharedProg, SharedStatement,
   -- Typeclasses
-  BodySym(body), BlockSym(..), TypeSym(..), FunctionSym,
-  MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
-  ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
+  BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
+  ValueSym(valueType), VariableValue(valueOf), ValueExpression,
+  List(listSize, listAdd), listOf, StatementSym(..), DeclStatement(listDecDef),
+  FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData)
+
+import Text.PrettyPrint.HughesPJ (Doc)
 
 class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
   ObserverPattern r smt, StrategyPattern r smt
@@ -276,7 +278,7 @@ addObserver o = listAdd obsList lastelem o
 
 class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
-    Maybe (SVariable r) -> MS (r (Block r))
+    Maybe (SVariable r) -> MS (r Doc)
 
 class (FunctionSym r) => OOFunctionSym r where
   func :: Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)

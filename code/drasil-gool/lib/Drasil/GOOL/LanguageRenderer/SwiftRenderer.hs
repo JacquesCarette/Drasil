@@ -192,7 +192,6 @@ instance BodyElim SwiftCode where
   body = unSC
 
 instance BlockSym SwiftCode (Doc, Terminator) where
-  type Block SwiftCode = Doc
   block = G.block
 
 instance RenderBlock SwiftCode where
@@ -1039,7 +1038,7 @@ swiftListSlice
   -> Maybe (SValue SwiftCode)
   -> Maybe (SValue SwiftCode)
   -> SValue SwiftCode
-  -> MS (SwiftCode (Block SwiftCode))
+  -> MS (SwiftCode Doc)
 swiftListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn

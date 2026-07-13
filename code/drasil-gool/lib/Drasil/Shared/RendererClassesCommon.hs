@@ -15,14 +15,13 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, SVariable, SValue,
-  MixedCall, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
-  UnRepr(..))
+  MixedCall, BodySym(..), TypeSym(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
+  InternalList(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -65,10 +64,10 @@ class BodyElim r where
   body :: r (Body r) -> Doc
 
 class RenderBlock r where
-  multiBlock :: [MS (r (Block r))] -> MS (r (Block r))
+  multiBlock :: [MS (r Doc)] -> MS (r Doc)
 
 class BlockElim r where
-  block :: r (Block r) -> Doc
+  block :: r Doc -> Doc
 
 class RenderType r where
   multiType :: [VS (r TypeData)] -> VS (r TypeData)

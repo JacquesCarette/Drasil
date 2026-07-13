@@ -148,7 +148,8 @@ fillReferences si = si2
       ++ traceyGraphGetRefs -- Document-EXTERNAL traceability graph FILE URIs
       -- SECTIONS ==============================================================
       ++ secRefs -- secRefs can be removed once #946 is complete
-    si2 = set refTable (M.union (si ^. refTable) newRefs) si
+    refTable' = M.union (si ^. refTable) newRefs -- All references added are EXTERNAL URIs.
+    si2 = set refTable refTable' si
 
 -- * Section Creator Functions
 

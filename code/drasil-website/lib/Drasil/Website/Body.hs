@@ -12,7 +12,6 @@ import Drasil.System (HasSystemMeta(..), mkSystemMeta)
 import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
@@ -92,7 +91,7 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ exampleRefs (repoRt fl) (exRt fl)
   ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
-  ++ concatMap findAllRefs (sections fl)
+  ++ concatMap extractLCRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI

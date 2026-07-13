@@ -26,14 +26,14 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, SMethod, CSStateVar,
-  SClass, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
-  ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
+import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, CSStateVar, SClass,
+  SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
+  Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
   convTypeOO, VisibilityTag(..), SharedStatement, TypeElim, VariableElim,
   OOStatement)
 import qualified Drasil.GOOL as OO (SFile)
@@ -95,7 +95,7 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- functions for reading input values, calculating derived inputs, checking
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
-genMainFunc :: (OOProg r vis smt) => GenState (Maybe (SMethod r))
+genMainFunc :: (OOProg r vis smt) => GenState (Maybe (MS (r (Method r))))
 genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
@@ -234,11 +234,11 @@ genInputClass scp = do
       cs = g ^. constDefns
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
-      constructors :: (OOProg r vis smt) => GenState [SMethod r]
+      constructors :: (OOProg r vis smt) => GenState [MS (r (Method r))]
       constructors = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor]
         else return []
-      methods :: (OOProg r vis smt) => GenState [SMethod r]
+      methods :: (OOProg r vis smt) => GenState [MS (r (Method r))]
       methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
         genInputDerived Priv, genInputConstraints Priv]
@@ -264,7 +264,7 @@ genInputClass scp = do
 -- | Generates a constructor for the input class, where the constructor calls the
 -- input-related functions. Returns 'Nothing' if no input-related functions are
 -- generated.
-genInputConstructor :: (OOProg r vis smt) => GenState (Maybe (SMethod r))
+genInputConstructor :: (OOProg r vis smt) => GenState (Maybe (MS (r (Method r))))
 genInputConstructor = do
   g <- get
   ipName <- genICName InputParameters
@@ -284,7 +284,7 @@ genInputConstructor = do
     dvName, icName]
 
 -- | Generates a function for calculating derived inputs.
-genInputDerived :: (OOProg r vis smt) => VisibilityTag -> GenState (Maybe (SMethod r))
+genInputDerived :: (OOProg r vis smt) => VisibilityTag -> GenState (Maybe (MS (r (Method r))))
 genInputDerived s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -292,7 +292,7 @@ genInputDerived s = do
   let dvals = g ^. derivedInputs
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genDerived :: (OOProg r vis smt) => Bool -> GenState (Maybe (SMethod r))
+      genDerived :: (OOProg r vis smt) => Bool -> GenState (Maybe (MS (r (Method r))))
       genDerived False = return Nothing
       genDerived _ = do
         ins <- getDerivedIns
@@ -305,7 +305,7 @@ genInputDerived s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r vis smt) => VisibilityTag ->
-  GenState (Maybe (SMethod r))
+  GenState (Maybe (MS (r (Method r))))
 genInputConstraints s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -314,7 +314,7 @@ genInputConstraints s = do
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints :: (OOProg r vis smt) => Bool -> GenState
-        (Maybe (SMethod r))
+        (Maybe (MS (r (Method r))))
       genConstraints False = return Nothing
       genConstraints _ = do
         parms <- getConstraintParams
@@ -453,7 +453,7 @@ printExpr Lit{} _     = []
 printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pinfo e))]
 
 -- | | Generates a function for reading inputs from a file.
-genInputFormat :: (OOProg r vis smt) => VisibilityTag -> GenState (Maybe (SMethod r))
+genInputFormat :: (OOProg r vis smt) => VisibilityTag -> GenState (Maybe (MS (r (Method r))))
 genInputFormat s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -461,7 +461,7 @@ genInputFormat s = do
   giName <- genICName GetInput
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genInFormat :: (OOProg r vis smt) => Bool -> GenState (Maybe (SMethod r))
+      genInFormat :: (OOProg r vis smt) => Bool -> GenState (Maybe (MS (r (Method r))))
       genInFormat False = return Nothing
       genInFormat _ = do
         ins <- getInputFormatIns
@@ -541,7 +541,7 @@ genCalcMod = do
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
-genCalcFunc :: (OOProg r vis smt) => CodeDefinition -> GenState (SMethod r)
+genCalcFunc :: (OOProg r vis smt) => CodeDefinition -> GenState (MS (r (Method r)))
 genCalcFunc cdef = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -618,12 +618,12 @@ genOutputMod = do
   liftS $ genModule ofName ofDesc [genOutputFormat] []
 
 -- | Generates a function for printing output values.
-genOutputFormat :: (OOProg r vis smt) => GenState (Maybe (SMethod r))
+genOutputFormat :: (OOProg r vis smt) => GenState (Maybe (MS (r (Method r))))
 genOutputFormat = do
   g <- get
   modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
-  let genOutput :: (OOProg r vis smt) => Maybe String -> GenState (Maybe (SMethod r))
+  let genOutput :: (OOProg r vis smt) => Maybe String -> GenState (Maybe (MS (r (Method r))))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
@@ -659,7 +659,7 @@ genMainProc = genModuleProc "Control" "Controls the flow of the program"
 -- Returns Nothing if the user chose to generate a library.
 genMainFuncProc
   :: (NativeVector r, SharedProg r vis smt)
-  => GenState (Maybe (SMethod r))
+  => GenState (Maybe (MS (r (Method r))))
 genMainFuncProc = do
     g <- get
     let mainFunc Library = return Nothing
@@ -787,7 +787,7 @@ genCalcModProc = do
 -- generate code is found by looking it up in the external library map.
 genCalcFuncProc
   :: (NativeVector r, SharedProg r vis smt)
-  => CodeDefinition -> GenState (SMethod r)
+  => CodeDefinition -> GenState (MS (r (Method r)))
 genCalcFuncProc cdef = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -853,7 +853,7 @@ genCaseBlockProc t v c cs = do
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormatProc :: (SharedProg r vis smt, NativeVector r) => VisibilityTag ->
-  GenState (Maybe (SMethod r))
+  GenState (Maybe (MS (r (Method r))))
 genInputFormatProc s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -862,7 +862,7 @@ genInputFormatProc s = do
   let getFunc Pub = publicInOutFuncProc
       getFunc Priv = privateInOutFuncProc
       genInFormat :: (SharedProg r vis smt, NativeVector r) => Bool -> GenState
-        (Maybe (SMethod r))
+        (Maybe (MS (r (Method r))))
       genInFormat False = return Nothing
       genInFormat _ = do
         ins <- getInputFormatIns
@@ -875,7 +875,7 @@ genInputFormatProc s = do
 
 -- | Generates a function for calculating derived inputs.
 genInputDerivedProc :: (SharedProg r vis smt, NativeVector r) => VisibilityTag ->
-  GenState (Maybe (SMethod r))
+  GenState (Maybe (MS (r (Method r))))
 genInputDerivedProc s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -884,7 +884,7 @@ genInputDerivedProc s = do
       getFunc Pub = publicInOutFuncProc
       getFunc Priv = privateInOutFuncProc
       genDerived :: (SharedProg r vis smt, NativeVector r) => Bool -> GenState
-        (Maybe (SMethod r))
+        (Maybe (MS (r (Method r))))
       genDerived False = return Nothing
       genDerived _ = do
         ins <- getDerivedIns
@@ -897,7 +897,7 @@ genInputDerivedProc s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraintsProc :: (SharedProg r vis smt, NativeVector r) => VisibilityTag ->
-  GenState (Maybe (SMethod r))
+  GenState (Maybe (MS (r (Method r))))
 genInputConstraintsProc s = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -906,7 +906,7 @@ genInputConstraintsProc s = do
       getFunc Pub = publicFuncProc
       getFunc Priv = privateFuncProc
       genConstraints :: (SharedProg r vis smt, NativeVector r) => Bool -> GenState
-        (Maybe (SMethod r))
+        (Maybe (MS (r (Method r))))
       genConstraints False = return Nothing
       genConstraints _ = do
         parms <- getConstraintParams
@@ -1042,7 +1042,7 @@ genOutputModProc = do
   liftS $ genModuleProc ofName ofDesc [genOutputFormatProc]
 
 -- | Generates a function for printing output values.
-genOutputFormatProc :: (SharedProg r vis smt, NativeVector r) => GenState (Maybe (SMethod r))
+genOutputFormatProc :: (SharedProg r vis smt, NativeVector r) => GenState (Maybe (MS (r (Method r))))
 genOutputFormatProc = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -1050,7 +1050,7 @@ genOutputFormatProc = do
   let genOutput
         :: (NativeVector r, SharedProg r vis smt)
         => Maybe String
-        -> GenState (Maybe (SMethod r))
+        -> GenState (Maybe (MS (r (Method r))))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"

@@ -1,7 +1,7 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
 module Helper (helperOO, helperProc) where
 
-import Drasil.GOOL (SMethod, SharedProg, OOProg, bodyStatements, TypeSym(..),
+import Drasil.GOOL (SharedProg, OOProg, MS, bodyStatements, TypeSym(..),
   DeclStatement(..), ControlStatement(..), (&=), VariableSym(var), Literal(..),
   VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..),
   MethodSym(..), ScopeSym(local))
@@ -20,7 +20,7 @@ helperProc :: (ProcProg r vis smt) => GProc.SFile r
 helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 
 -- | Creates a function that doubles the arguments and adds them together.
-doubleAndAdd :: (SharedProg r vis smt) => SMethod r
+doubleAndAdd :: (SharedProg r vis smt) => MS (r (Method r))
 doubleAndAdd = docFunc "This function adds two numbers"
   ["First number to add", "Second number to add"] (Just "Sum") $
   function "doubleAndAdd"  public double

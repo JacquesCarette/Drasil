@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  TypeElim(..), SVariable, SValue, SMethod, MixedCall, MixedCtorCall,
+  TypeElim(..), SVariable, SValue, MixedCall, MixedCtorCall, MethodSym(..),
   VariableSym(..), VariableValue(..), VariableElim(..),
   ValueSym(Value, valueType), getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
@@ -283,7 +283,7 @@ while f bStart bEnd v' b'= do
 
 intFunc :: (OORenderMethod r vis) => Bool -> Label -> r vis ->
   r (Attachment r) -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
-  SMethod r
+  MS (r (Method r))
 intFunc = intMethod
 
 -- Error Messages --

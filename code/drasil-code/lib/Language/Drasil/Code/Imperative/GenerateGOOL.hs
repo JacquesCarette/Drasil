@@ -24,11 +24,11 @@ import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..), HasSmithEtAlSRS(..))
 
-import Drasil.GOOL (SVariable, SValue, SMethod, CSStateVar, SClass, NamedArgs,
+import Drasil.GOOL (SVariable, SValue, CSStateVar, SClass, NamedArgs,
   OOProg, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
   OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
-  OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
-  objMethodCallMixedArgs, OOStatement)
+  OOFuncAppStatement(..), ClassSym(..), MethodSym(..), CodeType(..),
+  TypeElim(..), objMethodCallMixedArgs, OOStatement)
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports :: (OOProg r vis smt) => Name -> Description ->
-  [Import] -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] ->
+  [Import] -> [GenState (Maybe (MS (r (Method r))))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
@@ -52,7 +52,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule :: (OOProg r vis smt) => Name -> Description ->
-  [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] ->
+  [GenState (Maybe (MS (r (Method r))))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModule n desc = genModuleWithImports n desc []
 
@@ -83,8 +83,8 @@ data ClassType = Primary | Auxiliary
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
 mkClass :: (ClassSym r vis smt) => ClassType -> Name -> Maybe Name ->
-  Description -> [CSStateVar r] -> GenState [SMethod r] ->
-    GenState [SMethod r] -> GenState (SClass r)
+  Description -> [CSStateVar r] -> GenState [MS (r (Method r))] ->
+    GenState [MS (r (Method r))] -> GenState (SClass r)
 mkClass s n l desc vs cstrs mths = do
   g <- get
   modify (\ds -> ds {currentClass = n})
@@ -102,13 +102,13 @@ mkClass s n l desc vs cstrs mths = do
 
 -- | Generates a primary class.
 primaryClass :: (ClassSym r vis smt) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
+  [CSStateVar r] -> GenState [MS (r (Method r))] -> GenState [MS (r (Method r))] ->
   GenState (SClass r)
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
 auxClass :: (ClassSym r vis smt) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
+  [CSStateVar r] -> GenState [MS (r (Method r))] -> GenState [MS (r (Method r))] ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
 
@@ -178,7 +178,7 @@ fAppInOut m n ins outs both = do
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImportsProc :: (ProcProg r vis smt) => Name -> Description ->
-  [Import] -> [GenState (Maybe (SMethod r))] -> GenState (Proc.SFile r)
+  [Import] -> [GenState (Maybe (MS (r (Method r))))] -> GenState (Proc.SFile r)
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -191,7 +191,7 @@ genModuleWithImportsProc n desc is maybeMs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModuleProc :: (ProcProg r vis smt) => Name -> Description ->
-  [GenState (Maybe (SMethod r))] -> GenState (Proc.SFile r)
+  [GenState (Maybe (MS (r (Method r))))] -> GenState (Proc.SFile r)
 genModuleProc n desc = genModuleWithImportsProc n desc []
 
 -- | Function call generator.

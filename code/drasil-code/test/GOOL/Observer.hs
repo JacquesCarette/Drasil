@@ -1,11 +1,11 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
+import Drasil.GOOL (SFile, SVariable, SClass, OOProg, MS, FileSym(..),
   AttachmentSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
   SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
-  VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  VisibilitySym(..), MethodSym(..), OOMethodSym(..), initializer,
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -36,11 +36,11 @@ helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (OOMethodSym r vis smt, Literal r) => SMethod r
+observerConstructor :: (OOMethodSym r vis smt, Literal r) => MS (r (Method r))
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
 printNumMethod :: (OOMethodSym r vis smt, IOStatement r smt,
-  OOVariableValue r) => SMethod r
+  OOVariableValue r) => MS (r (Method r))
 printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

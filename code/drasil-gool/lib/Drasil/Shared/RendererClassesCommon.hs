@@ -15,9 +15,9 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, SVariable,
-  SValue, SMethod, MixedCall, BodySym(..), BlockSym(..), TypeSym(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  SValue, MixedCall, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
@@ -213,8 +213,8 @@ class (TypeSym r) => MethodTypeSym r where
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   -- | Takes a BlockComment and a method and generates a function.
-  commentedFunc :: MS (r Doc) -> SMethod r -> SMethod r
-  mthdFromData :: VisibilityTag -> Doc -> SMethod r
+  commentedFunc :: MS (r Doc) -> MS (r (Method r)) -> MS (r (Method r))
+  mthdFromData :: VisibilityTag -> Doc -> MS (r (Method r))
 
 class MethodElim r where
   method :: r (Method r) -> Doc

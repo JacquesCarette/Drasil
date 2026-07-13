@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, MSBlock, SVariable, SValue, SMethod, BodySym(..), oneLiner,
+  Label, MSBody, MSBlock, SVariable, SValue, BodySym(..), oneLiner,
   bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -1204,7 +1204,7 @@ swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
 
 swiftMethod :: Label -> SwiftCode Doc ->
   SwiftCode (Attachment SwiftCode) -> MSMthdType SwiftCode ->
-  [MS (SwiftCode ParamData)] -> MSBody SwiftCode -> SMethod SwiftCode
+  [MS (SwiftCode ParamData)] -> MSBody SwiftCode -> MS (SwiftCode (Method SwiftCode))
 swiftMethod n s p t ps b = do
   tp <- t
   pms <- sequence ps
@@ -1223,7 +1223,7 @@ swiftConstructor
   :: [MS (SwiftCode ParamData)]
   -> Initializers SwiftCode
   -> MSBody SwiftCode
-  -> SMethod SwiftCode
+  -> MS (SwiftCode (Method SwiftCode))
 swiftConstructor ps is b = do
   pms <- sequence ps
   bod <- multiBody [G.initStmts is, b]

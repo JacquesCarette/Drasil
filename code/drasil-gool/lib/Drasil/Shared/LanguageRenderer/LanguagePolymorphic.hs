@@ -22,8 +22,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, SVariable, SValue, SMethod, NamedArgs, MixedCall, MixedCtorCall,
-  BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
+  MSBlock, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body),
+  bodyStatements, oneLiner, BlockSym(Block), MethodSym(Method),
   VariableSym(Variable), VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
@@ -511,15 +511,15 @@ method
   -> VS (r TypeData)
   -> [MS (r ParamData)]
   -> MSBody r
-  -> SMethod r
+  -> MS (r (Method r))
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis smt) => SVariable r -> SMethod r
+getMethod :: (OORenderSym r vis smt) => SVariable r -> MS (r (Method r))
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis smt) => SVariable r -> SMethod r
+setMethod :: (OORenderSym r vis smt) => SVariable r -> MS (r (Method r))
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -529,29 +529,29 @@ initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
   :: (AttachmentSym r, OORenderMethod r vis)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (RenderMethod r) => FuncDocRenderer -> String ->
-  [String] -> [String] -> SMethod r -> SMethod r
+  [String] -> [String] -> MS (r (Method r)) -> MS (r (Method r))
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
 docFunc :: (RenderMethod r) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> SMethod r -> SMethod r
+  Maybe String -> MS (r (Method r)) -> MS (r (Method r))
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 
 buildClass
   :: (RenderClass r vis, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  =>  Maybe Label -> [CSStateVar r] -> [MS (r (Method r))] -> [MS (r (Method r))] -> SClass r
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
 implementingClass :: (RenderClass r vis, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  [CSStateVar r] -> [MS (r (Method r))] -> [MS (r (Method r))] -> SClass r
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass

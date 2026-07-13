@@ -21,11 +21,11 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, SMethod,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
+  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
-  MethodSym, VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
+  MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
@@ -62,7 +62,7 @@ type FSModule a = FS (a (Module a))
 class (ClassSym r vis smt) => ModuleSym r vis smt where
   type Module r
   -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r (Method r))] -> [SClass r] -> FSModule r
 
 type SClass a = CS (a (Class a))
 
@@ -70,16 +70,16 @@ class (OOMethodSym r vis smt, StateVarSym r vis) => ClassSym r vis smt where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  buildClass :: Maybe Label -> [CSStateVar r] -> [MS (r (Method r))] ->
+    [MS (r (Method r))] -> SClass r
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [MS (r (Method r))] ->
+    [MS (r (Method r))] -> SClass r
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [MS (r (Method r))] ->
+    [MS (r (Method r))] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
 
@@ -87,29 +87,29 @@ type Initializers r = [(SVariable r, SValue r)]
 
 class (MethodSym r vis smt, AttachmentSym r) => OOMethodSym r vis smt where
   method      :: Label -> r vis -> r (Attachment r) -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MSBody r -> SMethod r
-  getMethod   :: SVariable r -> SMethod r
-  setMethod   :: SVariable r -> SMethod r
-  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> SMethod r
+    [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
+  getMethod   :: SVariable r -> MS (r (Method r))
+  setMethod   :: SVariable r -> MS (r (Method r))
+  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r (Method r))
 
   -- inOutMethod and docInOutMethod both need the Attachment parameter
   inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r
   docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r
 
 privMethod :: (OOMethodSym r vis smt) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
 privMethod n = method n private instanceLevel
 
 pubMethod :: (OOMethodSym r vis smt) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
 pubMethod n = method n public instanceLevel
 
 initializer :: (OOMethodSym r vis smt) => [MS (r ParamData)] ->
-  Initializers r -> SMethod r
+  Initializers r -> MS (r (Method r))
 initializer ps is = constructor ps is (body [])
 
 nonInitConstructor :: (OOMethodSym r vis smt) => [MS (r ParamData)] ->
-  MSBody r -> SMethod r
+  MSBody r -> MS (r (Method r))
 nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))

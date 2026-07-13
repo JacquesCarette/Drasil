@@ -6,9 +6,10 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   listAdd, funcDecDef, function
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, SValue, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
-  getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
+  getCodeType, convType, MethodSym(Method), StatementSym, ValueExpression,
+  IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
@@ -59,7 +60,7 @@ fileFromData f fpath mdl' = do
 -- methods
 buildModule
   :: (RC.MethodElim r, RP.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> [SMethod r] -> FSModule r
+  => Label -> FS Doc -> FS Doc -> [MS (r (Method r))] -> FSModule r
 buildModule n imps bot fs = RP.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
@@ -119,5 +120,5 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function :: (RP.ProcRenderMethod r vis) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> SMethod r
+  [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
 function n s t = RP.intFunc False n s (RC.mType t)

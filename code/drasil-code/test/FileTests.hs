@@ -2,10 +2,10 @@
 -- and write to files. See stable/gooltest for more details on what is generated through this.
 module FileTests (fileTestsOO, fileTestsProc) where
 
-import Drasil.GOOL (MSBlock, SMethod, MS, SharedProg, OOProg,
-  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..),
-  ControlStatement(..), VariableSym(var), Literal(..), VariableValue(..),
-  Comparison(..), List(..), MethodSym(..), ScopeSym(..))
+import Drasil.GOOL (MSBlock, MS, SharedProg, OOProg, BodySym(..), BlockSym(..),
+  TypeSym(..), DeclStatement(..), IOStatement(..), ControlStatement(..),
+  VariableSym(var), Literal(..), VariableValue(..), Comparison(..), List(..),
+  MethodSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -23,7 +23,7 @@ fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
 
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
-fileTestMethod :: (SharedProg r vis smt) => SMethod r
+fileTestMethod :: (SharedProg r vis smt) => MS (r (Method r))
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
 -- | Generates functions that write to the file.

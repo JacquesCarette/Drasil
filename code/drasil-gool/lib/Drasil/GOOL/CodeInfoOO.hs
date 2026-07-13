@@ -6,7 +6,7 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
-  SMethod, SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
+  SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -486,7 +486,7 @@ noInfoScope = return $ sd Global -- Hack
 noInfoBinder :: VSBinder CodeInfoOO
 noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
 
-updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
+updateMEMandCM :: String -> MSBody CodeInfoOO -> MS (CodeInfoOO (Method CodeInfoOO))
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)

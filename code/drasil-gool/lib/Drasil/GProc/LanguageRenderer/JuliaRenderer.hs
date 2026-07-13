@@ -15,9 +15,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, SValue, SVariable, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  Label, SValue, SVariable, MSBlock, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), NativeVector(..),
@@ -857,7 +857,7 @@ jlForEach i lstVar b = vcat [
   jlEnd]
 
 -- | Creates the contents of a module in Julia
-jlModContents :: Label -> [Label] -> [SMethod JuliaCode] -> FSModule JuliaCode
+jlModContents :: Label -> [Label] -> [MS (JuliaCode (Method JuliaCode))] -> FSModule JuliaCode
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports

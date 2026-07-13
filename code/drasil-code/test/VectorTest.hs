@@ -3,9 +3,8 @@
 -- indexing, and dot products.
 module VectorTest (vectorTestProc) where
 
-import Drasil.GProc (SMethod, ProcProg, bodyStatements, TypeSym(..),
-  VariableSym(..), Literal(..), VariableValue(..), DeclStatement(..),
-  ScopeSym(..), MethodSym(..),
+import Drasil.GProc (ProcProg, MS, bodyStatements, TypeSym(..), VariableSym(..),
+  Literal(..), VariableValue(..), DeclStatement(..), ScopeSym(..), MethodSym(..),
   VisibilitySym(..), ParameterSym(..), ControlStatement(..), NativeVector(..),
   List(..))
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
@@ -22,7 +21,7 @@ vectorTestProc = GProc.prog "VectorTest" ""
 
 -- | Takes two vectors and stores each vector operation's result, returning
 -- their dot product.
-vectorOps :: (ProcProg r vis smt) => SMethod r
+vectorOps :: (ProcProg r vis smt) => MS (r (Method r))
 vectorOps =
   function "vectorOps" public double [param (var "a" double), param (var "b" double)]
   (bodyStatements

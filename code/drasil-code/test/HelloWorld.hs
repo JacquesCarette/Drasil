@@ -3,10 +3,10 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, SMethod, SClass, SVariable, MS, SharedProg,
-  OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice,
-  TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
+import Drasil.GOOL (MSBody, MSBlock, SClass, SVariable, MS, SharedProg, OOProg,
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..),
+  OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
@@ -46,7 +46,7 @@ myOtherList :: (SharedProg r vis smt) => SVariable r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainOO :: (OOProg r vis smt) => SMethod r
+helloWorldMainOO :: (OOProg r vis smt) => MS (r (Method r))
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -57,7 +57,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
       helloForEachLoop, helloTryCatch]]))
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainProc :: (ProcProg r vis smt) => SMethod r
+helloWorldMainProc :: (ProcProg r vis smt) => MS (r (Method r))
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [

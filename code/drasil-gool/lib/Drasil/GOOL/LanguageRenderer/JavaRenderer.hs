@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
+  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -1057,9 +1057,9 @@ jInOutCall f n ins outs both = fCall rets
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
 jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
-  MSBody JavaCode -> SMethod JavaCode) -> [SVariable JavaCode] ->
+  MSBody JavaCode -> MS (JavaCode (Method JavaCode))) -> [SVariable JavaCode] ->
   [SVariable JavaCode] -> [SVariable JavaCode] -> MSBody JavaCode ->
-  SMethod JavaCode
+  MS (JavaCode (Method JavaCode))
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
@@ -1085,9 +1085,9 @@ jInOut f ins outs both b = f (returnTp rets)
         rets = both ++ outs
 
 jDocInOut :: (RenderMethod r) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String ->
+  [SVariable r] -> [SVariable r] -> MSBody r -> MS (r (Method r))) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MSBody r -> SMethod r
+  [(String, SVariable r)] -> MSBody r -> MS (r (Method r))
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
@@ -1101,7 +1101,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
 
 jExtraClass
   :: (RenderClass r vis, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  => Label -> Maybe Label -> [CSStateVar r] -> [MS (r (Method r))] -> [MS (r (Method r))] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, SMethod, BodySym(..), oneLiner, BlockSym(..),
+  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -933,9 +933,9 @@ csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MSBody CSharpCode -> SMethod CSharpCode) ->
+  MSBody CSharpCode -> MS (CSharpCode (Method CSharpCode))) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MSBody CSharpCode -> SMethod CSharpCode
+  MSBody CSharpCode -> MS (CSharpCode (Method CSharpCode))
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))

@@ -23,11 +23,11 @@ import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, SVariable, Value,
-  SValue, SMethod, MixedCall, bodyStatements, oneLiner,
+  SValue, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
-  funcApp, listSize)
+  (&=), ControlStatement(returnStmt), VisibilitySym(..),
+  MethodSym(Method, function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
@@ -94,12 +94,12 @@ int = typeFromData Integer intRender (text intRender)
 
 constructor
   :: (OORenderSym r vis smt, OOStatement r smt)
-  => Label -> [MS (r ParamData)] -> Initializers r -> MSBody r -> SMethod r
+  => Label -> [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r (Method r))
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
 doxFunc :: (RenderMethod r) => String -> [String] -> Maybe String ->
-  SMethod r -> SMethod r
+  MS (r (Method r)) -> MS (r (Method r))
 doxFunc = docFunc functionDox
 
 doxClass :: (RG.RenderClass r vis) => String -> SClass r -> SClass r
@@ -150,8 +150,8 @@ intClass
   -> r vis
   -> r ParentSpec
   -> [CSStateVar r]
-  -> [SMethod r]
-  -> [SMethod r]
+  -> [MS (r (Method r))]
+  -> [MS (r (Method r))]
   -> CS (r Doc)
 intClass f n s i svrs cstrs mths = do
   modify (setClassName n)
@@ -166,7 +166,7 @@ intClass f n s i svrs cstrs mths = do
 -- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule
   :: (RG.ClassElim r, RC.MethodElim r, RG.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> FS Doc -> [SMethod r] -> [SClass r] -> FSModule r
+  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r (Method r))] -> [SClass r] -> FSModule r
 buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
@@ -258,7 +258,7 @@ mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
-docMain :: (OORenderSym r vis smt) => MSBody r -> SMethod r
+docMain :: (OORenderSym r vis smt) => MSBody r -> MS (r (Method r))
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
@@ -270,7 +270,7 @@ mainFunction
      , Monad r
      , VisibilitySym r vis
      )
-  => VS (r TypeData) -> Label -> MSBody r -> SMethod r
+  => VS (r TypeData) -> Label -> MSBody r -> MS (r (Method r))
 mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
   (render (renderType argT) ++ array) (renderType argT <> array'))))]
@@ -286,7 +286,7 @@ buildModule'
   => Label
   -> (String -> r Doc)
   -> [Label]
-  -> [SMethod r]
+  -> [MS (r (Method r))]
   -> [SClass r]
   -> FSModule r
 buildModule' n inc is ms cs = RG.modFromData n (do
@@ -329,13 +329,13 @@ string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
   :: (RenderMethod r)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r (Method r)))
   -> String
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> MSBody r
-  -> SMethod r
+  -> MS (r (Method r))
 docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
   [fst o] (f (map snd is) [snd o] [] b)
 docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (map fst $
@@ -418,7 +418,7 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 
 extraClass
   :: (RG.RenderClass r vis, VisibilitySym r vis)
-  =>  Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  =>  Label -> Maybe Label -> [CSStateVar r] -> [MS (r (Method r))] -> [MS (r (Method r))] -> SClass r
 extraClass n = RG.intClass n public . RG.inherit
 
 -- Java, C#, and Swift --
@@ -522,7 +522,7 @@ forLoopError :: String -> String
 forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
   "forRange, forEach, or while instead"
 
-mainBody :: (RC.BodyElim r, RC.RenderMethod r) => MSBody r -> SMethod r
+mainBody :: (RC.BodyElim r, RC.RenderMethod r) => MSBody r -> MS (r (Method r))
 mainBody b = do
   modify setCurrMain
   bod <- b
@@ -536,12 +536,12 @@ inOutFunc
      , RenderType r
      , VariableElim r
      )
-  => (VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> SMethod r)
+  => (VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r (Method r)))
   -> [SVariable r]
   -> [SVariable r]
   -> [SVariable r]
   -> MSBody r
-  -> SMethod r
+  -> MS (r (Method r))
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
 inOutFunc f ins outs both b = f
   (multiType $ map (onStateValue variableType) rets)
@@ -553,12 +553,12 @@ inOutFunc f ins outs both b = f
 docInOutFunc'
   :: (RenderMethod r)
   => FuncDocRenderer
-  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
+  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r (Method r)))
   -> String
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
-  -> MSBody r -> SMethod r
+  -> MSBody r -> MS (r (Method r))
 docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)
 

@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
-  SValue, SMethod, FSModule, NamedArgs, SharedProg, SharedStatement, ProcProg,
+module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
+  SValue, FSModule, NamedArgs, SharedProg, SharedStatement, ProcProg,
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
@@ -22,8 +22,8 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VS, SVariable,
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
-  SMethod, NamedArgs, SharedProg, SharedStatement, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
+  NamedArgs, SharedProg, SharedStatement, BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), extVar,
@@ -44,7 +44,7 @@ import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (VS, GOOLState(..), lensMStoVS, headers, sources,
+import Drasil.Shared.State (MS, VS, GOOLState(..), lensMStoVS, headers, sources,
   mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)

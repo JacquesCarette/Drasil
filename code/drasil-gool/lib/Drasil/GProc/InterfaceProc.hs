@@ -8,9 +8,9 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
-  MethodSym, NativeVector)
-import Drasil.Shared.State (GS, FS)
+import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..),
+  NativeVector)
+import Drasil.Shared.State (GS, FS, MS)
 
 class (SharedProg r vis smt, ProgramSym r vis smt,
   NativeVector r) => ProcProg r vis smt
@@ -35,4 +35,4 @@ type FSModule a = FS (a (Module a))
 class (MethodSym r vis smt) => ModuleSym r vis smt where
   type Module r
   -- Module name, import names, module functions
-  buildModule :: Label -> [Label] -> [SMethod r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r (Method r))] -> FSModule r

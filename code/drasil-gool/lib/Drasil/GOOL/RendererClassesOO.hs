@@ -7,8 +7,8 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue, SMethod,
-  BlockSym(..))
+import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue,
+  BlockSym(..), MethodSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
@@ -57,13 +57,13 @@ class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r vis | r -> vis whe
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->
-    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> SMethod r
+    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r (IG.Attachment r)
-    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> SMethod r
+    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r (Method r))
 
-  destructor :: [IG.CSStateVar r] -> SMethod r
+  destructor :: [IG.CSStateVar r] -> MS (r (Method r))
 
 class StateVarElim r where
   stateVar :: r (IG.StateVar r) -> Doc
@@ -73,7 +73,7 @@ type ParentSpec = Doc
 class (BlockCommentSym r) => RenderClass r vis | r -> vis where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r]
-    -> [SMethod r] -> [SMethod r] -> IG.SClass r
+    -> [MS (r (Method r))] -> [MS (r (Method r))] -> IG.SClass r
 
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec

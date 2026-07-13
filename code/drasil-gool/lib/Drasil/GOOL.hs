@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
 module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
-  SValue, SMethod, CSStateVar, SClass, FSModule, NamedArgs, Initializers,
-  SharedProg, SharedStatement, OOProg, OOStatement, ProgramSym(..), FileSym(..),
+  SValue, CSStateVar, SClass, FSModule, NamedArgs, Initializers, SharedProg,
+  SharedStatement, OOProg, OOStatement, ProgramSym(..), FileSym(..),
   AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
@@ -33,8 +33,8 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
-  SMethod, NamedArgs, SharedProg, SharedStatement, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
+  NamedArgs, SharedProg, SharedStatement, BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), extVar,

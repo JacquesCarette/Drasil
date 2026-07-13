@@ -4,9 +4,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, SMethod,
-  NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
-  InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
+  DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -530,28 +530,26 @@ class (VariableSym r) => ParameterSym r where
   param :: SVariable r -> MS (r ParamData)
   pointerParam :: SVariable r -> MS (r ParamData)
 
-type SMethod a = MS (a (Method a))
-
 -- The three lists are inputs, outputs, and both, respectively
 type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
-  MSBody r -> SMethod r
+  MSBody r -> MS (r (Method r))
 -- Parameters are: brief description of function, input descriptions and
 -- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
 type DocInOutFunc r = String -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> MS (r (Method r))
 
 class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis smt
   where
   type Method r
-  docMain :: MSBody r -> SMethod r
+  docMain :: MSBody r -> MS (r (Method r))
 
   function :: Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] ->
-    MSBody r -> SMethod r
-  mainFunction  :: MSBody r -> SMethod r
+    MSBody r -> MS (r (Method r))
+  mainFunction  :: MSBody r -> MS (r (Method r))
   -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
-  docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
+  docFunc :: String -> [String] -> Maybe String -> MS (r (Method r)) -> MS (r (Method r))
 
   inOutFunc :: Label -> r vis -> InOutFunc r
   docInOutFunc :: Label -> r vis -> DocInOutFunc r

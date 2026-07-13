@@ -92,7 +92,6 @@ instance BlockSym CodeInfoOO () where
     sequence_ b
     return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
 
-
 instance TypeSym CodeInfoOO where
   bool            = return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
   int             = return $ return $ error "[int] The return value of this isn't used, and the thunk shouldn't fire."

@@ -21,10 +21,10 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, SVariable, SValue, NamedArgs, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc, SharedProg, SharedStatement,
   -- Typeclasses
-  SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
+  BodySym(body), BlockSym(..), TypeSym(..), FunctionSym,
   MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
@@ -276,7 +276,7 @@ addObserver o = listAdd obsList lastelem o
 
 class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
-    Maybe (SVariable r) -> MSBlock r
+    Maybe (SVariable r) -> MS (r (Block r))
 
 class (FunctionSym r) => OOFunctionSym r where
   func :: Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)

@@ -4,9 +4,8 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
-  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  Label, Library, MSBody, VSBinder, SVariable, SValue, NamedArgs, MixedCall,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -63,7 +62,7 @@ type MSBody a = MS (a (Body a))
 
 class (BlockSym r smt) => BodySym r smt where
   type Body r
-  body           :: [MSBlock r] -> MSBody r
+  body           :: [MS (r (Block r))] -> MSBody r
 
   addComments :: Label -> MSBody r -> MSBody r
 
@@ -73,11 +72,9 @@ bodyStatements sts = body [block sts]
 oneLiner :: (BodySym r smt) => MS (r smt) -> MSBody r
 oneLiner tp = bodyStatements [tp]
 
-type MSBlock a = MS (a (Block a))
-
 class (StatementSym r smt) => BlockSym r smt where
   type Block r
-  block   :: [MS (r smt)] -> MSBlock r
+  block   :: [MS (r smt)] -> MS (r (Block r))
 
 class TypeSym r where
   bool          :: VS (r TypeData)
@@ -379,7 +376,7 @@ class (IndexTranslator r, Literal r) => NativeVector r where
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
-    -> SVariable r -> SValue r -> MSBlock r
+    -> SVariable r -> SValue r -> MS (r (Block r))
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -391,7 +388,7 @@ class (ValueSym r) => InternalList r where
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
+  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r (Block r))
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
 listIndexExists :: (List r smt, Comparison r) => SValue r -> SValue r -> SValue r

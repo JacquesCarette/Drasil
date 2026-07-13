@@ -9,8 +9,8 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
-  bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue,
+  BlockSym(..), bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
   ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(..),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
@@ -85,7 +85,7 @@ listSlice
   -> Maybe (SValue r)
   -> SVariable r
   -> SValue r
-  -> MSBlock r
+  -> MS (r (Block r))
 listSlice beg end step vnew vold = do
 
   l_temp <- genVarName [] "temp"

@@ -3,7 +3,7 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, SClass, SVariable, MS, SharedProg, OOProg,
+import Drasil.GOOL (MSBody, SClass, SVariable, MS, SharedProg, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..),
   OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), CommentStatement(..),
@@ -67,7 +67,7 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
-helloInitVariables :: (SharedProg r vis smt md) => MSBlock r
+helloInitVariables :: (SharedProg r vis smt md) => MS (r (Block r))
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
@@ -117,7 +117,7 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis smt md) => MSBlock r
+objectTests :: (OOProg r vis smt md) => MS (r (Block r))
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -151,7 +151,7 @@ mySlicedList9 = var "mySlicedList9" (listType double)
 mySlicedList10 = var "mySlicedList10" (listType double)
 mySlicedList11 = var "mySlicedList11" (listType double)
 
-listSliceTests :: (SharedProg r vis smt md) => [MSBlock r]
+listSliceTests :: (SharedProg r vis smt md) => [MS (r (Block r))]
 listSliceTests = [
 
   -- | Declare variables for list slices

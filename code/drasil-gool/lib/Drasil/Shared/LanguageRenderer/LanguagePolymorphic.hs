@@ -22,7 +22,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body),
+  SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body),
   bodyStatements, oneLiner, BlockSym(Block), VariableSym(Variable),
   VisibilitySym(..), VariableElim(variableName, variableType),
   ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
@@ -84,7 +84,7 @@ block
   => [MS (r smt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MSBlock r] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r, Monad r) => [MS (r (Block r))] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --

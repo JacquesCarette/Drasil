@@ -14,12 +14,12 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, MSBlock, SVariable, SValue, BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, bodyStatements,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
@@ -1039,7 +1039,7 @@ swiftListSlice
   -> Maybe (SValue SwiftCode)
   -> Maybe (SValue SwiftCode)
   -> SValue SwiftCode
-  -> MSBlock SwiftCode
+  -> MS (SwiftCode (Block SwiftCode))
 swiftListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn

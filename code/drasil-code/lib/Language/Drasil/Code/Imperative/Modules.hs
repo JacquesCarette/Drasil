@@ -26,7 +26,7 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, CSStateVar, SClass,
+import Drasil.GOOL (MSBody, SVariable, SValue, MS, CSStateVar, SClass,
   SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
   Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -580,7 +580,7 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
   :: (OOStatement r smt, TypeElim r, VariableElim r)
-   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MSBlock r)
+   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r (Block r)))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
   vv <- mkVar (quantvar v)
@@ -597,7 +597,7 @@ genCaseBlock
   -> CodeDefinition
   -> Completeness
   -> [(CodeExpr, CodeExpr)]
-  -> GenState (MSBlock r)
+  -> GenState (MS (r (Block r)))
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlock t v c cs = do
@@ -825,7 +825,7 @@ genCalcFuncProc cdef = do
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlockProc
   :: (NativeVector r, SharedStatement r smt, TypeElim r)
-  => CalcType -> CodeDefinition -> CodeExpr -> GenState (MSBlock r)
+  => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r (Block r)))
 genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
 genCalcBlockProc CalcAssign v e = do
   vv <- mkVarProc (quantvar v)
@@ -842,7 +842,7 @@ genCaseBlockProc
   -> CodeDefinition
   -> Completeness
   -> [(CodeExpr, CodeExpr)]
-  -> GenState (MSBlock r)
+  -> GenState (MS (r (Block r)))
 genCaseBlockProc _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlockProc t v c cs = do

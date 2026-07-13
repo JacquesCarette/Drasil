@@ -9,7 +9,7 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, BodySym(..),
+import Drasil.GOOL (Label, MSBody, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), IOStatement(..),
   lensMStoVS, ScopeSym(..), VariableSym, SharedStatement)
@@ -20,7 +20,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, BodySym(..),
 -- the beginning of the body.
 logBody
   :: (SharedStatement r smt, VariableElim r)
-  => Label -> [SVariable r] -> [MSBlock r] -> GenState (MSBody r)
+  => Label -> [SVariable r] -> [MS (r (Block r))] -> GenState (MSBody r)
 logBody n vars b = do
   g <- get
   return $ body $
@@ -32,7 +32,7 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod
   :: (SharedStatement r smt, VariableElim r)
-  => FilePath -> Label -> [SVariable r] -> MSBlock r
+  => FilePath -> Label -> [SVariable r] -> MS (r (Block r))
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),

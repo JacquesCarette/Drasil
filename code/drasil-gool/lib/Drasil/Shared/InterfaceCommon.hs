@@ -4,9 +4,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, Block, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
-  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  Label, Library, Body, MSBody, Block, MSBlock, VSBinder, SVariable, SValue,
+  NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
+  InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -60,10 +60,11 @@ class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
 class UnRepr repr contents where
   unRepr :: repr contents -> contents
 
-type MSBody a = MS (a (Body a))
+
+type Body = Doc
+type MSBody a = MS (a Body)
 
 class (BlockSym r smt) => BodySym r smt where
-  type Body r
   body           :: [MSBlock r] -> MSBody r
 
   addComments :: Label -> MSBody r -> MSBody r

@@ -125,7 +125,6 @@ instance ImportSym MatlabCode where
   modImport = undefined
 
 instance BodySym MatlabCode (Doc, Terminator) where
-  type Body MatlabCode = Doc
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 

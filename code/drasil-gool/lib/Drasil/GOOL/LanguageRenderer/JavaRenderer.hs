@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
+  Label, Body, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -179,7 +179,6 @@ instance PermElim JavaCode where
   binding = error $ CP.bindingError jName
 
 instance BodySym JavaCode (Doc, Terminator) where
-  type Body JavaCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -968,7 +967,7 @@ jThrowDoc :: (ValueElim r) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-jTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+jTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -1022,7 +1021,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
 
 jMethod :: Label -> [String] -> JavaCode Doc ->
   JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
-  [JavaCode ParamData] -> JavaCode (Body JavaCode) -> Doc
+  [JavaCode ParamData] -> JavaCode Body -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>

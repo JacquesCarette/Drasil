@@ -15,9 +15,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, SValue, SVariable, MSBlock, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  Label, Body, SValue, SVariable, MSBlock, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), NativeVector(..),
@@ -154,7 +154,6 @@ instance ImportSym JuliaCode where
                       importLabel <+> text "." <> modName]
 
 instance BodySym JuliaCode (Doc, Terminator) where
-  type Body JuliaCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
@@ -848,7 +847,7 @@ jlSpace = OSpace {oSpace = empty}
 -- | Creates a for-each loop in Julia
 jlForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+  => r (Variable r) -> r (Value r) -> r Body -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -875,7 +874,7 @@ jlModContents n is = A.buildModule n (do
 --   bod is body.
 jlIntFunc
   :: (BodyElim r, ParamElim r)
-  => Label -> [r ParamData] -> r (Body r) -> Doc
+  => Label -> [r ParamData] -> r Body -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,
@@ -889,7 +888,7 @@ jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 jlThrow :: (ValueElim r) => r (Value r) -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
-jlTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+jlTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 jlTryCatch tryB catchB = vcat [
   tryLabel,
   indent $ RC.body tryB,

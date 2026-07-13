@@ -15,7 +15,7 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, NamedArgs, BodySym(..), bodyStatements,
+  Label, Body, MSBody, SVariable, SValue, NamedArgs, BodySym(..), bodyStatements,
   oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -194,7 +194,6 @@ instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) where
   binding p = binding $ pfst p
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) (Doc, Terminator) where
-  type Body (p CppSrcCode CppHdrCode) = Doc
   body = pair1List body body
 
   addComments s = pair1 (addComments s) (addComments s)
@@ -1085,7 +1084,6 @@ instance PermElim CppSrcCode where
   binding = attachment . unCPPSC
 
 instance BodySym CppSrcCode (Doc, Terminator) where
-  type Body CppSrcCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -1820,7 +1818,6 @@ instance PermElim CppHdrCode where
   binding = attachment . unCPPHC
 
 instance BodySym CppHdrCode (Doc, Terminator) where
-  type Body CppHdrCode = Doc
   body _ = toState $ toCode empty
 
   addComments _ _ = toState $ toCode empty
@@ -2762,7 +2759,7 @@ cppPrint newLn pf vl = do
 cppThrowDoc :: (ValueElim r) => r (Value r) -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
-cppTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+cppTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 cppTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -2799,7 +2796,7 @@ cppPointerParamDoc
 cppPointerParamDoc v = renderType (variableType v) <+> cppPtr <> RC.variable v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode)
-  -> [CppSrcCode ParamData] -> CppSrcCode (Body CppSrcCode) -> Doc
+  -> [CppSrcCode ParamData] -> CppSrcCode Body -> Doc
 cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
   vcat [ttype <+> text (c `nmSpcAccess` n) <> parens (parameterList
     ps) <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
@@ -2819,14 +2816,14 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   lensMStoVS . snd) is <*> b)
 
 cppsFunction :: Label -> CppSrcCode TypeData ->
-  [CppSrcCode ParamData] -> CppSrcCode (Body CppSrcCode) -> Doc
+  [CppSrcCode ParamData] -> CppSrcCode Body -> Doc
 cppsFunction n t ps b = vcat [
   renderType t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
 
 cppsIntFunc :: (CppSrcCode TypeData -> [CppSrcCode ParamData] ->
-  CppSrcCode (Body CppSrcCode) -> Doc) -> CppSrcCode (Doc, VisibilityTag) ->
+  CppSrcCode Body -> Doc) -> CppSrcCode (Doc, VisibilityTag) ->
   MSMthdType CppSrcCode -> [MS (CppSrcCode ParamData)] ->
   MSBody CppSrcCode -> MS (CppSrcCode MethodData)
 cppsIntFunc f s t ps b = do

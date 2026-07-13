@@ -80,12 +80,11 @@ instance AttachmentSym CodeInfoOO where
   instanceLevel = toCode ()
 
 instance BodySym CodeInfoOO () where
-  type Body CodeInfoOO = ()
   body b = do
     sequence_ b
     return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
-  addComments _ _ = noInfo
+  addComments _ _ = return $ return $ error "[addComments] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BlockSym CodeInfoOO () where
   block b = do
@@ -314,7 +313,9 @@ instance DeclStatement CodeInfoOO () where
   arrayDec           _ _ _ = noInfo
   arrayDecDef          _ _ = zoom lensMStoVS . executeList
   constDecDef          _ _ = zoom lensMStoVS . execute1
-  funcDecDef         _ _ _ = execute1
+  funcDecDef         _ _ _ bod = do
+    _ <- bod
+    return $ return $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OODeclStatement CodeInfoOO () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
@@ -382,13 +383,32 @@ instance ControlStatement CodeInfoOO () where
     _ <- zoom lensMStoVS v
     evalConds cs b
 
-  ifExists v = execute3 (zoom lensMStoVS v)
+  ifExists v t f = do
+    _ <- zoom lensMStoVS v
+    _ <- t
+    _ <- f
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
-  for dec v = execute4 dec (zoom lensMStoVS v)
-  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e)
-    (zoom lensMStoVS s)
-  forEach _ v = execute2 (zoom lensMStoVS v)
-  while v = execute2 (zoom lensMStoVS v)
+  for dec v smt bod = do
+    _ <- dec
+    _ <- zoom lensMStoVS v
+    _ <- smt
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  forRange _ b e s bod = do
+    _ <- zoom lensMStoVS b
+    _ <- zoom lensMStoVS e
+    _ <- zoom lensMStoVS s
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  forEach _ v bod = do
+    _ <- zoom lensMStoVS v
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  while v bod = do
+    _ <- zoom lensMStoVS v
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
   tryCatch _ cb = do
     _ <- cb
@@ -538,12 +558,6 @@ execute3 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
 execute3 s1 s2 s3 = do
   _ <- s1
   execute2 s2 s3
-
-execute4 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
-  State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
-execute4 s1 s2 s3 s4 = do
-  _ <- s1
-  execute3 s2 s3 s4
 
 currModCall :: String -> [VS (CodeInfoOO ())] ->
   [(VS (CodeInfoOO ()), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())

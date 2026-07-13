@@ -30,7 +30,7 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
+import Drasil.Shared.InterfaceCommon (Label, Library, Body, SValue,
   VariableSym(Variable), ValueSym(..), TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
   InternalVarElim, InternalBinderElim, ParamElim)
@@ -220,8 +220,8 @@ switch
   => (Doc -> Doc)
   -> r smt
   -> r (Value r)
-  -> r (Body r)
-  -> [(r (Value r), r (Body r))]
+  -> r Body
+  -> [(r (Value r), r Body)]
   -> Doc
 switch f st v defBody cs =
   let caseDoc (l, result) = vcat [

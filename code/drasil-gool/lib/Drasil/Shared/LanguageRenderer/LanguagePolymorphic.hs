@@ -21,13 +21,12 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
   MSBlock, Block, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  BodySym(Body), bodyStatements, oneLiner, VariableSym(Variable),
-  VisibilitySym(..), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
-  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
-  TypeElim(..),
+  bodyStatements, oneLiner, VariableSym(Variable), VisibilitySym(..),
+  VariableElim(variableName, variableType), ValueSym(Value, valueType),
+  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
+  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
@@ -484,7 +483,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (RenderStatement r smt) => (r (Body r) -> r (Body r) -> Doc) ->
+tryCatch :: (RenderStatement r smt) => (r Body -> r Body -> Doc) ->
   MSBody r -> MSBody r -> MS (r smt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 

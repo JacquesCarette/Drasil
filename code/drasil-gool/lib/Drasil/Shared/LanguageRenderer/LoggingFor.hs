@@ -260,7 +260,6 @@ instance (BlockSym r smt) => BlockSym (LoggingFor r) smt where
   block = liftLogging block
 
 instance (BodySym r smt) => BodySym (LoggingFor r) smt where
-  type Body (LoggingFor r) = Body r
   body = liftLogging body
   addComments = liftLogging addComments
 

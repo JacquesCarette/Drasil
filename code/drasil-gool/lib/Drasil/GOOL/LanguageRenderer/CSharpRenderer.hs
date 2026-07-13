@@ -887,7 +887,7 @@ csAssert condition errorMessage = vcat [
 csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (OORenderSym r vis smt) => SValue r -> SValue r
+csFileInput :: (InternalValueExp r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
 csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
@@ -904,10 +904,10 @@ csInput tp inFn = do
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char]
           then addSystemImport else id
 
-csOpenFileR :: (OORenderSym r vis smt) => SValue r -> VS (r TypeData) -> SValue r
+csOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (OORenderSym r vis smt) => SValue r ->
+csOpenFileWorA :: (OOValueExpression r) => SValue r ->
   VS (r TypeData) -> SValue r -> SValue r
 csOpenFileWorA n w a = newObj w [n, a]
 

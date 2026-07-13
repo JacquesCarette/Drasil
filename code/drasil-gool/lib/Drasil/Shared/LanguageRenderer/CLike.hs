@@ -17,29 +17,22 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   TypeElim(..), SVariable, SValue, SMethod, MixedCall, MixedCtorCall,
   VariableSym(..), VariableValue(..), VariableElim(..),
   ValueSym(Value, valueType), getCodeType, getTypeString)
-import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float, int),
-  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
+import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
   objMethodCallNoParams, ($->))
-import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
-  OOValueExpression(newObjMixedArgs))
+import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (MSMthdType,
   InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
   ScopeElim(scopeData))
-import qualified Drasil.Shared.RendererClassesCommon as S (
-  RenderStatement(stmt, loopStmt))
-import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
-  InternalVarElim(variable), ValueElim(value), StatementElim(statement))
-import Drasil.GOOL.RendererClassesOO (OORenderSym,
-  OORenderMethod(intMethod))
-import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
+import qualified Drasil.Shared.RendererClassesCommon as RC
+import Drasil.GOOL.RendererClassesOO (OORenderMethod(intMethod))
 import Drasil.GOOL.Renderers (renderType)
+import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
   TypeData, ParamData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified Drasil.Shared.LanguageRenderer as R (switch, addAssign,
-  increment, decrement, this', this)
+import qualified Drasil.Shared.LanguageRenderer as R
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, mkStmt,
   mkStmtNoEnd, mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.Shared.State (MS, VS, lensMStoVS, lensVStoMS, addLibImportVS,
@@ -51,7 +44,7 @@ import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi,
   equals, empty)
-import qualified Text.PrettyPrint.HughesPJ as D (float)
+import qualified Text.PrettyPrint.HughesPJ as D
 
 -- Types --
 
@@ -101,7 +94,7 @@ orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
 -- Variables --
 
-self :: (OORenderSym r vis smt) => SVariable r
+self :: (IG.OOTypeSym r, RC.RenderVariable r) => SVariable r
 self = do
   l <- zoom lensVStoMS getClassName
   mkStateVar R.this (IG.obj l) R.this'
@@ -132,45 +125,53 @@ libFuncAppMixedArgs :: (IC.ValueExpression r) => Library -> MixedCall r
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
   IC.funcAppMixedArgs n t vs ns
 
-libNewObjMixedArgs :: (OORenderSym r vis smt) => Library -> MixedCtorCall r
+libNewObjMixedArgs :: (IG.OOValueExpression r) => Library -> MixedCtorCall r
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
   IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
-listSize :: (OORenderSym r vis smt) => String -> SValue r -> SValue r
+listSize :: (IG.InternalValueExp r) => String -> SValue r -> SValue r
 listSize fnName list = objMethodCallNoParams IC.int list fnName
 
-listSize' :: (OORenderSym r vis smt) => String -> SValue r -> SValue r
+listSize' :: (IG.OOVariableSym r, VariableValue r) => String -> SValue r -> SValue r
 listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 
 -- Statements --
 
 increment
-  :: (InternalVarElim r, S.RenderStatement r smt, ValueElim r)
+  :: (InternalVarElim r, RC.RenderStatement r smt, ValueElim r)
   => SVariable r -> SValue r -> MS (r smt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-increment1 :: (InternalVarElim r, S.RenderStatement r smt) => SVariable r -> MS (r smt)
+increment1 :: (InternalVarElim r, RC.RenderStatement r smt) => SVariable r -> MS (r smt)
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
-decrement1 :: (InternalVarElim r, S.RenderStatement r smt) => SVariable r -> MS (r smt)
+decrement1 :: (InternalVarElim r, RC.RenderStatement r smt) => SVariable r -> MS (r smt)
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (OORenderSym r vis smt, UnRepr r TypeData, TypeElim r) =>
-  r (Attachment r) -> r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
+varDec
+  :: ( InternalVarElim r
+     , RO.PermElim r
+     , RC.RenderStatement r smt
+     , ScopeElim r
+     , UnRepr r TypeData
+     , TypeElim r
+     , VariableElim r
+     )
+  => r (Attachment r) -> r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  mkStmt (RC.perm (bind $ variableBind v)
+  mkStmt (RO.perm (bind $ variableBind v)
     <+> renderType (variableType v) <+> (ptrdoc (getCodeType (variableType v)) <>
     RC.variable v))
   where bind ClassLevel = s
@@ -181,7 +182,7 @@ varDec s d pdoc v' scp = do
 
 varDecDef
   :: ( IC.DeclStatement r smt
-     , S.RenderStatement r smt
+     , RC.RenderStatement r smt
      , RC.StatementElim r smt
      , ValueElim r
      )
@@ -195,7 +196,7 @@ varDecDef t vr scp vl' = do
 
 setDecDef
   :: ( IC.DeclStatement r smt
-     , S.RenderStatement r smt
+     , RC.RenderStatement r smt
      , RC.StatementElim r smt
      , ValueElim r
      )
@@ -208,15 +209,16 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec
-  :: (IC.DeclStatement r smt, S.RenderStatement r smt, RC.StatementElim r smt)
+  :: (IC.DeclStatement r smt, RC.RenderStatement r smt, RC.StatementElim r smt)
   => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
-extObjDecNew :: (OORenderSym r vis smt) => Library -> SVariable r ->
-  r ScopeData -> [SValue r] -> MS (r smt)
+extObjDecNew
+  :: (IC.DeclStatement r smt, IG.OOValueExpression r, VariableElim r)
+  => Library -> SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 
@@ -224,7 +226,7 @@ extObjDecNew l v scp vs = IC.varDecDef v scp
 -- 2nd parameter is a statement to end every case with
 switch
   :: ( RC.BodyElim r
-     , S.RenderStatement r smt
+     , RC.RenderStatement r smt
      , RC.StatementElim r smt
      , ValueElim r
      )
@@ -235,7 +237,7 @@ switch
   -> MSBody r
   -> MS (r smt)
 switch f st v cs bod = do
-  s <- S.stmt st
+  s <- RC.stmt st
   val <- zoom lensMStoVS v
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
@@ -244,7 +246,7 @@ switch f st v cs bod = do
 
 for
   :: ( RC.BodyElim r
-     , S.RenderStatement r smt
+     , RC.RenderStatement r smt
      , RC.StatementElim r smt
      , ValueElim r
      )
@@ -256,9 +258,9 @@ for
   -> MSBody r
   -> MS (r smt)
 for bStart bEnd sInit vGuard sUpdate b = do
-  initl <- S.loopStmt sInit
+  initl <- RC.loopStmt sInit
   guard <- zoom lensMStoVS vGuard
-  upd <- S.loopStmt sUpdate
+  upd <- RC.loopStmt sUpdate
   bod <- b
   mkStmtNoEnd $ vcat [
     forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <>
@@ -268,7 +270,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while
-  :: (RC.BodyElim r, S.RenderStatement r smt, ValueElim r)
+  :: (RC.BodyElim r, RC.RenderStatement r smt, ValueElim r)
   => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> MS (r smt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
@@ -279,7 +281,7 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (OORenderSym r vis smt) => Bool -> Label -> r vis ->
+intFunc :: (OORenderMethod r vis) => Bool -> Label -> r vis ->
   r (Attachment r) -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
   SMethod r
 intFunc = intMethod

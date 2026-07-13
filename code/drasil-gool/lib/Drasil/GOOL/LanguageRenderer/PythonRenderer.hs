@@ -890,16 +890,18 @@ addmathImport = (>>) $ modify (addLangImportVS pyMath)
 mathFunc :: (Monad r) => String -> VSOp r
 mathFunc = addmathImport . unOpPrec . access pyMath
 
-splitFunc :: (OORenderSym r vis smt) => Char -> VS (r FuncData)
+splitFunc :: (Literal r, OOFunctionSym r) => Char -> VS (r FuncData)
 splitFunc d = func pySplit (listType string) [litString [d]]
 
-readline, readlines :: (OORenderSym r vis smt) => SValue r -> SValue r
+readline, readlines :: (InternalValueExp r) => SValue r -> SValue r
 readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
-readInt, readDouble, readString :: (OORenderSym r vis smt) => SValue r -> SValue r
+readInt, readDouble :: (ValueExpression r) => SValue r -> SValue r
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
+
+readString :: (InternalValueExp r) => SValue r -> SValue r
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
 range :: (ValueExpression r) => SValue r -> SValue r -> SValue r -> SValue r

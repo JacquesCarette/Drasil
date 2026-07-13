@@ -9,8 +9,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), TypeElim(..), SVariable,
   SValue, NamedArgs, VariableElim(..), TypeSym(void), IndexTranslator(..),
   getCodeType, StatementSym (valStmt), StatementSym(..))
 import Drasil.GOOL.InterfaceGOOL (objMethodCall, convTypeOO)
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ScopeElim(..),
-  RenderValue(..))
+import Drasil.Shared.RendererClassesCommon (ScopeElim(..), RenderValue(..),
+  InternalVarElim, RenderStatement, ValueElim)
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt)
 import Drasil.Shared.LanguageRenderer (dot)
@@ -22,8 +22,15 @@ import Drasil.Shared.Helpers (getInnerType)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
-constDecDef :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+constDecDef
+  :: ( InternalVarElim r
+     , RenderStatement r smt
+     , ScopeElim r
+     , UnRepr r TypeData
+     , ValueElim r
+     , VariableElim r
+     )
+  => SVariable r -> r ScopeData -> SValue r -> MS (r smt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -31,9 +38,14 @@ constDecDef vr' scp v'= do
   modify $ setVarScope (variableName vr) (scopeData scp)
   mkStmt (renderConstDecDef vr v)
 
-classMethodCall :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  String -> VS (r TypeData) -> VS (r TypeData) -> [SValue r] ->
-  NamedArgs r -> SValue r
+classMethodCall
+  :: (RenderValue r, UnRepr r TypeData)
+  => String
+  -> VS (r TypeData)
+  -> VS (r TypeData)
+  -> [SValue r]
+  -> NamedArgs r
+  -> SValue r
 classMethodCall f t cls vs ns = do
   c <- cls
   call Nothing (Just $ renderType c <> dot) f t vs ns

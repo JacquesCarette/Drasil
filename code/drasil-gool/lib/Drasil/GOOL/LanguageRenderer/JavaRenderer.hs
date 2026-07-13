@@ -933,7 +933,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: [r BinderD] -> r (Value r) -> Doc -- Needs (CommonRenderSym r TypeData) constraint
+jLambda :: [r BinderD] -> r (Value r) -> Doc
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VS (JavaCode TypeData) -> SValue JavaCode -> SValue JavaCode
@@ -966,11 +966,11 @@ jFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
-jThrowDoc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+jThrowDoc :: (ValueElim r) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-jTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+jTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -979,13 +979,14 @@ jTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-jAssert :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+jAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
 jAssert condition errorMessage = vcat [
   text "assert" <+> RC.value condition <+> colon <+> RC.value errorMessage
   ]
 
-jOut :: (CommonRenderSym r vis smt, TypeElim r) =>
-  Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+jOut
+  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
@@ -1083,7 +1084,7 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (CommonRenderSym r vis smt) => ([SVariable r] ->
+jDocInOut :: (RenderMethod r) => ([SVariable r] ->
   [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] ->
   [(String, SVariable r)] -> MSBody r -> SMethod r

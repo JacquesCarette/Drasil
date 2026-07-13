@@ -32,7 +32,8 @@ import Utils.Drasil (capitalize, stringList)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   VariableSym(Variable), ValueSym(..), TypeElim(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
+import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
+  InternalVarElim, InternalBinderElim, ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalVarElim(..), ValueElim(..), StatementElim(..),
   ParamElim(..), InternalBinderElim(..))
@@ -194,7 +195,7 @@ body bs = vibcat $ filter (not . isEmpty) bs
 
 -- IO --
 
-print :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+print :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
 print printFn v = RC.value printFn <> parens (RC.value v)
 
 printFile :: Label -> Doc -> Doc
@@ -214,8 +215,14 @@ stateVarList = vcat
 
 -- Controls --
 
-switch :: (CommonRenderSym r vis smt) => (Doc -> Doc) -> r smt ->
-  r (Value r) -> r (Body r) -> [(r (Value r), r (Body r))] -> Doc
+switch
+  :: (BodyElim r, StatementElim r smt, ValueElim r)
+  => (Doc -> Doc)
+  -> r smt
+  -> r (Value r)
+  -> r (Body r)
+  -> [(r (Value r), r (Body r))]
+  -> Doc
 switch f st v defBody cs =
   let caseDoc (l, result) = vcat [
         text "case" <+> RC.value l <> colon,
@@ -236,22 +243,24 @@ switch f st v defBody cs =
 
 -- Statements --
 
-assign :: (CommonRenderSym r vis smt) => r (Variable r) -> r (Value r) -> Doc
+assign
+  :: (InternalVarElim r, ValueElim r)
+  => r (Variable r) -> r (Value r) -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
-addAssign :: (CommonRenderSym r vis smt) => r (Variable r) -> r (Value r) -> Doc
+addAssign :: (InternalVarElim r, ValueElim r) => r (Variable r) -> r (Value r) -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
-subAssign :: (CommonRenderSym r vis smt) => r (Variable r) -> r (Value r) -> Doc
+subAssign :: (InternalVarElim r, ValueElim r) => r (Variable r) -> r (Value r) -> Doc
 subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
-increment :: (CommonRenderSym r vis smt) => r (Variable r) -> Doc
+increment :: (InternalVarElim r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"
 
-decrement :: (CommonRenderSym r vis smt) => r (Variable r) -> Doc
+decrement :: (InternalVarElim r) => r (Variable r) -> Doc
 decrement v = RC.variable v <> text "--"
 
-return' :: (CommonRenderSym r vis smt) => [r (Value r)] -> Doc
+return' :: (ValueElim r) => [r (Value r)] -> Doc
 return' vs = returnLabel <+> valueList vs
 
 comment :: Label -> Doc -> Doc
@@ -272,7 +281,7 @@ var = text
 extVar :: Library -> Label -> Doc
 extVar l n = text l <> dot <> text n
 
-arg :: (CommonRenderSym r vis smt) => r (Value r) -> r (Value r) -> Doc
+arg :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
 arg n argsList = RC.value argsList <> brackets (RC.value n)
 
 classVarAccess :: Doc -> Doc -> Doc
@@ -301,7 +310,7 @@ func fnApp = dot <> fnApp
 cast :: Doc -> Doc
 cast = parens
 
-listAccessFunc :: (CommonRenderSym r vis smt) => r (Value r) -> Doc
+listAccessFunc :: (ValueElim r) => r (Value r) -> Doc
 listAccessFunc v = brackets $ RC.value v
 
 objAccess :: Doc -> Doc -> Doc
@@ -395,19 +404,21 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 
 -- Helper Functions --
 
-valueList :: (CommonRenderSym r vis smt) => [r (Value r)] -> Doc
+valueList :: (ValueElim r) => [r (Value r)] -> Doc
 valueList = hicat listSep' . map RC.value
 
-variableList :: (CommonRenderSym r vis smt) => [r (Variable r)] -> Doc
+variableList :: (InternalVarElim r) => [r (Variable r)] -> Doc
 variableList = hicat listSep' . map RC.variable
 
-binderList :: (CommonRenderSym r vis smt) => [r BinderD] -> Doc
+binderList :: (InternalBinderElim r) => [r BinderD] -> Doc
 binderList = hicat listSep' . map RC.binderElim
 
-parameterList :: (CommonRenderSym r vis smt) => [r ParamData] -> Doc
+parameterList :: (ParamElim r) => [r ParamData] -> Doc
 parameterList = hicat listSep' . map RC.parameter
 
-namedArgList :: (CommonRenderSym r vis smt) => Doc -> [(r (Variable r), r (Value r))] -> Doc
+namedArgList
+  :: (InternalVarElim r, ValueElim r)
+  => Doc -> [(r (Variable r), r (Value r))] -> Doc
 namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
@@ -428,7 +439,7 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (CommonRenderSym r vis smt, TypeElim r) => SValue r -> SValue r
+intValue :: (TypeElim r, ValueSym r) => SValue r -> SValue r
 intValue i = i >>= intValue' . getCodeType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"

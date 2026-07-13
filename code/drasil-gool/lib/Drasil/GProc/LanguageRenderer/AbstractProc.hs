@@ -8,11 +8,10 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 
 import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
-  getCodeType, convType)
+  getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
   BlockCommentSym(..), ValueElim(value), MethodTypeSym(mType),
   ScopeElim(scopeData))
@@ -84,13 +83,16 @@ innerType :: (IC.TypeElim r) => VS (r TypeData) -> VS (r TypeData)
 innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
-listAppend :: (CommonRenderSym r vis smt) => String -> SValue r -> SValue r -> MS (r smt)
+listAppend
+  :: (StatementSym r smt, ValueExpression r)
+  => String -> SValue r -> SValue r -> MS (r smt)
 listAppend fnName list val = IC.valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
-listAdd :: (CommonRenderSym r vis smt) => String -> SValue r -> SValue r ->
-  SValue r -> MS (r smt)
+listAdd
+  :: (IndexTranslator r, StatementSym r smt, ValueExpression r)
+  => String -> SValue r -> SValue r -> SValue r -> MS (r smt)
 listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 

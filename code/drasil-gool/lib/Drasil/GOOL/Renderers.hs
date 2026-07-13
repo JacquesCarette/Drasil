@@ -10,7 +10,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
   VariableElim(..), ValueSym(..), BodySym(..))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, InternalVarElim(..),
+import Drasil.Shared.RendererClassesCommon (InternalVarElim(..),
   VisibilityElim(..), ValueElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, PermElim(..))
@@ -37,12 +37,14 @@ renderMethod n s p t ps b = vcat [
   indent (RC.body b),
   rbrace]
 
-renderListDec :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> r (Value r) -> Doc
+renderListDec
+  :: (UnRepr r TypeData, ValueElim r, VariableElim r)
+  => r (Variable r) -> r (Value r) -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
-renderConstDecDef :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> r (Value r) -> Doc
+renderConstDecDef
+  :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r)
+  =>  r (Variable r) -> r (Value r) -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

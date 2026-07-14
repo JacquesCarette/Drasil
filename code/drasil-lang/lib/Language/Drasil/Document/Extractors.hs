@@ -121,3 +121,6 @@ extractLCRefs (Section _ cs r) = r : concatMap findRefSecCons cs
     findRefSecCons (Sub s) = extractLCRefs s
     findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
     findRefSecCons _ = []
+
+{-# DEPRECATED extractLCRefs
+  "Avoid retroactive `Reference` gathering. Instead, insert the chunks themselves into the `ChunkDB` and let the generator do the rest." #-}

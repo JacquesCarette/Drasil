@@ -80,10 +80,10 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   notifyObservers', arrayDecAsList)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, listAdd, innerType)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
-  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
-  ValData(..), vd, VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
+  ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
+  ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
+  VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
   AttachmentData(..), ad)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,

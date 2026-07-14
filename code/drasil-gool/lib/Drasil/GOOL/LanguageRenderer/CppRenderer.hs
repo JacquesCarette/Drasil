@@ -26,7 +26,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   StringStatement(..), FunctionSym, FuncAppStatement(..), BinderSym(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), convScope, BinderElim (..), (&=))
-import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, OOStatement,
+import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, OOStatement, Class,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..),
   OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall,
@@ -793,7 +793,6 @@ instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Class (p CppSrcCode CppHdrCode) = Doc
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -1704,7 +1703,6 @@ instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC
 
 instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Class CppSrcCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -2339,7 +2337,6 @@ instance StateVarElim CppHdrCode where
   stateVar = stVar . unCPPHC
 
 instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Class CppHdrCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -2912,7 +2909,7 @@ cpphVarsFuncsList st vs fs =
   in vcat $ visVs ++ (if null visVs then empty else blank) : visFs
 
 cppsClass :: [CppSrcCode (StateVar CppSrcCode)] ->
-  [CppSrcCode MethodData] -> CppSrcCode (Class CppSrcCode)
+  [CppSrcCode MethodData] -> CppSrcCode Class
 cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map RC.stateVar vs
         funcs = map RC.method fs
@@ -2920,7 +2917,7 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
 cpphClass :: Label -> CppHdrCode ParentSpec ->
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode MethodData] ->
   CppHdrCode (Doc, VisibilityTag) -> CppHdrCode (Doc, VisibilityTag) ->
-  CppHdrCode (Class CppHdrCode)
+  CppHdrCode Class
 cpphClass n ps vars funcs pub priv = let
   pubs  = cpphVarsFuncsList Pub vars funcs
   privs = cpphVarsFuncsList Priv vars funcs

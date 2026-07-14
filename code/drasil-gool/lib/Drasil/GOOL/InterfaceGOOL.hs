@@ -3,7 +3,8 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, File, SFile, Module, FSModule, SClass, CSStateVar, Initializers,
+  GSProgram, File, SFile, Module, FSModule, Class, SClass, CSStateVar,
+  Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -33,6 +34,8 @@ import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
   ModData)
+
+import Text.PrettyPrint.HughesPJ (Doc)
 
 class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
   ObserverPattern r smt, StrategyPattern r smt
@@ -65,10 +68,10 @@ class (ClassSym r vis smt md) => ModuleSym r vis smt md where
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
 
-type SClass a = CS (a (Class a))
+type Class = Doc
+type SClass a = CS (a Class)
 
 class (OOMethodSym r vis smt md, StateVarSym r vis) => ClassSym r vis smt md where
-  type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r] -> [MS (r md)] ->

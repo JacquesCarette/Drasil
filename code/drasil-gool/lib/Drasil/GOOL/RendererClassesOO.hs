@@ -9,8 +9,8 @@ module Drasil.GOOL.RendererClassesOO (
 
 import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, Module, FSModule,
-  SClass, CSStateVar, OOVariableValue, OOValueExpression(..),
-  InternalValueExp(..), FileSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
+  Class, SClass, CSStateVar, OOVariableValue, OOValueExpression(..),
+  InternalValueExp(..), FileSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
@@ -80,7 +80,7 @@ class (BlockCommentSym r) => RenderClass r vis md | r -> vis md where
   commentedClass :: CS (r Doc) -> IG.SClass r -> IG.SClass r
 
 class ClassElim r where
-  class' :: r (IG.Class r) -> Doc
+  class' :: r IG.Class -> Doc
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> IG.FSModule r

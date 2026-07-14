@@ -703,7 +703,6 @@ instance StateVarElim PythonCode where
   stateVar = unPC
 
 instance ClassSym PythonCode Doc (Doc, Terminator) MethodData where
-  type Class PythonCode = Doc
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError

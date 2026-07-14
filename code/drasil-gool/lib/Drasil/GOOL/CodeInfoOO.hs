@@ -473,7 +473,6 @@ instance StateVarSym CodeInfoOO () where
   constVar    _ _ _   = noInfo
 
 instance ClassSym CodeInfoOO () () () where
-  type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
@@ -481,16 +480,17 @@ instance ClassSym CodeInfoOO () () () where
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
-    noInfo
+    return $ error "[extraClass] The return value of this isn't used, and the thunk shouldn't fire."
+
   implementingClass n _ _ cs ms = do
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
-    noInfo
+    return $ error "[implementingClass] The return value of this isn't used, and the thunk shouldn't fire."
 
   docClass _ c = do
     _ <- c
-    noInfo
+    return $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance ModuleSym CodeInfoOO () () () where
   buildModule n _ funcs classes = do

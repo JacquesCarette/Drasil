@@ -469,7 +469,6 @@ instance (G.StateVarSym r vis) => G.StateVarSym (LoggingFor r) vis where
   constVar = liftLogging G.constVar
 
 instance (G.ClassSym r vis smt md) => G.ClassSym (LoggingFor r) vis smt md where
-  type Class (LoggingFor r) = G.Class r
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass

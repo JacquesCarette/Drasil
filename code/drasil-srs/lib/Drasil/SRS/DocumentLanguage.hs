@@ -92,7 +92,7 @@ mkDoc si srsDecl headingComb =
       refdCites = extractSectionsBib (si ^. systemdb) sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences si
+      si' = buildTraceMaps dd si
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
@@ -126,27 +126,22 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
+        traceGs = map (ref . makeTabRef' . getTraceConfigUID) $ traceMatStandard si
+        newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $
+          -- TRACEABILITY GRAPHS ===================================================
+             traceGs -- Document-INTERNAL traceability graph LABELS
+          ++ traceyGraphGetRefs -- Document-EXTERNAL traceability graph FILE URIs
+        refTable' = M.union (si ^. refTable) newRefs -- All references added are EXTERNAL URIs.
     in set systemdb (insertAll tglcs db)
      $ set traceTable tdb
-     $ set refbyTable (invert tdb) si
+     $ set refbyTable (invert tdb)
+     $ set refTable refTable' si
   | otherwise = si
   where
     containsTraceSec :: DocDesc -> Bool
     containsTraceSec ((TraceabilitySec _):_) = True
     containsTraceSec (_:ss)                = containsTraceSec ss
     containsTraceSec []                    = False
-
--- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: SmithEtAlSRS -> SmithEtAlSRS
-fillReferences si = si2
-  where
-    traceGs = map (ref . makeTabRef' . getTraceConfigUID) $ traceMatStandard si
-    newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $
-      -- TRACEABILITY GRAPHS ===================================================
-         traceGs -- Document-INTERNAL traceability graph LABELS
-      ++ traceyGraphGetRefs -- Document-EXTERNAL traceability graph FILE URIs
-    refTable' = M.union (si ^. refTable) newRefs -- All references added are EXTERNAL URIs.
-    si2 = set refTable refTable' si
 
 -- * Section Creator Functions
 

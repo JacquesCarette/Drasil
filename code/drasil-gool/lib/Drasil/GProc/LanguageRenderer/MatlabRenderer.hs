@@ -40,7 +40,8 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
-  docMod, fileFromData, buildModule, modFromData, function)
+  docMod, fileFromData, buildModule, modFromData, function, funcDecDef,
+  innerType)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue,
@@ -51,14 +52,16 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
   litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
-  ifCond, tryCatch)
+  ifCond, tryCatch, listAccess)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
-  functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt')
+  functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
+  listDecDef)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize, forEach')
-import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists)
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
+  increment1, decrement1)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
   paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
@@ -66,9 +69,9 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
   progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
-  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStmtNoEnd,
+  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStateVar, mkStmtNoEnd,
   compEqualPrec, typeUnExpr, typeBinExpr)
-import Drasil.Shared.LanguageRenderer (listSep', valueList)
+import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
@@ -81,7 +84,7 @@ import Control.Monad.State (modify)
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), vcat, hcat,
-  parens, brackets, braces, equals, punctuate)
+  parens, brackets, braces, equals, punctuate, render)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -338,20 +341,21 @@ instance Reference MatlabCode where
   maybeDeref = id
 
 instance Array MatlabCode where
-  arrayElem = undefined
-  arrayLength = undefined
-  arrayCopy = undefined
+  arrayElem = mlArrayElem
+  arrayLength = listSize
+  arrayCopy arr = let arrTp = onStateValue valueType arr
+    in funcApp "copy" arrTp [arr]
 
 instance List MatlabCode (Doc, Terminator) where
   listSize = CS.listSize "length"   -- length(v)
   listAdd = undefined
-  listAppend = undefined
-  listAccess = undefined
-  listSet = undefined
-  indexOf = undefined
+  listAppend = mlListAppend
+  listAccess = G.listAccess
+  listSet = mlListSet
+  indexOf = mlIndexOf
 
 instance Set MatlabCode where
-  contains = undefined
+  contains s e = funcApp "ismember" bool [e, s]
   setAdd = undefined
   setRemove = undefined
   setUnion = undefined
@@ -368,7 +372,10 @@ instance InternalList MatlabCode where
   listSlice' = undefined
 
 instance InternalListFunc MatlabCode where
-  listAccessFunc = undefined
+  listAccessFunc t v = intValue v >>= ((`funcFromData` t) . mlListAccessFunc)
+
+mlListAccessFunc :: (CommonRenderSym r vis smt md) => r (Value r) -> Doc
+mlListAccessFunc v = parens $ RC.value v
 
 instance BinderSym MatlabCode where
   binder = undefined
@@ -412,22 +419,22 @@ instance StatementSym MatlabCode (Doc, Terminator) where
 
 instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi
-  (&-=) = undefined
-  (&+=) = undefined
-  (&++) = undefined
-  (&--) = undefined
+  (&-=) = mlSubAssign
+  (&+=) = mlAddAssign
+  (&++) = M.increment1
+  (&--) = M.decrement1
 
 instance DeclStatement MatlabCode (Doc, Terminator) where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
-  setDec = undefined
-  setDecDef = undefined
-  listDec = undefined
-  listDecDef = undefined
-  arrayDec = undefined
-  arrayDecDef = undefined
-  constDecDef = undefined
-  funcDecDef = undefined
+  setDec = varDec
+  setDecDef = varDecDef
+  listDec _ = varDec
+  listDecDef = CP.listDecDef
+  arrayDec _ = varDec
+  arrayDecDef = CP.listDecDef
+  constDecDef = varDecDef
+  funcDecDef = A.funcDecDef
 
 instance IOStatement MatlabCode (Doc, Terminator) where
   print = G.print False Nothing printFunc
@@ -720,3 +727,52 @@ mlTryCatch tryB catchB = vcat [
   text "catch" <+> text "e",
   indent $ RC.body catchB,
   mlEnd]
+
+mlSubAssign :: SVariable MatlabCode -> SValue MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlSubAssign vr' v' = do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  stmtFromData (RC.variable vr <+> equals <+>
+    RC.variable vr <+> text "-" <+> RC.value v) Semi
+
+mlAddAssign :: SVariable MatlabCode -> SValue MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlAddAssign vr' v' = do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  stmtFromData (RC.variable vr <+> equals <+>
+    RC.variable vr <+> text "+" <+> RC.value v) Semi
+
+mlArrayElem :: SValue MatlabCode -> SValue MatlabCode -> SVariable MatlabCode
+mlArrayElem arr' i' = do
+  i <- intToIndex i'
+  arr <- arr'
+  mkStateVar (render $ RC.value arr) (A.innerType $ return $ valueType arr)
+    (RC.value arr <> parens (RC.value i))
+
+mlListAppend :: SValue MatlabCode -> SValue MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlListAppend lst' v' = do
+  lst <- zoom lensMStoVS lst'
+  v <- zoom lensMStoVS v'
+  stmtFromData (RC.value lst <> parens (text "end+1") <+> equals <+> RC.value v)
+    Semi
+
+mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlListSet lst' idx' val' = do
+  lst <- zoom lensMStoVS lst'
+  idx <- zoom lensMStoVS (intToIndex idx')
+  let lvar = mkStateVar (render $ RC.value lst)
+               (A.innerType $ return $ valueType lst)
+               (RC.value lst <> parens (RC.value idx))
+  lvar &= val'
+
+mlIndexOf :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlIndexOf lst' v' = do
+  lst <- lst'
+  v <- v'
+  d <- int
+  mkVal d (text "find" <> parens (RC.value lst <+> text "==" <+> RC.value v
+    <> text ", 1") <+> text "- 1")

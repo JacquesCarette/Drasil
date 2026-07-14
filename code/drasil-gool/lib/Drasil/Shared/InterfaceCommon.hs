@@ -4,7 +4,7 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
+  Label, Library, MSBody, Block, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
   MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
   DocInOutFunc,
   -- Typeclasses
@@ -24,6 +24,7 @@ module Drasil.Shared.InterfaceCommon (
   ) where
 
 import Data.Bifunctor (first)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD,
   ParamData)
@@ -73,10 +74,10 @@ bodyStatements sts = body [block sts]
 oneLiner :: (BodySym r smt) => MS (r smt) -> MSBody r
 oneLiner tp = bodyStatements [tp]
 
-type MSBlock a = MS (a (Block a))
+type Block = Doc
+type MSBlock a = MS (a Block)
 
 class (StatementSym r smt) => BlockSym r smt where
-  type Block r
   block   :: [MS (r smt)] -> MSBlock r
 
 class TypeSym r where

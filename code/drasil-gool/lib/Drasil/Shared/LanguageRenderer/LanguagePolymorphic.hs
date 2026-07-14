@@ -22,8 +22,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall, BodySym(Body),
-  bodyStatements, oneLiner, BlockSym(Block), VariableSym(Variable),
+  MSBlock, Block, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall,
+  BodySym(Body), bodyStatements, oneLiner, VariableSym(Variable),
   VisibilitySym(..), VariableElim(variableName, variableType),
   ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
   Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
@@ -574,7 +574,7 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 fileDoc
   :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r (Module r) -> r (Block r)) -> r (Block r) -> FSModule r -> SFile r
+  => String -> (r (Module r) -> r Block) -> r Block -> FSModule r -> SFile r
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName

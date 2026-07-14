@@ -136,7 +136,6 @@ instance BodyElim MatlabCode where
   body = unMLC
 
 instance BlockSym MatlabCode (Doc, Terminator) where
-  type Block MatlabCode = Doc
   block = G.block
 
 instance RenderBlock MatlabCode where

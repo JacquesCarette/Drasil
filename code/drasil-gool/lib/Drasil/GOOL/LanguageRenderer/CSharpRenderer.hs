@@ -192,7 +192,6 @@ instance BodyElim CSharpCode where
   body = unCSC
 
 instance BlockSym CSharpCode (Doc, Terminator) where
-  type Block CSharpCode = Doc
   block = G.block
 
 instance RenderBlock CSharpCode where

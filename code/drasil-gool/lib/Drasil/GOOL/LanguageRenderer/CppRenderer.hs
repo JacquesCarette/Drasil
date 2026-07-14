@@ -206,7 +206,6 @@ instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) where
   body b = RC.body $ pfst b
 
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) (Doc, Terminator) where
-  type Block (p CppSrcCode CppHdrCode) = Doc
   block = pair1List block block
 
 instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) where
@@ -1098,7 +1097,6 @@ instance BodyElim CppSrcCode where
   body = unCPPSC
 
 instance BlockSym CppSrcCode (Doc, Terminator) where
-  type Block CppSrcCode = Doc
   block = G.block
 
 instance RenderBlock CppSrcCode where
@@ -1834,7 +1832,6 @@ instance BodyElim CppHdrCode where
   body = unCPPHC
 
 instance BlockSym CppHdrCode (Doc, Terminator) where
-  type Block CppHdrCode = Doc
   block _ = toState $ toCode empty
 
 instance RenderBlock CppHdrCode where

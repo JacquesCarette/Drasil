@@ -7,8 +7,7 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSBody, SVariable, SValue,
-  BlockSym(..))
+import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
@@ -35,8 +34,8 @@ class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IG.Module r) -> r (Block r)
-  bottom :: r (Block r)
+  top :: r (IG.Module r) -> r Block
+  bottom :: r Block
 
   commentedMod :: IG.SFile r -> FS (r Doc) -> IG.SFile r
 

@@ -166,7 +166,6 @@ instance BodyElim JuliaCode where
   body = unJLC
 
 instance BlockSym JuliaCode (Doc, Terminator) where
-  type Block JuliaCode = Doc
   block = G.block
 
 instance RenderBlock JuliaCode where

@@ -192,7 +192,6 @@ instance BodyElim SwiftCode where
   body = unSC
 
 instance BlockSym SwiftCode (Doc, Terminator) where
-  type Block SwiftCode = Doc
   block = G.block
 
 instance RenderBlock SwiftCode where

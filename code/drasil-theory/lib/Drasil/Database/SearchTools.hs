@@ -81,7 +81,7 @@ refResolve db trg
   | (Just c) <- find trg db :: Maybe ConceptInstance     = Just $ ref c
   | (Just c) <- find trg db :: Maybe LabelledContent     = Just $ ref c
   | (Just c) <- find trg db :: Maybe Citation            = Just $ ref c
-  | (Just c) <- find trg db :: Maybe Reference           = Just c
+  | (Just c) <- find trg db :: Maybe Section             = Just $ ref c
   | otherwise = Nothing
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]

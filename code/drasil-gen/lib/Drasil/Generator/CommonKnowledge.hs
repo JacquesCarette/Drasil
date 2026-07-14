@@ -6,7 +6,7 @@ module Drasil.Generator.CommonKnowledge (
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13)
 import Language.Drasil (IdeaDict, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, CI)
-import Language.Drasil.Document (LabelledContent, Reference)
+import Language.Drasil.Document (LabelledContent, Reference, Section)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource,
   smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -38,7 +38,7 @@ withCommonKnowledge = insertAllOutOfOrder13 basisCDB
 -- physics, general science, basic software, and general documentation.
 basisCDB :: ChunkDB
 basisCDB =
-    insertAll basisReferences
+    insertAll basisSections
   $ insertAll siUnits
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
@@ -47,8 +47,8 @@ basisCDB =
   $ insertAll basisCitations
     empty
 
-basisReferences :: [Reference]
-basisReferences = SRS.sectionReferences
+basisSections :: [Section]
+basisSections = SRS.sections
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =

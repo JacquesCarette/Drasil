@@ -193,4 +193,3 @@ mktAppndxSec (AppndxProg _) = Flat $ namedRef SRS.appendixLabel $ titleize  Doc.
 -- | Helper for creating the 'Off-The-Shelf Solutions' section ToC entry
 mktOffShelfSolnSec :: OffShelfSolnsSec -> ItemType
 mktOffShelfSolnSec (OffShelfSolnsProg _) = Flat $ namedRef SRS.offShelfSolnsLabel $ titleize' Doc.offShelfSolution
-

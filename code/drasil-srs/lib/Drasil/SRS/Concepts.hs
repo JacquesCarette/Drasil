@@ -26,7 +26,7 @@ module Drasil.SRS.Concepts (
   valsOfAuxConsLabel, referenceLabel, appendixLabel, offShelfSolnsLabel, indPRCaseLabel,
   projScopeLabel, useCaseTableLabel, terminologyLabel,
   -- * All Section References
-  sectionReferences) where
+  sections, sectionReferences) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Metadata.Drasil or Language.Drasil.Template?
 
@@ -50,6 +50,16 @@ import qualified Drasil.Metadata.Documentation as Doc (abbAcc, appendix, assumpt
 import Control.Lens ((^.), view)
 
 -- Ordered by appearance in SRS.
+
+sections :: [Section]
+sections = map (($ []) . ($ [])) [tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
+  charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, genSysDes, sysCont,
+  userChar, sysCon, specSysDes, probDesc, termAndDefn, physSyst, goalStmt,
+  solCharSpec, assumpt, thModel, genDefn, dataDefn, inModel, datCon, propCorSol,
+  require, nonfuncReq, funcReq, likeChg, unlikeChg, traceyMandG, valsOfAuxCons,
+  reference, appendix, offShelfSol, scpOfTheProj, prodUCTable, indPRCase,
+  termogy]
+
 -- | Standard SRS section builders.
 tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, genSysDes, sysCont,

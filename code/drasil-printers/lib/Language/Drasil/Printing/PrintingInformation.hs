@@ -36,6 +36,6 @@ piSys :: ChunkDB -> M.Map UID Reference -> Stage -> Notation -> PrintingInformat
 piSys = PI
 
 refFind :: UID -> PrintingInformation -> Reference
-refFind u pinfo = go $ M.lookup u (pinfo ^. refTable)
-                   <|> refResolve (pinfo ^. sysdb) u
+refFind u pinfo = go $ refResolve (pinfo ^. sysdb) u
+                   <|> M.lookup u (pinfo ^. refTable)
   where go = fromMaybe (error $ "`" ++ show u ++ "` not found in Reference table!!!")

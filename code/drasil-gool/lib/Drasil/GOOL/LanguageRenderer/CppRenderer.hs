@@ -15,8 +15,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, MSBody, Variable, SVariable, SValue, NamedArgs, BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  Label, Body, MSBody, Variable, SVariable, Value, SValue, NamedArgs,
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -313,7 +313,6 @@ instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
     (\t -> varFromData b n t d) t'
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
-  type Value (p CppSrcCode CppHdrCode) = ValData
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
 
 instance (Pair p) => OOValueSym (p CppSrcCode CppHdrCode)
@@ -1238,7 +1237,6 @@ instance RenderVariable CppSrcCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
-  type Value CppSrcCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym CppSrcCode where
@@ -1941,7 +1939,6 @@ instance RenderVariable CppHdrCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where
-  type Value CppHdrCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym CppHdrCode where
@@ -2631,7 +2628,7 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
   :: (DeclStatement r smt, RenderStatement r smt, StatementElim r smt)
-  => ([r (Value r)] -> Doc)
+  => ([r Value] -> Doc)
   -> SVariable r
   -> r ScopeData
   -> [SValue r]
@@ -2688,7 +2685,7 @@ cppFuncType ps' r' =  do
   r <- r'
   typeFromData (Func (map getCodeType ps) (getCodeType r)) "auto" (text "auto")
 
-cppLambda :: [CppSrcCode BinderD] -> CppSrcCode (Value CppSrcCode) -> Doc
+cppLambda :: [CppSrcCode BinderD] -> CppSrcCode Value -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
   (map (renderType . binderType) ps) (map RC.binderElim ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
@@ -2713,10 +2710,10 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
 
-cppListDecDoc :: (ValueElim r) => r (Value r) -> Doc
+cppListDecDoc :: (ValueElim r) => r Value -> Doc
 cppListDecDoc n = parens (RC.value n)
 
-cppListDecDefDoc :: (ValueElim r) => [r (Value r)] -> Doc
+cppListDecDefDoc :: (ValueElim r) => [r Value] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppFuncDecDef :: SVariable CppSrcCode -> CppSrcCode ScopeData ->
@@ -2744,7 +2741,7 @@ cppPrint newLn pf vl = do
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
 
-cppThrowDoc :: (ValueElim r) => r (Value r) -> Doc
+cppThrowDoc :: (ValueElim r) => r Value -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
 cppTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
@@ -2755,7 +2752,7 @@ cppTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-cppAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+cppAssert :: (ValueElim r) => r Value -> r Value -> Doc
 cppAssert condition errorMessage = vcat [
   text "assert(" <> RC.value condition <+> text "&&" <+> RC.value errorMessage <> text ")" <> semi
   ]

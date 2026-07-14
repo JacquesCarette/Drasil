@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, MSBody, MSBlock, Variable, SVariable, SValue, BodySym(..),
+  Label, Body, MSBody, MSBlock, Variable, SVariable, Value, SValue, BodySym(..),
   oneLiner, bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -303,7 +303,6 @@ instance RenderVariable SwiftCode where
     pure $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym SwiftCode where
-  type Value SwiftCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym SwiftCode
@@ -953,7 +952,7 @@ swiftNumBinExpr f v1' v2' = do
 swiftLitFloat :: (RenderValue r, TypeSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float
 
-swiftLambda :: [SwiftCode BinderD] -> SwiftCode (Value SwiftCode) -> Doc
+swiftLambda :: [SwiftCode BinderD] -> SwiftCode Value -> Doc
 swiftLambda ps ex = braces $ parens (hicat listSep'
   (zipWith (\n t -> n <> swiftTypeSpec <+> t)
     (map RC.binderElim ps)
@@ -1167,12 +1166,12 @@ swiftSetDec dec v' scp = do
 replaceBrackets :: String -> String
 replaceBrackets str = "<" ++ (init . tail) str ++ ">"
 
-swiftThrowDoc :: (ValueElim r) => r (Value r) -> Doc
+swiftThrowDoc :: (ValueElim r) => r Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r (Value r) -> r Body -> Doc
+  => r Variable -> r Value -> r Body -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
@@ -1186,7 +1185,7 @@ swiftTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-swiftAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+swiftAssert :: (ValueElim r) => r Value -> r Value -> Doc
 swiftAssert condition errorMessage = vcat [
   text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
   ]

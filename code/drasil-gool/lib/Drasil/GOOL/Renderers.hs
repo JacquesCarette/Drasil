@@ -7,8 +7,8 @@ module Drasil.GOOL.Renderers (
 
 import Drasil.FileHandling.Legacy (indent)
 
-import Drasil.Shared.InterfaceCommon (Body, Variable, UnRepr(..),
-  VariableElim(..), ValueSym(..))
+import Drasil.Shared.InterfaceCommon (Body, Variable, Value, UnRepr(..),
+  VariableElim(..))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..))
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(..),
   VisibilityElim(..), ValueElim(..), ParamElim)
@@ -51,12 +51,12 @@ renderMethod n s p t ps b = vcat [
 
 renderListDec
   :: (UnRepr r TypeData, ValueElim r, VariableElim r)
-  => r Variable -> r (Value r) -> Doc
+  => r Variable -> r Value -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
 renderConstDecDef
   :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r)
-  =>  r Variable -> r (Value r) -> Doc
+  =>  r Variable -> r Value -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

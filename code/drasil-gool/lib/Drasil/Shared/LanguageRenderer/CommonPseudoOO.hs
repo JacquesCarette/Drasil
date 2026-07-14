@@ -369,7 +369,7 @@ setDecDef v scp vals = do
 
 setDec
   :: (IC.DeclStatement r smt, RC.RenderStatement r smt, RC.StatementElim r smt)
-  => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
 setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp

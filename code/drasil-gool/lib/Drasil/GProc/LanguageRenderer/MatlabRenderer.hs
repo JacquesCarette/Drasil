@@ -59,8 +59,8 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
-  ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt, valType, opDoc,
-  opPrec, varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
+  ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
+  varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
@@ -230,7 +230,6 @@ instance RenderVariable MatlabCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym MatlabCode where
-  type Value MatlabCode = ValData
   valueType v = valType <$> v
 
 instance Argument MatlabCode where

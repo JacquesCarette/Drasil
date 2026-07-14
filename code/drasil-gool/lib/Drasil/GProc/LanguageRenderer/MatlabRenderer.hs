@@ -349,10 +349,10 @@ instance Array MatlabCode where
 instance List MatlabCode (Doc, Terminator) where
   listSize = CS.listSize "length"   -- length(v)
   listAdd = undefined
-  listAppend = mlListAppend
+  listAppend lst = listSet lst (listSize lst)
   listAccess = G.listAccess
   listSet = mlListSet
-  indexOf = mlIndexOf
+  indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance Set MatlabCode where
   contains s e = funcApp "ismember" bool [e, s]
@@ -419,8 +419,8 @@ instance StatementSym MatlabCode (Doc, Terminator) where
 
 instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi
-  (&-=) = mlSubAssign
-  (&+=) = mlAddAssign
+  (&-=) vr v = vr &= (valueOf vr #- v)
+  (&+=) vr v = vr &= (valueOf vr #+ v)
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -432,7 +432,7 @@ instance DeclStatement MatlabCode (Doc, Terminator) where
   listDec _ = varDec
   listDecDef = CP.listDecDef
   arrayDec _ = varDec
-  arrayDecDef = CP.listDecDef
+  arrayDecDef = listDecDef
   constDecDef = varDecDef
   funcDecDef = A.funcDecDef
 
@@ -479,8 +479,7 @@ instance ControlStatement MatlabCode (Doc, Terminator) where
   returnStmt v' = do
     v <- zoom lensMStoVS v'
     var mlRet (toState (valueType v)) &= v'
-  throw errMsg =
-    mkStmtNoEnd (text "error" <> parens (text ("'" ++ errMsg ++ "'")))
+  throw errMsg = valStmt $ funcApp "error" void [litString errMsg]
   ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty mlEnd
   switch = switchAsIf
   ifExists = M.ifExists
@@ -489,10 +488,7 @@ instance ControlStatement MatlabCode (Doc, Terminator) where
   forEach = CS.forEach' mlForEach
   while = C.while id empty mlEnd
   tryCatch = G.tryCatch mlTryCatch
-  assert condition errorMessage = do
-    cond <- zoom lensMStoVS condition
-    errMsg <- zoom lensMStoVS errorMessage
-    mkStmtNoEnd (text "assert" <> parens (RC.value cond <> text ", " <> RC.value errMsg))
+  assert cond errMsg = valStmt $ funcApp "assert" void [cond, errMsg]
 
 instance VisibilitySym MatlabCode Doc where
   private = toCode empty
@@ -728,36 +724,12 @@ mlTryCatch tryB catchB = vcat [
   indent $ RC.body catchB,
   mlEnd]
 
-mlSubAssign :: SVariable MatlabCode -> SValue MatlabCode
-  -> MS (MatlabCode (Doc, Terminator))
-mlSubAssign vr' v' = do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (RC.variable vr <+> equals <+>
-    RC.variable vr <+> text "-" <+> RC.value v) Semi
-
-mlAddAssign :: SVariable MatlabCode -> SValue MatlabCode
-  -> MS (MatlabCode (Doc, Terminator))
-mlAddAssign vr' v' = do
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (RC.variable vr <+> equals <+>
-    RC.variable vr <+> text "+" <+> RC.value v) Semi
-
 mlArrayElem :: SValue MatlabCode -> SValue MatlabCode -> SVariable MatlabCode
 mlArrayElem arr' i' = do
   i <- intToIndex i'
   arr <- arr'
   mkStateVar (render $ RC.value arr) (A.innerType $ return $ valueType arr)
     (RC.value arr <> parens (RC.value i))
-
-mlListAppend :: SValue MatlabCode -> SValue MatlabCode
-  -> MS (MatlabCode (Doc, Terminator))
-mlListAppend lst' v' = do
-  lst <- zoom lensMStoVS lst'
-  v <- zoom lensMStoVS v'
-  stmtFromData (RC.value lst <> parens (text "end+1") <+> equals <+> RC.value v)
-    Semi
 
 mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
   -> MS (MatlabCode (Doc, Terminator))
@@ -769,10 +741,3 @@ mlListSet lst' idx' val' = do
                (RC.value lst <> parens (RC.value idx))
   lvar &= val'
 
-mlIndexOf :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
-mlIndexOf lst' v' = do
-  lst <- lst'
-  v <- v'
-  d <- int
-  mkVal d (text "find" <> parens (RC.value lst <+> text "==" <+> RC.value v
-    <> text ", 1") <+> text "- 1")

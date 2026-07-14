@@ -80,11 +80,10 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
-  ParamData(..), ProgData(..), TypeData(..), ValData(..), vd, VarData(..),
-  vard, progD, fd, pd, updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..),
-  bindFormD)
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
+  ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
+  ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
+  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (MS, VS, lensGStoFS, revFiles, setFileType,
@@ -131,7 +130,6 @@ instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
 instance FileSym JuliaCode Doc (Doc, Terminator) MethodData where
-  type File JuliaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m

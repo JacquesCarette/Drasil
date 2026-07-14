@@ -92,10 +92,10 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, innerType)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
-  FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
-  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, TypeData(..), ValData(..), vd, AttachmentTag(..),
-  VarData(..), vard, ScopeData, BinderD(..), bindFormD)
+  FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
+  ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -151,7 +151,6 @@ instance UnRepr SwiftCode contents where
   unRepr = unSC
 
 instance FileSym SwiftCode Doc (Doc, Terminator) MethodData where
-  type File SwiftCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m

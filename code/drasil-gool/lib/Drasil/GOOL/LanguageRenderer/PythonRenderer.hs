@@ -141,7 +141,6 @@ instance UnRepr PythonCode contents where
   unRepr = unPC
 
 instance FileSym PythonCode Doc (Doc, Terminator) MethodData where
-  type File PythonCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m

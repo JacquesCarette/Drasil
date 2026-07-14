@@ -69,12 +69,13 @@ instance ProgramSym CodeInfoOO () () () where
     toState $ toCode s
 
 instance FileSym CodeInfoOO () () () where
-  type File CodeInfoOO = ()
   fileDoc m = do
     _ <- m
     return $ return $ error "[fileDoc] The return value of this isn't used, and the thunk shouldn't fire."
 
-  docMod _ _ _ _ = execute1
+  docMod _ _ _ _ fl = do
+    _ <- fl
+    return $ return $ error "[docMod] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance AttachmentSym CodeInfoOO where
   type Attachment CodeInfoOO = ()

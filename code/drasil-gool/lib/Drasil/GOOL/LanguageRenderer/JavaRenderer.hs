@@ -89,10 +89,10 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, listAdd, innerType)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
-  FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
-  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, TypeData(..), ValData(..), vd, VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD)
+  FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, TypeData(..), ValData(..), vd, VarData(..), vard, ScopeData,
+  BinderD(..), bindFormD)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
@@ -150,7 +150,6 @@ instance UnRepr JavaCode contents where
   unRepr = unJC
 
 instance FileSym JavaCode Doc (Doc, Terminator) MethodData where
-  type File JavaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m

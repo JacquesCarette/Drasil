@@ -57,8 +57,8 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue
   litFalse)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize)
-import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
+import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
+  updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt, valType, opDoc,
   opPrec, VarData, varName, varType, varBind, varDoc, vard, progD, mthdDoc,
   modDoc)
@@ -108,7 +108,6 @@ instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
 instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m

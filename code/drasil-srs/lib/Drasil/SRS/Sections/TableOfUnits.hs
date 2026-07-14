@@ -1,6 +1,6 @@
 -- | Standard code to make a table of units.
 -- First true example of a (small) recipe.
-module Drasil.SRS.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit', tunitNone, tuIntro, defaultTUI) where
+module Drasil.SRS.Sections.TableOfUnits (tOfUnitNone, tOfUnitDesc, tOfUnitSIName, unitTableRef, tunit, tunit', tunitNone, tuIntro, defaultTUI) where
 
 -- General Haskell
 import Control.Lens ((^.))

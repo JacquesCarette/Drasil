@@ -12,6 +12,7 @@ import Control.Applicative (Alternative(..))
 import Control.Lens (makeLenses, (^.))
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
+import Debug.Trace (trace)
 
 import Drasil.Database (UID, ChunkDB)
 import Drasil.Database.SearchTools (refResolve)
@@ -37,5 +38,5 @@ piSys = PI
 
 refFind :: UID -> PrintingInformation -> Reference
 refFind u pinfo = go $ refResolve (pinfo ^. sysdb) u
-                   <|> M.lookup u (pinfo ^. refTable)
+                   <|> trace ("Reference looked up: " ++ show u) (M.lookup u (pinfo ^. refTable))
   where go = fromMaybe (error $ "`" ++ show u ++ "` not found in Reference table!!!")

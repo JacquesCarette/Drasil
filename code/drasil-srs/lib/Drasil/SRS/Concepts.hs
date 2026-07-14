@@ -25,8 +25,7 @@ module Drasil.SRS.Concepts (
   funcReqLabel, nonfuncReqLabel, likeChgLabel, unlikeChgLabel, traceMatricesLabel,
   valsOfAuxConsLabel, referenceLabel, appendixLabel, offShelfSolnsLabel, indPRCaseLabel,
   projScopeLabel, useCaseTableLabel, terminologyLabel,
-  -- * All Section References
-  sections, sectionReferences) where
+) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Metadata.Drasil or Language.Drasil.Template?
 
@@ -50,15 +49,6 @@ import qualified Drasil.Metadata.Documentation as Doc (abbAcc, appendix, assumpt
 import Control.Lens ((^.), view)
 
 -- Ordered by appearance in SRS.
-
-sections :: [Section]
-sections = map (($ []) . ($ [])) [tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
-  charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, genSysDes, sysCont,
-  userChar, sysCon, specSysDes, probDesc, termAndDefn, physSyst, goalStmt,
-  solCharSpec, assumpt, thModel, genDefn, dataDefn, inModel, datCon, propCorSol,
-  require, nonfuncReq, funcReq, likeChg, unlikeChg, traceyMandG, valsOfAuxCons,
-  reference, appendix, offShelfSol, scpOfTheProj, prodUCTable, indPRCase,
-  termogy]
 
 -- | Standard SRS section builders.
 tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
@@ -171,17 +161,6 @@ indPRCase     cs ss = section (titleize' Doc.indPRCase)                cs ss ind
 termogy       cs ss = section (titleize Doc.terminology)               cs ss terminologyLabel
 
 --Labels--
--- | Collections all 'Section' 'Reference's.
-sectionReferences :: [Reference]
-sectionReferences = [tOfContLabel, refMatLabel, tOfUnitLabel, tOfSymbLabel, tOfAbbAccLabel,
-  introLabel, docPurposeLabel, reqsScopeLabel, readerCharsLabel, docOrgLabel,
-  stakeholderLabel, clientLabel, customerLabel, genSysDescLabel, sysContextLabel,
-  userCharsLabel, sysConstraintsLabel, specSystDescLabel, physSystLabel, probDescLabel,
-  termDefsLabel, goalStmtLabel, solCharSpecLabel, assumptLabel, thModelLabel,
-  genDefnLabel, dataDefnLabel, inModelLabel, datConLabel, corSolPropsLabel, requirementsLabel,
-  funcReqLabel, nonfuncReqLabel, likeChgLabel, unlikeChgLabel, traceMatricesLabel,
-  valsOfAuxConsLabel, referenceLabel, appendixLabel, offShelfSolnsLabel, indPRCaseLabel,
-  projScopeLabel, useCaseTableLabel, terminologyLabel]
 
 --FIXME: create using section information somehow?
 -- | Makes a 'Reference' to a 'Section'.

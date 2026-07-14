@@ -58,7 +58,6 @@ import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
-import Drasil.SRS.References (tableReferences)
 import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -146,8 +145,6 @@ fillReferences si = si2
       -- TRACEABILITY GRAPHS ===================================================
          traceGs -- Document-INTERNAL traceability graph LABELS
       ++ traceyGraphGetRefs -- Document-EXTERNAL traceability graph FILE URIs
-      -- TABLES ================================================================
-      ++ tableReferences
     refTable' = M.union (si ^. refTable) newRefs -- All references added are EXTERNAL URIs.
     si2 = set refTable refTable' si
 

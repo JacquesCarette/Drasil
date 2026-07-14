@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon')
 import Data.Drasil.SI_Units (siUnits)
-import qualified Drasil.SRS.Concepts as SRS
+import qualified Drasil.SRS.DummyChunks as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 import Drasil.Metadata.Domains (compScience, softEng, mathematics, progLanguage, civilEng,
@@ -39,6 +39,7 @@ withCommonKnowledge = insertAllOutOfOrder13 basisCDB
 basisCDB :: ChunkDB
 basisCDB =
     insertAll basisSections
+  $ insertAll basisLCs
   $ insertAll siUnits
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
@@ -49,6 +50,9 @@ basisCDB =
 
 basisSections :: [Section]
 basisSections = SRS.sections
+
+basisLCs :: [LabelledContent]
+basisLCs = SRS.tables
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =

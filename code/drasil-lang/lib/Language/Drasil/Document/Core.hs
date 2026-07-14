@@ -138,7 +138,7 @@ prependLabel EqnBlock{}     = prepend "EqnB"
 prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
-prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"
+prependLabel Paragraph{}    = prepend "Par" -- error "Shouldn't reference paragraphs"
 prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

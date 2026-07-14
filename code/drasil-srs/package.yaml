@@ -39,3 +39,4 @@ library:
   exposed-modules:
   - Drasil.SRS
   - Drasil.SRS.Concepts
+  - Drasil.SRS.DummyChunks

@@ -60,7 +60,6 @@ class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
 class UnRepr repr contents where
   unRepr :: repr contents -> contents
 
-
 type Body = Doc
 type MSBody a = MS (a Body)
 

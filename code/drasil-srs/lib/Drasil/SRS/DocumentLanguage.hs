@@ -76,6 +76,7 @@ import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
+import Debug.Trace (trace)
 
 -- * Main Function
 
@@ -126,13 +127,14 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
-        traceGs = map (ref . makeTabRef' . getTraceConfigUID) $ traceMatStandard si
+        traceMats = map (\(TraceConfig u _ desc cols rows) ->
+          TM.generateTraceTableView u desc cols rows si) $ traceMatStandard si
+        -- traceMats = map (ref . makeTabRef' . getTraceConfigUID) $ traceMatStandard si
         newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $
-          -- TRACEABILITY GRAPHS ===================================================
-             traceGs -- Document-INTERNAL traceability graph LABELS
-          ++ traceyGraphGetRefs -- Document-EXTERNAL traceability graph FILE URIs
+          -- TRACEABILITY GRAPHS & MATRICES ====================================
+          trace ("traceRefs: " ++ show (map (^. uid) traceyGraphGetRefs)) traceyGraphGetRefs -- Document-EXTERNAL traceability GRAPH FILE URIs
         refTable' = M.union (si ^. refTable) newRefs -- All references added are EXTERNAL URIs.
-    in set systemdb (insertAll tglcs db)
+    in set systemdb (insertAll tglcs $ insertAll traceMats db)
      $ set traceTable tdb
      $ set refbyTable (invert tdb)
      $ set refTable refTable' si

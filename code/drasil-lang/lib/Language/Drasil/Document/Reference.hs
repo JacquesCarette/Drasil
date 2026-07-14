@@ -63,9 +63,9 @@ namedRef r s = namedComplexRef r s None
 
 -- | Takes a 'Reference' with additional display info. Uses the internal shortname for its display name.
 complexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
-complexRef r = Ref (ref r ^. uid) EmptyS
+complexRef r = Ref (r ^. uid) EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
 namedComplexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
-namedComplexRef r = Ref (ref r ^. uid)
+namedComplexRef r = Ref (r ^. uid)

@@ -2,7 +2,6 @@
 module Drasil.SRS.References (secRefs) where
 
 import Language.Drasil.Document
-import Drasil.SRS.Concepts
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
 import Drasil.SRS.Sections.TableOfSymbols (symbTableRef)
@@ -13,5 +12,5 @@ import Drasil.SRS.Sections.SpecificSystemDescription (tInDataCstRef, tOutDataCst
 
 -- | All section references used in creating a Software Requirements Specification (SRS).
 secRefs :: [Reference]
-secRefs = sectionReferences ++ [tableAbbAccRef, reqInputsRef, symbTableRef,
+secRefs = [tableAbbAccRef, reqInputsRef, symbTableRef,
   unitTableRef, tableOfConstantsRef, tInDataCstRef, tOutDataCstRef]

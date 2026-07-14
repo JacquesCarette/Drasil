@@ -10,10 +10,10 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
-  UnRepr(..), SharedProg, SharedStatement, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (Label, SValue, Variable, SVariable,
+  getCodeType, UnRepr(..), SharedProg, SharedStatement, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
@@ -60,8 +60,7 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt, valType, opDoc,
-  opPrec, VarData, varName, varType, varBind, varDoc, vard, progD, mthdDoc,
-  modDoc)
+  opPrec, varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
@@ -213,7 +212,6 @@ instance ScopeElim MatlabCode where
   scopeData = unMLC
 
 instance VariableSym MatlabCode where
-  type Variable MatlabCode = VarData
   var = G.var
   constant = var
   extVar = undefined
@@ -582,7 +580,7 @@ mlTy :: CodeType -> String -> VS (MatlabCode TypeData)
 mlTy c s = typeFromData c s (text s)
 
 -- | A MATLAB parameter renders as just the variable name.
-mlParam :: MatlabCode (Variable MatlabCode) -> Doc
+mlParam :: MatlabCode Variable -> Doc
 mlParam = RC.variable
 
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.

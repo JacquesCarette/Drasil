@@ -276,7 +276,6 @@ instance ScopeElim CSharpCode where
   scopeData = unCSC
 
 instance VariableSym CSharpCode where
-  type Variable CSharpCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar

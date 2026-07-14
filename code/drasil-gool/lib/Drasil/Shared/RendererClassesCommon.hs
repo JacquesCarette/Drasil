@@ -15,14 +15,13 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, Body, MSBody, Block,
-  MSBlock, SVariable, SValue, MixedCall, TypeSym(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
-  UnRepr(..))
+  MSBlock, Variable, SVariable, SValue, MixedCall, TypeSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
+  InternalList(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -123,8 +122,8 @@ class RenderVariable r where
   varFromData :: AttachmentTag -> String -> VS (r TypeData) -> Doc -> SVariable r
 
 class InternalVarElim r where
-  variableBind :: r (Variable r) -> AttachmentTag
-  variable  :: r (Variable r) -> Doc
+  variableBind :: r Variable -> AttachmentTag
+  variable  :: r Variable -> Doc
 
 class InternalBinderElim r where
   binderElim  :: r BinderD -> Doc

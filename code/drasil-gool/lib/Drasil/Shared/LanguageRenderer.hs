@@ -30,8 +30,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, Body, SValue,
-  VariableSym(Variable), ValueSym(..), TypeElim(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, Body, Variable, SValue,
+  ValueSym(..), TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
   InternalVarElim, InternalBinderElim, ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -245,19 +245,19 @@ switch f st v defBody cs =
 
 assign
   :: (InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> Doc
+  => r Variable -> r (Value r) -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
-addAssign :: (InternalVarElim r, ValueElim r) => r (Variable r) -> r (Value r) -> Doc
+addAssign :: (InternalVarElim r, ValueElim r) => r Variable -> r (Value r) -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
-subAssign :: (InternalVarElim r, ValueElim r) => r (Variable r) -> r (Value r) -> Doc
+subAssign :: (InternalVarElim r, ValueElim r) => r Variable -> r (Value r) -> Doc
 subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
-increment :: (InternalVarElim r) => r (Variable r) -> Doc
+increment :: (InternalVarElim r) => r Variable -> Doc
 increment v = RC.variable v <> text "++"
 
-decrement :: (InternalVarElim r) => r (Variable r) -> Doc
+decrement :: (InternalVarElim r) => r Variable -> Doc
 decrement v = RC.variable v <> text "--"
 
 return' :: (ValueElim r) => [r (Value r)] -> Doc
@@ -407,7 +407,7 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (f
 valueList :: (ValueElim r) => [r (Value r)] -> Doc
 valueList = hicat listSep' . map RC.value
 
-variableList :: (InternalVarElim r) => [r (Variable r)] -> Doc
+variableList :: (InternalVarElim r) => [r Variable] -> Doc
 variableList = hicat listSep' . map RC.variable
 
 binderList :: (InternalBinderElim r) => [r BinderD] -> Doc
@@ -418,7 +418,7 @@ parameterList = hicat listSep' . map RC.parameter
 
 namedArgList
   :: (InternalVarElim r, ValueElim r)
-  => Doc -> [(r (Variable r), r (Value r))] -> Doc
+  => Doc -> [(r Variable, r (Value r))] -> Doc
 namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 

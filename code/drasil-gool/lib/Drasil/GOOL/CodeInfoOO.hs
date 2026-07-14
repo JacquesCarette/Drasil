@@ -5,8 +5,8 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
-  SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, Variable,
+  SValue, SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -123,20 +123,19 @@ instance ScopeSym CodeInfoOO where
   local = noInfoScope
 
 instance VariableSym CodeInfoOO where
-  type Variable CodeInfoOO = ()
-  var       _ _ = noInfo
-  constant  _ _ = noInfo
-  extVar  _ _ _ = noInfo
+  var       _ _ = return $ return $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
+  constant  _ _ = return $ return $ error "[constant] The return value of this isn't used, and the thunk shouldn't fire."
+  extVar  _ _ _ = return $ return $ error "[extVar] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OOVariableSym CodeInfoOO where
-  classVar _ _ = noInfo
-  classConst _ _ = noInfo
-  classVarAccess    _ _   = noInfo
-  extClassVarAccess _ _   = noInfo
-  instanceVarAccess      _ _   = noInfo
+  classVar _ _ = return $ return $ error "[classVar] The return value of this isn't used, and the thunk shouldn't fire."
+  classConst _ _ = return $ return $ error "[classConst] The return value of this isn't used, and the thunk shouldn't fire."
+  classVarAccess    _ _   = return $ return $ error "[classVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  extClassVarAccess _ _   = return $ return $ error "[extClassVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  instanceVarAccess      _ _   = return $ return $ error "[instanceVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance SelfSym CodeInfoOO where
-  self              = noInfo
+  self              = return $ return $ error "[self] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
@@ -217,10 +216,13 @@ instance Comparison CodeInfoOO where
 
 instance ValueExpression CodeInfoOO where
   inlineIf = execute3
-  funcAppMixedArgs n _ = currModCall n
+  funcAppMixedArgs n _ = do
+    _ <- currModCall n
+    return $ return $ return $ error "[funcAppMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
-    executePairList ns
+    mapM_ fst ns
+    mapM_ snd ns
     addExternalCall l n
   libFuncAppMixedArgs = extFuncAppMixedArgs
 
@@ -231,16 +233,21 @@ instance ValueExpression CodeInfoOO where
 instance OOValueExpression CodeInfoOO where
   newObjMixedArgs _ vs ns = do
     sequence_ vs
-    executePairList ns
+    mapM_ fst ns
+    mapM_ snd ns
     return $ return ()
   extNewObjMixedArgs _ _ vs ns = do
     sequence_ vs
-    executePairList ns
+    mapM_ fst ns
+    mapM_ snd ns
     return $ return ()
   libNewObjMixedArgs = extNewObjMixedArgs
 
 instance InternalValueExp CodeInfoOO where
-  objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
+  objMethodCallMixedArgs' n _ v vs ns = do
+    v
+    _ <- currModCall n vs ns
+    return $ return $ error "[objMethodCallMixedArgs'] The return value of this isn't used, and the thunk shouldn't fire."
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance FunctionSym CodeInfoOO where
@@ -267,7 +274,7 @@ instance Reference CodeInfoOO where
   maybeDeref = execute1
 
 instance Array CodeInfoOO where
-  arrayElem _ _ = noInfo
+  arrayElem _ _ = return $ return $ error "[arrayElem] The return value of this isn't used, and the thunk shouldn't fire."
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
@@ -542,13 +549,6 @@ executeList l = do
   sequence_ l
   noInfo
 
-executePairList :: [(State a (CodeInfoOO ()), State a (CodeInfoOO ()))] ->
-  State a (CodeInfoOO ())
-executePairList ps = do
-  mapM_ fst ps
-  mapM_ snd ps
-  noInfo
-
 execute2 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
   State a (CodeInfoOO ())
 execute2 s1 s2 = do
@@ -562,8 +562,9 @@ execute3 s1 s2 s3 = do
   execute2 s2 s3
 
 currModCall :: String -> [VS (CodeInfoOO ())] ->
-  [(VS (CodeInfoOO ()), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())
+  [(VS (CodeInfoOO Variable), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())
 currModCall n ps ns = do
   sequence_ ps
-  executePairList ns
+  mapM_ fst ns
+  mapM_ snd ns
   addCurrModCall n

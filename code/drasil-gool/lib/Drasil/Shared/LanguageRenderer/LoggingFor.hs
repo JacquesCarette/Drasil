@@ -186,7 +186,6 @@ instance (SharedStatement r smt, VariableElim r) => SharedStatement (LoggingFor 
 instance (G.OOStatement r smt, VariableElim r) => G.OOStatement (LoggingFor r) smt
 
 instance (VariableSym r) => VariableSym (LoggingFor r) where
-  type Variable (LoggingFor r) = Variable r
   var = liftLogging var
   constant = liftLogging constant
   extVar = liftLogging extVar

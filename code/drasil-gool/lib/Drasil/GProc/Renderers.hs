@@ -7,9 +7,7 @@ module Drasil.GProc.Renderers (
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
   VariableElim(..), ValueSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, InternalVarElim(..),
-  ValueElim(..))
-import Drasil.GProc.RendererClassesProc (ProcRenderSym)
+import Drasil.Shared.RendererClassesCommon (InternalVarElim(..), ValueElim(..))
 import Drasil.Shared.LanguageRenderer (new', constDec')
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.AST (TypeData(..))
@@ -22,16 +20,19 @@ renderType tp = case cType $ unRepr tp of
     (Object _) -> error "Classes are not supported in procedural languages"
     _ -> typeDoc $ unRepr tp
 
-renderParam :: (ProcRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> Doc
+renderParam
+  :: (InternalVarElim r, UnRepr r TypeData, VariableElim r)
+  => r (Variable r) -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
-renderListDec :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> r (Value r) -> Doc
+renderListDec
+  :: (UnRepr r TypeData, ValueElim r, VariableElim r)
+  => r (Variable r) -> r (Value r) -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
-renderConstDecDef :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> r (Value r) -> Doc
+renderConstDecDef
+  :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r)
+  => r (Variable r) -> r (Value r) -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

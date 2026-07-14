@@ -10,10 +10,10 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
   VariableElim(..), ValueSym(..), BodySym(..))
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, InternalVarElim(..),
-  VisibilityElim(..), ValueElim(..))
+import Drasil.Shared.RendererClassesCommon (InternalVarElim(..),
+  VisibilityElim(..), ValueElim(..), ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..))
-import Drasil.GOOL.RendererClassesOO (OORenderSym, PermElim(..))
+import Drasil.GOOL.RendererClassesOO (PermElim(..))
 import Drasil.Shared.LanguageRenderer (parameterList, new', constDec')
 import Drasil.Shared.AST (TypeData(..), ParamData)
 
@@ -24,25 +24,39 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), (<>), vcat, text, lbrace, rbrace,
 renderType :: (UnRepr r TypeData) => r TypeData -> Doc
 renderType = typeDoc . unRepr
 
-renderParam :: (OORenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> Doc
+renderParam
+  :: (InternalVarElim r, UnRepr r TypeData, VariableElim r)
+  => r (Variable r) -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
-renderMethod :: (OORenderSym r vis smt, UnRepr r TypeData) => String ->
-  r vis -> r (Attachment r) -> r TypeData -> [r ParamData] ->
-  r (Body r) -> Doc
+renderMethod
+  :: ( RC.BodyElim r
+     , ParamElim r
+     , PermElim r
+     , UnRepr r TypeData
+     , VisibilityElim r vis
+     )
+  => String
+  -> r vis
+  -> r (Attachment r)
+  -> r TypeData
+  -> [r ParamData]
+  -> r (Body r)
+  -> Doc
 renderMethod n s p t ps b = vcat [
   visibility s <+> perm p <+> renderType t <+> text n <>
     (parens (parameterList ps) <+> lbrace),
   indent (RC.body b),
   rbrace]
 
-renderListDec :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> r (Value r) -> Doc
+renderListDec
+  :: (UnRepr r TypeData, ValueElim r, VariableElim r)
+  => r (Variable r) -> r (Value r) -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
-renderConstDecDef :: (CommonRenderSym r vis smt, UnRepr r TypeData) =>
-  r (Variable r) -> r (Value r) -> Doc
+renderConstDecDef
+  :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r)
+  =>  r (Variable r) -> r (Value r) -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

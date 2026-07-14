@@ -23,20 +23,18 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - directory
-- drasil-code
-- drasil-data
-- drasil-database
-- drasil-srs
 - drasil-gen
-- drasil-gool
-- drasil-lang
-- drasil-printers
-- drasil-system
-- drasil-theory
-- drasil-utils
 - swhs
 
 library:
+  dependencies:
+  - drasil-code
+  - drasil-data
+  - drasil-database
+  - drasil-lang
+  - drasil-srs
+  - drasil-theory
+  - drasil-utils
   source-dirs: lib
   when:
   - condition: false

@@ -25,18 +25,8 @@ dependencies:
 - split
 - directory
 - pretty
-- drasil-data
-- drasil-database
-- drasil-file-handling
-- drasil-srs
-- drasil-code
-- drasil-gool
 - drasil-gen
 - drasil-lang
-- drasil-printers
-- drasil-system
-- drasil-theory
-- drasil-utils
 - sglpend
 - dblpend
 - gamephysics
@@ -51,6 +41,15 @@ dependencies:
 - template
 
 library:
+  dependencies:
+  - drasil-code
+  - drasil-data
+  - drasil-database
+  - drasil-file-handling
+  - drasil-gool
+  - drasil-printers
+  - drasil-srs
+  - drasil-system
   source-dirs: lib
 
 executables:

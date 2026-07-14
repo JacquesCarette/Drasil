@@ -6,21 +6,21 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
-  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), VisibilitySym(..), BinderSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), InternalValueExp(..), OOFunctionSym(..), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
+  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
@@ -52,13 +52,15 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () ()
-instance OOProg CodeInfoOO () ()
+instance SharedProg CodeInfoOO () () ()
+instance SharedStatement CodeInfoOO ()
+instance OOStatement CodeInfoOO ()
+instance OOProg CodeInfoOO () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () () where
+instance ProgramSym CodeInfoOO () () () where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -66,7 +68,7 @@ instance ProgramSym CodeInfoOO () () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO () () where
+instance FileSym CodeInfoOO () () () where
   type File CodeInfoOO = ()
   fileDoc = execute1
 
@@ -79,13 +81,16 @@ instance AttachmentSym CodeInfoOO where
 
 instance BodySym CodeInfoOO () where
   type Body CodeInfoOO = ()
-  body = executeList
+  body b = do
+    sequence_ b
+    return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
   addComments _ _ = noInfo
 
 instance BlockSym CodeInfoOO () where
-  type Block CodeInfoOO = ()
-  block = executeList
+  block b = do
+    sequence_ b
+    return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance TypeSym CodeInfoOO where
   bool            = return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
@@ -282,7 +287,7 @@ instance InternalList CodeInfoOO where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
-    noInfo
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
@@ -403,7 +408,7 @@ instance StrategyPattern CodeInfoOO () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
-    noInfo
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VisibilitySym CodeInfoOO () where
   private = return ()
@@ -413,8 +418,7 @@ instance ParameterSym CodeInfoOO where
   param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () where
-  type Method CodeInfoOO = ()
+instance MethodSym CodeInfoOO () () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -425,7 +429,7 @@ instance MethodSym CodeInfoOO () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () where
+instance OOMethodSym CodeInfoOO () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -445,7 +449,7 @@ instance StateVarSym CodeInfoOO () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () where
+instance ClassSym CodeInfoOO () () () where
   type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
@@ -465,7 +469,7 @@ instance ClassSym CodeInfoOO () () where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfoOO () () where
+instance ModuleSym CodeInfoOO () () () where
   type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
@@ -484,7 +488,7 @@ noInfoScope = return $ sd Global -- Hack
 noInfoBinder :: VSBinder CodeInfoOO
 noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
 
-updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
+updateMEMandCM :: String -> MSBody CodeInfoOO -> MS (CodeInfoOO ())
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)

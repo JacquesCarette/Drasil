@@ -10,20 +10,17 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable,
-  getCodeType,
-  UnRepr(..), SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), StatementSym(..),
-  AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  switchAsIf,
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), funcApp, (&=))
+import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
+  UnRepr(..), SharedProg, SharedStatement, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -95,23 +92,24 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode Doc (Doc, Terminator)
-instance ProcProg MatlabCode Doc (Doc, Terminator)
+instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
+instance SharedStatement MatlabCode (Doc, Terminator)
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) where
+instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData where
   type Program MatlabCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc (Doc, Terminator)
-instance ProcRenderSym MatlabCode Doc (Doc, Terminator)
+instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode Doc (Doc, Terminator) where
+instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
   type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
@@ -140,7 +138,6 @@ instance BodyElim MatlabCode where
   body = unMLC
 
 instance BlockSym MatlabCode (Doc, Terminator) where
-  type Block MatlabCode = Doc
   block = G.block
 
 instance RenderBlock MatlabCode where
@@ -519,8 +516,7 @@ instance ParamElim MatlabCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc (Doc, Terminator) where
-  type Method MatlabCode = MethodData
+instance MethodSym MatlabCode Doc (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -536,12 +532,12 @@ instance MethodSym MatlabCode Doc (Doc, Terminator) where
     pure $ toCode $ mthd $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod MatlabCode where
+instance RenderMethod MatlabCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance ProcRenderMethod MatlabCode Doc where
+instance ProcRenderMethod MatlabCode Doc MethodData where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
@@ -552,10 +548,10 @@ instance ProcRenderMethod MatlabCode Doc where
     let outs = [text mlRet | cType (unMLC tp) /= Void]
     pure $ toCode $ mthd $ mlFuncDoc n outs pms (RC.body bod)
 
-instance MethodElim MatlabCode where
+instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode Doc (Doc, Terminator) where
+instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
   type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
@@ -601,7 +597,7 @@ mlParam = RC.variable
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
 --   With no outputs the @[outs] =@ part is dropped; with a single output the
 --   brackets are dropped (@function out = name(ins)@).
-mlFuncDoc :: (CommonRenderSym r vis smt) => Label -> [Doc] ->
+mlFuncDoc :: (ParamElim r) => Label -> [Doc] ->
   [r ParamData] -> Doc -> Doc
 mlFuncDoc n outs pms bod =
   vcat [text "function" <+> (retDoc <> text n) <> parens (R.parameterList pms),
@@ -701,14 +697,14 @@ mlPrint newLn f' _ v' = do
 mlEnd :: Doc
 mlEnd = text "end"
 
-mlForEach :: (CommonRenderSym r vis smt) => r (Variable r) ->
+mlForEach :: (CommonRenderSym r vis smt md) => r (Variable r) ->
   r (Value r) -> r (Body r) -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,
   mlEnd]
 
-mlRange :: (CommonRenderSym r vis smt) => SValue r -> SValue r ->
+mlRange :: (CommonRenderSym r vis smt md) => SValue r -> SValue r ->
   SValue r -> SValue r
 mlRange initv finalv stepv = do
   ini <- initv
@@ -717,7 +713,7 @@ mlRange initv finalv stepv = do
   d <- double
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
-mlTryCatch :: (CommonRenderSym r vis smt) => r (Body r) -> r (Body r) -> Doc
+mlTryCatch :: (CommonRenderSym r vis smt md) => r (Body r) -> r (Body r) -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",
   indent $ RC.body tryB,

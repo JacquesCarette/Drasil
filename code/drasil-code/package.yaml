@@ -26,17 +26,9 @@ dependencies:
 - directory
 - filepath
 - split
-- drasil-database
 - drasil-file-handling
 - drasil-gool
-- drasil-lang
-- drasil-makefile
 - drasil-metadata
-- drasil-printers
-- drasil-srs
-- drasil-system
-- drasil-theory
-- drasil-utils
 - deriving-compat
 
 ghc-options:
@@ -45,6 +37,15 @@ ghc-options:
 - -Wmissing-export-lists
 
 library:
+  dependencies:
+  - drasil-database
+  - drasil-lang
+  - drasil-makefile
+  - drasil-printers
+  - drasil-srs
+  - drasil-system
+  - drasil-theory
+  - drasil-utils
   source-dirs: lib
   exposed-modules:
   - Language.Drasil.Code

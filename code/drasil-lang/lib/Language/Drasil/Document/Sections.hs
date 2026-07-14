@@ -170,9 +170,6 @@ docNs = nsUid "doc"
 docUid :: String -> UID
 docUid = docNs . mkUid
 
--- FIXME: horrible hacks.
--- FIXME: May need UID checker function here.
--- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
 makeTabRef rs = Reference (docUid rs) (RP (prepend "Tab") ("Table:" ++ rs)) (shortname' (S rs))

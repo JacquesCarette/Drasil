@@ -731,7 +731,6 @@ instance ClassElim PythonCode where
   class' = unPC
 
 instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData where
-  type Module PythonCode = ModData
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports

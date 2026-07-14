@@ -710,7 +710,6 @@ instance ClassElim CSharpCode where
   class' = unCSC
 
 instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData where
-  type Module CSharpCode = ModData
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode where

@@ -587,7 +587,6 @@ instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
 instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData where
-  type Module JuliaCode = ModData
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 

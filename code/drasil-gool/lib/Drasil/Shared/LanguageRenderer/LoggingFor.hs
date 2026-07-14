@@ -389,7 +389,6 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 instance (P.ProcProg r vis smt md) => P.ProcProg (LoggingFor r) vis smt md
 
 instance (P.ModuleSym r vis smt md) => P.ModuleSym (LoggingFor r) vis smt md where
-  type Module (LoggingFor r) = P.Module r
   buildModule = liftLogging P.buildModule
 
 instance (P.FileSym r vis smt md) => P.FileSym (LoggingFor r) vis smt md where
@@ -478,7 +477,6 @@ instance (G.ClassSym r vis smt md) => G.ClassSym (LoggingFor r) vis smt md where
   docClass = liftLogging G.docClass
 
 instance (G.ModuleSym r vis smt md) => G.ModuleSym (LoggingFor r) vis smt md where
-  type Module (LoggingFor r) = G.Module r
   buildModule = liftLogging G.buildModule
 
 instance (G.FileSym r vis smt md) => G.FileSym (LoggingFor r) vis smt md where

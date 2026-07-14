@@ -70,7 +70,9 @@ instance ProgramSym CodeInfoOO () () () where
 
 instance FileSym CodeInfoOO () () () where
   type File CodeInfoOO = ()
-  fileDoc = execute1
+  fileDoc m = do
+    _ <- m
+    return $ return $ error "[fileDoc] The return value of this isn't used, and the thunk shouldn't fire."
 
   docMod _ _ _ _ = execute1
 
@@ -490,12 +492,11 @@ instance ClassSym CodeInfoOO () () () where
     noInfo
 
 instance ModuleSym CodeInfoOO () () () where
-  type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes
     mapM_ (zoom lensFStoMS) funcs
-    modifyReturn (updateClassMap n) (toCode ())
+    modifyReturn (updateClassMap n) (return $ error "[buildModule] The return value of this isn't used, and the thunk shouldn't fire.")
 
 -- Helpers
 

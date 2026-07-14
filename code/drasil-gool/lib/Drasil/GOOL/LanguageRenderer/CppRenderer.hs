@@ -825,7 +825,6 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Module (p CppSrcCode CppHdrCode) = ModData
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
@@ -1729,7 +1728,6 @@ instance ClassElim CppSrcCode where
   class' = unCPPSC
 
 instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Module CppSrcCode = ModData
   buildModule n is ms cs = CP.buildModule n (do
     ds <- getDefines
     lis <- getLangImports
@@ -2369,7 +2367,6 @@ instance ClassElim CppHdrCode where
   class' = unCPPHC
 
 instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Module CppHdrCode = ModData
   buildModule n is = CP.buildModule n (do
     ds <- getHeaderDefines
     lis <- getHeaderLangImports

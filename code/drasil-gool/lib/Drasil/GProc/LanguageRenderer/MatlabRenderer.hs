@@ -58,10 +58,10 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
-  paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
-  valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc, vard,
-  progD, mthdDoc, modDoc)
+  md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
+  ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt, valType, opDoc,
+  opPrec, VarData, varName, varType, varBind, varDoc, vard, progD, mthdDoc,
+  modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
@@ -545,7 +545,6 @@ instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
   -- first, then the local functions. Command-line args map to varargin.

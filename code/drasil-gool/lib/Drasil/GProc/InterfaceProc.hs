@@ -3,7 +3,7 @@
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  GSProgram, SFile, FSModule,
+  GSProgram, SFile, Module, FSModule,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
@@ -11,6 +11,7 @@ module Drasil.GProc.InterfaceProc (
 import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..),
   NativeVector)
 import Drasil.Shared.State (GS, FS, MS)
+import Drasil.Shared.AST (ModData)
 
 class (SharedProg r vis smt md, ProgramSym r vis smt md,
   NativeVector r) => ProcProg r vis smt md
@@ -30,9 +31,9 @@ class (ModuleSym r vis smt md) => FileSym r vis smt md where
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
 
-type FSModule a = FS (a (Module a))
+type Module = ModData
+type FSModule a = FS (a Module)
 
 class (MethodSym r vis smt md) => ModuleSym r vis smt md where
-  type Module r
   -- Module name, import names, module functions
   buildModule :: Label -> [Label] -> [MS (r md)] -> FSModule r

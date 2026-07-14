@@ -739,7 +739,6 @@ instance ClassElim JavaCode where
   class' = unJC
 
 instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData where
-  type Module JavaCode = ModData
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod JavaCode where

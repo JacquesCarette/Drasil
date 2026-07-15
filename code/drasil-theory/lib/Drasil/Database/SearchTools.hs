@@ -41,7 +41,7 @@ termResolve f db trg
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
+  | otherwise = error $ "Term: `" ++ show trg ++ "` not found in TermMap"
   where
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c
     go f' c = f' (c ^. term) (getA c)
@@ -63,7 +63,7 @@ defResolve f db trg
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Definition: " ++ show trg ++ " not found in ConceptMap"
+  | otherwise = error $ "Definition: `" ++ show trg ++ "` not found in ConceptMap"
   where
     go :: Concept c => ([UID] -> Sentence -> r) -> c -> r
     go f' c = f' (cdom c) (c ^. defn)
@@ -72,20 +72,20 @@ defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn
 
 -- | Looks up a 'UID' in a 'ChunkDB' with a /referrable/ handle.
-refResolve :: ChunkDB -> UID -> Maybe Reference
+refResolve :: ChunkDB -> UID -> Reference
 refResolve db trg
-  | (Just c) <- find trg db :: Maybe DataDefinition      = Just $ ref c
-  | (Just c) <- find trg db :: Maybe InstanceModel       = Just $ ref c
-  | (Just c) <- find trg db :: Maybe GenDefn             = Just $ ref c
-  | (Just c) <- find trg db :: Maybe TheoryModel         = Just $ ref c
-  | (Just c) <- find trg db :: Maybe ConceptInstance     = Just $ ref c
-  | (Just c) <- find trg db :: Maybe LabelledContent     = Just $ ref c
-  | (Just c) <- find trg db :: Maybe Citation            = Just $ ref c
-  | (Just c) <- find trg db :: Maybe Section             = Just $ ref c
+  | (Just c) <- find trg db :: Maybe DataDefinition      = ref c
+  | (Just c) <- find trg db :: Maybe InstanceModel       = ref c
+  | (Just c) <- find trg db :: Maybe GenDefn             = ref c
+  | (Just c) <- find trg db :: Maybe TheoryModel         = ref c
+  | (Just c) <- find trg db :: Maybe ConceptInstance     = ref c
+  | (Just c) <- find trg db :: Maybe LabelledContent     = ref c
+  | (Just c) <- find trg db :: Maybe Citation            = ref c
+  | (Just c) <- find trg db :: Maybe Section             = ref c
   -- FIXME: When URIs are made not-`Reference`-types, we can (should) remove the
   -- below `Just` case.
-  | (Just c) <- find trg db :: Maybe Reference           = Just c
-  | otherwise = Nothing
+  | (Just c) <- find trg db :: Maybe Reference           = c
+  | otherwise = error $ "Reference for `" ++ show trg ++ "` not found."
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll

@@ -15,7 +15,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, SValue, SVariable, MSBlock, BodySym(..), BlockSym(..),
+  Label, Body, SValue, Variable, SVariable, MSBlock, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -245,7 +245,6 @@ instance ScopeElim JuliaCode where
   scopeData = unJLC
 
 instance VariableSym JuliaCode where
-  type Variable JuliaCode = VarData
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
@@ -844,7 +843,7 @@ jlSpace = OSpace {oSpace = empty}
 -- | Creates a for-each loop in Julia
 jlForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r Body -> Doc
+  => r Variable -> r (Value r) -> r Body -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -914,7 +913,7 @@ jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlParam :: JuliaCode (Variable JuliaCode) -> Doc
+jlParam :: JuliaCode Variable -> Doc
 jlParam v = RC.variable v <> jlType <> renderType (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)

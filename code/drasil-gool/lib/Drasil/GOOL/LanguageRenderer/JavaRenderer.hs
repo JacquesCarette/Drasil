@@ -271,7 +271,6 @@ instance ScopeElim JavaCode where
   scopeData = unJC
 
 instance VariableSym JavaCode where
-  type Variable JavaCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar

@@ -22,8 +22,8 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
-  MSBlock, Block, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  bodyStatements, oneLiner, VariableSym(Variable), VisibilitySym(..),
+  MSBlock, Block, Variable, SVariable, SValue, NamedArgs, MixedCall,
+  MixedCtorCall, bodyStatements, oneLiner, VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
@@ -175,7 +175,7 @@ classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
 -- not class-level since classVarAccess is for accessing class-level variables from a class
-classVarAccessCheck :: (InternalVarElim r) => r (Variable r) -> r (Variable r)
+classVarAccessCheck :: (InternalVarElim r) => r Variable -> r Variable
 classVarAccessCheck v = classVarCS (variableBind v)
   where classVarCS InstanceLevel = error
           "classVarAccess can only be used to access class-level variables"
@@ -494,7 +494,7 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param
   :: (RenderParam r, VariableElim r)
-  => (r (Variable r) -> Doc) -> SVariable r -> MS (r ParamData)
+  => (r Variable -> Doc) -> SVariable r -> MS (r ParamData)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v

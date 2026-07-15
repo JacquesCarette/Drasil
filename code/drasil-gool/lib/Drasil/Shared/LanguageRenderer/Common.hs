@@ -11,10 +11,9 @@ import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Body, SVariable, MixedCall, SValue,
-  ValueSym(Value), TypeSym(int), MSBody, VariableElim(variableName),
-  VariableSym(Variable), Label, Library, funcApp, getCodeType, AssignStatement,
-  ValueExpression)
+import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
+  SValue, ValueSym(Value), TypeSym(int), MSBody, VariableElim(variableName),
+  Label, Library, funcApp, getCodeType, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -62,7 +61,7 @@ listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
-forEach' :: (RenderStatement r smt) => (r (Variable r) -> r (Value r) ->
+forEach' :: (RenderStatement r smt) => (r Variable -> r (Value r) ->
   r Body -> Doc) -> SVariable r -> SValue r -> MSBody r -> MS (r smt)
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'

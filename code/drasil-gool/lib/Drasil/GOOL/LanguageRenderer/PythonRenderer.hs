@@ -13,7 +13,7 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Library, Body, SVariable, SValue, MixedCtorCall, BodySym(..),
+  Label, Library, Body, Variable, SVariable, SValue, MixedCtorCall, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -262,7 +262,6 @@ instance ScopeElim PythonCode where
   scopeData = unPC
 
 instance VariableSym PythonCode where
-  type Variable PythonCode = VarData
   var          = G.var
   constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
@@ -964,7 +963,7 @@ pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r Body -> Doc
+  => r Variable -> r (Value r) -> r Body -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
@@ -998,7 +997,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
 pyMethod
   :: Label
   -> PythonCode (Attachment PythonCode)
-  -> PythonCode (Variable PythonCode)
+  -> PythonCode Variable
   -> [PythonCode ParamData]
   -> PythonCode Body
   -> Doc

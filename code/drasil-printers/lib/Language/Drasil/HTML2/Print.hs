@@ -287,7 +287,7 @@ fence _     Norm  = "||"
 makeTableHTML :: [String] -> [[Spec]] -> Spec -> Bool -> Spec -> [HTMLBody]
 makeTableHTML _ [] _ _ _       = error "No table to print (see PrintHTML)"
 makeTableHTML ts (l:lls) r b t =
-  if b 
+  if b
     then [HTML.Div wrapperAttrs [tableNode, captionNode]]
     else [HTML.Div wrapperAttrs [tableNode]]
   where
@@ -297,7 +297,6 @@ makeTableHTML ts (l:lls) r b t =
     tableNode = HTML.Table attrs (headerRow : dataRows)
     captionNode = HTML.Paragraph [Attr "class" "caption"] (specToHTML t)
     wrapperAttrs = [Attr "id" (extractText r)]
-    
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
@@ -309,16 +308,10 @@ makeDefnHTML [] _ = error "Empty definition"
 makeDefnHTML ps l =
   let
     attrs  = [Attr "id" (extractText l), Attr "class" "defn-table"]
-    refRow = HTML.Row [] [
-      THeader [] [RawText "Refname"], 
-      TData [] [TextFormat HTML.Bold [] (specToHTML l)]
-      ]
-    dataRows = map (\(f, d) -> 
-      HTML.Row [] [
-        THeader [] [RawText (T.pack f)], 
-        TData [] (concatMap loToHTML d)
-        ]) ps
-      
+    refRow = HTML.Row []
+      [THeader [] [RawText "Refname"], TData [] [TextFormat HTML.Bold [] (specToHTML l)]]
+    dataRows = map (\(f, d) -> HTML.Row []
+      [THeader [] [RawText (T.pack f)], TData [] (concatMap loToHTML d)]) ps
   in
     [HTML.Table attrs (refRow : dataRows)]
 
@@ -329,23 +322,17 @@ makeDefnHTML ps l =
 -- | Renders lists in HTML.
 makeListHTML :: ListType -> HTMLBody -- FIXME: ref id's should be folded into the li
 makeListHTML (Simple items) = HTML.Div [Attr "class" "list"] $
-  map (\(b, e, l) -> 
-    HTML.Paragraph (mlrefAttr l) (foldRaw $ specToHTML b ++ [RawText ": "] ++ itemToHTML e)
-  ) items
+  map (\(b, e, l) -> HTML.Paragraph (mlrefAttr l)
+  (foldRaw $ specToHTML b ++ [RawText ": "] ++ itemToHTML e)) items
 makeListHTML (Desc items) = HTML.Div [Attr "class" "list"] $
-  map (\(b, e, l) -> 
-    HTML.Paragraph (mlrefAttr l) (
-      foldRaw $ [TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e
-    )
-  ) items
+  map (\(b, e, l) -> HTML.Paragraph (mlrefAttr l)
+  (foldRaw $ [TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e)) items
 makeListHTML (Ordered items) = HTML.List HTML.Ordered [Attr "class" "list"] $
   map (\(i, l) -> LItem (mlrefAttr l) (foldRaw $ itemToHTML i)) items
 makeListHTML (Unordered items) = HTML.List HTML.Unordered [Attr "class" "list"] $
   map (\(i, l) -> LItem (mlrefAttr l) (foldRaw $ itemToHTML i)) items
 makeListHTML (Definitions items) = HTML.List HTML.Unordered [Attr "class" "hide-list-style-no-indent"] $
-  map (\(b, e, l) -> 
-    LItem (mlrefAttr l) (foldRaw $ specToHTML b ++ [RawText " is the "] ++ itemToHTML e)
-  ) items
+  map (\(b, e, l) -> LItem (mlrefAttr l) (foldRaw $ specToHTML b ++ [RawText " is the "] ++ itemToHTML e)) items
 
 -- | Helper for setting up references as HTML Attributes.
 mlrefAttr :: Maybe Spec -> [Attr]

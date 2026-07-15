@@ -189,7 +189,7 @@ makeEqnRef rs = Reference (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ rs)) (
 
 -- | Create a reference for a 'URI'. Takes in a 'UID' (as a 'String'), a reference address, and a shortname.
 makeURI :: String -> String -> ShortName -> Reference
-makeURI u r = Reference (mkUid u) (URI r)
+makeURI u r = Reference (nsUid "links" $ mkUid u) (URI r)
 
 -- | Variants of 'makeTabRef' that takes a 'UID' instead of a 'String'.
 makeTabRef' :: UID -> Reference
@@ -210,4 +210,4 @@ makeEqnRef' rs = Reference (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ show r
 
 -- | Variants of 'makeURI' that takes a 'UID' instead of a 'String'.
 makeURI' :: UID -> String -> ShortName -> Reference
-makeURI' u r = Reference u (URI r)
+makeURI' u r = Reference (nsUid "links" u) (URI r)

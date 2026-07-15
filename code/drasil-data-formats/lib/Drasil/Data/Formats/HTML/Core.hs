@@ -129,6 +129,6 @@ span attrs txt = TextFormat Span attrs [RawText txt]
 
 -- | Creates a figure containing an image and a caption.
 -- The provided attributes are applied to the Figure
-figureImage :: [Attr] -> File -> Text -> Text -> HTMLBody
-figureImage attrs src altText captionTxt =
-  Figure attrs [Img src altText [], FigCaption [] [RawText captionTxt]]
+figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
+figureImage attrsFig attrsImg src altText captionTxt =
+  Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]

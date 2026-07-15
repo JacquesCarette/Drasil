@@ -15,8 +15,9 @@ import Text.PrettyPrint (Doc)
 import Drasil.FileHandling (file, ps)
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Document (Document)
-import Language.Drasil.Printers (Notation (Engineering), genHTML, genericCSS,
+import Language.Drasil.Printers (Notation (Engineering), genHTML2, genericCSS,
   piSys, makeDocument)
+import Drasil.Data.Formats.HTML (HTMLRenderOptions(..))
 
 import Drasil.System (HasSystemMeta(..), SystemMeta, ToFiles(..), HasProjectName(..))
 
@@ -60,4 +61,4 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
       pd = makeDocument printSetting $ dw ^. indexDoc
 
       -- 2. Transform the TDL into HTML.
-      html = genHTML "index" pd
+      html = genHTML2 (HTMLRO M.empty) "index" pd

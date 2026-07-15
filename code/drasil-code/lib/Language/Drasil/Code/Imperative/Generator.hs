@@ -120,8 +120,9 @@ generator l dt sd chs cs = let
 -- OO Versions --
 
 data SomeProgGenerator where
-  SomeProgGenerator :: forall repr vis smt md. (OOProg repr vis smt md) =>
-    (repr (OO.Program repr) -> ProgData) -> SomeProgGenerator
+  SomeProgGenerator
+    :: forall repr vis smt md svr. (OOProg repr vis smt md svr)
+    => (repr (OO.Program repr) -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
@@ -176,8 +177,10 @@ insertFile (p, d) m =
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr vis smt md, SoftwareDossierSym packRepr, Monad packRepr) =>
-  (progRepr (OO.Program progRepr) -> ProgData) -> GenState (packRepr PackageData)
+genPackage
+  :: (OOProg progRepr vis smt md svr, SoftwareDossierSym packRepr, Monad packRepr)
+  => (progRepr (OO.Program progRepr) -> ProgData)
+  -> GenState (packRepr PackageData)
 genPackage unRepr = do
   g <- get
   ci <- genProgram
@@ -216,7 +219,7 @@ genPackage unRepr = do
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
-genProgram :: (OOProg r vis smt md) => GenState (OO.GSProgram r)
+genProgram :: (OOProg r vis smt md svr) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
@@ -227,12 +230,12 @@ genProgram = do
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r vis smt md) => Modularity -> GenState [OO.SFile r]
+chooseModules :: (OOProg r vis smt md svr) => Modularity -> GenState [OO.SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r vis smt md) => GenState (OO.SFile r)
+genUnmodular :: (OOProg r vis smt md svr) => GenState (OO.SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -251,7 +254,7 @@ genUnmodular = do
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
-genModules :: (OOProg r vis smt md) => GenState [OO.SFile r]
+genModules :: (OOProg r vis smt md svr) => GenState [OO.SFile r]
 genModules = do
   g <- get
   mn     <- genMain

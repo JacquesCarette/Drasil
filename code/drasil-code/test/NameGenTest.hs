@@ -10,7 +10,7 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
-nameGenTestOO :: OOProg r vis smt md => OO.GSProgram r
+nameGenTestOO :: OOProg r vis smt md svr => OO.GSProgram r
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 

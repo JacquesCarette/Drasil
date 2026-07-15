@@ -90,7 +90,7 @@ gProcMatlabTestGroup n p =
     [ goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
     ]
 
-genCodeProcNoMake :: (ProcProg r vis smt md, Monad r') =>
+genCodeProcNoMake :: (ProcProg r vis smt md, NativeVector r, Monad r') =>
   (r (Proc.Program r) -> ProgData) -> (r' PackageData -> PackageData) ->
   (forall s vis' smt' md'. (ProcProg s vis' smt' md', NativeVector s) =>
     Proc.GSProgram s) ->

@@ -8,13 +8,11 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..),
-  NativeVector)
+import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..))
 import Drasil.Shared.State (GS, FS, MS)
 import Drasil.Shared.AST (FileData, ModData)
 
-class (SharedProg r vis smt md, ProgramSym r vis smt md,
-  NativeVector r) => ProcProg r vis smt md
+class (SharedProg r vis smt md, ProgramSym r vis smt md) => ProcProg r vis smt md
 
 type GSProgram a = GS (a (Program a))
 

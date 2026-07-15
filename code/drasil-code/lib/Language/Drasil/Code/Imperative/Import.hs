@@ -892,7 +892,9 @@ mkVarProc v = do
   toGOOLVar (v ^. obv)
 
 -- | Converts a 'Mod' to GOOL.
-genModDefProc :: (ProcProg r vis smt md) => Mod -> GenState (Proc.SFile r)
+genModDefProc
+  :: (NativeVector r, ProcProg r vis smt md)
+  => Mod -> GenState (Proc.SFile r)
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
           (map (fmap Just . genFuncProc publicFuncProc []) fs)

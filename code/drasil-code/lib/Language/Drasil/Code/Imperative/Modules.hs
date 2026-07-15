@@ -665,7 +665,7 @@ genOutputFormat = do
 -- Procedural Versions --
 
 -- | Generates a controller module.
-genMainProc :: (ProcProg r vis smt md) => GenState (Proc.SFile r)
+genMainProc :: (NativeVector r, ProcProg r vis smt md) => GenState (Proc.SFile r)
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
   [genMainFuncProc]
 
@@ -743,12 +743,15 @@ checkConstClass = do
     . codeName) cs
 
 -- | Generates a single module containing all input-related components.
-genInputModProc :: (ProcProg r vis smt md) => GenState [Proc.SFile r]
+genInputModProc
+  :: (NativeVector r, ProcProg r vis smt md)
+  => GenState [Proc.SFile r]
 genInputModProc = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
-  let genMod :: (ProcProg r vis smt md) => Bool ->
-        GenState (Proc.SFile r)
+  let genMod
+        :: (NativeVector r, ProcProg r vis smt md)
+        => Bool -> GenState (Proc.SFile r)
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
         genInputDerivedProc Pub, genInputConstraintsProc Pub]
       genMod True = error "genInputModProc: Procedural renderers do not support bundled inputs"
@@ -791,7 +794,9 @@ getInputDeclProc = do
     (g ^. inputs))
 
 -- | Generates a module containing calculation functions.
-genCalcModProc :: (ProcProg r vis smt md) => GenState (Proc.SFile r)
+genCalcModProc
+  :: (NativeVector r, ProcProg r vis smt md)
+  => GenState (Proc.SFile r)
 genCalcModProc = do
   g <- get
   cName <- genICName Calculations
@@ -1058,7 +1063,9 @@ printConstraintProc c = do
   printConstraint' c
 
 -- | Generates a module containing the function for printing outputs.
-genOutputModProc :: (ProcProg r vis smt md) => GenState [Proc.SFile r]
+genOutputModProc
+  :: (NativeVector r, ProcProg r vis smt md)
+  => GenState [Proc.SFile r]
 genOutputModProc = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc

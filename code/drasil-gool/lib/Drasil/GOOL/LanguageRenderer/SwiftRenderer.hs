@@ -750,7 +750,6 @@ instance ClassElim SwiftCode where
   class' = unSC
 
 instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData where
-  type Module SwiftCode = ModData
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will

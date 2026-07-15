@@ -31,9 +31,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (OOStatement, SFile, FSModule, SClass,
-  Initializers, CSStateVar, FileSym(File), ModuleSym(Module), newObj,
-  objMethodCallNoParams, ($.), AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOStatement, SFile, Module, FSModule, SClass,
+  Initializers, CSStateVar, FileSym(File), newObj, objMethodCallNoParams, ($.),
+  AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -566,14 +566,14 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 
 -- Modules --
 
-modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
+modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FSModule r
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
 fileDoc
   :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r (Module r) -> r Block) -> r Block -> FSModule r -> SFile r
+  => String -> (r Module -> r Block) -> r Block -> FSModule r -> SFile r
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -605,7 +605,7 @@ docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt
 
 fileFromData
   :: (RO.ModuleElim r)
-  => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
+  => (FilePath -> r Module -> r (File r)) -> FilePath -> FSModule r -> SFile r
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

@@ -44,7 +44,7 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
-  TSIntro(..), UCsSec(..), getTraceConfigUID)
+  TSIntro(..), UCsSec(..))
 import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
@@ -76,7 +76,6 @@ import qualified Drasil.SRS.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs, genTraceGraphLabCons)
 import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
-import Debug.Trace (trace)
 
 -- * Main Function
 

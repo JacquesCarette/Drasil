@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
+  Label, Body, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -94,11 +94,11 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
-  updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
-  TypeData(..), ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
-  vard, ScopeData, BinderD(..), bindFormD)
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
+  ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
+  ParamData(..), pd, updateParam, ProgData(..), progD, TypeData(..), ValData(..),
+  vd, updateValDoc, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..),
+  bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -151,7 +151,6 @@ instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
 instance FileSym CSharpCode Doc (Doc, Terminator) MethodData where
-  type File CSharpCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
@@ -180,7 +179,6 @@ instance PermElim CSharpCode where
   binding = error $ CP.bindingError csName
 
 instance BodySym CSharpCode (Doc, Terminator) where
-  type Body CSharpCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -278,7 +276,6 @@ instance ScopeElim CSharpCode where
   scopeData = unCSC
 
 instance VariableSym CSharpCode where
-  type Variable CSharpCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
@@ -692,7 +689,6 @@ instance StateVarElim CSharpCode where
   stateVar = unCSC
 
 instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData where
-  type Class CSharpCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -711,7 +707,6 @@ instance ClassElim CSharpCode where
   class' = unCSC
 
 instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData where
-  type Module CSharpCode = ModData
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode where
@@ -868,7 +863,7 @@ csThrowDoc :: CSharpCode (Value CSharpCode) -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-csTryCatch :: CSharpCode (Body CSharpCode) -> CSharpCode (Body CSharpCode) -> Doc
+csTryCatch :: CSharpCode Body -> CSharpCode Body -> Doc
 csTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,

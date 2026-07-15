@@ -14,10 +14,10 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, MSBlock, SVariable, SValue, BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  Label, Body, MSBody, MSBlock, Variable, SVariable, SValue, BodySym(..),
+  oneLiner, bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..),
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
@@ -92,10 +92,10 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, innerType)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
-  FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
-  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, TypeData(..), ValData(..), vd, AttachmentTag(..),
-  VarData(..), vard, ScopeData, BinderD(..), bindFormD)
+  FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
+  ScopeData, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -151,7 +151,6 @@ instance UnRepr SwiftCode contents where
   unRepr = unSC
 
 instance FileSym SwiftCode Doc (Doc, Terminator) MethodData where
-  type File SwiftCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
@@ -180,7 +179,6 @@ instance PermElim SwiftCode where
   binding = error $ CP.bindingError swiftName
 
 instance BodySym SwiftCode (Doc, Terminator) where
-  type Body SwiftCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -277,7 +275,6 @@ instance ScopeElim SwiftCode where
   scopeData = unSC
 
 instance VariableSym SwiftCode where
-  type Variable SwiftCode = VarData
   var         = G.var
   constant    = var
   extVar _    = var
@@ -732,7 +729,6 @@ instance StateVarElim SwiftCode where
   stateVar = unSC
 
 instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData where
-  type Class SwiftCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -751,7 +747,6 @@ instance ClassElim SwiftCode where
   class' = unSC
 
 instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData where
-  type Module SwiftCode = ModData
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will
@@ -1177,13 +1172,13 @@ swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+  => r Variable -> r (Value r) -> r Body -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
   bodyEnd]
 
-swiftTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+swiftTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 swiftTryCatch tb cb = vcat [
   swiftDo <+> lbrace,
   indent $ RC.body tb,
@@ -1196,7 +1191,7 @@ swiftAssert condition errorMessage = vcat [
   text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
   ]
 
-swiftParam :: Doc -> SwiftCode (Variable SwiftCode) -> Doc
+swiftParam :: Doc -> SwiftCode Variable -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> renderType (variableType v)
 

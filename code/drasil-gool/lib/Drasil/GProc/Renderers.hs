@@ -5,8 +5,8 @@ module Drasil.GProc.Renderers (
   renderType, renderParam, renderListDec, renderConstDecDef
 ) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), VariableSym(..),
-  VariableElim(..), ValueSym(..))
+import Drasil.Shared.InterfaceCommon (Variable, UnRepr(..), VariableElim(..),
+  ValueSym(..))
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(..), ValueElim(..))
 import Drasil.Shared.LanguageRenderer (new', constDec')
 import Drasil.Shared.CodeType (CodeType(..))
@@ -22,17 +22,17 @@ renderType tp = case cType $ unRepr tp of
 
 renderParam
   :: (InternalVarElim r, UnRepr r TypeData, VariableElim r)
-  => r (Variable r) -> Doc
+  => r Variable -> Doc
 renderParam v = renderType (variableType v) <+> variable v
 
 renderListDec
   :: (UnRepr r TypeData, ValueElim r, VariableElim r)
-  => r (Variable r) -> r (Value r) -> Doc
+  => r Variable -> r (Value r) -> Doc
 renderListDec v n = space <> equals <+> new' <+> renderType (variableType v)
   <> parens (value n)
 
 renderConstDecDef
   :: (InternalVarElim r, UnRepr r TypeData, ValueElim r, VariableElim r)
-  => r (Variable r) -> r (Value r) -> Doc
+  => r Variable -> r (Value r) -> Doc
 renderConstDecDef v def = constDec' <+> renderType (variableType v) <+>
   variable v <+> equals <+> value def

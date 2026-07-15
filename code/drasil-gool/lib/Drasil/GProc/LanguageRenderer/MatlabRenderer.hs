@@ -10,10 +10,10 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
-  UnRepr(..), SharedProg, SharedStatement, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (Label, SValue, Variable, SVariable,
+  getCodeType, UnRepr(..), SharedProg, SharedStatement, Body, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
@@ -62,11 +62,10 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize, forEach')
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1)
-import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
-  paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
-  valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc, vard,
-  progD, mthdDoc, modDoc)
+import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
+  updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
+  ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt, valType, opDoc,
+  opPrec, varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStateVar, mkStmtNoEnd,
@@ -113,7 +112,6 @@ instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
 instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m
@@ -130,7 +128,6 @@ instance ImportSym MatlabCode where
   modImport = undefined
 
 instance BodySym MatlabCode (Doc, Terminator) where
-  type Body MatlabCode = Doc
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 
@@ -220,7 +217,6 @@ instance ScopeElim MatlabCode where
   scopeData = unMLC
 
 instance VariableSym MatlabCode where
-  type Variable MatlabCode = VarData
   var = G.var
   constant = var
   extVar = undefined
@@ -555,7 +551,6 @@ instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
   -- first, then the local functions. Command-line args map to varargin.
@@ -594,7 +589,7 @@ mlTy :: CodeType -> String -> VS (MatlabCode TypeData)
 mlTy c s = typeFromData c s (text s)
 
 -- | A MATLAB parameter renders as just the variable name.
-mlParam :: MatlabCode (Variable MatlabCode) -> Doc
+mlParam :: MatlabCode Variable -> Doc
 mlParam = RC.variable
 
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
@@ -700,8 +695,8 @@ mlPrint newLn f' _ v' = do
 mlEnd :: Doc
 mlEnd = text "end"
 
-mlForEach :: (CommonRenderSym r vis smt md) => r (Variable r) ->
-  r (Value r) -> r (Body r) -> Doc
+mlForEach :: (CommonRenderSym r vis smt md) => r Variable ->
+  r (Value r) -> r Body -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,
@@ -716,7 +711,7 @@ mlRange initv finalv stepv = do
   d <- double
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
-mlTryCatch :: (CommonRenderSym r vis smt md) => r (Body r) -> r (Body r) -> Doc
+mlTryCatch :: (CommonRenderSym r vis smt md) => r Body -> r Body -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",
   indent $ RC.body tryB,
@@ -740,4 +735,3 @@ mlListSet lst' idx' val' = do
                (A.innerType $ return $ valueType lst)
                (RC.value lst <> parens (RC.value idx))
   lvar &= val'
-

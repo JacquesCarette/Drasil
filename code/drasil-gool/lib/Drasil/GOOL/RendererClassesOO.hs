@@ -8,9 +8,9 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
-  CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
+import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, Module, FSModule,
+  Class, SClass, CSStateVar, OOVariableValue, OOValueExpression(..),
+  InternalValueExp(..), FileSym(..), AttachmentSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
@@ -34,7 +34,7 @@ class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IG.Module r) -> r Block
+  top :: r IG.Module -> r Block
   bottom :: r Block
 
   commentedMod :: IG.SFile r -> FS (r Doc) -> IG.SFile r
@@ -80,11 +80,11 @@ class (BlockCommentSym r) => RenderClass r vis md | r -> vis md where
   commentedClass :: CS (r Doc) -> IG.SClass r -> IG.SClass r
 
 class ClassElim r where
-  class' :: r (IG.Class r) -> Doc
+  class' :: r IG.Class -> Doc
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> IG.FSModule r
-  updateModuleDoc :: (Doc -> Doc) -> r (IG.Module r) -> r (IG.Module r)
+  updateModuleDoc :: (Doc -> Doc) -> r IG.Module -> r IG.Module
 
 class ModuleElim r where
-  module' :: r (IG.Module r) -> Doc
+  module' :: r IG.Module -> Doc

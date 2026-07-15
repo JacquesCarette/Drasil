@@ -5,8 +5,8 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, SValue,
-  SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, Variable,
+  SValue, SharedProg, SharedStatement, BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -69,10 +69,13 @@ instance ProgramSym CodeInfoOO () () () where
     toState $ toCode s
 
 instance FileSym CodeInfoOO () () () where
-  type File CodeInfoOO = ()
-  fileDoc = execute1
+  fileDoc m = do
+    _ <- m
+    return $ return $ error "[fileDoc] The return value of this isn't used, and the thunk shouldn't fire."
 
-  docMod _ _ _ _ = execute1
+  docMod _ _ _ _ fl = do
+    _ <- fl
+    return $ return $ error "[docMod] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance AttachmentSym CodeInfoOO where
   type Attachment CodeInfoOO = ()
@@ -80,12 +83,11 @@ instance AttachmentSym CodeInfoOO where
   instanceLevel = toCode ()
 
 instance BodySym CodeInfoOO () where
-  type Body CodeInfoOO = ()
   body b = do
     sequence_ b
     return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
-  addComments _ _ = noInfo
+  addComments _ _ = return $ return $ error "[addComments] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance BlockSym CodeInfoOO () where
   block b = do
@@ -121,20 +123,19 @@ instance ScopeSym CodeInfoOO where
   local = noInfoScope
 
 instance VariableSym CodeInfoOO where
-  type Variable CodeInfoOO = ()
-  var       _ _ = noInfo
-  constant  _ _ = noInfo
-  extVar  _ _ _ = noInfo
+  var       _ _ = return $ return $ error "[var] The return value of this isn't used, and the thunk shouldn't fire."
+  constant  _ _ = return $ return $ error "[constant] The return value of this isn't used, and the thunk shouldn't fire."
+  extVar  _ _ _ = return $ return $ error "[extVar] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OOVariableSym CodeInfoOO where
-  classVar _ _ = noInfo
-  classConst _ _ = noInfo
-  classVarAccess    _ _   = noInfo
-  extClassVarAccess _ _   = noInfo
-  instanceVarAccess      _ _   = noInfo
+  classVar _ _ = return $ return $ error "[classVar] The return value of this isn't used, and the thunk shouldn't fire."
+  classConst _ _ = return $ return $ error "[classConst] The return value of this isn't used, and the thunk shouldn't fire."
+  classVarAccess    _ _   = return $ return $ error "[classVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  extClassVarAccess _ _   = return $ return $ error "[extClassVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
+  instanceVarAccess      _ _   = return $ return $ error "[instanceVarAccess] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance SelfSym CodeInfoOO where
-  self              = noInfo
+  self              = return $ return $ error "[self] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance VariableElim CodeInfoOO where
   variableName _ = ""
@@ -215,10 +216,13 @@ instance Comparison CodeInfoOO where
 
 instance ValueExpression CodeInfoOO where
   inlineIf = execute3
-  funcAppMixedArgs n _ = currModCall n
+  funcAppMixedArgs n _ = do
+    _ <- currModCall n
+    return $ return $ return $ error "[funcAppMixedArgs] The return value of this isn't used, and the thunk shouldn't fire."
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
-    executePairList ns
+    mapM_ fst ns
+    mapM_ snd ns
     addExternalCall l n
   libFuncAppMixedArgs = extFuncAppMixedArgs
 
@@ -229,16 +233,21 @@ instance ValueExpression CodeInfoOO where
 instance OOValueExpression CodeInfoOO where
   newObjMixedArgs _ vs ns = do
     sequence_ vs
-    executePairList ns
+    mapM_ fst ns
+    mapM_ snd ns
     return $ return ()
   extNewObjMixedArgs _ _ vs ns = do
     sequence_ vs
-    executePairList ns
+    mapM_ fst ns
+    mapM_ snd ns
     return $ return ()
   libNewObjMixedArgs = extNewObjMixedArgs
 
 instance InternalValueExp CodeInfoOO where
-  objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
+  objMethodCallMixedArgs' n _ v vs ns = do
+    v
+    _ <- currModCall n vs ns
+    return $ return $ error "[objMethodCallMixedArgs'] The return value of this isn't used, and the thunk shouldn't fire."
   classMethodCallMixedArgs' n _ cls vs ns = cls >> currModCall n vs ns
 
 instance FunctionSym CodeInfoOO where
@@ -265,7 +274,7 @@ instance Reference CodeInfoOO where
   maybeDeref = execute1
 
 instance Array CodeInfoOO where
-  arrayElem _ _ = noInfo
+  arrayElem _ _ = return $ return $ error "[arrayElem] The return value of this isn't used, and the thunk shouldn't fire."
   arrayLength _ = noInfo
   arrayCopy _ = noInfo
 
@@ -314,7 +323,9 @@ instance DeclStatement CodeInfoOO () where
   arrayDec           _ _ _ = noInfo
   arrayDecDef          _ _ = zoom lensMStoVS . executeList
   constDecDef          _ _ = zoom lensMStoVS . execute1
-  funcDecDef         _ _ _ = execute1
+  funcDecDef         _ _ _ bod = do
+    _ <- bod
+    return $ return $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance OODeclStatement CodeInfoOO () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
@@ -382,13 +393,32 @@ instance ControlStatement CodeInfoOO () where
     _ <- zoom lensMStoVS v
     evalConds cs b
 
-  ifExists v = execute3 (zoom lensMStoVS v)
+  ifExists v t f = do
+    _ <- zoom lensMStoVS v
+    _ <- t
+    _ <- f
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
-  for dec v = execute4 dec (zoom lensMStoVS v)
-  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e)
-    (zoom lensMStoVS s)
-  forEach _ v = execute2 (zoom lensMStoVS v)
-  while v = execute2 (zoom lensMStoVS v)
+  for dec v smt bod = do
+    _ <- dec
+    _ <- zoom lensMStoVS v
+    _ <- smt
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  forRange _ b e s bod = do
+    _ <- zoom lensMStoVS b
+    _ <- zoom lensMStoVS e
+    _ <- zoom lensMStoVS s
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  forEach _ v bod = do
+    _ <- zoom lensMStoVS v
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
+  while v bod = do
+    _ <- zoom lensMStoVS v
+    _ <- bod
+    return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
   tryCatch _ cb = do
     _ <- cb
@@ -450,7 +480,6 @@ instance StateVarSym CodeInfoOO () where
   constVar    _ _ _   = noInfo
 
 instance ClassSym CodeInfoOO () () () where
-  type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
@@ -458,24 +487,24 @@ instance ClassSym CodeInfoOO () () () where
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
-    noInfo
+    return $ error "[extraClass] The return value of this isn't used, and the thunk shouldn't fire."
+
   implementingClass n _ _ cs ms = do
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
-    noInfo
+    return $ error "[implementingClass] The return value of this isn't used, and the thunk shouldn't fire."
 
   docClass _ c = do
     _ <- c
-    noInfo
+    return $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
 instance ModuleSym CodeInfoOO () () () where
-  type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes
     mapM_ (zoom lensFStoMS) funcs
-    modifyReturn (updateClassMap n) (toCode ())
+    modifyReturn (updateClassMap n) (return $ error "[buildModule] The return value of this isn't used, and the thunk shouldn't fire.")
 
 -- Helpers
 
@@ -520,13 +549,6 @@ executeList l = do
   sequence_ l
   noInfo
 
-executePairList :: [(State a (CodeInfoOO ()), State a (CodeInfoOO ()))] ->
-  State a (CodeInfoOO ())
-executePairList ps = do
-  mapM_ fst ps
-  mapM_ snd ps
-  noInfo
-
 execute2 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
   State a (CodeInfoOO ())
 execute2 s1 s2 = do
@@ -539,15 +561,10 @@ execute3 s1 s2 s3 = do
   _ <- s1
   execute2 s2 s3
 
-execute4 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) ->
-  State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
-execute4 s1 s2 s3 s4 = do
-  _ <- s1
-  execute3 s2 s3 s4
-
 currModCall :: String -> [VS (CodeInfoOO ())] ->
-  [(VS (CodeInfoOO ()), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())
+  [(VS (CodeInfoOO Variable), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())
 currModCall n ps ns = do
   sequence_ ps
-  executePairList ns
+  mapM_ fst ns
+  mapM_ snd ns
   addCurrModCall n

@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
+  Label, Body, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -89,10 +89,10 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, listAdd, innerType)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
-  FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
-  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, TypeData(..), ValData(..), vd, VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD)
+  FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, TypeData(..), ValData(..), vd, VarData(..), vard, ScopeData,
+  BinderD(..), bindFormD)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
@@ -150,7 +150,6 @@ instance UnRepr JavaCode contents where
   unRepr = unJC
 
 instance FileSym JavaCode Doc (Doc, Terminator) MethodData where
-  type File JavaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
@@ -179,7 +178,6 @@ instance PermElim JavaCode where
   binding = error $ CP.bindingError jName
 
 instance BodySym JavaCode (Doc, Terminator) where
-  type Body JavaCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -273,7 +271,6 @@ instance ScopeElim JavaCode where
   scopeData = unJC
 
 instance VariableSym JavaCode where
-  type Variable JavaCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
@@ -721,7 +718,6 @@ instance StateVarElim JavaCode where
   stateVar = unJC
 
 instance ClassSym JavaCode Doc (Doc, Terminator) MethodData where
-  type Class JavaCode = Doc
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
@@ -740,7 +736,6 @@ instance ClassElim JavaCode where
   class' = unJC
 
 instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData where
-  type Module JavaCode = ModData
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod JavaCode where
@@ -968,7 +963,7 @@ jThrowDoc :: (ValueElim r) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-jTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+jTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -1022,7 +1017,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
 
 jMethod :: Label -> [String] -> JavaCode Doc ->
   JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
-  [JavaCode ParamData] -> JavaCode (Body JavaCode) -> Doc
+  [JavaCode ParamData] -> JavaCode Body -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>

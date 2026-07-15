@@ -21,20 +21,19 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, Block, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  BodySym(Body), bodyStatements, oneLiner, VariableSym(Variable),
-  VisibilitySym(..), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
-  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
-  TypeElim(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
+  MSBlock, Block, Variable, SVariable, SValue, NamedArgs, MixedCall,
+  MixedCtorCall, bodyStatements, oneLiner, VisibilitySym(..),
+  VariableElim(variableName, variableType), ValueSym(Value, valueType),
+  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
+  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (OOStatement, SFile, FSModule, SClass,
-  Initializers, CSStateVar, FileSym(File), ModuleSym(Module), newObj,
-  objMethodCallNoParams, ($.), AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOStatement, File, SFile, Module, FSModule,
+  SClass, Initializers, CSStateVar, newObj, objMethodCallNoParams, ($.),
+  AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -176,7 +175,7 @@ classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
 -- not class-level since classVarAccess is for accessing class-level variables from a class
-classVarAccessCheck :: (InternalVarElim r) => r (Variable r) -> r (Variable r)
+classVarAccessCheck :: (InternalVarElim r) => r Variable -> r Variable
 classVarAccessCheck v = classVarCS (variableBind v)
   where classVarCS InstanceLevel = error
           "classVarAccess can only be used to access class-level variables"
@@ -484,7 +483,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (RenderStatement r smt) => (r (Body r) -> r (Body r) -> Doc) ->
+tryCatch :: (RenderStatement r smt) => (r Body -> r Body -> Doc) ->
   MSBody r -> MSBody r -> MS (r smt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
@@ -495,7 +494,7 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param
   :: (RenderParam r, VariableElim r)
-  => (r (Variable r) -> Doc) -> SVariable r -> MS (r ParamData)
+  => (r Variable -> Doc) -> SVariable r -> MS (r ParamData)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
@@ -567,14 +566,14 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 
 -- Modules --
 
-modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
+modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FSModule r
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
 fileDoc
   :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r (Module r) -> r Block) -> r Block -> FSModule r -> SFile r
+  => String -> (r Module -> r Block) -> r Block -> FSModule r -> SFile r
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -606,7 +605,7 @@ docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt
 
 fileFromData
   :: (RO.ModuleElim r)
-  => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
+  => (FilePath -> r Module -> r File) -> FilePath -> FSModule r -> SFile r
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

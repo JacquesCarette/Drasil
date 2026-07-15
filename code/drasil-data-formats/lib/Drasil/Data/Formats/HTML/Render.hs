@@ -107,7 +107,7 @@ renderBlock opt tag attrs = wrapBlock tag attrs . map (renderBody opt)
 
 -- | Render the element as a block, but keep all children on a single indented line
 renderBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlockInline opt tag attrs [] = wrapLine tag attrs []
+renderBlockInline _ tag attrs [] = wrapLine tag attrs []
 renderBlockInline opt tag attrs ch = wrapBlockInline tag attrs (map (renderBody opt) ch)
 
 -- | Wrap an element with tag and its children breaking lines

@@ -94,11 +94,11 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
-  updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
-  TypeData(..), ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
-  vard, ScopeData, BinderD(..), bindFormD)
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
+  ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
+  ParamData(..), pd, updateParam, ProgData(..), progD, TypeData(..), ValData(..),
+  vd, updateValDoc, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..),
+  bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -151,7 +151,6 @@ instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
 instance FileSym CSharpCode Doc (Doc, Terminator) MethodData where
-  type File CSharpCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m

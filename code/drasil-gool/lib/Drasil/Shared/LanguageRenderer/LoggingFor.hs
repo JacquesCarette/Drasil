@@ -392,7 +392,6 @@ instance (P.ModuleSym r vis smt md) => P.ModuleSym (LoggingFor r) vis smt md whe
   buildModule = liftLogging P.buildModule
 
 instance (P.FileSym r vis smt md) => P.FileSym (LoggingFor r) vis smt md where
-  type File (LoggingFor r) = P.File r
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
@@ -480,7 +479,6 @@ instance (G.ModuleSym r vis smt md) => G.ModuleSym (LoggingFor r) vis smt md whe
   buildModule = liftLogging G.buildModule
 
 instance (G.FileSym r vis smt md) => G.FileSym (LoggingFor r) vis smt md where
-  type File (LoggingFor r) = G.File r
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 

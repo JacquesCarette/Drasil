@@ -3,7 +3,7 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, Module, FSModule, SClass, CSStateVar, Initializers,
+  GSProgram, File, SFile, Module, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -31,7 +31,8 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData, ModData)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
+  ModData)
 
 class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
   ObserverPattern r smt, StrategyPattern r smt
@@ -48,10 +49,10 @@ class (FileSym r vis smt md) => ProgramSym r vis smt md where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
-type SFile a = FS (a (File a))
+type File = FileData
+type SFile a = FS (a File)
 
 class (ModuleSym r vis smt md) => FileSym r vis smt md where
-  type File r
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, watermark, list of author names, date as a String, file to comment

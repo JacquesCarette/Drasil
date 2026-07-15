@@ -10,7 +10,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GProc.InterfaceProc (SFile, Module, FSModule, FileSym (File))
+import Drasil.GProc.InterfaceProc (File, SFile, Module, FSModule)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
 import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
@@ -41,7 +41,7 @@ fileDoc ext md = do
 
 fileFromData
   :: (RP.ModuleElim r)
-  => (FilePath -> r Module -> r (File r)) -> FilePath -> FSModule r -> SFile r
+  => (FilePath -> r Module -> r File) -> FilePath -> FSModule r -> SFile r
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

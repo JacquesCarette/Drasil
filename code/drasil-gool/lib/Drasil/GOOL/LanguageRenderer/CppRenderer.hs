@@ -167,7 +167,6 @@ instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
 
 instance (Pair p) => FileSym (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type File (p CppSrcCode CppHdrCode) = FileData
   fileDoc = pair1 fileDoc fileDoc
 
   docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
@@ -1052,7 +1051,6 @@ instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
 
 instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type File CppSrcCode = FileData
   fileDoc m = do
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
@@ -1786,7 +1784,6 @@ instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
 
 instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type File CppHdrCode = FileData
   fileDoc m = do
     modify (setFileType Header)
     G.fileDoc cppHdrExt top bottom m

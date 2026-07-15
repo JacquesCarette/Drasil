@@ -20,6 +20,7 @@ import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
 import Drasil.Metadata (watermark)
 import Drasil.System (systemdb)
 import Drasil.Data.Formats.HTML (HTMLRenderOptions(..))
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS.DocDecl (SRSDecl)
 import Drasil.SRS.DocumentLanguage (mkDoc)

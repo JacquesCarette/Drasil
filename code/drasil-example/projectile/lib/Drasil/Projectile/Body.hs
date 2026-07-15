@@ -159,7 +159,7 @@ conceptChunks =
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] dataDefs
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.

@@ -87,8 +87,8 @@ conceptChunks =
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] SWHS.dataDefs
-  insModel genDefs tMods concIns citations labelledContent'
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
+  SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

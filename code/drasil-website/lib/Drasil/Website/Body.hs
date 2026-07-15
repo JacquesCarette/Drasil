@@ -59,8 +59,8 @@ data FolderLocation = Folder {
 
 webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] db') d (allRefs fl)
-  where db' = insertAll (websiteLCs fl) $ insertAll ss symbMap
+webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] db') d []
+  where db' = insertAll (allRefs fl) $ insertAll (websiteLCs fl) $ insertAll ss symbMap
 webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.

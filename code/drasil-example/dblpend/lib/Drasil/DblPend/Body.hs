@@ -124,7 +124,7 @@ conceptChunks =
   gravitationalConst, gravity] ++ defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

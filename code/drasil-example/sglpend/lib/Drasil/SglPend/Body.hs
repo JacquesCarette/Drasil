@@ -107,7 +107,7 @@ allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] allSymbols ideaDicts cis
+symbMap = withCommonKnowledge allRefs allSymbols ideaDicts cis
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
 

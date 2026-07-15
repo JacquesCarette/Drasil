@@ -1,4 +1,5 @@
-{-# Language TemplateHaskell #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines a type used to hold referencing information.
 module Language.Drasil.Document.Reference (
   -- * Type

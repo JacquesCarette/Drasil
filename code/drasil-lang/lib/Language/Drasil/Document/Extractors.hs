@@ -4,8 +4,7 @@ module Language.Drasil.Document.Extractors (
   extractChRefs,
   getSec,
   extractSectionsBib,
-  resolveBibliography,
-  extractLCRefs
+  resolveBibliography
 ) where
 
 import Control.Lens ((^.))
@@ -113,14 +112,4 @@ resolveBibliography db uids = sortBy compareAuthYearTitle cites
   where
     cites = mapMaybe (`find` db) (S.toList uids)
 
--- | Recursively find all references in a section (meant for getting at 'LabelledContent').
-extractLCRefs :: Section -> [Reference]
-extractLCRefs (Section _ cs _) = concatMap findRefSecCons cs
-  where
-    findRefSecCons :: SecCons -> [Reference]
-    findRefSecCons (Sub s) = extractLCRefs s
-    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
-    findRefSecCons _ = []
 
-{-# DEPRECATED extractLCRefs
-  "Avoid retroactive `Reference` gathering. Instead, insert the chunks themselves into the `ChunkDB` and let the generator do the rest." #-}

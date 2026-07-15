@@ -85,7 +85,7 @@ tagsHTMLTest =
        Paragraph []
          [Anchor "https://jacquescarette.github.io/Drasil/" [Attr "id" "anchor"] [RawText "Anchor"]],
 
-       figureImage [Attr "id" "figure-image"] "source.png" "Alternative Text" "Figure Caption",
+       figureImage [Attr "id" "figure-image"] [] "source.png" "Alternative Text" "Figure Caption",
 
        Custom blockquoteTag [Attr "class" "quote"]
          [Paragraph [] [RawText "This is a quote."]],

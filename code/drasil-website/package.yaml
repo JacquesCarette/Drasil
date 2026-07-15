@@ -50,6 +50,7 @@ library:
   - drasil-printers
   - drasil-srs
   - drasil-system
+  - drasil-data-formats
   source-dirs: lib
 
 executables:

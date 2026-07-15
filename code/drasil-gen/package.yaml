@@ -35,6 +35,7 @@ dependencies:
 - drasil-srs
 - drasil-system
 - drasil-theory
+- drasil-data-formats
 - lens
 
 ghc-options:

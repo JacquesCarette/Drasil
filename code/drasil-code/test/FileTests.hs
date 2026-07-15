@@ -13,7 +13,7 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 -- | Creates a program in GOOL to test reading and writing to files.
-fileTestsOO :: (OOProg r vis smt md svr) => OO.GSProgram r
+fileTestsOO :: (OOProg r vis smt md svr att) => OO.GSProgram r
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 

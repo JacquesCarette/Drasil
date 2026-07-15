@@ -56,7 +56,7 @@ codeGenTestGroup =
     ]
 
 goolTestGroup :: String ->
-  (forall r vis smt md svr. (OOProg r vis smt md svr) => OO.GSProgram r) -> TestTree
+  (forall r vis smt md svr att. (OOProg r vis smt md svr att) => OO.GSProgram r) -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -102,10 +102,10 @@ genCodeProcNoMake unRepr unRepr' p =
   in seq gs' $ toFileLayout (progMods prog) ++ aux
 
 genCodeGOOL
-  :: (OOProg r vis smt md svr, SoftwareDossierSym r', Monad r')
+  :: (OOProg r vis smt md svr att, SoftwareDossierSym r', Monad r')
   => (r (OO.Program r) -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' svr'. (OOProg s vis' smt' md' svr') => OO.GSProgram s)
+  -> (forall s vis' smt' md' svr' att'. (OOProg s vis' smt' md' svr' att') => OO.GSProgram s)
   -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let

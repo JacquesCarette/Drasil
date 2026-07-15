@@ -121,7 +121,7 @@ generator l dt sd chs cs = let
 
 data SomeProgGenerator where
   SomeProgGenerator
-    :: forall repr vis smt md svr. (OOProg repr vis smt md svr)
+    :: forall repr vis smt md svr att. (OOProg repr vis smt md svr att)
     => (repr (OO.Program repr) -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
@@ -178,7 +178,7 @@ insertFile (p, d) m =
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
 genPackage
-  :: (OOProg progRepr vis smt md svr, SoftwareDossierSym packRepr, Monad packRepr)
+  :: (OOProg progRepr vis smt md svr att, SoftwareDossierSym packRepr, Monad packRepr)
   => (progRepr (OO.Program progRepr) -> ProgData)
   -> GenState (packRepr PackageData)
 genPackage unRepr = do
@@ -219,7 +219,7 @@ genPackage unRepr = do
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
-genProgram :: (OOProg r vis smt md svr) => GenState (OO.GSProgram r)
+genProgram :: (OOProg r vis smt md svr att) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
@@ -230,12 +230,12 @@ genProgram = do
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r vis smt md svr) => Modularity -> GenState [OO.SFile r]
+chooseModules :: (OOProg r vis smt md svr att) => Modularity -> GenState [OO.SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r vis smt md svr) => GenState (OO.SFile r)
+genUnmodular :: (OOProg r vis smt md svr att) => GenState (OO.SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -254,7 +254,7 @@ genUnmodular = do
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
-genModules :: (OOProg r vis smt md svr) => GenState [OO.SFile r]
+genModules :: (OOProg r vis smt md svr att) => GenState [OO.SFile r]
 genModules = do
   g <- get
   mn     <- genMain

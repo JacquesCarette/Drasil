@@ -56,12 +56,12 @@ instance Monad CodeInfoOO where
 instance SharedProg CodeInfoOO () () ()
 instance SharedStatement CodeInfoOO ()
 instance OOStatement CodeInfoOO ()
-instance OOProg CodeInfoOO () () () ()
+instance OOProg CodeInfoOO () () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () () () () where
+instance ProgramSym CodeInfoOO () () () () () where
   type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
@@ -69,7 +69,7 @@ instance ProgramSym CodeInfoOO () () () () where
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfoOO () () () () where
+instance FileSym CodeInfoOO () () () () () where
   fileDoc m = do
     _ <- m
     return $ return $ error "[fileDoc] The return value of this isn't used, and the thunk shouldn't fire."
@@ -78,8 +78,7 @@ instance FileSym CodeInfoOO () () () () where
     _ <- fl
     return $ return $ error "[docMod] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance AttachmentSym CodeInfoOO where
-  type Attachment CodeInfoOO = ()
+instance AttachmentSym CodeInfoOO () where
   classLevel  = toCode ()
   instanceLevel = toCode ()
 
@@ -459,7 +458,7 @@ instance MethodSym CodeInfoOO () () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () () where
+instance OOMethodSym CodeInfoOO () () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -473,12 +472,12 @@ instance OOMethodSym CodeInfoOO () () () where
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-instance StateVarSym CodeInfoOO () () where
+instance StateVarSym CodeInfoOO () () () where
   stateVar    _ _ _   = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () () () where
+instance ClassSym CodeInfoOO () () () () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
@@ -498,7 +497,7 @@ instance ClassSym CodeInfoOO () () () () where
     _ <- c
     return $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance ModuleSym CodeInfoOO () () () () where
+instance ModuleSym CodeInfoOO () () () () () where
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes

@@ -115,7 +115,7 @@ resolveBibliography db uids = sortBy compareAuthYearTitle cites
 
 -- | Recursively find all references in a section (meant for getting at 'LabelledContent').
 extractLCRefs :: Section -> [Reference]
-extractLCRefs (Section _ cs r) = r : concatMap findRefSecCons cs
+extractLCRefs (Section _ cs _) = concatMap findRefSecCons cs
   where
     findRefSecCons :: SecCons -> [Reference]
     findRefSecCons (Sub s) = extractLCRefs s

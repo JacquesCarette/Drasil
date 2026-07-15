@@ -61,4 +61,4 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
       pd = makeDocument printSetting $ dw ^. indexDoc
 
       -- 2. Transform the TDL into HTML.
-      html = genHTML2 (HTMLRO M.empty) "index" pd
+      html = genHTML2 (HTMLRO mempty) "index" pd

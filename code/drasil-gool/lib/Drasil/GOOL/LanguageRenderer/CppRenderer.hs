@@ -693,7 +693,6 @@ instance (Pair p) => VisibilityElim (p CppSrcCode CppHdrCode)
   visibility s = RC.visibility $ pfst s
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
-  type MethodType (p CppSrcCode CppHdrCode) = TypeData
   mType = pair1 mType mType . zoom lensMStoVS
 
 instance (Pair p) => OOMethodTypeSym (p CppSrcCode CppHdrCode) where
@@ -1610,7 +1609,6 @@ instance VisibilityElim CppSrcCode (Doc, VisibilityTag) where
   visibility = fst . unCPPSC
 
 instance MethodTypeSym CppSrcCode where
-  type MethodType CppSrcCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CppSrcCode where
@@ -2232,7 +2230,6 @@ instance VisibilityElim CppHdrCode (Doc, VisibilityTag) where
   visibility = fst . unCPPHC
 
 instance MethodTypeSym CppHdrCode where
-  type MethodType CppHdrCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CppHdrCode where
@@ -2762,7 +2759,7 @@ cppPointerParamDoc
   => r Variable -> Doc
 cppPointerParamDoc v = renderType (variableType v) <+> cppPtr <> RC.variable v
 
-cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode)
+cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode TypeData
   -> [CppSrcCode ParamData] -> CppSrcCode Body -> Doc
 cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
   vcat [ttype <+> text (c `nmSpcAccess` n) <> parens (parameterList

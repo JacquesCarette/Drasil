@@ -541,8 +541,6 @@ instance VisibilityElim JuliaCode Doc where
   visibility = unJLC
 
 instance MethodTypeSym JuliaCode where
-  type MethodType JuliaCode = TypeData
-
   mType = zoom lensMStoVS
 
 instance ParameterSym JuliaCode where

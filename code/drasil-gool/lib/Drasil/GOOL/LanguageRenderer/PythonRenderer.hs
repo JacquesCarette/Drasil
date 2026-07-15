@@ -628,7 +628,6 @@ instance VisibilityElim PythonCode Doc where
   visibility = unPC
 
 instance MethodTypeSym PythonCode where
-  type MethodType PythonCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym PythonCode where

@@ -621,7 +621,6 @@ instance VisibilityElim CSharpCode Doc where
   visibility = unCSC
 
 instance MethodTypeSym CSharpCode where
-  type MethodType CSharpCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CSharpCode where

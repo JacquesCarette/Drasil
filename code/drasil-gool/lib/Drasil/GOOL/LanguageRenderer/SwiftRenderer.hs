@@ -661,7 +661,6 @@ instance VisibilityElim SwiftCode Doc where
   visibility = unSC
 
 instance MethodTypeSym SwiftCode where
-  type MethodType SwiftCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym SwiftCode where

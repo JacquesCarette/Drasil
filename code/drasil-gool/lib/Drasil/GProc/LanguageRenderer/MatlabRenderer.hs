@@ -486,7 +486,6 @@ instance VisibilityElim MatlabCode Doc where
   visibility = unMLC
 
 instance MethodTypeSym MatlabCode where
-  type MethodType MatlabCode = TypeData
   mType = zoom lensMStoVS
 
 instance ParameterSym MatlabCode where

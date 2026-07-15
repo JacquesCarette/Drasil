@@ -19,7 +19,7 @@ import Drasil.Metadata.Documentation (notebook)
 import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
   learnObj, review, summary, example, appendix, reference)
 
-import Drasil.LessonPlan.Core (LessonPlan, lsnPlanRefs)
+import Drasil.LessonPlan.Core (LessonPlan)
 import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..))
 import Drasil.LessonPlan.ExtractBib (extractBib)
 import Language.Drasil.Printers
@@ -54,7 +54,7 @@ instance ToFiles LessonPlan JupyterGenOptions where
       nb = Notebook nm as $ mkSections (plan ^. systemdb) lsnDesc
 
       -- 2. Transform SDL into TDL (Typesetting Document Language).
-      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
+      printSetting = piSys (plan ^. systemdb) Equational Engineering
       pd = makeDocument printSetting nb
 
       -- 3. Transform TDL into `Prettyprinter.Doc`.

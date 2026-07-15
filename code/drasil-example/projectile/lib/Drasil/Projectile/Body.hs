@@ -130,7 +130,7 @@ si = mkSmithEtAlICO progName
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs (map cnstrw' constrained) constants symbols
-  symbMap allRefs
+  symbMap
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables ++ equations

@@ -204,7 +204,7 @@ si = mkSmithEtAlICO
   [probDescIntro] [background] [scope] [motivation]
   tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols
-  symbMap []
+  symbMap
 
 background :: Sentence
 background = foldlSent_ [S "Binary star systems are common in astronomy.",

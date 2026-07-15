@@ -8,19 +8,16 @@ module Drasil.Website.Core
   ( DrasilWebsite,
     mkDrasilWebsite,
     indexDoc,
-    webRefs,
     defaultDrasilWebsiteGenOpts,
   )
 where
 
 import Control.Lens (makeLenses, (^.))
-import qualified Data.Map.Strict as M
 import Text.PrettyPrint (Doc)
 
-import Drasil.Database (UID, uid)
 import Drasil.FileHandling (file, ps)
 import Language.Drasil (Stage (Equational))
-import Language.Drasil.Document (Document, Reference)
+import Language.Drasil.Document (Document)
 import Language.Drasil.Printers (Notation (Engineering), genHTML, genericCSS,
   piSys, makeDocument)
 
@@ -28,8 +25,7 @@ import Drasil.System (HasSystemMeta (..), SystemMeta, ToFiles (..))
 
 data DrasilWebsite = DW
   { _sm :: SystemMeta,
-    _indexDoc :: Document,
-    _webRefs :: M.Map UID Reference
+    _indexDoc :: Document
   }
 
 makeLenses ''DrasilWebsite
@@ -37,10 +33,8 @@ makeLenses ''DrasilWebsite
 instance HasSystemMeta DrasilWebsite where
   systemMeta = sm
 
-mkDrasilWebsite :: SystemMeta -> Document -> [Reference] -> DrasilWebsite
-mkDrasilWebsite m doc rs = DW m doc refs
-  where
-    refs = M.fromList $ map (\r -> (r ^. uid, r)) rs
+mkDrasilWebsite :: SystemMeta -> Document -> DrasilWebsite
+mkDrasilWebsite = DW
 
 -- | HTML generation options for the 'DrasilWebsite'.
 newtype DrasilWebsiteGenOptions = DWGO
@@ -62,7 +56,7 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
 
       -- 1. Transform the Semantic-Document-Language-encoded website to the
       -- Typesetting Document Language (TDL).
-      printSetting = piSys (dw ^. systemdb) (dw ^. webRefs) Equational Engineering
+      printSetting = piSys (dw ^. systemdb) Equational Engineering
       pd = makeDocument printSetting $ dw ^. indexDoc
 
       -- 2. Transform the TDL into HTML.

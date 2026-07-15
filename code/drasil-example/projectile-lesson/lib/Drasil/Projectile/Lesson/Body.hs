@@ -35,7 +35,6 @@ nbDecl = [
 si :: LessonPlan
 si = mkLessonPlan
   (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
-  []
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] []

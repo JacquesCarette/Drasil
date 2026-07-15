@@ -87,7 +87,7 @@ si = mkSmithEtAlICO
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
   inputs outputs (map cnstrw' inpConstrained) pidConstants allSymbols
-  symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,

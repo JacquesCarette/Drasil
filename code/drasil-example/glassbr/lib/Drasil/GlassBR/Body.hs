@@ -54,7 +54,6 @@ si = mkSmithEtAlICO progName
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants symbolsWCodeSymbols
   symbMap
-  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

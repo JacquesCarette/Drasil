@@ -136,10 +136,9 @@ instance Monad CSharpCode where
 instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
 instance SharedStatement CSharpCode (Doc, Terminator)
 instance OOStatement CSharpCode (Doc, Terminator)
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
-  type Program CSharpCode = ProgData
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles

@@ -136,10 +136,9 @@ instance Monad JavaCode where
 instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JavaCode (Doc, Terminator)
 instance OOStatement JavaCode (Doc, Terminator)
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
-  type Program JavaCode = ProgData
+instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))

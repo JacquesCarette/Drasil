@@ -17,7 +17,7 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis smt md svr att) => SFile r
+observer :: (OOProg r vis smt md svr att prg) => SFile r
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 

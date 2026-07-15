@@ -3,7 +3,8 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
+  GSProgram, File, SFile, Module, FSModule, Class, SClass, CSStateVar,
+  Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -31,7 +32,10 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
+  ModData)
+
+import Text.PrettyPrint.HughesPJ (Doc)
 
 class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
   ObserverPattern r smt, StrategyPattern r smt
@@ -48,26 +52,26 @@ class (FileSym r vis smt md) => ProgramSym r vis smt md where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
-type SFile a = FS (a (File a))
+type File = FileData
+type SFile a = FS (a File)
 
 class (ModuleSym r vis smt md) => FileSym r vis smt md where
-  type File r
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
 
-type FSModule a = FS (a (Module a))
+type Module = ModData
+type FSModule a = FS (a Module)
 
 class (ClassSym r vis smt md) => ModuleSym r vis smt md where
-  type Module r
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
 
-type SClass a = CS (a (Class a))
+type Class = Doc
+type SClass a = CS (a Class)
 
 class (OOMethodSym r vis smt md, StateVarSym r vis) => ClassSym r vis smt md where
-  type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r] -> [MS (r md)] ->

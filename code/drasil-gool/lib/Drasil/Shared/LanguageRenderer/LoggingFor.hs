@@ -186,7 +186,6 @@ instance (SharedStatement r smt, VariableElim r) => SharedStatement (LoggingFor 
 instance (G.OOStatement r smt, VariableElim r) => G.OOStatement (LoggingFor r) smt
 
 instance (VariableSym r) => VariableSym (LoggingFor r) where
-  type Variable (LoggingFor r) = Variable r
   var = liftLogging var
   constant = liftLogging constant
   extVar = liftLogging extVar
@@ -257,11 +256,9 @@ instance (Comparison r) => Comparison (LoggingFor r) where
   (?!=) = liftLogging (?!=)
 
 instance (BlockSym r smt) => BlockSym (LoggingFor r) smt where
-  type Block (LoggingFor r) = Block r
   block = liftLogging block
 
 instance (BodySym r smt) => BodySym (LoggingFor r) smt where
-  type Body (LoggingFor r) = Body r
   body = liftLogging body
   addComments = liftLogging addComments
 
@@ -391,11 +388,9 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 instance (P.ProcProg r vis smt md) => P.ProcProg (LoggingFor r) vis smt md
 
 instance (P.ModuleSym r vis smt md) => P.ModuleSym (LoggingFor r) vis smt md where
-  type Module (LoggingFor r) = P.Module r
   buildModule = liftLogging P.buildModule
 
 instance (P.FileSym r vis smt md) => P.FileSym (LoggingFor r) vis smt md where
-  type File (LoggingFor r) = P.File r
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
@@ -473,18 +468,15 @@ instance (G.StateVarSym r vis) => G.StateVarSym (LoggingFor r) vis where
   constVar = liftLogging G.constVar
 
 instance (G.ClassSym r vis smt md) => G.ClassSym (LoggingFor r) vis smt md where
-  type Class (LoggingFor r) = G.Class r
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
 instance (G.ModuleSym r vis smt md) => G.ModuleSym (LoggingFor r) vis smt md where
-  type Module (LoggingFor r) = G.Module r
   buildModule = liftLogging G.buildModule
 
 instance (G.FileSym r vis smt md) => G.FileSym (LoggingFor r) vis smt md where
-  type File (LoggingFor r) = G.File r
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 

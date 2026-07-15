@@ -10,10 +10,10 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
-  UnRepr(..), SharedProg, SharedStatement, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (Label, SValue, Variable, SVariable,
+  getCodeType, UnRepr(..), SharedProg, SharedStatement, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
@@ -57,11 +57,10 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue
   litFalse)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, listSize)
-import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
-  paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
-  valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc, vard,
-  progD, mthdDoc, modDoc)
+import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
+  updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
+  ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt, valType, opDoc,
+  opPrec, varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
@@ -108,7 +107,6 @@ instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
 instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m
@@ -125,7 +123,6 @@ instance ImportSym MatlabCode where
   modImport = undefined
 
 instance BodySym MatlabCode (Doc, Terminator) where
-  type Body MatlabCode = Doc
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 
@@ -136,7 +133,6 @@ instance BodyElim MatlabCode where
   body = unMLC
 
 instance BlockSym MatlabCode (Doc, Terminator) where
-  type Block MatlabCode = Doc
   block = G.block
 
 instance RenderBlock MatlabCode where
@@ -216,7 +212,6 @@ instance ScopeElim MatlabCode where
   scopeData = unMLC
 
 instance VariableSym MatlabCode where
-  type Variable MatlabCode = VarData
   var = G.var
   constant = var
   extVar = undefined
@@ -547,7 +542,6 @@ instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
   -- first, then the local functions. Command-line args map to varargin.
@@ -586,7 +580,7 @@ mlTy :: CodeType -> String -> VS (MatlabCode TypeData)
 mlTy c s = typeFromData c s (text s)
 
 -- | A MATLAB parameter renders as just the variable name.
-mlParam :: MatlabCode (Variable MatlabCode) -> Doc
+mlParam :: MatlabCode Variable -> Doc
 mlParam = RC.variable
 
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.

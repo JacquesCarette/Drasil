@@ -14,7 +14,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, MSBlock, SVariable, SValue, BodySym(..), oneLiner,
+  Label, Body, MSBody, MSBlock, SVariable, SValue, BodySym(..), oneLiner,
   bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -180,7 +180,6 @@ instance PermElim SwiftCode where
   binding = error $ CP.bindingError swiftName
 
 instance BodySym SwiftCode (Doc, Terminator) where
-  type Body SwiftCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -1177,13 +1176,13 @@ swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+  => r (Variable r) -> r (Value r) -> r Body -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
   bodyEnd]
 
-swiftTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+swiftTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 swiftTryCatch tb cb = vcat [
   swiftDo <+> lbrace,
   indent $ RC.body tb,

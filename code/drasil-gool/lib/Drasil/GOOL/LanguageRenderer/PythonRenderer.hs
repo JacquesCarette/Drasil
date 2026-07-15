@@ -13,16 +13,17 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Library, SVariable, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  Label, Library, Body, SVariable, SValue, MixedCtorCall, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -169,7 +170,6 @@ instance PermElim PythonCode where
   binding = attachment . unPC
 
 instance BodySym PythonCode (Doc, Terminator) where
-  type Body PythonCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
@@ -967,17 +967,17 @@ pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+  => r (Variable r) -> r (Value r) -> r Body -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (BodyElim r, ValueElim r) => r (Value r) -> r (Body r) -> Doc
+pyWhile :: (BodyElim r, ValueElim r) => r (Value r) -> r Body -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
 
-pyTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+pyTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 pyTryCatch tryB catchB = vcat [
   tryLabel <> colon,
   indent $ RC.body tryB,
@@ -1003,7 +1003,7 @@ pyMethod
   -> PythonCode (Attachment PythonCode)
   -> PythonCode (Variable PythonCode)
   -> [PythonCode ParamData]
-  -> PythonCode (Body PythonCode)
+  -> PythonCode Body
   -> Doc
 pyMethod n attch slf ps b = let
      decorator = case binding attch of
@@ -1021,7 +1021,7 @@ pyMethod n attch slf ps b = let
        indent bodyD]
 
 pyFunction :: (BodyElim r, ParamElim r) => Label ->
-  [r ParamData] -> r (Body r) -> Doc
+  [r ParamData] -> r Body -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

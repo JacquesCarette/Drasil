@@ -211,7 +211,6 @@ instance (TypeElim r) => TypeElim (LoggingFor r) where
   getCodeType = liftLogging getCodeType
 
 instance (ValueSym r) => ValueSym (LoggingFor r) where
-  type Value (LoggingFor r) = Value r
   valueType = liftLogging valueType
 
 instance StatementSym r smt => StatementSym (LoggingFor r) smt where

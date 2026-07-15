@@ -5,8 +5,8 @@
 module Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, Body, MSBody, Block, MSBlock, VSBinder, Variable, SVariable,
-  SValue, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
-  InOutFunc, DocInOutFunc,
+  Value, SValue, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
+  InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -27,7 +27,7 @@ import Data.Bifunctor (first)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD,
-  ParamData, VarData)
+  ParamData, VarData, ValData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -132,11 +132,11 @@ listVar n t = var n (listType t)
 listOf :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listOf = listVar
 
-type SValue a = VS (a (Value a))
+type Value = ValData
+type SValue a = VS (a Value)
 
 class (TypeSym r) => ValueSym r where
-  type Value r
-  valueType :: r (Value r) -> r TypeData
+  valueType :: r Value -> r TypeData
 
 class (TypeSym r) => TypeElim r where
   getCodeType :: r TypeData -> CodeType

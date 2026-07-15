@@ -13,17 +13,17 @@ import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Library, Body, Variable, SVariable, SValue, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..))
+  Label, Library, Body, Variable, SVariable, Value, SValue, MixedCtorCall,
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
+  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -292,7 +292,6 @@ instance RenderVariable PythonCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
-  type Value PythonCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym PythonCode
@@ -916,7 +915,7 @@ pyInlineIf c' v1' v2' = do
 
 pyLambda
   :: (InternalBinderElim r, ValueElim r)
-  => [r BinderD] -> r (Value r) -> Doc
+  => [r BinderD] -> r Value -> Doc
 pyLambda ps ex = pyLambdaDec <+> binderList ps <> colon <+> RC.value ex
 
 pyStringType :: (Monad r) => VS (r TypeData)
@@ -958,17 +957,17 @@ pyInput inSrc v = v &= (v >>= pyInput' . getCodeType . variableType)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow :: (ValueElim r) => r (Value r) -> Doc
+pyThrow :: (ValueElim r) => r Value -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r (Value r) -> r Body -> Doc
+  => r Variable -> r Value -> r Body -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (BodyElim r, ValueElim r) => r (Value r) -> r Body -> Doc
+pyWhile :: (BodyElim r, ValueElim r) => r Value -> r Body -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
@@ -980,7 +979,7 @@ pyTryCatch tryB catchB = vcat [
   pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
 
-pyAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+pyAssert :: (ValueElim r) => r Value -> r Value -> Doc
 pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
 pyListSlice :: (InternalVarElim r, Monad r, ValueElim r) => SVariable r ->

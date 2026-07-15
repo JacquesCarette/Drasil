@@ -15,17 +15,17 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, SValue, Variable, SVariable, MSBlock, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), NativeVector(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
-  switchAsIf, convScope)
+  Label, Body, Value, SValue, Variable, SVariable, MSBlock, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -263,7 +263,6 @@ instance RenderVariable JuliaCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JuliaCode where
-  type Value JuliaCode = ValData
   valueType v = valType <$> v
 
 instance Argument JuliaCode where
@@ -843,7 +842,7 @@ jlSpace = OSpace {oSpace = empty}
 -- | Creates a for-each loop in Julia
 jlForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r (Value r) -> r Body -> Doc
+  => r Variable -> r Value -> r Body -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -877,11 +876,11 @@ jlIntFunc n pms bod = do
         jlEnd]
 
 jlLambda :: (InternalBinderElim r, ValueElim r) => [r BinderD] ->
-  r (Value r) -> Doc
+  r Value -> Doc
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
-jlThrow :: (ValueElim r) => r (Value r) -> Doc
+jlThrow :: (ValueElim r) => r Value -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
 jlTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
@@ -900,7 +899,7 @@ includeLabel = text "include"
 importLabel = text "import"
 
 -- Assertions
-jlAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+jlAssert :: (ValueElim r) => r Value -> r Value -> Doc
 jlAssert condition errorMessage = vcat [
   text "@assert" <+> RC.value condition <+> RC.value errorMessage
   ]

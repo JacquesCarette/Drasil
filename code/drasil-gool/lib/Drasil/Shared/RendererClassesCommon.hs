@@ -15,13 +15,14 @@ module Drasil.Shared.RendererClassesCommon (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, Body, MSBody, Block,
-  MSBlock, Variable, SVariable, SValue, MixedCall, TypeSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  InternalList(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
+  MSBlock, Variable, SVariable, Value, SValue, MixedCall, TypeSym(..),
+  VariableElim(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
+  UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -147,9 +148,9 @@ class RenderValue r where
   valFromData :: Maybe Int -> Maybe Integer -> VS (r TypeData) -> Doc -> SValue r
 
 class ValueElim r where
-  valuePrec :: r (Value r) -> Maybe Int
-  valueInt :: r (Value r) -> Maybe Integer
-  value :: r (Value r) -> Doc
+  valuePrec :: r Value -> Maybe Int
+  valueInt :: r Value -> Maybe Integer
+  value :: r Value -> Doc
 
 class InternalListFunc r where
   -- | List, Index

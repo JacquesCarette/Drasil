@@ -22,9 +22,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
-  MSBlock, Block, Variable, SVariable, SValue, NamedArgs, MixedCall,
+  MSBlock, Block, Variable, SVariable, Value, SValue, NamedArgs, MixedCall,
   MixedCtorCall, bodyStatements, oneLiner, VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(Value, valueType),
+  VariableElim(variableName, variableType), ValueSym(valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
@@ -268,7 +268,7 @@ newObjMixedArgs s tp vs ns = do
 
 lambda
   :: (BinderElim r, RenderValue r, ValueSym r)
-  => ([r BinderD] -> r (Value r) -> Doc) -> [VSBinder r] -> SValue r -> SValue r
+  => ([r BinderD] -> r Value -> Doc) -> [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
@@ -434,7 +434,7 @@ valStmt t v' = do
 comment :: (RenderStatement r smt) => Doc -> Label -> MS (r smt)
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
-throw :: (IC.Literal r, RenderStatement r smt) => (r (Value r) -> Doc) -> Terminator ->
+throw :: (IC.Literal r, RenderStatement r smt) => (r Value -> Doc) -> Terminator ->
   Label -> MS (r smt)
 throw f t l = do
   msg <- zoom lensMStoVS (IC.litString l)

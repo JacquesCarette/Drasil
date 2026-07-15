@@ -14,16 +14,17 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  Label, Body, MSBody, SVariable, Value, SValue, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, OOStatement,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
@@ -299,7 +300,6 @@ instance RenderVariable JavaCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
-  type Value JavaCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym JavaCode
@@ -926,7 +926,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: [r BinderD] -> r (Value r) -> Doc
+jLambda :: [r BinderD] -> r Value -> Doc
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VS (JavaCode TypeData) -> SValue JavaCode -> SValue JavaCode
@@ -959,7 +959,7 @@ jFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
-jThrowDoc :: (ValueElim r) => r (Value r) -> Doc
+jThrowDoc :: (ValueElim r) => r Value -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
@@ -972,7 +972,7 @@ jTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-jAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+jAssert :: (ValueElim r) => r Value -> r Value -> Doc
 jAssert condition errorMessage = vcat [
   text "assert" <+> RC.value condition <+> colon <+> RC.value errorMessage
   ]

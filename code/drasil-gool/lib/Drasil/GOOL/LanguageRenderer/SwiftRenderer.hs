@@ -730,7 +730,6 @@ instance StateVarElim SwiftCode where
   stateVar = unSC
 
 instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData where
-  type Class SwiftCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

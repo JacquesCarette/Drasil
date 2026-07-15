@@ -719,7 +719,6 @@ instance StateVarElim JavaCode where
   stateVar = unJC
 
 instance ClassSym JavaCode Doc (Doc, Terminator) MethodData where
-  type Class JavaCode = Doc
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass

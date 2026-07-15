@@ -690,7 +690,6 @@ instance StateVarElim CSharpCode where
   stateVar = unCSC
 
 instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData where
-  type Class CSharpCode = Doc
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

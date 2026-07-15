@@ -15,7 +15,6 @@ import Data.List (nub, sortBy, (\\))
 import Data.Maybe (maybeToList, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
-import qualified Data.Map.Strict as M
 
 -- General Drasil
 import Language.Drasil
@@ -128,12 +127,12 @@ buildTraceMaps sd si
         tdb = generateTraceMap sd
         traceMats = map (\(TraceConfig u _ desc cols rows) ->
           TM.generateTraceTableView u desc cols rows si) $ traceMatStandard si
-        traceGraphLinkRefs = M.fromList $ map (\x -> (x ^. uid, x)) traceyGraphGetRefs -- Document-EXTERNAL traceability GRAPH FILE URIs
-        rt = M.union (si ^. refTable) traceGraphLinkRefs -- All references added are EXTERNAL URIs.
-    in set systemdb (insertAll tglcs $ insertAll traceMats db)
+        db' = insertAll tglcs
+            $ insertAll traceMats
+            $ insertAll traceyGraphGetRefs db
+    in set systemdb db'
      $ set traceTable tdb
-     $ set refbyTable (invert tdb)
-     $ set refTable rt si
+     $ set refbyTable (invert tdb) si
   | otherwise = si
   where
     containsTraceSec :: DocDesc -> Bool

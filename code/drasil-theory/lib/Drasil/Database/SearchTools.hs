@@ -82,6 +82,9 @@ refResolve db trg
   | (Just c) <- find trg db :: Maybe LabelledContent     = Just $ ref c
   | (Just c) <- find trg db :: Maybe Citation            = Just $ ref c
   | (Just c) <- find trg db :: Maybe Section             = Just $ ref c
+  -- FIXME: When URIs are made not-`Reference`-types, we can (should) remove the
+  -- below `Just` case.
+  | (Just c) <- find trg db :: Maybe Reference           = Just c
   | otherwise = Nothing
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]

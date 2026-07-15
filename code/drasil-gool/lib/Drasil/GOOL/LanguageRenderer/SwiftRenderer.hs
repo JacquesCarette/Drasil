@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
-import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
@@ -135,9 +135,9 @@ instance Monad SwiftCode where
 instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
 instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOStatement SwiftCode (Doc, Terminator)
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
   type Program SwiftCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
@@ -145,12 +145,12 @@ instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
@@ -716,25 +716,24 @@ instance OORenderMethod SwiftCode Doc MethodData where
 instance MethodElim SwiftCode MethodData where
   method = mthdDoc . unSC
 
-instance StateVarSym SwiftCode Doc where
-  type StateVar SwiftCode = Doc
+instance StateVarSym SwiftCode Doc Doc where
   stateVar s p vr = do
     v <- zoom lensCStoVS vr
     stateVarDef s p vr (typeDfltVal $ getCodeType $ variableType v)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm (classLevel :: SwiftCode (Attachment SwiftCode)))
 
-instance StateVarElim SwiftCode where
+instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = G.docClass swiftClassDoc
 
-instance RenderClass SwiftCode Doc MethodData where
+instance RenderClass SwiftCode Doc MethodData StateVar where
   intClass = CP.intClass R.class'
 
   inherit = CP.inherit
@@ -745,7 +744,7 @@ instance RenderClass SwiftCode Doc MethodData where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will

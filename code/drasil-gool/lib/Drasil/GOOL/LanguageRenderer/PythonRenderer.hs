@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
@@ -125,9 +125,9 @@ instance Monad PythonCode where
 instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
 instance SharedStatement PythonCode (Doc, Terminator)
 instance OOStatement PythonCode (Doc, Terminator)
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData where
+instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
   type Program PythonCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
@@ -135,12 +135,12 @@ instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
 
-instance FileSym PythonCode Doc (Doc, Terminator) MethodData where
+instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m
@@ -690,17 +690,16 @@ instance OORenderMethod PythonCode Doc MethodData where
 instance MethodElim PythonCode MethodData where
   method = mthdDoc . unPC
 
-instance StateVarSym PythonCode Doc where
-  type StateVar PythonCode = Doc
+instance StateVarSym PythonCode Doc Doc where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
     (classLevel :: PythonCode (Attachment PythonCode)))
 
-instance StateVarElim PythonCode where
+instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc (Doc, Terminator) MethodData where
+instance ClassSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
@@ -715,7 +714,7 @@ instance ClassSym PythonCode Doc (Doc, Terminator) MethodData where
 
   docClass = CP.doxClass
 
-instance RenderClass PythonCode Doc MethodData where
+instance RenderClass PythonCode Doc MethodData StateVar where
   intClass = CP.intClass pyClass
 
   inherit n = toCode $ maybe empty (parens . text) n
@@ -726,7 +725,7 @@ instance RenderClass PythonCode Doc MethodData where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports

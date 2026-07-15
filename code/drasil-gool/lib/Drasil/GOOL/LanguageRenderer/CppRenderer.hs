@@ -146,10 +146,10 @@ instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
 instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
-  (Doc, VisibilityTag) (Doc, Terminator) MethodData
+  (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n st mods = do
     m <-  mapM (zoom lensGStoFS) mods
@@ -166,7 +166,7 @@ instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
 
 instance (Pair p) => FileSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   fileDoc = pair1 fileDoc fileDoc
 
   docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
@@ -776,8 +776,7 @@ instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) MethodData where
   method m = RC.method $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) where
-  type StateVar (p CppSrcCode CppHdrCode) = StateVarData
+    (Doc, VisibilityTag) StateVarData where
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
     . zoom lensCStoVS
   stateVarDef s p vr vl = pair2
@@ -786,11 +785,11 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
   constVar s vr vl = pair2 (constVar (pfst s)) (constVar (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
 
-instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -806,7 +805,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
   docClass d = pair1 (docClass d) (docClass d)
 
 instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) MethodData where
+    (Doc, VisibilityTag) MethodData StateVarData where
   intClass n s i vs cs fs = pair3Lists
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i))
     vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
@@ -820,7 +819,7 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
   class' c = RC.class' $ pfst c
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
@@ -1035,19 +1034,19 @@ instance Applicative CppSrcCode where
 instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
-instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   type Program CppSrcCode = ProgData
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 instance SharedStatement CppSrcCode (Doc, Terminator) where
 instance OOStatement CppSrcCode (Doc, Terminator) where
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
 
-instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   fileDoc m = do
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
@@ -1680,23 +1679,22 @@ instance OORenderMethod CppSrcCode (Doc, VisibilityTag) MethodData where
 instance MethodElim CppSrcCode MethodData where
   method = mthdDoc . unCPPSC
 
-instance StateVarSym CppSrcCode (Doc, VisibilityTag) where
-  type StateVar CppSrcCode = StateVarData
+instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData where
   stateVar s _ _ = return $ return $ svd (snd (unCPPSC s)) empty
   stateVarDef = cppsStateVarDef empty
   constVar s = cppsStateVarDef constDec' s classLevel
 
-instance StateVarElim CppSrcCode where
+instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData where
+instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData where
   intClass n _ _ vs cs fs = do
     modify (setClassName n)
     on2StateLists cppsClass vs (map (zoom lensCStoMS) $ cs ++ fs)
@@ -1710,7 +1708,7 @@ instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData where
 instance ClassElim CppSrcCode where
   class' = unCPPSC
 
-instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildModule n is ms cs = CP.buildModule n (do
     ds <- getDefines
     lis <- getLangImports
@@ -1761,14 +1759,14 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
 instance SharedStatement CppHdrCode (Doc, Terminator) where
 instance OOStatement CppHdrCode (Doc, Terminator) where
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
 
-instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   fileDoc m = do
     modify (setFileType Header)
     G.fileDoc cppHdrExt top bottom m
@@ -2300,8 +2298,7 @@ instance OORenderMethod CppHdrCode (Doc, VisibilityTag) MethodData where
 instance MethodElim CppHdrCode MethodData where
   method = mthdDoc . unCPPHC
 
-instance StateVarSym CppHdrCode (Doc, VisibilityTag) where
-  type StateVar CppHdrCode = StateVarData
+instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData where
   stateVar s p v = do
     dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
@@ -2317,17 +2314,17 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) where
   --   on2CodeValues (R.constVar empty endStatement) (attachmentDoc <$> classLevel))
   --   (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
 
-instance StateVarElim CppHdrCode where
+instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData where
+instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData where
   intClass n _ i vs cstrs mths = do
     modify (setClassName n)
     vars <- sequence vs
@@ -2344,7 +2341,7 @@ instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData where
 instance ClassElim CppHdrCode where
   class' = unCPPHC
 
-instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildModule n is = CP.buildModule n (do
     ds <- getHeaderDefines
     lis <- getHeaderLangImports
@@ -2844,7 +2841,7 @@ cppCommentedFunc ft cmt fn = do
 
 cppsStateVarDef :: Doc -> CppSrcCode (Doc, VisibilityTag) ->
   CppSrcCode (Attachment CppSrcCode) -> SVariable CppSrcCode ->
-  SValue CppSrcCode -> CSStateVar CppSrcCode
+  SValue CppSrcCode -> CSStateVar CppSrcCode StateVarData
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
   vl <- zoom lensCStoVS vl'
@@ -2883,21 +2880,21 @@ cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
-cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] ->
+cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode StateVarData] ->
   [CppHdrCode MethodData] -> Doc
 cpphVarsFuncsList st vs fs =
   let visVs = [RC.stateVar v | v <- vs, getStVarScp (unCPPHC v) == st]
       visFs = [RC.method f | f <- fs, getMthdScp (unCPPHC f) == st]
   in vcat $ visVs ++ (if null visVs then empty else blank) : visFs
 
-cppsClass :: [CppSrcCode (StateVar CppSrcCode)] ->
+cppsClass :: [CppSrcCode StateVarData] ->
   [CppSrcCode MethodData] -> CppSrcCode Class
 cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map RC.stateVar vs
         funcs = map RC.method fs
 
 cpphClass :: Label -> CppHdrCode ParentSpec ->
-  [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode MethodData] ->
+  [CppHdrCode StateVarData] -> [CppHdrCode MethodData] ->
   CppHdrCode (Doc, VisibilityTag) -> CppHdrCode (Doc, VisibilityTag) ->
   CppHdrCode Class
 cpphClass n ps vars funcs pub priv = let

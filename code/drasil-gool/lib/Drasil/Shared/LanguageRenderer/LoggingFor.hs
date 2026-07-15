@@ -399,7 +399,7 @@ instance (P.ProgramSym r vis smt md) => P.ProgramSym (LoggingFor r) vis smt md w
 
 -- GOOL
 
-instance (G.OOProg r vis smt md) => G.OOProg (LoggingFor r) vis smt md
+instance (G.OOProg r vis smt md svr) => G.OOProg (LoggingFor r) vis smt md svr
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -460,26 +460,25 @@ instance (G.OOMethodSym r vis smt md) => G.OOMethodSym (LoggingFor r) vis smt md
   inOutMethod = liftLogging G.inOutMethod
   docInOutMethod = liftLogging G.docInOutMethod
 
-instance (G.StateVarSym r vis) => G.StateVarSym (LoggingFor r) vis where
-  type StateVar (LoggingFor r) = G.StateVar r
+instance (G.StateVarSym r vis svr) => G.StateVarSym (LoggingFor r) vis svr where
   stateVar = liftLogging G.stateVar
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis smt md) => G.ClassSym (LoggingFor r) vis smt md where
+instance (G.ClassSym r vis smt md svr) => G.ClassSym (LoggingFor r) vis smt md svr where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis smt md) => G.ModuleSym (LoggingFor r) vis smt md where
+instance (G.ModuleSym r vis smt md svr) => G.ModuleSym (LoggingFor r) vis smt md svr where
   buildModule = liftLogging G.buildModule
 
-instance (G.FileSym r vis smt md) => G.FileSym (LoggingFor r) vis smt md where
+instance (G.FileSym r vis smt md svr) => G.FileSym (LoggingFor r) vis smt md svr where
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis smt md) => G.ProgramSym (LoggingFor r) vis smt md where
+instance (G.ProgramSym r vis smt md svr) => G.ProgramSym (LoggingFor r) vis smt md svr where
   type Program (LoggingFor r) = G.Program r
   prog = liftLogging G.prog
 

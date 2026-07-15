@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImports :: (OOProg r vis smt md) => Name -> Description ->
+genModuleWithImports :: (OOProg r vis smt md svr) => Name -> Description ->
   [Import] -> [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
@@ -52,7 +52,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModule :: (OOProg r vis smt md) => Name -> Description ->
+genModule :: (OOProg r vis smt md svr) => Name -> Description ->
   [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModule n desc = genModuleWithImports n desc []
@@ -83,8 +83,8 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (ClassSym r vis smt md) => ClassType -> Name -> Maybe Name ->
-  Description -> [CSStateVar r] -> GenState [MS (r md)] ->
+mkClass :: (ClassSym r vis smt md svr) => ClassType -> Name -> Maybe Name ->
+  Description -> [CSStateVar r svr] -> GenState [MS (r md)] ->
     GenState [MS (r md)] -> GenState (SClass r)
 mkClass s n l desc vs cstrs mths = do
   g <- get
@@ -102,14 +102,14 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (ClassSym r vis smt md) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
+primaryClass :: (ClassSym r vis smt md svr) => Name -> Maybe Name -> Description ->
+  [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
   GenState (SClass r)
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (ClassSym r vis smt md) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
+auxClass :: (ClassSym r vis smt md svr) => Name -> Maybe Name -> Description ->
+  [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
 

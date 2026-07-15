@@ -513,12 +513,12 @@ method
   -> MS (r md)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis smt md) => SVariable r -> MS (r md)
+getMethod :: (OORenderSym r vis smt md svr) => SVariable r -> MS (r md)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis smt md) => SVariable r -> MS (r md)
+setMethod :: (OORenderSym r vis smt md svr) => SVariable r -> MS (r md)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -543,18 +543,18 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis md, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  :: (RenderClass r vis md svr, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis md, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
+implementingClass :: (RenderClass r vis md svr, VisibilitySym r vis) => Label -> [Label] ->
+  [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis md)
+  :: (RenderClass r vis md svr)
   => ClassDocRenderer -> String -> SClass r -> SClass r
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 

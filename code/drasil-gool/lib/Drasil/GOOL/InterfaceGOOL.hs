@@ -1,9 +1,10 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
+  GSProgram, File, SFile, Module, FSModule, Class, SClass, StateVar, CSStateVar,
+  Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -31,11 +32,14 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
+  ModData)
 
-class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
+import Text.PrettyPrint.HughesPJ (Doc)
+
+class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md svr,
   ObserverPattern r smt, StrategyPattern r smt
-  ) => OOProg r vis smt md
+  ) => OOProg r vis smt md svr
 
 class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
   OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
@@ -44,41 +48,41 @@ class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym r vis smt md) => ProgramSym r vis smt md where
+class (FileSym r vis smt md svr) => ProgramSym r vis smt md svr where
   type Program r
   prog :: Label -> Label -> [SFile r] -> GSProgram r
 
-type SFile a = FS (a (File a))
+type File = FileData
+type SFile a = FS (a File)
 
-class (ModuleSym r vis smt md) => FileSym r vis smt md where
-  type File r
+class (ModuleSym r vis smt md svr) => FileSym r vis smt md svr where
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
 
-type FSModule a = FS (a (Module a))
+type Module = ModData
+type FSModule a = FS (a Module)
 
-class (ClassSym r vis smt md) => ModuleSym r vis smt md where
-  type Module r
+class (ClassSym r vis smt md svr) => ModuleSym r vis smt md svr where
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
 
-type SClass a = CS (a (Class a))
+type Class = Doc
+type SClass a = CS (a Class)
 
-class (OOMethodSym r vis smt md, StateVarSym r vis) => ClassSym r vis smt md where
-  type Class r
+class (OOMethodSym r vis smt md, StateVarSym r vis svr) => ClassSym r vis smt md svr where
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [MS (r md)] ->
+  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
     [MS (r md)] -> SClass r
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [MS (r md)] ->
+  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
     [MS (r md)] -> SClass r
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [MS (r md)] ->
+  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
     [MS (r md)] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
@@ -112,21 +116,21 @@ nonInitConstructor :: (OOMethodSym r vis smt md) => [MS (r ParamData)] ->
   MSBody r -> MS (r md)
 nonInitConstructor ps = constructor ps []
 
-type CSStateVar a = CS (a (StateVar a))
+type StateVar = Doc
+type CSStateVar r svr = CS (r svr)
 
-class (VisibilitySym r vis, AttachmentSym r, VariableSym r) => StateVarSym r vis where
-  type StateVar r
-  stateVar :: r vis -> r (Attachment r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r vis -> r (Attachment r) -> SVariable r -> SValue r -> CSStateVar r
-  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r
+class (VisibilitySym r vis, AttachmentSym r, VariableSym r) => StateVarSym r vis svr | r -> svr where
+  stateVar :: r vis -> r (Attachment r) -> SVariable r -> CSStateVar r svr
+  stateVarDef :: r vis -> r (Attachment r) -> SVariable r -> SValue r -> CSStateVar r svr
+  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
 
-privDVar :: (StateVarSym r vis) => SVariable r -> CSStateVar r
+privDVar :: (StateVarSym r vis svr) => SVariable r -> CSStateVar r svr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis) => SVariable r -> CSStateVar r
+pubDVar :: (StateVarSym r vis svr) => SVariable r -> CSStateVar r svr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis) => SVariable r -> CSStateVar r
+pubSVar :: (StateVarSym r vis svr) => SVariable r -> CSStateVar r svr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance

@@ -15,8 +15,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, NamedArgs, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
+  Label, Body, MSBody, Variable, SVariable, Value, SValue, NamedArgs,
+  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -26,13 +26,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   StringStatement(..), FunctionSym, FuncAppStatement(..), BinderSym(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), convScope, BinderElim (..), (&=))
-import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, OOStatement,
+import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, OOStatement, Class,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), AttachmentSym(..), pubMethod, StateVarSym(..),
-  OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall,
-  InternalValueExp(..), objMethodCall, OOFunctionSym(..), ($.), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..), convTypeOO)
+  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfMethodCall, InternalValueExp(..),
+  objMethodCall, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.Renderers (renderType, renderParam,)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -81,7 +81,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listAccessFunc', containsInt, string, docInOutFunc, extraClass,
-  intToIndex, indexToInt, global, setMethodCall)
+  intToIndex, indexToInt, global, setMethodCall, destructorError)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
   listAppend, innerType)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
@@ -102,15 +102,15 @@ import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList,
   on2StateLists, on2StateWrapped)
 import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensCStoVS, lensMStoCS, lensCStoFS, lensMStoVS, lensVStoMS,
-  modifyReturn, revFiles, addLangImport, addLangImportVS, getLangImports,
-  getLibImports, addModuleImportVS, getModuleImports, addHeaderLangImport,
-  getHeaderLangImports, addHeaderModImport, getHeaderLibImports,
-  getHeaderModImports, addDefine, getDefines, addHeaderDefine,
-  getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
-  setFileType, getModuleName, setModuleName, setClassName, getClassName,
-  setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, useVarName, setVarScope, getVarScope)
+  lensCStoMS, lensCStoVS, lensCStoFS, lensMStoVS, lensVStoMS, modifyReturn,
+  revFiles, addLangImport, addLangImportVS, getLangImports, getLibImports,
+  addModuleImportVS, getModuleImports, addHeaderLangImport, getHeaderLangImports,
+  addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine,
+  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing,
+  addHeaderUsing, getHeaderUsing, setFileType, getModuleName, setModuleName,
+  setClassName, getClassName, setCurrMain, getCurrMain, getClassMap,
+  setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc, useVarName,
+  setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -146,10 +146,10 @@ instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
 instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
-  (Doc, VisibilityTag) (Doc, Terminator) MethodData
+  (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n st mods = do
     m <-  mapM (zoom lensGStoFS) mods
@@ -166,8 +166,7 @@ instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
 
 instance (Pair p) => FileSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type File (p CppSrcCode CppHdrCode) = FileData
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   fileDoc = pair1 fileDoc fileDoc
 
   docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
@@ -194,7 +193,6 @@ instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) where
   binding p = binding $ pfst p
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) (Doc, Terminator) where
-  type Body (p CppSrcCode CppHdrCode) = Doc
   body = pair1List body body
 
   addComments s = pair1 (addComments s) (addComments s)
@@ -206,7 +204,6 @@ instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) where
   body b = RC.body $ pfst b
 
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) (Doc, Terminator) where
-  type Block (p CppSrcCode CppHdrCode) = Doc
   block = pair1List block block
 
 instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) where
@@ -289,7 +286,6 @@ instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
   scopeData = unCPPSC . pfst
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
-  type Variable (p CppSrcCode CppHdrCode) = VarData
   var n       = pair1 (var n) (var n)
   constant n  = pair1 (constant n) (constant n)
   extVar l n  = pair1 (extVar l n) (extVar l n)
@@ -317,7 +313,6 @@ instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
     (\t -> varFromData b n t d) t'
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
-  type Value (p CppSrcCode CppHdrCode) = ValData
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
 
 instance (Pair p) => OOValueSym (p CppSrcCode CppHdrCode)
@@ -775,14 +770,13 @@ instance (Pair p) => OORenderMethod (p CppSrcCode CppHdrCode)
     (intMethod m n (pfst s) (pfst p)) (intMethod m n (psnd s) (psnd p))
   intFunc m n s p = pairValListVal
     (intFunc m n (pfst s) (pfst p)) (intFunc m n (psnd s) (psnd p))
-  destructor = pair1List destructor destructor . map (zoom lensMStoCS)
+  destructor = error $ CP.destructorError cppName
 
 instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) MethodData where
   method m = RC.method $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) where
-  type StateVar (p CppSrcCode CppHdrCode) = StateVarData
+    (Doc, VisibilityTag) StateVarData where
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
     . zoom lensCStoVS
   stateVarDef s p vr vl = pair2
@@ -791,12 +785,11 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
   constVar s vr vl = pair2 (constVar (pfst s)) (constVar (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
 
-instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Class (p CppSrcCode CppHdrCode) = Doc
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -812,7 +805,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
   docClass d = pair1 (docClass d) (docClass d)
 
 instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) MethodData where
+    (Doc, VisibilityTag) MethodData StateVarData where
   intClass n s i vs cs fs = pair3Lists
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i))
     vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
@@ -826,8 +819,7 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
   class' c = RC.class' $ pfst c
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Module (p CppSrcCode CppHdrCode) = ModData
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
@@ -1042,20 +1034,19 @@ instance Applicative CppSrcCode where
 instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
-instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   type Program CppSrcCode = ProgData
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 instance SharedStatement CppSrcCode (Doc, Terminator) where
 instance OOStatement CppSrcCode (Doc, Terminator) where
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
 
-instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type File CppSrcCode = FileData
+instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   fileDoc m = do
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
@@ -1086,7 +1077,6 @@ instance PermElim CppSrcCode where
   binding = attachment . unCPPSC
 
 instance BodySym CppSrcCode (Doc, Terminator) where
-  type Body CppSrcCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -1098,7 +1088,6 @@ instance BodyElim CppSrcCode where
   body = unCPPSC
 
 instance BlockSym CppSrcCode (Doc, Terminator) where
-  type Block CppSrcCode = Doc
   block = G.block
 
 instance RenderBlock CppSrcCode where
@@ -1195,7 +1184,6 @@ instance ScopeElim CppSrcCode where
   scopeData = unCPPSC
 
 instance VariableSym CppSrcCode where
-  type Variable CppSrcCode = VarData
   var          = G.var
   constant     = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
@@ -1248,7 +1236,6 @@ instance RenderVariable CppSrcCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
-  type Value CppSrcCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym CppSrcCode where
@@ -1687,41 +1674,30 @@ instance OORenderMethod CppSrcCode (Doc, VisibilityTag) MethodData where
   intFunc m n s _ t ps b = do
     modify (if m then setCurrMainFunc m . setCurrMain else id)
     cppsIntFunc (cppsFunction n) s t ps b
-  destructor vs =
-    let i = var "i" int
-        deleteStatements = map (onStateValue (onCodeValue destructSts) .
-          zoom lensMStoCS) vs
-        loopIndexDec = varDec i local
-        dbody = on2StateValues (on2CodeValues emptyIfEmpty)
-          (onStateList (onCodeList (vcat . map fst)) deleteStatements) $
-          bodyStatements $ loopIndexDec : deleteStatements
-    in getClassName >>= (\n -> pubMethod ('~':n) void [] dbody)
+  destructor = error $ CP.destructorError cppName
 
 instance MethodElim CppSrcCode MethodData where
   method = mthdDoc . unCPPSC
 
-instance StateVarSym CppSrcCode (Doc, VisibilityTag) where
-  type StateVar CppSrcCode = StateVarData
-  stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode
-    empty)) $ zoom lensCStoMS emptyStmt
+instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData where
+  stateVar s _ _ = return $ return $ svd (snd (unCPPSC s)) empty
   stateVarDef = cppsStateVarDef empty
   constVar s = cppsStateVarDef constDec' s classLevel
 
-instance StateVarElim CppSrcCode where
+instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Class CppSrcCode = Doc
+instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData where
+instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData where
   intClass n _ _ vs cs fs = do
     modify (setClassName n)
-    on2StateLists cppsClass vs (map (zoom lensCStoMS) $ cs ++ fs ++ [destructor vs])
+    on2StateLists cppsClass vs (map (zoom lensCStoMS) $ cs ++ fs)
 
   inherit n = onCodeValue (cppInherit n . fst) public
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is))
@@ -1732,8 +1708,7 @@ instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData where
 instance ClassElim CppSrcCode where
   class' = unCPPSC
 
-instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Module CppSrcCode = ModData
+instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildModule n is ms cs = CP.buildModule n (do
     ds <- getDefines
     lis <- getLangImports
@@ -1784,15 +1759,14 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
 instance SharedStatement CppHdrCode (Doc, Terminator) where
 instance OOStatement CppHdrCode (Doc, Terminator) where
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
 
-instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type File CppHdrCode = FileData
+instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   fileDoc m = do
     modify (setFileType Header)
     G.fileDoc cppHdrExt top bottom m
@@ -1822,7 +1796,6 @@ instance PermElim CppHdrCode where
   binding = attachment . unCPPHC
 
 instance BodySym CppHdrCode (Doc, Terminator) where
-  type Body CppHdrCode = Doc
   body _ = toState $ toCode empty
 
   addComments _ _ = toState $ toCode empty
@@ -1834,7 +1807,6 @@ instance BodyElim CppHdrCode where
   body = unCPPHC
 
 instance BlockSym CppHdrCode (Doc, Terminator) where
-  type Block CppHdrCode = Doc
   block _ = toState $ toCode empty
 
 instance RenderBlock CppHdrCode where
@@ -1928,7 +1900,6 @@ instance ScopeElim CppHdrCode where
   scopeData = unCPPHC
 
 instance VariableSym CppHdrCode where
-  type Variable CppHdrCode = VarData
   var           = G.var
   constant  _ _ = mkStateVar "" void empty
   extVar  _ _ _ = mkStateVar "" void empty
@@ -1957,7 +1928,6 @@ instance RenderVariable CppHdrCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where
-  type Value CppHdrCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym CppHdrCode where
@@ -2323,47 +2293,44 @@ instance OORenderMethod CppHdrCode (Doc, VisibilityTag) MethodData where
     pms <- sequence ps
     pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp a pms
   intFunc _ = cpphIntFunc
-  destructor vars = do
-    n <- getClassName
-    m <- pubMethod ('~':n) void [] (pure (toCode empty)) :: MS (CppHdrCode MethodData)
-    vs <- mapM (zoom lensMStoCS) vars
-    pure $ toCode $ mthd Pub (emptyIfEmpty
-      (vcat (map (RC.statement . onCodeValue destructSts) vs)) (RC.method m))
+  destructor = error $ CP.destructorError cppName
 
 instance MethodElim CppHdrCode MethodData where
   method = mthdDoc . unCPPHC
 
-instance StateVarSym CppHdrCode (Doc, VisibilityTag) where
-  type StateVar CppHdrCode = StateVarData
+instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData where
   stateVar s p v = do
     dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
-    emptS <- zoom lensCStoMS emptyStmt
-    pure $ on3CodeValues svd (onCodeValue snd s)
-      (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS
-  stateVarDef s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
-    (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
-  constVar s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) .
-    on2CodeValues (R.constVar empty endStatement) (attachmentDoc <$> classLevel))
-    (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
+    pure $ on2CodeValues svd (onCodeValue snd s)
+      (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec))
+  stateVarDef s p vr vl = do
+    d <- cpphStateVarDef empty p vr vl
+    return $ return $ svd (snd $ unCPPHC s) d
+  constVar s vr _ = do
+    vr' <- zoom lensCStoVS vr
+    let attch = R.constVar empty endStatement (attachmentDoc (unCPPHC classLevel)) (unCPPHC vr')
+    return $ return $ svd (snd $ unCPPHC s) attch
+  -- constVar s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) .
+  --   on2CodeValues (R.constVar empty endStatement) (attachmentDoc <$> classLevel))
+  --   (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
 
-instance StateVarElim CppHdrCode where
+instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Class CppHdrCode = Doc
+instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData where
+instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData where
   intClass n _ i vs cstrs mths = do
     modify (setClassName n)
     vars <- sequence vs
     funcs <- sequence fs
     pure $ cpphClass n i vars funcs public private
-    where fs = map (zoom lensCStoMS) $ cstrs ++ mths ++ [destructor vs]
+    where fs = map (zoom lensCStoMS) $ cstrs ++ mths
 
   inherit n = onCodeValue (cppInherit n . fst) public
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is))
@@ -2374,8 +2341,7 @@ instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData where
 instance ClassElim CppHdrCode where
   class' = unCPPHC
 
-instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
-  type Module CppHdrCode = ModData
+instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
   buildModule n is = CP.buildModule n (do
     ds <- getHeaderDefines
     lis <- getHeaderLangImports
@@ -2649,7 +2615,7 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
   :: (DeclStatement r smt, RenderStatement r smt, StatementElim r smt)
-  => ([r (Value r)] -> Doc)
+  => ([r Value] -> Doc)
   -> SVariable r
   -> r ScopeData
   -> [SValue r]
@@ -2706,7 +2672,7 @@ cppFuncType ps' r' =  do
   r <- r'
   typeFromData (Func (map getCodeType ps) (getCodeType r)) "auto" (text "auto")
 
-cppLambda :: [CppSrcCode BinderD] -> CppSrcCode (Value CppSrcCode) -> Doc
+cppLambda :: [CppSrcCode BinderD] -> CppSrcCode Value -> Doc
 cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>)
   (map (renderType . binderType) ps) (map RC.binderElim ps)) <+>
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
@@ -2731,10 +2697,10 @@ cppCast = join .: on2StateValues (\t v -> cppCast' (getCodeType t) (getCodeType 
         cppCast' _ _ t v = mkStateVal (toState t) (R.castObj
           (R.cast (renderType t)) (RC.value v))
 
-cppListDecDoc :: (ValueElim r) => r (Value r) -> Doc
+cppListDecDoc :: (ValueElim r) => r Value -> Doc
 cppListDecDoc n = parens (RC.value n)
 
-cppListDecDefDoc :: (ValueElim r) => [r (Value r)] -> Doc
+cppListDecDefDoc :: (ValueElim r) => [r Value] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppFuncDecDef :: SVariable CppSrcCode -> CppSrcCode ScopeData ->
@@ -2762,10 +2728,10 @@ cppPrint newLn pf vl = do
         end = if newLn then addIOStreamImport (pure $ streamL <+> text endl)
           else pure empty
 
-cppThrowDoc :: (ValueElim r) => r (Value r) -> Doc
+cppThrowDoc :: (ValueElim r) => r Value -> Doc
 cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
-cppTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+cppTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 cppTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -2773,7 +2739,7 @@ cppTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-cppAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+cppAssert :: (ValueElim r) => r Value -> r Value -> Doc
 cppAssert condition errorMessage = vcat [
   text "assert(" <> RC.value condition <+> text "&&" <+> RC.value errorMessage <> text ")" <> semi
   ]
@@ -2798,11 +2764,11 @@ cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n,
 
 cppPointerParamDoc
   :: (InternalVarElim r, UnRepr r TypeData, VariableElim r)
-  => r (Variable r) -> Doc
+  => r Variable -> Doc
 cppPointerParamDoc v = renderType (variableType v) <+> cppPtr <> RC.variable v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode)
-  -> [CppSrcCode ParamData] -> CppSrcCode (Body CppSrcCode) -> Doc
+  -> [CppSrcCode ParamData] -> CppSrcCode Body -> Doc
 cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
   vcat [ttype <+> text (c `nmSpcAccess` n) <> parens (parameterList
     ps) <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
@@ -2822,14 +2788,14 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   lensMStoVS . snd) is <*> b)
 
 cppsFunction :: Label -> CppSrcCode TypeData ->
-  [CppSrcCode ParamData] -> CppSrcCode (Body CppSrcCode) -> Doc
+  [CppSrcCode ParamData] -> CppSrcCode Body -> Doc
 cppsFunction n t ps b = vcat [
   renderType t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
 
 cppsIntFunc :: (CppSrcCode TypeData -> [CppSrcCode ParamData] ->
-  CppSrcCode (Body CppSrcCode) -> Doc) -> CppSrcCode (Doc, VisibilityTag) ->
+  CppSrcCode Body -> Doc) -> CppSrcCode (Doc, VisibilityTag) ->
   MSMthdType CppSrcCode -> [MS (CppSrcCode ParamData)] ->
   MSBody CppSrcCode -> MS (CppSrcCode MethodData)
 cppsIntFunc f s t ps b = do
@@ -2875,17 +2841,15 @@ cppCommentedFunc ft cmt fn = do
 
 cppsStateVarDef :: Doc -> CppSrcCode (Doc, VisibilityTag) ->
   CppSrcCode (Attachment CppSrcCode) -> SVariable CppSrcCode ->
-  SValue CppSrcCode -> CSStateVar CppSrcCode
+  SValue CppSrcCode -> CSStateVar CppSrcCode StateVarData
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
   vl <- zoom lensCStoVS vl'
   n <- zoom lensCStoMS getClassName
-  emptS <- zoom lensCStoMS emptyStmt
-  pure $ on3CodeValues svd (onCodeValue snd s)
+  pure $ on2CodeValues svd (onCodeValue snd s)
     (toCode $ onAttachment (binding p) (cns <+> renderType (variableType vr) <+>
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
-    emptS
 
 cppForEach :: Doc -> Doc -> Doc -> Doc -> SVariable CppSrcCode -> SValue CppSrcCode
   -> MSBody CppSrcCode -> MS (CppSrcCode (Doc, Terminator))
@@ -2916,23 +2880,23 @@ cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onAttachment (binding p)
   (varDec vr local) (varDecDef vr local vl))
 
-cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] ->
+cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode StateVarData] ->
   [CppHdrCode MethodData] -> Doc
 cpphVarsFuncsList st vs fs =
   let visVs = [RC.stateVar v | v <- vs, getStVarScp (unCPPHC v) == st]
       visFs = [RC.method f | f <- fs, getMthdScp (unCPPHC f) == st]
   in vcat $ visVs ++ (if null visVs then empty else blank) : visFs
 
-cppsClass :: [CppSrcCode (StateVar CppSrcCode)] ->
-  [CppSrcCode MethodData] -> CppSrcCode (Class CppSrcCode)
+cppsClass :: [CppSrcCode StateVarData] ->
+  [CppSrcCode MethodData] -> CppSrcCode Class
 cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map RC.stateVar vs
         funcs = map RC.method fs
 
 cpphClass :: Label -> CppHdrCode ParentSpec ->
-  [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode MethodData] ->
+  [CppHdrCode StateVarData] -> [CppHdrCode MethodData] ->
   CppHdrCode (Doc, VisibilityTag) -> CppHdrCode (Doc, VisibilityTag) ->
-  CppHdrCode (Class CppHdrCode)
+  CppHdrCode Class
 cpphClass n ps vars funcs pub priv = let
   pubs  = cpphVarsFuncsList Pub vars funcs
   privs = cpphVarsFuncsList Priv vars funcs

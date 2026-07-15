@@ -7,7 +7,7 @@ module Drasil.Shared.LanguageRenderer.Constructors (
   binExpr, binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.Shared.InterfaceCommon (SVariable, SValue, TypeSym(..),
+import Drasil.Shared.InterfaceCommon (SVariable, Value, SValue, TypeSym(..),
   ValueSym(..), getCodeType, TypeElim)
 import Drasil.Shared.RendererClassesCommon (VSUnOp, VSBinOp,
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..),
@@ -128,7 +128,7 @@ unExpr' u' v'= do
 
 mkUnExpr
   :: (OpElim r, RenderValue r, ValueElim r, ValueSym r)
-  => (Doc -> Doc -> Doc) -> r OpData -> r (Value r) -> SValue r
+  => (Doc -> Doc -> Doc) -> r OpData -> r Value -> SValue r
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 
 -- | To be used in languages where the unary operator returns a double. If the
@@ -146,7 +146,7 @@ unExprNumDbl u' v' = do
 -- Only used by unExprNumDbl
 unExprCastFloat
   :: (RenderValue r, TypeElim r)
-  => r TypeData -> r (Value r) -> SValue r
+  => r TypeData -> r Value -> SValue r
 unExprCastFloat t = castType (getCodeType t) . toState
   where castType Float = cast float
         castType _ = id
@@ -200,7 +200,7 @@ binExprNumDbl' b' v1' v2' = do
 -- Only used by binExprNumDbl'
 binExprCastFloat
   :: (RenderValue r, TypeElim r)
-  => r TypeData -> r TypeData -> r (Value r) -> SValue r
+  => r TypeData -> r TypeData -> r Value -> SValue r
 binExprCastFloat t1 t2 = castType (getCodeType t1) (getCodeType t2) . toState
   where castType Float _ = cast float
         castType _ Float = cast float
@@ -235,7 +235,7 @@ numType v1' v2' = do
       numericType _ _ = error "Numeric types required for numeric expression"
   toState $ numericType (getCodeType t1) (getCodeType t2)
 
-exprRender' :: (r OpData -> r (Value r) -> r (Value r) -> Doc) ->
+exprRender' :: (r OpData -> r Value -> r Value -> Doc) ->
   VSBinOp r -> SValue r -> SValue r -> VS Doc
 exprRender' f b' v1' v2' = do
   b <- b'
@@ -248,27 +248,27 @@ mkExpr p t = valFromData (Just p) Nothing (toState t)
 
 binOpDocDRend
   :: (OpElim r, ValueElim r)
-  => r OpData -> r (Value r) -> r (Value r) -> Doc
+  => r OpData -> r Value -> r Value -> Doc
 binOpDocDRend b v1 v2 = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
 
 -- Adds parentheses around an expression passed as the left argument to a
 -- left-associative binary operator if the precedence of the expression is less
 -- than the precedence of the operator
-exprParensL :: (OpElim r, ValueElim r) => r OpData -> r (Value r) -> Doc
+exprParensL :: (OpElim r, ValueElim r) => r OpData -> r Value -> Doc
 exprParensL o v = (if maybe False (< bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Adds parentheses around an expression passed as the right argument to a
 -- left-associative binary operator if the precedence of the expression is less
 -- than or equal to the precedence of the operator
-exprParensR :: (OpElim r, ValueElim r) => r OpData -> r (Value r) -> Doc
+exprParensR :: (OpElim r, ValueElim r) => r OpData -> r Value -> Doc
 exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Renders binary expression, adding parentheses if needed
 binExprRender
   :: (OpElim r, ValueElim r)
-  =>  r OpData -> r (Value r) -> r (Value r) -> Doc
+  =>  r OpData -> r Value -> r Value -> Doc
 binExprRender b v1 v2 =
   let leftExpr = exprParensL b v1
       rightExpr = exprParensR b v2

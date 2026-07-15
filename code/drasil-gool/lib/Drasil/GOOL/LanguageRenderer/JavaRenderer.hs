@@ -14,23 +14,24 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, MSBody, SVariable, SValue, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, OOStatement,
-  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
-  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  Label, Body, MSBody, SVariable, Value, SValue, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (SClass, StateVar, CSStateVar, OOProg,
+  OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
+  AttachmentSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
+  objMethodCall, selfMethodCall, newObj, InternalValueExp(..), OOFunctionSym(..),
+  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -89,10 +90,10 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (classMethodCall,
   listAppend, listAdd, innerType)
 import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
-  FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
-  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
-  ProgData(..), progD, TypeData(..), ValData(..), vd, VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD)
+  FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, TypeData(..), ValData(..), vd, VarData(..), vard, ScopeData,
+  BinderD(..), bindFormD)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
@@ -135,22 +136,21 @@ instance Monad JavaCode where
 instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JavaCode (Doc, Terminator)
 instance OOStatement JavaCode (Doc, Terminator)
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar
 
-instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData where
+instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
   type Program JavaCode = ProgData
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
 instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode Doc (Doc, Terminator) MethodData where
-  type File JavaCode = FileData
+instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
@@ -179,7 +179,6 @@ instance PermElim JavaCode where
   binding = error $ CP.bindingError jName
 
 instance BodySym JavaCode (Doc, Terminator) where
-  type Body JavaCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -191,7 +190,6 @@ instance BodyElim JavaCode where
   body = unJC
 
 instance BlockSym JavaCode (Doc, Terminator) where
-  type Block JavaCode = Doc
   block = G.block
 
 instance RenderBlock JavaCode where
@@ -274,7 +272,6 @@ instance ScopeElim JavaCode where
   scopeData = unJC
 
 instance VariableSym JavaCode where
-  type Variable JavaCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
@@ -303,7 +300,6 @@ instance RenderVariable JavaCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
-  type Value JavaCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym JavaCode
@@ -712,24 +708,22 @@ instance OORenderMethod JavaCode Doc MethodData where
 instance MethodElim JavaCode MethodData where
   method = mthdDoc . unJC
 
-instance StateVarSym JavaCode Doc where
-  type StateVar JavaCode = Doc
+instance StateVarSym JavaCode Doc Doc where
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm (classLevel :: JavaCode (Attachment JavaCode)))
 
-instance StateVarElim JavaCode where
+instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
-instance ClassSym JavaCode Doc (Doc, Terminator) MethodData where
-  type Class JavaCode = Doc
+instance ClassSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass JavaCode Doc MethodData where
+instance RenderClass JavaCode Doc MethodData StateVar where
   intClass = CP.intClass R.class'
 
   inherit n = toCode $ maybe empty ((jExtends <+>) . text) n
@@ -740,8 +734,7 @@ instance RenderClass JavaCode Doc MethodData where
 instance ClassElim JavaCode where
   class' = unJC
 
-instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData where
-  type Module JavaCode = ModData
+instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod JavaCode where
@@ -932,7 +925,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getCodeType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: [r BinderD] -> r (Value r) -> Doc
+jLambda :: [r BinderD] -> r Value -> Doc
 jLambda = error "Lambdas not supported in Java (yet). See #4956 for updates." -- \ps ex -> parens (binderList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VS (JavaCode TypeData) -> SValue JavaCode -> SValue JavaCode
@@ -965,11 +958,11 @@ jFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
-jThrowDoc :: (ValueElim r) => r (Value r) -> Doc
+jThrowDoc :: (ValueElim r) => r Value -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-jTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+jTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -978,7 +971,7 @@ jTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-jAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+jAssert :: (ValueElim r) => r Value -> r Value -> Doc
 jAssert condition errorMessage = vcat [
   text "assert" <+> RC.value condition <+> colon <+> RC.value errorMessage
   ]
@@ -1023,7 +1016,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
 
 jMethod :: Label -> [String] -> JavaCode Doc ->
   JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
-  [JavaCode ParamData] -> JavaCode (Body JavaCode) -> Doc
+  [JavaCode ParamData] -> JavaCode Body -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+>
@@ -1099,8 +1092,8 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass
-  :: (RenderClass r vis md, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  :: (RenderClass r vis md svr, RenderVisibility r vis)
+  => Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

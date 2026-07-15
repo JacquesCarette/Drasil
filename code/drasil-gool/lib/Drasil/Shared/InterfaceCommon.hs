@@ -4,9 +4,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSBinder, SVariable, SValue, NamedArgs,
-  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc,
-  DocInOutFunc,
+  Label, Library, Body, MSBody, Block, MSBlock, VSBinder, Variable, SVariable,
+  Value, SValue, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
+  InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -24,9 +24,10 @@ module Drasil.Shared.InterfaceCommon (
   ) where
 
 import Data.Bifunctor (first)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.AST (ScopeData(..), ScopeTag(..), TypeData(..), BinderD,
-  ParamData)
+  ParamData, VarData, ValData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.State (MS, VS)
 
@@ -59,10 +60,10 @@ class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
 class UnRepr repr contents where
   unRepr :: repr contents -> contents
 
-type MSBody a = MS (a (Body a))
+type Body = Doc
+type MSBody a = MS (a Body)
 
 class (BlockSym r smt) => BodySym r smt where
-  type Body r
   body           :: [MSBlock r] -> MSBody r
 
   addComments :: Label -> MSBody r -> MSBody r
@@ -73,10 +74,10 @@ bodyStatements sts = body [block sts]
 oneLiner :: (BodySym r smt) => MS (r smt) -> MSBody r
 oneLiner tp = bodyStatements [tp]
 
-type MSBlock a = MS (a (Block a))
+type Block = Doc
+type MSBlock a = MS (a Block)
 
 class (StatementSym r smt) => BlockSym r smt where
-  type Block r
   block   :: [MS (r smt)] -> MSBlock r
 
 class TypeSym r where
@@ -108,10 +109,10 @@ class ScopeSym r where
   mainFn :: r ScopeData -- Main program - either main function or global scope
   local  :: r ScopeData -- Definite local scope
 
-type SVariable a = VS (a (Variable a))
+type Variable = VarData
+type SVariable a = VS (a Variable)
 
 class (TypeSym r) => VariableSym r where
-  type Variable r
   -- | An instance- or function-level variable, separate from its instance (i.e. `v`, not `o.v`)
   var       :: Label -> VS (r TypeData) -> SVariable r
   -- | An instance- or function-level constant, separate from its instance (i.e. `v`, not `o.v`)
@@ -122,8 +123,8 @@ class (TypeSym r) => VariableSym r where
   extVar    :: Library -> Label -> VS (r TypeData) -> SVariable r
 
 class (VariableSym r) => VariableElim r where
-  variableName :: r (Variable r) -> String
-  variableType :: r (Variable r) -> r TypeData
+  variableName :: r Variable -> String
+  variableType :: r Variable -> r TypeData
 
 listVar :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listVar n t = var n (listType t)
@@ -131,11 +132,11 @@ listVar n t = var n (listType t)
 listOf :: (VariableSym r) => Label -> VS (r TypeData) -> SVariable r
 listOf = listVar
 
-type SValue a = VS (a (Value a))
+type Value = ValData
+type SValue a = VS (a Value)
 
 class (TypeSym r) => ValueSym r where
-  type Value r
-  valueType :: r (Value r) -> r TypeData
+  valueType :: r Value -> r TypeData
 
 class (TypeSym r) => TypeElim r where
   getCodeType :: r TypeData -> CodeType

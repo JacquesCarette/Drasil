@@ -14,9 +14,9 @@ module Drasil.Shared.RendererClassesCommon (
   MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, SVariable,
-  SValue, MixedCall, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+import Drasil.Shared.InterfaceCommon (Label, Library, Body, MSBody, Block,
+  MSBlock, Variable, SVariable, Value, SValue, MixedCall, TypeSym(..),
+  VariableElim(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), ValueExpression(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
@@ -62,13 +62,13 @@ class RenderBody r where
   multiBody :: [MSBody r] -> MSBody r
 
 class BodyElim r where
-  body :: r (Body r) -> Doc
+  body :: r Body -> Doc
 
 class RenderBlock r where
   multiBlock :: [MSBlock r] -> MSBlock r
 
 class BlockElim r where
-  block :: r (Block r) -> Doc
+  block :: r Block -> Doc
 
 class RenderType r where
   multiType :: [VS (r TypeData)] -> VS (r TypeData)
@@ -123,8 +123,8 @@ class RenderVariable r where
   varFromData :: AttachmentTag -> String -> VS (r TypeData) -> Doc -> SVariable r
 
 class InternalVarElim r where
-  variableBind :: r (Variable r) -> AttachmentTag
-  variable  :: r (Variable r) -> Doc
+  variableBind :: r Variable -> AttachmentTag
+  variable  :: r Variable -> Doc
 
 class InternalBinderElim r where
   binderElim  :: r BinderD -> Doc
@@ -148,9 +148,9 @@ class RenderValue r where
   valFromData :: Maybe Int -> Maybe Integer -> VS (r TypeData) -> Doc -> SValue r
 
 class ValueElim r where
-  valuePrec :: r (Value r) -> Maybe Int
-  valueInt :: r (Value r) -> Maybe Integer
-  value :: r (Value r) -> Doc
+  valuePrec :: r Value -> Maybe Int
+  valueInt :: r Value -> Maybe Integer
+  value :: r Value -> Doc
 
 class InternalListFunc r where
   -- | List, Index

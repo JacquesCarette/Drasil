@@ -14,9 +14,9 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  TypeElim(..), SVariable, SValue, MixedCall, MixedCtorCall, VariableSym(..),
-  VariableValue(..), VariableElim(..), ValueSym(Value, valueType), getCodeType,
-  getTypeString)
+  TypeElim(..), SVariable, Value, SValue, MixedCall, MixedCtorCall,
+  VariableSym(..), VariableValue(..), VariableElim(..), ValueSym(valueType),
+  getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
   objMethodCallNoParams, ($->))
@@ -210,7 +210,7 @@ setDecDef t vr scp vl' = do
 
 listDec
   :: (IC.DeclStatement r smt, RC.RenderStatement r smt, RC.StatementElim r smt)
-  => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp

@@ -125,10 +125,9 @@ instance Monad PythonCode where
 instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
 instance SharedStatement PythonCode (Doc, Terminator)
 instance OOStatement PythonCode (Doc, Terminator)
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
-  type Program PythonCode = ProgData
+instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles

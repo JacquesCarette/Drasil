@@ -3,8 +3,8 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, File, SFile, Module, FSModule, Class, SClass, StateVar, CSStateVar,
-  Initializers,
+  Program, GSProgram, File, SFile, Module, FSModule, Class, SClass, StateVar,
+  CSStateVar, Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -33,24 +33,25 @@ import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
 import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
-  ModData)
+  ModData, ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md svr att,
-  ObserverPattern r smt, StrategyPattern r smt
-  ) => OOProg r vis smt md svr att
+class (SharedProg r vis smt md, OOStatement r smt,
+  ProgramSym r vis smt md svr att prg, ObserverPattern r smt,
+  StrategyPattern r smt
+  ) => OOProg r vis smt md svr att prg
 
 class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
   OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
   OOFunctionSym r, OOValueExpression r
   ) => OOStatement r smt
 
-type GSProgram a = GS (a (Program a))
+type Program = ProgData
+type GSProgram a prg = GS (a prg)
 
-class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r -> prg where
+  prog :: Label -> Label -> [SFile r] -> GSProgram r prg
 
 type File = FileData
 type SFile a = FS (a File)

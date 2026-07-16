@@ -135,10 +135,9 @@ instance Monad SwiftCode where
 instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
 instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOStatement SwiftCode (Doc, Terminator)
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
-  type Program SwiftCode = ProgData
+instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles

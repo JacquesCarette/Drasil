@@ -56,13 +56,12 @@ instance Monad CodeInfoOO where
 instance SharedProg CodeInfoOO () () ()
 instance SharedStatement CodeInfoOO ()
 instance OOStatement CodeInfoOO ()
-instance OOProg CodeInfoOO () () () () ()
+instance OOProg CodeInfoOO () () () () () GOOLState
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
 
-instance ProgramSym CodeInfoOO () () () () () where
-  type Program CodeInfoOO = GOOLState
+instance ProgramSym CodeInfoOO () () () () () GOOLState where
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
     modify (updateMEMWithCalls . callMapTransClosure)

@@ -86,7 +86,7 @@ type ConstraintCE = Constraint CodeExpr
 ---- MAIN ---
 
 -- | Generates a controller module.
-genMain :: (OOProg r vis smt md svr att) => GenState (OO.SFile r)
+genMain :: (OOProg r vis smt md svr att prg) => GenState (OO.SFile r)
 genMain = genModule "Control" "Controls the flow of the program"
   [genMainFunc] []
 
@@ -95,7 +95,7 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- functions for reading input values, calculating derived inputs, checking
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
-genMainFunc :: (OOProg r vis smt md svr att) => GenState (Maybe (MS (r md)))
+genMainFunc :: (OOProg r vis smt md svr att prg) => GenState (Maybe (MS (r md)))
 genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
@@ -199,11 +199,11 @@ initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 ------- INPUT ----------
 
 -- | Generates a single module containing all input-related components.
-genInputMod :: (OOProg r vis smt md svr att) => GenState [OO.SFile r]
+genInputMod :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
-  let genMod :: (OOProg r vis smt md svr att) => Maybe (SClass r) -> GenState (OO.SFile r)
+  let genMod :: (OOProg r vis smt md svr att prg) => Maybe (SClass r) -> GenState (OO.SFile r)
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
       genMod _ = genModule cname ipDesc [] [genInputClass Primary]
@@ -226,7 +226,7 @@ constVarFunc Const = constVar public
 -- variables. If the InputParameters constructor is also exported, then the
 -- generated class also contains the input-related functions as private methods.
 genInputClass
-  :: (OOProg r vis smt md svr att)
+  :: (OOProg r vis smt md svr att prg)
   => ClassType -> GenState (Maybe (SClass r))
 genInputClass scp = do
   g <- get
@@ -236,17 +236,17 @@ genInputClass scp = do
       cs = g ^. constDefns
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
-      constructors :: (OOProg r vis smt md svr att) => GenState [MS (r md)]
+      constructors :: (OOProg r vis smt md svr att prg) => GenState [MS (r md)]
       constructors = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor]
         else return []
-      methods :: (OOProg r vis smt md svr att) => GenState [MS (r md)]
+      methods :: (OOProg r vis smt md svr att prg) => GenState [MS (r md)]
       methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
         genInputDerived Priv, genInputConstraints Priv]
         else return []
       genClass
-        :: (OOProg r vis smt md svr att)
+        :: (OOProg r vis smt md svr att prg)
         => [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
@@ -267,7 +267,7 @@ genInputClass scp = do
 -- | Generates a constructor for the input class, where the constructor calls the
 -- input-related functions. Returns 'Nothing' if no input-related functions are
 -- generated.
-genInputConstructor :: (OOProg r vis smt md svr att) => GenState (Maybe (MS (r md)))
+genInputConstructor :: (OOProg r vis smt md svr att prg) => GenState (Maybe (MS (r md)))
 genInputConstructor = do
   g <- get
   ipName <- genICName InputParameters
@@ -288,7 +288,7 @@ genInputConstructor = do
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived
-  :: (OOProg r vis smt md svr att)
+  :: (OOProg r vis smt md svr att prg)
   => VisibilityTag -> GenState (Maybe (MS (r md)))
 genInputDerived s = do
   g <- get
@@ -298,7 +298,7 @@ genInputDerived s = do
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genDerived
-        :: (OOProg r vis smt md svr att)
+        :: (OOProg r vis smt md svr att prg)
         => Bool -> GenState (Maybe (MS (r md)))
       genDerived False = return Nothing
       genDerived _ = do
@@ -312,7 +312,7 @@ genInputDerived s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints
-  :: (OOProg r vis smt md svr att)
+  :: (OOProg r vis smt md svr att prg)
   => VisibilityTag -> GenState (Maybe (MS (r md)))
 genInputConstraints s = do
   g <- get
@@ -322,7 +322,7 @@ genInputConstraints s = do
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints
-        :: (OOProg r vis smt md svr att)
+        :: (OOProg r vis smt md svr att prg)
         => Bool -> GenState (Maybe (MS (r md)))
       genConstraints False = return Nothing
       genConstraints _ = do
@@ -463,7 +463,7 @@ printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pi
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat
-  :: (OOProg r vis smt md svr att)
+  :: (OOProg r vis smt md svr att prg)
   => VisibilityTag -> GenState (Maybe (MS (r md)))
 genInputFormat s = do
   g <- get
@@ -473,7 +473,7 @@ genInputFormat s = do
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genInFormat
-        :: (OOProg r vis smt md svr att)
+        :: (OOProg r vis smt md svr att prg)
         => Bool -> GenState (Maybe (MS (r md)))
       genInFormat False = return Nothing
       genInFormat _ = do
@@ -506,7 +506,7 @@ genSampleInput = do
 ----- CONSTANTS -----
 
 -- | Generates a module containing the class where constants are stored.
-genConstMod :: (OOProg r vis smt md svr att) => GenState [OO.SFile r]
+genConstMod :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
   cName <- genICName Constants
@@ -515,7 +515,7 @@ genConstMod = do
 -- | Generates a class to store constants, if constants are mapped to the
 -- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass
-  :: (OOProg r vis smt md svr att)
+  :: (OOProg r vis smt md svr att prg)
   => ClassType -> GenState (Maybe (SClass r))
 genConstClass scp = do
   g <- get
@@ -523,7 +523,7 @@ genConstClass scp = do
   cname <- genICName Constants
   let cs = g ^. constDefns
       genClass
-        :: (OOProg r vis smt md svr att)
+        :: (OOProg r vis smt md svr att prg)
         => [CodeDefinition] -> GenState (Maybe (SClass r))
       genClass [] = return Nothing
       genClass vs = do
@@ -543,7 +543,7 @@ genConstClass scp = do
 ------- CALC ----------
 
 -- | Generates a module containing calculation functions.
-genCalcMod :: (OOProg r vis smt md svr att) => GenState (OO.SFile r)
+genCalcMod :: (OOProg r vis smt md svr att prg) => GenState (OO.SFile r)
 genCalcMod = do
   g <- get
   cName <- genICName Calculations
@@ -555,7 +555,7 @@ genCalcMod = do
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
 genCalcFunc
-  :: (OOProg r vis smt md svr att)
+  :: (OOProg r vis smt md svr att prg)
   => CodeDefinition -> GenState (MS (r md))
 genCalcFunc cdef = do
   g <- get
@@ -626,20 +626,20 @@ genCaseBlock t v c cs = do
 ----- OUTPUT -------
 
 -- | Generates a module containing the function for printing outputs.
-genOutputMod :: (OOProg r vis smt md svr att) => GenState [OO.SFile r]
+genOutputMod :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
 genOutputMod = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
   liftS $ genModule ofName ofDesc [genOutputFormat] []
 
 -- | Generates a function for printing output values.
-genOutputFormat :: (OOProg r vis smt md svr att) => GenState (Maybe (MS (r md)))
+genOutputFormat :: (OOProg r vis smt md svr att prg) => GenState (Maybe (MS (r md)))
 genOutputFormat = do
   g <- get
   modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput
-        :: (OOProg r vis smt md svr att)
+        :: (OOProg r vis smt md svr att prg)
         => Maybe String -> GenState (Maybe (MS (r md)))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
@@ -665,7 +665,7 @@ genOutputFormat = do
 -- Procedural Versions --
 
 -- | Generates a controller module.
-genMainProc :: (ProcProg r vis smt md) => GenState (Proc.SFile r)
+genMainProc :: (ProcProg r vis smt md prg) => GenState (Proc.SFile r)
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
   [genMainFuncProc]
 
@@ -743,11 +743,11 @@ checkConstClass = do
     . codeName) cs
 
 -- | Generates a single module containing all input-related components.
-genInputModProc :: (ProcProg r vis smt md) => GenState [Proc.SFile r]
+genInputModProc :: (ProcProg r vis smt md prg) => GenState [Proc.SFile r]
 genInputModProc = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
-  let genMod :: (ProcProg r vis smt md) => Bool ->
+  let genMod :: (ProcProg r vis smt md prg) => Bool ->
         GenState (Proc.SFile r)
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
         genInputDerivedProc Pub, genInputConstraintsProc Pub]
@@ -791,7 +791,7 @@ getInputDeclProc = do
     (g ^. inputs))
 
 -- | Generates a module containing calculation functions.
-genCalcModProc :: (ProcProg r vis smt md) => GenState (Proc.SFile r)
+genCalcModProc :: (ProcProg r vis smt md prg) => GenState (Proc.SFile r)
 genCalcModProc = do
   g <- get
   cName <- genICName Calculations
@@ -1058,7 +1058,7 @@ printConstraintProc c = do
   printConstraint' c
 
 -- | Generates a module containing the function for printing outputs.
-genOutputModProc :: (ProcProg r vis smt md) => GenState [Proc.SFile r]
+genOutputModProc :: (ProcProg r vis smt md prg) => GenState [Proc.SFile r]
 genOutputModProc = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc

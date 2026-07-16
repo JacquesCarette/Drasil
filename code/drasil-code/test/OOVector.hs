@@ -4,11 +4,11 @@ module OOVector (ooVector) where
 import Drasil.GOOL
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-ooVector :: OOProg r vis smt md svr att => GSProgram r
+ooVector :: OOProg r vis smt md svr att prg => GSProgram r prg
 ooVector = prog "OOVector" "" [fileDoc (buildModule "OOVector" []
   [main] [vectorClass])]
 
-vectorClass :: OOProg r vis smt md svr att => SClass r
+vectorClass :: OOProg r vis smt md svr att prg => SClass r
 vectorClass = docClass "Vectors of doubles and common vector-related operations." $
   extraClass "Vector" Nothing [stateVar private instanceLevel localV]
   [docFunc "Construct a vector from an array of doubles." ["The doubles."] Nothing $
@@ -32,19 +32,19 @@ localV = var "v" (arrayType double)
 thisV :: (SelfSym r, VariableValue r) => SVariable r
 thisV = instanceVarSelf localV
 
-dimension :: OOProg r vis smt md svr att => MS (r md)
+dimension :: OOProg r vis smt md svr att prg => MS (r md)
 dimension = docFunc "Returns the dimension of this vector." [] (Just "The dimension of the vector.") $
   method "dimension" public instanceLevel int [] $ bodyStatements [
     returnStmt $ arrayLength (valueOf thisV)
   ]
 
-magnitude :: OOProg r vis smt md svr att => MS (r md)
+magnitude :: OOProg r vis smt md svr att prg => MS (r md)
 magnitude = docFunc "Calculate the Euclidean norm (magnitude) of this vector."
   [] (Just "The magnitude.") $
   pubMethod "magnitude" double [] $ oneLiner $
     returnStmt (classMethodCall double (obj "Vector") "dot" [maybeDeref $ valueOf self, maybeDeref $ valueOf self] #/^)
 
-norm :: OOProg r vis smt md svr att => MS (r md)
+norm :: OOProg r vis smt md svr att prg => MS (r md)
 norm = docFunc "Calculate unit vector of this vector."
   [] (Just "A new unit vector.") $
   method "norm" public classLevel (obj "Vector") [param v] $ bodyStatements [
@@ -55,7 +55,7 @@ norm = docFunc "Calculate unit vector of this vector."
   where v = vecVar "v"
         mag = var "mag" double
 
-dot :: OOProg r vis smt md svr att => MS (r md)
+dot :: OOProg r vis smt md svr att prg => MS (r md)
 dot = docFunc "Calculate the dot product of two vectors."
   ["First vector.", "Second vector."] (Just "The dot product.") $
   method "dot" public classLevel double [param v1, param v2] $ bodyStatements [
@@ -74,7 +74,7 @@ dot = docFunc "Calculate the dot product of two vectors."
         res = var "res" double
         i = var "i" int
 
-add :: OOProg r vis smt md svr att => MS (r md)
+add :: OOProg r vis smt md svr att prg => MS (r md)
 add = docFunc "Calculate the resultant vector of two vectors."
   ["First vector.", "Second vector."] (Just "The resultant vector.") $
   method "add" public classLevel (obj "Vector") [param v1, param v2] $ bodyStatements [
@@ -92,7 +92,7 @@ add = docFunc "Calculate the resultant vector of two vectors."
         res = var "res" (arrayType double)
         i = var "i" int
 
-scale :: OOProg r vis smt md svr att => MS (r md)
+scale :: OOProg r vis smt md svr att prg => MS (r md)
 scale = docFunc "Scale this vector by a factor."
   ["Scalar factor."] (Just "A new scaled vector.") $
   method "scale" public classLevel (obj "Vector") [param v, param s] $ bodyStatements [
@@ -107,11 +107,11 @@ scale = docFunc "Scale this vector by a factor."
         res = var "res" (arrayType double)
         i = var "i" int
 
-print_ :: OOProg r vis smt md svr att => MS (r md)
+print_ :: OOProg r vis smt md svr att prg => MS (r md)
 print_ = docFunc "Prints the vector elements to console." [] Nothing $
   pubMethod "printSelf" void [] $ oneLiner $ printLn $ valueOf thisV
 
-main :: OOProg r vis smt md svr att => MS (r md)
+main :: OOProg r vis smt md svr att prg => MS (r md)
 main = mainFunction $ body [
     block [
       arrayDecDef ds1 mainFn [litDouble 1.0, litDouble 2.0, litDouble 3.0],

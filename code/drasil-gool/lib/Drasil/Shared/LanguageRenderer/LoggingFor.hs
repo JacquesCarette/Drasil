@@ -384,7 +384,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis smt md) => P.ProcProg (LoggingFor r) vis smt md
+instance (P.ProcProg r vis smt md prg) => P.ProcProg (LoggingFor r) vis smt md prg
 
 instance (P.ModuleSym r vis smt md) => P.ModuleSym (LoggingFor r) vis smt md where
   buildModule = liftLogging P.buildModule
@@ -393,13 +393,12 @@ instance (P.FileSym r vis smt md) => P.FileSym (LoggingFor r) vis smt md where
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
-instance (P.ProgramSym r vis smt md) => P.ProgramSym (LoggingFor r) vis smt md where
-  type Program (LoggingFor r) = P.Program r
+instance (P.ProgramSym r vis smt md prg) => P.ProgramSym (LoggingFor r) vis smt md prg where
   prog = liftLogging P.prog
 
 -- GOOL
 
-instance (G.OOProg r vis smt md svr att) => G.OOProg (LoggingFor r) vis smt md svr att
+instance (G.OOProg r vis smt md svr att prg) => G.OOProg (LoggingFor r) vis smt md svr att prg
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -477,8 +476,7 @@ instance (G.FileSym r vis smt md svr att) => G.FileSym (LoggingFor r) vis smt md
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis smt md svr att) => G.ProgramSym (LoggingFor r) vis smt md svr att where
-  type Program (LoggingFor r) = G.Program r
+instance (G.ProgramSym r vis smt md svr att prg) => G.ProgramSym (LoggingFor r) vis smt md svr att prg where
   prog = liftLogging G.prog
 
 instance (G.StrategyPattern r smt) => G.StrategyPattern (LoggingFor r) smt where

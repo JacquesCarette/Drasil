@@ -37,12 +37,12 @@ newObserver :: (OOValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
-patternTest :: (OOProg r vis smt md svr att) => GSProgram r
+patternTest :: (OOProg r vis smt md svr att prg) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.
-patternTestMainMethod :: (OOProg r vis smt md svr att) => MS (r md)
+patternTestMainMethod :: (OOProg r vis smt md svr att prg) => MS (r md)
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],
 

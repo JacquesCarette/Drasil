@@ -18,7 +18,6 @@ import Language.Drasil.Data.Citation (compareAuthYearTitle)
 import Language.Drasil.Development (lnames)
 import Language.Drasil.Document.Core
 import Language.Drasil.Document.Sections
-import Language.Drasil.Document.Reference
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Sentence (Sentence(..), eS, eS')
 
@@ -111,5 +110,3 @@ resolveBibliography :: ChunkDB -> S.Set UID -> [Citation]
 resolveBibliography db uids = sortBy compareAuthYearTitle cites
   where
     cites = mapMaybe (`find` db) (S.toList uids)
-
-

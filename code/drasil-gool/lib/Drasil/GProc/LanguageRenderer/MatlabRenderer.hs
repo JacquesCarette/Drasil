@@ -10,7 +10,7 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, Variable, SVariable,
+import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   getCodeType, UnRepr(..), SharedProg, SharedStatement, Body, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -369,7 +369,7 @@ instance InternalList MatlabCode where
 instance InternalListFunc MatlabCode where
   listAccessFunc t v = intValue v >>= ((`funcFromData` t) . mlListAccessFunc)
 
-mlListAccessFunc :: (CommonRenderSym r vis smt md) => r (Value r) -> Doc
+mlListAccessFunc :: (CommonRenderSym r vis smt md) => r Value -> Doc
 mlListAccessFunc v = parens $ RC.value v
 
 instance BinderSym MatlabCode where
@@ -695,7 +695,7 @@ mlEnd :: Doc
 mlEnd = text "end"
 
 mlForEach :: (CommonRenderSym r vis smt md) => r Variable ->
-  r (Value r) -> r Body -> Doc
+  r Value -> r Body -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,

@@ -205,10 +205,9 @@ class BlockCommentSym r where
 class BlockCommentElim r where
   blockComment' :: r Doc -> Doc
 
-type MSMthdType a = MS (a (MethodType a))
+type MSMthdType a = MS (a TypeData)
 
 class (TypeSym r) => MethodTypeSym r where
-  type MethodType r
   mType    :: VS (r TypeData) -> MSMthdType r
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r md | r -> md where

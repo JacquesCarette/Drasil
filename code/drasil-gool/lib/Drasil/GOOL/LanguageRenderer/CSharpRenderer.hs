@@ -136,22 +136,21 @@ instance Monad CSharpCode where
 instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
 instance SharedStatement CSharpCode (Doc, Terminator)
 instance OOStatement CSharpCode (Doc, Terminator)
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar where
-  type Program CSharpCode = ProgData
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar where
+instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
@@ -170,12 +169,11 @@ instance ImportSym CSharpCode where
   langImport = toCode . csImport
   modImport = langImport
 
-instance AttachmentSym CSharpCode where
-  type Attachment CSharpCode = Doc
+instance AttachmentSym CSharpCode Doc where
   classLevel = toCode R.classLevel
   instanceLevel = toCode R.instanceLevel
 
-instance PermElim CSharpCode where
+instance PermElim CSharpCode Doc where
   perm = unCSC
   binding = error $ CP.bindingError csName
 
@@ -623,7 +621,6 @@ instance VisibilityElim CSharpCode Doc where
   visibility = unCSC
 
 instance MethodTypeSym CSharpCode where
-  type MethodType CSharpCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CSharpCode where
@@ -652,7 +649,7 @@ instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData where
+instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -667,7 +664,7 @@ instance RenderMethod CSharpCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod CSharpCode Doc MethodData where
+instance OORenderMethod CSharpCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
@@ -679,7 +676,7 @@ instance OORenderMethod CSharpCode Doc MethodData where
 instance MethodElim CSharpCode MethodData where
   method = mthdDoc . unCSC
 
-instance StateVarSym CSharpCode Doc StateVar where
+instance StateVarSym CSharpCode Doc StateVar Doc where
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar empty
@@ -687,7 +684,7 @@ instance StateVarSym CSharpCode Doc StateVar where
 instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData StateVar where
+instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -705,7 +702,7 @@ instance RenderClass CSharpCode Doc MethodData StateVar where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar where
+instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode where

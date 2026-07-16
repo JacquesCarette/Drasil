@@ -93,7 +93,7 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis smt md svr, OOStatement r smt)
+  :: (OORenderSym r vis smt md svr att, OOStatement r smt)
   => Label -> [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
@@ -258,13 +258,13 @@ mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
-docMain :: (OORenderSym r vis smt md svr) => MSBody r -> MS (r md)
+docMain :: (OORenderSym r vis smt md svr att) => MSBody r -> MS (r md)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
 mainFunction
-  :: ( AttachmentSym r
-     , OORenderMethod r vis md
+  :: ( AttachmentSym r att
+     , OORenderMethod r vis md att
      , IC.ParameterSym r
      , UnRepr r TypeData
      , Monad r
@@ -282,7 +282,7 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   ms is the class methods
 --   cs is the classes
 buildModule'
-  :: (OORenderSym r vis smt md svr, UnRepr r Doc)
+  :: (OORenderSym r vis smt md svr att, UnRepr r Doc)
   => Label
   -> (String -> r Doc)
   -> [Label]
@@ -383,8 +383,8 @@ destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
 stateVarDef
-  :: (OORenderSym r vis smt md svr, Monad r)
-  => r vis -> r (Attachment r) -> SVariable r -> SValue r -> CS (r Doc)
+  :: (OORenderSym r vis smt md svr att, Monad r)
+  => r vis -> r att -> SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility  s) (RG.perm p) . RC.statement)
   (RC.stmt $ IC.varDecDef vr IC.local vl)
@@ -446,8 +446,8 @@ openFileW
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
-  :: (Monad r, OORenderSym r vis smt md svr)
-  => r vis -> r (Attachment r) -> SVariable r -> CS (r Doc)
+  :: (Monad r, OORenderSym r vis smt md svr att)
+  => r vis -> r att -> SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
 
@@ -493,7 +493,7 @@ listDec
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis smt md svr)
+  :: (OORenderSym r vis smt md svr att)
   => SVariable r -> r ScopeData -> [SVariable r] -> MSBody r -> MS (r smt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

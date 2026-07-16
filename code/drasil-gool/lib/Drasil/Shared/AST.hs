@@ -48,7 +48,7 @@ onAttachment :: AttachmentTag -> a -> a -> a
 onAttachment ClassLevel s _ = s
 onAttachment InstanceLevel _ d = d
 
--- Used as the underlying data type for Attachment in the C++ renderer
+-- Used as the underlying data type for AttachmentSym the C++ and Python renderers
 data AttachmentData = BD {attachment :: AttachmentTag, attachmentDoc :: Doc}
 
 ad :: AttachmentTag -> Doc -> AttachmentData

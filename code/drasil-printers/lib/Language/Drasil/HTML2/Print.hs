@@ -184,7 +184,7 @@ exprToHTML (Sup e)        = [TextFormat Superscript [] (exprToHTML e)]
 exprToHTML (Over Hat s)   = foldRaw (exprToHTML s ++ [RawText "̂"])
 exprToHTML (MO o)         = [RawText (pOps o)]
 exprToHTML (Fenced l r e) =
-  foldRaw [RawText (fence Open l)] ++ exprToHTML e ++ [RawText (fence Close r)]
+  foldRaw $ [RawText (fence Open l)] ++ exprToHTML e ++ [RawText (fence Close r)]
 exprToHTML (Font Bold e)  = [TextFormat HTML.Bold [] (exprToHTML e)]
 exprToHTML (Font Emph e)  = [TextFormat Emphasis [] (exprToHTML e)]
 exprToHTML (Spc Thin)     = [RawText " "]
@@ -328,11 +328,11 @@ makeListHTML (Desc items) = HTML.Div [Attr "class" "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mlrefAttr l)
   (foldRaw $ [TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e)) items
 makeListHTML (Ordered items) = HTML.List HTML.Ordered [Attr "class" "list"] $
-  map (\(i, l) -> LItem (mlrefAttr l) (foldRaw $ itemToHTML i)) items
+  map (\(i, l) -> LItem (mlrefAttr l) (itemToHTML i)) items
 makeListHTML (Unordered items) = HTML.List HTML.Unordered [Attr "class" "list"] $
-  map (\(i, l) -> LItem (mlrefAttr l) (foldRaw $ itemToHTML i)) items
+  map (\(i, l) -> LItem (mlrefAttr l) (itemToHTML i)) items
 makeListHTML (Definitions items) = HTML.List HTML.Unordered [Attr "class" "hide-list-style-no-indent"] $
-  map (\(b, e, l) -> LItem (mlrefAttr l) (foldRaw $ specToHTML b ++ [RawText " is the "] ++ itemToHTML e)) items
+  map (\(b, e, l) -> LItem (mlrefAttr l) (specToHTML b ++ [RawText " is the "] ++ itemToHTML e)) items
 
 -- | Helper for setting up references as HTML Attributes.
 mlrefAttr :: Maybe Spec -> [Attr]
@@ -450,18 +450,18 @@ useStyleArtcl f Chicago = artclChicago f
 bookMLA :: BibFormatter -> CiteField -> [HTMLBody]
 bookMLA f (Address   s) = foldRaw (spec f s ++ [RawText ": "])
 bookMLA _ (Edition   s) = [RawText (T.pack (show s ++ sufxer s ++ " ed., "))]
-bookMLA f (Series    s) = foldRaw (emph f (spec f s) ++ [RawText ". "])
-bookMLA f (Title     s) = foldRaw (emph f (spec f s) ++ [RawText ". "]) --If there is a series or collection, this should be in quotes, not italics
+bookMLA f (Series    s) = emph f (spec f s) ++ [RawText ". "]
+bookMLA f (Title     s) = emph f (spec f s) ++ [RawText ". "] --If there is a series or collection, this should be in quotes, not italics
 bookMLA _ (Volume    s) = [RawText ("vol. " <> T.pack (show s) <> ", ")]
 bookMLA f (Publisher s) = foldRaw (spec f s ++ [RawText ", "])
 bookMLA f (Author    p) = foldRaw (spec f (rendPeople' p) ++ [RawText ". "])
 bookMLA _ (Year      y) = [RawText (T.pack (show y) <> ". ")]
 --bookMLA _ (Date    d m y) = dot $ unwords [show d, show m, show y]
 --bookMLA f (URLdate d m y) = "Web. " ++ bookMLA f (Date d m y) sm
-bookMLA f (BookTitle s) = foldRaw (emph f (spec f s) ++ [RawText ". "])
-bookMLA f (Journal   s) = foldRaw (emph f (spec f s) ++ [RawText ", "])
+bookMLA f (BookTitle s) = emph f (spec f s) ++ [RawText ". "]
+bookMLA f (Journal   s) = emph f (spec f s) ++ [RawText ", "]
 bookMLA _ (Pages   [p]) = [RawText ("pg. " <> T.pack (show p) <> ". ")]
-bookMLA _ (Pages     p) = [RawText "pp. ", foldPages p, RawText ". "]
+bookMLA _ (Pages     p) = foldRaw [RawText "pp. ", foldPages p, RawText ". "]
 bookMLA f (Note      s) = spec f s
 bookMLA _ (Number    n) = [RawText ("no. " <> T.pack (show n) <> ", ")]
 bookMLA f (School    s) = foldRaw (spec f s ++ [RawText ", "])
@@ -482,8 +482,8 @@ bookAPA f (Author   p) = spec f (rendPeople rendPersLFM' p) --L.APA uses initals
 bookAPA _ (Year     y) = [RawText (T.pack (paren $ show y) <> ". ")]--APA puts "()" around the year
 --bookAPA _ (Date _ _ y) = bookAPA (Year y) --LAPA doesn't care about the day or month
 --bookAPA _ (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA _ (Pages    p) = [foldPages p, RawText ". "]
-bookAPA _ (Editor   p) = [foldPeople p, RawText " (Ed.). "]
+bookAPA _ (Pages    p) = foldRaw [foldPages p, RawText ". "]
+bookAPA _ (Editor   p) = foldRaw [foldPeople p, RawText " (Ed.). "]
 bookAPA f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- | Cite books in Chicago format.

@@ -644,7 +644,6 @@ instance VisibilityElim JavaCode Doc where
   visibility = unJC
 
 instance MethodTypeSym JavaCode where
-  type MethodType JavaCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym JavaCode where

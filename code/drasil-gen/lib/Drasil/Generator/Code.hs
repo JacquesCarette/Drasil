@@ -19,7 +19,7 @@ import Data.Time.Calendar (showGregorian)
 import Drasil.FileHandling (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
   OOProg, LoggingFor (unLC))
-import Drasil.GProc (unJLC, unMLC, ProcProg)
+import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
@@ -62,7 +62,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
     genCallProc
-      :: (ProcProg progRepr vis smt md prg, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (ProcProg progRepr vis smt md prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)

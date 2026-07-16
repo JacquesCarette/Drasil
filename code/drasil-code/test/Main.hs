@@ -100,7 +100,7 @@ gProcVectorTestGroup n p =
     ]
 
 genCodeProcNoMake
-  :: (ProcProg r vis smt md ProgData, Monad r')
+  :: (ProcProg r vis smt md ProgData, NativeVector r, Monad r')
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
   -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg', NativeVector s) => Proc.GSProgram s prg')

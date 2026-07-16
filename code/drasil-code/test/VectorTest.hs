@@ -23,20 +23,21 @@ vectorTestProc = GProc.prog "VectorTest" ""
 -- their dot product.
 vectorOps :: (ProcProg r vis smt md prg) => MS (r md)
 vectorOps =
-  function "vectorOps" public double [param (var "a" double), param (var "b" double)]
+  function "vectorOps" public double [param (var "a" vt), param (var "b" vt)]
   (bodyStatements
-    [ varDecDef (var "made" (vecType double)) local (litVec double [litDouble 1.0, litDouble 2.0, litDouble 3.0])  -- [1.0, 2.0, 3.0]
-    , varDecDef (var "scaled" double) local (vecScale (litDouble 2.0) a)  -- 2.0 * a
-    , varDecDef (var "summed" double) local (vecAdd a b)                  -- a + b
-    , varDecDef (var "elem"   double) local (vecIndex a (litInt 0))       -- a(1)
-    , varDecDef (var "dotted" double) local (vecDot a b)                  -- dot(a, b)
-    , varDecDef (var "dim"    double) local (listSize a)                  -- length(a)
-    , varDecDef (var "mag"    double) local (vecMag a)                    -- norm(a)
-    , varDecDef (var "unit"   (vecType double)) local (vecUnit a)         -- a / norm(a)
+    [ varDecDef (var "made" vt) local (litVec double [litDouble 1.0, litDouble 2.0, litDouble 3.0])  -- [1.0, 2.0, 3.0]
+    , varDecDef (var "scaled" vt) local (vecScale (litDouble 2.0) a)  -- 2.0 * a
+    , varDecDef (var "summed" vt) local (vecAdd a b)                  -- a + b
+    , varDecDef (var "elem"   double) local (vecIndex a (litInt 0))   -- a(1)
+    , varDecDef (var "dotted" double) local (vecDot a b)              -- dot(a, b)
+    , varDecDef (var "dim"    double) local (listSize a)              -- length(a)
+    , varDecDef (var "mag"    double) local (vecMag a)                -- norm(a)
+    , varDecDef (var "unit"   vt) local (vecUnit a)                   -- a / norm(a)
     -- Composed operations: check precedence/parenthesization.
-    , varDecDef (var "combo1" (vecType double)) local (vecAdd (vecScale (litDouble 2.0) a) b)  -- 2.0 * a + b
-    , varDecDef (var "combo2" (vecType double)) local (vecScale (litDouble 2.0) (vecAdd a b))  -- 2.0 * (a + b)
+    , varDecDef (var "combo1" vt) local (vecAdd (vecScale (litDouble 2.0) a) b)  -- 2.0 * a + b
+    , varDecDef (var "combo2" vt) local (vecScale (litDouble 2.0) (vecAdd a b))  -- 2.0 * (a + b)
     , returnStmt (valueOf (var "dotted" double))
     ])
-  where a = valueOf (var "a" double)
-        b = valueOf (var "b" double)
+  where vt = vecType double
+        a  = valueOf (var "a" vt)
+        b  = valueOf (var "b" vt)

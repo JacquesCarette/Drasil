@@ -54,7 +54,7 @@ codeGenTestGroup =
         [ gProcTestGroup "HelloWorldProc" helloWorldProc,
           gProcTestGroup "FileTestsProc" fileTestsProc,
           gProcTestGroup "NameGenTestProc" nameGenTestProc,
-          gProcMatlabTestGroup "VectorTestProc" vectorTestProc
+          gProcVectorTestGroup "VectorTestProc" vectorTestProc
         ]
     ]
 
@@ -86,16 +86,17 @@ gProcTestGroup n p =
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
 
-gProcMatlabTestGroup
+gProcVectorTestGroup
   :: String
   -> (forall r vis smt md prg. (ProcProg r vis smt md prg, NativeVector r) => Proc.GSProgram r prg)
   -> TestTree
-gProcMatlabTestGroup n p =
+gProcVectorTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
     ([osp|test/golden|] </> [ps|{n}|])
     n
-    [ goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProcNoMake unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
     ]
 
 genCodeProcNoMake

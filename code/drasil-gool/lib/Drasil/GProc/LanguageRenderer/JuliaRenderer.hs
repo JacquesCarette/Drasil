@@ -114,10 +114,9 @@ instance Monad JuliaCode where
 
 instance SharedProg JuliaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JuliaCode (Doc, Terminator)
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData where
-  type Program JuliaCode = ProgData
+instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -541,8 +540,6 @@ instance VisibilityElim JuliaCode Doc where
   visibility = unJLC
 
 instance MethodTypeSym JuliaCode where
-  type MethodType JuliaCode = TypeData
-
   mType = zoom lensMStoVS
 
 instance ParameterSym JuliaCode where

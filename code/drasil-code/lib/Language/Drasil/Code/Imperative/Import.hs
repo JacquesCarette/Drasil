@@ -220,7 +220,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc
-  :: (OOProg r vis smt md svr)
+  :: (OOProg r vis smt md svr att prg)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -234,7 +234,7 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod
-  :: (OOProg r vis smt md svr)
+  :: (OOProg r vis smt md svr att prg)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -246,31 +246,31 @@ publicMethod n t = do
   genMethod (method n public instanceLevel t) n
 
 -- | Generates a private method.
-privateMethod :: (OOProg r vis smt md svr) => Label -> VS (r TypeData) -> Description ->
+privateMethod :: (OOProg r vis smt md svr att prg) => Label -> VS (r TypeData) -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (MS (r md))
 privateMethod n t = do
   genMethod (method n private instanceLevel t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
-publicInOutFunc :: (OOProg r vis smt md svr) => Label -> Description -> [CodeVarChunk] ->
+publicInOutFunc :: (OOProg r vis smt md svr att prg) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (MS (r md))
 publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
-privateInOutMethod :: (OOProg r vis smt md svr) => Label -> Description -> [CodeVarChunk] ->
+privateInOutMethod :: (OOProg r vis smt md svr att prg) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (MS (r md))
 privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
   (docInOutMethod n private instanceLevel) n
 
 -- | Generates a constructor.
-genConstructor :: (OOProg r vis smt md svr) => Label -> Description -> [ParameterChunk] ->
+genConstructor :: (OOProg r vis smt md svr att prg) => Label -> Description -> [ParameterChunk] ->
   [MSBlock r] -> GenState (MS (r md))
 genConstructor n desc p = do
   genMethod nonInitConstructor n desc p Nothing
 
 -- | Generates a constructor that includes initialization of variables.
-genInitConstructor :: (OOProg r vis smt md svr) => Label -> Description -> [ParameterChunk]
+genInitConstructor :: (OOProg r vis smt md svr att prg) => Label -> Description -> [ParameterChunk]
   -> Initializers r -> [MSBlock r] -> GenState (MS (r md))
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
   Nothing
@@ -279,7 +279,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod
-  :: (OOProg r vis smt md svr)
+  :: (OOProg r vis smt md svr att prg)
   => ([MS (r ParamData)] -> MSBody r -> MS (r md))
   -> Label
   -> Description
@@ -544,7 +544,7 @@ elementSetBoolBfunc SContains = S.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r vis smt md svr) =>
+genModDef :: (OOProg r vis smt md svr att prg) =>
   Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
@@ -553,17 +553,17 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
                 map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r vis smt md svr) => Mod -> [GenState (MS (r md))]
+genModFuncs :: (OOProg r vis smt md svr att prg) => Mod -> [GenState (MS (r md))]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r vis smt md svr) => Mod -> [GenState (SClass r)]
+genModClasses :: (OOProg r vis smt md svr att prg) => Mod -> [GenState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
-  :: (OOProg r vis smt md svr)
+  :: (OOProg r vis smt md svr att prg)
   => (Name -> Maybe Name -> Description -> [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] -> GenState (SClass r))
   -> M.Class
   -> GenState (SClass r)
@@ -582,7 +582,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFunc
-  :: (OOProg r vis smt md svr)
+  :: (OOProg r vis smt md svr att prg)
   => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] -> GenState (MS (r md)))
   -> [StateVariable]
   -> Func
@@ -712,7 +712,7 @@ convStmt (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFunc
-  :: (OOProg r vis smt md svr)
+  :: (OOProg r vis smt md svr att prg)
   => Name -> Description -> DataDesc -> GenState (MS (r md))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -892,7 +892,7 @@ mkVarProc v = do
   toGOOLVar (v ^. obv)
 
 -- | Converts a 'Mod' to GOOL.
-genModDefProc :: (ProcProg r vis smt md) => Mod -> GenState (Proc.SFile r)
+genModDefProc :: (ProcProg r vis smt md prg) => Mod -> GenState (Proc.SFile r)
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
           (map (fmap Just . genFuncProc publicFuncProc []) fs)

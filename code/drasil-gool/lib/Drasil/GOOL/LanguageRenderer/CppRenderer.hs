@@ -146,11 +146,10 @@ instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
 instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
-  (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
+  (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
-  type Program (p CppSrcCode CppHdrCode) = ProgData
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData where
   prog n st mods = do
     m <-  mapM (zoom lensGStoFS) mods
     let fm = map pfst m
@@ -166,7 +165,7 @@ instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
 
 instance (Pair p) => FileSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   fileDoc = pair1 fileDoc fileDoc
 
   docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
@@ -183,12 +182,11 @@ instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   langImport n = pair (langImport n) (langImport n)
   modImport n = pair (modImport n) (modImport n)
 
-instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) where
-  type Attachment (p CppSrcCode CppHdrCode) = AttachmentData
+instance (Pair p) => AttachmentSym (p CppSrcCode CppHdrCode) AttachmentData where
   classLevel = pair classLevel classLevel
   instanceLevel = pair instanceLevel instanceLevel
 
-instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) AttachmentData where
   perm p = RC.perm $ pfst p
   binding p = binding $ pfst p
 
@@ -695,7 +693,6 @@ instance (Pair p) => VisibilityElim (p CppSrcCode CppHdrCode)
   visibility s = RC.visibility $ pfst s
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
-  type MethodType (p CppSrcCode CppHdrCode) = TypeData
   mType = pair1 mType mType . zoom lensMStoVS
 
 instance (Pair p) => OOMethodTypeSym (p CppSrcCode CppHdrCode) where
@@ -736,7 +733,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode)
     (map (zoom lensMStoVS . snd) bs)
 
 instance (Pair p) => OOMethodSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
   method n s p t = pairValListVal
     (method n (pfst s) (pfst p)) (method n (psnd s) (psnd p))
     (zoom lensMStoVS t)
@@ -765,7 +762,7 @@ instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) MethodData where
   mthdFromData s d = on2StateValues pair (mthdFromData s d) (mthdFromData s d)
 
 instance (Pair p) => OORenderMethod (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) MethodData where
+    (Doc, VisibilityTag) MethodData AttachmentData where
   intMethod m n s p = pairValListVal
     (intMethod m n (pfst s) (pfst p)) (intMethod m n (psnd s) (psnd p))
   intFunc m n s p = pairValListVal
@@ -776,7 +773,7 @@ instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) MethodData where
   method m = RC.method $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) StateVarData where
+    (Doc, VisibilityTag) StateVarData AttachmentData where
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
     . zoom lensCStoVS
   stateVarDef s p vr vl = pair2
@@ -789,7 +786,7 @@ instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -819,7 +816,7 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
   class' c = RC.class' $ pfst c
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
@@ -1034,19 +1031,18 @@ instance Applicative CppSrcCode where
 instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
-instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
-  type Program CppSrcCode = ProgData
+instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 instance SharedStatement CppSrcCode (Doc, Terminator) where
 instance OOStatement CppSrcCode (Doc, Terminator) where
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
 
-instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   fileDoc m = do
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
@@ -1067,12 +1063,11 @@ instance ImportSym CppSrcCode where
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt
     n)
 
-instance AttachmentSym CppSrcCode where
-  type Attachment CppSrcCode = AttachmentData
+instance AttachmentSym CppSrcCode AttachmentData where
   classLevel = toCode $ ad ClassLevel R.classLevel
   instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
-instance PermElim CppSrcCode where
+instance PermElim CppSrcCode AttachmentData where
   perm = attachmentDoc . unCPPSC
   binding = attachment . unCPPSC
 
@@ -1614,7 +1609,6 @@ instance VisibilityElim CppSrcCode (Doc, VisibilityTag) where
   visibility = fst . unCPPSC
 
 instance MethodTypeSym CppSrcCode where
-  type MethodType CppSrcCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CppSrcCode where
@@ -1652,7 +1646,7 @@ instance MethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData 
   inOutFunc n s = cppsInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance OOMethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -1666,7 +1660,7 @@ instance RenderMethod CppSrcCode MethodData where
 
   mthdFromData s d = toState $ toCode $ mthd s d
 
-instance OORenderMethod CppSrcCode (Doc, VisibilityTag) MethodData where
+instance OORenderMethod CppSrcCode (Doc, VisibilityTag) MethodData AttachmentData where
   intMethod m n s _ t ps b = do
     modify (if m then setCurrMain else id)
     c <- getClassName
@@ -1679,7 +1673,7 @@ instance OORenderMethod CppSrcCode (Doc, VisibilityTag) MethodData where
 instance MethodElim CppSrcCode MethodData where
   method = mthdDoc . unCPPSC
 
-instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData where
+instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData AttachmentData where
   stateVar s _ _ = return $ return $ svd (snd (unCPPSC s)) empty
   stateVarDef = cppsStateVarDef empty
   constVar s = cppsStateVarDef constDec' s classLevel
@@ -1687,7 +1681,7 @@ instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData where
 instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -1708,7 +1702,7 @@ instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData whe
 instance ClassElim CppSrcCode where
   class' = unCPPSC
 
-instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   buildModule n is ms cs = CP.buildModule n (do
     ds <- getDefines
     lis <- getLangImports
@@ -1759,14 +1753,14 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData
 instance SharedStatement CppHdrCode (Doc, Terminator) where
 instance OOStatement CppHdrCode (Doc, Terminator) where
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
 
-instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   fileDoc m = do
     modify (setFileType Header)
     G.fileDoc cppHdrExt top bottom m
@@ -1786,12 +1780,11 @@ instance ImportSym CppHdrCode where
   langImport n = toCode $ inc <+> angles (text n)
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt n)
 
-instance AttachmentSym CppHdrCode where
-  type Attachment CppHdrCode = AttachmentData
+instance AttachmentSym CppHdrCode AttachmentData where
   classLevel = toCode $ ad ClassLevel R.classLevel
   instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
-instance PermElim CppHdrCode where
+instance PermElim CppHdrCode AttachmentData where
   perm = attachmentDoc . unCPPHC
   binding = attachment . unCPPHC
 
@@ -2237,7 +2230,6 @@ instance VisibilityElim CppHdrCode (Doc, VisibilityTag) where
   visibility = fst . unCPPHC
 
 instance MethodTypeSym CppHdrCode where
-  type MethodType CppHdrCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CppHdrCode where
@@ -2270,7 +2262,7 @@ instance MethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData 
   inOutFunc n s = cpphInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance OOMethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
   method = G.method
   getMethod v = zoom lensMStoVS v >>= (\v' -> method (getterName $ variableName
     v') public instanceLevel (toState $ variableType v') [] (toState $ toCode empty))
@@ -2286,7 +2278,7 @@ instance RenderMethod CppHdrCode MethodData where
 
   mthdFromData s d = toState $ toCode $ mthd s d
 
-instance OORenderMethod CppHdrCode (Doc, VisibilityTag) MethodData where
+instance OORenderMethod CppHdrCode (Doc, VisibilityTag) MethodData AttachmentData where
   intMethod _ n s a t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))
     tp <- t
@@ -2298,7 +2290,7 @@ instance OORenderMethod CppHdrCode (Doc, VisibilityTag) MethodData where
 instance MethodElim CppHdrCode MethodData where
   method = mthdDoc . unCPPHC
 
-instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData where
+instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData AttachmentData where
   stateVar s p v = do
     dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
@@ -2317,7 +2309,7 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData where
 instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -2341,7 +2333,7 @@ instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData whe
 instance ClassElim CppHdrCode where
   class' = unCPPHC
 
-instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData where
+instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
   buildModule n is = CP.buildModule n (do
     ds <- getHeaderDefines
     lis <- getHeaderLangImports
@@ -2767,7 +2759,7 @@ cppPointerParamDoc
   => r Variable -> Doc
 cppPointerParamDoc v = renderType (variableType v) <+> cppPtr <> RC.variable v
 
-cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode)
+cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode TypeData
   -> [CppSrcCode ParamData] -> CppSrcCode Body -> Doc
 cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
   vcat [ttype <+> text (c `nmSpcAccess` n) <> parens (parameterList
@@ -2805,7 +2797,7 @@ cppsIntFunc f s t ps b = do
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
 cpphIntFunc :: Label -> CppHdrCode (Doc, VisibilityTag) ->
-  CppHdrCode (Attachment CppHdrCode) -> MSMthdType CppHdrCode ->
+  CppHdrCode att -> MSMthdType CppHdrCode ->
   [MS (CppHdrCode ParamData)] -> MSBody CppHdrCode -> MS (CppHdrCode MethodData)
 cpphIntFunc n s _ t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))
@@ -2819,7 +2811,7 @@ cpphFunc n t ps = (if isDtor n then empty else renderType t) <+>
   text n <> parens (parameterList ps) <> endStatement
 
 cpphMethod :: Label -> CppHdrCode TypeData ->
-  CppHdrCode (Attachment CppHdrCode) -> [CppHdrCode ParamData] -> Doc
+  CppHdrCode AttachmentData -> [CppHdrCode ParamData] -> Doc
 cpphMethod n t a ps = let attchDoc = RC.perm a
   in attchDoc <+> (if isDtor n then empty else renderType t) <+> text n
     <> parens (parameterList ps) <> endStatement
@@ -2840,7 +2832,7 @@ cppCommentedFunc ft cmt fn = do
   ret ft
 
 cppsStateVarDef :: Doc -> CppSrcCode (Doc, VisibilityTag) ->
-  CppSrcCode (Attachment CppSrcCode) -> SVariable CppSrcCode ->
+  CppSrcCode AttachmentData -> SVariable CppSrcCode ->
   SValue CppSrcCode -> CSStateVar CppSrcCode StateVarData
 cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
@@ -2873,7 +2865,7 @@ cppLitSet f t' es' = do
 
 cpphStateVarDef
   :: Doc
-  -> CppHdrCode (Attachment CppHdrCode)
+  -> CppHdrCode AttachmentData
   -> SVariable CppHdrCode
   -> SValue CppHdrCode -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .

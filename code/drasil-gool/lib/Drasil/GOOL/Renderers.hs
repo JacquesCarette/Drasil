@@ -9,7 +9,6 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.InterfaceCommon (Body, Variable, Value, UnRepr(..),
   VariableElim(..))
-import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..))
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(..),
   VisibilityElim(..), ValueElim(..), ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..))
@@ -32,13 +31,13 @@ renderParam v = renderType (variableType v) <+> variable v
 renderMethod
   :: ( RC.BodyElim r
      , ParamElim r
-     , PermElim r
+     , PermElim r att
      , UnRepr r TypeData
      , VisibilityElim r vis
      )
   => String
   -> r vis
-  -> r (Attachment r)
+  -> r att
   -> r TypeData
   -> [r ParamData]
   -> r Body

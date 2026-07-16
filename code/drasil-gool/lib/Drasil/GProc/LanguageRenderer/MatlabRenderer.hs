@@ -91,10 +91,9 @@ instance Monad MatlabCode where
 
 instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
 instance SharedStatement MatlabCode (Doc, Terminator)
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type Program MatlabCode = ProgData
+instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -487,7 +486,6 @@ instance VisibilityElim MatlabCode Doc where
   visibility = unMLC
 
 instance MethodTypeSym MatlabCode where
-  type MethodType MatlabCode = TypeData
   mType = zoom lensMStoVS
 
 instance ParameterSym MatlabCode where

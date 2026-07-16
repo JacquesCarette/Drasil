@@ -125,9 +125,9 @@ instance Monad PythonCode where
 instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
 instance SharedStatement PythonCode (Doc, Terminator)
 instance OOStatement PythonCode (Doc, Terminator)
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
+instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
   type Program PythonCode = ProgData
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
@@ -135,12 +135,12 @@ instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
 
-instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
+instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m
@@ -159,12 +159,11 @@ instance ImportSym PythonCode where
   langImport n = toCode $ importLabel <+> text n
   modImport = langImport
 
-instance AttachmentSym PythonCode where
-  type Attachment PythonCode = AttachmentData
+instance AttachmentSym PythonCode AttachmentData where
   classLevel = toCode $ ad ClassLevel empty
   instanceLevel = toCode $ ad InstanceLevel R.instanceLevel
 
-instance PermElim PythonCode where
+instance PermElim PythonCode AttachmentData where
   perm = attachmentDoc . unPC
   binding = attachment . unPC
 
@@ -659,7 +658,7 @@ instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData where
+instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData AttachmentData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -674,7 +673,7 @@ instance RenderMethod PythonCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod PythonCode Doc MethodData where
+instance OORenderMethod PythonCode Doc MethodData AttachmentData where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -690,16 +689,16 @@ instance OORenderMethod PythonCode Doc MethodData where
 instance MethodElim PythonCode MethodData where
   method = mthdDoc . unPC
 
-instance StateVarSym PythonCode Doc Doc where
+instance StateVarSym PythonCode Doc Doc AttachmentData where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
-    (classLevel :: PythonCode (Attachment PythonCode)))
+    (classLevel :: PythonCode AttachmentData))
 
 instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
+instance ClassSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
@@ -725,7 +724,7 @@ instance RenderClass PythonCode Doc MethodData StateVar where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar where
+instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports
@@ -994,7 +993,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
 
 pyMethod
   :: Label
-  -> PythonCode (Attachment PythonCode)
+  -> PythonCode AttachmentData
   -> PythonCode Variable
   -> [PythonCode ParamData]
   -> PythonCode Body

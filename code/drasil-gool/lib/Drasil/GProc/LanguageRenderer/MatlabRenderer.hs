@@ -425,7 +425,7 @@ instance DeclStatement MatlabCode (Doc, Terminator) where
   setDecDef = varDecDef
   listDec _ = varDec
   listDecDef = CP.listDecDef
-  arrayDec _ = varDec
+  arrayDec _ _ = varDec
   arrayDecDef = listDecDef
   constDecDef = varDecDef
   funcDecDef = A.funcDecDef

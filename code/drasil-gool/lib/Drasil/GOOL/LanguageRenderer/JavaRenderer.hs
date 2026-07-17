@@ -136,21 +136,20 @@ instance Monad JavaCode where
 instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JavaCode (Doc, Terminator)
 instance OOStatement JavaCode (Doc, Terminator)
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
-  type Program JavaCode = ProgData
+instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
 instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
+instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
@@ -169,12 +168,11 @@ instance ImportSym JavaCode where
   langImport = toCode . jImport
   modImport = langImport
 
-instance AttachmentSym JavaCode where
-  type Attachment JavaCode = Doc
+instance AttachmentSym JavaCode Doc where
   classLevel = toCode R.classLevel
   instanceLevel = toCode R.instanceLevel
 
-instance PermElim JavaCode where
+instance PermElim JavaCode Doc where
   perm = unJC
   binding = error $ CP.bindingError jName
 
@@ -646,7 +644,6 @@ instance VisibilityElim JavaCode Doc where
   visibility = unJC
 
 instance MethodTypeSym JavaCode where
-  type MethodType JavaCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym JavaCode where
@@ -675,7 +672,7 @@ instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode Doc (Doc, Terminator) MethodData where
+instance OOMethodSym JavaCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -690,7 +687,7 @@ instance RenderMethod JavaCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod JavaCode Doc MethodData where
+instance OORenderMethod JavaCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -708,15 +705,15 @@ instance OORenderMethod JavaCode Doc MethodData where
 instance MethodElim JavaCode MethodData where
   method = mthdDoc . unJC
 
-instance StateVarSym JavaCode Doc Doc where
+instance StateVarSym JavaCode Doc Doc Doc where
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (classLevel :: JavaCode (Attachment JavaCode)))
+  constVar = CP.constVar (RC.perm (classLevel :: JavaCode Doc))
 
 instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
-instance ClassSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
+instance ClassSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
@@ -734,7 +731,7 @@ instance RenderClass JavaCode Doc MethodData StateVar where
 instance ClassElim JavaCode where
   class' = unJC
 
-instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar where
+instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod JavaCode where
@@ -1015,7 +1012,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+>
   new' <+> renderType (variableType vnew) <> parens (RC.value s))
 
 jMethod :: Label -> [String] -> JavaCode Doc ->
-  JavaCode (Attachment JavaCode) -> JavaCode TypeData ->
+  JavaCode Doc -> JavaCode TypeData ->
   [JavaCode ParamData] -> JavaCode Body -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> renderType t <+> text n <>

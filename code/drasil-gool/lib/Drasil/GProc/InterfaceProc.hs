@@ -1,26 +1,25 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  GSProgram, File, SFile, Module, FSModule,
+  Program, GSProgram, File, SFile, Module, FSModule,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..),
-  NativeVector)
+import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..))
 import Drasil.Shared.State (GS, FS, MS)
-import Drasil.Shared.AST (FileData, ModData)
+import Drasil.Shared.AST (FileData, ModData, ProgData)
 
-class (SharedProg r vis smt md, ProgramSym r vis smt md,
-  NativeVector r) => ProcProg r vis smt md
+class (SharedProg r vis smt md, ProgramSym r vis smt md prg)
+  => ProcProg r vis smt md prg
 
-type GSProgram a = GS (a (Program a))
+type Program = ProgData
+type GSProgram a prg = GS (a prg)
 
-class (FileSym r vis smt md) => ProgramSym r vis smt md where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+class (FileSym r vis smt md) => ProgramSym r vis smt md prg | r -> prg where
+  prog :: Label -> Label -> [SFile r] -> GSProgram r prg
 
 type File = FileData
 type SFile a = FS (a File)

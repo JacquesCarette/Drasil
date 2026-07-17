@@ -135,22 +135,21 @@ instance Monad SwiftCode where
 instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
 instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOStatement SwiftCode (Doc, Terminator)
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
-  type Program SwiftCode = ProgData
+instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
+instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
@@ -169,12 +168,11 @@ instance ImportSym SwiftCode where
   langImport n = toCode $ importLabel <+> text n
   modImport = langImport
 
-instance AttachmentSym SwiftCode where
-  type Attachment SwiftCode = Doc
+instance AttachmentSym SwiftCode Doc where
   classLevel = toCode R.classLevel
   instanceLevel = toCode R.instanceLevel
 
-instance PermElim SwiftCode where
+instance PermElim SwiftCode Doc where
   perm = unSC
   binding = error $ CP.bindingError swiftName
 
@@ -663,7 +661,6 @@ instance VisibilityElim SwiftCode Doc where
   visibility = unSC
 
 instance MethodTypeSym SwiftCode where
-  type MethodType SwiftCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym SwiftCode where
@@ -693,7 +690,7 @@ instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -708,7 +705,7 @@ instance RenderMethod SwiftCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod SwiftCode Doc MethodData where
+instance OORenderMethod SwiftCode Doc MethodData Doc where
   intMethod _ = swiftMethod
   intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName
@@ -716,17 +713,17 @@ instance OORenderMethod SwiftCode Doc MethodData where
 instance MethodElim SwiftCode MethodData where
   method = mthdDoc . unSC
 
-instance StateVarSym SwiftCode Doc Doc where
+instance StateVarSym SwiftCode Doc Doc Doc where
   stateVar s p vr = do
     v <- zoom lensCStoVS vr
     stateVarDef s p vr (typeDfltVal $ getCodeType $ variableType v)
   stateVarDef = CP.stateVarDef
-  constVar = CP.constVar (RC.perm (classLevel :: SwiftCode (Attachment SwiftCode)))
+  constVar = CP.constVar (RC.perm (classLevel :: SwiftCode Doc))
 
 instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
+instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -744,7 +741,7 @@ instance RenderClass SwiftCode Doc MethodData StateVar where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar where
+instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will
@@ -1144,8 +1141,8 @@ swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind ClassLevel = classLevel :: SwiftCode (Attachment SwiftCode)
-      bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
+  let bind ClassLevel = classLevel :: SwiftCode Doc
+      bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> renderType (variableType v))
@@ -1156,8 +1153,8 @@ swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
-  let bind ClassLevel = classLevel :: SwiftCode (Attachment SwiftCode)
-      bind InstanceLevel = instanceLevel :: SwiftCode (Attachment SwiftCode)
+  let bind ClassLevel = classLevel :: SwiftCode Doc
+      bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))
@@ -1194,7 +1191,7 @@ swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> renderType (variableType v)
 
 swiftMethod :: Label -> SwiftCode Doc ->
-  SwiftCode (Attachment SwiftCode) -> MSMthdType SwiftCode ->
+  SwiftCode Doc -> MSMthdType SwiftCode ->
   [MS (SwiftCode ParamData)] -> MSBody SwiftCode -> MS (SwiftCode MethodData)
 swiftMethod n s p t ps b = do
   tp <- t

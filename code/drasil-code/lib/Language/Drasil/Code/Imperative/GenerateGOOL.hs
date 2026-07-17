@@ -37,7 +37,7 @@ import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImports :: (OOProg r vis smt md svr) => Name -> Description ->
+genModuleWithImports :: (OOProg r vis smt md svr att prg) => Name -> Description ->
   [Import] -> [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
@@ -52,7 +52,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModule :: (OOProg r vis smt md svr) => Name -> Description ->
+genModule :: (OOProg r vis smt md svr att prg) => Name -> Description ->
   [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
   GenState (OO.SFile r)
 genModule n desc = genModuleWithImports n desc []
@@ -83,7 +83,7 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (ClassSym r vis smt md svr) => ClassType -> Name -> Maybe Name ->
+mkClass :: (ClassSym r vis smt md svr att) => ClassType -> Name -> Maybe Name ->
   Description -> [CSStateVar r svr] -> GenState [MS (r md)] ->
     GenState [MS (r md)] -> GenState (SClass r)
 mkClass s n l desc vs cstrs mths = do
@@ -102,13 +102,13 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (ClassSym r vis smt md svr) => Name -> Maybe Name -> Description ->
+primaryClass :: (ClassSym r vis smt md svr att) => Name -> Maybe Name -> Description ->
   [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
   GenState (SClass r)
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (ClassSym r vis smt md svr) => Name -> Maybe Name -> Description ->
+auxClass :: (ClassSym r vis smt md svr att) => Name -> Maybe Name -> Description ->
   [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
@@ -178,7 +178,7 @@ fAppInOut m n ins outs both = do
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImportsProc :: (ProcProg r vis smt md) => Name -> Description ->
+genModuleWithImportsProc :: (ProcProg r vis smt md prg) => Name -> Description ->
   [Import] -> [GenState (Maybe (MS (r md)))] -> GenState (Proc.SFile r)
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
@@ -191,7 +191,7 @@ genModuleWithImportsProc n desc is maybeMs = do
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModuleProc :: (ProcProg r vis smt md) => Name -> Description ->
+genModuleProc :: (ProcProg r vis smt md prg) => Name -> Description ->
   [GenState (Maybe (MS (r md)))] -> GenState (Proc.SFile r)
 genModuleProc n desc = genModuleWithImportsProc n desc []
 

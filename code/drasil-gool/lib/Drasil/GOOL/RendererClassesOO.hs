@@ -10,8 +10,8 @@ module Drasil.GOOL.RendererClassesOO (
 import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, Module, FSModule,
   Class, SClass, CSStateVar, OOVariableValue, OOValueExpression(..),
-  InternalValueExp(..), FileSym(..), AttachmentSym(..), GetSet(..),
-  ObserverPattern(..), StrategyPattern(..))
+  InternalValueExp(..), FileSym(..), GetSet(..), ObserverPattern(..),
+  StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
@@ -20,13 +20,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis smt md, IG.FileSym r vis smt md svr,
+class (CommonRenderSym r vis smt md, IG.FileSym r vis smt md svr att,
   IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r smt,
   IG.StrategyPattern r smt, IG.OOVariableValue r,
   IG.OOValueExpression r, RenderClass r vis md svr, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r vis md, RenderMod r, ModuleElim r,
-  StateVarElim r svr, PermElim r
-  ) => OORenderSym r vis smt md svr
+  InternalGetSet r, OORenderMethod r vis md att, RenderMod r, ModuleElim r,
+  StateVarElim r svr, PermElim r att
+  ) => OORenderSym r vis smt md svr att
 
 -- OO-Only Typeclasses --
 
@@ -41,9 +41,9 @@ class (BlockCommentSym r) => RenderFile r where
 
   fileFromData :: FilePath -> IG.FSModule r -> IG.SFile r
 
-class PermElim r where
-  perm :: r (IG.Attachment r) -> Doc
-  binding :: r (IG.Attachment r) -> AttachmentTag
+class PermElim r att where
+  perm :: r att -> Doc
+  binding :: r att -> AttachmentTag
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VS (r FuncData)
@@ -52,14 +52,14 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md | r -> vis where
+class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md att | r -> vis att where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->
+  intMethod     :: Bool -> Label -> r vis -> r att ->
     MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r vis -> r (IG.Attachment r)
+  intFunc       :: Bool -> Label -> r vis -> r att
     -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
 
   destructor :: [IG.CSStateVar r svr] -> MS (r md)

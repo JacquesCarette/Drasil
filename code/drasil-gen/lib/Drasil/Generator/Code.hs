@@ -19,9 +19,7 @@ import Data.Time.Calendar (showGregorian)
 import Drasil.FileHandling (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
   OOProg, LoggingFor (unLC))
-import qualified Drasil.GOOL as OO
-import Drasil.GProc (unJLC, unMLC, ProcProg)
-import qualified Drasil.GProc as Proc
+import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
@@ -51,9 +49,9 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
     genLangCode Matlab = genCallProc Matlab unMLC unMLP
 
     genCall
-      :: (OOProg progRepr vis smt md svr, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (OOProg progRepr vis smt md svr att prg, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
-      -> (progRepr (OO.Program progRepr) -> ProgData)
+      -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)
       -> IO FileLayout
     genCall lng unProgRepr unPackRepr = do
@@ -64,9 +62,9 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
     genCallProc
-      :: (ProcProg progRepr vis smt md, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (ProcProg progRepr vis smt md prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
-      -> (progRepr (Proc.Program progRepr) -> ProgData)
+      -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)
       -> IO FileLayout
     genCallProc lng unProgRepr unPackRepr = do

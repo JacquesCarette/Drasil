@@ -18,8 +18,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
   VariableSym(..), VariableValue(..), VariableElim(..), ValueSym(valueType),
   getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
-  objMethodCallNoParams, ($->))
+import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (MSMthdType,
   InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
@@ -159,14 +158,14 @@ decrement1 vr' = do
 
 varDec
   :: ( InternalVarElim r
-     , RO.PermElim r
+     , RO.PermElim r att
      , RC.RenderStatement r smt
      , ScopeElim r
      , UnRepr r TypeData
      , TypeElim r
      , VariableElim r
      )
-  => r (Attachment r) -> r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
+  => r att -> r att -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -281,8 +280,8 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (OORenderMethod r vis md) => Bool -> Label -> r vis ->
-  r (Attachment r) -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
+intFunc :: (OORenderMethod r vis md att) => Bool -> Label -> r vis ->
+  r att -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
   MS (r md)
 intFunc = intMethod
 

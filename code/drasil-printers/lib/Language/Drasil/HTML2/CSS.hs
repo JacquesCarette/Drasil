@@ -1,146 +1,140 @@
 {-# LANGUAGE OverloadedStrings #-}
 -- | Defines functions to create accompanying .css files for HTML generators.
 module Language.Drasil.HTML2.CSS (
-  genericCSS, stylesheet
+  genericCSS
 ) where
 
-import Text.PrettyPrint (Doc, text, vcat)
-import Data.Text (Text)
-import Drasil.Data.Formats.HTML
+import Prettyprinter (Doc, vcat)
 
 -- | Generic CSS used for stylizing the 'LayoutObj' language when outputted in
 -- HTML format.
-genericCSS :: Doc
+genericCSS :: Doc ann
 genericCSS = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
-  text "body {min-width: 400px; max-width: 1400px;}",
-  text ".title {text-align: center;}",
-  text ".author {text-align: center;}",
-  text ".paragraph {text-align: justify;}",
+  "body {min-width: 400px; max-width: 1400px;}",
+  ".title {text-align: center;}",
+  ".author {text-align: center;}",
+  ".paragraph {text-align: justify;}",
   vcat [
-    text ".cases {",
-    text "  display: inline-block;",
-    text "  vertical-align: middle;}"],
+     ".cases {",
+    "  display: inline-block;",
+    "  vertical-align: middle;}"],
   vcat [
-    text ".case {",
-    text "  float: right;",
-    text "  padding-left: 1em;}"],
+    ".case {",
+    "  float: right;",
+    "  padding-left: 1em;}"],
   vcat [
-    text ".cases > span {",
-    text "  display: block;",
-    text "  padding-top: 0.1em;",
-    text "  padding-left: 0em;}"],
+    ".cases > span {",
+    "  display: block;",
+    "  padding-top: 0.1em;",
+    "  padding-left: 0em;}"],
   vcat [
-    text ".casebr {",
-    text "  display: inline-block;",
-    text "  vertical-align: middle;",
-    text "  margin: 0 0.2em 0.4ex;",
-    text "  text-align: center;",
-    text "  font-size: 500%;}"],
+    ".casebr {",
+    "  display: inline-block;",
+    "  vertical-align: middle;",
+    "  margin: 0 0.2em 0.4ex;",
+    "  text-align: center;",
+    "  font-size: 500%;}"],
   vcat [
-    text ".caption {",
-    text "  text-align: center;",
-    text "  font-weight: bold;",
-    text "  padding-bottom: 1%;",
-    text "  line-height: 0;}"
+    ".caption {",
+    "  text-align: center;",
+    "  font-weight: bold;",
+    "  padding-bottom: 1%;",
+    "  line-height: 0;}"
     ],
   vcat [
-    text ".fraction {",
-    text "  display: inline-block;",
-    text "  vertical-align: middle;",
-    text "  margin: 0 0.2em 0.4ex;",
-    text "  text-align: center;}"
+    ".fraction {",
+    "  display: inline-block;",
+    "  vertical-align: middle;",
+    "  margin: 0 0.2em 0.4ex;",
+    "  text-align: center;}"
     ],
   vcat [
-    text ".fraction > span {",
-    text "  display: block;",
-    text "  padding-top: 0.15em;}"
+    ".fraction > span {",
+    "  display: block;",
+    "  padding-top: 0.15em;}"
     ],
-  text ".fdn {border-top: thin solid black;}",
+  ".fdn {border-top: thin solid black;}",
   vcat [
-    text ".table {",
-    text "  text-align: left;",
-    text "  padding-left: 1%;",
-    text "  width: 90%;",
-    text "  margin-bottom: 2%;",
-    text "  margin-top: 2%}"],
+    ".table {",
+    "  text-align: left;",
+    "  padding-left: 1%;",
+    "  width: 90%;",
+    "  margin-bottom: 2%;",
+    "  margin-top: 2%}"],
   vcat [
-    text "table, th, td {",
-    text "  border-collapse: collapse;",
-    text "  margin-left: auto;",
-    text "  margin-right: auto;}"],
-  text "th, td {border: 1px solid black; padding: 0.5em;}",
-  text ".defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
-  text ".defn-table th {width: 15%;}",
-  text ".section {width: 80%; margin: 0 auto; text-align: left;}",
+    "table, th, td {",
+    "  border-collapse: collapse;",
+    "  margin-left: auto;",
+    "  margin-right: auto;}"],
+  "th, td {border: 1px solid black; padding: 0.5em;}",
+  ".defn-table {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
+  ".defn-table th {width: 15%;}",
+  ".section {width: 80%; margin: 0 auto; text-align: left;}",
   vcat [
-    text ".code {",
-    text "  display: inline-block;",
-    text "  text-align: left;",
-    text ("  font-family: Monaco, Consolas, \"Andale Mono\"," ++
-      "\"DejaVu Sans Mono\", monospace;"),
-    text "  font-size: 95%;",
-    text "  line-height: 140%;",
-    text "  white-space: pre;",
-    text "  white-space: pre-wrap;",
-    text "  white-space: -moz-pre-wrap;",
-    text "  white-space: -o-pre-wrap;",
-    text "  background: #faf8f0;}"],
-  text ".list {text-align: left;}",
+    ".code {",
+    "  display: inline-block;",
+    "  text-align: left;",
+    "  font-family: Monaco, Consolas, \"Andale Mono\",",
+      "\"DejaVu Sans Mono\", monospace;",
+    "  font-size: 95%;",
+    "  line-height: 140%;",
+    "  white-space: pre;",
+    "  white-space: pre-wrap;",
+    "  white-space: -moz-pre-wrap;",
+    "  white-space: -o-pre-wrap;",
+    "  background: #faf8f0;}"],
+  ".list {text-align: left;}",
   vcat [
-    text "figure {",
-    text "text-align: center;",
-    text "font-weight: bold;",
-    text "}"],
+    "figure {",
+    "text-align: center;",
+    "font-weight: bold;",
+    "}"],
   vcat [
-    text "figure > img {",
-    text "max-width: 100%;",
-    text "}"],
+    "figure > img {",
+    "max-width: 100%;",
+    "}"],
   vcat [
-    text ".matrix {",
-    text "  position: relative;",
-    text "  display: inline-table;",
-    text "  margin: 10px;",
-    text "  vertical-align: middle;}",
-    text ".matrix:before, .matrix:after {",
-    text "  content: \"\";",
-    text "  position: absolute;",
-    text "  top: 0;",
-    text "  border: 1px solid #000;",
-    text "  width: 5px;",
-    text "  height: 100%;}",
-    text ".matrix:before {",
-    text "  left: -5px;",
-    text "  border-right: 0px;}",
-    text ".matrix:after {",
-    text "  right: -5px;",
-    text "  border-left: 0px;}",
-    text ".matrix td {",
-    text "  padding: 5px;",
-    text "  text-align: center;",
-    text "  border: 0px;}"],
+    ".matrix {",
+    "  position: relative;",
+    "  display: inline-table;",
+    "  margin: 10px;",
+    "  vertical-align: middle;}",
+    ".matrix:before, .matrix:after {",
+    "  content: \"\";",
+    "  position: absolute;",
+    "  top: 0;",
+    "  border: 1px solid #000;",
+    "  width: 5px;",
+    "  height: 100%;}",
+    ".matrix:before {",
+    "  left: -5px;",
+    "  border-right: 0px;}",
+    ".matrix:after {",
+    "  right: -5px;",
+    "  border-left: 0px;}",
+    ".matrix td {",
+    "  padding: 5px;",
+    "  text-align: center;",
+    "  border: 0px;}"],
   vcat [
-    text "ul.hide-list-style {",
-    text "  list-style-type: none;}"
-    ],
-  vcat [
-    text "ul.hide-list-style-no-indent {",
-    text "  list-style-type: none;",
-    text "padding: 0;}"
+    "ul.hide-list-style {",
+    "  list-style-type: none;}"
     ],
   vcat [
-    text "dl.reference-list {",
-    text "  display: grid;",
-    text "  grid-template-columns: auto 1fr;",
-    text "  gap: 20px;",
-    text "  align-items: start;}"
+    "ul.hide-list-style-no-indent {",
+    "  list-style-type: none;",
+    "padding: 0;}"
     ],
   vcat [
-    text "dd {",
-    text "  margin: 0;}"
+    "dl.reference-list {",
+    "  display: grid;",
+    "  grid-template-columns: auto 1fr;",
+    "  gap: 20px;",
+    "  align-items: start;}"
+    ],
+  vcat [
+    "dd {",
+    "  margin: 0;}"
     ]
   ]
-
--- | Create the link to the CSS file
-stylesheet :: Text -> HTMLHead
-stylesheet css = Link "stylesheet" (css <> ".css") [Attr "type" "text/css"]

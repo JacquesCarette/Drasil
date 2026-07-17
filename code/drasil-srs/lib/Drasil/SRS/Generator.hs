@@ -8,18 +8,18 @@ module Drasil.SRS.Generator (
 import Prelude hiding (id)
 import Control.Lens ((^.))
 import qualified Data.Map.Strict as M
-
 import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
 import Language.Drasil.Printers (genericCSS, genHTML2, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
-  genJupyterSRS, makeDocument, makeProject)
+  genJupyterSRS, makeDocument, makeProject, HTMLRenderOptions(..),
+  htmlBibFormatter)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
+import Drasil.Data.Formats.HTML (HTMLGenOptions(..))
 import Drasil.System (systemdb)
-import Drasil.Data.Formats.HTML (HTMLRenderOptions(..))
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS.DocDecl (SRSDecl)
@@ -59,7 +59,11 @@ prntDoc d pinfo _ MDBook =
 prntDoc d pinfo fn Jupyter =
   [file [ps|{fn}.ipynb|] $ genJupyterSRS $ makeDocument pinfo d]
 prntDoc d pinfo fn HTML =
-  [ file [ps|{fn}.html|] $ genHTML2 (HTMLRO M.empty) fn $ makeDocument pinfo d,
+  [ file [ps|{fn}.html|]
+      $ genHTML2
+        (HTMLBO M.empty 2)
+        (HTMLRO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
+      fn $ makeDocument pinfo d,
     file [ps|{fn}.css|] genericCSS
   ]
 prntDoc d@(Document _ _ st _) pinfo fn TeX =

@@ -6,11 +6,10 @@ import Drasil.Data.Formats.HTML (
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HLevel(..), CustomTag(..),
     Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML,
     bold, emphasis, subscript, superscript, figureImage, customTag,
-    HTMLRenderOptions(..)
+    HTMLGenOptions(..)
   )
 
 import qualified Drasil.Data.Formats.HTML as HTML (span)
-
 import Drasil.TestingKit.Golden (file, goldenTest, goldenTestingGroup, ps)
 import System.OsPath (osp)
 import Test.Tasty (TestTree, testGroup)
@@ -27,11 +26,11 @@ blockquoteTag, inputTag :: CustomTag
 blockquoteTag = customTag "blockquote"
 inputTag      = customTag "input"
 
-testRenderOptions :: HTMLRenderOptions
-testRenderOptions = HTMLRO $ M.fromList [
+testGenOptions :: HTMLGenOptions
+testGenOptions = HTMLBO (M.fromList [
     (blockquoteTag, Standard),
     (inputTag, Void)
-  ]
+  ]) 2
 
 tagsHTMLTest :: HTML
 tagsHTMLTest =
@@ -110,9 +109,9 @@ renderHTMLTests =
       [osp|test/golden/html|]
       "Golden Tests"
       [ goldenTest "tagsHTMLTest" $
-          file [ps|tags.html|] $ renderHTML testRenderOptions tagsHTMLTest,
+          file [ps|tags.html|] $ renderHTML testGenOptions tagsHTMLTest,
 
         goldenTest "escapingHTMLTest" $
-          file [ps|escaping.html|] $ renderHTML testRenderOptions  escapingHTMLTest
+          file [ps|escaping.html|] $ renderHTML testGenOptions  escapingHTMLTest
       ]
     ]

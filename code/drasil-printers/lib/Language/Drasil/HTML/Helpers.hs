@@ -13,8 +13,7 @@ module Language.Drasil.HTML.Helpers (
 ) where
 import Prelude hiding ((<>))
 import Data.List (intersperse)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest,
-  cat)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest)
 
 import Language.Drasil.Document (MaxWidthPercent)
 
@@ -113,7 +112,7 @@ wrapGen' sepf v s ti _ = \x ->
 
 -- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen = wrapGen' cat
+wrapGen = wrapGen' vcat
 
 -- | Helper for creating a left HTML tag with a single attribute.
 tagL :: String -> Variation -> Doc -> Doc

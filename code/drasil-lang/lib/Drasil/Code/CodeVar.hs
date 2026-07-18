@@ -3,21 +3,22 @@
 module Drasil.Code.CodeVar (
   CodeIdea(..), DefiningCodeExpr(..), VarOrFunc(..), CodeChunk(..), qc,
   CodeVarChunk(..), ccv, obv, CodeFuncChunk(..),  ccf,
-  funcPrefix, listToArray
+  funcPrefix, listToArray, quantvar, quantfunc
 ) where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Drasil.Database (HasUID(uid), (+++), HasChunkRefs(..))
+import Drasil.Database (HasUID(uid), (+++), declareHasChunkRefs, Generically(..))
 
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Definition (defn), ConceptDomain (cdom))
+import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Concept,
+  Definition(defn), ConceptDomain (cdom))
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU', dqdWr)
 
 -- | A 'CodeIdea' must include some code and its name.
 class CodeIdea c where
@@ -44,10 +45,8 @@ data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
                        , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
 makeLenses ''CodeChunk
-
-instance HasChunkRefs CodeChunk where
-  chunkRefs cc = chunkRefs (cc ^. qc)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''VarOrFunc
+declareHasChunkRefs ''CodeChunk
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasUID        CodeChunk where uid = qc . uid
@@ -75,13 +74,7 @@ instance MayHaveUnit   CodeChunk where getUnit = getUnit . view qc
 data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
                             _obv :: Maybe CodeChunk}
 makeLenses ''CodeVarChunk
-
-instance HasChunkRefs CodeVarChunk where
-  chunkRefs cvc = mconcat
-    [ chunkRefs (cvc ^. ccv)
-    , chunkRefs (cvc ^. obv)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CodeVarChunk
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasUID        CodeVarChunk where uid = ccv . uid
@@ -104,13 +97,23 @@ instance Eq            CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance MayHaveUnit   CodeVarChunk where getUnit = getUnit . view ccv
 
+-- | Construct a 'CodeVarChunk' from a 'Quantity'.
+quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
+quantvar c = CodeVC (CodeC (dqdWr c) Var) Nothing
+
+-- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
+-- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
+listToArray :: CodeVarChunk -> CodeVarChunk
+listToArray c = newSpc (c ^. typ)
+  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (c +++ "_array")
+          (c ^. term) (c ^. defn) (getA c)
+          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
+        newSpc _ = c
+
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
-
-instance HasChunkRefs CodeFuncChunk where
-  chunkRefs cfc = chunkRefs (cfc ^. ccf)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CodeFuncChunk
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasUID        CodeFuncChunk where uid = ccf . uid
@@ -135,11 +138,6 @@ instance Eq            CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance MayHaveUnit   CodeFuncChunk where getUnit = getUnit . view ccf
 
--- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
--- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
-listToArray :: CodeVarChunk -> CodeVarChunk
-listToArray c = newSpc (c ^. typ)
-  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (show $ c +++ "_array")
-          (c ^. term) (c ^. defn) (getA c)
-          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
-        newSpc _ = c
+-- | Construct a 'CodeFuncChunk' from a 'Quantity'.
+quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
+quantfunc c = CodeFC $ CodeC (dqdWr c) Func

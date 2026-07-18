@@ -23,21 +23,16 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - directory
-- drasil-code
-- drasil-data
-- drasil-database
-- drasil-srs
 - drasil-gen
-- drasil-gool
 - drasil-lang
 - drasil-lesson-plan
-- drasil-printers
-- drasil-system
-- drasil-theory
-- drasil-utils
 - projectile
 
 library:
+  dependencies:
+  - drasil-data
+  - drasil-database
+  - drasil-system
   source-dirs: lib
 
 executables:

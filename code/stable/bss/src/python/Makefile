@@ -2,6 +2,9 @@
 
 # Project Name: BSS
 
+# Project Purpose: Simulate the motion of a binary star system under mutual
+# gravitational interaction.
+
 build:
 
 run: build

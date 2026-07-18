@@ -12,10 +12,9 @@ import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   foldlSPCol, bulletNested, bulletFlat)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
-import Drasil.SRS
+import Drasil.SRS hiding (constants, genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -102,7 +101,7 @@ si = mkSmithEtAlICO progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints constants symbols
-  labelledContent' symbMap allRefs
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]

@@ -5,4 +5,4 @@ import Language.Drasil
 import Drasil.GlassBR.Concepts (idglass)
 
 progName :: CI
-progName = commonIdeaWithDict (mkUid "glassBR") (pn "GlassBR") "GlassBR"  [idglass]
+progName = commonIdea (mkUid "glassBR") (pn "GlassBR") "GlassBR"  [idglass]

@@ -13,38 +13,37 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, MSBody,
-  VSType, VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod,
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), getCodeType, getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Array(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  InstanceVarSelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, OOFunctionSym(..),
-  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
+  Label, Body, MSBody, SVariable, Value, SValue, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
+  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, StateVar, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
+  objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
-  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
-import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter, method,
+import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
+  bOp, variable, value, function, statement, visibility, parameter, method,
   blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -60,54 +59,53 @@ import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, nullLabel, listSep, access, containing, mathFunc, valueList,
   variableList, binderList, appendToBody, surroundBody)
 import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body,
-  printFile, classVarAccess, cast, listSetFunc, castObj, classLevel,
+  printFile, classVarAccess, cast, castObj, classLevel,
   instanceLevel, break, continue, private, public, blockCmt, docCmt, addComments,
   commentedMod, commentedItem)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, typeFromData, VSOp, unOpPrec, powerPrec, unExpr, unExpr',
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, classVar, instanceVarAccess,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList,
-  objAccess, objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda,
-  func, get, set, listAccess, listSet, getFunc, setFunc, stmt, loopStmt,
-  emptyStmt, assign, subAssign, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+  multiBody, block, multiBlock, obj, csc, sec, cot, negateOp, equalOp,
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
+  multOp, divideOp, moduloOp, var, classVar, instanceVarAccess, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, newObjMixedArgs, lambda, func, get, set,
+  listAccess, getFunc, setFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
+  defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
   docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global,
   implements, indexOf, indexToInt, inherit, int, intClass, intToIndex,
-  listDecDef, mainFunction, notNull, instanceVarSelf, openFileA, openFileR, openFileW,
+  listDecDef, listSet, mainFunction, notNull, openFileA, openFileR, openFileW,
   pi, printSt, setMethodCall, stateVar, stateVarDef, string)
 import qualified Drasil.GOOL.LanguageRenderer.CommonGOOL as CG (constDecDef,
-  classMethodCall, listAppend, listAdd)
+  classMethodCall, listAppend, listAdd, innerType)
 
-import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char,
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize', increment,
-  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for,
-  while, intFunc, multiAssignError, multiReturnError, multiTypeError)
+import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
+  double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
+  litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
+  increment, increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew,
+  switch, for, while, intFunc, multiAssignError, multiReturnError,
+  multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
-  updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD,
-  TypeData(..), ValData(..), vd, updateValDoc, AttachmentTag(..), VarData(..),
-  vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData, BinderD(..),
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
+  ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
+  ParamData(..), pd, updateParam, ProgData(..), progD, TypeData(..), ValData(..),
+  vd, updateValDoc, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..),
   bindFormD)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
-import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
-  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
-  useVarName, genLoopIndex, setVarScope)
+import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn,
+  revFiles, addLangImport, addLangImportVS, setFileType, getClassName,
+  setCurrMain, useVarName, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -118,7 +116,7 @@ import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (
-  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc)
+  extFuncAppMixedArgs, extVar, listAccessFunc)
 
 csExt :: String
 csExt = "cs"
@@ -135,24 +133,24 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance SharedProg CSharpCode
-instance OOProg CSharpCode
+instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
+instance SharedStatement CSharpCode (Doc, Terminator)
+instance OOStatement CSharpCode (Doc, Terminator)
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
-instance ProgramSym CSharpCode where
-  type Program CSharpCode = ProgData
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode
-instance OORenderSym CSharpCode
+instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode where
-  type File CSharpCode = FileData
+instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
@@ -168,24 +166,18 @@ instance RenderFile CSharpCode where
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CSharpCode where
-  type Import CSharpCode = Doc
   langImport = toCode . csImport
   modImport = langImport
 
-instance ImportElim CSharpCode where
-  import' = unCSC
-
-instance AttachmentSym CSharpCode where
-  type Attachment CSharpCode = Doc
+instance AttachmentSym CSharpCode Doc where
   classLevel = toCode R.classLevel
   instanceLevel = toCode R.instanceLevel
 
-instance PermElim CSharpCode where
+instance PermElim CSharpCode Doc where
   perm = unCSC
   binding = error $ CP.bindingError csName
 
-instance BodySym CSharpCode where
-  type Body CSharpCode = Doc
+instance BodySym CSharpCode (Doc, Terminator) where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -196,8 +188,7 @@ instance RenderBody CSharpCode where
 instance BodyElim CSharpCode where
   body = unCSC
 
-instance BlockSym CSharpCode where
-  type Block CSharpCode = Doc
+instance BlockSym CSharpCode (Doc, Terminator) where
   block = G.block
 
 instance RenderBlock CSharpCode where
@@ -215,6 +206,7 @@ instance TypeSym CSharpCode where
   string = CP.string
   infile = csInfileType
   outfile = csOutfileType
+  referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType t = do
     modify (addLangImportVS csGeneric)
     C.listType csList t
@@ -222,9 +214,12 @@ instance TypeSym CSharpCode where
   setType t = do
     modify (addLangImportVS csGeneric)
     C.setType csSet t
-  listInnerType = G.listInnerType
+  innerType = CG.innerType
   funcType = csFuncType
   void = C.void
+
+instance TypeElim CSharpCode where
+  getCodeType = cType . unCSC
 
 instance OOTypeSym CSharpCode where
   obj = G.obj
@@ -280,7 +275,6 @@ instance ScopeElim CSharpCode where
   scopeData = unCSC
 
 instance VariableSym CSharpCode where
-  type Variable CSharpCode = VarData
   var         = G.var
   constant    = var
   extVar      = CS.extVar
@@ -294,9 +288,6 @@ instance OOVariableSym CSharpCode where
 
 instance SelfSym CSharpCode where
   self = C.self
-
-instance InstanceVarSelfSym CSharpCode where
-  instanceVarSelf = CP.instanceVarSelf
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
@@ -312,7 +303,6 @@ instance RenderVariable CSharpCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where
-  type Value CSharpCode = ValData
   valueType = onCodeValue valType
 
 instance OOValueSym CSharpCode
@@ -396,7 +386,6 @@ instance ValueExpression CSharpCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression CSharpCode where
-  selfMethodCallMixedArgs fn tp = objMethodCallMixedArgs' fn tp (valueOf self)
   newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs
@@ -430,7 +419,6 @@ instance InternalValueExp CSharpCode where
   classMethodCallMixedArgs' = CG.classMethodCall
 
 instance FunctionSym CSharpCode where
-  type Function CSharpCode = FuncData
 
 instance OOFunctionSym CSharpCode where
   func = G.func
@@ -444,6 +432,10 @@ instance IndexTranslator CSharpCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
 
+instance Reference CSharpCode where
+  makeRef = id
+  maybeDeref = id
+
 instance Array CSharpCode where
   arrayElem = G.arrayElem
   arrayLength arr = valueOf $ instanceVarAccess arr (var "Length" int)
@@ -451,12 +443,12 @@ instance Array CSharpCode where
     arrTp = onStateValue valueType arr
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
-instance List CSharpCode where
+instance List CSharpCode (Doc, Terminator) where
   listSize = C.listSize' csListSize
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
   listAccess = G.listAccess
-  listSet = G.listSet
+  listSet = CP.listSet
   indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
@@ -474,8 +466,6 @@ instance InternalGetSet CSharpCode where
 
 instance InternalListFunc CSharpCode where
   listAccessFunc = CS.listAccessFunc
-  -- Hack! This produces a statement and calls it a value
-  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance BinderSym CSharpCode where
   binder nm tp = onCodeValue (bindFormD nm) <$> tp
@@ -487,39 +477,6 @@ instance BinderElim CSharpCode where
 instance InternalBinderElim CSharpCode where
   binderElim = text . bindName . unCSC
 
-instance ThunkSym CSharpCode where
-  type Thunk CSharpCode = CommonThunk VS
-
-instance ThunkAssign CSharpCode where
-  thunkAssign v t = do
-    iName <- genLoopIndex
-    let
-      i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
-      loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
-      loopBody = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
-        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
-        ((v &+=) . vecIndex (valueOf i) . pure . pure)
-    multi [loopInit,
-      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
-
-instance VectorType CSharpCode where
-  vecType = listType
-
-instance VectorDecl CSharpCode where
-  vecDec = listDec
-  vecDecDef = listDecDef
-
-instance VectorThunk CSharpCode where
-  vecThunk = pure . pure . pureValue . fmap unCSC . valueOf
-
-instance VectorExpression CSharpCode where
-  vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
-  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
-  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #* fmap pure v2)
-
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
@@ -527,38 +484,37 @@ instance FunctionElim CSharpCode where
   functionType = onCodeValue fType
   function = funcDoc . unCSC
 
-instance InternalAssignStmt CSharpCode where
+instance InternalAssignStmt CSharpCode (Doc, Terminator) where
   multiAssign _ _ = error $ C.multiAssignError csName
 
-instance InternalIOStmt CSharpCode where
+instance InternalIOStmt CSharpCode (Doc, Terminator) where
   printSt _ _ = CP.printSt
 
-instance InternalControlStmt CSharpCode where
+instance InternalControlStmt CSharpCode (Doc, Terminator) where
   multiReturn _ = error $ C.multiReturnError csName
 
-instance RenderStatement CSharpCode where
+instance RenderStatement CSharpCode (Doc, Terminator) where
   stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
-instance StatementElim CSharpCode where
+instance StatementElim CSharpCode (Doc, Terminator) where
   statement = fst . unCSC
   statementTerm = snd . unCSC
 
-instance StatementSym CSharpCode where
-  type Statement CSharpCode = (Doc, Terminator)
+instance StatementSym CSharpCode (Doc, Terminator) where
   valStmt = G.valStmt Semi
   emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
-instance AssignStatement CSharpCode where
+instance AssignStatement CSharpCode (Doc, Terminator) where
   assign = G.assign Semi
   (&-=) = G.subAssign Semi
   (&+=) = C.increment
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CSharpCode where
+instance DeclStatement CSharpCode (Doc, Terminator) where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
     C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
@@ -567,17 +523,17 @@ instance DeclStatement CSharpCode where
   listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
     (litInt n) v scp)
   listDecDef = CP.listDecDef
-  arrayDec n = CP.arrayDec (litInt n)
+  arrayDec n _ = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
-instance OODeclStatement CSharpCode where
+instance OODeclStatement CSharpCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement CSharpCode where
+instance IOStatement CSharpCode (Doc, Terminator) where
   print      = csPrint False Nothing printFunc
   printLn    = csPrint True  Nothing printLnFunc
   printStr   = csPrint False Nothing printFunc   . litString
@@ -601,26 +557,26 @@ instance IOStatement CSharpCode where
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine csReadLine
   getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)
-    (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
+    (oneLiner $ listAppend (valueOf v) (csFileInput f))
 
-instance StringStatement CSharpCode where
+instance StringStatement CSharpCode (Doc, Terminator) where
   stringSplit d vnew s = assign vnew $ newObj (listType string)
     [s $. csSplitFunc d]
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
-instance FuncAppStatement CSharpCode where
+instance FuncAppStatement CSharpCode (Doc, Terminator) where
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-instance OOFuncAppStatement CSharpCode where
+instance OOFuncAppStatement CSharpCode (Doc, Terminator) where
   selfInOutCall = csInOutCall selfMethodCall
 
-instance CommentStatement CSharpCode where
+instance CommentStatement CSharpCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement CSharpCode where
+instance ControlStatement CSharpCode (Doc, Terminator) where
   break =  mkStmt R.break
   continue =  mkStmt R.continue
 
@@ -648,32 +604,29 @@ instance ControlStatement CSharpCode where
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (csAssert cond errMsg)
 
-instance ObserverPattern CSharpCode where
+instance ObserverPattern CSharpCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CSharpCode where
+instance StrategyPattern CSharpCode (Doc, Terminator) where
   runStrategy = M.runStrategy
 
-instance VisibilitySym CSharpCode where
-  type Visibility CSharpCode = Doc
+instance VisibilitySym CSharpCode Doc where
   private = toCode R.private
   public = toCode R.public
 
-instance RenderVisibility CSharpCode where
+instance RenderVisibility CSharpCode Doc where
   visibilityFromData _ = toCode
 
-instance VisibilityElim CSharpCode where
+instance VisibilityElim CSharpCode Doc where
   visibility = unCSC
 
 instance MethodTypeSym CSharpCode where
-  type MethodType CSharpCode = TypeData
   mType = zoom lensMStoVS
 
 instance OOMethodTypeSym CSharpCode where
   construct = G.construct
 
 instance ParameterSym CSharpCode where
-  type Parameter CSharpCode = ParamData
   param = G.param renderParam
   pointerParam = param
 
@@ -687,8 +640,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode where
-  type Method CSharpCode = MethodData
+instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -697,7 +649,7 @@ instance MethodSym CSharpCode where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode where
+instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -706,13 +658,13 @@ instance OOMethodSym CSharpCode where
   inOutMethod n s p = csInOut (method n s p)
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-instance RenderMethod CSharpCode where
+instance RenderMethod CSharpCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod CSharpCode where
+instance OORenderMethod CSharpCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
@@ -721,27 +673,25 @@ instance OORenderMethod CSharpCode where
   intFunc = C.intFunc
   destructor _ = error $ CP.destructorError csName
 
-instance MethodElim CSharpCode where
+instance MethodElim CSharpCode MethodData where
   method = mthdDoc . unCSC
 
-instance StateVarSym CSharpCode where
-  type StateVar CSharpCode = Doc
+instance StateVarSym CSharpCode Doc StateVar Doc where
   stateVar = CP.stateVar
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar empty
 
-instance StateVarElim CSharpCode where
+instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode where
-  type Class CSharpCode = Doc
+instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
   docClass = CP.doxClass
 
-instance RenderClass CSharpCode where
+instance RenderClass CSharpCode Doc MethodData StateVar where
   intClass = CP.intClass R.class'
 
   inherit = CP.inherit
@@ -752,8 +702,7 @@ instance RenderClass CSharpCode where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode where
-  type Module CSharpCode = ModData
+instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode where
@@ -781,10 +730,10 @@ csVersion = "6.0"
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
 
-csBoolType :: (Monad r) => VSType r
+csBoolType :: (Monad r) => VS (r TypeData)
 csBoolType = typeFromData Boolean csBool (text csBool)
 
-csFuncType :: [VSType CSharpCode] -> VSType CSharpCode -> VSType CSharpCode
+csFuncType :: [VS (CSharpCode TypeData)] -> VS (CSharpCode TypeData) -> VS (CSharpCode TypeData)
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
@@ -837,23 +786,23 @@ csSysAccess = access csSystem
 csUnaryMath :: (Monad r) => String -> VSOp r
 csUnaryMath = addSystemImport . unOpPrec . mathFunc
 
-csInfileType :: (Monad r) => VSType r
+csInfileType :: (Monad r) => VS (r TypeData)
 csInfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData InFile csReader (text csReader)
 
-csOutfileType :: (Monad r) => VSType r
+csOutfileType :: (Monad r) => VS (r TypeData)
 csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
   typeFromData OutFile csWriter (text csWriter)
 
-csLitList :: (VSType CSharpCode -> VSType CSharpCode) -> VSType CSharpCode ->
-  [SValue CSharpCode] -> SValue CSharpCode
+csLitList :: (VS (CSharpCode TypeData) -> VS (CSharpCode TypeData)) ->
+  VS (CSharpCode TypeData) -> [SValue CSharpCode] -> SValue CSharpCode
 csLitList f t' es' = do
   es <- sequence es'
   lt <- f t'
   mkVal lt (new' <+> renderType lt
     <+> braces (valueList es))
 
-csLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
+csLambda :: [CSharpCode BinderD] -> CSharpCode Value -> Doc
 csLambda ps ex = parens (binderList ps) <+> csLambdaSep <+> RC.value ex
 
 csReadLineFunc :: SValue CSharpCode
@@ -874,10 +823,10 @@ csBoolParse v = extFuncApp csBool csParse bool [v]
 csCharParse :: SValue CSharpCode -> SValue CSharpCode
 csCharParse v = extFuncApp csChar csParse char [v]
 
-csSplitFunc :: Char -> VSFunction CSharpCode
+csSplitFunc :: Char -> VS (CSharpCode FuncData)
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
-csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
+csCast :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
 csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
   valueType v) t v)
   where csCast' Double String _ v = csDblParse (toState v)
@@ -892,7 +841,7 @@ csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
 csFuncDecDef :: SVariable CSharpCode -> CSharpCode ScopeData ->
-  [SVariable CSharpCode] -> MSBody CSharpCode -> MSStatement CSharpCode
+  [SVariable CSharpCode] -> MSBody CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -906,11 +855,11 @@ csFuncDecDef v scp ps bod = do
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$
     indent (RC.body b) $$ bodyEnd
 
-csThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
+csThrowDoc :: CSharpCode Value -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-csTryCatch :: (CommonRenderSym r) => r (Body r) -> r (Body r) -> Doc
+csTryCatch :: CSharpCode Body -> CSharpCode Body -> Doc
 csTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -919,18 +868,18 @@ csTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-csAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+csAssert :: CSharpCode Value -> CSharpCode Value -> Doc
 csAssert condition errorMessage = vcat [
   text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
   ]
 
-csDiscardInput :: SValue CSharpCode -> MSStatement CSharpCode
+csDiscardInput :: SValue CSharpCode -> MS (CSharpCode (Doc, Terminator))
 csDiscardInput = valStmt
 
-csFileInput :: (OORenderSym r) => SValue r -> SValue r
+csFileInput :: (InternalValueExp r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine
 
-csInput :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
+csInput :: VS (CSharpCode TypeData) -> SValue CSharpCode -> SValue CSharpCode
 csInput tp inFn = do
   t <- tp
   csInputImport (getCodeType t) (csInput' (getCodeType t) inFn)
@@ -944,10 +893,11 @@ csInput tp inFn = do
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char]
           then addSystemImport else id
 
-csOpenFileR :: (OORenderSym r) => SValue r -> VSType r -> SValue r
+csOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (OORenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
+csOpenFileWorA :: (OOValueExpression r) => SValue r ->
+  VS (r TypeData) -> SValue r -> SValue r
 csOpenFileWorA n w a = newObj w [n, a]
 
 csRef :: Doc -> Doc
@@ -956,9 +906,9 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> VSType CSharpCode -> [SValue CSharpCode] ->
+csInOutCall :: (Label -> VS (CSharpCode TypeData) -> [SValue CSharpCode] ->
   SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SVariable CSharpCode]
-  -> [SVariable CSharpCode] -> MSStatement CSharpCode
+  -> [SVariable CSharpCode] -> MS (CSharpCode (Doc, Terminator))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
@@ -967,14 +917,14 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: AttachmentTag -> MSStatement CSharpCode -> MSStatement CSharpCode
+csVarDec :: AttachmentTag -> MS (CSharpCode smt) -> MS (CSharpCode smt)
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
-csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode ->
-    SMethod CSharpCode) ->
+csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
+  MSBody CSharpCode -> MS (CSharpCode md)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MSBody CSharpCode -> SMethod CSharpCode
+  MSBody CSharpCode -> MS (CSharpCode md)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
@@ -985,8 +935,9 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
-csPrint :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) -> SValue r ->
-  SValue r -> MSStatement r
+csPrint
+  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

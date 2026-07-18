@@ -12,11 +12,10 @@ import Data.List ((\\), nub)
 import Language.Drasil (Space, MayHaveUnit, Quantity, LiteralC(int), Concept)
 import Drasil.Database (ChunkDB)
 import Drasil.GOOL (VisibilityTag(..))
-import Data.String.Extras (toPlainName)
 
 import Drasil.Code.CodeExpr (CodeExpr)
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
-  codevars', quantvar)
+import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, quantvar)
+import Language.Drasil.Chunk.CodeBase (codevars, codevars')
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 
@@ -39,7 +38,7 @@ packmod n d = packmodRequires n d []
 -- | Define a 'Mod' that requires some library imports, with the given Name,
 -- Description, Classes, and Functions.
 packmodRequires :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
-packmodRequires n = Mod (toPlainName n)
+packmodRequires = Mod
 
 -- | Holds information needed to define a class.
 data Class = ClassDef {
@@ -81,20 +80,20 @@ data Func = FDef FuncDef
 -- | Define a function that reads data from a file, according to the given
 -- 'DataDesc'.
 funcData :: Name -> Description -> DataDesc -> Func
-funcData n desc d = FData $ FuncData (toPlainName n) desc d
+funcData n desc d = FData $ FuncData n desc d
 
 -- | Define a function by providing the 'FuncStmt's for its body. Other
 -- parameters are function name, description, list of parameters, space of the
 -- returned value, and description of the returned value.
 funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] ->
   Space -> Maybe Description -> [FuncStmt] -> Func
-funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
+funcDef s desc i t returnDesc fs = FDef $ FuncDef s desc
   (map (pcAuto . quantvar) i) t returnDesc fs
 
 -- | Like 'funcDef' but uses 'ParameterChunk's to represent the parameters.
 funcDefParams :: Name -> Description -> [ParameterChunk] -> Space ->
   Maybe Description -> [FuncStmt] -> Func
-funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
+funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef s desc
   ps t returnDesc fs
 
 -- | Define a constructor, with the given name, description, parameters,

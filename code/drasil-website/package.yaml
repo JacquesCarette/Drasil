@@ -20,20 +20,13 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - lens
 - split
 - directory
-- drasil-data
-- drasil-database
-- drasil-srs
-- drasil-code
-- drasil-gool
+- pretty
 - drasil-gen
 - drasil-lang
-- drasil-printers
-- drasil-system
-- drasil-theory
-- drasil-utils
 - sglpend
 - dblpend
 - gamephysics
@@ -44,9 +37,19 @@ dependencies:
 - projectile
 - ssp
 - swhs
+- bss
 - template
 
 library:
+  dependencies:
+  - drasil-code
+  - drasil-data
+  - drasil-database
+  - drasil-file-handling
+  - drasil-gool
+  - drasil-printers
+  - drasil-srs
+  - drasil-system
   source-dirs: lib
 
 executables:

@@ -3,11 +3,10 @@ module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS
+import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)
@@ -87,8 +86,8 @@ si = mkSmithEtAlICO
   progName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
-  inputs outputs (map cnstrw' inpConstrained) pidConstants allSymbols
-  labelledContent' symbMap allRefs
+  inputs outputs inpConstrained pidConstants allSymbols
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -119,8 +118,8 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
 
 allSymbols :: [DefinedQuantityDict]
-allSymbols = map dqdWr physicscon ++ symbols ++
-  [dqdWr mass, posInf, negInf] ++
+allSymbols = physicscon ++ symbols ++
+  [mass, posInf, negInf] ++
   map dqdWr pidConstants
 
 symbMap :: ChunkDB

@@ -9,7 +9,6 @@ import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
@@ -90,7 +89,7 @@ si = mkSmithEtAlICO progName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
   inputSymbols outputSymbols inputConstraints [] symbols
-  labelledContent symbMap allRefs
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,

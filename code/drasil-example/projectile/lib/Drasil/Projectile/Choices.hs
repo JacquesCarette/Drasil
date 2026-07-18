@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Math (piConst)
 choiceCombos :: [Choices]
 choiceCombos = [
   baseChoices {
-    lang = [Python, Cpp, CSharp, Java, Swift, Julia]
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia, Matlab]
   },
   baseChoices {
     architecture = makeArchit Modular Program,

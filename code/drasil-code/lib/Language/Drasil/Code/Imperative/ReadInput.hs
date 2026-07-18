@@ -11,9 +11,9 @@ import Data.List.NonEmpty (NonEmpty(..), toList)
 import Language.Drasil hiding (Matrix)
 import Language.Drasil.Expr.Development (Expr(Matrix))
 
+import Drasil.Code.CodeVar (CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
-import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 -- | Reads data from a file and converts the values to 'Expr's. The file must be
 -- formatted according to the 'DataDesc'' passed as a parameter.

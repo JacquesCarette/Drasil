@@ -1,17 +1,18 @@
 module Language.Drasil.Printers (
+  -- * Document
+    makeDocument, makeProject
   -- * HTML
   -- ** Printer
-    genHTML
+  , genHTML
   -- ** CSS
   , genericCSS
-  -- * Markdown
-  -- ** Printer
-  -- ** Section Printers
   -- * Plain
   -- ** Types
   , SingleLine(..)
   -- ** Functions
-  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showHasSymbImpl
+  , showHasSymbImpl
+  -- ** Renderers
+  , oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc
   -- * TeX
   , genTeX
   -- * Jupyter
@@ -26,8 +27,9 @@ import Language.Drasil.HTML.CSS (genericCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)
-import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
-  codeExprDoc, symbolDoc, unitDoc, showHasSymbImpl)
+import Language.Drasil.Plain.Print (SingleLine(..), showHasSymbImpl,
+  oneLineSentenceDoc, oneLineExprDoc, oneLineCodeExprDoc, oneLineUnitDoc)
 import Language.Drasil.TeX.Print (genTeX)
+import Language.Drasil.Printing.Import.Document (makeDocument, makeProject)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation,
   Notation(..), piSys)

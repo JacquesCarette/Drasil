@@ -2,6 +2,9 @@
 
 # Project Name: BSS
 
+# Project Purpose: Simulate the motion of a binary star system under mutual
+# gravitational interaction.
+
 build: BSS/Control.class
 
 BSS/Control.class: BSS/Control.java BSS/InputParameters.java BSS/Constants.java BSS/Calculations.java BSS/OutputFormat.java BSS/ODE.java BSS/ODEStepHandler.java

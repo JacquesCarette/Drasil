@@ -1,4 +1,11 @@
-module Drasil.BinaryStar.Unitals where
+module Drasil.BinaryStar.Unitals (
+  symbols, inputs, outputs, inConstraints, outConstraints, constants,
+  mass_1, mass_2, bssStateVar, index, numbBodies,
+  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
+  xAccel_1, yAccel_1, xAccel_2, yAccel_2,
+  xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0, tFinal,
+  xPos_1, yPos_1, xPos_2, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, sepDist
+) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
@@ -6,17 +13,14 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Database(mkUid)
 
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  refBy, refName, requirement, srs, typUnc)
-import Data.Drasil.Concepts.Theory (dataDefn, genDefn, inModel, thModel)
 import qualified Data.Drasil.Quantities.Physics as QP (position, velocity,
   acceleration, energy, force, fOfGravity, time)
-import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Quantities.Physics (gravitationalConst, gravitationalConstValue)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SI_Units (metre, kilogram, second)
@@ -30,25 +34,20 @@ import Drasil.BinaryStar.Concepts (starOne, starTwo)
 
 -- | All symbols for the Symbol Table
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
+symbols = [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
   xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
   xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
   tFinal, sepDist,
   massMin, massMax, rMax, vMax, tMax]
-  ++ map dqdWr [QP.velocity, QP.position, QP.acceleration, QP.force,
+  ++ [QP.velocity, QP.position, QP.acceleration, QP.force,
      QP.fOfGravity, QP.time, QP.energy, gravitationalConst, QPP.mass]
   ++ [index, numbBodies, dqdWr bssStateVar]
   ++ map dqdWr constants
 
--- | Acronyms for the Abbreviations table
-acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, refBy, refName, srs, thModel, typUnc]
-
 -- | Input variables (what the user provides)
 inputs :: NE.NonEmpty DefinedQuantityDict
-inputs = NE.map dqdWr $ mass_1 :| [mass_2, xPos_1_0, yPos_1_0, xPos_2_0,
+inputs = mass_1 :| [mass_2, xPos_1_0, yPos_1_0, xPos_2_0,
   yPos_2_0, xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0, tFinal]
 
 -- | Output variables (what the system calculates)
@@ -60,39 +59,16 @@ constants :: [ConstQDef]
 constants = gravitationalConstValue : specParamValues
 
 ---------------------------------------------------------
--- Unital chunks (physical quantities with symbols & units)
----------------------------------------------------------
-
-unitalChunks :: [UnitalChunk]
-unitalChunks = [
-  -- masses
-  mass_1, mass_2,
-  -- positions (state variables)
-  xPos_1, yPos_1, xPos_2, yPos_2,
-  -- initial positions
-  xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
-  -- velocities (state variables)
-  xVel_1, yVel_1, xVel_2, yVel_2,
-  -- initial velocities
-  xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
-  -- accelerations
-  xAccel_1, yAccel_1, xAccel_2, yAccel_2,
-  -- time
-  tFinal,
-  -- separation distance
-  sepDist]
-
----------------------------------------------------------
 -- Mass quantities
 ---------------------------------------------------------
 
-mass_1, mass_2 :: UnitalChunk
+mass_1, mass_2 :: DefinedQuantityDict
 
-mass_1 = uc' "m_1" (mass `ofThe` starOne)
+mass_1 = quant (mkUid "m_1") (mass `ofThe` starOne)
   (D.toSent $ phraseNP (mass `the_ofThe` starOne))
   (sub lM label1) Real kilogram
 
-mass_2 = uc' "m_2" (mass `ofThe` starTwo)
+mass_2 = quant (mkUid "m_2") (mass `ofThe` starTwo)
   (D.toSent $ phraseNP (mass `the_ofThe` starTwo))
   (sub lM label2) Real kilogram
 
@@ -100,21 +76,21 @@ mass_2 = uc' "m_2" (mass `ofThe` starTwo)
 -- Position quantities (x, y for each star)
 ---------------------------------------------------------
 
-xPos_1, yPos_1, xPos_2, yPos_2 :: UnitalChunk
+xPos_1, yPos_1, xPos_2, yPos_2 :: DefinedQuantityDict
 
-xPos_1 = uc' "x_1" (nounPhraseSP "x-position of the first star")
+xPos_1 = quant (mkUid "x_1") (nounPhraseSP "x-position of the first star")
   (S "x-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
   (sub lX label1) Real metre
 
-yPos_1 = uc' "y_1" (nounPhraseSP "y-position of the first star")
+yPos_1 = quant (mkUid "y_1") (nounPhraseSP "y-position of the first star")
   (S "y-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
   (sub lY label1) Real metre
 
-xPos_2 = uc' "x_2" (nounPhraseSP "x-position of the second star")
+xPos_2 = quant (mkUid "x_2") (nounPhraseSP "x-position of the second star")
   (S "x-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
   (sub lX label2) Real metre
 
-yPos_2 = uc' "y_2" (nounPhraseSP "y-position of the second star")
+yPos_2 = quant (mkUid "y_2") (nounPhraseSP "y-position of the second star")
   (S "y-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
   (sub lY label2) Real metre
 
@@ -122,21 +98,21 @@ yPos_2 = uc' "y_2" (nounPhraseSP "y-position of the second star")
 -- Initial position quantities
 ---------------------------------------------------------
 
-xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0 :: UnitalChunk
+xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0 :: DefinedQuantityDict
 
-xPos_1_0 = uc' "x_1_0" (nounPhraseSP "initial x-position of the first star")
+xPos_1_0 = quant (mkUid "x_1_0") (nounPhraseSP "initial x-position of the first star")
   (S "initial x-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
   (sup (sub lX label1) label0) Real metre
 
-yPos_1_0 = uc' "y_1_0" (nounPhraseSP "initial y-position of the first star")
+yPos_1_0 = quant (mkUid "y_1_0") (nounPhraseSP "initial y-position of the first star")
   (S "initial y-component of the" +:+ phrase QP.position `S.ofThe` phrase starOne)
   (sup (sub lY label1) label0) Real metre
 
-xPos_2_0 = uc' "x_2_0" (nounPhraseSP "initial x-position of the second star")
+xPos_2_0 = quant (mkUid "x_2_0") (nounPhraseSP "initial x-position of the second star")
   (S "initial x-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
   (sup (sub lX label2) label0) Real metre
 
-yPos_2_0 = uc' "y_2_0" (nounPhraseSP "initial y-position of the second star")
+yPos_2_0 = quant (mkUid "y_2_0") (nounPhraseSP "initial y-position of the second star")
   (S "initial y-component of the" +:+ phrase QP.position `S.ofThe` phrase starTwo)
   (sup (sub lY label2) label0) Real metre
 
@@ -144,21 +120,21 @@ yPos_2_0 = uc' "y_2_0" (nounPhraseSP "initial y-position of the second star")
 -- Velocity quantities
 ---------------------------------------------------------
 
-xVel_1, yVel_1, xVel_2, yVel_2 :: UnitalChunk
+xVel_1, yVel_1, xVel_2, yVel_2 :: DefinedQuantityDict
 
-xVel_1 = uc' "vx_1" (nounPhraseSP "x-velocity of the first star")
+xVel_1 = quant (mkUid "vx_1") (nounPhraseSP "x-velocity of the first star")
   (S "x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
   (sub lV (Concat [labelx, label1])) Real velU
 
-yVel_1 = uc' "vy_1" (nounPhraseSP "y-velocity of the first star")
+yVel_1 = quant (mkUid "vy_1") (nounPhraseSP "y-velocity of the first star")
   (S "y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
   (sub lV (Concat [labely, label1])) Real velU
 
-xVel_2 = uc' "vx_2" (nounPhraseSP "x-velocity of the second star")
+xVel_2 = quant (mkUid "vx_2") (nounPhraseSP "x-velocity of the second star")
   (S "x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
   (sub lV (Concat [labelx, label2])) Real velU
 
-yVel_2 = uc' "vy_2" (nounPhraseSP "y-velocity of the second star")
+yVel_2 = quant (mkUid "vy_2") (nounPhraseSP "y-velocity of the second star")
   (S "y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
   (sub lV (Concat [labely, label2])) Real velU
 
@@ -166,21 +142,21 @@ yVel_2 = uc' "vy_2" (nounPhraseSP "y-velocity of the second star")
 -- Initial velocity quantities
 ---------------------------------------------------------
 
-xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0 :: UnitalChunk
+xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0 :: DefinedQuantityDict
 
-xVel_1_0 = uc' "vx_1_0" (nounPhraseSP "initial x-velocity of the first star")
+xVel_1_0 = quant (mkUid "vx_1_0") (nounPhraseSP "initial x-velocity of the first star")
   (S "initial x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
   (sup (sub lV (Concat [labelx, label1])) label0) Real velU
 
-yVel_1_0 = uc' "vy_1_0" (nounPhraseSP "initial y-velocity of the first star")
+yVel_1_0 = quant (mkUid "vy_1_0") (nounPhraseSP "initial y-velocity of the first star")
   (S "initial y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
   (sup (sub lV (Concat [labely, label1])) label0) Real velU
 
-xVel_2_0 = uc' "vx_2_0" (nounPhraseSP "initial x-velocity of the second star")
+xVel_2_0 = quant (mkUid "vx_2_0") (nounPhraseSP "initial x-velocity of the second star")
   (S "initial x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
   (sup (sub lV (Concat [labelx, label2])) label0) Real velU
 
-yVel_2_0 = uc' "vy_2_0" (nounPhraseSP "initial y-velocity of the second star")
+yVel_2_0 = quant (mkUid "vy_2_0") (nounPhraseSP "initial y-velocity of the second star")
   (S "initial y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
   (sup (sub lV (Concat [labely, label2])) label0) Real velU
 
@@ -188,21 +164,21 @@ yVel_2_0 = uc' "vy_2_0" (nounPhraseSP "initial y-velocity of the second star")
 -- Acceleration quantities
 ---------------------------------------------------------
 
-xAccel_1, yAccel_1, xAccel_2, yAccel_2 :: UnitalChunk
+xAccel_1, yAccel_1, xAccel_2, yAccel_2 :: DefinedQuantityDict
 
-xAccel_1 = uc' "ax_1" (nounPhraseSP "x-acceleration of the first star")
+xAccel_1 = quant (mkUid "ax_1") (nounPhraseSP "x-acceleration of the first star")
   (S "x-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starOne)
   (sub lA (Concat [labelx, label1])) Real accelU
 
-yAccel_1 = uc' "ay_1" (nounPhraseSP "y-acceleration of the first star")
+yAccel_1 = quant (mkUid "ay_1") (nounPhraseSP "y-acceleration of the first star")
   (S "y-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starOne)
   (sub lA (Concat [labely, label1])) Real accelU
 
-xAccel_2 = uc' "ax_2" (nounPhraseSP "x-acceleration of the second star")
+xAccel_2 = quant (mkUid "ax_2") (nounPhraseSP "x-acceleration of the second star")
   (S "x-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starTwo)
   (sub lA (Concat [labelx, label2])) Real accelU
 
-yAccel_2 = uc' "ay_2" (nounPhraseSP "y-acceleration of the second star")
+yAccel_2 = quant (mkUid "ay_2") (nounPhraseSP "y-acceleration of the second star")
   (S "y-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starTwo)
   (sub lA (Concat [labely, label2])) Real accelU
 
@@ -210,13 +186,13 @@ yAccel_2 = uc' "ay_2" (nounPhraseSP "y-acceleration of the second star")
 -- Other quantities
 ---------------------------------------------------------
 
-tFinal :: UnitalChunk
-tFinal = uc' "t_final" (nounPhraseSP "final time")
+tFinal :: DefinedQuantityDict
+tFinal = quant (mkUid "t_final") (nounPhraseSP "final time")
   (S "end time of the simulation interval")
   (sub lT (label "final")) Real second
 
-sepDist :: UnitalChunk
-sepDist = uc' "r_12" (nounPhraseSP "separation distance")
+sepDist :: DefinedQuantityDict
+sepDist = quant (mkUid "r_12") (nounPhraseSP "separation distance")
   (S "distance between the two stars")
   (sub lR (Concat [label1, label2])) Real metre
 
@@ -237,15 +213,15 @@ labely = label "y"
 
 -- | Summation index variable i
 index :: DefinedQuantityDict
-index = dqd' (dcc "index" (nounPhraseSP "index")
-  "a number representing a single body")
-  (const lI) Integer Nothing
+index = quantNoUnit (mkUid "index") (nounPhraseSP "index")
+  (S "a number representing a single body")
+  lI Integer
 
 -- | Number of bodies n
 numbBodies :: DefinedQuantityDict
-numbBodies = dqd' (dcc "n" (nounPhraseSP "number of bodies")
-  "the number of point masses in the system")
-  (const lN) Integer Nothing
+numbBodies = quantNoUnit (mkUid "n") (nounPhraseSP "number of bodies")
+  (S "the number of point masses in the system")
+  lN Integer
 
 ---------------------------------------------------------
 -- ODE state vector (for code generation)
@@ -264,25 +240,25 @@ bssStateVar = cuc' "bssStateVar"
 -- These define the software constraint bounds.
 ---------------------------------------------------------
 
-massMin, massMax, rMax, vMax, tMax :: UnitalChunk
+massMin, massMax, rMax, vMax, tMax :: DefinedQuantityDict
 
-massMin = uc' "m_min" (nounPhraseSP "minimum stellar mass")
+massMin = quant (mkUid "m_min") (nounPhraseSP "minimum stellar mass")
   (S "lower bound for stellar mass; below this threshold objects cannot sustain hydrogen fusion")
   (sub lM (label "min")) Real kilogram
 
-massMax = uc' "m_max" (nounPhraseSP "maximum stellar mass")
+massMax = quant (mkUid "m_max") (nounPhraseSP "maximum stellar mass")
   (S "upper bound for stellar mass; beyond this range radiation effects violate the point-mass assumption")
   (sub lM (label "max")) Real kilogram
 
-rMax = uc' "r_max" (nounPhraseSP "maximum initial distance from origin")
+rMax = quant (mkUid "r_max") (nounPhraseSP "maximum initial distance from origin")
   (S "upper bound for each star's initial distance from the center of mass")
   (sub lR (label "max")) Real metre
 
-vMax = uc' "v_max" (nounPhraseSP "maximum initial speed")
+vMax = quant (mkUid "v_max") (nounPhraseSP "maximum initial speed")
   (S "upper bound for initial velocity magnitude; ensures classical mechanics remains valid")
   (sub lV (label "max")) Real velU
 
-tMax = uc' "t_max" (nounPhraseSP "maximum simulation time")
+tMax = quant (mkUid "t_max") (nounPhraseSP "maximum simulation time")
   (S "upper bound for simulation duration; limits numerical error accumulation over long integrations")
   (sub lT (label "max")) Real second
 

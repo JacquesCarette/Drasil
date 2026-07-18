@@ -17,13 +17,10 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- pretty
 - lens
-- containers
 - drasil-database
+- drasil-file-handling
 - drasil-lang
-- drasil-theory
-- drasil-utils
 
 ghc-options:
 - -Wall

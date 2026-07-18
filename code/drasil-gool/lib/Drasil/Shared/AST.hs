@@ -6,13 +6,11 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
   opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
   ProgData(progName, progPurp, progMods), progD, emptyProg,
-  StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
+  StateVarData(getStVarScp, stVar), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
   updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  BinderD(bindName, bindType), bindFormD, CommonThunk,
-  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim
-) where
+  BinderD(bindName, bindType), bindFormD
+  ) where
 
 import Drasil.Shared.CodeType (CodeType)
 
@@ -50,7 +48,7 @@ onAttachment :: AttachmentTag -> a -> a -> a
 onAttachment ClassLevel s _ = s
 onAttachment InstanceLevel _ d = d
 
--- Used as the underlying data type for Attachment in the C++ renderer
+-- Used as the underlying data type for AttachmentSym the C++ and Python renderers
 data AttachmentData = BD {attachment :: AttachmentTag, attachmentDoc :: Doc}
 
 ad :: AttachmentTag -> Doc -> AttachmentData
@@ -118,10 +116,9 @@ emptyProg :: ProgData
 emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
-data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc,
-  destructSts :: (Doc, Terminator)}
+data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc}
 
-svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
+svd :: VisibilityTag -> Doc -> StateVarData
 svd = SVD
 
 -- Used as the underlying data type for Scopes in all renderers
@@ -164,39 +161,3 @@ data BinderD = BindFormD {bindName :: String, bindType :: TypeData}
 bindFormD :: String -> TypeData -> BinderD
 bindFormD = BindFormD
 
--- Used as the underlying data type for Thunks in all renderers
-data CommonThunk s
-  = PureValue (s ValData)
-  | Vectorize (s ValData -> s ValData) (CommonThunk s)
-  | Vectorize2 (s ValData -> s ValData -> s ValData) (CommonThunk s) (CommonThunk s)
-  | SumComponents (CommonThunk s)
-
-pureValue :: s ValData -> CommonThunk s
-pureValue = PureValue
-
-vectorize :: (s ValData -> s ValData) -> CommonThunk s -> CommonThunk s
-vectorize = Vectorize
-
-vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
-vectorize2 = Vectorize2
-
-sumComponents :: CommonThunk s -> CommonThunk s
-sumComponents = SumComponents
-
-commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
-commonVecIndex index (PureValue v) = index v
-commonVecIndex index (Vectorize op v) = op (commonVecIndex index v)
-commonVecIndex index (Vectorize2 op v1 v2) = commonVecIndex index v1 `op` commonVecIndex index v2
-commonVecIndex _ (SumComponents _) = error "Indexing into a scalar thunk"
-
-commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
-commonThunkElim _ sumF (SumComponents v) = sumF v
-commonThunkElim vectorF _ v = vectorF v
-
--- The dimension of a vector or the vector underlying a dot product
--- Used to generate thunkAssign loops
-commonThunkDim :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
-commonThunkDim dim (PureValue v) = dim v
-commonThunkDim dim (Vectorize _ v) = commonThunkDim dim v
-commonThunkDim dim (Vectorize2 _ v1 _) = commonThunkDim dim v1
-commonThunkDim dim (SumComponents v) = commonThunkDim dim v

@@ -1,37 +1,38 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  GSProgram, SFile, FSModule,
+  Program, GSProgram, File, SFile, Module, FSModule,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
-  MethodSym)
-import Drasil.Shared.State (GS, FS)
+import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..))
+import Drasil.Shared.State (GS, FS, MS)
+import Drasil.Shared.AST (FileData, ModData, ProgData)
 
-class (SharedProg r, ProgramSym r
-  ) => ProcProg r
+class (SharedProg r vis smt md, ProgramSym r vis smt md prg)
+  => ProcProg r vis smt md prg
 
-type GSProgram a = GS (a (Program a))
+type Program = ProgData
+type GSProgram a prg = GS (a prg)
 
-class (FileSym r) => ProgramSym r where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+class (FileSym r vis smt md) => ProgramSym r vis smt md prg | r -> prg where
+  prog :: Label -> Label -> [SFile r] -> GSProgram r prg
 
-type SFile a = FS (a (File a))
+type File = FileData
+type SFile a = FS (a File)
 
-class (ModuleSym r) => FileSym r where
-  type File r
+class (ModuleSym r vis smt md) => FileSym r vis smt md where
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
 
-type FSModule a = FS (a (Module a))
+type Module = ModData
+type FSModule a = FS (a Module)
 
-class (MethodSym r) => ModuleSym r where
-  type Module r
+class (MethodSym r vis smt md) => ModuleSym r vis smt md where
   -- Module name, import names, module functions
-  buildModule :: Label -> [Label] -> [SMethod r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r md)] -> FSModule r

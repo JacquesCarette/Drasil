@@ -1,11 +1,13 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
+  Program, GSProgram, File, SFile, Module, FSModule, Class, SClass, StateVar,
+  CSStateVar, Initializers,
   -- Typeclasses
-  OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), InstanceVarSelfSym(..),
+  OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
   OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
@@ -20,131 +22,138 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
-  MSStatement, NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall,
+  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
-  VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
-  ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
+  SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
+  MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
+  ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
-import Drasil.Shared.State (GS, FS, CS)
-import Drasil.Shared.AST (ScopeData)
+import Drasil.Shared.State (GS, FS, CS, MS, VS)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
+  ModData, ProgData)
 
-class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
-  OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,
-  ObserverPattern r, StrategyPattern r
-  ) => OOProg r
+import Text.PrettyPrint.HughesPJ (Doc)
 
-type GSProgram a = GS (a (Program a))
+class (SharedProg r vis smt md, OOStatement r smt,
+  ProgramSym r vis smt md svr att prg, ObserverPattern r smt,
+  StrategyPattern r smt
+  ) => OOProg r vis smt md svr att prg
 
-class (FileSym r) => ProgramSym r where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
+  OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
+  OOFunctionSym r, OOValueExpression r
+  ) => OOStatement r smt
 
-type SFile a = FS (a (File a))
+type Program = ProgData
+type GSProgram a prg = GS (a prg)
 
-class (ModuleSym r) => FileSym r where
-  type File r
+class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r -> prg where
+  prog :: Label -> Label -> [SFile r] -> GSProgram r prg
+
+type File = FileData
+type SFile a = FS (a File)
+
+class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
 
-type FSModule a = FS (a (Module a))
+type Module = ModData
+type FSModule a = FS (a Module)
 
-class (ClassSym r) => ModuleSym r where
-  type Module r
+class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
   -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
 
-type SClass a = CS (a (Class a))
+type Class = Doc
+type SClass a = CS (a Class)
 
-class (OOMethodSym r, StateVarSym r) => ClassSym r where
-  type Class r
+class (OOMethodSym r vis smt md att, StateVarSym r vis svr att) => ClassSym r vis smt md svr att where
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
+    [MS (r md)] -> SClass r
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
+    [MS (r md)] -> SClass r
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] ->
-    [SMethod r] -> SClass r
+  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
+    [MS (r md)] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r, AttachmentSym r) => OOMethodSym r where
-  method      :: Label -> r (Visibility r) -> r (Attachment r) -> VSType r ->
-    [MSParameter r] -> MSBody r -> SMethod r
-  getMethod   :: SVariable r -> SMethod r
-  setMethod   :: SVariable r -> SMethod r
-  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
+class (MethodSym r vis smt md, AttachmentSym r att) => OOMethodSym r vis smt md att where
+  method      :: Label -> r vis -> r att -> VS (r TypeData) ->
+    [MS (r ParamData)] -> MSBody r -> MS (r md)
+  getMethod   :: SVariable r -> MS (r md)
+  setMethod   :: SVariable r -> MS (r md)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
 
-  -- inOutMethod and docInOutMethod both need the Attachment parameter
-  inOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> InOutFunc r
-  docInOutMethod :: Label -> r (Visibility r) -> r (Attachment r) -> DocInOutFunc r
+  -- inOutMethod and docInOutMethod both need AttachmentSym
+  inOutMethod :: Label -> r vis -> r att -> InOutFunc r md
+  docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r md
 
-privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
-  -> SMethod r
+privMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MSBody r -> MS (r md)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
-  -> SMethod r
+pubMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MSBody r -> MS (r md)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
+initializer :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
+  Initializers r -> MS (r md)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
+nonInitConstructor :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
+  MSBody r -> MS (r md)
 nonInitConstructor ps = constructor ps []
 
-type CSStateVar a = CS (a (StateVar a))
+type StateVar = Doc
+type CSStateVar r svr = CS (r svr)
 
-class (VisibilitySym r, AttachmentSym r, VariableSym r) => StateVarSym r where
-  type StateVar r
-  stateVar :: r (Visibility r) -> r (Attachment r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Visibility r) -> r (Attachment r) -> SVariable r ->
-    SValue r -> CSStateVar r
-  constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
+class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis svr att | r -> svr where
+  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r svr
+  stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
+  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
 
-privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+privDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubSVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance
-class AttachmentSym r where
-  type Attachment r
-  classLevel  :: r (Attachment r)
-  instanceLevel :: r (Attachment r)
+class AttachmentSym r att | r -> att where
+  classLevel  :: r att
+  instanceLevel :: r att
 
 class (TypeSym r) => OOTypeSym r where
-  obj :: ClassName -> VSType r
+  obj :: ClassName -> VS (r TypeData)
 
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
-  classVar          :: Label -> VSType r -> SVariable r
+  classVar          :: Label -> VS (r TypeData) -> SVariable r
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
-  classConst        :: Label -> VSType r -> SVariable r
+  classConst        :: Label -> VS (r TypeData) -> SVariable r
   -- | Given a class `C` and a class-level variable `v`, creates `C.v`
-  classVarAccess    :: VSType r -> SVariable r -> SVariable r
+  classVarAccess    :: VS (r TypeData) -> SVariable r -> SVariable r
   -- | Given a class `C` from an external module and a class-level variable `v`,
   -- performs any necessary imports and creates `C.v`
-  extClassVarAccess :: VSType r -> SVariable r -> SVariable r
+  extClassVarAccess :: VS (r TypeData) -> SVariable r -> SVariable r
   -- | Given an instance `i` and an instance-level variable `v`, creates `i.v`
   instanceVarAccess :: SValue r -> SVariable r -> SVariable r
 
@@ -156,26 +165,20 @@ class (OOVariableSym r) => SelfSym r where
   -- | `self` keyword
   self              :: SVariable r
 
-class (OOVariableSym r) => InstanceVarSelfSym r where
-  -- | Given a variable `v`, creates `self.v`
-  instanceVarSelf   :: SVariable r -> SVariable r
+-- | Given a variable `v`, creates `self.v`
+instanceVarSelf   :: (SelfSym r, VariableValue r) => SVariable r -> SVariable r
+instanceVarSelf = instanceVarAccess (valueOf self)
 
-class (VariableValue r, OOVariableSym r, SelfSym r, InstanceVarSelfSym r) => OOVariableValue r
+class (VariableValue r, OOVariableSym r, SelfSym r) => OOVariableValue r
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
-  -- | Generic function for calling a method on `self`.
-  -- Because of C++, this should always be called rather
-  -- than `objMethodCall` on `self.`
-  -- Takes the function name, the return type, a list of
-  -- positional arguments, and a list of named arguments.
-  selfMethodCallMixedArgs ::            MixedCall r
   newObjMixedArgs         ::            MixedCtorCall r
   extNewObjMixedArgs      :: Library -> MixedCtorCall r
   libNewObjMixedArgs      :: Library -> MixedCtorCall r
 
-selfMethodCall   :: (OOValueExpression r) =>            PosCall r
-selfMethodCall n t vs = selfMethodCallMixedArgs n t vs []
+selfMethodCall   :: (InternalValueExp r, VariableValue r, SelfSym r) => PosCall r
+selfMethodCall n t = objMethodCall t (valueOf self) n
 
 newObj           :: (OOValueExpression r) =>            PosCtorCall r
 newObj t vs = newObjMixedArgs t vs []
@@ -190,111 +193,111 @@ class (ValueSym r) => InternalValueExp r where
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of
   --   positional arguments, and a list of named arguments.
-  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] ->
+  objMethodCallMixedArgs' :: Label -> VS (r TypeData) -> SValue r -> [SValue r] ->
     NamedArgs r -> SValue r
   -- | Generic function for calling a class method.
   --   Takes the function name, the return type, the class type,
   --   a list of positional arguments, and a list of named arguments.
-  classMethodCallMixedArgs' :: Label -> VSType r -> VSType r -> [SValue r] ->
+  classMethodCallMixedArgs' :: Label -> VS (r TypeData) -> VS (r TypeData) -> [SValue r] ->
     NamedArgs r -> SValue r
 
 -- | Calling a method. t is the return type of the method, o is the
 --   object, f is the method name, and ps is a list of positional arguments.
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label ->
+objMethodCall :: (InternalValueExp r) => VS (r TypeData) -> SValue r -> Label ->
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
 -- | Calling a method with named arguments.
-objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label
-  -> NamedArgs r -> SValue r
+objMethodCallNamedArgs :: (InternalValueExp r) => VS (r TypeData) -> SValue r ->
+  Label -> NamedArgs r -> SValue r
 objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
 -- | Calling a method with a mix of positional and named arguments.
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label
-  -> [SValue r] -> NamedArgs r -> SValue r
+objMethodCallMixedArgs :: (InternalValueExp r) => VS (r TypeData) -> SValue r ->
+  Label -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 -- | Calling a method with no parameters.
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
-  -> SValue r
+objMethodCallNoParams :: (InternalValueExp r) => VS (r TypeData) -> SValue r ->
+  Label -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
 
 -- | Calling a class method. t is the return type of the method, c is the
 --   class, f is the method name, and ps is a list of positional arguments.
-classMethodCall :: (InternalValueExp r) => VSType r -> VSType r -> Label ->
+classMethodCall :: (InternalValueExp r) => VS (r TypeData) -> VS (r TypeData) -> Label ->
   [SValue r] -> SValue r
 classMethodCall t c f ps = classMethodCallMixedArgs' f t c ps []
 
 -- | Calling a class method with named arguments.
-classMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> VSType r -> Label
-  -> NamedArgs r -> SValue r
+classMethodCallNamedArgs :: (InternalValueExp r) => VS (r TypeData) -> VS (r TypeData) ->
+  Label -> NamedArgs r -> SValue r
 classMethodCallNamedArgs t c f = classMethodCallMixedArgs' f t c []
 
 -- | Calling a class method with a mix of positional and named arguments.
-classMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> VSType r -> Label
-  -> [SValue r] -> NamedArgs r -> SValue r
+classMethodCallMixedArgs :: (InternalValueExp r) => VS (r TypeData) -> VS (r TypeData) ->
+  Label -> [SValue r] -> NamedArgs r -> SValue r
 classMethodCallMixedArgs t c f = classMethodCallMixedArgs' f t c
 
 -- | Calling a class method with no parameters.
-classMethodCallNoParams :: (InternalValueExp r) => VSType r -> VSType r -> Label
-  -> SValue r
+classMethodCallNoParams :: (InternalValueExp r) => VS (r TypeData) -> VS (r TypeData) ->
+  Label -> SValue r
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
-  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MSStatement r
+class (DeclStatement r smt, OOVariableSym r) => OODeclStatement r smt where
+  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MSStatement r
+  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
   extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
-    -> MSStatement r
+    -> MS (r smt)
 
-objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r ScopeData
-  -> MSStatement r
-objDecNewNoParams v s = objDecNew v s []
+objDecNewNoParams :: (OODeclStatement r smt) => SVariable r -> r ScopeData
+  -> MS (r smt)
+objDecNewNoParams v tp = objDecNew v tp []
 
-extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r ->
-  r ScopeData -> MSStatement r
-extObjDecNewNoParams l v s = extObjDecNew l v s []
+extObjDecNewNoParams :: (OODeclStatement r smt) => Library -> SVariable r ->
+  r ScopeData -> MS (r smt)
+extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
-class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
-  selfInOutCall :: InOutCall r
+class (FuncAppStatement r smt, OOVariableSym r) => OOFuncAppStatement r smt where
+  selfInOutCall :: InOutCall r smt
 
-class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
+class (StatementSym r smt, OOFunctionSym r) => ObserverPattern r smt where
+  notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> r ScopeData
-  -> MSStatement r
+initObserverList :: (DeclStatement r smt) => VS (r TypeData) -> [SValue r] ->
+  r ScopeData -> MS (r smt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r
-  -> MSStatement r
-addObserver o = valStmt $ listAdd obsList lastelem o
+addObserver :: (OOVariableValue r, List r smt) => SValue r -> MS (r smt)
+addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (BodySym r, VariableSym r) => StrategyPattern r where
+class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MSBlock r
 
 class (FunctionSym r) => OOFunctionSym r where
-  func :: Label -> VSType r -> [SValue r] -> VSFunction r
-  objAccess :: SValue r -> VSFunction r -> SValue r
+  func :: Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)
+  objAccess :: SValue r -> VS (r FuncData) -> SValue r
 
-($.) :: (OOFunctionSym r) => SValue r -> VSFunction r -> SValue r
+($.) :: (OOFunctionSym r) => SValue r -> VS (r FuncData) -> SValue r
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, OOFunctionSym r) => VS (r FuncData) -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r, VariableSym r) => GetSet r where
   get :: SValue r -> SVariable r -> SValue r
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
-convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
+convTypeOO :: (OOTypeSym r) => CodeType -> VS (r TypeData)
 convTypeOO (Object n) = obj n
+convTypeOO (Reference t) = referenceType (convTypeOO t)
 convTypeOO t = convType t

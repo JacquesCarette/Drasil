@@ -18,16 +18,14 @@ import Language.Drasil
 import Drasil.System (purpose)
 import Utils.Drasil (stringList)
 
-import Drasil.Code.CodeVar (CodeIdea(..))
-import Language.Drasil.Chunk.CodeBase
+import Drasil.Code.CodeVar (CodeIdea(..), quantvar)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName, HasChoices(..))
 import Language.Drasil.Choices (ImplementationType(..), Structure(..),
   InternalConcept(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
+import Language.Drasil.CodeSpec (HasCodeSpec(..))
 import Language.Drasil.Mod (Description)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
-import Language.Drasil.Printing.Import (spec)
+import Language.Drasil.Printers (oneLineSentenceDoc)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
@@ -42,8 +40,8 @@ unmodularDesc = do
   g <- get
   let implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc OneLine $ spec (printfo g) $ capSent $ foldlSent
-      ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ codeSpec g ^. purpose)
+  return $ show $ oneLineSentenceDoc (printfo g) $ capSent $ foldlSent
+      ([S "a", S (implTypeStr (g ^. implType)), S "to"] ++ g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
@@ -124,7 +122,7 @@ constModDesc = do
   let cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
   return $ cDesc $ filter (flip member (Map.filter (cname ==)
-    (clsMap g)) . codeName) (codeSpec g ^. constantsO)
+    (clsMap g)) . codeName) (g ^. constDefns)
 
 -- | Returns a description of what is contained in the Output Format module,
 -- if it exists.
@@ -148,9 +146,9 @@ inputClassDesc = do
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [
-        inPs $ inIPMap $ codeSpec g ^. extInputsO,
-        dVs $ inIPMap $ map quantvar $ codeSpec g ^. derivedInputsO,
-        cVs $ inIPMap $ map quantvar $ codeSpec g ^. constantsO]
+        inPs $ inIPMap $ g ^. extInputs,
+        dVs $ inIPMap $ map quantvar $ g ^. derivedInputs,
+        cVs $ inIPMap $ map quantvar $ g ^. constDefns]
       inPs [] = ""
       inPs _ = "input values"
       dVs [] = ""
@@ -169,7 +167,7 @@ constClassDesc = do
   let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
   return $ ccDesc $ filter (flip member (Map.filter (cname ==)
-    (clsMap g)) . codeName) (codeSpec g ^. constantsO)
+    (clsMap g)) . codeName) (g ^. constDefns)
 
 -- | Returns a description for the generated function that reads input from a
 -- file, if it exists.
@@ -223,8 +221,8 @@ woFuncDesc = do
 physAndSfwrCons :: GenState Description
 physAndSfwrCons = do
   g <- get
-  let cns = concat $ mapMaybe ((`Map.lookup` (codeSpec g ^. cMapO)) . (^. uid))
-        (codeSpec g ^. inputsO)
+  let cns = concat $ mapMaybe ((`Map.lookup` (g ^. cMap)) . (^. uid))
+        (g ^. inputs)
   return $ stringList [
     if not (any isPhysC cns) then "" else "physical constraints",
     if not (any isSfwrC cns) then "" else "software constraints"]

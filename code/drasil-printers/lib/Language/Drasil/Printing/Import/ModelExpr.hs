@@ -160,6 +160,7 @@ modelExpr (UnaryOpVN Dim u)          sm = mkCall sm P.Dim u
 modelExpr (UnaryOp Sqrt u)           sm = P.Sqrt $ modelExpr u sm
 modelExpr (UnaryOp Neg u)            sm = neg sm u
 modelExpr (UnaryOpVV NegV u)         sm = neg sm u
+modelExpr (UnaryOp MakeRef _)        _  = error "modelExpr: UnaryOp MakeRef not implemented"
 modelExpr (ArithBinaryOp Frac a b)   sm = P.Div (modelExpr a sm) (modelExpr b sm)
 modelExpr (ArithBinaryOp Pow a b)    sm = pow sm a b
 modelExpr (ArithBinaryOp Subt a b)   sm = P.Row [modelExpr a sm, P.MO P.Subt, modelExpr b sm]

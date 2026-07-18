@@ -97,7 +97,7 @@
           Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge duplication and improve traceability. The artifacts are generated from a common knowledge-base using recipes written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of knowledge should be used in which artifacts, how to transform them, and more. For more information on the design, documentation, usage, and specifics of Drasil, please visit the <a href="https://github.com/JacquesCarette/Drasil">GitHub repository</a> or the <a href="https://github.com/JacquesCarette/Drasil/wiki">GitHub Wiki</a>.
         </p>
         <p class="paragraph">
-          This webpage is designed to contain the most up-to-date <a href=#Sec:CaseStudy>case study artifacts</a>, <a href=#Sec:Documentation>Haddock documentation</a>, and <a href=#Sec:Analysis>Drasil analysis</a> from the Drasil repository. The case study artifacts include the Software Requirements Specification (SRS) for each case study, which specifies what the program sets out to achieve. The Haddock Documentation section contains the current documentation for the Drasil framework. The package dependency graphs show the hierarchy of modules within each package.
+          This webpage is designed to contain the most up-to-date <a href="#Sec:CaseStudy">case study artifacts</a>, <a href="#Sec:Documentation">Haddock documentation</a>, and <a href="#Sec:Analysis">Drasil analysis</a> from the Drasil repository. The case study artifacts include the Software Requirements Specification (SRS) for each case study, which specifies what the program sets out to achieve. The Haddock Documentation section contains the current documentation for the Drasil framework. The package dependency graphs show the hierarchy of modules within each package.
         </p>
         <p class="paragraph">
           The following is a list of artifacts that Drasil currently generates:
@@ -146,6 +146,33 @@
           The development of Drasil follows an example-driven approach, with a current focus on creating Software Requirement Specifications (SRS). More specifically, Drasil's knowledge of the domain of Physics has seen significant growth through the creation of these examples, ranging from mechanics to thermodynamics. Each of the case studies implemented in Drasil contains its own generated PDF and HTML reports, and in some cases, its own generated code to solve the problem defined in their respective SRS documents.
         </p>
         <ul class="list">
+          <li>
+            BSS  - To simulate the motion of a binary star system under mutual gravitational interaction.
+            <ul class="list">
+              <li>
+                <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/drasil-example/bss">Drasil Source Code</a>
+              </li>
+              <li>
+                SRS: <a href="examples/bss/SRS/HTML/BSS_SRS.html">[HTML]</a> <a href="examples/bss/SRS/PDF/BSS_SRS.pdf">[PDF]</a> <a href="examples/bss/SRS/mdBook/book">[mdBook]</a> <a href="examples/bss/SRS/Jupyter/BSS_SRS.html">[Jupyter (HTML)]</a>
+              </li>
+              <li>
+                Generated Code:
+                <ul class="list">
+                  <li>
+                    BSS <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/bss/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/bss/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/bss/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/bss/src/java">[Java]</a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Generated Code Documentation:
+                <ul class="list">
+                  <li>
+                    BSS <a href="examples/bss/doxygen/python/index.html">[Python]</a> <a href="examples/bss/doxygen/cpp/index.html">[C++]</a> <a href="examples/bss/doxygen/csharp/index.html">[C Sharp]</a> <a href="examples/bss/doxygen/java/index.html">[Java]</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
           <li>
             DblPend  - To predict the motion of a double pendulum.
             <ul class="list">
@@ -289,7 +316,7 @@
                 Generated Code:
                 <ul class="list">
                   <li>
-                    Projectile_U_P_NoL_U_WI_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/swift">[Swift]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/julia">[Julia]</a>
+                    Projectile_U_P_NoL_U_WI_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/swift">[Swift]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/julia">[Julia]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_u_p_nol_u_wi_v_d/src/matlab">[Matlab]</a>
                   </li>
                   <li>
                     Projectile_M_P_NoL_B_U_V_D <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_m_p_nol_b_u_v_d/src/python">[Python]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_m_p_nol_b_u_v_d/src/cpp">[C++]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_m_p_nol_b_u_v_d/src/csharp">[C Sharp]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_m_p_nol_b_u_v_d/src/java">[Java]</a> <a href="https://github.com/JacquesCarette/Drasil/tree/main/code/stable/projectile/projectile_m_p_nol_b_u_v_d/src/swift">[Swift]</a>
@@ -309,7 +336,7 @@
                 Generated Code Documentation:
                 <ul class="list">
                   <li>
-                    Projectile_U_P_NoL_U_WI_V_D <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/python/index.html">[Python]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/cpp/index.html">[C++]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/csharp/index.html">[C Sharp]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/java/index.html">[Java]</a>
+                    Projectile_U_P_NoL_U_WI_V_D <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/python/index.html">[Python]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/cpp/index.html">[C++]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/csharp/index.html">[C Sharp]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/java/index.html">[Java]</a> <a href="examples/projectile/doxygen/projectile_u_p_nol_u_wi_v_d/matlab/index.html">[Matlab]</a>
                   </li>
                   <li>
                     Projectile_M_P_NoL_B_U_V_D <a href="examples/projectile/doxygen/projectile_m_p_nol_b_u_v_d/python/index.html">[Python]</a> <a href="examples/projectile/doxygen/projectile_m_p_nol_b_u_v_d/cpp/index.html">[C++]</a> <a href="examples/projectile/doxygen/projectile_m_p_nol_b_u_v_d/csharp/index.html">[C Sharp]</a> <a href="examples/projectile/doxygen/projectile_m_p_nol_b_u_v_d/java/index.html">[Java]</a>
@@ -380,6 +407,16 @@
               <th>Constant Structure</th>
               <th>Constant Representation</th>
               <th>Real Number Representation</th>
+            </tr>
+            <tr>
+              <td>BSS</td>
+              <td>M</td>
+              <td>P</td>
+              <td>NoL</td>
+              <td>U</td>
+              <td>B</td>
+              <td>C</td>
+              <td>D</td>
             </tr>
             <tr>
               <td>DblPend</td>
@@ -559,7 +596,7 @@
           <div class="subsection">
             <h2>Table of Graphs</h2>
             <p class="paragraph">
-              The following <a href=#Table:TableOfGraphs>Table of Type and Class Instance Graphs</a> is another artifact generated by Drasil. The type graphs explore the dependency of data types upon each other. These graphs include record-defined types, newtype wrappers, and data types built from other types. For these graphs, a node with a black outline signifies that the type is not defined in that package, but is still used in the creation of other types (this includes Haskell-native types since we do not redefine those). A red outline signifies that the type was created using Haskell's 'type' syntax, while dark green means the type was made using 'newtype' syntax. A purple border shows that the type uses constructor syntax and cyan is used for types written with record syntax. The arrow starts from the base types at the tip and follows through so that dependent types are placed at the tail. Usually, this means that those types at the tail may contain the type at the tip of the arrow.
+              The following <a href="#Table:TableOfGraphs">Table of Type and Class Instance Graphs</a> is another artifact generated by Drasil. The type graphs explore the dependency of data types upon each other. These graphs include record-defined types, newtype wrappers, and data types built from other types. For these graphs, a node with a black outline signifies that the type is not defined in that package, but is still used in the creation of other types (this includes Haskell-native types since we do not redefine those). A red outline signifies that the type was created using Haskell's 'type' syntax, while dark green means the type was made using 'newtype' syntax. A purple border shows that the type uses constructor syntax and cyan is used for types written with record syntax. The arrow starts from the base types at the tip and follows through so that dependent types are placed at the tail. Usually, this means that those types at the tail may contain the type at the tip of the arrow.
             </p>
             <p class="paragraph">
               The class instance graphs aim to look at the structure of classes, data types, and the interactions between those two. Specifically, each arrow represents the given type as an instance of a given class. The tip of the arrow points to the class, and the tail specifies the type that is an instance of the tip's class. For clarity in analyzing the structure, classes defined in the graph's package are coloured magenta, classes that are used but not defined in the package are rendered pink (including Haskell-native classes), and data types are rendered with a turquoise border.

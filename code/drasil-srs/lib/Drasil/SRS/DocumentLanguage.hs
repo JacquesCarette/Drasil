@@ -5,14 +5,14 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.SRS.DocumentLanguage (mkDoc, findAllRefs) where
+module Drasil.SRS.DocumentLanguage (mkDoc) where
 
 -- General Haskell
 import Control.Lens ((^.), set)
 import Data.Either (rights)
 import Data.Function (on)
 import Data.List (nub, sortBy, (\\))
-import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
+import Data.Maybe (maybeToList, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
 import qualified Data.Map.Strict as M
@@ -23,11 +23,12 @@ import Language.Drasil.Document
 import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (findAllConcInsts,
   TermAbbr, shortForm, termResolve')
 
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..))
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Drasil.SRS.GetChunks (resolveAllVars)
 
 -- Vocabulary
@@ -47,7 +48,7 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
 import Drasil.SRS.TraceTable (generateTraceMap)
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -127,8 +128,7 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
-    in set lbldCntnt (si ^. lbldCntnt ++ tglcs)
-     $ set systemdb (insertAll tglcs db)
+    in set systemdb (insertAll tglcs db)
      $ set traceTable tdb
      $ set refbyTable (invert tdb) si
   | otherwise = si
@@ -145,42 +145,20 @@ fillReferences allSections cites si = si2
     -- get old chunk database + ref database
     chkdb = si ^. systemdb
     -- get refs from SRSDecl. Should include all section labels and labelled content.
-    refsFromSRS = concatMap findAllRefs allSections
+    refsFromSRS = concatMap extractLCRefs allSections
     -- get refs from the stuff already inside the chunk database
     ddefs   = si ^. dataDefns
     gdefs   = si ^. genDefns
     imods   = si ^. instModels
     tmods   = si ^. theoryModels
-    lblCon  = si ^. lbldCntnt
     concIns = findAllConcInsts chkdb
     newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
-      ++ map ref tmods ++ map ref concIns ++ map ref lblCon
+      ++ map ref tmods ++ map ref concIns
     si2 = set refTable (M.union (si ^. refTable) newRefs) si
-
--- | Recursively find all references in a section (meant for getting at 'LabelledContent').
-findAllRefs :: Section -> [Reference]
-findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
-  where
-    findRefSecCons :: SecCons -> [Reference]
-    findRefSecCons (Sub s) = findAllRefs s
-    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
-    findRefSecCons _ = []
-
--- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
-extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
-
--- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
--- their units (i.e., what units their units are defined with).
-collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
-
-getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- * Section Creator Functions
 
@@ -409,9 +387,9 @@ mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
+    notNull xs = not (null (header (TM.layoutUIDs xs si) si))
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
-      not $ null (header (TM.layoutUIDs rows si) si)
-         || null (header (TM.layoutUIDs cols si) si)) progs
+      notNull rows && notNull cols) progs
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]

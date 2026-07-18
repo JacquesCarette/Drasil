@@ -9,7 +9,6 @@ import sys
 ## \brief Structure for holding the input values and constant values
 class InputParameters:
     g = 9.8
-    epsilon = 2.0e-2
     
     ## \brief Initializes input object by reading inputs and checking physical constraints on the input
     # \param filename name of the input file

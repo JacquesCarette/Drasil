@@ -1,33 +1,33 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GProc.RendererClassesProc (
   ProcRenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
   ProcRenderMethod(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, MSParameter,
-  MSBody, BlockSym(..), VisibilitySym(..))
-import qualified Drasil.GProc.InterfaceProc as IP (SFile, FSModule, FileSym(..),
-  ModuleSym(..))
-import Drasil.Shared.State (FS)
+import Drasil.Shared.InterfaceCommon (Label, Block, MSBody)
+import qualified Drasil.GProc.InterfaceProc as IP (SFile, Module, FSModule,
+  FileSym(..))
+import Drasil.Shared.State (FS, MS)
+import Drasil.Shared.AST (ParamData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
-class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,
-  ProcRenderMethod r
-  ) => ProcRenderSym r
-
+class (CommonRenderSym r vis smt md, IP.FileSym r vis smt md, RenderFile r,
+  RenderMod r, ModuleElim r, ProcRenderMethod r vis md
+  ) => ProcRenderSym r vis smt md
 -- Procedural-Only Typeclasses --
 
 class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IP.Module r) -> r (Block r)
-  bottom :: r (Block r)
+  top :: r IP.Module -> r Block
+  bottom :: r Block
 
   commentedMod :: IP.SFile r -> FS (r Doc) -> IP.SFile r
 
@@ -35,13 +35,13 @@ class (BlockCommentSym r) => RenderFile r where
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> IP.FSModule r
-  updateModuleDoc :: (Doc -> Doc) -> r (IP.Module r) -> r (IP.Module r)
+  updateModuleDoc :: (Doc -> Doc) -> r IP.Module -> r IP.Module
 
 class ModuleElim r where
-  module' :: r (IP.Module r) -> Doc
+  module' :: r IP.Module -> Doc
 
-class (RenderMethod r) => ProcRenderMethod r where
+class (RenderMethod r md) => ProcRenderMethod r vis md | r -> vis where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
-  intFunc     :: Bool -> Label -> r (Visibility r) -> MSMthdType r ->
-    [MSParameter r] -> MSBody r -> SMethod r
+  intFunc     :: Bool -> Label -> r vis -> MSMthdType r ->
+    [MS (r ParamData)] -> MSBody r -> MS (r md)

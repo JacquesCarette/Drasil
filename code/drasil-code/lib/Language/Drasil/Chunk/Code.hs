@@ -1,26 +1,25 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.Code (
-  CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..),
-  VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars',
-  listToArray, funcPrefix,
-  DefiningCodeExpr(..)
+  ccObjVar
 ) where
 
 import Control.Lens ((^.), view)
-import Text.PrettyPrint.HughesPJ (render)
 
 import Language.Drasil
-import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Printers (symbolDoc)
+import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.Code.CodeVar (CodeChunk(..), CodeIdea(..), VarOrFunc(..),
-  DefiningCodeExpr(..), CodeFuncChunk(..), CodeVarChunk(..), funcPrefix, obv,
-  listToArray, qc, ccv, ccf)
+import Drasil.Code.CodeVar (CodeChunk(..), CodeFuncChunk, CodeIdea(..),
+  CodeVarChunk(..), VarOrFunc(..), ccf, ccv, qc)
+
+-- FIXME: This file really wants to move closer to the definitions of these
+-- chunks. But, we can't do that because those chunks currently reside in
+-- `drasil-lang`, and `drasil-printers` (which this file relies on) depends on
+-- `drasil-lang`. i.e., a cycle!
 
 -- | Finds the code name of a 'CodeChunk'.
 instance CodeIdea    CodeChunk where
-  codeName = render . symbolDoc . codeSymb . view qc
+  codeName = showHasSymbImpl . view qc
   codeChunk = id
 
 -- | Finds the code name and 'CodeChunk' within a 'CodeVarChunk'.

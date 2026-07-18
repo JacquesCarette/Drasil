@@ -4,4 +4,4 @@ import Drasil.Database (mkUid)
 import Language.Drasil
 
 progName :: CI
-progName = commonIdeaWithDict (mkUid "projectileApp") (pn "Projectile") "Projectile" []
+progName = commonIdea (mkUid "projectileApp") (pn "Projectile") "Projectile" []

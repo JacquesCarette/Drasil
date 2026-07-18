@@ -2,13 +2,13 @@
 -- the Observer class both work.
 module GOOL.PatternTest (patternTest) where
 
-import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
-  ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), initObserverList, addObserver, VariableSym(var),
-  OOVariableSym(..), ScopeSym(..), Literal(..), VariableValue(..),
-  OOValueExpression(..), extNewObj, OOFunctionSym(..), GetSet(..),
-  ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
+import Drasil.GOOL (GSProgram, SVariable, SValue, OOProg, MS, VS, ProgramSym(..),
+  FileSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
+  StatementSym(..), DeclStatement(..), IOStatement(..), initObserverList,
+  addObserver, VariableSym(var), OOVariableSym(..), ScopeSym(..), Literal(..),
+  VariableValue(..), OOValueExpression(..), extNewObj, OOFunctionSym(..),
+  GetSet(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),
+  ModuleSym(..), TypeData)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import GOOL.Observer (observer, observerName, printNum, x)
 
@@ -23,7 +23,7 @@ obs2Name = "obs2"
 nName = "n"
 
 -- | Initialize Observer variables.
-observerType :: (OOTypeSym r) => VSType r
+observerType :: (OOTypeSym r) => VS (r TypeData)
 observerType = obj observerName
 
 -- | Variables used in the generated code.
@@ -37,12 +37,12 @@ newObserver :: (OOValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
-patternTest :: (OOProg r) => GSProgram r
+patternTest :: (OOProg r vis smt md svr att prg) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.
-patternTestMainMethod :: (OOProg r) => SMethod r
+patternTestMainMethod :: (OOProg r vis smt md svr att prg) => MS (r md)
 patternTestMainMethod = mainFunction (body [block [
   varDec n mainFn],
 

@@ -8,7 +8,6 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.SRS
 import qualified Drasil.SRS.Concepts as SRS (inModel)
@@ -66,16 +65,16 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : map dqdWr concepts ++ map dqdWr constrained ++
-  [gradient, pi_, uNormalVect, dqdWr surface] ++ map dqdWr symbolConcepts ++
+symbols = dqdWr watE : concepts ++ map dqdWr constrained ++
+  [gradient, pi_, uNormalVect, surface] ++ symbolConcepts ++
   map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 
-concepts :: [UnitalChunk]
+concepts :: [DefinedQuantityDict]
 concepts = [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW,
   surArea, area]
 
-symbolConcepts :: [UnitalChunk]
+symbolConcepts :: [DefinedQuantityDict]
 symbolConcepts = [density, mass, time, vol,
   QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 
@@ -145,8 +144,8 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList) symbols
-  labelledContent' symbMap allRefs
+  (map cnstrw' constrained ++ [tempW, watE]) (piConst : specParamValList) symbols
+  symbMap allRefs
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]

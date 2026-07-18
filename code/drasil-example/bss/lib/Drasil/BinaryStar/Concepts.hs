@@ -1,4 +1,7 @@
-module Drasil.BinaryStar.Concepts where
+module Drasil.BinaryStar.Concepts (
+  ideaDicts, conceptChunks, starOne, starTwo, gravInteraction,
+  ccsFortermsAndDefsTbl, newtonLUG
+) where
 
 import Drasil.Database (mkUid)
 import Language.Drasil
@@ -38,48 +41,48 @@ ccsFortermsAndDefsTbl = [binaryStarSys, starBody, gravInteraction, newtonLUG,
 
 -- | T1: binary star system
 binaryStarSys :: ConceptChunk
-binaryStarSys = dcc "binaryStarSys" (nounPhraseSP "binary star system")
-  "a system consisting of two stars that orbit around their common center of mass due to gravitational interaction"
+binaryStarSys = cncpt''' (mkUid "binaryStarSys") (nounPhraseSP "binary star system")
+  (S "a system consisting of two stars that orbit around their common center of mass due to gravitational interaction")
 
 -- | T2: star
 starBody :: ConceptChunk
-starBody = dcc "starBody" (cn' "star")
-  "a massive astronomical object that is treated as a point mass in this context"
+starBody = cncpt''' (mkUid "starBody") (cn' "star")
+  (S "a massive astronomical object that is treated as a point mass in this context")
 
 -- | T3: gravitational interaction
 gravInteraction :: ConceptChunk
-gravInteraction = dcc "gravInteraction" (nounPhraseSP "gravitational interaction")
-  "the mutual attractive force between two masses as described by Newtonian gravity"
+gravInteraction = cncpt''' (mkUid "gravInteraction") (nounPhraseSP "gravitational interaction")
+  (S "the mutual attractive force between two masses as described by Newtonian gravity")
 
 -- | T3b: Newton's law of universal gravitation
 newtonLUG :: ConceptChunk
-newtonLUG = dcc "newtonLUG" (nounPhraseSP "Newton's law of universal gravitation")
-  "the law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them"
+newtonLUG = cncpt''' (mkUid "newtonLUG") (nounPhraseSP "Newton's law of universal gravitation")
+  (S "the law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them")
 
 -- | T4: initial conditions
 initialConditions :: ConceptChunk
-initialConditions = dcc "initialConditions" (nounPhraseSP "initial conditions")
-  "the positions and velocities of the stars at the start of the simulation"
+initialConditions = cncpt''' (mkUid "initialConditions") (nounPhraseSP "initial conditions")
+  (S "the positions and velocities of the stars at the start of the simulation")
 
 -- | T5: trajectory
 trajectory :: ConceptChunk
-trajectory = dcc "trajectory" (cn' "trajectory")
-  "the path traced by a star in space as a function of time"
+trajectory = cncpt''' (mkUid "trajectory") (cn' "trajectory")
+  (S "the path traced by a star in space as a function of time")
 
 -- | T6: center of mass
 centerOfMass :: ConceptChunk
-centerOfMass = dcc "centerOfMass" (nounPhraseSP "center of mass")
-  "the point representing the average position of the mass distribution of the system"
+centerOfMass = cncpt''' (mkUid "centerOfMass") (nounPhraseSP "center of mass")
+  (S "the point representing the average position of the mass distribution of the system")
 
 -- | T7: inertial reference frame
 inertialRefFrame :: ConceptChunk
-inertialRefFrame = dcc "inertialRefFrame" (nounPhraseSP "inertial reference frame")
-  "a reference frame in which Newton's laws of motion are valid without the introduction of fictitious forces"
+inertialRefFrame = cncpt''' (mkUid "inertialRefFrame") (nounPhraseSP "inertial reference frame")
+  (S "a reference frame in which Newton's laws of motion are valid without the introduction of fictitious forces")
 
 -- | T8: simulation time span
 simTimeSpan :: ConceptChunk
-simTimeSpan = dcc "simTimeSpan" (nounPhraseSP "simulation time span")
-  "the duration over which the evolution of the system is computed"
+simTimeSpan = cncpt''' (mkUid "simTimeSpan") (nounPhraseSP "simulation time span")
+  (S "the duration over which the evolution of the system is computed")
 
 ---------------------------------------------------------
 -- Terms reused from drasil-data (already defined)

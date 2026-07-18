@@ -1,9 +1,9 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
+import Drasil.GOOL (SFile, SVariable, SClass, OOProg, MS, FileSym(..),
   AttachmentSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
-  InstanceVarSelfSym(..), Literal(..), VariableValue(..), OOVariableValue,
+  SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
   VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -17,7 +17,7 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r) => SFile r
+observer :: (OOProg r vis smt md svr att prg) => SFile r
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
@@ -26,19 +26,21 @@ x :: (VariableSym r) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (InstanceVarSelfSym r) => SVariable r
+selfX :: (SelfSym r, VariableValue r) => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
-helperClass :: (ClassSym r, IOStatement r, Literal r, OOVariableValue r) => SClass r
+helperClass :: (ClassSym r vis smt md svr att, IOStatement r smt, Literal r,
+  OOVariableValue r) => SClass r
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (OOMethodSym r, Literal r) => SMethod r
+observerConstructor :: (OOMethodSym r vis smt md att, Literal r) => MS (r md)
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (OOMethodSym r, IOStatement r, OOVariableValue r) => SMethod r
+printNumMethod :: (OOMethodSym r vis smt md att, IOStatement r smt,
+  OOVariableValue r) => MS (r md)
 printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

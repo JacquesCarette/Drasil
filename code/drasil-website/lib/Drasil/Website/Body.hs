@@ -8,11 +8,10 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(..), mkSystemMeta, DrasilWebsite,
-  mkDrasilWebsite)
+import Drasil.System (HasSystemMeta(..), mkSystemMeta)
+import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
@@ -92,11 +91,11 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ exampleRefs (repoRt fl) (exRt fl)
   ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
-  ++ concatMap findAllRefs (sections fl)
+  ++ concatMap extractLCRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI
-webName = commonIdeaWithDict (mkUid "websiteName") (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "website" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

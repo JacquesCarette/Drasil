@@ -23,7 +23,6 @@ dependencies:
 - file-io >= 0.1.6
 - template-haskell
 - text
-- drasil-file-handling
 
 ghc-options:
 - -Wall
@@ -31,6 +30,8 @@ ghc-options:
 - -Wmissing-export-lists
 
 library:
+  dependencies:
+  - drasil-file-handling
   source-dirs: lib
   exposed-modules:
   - Drasil.Assets

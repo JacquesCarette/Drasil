@@ -3,11 +3,12 @@
 module Main (main) where
 
 import Data.Maybe (fromMaybe)
+import System.Environment (getEnv, lookupEnv)
 
-import Drasil.Generator (caseStudyMainDrasilWebsite)
+import Drasil.Generator (concretizeAndWrite, drasilMakefileReqOpts)
 import Language.Drasil (Sentence(S))
 import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
-import System.Environment (getEnv, lookupEnv)
+import Drasil.Website.Core (defaultDrasilWebsiteGenOpts)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
   websiteTitle, webSys)
@@ -64,4 +65,4 @@ main = do
       websiteDoc = Document (S websiteTitle) author NoToC $ sections allFolders
       syst = webSys websiteDoc allFolders
 
-  caseStudyMainDrasilWebsite syst
+  concretizeAndWrite syst defaultDrasilWebsiteGenOpts drasilMakefileReqOpts

@@ -143,7 +143,6 @@ func write_output(_ d_offset: Double, _ t_flight: Double) throws -> Void {
 
 var filename: String = CommandLine.arguments[0]
 var g: Double = 9.8
-var epsilon: Double = 2.0e-2
 var v_launch: Double
 var theta: Double
 var p_target: Double

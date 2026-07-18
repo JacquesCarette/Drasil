@@ -1,4 +1,3 @@
-Languages selected as Python Cpp CSharp Java Swift.
 Modularity selected as Unmodular.
 Input Structure selected as Bundled.
 Constant Structure selected as Store Bundled.
@@ -16,5 +15,4 @@ Code Concept pi selected as Pi.
 Successfully matched Real with Double.
 Successfully matched String with String.
 Successfully matched Actor "InputParameters" with Object "InputParameters".
-Successfully matched Rational with Double.
 Successfully matched Actor "Constants" with Object "Constants".

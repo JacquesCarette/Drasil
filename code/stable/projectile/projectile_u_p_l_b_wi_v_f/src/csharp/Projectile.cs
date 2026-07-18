@@ -127,7 +127,6 @@ public class InputParameters {
     public float theta;
     public float p_target;
     public float g = 9.8f;
-    public float epsilon = 2.0e-2f;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file

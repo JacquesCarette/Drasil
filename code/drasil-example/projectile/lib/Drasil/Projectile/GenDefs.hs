@@ -115,7 +115,7 @@ posVecDerivSent =
   vecDeriv [(position, E.positionXY), (velocity, E.velocityXY), (acceleration, E.accelerationXY)] rectPosGD
 
 -- Helper for making rectilinear derivations
-rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
+rectDeriv :: DefinedQuantityDict -> DefinedQuantityDict -> Sentence -> DefinedQuantityDict -> TheoryModel -> Sentence
 rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   S "Assume we have", D.toSent (phraseNP (combineNINI rectilinear motion)) `S.ofA` S "particle",
   sParen (S "of negligible size" `S.and_` S "shape" `sC` S "from" +:+ refS pointMass) :+:
@@ -138,7 +138,7 @@ rearrAndIntSent = S "Rearranging" `S.and_` S "integrating" `sC` S "we" +: S "hav
 performIntSent  = S "Performing the integration" `sC` S "we have the required" +: phrase equation
 
 -- Helper for making vector derivations
-vecDeriv :: [(UnitalChunk, ModelExpr)] -> GenDefn -> Sentence
+vecDeriv :: [(DefinedQuantityDict, ModelExpr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", D.toSent $ phraseNP (combineNINI twoD cartesian), sParen (refS twoDMotion `S.and_` refS cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List

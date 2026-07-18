@@ -1,4 +1,7 @@
-{-# LANGUAGE PatternSynonyms, QuasiQuotes, RankNTypes #-}
+{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
@@ -12,23 +15,24 @@ import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
 import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
   initialState, ProgData(..), headers, sources, mainMod,
   GOOLState)
-import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), GSProgram)
-import Drasil.GProc (ProcProg, unJLC)
-import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), GSProgram)
+import qualified Drasil.GOOL as OO (unCI, GSProgram)
+import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
+import qualified Drasil.GProc as Proc (GSProgram)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
   PackageData(..), pattern PackageData,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP)
 
 import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
 import FileTests (fileTestsOO, fileTestsProc)
-import VectorTest (vectorTestOO, vectorTestProc)
+import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
+import VectorTest (vectorTestProc)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 
--- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- | Renders five GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
 main = defaultMain codeGenTestGroup
@@ -42,19 +46,22 @@ codeGenTestGroup =
         [ goolTestGroup "HelloWorldOO" helloWorldOO,
           goolTestGroup "PatternTestOO" patternTest,
           goolTestGroup "FileTestsOO" fileTestsOO,
-          goolTestGroup "VectorTestOO" vectorTestOO,
-          goolTestGroup "NameGenTestOO" nameGenTestOO
+          goolTestGroup "NameGenTestOO" nameGenTestOO,
+          goolTestGroup "OOVector" ooVector
         ],
       testGroup
         "GProc"
         [ gProcTestGroup "HelloWorldProc" helloWorldProc,
           gProcTestGroup "FileTestsProc" fileTestsProc,
-          gProcTestGroup "VectorTestProc" vectorTestProc,
-          gProcTestGroup "NameGenTestProc" nameGenTestProc
+          gProcTestGroup "NameGenTestProc" nameGenTestProc,
+          gProcVectorTestGroup "VectorTestProc" vectorTestProc
         ]
     ]
 
-goolTestGroup :: String -> (forall r. (OOProg r) => OO.GSProgram r) -> TestTree
+goolTestGroup
+  :: String
+  -> (forall r vis smt md svr att prg. (OOProg r vis smt md svr att prg) => OO.GSProgram r prg)
+  -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -67,7 +74,10 @@ goolTestGroup n p =
       goldenTest "swift" $ directory [ps|swift|] $ genCodeGOOL unSC unSP p
     ]
 
-gProcTestGroup :: String -> (forall r. (ProcProg r) => Proc.GSProgram r) -> TestTree
+gProcTestGroup
+  :: String
+  -> (forall r vis smt md prg. (ProcProg r vis smt md prg) => Proc.GSProgram r prg)
+  -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
@@ -76,20 +86,52 @@ gProcTestGroup n p =
     [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
     ]
 
-genCodeGOOL :: (OOProg r, SoftwareDossierSym r', Monad r') => (r (OO.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> (forall s. (OOProg s) => OO.GSProgram s) -> [FileLayout]
+gProcVectorTestGroup
+  :: String
+  -> (forall r vis smt md prg. (ProcProg r vis smt md prg, NativeVector r) => Proc.GSProgram r prg)
+  -> TestTree
+gProcVectorTestGroup n p =
+  goldenTestingGroup
+    ([osp|test/build|] </> [ps|{n}|])
+    ([osp|test/golden|] </> [ps|{n}|])
+    n
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProcNoMake unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProcNoMake unMLC unMLP p
+    ]
+
+genCodeProcNoMake
+  :: (ProcProg r vis smt md ProgData, NativeVector r, Monad r')
+  => (r ProgData -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg', NativeVector s) => Proc.GSProgram s prg')
+  -> [FileLayout]
+genCodeProcNoMake unRepr unRepr' p =
+  let
+    (p', gs') = runState p initialState
+    (PackageData prog aux) = unRepr' $ package (unRepr p') []
+  in seq gs' $ toFileLayout (progMods prog) ++ aux
+
+genCodeGOOL
+  :: (OOProg r vis smt md svr att ProgData, SoftwareDossierSym r', Monad r')
+  => (r ProgData -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> (forall s vis' smt' md' svr' att' prg'. (OOProg s vis' smt' md' svr' att' prg') => OO.GSProgram s prg')
+  -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let
     gs = OO.unCI (evalState p initialState)
     (p', gs') = runState p gs
   in genCode' (unRepr p') gs' unRepr'
 
-genCodeProc :: (ProcProg r, SoftwareDossierSym r', Monad r') => (r (Proc.Program r) -> ProgData) ->
-  (r' PackageData -> PackageData) -> (forall s. (ProcProg s) => Proc.GSProgram s) -> [FileLayout]
+genCodeProc
+  :: (ProcProg r vis smt md ProgData, SoftwareDossierSym r', Monad r')
+  => (r ProgData -> ProgData)
+  -> (r' PackageData -> PackageData)
+  -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg') => Proc.GSProgram s prg')
+  -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let
-    gs = Proc.unCI (evalState p initialState)
-    (p', gs') = runState p gs
+    (p', gs') = runState p initialState
   in genCode' (unRepr p') gs' unRepr'
 
 genCode' :: (SoftwareDossierSym r', Monad r') => ProgData -> GOOLState ->

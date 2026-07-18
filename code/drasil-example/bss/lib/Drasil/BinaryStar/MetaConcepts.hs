@@ -6,5 +6,5 @@ import Language.Drasil
 import Data.Drasil.Domains (physics)
 
 progName :: CI
-progName = commonIdeaWithDict (mkUid "bss")
+progName = commonIdea (mkUid "bss")
   (pn "Binary Star System Simulator") "BSS" [physics]

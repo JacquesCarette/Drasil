@@ -10,11 +10,13 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
-import Drasil.System (SmithEtAlSRS(..), programName, sysName, purpose)
+import Drasil.System (sysName, purpose)
+import Drasil.SRS (SmithEtAlSRS(..), programName)
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Drasil.Generator (codedDirName, Format(..))
 
+import qualified Drasil.BinaryStar.Body as BSS (si)
 import qualified Drasil.DblPend.Body as DblPend (si)
 import qualified Drasil.GamePhysics.Body as GamePhysics (si)
 import qualified Drasil.GlassBR.Body as GlassBR (si)
@@ -27,6 +29,7 @@ import qualified Drasil.SSP.Body as SSP (si)
 import qualified Drasil.SWHS.Body as SWHS (si)
 
 -- import choices for code generation
+import qualified Drasil.BinaryStar.Choices as BSS (choices)
 import qualified Drasil.DblPend.Choices as DblPend (choices)
 import qualified Drasil.GlassBR.Choices as GlassBR (choices)
 import qualified Drasil.SWHSNoPCM.Choices as NoPCM (choices)
@@ -58,6 +61,7 @@ data Example = E {
 -- | Records example system information.
 allExampleSI :: [SmithEtAlSRS]
 allExampleSI = [
+  BSS.si,
   DblPend.si,
   GamePhysics.si,
   GlassBR.si,
@@ -74,7 +78,7 @@ allExampleSI = [
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[BSS.choices], [DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.choices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
 allExamples :: [SmithEtAlSRS] -> [[Choices]] -> FilePath -> FilePath -> [Example]

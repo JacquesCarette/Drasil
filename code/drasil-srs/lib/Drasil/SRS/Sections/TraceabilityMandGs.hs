@@ -14,7 +14,7 @@ import Data.Foldable (foldl')
 
 -- General Drasil
 import Drasil.Database (mkUid)
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..))
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
@@ -96,11 +96,19 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural dataDefn,
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
 
+-- | Chooses the singular or plural noun phrase for a 'NamedIdea' depending on
+-- how many instances of it are actually present in the system, instead of
+-- assuming there are always several (see #3454).
+plOrSg :: NamedIdea n => [a] -> n -> Sentence
+plOrSg [_] = phrase
+plOrSg _   = plural
+
 -- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
 traceMatOtherReq :: SmithEtAlSRS -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
-  `S.and_` D.toSent (pluralNP (goalStmt `NC.onThePP` dataDefn)), plural thModel,
-  plural genDefn, plural inModel] (x titleize' +:+ S "and Other" +:+
+  `S.and_` D.toSent (pluralNP (goalStmt `NC.onThePP` dataDefn)),
+    plOrSg (si ^. theoryModels) thModel, plOrSg (si ^. genDefns) genDefn,
+    plOrSg (si ^. instModels) inModel] (x titleize' +:+ S "and Other" +:+
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs]
   [tvGoals, tvReqs] where
     x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (`f` si) si of

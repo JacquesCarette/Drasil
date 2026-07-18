@@ -47,7 +47,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->v_launch;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'self->v_launch' assigned ";
+    outfile << "var 'this->v_launch' assigned ";
     outfile << this->v_launch;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -55,7 +55,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->theta;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'self->theta' assigned ";
+    outfile << "var 'this->theta' assigned ";
     outfile << this->theta;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -63,7 +63,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->p_target;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'self->p_target' assigned ";
+    outfile << "var 'this->p_target' assigned ";
     outfile << this->p_target;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -110,7 +110,6 @@ void InputParameters::input_constraints() {
 }
 
 const double Constants::g = 9.8;
-const double Constants::epsilon = 2.0e-2;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments

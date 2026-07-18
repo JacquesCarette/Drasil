@@ -34,7 +34,7 @@ nbDecl = [
   ]
 
 si :: LessonPlan
-si = mkLessonPlan "projectile-lesson"
+si = mkLessonPlan
   (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
   allRefs
 
@@ -49,13 +49,13 @@ conceptChunks = defs ++ [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
   CCs.verticalMotion, CCs.gravity, CCs.position]
 
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
+symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
   Qs.gravitationalAccel, Qs.xAccel, Qs.yAccel, Qs.time, Qs.ixPos, Qs.iyPos,
   Qs.xPos, Qs.yPos, Qs.ixVel, Qs.iyVel, Qs.xVel, Qs.yVel, Qs.scalarPos,
-  Qs.iPos, Qs.height, horiz_velo]
+  Qs.iPos, Qs.height]
 
 projectileMotionLesson :: CI
-projectileMotionLesson = commonIdeaWithDict (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "Projectile Motion" []
+projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "projectile-lesson" []
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs)

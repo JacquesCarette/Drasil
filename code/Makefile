@@ -25,8 +25,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend bss projectile-lesson
+SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend bss
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend projectile-lesson
 GOOLTEST = codegenTest
 
 # where they live
@@ -210,7 +210,7 @@ debug: setup_debug_vars test ##@Examples Run test target with better debugging t
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
 pr_ready: stackArgs += --force-dirty
-pr_ready: GHCFLAGS += -Werror -fforce-recomp
+pr_ready: GHCFLAGS += -Werror -Wwarn=deprecations -fforce-recomp
 pr_ready: all stan hlint check_whitespace ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
@@ -271,6 +271,9 @@ test_website: $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website ##@Website Test fresh
 	@echo ---------------------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
+stack_test: code ##@General Run stack tests
+	stack test $(stackArgs) --no-interleaved-output
+
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then overwrite contents in the stable folder with currently generated ones.
 stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with up-to-date artifacts.
@@ -325,17 +328,21 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
+ifneq ($(SKIP_GEN), 1)
 	stack build $(stackBuildArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)"
 	cd "$(BUILD_FOLDER)" && $(STACK_EXEC) -- "$(EEXE)"
+endif
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 # We first build the codegenTest to catch any build errors
 # Then we run the codeGenTest, ignoring the exit code and not printing any output,
 # which will write the generated code to the build folder.
 $(GOOLTEST)$(GEN_E_SUFFIX):
+ifneq ($(SKIP_GEN), 1)
 	stack build $(stackBuildArgs) drasil-code
 	-stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)" --test-arguments="--quiet"
+endif
 
 $(GOOLTEST)$(TEST_E_SUFFIX):
 	stack test $(stackArgs) "drasil-code:test:$(GOOLTEST_EXE)"
@@ -347,7 +354,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 # Same as above targets; run individual examples but create traceability graphs
 # for each example run. Needs Graphviz to run. Graphs generate in svg, pdf, and png formats.
 # Specific example targets will have the name exampleName_trace_graph.
-$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): %$(GEN_E_SUFFIX) graphmod
+$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): %$(GEN_E_SUFFIX)
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
 		cd "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" && for graph in $(TRACEY_GRAPH_NAMES); do \
@@ -392,7 +399,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 # Targets will have the form exampleName_mdBook_build.
 $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
 	if [ -d "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ]; then \
-		- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
+		"$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
 		mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook" ; \
 	fi
 
@@ -499,6 +506,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 
 # For more information, see the *.hs files in the drasil-website folder.
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
+ifneq ($(SKIP_GEN), 1)
 	stack build $(stackBuildArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \
@@ -512,6 +520,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
 	$(STACK_EXEC) -- "website"
+endif
 
 # Prepares a website folder deployable to GitHub Pages using existing artifacts.
 deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.

@@ -9,7 +9,7 @@ import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),
   ConstantRepr(..))
-import Drasil.System (SmithEtAlSRS)
+import Drasil.SRS (SmithEtAlSRS)
 import Drasil.Generator (codedDirName)
 import Drasil.GOOL (CodeType(..))
 

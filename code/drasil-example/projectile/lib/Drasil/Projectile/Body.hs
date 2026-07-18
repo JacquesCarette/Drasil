@@ -4,13 +4,12 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
-import Drasil.SRS
+import Drasil.SRS hiding (constants, genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.SRS.Concepts as SRS
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
@@ -129,8 +128,8 @@ si = mkSmithEtAlICO progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs (map cnstrw' constrained) constants symbols
-  labelledContent' symbMap allRefs
+  inputs outputs constrained constants symbols
+  symbMap allRefs
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables
@@ -262,14 +261,14 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
-  map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
+symbols = pi_ : unitalQuants ++ [dqdWr gravitationalAccelConst] ++
+  [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+  iyPos, ixVel, iyVel, position, scalarPos, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV]
+  constAccelV, projPos, projSpeed]
 
 constants :: [ConstQDef]
-constants = [gravitationalAccelConst, piConst, tol]
+constants = [gravitationalAccelConst, piConst]
 
 unitalQuants :: [DefinedQuantityDict]
 unitalQuants = map dqdWr constrained

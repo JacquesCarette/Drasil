@@ -26,6 +26,7 @@ packages:
 - ../drasil-example/projectile
 - ../drasil-example/ssp
 - ../drasil-example/swhs
+- ../drasil-example/bss
 - ../drasil-example/template
 
 extra-deps:

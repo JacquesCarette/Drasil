@@ -107,7 +107,6 @@ end
 
 global filename = ARGS[1]
 global g = 9.8
-global epsilon = 2.0e-2
 v_launch, theta, p_target = get_input(filename)
 input_constraints(v_launch, theta, p_target)
 global t_flight = func_t_flight(v_launch, theta, g)

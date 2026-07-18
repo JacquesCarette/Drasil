@@ -546,7 +546,7 @@ instance DeclStatement JavaCode (Doc, Terminator) where
   listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
     (litInt n) v scp)
   listDecDef = CP.listDecDef
-  arrayDec n = CP.arrayDec (litInt n)
+  arrayDec n _ = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
@@ -1062,7 +1062,7 @@ jInOut f ins outs both b = f (returnTp rets)
   where returnTp [x] = onStateValue variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnStmt $ valueOf x
-        returnSt _ = multi (arrayDec (toInteger $ length rets) outputs local
+        returnSt _ = multi (arrayDec (toInteger $ length rets) undefined outputs local
           : assignArray 0 (map valueOf rets)
           ++ [returnStmt (valueOf outputs)])
         assignArray :: Integer -> [SValue JavaCode] -> [MS (JavaCode (Doc, Terminator))]

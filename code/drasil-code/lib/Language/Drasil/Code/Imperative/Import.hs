@@ -673,7 +673,7 @@ convStmt (FDecDef v (Matrix [[]])) = do
   let scp = convScope $ currentScope g
   vari <- mkVar v
   let convDec (C.List _) = listDec 0 vari
-      convDec (C.Array _) = arrayDec 0 vari
+      convDec (C.Array _) = arrayDec 0 undefined vari
       convDec _ = varDec vari
   fmap (`convDec` scp) (codeType v)
 convStmt (FDecDef v e) = do
@@ -1241,7 +1241,7 @@ convStmtProc (FDecDef v (Matrix [[]])) = do
   let scp = convScope $ currentScope g
   vari <- mkVarProc v
   let convDec (C.List _) = listDec 0 vari
-      convDec (C.Array _) = arrayDec 0 vari
+      convDec (C.Array _) = arrayDec 0 undefined vari
       convDec _ = varDec vari
   fmap (`convDec` scp) (codeType v)
 convStmtProc (FDecDef v e) = do

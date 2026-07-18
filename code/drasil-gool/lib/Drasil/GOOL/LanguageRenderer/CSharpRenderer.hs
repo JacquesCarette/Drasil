@@ -523,7 +523,7 @@ instance DeclStatement CSharpCode (Doc, Terminator) where
   listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (renderListDec v')
     (litInt n) v scp)
   listDecDef = CP.listDecDef
-  arrayDec n = CP.arrayDec (litInt n)
+  arrayDec n _ = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef

@@ -434,8 +434,9 @@ class (VariableSym r, StatementSym r smt, ScopeSym r) => DeclStatement r smt whe
   listDecDef   :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
   setDec       :: SVariable r -> r ScopeData -> MS (r smt)
   setDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
-  -- First argument is size of the array
-  arrayDec     :: Integer -> SVariable r -> r ScopeData -> MS (r smt)
+  -- Takes the size of the aray, the default value to fill the array with,
+  -- the variable to store the array in, and the scope of the variable.
+  arrayDec     :: Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
   arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
   constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MSBody r

@@ -318,7 +318,7 @@ instance DeclStatement CodeInfoOO () where
   setDecDef            _ _ = zoom lensMStoVS . execute1
   listDec            _ _ _ = noInfo
   listDecDef           _ _ = zoom lensMStoVS . executeListErr
-  arrayDec           _ _ _ = noInfo
+  arrayDec           _ _ _ _ = noInfo
   arrayDecDef          _ _ = zoom lensMStoVS . executeListErr
   constDecDef          _ _ = zoom lensMStoVS . execute1
   funcDecDef         _ _ _ bod = do

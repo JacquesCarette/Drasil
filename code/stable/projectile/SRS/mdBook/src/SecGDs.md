@@ -58,7 +58,7 @@ Rearranging and integrating, we have:
 
 From [GD:rectVel](./SecGDs.md#GD:rectVel), we can replace \\(v\\):
 
-\\[\int\_{{p^{\text{i}}}}^{p}{1}\\,dp=\int\_{0}^{t}{\left({v^{\text{i}}}+{a^{c}}\\,t\right)}\\,dt\\]
+\\[\int\_{{p^{\text{i}}}}^{p}{1}\\,dp=\int\_{0}^{t}{{v^{\text{i}}}+{a^{c}}\\,t}\\,dt\\]
 
 Performing the integration, we have the required equation:
 

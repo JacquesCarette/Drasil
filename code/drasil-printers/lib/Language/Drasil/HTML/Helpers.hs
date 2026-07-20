@@ -113,7 +113,7 @@ wrapGen' sepf v s ti _ = \x ->
 
 -- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen = wrapGen' vcat
+wrapGen = wrapGen' cat
 
 -- | Helper for creating a left HTML tag with a single attribute.
 tagL :: String -> Variation -> Doc -> Doc

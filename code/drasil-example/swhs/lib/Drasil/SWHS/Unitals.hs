@@ -239,7 +239,7 @@ aspectRatioMax = quantNoUnit (mkUid "aspectRatioMax")
 -----------------
 
 constrained :: [ConstrConcept]
-constrained = map cnstrw' inputConstraints ++ map cnstrw' (NE.toList outputs)
+constrained = map cnstrw' inputConstraints ++ NE.toList outputs
 
 -- Input Constraints
 inputs :: NE.NonEmpty DefinedQuantityDict

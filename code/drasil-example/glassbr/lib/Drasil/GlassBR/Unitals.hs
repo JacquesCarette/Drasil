@@ -34,7 +34,7 @@ symbols = NE.toList inputs ++ tmSymbols ++ map dqdWr specParamVals ++
   mathunitals ++ physicalquants ++ mathquants
 
 constrained :: [ConstrConcept]
-constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
+constrained = map cnstrw' dataConstraints ++ [nomThick, glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertQ
@@ -54,7 +54,7 @@ inputsWUncrtn = pbTol :| [tNT]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: NE.NonEmpty ConstrConcept
-inputsNoUncrtn = NE.map cnstrw' $ glassTypeCon :| [nomThick]
+inputsNoUncrtn = glassTypeCon :| [nomThick]
 
 --derived inputs with units and uncertainties
 derivedInsWUnitsUncrtn :: [UncertQ]

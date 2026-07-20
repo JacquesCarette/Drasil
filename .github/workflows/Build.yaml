@@ -63,7 +63,10 @@ jobs:
             code/.stack-work
             code/**/.stack-work
             code/**/.hie
-          key: ${{ runner.os }}-stack-work
+          # We don't expect a hit on this key, but having a key is mandatory
+          key: ${{ runner.os }}-stack-work--${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-stack-work--
 
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
@@ -117,7 +120,10 @@ jobs:
             code/.stack-work
             code/**/.stack-work
             code/**/.hie
-          key: ${{ runner.os }}-stack-work-haddock
+          # We don't expect a hit on this key, but having a key is mandatory
+          key: ${{ runner.os }}-stack-work-haddock--${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-stack-work-haddock--
 
       - name: "Generate Haddock docs (as test)"
         run: make docs

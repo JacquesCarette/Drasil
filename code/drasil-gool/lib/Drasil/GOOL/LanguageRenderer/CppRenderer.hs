@@ -550,8 +550,8 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) w
     (\v -> listDec n v (psnd scp)) (zoom lensMStoVS vr)
   listDecDef vr scp vs = pair1Val1List (`listDecDef` pfst scp)
     (`listDecDef` psnd scp) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
-  arrayDec n vr scp = pair1 (\v -> arrayDec n v (pfst scp))
-    (\v -> arrayDec n v (psnd scp)) (zoom lensMStoVS vr)
+  arrayDec n dflt vr scp = pair2 (\v d -> arrayDec n d v (pfst scp))
+    (\v d -> arrayDec n d v (psnd scp)) (zoom lensMStoVS vr) (zoom lensMStoVS dflt)
   arrayDecDef vr scp vs = pair1Val1List (`arrayDecDef` pfst scp)
     (`arrayDecDef` psnd scp) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
   constDecDef vr scp vl = pair2 (`constDecDef` pfst scp)
@@ -1478,7 +1478,7 @@ instance DeclStatement CppSrcCode (Doc, Terminator) where
   setDecDef = varDecDef
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
-  arrayDec n vr scp = do
+  arrayDec n _ vr scp = do
     decBase <- arrayDecBase vr scp
     let sz' = litInt n :: SValue CppSrcCode
     sz <- zoom lensMStoVS sz'
@@ -2140,7 +2140,7 @@ instance DeclStatement CppHdrCode (Doc, Terminator) where
   setDecDef = varDecDef
   listDec _ _ _ = emptyStmt
   listDecDef _ _ _ = emptyStmt
-  arrayDec _ _ _ = emptyStmt
+  arrayDec _ _ _ _ = emptyStmt
   arrayDecDef _ _ _ = emptyStmt
   constDecDef = CG.constDecDef
   funcDecDef _ _ _ _ = emptyStmt

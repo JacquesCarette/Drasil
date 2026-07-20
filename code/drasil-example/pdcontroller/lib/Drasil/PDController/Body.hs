@@ -86,7 +86,7 @@ si = mkSmithEtAlICO
   progName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
-  inputs outputs (map cnstrw' inpConstrained) pidConstants allSymbols
+  inputs outputs inpConstrained pidConstants allSymbols
   symbMap
 
 purp :: Sentence

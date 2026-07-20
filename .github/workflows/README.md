@@ -36,6 +36,7 @@ This workflow is split up into several jobs, some of which run in parallel:
 - Prepare Deployment: After Haddock and Generate Documents are done, runs the `prepare_deployment.sh` script
   to prepare the website deployment. Uploads the ready-to-deploy website.
 - Deploy: After Prepare Deployment, deploys the previously uploaded website to GitHub Pages.
+- Cleanup Caches: After Build & Test and Haddock are done, clean up old stack-work caches. See below for more details.
 
 ## Caching in `Build.yaml` and `Deploy.yaml`
 
@@ -51,6 +52,10 @@ There are three different caches used:
    without excessive cache usage.
 3. The `.stack-work` and `.hie` cache (for Haddock). The same as above, but used in the Haddock
    jobs. Separating the build and Haddock caches seemed to give the fastest Haddock build times.
+
+GitHub does not allow overwriting a cache key, so the Cleanup Caches job in Build & Test is necessary
+to delete old stack-work caches. This job uses the GitHub CLI (`gh`) to automatically delete the
+outdated caches.
 
 ## [`Lint.yaml`](Lint.yaml)
 

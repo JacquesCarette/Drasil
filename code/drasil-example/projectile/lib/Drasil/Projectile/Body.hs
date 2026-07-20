@@ -129,7 +129,7 @@ si = mkSmithEtAlICO progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs (map cnstrw' constrained) constants symbols
+  inputs outputs constrained constants symbols
   symbMap
 
 labelledContent' :: [LabelledContent]

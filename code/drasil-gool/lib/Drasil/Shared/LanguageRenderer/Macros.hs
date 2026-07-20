@@ -235,13 +235,14 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0
 
-arrayDecAsList :: (IC.SharedStatement r smt, VariableElim r) => Integer -> SVariable r ->
-  r ScopeData -> MS (r smt)
-arrayDecAsList len vr scp = do
+arrayDecAsList
+  :: (IC.SharedStatement r smt, VariableElim r)
+  => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
   let innerTp = IC.innerType $ return $ variableType vr'
   i <- genVarName [] "i"
   multi [
     IC.varDecDef vr scp (IC.litList innerTp []),
     IC.forRange (IC.var i IC.int) (IC.litInt 0) (IC.litInt len) (IC.litInt 1)
-      (oneLiner $ IC.listAppend (IC.valueOf vr) (IC.litInt 0))]
+      (oneLiner $ IC.listAppend (IC.valueOf vr) dflt)]

@@ -199,3 +199,13 @@ complexRef r = Ref (ref r ^. uid) EmptyS
 namedComplexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 namedComplexRef r = Ref (ref r ^. uid)
 ```
+
+## Terminology Issue Summary
+
+1. `Reference` is closer to a "citation." However, a `Reference` is also used to hack in _external links_ and treated like a chunk at times. So, it's not really an encoding of a citation either.
+2. `Ref` is closer to a "cite" action (verb) than `Reference` is because it is a constructor of `Sentence` and citations are just inline markers.
+2. `Citation` is closer to a "reference," paired with a LaTeX-convention-inspired label.
+3. `BibRef`: mentioning "Ref" is unnecessary. Just `Bibliography` is enough. And the full name is preferred to avoid confusion with LaTeX `.bib` files. What we really care for generating is most often a list of "works cited," however.
+4. `HasFields` is really about gathering all pieces of "path information" for a user to track down and access a source.
+5. No real encoding/notion of a cross-reference nor external link.
+6. "Source" is not mentioned anywhere in our documentation.

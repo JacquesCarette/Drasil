@@ -13,7 +13,8 @@ module Language.Drasil.HTML.Helpers (
 ) where
 import Prelude hiding ((<>))
 import Data.List (intersperse)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, nest)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), cat, vcat, hcat, nest,
+  renderStyle, style, Style(..), Mode(OneLineMode))
 
 import Language.Drasil.Document (MaxWidthPercent)
 
@@ -165,15 +166,21 @@ image f Nothing wp =
 image f (Just c) wp =
   figure $ vcat [img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100], figcaption $ text "Figure: " <> c]
 
+-- | Render a 'Doc' as a single line, for use inside inline HTML tags.
+-- Prevents multi-line content (e.g. TeX matrices) from breaking inline tags
+-- across multiple lines.
+renderInline :: Doc -> String
+renderInline = renderStyle (style { mode = OneLineMode })
+
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.
-em = wrap' "em" []
+em   d = text $ "<em>"  ++ renderInline d ++ "</em>"
 -- | Superscript tag.
-sup = wrap' "sup" []
+sup  d = text $ "<sup>" ++ renderInline d ++ "</sup>"
 -- | Subscript tag.
-sub = wrap' "sub" []
+sub  d = text $ "<sub>" ++ renderInline d ++ "</sub>"
 -- | Bold tag.
-bold = wrap' "b" []
+bold d = text $ "<b>"   ++ renderInline d ++ "</b>"
 
 articleTitle, author :: Doc -> Doc
 -- | Title header.

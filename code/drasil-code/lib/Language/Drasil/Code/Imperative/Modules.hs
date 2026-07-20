@@ -55,6 +55,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,
   genModuleProc, genModuleWithImports, genModuleWithImportsProc, primaryClass,
   auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS, convScope)
+import Language.Drasil.Code.Imperative.ConceptMatch (typeDefaultValue)
 import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprProc,
   convStmt, convStmtProc, genConstructor, mkVal, mkValProc, mkVar, mkVarProc,
   privateInOutMethod, privateMethod, privateFuncProc, publicFunc, publicFuncProc,
@@ -251,8 +252,10 @@ genInputClass scp = do
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
-        inputVars <- mapM (\x -> fmap (pubDVar .
-          var (codeName x) . convTypeOO) (codeType x)) inps
+        inputVars <- mapM (\x -> do
+                              cTp <- codeType x
+                              return $ pubDVar (var (codeName x) (convTypeOO cTp)) (typeDefaultValue cTp)
+                          ) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (g ^. conRepr)
           (var (codeName c) (convTypeOO t)) vl) (codeType c))
           csts vals

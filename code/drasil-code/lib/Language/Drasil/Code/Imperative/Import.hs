@@ -28,7 +28,8 @@ import Drasil.Database (UID, HasUID(..), IsChunk)
 import Language.Drasil (HasSymbol, HasSpace(..),
   Space (Rational, Real), RealInterval(..), Constraint(..), Inclusive (..))
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
-import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
+import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL,
+  typeDefaultValue)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
   ctorCall, genModuleWithImports, genModuleWithImportsProc, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (convScope)
@@ -66,7 +67,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, CSStateVar,
   OOStatement)
 import qualified Drasil.GOOL as S (Set(..)) -- TODO [Brandon Bosman, 07/09/2026]: Merge this with OO
 import qualified Drasil.GOOL as OO (SFile)
-import qualified Drasil.GOOL as C (CodeType(List, Array))
+import qualified Drasil.GOOL as C (CodeType(..))
 import Drasil.GProc (ProcProg, NativeVector(..))
 import qualified Drasil.GProc as Proc (SFile)
 import Drasil.System (systemdb)
@@ -571,8 +572,10 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
   modify (\st -> st {currentScope = Local})
-  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) .
-                convTypeOO) (codeType v)) svs
+  svrs <- mapM (\(SV s v) -> do
+                   cTp <- codeType v
+                   return (svar s (var (codeName v) (convTypeOO cTp))
+                           (typeDefaultValue cTp))) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) cs)
                   (mapM (genFunc publicMethod svs) ms)
 

@@ -377,7 +377,7 @@ helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
 
 helloWorldClass :: (OOProg r vis smt md svr att prg) => SClass r
 helloWorldClass = extraClass "TestClass" Nothing
-  [stateVar public instanceLevel (var "a" int)]
+  [stateVar public instanceLevel (var "a" int) (litInt 0)]
   [initializer [param $ var "a" int]
     [(var "a" int, valueOf (var "a" int))]]
   [ method "add" public classLevel (obj "TestClass")

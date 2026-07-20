@@ -32,7 +32,7 @@ selfX = instanceVarSelf x
 -- | Helper function to create the class.
 helperClass :: (ClassSym r vis smt md svr att, IOStatement r smt, Literal r,
   OOVariableValue r) => SClass r
-helperClass = buildClass Nothing [stateVar public instanceLevel x]
+helperClass = buildClass Nothing [stateVar public instanceLevel x (litInt 0)]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.

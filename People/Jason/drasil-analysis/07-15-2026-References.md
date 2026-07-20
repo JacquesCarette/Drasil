@@ -200,6 +200,49 @@ namedComplexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence
 namedComplexRef r = Ref (ref r ^. uid)
 ```
 
+`ref` shows us what `Reference` really is: a projection of a chunk out of another that contains information about "references." `Reference`s are later used in document generation for getting the in-text labels of things, [`drasil-printers/lib/Language/Drasil/Printing/Import/Sentence.hs`](https://github.com/JacquesCarette/Drasil/blob/4244c777c43c4054bdf23ede904de7a5bbca7017/code/drasil-printers/lib/Language/Drasil/Printing/Import/Sentence.hs#L22-L60):
+```haskell
+-- | Translates 'Sentence' to the printable representation of a 'Sentence' ('Spec').
+spec :: PrintingInformation -> Sentence -> P.Spec
+  -- make sure these optimizations are clear
+spec sm (EmptyS :+: b)          = spec sm b
+spec sm (a :+: EmptyS)          = spec sm a
+spec sm (a :+: b)               = spec sm a P.:+: spec sm b
+spec _  (S s)                   = either error P.S $ checkValidStr s invalidChars
+  where invalidChars = ['<', '>', '\"', '&', '$', '%', '&', '~', '^', '\\', '{', '}']
+spec _  (Sy s)                  = P.E $ pUnit s
+spec sm (NP np)                 = spec sm (toSent $ phraseNP np)
+spec _  Percent                 = P.E $ P.MO P.Perc
+spec _  (P s)                   = P.E $ symbol s
+spec sm (SyCh s)                = P.E $ symbol $ lookupSymb sm s
+
+-- First term is the tooltip, second term is the rendered short form
+spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
+  sm s caps) (spec sm $ lookupS sm s caps)
+
+spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
+spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
+spec sm (Ref u EmptyS notes)    =
+  case refResolve (sm ^. sysdb) u of
+    (Reference _ (RP rp ra) sn) ->
+      P.Ref P.Internal ra (spec sm $ renderShortName sm rp sn)
+    (Reference _ (Citation ra) _) ->
+      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))    ra (spec sm $ S ra)
+    (Reference _ (URI ra) sn) ->
+      P.Ref P.External    ra (spec sm $ getSentSN sn)
+spec sm (Ref u dName notes) =
+  case refResolve (sm ^. sysdb) u of
+    (Reference _ (RP _ ra) _) ->
+      P.Ref P.Internal ra (spec sm dName)
+    (Reference _ (Citation ra) _) ->
+      P.Ref (P.Cite2 (spec sm (renderCitInfo notes)))   ra (spec sm dName)
+    (Reference _ (URI ra) _) ->
+      P.Ref P.External    ra (spec sm dName)
+spec sm (Quote q)          = P.Quote $ spec sm q
+spec _  EmptyS             = P.EmptyS
+spec sm (E e)              = P.E $ modelExpr e sm
+```
+
 ## Terminology Issue Summary
 
 1. `Reference` is closer to a "citation." However, a `Reference` is also used to hack in _external links_ and treated like a chunk at times. So, it's not really an encoding of a citation either.
@@ -209,3 +252,18 @@ namedComplexRef r = Ref (ref r ^. uid)
 4. `HasFields` is really about gathering all pieces of "path information" for a user to track down and access a source.
 5. No real encoding/notion of a cross-reference nor external link.
 6. "Source" is not mentioned anywhere in our documentation.
+
+## What are we doing in [#5325](https://github.com/JacquesCarette/Drasil/pull/5325)?
+
+There are a few things we do:
+
+1. Insert more chunks in the `ChunkDB` instead of only their `Reference`s in the rendering-focused `Reference` map. Currently inserting dummy chunks for `Section`s and `LabelledContent`.
+2. Delete the `Reference` map.
+3. Insert strictly the `Reference`s that are external links into the `ChunkDB`. These have _actually unique_ `UID`s, unlike the ones that would be projected from other chunks.
+
+## What should we do next?
+
+1. Convert the `Reference`s that are external links into a (new) `ExternalLink` chunk (or something else of a different name).
+2. Look into whether `Reference` is really a necessary type. It is only effectively used in the above `spec` function. It appears that we can get rid of the `Reference` projection currently done in `refResolve` in favour of immediately using the chunk's "reference" information.
+3. Correct the terminology issues.
+4. A general analysis of the "future chunk `Reference`s" issue.

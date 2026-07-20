@@ -121,17 +121,25 @@ type StateVar = Doc
 type CSStateVar r svr = CS (r svr)
 
 class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis svr att | r -> svr where
-  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r svr
+  -- Given the visibility, attachment, variable, and default value
+  -- (used by Swift), create a stateVar for a class.
+  stateVar :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
   stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
   constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
 
-privDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+privDVar
+  :: (StateVarSym r vis svr att)
+  => SVariable r -> SValue r -> CSStateVar r svr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+pubDVar
+  :: (StateVarSym r vis svr att)
+  => SVariable r -> SValue r -> CSStateVar r svr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+pubSVar
+  :: (StateVarSym r vis svr att)
+  => SVariable r -> SValue r -> CSStateVar r svr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance

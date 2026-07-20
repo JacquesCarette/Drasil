@@ -472,7 +472,7 @@ instance OOMethodSym CodeInfoOO () () () () where
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
 instance StateVarSym CodeInfoOO () () () where
-  stateVar    _ _ _   = noInfo
+  stateVar    _ _ _ _ = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 

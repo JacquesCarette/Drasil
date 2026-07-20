@@ -774,8 +774,8 @@ instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) MethodData where
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) StateVarData AttachmentData where
-  stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
-    . zoom lensCStoVS
+  stateVar s p vr dflt = pair2 (stateVar (pfst s) (pfst p))
+    (stateVar (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS dflt)
   stateVarDef s p vr vl = pair2
     (stateVarDef (pfst s) (pfst p))
     (stateVarDef (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
@@ -1674,7 +1674,7 @@ instance MethodElim CppSrcCode MethodData where
   method = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData AttachmentData where
-  stateVar s _ _ = return $ return $ svd (snd (unCPPSC s)) empty
+  stateVar s _ _ _ = return $ return $ svd (snd (unCPPSC s)) empty
   stateVarDef = cppsStateVarDef empty
   constVar s = cppsStateVarDef constDec' s classLevel
 
@@ -2291,7 +2291,7 @@ instance MethodElim CppHdrCode MethodData where
   method = mthdDoc . unCPPHC
 
 instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData AttachmentData where
-  stateVar s p v = do
+  stateVar s p v _ = do
     dec <- zoom lensCStoMS $ stmt $ C.varDec classLevel instanceLevel empty v local
     pure $ on2CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec))

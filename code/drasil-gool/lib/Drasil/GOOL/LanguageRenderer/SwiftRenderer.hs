@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
   objMethodCall, objMethodCallMixedArgs, objMethodCallNamedArgs,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
+  StrategyPattern(..), OOMethodSym(..), Initializers)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
@@ -99,12 +99,11 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS,
-  getLangImports, getLibImports, setFileType, getClassName, setModuleName,
-  getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
-  getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
-  getLineIndex, getWordIndex, resetIndices, useVarName, genVarNameIf,
-  setVarScope, getVarScope)
+  lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS, getLangImports,
+  getLibImports, setFileType, getClassName, setModuleName, getModuleName,
+  getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed,
+  setErrorDefined, getErrorDefined, incrementLine, incrementWord, getLineIndex,
+  getWordIndex, resetIndices, useVarName, genVarNameIf, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -714,9 +713,7 @@ instance MethodElim SwiftCode MethodData where
   method = mthdDoc . unSC
 
 instance StateVarSym SwiftCode Doc Doc Doc where
-  stateVar s p vr = do
-    v <- zoom lensCStoVS vr
-    stateVarDef s p vr (typeDfltVal $ getCodeType $ variableType v)
+  stateVar = stateVarDef
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm (classLevel :: SwiftCode Doc))
 
@@ -1241,15 +1238,3 @@ swiftStringError = do
 
 swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
-
-typeDfltVal :: (Literal r, OOTypeSym r) => CodeType -> SValue r
-typeDfltVal Boolean = litFalse
-typeDfltVal Integer = litInt 0
-typeDfltVal Float = litFloat 0.0
-typeDfltVal Double = litDouble 0.0
-typeDfltVal Char = litChar ' '
-typeDfltVal String = litString ""
-typeDfltVal (List t) = litList (convTypeOO t) []
-typeDfltVal (Array t) = litArray (convTypeOO t) []
-typeDfltVal (Set t) = litSet (convTypeOO t) []
-typeDfltVal _ = error "Attempt to get default value for type with none."

@@ -447,9 +447,9 @@ openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
   :: (Monad r, OORenderSym r vis smt md svr att)
-  => r vis -> r att -> SVariable r -> CS (r Doc)
-stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
+  => r vis -> r att -> SVariable r -> SValue r -> CS (r Doc)
+stateVar s p vr _ = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
+  (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec vr IC.local)
 
 -- Python and Swift --
 

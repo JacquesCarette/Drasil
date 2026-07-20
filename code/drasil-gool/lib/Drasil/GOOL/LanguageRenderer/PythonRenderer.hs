@@ -688,7 +688,7 @@ instance MethodElim PythonCode MethodData where
   method = mthdDoc . unPC
 
 instance StateVarSym PythonCode Doc Doc AttachmentData where
-  stateVar _ _ _ = toState (toCode empty)
+  stateVar _ _ _ _ = toState (toCode empty)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm
     (classLevel :: PythonCode AttachmentData))

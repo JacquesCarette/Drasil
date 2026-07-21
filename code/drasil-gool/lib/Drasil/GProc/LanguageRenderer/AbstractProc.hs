@@ -10,7 +10,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GProc.InterfaceProc (File, SFile, Module, FSModule)
+import Drasil.GProc.InterfaceProc (File, Module, FSModule)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
 import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
@@ -32,7 +32,7 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
 -- Files --
 
-fileDoc :: (RP.RenderFile r) => String -> FSModule r -> SFile r
+fileDoc :: (RP.RenderFile r) => String -> FSModule r -> FS (r File)
 fileDoc ext md = do
   m <- md
   nm <- getModuleName
@@ -41,7 +41,7 @@ fileDoc ext md = do
 
 fileFromData
   :: (RP.ModuleElim r)
-  => (FilePath -> r Module -> r File) -> FilePath -> FSModule r -> SFile r
+  => (FilePath -> r Module -> r File) -> FilePath -> FSModule r -> FS (r File)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
@@ -68,7 +68,7 @@ buildModule n imps bot fs = RP.modFromData n (do
 
 docMod
   :: (RP.RenderFile r)
-  => String -> String -> String -> [String] -> String -> SFile r -> SFile r
+  => String -> String -> String -> [String] -> String -> FS (r File) -> FS (r File)
 docMod e d wm a dt fl = RP.commentedMod fl
   (RC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)
 

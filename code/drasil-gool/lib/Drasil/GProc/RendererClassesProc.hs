@@ -7,7 +7,7 @@ module Drasil.GProc.RendererClassesProc (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Block, MSBody)
-import qualified Drasil.GProc.InterfaceProc as IP (SFile, Module, FSModule,
+import qualified Drasil.GProc.InterfaceProc as IP (File, Module, FSModule,
   FileSym(..))
 import Drasil.Shared.State (FS, MS)
 import Drasil.Shared.AST (ParamData)
@@ -29,9 +29,9 @@ class (BlockCommentSym r) => RenderFile r where
   top :: r IP.Module -> r Block
   bottom :: r Block
 
-  commentedMod :: IP.SFile r -> FS (r Doc) -> IP.SFile r
+  commentedMod :: FS (r IP.File) -> FS (r Doc) -> FS (r IP.File)
 
-  fileFromData :: FilePath -> IP.FSModule r -> IP.SFile r
+  fileFromData :: FilePath -> IP.FSModule r -> FS (r IP.File)
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> IP.FSModule r

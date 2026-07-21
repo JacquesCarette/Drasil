@@ -26,19 +26,17 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MS, CSStateVar, SClass,
-  SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
-  Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-  convTypeOO, VisibilityTag(..), SharedStatement, TypeElim, VariableElim,
-  OOStatement)
-import qualified Drasil.GOOL as OO (SFile)
+import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, File, FS, MS, CSStateVar,
+  SClass, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
+  ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
+  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..),
+  SharedStatement, TypeElim, VariableElim, OOStatement)
 import Drasil.GProc (ProcProg, NativeVector)
-import qualified Drasil.GProc as Proc (SFile)
 
 import Drasil.Code.CodeExpr.Development
 import Drasil.Code.CodeVar (CodeIdea(codeName), CodeVarChunk, quantvar,
@@ -86,7 +84,7 @@ type ConstraintCE = Constraint CodeExpr
 ---- MAIN ---
 
 -- | Generates a controller module.
-genMain :: (OOProg r vis smt md svr att prg) => GenState (OO.SFile r)
+genMain :: (OOProg r vis smt md svr att prg) => GenState (FS (r File))
 genMain = genModule "Control" "Controls the flow of the program"
   [genMainFunc] []
 
@@ -199,11 +197,11 @@ initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 ------- INPUT ----------
 
 -- | Generates a single module containing all input-related components.
-genInputMod :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
+genInputMod :: (OOProg r vis smt md svr att prg) => GenState [FS (r File)]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
-  let genMod :: (OOProg r vis smt md svr att prg) => Maybe (SClass r) -> GenState (OO.SFile r)
+  let genMod :: (OOProg r vis smt md svr att prg) => Maybe (SClass r) -> GenState (FS (r File))
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
       genMod _ = genModule cname ipDesc [] [genInputClass Primary]
@@ -506,7 +504,7 @@ genSampleInput = do
 ----- CONSTANTS -----
 
 -- | Generates a module containing the class where constants are stored.
-genConstMod :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
+genConstMod :: (OOProg r vis smt md svr att prg) => GenState [FS (r File)]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
   cName <- genICName Constants
@@ -543,7 +541,7 @@ genConstClass scp = do
 ------- CALC ----------
 
 -- | Generates a module containing calculation functions.
-genCalcMod :: (OOProg r vis smt md svr att prg) => GenState (OO.SFile r)
+genCalcMod :: (OOProg r vis smt md svr att prg) => GenState (FS (r File))
 genCalcMod = do
   g <- get
   cName <- genICName Calculations
@@ -626,7 +624,7 @@ genCaseBlock t v c cs = do
 ----- OUTPUT -------
 
 -- | Generates a module containing the function for printing outputs.
-genOutputMod :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
+genOutputMod :: (OOProg r vis smt md svr att prg) => GenState [FS (r File)]
 genOutputMod = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
@@ -666,7 +664,7 @@ genOutputFormat = do
 
 -- | Generates a controller module.
 genMainProc
-  :: (ProcProg r vis smt md prg, NativeVector r) => GenState (Proc.SFile r)
+  :: (ProcProg r vis smt md prg, NativeVector r) => GenState (FS (r File))
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
   [genMainFuncProc]
 
@@ -745,13 +743,13 @@ checkConstClass = do
 
 -- | Generates a single module containing all input-related components.
 genInputModProc
-  :: (ProcProg r vis smt md prg, NativeVector r) => GenState [Proc.SFile r]
+  :: (ProcProg r vis smt md prg, NativeVector r) => GenState [FS (r File)]
 genInputModProc = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod
         :: (ProcProg r vis smt md prg, NativeVector r) => Bool
-        -> GenState (Proc.SFile r)
+        -> GenState (FS (r File))
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
         genInputDerivedProc Pub, genInputConstraintsProc Pub]
       genMod True = error "genInputModProc: Procedural renderers do not support bundled inputs"
@@ -795,7 +793,7 @@ getInputDeclProc = do
 
 -- | Generates a module containing calculation functions.
 genCalcModProc
-  :: (ProcProg r vis smt md prg, NativeVector r) => GenState (Proc.SFile r)
+  :: (ProcProg r vis smt md prg, NativeVector r) => GenState (FS (r File))
 genCalcModProc = do
   g <- get
   cName <- genICName Calculations
@@ -1063,7 +1061,7 @@ printConstraintProc c = do
 
 -- | Generates a module containing the function for printing outputs.
 genOutputModProc
-  :: (ProcProg r vis smt md prg, NativeVector r) => GenState [Proc.SFile r]
+  :: (ProcProg r vis smt md prg, NativeVector r) => GenState [FS (r File)]
 genOutputModProc = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc

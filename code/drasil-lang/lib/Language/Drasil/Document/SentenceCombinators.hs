@@ -23,13 +23,19 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
-import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
-  , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
-  , HasShortName(..) , short, atStart, titleize, phrase, plural
-  , ModelExpr
-  , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
-  , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
-  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
+import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
+import Language.Drasil.Classes (HasUnitSymbol(..), Quantity, Concept, Definition(..))
+import Language.Drasil.Development.Sentence (short, atStart, titleize, phrase, plural)
+import Language.Drasil.Label.Type (Referable)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
+  ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
+import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
+import Language.Drasil.Sentence.Generators (fromSource, fterms)
+import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
 import Language.Drasil.Document.Reference (refS, namedRef)
 import Language.Drasil.Document.Sections (Section)

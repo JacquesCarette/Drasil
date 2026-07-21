@@ -29,7 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   (&=), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
+import Drasil.GOOL.InterfaceGOOL (File, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
   objMethodCall, OOStatement)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
@@ -106,7 +106,7 @@ doxClass :: (RG.RenderClass r vis md svr) => String -> SClass r -> SClass r
 doxClass = docClass classDox
 
 doxMod :: (RG.RenderFile r) => String -> String -> String -> [String] ->
-  String -> SFile r -> SFile r
+  String -> FS (r File) -> FS (r File)
 doxMod = docMod moduleDox
 
 -- Python, Java, and C# --

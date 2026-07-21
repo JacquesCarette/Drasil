@@ -17,11 +17,11 @@ import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
 import Drasil.FileHandling (FileLayout, file, directory, exactFile, ps)
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
-  ProgData(..), initialState, FileData(..), modDoc)
-import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
+import Drasil.GOOL (OOProg, File, FS, VisibilityTag(..), headers, sources,
+  mainMod, ProgData(..), initialState, FileData(..), modDoc)
+import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg, NativeVector)
-import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..))
+import qualified Drasil.GProc as Proc (GSProgram, ProgramSym(..))
 import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
 import Drasil.System (HasSystemMeta(..))
 import Drasil.SRS (HasSmithEtAlSRS(..))
@@ -230,12 +230,12 @@ genProgram = do
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r vis smt md svr att prg) => Modularity -> GenState [OO.SFile r]
+chooseModules :: (OOProg r vis smt md svr att prg) => Modularity -> GenState [FS (r File)]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r vis smt md svr att prg) => GenState (OO.SFile r)
+genUnmodular :: (OOProg r vis smt md svr att prg) => GenState (FS (r File))
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -254,7 +254,7 @@ genUnmodular = do
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
-genModules :: (OOProg r vis smt md svr att prg) => GenState [OO.SFile r]
+genModules :: (OOProg r vis smt md svr att prg) => GenState [FS (r File)]
 genModules = do
   g <- get
   mn     <- genMain
@@ -349,14 +349,14 @@ genProgramProc = do
 -- of modularity.
 chooseModulesProc
   :: (ProcProg r vis smt md prg, NativeVector r)
-  => Modularity -> GenState [Proc.SFile r]
+  => Modularity -> GenState [FS (r File)]
 chooseModulesProc Unmodular = liftS genUnmodularProc
 chooseModulesProc Modular = genModulesProc
 
 -- | Generates an entire SCS program as a single module.
 genUnmodularProc
   :: (ProcProg r vis smt md prg, NativeVector r)
-  => GenState (Proc.SFile r)
+  => GenState (FS (r File))
 genUnmodularProc = do
   g <- get
   umDesc <- unmodularDesc
@@ -376,7 +376,7 @@ genUnmodularProc = do
 -- | Generates all modules for an SCS program.
 genModulesProc
   :: (ProcProg r vis smt md prg, NativeVector r)
-  => GenState [Proc.SFile r]
+  => GenState [FS (r File)]
 genModulesProc = do
   g <- get
   mn     <- genMainProc

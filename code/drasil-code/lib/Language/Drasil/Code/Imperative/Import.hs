@@ -50,25 +50,23 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, CSStateVar,
-  SClass, NamedArgs, Initializers, SharedProg, OOProg, MS, VS, AttachmentSym(..),
-  bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
-  VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
-  instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
-  VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Reference(..), Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), OOMethodSym(..), pubDVar, privDVar, nonInitConstructor,
-  convType, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue, TypeData,
-  ParamData, SharedStatement, TypeElim, OODeclStatement, OOVariableValue,
-  OOStatement)
+import Drasil.GOOL (Label, File, MSBody, MSBlock, SVariable, SValue, CSStateVar,
+  SClass, NamedArgs, Initializers, SharedProg, OOProg, FS, MS, VS,
+  AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
+  VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
+  OOVariableSym(..), SelfSym(..), instanceVarSelf, VariableElim(..), ($->),
+  ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..),
+  OOValueExpression(..), objMethodCallMixedArgs, Reference(..), Array(..),
+  List(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
+  privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue, TypeData, ParamData, SharedStatement, TypeElim,
+  OODeclStatement, OOVariableValue, OOStatement)
 import qualified Drasil.GOOL as S (Set(..)) -- TODO [Brandon Bosman, 07/09/2026]: Merge this with OO
-import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg, NativeVector(..))
-import qualified Drasil.GProc as Proc (SFile)
 import Drasil.System (systemdb)
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
@@ -545,7 +543,7 @@ elementSetBoolBfunc SContains = S.contains
 
 -- | Converts a 'Mod' to GOOL.
 genModDef :: (OOProg r vis smt md svr att prg) =>
-  Mod -> GenState (OO.SFile r)
+  Mod -> GenState (FS (r File))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
@@ -894,7 +892,7 @@ mkVarProc v = do
 -- | Converts a 'Mod' to GOOL.
 genModDefProc
   :: (ProcProg r vis smt md prg, NativeVector r)
-  => Mod -> GenState (Proc.SFile r)
+  => Mod -> GenState (FS (r File))
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
           (map (fmap Just . genFuncProc publicFuncProc []) fs)

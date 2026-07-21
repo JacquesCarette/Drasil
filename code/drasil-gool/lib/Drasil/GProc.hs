@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, MS, VS, SVariable,
-  SValue, FSModule, NamedArgs, SharedProg, SharedStatement, ProcProg,
+module Drasil.GProc (Label, GSProgram, File, MSBody, MSBlock, FS, MS, VS,
+  SVariable, SValue, FSModule, NamedArgs, SharedProg, SharedStatement, ProcProg,
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
@@ -36,7 +36,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
   VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
-import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
+import Drasil.GProc.InterfaceProc (GSProgram, File, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
@@ -44,8 +44,8 @@ import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (MS, VS, GOOLState(..), lensMStoVS, headers, sources,
-  mainMod, initialState)
+import Drasil.Shared.State (FS, MS, VS, GOOLState(..), lensMStoVS, headers,
+  sources, mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)
 

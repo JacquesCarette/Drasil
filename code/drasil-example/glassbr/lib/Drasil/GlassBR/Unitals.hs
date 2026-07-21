@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Unitals (module Drasil.GlassBR.Unitals) where --whole file is used
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (parensNP)
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -91,7 +90,7 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
 
 pbTol = uq (constrained' (quantNoUnit (mkUid "pbTol") (nounPhraseSP "tolerable probability of breakage")
   (S "the tolerable probability of breakage of the glass plate")
-  (sub cP (Concat [lBreak, lTol])) Real)
+  (sub cP (lBreak <> lTol)) Real)
   [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
@@ -141,7 +140,7 @@ probFail = cucNoUnit' "probFail" (nounPhraseSP "probability of failure")
 
 pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failure")
   "the tolerable probability of failure of the glass plate"
-  (sub cP (Concat [lFail, lTol])) Real
+  (sub cP (lFail <> lTol)) Real
   [probConstr] (dbl 0.008)
 
   --FIXME: no typical value!

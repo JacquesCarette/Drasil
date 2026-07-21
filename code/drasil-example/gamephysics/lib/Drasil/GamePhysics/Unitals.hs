@@ -94,7 +94,7 @@ timeParam n w s = quant
 contParam :: String -> String -> Symbol -> Symbol -> DefinedQuantityDict
 contParam n m w s = quant
  (mkUid $ "r_" ++ n ++ m) contdispN (phrase QP.displacement)
-  (sub (eqSymb QP.displacement) (Concat [w, s])) Real metre
+  (sub (eqSymb QP.displacement) (w <> s)) Real metre
   where contdispN = cn $ "displacement vector between the centre of mass of rigid body " ++
                          n ++ " and contact point " ++ m
 

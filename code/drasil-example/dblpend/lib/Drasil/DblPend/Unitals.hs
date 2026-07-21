@@ -78,67 +78,67 @@ massObj_2 = quant (mkUid "m_2") (mass `ofThe` secondObject)
 
 xPos_1 = quant (mkUid "p_x1") (horizontalPos `ofThe` firstObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
-        (sub lP (Concat [labelx, label1])) Real metre
+        (sub lP (labelx <> label1)) Real metre
 
 xPos_2 = quant (mkUid "p_x2") (horizontalPos `ofThe` secondObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
-        (sub lP (Concat [labelx, label2])) Real metre
+        (sub lP (labelx <> label2)) Real metre
 
 yPos_1 = quant (mkUid "p_y1") (verticalPos `ofThe` firstObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
-        (sub lP (Concat [labely, label1])) Real metre
+        (sub lP (labely <> label1)) Real metre
 
 yPos_2 = quant (mkUid "p_y2") (verticalPos `ofThe` secondObject)
         (D.toSent (phraseNP (QP.position `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
-        (sub lP (Concat [labely, label2])) Real metre
+        (sub lP (labely <> label2)) Real metre
 
 xVel_1 = quant (mkUid "v_x1") (horizontalVel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
-        (sub lV (Concat [labelx, label1])) Real velU
+        (sub lV (labelx <> label1)) Real velU
 
 xVel_2 = quant (mkUid "v_x2") (horizontalVel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
-        (sub lV (Concat [labelx, label2])) Real velU
+        (sub lV (labelx <> label2)) Real velU
 
 yVel_1 = quant (mkUid "v_y1") (verticalVel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
-        (sub lV (Concat [labely, label1])) Real velU
+        (sub lV (labely <> label1)) Real velU
 
 yVel_2 = quant (mkUid "v_y2") (verticalVel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.angularVelocity `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
-        (sub lV (Concat [labely, label2])) Real velU
+        (sub lV (labely <> label2)) Real velU
 
 xAccel_1 = quant (mkUid "a_x1") (horizontalAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
-        (sub lA (Concat [labelx, label1])) Real accelU
+        (sub lA (labelx <> label1)) Real accelU
 
 xAccel_2 = quant (mkUid "a_x2") (horizontalAccel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
-        (sub lA (Concat [labelx, label2])) Real accelU
+        (sub lA (labelx <> label2)) Real accelU
 
 yAccel_1 = quant (mkUid "a_y1") (verticalAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
-        (sub lA (Concat [labely, label1])) Real accelU
+        (sub lA (labely <> label1)) Real accelU
 
 yAccel_2 = quant (mkUid "a_y2") (verticalAccel `ofThe` secondObject)
         (D.toSent (phraseNP (QP.acceleration `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
-        (sub lA (Concat [labely, label2])) Real accelU
+        (sub lA (labely <> label2)) Real accelU
 
 xForce_1 = quant (mkUid "F_x1") (horizontalForce `onThe` firstObject)
         (D.toSent (phraseNP (QP.force `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)
-        (sub cF (Concat [labelx, label1])) Real newton
+        (sub cF (labelx <> label1)) Real newton
 
 xForce_2 = quant (mkUid "F_x2") (horizontalForce `onThe` secondObject)
         (D.toSent (phraseNP (QP.force `the_ofThe` secondObject)) `S.inThe` phrase CM.xDir)
-        (sub cF (Concat [labelx, label2])) Real newton
+        (sub cF (labelx <> label2)) Real newton
 
 yForce_1 = quant (mkUid "F_y1") (verticalForce `onThe` firstObject)
         (D.toSent (phraseNP (QP.force `the_ofThe` firstObject)) `S.inThe` phrase CM.yDir)
-        (sub cF (Concat [labely, label1])) Real newton
+        (sub cF (labely <> label1)) Real newton
 
 yForce_2 = quant (mkUid "F_y2") (verticalForce `onThe` secondObject)
         (D.toSent (phraseNP (QP.force `the_ofThe` secondObject)) `S.inThe` phrase CM.yDir)
-        (sub cF (Concat [labely, label2])) Real newton
+        (sub cF (labely <> label2)) Real newton
 
 angularAccel_1 = quant (mkUid "alpha_x1") (QP.angularAccel `ofThe` firstObject)
         (D.toSent (phraseNP (QP.angularAccel `the_ofThe` firstObject)) `S.inThe` phrase CM.xDir)

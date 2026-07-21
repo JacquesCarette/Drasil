@@ -29,7 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   (&=), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (File, FSModule, SClass, CSStateVar,
+import Drasil.GOOL.InterfaceGOOL (File, Module, SClass, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
   objMethodCall, OOStatement)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
@@ -166,7 +166,7 @@ intClass f n s i svrs cstrs mths = do
 -- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule
   :: (RG.ClassElim r, RC.MethodElim r md, RG.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r md)] -> [SClass r] -> FSModule r
+  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r md)] -> [SClass r] -> FS (r Module)
 buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
@@ -288,7 +288,7 @@ buildModule'
   -> [Label]
   -> [MS (r md)]
   -> [SClass r]
-  -> FSModule r
+  -> FS (r Module)
 buildModule' n inc is ms cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS)
           (if null ms then cs else IG.buildClass Nothing [] [] ms : cs)

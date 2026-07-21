@@ -21,7 +21,7 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
+  Label, Library, Body, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
@@ -88,21 +88,21 @@ type Initializers r = [(SVariable r, SValue r)]
 
 class (MethodSym r vis smt md, AttachmentSym r att) => OOMethodSym r vis smt md att where
   method      :: Label -> r vis -> r att -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MSBody r -> MS (r md)
+    [MS (r ParamData)] -> MS (r Body) -> MS (r md)
   getMethod   :: SVariable r -> MS (r md)
   setMethod   :: SVariable r -> MS (r md)
-  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r md)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
   inOutMethod :: Label -> r vis -> r att -> InOutFunc r md
   docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r md
 
 privMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> MS (r md)
+  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 privMethod n = method n private instanceLevel
 
 pubMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> MS (r md)
+  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 pubMethod n = method n public instanceLevel
 
 initializer :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
@@ -110,7 +110,7 @@ initializer :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
 initializer ps is = constructor ps is (body [])
 
 nonInitConstructor :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
-  MSBody r -> MS (r md)
+  MS (r Body) -> MS (r md)
 nonInitConstructor ps = constructor ps []
 
 type StateVar = Doc
@@ -275,7 +275,7 @@ addObserver o = listAdd obsList lastelem o
         lastelem = listSize obsList
 
 class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
-  runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
+  runStrategy :: Label -> [(Label, MS (r Body))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MSBlock r
 
 class (FunctionSym r) => OOFunctionSym r where

@@ -7,7 +7,7 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
+import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
@@ -55,11 +55,11 @@ class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md att | r 
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r att ->
-    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
+    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r att
-    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
+    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 
   destructor :: [IG.CSStateVar r svr] -> MS (r md)
 

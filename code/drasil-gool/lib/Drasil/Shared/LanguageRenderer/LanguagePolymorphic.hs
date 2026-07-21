@@ -21,9 +21,9 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
-  MSBlock, Block, Variable, SVariable, Value, SValue, NamedArgs, MixedCall,
-  MixedCtorCall, bodyStatements, oneLiner, VisibilitySym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBlock,
+  Block, Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
+  bodyStatements, oneLiner, VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
@@ -72,7 +72,7 @@ import qualified Text.PrettyPrint.HughesPJ as D
 
 -- Bodies --
 
-multiBody :: (RC.BodyElim r, Monad r) => [MSBody r] -> MS (r Doc)
+multiBody :: (RC.BodyElim r, Monad r) => [MS (r Body)] -> MS (r Doc)
 multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
@@ -462,8 +462,8 @@ ifCond
   -> Doc
   -> Doc
   -> Doc
-  -> [(SValue r, MSBody r)]
-  -> MSBody r
+  -> [(SValue r, MS (r Body))]
+  -> MS (r Body)
   -> MS (r smt)
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
@@ -483,7 +483,7 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
       >>= (mkStmtNoEnd . vcat)
 
 tryCatch :: (RenderStatement r smt) => (r Body -> r Body -> Doc) ->
-  MSBody r -> MSBody r -> MS (r smt)
+  MS (r Body) -> MS (r Body) -> MS (r smt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
@@ -508,7 +508,7 @@ method
   -> r att
   -> VS (r TypeData)
   -> [MS (r ParamData)]
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r md)
 method n s p t = intMethod False n s p (mType t)
 
@@ -522,12 +522,12 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
-initStmts :: (OOStatement r smt) => Initializers r -> MSBody r
+initStmts :: (OOStatement r smt) => Initializers r -> MS (r Body)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
   :: (AttachmentSym r att, OORenderMethod r vis md att)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r md)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (RenderMethod r md) => FuncDocRenderer -> String ->

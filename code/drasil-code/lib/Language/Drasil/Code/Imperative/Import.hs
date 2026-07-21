@@ -50,7 +50,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, File, MSBody, MSBlock, SVariable, SValue, Class,
+import Drasil.GOOL (Label, File, Body, MSBlock, SVariable, SValue, Class,
   CSStateVar, NamedArgs, Initializers, SharedProg, OOProg, CS, FS, MS, VS,
   AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
   VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
@@ -278,7 +278,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- description of what is returned (if applicable), and body.
 genMethod
   :: (OOProg r vis smt md svr att prg)
-  => ([MS (r ParamData)] -> MSBody r -> MS (r md))
+  => ([MS (r ParamData)] -> MS (r Body) -> MS (r md))
   -> Label
   -> Description
   -> [ParameterChunk]
@@ -301,8 +301,8 @@ genMethod f n desc p r b = do
 -- list of inputs, list of outputs, and body.
 genInOutFunc
   :: (OOStatement r smt, VariableElim r)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md))
-  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> MS (r md))
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md))
+  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r md))
   -> Label
   -> Description
   -> [CodeVarChunk]
@@ -939,7 +939,7 @@ privateFuncProc n t desc ps r b = do
 -- description of what is returned (if applicable), and body.
 genMethodProc
   :: (SharedProg r vis smt md)
-  => ([MS (r ParamData)] -> MSBody r -> MS (r md))
+  => ([MS (r ParamData)] -> MS (r Body) -> MS (r md))
   -> Label
   -> Description
   -> [ParameterChunk]
@@ -1314,8 +1314,8 @@ privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n 
 -- list of inputs, list of outputs, and body.
 genInOutFuncProc
   :: (SharedStatement r smt, VariableElim r)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md))
-  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> MS (r md))
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md))
+  -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r md))
   -> Label
   -> Description
   -> [CodeVarChunk]

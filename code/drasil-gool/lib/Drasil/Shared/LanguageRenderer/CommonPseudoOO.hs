@@ -22,7 +22,7 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
-  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, SVariable, Value,
+  extFuncAppMixedArgs,funcType, extVar, Label, Library, Body, SVariable, Value,
   SValue, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
@@ -94,7 +94,7 @@ int = typeFromData Integer intRender (text intRender)
 
 constructor
   :: (OORenderSym r vis smt md svr att, OOStatement r smt)
-  => Label -> [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
+  => Label -> [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r md)
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
@@ -243,7 +243,7 @@ forEach
      , RC.ValueElim r
      , VariableElim r
      )
-  => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MSBody r -> MS (r smt)
+  => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MS (r Body) -> MS (r smt)
 forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
@@ -258,7 +258,7 @@ mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
-docMain :: (OORenderSym r vis smt md svr att) => MSBody r -> MS (r md)
+docMain :: (OORenderSym r vis smt md svr att) => MS (r Body) -> MS (r md)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
@@ -270,7 +270,7 @@ mainFunction
      , Monad r
      , VisibilitySym r vis
      )
-  => VS (r TypeData) -> Label -> MSBody r -> MS (r md)
+  => VS (r TypeData) -> Label -> MS (r Body) -> MS (r md)
 mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
   (render (renderType argT) ++ array) (renderType argT <> array'))))]
@@ -329,12 +329,12 @@ string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
   :: (RenderMethod r md)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md))
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md))
   -> String
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r md)
 docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
   [fst o] (f (map snd is) [snd o] [] b)
@@ -494,7 +494,7 @@ listDec v scp = listDecDef v scp []
 
 funcDecDef
   :: (OORenderSym r vis smt md svr att)
-  => SVariable r -> r ScopeData -> [SVariable r] -> MSBody r -> MS (r smt)
+  => SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body) -> MS (r smt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -522,7 +522,7 @@ forLoopError :: String -> String
 forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
   "forRange, forEach, or while instead"
 
-mainBody :: (RC.BodyElim r, RC.RenderMethod r md) => MSBody r -> MS (r md)
+mainBody :: (RC.BodyElim r, RC.RenderMethod r md) => MS (r Body) -> MS (r md)
 mainBody b = do
   modify setCurrMain
   bod <- b
@@ -536,11 +536,11 @@ inOutFunc
      , RenderType r
      , VariableElim r
      )
-  => (VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r md))
+  => (VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r md))
   -> [SVariable r]
   -> [SVariable r]
   -> [SVariable r]
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r md)
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
 inOutFunc f ins outs both b = f
@@ -553,12 +553,12 @@ inOutFunc f ins outs both b = f
 docInOutFunc'
   :: (RenderMethod r md)
   => FuncDocRenderer
-  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md))
+  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md))
   -> String
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
-  -> MSBody r -> MS (r md)
+  -> MS (r Body) -> MS (r md)
 docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)
 

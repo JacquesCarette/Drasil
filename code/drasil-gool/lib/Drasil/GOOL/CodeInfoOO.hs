@@ -5,7 +5,7 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), MSBody, VSBinder, Variable,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
   Value, SValue, SharedProg, SharedStatement, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -514,13 +514,13 @@ noInfoScope = return $ sd Global -- Hack
 noInfoBinder :: VSBinder CodeInfoOO
 noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
 
-updateMEMandCM :: String -> MSBody CodeInfoOO -> MS (CodeInfoOO ())
+updateMEMandCM :: String -> MS (CodeInfoOO Body) -> MS (CodeInfoOO ())
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO ->
+evalConds :: [(SValue CodeInfoOO, MS (CodeInfoOO Body))] -> MS (CodeInfoOO Body) ->
   MS (CodeInfoOO ())
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs

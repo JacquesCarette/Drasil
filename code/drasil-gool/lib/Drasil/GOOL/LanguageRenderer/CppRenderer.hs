@@ -15,8 +15,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, MSBody, Variable, SVariable, Value, SValue, NamedArgs,
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
+  Label, Body, Variable, SVariable, Value, SValue, NamedArgs, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
   VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -2696,7 +2696,7 @@ cppListDecDefDoc :: (ValueElim r) => [r Value] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppFuncDecDef :: SVariable CppSrcCode -> CppSrcCode ScopeData ->
-  [SVariable CppSrcCode] -> MSBody CppSrcCode -> MS (CppSrcCode (Doc, Terminator))
+  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode (Doc, Terminator))
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -2771,7 +2771,7 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
         initList = hicat listSep' is
 
 cppConstructor :: [MS (CppSrcCode ParamData)] ->
-  NamedArgs CppSrcCode -> MSBody CppSrcCode -> MS (CppSrcCode MethodData)
+  NamedArgs CppSrcCode -> MS (CppSrcCode Body) -> MS (CppSrcCode MethodData)
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   bod -> if null is then CP.constructor n ps is b else modify (setVisibility Pub) >>
   toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable
@@ -2789,7 +2789,7 @@ cppsFunction n t ps b = vcat [
 cppsIntFunc :: (CppSrcCode TypeData -> [CppSrcCode ParamData] ->
   CppSrcCode Body -> Doc) -> CppSrcCode (Doc, VisibilityTag) ->
   MSMthdType CppSrcCode -> [MS (CppSrcCode ParamData)] ->
-  MSBody CppSrcCode -> MS (CppSrcCode MethodData)
+  MS (CppSrcCode Body) -> MS (CppSrcCode MethodData)
 cppsIntFunc f s t ps b = do
   modify (setVisibility (snd $ unCPPSC s))
   tp <- t
@@ -2798,7 +2798,7 @@ cppsIntFunc f s t ps b = do
 
 cpphIntFunc :: Label -> CppHdrCode (Doc, VisibilityTag) ->
   CppHdrCode att -> MSMthdType CppHdrCode ->
-  [MS (CppHdrCode ParamData)] -> MSBody CppHdrCode -> MS (CppHdrCode MethodData)
+  [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) -> MS (CppHdrCode MethodData)
 cpphIntFunc n s _ t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))
     tp <- t
@@ -2844,7 +2844,7 @@ cppsStateVarDef cns s p vr' vl' = do
       endStatement) empty)
 
 cppForEach :: Doc -> Doc -> Doc -> Doc -> SVariable CppSrcCode -> SValue CppSrcCode
-  -> MSBody CppSrcCode -> MS (CppSrcCode (Doc, Terminator))
+  -> MS (CppSrcCode Body) -> MS (CppSrcCode (Doc, Terminator))
 cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
@@ -2913,9 +2913,9 @@ cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins
   ++ map valueOf outs)
 
 cppsInOut :: (VS (CppSrcCode TypeData) ->
-  [MS (CppSrcCode ParamData)] -> MSBody CppSrcCode ->
+  [MS (CppSrcCode ParamData)] -> MS (CppSrcCode Body) ->
   MS (CppSrcCode md)) -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
-  [SVariable CppSrcCode] -> MSBody CppSrcCode -> MS (CppSrcCode md)
+  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode md)
 cppsInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody)
   (varDec v local) b (returnStmt $ valueOf v))
@@ -2925,9 +2925,9 @@ cppsInOut f ins [] [v] b = f (onStateValue variableType v)
 cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
 cpphInOut :: (VS (CppHdrCode TypeData) ->
-  [MS (CppHdrCode ParamData)] -> MSBody CppHdrCode ->
+  [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) ->
   MS (CppHdrCode md)) -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
-  [SVariable CppHdrCode] -> MSBody CppHdrCode -> MS (CppHdrCode md)
+  [SVariable CppHdrCode] -> MS (CppHdrCode Body) -> MS (CppHdrCode md)
 cpphInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) b
 cpphInOut f ins [] [v] b = f (onStateValue variableType v)

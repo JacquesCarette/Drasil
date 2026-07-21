@@ -63,7 +63,6 @@ instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr
 instance HasSpace        (QDefinition e) where typ = qdQua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Definition      (QDefinition e) where defn = qdQua . defn
-instance Quantity        (QDefinition e) where
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
 instance DefiningExpr     QDefinition    where defnExpr = qdExpr

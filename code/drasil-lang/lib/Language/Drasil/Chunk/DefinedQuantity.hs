@@ -65,8 +65,6 @@ instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 instance HasSpace      DefinedQuantityDict where typ = spa
 -- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
--- | 'DefinedQuantityDict's have a 'Quantity'.
-instance Quantity      DefinedQuantityDict where
 -- | Finds the units of the 'DefinedQuantityDict'.
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- | Convert the symbol of the 'DefinedQuantityDict' to a 'ModelExpr'.

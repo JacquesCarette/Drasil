@@ -62,8 +62,6 @@ instance ConceptDomain CodeChunk where cdom = cdom . view qc
 instance HasSpace      CodeChunk where typ = qc . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasSymbol     CodeChunk where symbol = symbol . view qc
--- | 'CodeChunk's have a 'Quantity'.
-instance Quantity      CodeChunk
 -- | Equal if 'UID's are equal.
 instance Eq            CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
@@ -90,8 +88,6 @@ instance ConceptDomain CodeVarChunk where cdom = cdom . view ccv
 instance HasSpace      CodeVarChunk where typ = ccv . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasSymbol     CodeVarChunk where symbol = symbol . view ccv
--- | 'CodeVarChunk's have a 'Quantity'.
-instance Quantity      CodeVarChunk
 -- | Equal if 'UID's are equal.
 instance Eq            CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeVarChunk'.
@@ -129,8 +125,6 @@ instance ConceptDomain CodeFuncChunk where cdom = cdom . view ccf
 instance HasSpace      CodeFuncChunk where typ = ccf . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasSymbol     CodeFuncChunk where symbol = symbol . view ccf
--- | 'CodeFuncChunk's have a 'Quantity'.
-instance Quantity      CodeFuncChunk
 -- | Functions are Callable.
 instance Callable      CodeFuncChunk
 -- | Equal if 'UID's are equal.

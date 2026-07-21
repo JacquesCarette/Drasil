@@ -35,8 +35,6 @@ instance ConceptDomain  NamedArgument where cdom = cdom . view qtd
 instance HasSpace       NamedArgument where typ = qtd . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'NamedArgument'.
 instance HasSymbol      NamedArgument where symbol = symbol . view qtd
--- | 'NamedArgument's have a 'Quantity'.
-instance Quantity       NamedArgument where
 -- | 'NamedArgument's have an argument name.
 instance IsArgumentName NamedArgument where
 -- | Equal if 'UID's are equal.

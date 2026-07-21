@@ -51,8 +51,6 @@ instance Idea          ConstrConcept where getA = getA . view defq
 instance HasSpace      ConstrConcept where typ = defq . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
--- | 'ConstrConcept's have a 'Quantity'.
-instance Quantity      ConstrConcept where
 -- | Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Definition    ConstrConcept where defn = defq . defn
 -- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.

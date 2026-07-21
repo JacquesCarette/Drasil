@@ -159,7 +159,7 @@ reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption.
-mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) =>
+mkValsSourceTable :: (Quantity i, MayHaveUnit i) =>
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
 mkValsSourceTable vals labl cap = llccTab labl $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]

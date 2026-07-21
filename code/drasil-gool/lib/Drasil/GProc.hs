@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GProc (Label, GSProgram, File, Body, MSBlock, FS, MS, VS,
-  SVariable, SValue, Module, NamedArgs, SharedProg, SharedStatement, ProcProg,
+module Drasil.GProc (Label, GSProgram, File, Body, Block, FS, MS, VS, SVariable,
+  SValue, Module, NamedArgs, SharedProg, SharedStatement, ProcProg,
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
@@ -21,7 +21,7 @@ module Drasil.GProc (Label, GSProgram, File, Body, MSBlock, FS, MS, VS,
   TypeElim(..), getTypeString
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Body, MSBlock, SVariable, SValue,
+import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
   NamedArgs, SharedProg, SharedStatement, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), BinderSym(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),

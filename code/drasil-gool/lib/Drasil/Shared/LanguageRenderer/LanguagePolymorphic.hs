@@ -21,8 +21,8 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBlock,
-  Block, Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
+  Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
   bodyStatements, oneLiner, VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
@@ -82,7 +82,7 @@ block
   => [MS (r smt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MSBlock r] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --

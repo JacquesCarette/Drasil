@@ -10,6 +10,7 @@ module Drasil.Database.SearchTools (
   -- * Resolvers
   termResolve, termResolve',
   defResolve, defResolve',
+  refResolve,
   findAllConcInsts
 ) where
 
@@ -17,6 +18,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, UID, find, findAll)
 import Language.Drasil
+import Language.Drasil.Document
 import Theory.Drasil.DataDefinition (DataDefinition)
 import Theory.Drasil.InstanceModel (InstanceModel)
 import Theory.Drasil.GenDefn (GenDefn)
@@ -39,7 +41,7 @@ termResolve f db trg
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
+  | otherwise = error $ "Term: `" ++ show trg ++ "` not found in TermMap"
   where
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c
     go f' c = f' (c ^. term) (getA c)
@@ -50,8 +52,8 @@ termResolve' = termResolve TermAbbr
 
 data DomDefn = DomDefn { domain :: [UID], definition :: Sentence }
 
--- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing
--- is found, an error is thrown.
+-- | Looks up a 'UID' in the 'ChunkDB' for a chunk's definition concept domain
+-- and definition. If nothing is found, an error is thrown.
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve f db trg
   | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
@@ -61,13 +63,29 @@ defResolve f db trg
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
-  | otherwise = error $ "Definition: " ++ show trg ++ " not found in ConceptMap"
+  | otherwise = error $ "Definition: `" ++ show trg ++ "` not found in ConceptMap"
   where
     go :: Concept c => ([UID] -> Sentence -> r) -> c -> r
     go f' c = f' (cdom c) (c ^. defn)
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn
+
+-- | Looks up a 'UID' in a 'ChunkDB' with a /referrable/ handle.
+refResolve :: ChunkDB -> UID -> Reference
+refResolve db trg
+  | (Just c) <- find trg db :: Maybe DataDefinition      = ref c
+  | (Just c) <- find trg db :: Maybe InstanceModel       = ref c
+  | (Just c) <- find trg db :: Maybe GenDefn             = ref c
+  | (Just c) <- find trg db :: Maybe TheoryModel         = ref c
+  | (Just c) <- find trg db :: Maybe ConceptInstance     = ref c
+  | (Just c) <- find trg db :: Maybe LabelledContent     = ref c
+  | (Just c) <- find trg db :: Maybe Citation            = ref c
+  | (Just c) <- find trg db :: Maybe Section             = ref c
+  -- FIXME: When URIs are made not-`Reference`-types, we can (should) remove the
+  -- below `Just` case.
+  | (Just c) <- find trg db :: Maybe Reference           = c
+  | otherwise = error $ "Reference for `" ++ show trg ++ "` not found."
 
 findAllConcInsts :: ChunkDB -> [ConceptInstance]
 findAllConcInsts = findAll

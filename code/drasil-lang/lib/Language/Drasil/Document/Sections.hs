@@ -170,9 +170,6 @@ docNs = nsUid "doc"
 docUid :: String -> UID
 docUid = docNs . mkUid
 
--- FIXME: horrible hacks.
--- FIXME: May need UID checker function here.
--- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
 makeTabRef rs = Reference (docUid rs) (RP (prepend "Tab") ("Table:" ++ rs)) (shortname' (S rs))
@@ -192,7 +189,7 @@ makeEqnRef rs = Reference (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ rs)) (
 
 -- | Create a reference for a 'URI'. Takes in a 'UID' (as a 'String'), a reference address, and a shortname.
 makeURI :: String -> String -> ShortName -> Reference
-makeURI u r = Reference (mkUid u) (URI r)
+makeURI = makeURI' . mkUid
 
 -- | Variants of 'makeTabRef' that takes a 'UID' instead of a 'String'.
 makeTabRef' :: UID -> Reference
@@ -213,4 +210,4 @@ makeEqnRef' rs = Reference (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ show r
 
 -- | Variants of 'makeURI' that takes a 'UID' instead of a 'String'.
 makeURI' :: UID -> String -> ShortName -> Reference
-makeURI' u r = Reference u (URI r)
+makeURI' u r = Reference (nsUid "links" u) (URI r)

@@ -87,7 +87,7 @@ si = mkSmithEtAlICO
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
   inputs outputs inpConstrained pidConstants allSymbols
-  symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -123,19 +123,9 @@ allSymbols = physicscon ++ symbols ++
   map dqdWr pidConstants
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge []
-  allSymbols
-  []
-  cis
-  conceptChunks
-  ([] :: [UnitDefn])
-  dataDefinitions
-  instanceModels
-  genDefns
-  theoreticalModels
-  conceptInstances
-  citations
-  labelledContent'
+symbMap = withCommonKnowledge allRefs allSymbols [] cis conceptChunks []
+  dataDefinitions instanceModels genDefns theoreticalModels conceptInstances
+  citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

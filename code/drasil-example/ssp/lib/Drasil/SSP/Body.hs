@@ -63,7 +63,7 @@ si = mkSmithEtAlICO
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
   inputs outputs constrained [] symbols
-  symbMap allRefs
+  symbMap
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -137,8 +137,8 @@ conceptChunks =
   [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [degree]
-  dataDefs iMods generalDefinitions tMods concIns citations labCon
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks
+  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

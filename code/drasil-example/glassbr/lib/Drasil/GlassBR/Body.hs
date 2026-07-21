@@ -54,7 +54,6 @@ si = mkSmithEtAlICO progName
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants symbolsWCodeSymbols
   symbMap
-  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -119,7 +118,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks []
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
@@ -128,9 +127,7 @@ symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
--- FIXME: GlassBR needs `map ref citations` pre-created or else the code
--- generator fails due to a missing reference to `astm2009`.
-allRefs = externalLinkRef : map ref citations
+allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs

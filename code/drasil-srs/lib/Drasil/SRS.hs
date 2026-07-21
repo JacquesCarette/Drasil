@@ -52,9 +52,6 @@ module Drasil.SRS (
   -- ** Specific System Description
   -- Drasil.Sections.SpecificSystemDescription
   auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl,
-  -- * References
-  -- Drasil.SRS.References
-  secRefs
 ) where
 
 import Drasil.SRS.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -70,7 +67,6 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
-import Drasil.SRS.References (secRefs)
 import Drasil.SRS.Sections.AuxiliaryConstants (tableOfConstants)
 import Drasil.SRS.Sections.Introduction (purpDoc)
 import Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)

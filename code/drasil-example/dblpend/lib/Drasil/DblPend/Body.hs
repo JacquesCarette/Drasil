@@ -101,7 +101,7 @@ si = mkSmithEtAlICO progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints constants symbols
-  symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -124,7 +124,7 @@ conceptChunks =
   gravitationalConst, gravity] ++ defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

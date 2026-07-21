@@ -75,7 +75,13 @@ data Sentence where
   P     :: Symbol -> Sentence       -- should not be used in examples?
   -- | Lifts an expression into a Sentence.
   E     :: ModelExpr -> Sentence
-  -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any additional reference display information ('RefInfo'). Resolves the reference later (similar to Ch).
+  -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any
+  -- additional reference display information ('RefInfo'). Resolves the
+  -- reference later (similar to Ch).
+  --
+  -- FIXME: Attempting to convert this 'UID' into a 'UIDRef' creates a mess of a
+  -- cyclic dependency between `Language.Drasil.Document.Reference`,
+  -- `Language.Drasil.ShortName`, and this file.
   Ref   :: UID -> Sentence -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.
   Quote :: Sentence -> Sentence

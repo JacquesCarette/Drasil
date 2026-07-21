@@ -9,10 +9,10 @@ import Language.Drasil (Sentence(..), ShortName, LblType(..),
   RefInfo(..), SentenceStyle(..))
 import Language.Drasil.Document (Reference(..))
 import Language.Drasil.Development (toSent)
-import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..), refResolve)
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, refFind, sysdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Helpers (lookupT, lookupS, lookupP, lookupSymb)
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
@@ -40,8 +40,7 @@ spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
 spec sm (Ch TermStyle caps s)   = spec sm $ lookupT sm s caps
 spec sm (Ch PluralTerm caps s) = spec sm $ lookupP sm s caps
 spec sm (Ref u EmptyS notes)    =
-  let reff = refFind u sm in
-  case reff of
+  case refResolve (sm ^. sysdb) u of
     (Reference _ (RP rp ra) sn) ->
       P.Ref P.Internal ra (spec sm $ renderShortName sm rp sn)
     (Reference _ (Citation ra) _) ->
@@ -49,8 +48,7 @@ spec sm (Ref u EmptyS notes)    =
     (Reference _ (URI ra) sn) ->
       P.Ref P.External    ra (spec sm $ getSentSN sn)
 spec sm (Ref u dName notes) =
-  let reff = refFind u sm in
-  case reff of
+  case refResolve (sm ^. sysdb) u of
     (Reference _ (RP _ ra) _) ->
       P.Ref P.Internal ra (spec sm dName)
     (Reference _ (Citation ra) _) ->

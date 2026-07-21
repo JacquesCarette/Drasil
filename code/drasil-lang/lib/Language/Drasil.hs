@@ -161,7 +161,7 @@ module Language.Drasil (
   , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
   , ch, eS, eS', sC, sDash, sParen
   -- Language.Drasil.Sentence.Generators
-  , fromSource, fterms, getTandS, checkValidStr
+  , fterms, getTandS, checkValidStr
   -- Language.Drasil.NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -279,7 +279,7 @@ import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen)
 import Language.Drasil.Sentence.Fold
-import Language.Drasil.Sentence.Generators (fromSource, fterms, getTandS, checkValidStr)
+import Language.Drasil.Sentence.Generators (fterms, getTandS, checkValidStr)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
   label, variable, sortBySymbol, sortBySymbolTuple)

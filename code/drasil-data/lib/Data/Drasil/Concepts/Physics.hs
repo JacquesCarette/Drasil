@@ -4,6 +4,7 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Drasil.Database (mkUid)
 import Language.Drasil hiding (space)
+import Language.Drasil.Document (fromSource)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 

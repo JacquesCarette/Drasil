@@ -35,8 +35,6 @@ instance ConceptDomain ParameterChunk where cdom = cdom . view pcc
 instance HasSpace    ParameterChunk where typ = pcc . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasSymbol   ParameterChunk where symbol = symbol . view pcc
--- | 'ParameterChunk's have a 'Quantity'.
-instance Quantity    ParameterChunk
 -- | Finds the code name and 'CodeChunk' of a 'ParameterChunk'.
 instance CodeIdea    ParameterChunk where
   codeName = codeName . view pcc

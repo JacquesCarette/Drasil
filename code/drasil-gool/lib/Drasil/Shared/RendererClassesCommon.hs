@@ -14,15 +14,14 @@ module Drasil.Shared.RendererClassesCommon (
   MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Body, MSBody, Block,
-  MSBlock, Variable, SVariable, Value, SValue, MixedCall, TypeSym(..),
-  VariableElim(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
-  UnRepr(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, Body, Block, MSBlock,
+  Variable, SVariable, Value, SValue, MixedCall, TypeSym(..), VariableElim(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
+  InternalList(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -59,7 +58,7 @@ import' :: (UnRepr r Doc) => r Doc -> Doc
 import' = unRepr
 
 class RenderBody r where
-  multiBody :: [MSBody r] -> MSBody r
+  multiBody :: [MS (r Body)] -> MS (r Body)
 
 class BodyElim r where
   body :: r Body -> Doc

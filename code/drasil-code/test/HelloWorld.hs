@@ -3,10 +3,10 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, Class, SVariable, CS, MS, SharedProg,
-  OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice,
-  TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
+import Drasil.GOOL (Body, MSBlock, Class, SVariable, CS, MS, SharedProg, OOProg,
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..),
+  OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
@@ -270,7 +270,7 @@ listSliceTests = [
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}
-helloIfBody :: (SharedProg r vis smt md) => MSBody r
+helloIfBody :: (SharedProg r vis smt md) => MS (r Body)
 helloIfBody = addComments "If body" (body [
   block [
     varDec (var "c" int) mainFn,
@@ -338,7 +338,7 @@ helloIfBody = addComments "If body" (body [
     printLn (cot (litDouble 1.0))]])
 
 -- | Print the 5th given argument.
-helloElseBody :: (SharedProg r vis smt md) => MSBody r
+helloElseBody :: (SharedProg r vis smt md) => MS (r Body)
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.

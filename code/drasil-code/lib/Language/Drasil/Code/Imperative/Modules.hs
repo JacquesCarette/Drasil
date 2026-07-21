@@ -26,7 +26,7 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, File, CS, FS, MS,
+import Drasil.GOOL (Body, MSBlock, SVariable, SValue, File, CS, FS, MS,
   CSStateVar, Class, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
   ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
@@ -381,7 +381,7 @@ chooseConstr cb cs = do
 -- what value was \"suggested\".
 constrWarn
   :: (OOStatement r smt, TypeElim r, VariableElim r)
-  => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
+  => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrWarn c = do
   let q = fst c
       cs = snd c
@@ -393,7 +393,7 @@ constrWarn c = do
 -- followed by throwing an exception.
 constrExc
   :: (OOStatement r smt, TypeElim r, VariableElim r)
-  => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
+  => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrExc c = do
   let q = fst c
       cs = snd c
@@ -987,7 +987,7 @@ chooseConstrProc cb cs = do
 -- what value was \"suggested\".
 constrWarnProc
   :: (NativeVector r, SharedStatement r smt, TypeElim r)
-  => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
+  => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrWarnProc c = do
   let q = fst c
       cs = snd c
@@ -999,7 +999,7 @@ constrWarnProc c = do
 -- followed by throwing an exception.
 constrExcProc
   :: (NativeVector r, SharedStatement r smt, TypeElim r)
-  => (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
+  => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrExcProc c = do
   let q = fst c
       cs = snd c

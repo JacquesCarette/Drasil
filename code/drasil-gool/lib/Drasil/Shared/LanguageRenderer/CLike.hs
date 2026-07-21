@@ -13,7 +13,7 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body,
   TypeElim(..), SVariable, Value, SValue, MixedCall, MixedCtorCall,
   VariableSym(..), VariableValue(..), VariableElim(..), ValueSym(valueType),
   getCodeType, getTypeString)
@@ -232,8 +232,8 @@ switch
   => (Doc -> Doc)
   -> MS (r smt)
   -> SValue r
-  -> [(SValue r, MSBody r)]
-  -> MSBody r
+  -> [(SValue r, MS (r Body))]
+  -> MS (r Body)
   -> MS (r smt)
 switch f st v cs bod = do
   s <- RC.stmt st
@@ -254,7 +254,7 @@ for
   -> MS (r smt)
   -> SValue r
   -> MS (r smt)
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r smt)
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- RC.loopStmt sInit
@@ -270,7 +270,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
 -- Doc function parameter is applied to the render of the while-condition
 while
   :: (RC.BodyElim r, RC.RenderStatement r smt, ValueElim r)
-  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> MS (r smt)
+  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r Body) -> MS (r smt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'
@@ -281,7 +281,7 @@ while f bStart bEnd v' b'= do
 -- Methods --
 
 intFunc :: (OORenderMethod r vis md att) => Bool -> Label -> r vis ->
-  r att -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
+  r att -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) ->
   MS (r md)
 intFunc = intMethod
 

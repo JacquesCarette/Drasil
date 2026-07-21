@@ -9,7 +9,7 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, BodySym(..),
+import Drasil.GOOL (Label, Body, MSBlock, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), IOStatement(..),
   lensMStoVS, ScopeSym(..), VariableSym, SharedStatement)
@@ -20,7 +20,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, BodySym(..),
 -- the beginning of the body.
 logBody
   :: (SharedStatement r smt, VariableElim r)
-  => Label -> [SVariable r] -> [MSBlock r] -> GenState (MSBody r)
+  => Label -> [SVariable r] -> [MSBlock r] -> GenState (MS (r Body))
 logBody n vars b = do
   g <- get
   return $ body $

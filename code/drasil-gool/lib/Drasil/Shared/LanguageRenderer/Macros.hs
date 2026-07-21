@@ -9,7 +9,7 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
+import Drasil.Shared.InterfaceCommon (Label, Body, MSBlock, SVariable, SValue,
   bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
   ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(..),
@@ -34,7 +34,7 @@ import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists
   :: (IC.ControlStatement r smt, IC.ValueExpression r)
-  => SValue r -> MSBody r -> MSBody r -> MS (r smt)
+  => SValue r -> MS (r Body) -> MS (r Body) -> MS (r smt)
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
 decrement1
@@ -54,7 +54,7 @@ increment1 vr = vr &+= IC.litInt 1
 
 strat
   :: (RC.BodyElim r, Monad r, RC.StatementElim r smt)
-  => MS (r smt) -> MSBody r -> MS (r Doc)
+  => MS (r smt) -> MS (r Body) -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
   RC.statement result])
 
@@ -66,7 +66,7 @@ runStrategy
      , RC.StatementElim r smt
      )
   => Label
-  -> [(Label, MSBody r)]
+  -> [(Label, MS (r Body))]
   -> Maybe (SValue r)
   -> Maybe (SVariable r)
   -> MS (r Doc)
@@ -203,7 +203,7 @@ stringListLists lsts sl = do
   checkList (getCodeType $ valueType slst)
 
 forRange :: (IC.SharedStatement r smt) => SVariable r -> SValue r -> SValue r ->
-  SValue r -> MSBody r -> MS (r smt)
+  SValue r -> MS (r Body) -> MS (r smt)
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
@@ -218,7 +218,7 @@ obsList t = IC.valueOf $ listOf observerListName t
 
 notify
   :: (OOStatement r smt)
-  => VS (r TypeData) -> VS (r FuncData) -> MSBody r
+  => VS (r TypeData) -> VS (r FuncData) -> MS (r Body)
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers

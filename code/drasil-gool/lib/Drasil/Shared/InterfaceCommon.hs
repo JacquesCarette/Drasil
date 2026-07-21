@@ -4,9 +4,9 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, MSBody, Block, MSBlock, VSBinder, Variable, SVariable,
-  Value, SValue, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
-  InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, Body, Block, MSBlock, VSBinder, Variable, SVariable, Value,
+  SValue, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
+  InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
@@ -61,17 +61,16 @@ class UnRepr repr contents where
   unRepr :: repr contents -> contents
 
 type Body = Doc
-type MSBody a = MS (a Body)
 
 class (BlockSym r smt) => BodySym r smt where
-  body           :: [MSBlock r] -> MSBody r
+  body           :: [MSBlock r] -> MS (r Body)
 
-  addComments :: Label -> MSBody r -> MSBody r
+  addComments :: Label -> MS (r Body) -> MS (r Body)
 
-bodyStatements :: (BodySym r smt) => [MS (r smt)] -> MSBody r
+bodyStatements :: (BodySym r smt) => [MS (r smt)] -> MS (r Body)
 bodyStatements sts = body [block sts]
 
-oneLiner :: (BodySym r smt) => MS (r smt) -> MSBody r
+oneLiner :: (BodySym r smt) => MS (r smt) -> MS (r Body)
 oneLiner tp = bodyStatements [tp]
 
 type Block = Doc
@@ -439,7 +438,7 @@ class (VariableSym r, StatementSym r smt, ScopeSym r) => DeclStatement r smt whe
   arrayDec     :: Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
   arrayDecDef  :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
   constDecDef  :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
-  funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MSBody r
+  funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body)
     -> MS (r smt)
 
 class (VariableSym r, StatementSym r smt) => IOStatement r smt where
@@ -500,28 +499,28 @@ class (BodySym r smt, VariableSym r) => ControlStatement r smt where
   -- | String of if-else statements.
   --   Arguments: List of predicates and bodies (if this then that),
   --   Body for else branch
-  ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MS (r smt)
-  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MS (r smt)
+  ifCond     :: [(SValue r, MS (r Body))] -> MS (r Body) -> MS (r smt)
+  switch     :: SValue r -> [(SValue r, MS (r Body))] -> MS (r Body) -> MS (r smt)
 
-  ifExists :: SValue r -> MSBody r -> MSBody r -> MS (r smt)
+  ifExists :: SValue r -> MS (r Body) -> MS (r Body) -> MS (r smt)
 
-  for      :: MS (r smt) -> SValue r -> MS (r smt) -> MSBody r ->
+  for      :: MS (r smt) -> SValue r -> MS (r smt) -> MS (r Body) ->
     MS (r smt)
   -- Iterator variable, start value, end value, step value, loop body
-  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r ->
+  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MS (r Body) ->
     MS (r smt)
-  forEach  :: SVariable r -> SValue r -> MSBody r -> MS (r smt)
-  while    :: SValue r -> MSBody r -> MS (r smt)
+  forEach  :: SVariable r -> SValue r -> MS (r Body) -> MS (r smt)
+  while    :: SValue r -> MS (r Body) -> MS (r smt)
 
-  tryCatch :: MSBody r -> MSBody r -> MS (r smt)
+  tryCatch :: MS (r Body) -> MS (r Body) -> MS (r smt)
 
   assert :: SValue r -> SValue r -> MS (r smt)
 
-ifNoElse :: (ControlStatement r smt) => [(SValue r, MSBody r)] -> MS (r smt)
+ifNoElse :: (ControlStatement r smt) => [(SValue r, MS (r Body))] -> MS (r smt)
 ifNoElse bs = ifCond bs $ body []
 
 switchAsIf :: (ControlStatement r smt, Comparison r) => SValue r ->
-  [(SValue r, MSBody r)] -> MSBody r -> MS (r smt)
+  [(SValue r, MS (r Body))] -> MS (r Body) -> MS (r smt)
 switchAsIf v = ifCond . map (first (v ?==))
 
 class VisibilitySym r vis | r -> vis where
@@ -534,20 +533,20 @@ class (VariableSym r) => ParameterSym r where
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutFunc r md = [SVariable r] -> [SVariable r] -> [SVariable r] ->
-  MSBody r -> MS (r md)
+  MS (r Body) -> MS (r md)
 -- Parameters are: brief description of function, input descriptions and
 -- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
 type DocInOutFunc r md = String -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> MS (r md)
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r md)
 
 class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis smt md | r -> md
   where
-  docMain :: MSBody r -> MS (r md)
+  docMain :: MS (r Body) -> MS (r md)
 
   function :: Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] ->
-    MSBody r -> MS (r md)
-  mainFunction  :: MSBody r -> MS (r md)
+    MS (r Body) -> MS (r md)
+  mainFunction  :: MS (r Body) -> MS (r md)
   -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> MS (r md) -> MS (r md)

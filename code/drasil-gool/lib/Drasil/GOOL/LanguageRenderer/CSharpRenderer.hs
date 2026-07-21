@@ -14,17 +14,16 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, MSBody, SVariable, Value, SValue, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..))
+  Label, Body, SVariable, Value, SValue, BodySym(..), oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, StateVar, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -841,7 +840,7 @@ csCast = join .: on2StateValues (\t v -> csCast' (getCodeType t) (getCodeType $
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
 csFuncDecDef :: SVariable CSharpCode -> CSharpCode ScopeData ->
-  [SVariable CSharpCode] -> MSBody CSharpCode -> MS (CSharpCode (Doc, Terminator))
+  [SVariable CSharpCode] -> MS (CSharpCode Body) -> MS (CSharpCode (Doc, Terminator))
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -922,9 +921,9 @@ csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MSBody CSharpCode -> MS (CSharpCode md)) ->
+  MS (CSharpCode Body) -> MS (CSharpCode md)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MSBody CSharpCode -> MS (CSharpCode md)
+  MS (CSharpCode Body) -> MS (CSharpCode md)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))

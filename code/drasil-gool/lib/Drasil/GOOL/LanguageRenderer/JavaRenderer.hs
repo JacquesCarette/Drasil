@@ -14,17 +14,16 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, MSBody, SVariable, Value, SValue, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..))
+  Label, Body, SVariable, Value, SValue, BodySym(..), oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
@@ -944,7 +943,7 @@ jConstDecDef v' scp def' = do
     RC.variable v <+> equals <+> RC.value def
 
 jFuncDecDef :: SVariable JavaCode -> JavaCode ScopeData ->
-  [SVariable JavaCode] -> MSBody JavaCode -> MS (JavaCode (Doc, Terminator))
+  [SVariable JavaCode] -> MS (JavaCode Body) -> MS (JavaCode (Doc, Terminator))
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -1046,8 +1045,8 @@ jInOutCall f n ins outs both = fCall rets
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
 jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
-  MSBody JavaCode -> MS (JavaCode md)) -> [SVariable JavaCode] ->
-  [SVariable JavaCode] -> [SVariable JavaCode] -> MSBody JavaCode ->
+  MS (JavaCode Body) -> MS (JavaCode md)) -> [SVariable JavaCode] ->
+  [SVariable JavaCode] -> [SVariable JavaCode] -> MS (JavaCode Body) ->
   MS (JavaCode md)
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
@@ -1074,9 +1073,9 @@ jInOut f ins outs both b = f (returnTp rets)
         rets = both ++ outs
 
 jDocInOut :: (RenderMethod r md) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md)) -> String ->
+  [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md)) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MSBody r -> MS (r md)
+  [(String, SVariable r)] -> MS (r Body) -> MS (r md)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)

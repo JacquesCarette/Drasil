@@ -8,7 +8,7 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.Display (Symbol(Concat))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT)
 
 import Data.Drasil.Quantities.Math (pi_)

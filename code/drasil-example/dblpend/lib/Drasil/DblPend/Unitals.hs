@@ -15,7 +15,7 @@ import qualified Data.List.NonEmpty as NE
 import Drasil.Database (mkUid)
 import Language.Drasil
 import qualified Language.Drasil.Development as D (toSent)
-import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.Display (Symbol(Integ))
 import Language.Drasil.ShortHands (cF, cL, cT, lA, lAlpha, lM, lP, lTheta, lV, lW)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

@@ -5,7 +5,7 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.Display (Symbol(Concat))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D

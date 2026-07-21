@@ -2,7 +2,7 @@
 module Data.Drasil.Quantities.Math where
 
 import Language.Drasil
-import Language.Drasil.Display
+import Language.Drasil.Display (Symbol(Atop), Decoration(Magnitude))
 import Language.Drasil.ShortHands
 
 import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient,

@@ -8,10 +8,9 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, FSModule, Class,
-  SClass, CSStateVar, OOVariableValue, OOValueExpression(..),
-  InternalValueExp(..), FileSym(..), GetSet(..), ObserverPattern(..),
-  StrategyPattern(..))
+import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class, SClass,
+  CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
@@ -39,7 +38,7 @@ class (BlockCommentSym r) => RenderFile r where
 
   commentedMod :: FS (r IG.File) -> FS (r Doc) -> FS (r IG.File)
 
-  fileFromData :: FilePath -> IG.FSModule r -> FS (r IG.File)
+  fileFromData :: FilePath -> FS (r IG.Module) -> FS (r IG.File)
 
 class PermElim r att where
   perm :: r att -> Doc
@@ -83,7 +82,7 @@ class ClassElim r where
   class' :: r IG.Class -> Doc
 
 class RenderMod r where
-  modFromData :: String -> FS Doc -> IG.FSModule r
+  modFromData :: String -> FS Doc -> FS (r IG.Module)
   updateModuleDoc :: (Doc -> Doc) -> r IG.Module -> r IG.Module
 
 class ModuleElim r where

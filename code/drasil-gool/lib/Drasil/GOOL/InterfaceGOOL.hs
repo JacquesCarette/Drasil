@@ -3,8 +3,8 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  Program, GSProgram, File, Module, FSModule, Class, SClass, StateVar,
-  CSStateVar, Initializers,
+  Program, GSProgram, File, Module, Class, SClass, StateVar, CSStateVar,
+  Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -56,17 +56,16 @@ class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r 
 type File = FileData
 
 class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
-  fileDoc :: FSModule r -> FS (r File)
+  fileDoc :: FS (r Module) -> FS (r File)
 
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> FS (r File) -> FS (r File)
 
 type Module = ModData
-type FSModule a = FS (a Module)
 
 class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
   -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FS (r Module)
 
 type Class = Doc
 type SClass a = CS (a Class)

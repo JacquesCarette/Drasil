@@ -3,7 +3,7 @@
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  Program, GSProgram, File, Module, FSModule,
+  Program, GSProgram, File, Module,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
@@ -24,14 +24,13 @@ class (FileSym r vis smt md) => ProgramSym r vis smt md prg | r -> prg where
 type File = FileData
 
 class (ModuleSym r vis smt md) => FileSym r vis smt md where
-  fileDoc :: FSModule r -> FS (r File)
+  fileDoc :: FS (r Module) -> FS (r File)
 
   -- Module description, watermark, list of author names, date as a String, file to comment
   docMod :: String -> String -> [String] -> String -> FS (r File) -> FS (r File)
 
 type Module = ModData
-type FSModule a = FS (a Module)
 
 class (MethodSym r vis smt md) => ModuleSym r vis smt md where
   -- Module name, import names, module functions
-  buildModule :: Label -> [Label] -> [MS (r md)] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r md)] -> FS (r Module)

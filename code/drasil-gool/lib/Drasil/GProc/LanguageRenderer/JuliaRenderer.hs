@@ -26,8 +26,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
-import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
-  FileSym(..), ModuleSym(..))
+import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -86,7 +86,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
   updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.Shared.State (MS, VS, lensGStoFS, revFiles, setFileType,
+import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
   lensMStoVS, getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
@@ -846,7 +846,7 @@ jlForEach i lstVar b = vcat [
 
 -- | Creates the contents of a module in Julia
 jlModContents
-  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FSModule JuliaCode
+  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode Module)
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports

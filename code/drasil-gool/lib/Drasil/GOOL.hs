@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, File, MSBody, MSBlock, FS, MS, VS,
-  SVariable, SValue, CSStateVar, SClass, Module, NamedArgs, Initializers,
+module Drasil.GOOL (Label, GSProgram, File, MSBody, MSBlock, CS, FS, MS, VS,
+  SVariable, SValue, CSStateVar, Class, Module, NamedArgs, Initializers,
   SharedProg, SharedStatement, OOProg, OOStatement, ProgramSym(..), FileSym(..),
   AttachmentSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), BinderSym(..), StatementSym(..),
@@ -46,7 +46,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, SVariable, SValue,
   ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
-import Drasil.GOOL.InterfaceGOOL (GSProgram, File, Module, SClass, CSStateVar,
+import Drasil.GOOL.InterfaceGOOL (GSProgram, File, Module, Class, CSStateVar,
   Initializers, OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..),
   ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod, initializer,
@@ -64,7 +64,7 @@ import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.State (FS, MS, VS, GOOLState(..), lensMStoVS, headers,
+import Drasil.Shared.State (CS, FS, MS, VS, GOOLState(..), lensMStoVS, headers,
   sources, mainMod, initialState)
 
 import Drasil.Shared.Helpers (onStateValue, onCodeList)

@@ -8,7 +8,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class, SClass,
+import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
@@ -71,12 +71,12 @@ type ParentSpec = Doc
 class (BlockCommentSym r) => RenderClass r vis md svr | r -> vis md svr where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r svr]
-    -> [MS (r md)] -> [MS (r md)] -> IG.SClass r
+    -> [MS (r md)] -> [MS (r md)] -> CS (r IG.Class)
 
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec
 
-  commentedClass :: CS (r Doc) -> IG.SClass r -> IG.SClass r
+  commentedClass :: CS (r Doc) -> CS (r IG.Class) -> CS (r IG.Class)
 
 class ClassElim r where
   class' :: r IG.Class -> Doc

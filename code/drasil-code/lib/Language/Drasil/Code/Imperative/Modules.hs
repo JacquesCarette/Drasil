@@ -26,16 +26,16 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, File, FS, MS, CSStateVar,
-  SClass, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
+import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, File, CS, FS, MS,
+  CSStateVar, Class, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
   ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
-  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..),
-  SharedStatement, TypeElim, VariableElim, OOStatement)
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), ControlStatement(..),
+  ifNoElse, VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
+  convTypeOO, VisibilityTag(..), SharedStatement, TypeElim, VariableElim,
+  OOStatement)
 import Drasil.GProc (ProcProg, NativeVector)
 
 import Drasil.Code.CodeExpr.Development
@@ -201,7 +201,7 @@ genInputMod :: (OOProg r vis smt md svr att prg) => GenState [FS (r File)]
 genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
-  let genMod :: (OOProg r vis smt md svr att prg) => Maybe (SClass r) -> GenState (FS (r File))
+  let genMod :: (OOProg r vis smt md svr att prg) => Maybe (CS (r Class)) -> GenState (FS (r File))
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
       genMod _ = genModule cname ipDesc [] [genInputClass Primary]
@@ -225,7 +225,7 @@ constVarFunc Const = constVar public
 -- generated class also contains the input-related functions as private methods.
 genInputClass
   :: (OOProg r vis smt md svr att prg)
-  => ClassType -> GenState (Maybe (SClass r))
+  => ClassType -> GenState (Maybe (CS (r Class)))
 genInputClass scp = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -245,7 +245,7 @@ genInputClass scp = do
         else return []
       genClass
         :: (OOProg r vis smt md svr att prg)
-        => [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (SClass r))
+        => [CodeVarChunk] -> [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
@@ -514,7 +514,7 @@ genConstMod = do
 -- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass
   :: (OOProg r vis smt md svr att prg)
-  => ClassType -> GenState (Maybe (SClass r))
+  => ClassType -> GenState (Maybe (CS (r Class)))
 genConstClass scp = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -522,7 +522,7 @@ genConstClass scp = do
   let cs = g ^. constDefns
       genClass
         :: (OOProg r vis smt md svr att prg)
-        => [CodeDefinition] -> GenState (Maybe (SClass r))
+        => [CodeDefinition] -> GenState (Maybe (CS (r Class)))
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs

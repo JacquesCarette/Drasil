@@ -31,9 +31,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, MSBody,
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, SClass,
-  Initializers, CSStateVar, newObj, objMethodCallNoParams, ($.),
-  AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, Class, Initializers,
+  CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -544,23 +543,23 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 buildClass
   :: (RenderClass r vis md svr, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
 implementingClass :: (RenderClass r vis md svr, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
   :: (RenderClass r vis md svr)
-  => ClassDocRenderer -> String -> SClass r -> SClass r
+  => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass
   :: (RC.BlockCommentElim r, RO.ClassElim r, Monad r)
-  => CS (r Doc) -> SClass r -> CS (r Doc)
+  => CS (r Doc) -> CS (r Class) -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RO.class' cs))
 

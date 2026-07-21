@@ -29,7 +29,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   (&=), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (File, Module, SClass, CSStateVar,
+import Drasil.GOOL.InterfaceGOOL (File, Module, Class, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
   objMethodCall, OOStatement)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
@@ -102,7 +102,7 @@ doxFunc :: (RenderMethod r md) => String -> [String] -> Maybe String ->
   MS (r md) -> MS (r md)
 doxFunc = docFunc functionDox
 
-doxClass :: (RG.RenderClass r vis md svr) => String -> SClass r -> SClass r
+doxClass :: (RG.RenderClass r vis md svr) => String -> CS (r Class) -> CS (r Class)
 doxClass = docClass classDox
 
 doxMod :: (RG.RenderFile r) => String -> String -> String -> [String] ->
@@ -166,7 +166,7 @@ intClass f n s i svrs cstrs mths = do
 -- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule
   :: (RG.ClassElim r, RC.MethodElim r md, RG.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r md)] -> [SClass r] -> FS (r Module)
+  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
 buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
@@ -287,7 +287,7 @@ buildModule'
   -> (String -> r Doc)
   -> [Label]
   -> [MS (r md)]
-  -> [SClass r]
+  -> [CS (r Class)]
   -> FS (r Module)
 buildModule' n inc is ms cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS)
@@ -418,7 +418,7 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 
 extraClass
   :: (RG.RenderClass r vis md svr, VisibilitySym r vis)
-  =>  Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  =>  Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 extraClass n = RG.intClass n public . RG.inherit
 
 -- Java, C#, and Swift --

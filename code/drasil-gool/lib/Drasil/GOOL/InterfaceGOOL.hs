@@ -3,8 +3,7 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  Program, GSProgram, File, Module, Class, SClass, StateVar, CSStateVar,
-  Initializers,
+  Program, GSProgram, File, Module, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -65,26 +64,25 @@ type Module = ModData
 
 class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
   -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FS (r Module)
+  buildModule :: Label -> [Label] -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
 
 type Class = Doc
-type SClass a = CS (a Class)
 
 class (OOMethodSym r vis smt md att, StateVarSym r vis svr att) => ClassSym r vis smt md svr att where
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> SClass r
+    [MS (r md)] -> CS (r Class)
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
   extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> SClass r
+    [MS (r md)] -> CS (r Class)
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> SClass r
+    [MS (r md)] -> CS (r Class)
 
-  docClass :: String -> SClass r -> SClass r
+  docClass :: String -> CS (r Class) -> CS (r Class)
 
 type Initializers r = [(SVariable r, SValue r)]
 

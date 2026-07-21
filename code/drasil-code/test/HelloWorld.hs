@@ -3,10 +3,10 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, SClass, SVariable, MS, SharedProg, OOProg,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..),
-  OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), CommentStatement(..),
+import Drasil.GOOL (MSBody, MSBlock, Class, SVariable, CS, MS, SharedProg,
+  OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), listSlice,
+  TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
@@ -375,7 +375,7 @@ helloTryCatch :: (SharedProg r vis smt md) => MS (r smt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
-helloWorldClass :: (OOProg r vis smt md svr att prg) => SClass r
+helloWorldClass :: (OOProg r vis smt md svr att prg) => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

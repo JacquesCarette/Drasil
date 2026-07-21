@@ -4,6 +4,7 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
+import Language.Drasil.Document (fromSource)
 import Theory.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 

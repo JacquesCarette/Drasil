@@ -34,7 +34,7 @@ import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
   ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
 import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
-import Language.Drasil.Sentence.Generators (fromSource, fterms)
+import Language.Drasil.Sentence.Generators (fterms)
 import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
 import Language.Drasil.Document.Reference (refS, namedRef)
@@ -210,6 +210,10 @@ tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. de
 -- | Appends "following @reference@" to the end of a 'Sentence'.
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` r = preceding +:+ S "following" +:+ refS r
+
+-- | Wraps "from @reference@" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+fromSource r = sParen (S "from" +:+ refS r)
 
 -- | Similar to `fromSource` but takes a list of references instead of one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence

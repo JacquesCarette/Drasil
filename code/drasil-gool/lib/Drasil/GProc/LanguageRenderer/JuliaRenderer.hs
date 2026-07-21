@@ -15,7 +15,7 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, Value, SValue, Variable, SVariable, MSBlock, BodySym(..),
+  Label, Body, Value, SValue, Variable, SVariable, Block, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -715,7 +715,7 @@ jlListSlice
   -> Maybe (SValue JuliaCode)
   -> Maybe (SValue JuliaCode)
   -> SValue JuliaCode
-  -> MSBlock JuliaCode
+  -> MS (JuliaCode Block)
 jlListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn

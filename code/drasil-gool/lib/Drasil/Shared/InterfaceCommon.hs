@@ -4,8 +4,8 @@
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, Block, MSBlock, VSBinder, Variable, SVariable, Value,
-  SValue, NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
+  Label, Library, Body, Block, VSBinder, Variable, SVariable, Value, SValue,
+  NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
   InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
@@ -63,7 +63,7 @@ class UnRepr repr contents where
 type Body = Doc
 
 class (BlockSym r smt) => BodySym r smt where
-  body           :: [MSBlock r] -> MS (r Body)
+  body           :: [MS (r Block)] -> MS (r Body)
 
   addComments :: Label -> MS (r Body) -> MS (r Body)
 
@@ -74,10 +74,9 @@ oneLiner :: (BodySym r smt) => MS (r smt) -> MS (r Body)
 oneLiner tp = bodyStatements [tp]
 
 type Block = Doc
-type MSBlock a = MS (a Block)
 
 class (StatementSym r smt) => BlockSym r smt where
-  block   :: [MS (r smt)] -> MSBlock r
+  block   :: [MS (r smt)] -> MS (r Block)
 
 class TypeSym r where
   bool          :: VS (r TypeData)
@@ -379,7 +378,7 @@ class (IndexTranslator r, Literal r) => NativeVector r where
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
-    -> SVariable r -> SValue r -> MSBlock r
+    -> SVariable r -> SValue r -> MS (r Block)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -391,7 +390,7 @@ class (ValueSym r) => InternalList r where
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
+  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r Block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
 listIndexExists :: (List r smt, Comparison r) => SValue r -> SValue r -> SValue r

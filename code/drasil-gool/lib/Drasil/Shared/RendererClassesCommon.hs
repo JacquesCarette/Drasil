@@ -14,8 +14,8 @@ module Drasil.Shared.RendererClassesCommon (
   MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Body, Block, MSBlock,
-  Variable, SVariable, Value, SValue, MixedCall, TypeSym(..), VariableElim(..),
+import Drasil.Shared.InterfaceCommon (Label, Library, Body, Block, Variable,
+  SVariable, Value, SValue, MixedCall, TypeSym(..), VariableElim(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
@@ -64,7 +64,7 @@ class BodyElim r where
   body :: r Body -> Doc
 
 class RenderBlock r where
-  multiBlock :: [MSBlock r] -> MSBlock r
+  multiBlock :: [MS (r Block)] -> MS (r Block)
 
 class BlockElim r where
   block :: r Block -> Doc

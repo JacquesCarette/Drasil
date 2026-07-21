@@ -26,14 +26,14 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
   Space(..))
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
-import Drasil.GOOL (Body, MSBlock, SVariable, SValue, File, CS, FS, MS,
-  CSStateVar, Class, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
-  ScopeData, Literal(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
+import Drasil.GOOL (Body, Block, SVariable, SValue, File, CS, FS, MS, CSStateVar,
+  Class, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
+  Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
   convTypeOO, VisibilityTag(..), SharedStatement, TypeElim, VariableElim,
   OOStatement)
 import Drasil.GProc (ProcProg, NativeVector)
@@ -590,7 +590,7 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
   :: (OOStatement r smt, TypeElim r, VariableElim r)
-   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MSBlock r)
+   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Block))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
   vv <- mkVar (quantvar v)
@@ -607,7 +607,7 @@ genCaseBlock
   -> CodeDefinition
   -> Completeness
   -> [(CodeExpr, CodeExpr)]
-  -> GenState (MSBlock r)
+  -> GenState (MS (r Block))
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlock t v c cs = do
@@ -839,7 +839,7 @@ genCalcFuncProc cdef = do
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlockProc
   :: (NativeVector r, SharedStatement r smt, TypeElim r)
-  => CalcType -> CodeDefinition -> CodeExpr -> GenState (MSBlock r)
+  => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Block))
 genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
 genCalcBlockProc CalcAssign v e = do
   vv <- mkVarProc (quantvar v)
@@ -856,7 +856,7 @@ genCaseBlockProc
   -> CodeDefinition
   -> Completeness
   -> [(CodeExpr, CodeExpr)]
-  -> GenState (MSBlock r)
+  -> GenState (MS (r Block))
 genCaseBlockProc _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlockProc t v c cs = do

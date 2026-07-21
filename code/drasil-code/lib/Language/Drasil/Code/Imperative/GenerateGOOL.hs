@@ -25,11 +25,11 @@ import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..))
 import Drasil.SRS (HasSmithEtAlSRS(..))
 
-import Drasil.GOOL (SVariable, SValue, CSStateVar, SClass, NamedArgs, File,
-  OOProg, FS, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
-  OOValueExpression(..), SelfSym(..), VariableValue(..), FuncAppStatement(..),
-  OOFuncAppStatement(..), ClassSym(..), CodeType(..), TypeElim(..),
-  objMethodCallMixedArgs, OOStatement)
+import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, File,
+  OOProg, CS, FS, MS, VS, TypeData, ValueSym(..), Argument(..),
+  ValueExpression(..), OOValueExpression(..), SelfSym(..), VariableValue(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
+  TypeElim(..), objMethodCallMixedArgs, OOStatement)
 import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -38,7 +38,7 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports :: (OOProg r vis smt md svr att prg) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
+  [Import] -> [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (CS (r Class)))] ->
   GenState (FS (r File))
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
@@ -53,7 +53,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule :: (OOProg r vis smt md svr att prg) => Name -> Description ->
-  [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (SClass r))] ->
+  [GenState (Maybe (MS (r md)))] -> [GenState (Maybe (CS (r Class)))] ->
   GenState (FS (r File))
 genModule n desc = genModuleWithImports n desc []
 
@@ -85,7 +85,7 @@ data ClassType = Primary | Auxiliary
 -- interface the class implements, if applicable.
 mkClass :: (ClassSym r vis smt md svr att) => ClassType -> Name -> Maybe Name ->
   Description -> [CSStateVar r svr] -> GenState [MS (r md)] ->
-    GenState [MS (r md)] -> GenState (SClass r)
+    GenState [MS (r md)] -> GenState (CS (r Class))
 mkClass s n l desc vs cstrs mths = do
   g <- get
   modify (\ds -> ds {currentClass = n})
@@ -104,13 +104,13 @@ mkClass s n l desc vs cstrs mths = do
 -- | Generates a primary class.
 primaryClass :: (ClassSym r vis smt md svr att) => Name -> Maybe Name -> Description ->
   [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
-  GenState (SClass r)
+  GenState (CS (r Class))
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
 auxClass :: (ClassSym r vis smt md svr att) => Name -> Maybe Name -> Description ->
   [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] ->
-  GenState (SClass r)
+  GenState (CS (r Class))
 auxClass = mkClass Auxiliary
 
 -- | Converts lists or objects to pointer arguments, since we use pointerParam

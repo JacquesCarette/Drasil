@@ -1,7 +1,7 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (File, SVariable, SClass, OOProg, FS, MS, FileSym(..),
+import Drasil.GOOL (File, SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
   AttachmentSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
   SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
   VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
@@ -31,7 +31,7 @@ selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
 helperClass :: (ClassSym r vis smt md svr att, IOStatement r smt, Literal r,
-  OOVariableValue r) => SClass r
+  OOVariableValue r) => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 

@@ -8,7 +8,7 @@ ooVector :: OOProg r vis smt md svr att prg => GSProgram r prg
 ooVector = prog "OOVector" "" [fileDoc (buildModule "OOVector" []
   [main] [vectorClass])]
 
-vectorClass :: OOProg r vis smt md svr att prg => SClass r
+vectorClass :: OOProg r vis smt md svr att prg => CS (r Class)
 vectorClass = docClass "Vectors of doubles and common vector-related operations." $
   extraClass "Vector" Nothing [stateVar private instanceLevel localV]
   [docFunc "Construct a vector from an array of doubles." ["The doubles."] Nothing $

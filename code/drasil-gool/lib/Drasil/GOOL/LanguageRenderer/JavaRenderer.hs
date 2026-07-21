@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
   BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (SClass, StateVar, CSStateVar, OOProg,
+import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
   AttachmentSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
@@ -99,7 +99,7 @@ import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateWrapped)
-import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoFS, lensMStoVS,
+import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensMStoFS, lensMStoVS,
   lensVStoFS, lensVStoMS, modifyReturn, modifyReturnList, revFiles,
   addProgNameToPaths, addLangImport, addLangImportVS, addExceptionImports,
   getModuleName, setFileType, getClassName, setCurrMain, setOutputsDeclared,
@@ -1090,7 +1090,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
 
 jExtraClass
   :: (RenderClass r vis md svr, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  => Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

@@ -50,8 +50,8 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
-import Drasil.GOOL (Label, File, MSBody, MSBlock, SVariable, SValue, CSStateVar,
-  SClass, NamedArgs, Initializers, SharedProg, OOProg, FS, MS, VS,
+import Drasil.GOOL (Label, File, MSBody, MSBlock, SVariable, SValue, Class,
+  CSStateVar, NamedArgs, Initializers, SharedProg, OOProg, CS, FS, MS, VS,
   AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
   VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
   OOVariableSym(..), SelfSym(..), instanceVarSelf, VariableElim(..), ($->),
@@ -555,16 +555,16 @@ genModFuncs :: (OOProg r vis smt md svr att prg) => Mod -> [GenState (MS (r md))
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r vis smt md svr att prg) => Mod -> [GenState (SClass r)]
+genModClasses :: (OOProg r vis smt md svr att prg) => Mod -> [GenState (CS (r Class))]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
   :: (OOProg r vis smt md svr att prg)
-  => (Name -> Maybe Name -> Description -> [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] -> GenState (SClass r))
+  => (Name -> Maybe Name -> Description -> [CSStateVar r svr] -> GenState [MS (r md)] -> GenState [MS (r md)] -> GenState (CS (r Class)))
   -> M.Class
-  -> GenState (SClass r)
+  -> GenState (CS (r Class))
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do

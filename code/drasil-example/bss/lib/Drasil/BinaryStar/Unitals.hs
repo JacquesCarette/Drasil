@@ -9,7 +9,7 @@ module Drasil.BinaryStar.Unitals (
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
-import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.Display (Symbol(Integ))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -124,19 +124,19 @@ xVel_1, yVel_1, xVel_2, yVel_2 :: DefinedQuantityDict
 
 xVel_1 = quant (mkUid "vx_1") (nounPhraseSP "x-velocity of the first star")
   (S "x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
-  (sub lV (Concat [labelx, label1])) Real velU
+  (sub lV (labelx <> label1)) Real velU
 
 yVel_1 = quant (mkUid "vy_1") (nounPhraseSP "y-velocity of the first star")
   (S "y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
-  (sub lV (Concat [labely, label1])) Real velU
+  (sub lV (labely <> label1)) Real velU
 
 xVel_2 = quant (mkUid "vx_2") (nounPhraseSP "x-velocity of the second star")
   (S "x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
-  (sub lV (Concat [labelx, label2])) Real velU
+  (sub lV (labelx <> label2)) Real velU
 
 yVel_2 = quant (mkUid "vy_2") (nounPhraseSP "y-velocity of the second star")
   (S "y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
-  (sub lV (Concat [labely, label2])) Real velU
+  (sub lV (labely <> label2)) Real velU
 
 ---------------------------------------------------------
 -- Initial velocity quantities
@@ -146,19 +146,19 @@ xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0 :: DefinedQuantityDict
 
 xVel_1_0 = quant (mkUid "vx_1_0") (nounPhraseSP "initial x-velocity of the first star")
   (S "initial x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
-  (sup (sub lV (Concat [labelx, label1])) label0) Real velU
+  (sup (sub lV (labelx <> label1)) label0) Real velU
 
 yVel_1_0 = quant (mkUid "vy_1_0") (nounPhraseSP "initial y-velocity of the first star")
   (S "initial y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starOne)
-  (sup (sub lV (Concat [labely, label1])) label0) Real velU
+  (sup (sub lV (labely <> label1)) label0) Real velU
 
 xVel_2_0 = quant (mkUid "vx_2_0") (nounPhraseSP "initial x-velocity of the second star")
   (S "initial x-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
-  (sup (sub lV (Concat [labelx, label2])) label0) Real velU
+  (sup (sub lV (labelx <> label2)) label0) Real velU
 
 yVel_2_0 = quant (mkUid "vy_2_0") (nounPhraseSP "initial y-velocity of the second star")
   (S "initial y-component of the" +:+ phrase QP.velocity `S.ofThe` phrase starTwo)
-  (sup (sub lV (Concat [labely, label2])) label0) Real velU
+  (sup (sub lV (labely <> label2)) label0) Real velU
 
 ---------------------------------------------------------
 -- Acceleration quantities
@@ -168,19 +168,19 @@ xAccel_1, yAccel_1, xAccel_2, yAccel_2 :: DefinedQuantityDict
 
 xAccel_1 = quant (mkUid "ax_1") (nounPhraseSP "x-acceleration of the first star")
   (S "x-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starOne)
-  (sub lA (Concat [labelx, label1])) Real accelU
+  (sub lA (labelx <> label1)) Real accelU
 
 yAccel_1 = quant (mkUid "ay_1") (nounPhraseSP "y-acceleration of the first star")
   (S "y-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starOne)
-  (sub lA (Concat [labely, label1])) Real accelU
+  (sub lA (labely <> label1)) Real accelU
 
 xAccel_2 = quant (mkUid "ax_2") (nounPhraseSP "x-acceleration of the second star")
   (S "x-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starTwo)
-  (sub lA (Concat [labelx, label2])) Real accelU
+  (sub lA (labelx <> label2)) Real accelU
 
 yAccel_2 = quant (mkUid "ay_2") (nounPhraseSP "y-acceleration of the second star")
   (S "y-component of the" +:+ phrase QP.acceleration `S.ofThe` phrase starTwo)
-  (sub lA (Concat [labely, label2])) Real accelU
+  (sub lA (labely <> label2)) Real accelU
 
 ---------------------------------------------------------
 -- Other quantities
@@ -194,7 +194,7 @@ tFinal = quant (mkUid "t_final") (nounPhraseSP "final time")
 sepDist :: DefinedQuantityDict
 sepDist = quant (mkUid "r_12") (nounPhraseSP "separation distance")
   (S "distance between the two stars")
-  (sub lR (Concat [label1, label2])) Real metre
+  (sub lR (label1 <> label2)) Real metre
 
 ---------------------------------------------------------
 -- Symbol helpers

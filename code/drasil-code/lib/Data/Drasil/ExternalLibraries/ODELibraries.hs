@@ -19,7 +19,6 @@ import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
   Vect, Reference), implVar, implVar', compoundPhrase, nounPhrase, nounPhraseSP,
   label, sub, Idea(getA), NamedIdea(term), Stage(..), Definition (defn), (+:+),
   Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
-import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
@@ -472,16 +471,16 @@ adamsC = quantfunc $ implVar (mkUid "adams_ctor_apache") (nounPhrase
   "constructor for an Adams-Bashforth integrator"
   "constructors for an Adams-Bashforth integrator")
   "the constructors for an Adams-Bashforth integrator"
-  (Actor adams) (Label adams)
+  (Actor adams) (label adams)
 dp54C = quantfunc $ implVar (mkUid "dp54_ctor_apache") (nounPhrase
   "constructor for a Dormand-Prince 5-4 integrator"
   "constructors for a Dormand-Prince 5-4 integrator")
   "the constructors for a Dormand-Prince 5-4 integrator"
-  (Actor dp54) (Label dp54)
+  (Actor dp54) (label dp54)
 stepHandlerCtor = quantfunc $ implVar (mkUid "StepHandler_ctor_apache") (nounPhrase
   "constructor for StepHandler" "constructors for StepHandler")
   "the constructor for StepHandler"
-  (Actor $ "ODE" ++ sh) (Label $ "ODE" ++ sh)
+  (Actor $ "ODE" ++ sh) (label $ "ODE" ++ sh)
 addStepHandler = quantfunc $ implVar (mkUid "addStepHandler_apache") (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")
@@ -622,22 +621,22 @@ rkdp5C = quantfunc $ implVar (mkUid "rkdp5_odeint") (nounPhrase
   "constructor for stepper using Runge-Kutta-Dopri5 method"
   "constructors for stepper using Runge-Kutta-Dopri5 method")
   "the constructor for stepper using the Runge-Kutta-Dopri5 method"
-  (Actor rkdp5) (Label rkdp5)
+  (Actor rkdp5) (label rkdp5)
 makeControlled = quantfunc $ implVar (mkUid "make_controlled_odeint") (nounPhrase
   "function for adding error control to a stepper"
   "functions for adding error control to a stepper")
   "the function for adding error control to a stepper"
-  (Actor "auto") (Label $ odeNameSpace ++ "make_controlled")
+  (Actor "auto") (label $ odeNameSpace ++ "make_controlled")
 adamsBashC = quantfunc $ implVar (mkUid "adamsBash_odeint") (nounPhrase
   "constructor for stepper using Adams-Bashforth method"
   "constructors for stepper using Adams-Bashforth method")
   "the constructor for stepper using the Adams-Bashforth method"
-  (Actor adamsBash) (Label adamsBash)
+  (Actor adamsBash) (label adamsBash)
 integrateConst = quantfunc $ implVar (mkUid "integrate_const_odeint") (nounPhrase
   "function for integrating with a constant step size"
   "functions for integrating with a constant step size")
   "the function for integrating with a constant step size"
-  Void (Label $ odeNameSpace ++ "integrate_const")
+  Void (label $ odeNameSpace ++ "integrate_const")
 odeOp = quantfunc $ implVar (mkUid "ode_operator_odeint") (nounPhrase
   "method defining override for calling ODE object"
   "methods defining override for calling ODE object")
@@ -709,7 +708,7 @@ diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVarAU' (c +++ "d" )
   (compoundPhrase (nounPhraseSP "change in") (c ^. term))
   (S "the change in" +:+ (c ^. defn)) (getA c)
-  (c ^. typ) (Concat [label "d", symbol c Implementation]) (getUnit c)
+  (c ^. typ) (label "d" <> symbol c Implementation) (getUnit c)
 
 -- FIXME: This is surely a hack, but I can't think of a better way right now.
 -- | Some libraries use an array instead of a list to internally represent the ODE.

@@ -80,7 +80,7 @@ constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) =>
   c -> [ConstraintE] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept (dqdWr q) cs Nothing Nothing
 
--- | Similar to 'constrained'', but with a rationale 'Sentence' explaining the typical value.
+-- | Similar to 'constrained'', but with a rationale 'Sentence' explaining the reasonable value.
 constrainedWithRationale :: (Concept c, MayHaveUnit c, Quantity c) =>
   c -> [ConstraintE] -> Expr -> Sentence -> ConstrConcept
 constrainedWithRationale q cs rv r = ConstrConcept (dqdWr q) cs (Just rv) (Just r)

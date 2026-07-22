@@ -67,7 +67,7 @@ instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
 instance Express        UncertQ where express = sy
 
 {-- Constructors --}
--- | Smart constructor that requires a 'Quantity', a percentage, and a typical value with an 'Uncertainty'.
+-- | Smart constructor that requires a 'Quantity', a percentage, and a reasonable value with an 'Uncertainty'.
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
   c -> Uncertainty -> UncertQ
 uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal) Nothing)

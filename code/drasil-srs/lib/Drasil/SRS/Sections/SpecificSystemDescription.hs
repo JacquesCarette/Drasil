@@ -210,7 +210,7 @@ datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
 -- | Constructor for the paragraph of the Data Constraints section. Takes in a trailing 'Sentence'.
 dataConstraintParagraph :: Sentence -> Contents
 dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
-  uncertSent, conservConsSent, typValSent, trailingSent]
+  uncertSent, conservConsSent, reasValSent, trailingSent]
 
 -- | General 'Sentence' that describes the data constraints on the input variables.
 inputTableSent :: Sentence
@@ -237,10 +237,10 @@ conservConsSent = foldlSent [D.toSent (atStartNP' (the constraint)) `S.are` S "c
   S "to give", phrase user `S.the_ofThe` phrase model,
   S "the flexibility to experiment with unusual situations"]
 
--- | General 'Sentence' that describes the typical values.
-typValSent :: Sentence
-typValSent = foldlSent [D.toSent (atStartNP (the column)) `S.of_` S "typical",
-  plural value `S.is` S "intended to provide a feel for a common scenario"]
+-- | General 'Sentence' that describes the reasonable values.
+reasValSent :: Sentence
+reasValSent = foldlSent [D.toSent (atStartNP (the column)) `S.of_` S "reasonable",
+  plural value `S.is` S "intended to provide examples of values that are physically admissible"]
 
 -- | General 'Sentence' that describes some auxiliary specifications of the system.
 auxSpecSent :: Sentence
@@ -266,7 +266,7 @@ inDataConstTbl qlst = mkDataConstraintTable (baseCols ++ rationaleCols ++ uncert
     baseCols = [(S "Var", map ch sorted),
                 (titleize' physicalConstraint, map fmtPhys sorted),
                 (titleize' softwareConstraint, map fmtSfwr sorted),
-                (S "Typical Value", map (\q -> fmtU (eS $ express $ getRVal q) q) sorted)]
+                (S "Reasonable Value", map (\q -> fmtU (eS $ express $ getRVal q) q) sorted)]
     uncertCols = [(short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) sorted)]
     hasAnyRationale = any (\q -> isJust (q ^. rationale)) sorted
     rationaleCols = [(S "Rationale", map (\q -> fromMaybe EmptyS (q ^. rationale)) sorted) |

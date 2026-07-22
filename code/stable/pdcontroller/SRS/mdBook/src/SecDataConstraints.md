@@ -1,10 +1,10 @@
 # Data Constraints {#Sec:DataConstraints}
 
-The [Input Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The [Input Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible.
 
 <div id="Table:InDataConstraints"></div>
 
-|Var                     |Physical Constraints                                              |Typical Value               |Uncert.    |
+|Var                     |Physical Constraints                                              |Reasonable Value            |Uncert.    |
 |:-----------------------|:-----------------------------------------------------------------|:---------------------------|:----------|
 |\\({K\_{\text{d}}}\\)   |\\({K\_{\text{d}}}\geq{}0\\)                                      |\\(1\\)                     |10\\(\\%\\)|
 |\\({K\_{\text{p}}}\\)   |\\({K\_{\text{p}}}\gt{}0\\)                                       |\\(20\\)                    |10\\(\\%\\)|

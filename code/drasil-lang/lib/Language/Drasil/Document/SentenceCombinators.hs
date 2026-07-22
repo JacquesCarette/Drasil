@@ -13,7 +13,7 @@ module Language.Drasil.Document.SentenceCombinators (
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
   unwrap, fterms, eqN, eqnWSource,
   -- * List-related Functions
-  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
+  bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList
@@ -128,12 +128,6 @@ mkTableFromColumns l =
     isEmpty       _      = False
     replaceEmptyS EmptyS = S "--"
     replaceEmptyS s      = s
-
--- | Makes 'Sentence's from an item and its reference.
--- Takes the title of reference as a 'String' and a
--- 'Sentence' containing the full reference. Wraps the full reference in parenthesis.
-itemRefToSent :: String -> Sentence -> Sentence
-itemRefToSent a b = S a +:+ sParen b
 
 -- | Takes a list and a 'Section', then generates a list of that section's reference to
 -- match the length of the list.

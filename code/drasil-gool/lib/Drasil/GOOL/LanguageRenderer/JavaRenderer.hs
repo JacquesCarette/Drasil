@@ -973,8 +973,8 @@ jAssert condition errorMessage = vcat [
   ]
 
 jOut
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v

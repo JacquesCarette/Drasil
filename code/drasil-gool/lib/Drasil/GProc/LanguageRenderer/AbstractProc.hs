@@ -82,15 +82,15 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (StatementSym r smt, ValueExpression r)
-  => String -> SValue r -> SValue r -> MS (r smt)
+  :: (StatementSym r stmt, ValueExpression r)
+  => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = IC.valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
 listAdd
-  :: (IndexTranslator r, StatementSym r smt, ValueExpression r)
-  => String -> SValue r -> SValue r -> SValue r -> MS (r smt)
+  :: (IndexTranslator r, StatementSym r stmt, ValueExpression r)
+  => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
@@ -105,8 +105,8 @@ arrayElem arr' i' = do
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (RP.ProcRenderSym r vis smt mthd) => SVariable r -> r ScopeData ->
-  [SVariable r] -> MS (r Body) -> MS (r smt)
+funcDecDef :: (RP.ProcRenderSym r vis stmt mthd) => SVariable r -> r ScopeData ->
+  [SVariable r] -> MS (r Body) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr

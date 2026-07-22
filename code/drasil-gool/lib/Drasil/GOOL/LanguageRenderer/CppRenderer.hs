@@ -2606,12 +2606,12 @@ cppIterEndFunc :: VS (CppSrcCode TypeData) -> VS (CppSrcCode FuncData)
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
-  :: (DeclStatement r smt, RenderStatement r smt, StatementElim r smt)
+  :: (DeclStatement r stmt, RenderStatement r stmt, StatementElim r stmt)
   => ([r Value] -> Doc)
   -> SVariable r
   -> r ScopeData
   -> [SValue r]
-  -> MS (r smt)
+  -> MS (r stmt)
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2709,8 +2709,8 @@ cppFuncDecDef v scp ps bod = do
     indent (RC.body b) $$ bodyEnd
 
 cppPrint
-  :: (RenderStatement r smt, ValueElim r)
-  => Bool -> SValue r -> SValue r -> MS (r smt)
+  :: (RenderStatement r stmt, ValueElim r)
+  => Bool -> SValue r -> SValue r -> MS (r stmt)
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf

@@ -972,8 +972,8 @@ jlPrint _ f' p' v' = do
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v

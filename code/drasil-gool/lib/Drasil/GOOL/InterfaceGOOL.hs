@@ -38,22 +38,22 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (SharedProg r vis smt mthd, OOStatement r smt,
-  ProgramSym r vis smt mthd svr att prg, ObserverPattern r smt,
-  StrategyPattern r smt
-  ) => OOProg r vis smt mthd svr att prg
+class (SharedProg r vis stmt mthd, OOStatement r stmt,
+  ProgramSym r vis stmt mthd svr att prg, ObserverPattern r stmt,
+  StrategyPattern r stmt
+  ) => OOProg r vis stmt mthd svr att prg
 
-class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
-  OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
+class (SharedStatement r stmt, GetSet r, InternalValueExp r, OOFuncAppStatement r stmt,
+  OOVariableValue r, OODeclStatement r stmt, OOFuncAppStatement r stmt,
   OOFunctionSym r, OOValueExpression r
-  ) => OOStatement r smt
+  ) => OOStatement r stmt
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
-class (FileSym r vis smt mthd svr att) => ProgramSym r vis smt mthd svr att prg | r -> prg where
+class (FileSym r vis stmt mthd svr att) => ProgramSym r vis stmt mthd svr att prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
@@ -61,7 +61,7 @@ class (FileSym r vis smt mthd svr att) => ProgramSym r vis smt mthd svr att prg 
 type File = FileData
 
 -- | Class for representing a file.
-class (ModuleSym r vis smt mthd svr att) => FileSym r vis smt mthd svr att where
+class (ModuleSym r vis stmt mthd svr att) => FileSym r vis stmt mthd svr att where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
@@ -74,7 +74,7 @@ class (ModuleSym r vis smt mthd svr att) => FileSym r vis smt mthd svr att where
 type Module = ModData
 
 -- | Class for representing a module.
-class (ClassSym r vis smt mthd svr att) => ModuleSym r vis smt mthd svr att where
+class (ClassSym r vis stmt mthd svr att) => ModuleSym r vis stmt mthd svr att where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
@@ -82,7 +82,7 @@ class (ClassSym r vis smt mthd svr att) => ModuleSym r vis smt mthd svr att wher
 type Class = Doc
 
 -- | Class for representing an OO class.
-class (OOMethodSym r vis smt mthd att, StateVarSym r vis svr att) => ClassSym r vis smt mthd svr att where
+class (OOMethodSym r vis stmt mthd att, StateVarSym r vis svr att) => ClassSym r vis stmt mthd svr att where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] ->
@@ -100,7 +100,7 @@ class (OOMethodSym r vis smt mthd att, StateVarSym r vis svr att) => ClassSym r 
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis smt mthd, AttachmentSym r att) => OOMethodSym r vis smt mthd att where
+class (MethodSym r vis stmt mthd, AttachmentSym r att) => OOMethodSym r vis stmt mthd att where
   method      :: Label -> r vis -> r att -> VS (r TypeData) ->
     [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)
@@ -111,19 +111,19 @@ class (MethodSym r vis smt mthd, AttachmentSym r att) => OOMethodSym r vis smt m
   inOutMethod :: Label -> r vis -> r att -> InOutFunc r mthd
   docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r mthd
 
-privMethod :: (OOMethodSym r vis smt mthd att) => Label -> VS (r TypeData) ->
+privMethod :: (OOMethodSym r vis stmt mthd att) => Label -> VS (r TypeData) ->
   [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis smt mthd att) => Label -> VS (r TypeData) ->
+pubMethod :: (OOMethodSym r vis stmt mthd att) => Label -> VS (r TypeData) ->
   [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis smt mthd att) => [MS (r ParamData)] ->
+initializer :: (OOMethodSym r vis stmt mthd att) => [MS (r ParamData)] ->
   Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis smt mthd att) => [MS (r ParamData)] ->
+nonInitConstructor :: (OOMethodSym r vis stmt mthd att) => [MS (r ParamData)] ->
   MS (r Body) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
@@ -266,42 +266,42 @@ classMethodCallNoParams :: (InternalValueExp r) => VS (r TypeData) -> VS (r Type
   Label -> SValue r
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class (DeclStatement r smt, OOVariableSym r) => OODeclStatement r smt where
-  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+class (DeclStatement r stmt, OOVariableSym r) => OODeclStatement r stmt where
+  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
+  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
   extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
-    -> MS (r smt)
+    -> MS (r stmt)
 
-objDecNewNoParams :: (OODeclStatement r smt) => SVariable r -> r ScopeData
-  -> MS (r smt)
+objDecNewNoParams :: (OODeclStatement r stmt) => SVariable r -> r ScopeData
+  -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
-extObjDecNewNoParams :: (OODeclStatement r smt) => Library -> SVariable r ->
-  r ScopeData -> MS (r smt)
+extObjDecNewNoParams :: (OODeclStatement r stmt) => Library -> SVariable r ->
+  r ScopeData -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
-class (FuncAppStatement r smt, OOVariableSym r) => OOFuncAppStatement r smt where
-  selfInOutCall :: InOutCall r smt
+class (FuncAppStatement r stmt, OOVariableSym r) => OOFuncAppStatement r stmt where
+  selfInOutCall :: InOutCall r stmt
 
-class (StatementSym r smt, OOFunctionSym r) => ObserverPattern r smt where
-  notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
+class (StatementSym r stmt, OOFunctionSym r) => ObserverPattern r stmt where
+  notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r smt) => VS (r TypeData) -> [SValue r] ->
-  r ScopeData -> MS (r smt)
+initObserverList :: (DeclStatement r stmt) => VS (r TypeData) -> [SValue r] ->
+  r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (OOVariableValue r, List r smt) => SValue r -> MS (r smt)
+addObserver :: (OOVariableValue r, List r stmt) => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
+class (BodySym r stmt, VariableSym r) => StrategyPattern r stmt where
   runStrategy :: Label -> [(Label, MS (r Body))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MS (r Block)
 

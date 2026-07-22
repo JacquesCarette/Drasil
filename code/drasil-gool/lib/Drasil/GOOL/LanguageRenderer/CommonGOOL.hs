@@ -24,13 +24,13 @@ import Control.Monad.State (modify)
 
 constDecDef
   :: ( InternalVarElim r
-     , RenderStatement r smt
+     , RenderStatement r stmt
      , ScopeElim r
      , UnRepr r TypeData
      , ValueElim r
      , VariableElim r
      )
-  => SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+  => SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
 constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -51,13 +51,13 @@ classMethodCall f t cls vs ns = do
   call Nothing (Just $ renderType c <> dot) f t vs ns
 
 listAppend
-  :: (InternalValueExp r, StatementSym r smt)
-  => String -> SValue r -> SValue r -> MS (r smt)
+  :: (InternalValueExp r, StatementSym r stmt)
+  => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = valStmt $ objMethodCall void list fnName [val]
 
 listAdd
-  :: (IndexTranslator r, InternalValueExp r, StatementSym r smt)
-  => String -> SValue r -> SValue r -> SValue r -> MS (r smt)
+  :: (IndexTranslator r, InternalValueExp r, StatementSym r stmt)
+  => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = valStmt $ objMethodCall void list fnName [intToIndex idx, val]
 
 innerType

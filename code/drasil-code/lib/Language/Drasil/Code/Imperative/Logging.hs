@@ -19,7 +19,7 @@ import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
 -- function calls, statements that log how the function was called are added to
 -- the beginning of the body.
 logBody
-  :: (SharedStatement r smt, VariableElim r)
+  :: (SharedStatement r stmt, VariableElim r)
   => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r Body))
 logBody n vars b = do
   g <- get
@@ -31,7 +31,7 @@ logBody n vars b = do
 -- used as the first block in the function, to log that it was called and what
 -- inputs it was called with.
 loggedMethod
-  :: (SharedStatement r smt, VariableElim r)
+  :: (SharedStatement r stmt, VariableElim r)
   => FilePath -> Label -> [SVariable r] -> MS (r Block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,

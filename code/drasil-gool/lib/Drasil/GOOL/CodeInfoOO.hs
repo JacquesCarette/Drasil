@@ -397,10 +397,10 @@ instance ControlStatement CodeInfoOO () where
     _ <- f
     return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
 
-  for dec v smt bod = do
+  for dec v stmt bod = do
     _ <- dec
     _ <- zoom lensMStoVS v
-    _ <- smt
+    _ <- stmt
     _ <- bod
     return $ return $ error "[bool] The return value of this isn't used, and the thunk shouldn't fire."
   forRange _ b e s bod = do

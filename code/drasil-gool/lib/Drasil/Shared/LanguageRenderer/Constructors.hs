@@ -27,11 +27,11 @@ import Control.Monad (join)
 -- Statements
 
 -- | Constructs a statement terminated by a semi-colon
-mkStmt :: (RenderStatement r smt) => Doc -> MS (r smt)
+mkStmt :: (RenderStatement r stmt) => Doc -> MS (r stmt)
 mkStmt = flip stmtFromData Semi
 
 -- | Constructs a statement without a termination character
-mkStmtNoEnd :: (RenderStatement r smt) => Doc -> MS (r smt)
+mkStmtNoEnd :: (RenderStatement r stmt) => Doc -> MS (r stmt)
 mkStmtNoEnd = flip stmtFromData Empty
 
 -- Values --

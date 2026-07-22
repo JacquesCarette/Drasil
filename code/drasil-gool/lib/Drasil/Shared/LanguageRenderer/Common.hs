@@ -61,8 +61,8 @@ listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python, Swift, and Julia --
 
-forEach' :: (RenderStatement r smt) => (r Variable -> r Value ->
-  r Body -> Doc) -> SVariable r -> SValue r -> MS (r Body) -> MS (r smt)
+forEach' :: (RenderStatement r stmt) => (r Variable -> r Value ->
+  r Body -> Doc) -> SVariable r -> SValue r -> MS (r Body) -> MS (r stmt)
 forEach' f i' v' b' = do
   i <- zoom lensMStoVS i'
   v <- zoom lensMStoVS v'
@@ -72,8 +72,8 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef
-  :: (AssignStatement r smt, ScopeElim r, VariableElim r)
-  => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r smt)
+  :: (AssignStatement r stmt, ScopeElim r, VariableElim r)
+  => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
@@ -86,8 +86,8 @@ varDecDef v scp e = do
 -- Python and Swift --
 
 increment
-  :: (InternalVarElim r, RenderStatement r smt, ValueElim r)
-  => SVariable r -> SValue r -> MS (r smt)
+  :: (InternalVarElim r, RenderStatement r stmt, ValueElim r)
+  => SVariable r -> SValue r -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'

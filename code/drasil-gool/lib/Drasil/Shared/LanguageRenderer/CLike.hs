@@ -139,19 +139,19 @@ listSize' lengthName list = valueOf $ list $-> var lengthName IC.int
 -- Statements --
 
 increment
-  :: (InternalVarElim r, RC.RenderStatement r smt, ValueElim r)
-  => SVariable r -> SValue r -> MS (r smt)
+  :: (InternalVarElim r, RC.RenderStatement r stmt, ValueElim r)
+  => SVariable r -> SValue r -> MS (r stmt)
 increment vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-increment1 :: (InternalVarElim r, RC.RenderStatement r smt) => SVariable r -> MS (r smt)
+increment1 :: (InternalVarElim r, RC.RenderStatement r stmt) => SVariable r -> MS (r stmt)
 increment1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.increment) vr
 
-decrement1 :: (InternalVarElim r, RC.RenderStatement r smt) => SVariable r -> MS (r smt)
+decrement1 :: (InternalVarElim r, RC.RenderStatement r stmt) => SVariable r -> MS (r stmt)
 decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
@@ -159,13 +159,13 @@ decrement1 vr' = do
 varDec
   :: ( InternalVarElim r
      , RO.PermElim r att
-     , RC.RenderStatement r smt
+     , RC.RenderStatement r stmt
      , ScopeElim r
      , UnRepr r TypeData
      , TypeElim r
      , VariableElim r
      )
-  => r att -> r att -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
+  => r att -> r att -> Doc -> SVariable r -> r ScopeData -> MS (r stmt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -180,12 +180,12 @@ varDec s d pdoc v' scp = do
         ptrdoc _ = empty
 
 varDecDef
-  :: ( IC.DeclStatement r smt
-     , RC.RenderStatement r smt
-     , RC.StatementElim r smt
+  :: ( IC.DeclStatement r stmt
+     , RC.RenderStatement r stmt
+     , RC.StatementElim r stmt
      , ValueElim r
      )
-  => Terminator -> SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+  => Terminator -> SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
 varDecDef t vr scp vl' = do
   vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -194,12 +194,12 @@ varDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 setDecDef
-  :: ( IC.DeclStatement r smt
-     , RC.RenderStatement r smt
-     , RC.StatementElim r smt
+  :: ( IC.DeclStatement r stmt
+     , RC.RenderStatement r stmt
+     , RC.StatementElim r stmt
      , ValueElim r
      )
-  => Terminator -> SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+  => Terminator -> SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
 setDecDef t vr scp vl' = do
   vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
@@ -208,16 +208,16 @@ setDecDef t vr scp vl' = do
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec
-  :: (IC.DeclStatement r smt, RC.RenderStatement r smt, RC.StatementElim r smt)
-  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+  :: (IC.DeclStatement r stmt, RC.RenderStatement r stmt, RC.StatementElim r stmt)
+  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
 extObjDecNew
-  :: (IC.DeclStatement r smt, IG.OOValueExpression r, VariableElim r)
-  => Library -> SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
+  :: (IC.DeclStatement r stmt, IG.OOValueExpression r, VariableElim r)
+  => Library -> SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 extObjDecNew l v scp vs = IC.varDecDef v scp
   (extNewObj l (onStateValue variableType v) vs)
 
@@ -225,16 +225,16 @@ extObjDecNew l v scp vs = IC.varDecDef v scp
 -- 2nd parameter is a statement to end every case with
 switch
   :: ( RC.BodyElim r
-     , RC.RenderStatement r smt
-     , RC.StatementElim r smt
+     , RC.RenderStatement r stmt
+     , RC.StatementElim r stmt
      , ValueElim r
      )
   => (Doc -> Doc)
-  -> MS (r smt)
+  -> MS (r stmt)
   -> SValue r
   -> [(SValue r, MS (r Body))]
   -> MS (r Body)
-  -> MS (r smt)
+  -> MS (r stmt)
 switch f st v cs bod = do
   s <- RC.stmt st
   val <- zoom lensMStoVS v
@@ -245,17 +245,17 @@ switch f st v cs bod = do
 
 for
   :: ( RC.BodyElim r
-     , RC.RenderStatement r smt
-     , RC.StatementElim r smt
+     , RC.RenderStatement r stmt
+     , RC.StatementElim r stmt
      , ValueElim r
      )
   => Doc
   -> Doc
-  -> MS (r smt)
+  -> MS (r stmt)
   -> SValue r
-  -> MS (r smt)
+  -> MS (r stmt)
   -> MS (r Body)
-  -> MS (r smt)
+  -> MS (r stmt)
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- RC.loopStmt sInit
   guard <- zoom lensMStoVS vGuard
@@ -269,8 +269,8 @@ for bStart bEnd sInit vGuard sUpdate b = do
 
 -- Doc function parameter is applied to the render of the while-condition
 while
-  :: (RC.BodyElim r, RC.RenderStatement r smt, ValueElim r)
-  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r Body) -> MS (r smt)
+  :: (RC.BodyElim r, RC.RenderStatement r stmt, ValueElim r)
+  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r Body) -> MS (r stmt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'

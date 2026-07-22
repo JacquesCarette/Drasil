@@ -368,7 +368,7 @@ instance InternalList MatlabCode where
 instance InternalListFunc MatlabCode where
   listAccessFunc t v = intValue v >>= ((`funcFromData` t) . mlListAccessFunc)
 
-mlListAccessFunc :: (CommonRenderSym r vis smt md) => r Value -> Doc
+mlListAccessFunc :: (CommonRenderSym r vis stmt mthd) => r Value -> Doc
 mlListAccessFunc v = parens $ RC.value v
 
 instance BinderSym MatlabCode where
@@ -692,14 +692,14 @@ mlPrint newLn f' _ v' = do
 mlEnd :: Doc
 mlEnd = text "end"
 
-mlForEach :: (CommonRenderSym r vis smt md) => r Variable ->
+mlForEach :: (CommonRenderSym r vis stmt mthd) => r Variable ->
   r Value -> r Body -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,
   mlEnd]
 
-mlRange :: (CommonRenderSym r vis smt md) => SValue r -> SValue r ->
+mlRange :: (CommonRenderSym r vis stmt mthd) => SValue r -> SValue r ->
   SValue r -> SValue r
 mlRange initv finalv stepv = do
   ini <- initv
@@ -708,7 +708,7 @@ mlRange initv finalv stepv = do
   d <- double
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
-mlTryCatch :: (CommonRenderSym r vis smt md) => r Body -> r Body -> Doc
+mlTryCatch :: (CommonRenderSym r vis stmt mthd) => r Body -> r Body -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",
   indent $ RC.body tryB,

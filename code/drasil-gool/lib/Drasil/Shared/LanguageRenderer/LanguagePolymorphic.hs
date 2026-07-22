@@ -78,8 +78,8 @@ multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 -- Blocks --
 
 block
-  :: (Monad r, RenderStatement r smt, StatementElim r smt)
-  => [MS (r smt)] -> MS (r Doc)
+  :: (Monad r, RenderStatement r stmt, StatementElim r stmt)
+  => [MS (r stmt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
 multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Block)] -> MS (r Doc)
@@ -339,44 +339,44 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 -- Statements --
 
 stmt
-  :: (RenderStatement r smt, StatementElim r smt)
-  => MS (r smt) -> MS (r smt)
+  :: (RenderStatement r stmt, StatementElim r stmt)
+  => MS (r stmt) -> MS (r stmt)
 stmt s' = do
   s <- s'
   mkStmtNoEnd (RC.statement s <> R.getTerm (statementTerm s))
 
 loopStmt
-  :: (RenderStatement r smt, StatementElim r smt)
-  => MS (r smt) -> MS (r smt)
+  :: (RenderStatement r stmt, StatementElim r stmt)
+  => MS (r stmt) -> MS (r stmt)
 loopStmt = RC.stmt . setEmpty
 
-emptyStmt :: (RenderStatement r smt) => MS (r smt)
+emptyStmt :: (RenderStatement r stmt) => MS (r stmt)
 emptyStmt = mkStmtNoEnd empty
 
 assign
-  :: (InternalVarElim r, RenderStatement r smt, ValueElim r)
-  => Terminator -> SVariable r -> SValue r -> MS (r smt)
+  :: (InternalVarElim r, RenderStatement r stmt, ValueElim r)
+  => Terminator -> SVariable r -> SValue r -> MS (r stmt)
 assign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.assign vr v) t
 
 subAssign
-  :: (InternalVarElim r, RenderStatement r smt, ValueElim r)
-  => Terminator -> SVariable r -> SValue r -> MS (r smt)
+  :: (InternalVarElim r, RenderStatement r stmt, ValueElim r)
+  => Terminator -> SVariable r -> SValue r -> MS (r stmt)
 subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.subAssign vr v) t
 
 objDecNew
-  :: (IC.DeclStatement r smt, IG.OOValueExpression r, VariableElim r)
-  => SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
+  :: (IC.DeclStatement r stmt, IG.OOValueExpression r, VariableElim r)
+  => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
-printList :: (IC.SharedStatement r smt) => Integer -> SValue r ->
-  (SValue r -> MS (r smt)) -> (String -> MS (r smt)) ->
-  (String -> MS (r smt)) -> MS (r smt)
+printList :: (IC.SharedStatement r stmt) => Integer -> SValue r ->
+  (SValue r -> MS (r stmt)) -> (String -> MS (r stmt)) ->
+  (String -> MS (r stmt)) -> MS (r stmt)
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   IC.for (IC.varDecDef i IC.local (IC.litInt 0))
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++)
@@ -387,9 +387,9 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int
 
-printSet :: (IC.SharedStatement r smt) => Integer -> SValue r ->
-  (SValue r -> MS (r smt)) -> (String -> MS (r smt)) ->
-  (String -> MS (r smt)) -> VS (r TypeData) -> MS (r smt)
+printSet :: (IC.SharedStatement r stmt) => Integer -> SValue r ->
+  (SValue r -> MS (r stmt)) -> (String -> MS (r stmt)) ->
+  (String -> MS (r stmt)) -> VS (r TypeData) -> MS (r stmt)
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
@@ -397,12 +397,12 @@ printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   where set_i = "set_i" ++ show n
         i = IC.var set_i s
 
-printObj :: ClassName -> (String -> MS (r smt)) -> MS (r smt)
+printObj :: ClassName -> (String -> MS (r stmt)) -> MS (r stmt)
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
-  :: (RC.InternalIOStmt r smt, IC.SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  :: (RC.InternalIOStmt r stmt, IC.SharedStatement r stmt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn
         print' (Object n) = printObj n prLnFn
@@ -414,27 +414,27 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
           printStr printFileStr f
 
 closeFile
-  :: (IG.InternalValueExp r, StatementSym r smt)
-  => Label -> SValue r -> MS (r smt)
+  :: (IG.InternalValueExp r, StatementSym r stmt)
+  => Label -> SValue r -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
 returnStmt
-  :: (RenderStatement r smt, ValueElim r)
-  => Terminator -> SValue r -> MS (r smt)
+  :: (RenderStatement r stmt, ValueElim r)
+  => Terminator -> SValue r -> MS (r stmt)
 returnStmt t v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (R.return' [v]) t
 
-valStmt :: (RenderStatement r smt, ValueElim r) => Terminator -> SValue r -> MS (r smt)
+valStmt :: (RenderStatement r stmt, ValueElim r) => Terminator -> SValue r -> MS (r stmt)
 valStmt t v' = do
   v <- zoom lensMStoVS v'
   stmtFromData (RC.value v) t
 
-comment :: (RenderStatement r smt) => Doc -> Label -> MS (r smt)
+comment :: (RenderStatement r stmt) => Doc -> Label -> MS (r stmt)
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
-throw :: (IC.Literal r, RenderStatement r smt) => (r Value -> Doc) -> Terminator ->
-  Label -> MS (r smt)
+throw :: (IC.Literal r, RenderStatement r stmt) => (r Value -> Doc) -> Terminator ->
+  Label -> MS (r stmt)
 throw f t l = do
   msg <- zoom lensMStoVS (IC.litString l)
   stmtFromData (f msg) t
@@ -455,7 +455,7 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 4th parameter is the syntax for ending a block in an if-condition
 -- 5th parameter is the syntax for ending an if-statement
 ifCond
-  :: (RC.BodyElim r, RenderStatement r smt, ValueElim r)
+  :: (RC.BodyElim r, RenderStatement r stmt, ValueElim r)
   => (Doc -> Doc)
   -> Doc
   -> OptionalSpace
@@ -464,7 +464,7 @@ ifCond
   -> Doc
   -> [(SValue r, MS (r Body))]
   -> MS (r Body)
-  -> MS (r smt)
+  -> MS (r stmt)
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -482,8 +482,8 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (RenderStatement r smt) => (r Body -> r Body -> Doc) ->
-  MS (r Body) -> MS (r Body) -> MS (r smt)
+tryCatch :: (RenderStatement r stmt) => (r Body -> r Body -> Doc) ->
+  MS (r Body) -> MS (r Body) -> MS (r stmt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
@@ -502,58 +502,58 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis md att)
+  :: (OORenderMethod r vis mthd attch)
   => Label
   -> r vis
-  -> r att
+  -> r attch
   -> VS (r TypeData)
   -> [MS (r ParamData)]
   -> MS (r Body)
-  -> MS (r md)
+  -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis smt md svr att) => SVariable r -> MS (r md)
+getMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis smt md svr att) => SVariable r -> MS (r md)
+setMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
-initStmts :: (OOStatement r smt) => Initializers r -> MS (r Body)
+initStmts :: (OOStatement r stmt) => Initializers r -> MS (r Body)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r att, OORenderMethod r vis md att)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (RenderMethod r md) => FuncDocRenderer -> String ->
-  [String] -> [String] -> MS (r md) -> MS (r md)
+docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
+  [String] -> [String] -> MS (r mthd) -> MS (r mthd)
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderMethod r md) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> MS (r md) -> MS (r md)
+docFunc :: (RenderMethod r mthd) => FuncDocRenderer -> String -> [String] ->
+  Maybe String -> MS (r mthd) -> MS (r mthd)
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis md svr, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
+  :: (RenderClass r vis mthd stvr, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis md svr, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
+implementingClass :: (RenderClass r vis mthd stvr, VisibilitySym r vis) => Label -> [Label] ->
+  [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis md svr)
+  :: (RenderClass r vis mthd stvr)
   => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
@@ -619,5 +619,5 @@ fileFromData f fpath mdl' = do
 
 -- Helper functions
 
-setEmpty :: (RenderStatement r smt, StatementElim r smt) => MS (r smt) -> MS (r smt)
+setEmpty :: (RenderStatement r stmt, StatementElim r stmt) => MS (r stmt) -> MS (r stmt)
 setEmpty s' = s' >>= mkStmtNoEnd . RC.statement

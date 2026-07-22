@@ -937,8 +937,8 @@ pyPrint newLn f' p' v' = do
     mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
 pyOut
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v

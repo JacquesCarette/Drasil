@@ -15,14 +15,14 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | A program with one function that applies each vector operation.
 vectorTestProc
-  :: (ProcProg r vis smt md prg, NativeVector r) => GProc.GSProgram r prg
+  :: (ProcProg r vis stmt mthd prg, NativeVector r) => GProc.GSProgram r prg
 vectorTestProc = GProc.prog "VectorTest" ""
   [GProc.docMod "Tests native vector operations." watermark ["Drasil"] "" $
     GProc.fileDoc (GProc.buildModule "VectorTest" [] [vectorOps])]
 
 -- | Takes two vectors and stores each vector operation's result, returning
 -- their dot product.
-vectorOps :: (ProcProg r vis smt md prg, NativeVector r) => MS (r md)
+vectorOps :: (ProcProg r vis stmt mthd prg, NativeVector r) => MS (r mthd)
 vectorOps =
   function "vectorOps" public double [param (var "a" vt), param (var "b" vt)]
   (bodyStatements

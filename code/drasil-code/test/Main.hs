@@ -60,7 +60,7 @@ codeGenTestGroup =
 
 goolTestGroup
   :: String
-  -> (forall r vis smt md svr att prg. (OOProg r vis smt md svr att prg) => OO.GSProgram r prg)
+  -> (forall r vis stmt mthd stvr attch prg. (OOProg r vis stmt mthd stvr attch prg) => OO.GSProgram r prg)
   -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
@@ -76,7 +76,7 @@ goolTestGroup n p =
 
 gProcTestGroup
   :: String
-  -> (forall r vis smt md prg. (ProcProg r vis smt md prg) => Proc.GSProgram r prg)
+  -> (forall r vis stmt mthd prg. (ProcProg r vis stmt mthd prg) => Proc.GSProgram r prg)
   -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
@@ -88,7 +88,7 @@ gProcTestGroup n p =
 
 gProcVectorTestGroup
   :: String
-  -> (forall r vis smt md prg. (ProcProg r vis smt md prg, NativeVector r) => Proc.GSProgram r prg)
+  -> (forall r vis stmt mthd prg. (ProcProg r vis stmt mthd prg, NativeVector r) => Proc.GSProgram r prg)
   -> TestTree
 gProcVectorTestGroup n p =
   goldenTestingGroup
@@ -100,10 +100,10 @@ gProcVectorTestGroup n p =
     ]
 
 genCodeProcNoMake
-  :: (ProcProg r vis smt md ProgData, NativeVector r, Monad r')
+  :: (ProcProg r vis stmt mthd ProgData, NativeVector r, Monad r')
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg', NativeVector s) => Proc.GSProgram s prg')
+  -> (forall s vis' stmt' mthd' prg'. (ProcProg s vis' stmt' mthd' prg', NativeVector s) => Proc.GSProgram s prg')
   -> [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =
   let
@@ -112,10 +112,10 @@ genCodeProcNoMake unRepr unRepr' p =
   in seq gs' $ toFileLayout (progMods prog) ++ aux
 
 genCodeGOOL
-  :: (OOProg r vis smt md svr att ProgData, SoftwareDossierSym r', Monad r')
+  :: (OOProg r vis stmt mthd stvr attch ProgData, SoftwareDossierSym r', Monad r')
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' svr' att' prg'. (OOProg s vis' smt' md' svr' att' prg') => OO.GSProgram s prg')
+  -> (forall s vis' stmt' mthd' stvr' attch' prg'. (OOProg s vis' stmt' mthd' stvr' attch' prg') => OO.GSProgram s prg')
   -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let
@@ -124,10 +124,10 @@ genCodeGOOL unRepr unRepr' p =
   in genCode' (unRepr p') gs' unRepr'
 
 genCodeProc
-  :: (ProcProg r vis smt md ProgData, SoftwareDossierSym r', Monad r')
+  :: (ProcProg r vis stmt mthd ProgData, SoftwareDossierSym r', Monad r')
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg') => Proc.GSProgram s prg')
+  -> (forall s vis' stmt' mthd' prg'. (ProcProg s vis' stmt' mthd' prg') => Proc.GSProgram s prg')
   -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let

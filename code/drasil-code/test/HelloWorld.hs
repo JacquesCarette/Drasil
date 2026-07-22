@@ -25,13 +25,13 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldOO :: (OOProg r vis smt md svr att prg) => OO.GSProgram r prg
+helloWorldOO :: (OOProg r vis stmt mthd stvr attch prg) => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
   [helloWorldMainOO] [helloWorldClass]), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldProc :: (ProcProg r vis smt md prg) => GProc.GSProgram r prg
+helloWorldProc :: (ProcProg r vis stmt mthd prg) => GProc.GSProgram r prg
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
   watermark
   ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
@@ -42,11 +42,11 @@ description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (SharedProg r vis smt md) => SVariable r
+myOtherList :: (SharedProg r vis stmt mthd) => SVariable r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainOO :: (OOProg r vis smt md svr att prg) => MS (r md)
+helloWorldMainOO :: (OOProg r vis stmt mthd stvr attch prg) => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -57,7 +57,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
       helloForEachLoop, helloTryCatch]]))
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainProc :: (ProcProg r vis smt md prg) => MS (r md)
+helloWorldMainProc :: (ProcProg r vis stmt mthd prg) => MS (r mthd)
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -67,7 +67,7 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
-helloInitVariables :: (SharedProg r vis smt md) => MS (r Block)
+helloInitVariables :: (SharedProg r vis stmt mthd) => MS (r Block)
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
@@ -117,7 +117,7 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis smt md svr att prg) => MS (r Block)
+objectTests :: (OOProg r vis stmt mthd stvr attch prg) => MS (r Block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -138,7 +138,7 @@ objectTests = block [comment "Object tests",
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
-  mySlicedList10, mySlicedList11 :: (SharedProg r vis smt md) => SVariable r
+  mySlicedList10, mySlicedList11 :: (SharedProg r vis stmt mthd) => SVariable r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -151,7 +151,7 @@ mySlicedList9 = var "mySlicedList9" (listType double)
 mySlicedList10 = var "mySlicedList10" (listType double)
 mySlicedList11 = var "mySlicedList11" (listType double)
 
-listSliceTests :: (SharedProg r vis smt md) => [MS (r Block)]
+listSliceTests :: (SharedProg r vis stmt mthd) => [MS (r Block)]
 listSliceTests = [
 
   -- | Declare variables for list slices
@@ -270,7 +270,7 @@ listSliceTests = [
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}
-helloIfBody :: (SharedProg r vis smt md) => MS (r Body)
+helloIfBody :: (SharedProg r vis stmt mthd) => MS (r Body)
 helloIfBody = addComments "If body" (body [
   block [
     varDec (var "c" int) mainFn,
@@ -338,44 +338,44 @@ helloIfBody = addComments "If body" (body [
     printLn (cot (litDouble 1.0))]])
 
 -- | Print the 5th given argument.
-helloElseBody :: (SharedProg r vis smt md) => MS (r Body)
+helloElseBody :: (SharedProg r vis stmt mthd) => MS (r Body)
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
-helloIfExists :: (SharedProg r vis smt md) => MS (r smt)
+helloIfExists :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
-helloSwitch :: (SharedProg r vis smt md) => MS (r smt)
+helloSwitch :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
 -- | Creates a for loop.
-helloForLoop :: (SharedProg r vis smt md) => MS (r smt)
+helloForLoop :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
   where i = var "i" int
 
 -- | Creates a while loop.
-helloWhileLoop :: (SharedProg r vis smt md) => MS (r smt)
+helloWhileLoop :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (var "a" int)])
 
 -- | Creates a for-each loop.
-helloForEachLoop :: (SharedProg r vis smt md) => MS (r smt)
+helloForEachLoop :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloForEachLoop = forEach i (valueOf myOtherList)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
   where i = var "num" double
 
 -- | Creates a try statement to catch an intentional error.
-helloTryCatch :: (SharedProg r vis smt md) => MS (r smt)
+helloTryCatch :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
-helloWorldClass :: (OOProg r vis smt md svr att prg) => CS (r Class)
+helloWorldClass :: (OOProg r vis stmt mthd stvr attch prg) => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

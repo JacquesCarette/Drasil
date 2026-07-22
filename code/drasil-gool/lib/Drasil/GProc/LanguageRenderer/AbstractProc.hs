@@ -57,8 +57,8 @@ fileFromData f fpath mdl' = do
 -- Parameters: Module name, Doc for imports, Doc to put at bottom of module,
 -- methods
 buildModule
-  :: (RC.MethodElim r md, RP.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> [MS (r md)] -> FS (r Module)
+  :: (RC.MethodElim r mthd, RP.RenderMod r)
+  => Label -> FS Doc -> FS Doc -> [MS (r mthd)] -> FS (r Module)
 buildModule n imps bot fs = RP.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
@@ -82,15 +82,15 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (StatementSym r smt, ValueExpression r)
-  => String -> SValue r -> SValue r -> MS (r smt)
+  :: (StatementSym r stmt, ValueExpression r)
+  => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = IC.valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
 listAdd
-  :: (IndexTranslator r, StatementSym r smt, ValueExpression r)
-  => String -> SValue r -> SValue r -> SValue r -> MS (r smt)
+  :: (IndexTranslator r, StatementSym r stmt, ValueExpression r)
+  => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]
 
@@ -105,8 +105,8 @@ arrayElem arr' i' = do
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (RP.ProcRenderSym r vis smt md) => SVariable r -> r ScopeData ->
-  [SVariable r] -> MS (r Body) -> MS (r smt)
+funcDecDef :: (RP.ProcRenderSym r vis stmt mthd) => SVariable r -> r ScopeData ->
+  [SVariable r] -> MS (r Body) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -117,6 +117,6 @@ funcDecDef v scp ps b = do
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
-function :: (RP.ProcRenderMethod r vis md) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+function :: (RP.ProcRenderMethod r vis mthd) => Label -> r vis -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 function n s t = RP.intFunc False n s (RC.mType t)

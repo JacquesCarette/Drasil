@@ -216,9 +216,9 @@ stateVarList = vcat
 -- Controls --
 
 switch
-  :: (BodyElim r, StatementElim r smt, ValueElim r)
+  :: (BodyElim r, StatementElim r stmt, ValueElim r)
   => (Doc -> Doc)
-  -> r smt
+  -> r stmt
   -> r Value
   -> r Body
   -> [(r Value, r Body)]

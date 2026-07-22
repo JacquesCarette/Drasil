@@ -31,13 +31,13 @@ renderParam v = renderType (variableType v) <+> variable v
 renderMethod
   :: ( RC.BodyElim r
      , ParamElim r
-     , PermElim r att
+     , PermElim r attch
      , UnRepr r TypeData
      , VisibilityElim r vis
      )
   => String
   -> r vis
-  -> r att
+  -> r attch
   -> r TypeData
   -> [r ParamData]
   -> r Body

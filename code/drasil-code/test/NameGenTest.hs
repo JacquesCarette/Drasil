@@ -10,15 +10,15 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
-nameGenTestOO :: OOProg r vis smt md svr att prg => OO.GSProgram r prg
+nameGenTestOO :: OOProg r vis stmt mthd stvr attch prg => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
-nameGenTestProc :: ProcProg r vis smt md prg => GProc.GSProgram r prg
+nameGenTestProc :: ProcProg r vis stmt mthd prg => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
 
-helper :: SharedProg r vis smt md => MS (r md)
+helper :: SharedProg r vis stmt mthd => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
   [block [listDec 2 result local],
     listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing,
@@ -27,7 +27,7 @@ helper = function "helper" private void [param temp] $ body
     temp = var "temp" (listType int)
     result = var "result" (listType int)
 
-main :: SharedProg r vis smt md => MS (r md)
+main :: SharedProg r vis stmt mthd => MS (r mthd)
 main = mainFunction $ body
   [block [
     listDecDef temp mainFn [litInt 1, litInt 2, litInt 3],

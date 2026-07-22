@@ -916,14 +916,14 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: AttachmentTag -> MS (CSharpCode smt) -> MS (CSharpCode smt)
+csVarDec :: AttachmentTag -> MS (CSharpCode stmt) -> MS (CSharpCode stmt)
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MS (CSharpCode Body) -> MS (CSharpCode md)) ->
+  MS (CSharpCode Body) -> MS (CSharpCode mthd)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MS (CSharpCode Body) -> MS (CSharpCode md)
+  MS (CSharpCode Body) -> MS (CSharpCode mthd)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
@@ -935,8 +935,8 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
 csPrint
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

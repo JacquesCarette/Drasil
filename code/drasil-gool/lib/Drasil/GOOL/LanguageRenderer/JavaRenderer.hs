@@ -973,8 +973,8 @@ jAssert condition errorMessage = vcat [
   ]
 
 jOut
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
@@ -1045,9 +1045,9 @@ jInOutCall f n ins outs both = fCall rets
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
 jInOut :: (VS (JavaCode TypeData) -> [MS (JavaCode ParamData)] ->
-  MS (JavaCode Body) -> MS (JavaCode md)) -> [SVariable JavaCode] ->
+  MS (JavaCode Body) -> MS (JavaCode mthd)) -> [SVariable JavaCode] ->
   [SVariable JavaCode] -> [SVariable JavaCode] -> MS (JavaCode Body) ->
-  MS (JavaCode md)
+  MS (JavaCode mthd)
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
@@ -1072,10 +1072,10 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (RenderMethod r md) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md)) -> String ->
+jDocInOut :: (RenderMethod r mthd) => ([SVariable r] ->
+  [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd)) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MS (r Body) -> MS (r md)
+  [(String, SVariable r)] -> MS (r Body) -> MS (r mthd)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
@@ -1088,8 +1088,8 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass
-  :: (RenderClass r vis md svr, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
+  :: (RenderClass r vis mthd stvr, RenderVisibility r vis)
+  => Label -> Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

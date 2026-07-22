@@ -2606,12 +2606,12 @@ cppIterEndFunc :: VS (CppSrcCode TypeData) -> VS (CppSrcCode FuncData)
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef
-  :: (DeclStatement r smt, RenderStatement r smt, StatementElim r smt)
+  :: (DeclStatement r stmt, RenderStatement r stmt, StatementElim r stmt)
   => ([r Value] -> Doc)
   -> SVariable r
   -> r ScopeData
   -> [SValue r]
-  -> MS (r smt)
+  -> MS (r stmt)
 cppListDecDef f v scp vls = do
   vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
@@ -2709,8 +2709,8 @@ cppFuncDecDef v scp ps bod = do
     indent (RC.body b) $$ bodyEnd
 
 cppPrint
-  :: (RenderStatement r smt, ValueElim r)
-  => Bool -> SValue r -> SValue r -> MS (r smt)
+  :: (RenderStatement r stmt, ValueElim r)
+  => Bool -> SValue r -> SValue r -> MS (r stmt)
 cppPrint newLn pf vl = do
   e <- zoom lensMStoVS end
   printFn <- zoom lensMStoVS pf
@@ -2797,7 +2797,7 @@ cppsIntFunc f s t ps b = do
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
 cpphIntFunc :: Label -> CppHdrCode (Doc, VisibilityTag) ->
-  CppHdrCode att -> MSMthdType CppHdrCode ->
+  CppHdrCode attch -> MSMthdType CppHdrCode ->
   [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) -> MS (CppHdrCode MethodData)
 cpphIntFunc n s _ t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))
@@ -2914,8 +2914,8 @@ cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins
 
 cppsInOut :: (VS (CppSrcCode TypeData) ->
   [MS (CppSrcCode ParamData)] -> MS (CppSrcCode Body) ->
-  MS (CppSrcCode md)) -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
-  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode md)
+  MS (CppSrcCode mthd)) -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
+  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode mthd)
 cppsInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody)
   (varDec v local) b (returnStmt $ valueOf v))
@@ -2926,8 +2926,8 @@ cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
 cpphInOut :: (VS (CppHdrCode TypeData) ->
   [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) ->
-  MS (CppHdrCode md)) -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
-  [SVariable CppHdrCode] -> MS (CppHdrCode Body) -> MS (CppHdrCode md)
+  MS (CppHdrCode mthd)) -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
+  [SVariable CppHdrCode] -> MS (CppHdrCode Body) -> MS (CppHdrCode mthd)
 cpphInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) b
 cpphInOut f ins [] [v] b = f (onStateValue variableType v)

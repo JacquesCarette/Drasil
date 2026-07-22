@@ -60,8 +60,8 @@ data GOOLState = GS {
                                      -- needed when using extClassVarAccess and obj
 
   -- Only used in Java and Swift, to generate correct "throws Exception" declarations
-  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- md exceptions thrown
-  _callMap :: Map QualifiedName [QualifiedName], -- md other methods it calls
+  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- map of exceptions thrown by methods
+  _callMap :: Map QualifiedName [QualifiedName], -- mthd other methods it calls
 
   -- Only used for Swift
   _throwUsed :: Bool, -- to add code so Strings can be used as Errors

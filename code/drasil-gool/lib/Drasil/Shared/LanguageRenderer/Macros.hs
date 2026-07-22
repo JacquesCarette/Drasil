@@ -33,37 +33,37 @@ import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists
-  :: (IC.ControlStatement r smt, IC.ValueExpression r)
-  => SValue r -> MS (r Body) -> MS (r Body) -> MS (r smt)
+  :: (IC.ControlStatement r stmt, IC.ValueExpression r)
+  => SValue r -> MS (r Body) -> MS (r Body) -> MS (r stmt)
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
 decrement1
-  :: (IC.AssignStatement r smt, IC.Literal r)
-  => SVariable r -> MS (r smt)
+  :: (IC.AssignStatement r stmt, IC.Literal r)
+  => SVariable r -> MS (r stmt)
 decrement1 v = v &-= IC.litInt 1
 
 increment
-  :: (IC.AssignStatement r smt, IC.NumericExpression r, IC.VariableValue r)
-  => SVariable r -> SValue r -> MS (r smt)
+  :: (IC.AssignStatement r stmt, IC.NumericExpression r, IC.VariableValue r)
+  => SVariable r -> SValue r -> MS (r stmt)
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
 increment1
-  :: (IC.AssignStatement r smt, IC.Literal r)
-  => SVariable r -> MS (r smt)
+  :: (IC.AssignStatement r stmt, IC.Literal r)
+  => SVariable r -> MS (r stmt)
 increment1 vr = vr &+= IC.litInt 1
 
 strat
-  :: (RC.BodyElim r, Monad r, RC.StatementElim r smt)
-  => MS (r smt) -> MS (r Body) -> MS (r Doc)
+  :: (RC.BodyElim r, Monad r, RC.StatementElim r stmt)
+  => MS (r stmt) -> MS (r Body) -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
   RC.statement result])
 
 runStrategy
-  :: ( IC.AssignStatement r smt
+  :: ( IC.AssignStatement r stmt
      , RC.BodyElim r
      , Monad r
-     , S.RenderStatement r smt
-     , RC.StatementElim r smt
+     , S.RenderStatement r stmt
+     , RC.StatementElim r stmt
      )
   => Label
   -> [(Label, MS (r Body))]
@@ -79,7 +79,7 @@ runStrategy l strats rv av = maybe
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
 listSlice
-  :: (IC.SharedStatement r smt, ValueElim r, VariableElim r)
+  :: (IC.SharedStatement r stmt, ValueElim r, VariableElim r)
   => Maybe (SValue r)
   -> Maybe (SValue r)
   -> Maybe (SValue r)
@@ -147,9 +147,9 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is positive
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (SValue): (setter, value) of bound
-makeSetterVal :: (IC.SharedStatement r smt) => Label -> SValue r ->
+makeSetterVal :: (IC.SharedStatement r stmt) => Label -> SValue r ->
   Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> r ScopeData ->
-  (MS (r smt), SValue r)
+  (MS (r stmt), SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb  scp =
@@ -158,14 +158,14 @@ makeSetterVal vName step _       _       lb rb  scp =
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
 stringListVals
-  :: ( IC.AssignStatement r smt
-     , IC.List r smt
+  :: ( IC.AssignStatement r stmt
+     , IC.List r stmt
      , IC.Literal r
      , RenderValue r
      , IC.TypeElim r
      , VariableElim r
      )
-  => [SVariable r] -> SValue r -> MS (r smt)
+  => [SVariable r] -> SValue r -> MS (r stmt)
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
   (getCodeType $ valueType slst))
   where checkList (List String) = assignVals vars 0
@@ -176,8 +176,8 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
 stringListLists
-  :: (S.RenderValue r, IC.SharedStatement r smt, IC.TypeElim r, VariableElim r)
-  => [SVariable r] -> SValue r -> MS (r smt)
+  :: (S.RenderValue r, IC.SharedStatement r stmt, IC.TypeElim r, VariableElim r)
+  => [SVariable r] -> SValue r -> MS (r stmt)
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
@@ -202,8 +202,8 @@ stringListLists lsts sl = do
     v_i = IC.valueOf var_i
   checkList (getCodeType $ valueType slst)
 
-forRange :: (IC.SharedStatement r smt) => SVariable r -> SValue r -> SValue r ->
-  SValue r -> MS (r Body) -> MS (r smt)
+forRange :: (IC.SharedStatement r stmt) => SVariable r -> SValue r -> SValue r ->
+  SValue r -> MS (r Body) -> MS (r stmt)
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
@@ -217,27 +217,27 @@ obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
-  :: (OOStatement r smt)
+  :: (OOStatement r stmt)
   => VS (r TypeData) -> VS (r FuncData) -> MS (r Body)
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
-  :: (OOStatement r smt)
-  => VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
+  :: (OOStatement r stmt)
+  => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
 notifyObservers'
-  :: (OOStatement r smt)
-  => VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
+  :: (OOStatement r stmt)
+  => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)
     where initv = IC.litInt 0
 
 arrayDecAsList
-  :: (IC.SharedStatement r smt, VariableElim r)
-  => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+  :: (IC.SharedStatement r stmt, VariableElim r)
+  => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr
   let innerTp = IC.innerType $ return $ variableType vr'

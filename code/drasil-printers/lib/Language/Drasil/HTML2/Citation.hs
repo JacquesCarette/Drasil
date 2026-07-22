@@ -1,17 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Language.Drasil.HTML2.Citation
-  ( printBib,
-  )
-where
+module Language.Drasil.HTML2.Citation (
+  printBib, htmlBibFormatter
+) where
 
 import Data.String (IsString)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.List (sortBy)
 
-import Language.Drasil.HTML2.Helpers (printSpec, HTMLRenderOptions(..),
-  BibFormatter(..), foldRaw)
+import Language.Drasil.HTML2.Helpers (
+  HTMLRenderOptions (..), BibFormatter (..), BibFormatter(..),
+  colon, period, comma, vol, pg, pp, no, ed, editedBy)
+import Language.Drasil.HTML2.Spec (specToHTML, printSpec)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', CitationKind(..), numList)
@@ -24,8 +25,16 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.Helpers (paren, sufxer, sufxPrint)
 
-import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), Attr(..), emphasis)
+import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), Attr(..), emphasis, Format(Emphasis))
 import qualified Drasil.Data.Formats.HTML as HTML (Format(..))
+
+-- | HTML specific bib rendering functions
+htmlBibFormatter :: BibFormatter
+htmlBibFormatter =
+  BibFormatter {
+    emph = \x -> [TextFormat Emphasis [] x],
+    spec = specToHTML
+  }
 
 -- | Makes a bilbliography for the document.
 printBib :: HTMLRenderOptions -> BibRef -> HTMLBody
@@ -41,13 +50,13 @@ printBib rOpts bib =
 -- | For when we add other things to reference like website, newspaper
 renderCite :: BibFormatter -> Citation -> ([HTMLBody], [HTMLBody])
 renderCite f (Cite e Book cfs)      = ([RawText $ T.pack e],
-  foldRaw (renderF cfs (useStyleBk    f)  ++ [RawText (T.pack $ sufxPrint cfs)]))
+  renderF cfs (useStyleBk    f)  ++ [RawText (T.pack $ sufxPrint cfs)])
 renderCite f (Cite e Article cfs)   = ([RawText $ T.pack e],
-  foldRaw (renderF cfs (useStyleArtcl f)  ++ [RawText (T.pack $ sufxPrint cfs)]))
+  renderF cfs (useStyleArtcl f)  ++ [RawText (T.pack $ sufxPrint cfs)])
 renderCite f (Cite e MThesis cfs)   = ([RawText $ T.pack e],
-  foldRaw (renderF cfs (useStyleBk    f)  ++ [RawText (T.pack $ sufxPrint cfs)]))
+  renderF cfs (useStyleBk    f)  ++ [RawText (T.pack $ sufxPrint cfs)])
 renderCite f (Cite e PhDThesis cfs) = ([RawText $ T.pack e],
-  foldRaw (renderF cfs (useStyleBk    f)  ++ [RawText (T.pack $ sufxPrint cfs)]))
+  renderF cfs (useStyleBk    f)  ++ [RawText (T.pack $ sufxPrint cfs)])
 renderCite f (Cite e Misc cfs)      = ([RawText $ T.pack e],
   renderF cfs (useStyleBk    f))
 renderCite f (Cite e _ cfs)         = ([RawText $ T.pack e],
@@ -55,7 +64,7 @@ renderCite f (Cite e _ cfs)         = ([RawText $ T.pack e],
 
 -- | Render fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> [HTMLBody])) -> [HTMLBody]
-renderF fields styl = foldRaw (concatMap (styl bibStyleH) (sortBy compCiteField fields))
+renderF fields styl = concatMap (styl bibStyleH) (sortBy compCiteField fields)
 
 -- | Compares two cite fields.
 compCiteField :: CiteField -> CiteField -> Ordering
@@ -117,47 +126,45 @@ useStyleArtcl f MLA     = artclMLA f
 useStyleArtcl f APA     = artclAPA f
 useStyleArtcl f Chicago = artclChicago f
 
--- FIXME: move these show functions and use tags, combinators
-
 -- | Cite books in MLA format.
 bookMLA :: BibFormatter -> CiteField -> [HTMLBody]
-bookMLA f (Address   s) = foldRaw (spec f s ++ [RawText ": "])
-bookMLA _ (Edition   s) = [RawText (T.pack (show s ++ sufxer s ++ " ed., "))]
-bookMLA f (Series    s) = emph f (spec f s) ++ [RawText ". "]
-bookMLA f (Title     s) = emph f (spec f s) ++ [RawText ". "] --If there is a series or collection, this should be in quotes, not italics
-bookMLA _ (Volume    s) = [RawText ("vol. " <> T.pack (show s) <> ", ")]
-bookMLA f (Publisher s) = foldRaw (spec f s ++ [RawText ", "])
-bookMLA f (Author    p) = foldRaw (spec f (rendPeople' p) ++ [RawText ". "])
-bookMLA _ (Year      y) = [RawText (T.pack (show y) <> ". ")]
-bookMLA f (BookTitle s) = emph f (spec f s) ++ [RawText ". "]
-bookMLA f (Journal   s) = emph f (spec f s) ++ [RawText ", "]
-bookMLA _ (Pages   [p]) = [RawText ("pg. " <> T.pack (show p) <> ". ")]
-bookMLA _ (Pages     p) = foldRaw [RawText "pp. ", foldPages p, RawText ". "]
+bookMLA f (Address   s) = spec f s ++ [colon]
+bookMLA _ (Edition   s) = [RawText (T.pack (show s ++ sufxer s)), ed]
+bookMLA f (Series    s) = emph f (spec f s) ++ [period]
+bookMLA f (Title     s) = emph f (spec f s) ++ [period] --If there is a series or collection, this should be in quotes, not italics
+bookMLA _ (Volume    s) = [vol, RawText (T.pack (show s)), comma]
+bookMLA f (Publisher s) = spec f s ++ [comma]
+bookMLA f (Author    p) = spec f (rendPeople' p) ++ [period]
+bookMLA _ (Year      y) = [RawText (T.pack (show y)), period]
+bookMLA f (BookTitle s) = emph f (spec f s) ++ [period]
+bookMLA f (Journal   s) = emph f (spec f s) ++ [comma]
+bookMLA _ (Pages   [p]) = [pg, RawText (T.pack (show p)), period]
+bookMLA _ (Pages     p) = [pp, foldPages p, period]
 bookMLA f (Note      s) = spec f s
-bookMLA _ (Number    n) = [RawText ("no. " <> T.pack (show n) <> ", ")]
-bookMLA f (School    s) = foldRaw (spec f s ++ [RawText ", "])
-bookMLA f (HowPublished (Verb s))      = foldRaw (spec f s ++ [RawText ", "])
-bookMLA f (HowPublished (URL s)) = [Anchor (printSpec s) [] (spec f s), RawText ". "]
-bookMLA _ (Editor       p) = foldRaw [RawText "Edited by ", foldPeople p, RawText ", "]
+bookMLA _ (Number    n) = [no, RawText (T.pack (show n)), comma]
+bookMLA f (School    s) = spec f s ++ [comma]
+bookMLA f (HowPublished (Verb s)) = spec f s ++ [comma]
+bookMLA f (HowPublished (URL s)) = [Anchor (printSpec s) [] (spec f s), period]
+bookMLA _ (Editor       p) = [editedBy, foldPeople p, comma]
 bookMLA _ (Chapter      _) = []
-bookMLA f (Institution  i) = foldRaw (spec f i ++ [RawText ", "])
-bookMLA f (Organization i) = foldRaw (spec f i ++ [RawText ", "])
-bookMLA _ (Month        m) = [RawText (T.pack (show m) <> ", ")]
-bookMLA f (Type         t) = foldRaw (spec f t ++ [RawText ", "])
+bookMLA f (Institution  i) = spec f i ++ [comma]
+bookMLA f (Organization i) = spec f i ++ [comma]
+bookMLA _ (Month        m) = [RawText (T.pack (show m)), comma]
+bookMLA f (Type         t) = spec f t ++ [comma]
 
 -- | Cite books in APA format.
 bookAPA :: BibFormatter -> CiteField -> [HTMLBody] --FIXME: year needs to come after author in APA
 bookAPA f (Author   p) = spec f (rendPeople rendPersLFM' p) --L.APA uses initals rather than full name
-bookAPA _ (Year     y) = [RawText (T.pack (paren $ show y) <> ". ")]--APA puts "()" around the year
-bookAPA _ (Pages    p) = foldRaw [foldPages p, RawText ". "]
-bookAPA _ (Editor   p) = foldRaw [foldPeople p, RawText " (Ed.). "]
+bookAPA _ (Year     y) = [RawText (T.pack (paren $ show y)), period] --APA puts "()" around the year
+bookAPA _ (Pages    p) = [foldPages p, period]
+bookAPA _ (Editor   p) = [foldPeople p, RawText " (Ed.)", period]
 bookAPA f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- | Cite books in Chicago format.
 bookChicago :: BibFormatter -> CiteField -> [HTMLBody]
 bookChicago f (Author   p) = spec f (rendPeople rendPersLFM'' p) -- APA uses middle initals rather than full name
-bookChicago _ (Pages    p) = [foldPages p, RawText ". "]
-bookChicago _ (Editor   p) = [foldPeople p, RawText (toPlural p " ed" <> ". ")]
+bookChicago _ (Pages    p) = [foldPages p, period]
+bookChicago _ (Editor   p) = [foldPeople p, RawText (toPlural p " ed"), period]
 bookChicago f i = bookMLA f i --Most items are rendered the same as MLA
 
 -- for article renderings
@@ -176,23 +183,22 @@ artclAPA f i           = bookAPA f i
 
 -- | Cite articles in Chicago format.
 artclChicago :: BibFormatter -> CiteField -> [HTMLBody]
-artclChicago f i@(Title    _) = artclMLA f i
-artclChicago _ (Volume     n) = [RawText (T.pack (show n) <> ", ")]
+artclChicago f i@(Title    _)  = artclMLA f i
+artclChicago _ (Volume     n)  = [RawText (T.pack (show n)), comma]
 artclChicago _ (Number      n) = [RawText ("no. " <> T.pack (show n))]
-artclChicago f i@(Year     _) = bookAPA f i
---artclChicago f i@(Date _ _ _) = bookAPA f i
+artclChicago f i@(Year     _)  = bookAPA f i
 artclChicago f i = bookChicago f i
 
 -- PEOPLE RENDERING --
 
 -- | Render a list of people (after applying a given function).
 rendPeople :: (Person -> String) -> People -> Spec
-rendPeople _ []  = S "N.a." -- "No authors given"
+rendPeople _ []     = S "N.a." -- "No authors given"
 rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
 -- | Render a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
-rendPeople' []  = S "N.a." -- "No authors given"
+rendPeople' []     = S "N.a." -- "No authors given"
 rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
 
 -- | Organize a list of pages.

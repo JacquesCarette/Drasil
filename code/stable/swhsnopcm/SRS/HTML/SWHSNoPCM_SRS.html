@@ -2,29 +2,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="SWHSNoPCM_SRS.css" type="text/css">
-    <title>
-      Software Requirements Specification for Solar Water Heating System With No Phase Change Material
-    </title>
+    <title>Software Requirements Specification for Solar Water Heating System With No Phase Change Material</title>
     <meta charset="utf-8">
     <script>
-      MathJax = {
-        "loader": {
-          "load": [
-            "[tex]/textmacros",
-            "output/chtml"
-          ]
-        },
-        "tex": {
-          "packages": {
-            "[+]": [
-              "textmacros"
-            ]
-          }
-        },
-        "svg": {
-          "fontCache": "global"
-        }
-      };
+      MathJax = {"loader":{"load":["[tex]/textmacros","output/chtml"]},"tex":{"packages":{"[+]":["textmacros"]}},"svg":{"fontCache":"global"}};
     </script>
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js">
       
@@ -43,118 +24,48 @@
         An outline of all sections included in this SRS is recorded here for easy reference.
       </p>
       <ul class="list">
-        <li>
-          <a href="#Sec:ToC">Table of Contents</a>
-        </li>
-        <li>
-          <a href="#Sec:RefMat">Reference Material</a><ul class="list">
-            <li>
-              <a href="#Sec:ToU">Table of Units</a>
-            </li>
-            <li>
-              <a href="#Sec:ToS">Table of Symbols</a>
-            </li>
-            <li>
-              <a href="#Sec:TAbbAcc">Abbreviations and Acronyms</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Intro">Introduction</a><ul class="list">
-            <li>
-              <a href="#Sec:DocPurpose">Purpose of Document</a>
-            </li>
-            <li>
-              <a href="#Sec:ReqsScope">Scope of Requirements</a>
-            </li>
-            <li>
-              <a href="#Sec:ReaderChars">Characteristics of Intended Reader</a>
-            </li>
-            <li>
-              <a href="#Sec:DocOrg">Organization of Document</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:GenSysDesc">General System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:SysContext">System Context</a>
-            </li>
-            <li>
-              <a href="#Sec:UserChars">User Characteristics</a>
-            </li>
-            <li>
-              <a href="#Sec:SysConstraints">System Constraints</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:ProbDesc">Problem Description</a><ul class="list">
-                <li>
-                  <a href="#Sec:TermDefs">Terminology and Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:PhysSyst">Physical System Description</a>
-                </li>
-                <li>
-                  <a href="#Sec:GoalStmt">Goal Statements</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
-                <li>
-                  <a href="#Sec:Assumps">Assumptions</a>
-                </li>
-                <li>
-                  <a href="#Sec:TMs">Theoretical Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:GDs">General Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:DDs">Data Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:IMs">Instance Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:DataConstraints">Data Constraints</a>
-                </li>
-                <li>
-                  <a href="#Sec:CorSolProps">Properties of a Correct Solution</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Requirements">Requirements</a><ul class="list">
-            <li>
-              <a href="#Sec:FRs">Functional Requirements</a>
-            </li>
-            <li>
-              <a href="#Sec:NFRs">Non-Functional Requirements</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:LCs">Likely Changes</a>
-        </li>
-        <li>
-          <a href="#Sec:UCs">Unlikely Changes</a>
-        </li>
-        <li>
-          <a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a>
-        </li>
-        <li>
-          <a href="#Sec:AuxConstants">Values of Auxiliary Constants</a>
-        </li>
-        <li>
-          <a href="#Sec:References">References</a>
-        </li>
+        <li><a href="#Sec:ToC">Table of Contents</a></li>
+        <li><a href="#Sec:RefMat">Reference Material</a><ul class="list">
+          <li><a href="#Sec:ToU">Table of Units</a></li>
+          <li><a href="#Sec:ToS">Table of Symbols</a></li>
+          <li><a href="#Sec:TAbbAcc">Abbreviations and Acronyms</a></li>
+        </ul></li>
+        <li><a href="#Sec:Intro">Introduction</a><ul class="list">
+          <li><a href="#Sec:DocPurpose">Purpose of Document</a></li>
+          <li><a href="#Sec:ReqsScope">Scope of Requirements</a></li>
+          <li><a href="#Sec:ReaderChars">Characteristics of Intended Reader</a></li>
+          <li><a href="#Sec:DocOrg">Organization of Document</a></li>
+        </ul></li>
+        <li><a href="#Sec:GenSysDesc">General System Description</a><ul class="list">
+          <li><a href="#Sec:SysContext">System Context</a></li>
+          <li><a href="#Sec:UserChars">User Characteristics</a></li>
+          <li><a href="#Sec:SysConstraints">System Constraints</a></li>
+        </ul></li>
+        <li><a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
+          <li><a href="#Sec:ProbDesc">Problem Description</a><ul class="list">
+            <li><a href="#Sec:TermDefs">Terminology and Definitions</a></li>
+            <li><a href="#Sec:PhysSyst">Physical System Description</a></li>
+            <li><a href="#Sec:GoalStmt">Goal Statements</a></li>
+          </ul></li>
+          <li><a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
+            <li><a href="#Sec:Assumps">Assumptions</a></li>
+            <li><a href="#Sec:TMs">Theoretical Models</a></li>
+            <li><a href="#Sec:GDs">General Definitions</a></li>
+            <li><a href="#Sec:DDs">Data Definitions</a></li>
+            <li><a href="#Sec:IMs">Instance Models</a></li>
+            <li><a href="#Sec:DataConstraints">Data Constraints</a></li>
+            <li><a href="#Sec:CorSolProps">Properties of a Correct Solution</a></li>
+          </ul></li>
+        </ul></li>
+        <li><a href="#Sec:Requirements">Requirements</a><ul class="list">
+          <li><a href="#Sec:FRs">Functional Requirements</a></li>
+          <li><a href="#Sec:NFRs">Non-Functional Requirements</a></li>
+        </ul></li>
+        <li><a href="#Sec:LCs">Likely Changes</a></li>
+        <li><a href="#Sec:UCs">Unlikely Changes</a></li>
+        <li><a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></li>
+        <li><a href="#Sec:AuxConstants">Values of Auxiliary Constants</a></li>
+        <li><a href="#Sec:References">References</a></li>
       </ul>
     </div>
     <div id="Sec:RefMat" class="section">
@@ -175,70 +86,34 @@
               <th>SI Name</th>
             </tr>
             <tr>
-              <td>
-                <em>°C</em>
-              </td>
-              <td>
-                temperature
-              </td>
-              <td>
-                centigrade
-              </td>
+              <td><em>°C</em></td>
+              <td>temperature</td>
+              <td>centigrade</td>
             </tr>
             <tr>
-              <td>
-                <em>J</em>
-              </td>
-              <td>
-                energy
-              </td>
-              <td>
-                joule
-              </td>
+              <td><em>J</em></td>
+              <td>energy</td>
+              <td>joule</td>
             </tr>
             <tr>
-              <td>
-                <em>kg</em>
-              </td>
-              <td>
-                mass
-              </td>
-              <td>
-                kilogram
-              </td>
+              <td><em>kg</em></td>
+              <td>mass</td>
+              <td>kilogram</td>
             </tr>
             <tr>
-              <td>
-                <em>m</em>
-              </td>
-              <td>
-                length
-              </td>
-              <td>
-                metre
-              </td>
+              <td><em>m</em></td>
+              <td>length</td>
+              <td>metre</td>
             </tr>
             <tr>
-              <td>
-                <em>s</em>
-              </td>
-              <td>
-                time
-              </td>
-              <td>
-                second
-              </td>
+              <td><em>s</em></td>
+              <td>time</td>
+              <td>second</td>
             </tr>
             <tr>
-              <td>
-                <em>W</em>
-              </td>
-              <td>
-                power
-              </td>
-              <td>
-                watt
-              </td>
+              <td><em>W</em></td>
+              <td>power</td>
+              <td>watt</td>
             </tr>
           </table>
           <p class="caption">
@@ -259,587 +134,269 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>C</sub></em>
-              </td>
-              <td>
-                Heating coil surface area
-              </td>
-              <td>
-                <em>m<sup>2</sup></em>
-              </td>
+              <td><em>A<sub>C</sub></em></td>
+              <td>Heating coil surface area</td>
+              <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>C</sub><sup>max</sup></em>
-              </td>
-              <td>
-                Maximum surface area of coil
-              </td>
-              <td>
-                <em>m<sup>2</sup></em>
-              </td>
+              <td><em>A<sub>C</sub><sup>max</sup></em></td>
+              <td>Maximum surface area of coil</td>
+              <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>in</sub></em>
-              </td>
-              <td>
-                Surface area over which heat is transferred in
-              </td>
-              <td>
-                <em>m<sup>2</sup></em>
-              </td>
+              <td><em>A<sub>in</sub></em></td>
+              <td>Surface area over which heat is transferred in</td>
+              <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>out</sub></em>
-              </td>
-              <td>
-                Surface area over which heat is transferred out
-              </td>
-              <td>
-                <em>m<sup>2</sup></em>
-              </td>
+              <td><em>A<sub>out</sub></em></td>
+              <td>Surface area over which heat is transferred out</td>
+              <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>tol</sub></em>
-              </td>
-              <td>
-                Absolute tolerance
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>A<sub>tol</sub></em></td>
+              <td>Absolute tolerance</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>AR<sub>max</sub></em>
-              </td>
-              <td>
-                Maximum aspect ratio
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>AR<sub>max</sub></em></td>
+              <td>Maximum aspect ratio</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>AR<sub>min</sub></em>
-              </td>
-              <td>
-                Minimum aspect ratio
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>AR<sub>min</sub></em></td>
+              <td>Minimum aspect ratio</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>C</em>
-              </td>
-              <td>
-                Specific heat capacity
-              </td>
-              <td>
-                <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>C</em></td>
+              <td>Specific heat capacity</td>
+              <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>C<sup>L</sup></em>
-              </td>
-              <td>
-                Specific heat capacity of a liquid
-              </td>
-              <td>
-                <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>C<sup>L</sup></em></td>
+              <td>Specific heat capacity of a liquid</td>
+              <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>C<sub>W</sub></em>
-              </td>
-              <td>
-                Specific heat capacity of water
-              </td>
-              <td>
-                <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>C<sub>W</sub></em></td>
+              <td>Specific heat capacity of water</td>
+              <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>C<sub>W</sub><sup>max</sup></em>
-              </td>
-              <td>
-                Maximum specific heat capacity of water
-              </td>
-              <td>
-                <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>C<sub>W</sub><sup>max</sup></em></td>
+              <td>Maximum specific heat capacity of water</td>
+              <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>C<sub>W</sub><sup>min</sup></em>
-              </td>
-              <td>
-                Minimum specific heat capacity of water
-              </td>
-              <td>
-                <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>C<sub>W</sub><sup>min</sup></em></td>
+              <td>Minimum specific heat capacity of water</td>
+              <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>D</em>
-              </td>
-              <td>
-                Diameter of tank
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>D</em></td>
+              <td>Diameter of tank</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>E</em>
-              </td>
-              <td>
-                Sensible heat
-              </td>
-              <td>
-                <em>J</em>
-              </td>
+              <td><em>E</em></td>
+              <td>Sensible heat</td>
+              <td><em>J</em></td>
             </tr>
             <tr>
-              <td>
-                <em>E<sub>W</sub></em>
-              </td>
-              <td>
-                Change in heat energy in the water
-              </td>
-              <td>
-                <em>J</em>
-              </td>
+              <td><em>E<sub>W</sub></em></td>
+              <td>Change in heat energy in the water</td>
+              <td><em>J</em></td>
             </tr>
             <tr>
-              <td>
-                <em>g</em>
-              </td>
-              <td>
-                Volumetric heat generation per unit volume
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>
-              </td>
+              <td><em>g</em></td>
+              <td>Volumetric heat generation per unit volume</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h</em>
-              </td>
-              <td>
-                Convective heat transfer coefficient
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h</em></td>
+              <td>Convective heat transfer coefficient</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>C</sub></em>
-              </td>
-              <td>
-                Convective heat transfer coefficient between coil and water
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h<sub>C</sub></em></td>
+              <td>Convective heat transfer coefficient between coil and water</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>C</sub><sup>max</sup></em>
-              </td>
-              <td>
-                Maximum convective heat transfer coefficient between coil and water
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h<sub>C</sub><sup>max</sup></em></td>
+              <td>Maximum convective heat transfer coefficient between coil and water</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>C</sub><sup>min</sup></em>
-              </td>
-              <td>
-                Minimum convective heat transfer coefficient between coil and water
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h<sub>C</sub><sup>min</sup></em></td>
+              <td>Minimum convective heat transfer coefficient between coil and water</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>L</em>
-              </td>
-              <td>
-                Length of tank
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>L</em></td>
+              <td>Length of tank</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>L<sub>max</sub></em>
-              </td>
-              <td>
-                Maximum length of tank
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>L<sub>max</sub></em></td>
+              <td>Maximum length of tank</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>L<sub>min</sub></em>
-              </td>
-              <td>
-                Minimum length of tank
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>L<sub>min</sub></em></td>
+              <td>Minimum length of tank</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m</em>
-              </td>
-              <td>
-                Mass
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m</em></td>
+              <td>Mass</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>W</sub></em>
-              </td>
-              <td>
-                Mass of water
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>W</sub></em></td>
+              <td>Mass of water</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em><b>n̂</b></em>
-              </td>
-              <td>
-                Normal vector
-              </td>
-              <td>
-                --
-              </td>
+              <td><em><b>n̂</b></em></td>
+              <td>Normal vector</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>q</em>
-              </td>
-              <td>
-                Heat flux
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
-              </td>
+              <td><em>q</em></td>
+              <td>Heat flux</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>q<sub>C</sub></em>
-              </td>
-              <td>
-                Heat flux into the water from the coil
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
-              </td>
+              <td><em>q<sub>C</sub></em></td>
+              <td>Heat flux into the water from the coil</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>q<sub>in</sub></em>
-              </td>
-              <td>
-                Heat flux input
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
-              </td>
+              <td><em>q<sub>in</sub></em></td>
+              <td>Heat flux input</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>q<sub>out</sub></em>
-              </td>
-              <td>
-                Heat flux output
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
-              </td>
+              <td><em>q<sub>out</sub></em></td>
+              <td>Heat flux output</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em><b>q</b></em>
-              </td>
-              <td>
-                Thermal flux vector
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
-              </td>
+              <td><em><b>q</b></em></td>
+              <td>Thermal flux vector</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>R<sub>tol</sub></em>
-              </td>
-              <td>
-                Relative tolerance
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>R<sub>tol</sub></em></td>
+              <td>Relative tolerance</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>S</em>
-              </td>
-              <td>
-                Surface
-              </td>
-              <td>
-                <em>m<sup>2</sup></em>
-              </td>
+              <td><em>S</em></td>
+              <td>Surface</td>
+              <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>T</em>
-              </td>
-              <td>
-                Temperature
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T</em></td>
+              <td>Temperature</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>ΔT</em>
-              </td>
-              <td>
-                Change in temperature
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>ΔT</em></td>
+              <td>Change in temperature</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>T<sub>C</sub></em>
-              </td>
-              <td>
-                Temperature of the heating coil
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T<sub>C</sub></em></td>
+              <td>Temperature of the heating coil</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>T<sub>env</sub></em>
-              </td>
-              <td>
-                Temperature of the environment
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T<sub>env</sub></em></td>
+              <td>Temperature of the environment</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>T<sub>init</sub></em>
-              </td>
-              <td>
-                Initial temperature
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T<sub>init</sub></em></td>
+              <td>Initial temperature</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>T<sub>W</sub></em>
-              </td>
-              <td>
-                Temperature of the water
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T<sub>W</sub></em></td>
+              <td>Temperature of the water</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t</em>
-              </td>
-              <td>
-                Time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t</em></td>
+              <td>Time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>final</sub></em>
-              </td>
-              <td>
-                Final time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>final</sub></em></td>
+              <td>Final time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>final</sub><sup>max</sup></em>
-              </td>
-              <td>
-                Maximum final time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>final</sub><sup>max</sup></em></td>
+              <td>Maximum final time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>step</sub></em>
-              </td>
-              <td>
-                Time step for simulation
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>step</sub></em></td>
+              <td>Time step for simulation</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>V</em>
-              </td>
-              <td>
-                Volume
-              </td>
-              <td>
-                <em>m<sup>3</sup></em>
-              </td>
+              <td><em>V</em></td>
+              <td>Volume</td>
+              <td><em>m<sup>3</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>V<sub>tank</sub></em>
-              </td>
-              <td>
-                Volume of the cylindrical tank
-              </td>
-              <td>
-                <em>m<sup>3</sup></em>
-              </td>
+              <td><em>V<sub>tank</sub></em></td>
+              <td>Volume of the cylindrical tank</td>
+              <td><em>m<sup>3</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>V<sub>W</sub></em>
-              </td>
-              <td>
-                Volume of water
-              </td>
-              <td>
-                <em>m<sup>3</sup></em>
-              </td>
+              <td><em>V<sub>W</sub></em></td>
+              <td>Volume of water</td>
+              <td><em>m<sup>3</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>π</em>
-              </td>
-              <td>
-                Ratio of circumference to diameter for any circle
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>π</em></td>
+              <td>Ratio of circumference to diameter for any circle</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>ρ</em>
-              </td>
-              <td>
-                Density
-              </td>
-              <td>
-                <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-              </td>
+              <td><em>ρ</em></td>
+              <td>Density</td>
+              <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>ρ<sub>W</sub></em>
-              </td>
-              <td>
-                Density of water
-              </td>
-              <td>
-                <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-              </td>
+              <td><em>ρ<sub>W</sub></em></td>
+              <td>Density of water</td>
+              <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>ρ<sub>W</sub><sup>max</sup></em>
-              </td>
-              <td>
-                Maximum density of water
-              </td>
-              <td>
-                <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-              </td>
+              <td><em>ρ<sub>W</sub><sup>max</sup></em></td>
+              <td>Maximum density of water</td>
+              <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>ρ<sub>W</sub><sup>min</sup></em>
-              </td>
-              <td>
-                Minimum density of water
-              </td>
-              <td>
-                <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-              </td>
+              <td><em>ρ<sub>W</sub><sup>min</sup></em></td>
+              <td>Minimum density of water</td>
+              <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>τ<sub>W</sub></em>
-              </td>
-              <td>
-                ODE parameter for water related to decay time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>τ<sub>W</sub></em></td>
+              <td>ODE parameter for water related to decay time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>∇</em>
-              </td>
-              <td>
-                Gradient
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>∇</em></td>
+              <td>Gradient</td>
+              <td>--</td>
             </tr>
           </table>
           <p class="caption">
@@ -856,124 +413,64 @@
               <th>Full Form</th>
             </tr>
             <tr>
-              <td>
-                A
-              </td>
-              <td>
-                Assumption
-              </td>
+              <td>A</td>
+              <td>Assumption</td>
             </tr>
             <tr>
-              <td>
-                DD
-              </td>
-              <td>
-                Data Definition
-              </td>
+              <td>DD</td>
+              <td>Data Definition</td>
             </tr>
             <tr>
-              <td>
-                GD
-              </td>
-              <td>
-                General Definition
-              </td>
+              <td>GD</td>
+              <td>General Definition</td>
             </tr>
             <tr>
-              <td>
-                GS
-              </td>
-              <td>
-                Goal Statement
-              </td>
+              <td>GS</td>
+              <td>Goal Statement</td>
             </tr>
             <tr>
-              <td>
-                IM
-              </td>
-              <td>
-                Instance Model
-              </td>
+              <td>IM</td>
+              <td>Instance Model</td>
             </tr>
             <tr>
-              <td>
-                LC
-              </td>
-              <td>
-                Likely Change
-              </td>
+              <td>LC</td>
+              <td>Likely Change</td>
             </tr>
             <tr>
-              <td>
-                ODE
-              </td>
-              <td>
-                Ordinary Differential Equation
-              </td>
+              <td>ODE</td>
+              <td>Ordinary Differential Equation</td>
             </tr>
             <tr>
-              <td>
-                PS
-              </td>
-              <td>
-                Physical System Description
-              </td>
+              <td>PS</td>
+              <td>Physical System Description</td>
             </tr>
             <tr>
-              <td>
-                R
-              </td>
-              <td>
-                Requirement
-              </td>
+              <td>R</td>
+              <td>Requirement</td>
             </tr>
             <tr>
-              <td>
-                RefBy
-              </td>
-              <td>
-                Referenced by
-              </td>
+              <td>RefBy</td>
+              <td>Referenced by</td>
             </tr>
             <tr>
-              <td>
-                Refname
-              </td>
-              <td>
-                Reference Name
-              </td>
+              <td>Refname</td>
+              <td>Reference Name</td>
             </tr>
             <tr>
-              <td>
-                SRS
-              </td>
-              <td>
-                Software Requirements Specification
-              </td>
+              <td>SRS</td>
+              <td>Software Requirements Specification</td>
             </tr>
             <tr>
-              <td>
-                TM
-              </td>
-              <td>
-                Theoretical Model
-              </td>
+              <td>TM</td>
+              <td>Theoretical Model</td>
             </tr>
             <tr>
-              <td>
-                UC
-              </td>
-              <td>
-                Unlikely Change
-              </td>
+              <td>UC</td>
+              <td>Unlikely Change</td>
             </tr>
             <tr>
-              <td>
-                Uncert.
-              </td>
-              <td>
-                Typical Uncertainty
-              </td>
+              <td>Uncert.</td>
+              <td>Typical Uncertainty</td>
             </tr>
           </table>
           <p class="caption">
@@ -1041,29 +538,15 @@
           <span title="solar water heating system with no phase change material">SWHSNoPCM</span> is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
         </p>
         <ul class="list">
-          <li>
-            User Responsibilities:<ul class="list">
-              <li>
-                Provide the input data to the system, ensuring no errors in the data entry
-              </li>
-              <li>
-                Take care that consistent units are used for input variables
-              </li>
-            </ul>
-          </li>
-          <li>
-            <span title="solar water heating system with no phase change material">SWHSNoPCM</span> Responsibilities:<ul class="list">
-              <li>
-                Detect data type mismatch, such as a string of characters instead of a floating point number
-              </li>
-              <li>
-                Determine if the inputs satisfy the required physical and software constraints
-              </li>
-              <li>
-                Calculate the required outputs
-              </li>
-            </ul>
-          </li>
+          <li>User Responsibilities:<ul class="list">
+            <li>Provide the input data to the system, ensuring no errors in the data entry</li>
+            <li>Take care that consistent units are used for input variables</li>
+          </ul></li>
+          <li><span title="solar water heating system with no phase change material">SWHSNoPCM</span> Responsibilities:<ul class="list">
+            <li>Detect data type mismatch, such as a string of characters instead of a floating point number</li>
+            <li>Determine if the inputs satisfy the required physical and software constraints</li>
+            <li>Calculate the required outputs</li>
+          </ul></li>
         </ul>
       </div>
       <div id="Sec:UserChars" class="subsection">
@@ -1095,18 +578,10 @@
             This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
           </p>
           <ul class="list">
-            <li>
-              Heat flux: The rate of thermal energy transfer through a given surface per unit time.
-            </li>
-            <li>
-              Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
-            </li>
-            <li>
-              Thermal conduction: The transfer of heat energy through a substance.
-            </li>
-            <li>
-              Transient: Changing with time.
-            </li>
+            <li>Heat flux: The rate of thermal energy transfer through a given surface per unit time.</li>
+            <li>Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.</li>
+            <li>Thermal conduction: The transfer of heat energy through a substance.</li>
+            <li>Transient: Changing with time.</li>
           </ul>
         </div>
         <div id="Sec:PhysSyst" class="subsubsection">
@@ -1207,211 +682,139 @@
           <table id="TM:consThermE" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:consThermE</b>
-              </td>
+              <td><b>TM:consThermE</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Conservation of thermal energy
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Conservation of thermal energy
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[-∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]
-              </td>
+              <td>\[-∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>∇</em> is the gradient (Unitless)
-                  </li>
-                  <li>
-                    <em><b>q</b></em> is the thermal flux vector (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)
-                  </li>
-                  <li>
-                    <em>ρ</em> is the density (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)
-                  </li>
-                  <li>
-                    <em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>T</em> is the temperature (<em>°C</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>∇</em> is the gradient (Unitless)</li>
+                <li><em><b>q</b></em> is the thermal flux vector (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)</li>
+                <li><em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)</li>
+                <li><em>ρ</em> is the density (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)</li>
+                <li><em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em>T</em> is the temperature (<em>°C</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The above equation gives the law of conservation of energy for transient heat transfer in a given material.
-                </p><p class="paragraph">
-                  For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href="#assumpTEO">A:Thermal-Energy-Only</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+              </p><p class="paragraph">
+                For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href="#assumpTEO">A:Thermal-Energy-Only</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#GD:rocTempSimp">GD:rocTempSimp</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#GD:rocTempSimp">GD:rocTempSimp</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:sensHtE" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:sensHtE</b>
-              </td>
+              <td><b>TM:sensHtE</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Sensible heat energy (no state change)
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Sensible heat energy (no state change)
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[E={C^{\text{L}}}\,m\,ΔT\]
-              </td>
+              <td>\[E={C^{\text{L}}}\,m\,ΔT\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>E</em> is the sensible heat (<em>J</em>)
-                  </li>
-                  <li>
-                    <em>C<sup>L</sup></em> is the specific heat capacity of a liquid (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m</em> is the mass (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>ΔT</em> is the change in temperature (<em>°C</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>E</em> is the sensible heat (<em>J</em>)</li>
+                <li><em>C<sup>L</sup></em> is the specific heat capacity of a liquid (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>m</em> is the mass (<em>kg</em>)</li>
+                <li><em>ΔT</em> is the change in temperature (<em>°C</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>E</em> occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in <a href="#assumpWAL">A:Water-Always-Liquid</a>.
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>E</em> occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in <a href="#assumpWAL">A:Water-Always-Liquid</a>.
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:heatEInWtr">IM:heatEInWtr</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:heatEInWtr">IM:heatEInWtr</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:nwtnCooling" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:nwtnCooling</b>
-              </td>
+              <td><b>TM:nwtnCooling</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Newton&#39;s law of cooling
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Newton&#39;s law of cooling
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[q\left(t\right)=h\,ΔT\left(t\right)\]
-              </td>
+              <td>\[q\left(t\right)=h\,ΔT\left(t\right)\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>q</em> is the heat flux (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>h</em> is the convective heat transfer coefficient (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>ΔT</em> is the change in temperature (<em>°C</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>q</em> is the heat flux (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em>h</em> is the convective heat transfer coefficient (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>ΔT</em> is the change in temperature (<em>°C</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  Newton&#39;s law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
-                </p><p class="paragraph">
-                  <em>h</em> is assumed to be independent of <em>T</em> (from <a href="#assumpHTCC">A:Heat-Transfer-Coeffs-Constant</a>).
-                </p><p class="paragraph">
-                  <em>ΔT(t) = T(t)−T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object.
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Newton&#39;s law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+              </p><p class="paragraph">
+                <em>h</em> is assumed to be independent of <em>T</em> (from <a href="#assumpHTCC">A:Heat-Transfer-Coeffs-Constant</a>).
+              </p><p class="paragraph">
+                <em>ΔT(t) = T(t)−T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object.
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#incroperaEtAl2007">incroperaEtAl2007</a>(pg. 8)
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#incroperaEtAl2007">incroperaEtAl2007</a>(pg. 8)
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>
+              </p></td>
             </tr>
           </table>
         </div>
@@ -1423,76 +826,44 @@
           <table id="GD:rocTempSimp" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>GD:rocTempSimp</b>
-              </td>
+              <td><b>GD:rocTempSimp</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Simplified rate of change of temperature
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Simplified rate of change of temperature
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
-              </td>
+              <td>\[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>m</em> is the mass (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>T</em> is the temperature (<em>°C</em>)
-                  </li>
-                  <li>
-                    <em>q<sub>in</sub></em> is the heat flux input (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>A<sub>in</sub></em> is the surface area over which heat is transferred in (<em>m<sup>2</sup></em>)
-                  </li>
-                  <li>
-                    <em>q<sub>out</sub></em> is the heat flux output (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>A<sub>out</sub></em> is the surface area over which heat is transferred out (<em>m<sup>2</sup></em>)
-                  </li>
-                  <li>
-                    <em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)
-                  </li>
-                  <li>
-                    <em>V</em> is the volume (<em>m<sup>3</sup></em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>m</em> is the mass (<em>kg</em>)</li>
+                <li><em>C</em> is the specific heat capacity (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em>T</em> is the temperature (<em>°C</em>)</li>
+                <li><em>q<sub>in</sub></em> is the heat flux input (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)</li>
+                <li><em>A<sub>in</sub></em> is the surface area over which heat is transferred in (<em>m<sup>2</sup></em>)</li>
+                <li><em>q<sub>out</sub></em> is the heat flux output (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)</li>
+                <li><em>A<sub>out</sub></em> is the surface area over which heat is transferred out (<em>m<sup>2</sup></em>)</li>
+                <li><em>g</em> is the volumetric heat generation per unit volume (<em>\(\frac{\text{W}}{\text{m}^{3}}\)</em>)</li>
+                <li><em>V</em> is the volume (<em>m<sup>3</sup></em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#GD:rocTempSimp">GD:rocTempSimp</a> and <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#GD:rocTempSimp">GD:rocTempSimp</a> and <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>
+              </p></td>
             </tr>
           </table>
           <div id="GD:rocTempSimpDeriv" class="subsubsubsection">
@@ -1521,79 +892,53 @@
           <table id="GD:htFluxWaterFromCoil" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>GD:htFluxWaterFromCoil</b>
-              </td>
+              <td><b>GD:htFluxWaterFromCoil</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Heat flux into the water from the coil
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Heat flux into the water from the coil
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
-              </td>
+              <td>\[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>q<sub>C</sub></em> is the heat flux into the water from the coil (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>C</sub></em> is the temperature of the heating coil (<em>°C</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>W</sub></em> is the temperature of the water (<em>°C</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>q<sub>C</sub></em> is the heat flux into the water from the coil (<em>\(\frac{\text{W}}{\text{m}^{2}}\)</em>)</li>
+                <li><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>T<sub>C</sub></em> is the temperature of the heating coil (<em>°C</em>)</li>
+                <li><em>T<sub>W</sub></em> is the temperature of the water (<em>°C</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>q<sub>C</sub></em> is found by assuming that Newton&#39;s law of cooling applies (<a href="#assumpLCCCW">A:Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href="#TM:nwtnCooling">TM:nwtnCooling</a>) is used on the surface of the heating coil.
-                </p><p class="paragraph">
-                  <a href="#assumpTHCCoT">A:Temp-Heating-Coil-Constant-over-Time</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>q<sub>C</sub></em> is found by assuming that Newton&#39;s law of cooling applies (<a href="#assumpLCCCW">A:Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href="#TM:nwtnCooling">TM:nwtnCooling</a>) is used on the surface of the heating coil.
+              </p><p class="paragraph">
+                <a href="#assumpTHCCoT">A:Temp-Heating-Coil-Constant-over-Time</a>
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#koothoor2013">koothoor2013</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#koothoor2013">koothoor2013</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>
+              </p></td>
             </tr>
           </table>
         </div>
@@ -1605,295 +950,201 @@
           <table id="DD:waterMass" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:waterMass</b>
-              </td>
+              <td><b>DD:waterMass</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Mass of water
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Mass of water
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>kg</em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>kg</em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}\]
-              </td>
+              <td>\[{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)
-                  </li>
-                  <li>
-                    <em>ρ<sub>W</sub></em> is the density of water (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
+                <li><em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)</li>
+                <li><em>ρ<sub>W</sub></em> is the density of water (<em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#findMass">FR:Find-Mass</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#findMass">FR:Find-Mass</a>
+              </p></td>
             </tr>
           </table>
           <table id="DD:waterVolume_nopcm" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:waterVolume_nopcm</b>
-              </td>
+              <td><b>DD:waterVolume_nopcm</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Volume of water
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Volume of water
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>V<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>V<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sup>3</sup></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sup>3</sup></em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{V_{\text{W}}}={V_{\text{tank}}}\]
-              </td>
+              <td>\[{V_{\text{W}}}={V_{\text{tank}}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)
-                  </li>
-                  <li>
-                    <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>V<sub>W</sub></em> is the volume of water (<em>m<sup>3</sup></em>)</li>
+                <li><em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  Based on <a href="#assumpVCN">A:Volume-Coil-Negligible</a>. <em>V<sub>tank</sub></em> is defined in <a href="#DD:tankVolume">DD:tankVolume</a>.
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Based on <a href="#assumpVCN">A:Volume-Coil-Negligible</a>. <em>V<sub>tank</sub></em> is defined in <a href="#DD:tankVolume">DD:tankVolume</a>.
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#findMass">FR:Find-Mass</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#findMass">FR:Find-Mass</a>
+              </p></td>
             </tr>
           </table>
           <table id="DD:tankVolume" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:tankVolume</b>
-              </td>
+              <td><b>DD:tankVolume</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Volume of the cylindrical tank
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Volume of the cylindrical tank
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>V<sub>tank</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>V<sub>tank</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sup>3</sup></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sup>3</sup></em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L\]
-              </td>
+              <td>\[{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)
-                  </li>
-                  <li>
-                    <em>π</em> is the ratio of circumference to diameter for any circle (Unitless)
-                  </li>
-                  <li>
-                    <em>D</em> is the diameter of tank (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>L</em> is the length of tank (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>V<sub>tank</sub></em> is the volume of the cylindrical tank (<em>m<sup>3</sup></em>)</li>
+                <li><em>π</em> is the ratio of circumference to diameter for any circle (Unitless)</li>
+                <li><em>D</em> is the diameter of tank (<em>m</em>)</li>
+                <li><em>L</em> is the length of tank (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#findMass">FR:Find-Mass</a> and <a href="#DD:waterVolume_nopcm">DD:waterVolume_nopcm</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#findMass">FR:Find-Mass</a> and <a href="#DD:waterVolume_nopcm">DD:waterVolume_nopcm</a>
+              </p></td>
             </tr>
           </table>
           <table id="DD:balanceDecayRate" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:balanceDecayRate</b>
-              </td>
+              <td><b>DD:balanceDecayRate</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  ODE parameter for water related to decay time
-                </p>
-              </td>
+              <td><p class="paragraph">
+                ODE parameter for water related to decay time
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>τ<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>τ<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>s</em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>s</em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]
-              </td>
+              <td>\[{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>A<sub>C</sub></em> is the heating coil surface area (<em>m<sup>2</sup></em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)</li>
+                <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
+                <li><em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>A<sub>C</sub></em> is the heating coil surface area (<em>m<sup>2</sup></em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#koothoor2013">koothoor2013</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#koothoor2013">koothoor2013</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="#outputInputDerivVals">FR:Output-Input-Derived-Values</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="#outputInputDerivVals">FR:Output-Input-Derived-Values</a>
+              </p></td>
             </tr>
           </table>
         </div>
@@ -1908,39 +1159,29 @@
           <table id="IM:eBalanceOnWtr" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>IM:eBalanceOnWtr</b>
-              </td>
+              <td><b>IM:eBalanceOnWtr</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Energy balance on water to find the temperature of the water
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Energy balance on water to find the temperature of the water
+              </p></td>
             </tr>
             <tr>
               <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>T<sub>C</sub></em>, <em>T<sub>init</sub></em>, <em>t<sub>final</sub></em>, <em>A<sub>C</sub></em>, <em>h<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>T<sub>C</sub></em>, <em>T<sub>init</sub></em>, <em>t<sub>final</sub></em>, <em>A<sub>C</sub></em>, <em>h<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Output</th>
-              <td>
-                <p class="paragraph">
-                  <em>T<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>T<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Input Constraints</th>
-              <td>
-                \[{T_{\text{C}}}\geq{}{T_{\text{init}}}\]
-              </td>
+              <td>\[{T_{\text{C}}}\geq{}{T_{\text{init}}}\]</td>
             </tr>
             <tr>
               <th>Output Constraints</th>
@@ -1948,54 +1189,36 @@
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}}\,{{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}}\,{T_{\text{C}}}\]
-              </td>
+              <td>\[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}}\,{{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}}\,{T_{\text{C}}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>W</sub></em> is the temperature of the water (<em>°C</em>)
-                  </li>
-                  <li>
-                    <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>C</sub></em> is the temperature of the heating coil (<em>°C</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em>T<sub>W</sub></em> is the temperature of the water (<em>°C</em>)</li>
+                <li><em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (<em>s</em>)</li>
+                <li><em>T<sub>C</sub></em> is the temperature of the heating coil (<em>°C</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>τ<sub>W</sub></em> is calculated from <a href="#DD:balanceDecayRate">DD:balanceDecayRate</a>.
-                </p><p class="paragraph">
-                  The above equation applies as long as the water is in liquid form, <em>0 &lt; T<sub>W</sub> &lt; 100</em> (<em>°C</em>) where <em>0</em> (<em>°C</em>) and <em>100</em> (<em>°C</em>) are the melting and boiling point temperatures of water, respectively (<a href="#assumpWAL">A:Water-Always-Liquid</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>τ<sub>W</sub></em> is calculated from <a href="#DD:balanceDecayRate">DD:balanceDecayRate</a>.
+              </p><p class="paragraph">
+                The above equation applies as long as the water is in liquid form, <em>0 &lt; T<sub>W</sub> &lt; 100</em> (<em>°C</em>) where <em>0</em> (<em>°C</em>) and <em>100</em> (<em>°C</em>) are the melting and boiling point temperatures of water, respectively (<a href="#assumpWAL">A:Water-Always-Liquid</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#koothoor2013">koothoor2013</a>(with PCM removed)
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#koothoor2013">koothoor2013</a>(with PCM removed)
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#unlikeChgNIHG">UC:No-Internal-Heat-Generation</a>, <a href="#outputValues">FR:Output-Values</a>, <a href="#findMass">FR:Find-Mass</a>, and <a href="#calcValues">FR:Calculate-Values</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#unlikeChgNIHG">UC:No-Internal-Heat-Generation</a>, <a href="#outputValues">FR:Output-Values</a>, <a href="#findMass">FR:Find-Mass</a>, and <a href="#calcValues">FR:Calculate-Values</a>
+              </p></td>
             </tr>
           </table>
           <div id="IM:eBalanceOnWtrDeriv" class="subsubsubsection">
@@ -2020,33 +1243,25 @@
           <table id="IM:heatEInWtr" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>IM:heatEInWtr</b>
-              </td>
+              <td><b>IM:heatEInWtr</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Heat energy in the water
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Heat energy in the water
+              </p></td>
             </tr>
             <tr>
               <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>T<sub>init</sub></em>, <em>m<sub>W</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>T<sub>init</sub></em>, <em>m<sub>W</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Output</th>
-              <td>
-                <p class="paragraph">
-                  <em>E<sub>W</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>E<sub>W</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Input Constraints</th>
@@ -2058,62 +1273,40 @@
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
-              </td>
+              <td>\[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>E<sub>W</sub></em> is the change in heat energy in the water (<em>J</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>W</sub></em> is the temperature of the water (<em>°C</em>)
-                  </li>
-                  <li>
-                    <em>T<sub>init</sub></em> is the initial temperature (<em>°C</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>E<sub>W</sub></em> is the change in heat energy in the water (<em>J</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em>C<sub>W</sub></em> is the specific heat capacity of water (<em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>m<sub>W</sub></em> is the mass of water (<em>kg</em>)</li>
+                <li><em>T<sub>W</sub></em> is the temperature of the water (<em>°C</em>)</li>
+                <li><em>T<sub>init</sub></em> is the initial temperature (<em>°C</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The above equation is derived using <a href="#TM:sensHtE">TM:sensHtE</a>.
-                </p><p class="paragraph">
-                  The change in temperature is the difference between the temperature at time <em>t</em> (<em>s</em>), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (<em>°C</em>).
-                </p><p class="paragraph">
-                  This equation applies as long as <em>0 &lt; T<sub>W</sub> &lt; 100</em><em>°C</em> (<a href="#assumpWAL">A:Water-Always-Liquid</a>, <a href="#assumpAPT">A:Atmospheric-Pressure-Tank</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                The above equation is derived using <a href="#TM:sensHtE">TM:sensHtE</a>.
+              </p><p class="paragraph">
+                The change in temperature is the difference between the temperature at time <em>t</em> (<em>s</em>), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (<em>°C</em>).
+              </p><p class="paragraph">
+                This equation applies as long as <em>0 &lt; T<sub>W</sub> &lt; 100</em><em>°C</em> (<a href="#assumpWAL">A:Water-Always-Liquid</a>, <a href="#assumpAPT">A:Atmospheric-Pressure-Tank</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#koothoor2013">koothoor2013</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#koothoor2013">koothoor2013</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#outputValues">FR:Output-Values</a> and <a href="#calcValues">FR:Calculate-Values</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#outputValues">FR:Output-Values</a> and <a href="#calcValues">FR:Calculate-Values</a>
+              </p></td>
             </tr>
           </table>
         </div>
@@ -2132,174 +1325,74 @@
                 <th><span title="typical uncertainty">Uncert.</span></th>
               </tr>
               <tr>
-                <td>
-                  <em>A<sub>C</sub></em>
-                </td>
-                <td>
-                  <em>A<sub>C</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>A<sub>C</sub> ≤ A<sub>C</sub><sup>max</sup></em>
-                </td>
-                <td>
-                  <em>0.12</em> <em>m<sup>2</sup></em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>A<sub>C</sub></em></td>
+                <td><em>A<sub>C</sub> &gt; 0</em></td>
+                <td><em>A<sub>C</sub> ≤ A<sub>C</sub><sup>max</sup></em></td>
+                <td><em>0.12</em> <em>m<sup>2</sup></em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>C<sub>W</sub></em>
-                </td>
-                <td>
-                  <em>C<sub>W</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>C<sub>W</sub><sup>min</sup> &lt; C<sub>W</sub> &lt; C<sub>W</sub><sup>max</sup></em>
-                </td>
-                <td>
-                  <em>4186</em> <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>C<sub>W</sub></em></td>
+                <td><em>C<sub>W</sub> &gt; 0</em></td>
+                <td><em>C<sub>W</sub><sup>min</sup> &lt; C<sub>W</sub> &lt; C<sub>W</sub><sup>max</sup></em></td>
+                <td><em>4186</em> <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>D</em>
-                </td>
-                <td>
-                  <em>D &gt; 0</em>
-                </td>
-                <td>
-                  <em>AR<sub>min</sub> ≤ D ≤ AR<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>0.412</em> <em>m</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>D</em></td>
+                <td><em>D &gt; 0</em></td>
+                <td><em>AR<sub>min</sub> ≤ D ≤ AR<sub>max</sub></em></td>
+                <td><em>0.412</em> <em>m</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>h<sub>C</sub></em>
-                </td>
-                <td>
-                  <em>h<sub>C</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>h<sub>C</sub><sup>min</sup> ≤ h<sub>C</sub> ≤ h<sub>C</sub><sup>max</sup></em>
-                </td>
-                <td>
-                  <em>1000</em> <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>h<sub>C</sub></em></td>
+                <td><em>h<sub>C</sub> &gt; 0</em></td>
+                <td><em>h<sub>C</sub><sup>min</sup> ≤ h<sub>C</sub> ≤ h<sub>C</sub><sup>max</sup></em></td>
+                <td><em>1000</em> <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>L</em>
-                </td>
-                <td>
-                  <em>L &gt; 0</em>
-                </td>
-                <td>
-                  <em>L<sub>min</sub> ≤ L ≤ L<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>1.5</em> <em>m</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>L</em></td>
+                <td><em>L &gt; 0</em></td>
+                <td><em>L<sub>min</sub> ≤ L ≤ L<sub>max</sub></em></td>
+                <td><em>1.5</em> <em>m</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>T<sub>C</sub></em>
-                </td>
-                <td>
-                  <em>0 &lt; T<sub>C</sub> &lt; 100</em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>50</em> <em>°C</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>T<sub>C</sub></em></td>
+                <td><em>0 &lt; T<sub>C</sub> &lt; 100</em></td>
+                <td>--</td>
+                <td><em>50</em> <em>°C</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>T<sub>init</sub></em>
-                </td>
-                <td>
-                  <em>0 &lt; T<sub>init</sub> &lt; 100</em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>40</em> <em>°C</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>T<sub>init</sub></em></td>
+                <td><em>0 &lt; T<sub>init</sub> &lt; 100</em></td>
+                <td>--</td>
+                <td><em>40</em> <em>°C</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>t<sub>final</sub></em>
-                </td>
-                <td>
-                  <em>t<sub>final</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>t<sub>final</sub> &lt; t<sub>final</sub><sup>max</sup></em>
-                </td>
-                <td>
-                  <em>50000</em> <em>s</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>t<sub>final</sub></em></td>
+                <td><em>t<sub>final</sub> &gt; 0</em></td>
+                <td><em>t<sub>final</sub> &lt; t<sub>final</sub><sup>max</sup></em></td>
+                <td><em>50000</em> <em>s</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>t<sub>step</sub></em>
-                </td>
-                <td>
-                  <em>0 &lt; t<sub>step</sub> &lt; t<sub>final</sub></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>0.01</em> <em>s</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>t<sub>step</sub></em></td>
+                <td><em>0 &lt; t<sub>step</sub> &lt; t<sub>final</sub></em></td>
+                <td>--</td>
+                <td><em>0.01</em> <em>s</em></td>
+                <td>10<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>ρ<sub>W</sub></em>
-                </td>
-                <td>
-                  <em>ρ<sub>W</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>ρ<sub>W</sub><sup>min</sup> &lt; ρ<sub>W</sub> ≤ ρ<sub>W</sub><sup>max</sup></em>
-                </td>
-                <td>
-                  <em>1000</em> <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-                </td>
-                <td>
-                  10<em>%</em>
-                </td>
+                <td><em>ρ<sub>W</sub></em></td>
+                <td><em>ρ<sub>W</sub> &gt; 0</em></td>
+                <td><em>ρ<sub>W</sub><sup>min</sup> &lt; ρ<sub>W</sub> ≤ ρ<sub>W</sub><sup>max</sup></em></td>
+                <td><em>1000</em> <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
+                <td>10<em>%</em></td>
               </tr>
             </table>
             <p class="caption">
@@ -2319,20 +1412,12 @@
                 <th>Physical Constraints</th>
               </tr>
               <tr>
-                <td>
-                  <em>T<sub>W</sub></em>
-                </td>
-                <td>
-                  <em>T<sub>init</sub> ≤ T<sub>W</sub> ≤ T<sub>C</sub></em>
-                </td>
+                <td><em>T<sub>W</sub></em></td>
+                <td><em>T<sub>init</sub> ≤ T<sub>W</sub> ≤ T<sub>C</sub></em></td>
               </tr>
               <tr>
-                <td>
-                  <em>E<sub>W</sub></em>
-                </td>
-                <td>
-                  <em>E<sub>W</sub> ≥ 0</em>
-                </td>
+                <td><em>E<sub>W</sub></em></td>
+                <td><em>E<sub>W</sub> ≥ 0</em></td>
               </tr>
             </table>
             <p class="caption">
@@ -2380,147 +1465,69 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>C</sub></em>
-              </td>
-              <td>
-                Heating coil surface area
-              </td>
-              <td>
-                <em>m<sup>2</sup></em>
-              </td>
+              <td><em>A<sub>C</sub></em></td>
+              <td>Heating coil surface area</td>
+              <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
-              <td>
-                <em>A<sub>tol</sub></em>
-              </td>
-              <td>
-                Absolute tolerance
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>A<sub>tol</sub></em></td>
+              <td>Absolute tolerance</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>C<sub>W</sub></em>
-              </td>
-              <td>
-                Specific heat capacity of water
-              </td>
-              <td>
-                <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>C<sub>W</sub></em></td>
+              <td>Specific heat capacity of water</td>
+              <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>D</em>
-              </td>
-              <td>
-                Diameter of tank
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>D</em></td>
+              <td>Diameter of tank</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>E<sub>W</sub></em>
-              </td>
-              <td>
-                Change in heat energy in the water
-              </td>
-              <td>
-                <em>J</em>
-              </td>
+              <td><em>E<sub>W</sub></em></td>
+              <td>Change in heat energy in the water</td>
+              <td><em>J</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>C</sub></em>
-              </td>
-              <td>
-                Convective heat transfer coefficient between coil and water
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h<sub>C</sub></em></td>
+              <td>Convective heat transfer coefficient between coil and water</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>L</em>
-              </td>
-              <td>
-                Length of tank
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>L</em></td>
+              <td>Length of tank</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>R<sub>tol</sub></em>
-              </td>
-              <td>
-                Relative tolerance
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>R<sub>tol</sub></em></td>
+              <td>Relative tolerance</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>T<sub>C</sub></em>
-              </td>
-              <td>
-                Temperature of the heating coil
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T<sub>C</sub></em></td>
+              <td>Temperature of the heating coil</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>T<sub>init</sub></em>
-              </td>
-              <td>
-                Initial temperature
-              </td>
-              <td>
-                <em>°C</em>
-              </td>
+              <td><em>T<sub>init</sub></em></td>
+              <td>Initial temperature</td>
+              <td><em>°C</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>final</sub></em>
-              </td>
-              <td>
-                Final time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>final</sub></em></td>
+              <td>Final time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>step</sub></em>
-              </td>
-              <td>
-                Time step for simulation
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>step</sub></em></td>
+              <td>Time step for simulation</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>ρ<sub>W</sub></em>
-              </td>
-              <td>
-                Density of water
-              </td>
-              <td>
-                <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-              </td>
+              <td><em>ρ<sub>W</sub></em></td>
+              <td>Density of water</td>
+              <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
           </table>
           <p class="caption">
@@ -2611,9 +1618,7 @@
             <th><a href="#assumpVCN">A:Volume-Coil-Negligible</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpTEO">A:Thermal-Energy-Only</a>
-            </td>
+            <td><a href="#assumpTEO">A:Thermal-Energy-Only</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2630,9 +1635,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpHTCC">A:Heat-Transfer-Coeffs-Constant</a>
-            </td>
+            <td><a href="#assumpHTCC">A:Heat-Transfer-Coeffs-Constant</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2649,9 +1652,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpCWTAT">A:Constant-Water-Temp-Across-Tank</a>
-            </td>
+            <td><a href="#assumpCWTAT">A:Constant-Water-Temp-Across-Tank</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2668,9 +1669,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpDWCoW">A:Density-Water-Constant-over-Volume</a>
-            </td>
+            <td><a href="#assumpDWCoW">A:Density-Water-Constant-over-Volume</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2687,9 +1686,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpSHECoW">A:Specific-Heat-Energy-Constant-over-Volume</a>
-            </td>
+            <td><a href="#assumpSHECoW">A:Specific-Heat-Energy-Constant-over-Volume</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2706,9 +1703,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpLCCCW">A:Newton-Law-Convective-Cooling-Coil-Water</a>
-            </td>
+            <td><a href="#assumpLCCCW">A:Newton-Law-Convective-Cooling-Coil-Water</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2725,9 +1720,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpTHCCoT">A:Temp-Heating-Coil-Constant-over-Time</a>
-            </td>
+            <td><a href="#assumpTHCCoT">A:Temp-Heating-Coil-Constant-over-Time</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2744,9 +1737,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpTHCCoL">A:Temp-Heating-Coil-Constant-over-Length</a>
-            </td>
+            <td><a href="#assumpTHCCoL">A:Temp-Heating-Coil-Constant-over-Length</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2763,9 +1754,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpCTNTD">A:Charging-Tank-No-Temp-Discharge</a>
-            </td>
+            <td><a href="#assumpCTNTD">A:Charging-Tank-No-Temp-Discharge</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2782,9 +1771,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpWAL">A:Water-Always-Liquid</a>
-            </td>
+            <td><a href="#assumpWAL">A:Water-Always-Liquid</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2801,9 +1788,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpPIT">A:Perfect-Insulation-Tank</a>
-            </td>
+            <td><a href="#assumpPIT">A:Perfect-Insulation-Tank</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2820,9 +1805,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpNIHGBW">A:No-Internal-Heat-Generation-By-Water</a>
-            </td>
+            <td><a href="#assumpNIHGBW">A:No-Internal-Heat-Generation-By-Water</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2839,9 +1822,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpAPT">A:Atmospheric-Pressure-Tank</a>
-            </td>
+            <td><a href="#assumpAPT">A:Atmospheric-Pressure-Tank</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2858,9 +1839,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#assumpVCN">A:Volume-Coil-Negligible</a>
-            </td>
+            <td><a href="#assumpVCN">A:Volume-Coil-Negligible</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2901,9 +1880,7 @@
             <th><a href="#assumpVCN">A:Volume-Coil-Negligible</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:waterMass">DD:waterMass</a>
-            </td>
+            <td><a href="#DD:waterMass">DD:waterMass</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2920,9 +1897,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:waterVolume_nopcm">DD:waterVolume_nopcm</a>
-            </td>
+            <td><a href="#DD:waterVolume_nopcm">DD:waterVolume_nopcm</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2936,14 +1911,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:tankVolume">DD:tankVolume</a>
-            </td>
+            <td><a href="#DD:tankVolume">DD:tankVolume</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2960,9 +1931,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:balanceDecayRate">DD:balanceDecayRate</a>
-            </td>
+            <td><a href="#DD:balanceDecayRate">DD:balanceDecayRate</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2979,12 +1948,8 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:consThermE">TM:consThermE</a>
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#TM:consThermE">TM:consThermE</a></td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3000,9 +1965,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:sensHtE">TM:sensHtE</a>
-            </td>
+            <td><a href="#TM:sensHtE">TM:sensHtE</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3012,22 +1975,16 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:nwtnCooling">TM:nwtnCooling</a>
-            </td>
+            <td><a href="#TM:nwtnCooling">TM:nwtnCooling</a></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3042,20 +1999,12 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#GD:rocTempSimp">GD:rocTempSimp</a>
-            </td>
+            <td><a href="#GD:rocTempSimp">GD:rocTempSimp</a></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3067,20 +2016,14 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>
-            </td>
+            <td><a href="#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3090,9 +2033,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>
-            </td>
+            <td><a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3102,22 +2043,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:heatEInWtr">IM:heatEInWtr</a>
-            </td>
+            <td><a href="#IM:heatEInWtr">IM:heatEInWtr</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3127,20 +2060,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#inputValues">FR:Input-Values</a>
-            </td>
+            <td><a href="#inputValues">FR:Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3157,9 +2084,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#findMass">FR:Find-Mass</a>
-            </td>
+            <td><a href="#findMass">FR:Find-Mass</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3176,9 +2101,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#checkWithPhysConsts">FR:Check-Input-with-Physical_Constraints</a>
-            </td>
+            <td><a href="#checkWithPhysConsts">FR:Check-Input-with-Physical_Constraints</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3195,9 +2118,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputInputDerivVals">FR:Output-Input-Derived-Values</a>
-            </td>
+            <td><a href="#outputInputDerivVals">FR:Output-Input-Derived-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3214,9 +2135,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#calcValues">FR:Calculate-Values</a>
-            </td>
+            <td><a href="#calcValues">FR:Calculate-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3233,9 +2152,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputValues">FR:Output-Values</a>
-            </td>
+            <td><a href="#outputValues">FR:Output-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3252,9 +2169,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#correct">NFR:Correctness</a>
-            </td>
+            <td><a href="#correct">NFR:Correctness</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3271,9 +2186,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#verifiable">NFR:Verifiability</a>
-            </td>
+            <td><a href="#verifiable">NFR:Verifiability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3290,9 +2203,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#understandable">NFR:Understandability</a>
-            </td>
+            <td><a href="#understandable">NFR:Understandability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3309,9 +2220,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#reusable">NFR:Reusability</a>
-            </td>
+            <td><a href="#reusable">NFR:Reusability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3328,9 +2237,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#maintainable">NFR:Maintainability</a>
-            </td>
+            <td><a href="#maintainable">NFR:Maintainability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3347,18 +2254,14 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#likeChgTCVOD">LC:Temperature-Coil-Variable-Over-Day</a>
-            </td>
+            <td><a href="#likeChgTCVOD">LC:Temperature-Coil-Variable-Over-Day</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3368,9 +2271,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#likeChgTCVOL">LC:Temperature-Coil-Variable-Over-Length</a>
-            </td>
+            <td><a href="#likeChgTCVOL">LC:Temperature-Coil-Variable-Over-Length</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3378,9 +2279,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3389,9 +2288,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#likeChgDT">LC:Discharging-Tank</a>
-            </td>
+            <td><a href="#likeChgDT">LC:Discharging-Tank</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3400,9 +2297,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3410,9 +2305,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#likeChgTLH">LC:Tank-Lose-Heat</a>
-            </td>
+            <td><a href="#likeChgTLH">LC:Tank-Lose-Heat</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3423,17 +2316,13 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#unlikeChgWFS">UC:Water-Fixed-States</a>
-            </td>
+            <td><a href="#unlikeChgWFS">UC:Water-Fixed-States</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3443,18 +2332,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#unlikeChgNIHG">UC:No-Internal-Heat-Generation</a>
-            </td>
+            <td><a href="#unlikeChgNIHG">UC:No-Internal-Heat-Generation</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3466,9 +2351,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
           </tr>
@@ -3494,9 +2377,7 @@
             <th><a href="#IM:heatEInWtr">IM:heatEInWtr</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:waterMass">DD:waterMass</a>
-            </td>
+            <td><a href="#DD:waterMass">DD:waterMass</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3510,14 +2391,10 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:waterVolume_nopcm">DD:waterVolume_nopcm</a>
-            </td>
+            <td><a href="#DD:waterVolume_nopcm">DD:waterVolume_nopcm</a></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3528,9 +2405,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:tankVolume">DD:tankVolume</a>
-            </td>
+            <td><a href="#DD:tankVolume">DD:tankVolume</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3544,9 +2419,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:balanceDecayRate">DD:balanceDecayRate</a>
-            </td>
+            <td><a href="#DD:balanceDecayRate">DD:balanceDecayRate</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3560,9 +2433,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:consThermE">TM:consThermE</a>
-            </td>
+            <td><a href="#TM:consThermE">TM:consThermE</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3576,9 +2447,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:sensHtE">TM:sensHtE</a>
-            </td>
+            <td><a href="#TM:sensHtE">TM:sensHtE</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3592,9 +2461,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:nwtnCooling">TM:nwtnCooling</a>
-            </td>
+            <td><a href="#TM:nwtnCooling">TM:nwtnCooling</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3608,77 +2475,55 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#GD:rocTempSimp">GD:rocTempSimp</a>
-            </td>
+            <td><a href="#GD:rocTempSimp">GD:rocTempSimp</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>
-            </td>
+            <td><a href="#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>
-            </td>
+            <td><a href="#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:heatEInWtr">IM:heatEInWtr</a>
-            </td>
+            <td><a href="#IM:heatEInWtr">IM:heatEInWtr</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3718,9 +2563,7 @@
             <th><a href="#maintainable">NFR:Maintainability</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#waterTempGS">GS:Predict-Water-Temperature</a>
-            </td>
+            <td><a href="#waterTempGS">GS:Predict-Water-Temperature</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3745,9 +2588,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#waterEnergyGS">GS:Predict-Water-Energy</a>
-            </td>
+            <td><a href="#waterEnergyGS">GS:Predict-Water-Energy</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3772,9 +2613,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#inputValues">FR:Input-Values</a>
-            </td>
+            <td><a href="#inputValues">FR:Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3799,31 +2638,19 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#findMass">FR:Find-Mass</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#findMass">FR:Find-Mass</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3836,9 +2663,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#checkWithPhysConsts">FR:Check-Input-with-Physical_Constraints</a>
-            </td>
+            <td><a href="#checkWithPhysConsts">FR:Check-Input-with-Physical_Constraints</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3863,15 +2688,11 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputInputDerivVals">FR:Output-Input-Derived-Values</a>
-            </td>
+            <td><a href="#outputInputDerivVals">FR:Output-Input-Derived-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3879,12 +2700,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3896,9 +2713,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#calcValues">FR:Calculate-Values</a>
-            </td>
+            <td><a href="#calcValues">FR:Calculate-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3908,12 +2723,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3927,9 +2738,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputValues">FR:Output-Values</a>
-            </td>
+            <td><a href="#outputValues">FR:Output-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3939,12 +2748,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3958,9 +2763,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#correct">NFR:Correctness</a>
-            </td>
+            <td><a href="#correct">NFR:Correctness</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3985,9 +2788,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#verifiable">NFR:Verifiability</a>
-            </td>
+            <td><a href="#verifiable">NFR:Verifiability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -4012,9 +2813,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#understandable">NFR:Understandability</a>
-            </td>
+            <td><a href="#understandable">NFR:Understandability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -4039,9 +2838,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#reusable">NFR:Reusability</a>
-            </td>
+            <td><a href="#reusable">NFR:Reusability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -4066,9 +2863,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#maintainable">NFR:Maintainability</a>
-            </td>
+            <td><a href="#maintainable">NFR:Maintainability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -4134,21 +2929,11 @@
         For convenience, the following graphs can be found at the links below:
       </p>
       <ul class="list">
-        <li>
-          <a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a>
-        </li>
+        <li><a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a></li>
+        <li><a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a></li>
+        <li><a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a></li>
+        <li><a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a></li>
+        <li><a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a></li>
       </ul>
     </div>
     <div id="Sec:AuxConstants" class="section">
@@ -4165,172 +2950,76 @@
             <th>Unit</th>
           </tr>
           <tr>
-            <td>
-              <em>A<sub>C</sub><sup>max</sup></em>
-            </td>
-            <td>
-              maximum surface area of coil
-            </td>
-            <td>
-              <em>100000</em>
-            </td>
-            <td>
-              <em>m<sup>2</sup></em>
-            </td>
+            <td><em>A<sub>C</sub><sup>max</sup></em></td>
+            <td>maximum surface area of coil</td>
+            <td><em>100000</em></td>
+            <td><em>m<sup>2</sup></em></td>
           </tr>
           <tr>
-            <td>
-              <em>AR<sub>max</sub></em>
-            </td>
-            <td>
-              maximum aspect ratio
-            </td>
-            <td>
-              <em>100</em>
-            </td>
-            <td>
-              --
-            </td>
+            <td><em>AR<sub>max</sub></em></td>
+            <td>maximum aspect ratio</td>
+            <td><em>100</em></td>
+            <td>--</td>
           </tr>
           <tr>
-            <td>
-              <em>AR<sub>min</sub></em>
-            </td>
-            <td>
-              minimum aspect ratio
-            </td>
-            <td>
-              <em>0.01</em>
-            </td>
-            <td>
-              --
-            </td>
+            <td><em>AR<sub>min</sub></em></td>
+            <td>minimum aspect ratio</td>
+            <td><em>0.01</em></td>
+            <td>--</td>
           </tr>
           <tr>
-            <td>
-              <em>C<sub>W</sub><sup>max</sup></em>
-            </td>
-            <td>
-              maximum specific heat capacity of water
-            </td>
-            <td>
-              <em>4210</em>
-            </td>
-            <td>
-              <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-            </td>
+            <td><em>C<sub>W</sub><sup>max</sup></em></td>
+            <td>maximum specific heat capacity of water</td>
+            <td><em>4210</em></td>
+            <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
           </tr>
           <tr>
-            <td>
-              <em>C<sub>W</sub><sup>min</sup></em>
-            </td>
-            <td>
-              minimum specific heat capacity of water
-            </td>
-            <td>
-              <em>4170</em>
-            </td>
-            <td>
-              <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
-            </td>
+            <td><em>C<sub>W</sub><sup>min</sup></em></td>
+            <td>minimum specific heat capacity of water</td>
+            <td><em>4170</em></td>
+            <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
           </tr>
           <tr>
-            <td>
-              <em>h<sub>C</sub><sup>max</sup></em>
-            </td>
-            <td>
-              maximum convective heat transfer coefficient between coil and water
-            </td>
-            <td>
-              <em>10000</em>
-            </td>
-            <td>
-              <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-            </td>
+            <td><em>h<sub>C</sub><sup>max</sup></em></td>
+            <td>maximum convective heat transfer coefficient between coil and water</td>
+            <td><em>10000</em></td>
+            <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
           </tr>
           <tr>
-            <td>
-              <em>h<sub>C</sub><sup>min</sup></em>
-            </td>
-            <td>
-              minimum convective heat transfer coefficient between coil and water
-            </td>
-            <td>
-              <em>10</em>
-            </td>
-            <td>
-              <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-            </td>
+            <td><em>h<sub>C</sub><sup>min</sup></em></td>
+            <td>minimum convective heat transfer coefficient between coil and water</td>
+            <td><em>10</em></td>
+            <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
           </tr>
           <tr>
-            <td>
-              <em>L<sub>max</sub></em>
-            </td>
-            <td>
-              maximum length of tank
-            </td>
-            <td>
-              <em>50</em>
-            </td>
-            <td>
-              <em>m</em>
-            </td>
+            <td><em>L<sub>max</sub></em></td>
+            <td>maximum length of tank</td>
+            <td><em>50</em></td>
+            <td><em>m</em></td>
           </tr>
           <tr>
-            <td>
-              <em>L<sub>min</sub></em>
-            </td>
-            <td>
-              minimum length of tank
-            </td>
-            <td>
-              <em>0.1</em>
-            </td>
-            <td>
-              <em>m</em>
-            </td>
+            <td><em>L<sub>min</sub></em></td>
+            <td>minimum length of tank</td>
+            <td><em>0.1</em></td>
+            <td><em>m</em></td>
           </tr>
           <tr>
-            <td>
-              <em>t<sub>final</sub><sup>max</sup></em>
-            </td>
-            <td>
-              maximum final time
-            </td>
-            <td>
-              <em>86400</em>
-            </td>
-            <td>
-              <em>s</em>
-            </td>
+            <td><em>t<sub>final</sub><sup>max</sup></em></td>
+            <td>maximum final time</td>
+            <td><em>86400</em></td>
+            <td><em>s</em></td>
           </tr>
           <tr>
-            <td>
-              <em>ρ<sub>W</sub><sup>max</sup></em>
-            </td>
-            <td>
-              maximum density of water
-            </td>
-            <td>
-              <em>1000</em>
-            </td>
-            <td>
-              <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-            </td>
+            <td><em>ρ<sub>W</sub><sup>max</sup></em></td>
+            <td>maximum density of water</td>
+            <td><em>1000</em></td>
+            <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
           </tr>
           <tr>
-            <td>
-              <em>ρ<sub>W</sub><sup>min</sup></em>
-            </td>
-            <td>
-              minimum density of water
-            </td>
-            <td>
-              <em>950</em>
-            </td>
-            <td>
-              <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-            </td>
+            <td><em>ρ<sub>W</sub><sup>min</sup></em></td>
+            <td>minimum density of water</td>
+            <td><em>950</em></td>
+            <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
           </tr>
         </table>
         <p class="caption">

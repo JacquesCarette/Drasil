@@ -2,29 +2,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="HGHC_SRS.css" type="text/css">
-    <title>
-      Software Requirements Specification for HGHC
-    </title>
+    <title>Software Requirements Specification for HGHC</title>
     <meta charset="utf-8">
     <script>
-      MathJax = {
-        "loader": {
-          "load": [
-            "[tex]/textmacros",
-            "output/chtml"
-          ]
-        },
-        "tex": {
-          "packages": {
-            "[+]": [
-              "textmacros"
-            ]
-          }
-        },
-        "svg": {
-          "fontCache": "global"
-        }
-      };
+      MathJax = {"loader":{"load":["[tex]/textmacros","output/chtml"]},"tex":{"packages":{"[+]":["textmacros"]}},"svg":{"fontCache":"global"}};
     </script>
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js">
       
@@ -43,44 +24,22 @@
         An outline of all sections included in this SRS is recorded here for easy reference.
       </p>
       <ul class="list">
-        <li>
-          <a href="#Sec:ToC">Table of Contents</a>
-        </li>
-        <li>
-          <a href="#Sec:RefMat">Reference Material</a><ul class="list">
-            <li>
-              <a href="#Sec:ToU">Table of Units</a>
-            </li>
-            <li>
-              <a href="#Sec:ToS">Table of Symbols</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Intro">Introduction</a><ul class="list">
-            
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
-                <li>
-                  <a href="#Sec:TMs">Theoretical Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:GDs">General Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:DDs">Data Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:IMs">Instance Models</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
+        <li><a href="#Sec:ToC">Table of Contents</a></li>
+        <li><a href="#Sec:RefMat">Reference Material</a><ul class="list">
+          <li><a href="#Sec:ToU">Table of Units</a></li>
+          <li><a href="#Sec:ToS">Table of Symbols</a></li>
+        </ul></li>
+        <li><a href="#Sec:Intro">Introduction</a><ul class="list">
+          
+        </ul></li>
+        <li><a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
+          <li><a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
+            <li><a href="#Sec:TMs">Theoretical Models</a></li>
+            <li><a href="#Sec:GDs">General Definitions</a></li>
+            <li><a href="#Sec:DDs">Data Definitions</a></li>
+            <li><a href="#Sec:IMs">Instance Models</a></li>
+          </ul></li>
+        </ul></li>
       </ul>
     </div>
     <div id="Sec:RefMat" class="section">
@@ -101,37 +60,19 @@
               <th>SI Name</th>
             </tr>
             <tr>
-              <td>
-                <em>°C</em>
-              </td>
-              <td>
-                temperature
-              </td>
-              <td>
-                centigrade
-              </td>
+              <td><em>°C</em></td>
+              <td>temperature</td>
+              <td>centigrade</td>
             </tr>
             <tr>
-              <td>
-                <em>m</em>
-              </td>
-              <td>
-                length
-              </td>
-              <td>
-                metre
-              </td>
+              <td><em>m</em></td>
+              <td>length</td>
+              <td>metre</td>
             </tr>
             <tr>
-              <td>
-                <em>W</em>
-              </td>
-              <td>
-                power
-              </td>
-              <td>
-                watt
-              </td>
+              <td><em>W</em></td>
+              <td>power</td>
+              <td>watt</td>
             </tr>
           </table>
           <p class="caption">
@@ -152,70 +93,34 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>b</sub></em>
-              </td>
-              <td>
-                Initial coolant film conductance
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>h<sub>b</sub></em></td>
+              <td>Initial coolant film conductance</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>c</sub></em>
-              </td>
-              <td>
-                Convective heat transfer coefficient between clad and coolant
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h<sub>c</sub></em></td>
+              <td>Convective heat transfer coefficient between clad and coolant</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>g</sub></em>
-              </td>
-              <td>
-                Effective heat transfer coefficient between clad and fuel surface
-              </td>
-              <td>
-                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-              </td>
+              <td><em>h<sub>g</sub></em></td>
+              <td>Effective heat transfer coefficient between clad and fuel surface</td>
+              <td><em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>h<sub>p</sub></em>
-              </td>
-              <td>
-                Initial gap film conductance
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>h<sub>p</sub></em></td>
+              <td>Initial gap film conductance</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>k<sub>c</sub></em>
-              </td>
-              <td>
-                Clad conductivity
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>k<sub>c</sub></em></td>
+              <td>Clad conductivity</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>τ<sub>c</sub></em>
-              </td>
-              <td>
-                Clad thickness
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>τ<sub>c</sub></em></td>
+              <td>Clad thickness</td>
+              <td>--</td>
             </tr>
           </table>
           <p class="caption">
@@ -263,115 +168,75 @@
           <table id="DD:htTransCladFuel" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:htTransCladFuel</b>
-              </td>
+              <td><b>DD:htTransCladFuel</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Effective heat transfer coefficient between clad and fuel surface
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Effective heat transfer coefficient between clad and fuel surface
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>h<sub>g</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>h<sub>g</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}\]
-              </td>
+              <td>\[{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>h<sub>g</sub></em> is the effective heat transfer coefficient between clad and fuel surface (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>k<sub>c</sub></em> is the clad conductivity (Unitless)
-                  </li>
-                  <li>
-                    <em>h<sub>p</sub></em> is the initial gap film conductance (Unitless)
-                  </li>
-                  <li>
-                    <em>τ<sub>c</sub></em> is the clad thickness (Unitless)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>h<sub>g</sub></em> is the effective heat transfer coefficient between clad and fuel surface (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>k<sub>c</sub></em> is the clad conductivity (Unitless)</li>
+                <li><em>h<sub>p</sub></em> is the initial gap film conductance (Unitless)</li>
+                <li><em>τ<sub>c</sub></em> is the clad thickness (Unitless)</li>
+              </ul></td>
             </tr>
           </table>
           <table id="DD:htTransCladCool" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:htTransCladCool</b>
-              </td>
+              <td><b>DD:htTransCladCool</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Convective heat transfer coefficient between clad and coolant
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Convective heat transfer coefficient between clad and coolant
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>h<sub>c</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>h<sub>c</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}\]
-              </td>
+              <td>\[{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>h<sub>c</sub></em> is the convective heat transfer coefficient between clad and coolant (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)
-                  </li>
-                  <li>
-                    <em>k<sub>c</sub></em> is the clad conductivity (Unitless)
-                  </li>
-                  <li>
-                    <em>h<sub>b</sub></em> is the initial coolant film conductance (Unitless)
-                  </li>
-                  <li>
-                    <em>τ<sub>c</sub></em> is the clad thickness (Unitless)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>h<sub>c</sub></em> is the convective heat transfer coefficient between clad and coolant (<em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>)</li>
+                <li><em>k<sub>c</sub></em> is the clad conductivity (Unitless)</li>
+                <li><em>h<sub>b</sub></em> is the initial coolant film conductance (Unitless)</li>
+                <li><em>τ<sub>c</sub></em> is the clad thickness (Unitless)</li>
+              </ul></td>
             </tr>
           </table>
         </div>

@@ -2,29 +2,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="Template_SRS.css" type="text/css">
-    <title>
-      Software Requirements Specification for Template
-    </title>
+    <title>Software Requirements Specification for Template</title>
     <meta charset="utf-8">
     <script>
-      MathJax = {
-        "loader": {
-          "load": [
-            "[tex]/textmacros",
-            "output/chtml"
-          ]
-        },
-        "tex": {
-          "packages": {
-            "[+]": [
-              "textmacros"
-            ]
-          }
-        },
-        "svg": {
-          "fontCache": "global"
-        }
-      };
+      MathJax = {"loader":{"load":["[tex]/textmacros","output/chtml"]},"tex":{"packages":{"[+]":["textmacros"]}},"svg":{"fontCache":"global"}};
     </script>
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js">
       
@@ -43,115 +24,47 @@
         An outline of all sections included in this SRS is recorded here for easy reference.
       </p>
       <ul class="list">
-        <li>
-          <a href="#Sec:ToC">Table of Contents</a>
-        </li>
-        <li>
-          <a href="#Sec:RefMat">Reference Material</a><ul class="list">
-            <li>
-              <a href="#Sec:ToU">Table of Units</a>
-            </li>
-            <li>
-              <a href="#Sec:ToS">Table of Symbols</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Intro">Introduction</a><ul class="list">
-            <li>
-              <a href="#Sec:DocPurpose">Purpose of Document</a>
-            </li>
-            <li>
-              <a href="#Sec:ReqsScope">Scope of Requirements</a>
-            </li>
-            <li>
-              <a href="#Sec:ReaderChars">Characteristics of Intended Reader</a>
-            </li>
-            <li>
-              <a href="#Sec:DocOrg">Organization of Document</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:GenSysDesc">General System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:SysContext">System Context</a>
-            </li>
-            <li>
-              <a href="#Sec:UserChars">User Characteristics</a>
-            </li>
-            <li>
-              <a href="#Sec:SysConstraints">System Constraints</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:ProbDesc">Problem Description</a><ul class="list">
-                <li>
-                  <a href="#Sec:TermDefs">Terminology and Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:PhysSyst">Physical System Description</a>
-                </li>
-                <li>
-                  <a href="#Sec:GoalStmt">Goal Statements</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
-                <li>
-                  <a href="#Sec:Assumps">Assumptions</a>
-                </li>
-                <li>
-                  <a href="#Sec:TMs">Theoretical Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:GDs">General Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:DDs">Data Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:IMs">Instance Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:DataConstraints">Data Constraints</a>
-                </li>
-                <li>
-                  <a href="#Sec:CorSolProps">Properties of a Correct Solution</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Requirements">Requirements</a><ul class="list">
-            <li>
-              <a href="#Sec:FRs">Functional Requirements</a>
-            </li>
-            <li>
-              <a href="#Sec:NFRs">Non-Functional Requirements</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:LCs">Likely Changes</a>
-        </li>
-        <li>
-          <a href="#Sec:UCs">Unlikely Changes</a>
-        </li>
-        <li>
-          <a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a>
-        </li>
-        <li>
-          <a href="#Sec:AuxConstants">Values of Auxiliary Constants</a>
-        </li>
-        <li>
-          <a href="#Sec:References">References</a>
-        </li>
+        <li><a href="#Sec:ToC">Table of Contents</a></li>
+        <li><a href="#Sec:RefMat">Reference Material</a><ul class="list">
+          <li><a href="#Sec:ToU">Table of Units</a></li>
+          <li><a href="#Sec:ToS">Table of Symbols</a></li>
+        </ul></li>
+        <li><a href="#Sec:Intro">Introduction</a><ul class="list">
+          <li><a href="#Sec:DocPurpose">Purpose of Document</a></li>
+          <li><a href="#Sec:ReqsScope">Scope of Requirements</a></li>
+          <li><a href="#Sec:ReaderChars">Characteristics of Intended Reader</a></li>
+          <li><a href="#Sec:DocOrg">Organization of Document</a></li>
+        </ul></li>
+        <li><a href="#Sec:GenSysDesc">General System Description</a><ul class="list">
+          <li><a href="#Sec:SysContext">System Context</a></li>
+          <li><a href="#Sec:UserChars">User Characteristics</a></li>
+          <li><a href="#Sec:SysConstraints">System Constraints</a></li>
+        </ul></li>
+        <li><a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
+          <li><a href="#Sec:ProbDesc">Problem Description</a><ul class="list">
+            <li><a href="#Sec:TermDefs">Terminology and Definitions</a></li>
+            <li><a href="#Sec:PhysSyst">Physical System Description</a></li>
+            <li><a href="#Sec:GoalStmt">Goal Statements</a></li>
+          </ul></li>
+          <li><a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
+            <li><a href="#Sec:Assumps">Assumptions</a></li>
+            <li><a href="#Sec:TMs">Theoretical Models</a></li>
+            <li><a href="#Sec:GDs">General Definitions</a></li>
+            <li><a href="#Sec:DDs">Data Definitions</a></li>
+            <li><a href="#Sec:IMs">Instance Models</a></li>
+            <li><a href="#Sec:DataConstraints">Data Constraints</a></li>
+            <li><a href="#Sec:CorSolProps">Properties of a Correct Solution</a></li>
+          </ul></li>
+        </ul></li>
+        <li><a href="#Sec:Requirements">Requirements</a><ul class="list">
+          <li><a href="#Sec:FRs">Functional Requirements</a></li>
+          <li><a href="#Sec:NFRs">Non-Functional Requirements</a></li>
+        </ul></li>
+        <li><a href="#Sec:LCs">Likely Changes</a></li>
+        <li><a href="#Sec:UCs">Unlikely Changes</a></li>
+        <li><a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></li>
+        <li><a href="#Sec:AuxConstants">Values of Auxiliary Constants</a></li>
+        <li><a href="#Sec:References">References</a></li>
       </ul>
     </div>
     <div id="Sec:RefMat" class="section">
@@ -172,15 +85,9 @@
               <th>SI Name</th>
             </tr>
             <tr>
-              <td>
-                <em>s</em>
-              </td>
-              <td>
-                time
-              </td>
-              <td>
-                second
-              </td>
+              <td><em>s</em></td>
+              <td>time</td>
+              <td>second</td>
             </tr>
           </table>
           <p class="caption">
@@ -201,37 +108,19 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>Δt</em>
-              </td>
-              <td>
-                Time delta
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>Δt</em></td>
+              <td>Time delta</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>0</sub></em>
-              </td>
-              <td>
-                Start time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>0</sub></em></td>
+              <td>Start time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>1</sub></em>
-              </td>
-              <td>
-                End time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>1</sub></em></td>
+              <td>End time</td>
+              <td><em>s</em></td>
             </tr>
           </table>
           <p class="caption">
@@ -363,55 +252,37 @@
           <table id="DD:t1" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>DD:t1</b>
-              </td>
+              <td><b>DD:t1</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  End time
-                </p>
-              </td>
+              <td><p class="paragraph">
+                End time
+              </p></td>
             </tr>
             <tr>
               <th>Symbol</th>
-              <td>
-                <p class="paragraph">
-                  <em>t<sub>1</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>t<sub>1</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Units</th>
-              <td>
-                <p class="paragraph">
-                  <em>s</em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>s</em>
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{t_{1}}={t_{0}}+Δt\]
-              </td>
+              <td>\[{t_{1}}={t_{0}}+Δt\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>t<sub>1</sub></em> is the end time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>t<sub>0</sub></em> is the start time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em>Δt</em> is the time delta (<em>s</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>t<sub>1</sub></em> is the end time (<em>s</em>)</li>
+                <li><em>t<sub>0</sub></em> is the start time (<em>s</em>)</li>
+                <li><em>Δt</em> is the time delta (<em>s</em>)</li>
+              </ul></td>
             </tr>
           </table>
         </div>
@@ -461,26 +332,14 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>Δt</em>
-              </td>
-              <td>
-                Time delta
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>Δt</em></td>
+              <td>Time delta</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>0</sub></em>
-              </td>
-              <td>
-                Start time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>0</sub></em></td>
+              <td>Start time</td>
+              <td><em>s</em></td>
             </tr>
           </table>
           <p class="caption">
@@ -519,9 +378,7 @@
             <th><a href="#DD:t1">DD:t1</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#DD:t1">DD:t1</a>
-            </td>
+            <td><a href="#DD:t1">DD:t1</a></td>
             <td></td>
           </tr>
         </table>
@@ -538,17 +395,13 @@
             <th><a href="#outputValues">FR:Output-Values</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#inputValues">FR:Input-Values</a>
-            </td>
+            <td><a href="#inputValues">FR:Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputValues">FR:Output-Values</a>
-            </td>
+            <td><a href="#outputValues">FR:Output-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -595,21 +448,11 @@
         For convenience, the following graphs can be found at the links below:
       </p>
       <ul class="list">
-        <li>
-          <a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a>
-        </li>
+        <li><a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a></li>
+        <li><a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a></li>
+        <li><a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a></li>
+        <li><a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a></li>
+        <li><a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a></li>
       </ul>
     </div>
     <div id="Sec:AuxConstants" class="section">

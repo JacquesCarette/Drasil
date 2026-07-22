@@ -502,22 +502,22 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis mthd att)
+  :: (OORenderMethod r vis mthd attch)
   => Label
   -> r vis
-  -> r att
+  -> r attch
   -> VS (r TypeData)
   -> [MS (r ParamData)]
   -> MS (r Body)
   -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis stmt mthd stvr att) => SVariable r -> MS (r mthd)
+getMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis stmt mthd stvr att) => SVariable r -> MS (r mthd)
+setMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -526,7 +526,7 @@ initStmts :: (OOStatement r stmt) => Initializers r -> MS (r Body)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r att, OORenderMethod r vis mthd att)
+  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch)
   => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 

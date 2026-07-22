@@ -2797,7 +2797,7 @@ cppsIntFunc f s t ps b = do
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
 cpphIntFunc :: Label -> CppHdrCode (Doc, VisibilityTag) ->
-  CppHdrCode att -> MSMthdType CppHdrCode ->
+  CppHdrCode attch -> MSMthdType CppHdrCode ->
   [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) -> MS (CppHdrCode MethodData)
 cpphIntFunc n s _ t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))

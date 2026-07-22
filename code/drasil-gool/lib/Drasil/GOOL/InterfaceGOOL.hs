@@ -39,9 +39,9 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
 class (SharedProg r vis stmt mthd, OOStatement r stmt,
-  ProgramSym r vis stmt mthd stvr att prg, ObserverPattern r stmt,
+  ProgramSym r vis stmt mthd stvr attch prg, ObserverPattern r stmt,
   StrategyPattern r stmt
-  ) => OOProg r vis stmt mthd stvr att prg
+  ) => OOProg r vis stmt mthd stvr attch prg
 
 class (SharedStatement r stmt, GetSet r, InternalValueExp r, OOFuncAppStatement r stmt,
   OOVariableValue r, OODeclStatement r stmt, OOFuncAppStatement r stmt,
@@ -53,7 +53,7 @@ type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
-class (FileSym r vis stmt mthd stvr att) => ProgramSym r vis stmt mthd stvr att prg | r -> prg where
+class (FileSym r vis stmt mthd stvr attch) => ProgramSym r vis stmt mthd stvr attch prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
@@ -61,7 +61,7 @@ class (FileSym r vis stmt mthd stvr att) => ProgramSym r vis stmt mthd stvr att 
 type File = FileData
 
 -- | Class for representing a file.
-class (ModuleSym r vis stmt mthd stvr att) => FileSym r vis stmt mthd stvr att where
+class (ModuleSym r vis stmt mthd stvr attch) => FileSym r vis stmt mthd stvr attch where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
@@ -74,7 +74,7 @@ class (ModuleSym r vis stmt mthd stvr att) => FileSym r vis stmt mthd stvr att w
 type Module = ModData
 
 -- | Class for representing a module.
-class (ClassSym r vis stmt mthd stvr att) => ModuleSym r vis stmt mthd stvr att where
+class (ClassSym r vis stmt mthd stvr attch) => ModuleSym r vis stmt mthd stvr attch where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
@@ -82,7 +82,7 @@ class (ClassSym r vis stmt mthd stvr att) => ModuleSym r vis stmt mthd stvr att 
 type Class = Doc
 
 -- | Class for representing an OO class.
-class (OOMethodSym r vis stmt mthd att, StateVarSym r vis stvr att) => ClassSym r vis stmt mthd stvr att where
+class (OOMethodSym r vis stmt mthd attch, StateVarSym r vis stvr attch) => ClassSym r vis stmt mthd stvr attch where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
@@ -100,30 +100,30 @@ class (OOMethodSym r vis stmt mthd att, StateVarSym r vis stvr att) => ClassSym 
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis stmt mthd, AttachmentSym r att) => OOMethodSym r vis stmt mthd att where
-  method      :: Label -> r vis -> r att -> VS (r TypeData) ->
+class (MethodSym r vis stmt mthd, AttachmentSym r attch) => OOMethodSym r vis stmt mthd attch where
+  method      :: Label -> r vis -> r attch -> VS (r TypeData) ->
     [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)
   setMethod   :: SVariable r -> MS (r mthd)
   constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
-  inOutMethod :: Label -> r vis -> r att -> InOutFunc r mthd
-  docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r mthd
+  inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd
+  docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd
 
-privMethod :: (OOMethodSym r vis stmt mthd att) => Label -> VS (r TypeData) ->
+privMethod :: (OOMethodSym r vis stmt mthd attch) => Label -> VS (r TypeData) ->
   [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis stmt mthd att) => Label -> VS (r TypeData) ->
+pubMethod :: (OOMethodSym r vis stmt mthd attch) => Label -> VS (r TypeData) ->
   [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis stmt mthd att) => [MS (r ParamData)] ->
+initializer :: (OOMethodSym r vis stmt mthd attch) => [MS (r ParamData)] ->
   Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis stmt mthd att) => [MS (r ParamData)] ->
+nonInitConstructor :: (OOMethodSym r vis stmt mthd attch) => [MS (r ParamData)] ->
   MS (r Body) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
@@ -134,30 +134,30 @@ type CSStateVar r stvr = CS (r stvr)
 -- Used when creating a class, to hold extra information about `Attachment`
 -- and `Visibility`.
 -- Usually 'Doc' is used for the representation.
-class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis stvr att | r -> stvr where
+class (VisibilitySym r vis, AttachmentSym r attch, VariableSym r) => StateVarSym r vis stvr attch | r -> stvr where
   -- | Given a visibility, attachment, and variable, represent the declaration
   -- of a state variable with no initial value.
-  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r stvr
+  stateVar :: r vis -> r attch -> SVariable r -> CSStateVar r stvr
   -- | Given a visibility, attachment, variable, and initial value,
   -- represent the declaration of a state variable with the given initial value.
-  stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r stvr
+  stateVarDef :: r vis -> r attch -> SVariable r -> SValue r -> CSStateVar r stvr
   -- | Given a visibility, variable, and value, represent the declaration of
   -- a state constant with the given value.
   constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r stvr
 
-privDVar :: (StateVarSym r vis stvr att) => SVariable r -> CSStateVar r stvr
+privDVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis stvr att) => SVariable r -> CSStateVar r stvr
+pubDVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis stvr att) => SVariable r -> CSStateVar r stvr
+pubSVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance
-class AttachmentSym r att | r -> att where
-  classLevel  :: r att
-  instanceLevel :: r att
+class AttachmentSym r attch | r -> attch where
+  classLevel  :: r attch
+  instanceLevel :: r attch
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VS (r TypeData)

@@ -158,14 +158,14 @@ decrement1 vr' = do
 
 varDec
   :: ( InternalVarElim r
-     , RO.PermElim r att
+     , RO.PermElim r attch
      , RC.RenderStatement r stmt
      , ScopeElim r
      , UnRepr r TypeData
      , TypeElim r
      , VariableElim r
      )
-  => r att -> r att -> Doc -> SVariable r -> r ScopeData -> MS (r stmt)
+  => r attch -> r attch -> Doc -> SVariable r -> r ScopeData -> MS (r stmt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -280,8 +280,8 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (OORenderMethod r vis mthd att) => Bool -> Label -> r vis ->
-  r att -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) ->
+intFunc :: (OORenderMethod r vis mthd attch) => Bool -> Label -> r vis ->
+  r attch -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) ->
   MS (r mthd)
 intFunc = intMethod
 

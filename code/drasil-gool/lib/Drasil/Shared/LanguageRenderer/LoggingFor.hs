@@ -398,7 +398,7 @@ instance (P.ProgramSym r vis stmt mthd prg) => P.ProgramSym (LoggingFor r) vis s
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd stvr att prg) => G.OOProg (LoggingFor r) vis stmt mthd stvr att prg
+instance (G.OOProg r vis stmt mthd stvr attch prg) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -446,11 +446,11 @@ instance (G.OOFunctionSym r) => G.OOFunctionSym (LoggingFor r) where
 instance (G.ObserverPattern r stmt) => G.ObserverPattern (LoggingFor r) stmt where
   notifyObservers = liftLogging G.notifyObservers
 
-instance (G.AttachmentSym r att) => G.AttachmentSym (LoggingFor r) att where
+instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
 
-instance (G.OOMethodSym r vis stmt mthd att) => G.OOMethodSym (LoggingFor r) vis stmt mthd att where
+instance (G.OOMethodSym r vis stmt mthd attch) => G.OOMethodSym (LoggingFor r) vis stmt mthd attch where
   method = liftLogging G.method
   getMethod = liftLogging G.getMethod
   setMethod = liftLogging G.setMethod
@@ -458,25 +458,25 @@ instance (G.OOMethodSym r vis stmt mthd att) => G.OOMethodSym (LoggingFor r) vis
   inOutMethod = liftLogging G.inOutMethod
   docInOutMethod = liftLogging G.docInOutMethod
 
-instance (G.StateVarSym r vis stvr att) => G.StateVarSym (LoggingFor r) vis stvr att where
+instance (G.StateVarSym r vis stvr attch) => G.StateVarSym (LoggingFor r) vis stvr attch where
   stateVar = liftLogging G.stateVar
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis stmt mthd stvr att) => G.ClassSym (LoggingFor r) vis stmt mthd stvr att where
+instance (G.ClassSym r vis stmt mthd stvr attch) => G.ClassSym (LoggingFor r) vis stmt mthd stvr attch where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis stmt mthd stvr att) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr att where
+instance (G.ModuleSym r vis stmt mthd stvr attch) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch where
   buildModule = liftLogging G.buildModule
 
-instance (G.FileSym r vis stmt mthd stvr att) => G.FileSym (LoggingFor r) vis stmt mthd stvr att where
+instance (G.FileSym r vis stmt mthd stvr attch) => G.FileSym (LoggingFor r) vis stmt mthd stvr attch where
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis stmt mthd stvr att prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr att prg where
+instance (G.ProgramSym r vis stmt mthd stvr attch prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr attch prg where
   prog = liftLogging G.prog
 
 instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where

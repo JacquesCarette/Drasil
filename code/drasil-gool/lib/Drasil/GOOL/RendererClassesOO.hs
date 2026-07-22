@@ -19,13 +19,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd, IG.FileSym r vis stmt mthd stvr att,
+class (CommonRenderSym r vis stmt mthd, IG.FileSym r vis stmt mthd stvr attch,
   IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
   IG.StrategyPattern r stmt, IG.OOVariableValue r,
   IG.OOValueExpression r, RenderClass r vis mthd stvr, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r vis mthd att, RenderMod r, ModuleElim r,
-  StateVarElim r stvr, PermElim r att
-  ) => OORenderSym r vis stmt mthd stvr att
+  InternalGetSet r, OORenderMethod r vis mthd attch, RenderMod r, ModuleElim r,
+  StateVarElim r stvr, PermElim r attch
+  ) => OORenderSym r vis stmt mthd stvr attch
 
 -- OO-Only Typeclasses --
 
@@ -40,9 +40,9 @@ class (BlockCommentSym r) => RenderFile r where
 
   fileFromData :: FilePath -> FS (r IG.Module) -> FS (r IG.File)
 
-class PermElim r att where
-  perm :: r att -> Doc
-  binding :: r att -> AttachmentTag
+class PermElim r attch where
+  perm :: r attch -> Doc
+  binding :: r attch -> AttachmentTag
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VS (r FuncData)
@@ -51,14 +51,14 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd att | r -> vis att where
+class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch | r -> vis attch where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r vis -> r att ->
+  intMethod     :: Bool -> Label -> r vis -> r attch ->
     MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r vis -> r att
+  intFunc       :: Bool -> Label -> r vis -> r attch
     -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)

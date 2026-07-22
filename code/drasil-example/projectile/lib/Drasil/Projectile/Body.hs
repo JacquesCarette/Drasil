@@ -40,6 +40,7 @@ import Drasil.Projectile.Changes (likelyChgs)
 import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
   ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
+import Drasil.Projectile.Expressions (equations)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
@@ -128,11 +129,11 @@ si = mkSmithEtAlICO progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs (map cnstrw' constrained) constants symbols
-  symbMap allRefs
+  inputs outputs constrained constants symbols
+  symbMap
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent ++ funcReqsTables ++ equations
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -158,7 +159,7 @@ conceptChunks =
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] dataDefs
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.

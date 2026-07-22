@@ -10,17 +10,17 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   MatlabCode(..), mlName, mlVersion
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SValue, SVariable, getCodeType,
-  UnRepr(..), SharedProg, SharedStatement, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
+  getCodeType, UnRepr(..), SharedProg, SharedStatement, Body, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
+  ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -40,33 +40,37 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
-  docMod, fileFromData, buildModule, modFromData, function)
+  docMod, fileFromData, buildModule, modFromData, function, funcDecDef,
+  innerType)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, elseIfLabel)
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue,
+  elseIfLabel)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
   litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
-  ifCond)
+  ifCond, tryCatch, listAccess)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
-  functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt')
+  functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
+  listDecDef)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
-  litFalse)
+  litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extFuncAppMixedArgs, listSize)
-import Drasil.Shared.AST (Terminator(..), FileType(Combined), FileData, fileD,
-  ModData, md, updateMod, MethodData, mthd, updateMthd, ParamData, paramVar,
-  paramDoc, pd, ProgData, TypeData, cType, ValData, vd, val, valPrec, valInt,
-  valType, opDoc, opPrec, VarData, varName, varType, varBind, varDoc, vard,
-  progD, mthdDoc, modDoc)
+  extFuncAppMixedArgs, listSize, forEach')
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
+  increment1, decrement1)
+import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
+  updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
+  ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
+  varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
-  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, compEqualPrec,
-  typeUnExpr, typeBinExpr)
-import Drasil.Shared.LanguageRenderer (listSep', valueList)
+  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStateVar, mkStmtNoEnd,
+  compEqualPrec, typeUnExpr, typeBinExpr)
+import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
@@ -79,7 +83,7 @@ import Control.Monad.State (modify)
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), vcat, hcat,
-  parens, brackets, braces, equals, punctuate)
+  parens, brackets, braces, equals, punctuate, render)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -92,10 +96,9 @@ instance Monad MatlabCode where
 
 instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
 instance SharedStatement MatlabCode (Doc, Terminator)
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type Program MatlabCode = ProgData
+instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -108,7 +111,6 @@ instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
 instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type File MatlabCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m
@@ -125,7 +127,6 @@ instance ImportSym MatlabCode where
   modImport = undefined
 
 instance BodySym MatlabCode (Doc, Terminator) where
-  type Body MatlabCode = Doc
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 
@@ -215,7 +216,6 @@ instance ScopeElim MatlabCode where
   scopeData = unMLC
 
 instance VariableSym MatlabCode where
-  type Variable MatlabCode = VarData
   var = G.var
   constant = var
   extVar = undefined
@@ -234,7 +234,6 @@ instance RenderVariable MatlabCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym MatlabCode where
-  type Value MatlabCode = ValData
   valueType v = valType <$> v
 
 instance Argument MatlabCode where
@@ -336,20 +335,21 @@ instance Reference MatlabCode where
   maybeDeref = id
 
 instance Array MatlabCode where
-  arrayElem = undefined
-  arrayLength = undefined
-  arrayCopy = undefined
+  arrayElem = mlArrayElem
+  arrayLength = listSize
+  arrayCopy arr = let arrTp = onStateValue valueType arr
+    in funcApp "copy" arrTp [arr]
 
 instance List MatlabCode (Doc, Terminator) where
   listSize = CS.listSize "length"   -- length(v)
   listAdd = undefined
-  listAppend = undefined
-  listAccess = undefined
-  listSet = undefined
-  indexOf = undefined
+  listAppend lst = listSet lst (listSize lst)
+  listAccess = G.listAccess
+  listSet = mlListSet
+  indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance Set MatlabCode where
-  contains = undefined
+  contains s e = funcApp "ismember" bool [e, s]
   setAdd = undefined
   setRemove = undefined
   setUnion = undefined
@@ -366,7 +366,10 @@ instance InternalList MatlabCode where
   listSlice' = undefined
 
 instance InternalListFunc MatlabCode where
-  listAccessFunc = undefined
+  listAccessFunc t v = intValue v >>= ((`funcFromData` t) . mlListAccessFunc)
+
+mlListAccessFunc :: (CommonRenderSym r vis smt md) => r Value -> Doc
+mlListAccessFunc v = parens $ RC.value v
 
 instance BinderSym MatlabCode where
   binder = undefined
@@ -410,22 +413,22 @@ instance StatementSym MatlabCode (Doc, Terminator) where
 
 instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi
-  (&-=) = undefined
-  (&+=) = undefined
-  (&++) = undefined
-  (&--) = undefined
+  (&-=) vr v = vr &= (valueOf vr #- v)
+  (&+=) vr v = vr &= (valueOf vr #+ v)
+  (&++) = M.increment1
+  (&--) = M.decrement1
 
 instance DeclStatement MatlabCode (Doc, Terminator) where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
-  setDec = undefined
-  setDecDef = undefined
-  listDec = undefined
-  listDecDef = undefined
-  arrayDec = undefined
-  arrayDecDef = undefined
-  constDecDef = undefined
-  funcDecDef = undefined
+  setDec = varDec
+  setDecDef = varDecDef
+  listDec _ = varDec
+  listDecDef = CP.listDecDef
+  arrayDec _ _ = varDec
+  arrayDecDef = listDecDef
+  constDecDef = varDecDef
+  funcDecDef = A.funcDecDef
 
 instance IOStatement MatlabCode (Doc, Terminator) where
   print = G.print False Nothing printFunc
@@ -463,23 +466,23 @@ instance CommentStatement MatlabCode (Doc, Terminator) where
   comment = G.comment mlCmtStart
 
 instance ControlStatement MatlabCode (Doc, Terminator) where
-  break = undefined
-  continue = undefined
+  break = mkStmtNoEnd R.break
+  continue = mkStmtNoEnd R.continue
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
   -- output, so a return becomes `result = <value>;`.
   returnStmt v' = do
     v <- zoom lensMStoVS v'
     var mlRet (toState (valueType v)) &= v'
-  throw = undefined
-  ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty (text "end")
-  switch = undefined
-  ifExists = undefined
-  for = undefined
-  forRange = undefined
-  forEach = undefined
-  while = undefined
-  tryCatch = undefined
-  assert = undefined
+  throw errMsg = valStmt $ funcApp "error" void [litString errMsg]
+  ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty mlEnd
+  switch = switchAsIf
+  ifExists = M.ifExists
+  for _ _ _ _ = error "MATLAB does not support C-style for loops; use forRange"
+  forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
+  forEach = CS.forEach' mlForEach
+  while = C.while id empty mlEnd
+  tryCatch = G.tryCatch mlTryCatch
+  assert cond errMsg = valStmt $ funcApp "assert" void [cond, errMsg]
 
 instance VisibilitySym MatlabCode Doc where
   private = toCode empty
@@ -492,7 +495,6 @@ instance VisibilityElim MatlabCode Doc where
   visibility = unMLC
 
 instance MethodTypeSym MatlabCode where
-  type MethodType MatlabCode = TypeData
   mType = zoom lensMStoVS
 
 instance ParameterSym MatlabCode where
@@ -546,7 +548,6 @@ instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
-  type Module MatlabCode = ModData
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
   -- first, then the local functions. Command-line args map to varargin.
@@ -585,7 +586,7 @@ mlTy :: CodeType -> String -> VS (MatlabCode TypeData)
 mlTy c s = typeFromData c s (text s)
 
 -- | A MATLAB parameter renders as just the variable name.
-mlParam :: MatlabCode (Variable MatlabCode) -> Doc
+mlParam :: MatlabCode Variable -> Doc
 mlParam = RC.variable
 
 -- | Renders a MATLAB function: @function [outs] = name(ins) ... end@.
@@ -687,3 +688,47 @@ mlPrint newLn f' _ v' = do
   stmtFromData (text "fprintf" <>
     parens (fileArg <> text ("'" ++ fmt ++ nl ++ "'") <> listSep' <> RC.value v))
     Semi
+
+mlEnd :: Doc
+mlEnd = text "end"
+
+mlForEach :: (CommonRenderSym r vis smt md) => r Variable ->
+  r Value -> r Body -> Doc
+mlForEach i lstVar b = vcat [
+  text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
+  indent $ RC.body b,
+  mlEnd]
+
+mlRange :: (CommonRenderSym r vis smt md) => SValue r -> SValue r ->
+  SValue r -> SValue r
+mlRange initv finalv stepv = do
+  ini <- initv
+  fin <- finalv
+  stp <- stepv
+  d <- double
+  mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
+
+mlTryCatch :: (CommonRenderSym r vis smt md) => r Body -> r Body -> Doc
+mlTryCatch tryB catchB = vcat [
+  text "try",
+  indent $ RC.body tryB,
+  text "catch" <+> text "e",
+  indent $ RC.body catchB,
+  mlEnd]
+
+mlArrayElem :: SValue MatlabCode -> SValue MatlabCode -> SVariable MatlabCode
+mlArrayElem arr' i' = do
+  i <- intToIndex i'
+  arr <- arr'
+  mkStateVar (render $ RC.value arr) (A.innerType $ return $ valueType arr)
+    (RC.value arr <> parens (RC.value i))
+
+mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlListSet lst' idx' val' = do
+  lst <- zoom lensMStoVS lst'
+  idx <- zoom lensMStoVS (intToIndex idx')
+  let lvar = mkStateVar (render $ RC.value lst)
+               (A.innerType $ return $ valueType lst)
+               (RC.value lst <> parens (RC.value idx))
+  lvar &= val'

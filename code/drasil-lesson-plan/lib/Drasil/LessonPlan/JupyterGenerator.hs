@@ -19,7 +19,7 @@ import Drasil.Metadata.Documentation (notebook)
 import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
   learnObj, review, summary, example, appendix, reference)
 
-import Drasil.LessonPlan.Core (LessonPlan, lsnPlanRefs)
+import Drasil.LessonPlan.Core (LessonPlan)
 import Drasil.LessonPlan.Document (LsnDesc, LsnChapter(..))
 import Drasil.LessonPlan.ExtractBib (extractBib)
 import Language.Drasil.Printers
@@ -46,10 +46,15 @@ instance ToFiles LessonPlan JupyterGenOptions where
       -- 1. Transform `LessonPlan` into SDL (Semantic Document language).
       nm = notebook `titleComb` (plan ^. sysName)
       as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
+      -- FIXME: These sections should be inserted into the ChunkDB but doing so
+      -- (currently) creates a "duplicate chunk insertion" error /because/ the
+      -- lesson plan is often initialized with `withCommonKnowledge` (from
+      -- `drasil-gen`), which by default loads the sections presumed existent in
+      -- an SRS. The `Section` duplicate: References.
       nb = Notebook nm as $ mkSections (plan ^. systemdb) lsnDesc
 
       -- 2. Transform SDL into TDL (Typesetting Document Language).
-      printSetting = piSys (plan ^. systemdb) (plan ^. lsnPlanRefs) Equational Engineering
+      printSetting = piSys (plan ^. systemdb) Equational Engineering
       pd = makeDocument printSetting nb
 
       -- 3. Transform TDL into `Prettyprinter.Doc`.

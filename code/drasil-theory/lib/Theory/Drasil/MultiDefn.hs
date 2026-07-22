@@ -76,7 +76,6 @@ instance NamedIdea        (MultiDefn e) where term    = qd . term
 instance Idea             (MultiDefn e) where getA    = getA . (^. qd)
 instance HasSpace         (MultiDefn e) where typ     = qd . typ
 instance Definition       (MultiDefn e) where defn    = rDesc
-instance Quantity         (MultiDefn e)
 instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
 -- | The concept domain of a MultiDefn is the union of the concept domains of
 -- the underlying variants.

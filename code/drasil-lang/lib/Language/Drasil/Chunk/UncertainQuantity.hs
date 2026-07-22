@@ -46,9 +46,7 @@ instance Idea           UncertQ where getA (UQ q _) = getA q
 -- | Finds the 'Space' of the 'ConstrConcept' used to make the 'UncertQ'.
 instance HasSpace       UncertQ where typ = coco . typ
 -- | Finds the 'Symbol' of the 'ConstrConcept' used to make the 'UncertQ'.
-instance HasSymbol      UncertQ where symbol c = symbol (c^.coco)
--- | 'UncertQ's have a 'Quantity'.
-instance Quantity       UncertQ where
+instance HasSymbol      UncertQ where symbol c = symbol (c ^. coco)
 -- | Finds the uncertainty of an 'UncertQ'.
 instance HasUncertainty UncertQ where unc = unc''
 -- | Finds the 'Constraint's of a 'ConstrConcept' used to make the 'UncertQ'.

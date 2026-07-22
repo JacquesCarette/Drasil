@@ -2,7 +2,7 @@
 module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
-import Language.Drasil.Display
+import Language.Drasil.Display (Symbol(Concat, Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
@@ -63,12 +63,12 @@ gravitationalMagnitude = dqd CP.gravitationalMagnitude lG                       
 height                 = dqd CP.height                 lH                                          Real        metre
 impulseS               = dqd CP.impulseS               lJ                                          Real        impulseU
 impulseV               = dqd CP.impulseV               (vec cJ)                                    Real        impulseU
-kEnergy                = dqd CP.kEnergy                (Concat [cK, cE])                           Real        joule
+kEnergy                = dqd CP.kEnergy                (cK <> cE)                                  Real        joule
 linearAccel            = dqd CP.linAccel               (Concat [lA, label "(", lT, label ")"])     Real        accelU
 linearDisplacement     = dqd CP.linDisp                (Concat [lU, label "(", lT, label ")"])     Real        metre
 linearVelocity         = dqd CP.linVelo                (Concat [lV, label "(", lT, label ")"])     Real        velU
 momentOfInertia        = dqd CP.momentOfInertia        (vec cI)                                    Real        momtInertU
-chgMomentum            = dqd CP.chgMomentum            (Concat [cDelta,vec cP])                    Real        impulseU
+chgMomentum            = dqd CP.chgMomentum            (cDelta <> vec cP)                          Real        impulseU
 momentum               = dqd CP.momentum               (vec cP)                                    Real        impulseU
 moment                 = dqd CP.moment                 (vec cM)                                    Real        torqueU
 moment2D               = dqd CP.moment2D               cM                                          Real        torqueU
@@ -76,7 +76,7 @@ moment2D               = dqd CP.moment2D               cM                       
 period                 = dqd CP.period                 cT                                          Real        second
 position               = dqd CP.position               (Concat [vec lP, label "(", lT, label ")"]) Real        metre
 positionVec            = dqd CP.positionVec            (vec lR)                                    Real        metre
-potEnergy              = dqd CP.potEnergy              (Concat [cP, cE])                           Real        joule
+potEnergy              = dqd CP.potEnergy              (cP <> cE)                                  Real        joule
 pressure               = dqd CP.pressure               lP                                          Real        pascal
 speed                  = dqd CP.speed                  lV                                          Real        velU
 scalarAccel            = dqd CP.scalarAccel            lA                                          Real        accelU

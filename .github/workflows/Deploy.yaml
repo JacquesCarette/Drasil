@@ -85,7 +85,7 @@ jobs:
             code/.stack-work
             code/**/.stack-work
             code/**/.hie
-          key: ${{ runner.os }}-stack-work
+          key: ${{ runner.os }}-stack-work--${{ github.sha }}
 
   haddock:
     name: Haddock
@@ -116,7 +116,7 @@ jobs:
             code/.stack-work
             code/**/.stack-work
             code/**/.hie
-          key: ${{ runner.os }}-stack-work-haddock
+          key: ${{ runner.os }}-stack-work-haddock--${{ github.sha }}
 
   gooltest:
     name: "Compile GOOL"
@@ -257,3 +257,37 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Since GitHub does not allow overrwriting a cache key, we use the commit SHA in the key, then delete old caches with this job
+  # Based on https://github.com/actions/cache/blob/main/tips-and-workarounds.md#force-deletion-of-caches-overriding-default-cache-eviction-policy
+  cleanup_cache:
+    name: "Cleanup Cache"
+    needs: [build, haddock]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: "Cleanup Cache"
+        run: |
+          echo "Fetching list of cache keys"
+          gh cache list --key ${{ runner.os }}-stack-work
+          oldCacheKeys=$(gh cache list --key ${{ runner.os }}-stack-work --json id,key --jq "$JQ_FILTER")
+          echo "Keys to delete:"
+          echo $oldCacheKeys
+
+          ## Setting this to not fail the workflow while deleting cache keys.
+          set +e
+          echo "Deleting caches..."
+          for cacheKey in $oldCacheKeys
+          do
+              echo "Deleting $cacheKey..."
+              gh cache delete $cacheKey
+          done
+          echo "Done"
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          # This JQ filter ignores cache keys matching the current commit (the ones we just pushed to the cache)
+          JQ_FILTER: map(select(.key != "${{ runner.os }}-stack-work--${{ github.sha }}" and .key != "${{ runner.os }}-stack-work-haddock--${{ github.sha }}")) | .[].id

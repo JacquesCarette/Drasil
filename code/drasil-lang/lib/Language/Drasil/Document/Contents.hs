@@ -14,14 +14,18 @@ module Language.Drasil.Document.Contents (
 
 import Control.Lens ((^.))
 
-import Language.Drasil
-  ( Definition(..), HasShortName(..), getSentSN, foldlSent_
-  , foldlSent, foldlSentCol
-  , Expr, Referable(refAdd), ModelExpr, Sentence (..))
-import Language.Drasil.Document.Core
-import Language.Drasil.Document.Reference
-import Language.Drasil.Document.Sections
+import Language.Drasil.Classes (Definition(..))
+import Language.Drasil.Document.Core (LabelledContent, RawContent(..),
+  Contents(UlC), ListTuple, ItemType(Flat), ListType(Simple))
+import Language.Drasil.Document.Reference (Reference)
+import Language.Drasil.Document.Sections (ulcc, mkParagraph, mkRawLC)
 import Language.Drasil.Document.SentenceCombinators (bulletFlat, mkEnumAbbrevList)
+import Language.Drasil.Expr.Lang (Expr)
+import Language.Drasil.Label.Type (Referable(refAdd))
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.Sentence (Sentence(..))
+import Language.Drasil.Sentence.Fold (foldlSent_, foldlSent, foldlSentCol)
+import Language.Drasil.ShortName (HasShortName(..), getSentSN)
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent

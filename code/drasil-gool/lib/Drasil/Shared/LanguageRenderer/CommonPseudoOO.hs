@@ -22,14 +22,14 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
-  extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, SVariable, Value,
+  extFuncAppMixedArgs,funcType, extVar, Label, Library, Body, SVariable, Value,
   SValue, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
+import Drasil.GOOL.InterfaceGOOL (File, Module, Class, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
   objMethodCall, OOStatement)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
@@ -93,8 +93,8 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis smt md, OOStatement r smt)
-  => Label -> [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
+  :: (OORenderSym r vis smt md svr att, OOStatement r smt)
+  => Label -> [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r md)
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
@@ -102,11 +102,11 @@ doxFunc :: (RenderMethod r md) => String -> [String] -> Maybe String ->
   MS (r md) -> MS (r md)
 doxFunc = docFunc functionDox
 
-doxClass :: (RG.RenderClass r vis md) => String -> SClass r -> SClass r
+doxClass :: (RG.RenderClass r vis md svr) => String -> CS (r Class) -> CS (r Class)
 doxClass = docClass classDox
 
 doxMod :: (RG.RenderFile r) => String -> String -> String -> [String] ->
-  String -> SFile r -> SFile r
+  String -> FS (r File) -> FS (r File)
 doxMod = docMod moduleDox
 
 -- Python, Java, and C# --
@@ -144,12 +144,12 @@ discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n
 --   Parameters: render function, class name, scope, parent, class variables,
 --               constructor(s), methods
 intClass
-  :: (RC.MethodElim r md, Monad r, RG.StateVarElim r, RC.VisibilityElim r vis)
+  :: (RC.MethodElim r md, Monad r, RG.StateVarElim r svr, RC.VisibilityElim r vis)
   => (Label -> Doc -> Doc -> Doc -> Doc -> Doc)
   -> Label
   -> r vis
   -> r ParentSpec
-  -> [CSStateVar r]
+  -> [CSStateVar r svr]
   -> [MS (r md)]
   -> [MS (r md)]
   -> CS (r Doc)
@@ -166,7 +166,7 @@ intClass f n s i svrs cstrs mths = do
 -- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule
   :: (RG.ClassElim r, RC.MethodElim r md, RG.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r md)] -> [SClass r] -> FSModule r
+  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
 buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
@@ -243,7 +243,7 @@ forEach
      , RC.ValueElim r
      , VariableElim r
      )
-  => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MSBody r -> MS (r smt)
+  => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MS (r Body) -> MS (r smt)
 forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
@@ -258,19 +258,19 @@ mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
-docMain :: (OORenderSym r vis smt md) => MSBody r -> MS (r md)
+docMain :: (OORenderSym r vis smt md svr att) => MS (r Body) -> MS (r md)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
 mainFunction
-  :: ( AttachmentSym r
-     , OORenderMethod r vis md
+  :: ( AttachmentSym r att
+     , OORenderMethod r vis md att
      , IC.ParameterSym r
      , UnRepr r TypeData
      , Monad r
      , VisibilitySym r vis
      )
-  => VS (r TypeData) -> Label -> MSBody r -> MS (r md)
+  => VS (r TypeData) -> Label -> MS (r Body) -> MS (r md)
 mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
   (render (renderType argT) ++ array) (renderType argT <> array'))))]
@@ -282,13 +282,13 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   ms is the class methods
 --   cs is the classes
 buildModule'
-  :: (OORenderSym r vis smt md, UnRepr r Doc)
+  :: (OORenderSym r vis smt md svr att, UnRepr r Doc)
   => Label
   -> (String -> r Doc)
   -> [Label]
   -> [MS (r md)]
-  -> [SClass r]
-  -> FSModule r
+  -> [CS (r Class)]
+  -> FS (r Module)
 buildModule' n inc is ms cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS)
           (if null ms then cs else IG.buildClass Nothing [] [] ms : cs)
@@ -329,12 +329,12 @@ string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
   :: (RenderMethod r md)
-  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md))
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md))
   -> String
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r md)
 docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)
   [fst o] (f (map snd is) [snd o] [] b)
@@ -369,7 +369,7 @@ setDecDef v scp vals = do
 
 setDec
   :: (IC.DeclStatement r smt, RC.RenderStatement r smt, RC.StatementElim r smt)
-  => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
 setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
@@ -383,8 +383,8 @@ destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
 stateVarDef
-  :: (OORenderSym r vis smt md, Monad r)
-  => r vis -> r (Attachment r) -> SVariable r -> SValue r -> CS (r Doc)
+  :: (OORenderSym r vis smt md svr att, Monad r)
+  => r vis -> r att -> SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility  s) (RG.perm p) . RC.statement)
   (RC.stmt $ IC.varDecDef vr IC.local vl)
@@ -417,8 +417,8 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 -- Python, C#, C++, and Swift--
 
 extraClass
-  :: (RG.RenderClass r vis md, VisibilitySym r vis)
-  =>  Label -> Maybe Label -> [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  :: (RG.RenderClass r vis md svr, VisibilitySym r vis)
+  =>  Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 extraClass n = RG.intClass n public . RG.inherit
 
 -- Java, C#, and Swift --
@@ -446,8 +446,8 @@ openFileW
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
-  :: (Monad r, OORenderSym r vis smt md)
-  => r vis -> r (Attachment r) -> SVariable r -> CS (r Doc)
+  :: (Monad r, OORenderSym r vis smt md svr att)
+  => r vis -> r att -> SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
 
@@ -493,8 +493,8 @@ listDec
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis smt md)
-  => SVariable r -> r ScopeData -> [SVariable r] -> MSBody r -> MS (r smt)
+  :: (OORenderSym r vis smt md svr att)
+  => SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body) -> MS (r smt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
@@ -522,7 +522,7 @@ forLoopError :: String -> String
 forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
   "forRange, forEach, or while instead"
 
-mainBody :: (RC.BodyElim r, RC.RenderMethod r md) => MSBody r -> MS (r md)
+mainBody :: (RC.BodyElim r, RC.RenderMethod r md) => MS (r Body) -> MS (r md)
 mainBody b = do
   modify setCurrMain
   bod <- b
@@ -536,11 +536,11 @@ inOutFunc
      , RenderType r
      , VariableElim r
      )
-  => (VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r md))
+  => (VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r md))
   -> [SVariable r]
   -> [SVariable r]
   -> [SVariable r]
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r md)
 inOutFunc f ins [] [] b = f IC.void (map IC.param ins) b
 inOutFunc f ins outs both b = f
@@ -553,12 +553,12 @@ inOutFunc f ins outs both b = f
 docInOutFunc'
   :: (RenderMethod r md)
   => FuncDocRenderer
-  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> MS (r md))
+  -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r md))
   -> String
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
   -> [(String, SVariable r)]
-  -> MSBody r -> MS (r md)
+  -> MS (r Body) -> MS (r md)
 docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)
 

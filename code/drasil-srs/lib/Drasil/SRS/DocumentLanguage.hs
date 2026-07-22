@@ -15,7 +15,6 @@ import Data.List (nub, sortBy, (\\))
 import Data.Maybe (maybeToList, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
-import qualified Data.Map.Strict as M
 
 -- General Drasil
 import Language.Drasil
@@ -24,8 +23,7 @@ import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
 import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts,
-  TermAbbr, shortForm, termResolve')
+import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
 
 import Drasil.System (HasSystemMeta(..))
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
@@ -45,7 +43,7 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
-  TSIntro(..), UCsSec(..), getTraceConfigUID)
+  TSIntro(..), UCsSec(..))
 import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
@@ -59,7 +57,6 @@ import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
-import Drasil.SRS.References (secRefs)
 import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -94,7 +91,7 @@ mkDoc si srsDecl headingComb =
       refdCites = extractSectionsBib (si ^. systemdb) sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences sections refdCites si
+      si' = buildTraceMaps dd si
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
@@ -128,7 +125,12 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
-    in set systemdb (insertAll tglcs db)
+        traceMats = map (\(TraceConfig u _ desc cols rows) ->
+          TM.generateTraceTableView u desc cols rows si) $ traceMatStandard si
+        db' = insertAll tglcs
+            $ insertAll traceMats
+            $ insertAll traceyGraphGetRefs db
+    in set systemdb db'
      $ set traceTable tdb
      $ set refbyTable (invert tdb) si
   | otherwise = si
@@ -137,28 +139,6 @@ buildTraceMaps sd si
     containsTraceSec ((TraceabilitySec _):_) = True
     containsTraceSec (_:ss)                = containsTraceSec ss
     containsTraceSec []                    = False
-
--- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> [Citation] -> SmithEtAlSRS -> SmithEtAlSRS
-fillReferences allSections cites si = si2
-  where
-    -- get old chunk database + ref database
-    chkdb = si ^. systemdb
-    -- get refs from SRSDecl. Should include all section labels and labelled content.
-    refsFromSRS = concatMap extractLCRefs allSections
-    -- get refs from the stuff already inside the chunk database
-    ddefs   = si ^. dataDefns
-    gdefs   = si ^. genDefns
-    imods   = si ^. instModels
-    tmods   = si ^. theoryModels
-    concIns = findAllConcInsts chkdb
-    newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
-      ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
-      ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs ++ map ref cites
-      ++ map ref ddefs ++ map ref gdefs ++ map ref imods
-      ++ map ref tmods ++ map ref concIns
-    si2 = set refTable (M.union (si ^. refTable) newRefs) si
 
 -- * Section Creator Functions
 

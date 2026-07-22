@@ -2,7 +2,7 @@
 module Data.Drasil.SI_Units where
 
 import Language.Drasil
-import Language.Drasil.Display
+import Language.Drasil.Display (Symbol(Special))
 import Language.Drasil.ShortHands (cOmega)
 import Drasil.Database (mkUid)
 
@@ -36,7 +36,6 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 -- * Commonly Defined Units
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
--- degree = UD (dcc "degree" (cn' "degree") "angle") (BaseSI (US [(Special Circle,1)])) ["degree"]
 degree = fund' "degree" "angle" (Special Circle)
 
 -- Some of these units are easiest to define via others less common names,
@@ -62,7 +61,7 @@ calorie = derUC "calorie"
   "calorie" "energy" (label "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade"
-  "centigrade" "temperature" (Concat [Special Circle, label "C"])
+  "centigrade" "temperature" (Special Circle <> label "C")
   (shift 273.15 kelvin)
 
 coulomb = derCUC' "coulomb"
@@ -89,10 +88,10 @@ katal = derCUC' "katal"
 
 kilopascal = derUC' "kilopascal"
   "kilopascal" "pressure"
-  (Concat [label "k", label "Pa"]) (scale 1000 pascal)
+  (label "k" <> label "Pa") (scale 1000 pascal)
 
 kilowatt = derUC' "kilowatt"
-  "kilowatt" "power" (Concat [label "k", label "W"]) (scale 1000 watt)
+  "kilowatt" "power" (label "k" <> label "W") (scale 1000 watt)
 
 litre = derUC' "litre"
   "litre" "volume" (label "L") (scale (1/1000) m_3)

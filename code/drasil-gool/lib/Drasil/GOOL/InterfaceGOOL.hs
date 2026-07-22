@@ -1,9 +1,9 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
+  Program, GSProgram, File, Module, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -21,7 +21,7 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, SVariable, SValue, NamedArgs, MixedCtorCall,
+  Label, Library, Body, Block, SVariable, SValue, NamedArgs, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
@@ -31,109 +31,109 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
+  ModData, ProgData)
 
-class (SharedProg r vis smt md, OOStatement r smt, ProgramSym r vis smt md,
-  ObserverPattern r smt, StrategyPattern r smt
-  ) => OOProg r vis smt md
+import Text.PrettyPrint.HughesPJ (Doc)
+
+class (SharedProg r vis smt md, OOStatement r smt,
+  ProgramSym r vis smt md svr att prg, ObserverPattern r smt,
+  StrategyPattern r smt
+  ) => OOProg r vis smt md svr att prg
 
 class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
   OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
   OOFunctionSym r, OOValueExpression r
   ) => OOStatement r smt
 
-type GSProgram a = GS (a (Program a))
+type Program = ProgData
+type GSProgram a prg = GS (a prg)
 
-class (FileSym r vis smt md) => ProgramSym r vis smt md where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r -> prg where
+  prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
 
-type SFile a = FS (a (File a))
+type File = FileData
 
-class (ModuleSym r vis smt md) => FileSym r vis smt md where
-  type File r
-  fileDoc :: FSModule r -> SFile r
+class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
+  fileDoc :: FS (r Module) -> FS (r File)
 
   -- Module description, watermark, list of author names, date as a String, file to comment
-  docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
+  docMod :: String -> String -> [String] -> String -> FS (r File) -> FS (r File)
 
-type FSModule a = FS (a (Module a))
+type Module = ModData
 
-class (ClassSym r vis smt md) => ModuleSym r vis smt md where
-  type Module r
+class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
   -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [MS (r md)] -> [SClass r] -> FSModule r
+  buildModule :: Label -> [Label] -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
 
-type SClass a = CS (a (Class a))
+type Class = Doc
 
-class (OOMethodSym r vis smt md, StateVarSym r vis) => ClassSym r vis smt md where
-  type Class r
+class (OOMethodSym r vis smt md att, StateVarSym r vis svr att) => ClassSym r vis smt md svr att where
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [MS (r md)] ->
-    [MS (r md)] -> SClass r
+  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
+    [MS (r md)] -> CS (r Class)
   -- | Creates an extra class.
   --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [MS (r md)] ->
-    [MS (r md)] -> SClass r
+  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
+    [MS (r md)] -> CS (r Class)
   -- | Creates a class implementing interfaces.
   --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [MS (r md)] ->
-    [MS (r md)] -> SClass r
+  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
+    [MS (r md)] -> CS (r Class)
 
-  docClass :: String -> SClass r -> SClass r
+  docClass :: String -> CS (r Class) -> CS (r Class)
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis smt md, AttachmentSym r) => OOMethodSym r vis smt md where
-  method      :: Label -> r vis -> r (Attachment r) -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MSBody r -> MS (r md)
+class (MethodSym r vis smt md, AttachmentSym r att) => OOMethodSym r vis smt md att where
+  method      :: Label -> r vis -> r att -> VS (r TypeData) ->
+    [MS (r ParamData)] -> MS (r Body) -> MS (r md)
   getMethod   :: SVariable r -> MS (r md)
   setMethod   :: SVariable r -> MS (r md)
-  constructor :: [MS (r ParamData)] -> Initializers r -> MSBody r -> MS (r md)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r md)
 
-  -- inOutMethod and docInOutMethod both need the Attachment parameter
-  inOutMethod :: Label -> r vis -> r (Attachment r) -> InOutFunc r md
-  docInOutMethod :: Label -> r vis -> r (Attachment r) -> DocInOutFunc r md
+  -- inOutMethod and docInOutMethod both need AttachmentSym
+  inOutMethod :: Label -> r vis -> r att -> InOutFunc r md
+  docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r md
 
-privMethod :: (OOMethodSym r vis smt md) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> MS (r md)
+privMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis smt md) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MSBody r -> MS (r md)
+pubMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis smt md) => [MS (r ParamData)] ->
+initializer :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
   Initializers r -> MS (r md)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis smt md) => [MS (r ParamData)] ->
-  MSBody r -> MS (r md)
+nonInitConstructor :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
+  MS (r Body) -> MS (r md)
 nonInitConstructor ps = constructor ps []
 
-type CSStateVar a = CS (a (StateVar a))
+type StateVar = Doc
+type CSStateVar r svr = CS (r svr)
 
-class (VisibilitySym r vis, AttachmentSym r, VariableSym r) => StateVarSym r vis where
-  type StateVar r
-  stateVar :: r vis -> r (Attachment r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r vis -> r (Attachment r) -> SVariable r -> SValue r -> CSStateVar r
-  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r
+class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis svr att | r -> svr where
+  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r svr
+  stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
+  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
 
-privDVar :: (StateVarSym r vis) => SVariable r -> CSStateVar r
+privDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis) => SVariable r -> CSStateVar r
+pubDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis) => SVariable r -> CSStateVar r
+pubSVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance
-class AttachmentSym r where
-  type Attachment r
-  classLevel  :: r (Attachment r)
-  instanceLevel :: r (Attachment r)
+class AttachmentSym r att | r -> att where
+  classLevel  :: r att
+  instanceLevel :: r att
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VS (r TypeData)
@@ -275,8 +275,8 @@ addObserver o = listAdd obsList lastelem o
         lastelem = listSize obsList
 
 class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
-  runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
-    Maybe (SVariable r) -> MSBlock r
+  runStrategy :: Label -> [(Label, MS (r Body))] -> Maybe (SValue r) ->
+    Maybe (SVariable r) -> MS (r Block)
 
 class (FunctionSym r) => OOFunctionSym r where
   func :: Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)

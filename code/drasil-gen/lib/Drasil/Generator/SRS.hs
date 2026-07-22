@@ -17,7 +17,7 @@ import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.SRS (SmithEtAlSRS, mkGraphInfo, refTable)
+import Drasil.SRS (SmithEtAlSRS, mkGraphInfo)
 import Drasil.System (systemdb)
 import Drasil.Data.Formats.HTML (HTMLGenOptions(..))
 
@@ -31,7 +31,7 @@ genSmithEtAlSrs syst doc srsFileName =
     traceyLayout
   ]
   where
-    pinfo = piSys (syst ^. systemdb) (syst ^. refTable) Equational Engineering
+    pinfo = piSys (syst ^. systemdb) Equational Engineering
     srsLayout =
       directory [ps|SRS|] $
         map

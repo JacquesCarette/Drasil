@@ -17,14 +17,14 @@ import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
 import Drasil.FileHandling (FileLayout, file, directory, exactFile, ps)
 import Language.Drasil
-import Drasil.GOOL (OOProg, VisibilityTag(..), headers, sources, mainMod,
-  ProgData(..), initialState, FileData(..), modDoc)
-import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
-import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..))
+import Drasil.GOOL (OOProg, File, FS, VisibilityTag(..), headers, sources,
+  mainMod, ProgData(..), initialState, FileData(..), modDoc)
+import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), unCI)
+import Drasil.GProc (ProcProg, NativeVector)
+import qualified Drasil.GProc as Proc (GSProgram, ProgramSym(..))
 import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
 import Drasil.System (HasSystemMeta(..))
-import Drasil.SRS (refTable, HasSmithEtAlSRS(..))
+import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -102,7 +102,7 @@ generator l dt sd chs cs = let
   _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
   currentScope = Global
 }
-  where pinfo = piSys (cs ^. systemdb) (cs ^. refTable) Implementation Scientific
+  where pinfo = piSys (cs ^. systemdb) Implementation Scientific
         (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
@@ -120,8 +120,9 @@ generator l dt sd chs cs = let
 -- OO Versions --
 
 data SomeProgGenerator where
-  SomeProgGenerator :: forall repr vis smt md. (OOProg repr vis smt md) =>
-    (repr (OO.Program repr) -> ProgData) -> SomeProgGenerator
+  SomeProgGenerator
+    :: forall repr vis smt md svr att prg. (OOProg repr vis smt md svr att prg)
+    => (repr prg -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
@@ -176,8 +177,10 @@ insertFile (p, d) m =
 -- package will be generated in.
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
-genPackage :: (OOProg progRepr vis smt md, SoftwareDossierSym packRepr, Monad packRepr) =>
-  (progRepr (OO.Program progRepr) -> ProgData) -> GenState (packRepr PackageData)
+genPackage
+  :: (OOProg progRepr vis smt md svr att prg, SoftwareDossierSym packRepr, Monad packRepr)
+  => (progRepr prg -> ProgData)
+  -> GenState (packRepr PackageData)
 genPackage unRepr = do
   g <- get
   ci <- genProgram
@@ -216,7 +219,7 @@ genPackage unRepr = do
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
-genProgram :: (OOProg r vis smt md) => GenState (OO.GSProgram r)
+genProgram :: (OOProg r vis smt md svr att prg) => GenState (OO.GSProgram r prg)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
@@ -227,12 +230,12 @@ genProgram = do
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r vis smt md) => Modularity -> GenState [OO.SFile r]
+chooseModules :: (OOProg r vis smt md svr att prg) => Modularity -> GenState [FS (r File)]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r vis smt md) => GenState (OO.SFile r)
+genUnmodular :: (OOProg r vis smt md svr att prg) => GenState (FS (r File))
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -251,7 +254,7 @@ genUnmodular = do
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
-genModules :: (OOProg r vis smt md) => GenState [OO.SFile r]
+genModules :: (OOProg r vis smt md svr att prg) => GenState [FS (r File)]
 genModules = do
   g <- get
   mn     <- genMain
@@ -268,9 +271,9 @@ genModules = do
 -- un-representation functions determine which target language the package will
 -- be generated in.
 generateCodeProc
-  :: (ProcProg progRepr vis smt md, SoftwareDossierSym packRepr, Monad packRepr)
+  :: (ProcProg progRepr vis smt md prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
   => Lang
-  -> (progRepr (Proc.Program progRepr) -> ProgData)
+  -> (progRepr prg -> ProgData)
   -> (packRepr PackageData -> PackageData)
   -> DrasilState
   -> FileLayout
@@ -294,8 +297,8 @@ generateCodeProc l unReprProg unReprPack g =
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
 genPackageProc
-  :: (ProcProg progRepr vis smt md, SoftwareDossierSym packRepr, Monad packRepr)
-  => (progRepr (Proc.Program progRepr) -> ProgData)
+  :: (ProcProg progRepr vis smt md prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
+  => (progRepr prg -> ProgData)
   -> GenState (packRepr PackageData)
 genPackageProc unRepr = do
   g <- get
@@ -332,7 +335,9 @@ genPackageProc unRepr = do
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
-genProgramProc :: (ProcProg r vis smt md) => GenState (Proc.GSProgram r)
+genProgramProc
+  :: (ProcProg r vis smt md prg, NativeVector r)
+  => GenState (Proc.GSProgram r prg)
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
@@ -343,13 +348,15 @@ genProgramProc = do
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModulesProc
-  :: (ProcProg r vis smt md)
-  => Modularity -> GenState [Proc.SFile r]
+  :: (ProcProg r vis smt md prg, NativeVector r)
+  => Modularity -> GenState [FS (r File)]
 chooseModulesProc Unmodular = liftS genUnmodularProc
 chooseModulesProc Modular = genModulesProc
 
 -- | Generates an entire SCS program as a single module.
-genUnmodularProc :: (ProcProg r vis smt md) => GenState (Proc.SFile r)
+genUnmodularProc
+  :: (ProcProg r vis smt md prg, NativeVector r)
+  => GenState (FS (r File))
 genUnmodularProc = do
   g <- get
   umDesc <- unmodularDesc
@@ -367,7 +374,9 @@ genUnmodularProc = do
               genInputConstraintsProc Pub] ++ [genOutputFormatProc]))
 
 -- | Generates all modules for an SCS program.
-genModulesProc :: (ProcProg r vis smt md) => GenState [Proc.SFile r]
+genModulesProc
+  :: (ProcProg r vis smt md prg, NativeVector r)
+  => GenState [FS (r File)]
 genModulesProc = do
   g <- get
   mn     <- genMainProc

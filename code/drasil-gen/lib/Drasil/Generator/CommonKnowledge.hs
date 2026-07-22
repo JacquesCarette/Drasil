@@ -6,7 +6,7 @@ module Drasil.Generator.CommonKnowledge (
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13)
 import Language.Drasil (IdeaDict, Citation, ConceptChunk, ConceptInstance,
   DefinedQuantityDict, UnitDefn, CI)
-import Language.Drasil.Document (LabelledContent, Reference)
+import Language.Drasil.Document (LabelledContent, Reference, Section)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource,
   smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon')
 import Data.Drasil.SI_Units (siUnits)
-import qualified Drasil.SRS.Concepts as SRS
+import qualified Drasil.SRS.DummyChunks as SRS
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 import Drasil.Metadata.Domains (compScience, softEng, mathematics, progLanguage, civilEng,
@@ -38,7 +38,8 @@ withCommonKnowledge = insertAllOutOfOrder13 basisCDB
 -- physics, general science, basic software, and general documentation.
 basisCDB :: ChunkDB
 basisCDB =
-    insertAll basisReferences
+    insertAll basisSections
+  $ insertAll basisLCs
   $ insertAll siUnits
   $ insertAll basisConceptChunks
   $ insertAll basisSymbols
@@ -47,8 +48,11 @@ basisCDB =
   $ insertAll basisCitations
     empty
 
-basisReferences :: [Reference]
-basisReferences = SRS.sectionReferences
+basisSections :: [Section]
+basisSections = SRS.sections
+
+basisLCs :: [LabelledContent]
+basisLCs = SRS.tables
 
 basisSymbols :: [DefinedQuantityDict]
 basisSymbols =

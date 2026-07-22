@@ -7,11 +7,10 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, MSBody, SVariable, SValue)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
+import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
+import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), AttachmentSym(..), GetSet(..),
-  StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
+  FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
@@ -20,13 +19,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis smt md, IG.FileSym r vis smt md,
+class (CommonRenderSym r vis smt md, IG.FileSym r vis smt md svr att,
   IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r smt,
   IG.StrategyPattern r smt, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r vis md, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r vis md, RenderMod r, ModuleElim r,
-  StateVarElim r, PermElim r
-  ) => OORenderSym r vis smt md
+  IG.OOValueExpression r, RenderClass r vis md svr, ClassElim r, RenderFile r,
+  InternalGetSet r, OORenderMethod r vis md att, RenderMod r, ModuleElim r,
+  StateVarElim r svr, PermElim r att
+  ) => OORenderSym r vis smt md svr att
 
 -- OO-Only Typeclasses --
 
@@ -34,16 +33,16 @@ class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r (IG.Module r) -> r Block
+  top :: r IG.Module -> r Block
   bottom :: r Block
 
-  commentedMod :: IG.SFile r -> FS (r Doc) -> IG.SFile r
+  commentedMod :: FS (r IG.File) -> FS (r Doc) -> FS (r IG.File)
 
-  fileFromData :: FilePath -> IG.FSModule r -> IG.SFile r
+  fileFromData :: FilePath -> FS (r IG.Module) -> FS (r IG.File)
 
-class PermElim r where
-  perm :: r (IG.Attachment r) -> Doc
-  binding :: r (IG.Attachment r) -> AttachmentTag
+class PermElim r att where
+  perm :: r att -> Doc
+  binding :: r att -> AttachmentTag
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VS (r FuncData)
@@ -52,39 +51,39 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md | r -> vis where
+class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md att | r -> vis att where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r vis -> r (IG.Attachment r) ->
-    MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
+  intMethod     :: Bool -> Label -> r vis -> r att ->
+    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r vis -> r (IG.Attachment r)
-    -> MSMthdType r -> [MS (r ParamData)] -> MSBody r -> MS (r md)
+  intFunc       :: Bool -> Label -> r vis -> r att
+    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 
-  destructor :: [IG.CSStateVar r] -> MS (r md)
+  destructor :: [IG.CSStateVar r svr] -> MS (r md)
 
-class StateVarElim r where
-  stateVar :: r (IG.StateVar r) -> Doc
+class StateVarElim r svr | r -> svr where
+  stateVar :: r svr -> Doc
 
 type ParentSpec = Doc
 
-class (BlockCommentSym r) => RenderClass r vis md | r -> vis md where
+class (BlockCommentSym r) => RenderClass r vis md svr | r -> vis md svr where
   -- class name, visibility, parent, state variables, constructor(s), methods
-  intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r]
-    -> [MS (r md)] -> [MS (r md)] -> IG.SClass r
+  intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r svr]
+    -> [MS (r md)] -> [MS (r md)] -> CS (r IG.Class)
 
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec
 
-  commentedClass :: CS (r Doc) -> IG.SClass r -> IG.SClass r
+  commentedClass :: CS (r Doc) -> CS (r IG.Class) -> CS (r IG.Class)
 
 class ClassElim r where
-  class' :: r (IG.Class r) -> Doc
+  class' :: r IG.Class -> Doc
 
 class RenderMod r where
-  modFromData :: String -> FS Doc -> IG.FSModule r
-  updateModuleDoc :: (Doc -> Doc) -> r (IG.Module r) -> r (IG.Module r)
+  modFromData :: String -> FS Doc -> FS (r IG.Module)
+  updateModuleDoc :: (Doc -> Doc) -> r IG.Module -> r IG.Module
 
 class ModuleElim r where
-  module' :: r (IG.Module r) -> Doc
+  module' :: r IG.Module -> Doc

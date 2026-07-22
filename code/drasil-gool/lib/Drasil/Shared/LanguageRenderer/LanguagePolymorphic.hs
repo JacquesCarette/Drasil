@@ -21,20 +21,18 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  MSBlock, Block, SVariable, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  BodySym(Body), bodyStatements, oneLiner, VariableSym(Variable),
-  VisibilitySym(..), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
-  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
-  TypeElim(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
+  Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
+  bodyStatements, oneLiner, VisibilitySym(..),
+  VariableElim(variableName, variableType), ValueSym(valueType),
+  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
+  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (OOStatement, SFile, FSModule, SClass,
-  Initializers, CSStateVar, FileSym(File), ModuleSym(Module), newObj,
-  objMethodCallNoParams, ($.), AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, Class, Initializers,
+  CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -74,7 +72,7 @@ import qualified Text.PrettyPrint.HughesPJ as D
 
 -- Bodies --
 
-multiBody :: (RC.BodyElim r, Monad r) => [MSBody r] -> MS (r Doc)
+multiBody :: (RC.BodyElim r, Monad r) => [MS (r Body)] -> MS (r Doc)
 multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
@@ -84,7 +82,7 @@ block
   => [MS (r smt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MSBlock r] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
@@ -176,7 +174,7 @@ classVar n t = mkClassVar n t (R.var n)
 
 -- | To be used in classVarAccess implementations. Throws an error if the variable is
 -- not class-level since classVarAccess is for accessing class-level variables from a class
-classVarAccessCheck :: (InternalVarElim r) => r (Variable r) -> r (Variable r)
+classVarAccessCheck :: (InternalVarElim r) => r Variable -> r Variable
 classVarAccessCheck v = classVarCS (variableBind v)
   where classVarCS InstanceLevel = error
           "classVarAccess can only be used to access class-level variables"
@@ -269,7 +267,7 @@ newObjMixedArgs s tp vs ns = do
 
 lambda
   :: (BinderElim r, RenderValue r, ValueSym r)
-  => ([r BinderD] -> r (Value r) -> Doc) -> [VSBinder r] -> SValue r -> SValue r
+  => ([r BinderD] -> r Value -> Doc) -> [VSBinder r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
@@ -435,7 +433,7 @@ valStmt t v' = do
 comment :: (RenderStatement r smt) => Doc -> Label -> MS (r smt)
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
-throw :: (IC.Literal r, RenderStatement r smt) => (r (Value r) -> Doc) -> Terminator ->
+throw :: (IC.Literal r, RenderStatement r smt) => (r Value -> Doc) -> Terminator ->
   Label -> MS (r smt)
 throw f t l = do
   msg <- zoom lensMStoVS (IC.litString l)
@@ -464,8 +462,8 @@ ifCond
   -> Doc
   -> Doc
   -> Doc
-  -> [(SValue r, MSBody r)]
-  -> MSBody r
+  -> [(SValue r, MS (r Body))]
+  -> MS (r Body)
   -> MS (r smt)
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
@@ -484,8 +482,8 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (RenderStatement r smt) => (r (Body r) -> r (Body r) -> Doc) ->
-  MSBody r -> MSBody r -> MS (r smt)
+tryCatch :: (RenderStatement r smt) => (r Body -> r Body -> Doc) ->
+  MS (r Body) -> MS (r Body) -> MS (r smt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
@@ -495,7 +493,7 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param
   :: (RenderParam r, VariableElim r)
-  => (r (Variable r) -> Doc) -> SVariable r -> MS (r ParamData)
+  => (r Variable -> Doc) -> SVariable r -> MS (r ParamData)
 param f v' = do
   v <- zoom lensMStoVS v'
   let n = variableName v
@@ -504,32 +502,32 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis md)
+  :: (OORenderMethod r vis md att)
   => Label
   -> r vis
-  -> r (Attachment r)
+  -> r att
   -> VS (r TypeData)
   -> [MS (r ParamData)]
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r md)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis smt md) => SVariable r -> MS (r md)
+getMethod :: (OORenderSym r vis smt md svr att) => SVariable r -> MS (r md)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis smt md) => SVariable r -> MS (r md)
+setMethod :: (OORenderSym r vis smt md svr att) => SVariable r -> MS (r md)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
-initStmts :: (OOStatement r smt) => Initializers r -> MSBody r
+initStmts :: (OOStatement r smt) => Initializers r -> MS (r Body)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r, OORenderMethod r vis md)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MSBody r -> MS (r md)
+  :: (AttachmentSym r att, OORenderMethod r vis md att)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (RenderMethod r md) => FuncDocRenderer -> String ->
@@ -544,37 +542,37 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis md, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
+  :: (RenderClass r vis md svr, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis md, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r] -> [MS (r md)] -> [MS (r md)] -> SClass r
+implementingClass :: (RenderClass r vis md svr, VisibilitySym r vis) => Label -> [Label] ->
+  [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis md)
-  => ClassDocRenderer -> String -> SClass r -> SClass r
+  :: (RenderClass r vis md svr)
+  => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass
   :: (RC.BlockCommentElim r, RO.ClassElim r, Monad r)
-  => CS (r Doc) -> SClass r -> CS (r Doc)
+  => CS (r Doc) -> CS (r Class) -> CS (r Doc)
 commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
   (RC.blockComment' cmt) (RO.class' cs))
 
 -- Modules --
 
-modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
+modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FS (r Module)
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
 fileDoc
   :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r (Module r) -> r Block) -> r Block -> FSModule r -> SFile r
+  => String -> (r Module -> r Block) -> r Block -> FS (r Module) -> FS (r File)
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -599,14 +597,14 @@ docMod
   -> String
   -> [String]
   -> String
-  -> SFile r
-  -> SFile r
+  -> FS (r File)
+  -> FS (r File)
 docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt e
   <$> getModuleName)
 
 fileFromData
   :: (RO.ModuleElim r)
-  => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
+  => (FilePath -> r Module -> r File) -> FilePath -> FS (r Module) -> FS (r File)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

@@ -3,7 +3,7 @@
 -- This is supposed to always be imported qualified, since we're purposefully
 -- overloading the names.
 module Drasil.Projectile.Expressions (
-  eqnRefs, speed', scalarPos', flightDur', offset', velVecExpr, posVecExpr,
+  equations, speed', scalarPos', flightDur', offset', velVecExpr, posVecExpr,
   lcrectVel, lcrectPos, lcrectNoTime, landPosExpr,
   horizVel, horizPos, vertVel, vertPos, vertNoTime, iyPos, yConstAccel, iSpeed,
   velocityXY, accelerationXY, positionXY, constAccelXY,
@@ -19,6 +19,9 @@ import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelCon
   ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position,
   velocity, acceleration, constAccelV, speed)
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, landPos)
+
+equations :: [LabelledContent]
+equations = [lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime]
 
 flightDur', iyPos, yConstAccel, iSpeed :: PExpr
 flightDur' = exactDbl 2 $* sy launSpeed $* sin (sy launAngle) $/ sy gravitationalAccelConst
@@ -79,7 +82,3 @@ lchorizPos = lbldExpr horizPos (makeEqnRef "horizPos")
 lcvertVel = lbldExpr vertVel (makeEqnRef "vertVel")
 lcvertPos = lbldExpr vertPos (makeEqnRef "vertPos")
 lcvertNoTime = lbldExpr vertNoTime (makeEqnRef "vertNoTime")
-
--- References --
-eqnRefs :: [Reference]
-eqnRefs = map ref [lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime]

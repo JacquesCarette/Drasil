@@ -6,7 +6,7 @@ module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
   opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
   ProgData(progName, progPurp, progMods), progD, emptyProg,
-  StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
+  StateVarData(getStVarScp, stVar), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
   updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
   BinderD(bindName, bindType), bindFormD
@@ -48,7 +48,7 @@ onAttachment :: AttachmentTag -> a -> a -> a
 onAttachment ClassLevel s _ = s
 onAttachment InstanceLevel _ d = d
 
--- Used as the underlying data type for Attachment in the C++ renderer
+-- Used as the underlying data type for AttachmentSym the C++ and Python renderers
 data AttachmentData = BD {attachment :: AttachmentTag, attachmentDoc :: Doc}
 
 ad :: AttachmentTag -> Doc -> AttachmentData
@@ -116,10 +116,9 @@ emptyProg :: ProgData
 emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
-data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc,
-  destructSts :: (Doc, Terminator)}
+data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc}
 
-svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
+svd :: VisibilityTag -> Doc -> StateVarData
 svd = SVD
 
 -- Used as the underlying data type for Scopes in all renderers

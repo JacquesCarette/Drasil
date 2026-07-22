@@ -15,19 +15,19 @@ import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, SValue, SVariable, MSBlock, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), NativeVector(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
-  switchAsIf, convScope)
-import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
-  FileSym(..), ModuleSym(..))
+  Label, Body, Value, SValue, Variable, SVariable, Block, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, libFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -80,14 +80,13 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
-  ParamData(..), ProgData(..), TypeData(..), ValData(..), vd, VarData(..),
-  vard, progD, fd, pd, updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..),
-  bindFormD)
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
+  ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
+  ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
+  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.Shared.State (MS, VS, lensGStoFS, revFiles, setFileType,
+import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
   lensMStoVS, getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
@@ -115,10 +114,9 @@ instance Monad JuliaCode where
 
 instance SharedProg JuliaCode Doc (Doc, Terminator) MethodData
 instance SharedStatement JuliaCode (Doc, Terminator)
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData where
-  type Program JuliaCode = ProgData
+instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -131,7 +129,6 @@ instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
 instance FileSym JuliaCode Doc (Doc, Terminator) MethodData where
-  type File JuliaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m
@@ -154,7 +151,6 @@ instance ImportSym JuliaCode where
                       importLabel <+> text "." <> modName]
 
 instance BodySym JuliaCode (Doc, Terminator) where
-  type Body JuliaCode = Doc
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
@@ -248,7 +244,6 @@ instance ScopeElim JuliaCode where
   scopeData = unJLC
 
 instance VariableSym JuliaCode where
-  type Variable JuliaCode = VarData
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
@@ -267,7 +262,6 @@ instance RenderVariable JuliaCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JuliaCode where
-  type Value JuliaCode = ValData
   valueType v = valType <$> v
 
 instance Argument JuliaCode where
@@ -406,14 +400,13 @@ instance Set JuliaCode where
   setRemove s e = funcApp "delete!" void [s, e]
   setUnion a b = funcApp "union!" void [a, b]
 
--- TODO: implement native vector operations for Julia (currently MATLAB-only).
 instance NativeVector JuliaCode where
-  vecScale = undefined
-  vecAdd = undefined
-  vecIndex = undefined
-  vecDot = undefined
-  vecMag = undefined
-  vecUnit = undefined
+  vecScale = binExpr multOp
+  vecAdd   = binExpr plusOp
+  vecIndex = G.listAccess
+  vecDot a b = libFuncApp "LinearAlgebra" "dot" double [a, b]
+  vecMag a   = libFuncApp "LinearAlgebra" "norm" double [a]
+  vecUnit a  = a #/ vecMag a
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -547,8 +540,6 @@ instance VisibilityElim JuliaCode Doc where
   visibility = unJLC
 
 instance MethodTypeSym JuliaCode where
-  type MethodType JuliaCode = TypeData
-
   mType = zoom lensMStoVS
 
 instance ParameterSym JuliaCode where
@@ -588,7 +579,6 @@ instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
 instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData where
-  type Module JuliaCode = ModData
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
@@ -725,7 +715,7 @@ jlListSlice
   -> Maybe (SValue JuliaCode)
   -> Maybe (SValue JuliaCode)
   -> SValue JuliaCode
-  -> MSBlock JuliaCode
+  -> MS (JuliaCode Block)
 jlListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn
@@ -848,7 +838,7 @@ jlSpace = OSpace {oSpace = empty}
 -- | Creates a for-each loop in Julia
 jlForEach
   :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+  => r Variable -> r Value -> r Body -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -856,7 +846,7 @@ jlForEach i lstVar b = vcat [
 
 -- | Creates the contents of a module in Julia
 jlModContents
-  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FSModule JuliaCode
+  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode Module)
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
@@ -875,21 +865,21 @@ jlModContents n is = A.buildModule n (do
 --   bod is body.
 jlIntFunc
   :: (BodyElim r, ParamElim r)
-  => Label -> [r ParamData] -> r (Body r) -> Doc
+  => Label -> [r ParamData] -> r Body -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,
         jlEnd]
 
 jlLambda :: (InternalBinderElim r, ValueElim r) => [r BinderD] ->
-  r (Value r) -> Doc
+  r Value -> Doc
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
-jlThrow :: (ValueElim r) => r (Value r) -> Doc
+jlThrow :: (ValueElim r) => r Value -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
-jlTryCatch :: (BodyElim r) => r (Body r) -> r (Body r) -> Doc
+jlTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
 jlTryCatch tryB catchB = vcat [
   tryLabel,
   indent $ RC.body tryB,
@@ -905,7 +895,7 @@ includeLabel = text "include"
 importLabel = text "import"
 
 -- Assertions
-jlAssert :: (ValueElim r) => r (Value r) -> r (Value r) -> Doc
+jlAssert :: (ValueElim r) => r Value -> r Value -> Doc
 jlAssert condition errorMessage = vcat [
   text "@assert" <+> RC.value condition <+> RC.value errorMessage
   ]
@@ -918,7 +908,7 @@ jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlParam :: JuliaCode (Variable JuliaCode) -> Doc
+jlParam :: JuliaCode Variable -> Doc
 jlParam v = RC.variable v <> jlType <> renderType (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)

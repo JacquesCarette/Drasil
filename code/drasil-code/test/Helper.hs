@@ -1,22 +1,22 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
 module Helper (helperOO, helperProc) where
 
-import Drasil.GOOL (SharedProg, OOProg, MS, bodyStatements, TypeSym(..),
-  DeclStatement(..), ControlStatement(..), (&=), VariableSym(var), Literal(..),
-  VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), ScopeSym(local))
-import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
+import Drasil.GOOL (SharedProg, OOProg, File, FS, MS, bodyStatements,
+  TypeSym(..), DeclStatement(..), ControlStatement(..), (&=), VariableSym(var),
+  Literal(..), VariableValue(..), NumericExpression(..), VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), ScopeSym(local))
+import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 import Drasil.GProc (ProcProg)
-import qualified Drasil.GProc as GProc (SFile, FileSym(..), ModuleSym(..))
+import qualified Drasil.GProc as GProc (FileSym(..), ModuleSym(..))
 
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.
-helperOO :: (OOProg r vis smt md) => OO.SFile r
+helperOO :: (OOProg r vis smt md svr att prg) => FS (r File)
 helperOO = OO.fileDoc (OO.buildModule "Helper" [] [doubleAndAdd] [])
 
 -- | Creates Helper module that contains an addition function.
-helperProc :: (ProcProg r vis smt md) => GProc.SFile r
+helperProc :: (ProcProg r vis smt md prg) => FS (r File)
 helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 
 -- | Creates a function that doubles the arguments and adds them together.

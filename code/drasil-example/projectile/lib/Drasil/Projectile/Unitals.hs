@@ -8,7 +8,7 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.Display (Symbol(Concat))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT)
 
 import Data.Drasil.Quantities.Math (pi_)
@@ -49,5 +49,3 @@ launAngle = constrained'    (dqd'     C.launAngle (autoStage lTheta  ) Real (Jus
 launSpeed = constrained'    (dqd      C.launSpeed (subStr lV "launch") Real velU  ) [gtZeroConstr] (exactDbl 100)
 offset    = constrainedNRV' (dqd      C.offset    (subStr lD "offset") Real metre ) [physRange $ UpFrom (Exc, neg $ sy targPos)]
 targPos   = constrained'    (dqd      C.targPos   (subStr lP "target") Real metre ) [gtZeroConstr] (exactDbl 1000)
-
----

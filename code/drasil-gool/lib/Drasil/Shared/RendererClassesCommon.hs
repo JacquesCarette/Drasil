@@ -14,15 +14,14 @@ module Drasil.Shared.RendererClassesCommon (
   MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, Block, MSBlock,
-  SVariable, SValue, MixedCall, BodySym(..), TypeSym(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), ValueExpression(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  IndexTranslator(..), List(..), InternalList(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ParameterSym(..), BinderElim(..),
-  UnRepr(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, Body, Block, Variable,
+  SVariable, Value, SValue, MixedCall, TypeSym(..), VariableElim(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
+  InternalList(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -59,13 +58,13 @@ import' :: (UnRepr r Doc) => r Doc -> Doc
 import' = unRepr
 
 class RenderBody r where
-  multiBody :: [MSBody r] -> MSBody r
+  multiBody :: [MS (r Body)] -> MS (r Body)
 
 class BodyElim r where
-  body :: r (Body r) -> Doc
+  body :: r Body -> Doc
 
 class RenderBlock r where
-  multiBlock :: [MSBlock r] -> MSBlock r
+  multiBlock :: [MS (r Block)] -> MS (r Block)
 
 class BlockElim r where
   block :: r Block -> Doc
@@ -123,8 +122,8 @@ class RenderVariable r where
   varFromData :: AttachmentTag -> String -> VS (r TypeData) -> Doc -> SVariable r
 
 class InternalVarElim r where
-  variableBind :: r (Variable r) -> AttachmentTag
-  variable  :: r (Variable r) -> Doc
+  variableBind :: r Variable -> AttachmentTag
+  variable  :: r Variable -> Doc
 
 class InternalBinderElim r where
   binderElim  :: r BinderD -> Doc
@@ -148,9 +147,9 @@ class RenderValue r where
   valFromData :: Maybe Int -> Maybe Integer -> VS (r TypeData) -> Doc -> SValue r
 
 class ValueElim r where
-  valuePrec :: r (Value r) -> Maybe Int
-  valueInt :: r (Value r) -> Maybe Integer
-  value :: r (Value r) -> Doc
+  valuePrec :: r Value -> Maybe Int
+  valueInt :: r Value -> Maybe Integer
+  value :: r Value -> Doc
 
 class InternalListFunc r where
   -- | List, Index
@@ -205,10 +204,9 @@ class BlockCommentSym r where
 class BlockCommentElim r where
   blockComment' :: r Doc -> Doc
 
-type MSMthdType a = MS (a (MethodType a))
+type MSMthdType a = MS (a TypeData)
 
 class (TypeSym r) => MethodTypeSym r where
-  type MethodType r
   mType    :: VS (r TypeData) -> MSMthdType r
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r md | r -> md where

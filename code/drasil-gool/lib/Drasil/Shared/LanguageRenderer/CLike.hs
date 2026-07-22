@@ -13,13 +13,12 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, MSBody,
-  TypeElim(..), SVariable, SValue, MixedCall, MixedCtorCall, VariableSym(..),
-  VariableValue(..), VariableElim(..), ValueSym(Value, valueType), getCodeType,
-  getTypeString)
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body,
+  TypeElim(..), SVariable, Value, SValue, MixedCall, MixedCtorCall,
+  VariableSym(..), VariableValue(..), VariableElim(..), ValueSym(valueType),
+  getCodeType, getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (AttachmentSym(..), extNewObj,
-  objMethodCallNoParams, ($->))
+import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (MSMthdType,
   InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
@@ -159,14 +158,14 @@ decrement1 vr' = do
 
 varDec
   :: ( InternalVarElim r
-     , RO.PermElim r
+     , RO.PermElim r att
      , RC.RenderStatement r smt
      , ScopeElim r
      , UnRepr r TypeData
      , TypeElim r
      , VariableElim r
      )
-  => r (Attachment r) -> r (Attachment r) -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
+  => r att -> r att -> Doc -> SVariable r -> r ScopeData -> MS (r smt)
 varDec s d pdoc v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
@@ -210,7 +209,7 @@ setDecDef t vr scp vl' = do
 
 listDec
   :: (IC.DeclStatement r smt, RC.RenderStatement r smt, RC.StatementElim r smt)
-  => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
+  => (r Value -> Doc) -> SValue r -> SVariable r -> r ScopeData -> MS (r smt)
 listDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
@@ -233,8 +232,8 @@ switch
   => (Doc -> Doc)
   -> MS (r smt)
   -> SValue r
-  -> [(SValue r, MSBody r)]
-  -> MSBody r
+  -> [(SValue r, MS (r Body))]
+  -> MS (r Body)
   -> MS (r smt)
 switch f st v cs bod = do
   s <- RC.stmt st
@@ -255,7 +254,7 @@ for
   -> MS (r smt)
   -> SValue r
   -> MS (r smt)
-  -> MSBody r
+  -> MS (r Body)
   -> MS (r smt)
 for bStart bEnd sInit vGuard sUpdate b = do
   initl <- RC.loopStmt sInit
@@ -271,7 +270,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
 -- Doc function parameter is applied to the render of the while-condition
 while
   :: (RC.BodyElim r, RC.RenderStatement r smt, ValueElim r)
-  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> MS (r smt)
+  => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MS (r Body) -> MS (r smt)
 while f bStart bEnd v' b'= do
   v <- zoom lensMStoVS v'
   b <- b'
@@ -281,8 +280,8 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (OORenderMethod r vis md) => Bool -> Label -> r vis ->
-  r (Attachment r) -> MSMthdType r -> [MS (r ParamData)] -> MSBody r ->
+intFunc :: (OORenderMethod r vis md att) => Bool -> Label -> r vis ->
+  r att -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) ->
   MS (r md)
 intFunc = intMethod
 

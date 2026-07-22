@@ -36,6 +36,8 @@ import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Wrapper typeclass that bundles everything essential
+-- for generating an object-oriented program.
 class (SharedProg r vis smt md, OOStatement r smt,
   ProgramSym r vis smt md svr att prg, ObserverPattern r smt,
   StrategyPattern r smt
@@ -49,36 +51,48 @@ class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
+-- | Class for representing a program.
+-- Usually 'ProgData' is used for the representation.
 class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r -> prg where
+  -- | Given program name, program purpose, and list of files,
+  -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
 
 type File = FileData
 
+-- | Class for representing a file.
 class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
+  -- | Given a module, generates a representation of a file.
+  -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
 
-  -- Module description, watermark, list of author names, date as a String, file to comment
+  -- | Given module description, watermark, list of author names,
+  -- date as a String, and file to comment, creates a __documented module__
+  -- (i.e. module with a header comment)
   docMod :: String -> String -> [String] -> String -> FS (r File) -> FS (r File)
 
 type Module = ModData
 
+-- | Class for representing a module.
 class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
-  -- Module name, import names, module functions, module classes
+  -- | Given module name, list of import names, list of module functions,
+  -- and list of module classes, generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
 
 type Class = Doc
 
+-- | Class for representing an OO class.
 class (OOMethodSym r vis smt md att, StateVarSym r vis svr att) => ClassSym r vis smt md svr att where
   -- | Main external method for creating a class.
-  --   Inputs: parent class, variables, constructor(s), methods
+  -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
     [MS (r md)] -> CS (r Class)
-  -- | Creates an extra class.
-  --   Inputs: class name, the rest are the same as buildClass.
+  -- | Creates an extra class, i.e. with a different name than the module name.
+  -- Inputs: class name, the rest are the same as buildClass.
   extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
     [MS (r md)] -> CS (r Class)
-  -- | Creates a class implementing interfaces.
-  --   Inputs: class name, interface names, variables, constructor(s), methods
+  -- | Creates a class implementing a list of interfaces.
+  -- Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
     [MS (r md)] -> CS (r Class)
 
@@ -116,9 +130,19 @@ nonInitConstructor ps = constructor ps []
 type StateVar = Doc
 type CSStateVar r svr = CS (r svr)
 
+-- | Class for representing class variables, both instance- and class-level.
+-- Used when creating a class, to hold extra information about `Attachment`
+-- and `Visibility`.
+-- Usually 'Doc' is used for the representation.
 class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis svr att | r -> svr where
+  -- | Given a visibility, attachment, and variable, represent the declaration
+  -- of a state variable with no initial value.
   stateVar :: r vis -> r att -> SVariable r -> CSStateVar r svr
+  -- | Given a visibility, attachment, variable, and initial value,
+  -- represent the declaration of a state variable with the given initial value.
   stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
+  -- | Given a visibility, variable, and value, represent the declaration of
+  -- a state constant with the given value.
   constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
 
 privDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
@@ -185,7 +209,10 @@ extNewObj l t vs = extNewObjMixedArgs l t vs []
 libNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
 libNewObj l t vs = libNewObjMixedArgs l t vs []
 
+-- TODO [Brandon Bosman, 07/22/2026]: Give this a better name
+-- | A class for representing method calls, both instance- and class-level
 class (ValueSym r) => InternalValueExp r where
+  -- TODO [Brandon Bosman, 07/22/2026]: rename this to `instanceMethodCallMixedArgs'`
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of
   --   positional arguments, and a list of named arguments.

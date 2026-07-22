@@ -30,7 +30,7 @@ renderHTML opt (HTML heads bodies) =
     [ "<!DOCTYPE html>",
       angles "html",
       indent (indentationSize opt) $ renderHeadSec opt heads,
-      indent (indentationSize opt) $ renderBodySec opt bodies,
+      indent (indentationSize opt) $ renderBodySec opt (normalize bodies),
       angles "/html"
     ]
 
@@ -46,7 +46,7 @@ renderBodySec opt bodies = wrapBlock opt "body" [] (map (renderBody opt) bodies)
 renderHead :: HTMLGenOptions -> HTMLHead -> Doc ann
 renderHead _ (Link relation file attrs) =
   angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
-renderHead opt (Title txt) = wrapBlock opt "title" [] [pretty (escapeHTMLText txt)]
+renderHead _ (Title txt) = wrapLine "title" [] [pretty (escapeHTMLText txt)]
 renderHead _ (Meta attrs) = angles ("meta" <> renderAttrs attrs)
 renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt]
 
@@ -56,7 +56,7 @@ renderBody opt (Div attrs ch) = renderBlock opt "div" attrs ch
 renderBody opt (Paragraph attrs ch) = renderBlockInline opt "p" attrs ch
 renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (map renderIList items)
   where
-    renderIList (LItem iAttrs ch) = renderBlockInline opt "li" iAttrs ch
+    renderIList (LItem iAttrs ch) = renderLine opt "li" iAttrs ch
 renderBody opt (List Ordered attrs items) = wrapBlock opt "ol" attrs (map renderIList items)
   where
     renderIList (LItem iAttrs ch) = renderBlockInline opt "li" iAttrs ch
@@ -68,7 +68,7 @@ renderBody opt (Table attr rows) = wrapBlock opt "table" attr (map renderRow row
   where
     renderRow (Row attrs cells) = wrapBlock opt "tr" attrs (map renderCell cells)
     renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch
-    renderCell (TData cAttrs ch) = renderBlockInline opt "td" cAttrs ch
+    renderCell (TData cAttrs ch) = renderLine opt "td" cAttrs ch
 renderBody opt (Figure attrs ch) = renderBlock opt "figure" attrs ch
 renderBody opt (FigCaption attrs ch) = renderLine opt "figcaption" attrs ch
 renderBody opt (TextFormat fmt attrs ch) = renderLine opt (fmtTag fmt) attrs ch
@@ -100,16 +100,16 @@ headTag H6 = "h6"
 
 -- | Render the element and its children in the same line
 renderLine :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderLine opt tag attrs = wrapLine tag attrs . map (renderBody opt)
+renderLine opt tag attrs ch = wrapLine tag attrs $ map (renderBody opt) (normalize ch)
 
 -- | Render the children breaking lines
 renderBlock :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlock opt tag attrs = wrapBlock opt tag attrs . map (renderBody opt)
+renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ map (renderBody opt) (normalize ch)
 
 -- | Render the element as a block, but keep all children on a single indented line
 renderBlockInline :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderBlockInline _ tag attrs [] = wrapLine tag attrs []
-renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) ch)
+renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) (normalize ch))
 
 -- | Wrap an element with tag and its children breaking lines
 wrapBlock :: HTMLGenOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
@@ -153,3 +153,9 @@ escapeHTMLText = T.concatMap escapeChar
     escapeChar '\'' = "&#39;"
     escapeChar '/'  = "&#x2F;"
     escapeChar c    = T.singleton c
+
+-- | Merges contiguous `RawText` in one
+normalize :: [HTMLBody] -> [HTMLBody]
+normalize [] = []
+normalize (RawText a : RawText b : rest) = normalize (RawText (a <> b) : rest)
+normalize (x : xs) = x : normalize xs

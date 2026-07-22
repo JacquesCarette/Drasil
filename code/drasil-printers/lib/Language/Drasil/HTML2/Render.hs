@@ -1,13 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 -- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML.Print.html).
-module Language.Drasil.HTML2.Print(
+module Language.Drasil.HTML2.Render(
   -- * Main Function
-  genHTML2,
+  genHTML,
   BibFormatter(..), htmlBibFormatter, HTMLRenderOptions(..)
-  ) where
+) where
 
 import Prelude hiding (print)
-import Text.PrettyPrint as PLegacy hiding (Str, (<>))
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Prettyprinter as PNew (Doc)
@@ -15,23 +14,24 @@ import qualified Prettyprinter as PNew (Doc)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Spec(EmptyS))
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
+import Language.Drasil.Printing.Helpers (sqbrac)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec)
 
-import Language.Drasil.HTML2.Citation (printBib)
+import Language.Drasil.HTML2.Citation (printBib, htmlBibFormatter)
 import Language.Drasil.HTML2.Helpers (HTMLRenderOptions(..), BibFormatter(..),
-  htmlBibFormatter, printSpec, articleTitle, specToHTML, author, foldRaw, stylesheet, renderMath,)
+  articleTitle, author, stylesheet)
+import Language.Drasil.HTML2.Spec (printSpec, specToHTML, renderMath)
 
-import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle(Pretty))
-
+import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle(Minified))
 import Drasil.Data.Formats.HTML hiding (Title, Row, Bold, ListType, Ordered,
   Unordered, span, Paragraph, Table, List, Figure)
 import qualified Drasil.Data.Formats.HTML as HTML
 
 -- | Generate an HTML document from a Drasil 'Document'.
 --   Arguments: Rendering options, Bib rendering options, CSS file name, `Document` to be rendered
-genHTML2 :: HTMLGenOptions -> HTMLRenderOptions -> String -> Document -> PNew.Doc ann
-genHTML2 gOpts rOpts fn (Document t a c) = renderHTML gOpts (HTML heads bodies)
+genHTML :: HTMLGenOptions -> HTMLRenderOptions -> String -> Document -> PNew.Doc ann
+genHTML gOpts rOpts fn (Document t a c) = renderHTML gOpts (HTML heads bodies)
   where
     heads =
       [ stylesheet (T.pack fn),
@@ -57,7 +57,7 @@ mathJaxScript :: Text
 mathJaxScript = "MathJax = " <> configJSON <> ";"
   where
     configJSON = T.pack $ show $ renderJSON
-      (jsonRenderOpts (Pretty 2))
+      (jsonRenderOpts Minified)
       ( JObject [
         ("loader",
         JObject [("load", JArray ["[tex]/textmacros", "output/chtml"])]),
@@ -70,9 +70,7 @@ loToHTML :: HTMLRenderOptions -> LayoutObj -> [HTMLBody]
 -- Creates delimeters to be used for mathjax displayed equations
 -- Latex print sets up a \begin{displaymath} environment instead of this
 loToHTML _ (EqnBlock contents) =
-  [RawText $ T.pack $ show $ mjDelimDisp $ renderMath $ TeX.spec contents]
-  where
-    mjDelimDisp d = text "\\[" <> d <> text "\\]"
+  [RawText ( T.pack ("\\" <> sqbrac ( show (renderMath $ TeX.spec contents) <> "\\")))]
 -- Non-mathjax
 loToHTML rOpts (HDiv ts layoutObs EmptyS) =
   [HTML.Div [Attr "class" (T.unwords $ map T.pack ts)] (concatMap (loToHTML rOpts) layoutObs)]
@@ -141,10 +139,10 @@ makeDefnHTML rOpts ps l =
 makeListHTML :: ListType -> HTMLBody -- FIXME: ref id's should be folded into the li
 makeListHTML (Simple items) = HTML.Div [Attr "class" "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mlrefAttr l)
-  (foldRaw $ specToHTML b ++ [RawText ": "] ++ itemToHTML e)) items
+  (specToHTML b ++ [RawText ": "] ++ itemToHTML e)) items
 makeListHTML (Desc items) = HTML.Div [Attr "class" "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mlrefAttr l)
-  (foldRaw $ [TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e)) items
+  ([TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e)) items
 makeListHTML (Ordered items) = HTML.List HTML.Ordered [Attr "class" "list"] $
   map (\(i, l) -> LItem (mlrefAttr l) (itemToHTML i)) items
 makeListHTML (Unordered items) = HTML.List HTML.Unordered [Attr "class" "list"] $
@@ -159,5 +157,5 @@ mlrefAttr (Just l) = [Attr "id" (printSpec l)]
 
 -- | Helper for rendering list items.
 itemToHTML :: ItemType -> [HTMLBody]
-itemToHTML (Flat s)     = foldRaw $ specToHTML s
-itemToHTML (Nested s l) = foldRaw $ specToHTML s ++ [makeListHTML l]
+itemToHTML (Flat s)     = specToHTML s
+itemToHTML (Nested s l) = specToHTML s ++ [makeListHTML l]

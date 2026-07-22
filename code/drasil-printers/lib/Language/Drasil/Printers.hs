@@ -4,7 +4,7 @@ module Language.Drasil.Printers (
   -- * HTML
   -- ** Printer
   , genHTML
-  , genHTML2, BibFormatter (..), htmlBibFormatter, HTMLRenderOptions (..)
+  , BibFormatter (..), htmlBibFormatter, HTMLRenderOptions (..)
   -- ** CSS
   , genericCSS
   -- * Plain
@@ -25,8 +25,7 @@ module Language.Drasil.Printers (
 ) where
 
 import Language.Drasil.HTML.CSS (genericCSS)
-import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.HTML2.Print (BibFormatter (..), HTMLRenderOptions (..), genHTML2, htmlBibFormatter)
+import Language.Drasil.HTML2.Render (BibFormatter (..), HTMLRenderOptions (..), genHTML, htmlBibFormatter)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)
 import Language.Drasil.Plain.Print (SingleLine(..), showHasSymbImpl,

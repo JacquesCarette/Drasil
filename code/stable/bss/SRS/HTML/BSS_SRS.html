@@ -2,29 +2,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="BSS_SRS.css" type="text/css">
-    <title>
-      Software Requirements Specification for Binary Star System Simulator
-    </title>
+    <title>Software Requirements Specification for Binary Star System Simulator</title>
     <meta charset="utf-8">
     <script>
-      MathJax = {
-        "loader": {
-          "load": [
-            "[tex]/textmacros",
-            "output/chtml"
-          ]
-        },
-        "tex": {
-          "packages": {
-            "[+]": [
-              "textmacros"
-            ]
-          }
-        },
-        "svg": {
-          "fontCache": "global"
-        }
-      };
+      MathJax = {"loader":{"load":["[tex]/textmacros","output/chtml"]},"tex":{"packages":{"[+]":["textmacros"]}},"svg":{"fontCache":"global"}};
     </script>
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js">
       
@@ -43,118 +24,48 @@
         An outline of all sections included in this SRS is recorded here for easy reference.
       </p>
       <ul class="list">
-        <li>
-          <a href="#Sec:ToC">Table of Contents</a>
-        </li>
-        <li>
-          <a href="#Sec:RefMat">Reference Material</a><ul class="list">
-            <li>
-              <a href="#Sec:ToU">Table of Units</a>
-            </li>
-            <li>
-              <a href="#Sec:ToS">Table of Symbols</a>
-            </li>
-            <li>
-              <a href="#Sec:TAbbAcc">Abbreviations and Acronyms</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Intro">Introduction</a><ul class="list">
-            <li>
-              <a href="#Sec:DocPurpose">Purpose of Document</a>
-            </li>
-            <li>
-              <a href="#Sec:ReqsScope">Scope of Requirements</a>
-            </li>
-            <li>
-              <a href="#Sec:ReaderChars">Characteristics of Intended Reader</a>
-            </li>
-            <li>
-              <a href="#Sec:DocOrg">Organization of Document</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:GenSysDesc">General System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:SysContext">System Context</a>
-            </li>
-            <li>
-              <a href="#Sec:UserChars">User Characteristics</a>
-            </li>
-            <li>
-              <a href="#Sec:SysConstraints">System Constraints</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
-            <li>
-              <a href="#Sec:ProbDesc">Problem Description</a><ul class="list">
-                <li>
-                  <a href="#Sec:TermDefs">Terminology and Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:PhysSyst">Physical System Description</a>
-                </li>
-                <li>
-                  <a href="#Sec:GoalStmt">Goal Statements</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
-                <li>
-                  <a href="#Sec:Assumps">Assumptions</a>
-                </li>
-                <li>
-                  <a href="#Sec:TMs">Theoretical Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:GDs">General Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:DDs">Data Definitions</a>
-                </li>
-                <li>
-                  <a href="#Sec:IMs">Instance Models</a>
-                </li>
-                <li>
-                  <a href="#Sec:DataConstraints">Data Constraints</a>
-                </li>
-                <li>
-                  <a href="#Sec:CorSolProps">Properties of a Correct Solution</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:Requirements">Requirements</a><ul class="list">
-            <li>
-              <a href="#Sec:FRs">Functional Requirements</a>
-            </li>
-            <li>
-              <a href="#Sec:NFRs">Non-Functional Requirements</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#Sec:LCs">Likely Changes</a>
-        </li>
-        <li>
-          <a href="#Sec:UCs">Unlikely Changes</a>
-        </li>
-        <li>
-          <a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a>
-        </li>
-        <li>
-          <a href="#Sec:AuxConstants">Values of Auxiliary Constants</a>
-        </li>
-        <li>
-          <a href="#Sec:References">References</a>
-        </li>
+        <li><a href="#Sec:ToC">Table of Contents</a></li>
+        <li><a href="#Sec:RefMat">Reference Material</a><ul class="list">
+          <li><a href="#Sec:ToU">Table of Units</a></li>
+          <li><a href="#Sec:ToS">Table of Symbols</a></li>
+          <li><a href="#Sec:TAbbAcc">Abbreviations and Acronyms</a></li>
+        </ul></li>
+        <li><a href="#Sec:Intro">Introduction</a><ul class="list">
+          <li><a href="#Sec:DocPurpose">Purpose of Document</a></li>
+          <li><a href="#Sec:ReqsScope">Scope of Requirements</a></li>
+          <li><a href="#Sec:ReaderChars">Characteristics of Intended Reader</a></li>
+          <li><a href="#Sec:DocOrg">Organization of Document</a></li>
+        </ul></li>
+        <li><a href="#Sec:GenSysDesc">General System Description</a><ul class="list">
+          <li><a href="#Sec:SysContext">System Context</a></li>
+          <li><a href="#Sec:UserChars">User Characteristics</a></li>
+          <li><a href="#Sec:SysConstraints">System Constraints</a></li>
+        </ul></li>
+        <li><a href="#Sec:SpecSystDesc">Specific System Description</a><ul class="list">
+          <li><a href="#Sec:ProbDesc">Problem Description</a><ul class="list">
+            <li><a href="#Sec:TermDefs">Terminology and Definitions</a></li>
+            <li><a href="#Sec:PhysSyst">Physical System Description</a></li>
+            <li><a href="#Sec:GoalStmt">Goal Statements</a></li>
+          </ul></li>
+          <li><a href="#Sec:SolCharSpec">Solution Characteristics Specification</a><ul class="list">
+            <li><a href="#Sec:Assumps">Assumptions</a></li>
+            <li><a href="#Sec:TMs">Theoretical Models</a></li>
+            <li><a href="#Sec:GDs">General Definitions</a></li>
+            <li><a href="#Sec:DDs">Data Definitions</a></li>
+            <li><a href="#Sec:IMs">Instance Models</a></li>
+            <li><a href="#Sec:DataConstraints">Data Constraints</a></li>
+            <li><a href="#Sec:CorSolProps">Properties of a Correct Solution</a></li>
+          </ul></li>
+        </ul></li>
+        <li><a href="#Sec:Requirements">Requirements</a><ul class="list">
+          <li><a href="#Sec:FRs">Functional Requirements</a></li>
+          <li><a href="#Sec:NFRs">Non-Functional Requirements</a></li>
+        </ul></li>
+        <li><a href="#Sec:LCs">Likely Changes</a></li>
+        <li><a href="#Sec:UCs">Unlikely Changes</a></li>
+        <li><a href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></li>
+        <li><a href="#Sec:AuxConstants">Values of Auxiliary Constants</a></li>
+        <li><a href="#Sec:References">References</a></li>
       </ul>
     </div>
     <div id="Sec:RefMat" class="section">
@@ -175,59 +86,29 @@
               <th>SI Name</th>
             </tr>
             <tr>
-              <td>
-                <em>J</em>
-              </td>
-              <td>
-                energy
-              </td>
-              <td>
-                joule
-              </td>
+              <td><em>J</em></td>
+              <td>energy</td>
+              <td>joule</td>
             </tr>
             <tr>
-              <td>
-                <em>kg</em>
-              </td>
-              <td>
-                mass
-              </td>
-              <td>
-                kilogram
-              </td>
+              <td><em>kg</em></td>
+              <td>mass</td>
+              <td>kilogram</td>
             </tr>
             <tr>
-              <td>
-                <em>m</em>
-              </td>
-              <td>
-                length
-              </td>
-              <td>
-                metre
-              </td>
+              <td><em>m</em></td>
+              <td>length</td>
+              <td>metre</td>
             </tr>
             <tr>
-              <td>
-                <em>N</em>
-              </td>
-              <td>
-                force
-              </td>
-              <td>
-                newton
-              </td>
+              <td><em>N</em></td>
+              <td>force</td>
+              <td>newton</td>
             </tr>
             <tr>
-              <td>
-                <em>s</em>
-              </td>
-              <td>
-                time
-              </td>
-              <td>
-                second
-              </td>
+              <td><em>s</em></td>
+              <td>time</td>
+              <td>second</td>
             </tr>
           </table>
           <p class="caption">
@@ -248,444 +129,204 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>a<sub>x1</sub></em>
-              </td>
-              <td>
-                X-acceleration of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>
-              </td>
+              <td><em>a<sub>x1</sub></em></td>
+              <td>X-acceleration of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>a<sub>x2</sub></em>
-              </td>
-              <td>
-                X-acceleration of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>
-              </td>
+              <td><em>a<sub>x2</sub></em></td>
+              <td>X-acceleration of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>a<sub>y1</sub></em>
-              </td>
-              <td>
-                Y-acceleration of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>
-              </td>
+              <td><em>a<sub>y1</sub></em></td>
+              <td>Y-acceleration of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>a<sub>y2</sub></em>
-              </td>
-              <td>
-                Y-acceleration of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>
-              </td>
+              <td><em>a<sub>y2</sub></em></td>
+              <td>Y-acceleration of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em><b>a</b>(t)</em>
-              </td>
-              <td>
-                Acceleration
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>
-              </td>
+              <td><em><b>a</b>(t)</em></td>
+              <td>Acceleration</td>
+              <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>E</em>
-              </td>
-              <td>
-                Energy
-              </td>
-              <td>
-                <em>J</em>
-              </td>
+              <td><em>E</em></td>
+              <td>Energy</td>
+              <td><em>J</em></td>
             </tr>
             <tr>
-              <td>
-                <em><b>F</b></em>
-              </td>
-              <td>
-                Force
-              </td>
-              <td>
-                <em>N</em>
-              </td>
+              <td><em><b>F</b></em></td>
+              <td>Force</td>
+              <td><em>N</em></td>
             </tr>
             <tr>
-              <td>
-                <em><b>F</b><sub><b>g</b></sub></em>
-              </td>
-              <td>
-                Force of gravity
-              </td>
-              <td>
-                <em>N</em>
-              </td>
+              <td><em><b>F</b><sub><b>g</b></sub></em></td>
+              <td>Force of gravity</td>
+              <td><em>N</em></td>
             </tr>
             <tr>
-              <td>
-                <em>G</em>
-              </td>
-              <td>
-                Gravitational constant
-              </td>
-              <td>
-                <em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>
-              </td>
+              <td><em>G</em></td>
+              <td>Gravitational constant</td>
+              <td><em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>i</em>
-              </td>
-              <td>
-                Index
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>i</em></td>
+              <td>Index</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em>m</em>
-              </td>
-              <td>
-                Mass
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m</em></td>
+              <td>Mass</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>1</sub></em>
-              </td>
-              <td>
-                Mass of the first star
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>1</sub></em></td>
+              <td>Mass of the first star</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>2</sub></em>
-              </td>
-              <td>
-                Mass of the second star
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>2</sub></em></td>
+              <td>Mass of the second star</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>max</sub></em>
-              </td>
-              <td>
-                Maximum stellar mass
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>max</sub></em></td>
+              <td>Maximum stellar mass</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>min</sub></em>
-              </td>
-              <td>
-                Minimum stellar mass
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>min</sub></em></td>
+              <td>Minimum stellar mass</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>n</em>
-              </td>
-              <td>
-                Number of bodies
-              </td>
-              <td>
-                --
-              </td>
+              <td><em>n</em></td>
+              <td>Number of bodies</td>
+              <td>--</td>
             </tr>
             <tr>
-              <td>
-                <em><b>p</b>(t)</em>
-              </td>
-              <td>
-                Position
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em><b>p</b>(t)</em></td>
+              <td>Position</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>r<sub>12</sub></em>
-              </td>
-              <td>
-                Separation distance
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>r<sub>12</sub></em></td>
+              <td>Separation distance</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>r<sub>max</sub></em>
-              </td>
-              <td>
-                Maximum initial distance from origin
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>r<sub>max</sub></em></td>
+              <td>Maximum initial distance from origin</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t</em>
-              </td>
-              <td>
-                Time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t</em></td>
+              <td>Time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>final</sub></em>
-              </td>
-              <td>
-                Final time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>final</sub></em></td>
+              <td>Final time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>max</sub></em>
-              </td>
-              <td>
-                Maximum simulation time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>max</sub></em></td>
+              <td>Maximum simulation time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>max</sub></em>
-              </td>
-              <td>
-                Maximum initial speed
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>max</sub></em></td>
+              <td>Maximum initial speed</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>x1</sub></em>
-              </td>
-              <td>
-                X-velocity of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>x1</sub></em></td>
+              <td>X-velocity of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>x1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-velocity of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>x1</sub><sup>0</sup></em></td>
+              <td>Initial x-velocity of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>x2</sub></em>
-              </td>
-              <td>
-                X-velocity of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>x2</sub></em></td>
+              <td>X-velocity of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>x2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-velocity of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>x2</sub><sup>0</sup></em></td>
+              <td>Initial x-velocity of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>y1</sub></em>
-              </td>
-              <td>
-                Y-velocity of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>y1</sub></em></td>
+              <td>Y-velocity of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>y1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-velocity of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>y1</sub><sup>0</sup></em></td>
+              <td>Initial y-velocity of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>y2</sub></em>
-              </td>
-              <td>
-                Y-velocity of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>y2</sub></em></td>
+              <td>Y-velocity of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>y2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-velocity of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>y2</sub><sup>0</sup></em></td>
+              <td>Initial y-velocity of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em><b>v</b>(t)</em>
-              </td>
-              <td>
-                Velocity
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em><b>v</b>(t)</em></td>
+              <td>Velocity</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>x<sub>1</sub></em>
-              </td>
-              <td>
-                X-position of the first star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>x<sub>1</sub></em></td>
+              <td>X-position of the first star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>x<sub>1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-position of the first star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>x<sub>1</sub><sup>0</sup></em></td>
+              <td>Initial x-position of the first star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>x<sub>2</sub></em>
-              </td>
-              <td>
-                X-position of the second star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>x<sub>2</sub></em></td>
+              <td>X-position of the second star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>x<sub>2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-position of the second star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>x<sub>2</sub><sup>0</sup></em></td>
+              <td>Initial x-position of the second star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>y<sub>1</sub></em>
-              </td>
-              <td>
-                Y-position of the first star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>y<sub>1</sub></em></td>
+              <td>Y-position of the first star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>y<sub>1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-position of the first star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>y<sub>1</sub><sup>0</sup></em></td>
+              <td>Initial y-position of the first star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>y<sub>2</sub></em>
-              </td>
-              <td>
-                Y-position of the second star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>y<sub>2</sub></em></td>
+              <td>Y-position of the second star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>y<sub>2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-position of the second star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>y<sub>2</sub><sup>0</sup></em></td>
+              <td>Initial y-position of the second star</td>
+              <td><em>m</em></td>
             </tr>
           </table>
           <p class="caption">
@@ -702,124 +343,64 @@
               <th>Full Form</th>
             </tr>
             <tr>
-              <td>
-                A
-              </td>
-              <td>
-                Assumption
-              </td>
+              <td>A</td>
+              <td>Assumption</td>
             </tr>
             <tr>
-              <td>
-                DD
-              </td>
-              <td>
-                Data Definition
-              </td>
+              <td>DD</td>
+              <td>Data Definition</td>
             </tr>
             <tr>
-              <td>
-                GD
-              </td>
-              <td>
-                General Definition
-              </td>
+              <td>GD</td>
+              <td>General Definition</td>
             </tr>
             <tr>
-              <td>
-                GS
-              </td>
-              <td>
-                Goal Statement
-              </td>
+              <td>GS</td>
+              <td>Goal Statement</td>
             </tr>
             <tr>
-              <td>
-                IM
-              </td>
-              <td>
-                Instance Model
-              </td>
+              <td>IM</td>
+              <td>Instance Model</td>
             </tr>
             <tr>
-              <td>
-                LC
-              </td>
-              <td>
-                Likely Change
-              </td>
+              <td>LC</td>
+              <td>Likely Change</td>
             </tr>
             <tr>
-              <td>
-                ODE
-              </td>
-              <td>
-                Ordinary Differential Equation
-              </td>
+              <td>ODE</td>
+              <td>Ordinary Differential Equation</td>
             </tr>
             <tr>
-              <td>
-                PS
-              </td>
-              <td>
-                Physical System Description
-              </td>
+              <td>PS</td>
+              <td>Physical System Description</td>
             </tr>
             <tr>
-              <td>
-                R
-              </td>
-              <td>
-                Requirement
-              </td>
+              <td>R</td>
+              <td>Requirement</td>
             </tr>
             <tr>
-              <td>
-                RefBy
-              </td>
-              <td>
-                Referenced by
-              </td>
+              <td>RefBy</td>
+              <td>Referenced by</td>
             </tr>
             <tr>
-              <td>
-                Refname
-              </td>
-              <td>
-                Reference Name
-              </td>
+              <td>Refname</td>
+              <td>Reference Name</td>
             </tr>
             <tr>
-              <td>
-                SRS
-              </td>
-              <td>
-                Software Requirements Specification
-              </td>
+              <td>SRS</td>
+              <td>Software Requirements Specification</td>
             </tr>
             <tr>
-              <td>
-                TM
-              </td>
-              <td>
-                Theoretical Model
-              </td>
+              <td>TM</td>
+              <td>Theoretical Model</td>
             </tr>
             <tr>
-              <td>
-                UC
-              </td>
-              <td>
-                Unlikely Change
-              </td>
+              <td>UC</td>
+              <td>Unlikely Change</td>
             </tr>
             <tr>
-              <td>
-                Uncert.
-              </td>
-              <td>
-                Typical Uncertainty
-              </td>
+              <td>Uncert.</td>
+              <td>Typical Uncertainty</td>
             </tr>
           </table>
           <p class="caption">
@@ -887,32 +468,16 @@
           The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
         </p>
         <ul class="list">
-          <li>
-            User Responsibilities<ul class="list">
-              <li>
-                Provide the physical parameters of the binary star system, including stellar masses, initial positions, and initial velocities, ensuring no errors in the data entry.
-              </li>
-              <li>
-                Ensure that consistent units are used for inputs.
-              </li>
-              <li>
-                Ensure required <a href="#Sec:Assumps">software assumptions</a> are appropriate for any particular problem input to the software.
-              </li>
-            </ul>
-          </li>
-          <li>
-            <span title="Binary Star System Simulator">BSS</span> Responsibilities<ul class="list">
-              <li>
-                Detect data type mismatch, such as a string of characters input instead of a floating point number.
-              </li>
-              <li>
-                Determine if the inputs satisfy the required physical and software constraints.
-              </li>
-              <li>
-                Calculate the required outputs.
-              </li>
-            </ul>
-          </li>
+          <li>User Responsibilities<ul class="list">
+            <li>Provide the physical parameters of the binary star system, including stellar masses, initial positions, and initial velocities, ensuring no errors in the data entry.</li>
+            <li>Ensure that consistent units are used for inputs.</li>
+            <li>Ensure required <a href="#Sec:Assumps">software assumptions</a> are appropriate for any particular problem input to the software.</li>
+          </ul></li>
+          <li><span title="Binary Star System Simulator">BSS</span> Responsibilities<ul class="list">
+            <li>Detect data type mismatch, such as a string of characters input instead of a floating point number.</li>
+            <li>Determine if the inputs satisfy the required physical and software constraints.</li>
+            <li>Calculate the required outputs.</li>
+          </ul></li>
         </ul>
       </div>
       <div id="Sec:UserChars" class="subsection">
@@ -944,33 +509,15 @@
             This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
           </p>
           <ul class="list">
-            <li>
-              Binary star system: A system consisting of two stars that orbit around their common center of mass due to gravitational interaction.
-            </li>
-            <li>
-              Star: A massive astronomical object that is treated as a point mass in this context.
-            </li>
-            <li>
-              Gravitational interaction: The mutual attractive force between two masses as described by Newtonian gravity.
-            </li>
-            <li>
-              Newton&#39;s law of universal gravitation: The law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them.
-            </li>
-            <li>
-              Initial conditions: The positions and velocities of the stars at the start of the simulation.
-            </li>
-            <li>
-              Trajectory: The path traced by a star in space as a function of time.
-            </li>
-            <li>
-              Center of mass: The point representing the average position of the mass distribution of the system.
-            </li>
-            <li>
-              Inertial reference frame: A reference frame in which Newton&#39;s laws of motion are valid without the introduction of fictitious forces.
-            </li>
-            <li>
-              Simulation time span: The duration over which the evolution of the system is computed.
-            </li>
+            <li>Binary star system: A system consisting of two stars that orbit around their common center of mass due to gravitational interaction.</li>
+            <li>Star: A massive astronomical object that is treated as a point mass in this context.</li>
+            <li>Gravitational interaction: The mutual attractive force between two masses as described by Newtonian gravity.</li>
+            <li>Newton&#39;s law of universal gravitation: The law stating that every mass attracts every other mass with a force proportional to the product of their masses and inversely proportional to the square of the distance between them.</li>
+            <li>Initial conditions: The positions and velocities of the stars at the start of the simulation.</li>
+            <li>Trajectory: The path traced by a star in space as a function of time.</li>
+            <li>Center of mass: The point representing the average position of the mass distribution of the system.</li>
+            <li>Inertial reference frame: A reference frame in which Newton&#39;s laws of motion are valid without the introduction of fictitious forces.</li>
+            <li>Simulation time span: The duration over which the evolution of the system is computed.</li>
           </ul>
         </div>
         <div id="Sec:PhysSyst" class="subsubsection">
@@ -1056,395 +603,255 @@
           <table id="TM:centerOfMass" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:centerOfMass</b>
-              </td>
+              <td><b>TM:centerOfMass</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Center-of-mass constraint
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Center-of-mass constraint
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[\displaystyle\sum_{i=1}^{n}{m_{i}\,{\symbf{p}\text{(}t\text{)}}_{i}}=0\]\[{m_{1}}\,{{x_{1}}^{0}}+{m_{2}}\,{{x_{2}}^{0}}=0\]\[{m_{1}}\,{{y_{1}}^{0}}+{m_{2}}\,{{y_{2}}^{0}}=0\]
-              </td>
+              <td>\[\displaystyle\sum_{i=1}^{n}{m_{i}\,{\symbf{p}\text{(}t\text{)}}_{i}}=0\]\[{m_{1}}\,{{x_{1}}^{0}}+{m_{2}}\,{{x_{2}}^{0}}=0\]\[{m_{1}}\,{{y_{1}}^{0}}+{m_{2}}\,{{y_{2}}^{0}}=0\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>m</em> is the mass (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>i</em> is the index (Unitless)
-                  </li>
-                  <li>
-                    <em><b>p</b>(t)</em> is the position (<em>m</em>)
-                  </li>
-                </ul><ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>1</sub><sup>0</sup></em> is the initial x-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>2</sub><sup>0</sup></em> is the initial x-position of the second star (<em>m</em>)
-                  </li>
-                </ul><ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>1</sub><sup>0</sup></em> is the initial y-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>2</sub><sup>0</sup></em> is the initial y-position of the second star (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>m</em> is the mass (<em>kg</em>)</li>
+                <li><em>i</em> is the index (Unitless)</li>
+                <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
+              </ul><ul class="hide-list-style-no-indent">
+                <li><em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)</li>
+                <li><em>x<sub>1</sub><sup>0</sup></em> is the initial x-position of the first star (<em>m</em>)</li>
+                <li><em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)</li>
+                <li><em>x<sub>2</sub><sup>0</sup></em> is the initial x-position of the second star (<em>m</em>)</li>
+              </ul><ul class="hide-list-style-no-indent">
+                <li><em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)</li>
+                <li><em>y<sub>1</sub><sup>0</sup></em> is the initial y-position of the first star (<em>m</em>)</li>
+                <li><em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)</li>
+                <li><em>y<sub>2</sub><sup>0</sup></em> is the initial y-position of the second star (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The first equation gives the general center-of-mass constraint for a system of <em>n</em> point masses, where <em>i</em> indexes each body. In the center-of-mass reference frame (<a href="#inertialFrame">A:inertialFrame</a>), the origin is chosen so that the mass-weighted sum of positions vanishes. The remaining equations specialize to the binary case (n = 2), decomposing the vector constraint into <em>x</em>-direction and <em>y</em>-direction components of the initial positions.
-                </p>
-              </td>
+              <td><p class="paragraph">
+                The first equation gives the general center-of-mass constraint for a system of <em>n</em> point masses, where <em>i</em> indexes each body. In the center-of-mass reference frame (<a href="#inertialFrame">A:inertialFrame</a>), the origin is chosen so that the mass-weighted sum of positions vanishes. The remaining equations specialize to the binary case (n = 2), decomposing the vector constraint into <em>x</em>-direction and <em>y</em>-direction components of the initial positions.
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:NewtonSecLawMot" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:NewtonSecLawMot</b>
-              </td>
+              <td><b>TM:NewtonSecLawMot</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Newton&#39;s second law of motion
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Newton&#39;s second law of motion
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}\]
-              </td>
+              <td>\[\symbf{F}=m\,\symbf{a}\text{(}t\text{)}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em><b>F</b></em> is the force (<em>N</em>)
-                  </li>
-                  <li>
-                    <em>m</em> is the mass (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                <li><em>m</em> is the mass (<em>kg</em>)</li>
+                <li><em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b>(t)</em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
-                </p>
-              </td>
+              <td><p class="paragraph">
+                The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b>(t)</em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#hibbeler2004">hibbeler2004</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#hibbeler2004">hibbeler2004</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:velocity" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:velocity</b>
-              </td>
+              <td><b>TM:velocity</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Velocity
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Velocity
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
-              </td>
+              <td>\[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em><b>p</b>(t)</em> is the position (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#velocityWiki">velocityWiki</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#velocityWiki">velocityWiki</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:acceleration" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:acceleration</b>
-              </td>
+              <td><b>TM:acceleration</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Acceleration
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Acceleration
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
-              </td>
+              <td>\[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>t</em> is the time (<em>s</em>)
-                  </li>
-                  <li>
-                    <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)</li>
+                <li><em>t</em> is the time (<em>s</em>)</li>
+                <li><em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#accelerationWiki">accelerationWiki</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#accelerationWiki">accelerationWiki</a>
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:UniversalGravLaw" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:UniversalGravLaw</b>
-              </td>
+              <td><b>TM:UniversalGravLaw</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Newton&#39;s law of universal gravitation
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Newton&#39;s law of universal gravitation
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{\symbf{F}_{\symbf{g}}}=G\,\frac{{m_{1}}\,{m_{2}}}{{r_{12}}^{2}}\]
-              </td>
+              <td>\[{\symbf{F}_{\symbf{g}}}=G\,\frac{{m_{1}}\,{m_{2}}}{{r_{12}}^{2}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em><b>F</b><sub><b>g</b></sub></em> is the force of gravity (<em>N</em>)
-                  </li>
-                  <li>
-                    <em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>r<sub>12</sub></em> is the separation distance (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em><b>F</b><sub><b>g</b></sub></em> is the force of gravity (<em>N</em>)</li>
+                <li><em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)</li>
+                <li><em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)</li>
+                <li><em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)</li>
+                <li><em>r<sub>12</sub></em> is the separation distance (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em><b>F</b><sub><b>g</b></sub></em> is the magnitude of the gravitational force between two bodies; it is proportional to the product of their masses and inversely proportional to the square of the distance between them. The force acts along the relative-position vector (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), directed from one body toward the other. This assumes Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>) and requires the separation distance to be positive (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em><b>F</b><sub><b>g</b></sub></em> is the magnitude of the gravitational force between two bodies; it is proportional to the product of their masses and inversely proportional to the square of the distance between them. The force acts along the relative-position vector (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), directed from one body toward the other. This assumes Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>) and requires the separation distance to be positive (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
+              </p></td>
             </tr>
           </table>
           <table id="TM:relPosAndSep" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>TM:relPosAndSep</b>
-              </td>
+              <td><b>TM:relPosAndSep</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Relative position and separation
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Relative position and separation
+              </p></td>
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{r_{12}}=\sqrt{\left({x_{1}}-{x_{2}}\right)^{2}+\left({y_{1}}-{y_{2}}\right)^{2}}\]
-              </td>
+              <td>\[{r_{12}}=\sqrt{\left({x_{1}}-{x_{2}}\right)^{2}+\left({y_{1}}-{y_{2}}\right)^{2}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>r<sub>12</sub></em> is the separation distance (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>r<sub>12</sub></em> is the separation distance (<em>m</em>)</li>
+                <li><em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)</li>
+                <li><em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)</li>
+                <li><em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)</li>
+                <li><em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  The relative position vector is defined as the difference of the two star positions (i.e., r12 = r1 - r2). <em>r<sub>12</sub></em> is the corresponding separation distance (the magnitude of the relative position vector), computed from the position coordinates <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em> . The motion is confined to a 2D plane (<a href="#planar">A:planar</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                The relative position vector is defined as the difference of the two star positions (i.e., r12 = r1 - r2). <em>r<sub>12</sub></em> is the corresponding separation distance (the magnitude of the relative position vector), computed from the position coordinates <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em> . The motion is confined to a 2D plane (<a href="#planar">A:planar</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>, <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>, <a href="#IM:accelY2">IM:accelY2</a>, <a href="#IM:accelY1">IM:accelY1</a>, <a href="#IM:accelX2">IM:accelX2</a>, and <a href="#IM:accelX1">IM:accelX1</a>
+              </p></td>
             </tr>
           </table>
         </div>
@@ -1468,39 +875,29 @@
           <table id="IM:accelX1" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>IM:accelX1</b>
-              </td>
+              <td><b>IM:accelX1</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  X-acceleration of the first star
-                </p>
-              </td>
+              <td><p class="paragraph">
+                X-acceleration of the first star
+              </p></td>
             </tr>
             <tr>
               <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Output</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>x1</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>x1</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Input Constraints</th>
-              <td>
-                \[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]
-              </td>
+              <td>\[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]</td>
             </tr>
             <tr>
               <th>Output Constraints</th>
@@ -1508,102 +905,66 @@
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{a_{\text{x}1}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{-G\,{m_{2}}\,\left({x_{1}}-{x_{2}}\right)}{{r_{12}}^{3}}\]
-              </td>
+              <td>\[{a_{\text{x}1}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{-G\,{m_{2}}\,\left({x_{1}}-{x_{2}}\right)}{{r_{12}}^{3}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>a<sub>x1</sub></em> is the x-acceleration of the first star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>r<sub>12</sub></em> is the separation distance (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>a<sub>x1</sub></em> is the x-acceleration of the first star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)</li>
+                <li><em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)</li>
+                <li><em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)</li>
+                <li><em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)</li>
+                <li><em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)</li>
+                <li><em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)</li>
+                <li><em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)</li>
+                <li><em>r<sub>12</sub></em> is the separation distance (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>x1</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>x1</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
+              </p></td>
             </tr>
           </table>
           <table id="IM:accelY1" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>IM:accelY1</b>
-              </td>
+              <td><b>IM:accelY1</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Y-acceleration of the first star
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Y-acceleration of the first star
+              </p></td>
             </tr>
             <tr>
               <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Output</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>y1</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>y1</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Input Constraints</th>
-              <td>
-                \[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]
-              </td>
+              <td>\[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]</td>
             </tr>
             <tr>
               <th>Output Constraints</th>
@@ -1611,102 +972,66 @@
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{a_{\text{y}1}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{-G\,{m_{2}}\,\left({y_{1}}-{y_{2}}\right)}{{r_{12}}^{3}}\]
-              </td>
+              <td>\[{a_{\text{y}1}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{-G\,{m_{2}}\,\left({y_{1}}-{y_{2}}\right)}{{r_{12}}^{3}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>a<sub>y1</sub></em> is the y-acceleration of the first star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>r<sub>12</sub></em> is the separation distance (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>a<sub>y1</sub></em> is the y-acceleration of the first star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)</li>
+                <li><em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)</li>
+                <li><em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)</li>
+                <li><em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)</li>
+                <li><em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)</li>
+                <li><em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)</li>
+                <li><em>m<sub>2</sub></em> is the mass of the second star (<em>kg</em>)</li>
+                <li><em>r<sub>12</sub></em> is the separation distance (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>y1</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>y1</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
+              </p></td>
             </tr>
           </table>
           <table id="IM:accelX2" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>IM:accelX2</b>
-              </td>
+              <td><b>IM:accelX2</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  X-acceleration of the second star
-                </p>
-              </td>
+              <td><p class="paragraph">
+                X-acceleration of the second star
+              </p></td>
             </tr>
             <tr>
               <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Output</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>x2</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>x2</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Input Constraints</th>
-              <td>
-                \[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]
-              </td>
+              <td>\[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]</td>
             </tr>
             <tr>
               <th>Output Constraints</th>
@@ -1714,102 +1039,66 @@
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{a_{\text{x}2}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{G\,{m_{1}}\,\left({x_{1}}-{x_{2}}\right)}{{r_{12}}^{3}}\]
-              </td>
+              <td>\[{a_{\text{x}2}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{G\,{m_{1}}\,\left({x_{1}}-{x_{2}}\right)}{{r_{12}}^{3}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>a<sub>x2</sub></em> is the x-acceleration of the second star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>r<sub>12</sub></em> is the separation distance (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>a<sub>x2</sub></em> is the x-acceleration of the second star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)</li>
+                <li><em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)</li>
+                <li><em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)</li>
+                <li><em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)</li>
+                <li><em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)</li>
+                <li><em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)</li>
+                <li><em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)</li>
+                <li><em>r<sub>12</sub></em> is the separation distance (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>x2</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>x2</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
+              </p></td>
             </tr>
           </table>
           <table id="IM:accelY2" class="defn-table">
             <tr>
               <th>Refname</th>
-              <td>
-                <b>IM:accelY2</b>
-              </td>
+              <td><b>IM:accelY2</b></td>
             </tr>
             <tr>
               <th>Label</th>
-              <td>
-                <p class="paragraph">
-                  Y-acceleration of the second star
-                </p>
-              </td>
+              <td><p class="paragraph">
+                Y-acceleration of the second star
+              </p></td>
             </tr>
             <tr>
               <th>Input</th>
-              <td>
-                <p class="paragraph">
-                  <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>m<sub>1</sub></em>, <em>m<sub>2</sub></em>, <em>x<sub>1</sub></em>, <em>y<sub>1</sub></em>, <em>x<sub>2</sub></em>, <em>y<sub>2</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Output</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>y2</sub></em>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>y2</sub></em>
+              </p></td>
             </tr>
             <tr>
               <th>Input Constraints</th>
-              <td>
-                \[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]
-              </td>
+              <td>\[{m_{1}}\gt{}0\]\[{m_{2}}\gt{}0\]</td>
             </tr>
             <tr>
               <th>Output Constraints</th>
@@ -1817,64 +1106,38 @@
             </tr>
             <tr>
               <th>Equation</th>
-              <td>
-                \[{a_{\text{y}2}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{G\,{m_{1}}\,\left({y_{1}}-{y_{2}}\right)}{{r_{12}}^{3}}\]
-              </td>
+              <td>\[{a_{\text{y}2}}\left({x_{1}},{y_{1}},{x_{2}},{y_{2}}\right)=\frac{G\,{m_{1}}\,\left({y_{1}}-{y_{2}}\right)}{{r_{12}}^{3}}\]</td>
             </tr>
             <tr>
               <th>Description</th>
-              <td>
-                <ul class="hide-list-style-no-indent">
-                  <li>
-                    <em>a<sub>y2</sub></em> is the y-acceleration of the second star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)
-                  </li>
-                  <li>
-                    <em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)
-                  </li>
-                  <li>
-                    <em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)
-                  </li>
-                  <li>
-                    <em>r<sub>12</sub></em> is the separation distance (<em>m</em>)
-                  </li>
-                </ul>
-              </td>
+              <td><ul class="hide-list-style-no-indent">
+                <li><em>a<sub>y2</sub></em> is the y-acceleration of the second star (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)</li>
+                <li><em>x<sub>1</sub></em> is the x-position of the first star (<em>m</em>)</li>
+                <li><em>y<sub>1</sub></em> is the y-position of the first star (<em>m</em>)</li>
+                <li><em>x<sub>2</sub></em> is the x-position of the second star (<em>m</em>)</li>
+                <li><em>y<sub>2</sub></em> is the y-position of the second star (<em>m</em>)</li>
+                <li><em>G</em> is the gravitational constant (<em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>)</li>
+                <li><em>m<sub>1</sub></em> is the mass of the first star (<em>kg</em>)</li>
+                <li><em>r<sub>12</sub></em> is the separation distance (<em>m</em>)</li>
+              </ul></td>
             </tr>
             <tr>
               <th>Notes</th>
-              <td>
-                <p class="paragraph">
-                  <em>a<sub>y2</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <em>a<sub>y2</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> together with the initial conditions . This model is derived from Newton&#39;s second law (<a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>), universal gravitation (<a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>), and the definitions of acceleration (<a href="#TM:acceleration">TM:acceleration</a>), velocity (<a href="#TM:velocity">TM:velocity</a>) and relative position (<a href="#TM:relPosAndSep">TM:relPosAndSep</a>), under the center-of-mass constraint (<a href="#TM:centerOfMass">TM:centerOfMass</a>) . The assumptions are: two-body system (<a href="#twoBody">A:twoBody</a>), isolated system (<a href="#isolated">A:isolated</a>), Newtonian gravitation (<a href="#newtonianGravity">A:newtonianGravity</a>), non-relativistic mechanics (<a href="#nonRelativistic">A:nonRelativistic</a>), point masses (<a href="#pointMass">A:pointMass</a>), constant masses (<a href="#constantMass">A:constantMass</a>), inertial reference frame (<a href="#inertialFrame">A:inertialFrame</a>), planar motion (<a href="#planar">A:planar</a>) and non-zero separation (<a href="#nonzeroSeparation">A:nonzeroSeparation</a>).
+              </p></td>
             </tr>
             <tr>
               <th>Source</th>
-              <td>
-                <p class="paragraph">
-                  --
-                </p>
-              </td>
+              <td><p class="paragraph">
+                --
+              </p></td>
             </tr>
             <tr>
               <th>RefBy</th>
-              <td>
-                <p class="paragraph">
-                  <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
-                </p>
-              </td>
+              <td><p class="paragraph">
+                <a href="#outputValues">FR:Output-Values</a> and <a href="#calcPositions">FR:Calculate-Positions</a>
+              </p></td>
             </tr>
           </table>
         </div>
@@ -1894,224 +1157,92 @@
                 <th><span title="typical uncertainty">Uncert.</span></th>
               </tr>
               <tr>
-                <td>
-                  <em>m<sub>1</sub></em>
-                </td>
-                <td>
-                  <em>m<sub>1</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>m<sub>min</sub> ≤ m<sub>1</sub> ≤ m<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>2.0⋅10<sup>30</sup></em> <em>kg</em>
-                </td>
-                <td>
-                  approximately 1 solar mass
-                </td>
-                <td>
-                  5.0<em>%</em>
-                </td>
+                <td><em>m<sub>1</sub></em></td>
+                <td><em>m<sub>1</sub> &gt; 0</em></td>
+                <td><em>m<sub>min</sub> ≤ m<sub>1</sub> ≤ m<sub>max</sub></em></td>
+                <td><em>2.0⋅10<sup>30</sup></em> <em>kg</em></td>
+                <td>approximately 1 solar mass</td>
+                <td>5.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>m<sub>2</sub></em>
-                </td>
-                <td>
-                  <em>m<sub>2</sub> &gt; 0</em>
-                </td>
-                <td>
-                  <em>m<sub>min</sub> ≤ m<sub>2</sub> ≤ m<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>1.6⋅10<sup>30</sup></em> <em>kg</em>
-                </td>
-                <td>
-                  approximately 0.8 solar masses
-                </td>
-                <td>
-                  5.0<em>%</em>
-                </td>
+                <td><em>m<sub>2</sub></em></td>
+                <td><em>m<sub>2</sub> &gt; 0</em></td>
+                <td><em>m<sub>min</sub> ≤ m<sub>2</sub> ≤ m<sub>max</sub></em></td>
+                <td><em>1.6⋅10<sup>30</sup></em> <em>kg</em></td>
+                <td>approximately 0.8 solar masses</td>
+                <td>5.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>t<sub>final</sub></em>
-                </td>
-                <td>
-                  <em>t<sub>final</sub> ≥ 0</em>
-                </td>
-                <td>
-                  <em>t<sub>final</sub> ≤ t<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>100.0⋅10<sup>3</sup></em> <em>s</em>
-                </td>
-                <td>
-                  short integration window
-                </td>
-                <td>
-                  0.0<em>%</em>
-                </td>
+                <td><em>t<sub>final</sub></em></td>
+                <td><em>t<sub>final</sub> ≥ 0</em></td>
+                <td><em>t<sub>final</sub> ≤ t<sub>max</sub></em></td>
+                <td><em>100.0⋅10<sup>3</sup></em> <em>s</em></td>
+                <td>short integration window</td>
+                <td>0.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>v<sub>x1</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−v<sub>max</sub> ≤ v<sub>x1</sub><sup>0</sup> ≤ v<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>2.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em>
-                </td>
-                <td>
-                  non-zero x-velocity produces a general elliptical orbit
-                </td>
-                <td>
-                  5.0<em>%</em>
-                </td>
+                <td><em>v<sub>x1</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−v<sub>max</sub> ≤ v<sub>x1</sub><sup>0</sup> ≤ v<sub>max</sub></em></td>
+                <td><em>2.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                <td>non-zero x-velocity produces a general elliptical orbit</td>
+                <td>5.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>v<sub>x2</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−v<sub>max</sub> ≤ v<sub>x2</sub><sup>0</sup> ≤ v<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>-2.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em>
-                </td>
-                <td>
-                  derived from COM constraint
-                </td>
-                <td>
-                  5.0<em>%</em>
-                </td>
+                <td><em>v<sub>x2</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−v<sub>max</sub> ≤ v<sub>x2</sub><sup>0</sup> ≤ v<sub>max</sub></em></td>
+                <td><em>-2.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                <td>derived from COM constraint</td>
+                <td>5.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>v<sub>y1</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−v<sub>max</sub> ≤ v<sub>y1</sub><sup>0</sup> ≤ v<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>9.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em>
-                </td>
-                <td>
-                  yields a bound orbit for the typical masses and separation
-                </td>
-                <td>
-                  5.0<em>%</em>
-                </td>
+                <td><em>v<sub>y1</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−v<sub>max</sub> ≤ v<sub>y1</sub><sup>0</sup> ≤ v<sub>max</sub></em></td>
+                <td><em>9.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                <td>yields a bound orbit for the typical masses and separation</td>
+                <td>5.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>v<sub>y2</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−v<sub>max</sub> ≤ v<sub>y2</sub><sup>0</sup> ≤ v<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>-11.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em>
-                </td>
-                <td>
-                  derived from COM constraint
-                </td>
-                <td>
-                  5.0<em>%</em>
-                </td>
+                <td><em>v<sub>y2</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−v<sub>max</sub> ≤ v<sub>y2</sub><sup>0</sup> ≤ v<sub>max</sub></em></td>
+                <td><em>-11.0⋅10<sup>3</sup></em> <em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                <td>derived from COM constraint</td>
+                <td>5.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>x<sub>1</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−r<sub>max</sub> ≤ x<sub>1</sub><sup>0</sup> ≤ r<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>75.0⋅10<sup>9</sup></em> <em>m</em>
-                </td>
-                <td>
-                  approximately 0.5 AU; satisfies COM constraint with star 2
-                </td>
-                <td>
-                  1.0<em>%</em>
-                </td>
+                <td><em>x<sub>1</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−r<sub>max</sub> ≤ x<sub>1</sub><sup>0</sup> ≤ r<sub>max</sub></em></td>
+                <td><em>75.0⋅10<sup>9</sup></em> <em>m</em></td>
+                <td>approximately 0.5 AU; satisfies COM constraint with star 2</td>
+                <td>1.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>x<sub>2</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−r<sub>max</sub> ≤ x<sub>2</sub><sup>0</sup> ≤ r<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>-90.0⋅10<sup>9</sup></em> <em>m</em>
-                </td>
-                <td>
-                  derived from COM constraint
-                </td>
-                <td>
-                  1.0<em>%</em>
-                </td>
+                <td><em>x<sub>2</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−r<sub>max</sub> ≤ x<sub>2</sub><sup>0</sup> ≤ r<sub>max</sub></em></td>
+                <td><em>-90.0⋅10<sup>9</sup></em> <em>m</em></td>
+                <td>derived from COM constraint</td>
+                <td>1.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>y<sub>1</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−r<sub>max</sub> ≤ y<sub>1</sub><sup>0</sup> ≤ r<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>0.0</em> <em>m</em>
-                </td>
-                <td>
-                  stars initially on the x-axis
-                </td>
-                <td>
-                  1.0<em>%</em>
-                </td>
+                <td><em>y<sub>1</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−r<sub>max</sub> ≤ y<sub>1</sub><sup>0</sup> ≤ r<sub>max</sub></em></td>
+                <td><em>0.0</em> <em>m</em></td>
+                <td>stars initially on the x-axis</td>
+                <td>1.0<em>%</em></td>
               </tr>
               <tr>
-                <td>
-                  <em>y<sub>2</sub><sup>0</sup></em>
-                </td>
-                <td>
-                  --
-                </td>
-                <td>
-                  <em>−r<sub>max</sub> ≤ y<sub>2</sub><sup>0</sup> ≤ r<sub>max</sub></em>
-                </td>
-                <td>
-                  <em>0.0</em> <em>m</em>
-                </td>
-                <td>
-                  stars initially on the x-axis
-                </td>
-                <td>
-                  1.0<em>%</em>
-                </td>
+                <td><em>y<sub>2</sub><sup>0</sup></em></td>
+                <td>--</td>
+                <td><em>−r<sub>max</sub> ≤ y<sub>2</sub><sup>0</sup> ≤ r<sub>max</sub></em></td>
+                <td><em>0.0</em> <em>m</em></td>
+                <td>stars initially on the x-axis</td>
+                <td>1.0<em>%</em></td>
               </tr>
             </table>
             <p class="caption">
@@ -2163,125 +1294,59 @@
               <th>Units</th>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>1</sub></em>
-              </td>
-              <td>
-                Mass of the first star
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>1</sub></em></td>
+              <td>Mass of the first star</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>m<sub>2</sub></em>
-              </td>
-              <td>
-                Mass of the second star
-              </td>
-              <td>
-                <em>kg</em>
-              </td>
+              <td><em>m<sub>2</sub></em></td>
+              <td>Mass of the second star</td>
+              <td><em>kg</em></td>
             </tr>
             <tr>
-              <td>
-                <em>t<sub>final</sub></em>
-              </td>
-              <td>
-                Final time
-              </td>
-              <td>
-                <em>s</em>
-              </td>
+              <td><em>t<sub>final</sub></em></td>
+              <td>Final time</td>
+              <td><em>s</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>x1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-velocity of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>x1</sub><sup>0</sup></em></td>
+              <td>Initial x-velocity of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>x2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-velocity of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>x2</sub><sup>0</sup></em></td>
+              <td>Initial x-velocity of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>y1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-velocity of the first star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>y1</sub><sup>0</sup></em></td>
+              <td>Initial y-velocity of the first star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>v<sub>y2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-velocity of the second star
-              </td>
-              <td>
-                <em>\(\frac{\text{m}}{\text{s}}\)</em>
-              </td>
+              <td><em>v<sub>y2</sub><sup>0</sup></em></td>
+              <td>Initial y-velocity of the second star</td>
+              <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
             </tr>
             <tr>
-              <td>
-                <em>x<sub>1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-position of the first star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>x<sub>1</sub><sup>0</sup></em></td>
+              <td>Initial x-position of the first star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>x<sub>2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial x-position of the second star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>x<sub>2</sub><sup>0</sup></em></td>
+              <td>Initial x-position of the second star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>y<sub>1</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-position of the first star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>y<sub>1</sub><sup>0</sup></em></td>
+              <td>Initial y-position of the first star</td>
+              <td><em>m</em></td>
             </tr>
             <tr>
-              <td>
-                <em>y<sub>2</sub><sup>0</sup></em>
-              </td>
-              <td>
-                Initial y-position of the second star
-              </td>
-              <td>
-                <em>m</em>
-              </td>
+              <td><em>y<sub>2</sub><sup>0</sup></em></td>
+              <td>Initial y-position of the second star</td>
+              <td><em>m</em></td>
             </tr>
           </table>
           <p class="caption">
@@ -2352,9 +1417,7 @@
             <th><a href="#nonzeroSeparation">A:nonzeroSeparation</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#twoBody">A:twoBody</a>
-            </td>
+            <td><a href="#twoBody">A:twoBody</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2366,14 +1429,10 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#isolated">A:isolated</a>
-            </td>
+            <td><a href="#isolated">A:isolated</a></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -2382,9 +1441,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#newtonianGravity">A:newtonianGravity</a>
-            </td>
+            <td><a href="#newtonianGravity">A:newtonianGravity</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2396,9 +1453,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#nonRelativistic">A:nonRelativistic</a>
-            </td>
+            <td><a href="#nonRelativistic">A:nonRelativistic</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2410,9 +1465,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#pointMass">A:pointMass</a>
-            </td>
+            <td><a href="#pointMass">A:pointMass</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2424,9 +1477,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#constantMass">A:constantMass</a>
-            </td>
+            <td><a href="#constantMass">A:constantMass</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2438,9 +1489,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#inertialFrame">A:inertialFrame</a>
-            </td>
+            <td><a href="#inertialFrame">A:inertialFrame</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2452,9 +1501,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#planar">A:planar</a>
-            </td>
+            <td><a href="#planar">A:planar</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2466,18 +1513,12 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#nonzeroSeparation">A:nonzeroSeparation</a>
-            </td>
+            <td><a href="#nonzeroSeparation">A:nonzeroSeparation</a></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -2503,25 +1544,19 @@
             <th><a href="#nonzeroSeparation">A:nonzeroSeparation</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:centerOfMass">TM:centerOfMass</a>
-            </td>
+            <td><a href="#TM:centerOfMass">TM:centerOfMass</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>
-            </td>
+            <td><a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2533,9 +1568,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:velocity">TM:velocity</a>
-            </td>
+            <td><a href="#TM:velocity">TM:velocity</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2547,9 +1580,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:acceleration">TM:acceleration</a>
-            </td>
+            <td><a href="#TM:acceleration">TM:acceleration</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2561,27 +1592,19 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>
-            </td>
+            <td><a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:relPosAndSep">TM:relPosAndSep</a>
-            </td>
+            <td><a href="#TM:relPosAndSep">TM:relPosAndSep</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2589,143 +1612,59 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelX1">IM:accelX1</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelX1">IM:accelX1</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelY1">IM:accelY1</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelY1">IM:accelY1</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelX2">IM:accelX2</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelX2">IM:accelX2</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelY2">IM:accelY2</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelY2">IM:accelY2</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#inputValues">FR:Input-Values</a>
-            </td>
+            <td><a href="#inputValues">FR:Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2737,9 +1676,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#verifyInptVals">FR:Verify-Input-Values</a>
-            </td>
+            <td><a href="#verifyInptVals">FR:Verify-Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2751,9 +1688,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#calcPositions">FR:Calculate-Positions</a>
-            </td>
+            <td><a href="#calcPositions">FR:Calculate-Positions</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2765,9 +1700,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#verifyOutput">FR:Verify-Output</a>
-            </td>
+            <td><a href="#verifyOutput">FR:Verify-Output</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2779,9 +1712,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputValues">FR:Output-Values</a>
-            </td>
+            <td><a href="#outputValues">FR:Output-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2793,9 +1724,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#correct">NFR:Correctness</a>
-            </td>
+            <td><a href="#correct">NFR:Correctness</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2807,9 +1736,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#portable">NFR:Portability</a>
-            </td>
+            <td><a href="#portable">NFR:Portability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2821,9 +1748,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#maintainable">NFR:Maintainability</a>
-            </td>
+            <td><a href="#maintainable">NFR:Maintainability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2835,9 +1760,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#usable">NFR:Usability</a>
-            </td>
+            <td><a href="#usable">NFR:Usability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2849,46 +1772,22 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#lcDerivedOutputs">LC:Derived-Output-Quantities</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#lcDerivedOutputs">LC:Derived-Output-Quantities</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
           </tr>
           <tr>
-            <td>
-              <a href="#ucNewtonianGravity">UC:Newtonian-Gravity-Model</a>
-            </td>
+            <td><a href="#ucNewtonianGravity">UC:Newtonian-Gravity-Model</a></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -2917,9 +1816,7 @@
             <th><a href="#IM:accelY2">IM:accelY2</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:centerOfMass">TM:centerOfMass</a>
-            </td>
+            <td><a href="#TM:centerOfMass">TM:centerOfMass</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2932,9 +1829,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a>
-            </td>
+            <td><a href="#TM:NewtonSecLawMot">TM:NewtonSecLawMot</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2947,9 +1842,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:velocity">TM:velocity</a>
-            </td>
+            <td><a href="#TM:velocity">TM:velocity</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2962,9 +1855,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:acceleration">TM:acceleration</a>
-            </td>
+            <td><a href="#TM:acceleration">TM:acceleration</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -2977,26 +1868,20 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a>
-            </td>
+            <td><a href="#TM:UniversalGravLaw">TM:UniversalGravLaw</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#TM:relPosAndSep">TM:relPosAndSep</a>
-            </td>
+            <td><a href="#TM:relPosAndSep">TM:relPosAndSep</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3009,108 +1894,52 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelX1">IM:accelX1</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelX1">IM:accelX1</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelY1">IM:accelY1</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelY1">IM:accelY1</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelX2">IM:accelX2</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelX2">IM:accelX2</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#IM:accelY2">IM:accelY2</a>
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td><a href="#IM:accelY2">IM:accelY2</a></td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3146,9 +1975,7 @@
             <th><a href="#usable">NFR:Usability</a></th>
           </tr>
           <tr>
-            <td>
-              <a href="#positionsOverTime">GS:positionsOverTime</a>
-            </td>
+            <td><a href="#positionsOverTime">GS:positionsOverTime</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3170,9 +1997,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#inputValues">FR:Input-Values</a>
-            </td>
+            <td><a href="#inputValues">FR:Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3194,9 +2019,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#verifyInptVals">FR:Verify-Input-Values</a>
-            </td>
+            <td><a href="#verifyInptVals">FR:Verify-Input-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3218,27 +2041,17 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#calcPositions">FR:Calculate-Positions</a>
-            </td>
+            <td><a href="#calcPositions">FR:Calculate-Positions</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3250,9 +2063,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#verifyOutput">FR:Verify-Output</a>
-            </td>
+            <td><a href="#verifyOutput">FR:Verify-Output</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3274,27 +2085,17 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#outputValues">FR:Output-Values</a>
-            </td>
+            <td><a href="#outputValues">FR:Output-Values</a></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
-            <td>
-              X
-            </td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
+            <td>X</td>
             <td></td>
             <td></td>
             <td></td>
@@ -3306,9 +2107,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#correct">NFR:Correctness</a>
-            </td>
+            <td><a href="#correct">NFR:Correctness</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3330,9 +2129,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#portable">NFR:Portability</a>
-            </td>
+            <td><a href="#portable">NFR:Portability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3354,9 +2151,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#maintainable">NFR:Maintainability</a>
-            </td>
+            <td><a href="#maintainable">NFR:Maintainability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3378,9 +2173,7 @@
             <td></td>
           </tr>
           <tr>
-            <td>
-              <a href="#usable">NFR:Usability</a>
-            </td>
+            <td><a href="#usable">NFR:Usability</a></td>
             <td></td>
             <td></td>
             <td></td>
@@ -3443,21 +2236,11 @@
         For convenience, the following graphs can be found at the links below:
       </p>
       <ul class="list">
-        <li>
-          <a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a>
-        </li>
-        <li>
-          <a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a>
-        </li>
+        <li><a href="../../TraceyGraph/avsa.svg">TraceGraphAvsA</a></li>
+        <li><a href="../../TraceyGraph/avsall.svg">TraceGraphAvsAll</a></li>
+        <li><a href="../../TraceyGraph/refvsref.svg">TraceGraphRefvsRef</a></li>
+        <li><a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a></li>
+        <li><a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a></li>
       </ul>
     </div>
     <div id="Sec:AuxConstants" class="section">
@@ -3474,88 +2257,40 @@
             <th>Unit</th>
           </tr>
           <tr>
-            <td>
-              <em>G</em>
-            </td>
-            <td>
-              gravitational constant
-            </td>
-            <td>
-              <em>66.743⋅10<sup>-12</sup></em>
-            </td>
-            <td>
-              <em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em>
-            </td>
+            <td><em>G</em></td>
+            <td>gravitational constant</td>
+            <td><em>66.743⋅10<sup>-12</sup></em></td>
+            <td><em>\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\)</em></td>
           </tr>
           <tr>
-            <td>
-              <em>m<sub>max</sub></em>
-            </td>
-            <td>
-              maximum stellar mass
-            </td>
-            <td>
-              <em>100.0⋅10<sup>30</sup></em>
-            </td>
-            <td>
-              <em>kg</em>
-            </td>
+            <td><em>m<sub>max</sub></em></td>
+            <td>maximum stellar mass</td>
+            <td><em>100.0⋅10<sup>30</sup></em></td>
+            <td><em>kg</em></td>
           </tr>
           <tr>
-            <td>
-              <em>m<sub>min</sub></em>
-            </td>
-            <td>
-              minimum stellar mass
-            </td>
-            <td>
-              <em>100.0⋅10<sup>27</sup></em>
-            </td>
-            <td>
-              <em>kg</em>
-            </td>
+            <td><em>m<sub>min</sub></em></td>
+            <td>minimum stellar mass</td>
+            <td><em>100.0⋅10<sup>27</sup></em></td>
+            <td><em>kg</em></td>
           </tr>
           <tr>
-            <td>
-              <em>r<sub>max</sub></em>
-            </td>
-            <td>
-              maximum initial distance from origin
-            </td>
-            <td>
-              <em>10.0⋅10<sup>12</sup></em>
-            </td>
-            <td>
-              <em>m</em>
-            </td>
+            <td><em>r<sub>max</sub></em></td>
+            <td>maximum initial distance from origin</td>
+            <td><em>10.0⋅10<sup>12</sup></em></td>
+            <td><em>m</em></td>
           </tr>
           <tr>
-            <td>
-              <em>t<sub>max</sub></em>
-            </td>
-            <td>
-              maximum simulation time
-            </td>
-            <td>
-              <em>10.0⋅10<sup>9</sup></em>
-            </td>
-            <td>
-              <em>s</em>
-            </td>
+            <td><em>t<sub>max</sub></em></td>
+            <td>maximum simulation time</td>
+            <td><em>10.0⋅10<sup>9</sup></em></td>
+            <td><em>s</em></td>
           </tr>
           <tr>
-            <td>
-              <em>v<sub>max</sub></em>
-            </td>
-            <td>
-              maximum initial speed
-            </td>
-            <td>
-              <em>1.0⋅10<sup>6</sup></em>
-            </td>
-            <td>
-              <em>\(\frac{\text{m}}{\text{s}}\)</em>
-            </td>
+            <td><em>v<sub>max</sub></em></td>
+            <td>maximum initial speed</td>
+            <td><em>1.0⋅10<sup>6</sup></em></td>
+            <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
           </tr>
         </table>
         <p class="caption">

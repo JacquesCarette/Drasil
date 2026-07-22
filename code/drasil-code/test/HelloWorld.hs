@@ -25,7 +25,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldOO :: (OOProg r vis stmt mthd svr att prg) => OO.GSProgram r prg
+helloWorldOO :: (OOProg r vis stmt mthd stvr att prg) => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
   [helloWorldMainOO] [helloWorldClass]), helperOO]
@@ -46,7 +46,7 @@ myOtherList :: (SharedProg r vis stmt mthd) => SVariable r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainOO :: (OOProg r vis stmt mthd svr att prg) => MS (r mthd)
+helloWorldMainOO :: (OOProg r vis stmt mthd stvr att prg) => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -117,7 +117,7 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r vis stmt mthd svr att prg) => MS (r Block)
+objectTests :: (OOProg r vis stmt mthd stvr att prg) => MS (r Block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -375,7 +375,7 @@ helloTryCatch :: (SharedProg r vis stmt mthd) => MS (r stmt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
-helloWorldClass :: (OOProg r vis stmt mthd svr att prg) => CS (r Class)
+helloWorldClass :: (OOProg r vis stmt mthd stvr att prg) => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

@@ -512,12 +512,12 @@ method
   -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis stmt mthd svr att) => SVariable r -> MS (r mthd)
+getMethod :: (OORenderSym r vis stmt mthd stvr att) => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis stmt mthd svr att) => SVariable r -> MS (r mthd)
+setMethod :: (OORenderSym r vis stmt mthd stvr att) => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -542,18 +542,18 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis mthd svr, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
+  :: (RenderClass r vis mthd stvr, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis mthd svr, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r svr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
+implementingClass :: (RenderClass r vis mthd stvr, VisibilitySym r vis) => Label -> [Label] ->
+  [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis mthd svr)
+  :: (RenderClass r vis mthd stvr)
   => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 

@@ -398,7 +398,7 @@ instance (P.ProgramSym r vis stmt mthd prg) => P.ProgramSym (LoggingFor r) vis s
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd svr att prg) => G.OOProg (LoggingFor r) vis stmt mthd svr att prg
+instance (G.OOProg r vis stmt mthd stvr att prg) => G.OOProg (LoggingFor r) vis stmt mthd stvr att prg
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -458,25 +458,25 @@ instance (G.OOMethodSym r vis stmt mthd att) => G.OOMethodSym (LoggingFor r) vis
   inOutMethod = liftLogging G.inOutMethod
   docInOutMethod = liftLogging G.docInOutMethod
 
-instance (G.StateVarSym r vis svr att) => G.StateVarSym (LoggingFor r) vis svr att where
+instance (G.StateVarSym r vis stvr att) => G.StateVarSym (LoggingFor r) vis stvr att where
   stateVar = liftLogging G.stateVar
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis stmt mthd svr att) => G.ClassSym (LoggingFor r) vis stmt mthd svr att where
+instance (G.ClassSym r vis stmt mthd stvr att) => G.ClassSym (LoggingFor r) vis stmt mthd stvr att where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis stmt mthd svr att) => G.ModuleSym (LoggingFor r) vis stmt mthd svr att where
+instance (G.ModuleSym r vis stmt mthd stvr att) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr att where
   buildModule = liftLogging G.buildModule
 
-instance (G.FileSym r vis stmt mthd svr att) => G.FileSym (LoggingFor r) vis stmt mthd svr att where
+instance (G.FileSym r vis stmt mthd stvr att) => G.FileSym (LoggingFor r) vis stmt mthd stvr att where
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis stmt mthd svr att prg) => G.ProgramSym (LoggingFor r) vis stmt mthd svr att prg where
+instance (G.ProgramSym r vis stmt mthd stvr att prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr att prg where
   prog = liftLogging G.prog
 
 instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where

@@ -39,9 +39,9 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
 class (SharedProg r vis stmt mthd, OOStatement r stmt,
-  ProgramSym r vis stmt mthd svr att prg, ObserverPattern r stmt,
+  ProgramSym r vis stmt mthd stvr att prg, ObserverPattern r stmt,
   StrategyPattern r stmt
-  ) => OOProg r vis stmt mthd svr att prg
+  ) => OOProg r vis stmt mthd stvr att prg
 
 class (SharedStatement r stmt, GetSet r, InternalValueExp r, OOFuncAppStatement r stmt,
   OOVariableValue r, OODeclStatement r stmt, OOFuncAppStatement r stmt,
@@ -53,7 +53,7 @@ type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
-class (FileSym r vis stmt mthd svr att) => ProgramSym r vis stmt mthd svr att prg | r -> prg where
+class (FileSym r vis stmt mthd stvr att) => ProgramSym r vis stmt mthd stvr att prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
@@ -61,7 +61,7 @@ class (FileSym r vis stmt mthd svr att) => ProgramSym r vis stmt mthd svr att pr
 type File = FileData
 
 -- | Class for representing a file.
-class (ModuleSym r vis stmt mthd svr att) => FileSym r vis stmt mthd svr att where
+class (ModuleSym r vis stmt mthd stvr att) => FileSym r vis stmt mthd stvr att where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
@@ -74,7 +74,7 @@ class (ModuleSym r vis stmt mthd svr att) => FileSym r vis stmt mthd svr att whe
 type Module = ModData
 
 -- | Class for representing a module.
-class (ClassSym r vis stmt mthd svr att) => ModuleSym r vis stmt mthd svr att where
+class (ClassSym r vis stmt mthd stvr att) => ModuleSym r vis stmt mthd stvr att where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
@@ -82,18 +82,18 @@ class (ClassSym r vis stmt mthd svr att) => ModuleSym r vis stmt mthd svr att wh
 type Class = Doc
 
 -- | Class for representing an OO class.
-class (OOMethodSym r vis stmt mthd att, StateVarSym r vis svr att) => ClassSym r vis stmt mthd svr att where
+class (OOMethodSym r vis stmt mthd att, StateVarSym r vis stvr att) => ClassSym r vis stmt mthd stvr att where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] ->
+  buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
     [MS (r mthd)] -> CS (r Class)
   -- | Creates an extra class, i.e. with a different name than the module name.
   -- Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] ->
+  extraClass :: Label -> Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
     [MS (r mthd)] -> CS (r Class)
   -- | Creates a class implementing a list of interfaces.
   -- Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r mthd)] ->
+  implementingClass :: Label -> [Label] -> [CSStateVar r stvr] -> [MS (r mthd)] ->
     [MS (r mthd)] -> CS (r Class)
 
   docClass :: String -> CS (r Class) -> CS (r Class)
@@ -128,30 +128,30 @@ nonInitConstructor :: (OOMethodSym r vis stmt mthd att) => [MS (r ParamData)] ->
 nonInitConstructor ps = constructor ps []
 
 type StateVar = Doc
-type CSStateVar r svr = CS (r svr)
+type CSStateVar r stvr = CS (r stvr)
 
 -- | Class for representing class variables, both instance- and class-level.
 -- Used when creating a class, to hold extra information about `Attachment`
 -- and `Visibility`.
 -- Usually 'Doc' is used for the representation.
-class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis svr att | r -> svr where
+class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis stvr att | r -> stvr where
   -- | Given a visibility, attachment, and variable, represent the declaration
   -- of a state variable with no initial value.
-  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r svr
+  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r stvr
   -- | Given a visibility, attachment, variable, and initial value,
   -- represent the declaration of a state variable with the given initial value.
-  stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
+  stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r stvr
   -- | Given a visibility, variable, and value, represent the declaration of
   -- a state constant with the given value.
-  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
+  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r stvr
 
-privDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+privDVar :: (StateVarSym r vis stvr att) => SVariable r -> CSStateVar r stvr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+pubDVar :: (StateVarSym r vis stvr att) => SVariable r -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+pubSVar :: (StateVarSym r vis stvr att) => SVariable r -> CSStateVar r stvr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance

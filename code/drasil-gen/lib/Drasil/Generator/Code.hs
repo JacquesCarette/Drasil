@@ -49,7 +49,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
     genLangCode Matlab = genCallProc Matlab unMLC unMLP
 
     genCall
-      :: (OOProg progRepr vis stmt mthd svr att prg, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (OOProg progRepr vis stmt mthd stvr att prg, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)

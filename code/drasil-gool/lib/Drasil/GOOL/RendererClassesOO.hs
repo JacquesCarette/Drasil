@@ -19,13 +19,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd, IG.FileSym r vis stmt mthd svr att,
+class (CommonRenderSym r vis stmt mthd, IG.FileSym r vis stmt mthd stvr att,
   IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
   IG.StrategyPattern r stmt, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r vis mthd svr, ClassElim r, RenderFile r,
+  IG.OOValueExpression r, RenderClass r vis mthd stvr, ClassElim r, RenderFile r,
   InternalGetSet r, OORenderMethod r vis mthd att, RenderMod r, ModuleElim r,
-  StateVarElim r svr, PermElim r att
-  ) => OORenderSym r vis stmt mthd svr att
+  StateVarElim r stvr, PermElim r att
+  ) => OORenderSym r vis stmt mthd stvr att
 
 -- OO-Only Typeclasses --
 
@@ -61,16 +61,16 @@ class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd att 
   intFunc       :: Bool -> Label -> r vis -> r att
     -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 
-  destructor :: [IG.CSStateVar r svr] -> MS (r mthd)
+  destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 
-class StateVarElim r svr | r -> svr where
-  stateVar :: r svr -> Doc
+class StateVarElim r stvr | r -> stvr where
+  stateVar :: r stvr -> Doc
 
 type ParentSpec = Doc
 
-class (BlockCommentSym r) => RenderClass r vis mthd svr | r -> vis mthd svr where
+class (BlockCommentSym r) => RenderClass r vis mthd stvr | r -> vis mthd stvr where
   -- class name, visibility, parent, state variables, constructor(s), methods
-  intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r svr]
+  intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r stvr]
     -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r IG.Class)
 
   inherit :: Maybe Label -> r ParentSpec

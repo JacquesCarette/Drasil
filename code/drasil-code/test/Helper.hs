@@ -12,7 +12,7 @@ import qualified Drasil.GProc as GProc (FileSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.
-helperOO :: (OOProg r vis stmt mthd svr att prg) => FS (r File)
+helperOO :: (OOProg r vis stmt mthd stvr att prg) => FS (r File)
 helperOO = OO.fileDoc (OO.buildModule "Helper" [] [doubleAndAdd] [])
 
 -- | Creates Helper module that contains an addition function.

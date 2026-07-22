@@ -1088,8 +1088,8 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass
-  :: (RenderClass r vis mthd svr, RenderVisibility r vis)
-  => Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
+  :: (RenderClass r vis mthd stvr, RenderVisibility r vis)
+  => Label -> Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

@@ -14,10 +14,11 @@ I will first list all the steps, then give some commentary on them. So the
 first list is meant to be succinct and, because of that, may well be
 ambiguous. Convention: steps in _italics_ are optional. A step with a
 **bolded** verb means that this is (currently) an "on paper" step.
+See the commentary below which defines some of the terminology in more detail.
 
 1. **Gather** all relevant theories needed to describe the problem domain.
 2. Choose (or implement), from Drasil's database all theories gathered in step (1)
-3. _Generate a theory Manual_.
+3. _Generate a Theory Manual_.
 4. Weave a context(s) out of the above theories for problem description.
 5. Describe the problem that needs to be solved, using the woven contexts.
 6. _Generate a Problem Description Document_
@@ -39,10 +40,38 @@ necessary for a good solution.
 
 ## Commentary
 
+See the [Terminology](Glossary) section of the Terminology page for the
+definition of certain terms used below.
+
 - Pretty much all 'Generate' steps will have _options_ that control how it
 looks as well as various details specific to it.
 - Many items are implicit/tacit above. Things like 'problem frames' are not mentioned at all. These will arise when checking the adequacy of the contexts.
 - The subtlety between natural language generation and code generation is also omnipresent yet implicit.
+- A "Theory Manual" is a background document that gives all the theories
+necessary for the problem statement and solution (including the software
+aspects of the solution) to 'make sense'.
+- The relevant theories are arranged in a *network*. We need to weave them
+together (and specialize them as well) to create a *context* in which to work.
+That context, on top of being a giant reservoir of vocabulary, also will
+contain ``variables'' representing not-yet-known quantities of interest.
+- It is not a 'bug' if theories that eventually turn out to be irrelevant
+are gathered/included. Such 'irrelevant' theories help support exploration.
+- a "Problem Description Document" is akin to a pre-software SRS. One way
+to think of it is as an SRS that has nothing to do with the first 'S', aka
+Software. 
+- The "Solution Landscape Document" lays out the *software theories* that
+could be used to solve the problem. Not that step (1) did not involve the
+solution space at all, so step (7) is needed for that, and this document
+is part of that. The point of 'landscape' is that known but discarded solutions
+may be documented here.
+- Generate steps are explicit in the above as each of those also involve a 
+lot of choices, and that is where those come in.
+- The steps are not meant to be linear, and the in-practice process will
+certainly be spiral/iterative, i.e. latter steps will always illuminate
+what *ought* to have been done in previous steps, and then lead to fixes.
+- The steps are not all manditory (ex: 15-16 do not exist right now).
+- The steps are not sequential, even in the ideal case, i.e. one can definitely
+jump to 17 from 13.
 - Basically: every single step above encapsulates many pages worth of description
 - 16 of the 18 steps will generate one or more DSL that is well-suited to that
 step.

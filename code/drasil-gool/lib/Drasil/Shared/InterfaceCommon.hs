@@ -46,8 +46,8 @@ type Library = String
 -- for generating object-oriented and procedural programs.
 class (UnRepr r TypeData, SharedStatement r smt, FunctionSym r, InternalList r,
   VariableValue r, IndexTranslator r, TypeElim r,
-  VariableElim r, MethodSym r vis smt md, ScopeSym r, BinderSym r
-  ) => SharedProg r vis smt md
+  VariableElim r, MethodSym r vis smt mthd, ScopeSym r, BinderSym r
+  ) => SharedProg r vis smt mthd
 
 class (Array r, AssignStatement r smt, Argument r, BooleanExpression r,
   CommandLineArgs r, CommentStatement r smt, Comparison r,
@@ -573,29 +573,29 @@ class (VariableSym r) => ParameterSym r where
   pointerParam :: SVariable r -> MS (r ParamData)
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r md = [SVariable r] -> [SVariable r] -> [SVariable r] ->
-  MS (r Body) -> MS (r md)
+type InOutFunc r mthd = [SVariable r] -> [SVariable r] -> [SVariable r] ->
+  MS (r Body) -> MS (r mthd)
 -- Parameters are: brief description of function, input descriptions and
 -- variables, output descriptions and variables, descriptions and variables
 -- for parameters that are both input and output, function body
-type DocInOutFunc r md = String -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r md)
+type DocInOutFunc r mthd = String -> [(String, SVariable r)] ->
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r mthd)
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.
-class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis smt md | r -> md
+class (BodySym r smt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis smt mthd | r -> mthd
   where
-  docMain :: MS (r Body) -> MS (r md)
+  docMain :: MS (r Body) -> MS (r mthd)
 
   function :: Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] ->
-    MS (r Body) -> MS (r md)
-  mainFunction  :: MS (r Body) -> MS (r md)
+    MS (r Body) -> MS (r mthd)
+  mainFunction  :: MS (r Body) -> MS (r mthd)
   -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
-  docFunc :: String -> [String] -> Maybe String -> MS (r md) -> MS (r md)
+  docFunc :: String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 
-  inOutFunc :: Label -> r vis -> InOutFunc r md
-  docInOutFunc :: Label -> r vis -> DocInOutFunc r md
+  inOutFunc :: Label -> r vis -> InOutFunc r mthd
+  docInOutFunc :: Label -> r vis -> DocInOutFunc r mthd
 
 -- Utility
 

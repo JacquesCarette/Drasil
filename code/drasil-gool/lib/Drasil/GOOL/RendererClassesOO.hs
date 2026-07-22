@@ -19,13 +19,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis smt md, IG.FileSym r vis smt md svr att,
+class (CommonRenderSym r vis smt mthd, IG.FileSym r vis smt mthd svr att,
   IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r smt,
   IG.StrategyPattern r smt, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r vis md svr, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r vis md att, RenderMod r, ModuleElim r,
+  IG.OOValueExpression r, RenderClass r vis mthd svr, ClassElim r, RenderFile r,
+  InternalGetSet r, OORenderMethod r vis mthd att, RenderMod r, ModuleElim r,
   StateVarElim r svr, PermElim r att
-  ) => OORenderSym r vis smt md svr att
+  ) => OORenderSym r vis smt mthd svr att
 
 -- OO-Only Typeclasses --
 
@@ -51,27 +51,27 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r md, OOMethodTypeSym r) => OORenderMethod r vis md att | r -> vis att where
+class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd att | r -> vis att where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r att ->
-    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r att
-    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 
-  destructor :: [IG.CSStateVar r svr] -> MS (r md)
+  destructor :: [IG.CSStateVar r svr] -> MS (r mthd)
 
 class StateVarElim r svr | r -> svr where
   stateVar :: r svr -> Doc
 
 type ParentSpec = Doc
 
-class (BlockCommentSym r) => RenderClass r vis md svr | r -> vis md svr where
+class (BlockCommentSym r) => RenderClass r vis mthd svr | r -> vis mthd svr where
   -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r vis -> r ParentSpec -> [IG.CSStateVar r svr]
-    -> [MS (r md)] -> [MS (r md)] -> CS (r IG.Class)
+    -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r IG.Class)
 
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec

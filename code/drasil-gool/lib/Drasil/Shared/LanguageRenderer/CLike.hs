@@ -280,9 +280,9 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (OORenderMethod r vis md att) => Bool -> Label -> r vis ->
+intFunc :: (OORenderMethod r vis mthd att) => Bool -> Label -> r vis ->
   r att -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) ->
-  MS (r md)
+  MS (r mthd)
 intFunc = intMethod
 
 -- Error Messages --

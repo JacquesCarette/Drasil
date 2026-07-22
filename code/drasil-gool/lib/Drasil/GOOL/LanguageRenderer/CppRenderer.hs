@@ -2914,8 +2914,8 @@ cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins
 
 cppsInOut :: (VS (CppSrcCode TypeData) ->
   [MS (CppSrcCode ParamData)] -> MS (CppSrcCode Body) ->
-  MS (CppSrcCode md)) -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
-  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode md)
+  MS (CppSrcCode mthd)) -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] ->
+  [SVariable CppSrcCode] -> MS (CppSrcCode Body) -> MS (CppSrcCode mthd)
 cppsInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody)
   (varDec v local) b (returnStmt $ valueOf v))
@@ -2926,8 +2926,8 @@ cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
 cpphInOut :: (VS (CppHdrCode TypeData) ->
   [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) ->
-  MS (CppHdrCode md)) -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
-  [SVariable CppHdrCode] -> MS (CppHdrCode Body) -> MS (CppHdrCode md)
+  MS (CppHdrCode mthd)) -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] ->
+  [SVariable CppHdrCode] -> MS (CppHdrCode Body) -> MS (CppHdrCode mthd)
 cpphInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) b
 cpphInOut f ins [] [v] b = f (onStateValue variableType v)

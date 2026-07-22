@@ -921,9 +921,9 @@ csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MS (CSharpCode Body) -> MS (CSharpCode md)) ->
+  MS (CSharpCode Body) -> MS (CSharpCode mthd)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MS (CSharpCode Body) -> MS (CSharpCode md)
+  MS (CSharpCode Body) -> MS (CSharpCode mthd)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))

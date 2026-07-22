@@ -502,22 +502,22 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis md att)
+  :: (OORenderMethod r vis mthd att)
   => Label
   -> r vis
   -> r att
   -> VS (r TypeData)
   -> [MS (r ParamData)]
   -> MS (r Body)
-  -> MS (r md)
+  -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis smt md svr att) => SVariable r -> MS (r md)
+getMethod :: (OORenderSym r vis smt mthd svr att) => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis smt md svr att) => SVariable r -> MS (r md)
+setMethod :: (OORenderSym r vis smt mthd svr att) => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -526,34 +526,34 @@ initStmts :: (OOStatement r smt) => Initializers r -> MS (r Body)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r att, OORenderMethod r vis md att)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+  :: (AttachmentSym r att, OORenderMethod r vis mthd att)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
-docFuncRepr :: (RenderMethod r md) => FuncDocRenderer -> String ->
-  [String] -> [String] -> MS (r md) -> MS (r md)
+docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
+  [String] -> [String] -> MS (r mthd) -> MS (r mthd)
 docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue
   (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderMethod r md) => FuncDocRenderer -> String -> [String] ->
-  Maybe String -> MS (r md) -> MS (r md)
+docFunc :: (RenderMethod r mthd) => FuncDocRenderer -> String -> [String] ->
+  Maybe String -> MS (r mthd) -> MS (r mthd)
 docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 
 buildClass
-  :: (RenderClass r vis md svr, VisibilitySym r vis)
-  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
+  :: (RenderClass r vis mthd svr, VisibilitySym r vis)
+  =>  Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 buildClass p stVars constructors methods = do
   n <- zoom lensCStoFS getModuleName
   RO.intClass n public (inherit p) stVars constructors methods
 
-implementingClass :: (RenderClass r vis md svr, VisibilitySym r vis) => Label -> [Label] ->
-  [CSStateVar r svr] -> [MS (r md)] -> [MS (r md)] -> CS (r Class)
+implementingClass :: (RenderClass r vis mthd svr, VisibilitySym r vis) => Label -> [Label] ->
+  [CSStateVar r svr] -> [MS (r mthd)] -> [MS (r mthd)] -> CS (r Class)
 implementingClass n is = RO.intClass n public (implements is)
 
 docClass
-  :: (RenderClass r vis md svr)
+  :: (RenderClass r vis mthd svr)
   => ClassDocRenderer -> String -> CS (r Class) -> CS (r Class)
 docClass cdr d = RO.commentedClass (docComment $ toState $ cdr d)
 

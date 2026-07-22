@@ -38,10 +38,10 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (SharedProg r vis smt md, OOStatement r smt,
-  ProgramSym r vis smt md svr att prg, ObserverPattern r smt,
+class (SharedProg r vis smt mthd, OOStatement r smt,
+  ProgramSym r vis smt mthd svr att prg, ObserverPattern r smt,
   StrategyPattern r smt
-  ) => OOProg r vis smt md svr att prg
+  ) => OOProg r vis smt mthd svr att prg
 
 class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
   OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
@@ -53,7 +53,7 @@ type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
-class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r -> prg where
+class (FileSym r vis smt mthd svr att) => ProgramSym r vis smt mthd svr att prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
@@ -61,7 +61,7 @@ class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r 
 type File = FileData
 
 -- | Class for representing a file.
-class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
+class (ModuleSym r vis smt mthd svr att) => FileSym r vis smt mthd svr att where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
@@ -74,57 +74,57 @@ class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
 type Module = ModData
 
 -- | Class for representing a module.
-class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
+class (ClassSym r vis smt mthd svr att) => ModuleSym r vis smt mthd svr att where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
-  buildModule :: Label -> [Label] -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
+  buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
 
 type Class = Doc
 
 -- | Class for representing an OO class.
-class (OOMethodSym r vis smt md att, StateVarSym r vis svr att) => ClassSym r vis smt md svr att where
+class (OOMethodSym r vis smt mthd att, StateVarSym r vis svr att) => ClassSym r vis smt mthd svr att where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> CS (r Class)
+  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] ->
+    [MS (r mthd)] -> CS (r Class)
   -- | Creates an extra class, i.e. with a different name than the module name.
   -- Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> CS (r Class)
+  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r mthd)] ->
+    [MS (r mthd)] -> CS (r Class)
   -- | Creates a class implementing a list of interfaces.
   -- Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> CS (r Class)
+  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r mthd)] ->
+    [MS (r mthd)] -> CS (r Class)
 
   docClass :: String -> CS (r Class) -> CS (r Class)
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis smt md, AttachmentSym r att) => OOMethodSym r vis smt md att where
+class (MethodSym r vis smt mthd, AttachmentSym r att) => OOMethodSym r vis smt mthd att where
   method      :: Label -> r vis -> r att -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MS (r Body) -> MS (r md)
-  getMethod   :: SVariable r -> MS (r md)
-  setMethod   :: SVariable r -> MS (r md)
-  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r md)
+    [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  getMethod   :: SVariable r -> MS (r mthd)
+  setMethod   :: SVariable r -> MS (r mthd)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
-  inOutMethod :: Label -> r vis -> r att -> InOutFunc r md
-  docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r md
+  inOutMethod :: Label -> r vis -> r att -> InOutFunc r mthd
+  docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r mthd
 
-privMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+privMethod :: (OOMethodSym r vis smt mthd att) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+pubMethod :: (OOMethodSym r vis smt mthd att) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
-  Initializers r -> MS (r md)
+initializer :: (OOMethodSym r vis smt mthd att) => [MS (r ParamData)] ->
+  Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
-  MS (r Body) -> MS (r md)
+nonInitConstructor :: (OOMethodSym r vis smt mthd att) => [MS (r ParamData)] ->
+  MS (r Body) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
 type StateVar = Doc

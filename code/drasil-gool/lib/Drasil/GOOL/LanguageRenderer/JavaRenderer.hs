@@ -82,7 +82,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment,
   increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for,
-  while, intFunc, multiAssignError, multiReturnError, multiTypeError, setType)
+  while, multiAssignError, multiReturnError, multiTypeError, setType)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -698,7 +698,7 @@ instance OORenderMethod JavaCode Doc MethodData Doc where
           (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs)
     pure $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
-  intFunc = C.intFunc
+  intFunc = intMethod
   destructor _ = error $ CP.destructorError jName
 
 instance MethodElim JavaCode MethodData where

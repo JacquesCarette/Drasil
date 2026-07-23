@@ -60,10 +60,12 @@ reflink rm ref txt = brackets txt <> parens rp
 reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
 reflinkInfo rm rf txt info = reflink rm rf txt <+> info
 
--- | Helper for setting up links to external URIs
+-- | Create clickable URIs with a link and a displayed text. If displayed text
+-- is the same as the link, it will return @<link>@ instead of @[text](link)@.
 reflinkURI :: Doc -> Doc -> Doc
-reflinkURI ref txt = if ref == txt then ang ref
-  else brackets txt <> parens ref
+reflinkURI ref txt
+  | ref == txt = ang ref
+  | otherwise  = brackets txt <> parens ref
 
 -- | Helper for setting up figures
 image :: Doc -> Maybe Doc -> Doc

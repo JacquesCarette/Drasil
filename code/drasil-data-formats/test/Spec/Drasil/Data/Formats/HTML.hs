@@ -6,7 +6,7 @@ import Drasil.Data.Formats.HTML (
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), HLevel(..), CustomTag(..),
     Row(..), Cell(..), LItem(..), DItem(..), ListType(..), Attr(..), renderHTML,
     bold, emphasis, subscript, superscript, figureImage, customTag,
-    HTMLGenOptions(..)
+    HTMLRenderOptions(..)
   )
 
 import qualified Drasil.Data.Formats.HTML as HTML (span)
@@ -26,7 +26,7 @@ blockquoteTag, inputTag :: CustomTag
 blockquoteTag = customTag "blockquote"
 inputTag      = customTag "input"
 
-testGenOptions :: HTMLGenOptions
+testGenOptions :: HTMLRenderOptions
 testGenOptions = HTMLBO (M.fromList [
     (blockquoteTag, Standard),
     (inputTag, Void)

@@ -1,15 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 -- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML.Print.html).
 module Language.Drasil.HTML2.Render(
-  -- * Main Function
-  genHTML,
-  BibFormatter(..), htmlBibFormatter, HTMLRenderOptions(..)
+  genHTML, BibFormatter(..), htmlBibFormatter, HTMLGenOptions(..),
+  renderHTML
 ) where
 
-import Prelude hiding (print)
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Prettyprinter as PNew (Doc)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Spec(EmptyS))
@@ -19,7 +17,7 @@ import Language.Drasil.Printing.Helpers (sqbrac)
 import qualified Language.Drasil.TeX.Print as TeX (spec)
 
 import Language.Drasil.HTML2.Citation (printBib, htmlBibFormatter)
-import Language.Drasil.HTML2.Helpers (HTMLRenderOptions(..), BibFormatter(..),
+import Language.Drasil.HTML2.Helpers (HTMLGenOptions(..), BibFormatter(..),
   articleTitle, author, stylesheet)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML, renderMath)
 
@@ -30,15 +28,16 @@ import qualified Drasil.Data.Formats.HTML as HTML
 
 -- | Generate an HTML document from a Drasil 'Document'.
 --   Arguments: Rendering options, Bib rendering options, CSS file name, `Document` to be rendered
-genHTML :: HTMLGenOptions -> HTMLRenderOptions -> String -> Document -> PNew.Doc ann
-genHTML gOpts rOpts fn (Document t a c) = renderHTML gOpts (HTML heads bodies)
+genHTML :: HTMLGenOptions -> String -> Document -> HTML
+genHTML rOpts fn (Document t a c) = HTML heads bodies
   where
     heads =
       [ stylesheet (T.pack fn),
         HTML.Title (printSpec t),
         Meta [Attr "charset" "utf-8"],
         inlineScript mathJaxScript,
-        externalScript (T.pack $ mathJaxSrc rOpts)
+        externalScript
+          (T.pack $ mathJaxSrc rOpts)
           [ Attr "type" "text/javascript",
             Attr "id" "MathJax-script",
             Attr "async" ""
@@ -64,7 +63,7 @@ mathJaxScript = "MathJax = " <> configJSON <> ";"
       )
 
 -- | Helper for transforming layout objects ('LayoutObj's) into HTML.
-loToHTML :: HTMLRenderOptions -> LayoutObj -> [HTMLBody]
+loToHTML :: HTMLGenOptions -> LayoutObj -> [HTMLBody]
 -- Creates delimeters to be used for mathjax displayed equations
 -- Latex print sets up a \begin{displaymath} environment instead of this
 loToHTML _ (EqnBlock contents) =
@@ -119,7 +118,7 @@ makeTableHTML ts (l : lls) r b t =
 -----------------------------------------------------------------
 
 -- | Renders definition tables.
-makeDefnHTML :: HTMLRenderOptions -> [(String, [LayoutObj])] -> Spec -> [HTMLBody]
+makeDefnHTML :: HTMLGenOptions -> [(String, [LayoutObj])] -> Spec -> [HTMLBody]
 makeDefnHTML _ [] _ = error "Empty definition"
 makeDefnHTML rOpts ps l =
   let attrs = [Attr "id" (printSpec l), Attr "class" "defn-table"]

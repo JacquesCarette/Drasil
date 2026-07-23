@@ -2,7 +2,7 @@
 
 -- | Helper functions for creating HTML printers (specifically, HTML tag wrappers).
 module Language.Drasil.HTML2.Helpers (
-  HTMLRenderOptions (..), BibFormatter (..),
+  HTMLGenOptions (..), BibFormatter (..),
   articleTitle, author, stylesheet,
   specialToString, OpenClose (..), fence, pOps,
   colon, period, comma, vol, pg, pp, no, ed, editedBy
@@ -19,7 +19,7 @@ import Language.Drasil.Printing.AST (
   )
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
-data HTMLRenderOptions = HTMLRO
+data HTMLGenOptions = HTMLRO
   { -- | Formatting rules for Bib
     bibFmt :: BibFormatter,
     -- | MathJax source URL

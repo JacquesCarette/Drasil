@@ -14,14 +14,15 @@ where
 
 import Control.Lens (makeLenses, (^.))
 import qualified Data.Map.Strict as M
-import Drasil.Data.Formats.HTML (HTMLGenOptions (..))
+import Drasil.Data.Formats.HTML (HTMLRenderOptions (..))
 import Text.PrettyPrint (Doc)
 
 import Drasil.FileHandling (file, ps)
 import Drasil.System (HasSystemMeta (..), SystemMeta, ToFiles (..))
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Document (Document)
-import Language.Drasil.Printers (HTMLRenderOptions (..), Notation (Engineering), genHTML, genericCSS,
+import Language.Drasil.Printers (HTMLGenOptions (..), Notation (Engineering),
+  genHTML, renderHTML, genericCSS,
   htmlBibFormatter, piSys, makeDocument)
 
 data DrasilWebsite = DW
@@ -61,6 +62,7 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
       pd = makeDocument printSetting $ dw ^. indexDoc
 
       -- 2. Transform the TDL into HTML.
-      html = genHTML (HTMLBO M.empty 2)
+      html = renderHTML (HTMLBO M.empty 2)
+        $ genHTML
         (HTMLRO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
         "index" pd

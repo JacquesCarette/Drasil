@@ -10,7 +10,7 @@ import qualified Data.Text as T
 import Data.List (sortBy)
 
 import Language.Drasil.HTML2.Helpers (
-  HTMLRenderOptions (..), BibFormatter (..), BibFormatter(..),
+  HTMLGenOptions (..), BibFormatter (..), BibFormatter(..),
   colon, period, comma, vol, pg, pp, no, ed, editedBy)
 import Language.Drasil.HTML2.Spec (specToHTML, printSpec)
 
@@ -37,7 +37,7 @@ htmlBibFormatter =
   }
 
 -- | Makes a bilbliography for the document.
-printBib :: HTMLRenderOptions -> BibRef -> HTMLBody
+printBib :: HTMLGenOptions -> BibRef -> HTMLBody
 printBib rOpts bib =
   DescriptionList [Attr "class" "reference-list"] (concatMap renderCitation bib)
   where
@@ -45,7 +45,7 @@ printBib rOpts bib =
     renderCitation cite@(Cite e _ _) =
       let (termDoc, detailsDoc) = renderCite (bibFmt rOpts) cite
           termHTML = [RawText "[", TextFormat HTML.Bold [] termDoc, RawText "]"]
-      in [DTerm [Attr "id" (T.pack e)] termHTML, DDetails [] detailsDoc]
+       in [DTerm [Attr "id" (T.pack e)] termHTML, DDetails [] detailsDoc]
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: BibFormatter -> Citation -> ([HTMLBody], [HTMLBody])

@@ -25,14 +25,15 @@ data HTMLGenOptions = HTMLBO
 
 -- | Render 'HTML' to a 'Doc'
 renderHTML :: HTMLGenOptions -> HTML -> Doc ann
-renderHTML opt (HTML heads bodies) =
+renderHTML opt htmlTree =
   vcat
     [ "<!DOCTYPE html>",
       angles "html",
       indent (indentationSize opt) $ renderHeadSec opt heads,
-      indent (indentationSize opt) $ renderBodySec opt (normalize bodies),
+      indent (indentationSize opt) $ renderBodySec opt bodies,
       angles "/html"
     ]
+  where HTML heads bodies = normalizeHTML htmlTree
 
 -- | Render the 'head' section
 renderHeadSec :: HTMLGenOptions -> [HTMLHead] -> Doc ann
@@ -100,16 +101,16 @@ headTag H6 = "h6"
 
 -- | Render the element and its children in the same line
 renderLine :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderLine opt tag attrs ch = wrapLine tag attrs $ map (renderBody opt) (normalize ch)
+renderLine opt tag attrs ch = wrapLine tag attrs $ map (renderBody opt) ch
 
 -- | Render the children breaking lines
 renderBlock :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ map (renderBody opt) (normalize ch)
+renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ map (renderBody opt) ch
 
 -- | Render the element as a block, but keep all children on a single indented line
 renderBlockInline :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderBlockInline _ tag attrs [] = wrapLine tag attrs []
-renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) (normalize ch))
+renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) ch)
 
 -- | Wrap an element with tag and its children breaking lines
 wrapBlock :: HTMLGenOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
@@ -154,8 +155,35 @@ escapeHTMLText = T.concatMap escapeChar
     escapeChar '/'  = "&#x2F;"
     escapeChar c    = T.singleton c
 
--- | Merges contiguous `RawText` in one
-normalize :: [HTMLBody] -> [HTMLBody]
-normalize [] = []
-normalize (RawText a : RawText b : rest) = normalize (RawText (a <> b) : rest)
-normalize (x : xs) = x : normalize xs
+-- | Normalizes the whole HTML tree at once
+normalizeHTML :: HTML -> HTML
+normalizeHTML (HTML heads bodies) = HTML heads (normalizeBody bodies)
+
+-- | Normalizes body elements, merging adjacent `RawText`
+normalizeBody :: [HTMLBody] -> [HTMLBody]
+normalizeBody [] = []
+normalizeBody (RawText a : RawText b : rest) = normalizeBody (RawText (a <> b) : rest)
+normalizeBody (x : xs) = normalizeNode x : normalizeBody xs
+
+-- | Normalizes children from each node
+normalizeNode :: HTMLBody -> HTMLBody
+normalizeNode (Div attrs ch) = Div attrs (normalizeBody ch)
+normalizeNode (Paragraph attrs ch) = Paragraph attrs (normalizeBody ch)
+normalizeNode (List t attrs items) = List t attrs (map normItem items)
+  where normItem (LItem a ch) = LItem a (normalizeBody ch)
+normalizeNode (DescriptionList attrs items) = DescriptionList attrs (map normDItem items)
+  where
+    normDItem (DTerm a ch) = DTerm a (normalizeBody ch)
+    normDItem (DDetails a ch) = DDetails a (normalizeBody ch)
+normalizeNode (Table attrs rows) = Table attrs (map normRow rows)
+  where
+    normRow (Row a cells) = Row a (map normCell cells)
+    normCell (THeader a ch) = THeader a (normalizeBody ch)
+    normCell (TData a ch) = TData a (normalizeBody ch)
+normalizeNode (Figure attrs ch) = Figure attrs (normalizeBody ch)
+normalizeNode (FigCaption attrs ch) = FigCaption attrs (normalizeBody ch)
+normalizeNode (TextFormat fmt attrs ch) = TextFormat fmt attrs (normalizeBody ch)
+normalizeNode (Heading lvl attrs ch) = Heading lvl attrs (normalizeBody ch)
+normalizeNode (Anchor url attrs ch) = Anchor url attrs (normalizeBody ch)
+normalizeNode (Custom ct attrs ch) = Custom ct attrs (normalizeBody ch)
+normalizeNode node = node

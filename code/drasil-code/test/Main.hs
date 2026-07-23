@@ -12,9 +12,8 @@ import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
-import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
-  initialState, ProgData(..), headers, sources, mainMod,
-  GOOLState)
+import Drasil.GOOL (OOProg, StrategyPattern, ObserverPattern, unJC, unPC, unCSC,
+  unCPPC, unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
 import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (GSProgram)
@@ -60,7 +59,12 @@ codeGenTestGroup =
 
 goolTestGroup
   :: String
-  -> (forall r vis stmt mthd stvr attch prg. (OOProg r vis stmt mthd stvr attch prg) => OO.GSProgram r prg)
+  -> ( forall r vis stmt mthd stvr attch prg.
+       ( OOProg r vis stmt mthd stvr attch prg
+       , StrategyPattern r stmt
+       , ObserverPattern r stmt
+       ) => OO.GSProgram r prg
+     )
   -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
@@ -112,10 +116,21 @@ genCodeProcNoMake unRepr unRepr' p =
   in seq gs' $ toFileLayout (progMods prog) ++ aux
 
 genCodeGOOL
-  :: (OOProg r vis stmt mthd stvr attch ProgData, SoftwareDossierSym r', Monad r')
+  ::
+    ( OOProg r vis stmt mthd stvr attch ProgData
+    , StrategyPattern r stmt
+    , ObserverPattern r stmt
+    , SoftwareDossierSym r'
+    , Monad r'
+    )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' stmt' mthd' stvr' attch' prg'. (OOProg s vis' stmt' mthd' stvr' attch' prg') => OO.GSProgram s prg')
+  -> ( forall s vis' stmt' mthd' stvr' attch' prg'.
+       ( OOProg s vis' stmt' mthd' stvr' attch' prg'
+       , StrategyPattern s stmt'
+       , ObserverPattern s stmt'
+       ) => OO.GSProgram s prg'
+     )
   -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let

@@ -664,7 +664,7 @@ genOutputFormat = do
 
 -- | Generates a controller module.
 genMainProc
-  :: (ProcProg r vis stmt mthd prg, NativeVector r) => GenState (FS (r File))
+  :: (ProcProg r stmt mthd prg, NativeVector r) => GenState (FS (r File))
 genMainProc = genModuleProc "Control" "Controls the flow of the program"
   [genMainFuncProc]
 
@@ -674,7 +674,7 @@ genMainProc = genModuleProc "Control" "Controls the flow of the program"
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
 genMainFuncProc
-  :: (NativeVector r, SharedProg r vis stmt mthd)
+  :: (NativeVector r, SharedProg r stmt mthd)
   => GenState (Maybe (MS (r mthd)))
 genMainFuncProc = do
     g <- get
@@ -743,12 +743,12 @@ checkConstClass = do
 
 -- | Generates a single module containing all input-related components.
 genInputModProc
-  :: (ProcProg r vis stmt mthd prg, NativeVector r) => GenState [FS (r File)]
+  :: (ProcProg r stmt mthd prg, NativeVector r) => GenState [FS (r File)]
 genInputModProc = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod
-        :: (ProcProg r vis stmt mthd prg, NativeVector r) => Bool
+        :: (ProcProg r stmt mthd prg, NativeVector r) => Bool
         -> GenState (FS (r File))
       genMod False = genModuleProc cname ipDesc [genInputFormatProc Pub,
         genInputDerivedProc Pub, genInputConstraintsProc Pub]
@@ -793,7 +793,7 @@ getInputDeclProc = do
 
 -- | Generates a module containing calculation functions.
 genCalcModProc
-  :: (ProcProg r vis stmt mthd prg, NativeVector r) => GenState (FS (r File))
+  :: (ProcProg r stmt mthd prg, NativeVector r) => GenState (FS (r File))
 genCalcModProc = do
   g <- get
   cName <- genICName Calculations
@@ -805,7 +805,7 @@ genCalcModProc = do
 -- For solving ODEs, the 'ExtLibState' containing the information needed to
 -- generate code is found by looking it up in the external library map.
 genCalcFuncProc
-  :: (NativeVector r, SharedProg r vis stmt mthd)
+  :: (NativeVector r, SharedProg r stmt mthd)
   => CodeDefinition -> GenState (MS (r mthd))
 genCalcFuncProc cdef = do
   g <- get
@@ -872,7 +872,7 @@ genCaseBlockProc t v c cs = do
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormatProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputFormatProc s = do
   g <- get
@@ -882,7 +882,7 @@ genInputFormatProc s = do
   let getFunc Pub = publicInOutFuncProc
       getFunc Priv = privateInOutFuncProc
       genInFormat
-        :: (SharedProg r vis stmt mthd, NativeVector r)
+        :: (SharedProg r stmt mthd, NativeVector r)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genInFormat False = return Nothing
       genInFormat _ = do
@@ -896,7 +896,7 @@ genInputFormatProc s = do
 
 -- | Generates a function for calculating derived inputs.
 genInputDerivedProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputDerivedProc s = do
   g <- get
@@ -906,7 +906,7 @@ genInputDerivedProc s = do
       getFunc Pub = publicInOutFuncProc
       getFunc Priv = privateInOutFuncProc
       genDerived
-        :: (SharedProg r vis stmt mthd, NativeVector r)
+        :: (SharedProg r stmt mthd, NativeVector r)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genDerived False = return Nothing
       genDerived _ = do
@@ -920,7 +920,7 @@ genInputDerivedProc s = do
 
 -- | Generates function that checks constraints on the input.
 genInputConstraintsProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputConstraintsProc s = do
   g <- get
@@ -930,7 +930,7 @@ genInputConstraintsProc s = do
       getFunc Pub = publicFuncProc
       getFunc Priv = privateFuncProc
       genConstraints
-        :: (SharedProg r vis stmt mthd, NativeVector r)
+        :: (SharedProg r stmt mthd, NativeVector r)
         => Bool -> GenState (Maybe (MS (r mthd)))
       genConstraints False = return Nothing
       genConstraints _ = do
@@ -1061,7 +1061,7 @@ printConstraintProc c = do
 
 -- | Generates a module containing the function for printing outputs.
 genOutputModProc
-  :: (ProcProg r vis stmt mthd prg, NativeVector r) => GenState [FS (r File)]
+  :: (ProcProg r stmt mthd prg, NativeVector r) => GenState [FS (r File)]
 genOutputModProc = do
   ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
@@ -1069,14 +1069,14 @@ genOutputModProc = do
 
 -- | Generates a function for printing output values.
 genOutputFormatProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => GenState (Maybe (MS (r mthd)))
 genOutputFormatProc = do
   g <- get
   modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput
-        :: (NativeVector r, SharedProg r vis stmt mthd)
+        :: (NativeVector r, SharedProg r stmt mthd)
         => Maybe String -> GenState (Maybe (MS (r mthd)))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do

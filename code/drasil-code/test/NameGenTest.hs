@@ -3,7 +3,7 @@ module NameGenTest (nameGenTestOO, nameGenTestProc) where
 import Drasil.GOOL (SharedProg, OOProg, MS, BodySym(..), BlockSym(..),
   TypeSym(..), VariableSym(var), Literal(..), DeclStatement(..),
   ControlStatement(..), MethodSym(..), VariableValue(..), Comparison(..),
-  listSlice, List(..), ParameterSym(..), VisibilitySym(..), ScopeSym(..))
+  listSlice, List(..), ParameterSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -14,12 +14,12 @@ nameGenTestOO :: OOProg r vis stmt mthd stvr attch prg => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
-nameGenTestProc :: ProcProg r vis stmt mthd prg => GProc.GSProgram r prg
+nameGenTestProc :: ProcProg r stmt mthd prg => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
 
-helper :: SharedProg r vis stmt mthd => MS (r mthd)
-helper = function "helper" private void [param temp] $ body
+helper :: SharedProg r stmt mthd => MS (r mthd)
+helper = function "helper" void [param temp] $ body
   [block [listDec 2 result local],
     listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing,
     block [assert (listSize (valueOf result) ?== litInt 2) (litString "Result list should have 2 elements after slicing.")]]
@@ -27,7 +27,7 @@ helper = function "helper" private void [param temp] $ body
     temp = var "temp" (listType int)
     result = var "result" (listType int)
 
-main :: SharedProg r vis stmt mthd => MS (r mthd)
+main :: SharedProg r stmt mthd => MS (r mthd)
 main = mainFunction $ body
   [block [
     listDecDef temp mainFn [litInt 1, litInt 2, litInt 3],

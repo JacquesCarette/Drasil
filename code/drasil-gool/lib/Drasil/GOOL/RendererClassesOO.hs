@@ -7,7 +7,8 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
+import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue,
+  VisibilitySym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
@@ -51,15 +52,21 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch | r -> vis attch where
+class (RenderMethod r mthd, OOMethodTypeSym r, VisibilitySym r vis) => OORenderMethod r vis mthd attch | r -> vis attch where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->
     MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r vis -> r attch
-    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  intFunc
+    :: Bool
+    -> Label
+    -> r attch
+    -> MSMthdType r
+    -> [MS (r ParamData)]
+    -> MS (r Body)
+    -> MS (r mthd)
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 

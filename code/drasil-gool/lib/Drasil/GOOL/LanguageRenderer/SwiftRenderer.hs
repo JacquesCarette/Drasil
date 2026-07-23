@@ -132,7 +132,7 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
+instance SharedProg SwiftCode (Doc, Terminator) MethodData
 instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOStatement SwiftCode (Doc, Terminator)
 instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
@@ -680,15 +680,15 @@ instance ParamElim SwiftCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance MethodSym SwiftCode (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
 
-  inOutFunc n s = CP.inOutFunc (function n s)
+  inOutFunc n = CP.inOutFunc (function n)
 
-  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
+  docInOutFunc n = CP.docInOutFunc' CP.functionDoc (inOutFunc n)
 
 instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method
@@ -707,7 +707,7 @@ instance RenderMethod SwiftCode MethodData where
 
 instance OORenderMethod SwiftCode Doc MethodData Doc where
   intMethod _ = swiftMethod
-  intFunc _ n s _ = swiftMethod n s instanceLevel
+  intFunc _ n _ = swiftMethod n public instanceLevel
   destructor _ = error $ CP.destructorError swiftName
 
 instance MethodElim SwiftCode MethodData where

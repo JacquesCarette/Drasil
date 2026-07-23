@@ -94,11 +94,11 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
+instance SharedProg MatlabCode (Doc, Terminator) MethodData
 instance SharedStatement MatlabCode (Doc, Terminator)
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData
+instance ProcProg MatlabCode (Doc, Terminator) MethodData ProgData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ProgData where
+instance ProgramSym MatlabCode (Doc, Terminator) MethodData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -110,7 +110,7 @@ instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
+instance FileSym MatlabCode (Doc, Terminator) MethodData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m
@@ -512,7 +512,7 @@ instance ParamElim MatlabCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc (Doc, Terminator) MethodData where
+instance MethodSym MatlabCode (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -521,12 +521,12 @@ instance MethodSym MatlabCode Doc (Doc, Terminator) MethodData where
   -- MATLAB returns values through the output list in the header
   -- (function [outs] = name(ins)), not through a return statement, so we build
   -- the method directly instead of reusing the shared inOutFunc machinery.
-  inOutFunc n _ ins outs both b = do
+  inOutFunc n ins outs both b = do
     pms  <- mapM param (both ++ ins)
     rets <- mapM (zoom lensMStoVS) (both ++ outs)
     bod  <- b
     pure $ toCode $ mthd $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
-  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
+  docInOutFunc n = CP.docInOutFunc' CP.functionDoc (inOutFunc n)
 
 instance RenderMethod MatlabCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
@@ -534,7 +534,7 @@ instance RenderMethod MatlabCode MethodData where
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance ProcRenderMethod MatlabCode Doc MethodData where
-  intFunc _ n _ t ps b = do
+  intFunc _ n t ps b = do
     pms <- sequence ps
     tp  <- t
     bod <- b
@@ -547,7 +547,7 @@ instance ProcRenderMethod MatlabCode Doc MethodData where
 instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym MatlabCode (Doc, Terminator) MethodData where
   -- Function-file layout (runs in both MATLAB and Octave): the main code
   -- becomes the entry function `function <name>(varargin) ... end` and comes
   -- first, then the local functions. Command-line args map to varargin.

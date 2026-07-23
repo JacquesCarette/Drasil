@@ -19,7 +19,7 @@ public class NameGenTest {
         Debug.Assert( result[0] == 2 , "First element of result should be 2.");
     }
     
-    private static void helper(List<int> temp) {
+    public static void helper(List<int> temp) {
         List<int> result = new List<int>(2);
         
         List<int> temp0 = new List<int>(0);

@@ -132,7 +132,7 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
+instance SharedProg JavaCode (Doc, Terminator) MethodData
 instance SharedStatement JavaCode (Doc, Terminator)
 instance OOStatement JavaCode (Doc, Terminator)
 instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
@@ -662,14 +662,14 @@ instance ParamElim JavaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JavaCode (Doc, Terminator) MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string mainFunc
   docFunc = CP.doxFunc
 
-  inOutFunc n s = jInOut (function n s)
-  docInOutFunc n s = jDocInOut (inOutFunc n s)
+  inOutFunc n = jInOut (function n)
+  docInOutFunc n = jDocInOut (inOutFunc n)
 
 instance OOMethodSym JavaCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method

@@ -268,10 +268,9 @@ mainFunction
      , IC.ParameterSym r
      , UnRepr r TypeData
      , Monad r
-     , VisibilitySym r vis
      )
   => VS (r TypeData) -> Label -> MS (r Body) -> MS (r mthd)
-mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
+mainFunction s n = RG.intFunc True n classLevel (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String)
   (render (renderType argT) ++ array) (renderType argT <> array'))))]
 
@@ -500,7 +499,7 @@ funcDecDef v scp ps b = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (scopeData scp)
   s <- get
-  f <- function (variableName vr) private (return $ variableType vr)
+  f <- function (variableName vr) (return $ variableType vr)
     (map IC.param ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f

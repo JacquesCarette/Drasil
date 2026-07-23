@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -132,7 +131,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
+instance SharedProg CSharpCode (Doc, Terminator) MethodData
 instance SharedStatement CSharpCode (Doc, Terminator)
 instance OOStatement CSharpCode (Doc, Terminator)
 instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
@@ -639,14 +638,14 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
+instance MethodSym CSharpCode (Doc, Terminator) MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
   docFunc = CP.doxFunc
 
-  inOutFunc n s = csInOut (function n s)
-  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
+  inOutFunc n = csInOut (function n)
+  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
 
 instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData Doc where
   method = G.method

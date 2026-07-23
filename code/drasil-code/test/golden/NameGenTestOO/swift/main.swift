@@ -1,4 +1,4 @@
-private func helper(_ temp: [Int]) -> Void {
+func helper(_ temp: [Int]) -> Void {
     var result: [Int] = []
     
     result = [Int](stride(from: 1, to: 3, by: 1)).map({(i: Int) -> Int in temp[i]})

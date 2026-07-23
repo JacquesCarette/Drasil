@@ -181,7 +181,7 @@ instance (StringStatement r stmt, IOStatement r stmt, VariableValue r, VariableE
 
 -- SharedProg Boilerplate
 
-instance (SharedProg r vis stmt mthd) => SharedProg (LoggingFor r) vis stmt mthd
+instance (SharedProg r stmt mthd) => SharedProg (LoggingFor r) stmt mthd
 instance (SharedStatement r stmt, VariableElim r) => SharedStatement (LoggingFor r) stmt
 instance (G.OOStatement r stmt, VariableElim r) => G.OOStatement (LoggingFor r) stmt
 
@@ -313,7 +313,7 @@ instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
   private = liftLogging private
   public = liftLogging public
 
-instance (MethodSym r vis stmt mthd) => MethodSym (LoggingFor r) vis stmt mthd where
+instance (MethodSym r stmt mthd) => MethodSym (LoggingFor r) stmt mthd where
   docMain = liftLogging docMain
   function = liftLogging function
   mainFunction = liftLogging mainFunction
@@ -384,16 +384,16 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg) => P.ProcProg (LoggingFor r) vis stmt mthd prg
+instance (P.ProcProg r stmt mthd prg) => P.ProcProg (LoggingFor r) stmt mthd prg
 
-instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
+instance (P.ModuleSym r stmt mthd) => P.ModuleSym (LoggingFor r) stmt mthd where
   buildModule = liftLogging P.buildModule
 
-instance (P.FileSym r vis stmt mthd) => P.FileSym (LoggingFor r) vis stmt mthd where
+instance (P.FileSym r stmt mthd) => P.FileSym (LoggingFor r) stmt mthd where
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
-instance (P.ProgramSym r vis stmt mthd prg) => P.ProgramSym (LoggingFor r) vis stmt mthd prg where
+instance (P.ProgramSym r stmt mthd prg) => P.ProgramSym (LoggingFor r) stmt mthd prg where
   prog = liftLogging P.prog
 
 -- GOOL

@@ -46,8 +46,8 @@ type Library = String
 -- for generating object-oriented and procedural programs.
 class (UnRepr r TypeData, SharedStatement r stmt, FunctionSym r, InternalList r,
   VariableValue r, IndexTranslator r, TypeElim r,
-  VariableElim r, MethodSym r vis stmt mthd, ScopeSym r, BinderSym r
-  ) => SharedProg r vis stmt mthd
+  VariableElim r, MethodSym r stmt mthd, ScopeSym r, BinderSym r
+  ) => SharedProg r stmt mthd
 
 class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
   CommandLineArgs r, CommentStatement r stmt, Comparison r,
@@ -583,19 +583,19 @@ type DocInOutFunc r mthd = String -> [(String, SVariable r)] ->
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.
-class (BodySym r stmt, ParameterSym r, VisibilitySym r vis) => MethodSym r vis stmt mthd | r -> mthd
+class (BodySym r stmt, ParameterSym r) => MethodSym r stmt mthd | r -> mthd
   where
   docMain :: MS (r Body) -> MS (r mthd)
 
-  function :: Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] ->
+  function :: Label -> VS (r TypeData) -> [MS (r ParamData)] ->
     MS (r Body) -> MS (r mthd)
   mainFunction  :: MS (r Body) -> MS (r mthd)
   -- Parameters are: function description, parameter descriptions,
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 
-  inOutFunc :: Label -> r vis -> InOutFunc r mthd
-  docInOutFunc :: Label -> r vis -> DocInOutFunc r mthd
+  inOutFunc :: Label -> InOutFunc r mthd
+  docInOutFunc :: Label -> DocInOutFunc r mthd
 
 -- Utility
 

@@ -53,7 +53,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () () ()
+instance SharedProg CodeInfoOO () ()
 instance SharedStatement CodeInfoOO ()
 instance OOStatement CodeInfoOO ()
 instance OOProg CodeInfoOO () () () () () GOOLState
@@ -446,16 +446,16 @@ instance ParameterSym CodeInfoOO where
   param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () () where
+instance MethodSym CodeInfoOO () () where
   docMain = updateMEMandCM "main"
-  function n _ _ _ = updateMEMandCM n
+  function n _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
   docFunc _ _ _ f = do
     _ <- f
     noInfo
 
-  inOutFunc      n _ _ _ _     = updateMEMandCM n
-  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
+  inOutFunc      n _ _ _     = updateMEMandCM n
+  docInOutFunc   n _ _ _ _   = updateMEMandCM n
 
 instance OOMethodSym CodeInfoOO () () () () where
   method n _ _ _ _ = updateMEMandCM n

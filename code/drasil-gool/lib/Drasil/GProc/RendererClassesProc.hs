@@ -16,7 +16,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
-class (CommonRenderSym r vis stmt mthd, IP.FileSym r vis stmt mthd, RenderFile r,
+class (CommonRenderSym r vis stmt mthd, IP.FileSym r stmt mthd, RenderFile r,
   RenderMod r, ModuleElim r, ProcRenderMethod r vis mthd
   ) => ProcRenderSym r vis stmt mthd
 -- Procedural-Only Typeclasses --
@@ -42,5 +42,4 @@ class ModuleElim r where
 class (RenderMethod r mthd) => ProcRenderMethod r vis mthd | r -> vis where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
-  intFunc     :: Bool -> Label -> r vis -> MSMthdType r ->
-    [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  intFunc :: Bool -> Label -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)

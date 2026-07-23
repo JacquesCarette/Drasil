@@ -20,7 +20,7 @@ public class NameGenTest {
         assert result.get(0) == 2 : "First element of result should be 2.";
     }
     
-    private static void helper(ArrayList<Integer> temp) {
+    public static void helper(ArrayList<Integer> temp) {
         ArrayList<Integer> result = new ArrayList<Integer>(2);
         
         ArrayList<Integer> temp0 = new ArrayList<Integer>(0);

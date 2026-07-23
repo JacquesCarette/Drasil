@@ -141,8 +141,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
-  (Doc, VisibilityTag) (Doc, Terminator) MethodData
+instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode) (Doc, Terminator) MethodData
 instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
@@ -710,25 +709,24 @@ instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
   parameter p = RC.parameter $ pfst p
 
-instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) (Doc, Terminator) MethodData where
   docMain = pair1 docMain docMain
-  function n s t = pairValListVal
-    (function n (pfst s)) (function n (psnd s))
+  function n t = pairValListVal
+    (function n) (function n)
     (zoom lensMStoVS t)
   mainFunction = pair1 mainFunction mainFunction
   docFunc desc pComms rComm = pair1 (docFunc desc pComms rComm)
     (docFunc desc pComms rComm)
 
-  inOutFunc n s is os bs = pair3Lists1Val
-    (inOutFunc n (pfst s)) (inOutFunc n (psnd s))
+  inOutFunc n is os bs = pair3Lists1Val
+    (inOutFunc n) (inOutFunc n)
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os)
     (map (zoom lensMStoVS) bs)
-  docInOutFunc n s desc is os bs = pair3Lists1Val
-    (\ins outs both -> docInOutFunc n (pfst s) desc (zip (map fst
-      is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
-    (\ins outs both -> docInOutFunc n (psnd s) desc (zip (map fst
-      is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
+  docInOutFunc n desc is os bs = pair3Lists1Val
+    (\ins outs both -> docInOutFunc n desc (zip (map fst is) ins)
+      (zip (map fst os) outs) (zip (map fst bs) both))
+    (\ins outs both -> docInOutFunc n desc (zip (map fst is) ins)
+      (zip (map fst os) outs) (zip (map fst bs) both))
     (map (zoom lensMStoVS . snd) is) (map (zoom lensMStoVS . snd) os)
     (map (zoom lensMStoVS . snd) bs)
 
@@ -765,8 +763,8 @@ instance (Pair p) => OORenderMethod (p CppSrcCode CppHdrCode)
     (Doc, VisibilityTag) MethodData AttachmentData where
   intMethod m n s p = pairValListVal
     (intMethod m n (pfst s) (pfst p)) (intMethod m n (psnd s) (psnd p))
-  intFunc m n s p = pairValListVal
-    (intFunc m n (pfst s) (pfst p)) (intFunc m n (psnd s) (psnd p))
+  intFunc m n p = pairValListVal
+    (intFunc m n (pfst p)) (intFunc m n (psnd p))
   destructor = error $ CP.destructorError cppName
 
 instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) MethodData where
@@ -1628,11 +1626,11 @@ instance ParamElim CppSrcCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCPPSC
 
-instance MethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance MethodSym CppSrcCode  (Doc, Terminator) MethodData where
   docMain b = commentedFunc (docComment $ toState $ functionDox mainDesc
     [(argc, argcDesc), (argv, argvDesc)] [mainReturnDesc]) (mainFunction b)
   function = G.function
-  mainFunction b = intFunc True mainFunc public classLevel (mType int)
+  mainFunction b = intFunc True mainFunc classLevel (mType int)
     [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argcVar = var argc int
@@ -1643,8 +1641,8 @@ instance MethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData 
             mkVar argv t (cppDeref <> text argv <> array')
   docFunc = CP.doxFunc
 
-  inOutFunc n s = cppsInOut (function n s)
-  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
+  inOutFunc n = cppsInOut (function n)
+  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
 
 instance OOMethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
   method = G.method
@@ -1665,9 +1663,9 @@ instance OORenderMethod CppSrcCode (Doc, VisibilityTag) MethodData AttachmentDat
     modify (if m then setCurrMain else id)
     c <- getClassName
     cppsIntFunc (cppsMethod [] n c) s t ps b
-  intFunc m n s _ t ps b = do
+  intFunc m n _ t ps b = do
     modify (if m then setCurrMainFunc m . setCurrMain else id)
-    cppsIntFunc (cppsFunction n) s t ps b
+    cppsIntFunc (cppsFunction n) public t ps b
   destructor = error $ CP.destructorError cppName
 
 instance MethodElim CppSrcCode MethodData where
@@ -2253,14 +2251,14 @@ instance ParamElim CppHdrCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCPPHC
 
-instance MethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance MethodSym CppHdrCode  (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction _ = modifyReturn (setVisibility Pub) $ toCode $ mthd Pub empty
   docFunc = CP.doxFunc
 
-  inOutFunc n s = cpphInOut (function n s)
-  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
+  inOutFunc n = cpphInOut (function n)
+  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
 
 instance OOMethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
   method = G.method
@@ -2284,7 +2282,7 @@ instance OORenderMethod CppHdrCode (Doc, VisibilityTag) MethodData AttachmentDat
     tp <- t
     pms <- sequence ps
     pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp a pms
-  intFunc _ = cpphIntFunc
+  intFunc _ n = cpphIntFunc n public
   destructor = error $ CP.destructorError cppName
 
 instance MethodElim CppHdrCode MethodData where

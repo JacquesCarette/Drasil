@@ -178,7 +178,7 @@ fAppInOut m n ins outs both = do
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImportsProc :: (ProcProg r vis stmt mthd prg) => Name -> Description ->
+genModuleWithImportsProc :: (ProcProg r stmt mthd prg) => Name -> Description ->
   [Import] -> [GenState (Maybe (MS (r mthd)))] -> GenState (FS (r File))
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
@@ -191,7 +191,7 @@ genModuleWithImportsProc n desc is maybeMs = do
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModuleProc :: (ProcProg r vis stmt mthd prg) => Name -> Description ->
+genModuleProc :: (ProcProg r stmt mthd prg) => Name -> Description ->
   [GenState (Maybe (MS (r mthd)))] -> GenState (FS (r File))
 genModuleProc n desc = genModuleWithImportsProc n desc []
 

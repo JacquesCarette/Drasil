@@ -228,7 +228,7 @@ publicFunc
   -> GenState (MS (r mthd))
 publicFunc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
-  genMethod (function n public t) n desc ps r b
+  genMethod (function n t) n desc ps r b
 
 -- | Generates a public method.
 publicMethod
@@ -253,7 +253,7 @@ privateMethod n t = do
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: (OOProg r vis stmt mthd stvr attch prg) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MS (r Block)] -> GenState (MS (r mthd))
-publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
+publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod :: (OOProg r vis stmt mthd stvr attch prg) => Label -> Description -> [CodeVarChunk] ->
@@ -891,7 +891,7 @@ mkVarProc v = do
 
 -- | Converts a 'Mod' to GOOL.
 genModDefProc
-  :: (ProcProg r vis stmt mthd prg, NativeVector r)
+  :: (ProcProg r stmt mthd prg, NativeVector r)
   => Mod -> GenState (FS (r File))
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
@@ -908,7 +908,7 @@ mkParamProc p = do
 
 -- | Generates a public function.
 publicFuncProc
-  :: (SharedProg r vis stmt mthd)
+  :: (SharedProg r stmt mthd)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -918,11 +918,11 @@ publicFuncProc
   -> GenState (MS (r mthd))
 publicFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
-  genMethodProc (function n public t) n desc ps r b
+  genMethodProc (function n t) n desc ps r b
 
 -- | Generates a private function.
 privateFuncProc
-  :: (SharedProg r vis stmt mthd)
+  :: (SharedProg r stmt mthd)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -932,13 +932,13 @@ privateFuncProc
   -> GenState (MS (r mthd))
 privateFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
-  genMethodProc (function n private t) n desc ps r b
+  genMethodProc (function n t) n desc ps r b
 
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethodProc
-  :: (SharedProg r vis stmt mthd)
+  :: (SharedProg r stmt mthd)
   => ([MS (r ParamData)] -> MS (r Body) -> MS (r mthd))
   -> Label
   -> Description
@@ -962,7 +962,7 @@ genMethodProc f n desc p r b = do
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFuncProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r Block)] -> GenState (MS (r mthd)))
   -> [StateVariable]
   -> Func
@@ -980,7 +980,7 @@ genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncsProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => Mod -> [GenState (MS (r mthd))]
 genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 
@@ -1278,7 +1278,7 @@ convStmtProc (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFuncProc
-  :: (SharedProg r vis stmt mthd, NativeVector r)
+  :: (SharedProg r stmt mthd, NativeVector r)
   => Name -> Description -> DataDesc -> GenState (MS (r mthd))
 genDataFuncProc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -1288,25 +1288,25 @@ genDataFuncProc nameTitle desc ddef = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFuncProc
-  :: (SharedProg r vis stmt mthd)
+  :: (SharedProg r stmt mthd)
   => Label
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
   -> [MS (r Block)]
   -> GenState (MS (r mthd))
-publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n public) n
+publicInOutFuncProc n = genInOutFuncProc (inOutFunc n) (docInOutFunc n) n
 
 -- | Generates a private function, defined by its inputs and outputs.
 privateInOutFuncProc
-  :: (SharedProg r vis stmt mthd)
+  :: (SharedProg r stmt mthd)
   => Label
   -> Description
   -> [CodeVarChunk]
   -> [CodeVarChunk]
   -> [MS (r Block)]
   -> GenState (MS (r mthd))
-privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n private) n
+privateInOutFuncProc n = genInOutFuncProc (inOutFunc n) (docInOutFunc n) n
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor

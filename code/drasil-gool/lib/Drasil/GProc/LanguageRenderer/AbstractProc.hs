@@ -7,8 +7,8 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Body, SValue, SVariable,
-  VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
-  getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
+  VariableElim(variableName, variableType), funcApp, getCodeType, convType,
+  StatementSym, ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (File, Module)
 import qualified Drasil.Shared.RendererClassesCommon as RC
@@ -112,11 +112,11 @@ funcDecDef v scp ps b = do
   modify $ useVarName $ variableName vr
   modify $ setVarScope (variableName vr) (RC.scopeData scp)
   s <- get
-  f <- IC.function (variableName vr) private (return $ variableType vr)
+  f <- IC.function (variableName vr) (return $ variableType vr)
     (map IC.param ps) b
   modify (L.set currParameters (s ^. currParameters))
   mkStmtNoEnd $ RC.method f
 
-function :: (RP.ProcRenderMethod r vis mthd) => Label -> r vis -> VS (r TypeData) ->
+function :: (RP.ProcRenderMethod r vis mthd) => Label -> VS (r TypeData) ->
   [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
-function n s t = RP.intFunc False n s (RC.mType t)
+function n t = RP.intFunc False n (RC.mType t)

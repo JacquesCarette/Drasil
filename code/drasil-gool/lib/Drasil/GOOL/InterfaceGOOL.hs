@@ -38,7 +38,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (SharedProg r vis stmt mthd, OOStatement r stmt,
+class (SharedProg r stmt mthd, OOStatement r stmt,
   ProgramSym r vis stmt mthd stvr attch prg, ObserverPattern r stmt,
   StrategyPattern r stmt
   ) => OOProg r vis stmt mthd stvr attch prg
@@ -100,7 +100,7 @@ class (OOMethodSym r vis stmt mthd attch, StateVarSym r vis stvr attch) => Class
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis stmt mthd, AttachmentSym r attch) => OOMethodSym r vis stmt mthd attch where
+class (MethodSym r stmt mthd, AttachmentSym r attch, VisibilitySym r vis) => OOMethodSym r vis stmt mthd attch where
   method      :: Label -> r vis -> r attch -> VS (r TypeData) ->
     [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)

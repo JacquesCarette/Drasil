@@ -112,11 +112,11 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance SharedProg JuliaCode Doc (Doc, Terminator) MethodData
+instance SharedProg JuliaCode (Doc, Terminator) MethodData
 instance SharedStatement JuliaCode (Doc, Terminator)
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
+instance ProcProg JuliaCode (Doc, Terminator) MethodData ProgData
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
+instance ProgramSym JuliaCode (Doc, Terminator) MethodData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
@@ -128,7 +128,7 @@ instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
-instance FileSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance FileSym JuliaCode (Doc, Terminator) MethodData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m
@@ -556,14 +556,14 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JuliaCode (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
 
-  inOutFunc n s = CP.inOutFunc (function n s)
-  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
+  inOutFunc n = CP.inOutFunc (function n)
+  docInOutFunc n = CP.docInOutFunc' CP.functionDoc (inOutFunc n)
 
 instance RenderMethod JuliaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
@@ -571,14 +571,14 @@ instance RenderMethod JuliaCode MethodData where
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance ProcRenderMethod JuliaCode Doc MethodData where
-  intFunc _ n _ _ ps b = do
+  intFunc _ n _ ps b = do
     pms <- sequence ps
     toCode . mthd . jlIntFunc n pms <$> b
 
 instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
-instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym JuliaCode (Doc, Terminator) MethodData where
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 

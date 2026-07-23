@@ -122,7 +122,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
+instance SharedProg PythonCode (Doc, Terminator) MethodData
 instance SharedStatement PythonCode (Doc, Terminator)
 instance OOStatement PythonCode (Doc, Terminator)
 instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
@@ -647,14 +647,14 @@ instance ParamElim PythonCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
+instance MethodSym PythonCode (Doc, Terminator) MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
   docFunc = CP.doxFunc
 
-  inOutFunc n s = CP.inOutFunc (function n s)
-  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
+  inOutFunc n = CP.inOutFunc (function n)
+  docInOutFunc n = CP.docInOutFunc' functionDox (inOutFunc n)
 
 instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData AttachmentData where
   method = G.method
@@ -677,7 +677,7 @@ instance OORenderMethod PythonCode Doc MethodData AttachmentData where
     sl <- zoom lensMStoVS self
     pms <- sequence ps
     toCode . mthd . pyMethod n a sl pms <$> b
-  intFunc m n _ _ _ ps b = do
+  intFunc m n _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps

@@ -14,15 +14,15 @@ import Drasil.Shared.AST (FileData, ModData, ProgData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
-class (SharedProg r vis stmt mthd, ProgramSym r vis stmt mthd prg)
-  => ProcProg r vis stmt mthd prg
+class (SharedProg r stmt mthd, ProgramSym r stmt mthd prg)
+  => ProcProg r stmt mthd prg
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
-class (FileSym r vis stmt mthd) => ProgramSym r vis stmt mthd prg | r -> prg where
+class (FileSym r stmt mthd) => ProgramSym r stmt mthd prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
@@ -30,7 +30,7 @@ class (FileSym r vis stmt mthd) => ProgramSym r vis stmt mthd prg | r -> prg whe
 type File = FileData
 
 -- | Class for representing a file.
-class (ModuleSym r vis stmt mthd) => FileSym r vis stmt mthd where
+class (ModuleSym r stmt mthd) => FileSym r stmt mthd where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
@@ -43,7 +43,7 @@ class (ModuleSym r vis stmt mthd) => FileSym r vis stmt mthd where
 type Module = ModData
 
 -- | Class for representing a module.
-class (MethodSym r vis stmt mthd) => ModuleSym r vis stmt mthd where
+class (MethodSym r stmt mthd) => ModuleSym r stmt mthd where
   -- | Given module name, list of import names, and list of module functions,
   -- generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> FS (r Module)

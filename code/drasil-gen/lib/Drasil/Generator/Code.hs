@@ -62,7 +62,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
     genCallProc
-      :: (ProcProg progRepr vis stmt mthd prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (ProcProg progRepr stmt mthd prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)

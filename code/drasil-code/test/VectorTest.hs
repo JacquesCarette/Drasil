@@ -5,8 +5,7 @@ module VectorTest (vectorTestProc) where
 
 import Drasil.GProc (ProcProg, MS, bodyStatements, TypeSym(..), VariableSym(..),
   Literal(..), VariableValue(..), DeclStatement(..), ScopeSym(..), MethodSym(..),
-  VisibilitySym(..), ParameterSym(..), ControlStatement(..), NativeVector(..),
-  List(..))
+  ParameterSym(..), ControlStatement(..), NativeVector(..), List(..))
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.Metadata (watermark)
@@ -15,16 +14,16 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | A program with one function that applies each vector operation.
 vectorTestProc
-  :: (ProcProg r vis stmt mthd prg, NativeVector r) => GProc.GSProgram r prg
+  :: (ProcProg r stmt mthd prg, NativeVector r) => GProc.GSProgram r prg
 vectorTestProc = GProc.prog "VectorTest" ""
   [GProc.docMod "Tests native vector operations." watermark ["Drasil"] "" $
     GProc.fileDoc (GProc.buildModule "VectorTest" [] [vectorOps])]
 
 -- | Takes two vectors and stores each vector operation's result, returning
 -- their dot product.
-vectorOps :: (ProcProg r vis stmt mthd prg, NativeVector r) => MS (r mthd)
+vectorOps :: (ProcProg r stmt mthd prg, NativeVector r) => MS (r mthd)
 vectorOps =
-  function "vectorOps" public double [param (var "a" vt), param (var "b" vt)]
+  function "vectorOps" double [param (var "a" vt), param (var "b" vt)]
   (bodyStatements
     [ varDecDef (var "made" vt) local (litVec double [litDouble 1.0, litDouble 2.0, litDouble 3.0])  -- [1.0, 2.0, 3.0]
     , varDecDef (var "scaled" vt) local (vecScale (litDouble 2.0) a)  -- 2.0 * a

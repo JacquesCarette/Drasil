@@ -527,8 +527,8 @@ initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
   :: (AttachmentSym r attch, OORenderMethod r vis mthd attch)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
-function n s t = RO.intFunc False n s classLevel (mType t)
+  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+function n t = RO.intFunc False n classLevel (mType t)
 
 docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
   [String] -> [String] -> MS (r mthd) -> MS (r mthd)

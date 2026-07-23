@@ -39,13 +39,12 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
 class (SharedProg r vis stmt mthd, OOStatement r stmt,
-  ProgramSym r vis stmt mthd stvr attch prg, ObserverPattern r stmt,
-  StrategyPattern r stmt
+  ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
 
-class (SharedStatement r stmt, GetSet r, InternalValueExp r, OOFuncAppStatement r stmt,
-  OOVariableValue r, OODeclStatement r stmt, OOFuncAppStatement r stmt,
-  OOFunctionSym r, OOValueExpression r
+class (SharedStatement r stmt, GetSet r, InternalValueExp r,
+  OOFuncAppStatement r stmt, OOVariableValue r, OODeclStatement r stmt,
+  OOFuncAppStatement r stmt, OOFunctionSym r, OOValueExpression r
   ) => OOStatement r stmt
 
 type Program = ProgData

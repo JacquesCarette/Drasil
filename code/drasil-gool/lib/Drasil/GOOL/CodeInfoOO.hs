@@ -14,14 +14,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
   Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..),
-  BinderSym(..))
+  ScopeSym(..), ParameterSym(..), MethodSym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..))
+  FileSym(..), ModuleSym(..), ClassSym(..), VisibilitySym(..), OOMethodSym(..),
+  OOTypeSym(..), OOVariableSym(..), SelfSym(..), AttachmentSym(..),
+  StateVarSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
+  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))

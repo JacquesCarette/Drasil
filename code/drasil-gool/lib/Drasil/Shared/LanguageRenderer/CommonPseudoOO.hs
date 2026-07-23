@@ -26,12 +26,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   SValue, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), VisibilitySym(..),
-  MethodSym(function), funcApp, listSize)
+  (&=), ControlStatement(returnStmt), MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (File, Module, Class, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
-  objMethodCall, OOStatement)
+  objMethodCall, OOStatement, VisibilitySym(..),)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),

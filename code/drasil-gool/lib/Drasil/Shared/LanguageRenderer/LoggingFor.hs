@@ -309,10 +309,6 @@ instance (ParameterSym r) => ParameterSym (LoggingFor r) where
   param = liftLogging param
   pointerParam = liftLogging pointerParam
 
-instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
-  private = liftLogging private
-  public = liftLogging public
-
 instance (MethodSym r stmt mthd) => MethodSym (LoggingFor r) stmt mthd where
   docMain = liftLogging docMain
   function = liftLogging function
@@ -449,6 +445,10 @@ instance (G.ObserverPattern r stmt) => G.ObserverPattern (LoggingFor r) stmt whe
 instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
+
+instance (G.VisibilitySym r vis) => G.VisibilitySym (LoggingFor r) vis where
+  private = liftLogging G.private
+  public = liftLogging G.public
 
 instance (G.OOMethodSym r vis stmt mthd attch) => G.OOMethodSym (LoggingFor r) vis stmt mthd attch where
   method = liftLogging G.method

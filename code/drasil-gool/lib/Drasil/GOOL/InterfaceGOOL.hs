@@ -12,11 +12,11 @@ module Drasil.GOOL.InterfaceGOOL (
   extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
   objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
   objMethodCallNoParams, classMethodCall, classMethodCallNamedArgs,
-  classMethodCallMixedArgs, classMethodCallNoParams, OOMethodSym(..), privMethod,
-  pubMethod, initializer, nonInitConstructor, StateVarSym(..), privDVar, pubDVar,
-  pubSVar, AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess,
-  ObserverPattern(..), observerListName, initObserverList, addObserver,
-  StrategyPattern(..), convTypeOO
+  classMethodCallMixedArgs, classMethodCallNoParams, VisibilitySym(..),
+  OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, AttachmentSym(..),
+  OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
+  initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
 import Drasil.Shared.InterfaceCommon (
@@ -27,7 +27,7 @@ import Drasil.Shared.InterfaceCommon (
   SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
   MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
+  DeclStatement(listDecDef), FuncAppStatement, convType)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
@@ -97,6 +97,12 @@ class (OOMethodSym r vis stmt mthd attch, StateVarSym r vis stvr attch) => Class
     [MS (r mthd)] -> CS (r Class)
 
   docClass :: String -> CS (r Class) -> CS (r Class)
+
+-- | A class for representing "Visibility", of a class member,
+-- i.e. whether it is public or private.
+class VisibilitySym r vis | r -> vis where
+  private :: r vis
+  public  :: r vis
 
 type Initializers r = [(SVariable r, SValue r)]
 

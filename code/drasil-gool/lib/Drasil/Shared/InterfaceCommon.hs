@@ -19,8 +19,7 @@ module Drasil.Shared.InterfaceCommon (
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..), convType
+  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -556,13 +555,6 @@ ifNoElse bs = ifCond bs $ body []
 switchAsIf :: (ControlStatement r stmt, Comparison r) => SValue r ->
   [(SValue r, MS (r Body))] -> MS (r Body) -> MS (r stmt)
 switchAsIf v = ifCond . map (first (v ?==))
-
--- TODO [Brandon Bosman, 07/22/2026]: move this to InterfaceGOOL
--- | A class for representing "Visibility", of a class member,
--- i.e. whether it is public or private.
-class VisibilitySym r vis | r -> vis where
-  private :: r vis
-  public  :: r vis
 
 -- | A class for representing function/method parameters.
 class (VariableSym r) => ParameterSym r where

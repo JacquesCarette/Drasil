@@ -7,11 +7,11 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue,
-  VisibilitySym)
+import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (File, Module, Class,
-  CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..))
+  CSStateVar, OOVariableValue, VisibilitySym, OOValueExpression(..),
+  InternalValueExp(..), FileSym(..), GetSet(..), ObserverPattern(..),
+  StrategyPattern(..))
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
@@ -52,7 +52,9 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r mthd, OOMethodTypeSym r, VisibilitySym r vis) => OORenderMethod r vis mthd attch | r -> vis attch where
+class
+  (RenderMethod r mthd, OOMethodTypeSym r, IG.VisibilitySym r vis)
+  => OORenderMethod r vis mthd attch | r -> vis attch where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->

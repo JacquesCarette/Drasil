@@ -19,8 +19,8 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -483,10 +483,6 @@ instance ControlStatement MatlabCode (Doc, Terminator) where
   while = C.while id empty mlEnd
   tryCatch = G.tryCatch mlTryCatch
   assert cond errMsg = valStmt $ funcApp "assert" void [cond, errMsg]
-
-instance VisibilitySym MatlabCode Doc where
-  private = toCode empty
-  public = toCode empty
 
 instance RenderVisibility MatlabCode Doc where
   visibilityFromData = undefined

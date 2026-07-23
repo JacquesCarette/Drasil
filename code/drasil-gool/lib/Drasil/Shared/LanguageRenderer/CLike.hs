@@ -289,7 +289,7 @@ intFunc
   -> [MS (r ParamData)]
   -> MS (r Body)
   -> MS (r mthd)
-intFunc m n = intMethod m n IC.public
+intFunc m n = intMethod m n IG.public
 
 -- Error Messages --
 

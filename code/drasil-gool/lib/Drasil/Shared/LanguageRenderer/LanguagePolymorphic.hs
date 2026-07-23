@@ -23,16 +23,17 @@ import Drasil.FileHandling.Legacy (indent)
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  bodyStatements, oneLiner, VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(valueType),
-  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
+  bodyStatements, oneLiner, VariableElim(variableName, variableType),
+  ValueSym(valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
+  TypeElim(..),
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
   ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, Class, Initializers,
-  CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..))
+  CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..),
+  VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),

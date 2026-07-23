@@ -24,8 +24,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..),
+  (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -527,11 +527,6 @@ instance ControlStatement JuliaCode (Doc, Terminator) where
     cond <- zoom lensMStoVS condition
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (jlAssert cond errMsg)
-
-instance VisibilitySym JuliaCode Doc where
-
-  private = toCode empty -- Julia doesn't have private/public members
-  public = toCode empty
 
 instance RenderVisibility JuliaCode Doc where
   visibilityFromData _ = toCode

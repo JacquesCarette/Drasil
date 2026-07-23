@@ -43,21 +43,22 @@ import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   Reference(..), Array(..), List(..), Set(..), listSlice, listIndexExists, at,
-  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..), convType,
+  ScopeSym(..), ParameterSym(..), MethodSym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
 import Drasil.GOOL.InterfaceGOOL (GSProgram, File, Module, Class, CSStateVar,
   Initializers, OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..),
-  ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  OOVariableValue, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
-  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
-  OOFuncAppStatement(..), GetSet(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, classMethodCall,
-  classMethodCallNamedArgs, classMethodCallMixedArgs, classMethodCallNoParams,
-  OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), initObserverList,
-  addObserver, StrategyPattern(..), convTypeOO)
+  ClassSym(..), VisibilitySym(..), OOMethodSym(..), OOTypeSym(..),
+  OOVariableSym(..), SelfSym(..), instanceVarSelf, ($->), AttachmentSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
+  privDVar, pubDVar, pubSVar, OOVariableValue, OOValueExpression(..),
+  selfMethodCall, newObj, extNewObj, libNewObj, OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
+  objMethodCallNoParams, classMethodCall, classMethodCallNamedArgs,
+  classMethodCallMixedArgs, classMethodCallNoParams, OOFunctionSym(..), ($.),
+  selfAccess, ObserverPattern(..), initObserverList, addObserver,
+  StrategyPattern(..), convTypeOO)
 
 import Drasil.Shared.AST (FileData(..), ScopeData(..), ModData(..), ProgData(..),
   TypeData(..), VisibilityTag(..), ParamData)

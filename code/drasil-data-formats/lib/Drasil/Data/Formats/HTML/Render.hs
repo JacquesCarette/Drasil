@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Drasil.Data.Formats.HTML.Render (
-    renderHTML,
-    HTMLGenOptions(..)
+  renderHTML,
+  HTMLRenderOptions (..),
 ) where
 
 import qualified Data.Map as M
@@ -16,7 +16,7 @@ import Drasil.Data.Formats.HTML.Core
 import Prettyprinter
   (vcat, Doc, angles, dquotes, equals, hcat, hsep, indent, pretty, space)
 
-data HTMLGenOptions = HTMLBO
+data HTMLRenderOptions = HTMLBO
   { -- | What 'TagType' is each 'CustomTag'?
     customElementTagTypes :: M.Map CustomTag TagType,
     -- | The number of spaces to use for each level of indentation.
@@ -24,7 +24,7 @@ data HTMLGenOptions = HTMLBO
   }
 
 -- | Render 'HTML' to a 'Doc'
-renderHTML :: HTMLGenOptions -> HTML -> Doc ann
+renderHTML :: HTMLRenderOptions -> HTML -> Doc ann
 renderHTML opt htmlTree =
   vcat
     [ "<!DOCTYPE html>",
@@ -36,15 +36,15 @@ renderHTML opt htmlTree =
   where HTML heads bodies = normalizeHTML htmlTree
 
 -- | Render the 'head' section
-renderHeadSec :: HTMLGenOptions -> [HTMLHead] -> Doc ann
+renderHeadSec :: HTMLRenderOptions -> [HTMLHead] -> Doc ann
 renderHeadSec opt heads = wrapBlock opt "head" [] (map (renderHead opt) heads)
 
 -- | Render the 'body' section
-renderBodySec :: HTMLGenOptions -> [HTMLBody] -> Doc ann
+renderBodySec :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
 renderBodySec opt bodies = wrapBlock opt "body" [] (map (renderBody opt) bodies)
 
 -- | Render 'head' elements
-renderHead :: HTMLGenOptions -> HTMLHead -> Doc ann
+renderHead :: HTMLRenderOptions -> HTMLHead -> Doc ann
 renderHead _ (Link relation file attrs) =
   angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
 renderHead _ (Title txt) = wrapLine "title" [] [pretty (escapeHTMLText txt)]
@@ -52,7 +52,7 @@ renderHead _ (Meta attrs) = angles ("meta" <> renderAttrs attrs)
 renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt]
 
 -- | Render 'body' elements
-renderBody :: HTMLGenOptions -> HTMLBody -> Doc ann
+renderBody :: HTMLRenderOptions -> HTMLBody -> Doc ann
 renderBody opt (Div attrs ch) = renderBlock opt "div" attrs ch
 renderBody opt (Paragraph attrs ch) = renderBlockInline opt "p" attrs ch
 renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (map renderIList items)
@@ -100,20 +100,20 @@ headTag H5 = "h5"
 headTag H6 = "h6"
 
 -- | Render the element and its children in the same line
-renderLine :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
+renderLine :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderLine opt tag attrs ch = wrapLine tag attrs $ map (renderBody opt) ch
 
 -- | Render the children breaking lines
-renderBlock :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
+renderBlock :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ map (renderBody opt) ch
 
 -- | Render the element as a block, but keep all children on a single indented line
-renderBlockInline :: HTMLGenOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
+renderBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
 renderBlockInline _ tag attrs [] = wrapLine tag attrs []
 renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) ch)
 
 -- | Wrap an element with tag and its children breaking lines
-wrapBlock :: HTMLGenOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
+wrapBlock :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
 wrapBlock opt tag attrs docs =
   vcat
     [ angles (pretty tag <> renderAttrs attrs),
@@ -127,10 +127,13 @@ wrapLine tag attrs docs =
   angles (pretty tag <> renderAttrs attrs) <> hcat docs <> angles ("/" <> pretty tag)
 
 -- | Wrap an element with tags on separate lines, but children on the same line
-wrapBlockInline :: HTMLGenOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
+wrapBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
 wrapBlockInline opt tag attrs docs =
-  vcat [ angles (pretty tag <> renderAttrs attrs),
-  indent (indentationSize opt) (hcat docs), angles ("/" <> pretty tag)]
+  vcat [
+    angles (pretty tag <> renderAttrs attrs),
+    indent (indentationSize opt) (hcat docs),
+    angles ("/" <> pretty tag)
+  ]
 
 -- | Render attribute in the format 'key="value"'
 renderAttrs :: [Attr] -> Doc ann

@@ -90,9 +90,8 @@ logName :: (Literal r) => SValue r
 logName = litString "log.txt"
 
 logVarUpdate
-  :: (IOStatement r stmt, VariableValue r, VariableElim r, Literal r)
-  => SVariable (LoggingFor r)
-  -> [MS (r stmt)]
+  :: (FileHandling r stmt, PrintFile r stmt, VariableValue r, VariableElim r, Literal r)
+  => SVariable (LoggingFor r) -> [MS (r stmt)]
 logVarUpdate x =
   [ openFileA varLogFile logName
   , do
@@ -105,8 +104,14 @@ logVarUpdate x =
   , closeFile valLogFile
   ]
 
-instance (AssignStatement r stmt, IOStatement r stmt, VariableValue r, VariableElim r, Literal r)
-  => AssignStatement (LoggingFor r) stmt where
+instance
+  ( AssignStatement r stmt
+  , FileHandling r stmt
+  , PrintFile r stmt
+  , VariableValue r
+  , VariableElim r
+  , Literal r
+  ) => AssignStatement (LoggingFor r) stmt where
   (&-=) = liftLogging (&-=)
   (&+=) = liftLogging (&+=)
   (&++) = liftLogging (&++)
@@ -124,8 +129,14 @@ instance (List r stmt) => List (LoggingFor r) stmt where
                                 -- (Can't right now because RC.value isn't exposed)
   indexOf = liftLogging indexOf
 
-instance (DeclStatement r stmt, IOStatement r stmt, VariableValue r, VariableElim r, Literal r)
-  => DeclStatement (LoggingFor r) stmt where
+instance
+  (DeclStatement r stmt
+  , FileHandling r stmt
+  , PrintFile r stmt
+  , VariableValue r
+  , VariableElim r
+  , Literal r
+  ) => DeclStatement (LoggingFor r) stmt where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
     varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
@@ -144,33 +155,60 @@ instance (DeclStatement r stmt, IOStatement r stmt, VariableValue r, VariableEli
     : logVarUpdate cnst
   funcDecDef = liftLogging funcDecDef
 
-instance (IOStatement r stmt, VariableValue r, VariableElim r, Literal r)
-  => IOStatement (LoggingFor r) stmt where
+instance (PrintConsole r stmt) => PrintConsole (LoggingFor r) stmt where
   print = liftLogging print
   printLn = liftLogging printLn
   printStr = liftLogging printStr
   printStrLn = liftLogging printStrLn
-  printFile = liftLogging printFile
-  printFileLn = liftLogging printFileLn
-  printFileStr = liftLogging printFileStr
-  printFileStrLn = liftLogging printFileStrLn
+
+instance
+  ( FileHandling r stmt
+  , PrintFile r stmt
+  , ReadConsole r stmt
+  , VariableValue r
+  , VariableElim r
+  , Literal r
+  ) => ReadConsole (LoggingFor r) stmt where
   getInput vr = liftLogging $ multi $
     getInput (lowerLogging vr) : logVarUpdate vr
   discardInput = liftLogging discardInput
-  getFileInput file vr = liftLogging $ multi $
-    getFileInput (lowerLogging file) (lowerLogging vr)
-    : logVarUpdate vr
-  discardFileInput = liftLogging discardFileInput
+
+instance (FileHandling r stmt) => FileHandling (LoggingFor r) stmt where
   openFileR = liftLogging openFileR
   openFileW = liftLogging openFileW
   openFileA = liftLogging openFileA
   closeFile = liftLogging closeFile
+
+instance (PrintFile r stmt) => PrintFile (LoggingFor r) stmt where
+  printFile = liftLogging printFile
+  printFileLn = liftLogging printFileLn
+  printFileStr = liftLogging printFileStr
+  printFileStrLn = liftLogging printFileStrLn
+
+instance
+  ( FileHandling r stmt
+  , PrintFile r stmt
+  , ReadFile r stmt
+  , VariableValue r
+  , VariableElim r
+  , Literal r
+  ) => ReadFile (LoggingFor r) stmt where
+  getFileInput file vr = liftLogging $ multi $
+    getFileInput (lowerLogging file) (lowerLogging vr)
+    : logVarUpdate vr
+  discardFileInput = liftLogging discardFileInput
   getFileInputLine = liftLogging getFileInputLine
   discardFileLine = liftLogging discardFileLine
   getFileInputAll = liftLogging getFileInputAll
 
-instance (StringStatement r stmt, IOStatement r stmt, VariableValue r, VariableElim r, Literal r)
-  => StringStatement (LoggingFor r) stmt where
+instance
+  ( StringStatement r stmt
+  , FileHandling r stmt
+  , PrintFile r stmt
+  , VariableValue r
+  , VariableElim r
+  , Literal r
+  ) => StringStatement (LoggingFor r) stmt where
   stringSplit chr vr str  = liftLogging $
     stringSplit (lowerLogging chr) (lowerLogging vr) (lowerLogging str)
   stringListVals vrs strs  = liftLogging $

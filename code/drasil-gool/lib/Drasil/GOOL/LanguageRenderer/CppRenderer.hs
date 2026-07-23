@@ -22,7 +22,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), BinderSym(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), convScope, BinderElim (..), (&=))
@@ -569,12 +570,26 @@ instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
     (\vr' -> extObjDecNew lib vr' (psnd scp))
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
 
-instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => PrintConsole (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   print = pair1 print print . zoom lensMStoVS
   printLn = pair1 printLn printLn . zoom lensMStoVS
   printStr s = on2StateValues pair (printStr s) (printStr s)
   printStrLn s = on2StateValues pair (printStrLn s) (printStrLn s)
 
+instance (Pair p) => ReadConsole (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+  getInput = pair1 getInput getInput . zoom lensMStoVS
+  discardInput = on2StateValues pair discardInput discardInput
+
+instance (Pair p) => FileHandling (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+  openFileR f v = pair2 openFileR openFileR (zoom lensMStoVS f)
+    (zoom lensMStoVS v)
+  openFileW f v = pair2 openFileW openFileW (zoom lensMStoVS f)
+    (zoom lensMStoVS v)
+  openFileA f v = pair2 openFileA openFileA (zoom lensMStoVS f)
+    (zoom lensMStoVS v)
+  closeFile = pair1 closeFile closeFile . zoom lensMStoVS
+
+instance (Pair p) => PrintFile (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   printFile f v = pair2 printFile printFile (zoom lensMStoVS f)
     (zoom lensMStoVS v)
   printFileLn f v = pair2 printFileLn printFileLn (zoom lensMStoVS f)
@@ -584,20 +599,10 @@ instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) whe
   printFileStrLn f s = pair1 (`printFileStrLn` s) (`printFileStrLn` s)
     (zoom lensMStoVS f)
 
-  getInput = pair1 getInput getInput . zoom lensMStoVS
-  discardInput = on2StateValues pair discardInput discardInput
+instance (Pair p) => ReadFile (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   getFileInput f v = pair2 getFileInput getFileInput (zoom lensMStoVS f)
     (zoom lensMStoVS v)
   discardFileInput = pair1 discardFileInput discardFileInput . zoom lensMStoVS
-
-  openFileR f v = pair2 openFileR openFileR (zoom lensMStoVS f)
-    (zoom lensMStoVS v)
-  openFileW f v = pair2 openFileW openFileW (zoom lensMStoVS f)
-    (zoom lensMStoVS v)
-  openFileA f v = pair2 openFileA openFileA (zoom lensMStoVS f)
-    (zoom lensMStoVS v)
-  closeFile = pair1 closeFile closeFile . zoom lensMStoVS
-
   getFileInputLine f v = pair2 getFileInputLine getFileInputLine
     (zoom lensMStoVS f) (zoom lensMStoVS v)
   discardFileLine = pair1 discardFileLine discardFileLine . zoom lensMStoVS
@@ -1495,29 +1500,33 @@ instance OODeclStatement CppSrcCode (Doc, Terminator) where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement CppSrcCode (Doc, Terminator) where
+instance PrintConsole CppSrcCode (Doc, Terminator) where
   print      = G.print False Nothing printFunc
   printLn    = G.print True  Nothing printLnFunc
   printStr   = G.print False Nothing printFunc   . litString
   printStrLn = G.print True  Nothing printLnFunc . litString
 
-  printFile f      = G.print False (Just f) (printFileFunc f)
-  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
-  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
-
+instance ReadConsole CppSrcCode (Doc, Terminator) where
   getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ cppDiscardInput '\n'
     inputFunc
-  getFileInput f v = cppInput v f
-  discardFileInput f = addAlgorithmImport $ addLimitsImport $
-    cppDiscardInput ' ' f
 
+instance FileHandling CppSrcCode (Doc, Terminator) where
   openFileR = cppOpenFile cppR
   openFileW = cppOpenFile cppW
   openFileA = cppOpenFile cppA
   closeFile = G.closeFile cppClose
 
+instance PrintFile CppSrcCode (Doc, Terminator) where
+  printFile f      = G.print False (Just f) (printFileFunc f)
+  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
+  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
+
+instance ReadFile CppSrcCode (Doc, Terminator) where
+  getFileInput f v = cppInput v f
+  discardFileInput f = addAlgorithmImport $ addLimitsImport $
+    cppDiscardInput ' ' f
   getFileInputLine f v = valStmt $ getLineFunc f (valueOf v)
   discardFileLine f = addLimitsImport $ cppDiscardInput '\n' f
   getFileInputAll f v = do
@@ -2150,27 +2159,31 @@ instance OODeclStatement CppHdrCode (Doc, Terminator) where
   objDecNew _ _ _ = emptyStmt
   extObjDecNew _ _ _ _ = emptyStmt
 
-instance IOStatement CppHdrCode (Doc, Terminator) where
+instance PrintConsole CppHdrCode (Doc, Terminator) where
   print _ = emptyStmt
   printLn _ = emptyStmt
   printStr _ = emptyStmt
   printStrLn _ = emptyStmt
 
-  printFile _ _ = emptyStmt
-  printFileLn _ _ = emptyStmt
-  printFileStr _ _ = emptyStmt
-  printFileStrLn _ _ = emptyStmt
-
+instance ReadConsole CppHdrCode (Doc, Terminator) where
   getInput _ = emptyStmt
   discardInput = emptyStmt
-  getFileInput _ _ = emptyStmt
-  discardFileInput _ = emptyStmt
 
+instance FileHandling CppHdrCode (Doc, Terminator) where
   openFileR _ _ = emptyStmt
   openFileW _ _ = emptyStmt
   openFileA _ _ = emptyStmt
   closeFile _ = emptyStmt
 
+instance PrintFile CppHdrCode (Doc, Terminator) where
+  printFile _ _ = emptyStmt
+  printFileLn _ _ = emptyStmt
+  printFileStr _ _ = emptyStmt
+  printFileStrLn _ _ = emptyStmt
+
+instance ReadFile CppHdrCode (Doc, Terminator) where
+  getFileInput _ _ = emptyStmt
+  discardFileInput _ = emptyStmt
   getFileInputLine _ _ = emptyStmt
   discardFileLine _ = emptyStmt
   getFileInputAll _ _ = emptyStmt

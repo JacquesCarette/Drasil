@@ -19,9 +19,9 @@ import Drasil.Shared.InterfaceCommon (Label, Library, Body, Block, Variable,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  InternalList(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
+  InternalList(..), AssignStatement(..), DeclStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ParameterSym(..), BinderElim(..), UnRepr(..))
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -29,21 +29,19 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (AssignStatement r stmt, DeclStatement r stmt, IOStatement r stmt,
-  StringStatement r stmt, FuncAppStatement r stmt, CommentStatement r stmt,
-  ControlStatement r stmt, Argument r, Literal r, MathConstant r,
-  VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, IndexTranslator r, List r stmt,
-  InternalList r, VariableElim r, BinderElim r, RenderBlock r,
-  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r,
-  RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
-  ParamElim r, RenderVisibility r vis, VisibilityElim r vis,
-  InternalAssignStmt r stmt, InternalIOStmt r stmt, InternalControlStmt r stmt,
-  RenderStatement r stmt, StatementElim r stmt, RenderType r, RenderValue r,
-  ValueElim r, RenderVariable r, InternalVarElim r, InternalBinderElim r,
-  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
-  BlockCommentElim r, ValueExpression r, RenderMethod r mthd, MethodElim r mthd,
-  ParameterSym r, ScopeElim r
+class (AssignStatement r stmt, DeclStatement r stmt, StringStatement r stmt,
+  FuncAppStatement r stmt, CommentStatement r stmt, ControlStatement r stmt,
+  Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
+  NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,
+  List r stmt, InternalList r, VariableElim r, BinderElim r, RenderBlock r,
+  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
+  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r vis,
+  VisibilityElim r vis, InternalAssignStmt r stmt, InternalIOStmt r stmt,
+  InternalControlStmt r stmt, RenderStatement r stmt, StatementElim r stmt,
+  RenderType r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r,
+  InternalBinderElim r, ImportSym r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r mthd,
+  MethodElim r mthd, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r vis stmt mthd
 
 -- Common Typeclasses --

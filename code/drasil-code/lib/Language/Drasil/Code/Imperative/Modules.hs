@@ -32,10 +32,10 @@ import Drasil.GOOL (Body, Block, SVariable, SValue, File, CS, FS, MS, CSStateVar
   Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-  convTypeOO, VisibilityTag(..), SharedStatement, TypeElim, VariableElim,
-  OOStatement)
+  extObjDecNewNoParams, PrintConsole(..), FileHandling(..), PrintFile(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
+  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..),
+  SharedStatement, TypeElim, VariableElim, OOStatement)
 import Drasil.GProc (ProcProg, NativeVector)
 
 import Drasil.Code.CodeExpr.Development
@@ -455,7 +455,7 @@ printConstraint v c = do
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (IOStatement r stmt) => CodeExpr -> PrintingInformation -> [MS (r stmt)]
+printExpr :: (PrintConsole r stmt) => CodeExpr -> PrintingInformation -> [MS (r stmt)]
 printExpr Lit{} _     = []
 printExpr e     pinfo = [printStr $ " " ++ render (parens (oneLineCodeExprDoc pinfo e))]
 

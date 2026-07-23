@@ -12,7 +12,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
   FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..),
   BinderSym(..))
@@ -330,28 +331,32 @@ instance OODeclStatement CodeInfoOO () where
   objDecNew            _ _ = zoom lensMStoVS . executeListErr
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeListErr
 
-instance IOStatement CodeInfoOO () where
+instance PrintConsole CodeInfoOO () where
   print        = zoom lensMStoVS . execute1
   printLn      = zoom lensMStoVS . execute1
   printStr   _ = noInfo
   printStrLn _ = noInfo
 
-  printFile      v   = zoom lensMStoVS . execute2 v
-  printFileLn    v   = zoom lensMStoVS . execute2 v
-  printFileStr   v _ = zoom lensMStoVS $ execute1 v
-  printFileStrLn v _ = zoom lensMStoVS $ execute1 v
-
+instance ReadConsole CodeInfoOO () where
   getInput       _ = noInfo
   discardInput     = noInfo
-  getFileInput v _ = zoom lensMStoVS $ execute1 v
-  discardFileInput = zoom lensMStoVS . execute1
 
+instance FileHandling CodeInfoOO () where
   openFileR _ v = modify (addException FileNotFound) >>
     execute1 (zoom lensMStoVS v)
   openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
   openFileA _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
   closeFile     = zoom lensMStoVS . execute1
 
+instance PrintFile CodeInfoOO () where
+  printFile      v   = zoom lensMStoVS . execute2 v
+  printFileLn    v   = zoom lensMStoVS . execute2 v
+  printFileStr   v _ = zoom lensMStoVS $ execute1 v
+  printFileStrLn v _ = zoom lensMStoVS $ execute1 v
+
+instance ReadFile CodeInfoOO () where
+  getFileInput v _ = zoom lensMStoVS $ execute1 v
+  discardFileInput = zoom lensMStoVS . execute1
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)

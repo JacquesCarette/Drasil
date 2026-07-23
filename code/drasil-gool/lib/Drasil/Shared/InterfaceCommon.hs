@@ -17,7 +17,8 @@ module Drasil.Shared.InterfaceCommon (
   libFuncApp, exists, IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
   BinderElim(..), convType
@@ -52,7 +53,8 @@ class (UnRepr r TypeData, SharedStatement r stmt, FunctionSym r, InternalList r,
 class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
   CommandLineArgs r, CommentStatement r stmt, Comparison r,
   ControlStatement r stmt, DeclStatement r stmt, FuncAppStatement r stmt,
-  IOStatement r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
   ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
   VariableValue r
   ) => SharedStatement r stmt
@@ -473,28 +475,33 @@ class (VariableSym r, StatementSym r stmt, ScopeSym r) => DeclStatement r stmt w
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body)
     -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => IOStatement r stmt where
+class (VariableSym r, StatementSym r stmt) => PrintConsole r stmt where
   print      :: SValue r -> MS (r stmt)
   printLn    :: SValue r -> MS (r stmt)
+  -- TODO [Brandon Bosman, 07/23/2026]: Could these be helpers?
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
 
+class (VariableSym r, StatementSym r stmt) => ReadConsole r stmt where
+  getInput         :: SVariable r -> MS (r stmt)
+  discardInput     :: MS (r stmt)
+
+class (VariableSym r, StatementSym r stmt) => FileHandling r stmt where
+  openFileR :: SVariable r -> SValue r -> MS (r stmt)
+  openFileW :: SVariable r -> SValue r -> MS (r stmt)
+  openFileA :: SVariable r -> SValue r -> MS (r stmt)
+  closeFile :: SValue r -> MS (r stmt)
+
+class (VariableSym r, StatementSym r stmt) => PrintFile r stmt where
   -- | Given the file handle and value to print, print the value to the file.
   printFile      :: SValue r -> SValue r -> MS (r stmt)
   printFileLn    :: SValue r -> SValue r -> MS (r stmt)
   printFileStr   :: SValue r -> String -> MS (r stmt)
   printFileStrLn :: SValue r -> String -> MS (r stmt)
 
-  getInput         :: SVariable r -> MS (r stmt)
-  discardInput     :: MS (r stmt)
+class (VariableSym r, StatementSym r stmt) => ReadFile r stmt where
   getFileInput     :: SValue r -> SVariable r -> MS (r stmt)
   discardFileInput :: SValue r -> MS (r stmt)
-
-  openFileR :: SVariable r -> SValue r -> MS (r stmt)
-  openFileW :: SVariable r -> SValue r -> MS (r stmt)
-  openFileA :: SVariable r -> SValue r -> MS (r stmt)
-  closeFile :: SValue r -> MS (r stmt)
-
   getFileInputLine :: SValue r -> SVariable r -> MS (r stmt)
   discardFileLine  :: SValue r -> MS (r stmt)
   getFileInputAll  :: SValue r -> SVariable r -> MS (r stmt)

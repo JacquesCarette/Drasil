@@ -27,9 +27,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   VariableElim(variableName, variableType), ValueSym(valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
   StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
-  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, convType, VSBinder, BinderElim(..), getCodeType, getTypeString,
-  ValueExpression)
+  PrintConsole(printStr, printStrLn),
+  PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
+  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, Class, Initializers,
   CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..))

@@ -11,8 +11,8 @@ import Language.Drasil.Choices (Logging(..))
 
 import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), IOStatement(..),
-  lensMStoVS, ScopeSym(..), VariableSym, SharedStatement)
+  VariableValue(..), StatementSym(..), DeclStatement(..), FileHandling(..),
+  PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym, SharedStatement)
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of

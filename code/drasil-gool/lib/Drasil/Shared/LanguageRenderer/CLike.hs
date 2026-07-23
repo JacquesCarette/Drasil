@@ -6,29 +6,27 @@ module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, listSize',
   increment, increment1, decrement1, varDec, varDecDef, setDecDef, listDec,
-  extObjDecNew, switch, for, while, intFunc, multiAssignError, multiReturnError,
+  extObjDecNew, switch, for, while, multiAssignError, multiReturnError,
   multiTypeError
 ) where
 
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body,
-  TypeElim(..), SVariable, Value, SValue, MixedCall, MixedCtorCall,
-  VariableSym(..), VariableValue(..), VariableElim(..), ValueSym(valueType),
-  getCodeType, getTypeString)
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Library, Body, TypeElim(..),
+  SVariable, Value, SValue, MixedCall, MixedCtorCall, VariableSym(..),
+  VariableValue(..), VariableElim(..), ValueSym(valueType), getCodeType,
+  getTypeString)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (extNewObj, objMethodCallNoParams, ($->))
 import qualified Drasil.GOOL.InterfaceGOOL as IG
-import Drasil.Shared.RendererClassesCommon (MSMthdType,
-  InternalVarElim(variableBind), RenderValue(valFromData), ValueElim(valuePrec),
-  ScopeElim(scopeData))
+import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
+  RenderValue(valFromData), ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as RC
-import Drasil.GOOL.RendererClassesOO (OORenderMethod(intMethod))
 import Drasil.GOOL.Renderers (renderType)
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), ScopeData,
-  TypeData, ParamData)
+  TypeData)
 import Drasil.Shared.Helpers (angles, toState, onStateValue)
 import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.Shared.LanguageRenderer as R
@@ -277,13 +275,6 @@ while f bStart bEnd v' b'= do
   mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart,
     indent $ RC.body b,
     bEnd])
-
--- Methods --
-
-intFunc :: (OORenderMethod r vis mthd attch) => Bool -> Label -> r vis ->
-  r attch -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) ->
-  MS (r mthd)
-intFunc = intMethod
 
 -- Error Messages --
 

@@ -89,8 +89,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
   increment, increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew,
-  switch, for, while, intFunc, multiAssignError, multiReturnError,
-  multiTypeError)
+  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -669,7 +668,7 @@ instance OORenderMethod CSharpCode Doc MethodData Doc where
     tp <- t
     pms <- sequence ps
     toCode . mthd . renderMethod n s p tp pms <$> b
-  intFunc = C.intFunc
+  intFunc = intMethod
   destructor _ = error $ CP.destructorError csName
 
 instance MethodElim CSharpCode MethodData where

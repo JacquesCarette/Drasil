@@ -11,7 +11,7 @@ module Language.Drasil.Document.SentenceCombinators (
   -- | See Reference-related Functions as well.
   addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  unwrap, fterms, eqN, eqnWSource,
+  chWithUnit, unitInParen, unitSym, fterms, eqN, eqnWSource,
   -- * List-related Functions
   bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
@@ -26,7 +26,7 @@ import Data.List (transpose)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
-import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(..))
 import Language.Drasil.Classes (HasUnitSymbol(..), Quantity, Concept, Definition(..))
 import Language.Drasil.Development.Sentence (short, atStart, titleize, phrase, plural)
 import Language.Drasil.Label.Type (Referable)
@@ -87,7 +87,7 @@ mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
 
 -- | Takes an amount as a 'Sentence' and appends a unit to it.
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
-fmtU n u  = n +:+ unwrap (getUnit u)
+fmtU n u  = n +:+ unitSym u
 
 -- | Formats typical uncertainty data to be displayed.
 typUncr :: (Double, Maybe Int) -> Sentence
@@ -143,10 +143,17 @@ bulletFlat = Bullet . noRefs . map Flat
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 
--- | Get a unit symbol if there is one.
-unwrap :: Maybe UnitDefn -> Sentence
-unwrap (Just a) = Sy $ usymb a
-unwrap Nothing  = EmptyS
+-- | Get a unit symbol as a 'Sentence' if one exists.
+unitSym :: MayHaveUnit a => a -> Sentence
+unitSym = maybe EmptyS (Sy . usymb) . getUnit
+
+-- | Formats a unit in parentheses. Outputs "(unit)".
+unitInParen :: MayHaveUnit a => a -> Sentence
+unitInParen = sParen . unitSym
+
+-- | Outputs "ch x (unit of x)". For introducing a quantity with its symbol and unit.
+chWithUnit :: (Quantity a, MayHaveUnit a) => a -> Sentence
+chWithUnit x = ch x +:+ unitInParen x
 
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.

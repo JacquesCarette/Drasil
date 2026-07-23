@@ -50,6 +50,8 @@
 #
 # Generalise map to fmap, ++ to <>
 # - group: {name: generalise, enabled: true}
+- group: {name: lens, enabled: true}
+- group: {name: use-lens, enabled: true}
 
 
 # Ignore some builtin hints

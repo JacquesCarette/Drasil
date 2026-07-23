@@ -2,7 +2,7 @@
 module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (File, SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
-  AttachmentSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
+  AttachmentSym(..), oneLiner, TypeSym(..), PrintConsole(..), VariableSym(..),
   SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
   VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
   ModuleSym(..))
@@ -30,7 +30,7 @@ selfX :: (SelfSym r, VariableValue r) => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
-helperClass :: (ClassSym r vis stmt mthd stvr attch, IOStatement r stmt, Literal r,
+helperClass :: (ClassSym r vis stmt mthd stvr attch, PrintConsole r stmt, Literal r,
   OOVariableValue r) => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
@@ -40,7 +40,7 @@ observerConstructor :: (OOMethodSym r vis stmt mthd attch, Literal r) => MS (r m
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (OOMethodSym r vis stmt mthd attch, IOStatement r stmt,
+printNumMethod :: (OOMethodSym r vis stmt mthd attch, PrintConsole r stmt,
   OOVariableValue r) => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

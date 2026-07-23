@@ -22,7 +22,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..),  StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
@@ -542,27 +543,17 @@ instance OODeclStatement SwiftCode (Doc, Terminator) where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement SwiftCode (Doc, Terminator) where
+instance PrintConsole SwiftCode (Doc, Terminator) where
   print      = swiftOut False Nothing printFunc
   printLn    = swiftOut True  Nothing printLnFunc
   printStr   = swiftOut False Nothing printFunc   . litString
   printStrLn = swiftOut True  Nothing printLnFunc . litString
 
-  printFile f      = swiftOut False (Just f) (printFileFunc f)
-  printFileLn f    = swiftOut True  (Just f) (printFileLnFunc f)
-  printFileStr f   = swiftOut False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = swiftOut True  (Just f) (printFileLnFunc f) . litString
-
+instance ReadConsole SwiftCode (Doc, Terminator) where
   getInput v = v &= swiftInput v swiftReadLineFunc
   discardInput = valStmt swiftReadLineFunc
-  getFileInput _ v = do
-    wi <- getWordIndex
-    li <- getLineIndex
-    modify incrementWord
-    v &= swiftInput v
-      (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
-  discardFileInput _ = modify incrementWord >> emptyStmt
 
+instance FileHandling SwiftCode (Doc, Terminator) where
   openFileR v pth = do
     v' <- zoom lensMStoVS v
     scpData <- getVarScope $ variableName v'
@@ -573,6 +564,20 @@ instance IOStatement SwiftCode (Doc, Terminator) where
   openFileA = swiftOpenFileWA True
   closeFile = swiftCloseFile
 
+instance PrintFile SwiftCode (Doc, Terminator) where
+  printFile f      = swiftOut False (Just f) (printFileFunc f)
+  printFileLn f    = swiftOut True  (Just f) (printFileLnFunc f)
+  printFileStr f   = swiftOut False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = swiftOut True  (Just f) (printFileLnFunc f) . litString
+
+instance ReadFile SwiftCode (Doc, Terminator) where
+  getFileInput _ v = do
+    wi <- getWordIndex
+    li <- getLineIndex
+    modify incrementWord
+    v &= swiftInput v
+      (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
+  discardFileInput _ = modify incrementWord >> emptyStmt
   getFileInputLine _ v = do
     v' <- zoom lensMStoVS v
     scpData <- getVarScope $ variableName v'
@@ -800,8 +805,6 @@ swiftArgVal v' = do
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
 
 -- Putting "gool" in these names to avoid name conflicts
--- The `local` is a hack, but Swift doesn't care about scope
--- and I don't want to change the IOStatement API just for this
 swiftContentsVar, swiftLineVar :: SVariable SwiftCode
 swiftContentsVar = var "goolContents" (listType $ listType string)
 swiftLineVar = var "goolLine" (listType string)

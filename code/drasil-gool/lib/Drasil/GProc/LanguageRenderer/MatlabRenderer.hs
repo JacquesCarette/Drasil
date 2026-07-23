@@ -17,7 +17,8 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
@@ -430,23 +431,31 @@ instance DeclStatement MatlabCode (Doc, Terminator) where
   constDecDef = varDecDef
   funcDecDef = A.funcDecDef
 
-instance IOStatement MatlabCode (Doc, Terminator) where
+instance PrintConsole MatlabCode (Doc, Terminator) where
   print = G.print False Nothing printFunc
   printLn = G.print True Nothing printLnFunc
   printStr = G.print False Nothing printFunc . litString
   printStrLn = G.print True Nothing printLnFunc . litString
-  printFile f = G.print False (Just f) printFunc
-  printFileLn f = G.print True (Just f) printLnFunc
-  printFileStr f = printFile f . litString
-  printFileStrLn f = printFileLn f . litString
+
+instance ReadConsole MatlabCode (Doc, Terminator) where
   getInput = undefined
   discardInput = undefined
-  getFileInput f = mlInput (mlReadLine f)
-  discardFileInput f = valStmt (mlReadLine f)
+
+instance FileHandling MatlabCode (Doc, Terminator) where
   openFileR f n = f &= funcApp "fopen" infile [n, litString "r"]
   openFileW f n = f &= funcApp "fopen" outfile [n, litString "w"]
   openFileA f n = f &= funcApp "fopen" outfile [n, litString "a"]
   closeFile f = valStmt $ funcApp "fclose" void [f]
+
+instance PrintFile MatlabCode (Doc, Terminator) where
+  printFile f = G.print False (Just f) printFunc
+  printFileLn f = G.print True (Just f) printLnFunc
+  printFileStr f = printFile f . litString
+  printFileStrLn f = printFileLn f . litString
+
+instance ReadFile MatlabCode (Doc, Terminator) where
+  getFileInput f = mlInput (mlReadLine f)
+  discardFileInput f = valStmt (mlReadLine f)
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
   getFileInputAll = undefined

@@ -21,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), InternalList(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
@@ -542,30 +543,34 @@ instance OODeclStatement PythonCode (Doc, Terminator) where
     modify (addModuleImport lib)
     varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
-instance IOStatement PythonCode (Doc, Terminator) where
+instance PrintConsole PythonCode (Doc, Terminator) where
   print      = pyOut False Nothing printFunc
   printLn    = pyOut True  Nothing printFunc
   printStr   = print   . litString
   printStrLn = printLn . litString
 
-  printFile f      = pyOut False (Just f) printFunc
-  printFileLn f    = pyOut True  (Just f) printFunc
-  printFileStr f   = printFile f   . litString
-  printFileStrLn f = printFileLn f . litString
-
+instance ReadConsole PythonCode (Doc, Terminator) where
   getInput = pyInput inputFunc
   discardInput = valStmt inputFunc
-  getFileInput f = pyInput (readline f)
-  discardFileInput f = valStmt (readline f)
 
+instance FileHandling PythonCode (Doc, Terminator) where
   openFileR f n = f &= CP.openFileR' n
   openFileW f n = f &= CP.openFileW' n
   openFileA f n = f &= CP.openFileA' n
   closeFile = G.closeFile pyClose
 
+instance ReadFile PythonCode (Doc, Terminator) where
+  getFileInput f = pyInput (readline f)
+  discardFileInput f = valStmt (readline f)
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine pyReadline
   getFileInputAll f v = v &= readlines f
+
+instance PrintFile PythonCode (Doc, Terminator) where
+  printFile f      = pyOut False (Just f) printFunc
+  printFileLn f    = pyOut True  (Just f) printFunc
+  printFileStr f   = printFile f   . litString
+  printFileStrLn f = printFileLn f . litString
 
 instance StringStatement PythonCode (Doc, Terminator) where
   stringSplit d vnew s = assign vnew (objAccess s (splitFunc d))

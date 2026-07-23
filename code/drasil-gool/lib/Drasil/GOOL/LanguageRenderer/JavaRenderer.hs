@@ -21,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
@@ -555,27 +556,31 @@ instance OODeclStatement JavaCode (Doc, Terminator) where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement JavaCode (Doc, Terminator) where
+instance PrintConsole JavaCode (Doc, Terminator) where
   print      = jOut False Nothing printFunc
   printLn    = jOut True  Nothing printLnFunc
   printStr   = jOut False Nothing printFunc   . litString
   printStrLn = jOut True  Nothing printLnFunc . litString
 
-  printFile f      = jOut False (Just f) (printFileFunc f)
-  printFileLn f    = jOut True  (Just f) (printFileLnFunc f)
-  printFileStr f   = jOut False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = jOut True  (Just f) (printFileLnFunc f) . litString
-
+instance ReadConsole JavaCode (Doc, Terminator) where
   getInput v = v &= jInput v inputFunc
   discardInput = jDiscardInput inputFunc
-  getFileInput f v = v &= jInput v f
-  discardFileInput = jDiscardInput
 
+instance FileHandling JavaCode (Doc, Terminator) where
   openFileR = CP.openFileR jOpenFileR
   openFileW = CP.openFileW jOpenFileWorA
   openFileA = CP.openFileA jOpenFileWorA
   closeFile = G.closeFile jClose
 
+instance PrintFile JavaCode (Doc, Terminator) where
+  printFile f      = jOut False (Just f) (printFileFunc f)
+  printFileLn f    = jOut True  (Just f) (printFileLnFunc f)
+  printFileStr f   = jOut False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = jOut True  (Just f) (printFileLnFunc f) . litString
+
+instance ReadFile JavaCode (Doc, Terminator) where
+  getFileInput f v = v &= jInput v f
+  discardFileInput = jDiscardInput
   getFileInputLine f v = v &= f $. jNextLineFunc
   discardFileLine = CP.discardFileLine jNextLine
   getFileInputAll f v = while (f $. jHasNextLineFunc)

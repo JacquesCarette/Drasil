@@ -3,9 +3,10 @@
 module FileTests (fileTestsOO, fileTestsProc) where
 
 import Drasil.GOOL (Block, MS, SharedProg, OOProg, BodySym(..), BlockSym(..),
-  TypeSym(..), DeclStatement(..), IOStatement(..), ControlStatement(..),
-  VariableSym(var), Literal(..), VariableValue(..), Comparison(..), List(..),
-  MethodSym(..), ScopeSym(..))
+  TypeSym(..), DeclStatement(..), PrintConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), ControlStatement(..), VariableSym(var),
+  Literal(..), VariableValue(..), Comparison(..), List(..), MethodSym(..),
+  ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)

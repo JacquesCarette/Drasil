@@ -21,7 +21,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, StateVar, ProgramSym(..),
@@ -531,27 +532,31 @@ instance OODeclStatement CSharpCode (Doc, Terminator) where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement CSharpCode (Doc, Terminator) where
+instance PrintConsole CSharpCode (Doc, Terminator) where
   print      = csPrint False Nothing printFunc
   printLn    = csPrint True  Nothing printLnFunc
   printStr   = csPrint False Nothing printFunc   . litString
   printStrLn = csPrint True  Nothing printLnFunc . litString
 
-  printFile f      = csPrint False (Just f) (printFileFunc f)
-  printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
-  printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
-
+instance ReadConsole CSharpCode (Doc, Terminator) where
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = csDiscardInput inputFunc
-  getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
-  discardFileInput f = valStmt $ csFileInput f
 
+instance FileHandling CSharpCode (Doc, Terminator) where
   openFileR = CP.openFileR csOpenFileR
   openFileW = CP.openFileW csOpenFileWorA
   openFileA = CP.openFileA csOpenFileWorA
   closeFile = G.closeFile csClose
 
+instance PrintFile CSharpCode (Doc, Terminator) where
+  printFile f      = csPrint False (Just f) (printFileFunc f)
+  printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
+  printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
+
+instance ReadFile CSharpCode (Doc, Terminator) where
+  getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
+  discardFileInput f = valStmt $ csFileInput f
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine csReadLine
   getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)

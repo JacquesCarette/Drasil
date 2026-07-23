@@ -20,10 +20,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, libFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  extFuncApp, libFuncApp, IndexTranslator(..), Reference(..), Array(..),
+  List(..), Set(..), NativeVector(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
+  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
@@ -473,25 +474,31 @@ instance DeclStatement JuliaCode (Doc, Terminator) where
   constDecDef = jlConstDecDef
   funcDecDef = A.funcDecDef
 
-instance IOStatement JuliaCode (Doc, Terminator) where
+instance PrintConsole JuliaCode (Doc, Terminator) where
   print      = jlOut False Nothing printFunc
   printLn    = jlOut True  Nothing printLnFunc
   printStr   = jlOut False Nothing printFunc   . litString
   printStrLn = jlOut True  Nothing printLnFunc . litString
 
+instance ReadConsole JuliaCode (Doc, Terminator) where
+  getInput = jlInput inputFunc
+  discardInput = valStmt inputFunc
+
+instance FileHandling JuliaCode (Doc, Terminator) where
+  openFileR f n = f &= CP.openFileR' n
+  openFileW f n = f &= CP.openFileW' n
+  openFileA f n = f &= CP.openFileA' n
+  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
+
+instance PrintFile JuliaCode (Doc, Terminator) where
   printFile f      = jlOut False (Just f) printFunc
   printFileLn f    = jlOut True (Just f) printLnFunc
   printFileStr f   = printFile   f . litString
   printFileStrLn f = printFileLn f . litString
 
-  getInput = jlInput inputFunc
-  discardInput = valStmt inputFunc
+instance ReadFile JuliaCode (Doc, Terminator) where
   getFileInput f = jlInput (readLine f)
   discardFileInput f = valStmt (readLine f)
-  openFileR f n = f &= CP.openFileR' n
-  openFileW f n = f &= CP.openFileW' n
-  openFileA f n = f &= CP.openFileA' n
-  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
   getFileInputAll f v = v &= readLines f

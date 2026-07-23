@@ -1,8 +1,10 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Drasil.Data.Formats.HTML.Core
   ( -- * HTML
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
-    Attr(..), bold, emphasis, subscript, superscript, span, figureImage
+    Attr(..), bold, emphasis, subscript, superscript, span, figureImage,
+    inlineScript, externalScript
   )
 where
 
@@ -132,3 +134,11 @@ span attrs txt = TextFormat Span attrs [RawText txt]
 figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
 figureImage attrsFig attrsImg src altText captionTxt =
   Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]
+
+-- | Creates an inline script. Does not allow any attributes.
+inlineScript :: Text -> HTMLHead
+inlineScript = Script []
+
+-- | Creates an external script. Requires a source file/URL and allows optional attributes.
+externalScript :: File -> [Attr] -> HTMLHead
+externalScript src attrs = Script (Attr "src" src : attrs) ""

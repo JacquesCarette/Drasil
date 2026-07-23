@@ -23,7 +23,7 @@ import Language.Drasil.HTML2.Helpers (HTMLRenderOptions(..), BibFormatter(..),
   articleTitle, author, stylesheet)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML, renderMath)
 
-import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle(Minified))
+import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle(Pretty))
 import Drasil.Data.Formats.HTML hiding (Title, Row, Bold, ListType, Ordered,
   Unordered, span, Paragraph, Table, List, Figure)
 import qualified Drasil.Data.Formats.HTML as HTML
@@ -37,14 +37,12 @@ genHTML gOpts rOpts fn (Document t a c) = renderHTML gOpts (HTML heads bodies)
       [ stylesheet (T.pack fn),
         HTML.Title (printSpec t),
         Meta [Attr "charset" "utf-8"],
-        Script [] mathJaxScript,
-        Script
+        inlineScript mathJaxScript,
+        externalScript (T.pack $ mathJaxSrc rOpts)
           [ Attr "type" "text/javascript",
             Attr "id" "MathJax-script",
-            Attr "async" "",
-            Attr "src" (T.pack $ mathJaxSrc rOpts)
+            Attr "async" ""
           ]
-          ""
       ]
     bodies =
       [ articleTitle (specToHTML t),
@@ -57,7 +55,7 @@ mathJaxScript :: Text
 mathJaxScript = "MathJax = " <> configJSON <> ";"
   where
     configJSON = T.pack $ show $ renderJSON
-      (jsonRenderOpts Minified)
+      (jsonRenderOpts (Pretty 2))
       ( JObject [
         ("loader",
         JObject [("load", JArray ["[tex]/textmacros", "output/chtml"])]),

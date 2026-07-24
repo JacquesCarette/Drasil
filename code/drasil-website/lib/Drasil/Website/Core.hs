@@ -12,7 +12,7 @@ where
 import Control.Lens (makeLenses, (^.))
 import qualified Data.Map.Strict as M
 import Drasil.Data.Formats.HTML (HTMLRenderOptions (..))
-import Text.PrettyPrint (Doc)
+import Prettyprinter (Doc)
 import Drasil.FileHandling (file, ps)
 import Drasil.System (HasProjectName (..), HasSystemMeta (..), SystemMeta, ToFiles (..))
 import Language.Drasil (Stage (Equational))
@@ -40,7 +40,7 @@ mkDrasilWebsite = DW
 -- | HTML generation options for the 'DrasilWebsite'.
 newtype DrasilWebsiteGenOptions = DWGO
   { -- | What CSS should be loaded?
-    css :: Doc
+    css :: Doc ()
   }
 
 -- | Default options for the 'DrasilWebsite' generator.

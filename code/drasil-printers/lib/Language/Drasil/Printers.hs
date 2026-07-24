@@ -24,7 +24,7 @@ module Language.Drasil.Printers (
   , PrintingInformation, piSys, Notation(..)
 ) where
 
-import Language.Drasil.HTML.CSS (genericCSS)
+import Language.Drasil.HTML2.CSS (genericCSS)
 import Language.Drasil.HTML2.Render (BibFormatter (..), HTMLGenOptions (..),
   renderHTML, genHTML, htmlBibFormatter)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)

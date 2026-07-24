@@ -294,8 +294,8 @@ htWtrNotes = map foldlSent [
    phrase temp, S "at", phrase time, ch time, unitInParen tInitMelt `sC`
   ch tempW `S.andThe` phrase tempInit `sC` chWithUnit tempInit],
   [S "This", phrase equation, S "applies as long as",
-   eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))), unitInParen tempW,
-  sParen $ refS assumpWAL `sC` refS assumpAPT]]
+   eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))) :+:
+  unitSym tempW, sParen $ refS assumpWAL `sC` refS assumpAPT]]
 
 ---------
 -- IM4 --

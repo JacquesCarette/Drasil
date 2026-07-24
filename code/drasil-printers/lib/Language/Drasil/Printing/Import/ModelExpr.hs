@@ -19,10 +19,10 @@ import Language.Drasil.ModelExpr.Development (
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.Import.ExprCommon (lookupC', parens)
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
 import Language.Drasil.Printing.Import.Symbol (symbol)
-import Language.Drasil.Printing.Import.Helpers (lookupC', parens)
 
 -- | Helper that adds parenthesis to a display expression where appropriate.
 modelExpr' :: PrintingInformation -> Int -> ModelExpr -> P.Expr

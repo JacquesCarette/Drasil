@@ -4,20 +4,14 @@ module Language.Drasil.Printing.Import.Helpers (
   -- * Expression-related
   parens,
   -- * Symbol and Term Resolution
-  lookupC, lookupC', lookupSymb, lookupT, lookupS, lookupP,
-  -- * Capitalization
-  resolveCapT, resolveCapP, capHelper
+  lookupC, lookupC', lookupSymb
 ) where
 
 import Control.Lens ((^.))
-import Data.Char (toUpper)
 
 import Drasil.Database (UID, ChunkDB, findOrErr, UIDRef, IsChunk, raw)
-import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
-import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
-  Symbol, TermCapitalization(..), titleizeNP, titleizeNP', HasSymbol,
-  atStartNP, atStartNP', NP, DefinedQuantityDict)
-import Language.Drasil.Development (toSent)
+import Language.Drasil (Stage(..), codeSymb, eqSymb, Symbol, HasSymbol,
+  DefinedQuantityDict)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, sysdb)
@@ -51,34 +45,3 @@ lookupSymb :: (IsChunk t, HasSymbol t) => PrintingInformation -> UIDRef t -> Sym
 lookupSymb pinfo u = sytyF (pinfo ^. stg) (findOrErr (raw u) (pinfo ^. sysdb) :: DefinedQuantityDict)
   where sytyF Equational = eqSymb
         sytyF Implementation = codeSymb
-
--- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
-lookupT :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' (sm ^. sysdb) c
-
--- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
-lookupS :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
-  where l = termResolve' (sm ^. sysdb) c
-
--- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
-lookupP :: PrintingInformation -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' (sm ^. sysdb) c
-
--- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
-resolveCapT :: TermCapitalization -> (NP -> Sentence)
-resolveCapT NoCap = toSent . phraseNP
-resolveCapT CapF = toSent . atStartNP
-resolveCapT CapW = toSent . titleizeNP
-
--- | Helper to get the right function for capitalizing a 'NP' based on its 'TermCapitalization'. Plural case.
-resolveCapP :: TermCapitalization -> (NP -> Sentence)
-resolveCapP NoCap = toSent . pluralNP
-resolveCapP CapF = toSent . atStartNP'
-resolveCapP CapW = toSent . titleizeNP'
-
--- | Helper to get the capital case of an abbreviation based on 'TermCapitalization'. For sentence and title cases.
-capHelper :: TermCapitalization -> String -> Maybe String
-capHelper NoCap s      = return s
-capHelper _     []     = Nothing
-capHelper _     (x:xs) = Just (toUpper x: xs)

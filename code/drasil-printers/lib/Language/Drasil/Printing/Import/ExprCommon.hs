@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Printing helpers.
-module Language.Drasil.Printing.Import.Helpers (
+module Language.Drasil.Printing.Import.ExprCommon (
   -- * Expression-related
   parens,
   -- * Symbol and Term Resolution

@@ -15,7 +15,7 @@ import Language.Drasil.Development (toSent)
 import Language.Drasil.Document (Reference(..))
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
-import Language.Drasil.Printing.Import.Helpers (lookupSymb)
+import Language.Drasil.Printing.Import.ExprCommon (lookupSymb)
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 

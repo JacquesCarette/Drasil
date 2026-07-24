@@ -11,7 +11,7 @@ module Language.Drasil.Document.SentenceCombinators (
   -- | See Reference-related Functions as well.
   addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  chWithUnit, unitInParen, phraseWithUnit, fterms, eqN, eqnWSource,
+  chWithUnit, unitInParen, unitSym, phraseWithUnit, fterms, eqN, eqnWSource,
   -- * List-related Functions
   bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
@@ -87,7 +87,7 @@ mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
 
 -- | Takes an amount as a 'Sentence' and appends a unit to it.
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
-fmtU n u  = n +:+ maybe EmptyS (Sy . usymb) (getUnit u)
+fmtU n u  = n +:+ unitSym u
 
 -- | Formats typical uncertainty data to be displayed.
 typUncr :: (Double, Maybe Int) -> Sentence
@@ -142,6 +142,10 @@ bulletFlat = Bullet . noRefs . map Flat
 -- The first argument is the headers of the 'Nested' lists.
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
+
+-- | Get a unit symbol as a 'Sentence' if one exists.
+unitSym :: MayHaveUnit a => a -> Sentence
+unitSym = maybe EmptyS (Sy . usymb) . getUnit
 
 -- | Formats a unit in parentheses. Outputs "(unit)", or 'EmptyS' if no unit exists.
 unitInParen :: MayHaveUnit a => a -> Sentence

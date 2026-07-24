@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Language.Drasil.HTML2.Spec (
-  printSpec, specToHTML, exprToHTML, printMath, renderMath
+  printSpec, specToHTML, exprToHTML
 ) where
 
-import Text.PrettyPrint as PLegacy (Doc, text)
+import Text.PrettyPrint as PLegacy (text)
 import Data.Text (Text)
 import qualified Data.Text as T (pack)
 import Numeric (showEFloat)
@@ -18,13 +18,14 @@ import Drasil.Data.Formats.HTML (
   Attr (..), Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..), customTag
   )
 import qualified Drasil.Data.Formats.HTML as HTML (Format (Bold))
-import Language.Drasil.TeX.Monad (D, MathContext (Math), runPrint, toMath)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
 import Language.Drasil.HTML2.Helpers (specialToString, fence, OpenClose(..), pOps)
+import Language.Drasil.Markdown.Print (printMath)
 
+-- | Transforms the Sentences ('Spec's) into Text
 printSpec :: Spec -> Text
 printSpec (S s) = T.pack s
-printSpec (E e) = T.pack $ show $ renderMath $ TeX.pExpr e
+printSpec (E e) = T.pack $ show $ printMath $ TeX.pExpr e
 printSpec (a :+: b) = printSpec a <> printSpec b
 printSpec HARDNL = " "
 printSpec (Sp s) = T.pack $ specialToString s
@@ -50,7 +51,7 @@ specToHTML (Ref External r a) = [Anchor (T.pack r) [] (specToHTML a)]
 specToHTML EmptyS = []
 specToHTML (Quote q) = [RawText "\""] ++ specToHTML q ++ [RawText "\""]
 
--- | Renders expressions in the HTML document (called by multiple functions).
+-- | Generates expressions in the HTML document (called by multiple functions).
 exprToHTML :: Expr -> [HTMLBody]
 exprToHTML (Dbl d) = [RawText (T.pack $ showEFloat Nothing d "")]
 exprToHTML (Int i) = [RawText (T.pack $ show i)]
@@ -70,14 +71,6 @@ exprToHTML (Font Emph e) = [TextFormat Emphasis [] (exprToHTML e)]
 exprToHTML (Spc Thin) = [RawText " "]
 -- Uses TeX for Mathjax for all other exprs
 exprToHTML e =
-  [RawText $ T.pack $ show $ mjDelimDisp $ renderMath $ TeX.pExpr e]
+  [RawText $ T.pack $ show $ mjDelimDisp $ printMath $ TeX.pExpr e]
   where
     mjDelimDisp d = PLegacy.text "\\(" <> d <> PLegacy.text "\\)"
-
--- | Helper for rendering a 'D' from Latex print.
-printMath :: D -> PLegacy.Doc
-printMath = (`runPrint` Math)
-
--- | Helper for converting and rendering math expressions to Latex print.
-renderMath :: D -> PLegacy.Doc
-renderMath = printMath . toMath

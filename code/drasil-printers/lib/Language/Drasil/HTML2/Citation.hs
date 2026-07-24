@@ -62,7 +62,7 @@ renderCite f (Cite e Misc cfs)      = ([RawText $ T.pack e],
 renderCite f (Cite e _ cfs)         = ([RawText $ T.pack e],
   renderF cfs (useStyleArtcl f)) --FIXME: Properly render these later.
 
--- | Render fields to be used in the document.
+-- | Generates fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> [HTMLBody])) -> [HTMLBody]
 renderF fields styl = concatMap (styl bibStyleH) (sortBy compCiteField fields)
 
@@ -114,13 +114,13 @@ compCiteField (Type       _) _ = LT
 
 -- Config helpers --
 
--- | Renders citation as a book style.
+-- | Generates citation as a book style.
 useStyleBk :: BibFormatter -> StyleGuide -> (CiteField -> [HTMLBody])
 useStyleBk f MLA     = bookMLA f
 useStyleBk f APA     = bookAPA f
 useStyleBk f Chicago = bookChicago f
 
--- | Renders citation as an article style.
+-- | Generates citation as an article style.
 useStyleArtcl :: BibFormatter -> StyleGuide -> (CiteField -> [HTMLBody])
 useStyleArtcl f MLA     = artclMLA f
 useStyleArtcl f APA     = artclAPA f
@@ -191,12 +191,12 @@ artclChicago f i = bookChicago f i
 
 -- PEOPLE RENDERING --
 
--- | Render a list of people (after applying a given function).
+-- | Generate a list of people (after applying a given function).
 rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []     = S "N.a." -- "No authors given"
 rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
--- | Render a list of people (of form FirstName LastName).
+-- | Generate a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
 rendPeople' []     = S "N.a." -- "No authors given"
 rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
@@ -222,12 +222,12 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
--- | Renders a person's last name.
+-- | Generate a person's last name.
 rendPersL :: Person -> String
 rendPersL =
   (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPersLFM
 
--- | adds an 's' if there is more than one person in a list.
+-- | Adds an 's' if there is more than one person in a list.
 toPlural :: People -> Text -> Text
 toPlural (_:_) str = str <> "s"
 toPlural _     str = str

@@ -35,7 +35,7 @@
     <div class="author">
       <h2>Nikitha Krithnan and W. Spencer Smith</h2>
     </div>
-    <div id="Sec:ToC" class="section">
+    <section id="Sec:ToC" class="section">
       <h1>Table of Contents</h1>
       <p class="paragraph">
         An outline of all sections included in this SRS is recorded here for easy reference.
@@ -88,13 +88,13 @@
         <li><a href="#Sec:References">References</a></li>
         <li><a href="#Sec:Appendix">Appendix</a></li>
       </ul>
-    </div>
-    <div id="Sec:RefMat" class="section">
+    </section>
+    <section id="Sec:RefMat" class="section">
       <h1>Reference Material</h1>
       <p class="paragraph">
         This section records information for easy reference.
       </p>
-      <div id="Sec:ToU" class="subsection">
+      <section id="Sec:ToU" class="subsection">
         <h2>Table of Units</h2>
         <p class="paragraph">
           The unit system used throughout is SI (Système International d&#39;Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href="#Table:ToU">Table of Units</a> lists the symbol, a description, and the SI name.
@@ -136,8 +136,8 @@
             Table of Units
           </p>
         </div>
-      </div>
-      <div id="Sec:ToS" class="subsection">
+      </section>
+      <section id="Sec:ToS" class="subsection">
         <h2>Table of Symbols</h2>
         <p class="paragraph">
           The symbols used in this document are summarized in the <a href="#Table:ToS">Table of Symbols</a> along with their units. The symbols are listed in alphabetical order.
@@ -399,8 +399,8 @@
             Table of Symbols
           </p>
         </div>
-      </div>
-      <div id="Sec:TAbbAcc" class="subsection">
+      </section>
+      <section id="Sec:TAbbAcc" class="subsection">
         <h2>Abbreviations and Acronyms</h2>
         <div id="Table:TAbbAcc">
           <table class="table">
@@ -513,9 +513,9 @@
             Abbreviations and Acronyms
           </p>
         </div>
-      </div>
-    </div>
-    <div id="Sec:Intro" class="section">
+      </section>
+    </section>
+    <section id="Sec:Intro" class="section">
       <h1>Introduction</h1>
       <p class="paragraph">
         Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The document describes the program called <span title="GlassBR">GlassBR</span> , which is based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass">GlassBR</a>.
@@ -523,7 +523,7 @@
       <p class="paragraph">
         The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for <span title="GlassBR">GlassBR</span>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
       </p>
-      <div id="Sec:DocPurpose" class="subsection">
+      <section id="Sec:DocPurpose" class="subsection">
         <h2>Purpose of Document</h2>
         <p class="paragraph">
           The primary purpose of this document is to record the requirements of <span title="GlassBR">GlassBR</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="GlassBR">GlassBR</span>. With the exception of <a href="#Sec:SysConstraints">system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
@@ -531,20 +531,20 @@
         <p class="paragraph">
           This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href="#parnasClements1986">parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
         </p>
-      </div>
-      <div id="Sec:ReqsScope" class="subsection">
+      </section>
+      <section id="Sec:ReqsScope" class="subsection">
         <h2>Scope of Requirements</h2>
         <p class="paragraph">
           The scope of the requirements includes determining the safety of a glass slab under a blast loading following the ASTM standard (<a href="#astm2009">astm2009</a>).
         </p>
-      </div>
-      <div id="Sec:ReaderChars" class="subsection">
+      </section>
+      <section id="Sec:ReaderChars" class="subsection">
         <h2>Characteristics of Intended Reader</h2>
         <p class="paragraph">
           Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href="#astm2009">astm2009</a>, <a href="#astm2012">astm2012</a>, and <a href="#astm2016">astm2016</a> in <a href="#Sec:References">references</a>. The users of <span title="GlassBR">GlassBR</span> can have a lower level of expertise, as explained in <a href="#Sec:UserChars">Sec:User Characteristics</a>.
         </p>
-      </div>
-      <div id="Sec:DocOrg" class="subsection">
+      </section>
+      <section id="Sec:DocOrg" class="subsection">
         <h2>Organization of Document</h2>
         <p class="paragraph">
           The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href="#koothoor2013">koothoor2013</a>, <a href="#smithLai2005">smithLai2005</a>, <a href="#smithEtAl2007">smithEtAl2007</a>, and <a href="#smithKoothoor2016">smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href="#Sec:IMs">data definitions</a> and trace back to find any additional information they require.
@@ -552,32 +552,32 @@
         <p class="paragraph">
           The <a href="#Sec:GoalStmt">goal statements</a> are refined to the theoretical models and the <a href="#Sec:TMs">theoretical models</a> to the <a href="#Sec:IMs">instance models</a>. The data definitions are used to support the definitions of the different models.
         </p>
-      </div>
-    </div>
-    <div id="Sec:Stakeholder" class="section">
+      </section>
+    </section>
+    <section id="Sec:Stakeholder" class="section">
       <h1>Stakeholders</h1>
       <p class="paragraph">
         This section describes the stakeholders: the people who have an interest in the product.
       </p>
-      <div id="Sec:Client" class="subsection">
+      <section id="Sec:Client" class="subsection">
         <h2>The Client</h2>
         <p class="paragraph">
           The client for <span title="GlassBR">GlassBR</span> is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
         </p>
-      </div>
-      <div id="Sec:Customer" class="subsection">
+      </section>
+      <section id="Sec:Customer" class="subsection">
         <h2>The Customer</h2>
         <p class="paragraph">
           The customers are the end user of <span title="GlassBR">GlassBR</span>.
         </p>
-      </div>
-    </div>
-    <div id="Sec:GenSysDesc" class="section">
+      </section>
+    </section>
+    <section id="Sec:GenSysDesc" class="section">
       <h1>General System Description</h1>
       <p class="paragraph">
         This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
       </p>
-      <div id="Sec:SysContext" class="subsection">
+      <section id="Sec:SysContext" class="subsection">
         <h2>System Context</h2>
         <p class="paragraph">
           <a href="#Figure:sysCtxDiag">Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (<span title="GlassBR">GlassBR</span>). Arrows are used to show the data flow between the system and its environment.
@@ -603,33 +603,33 @@
             <li>Predict whether the glass slab is safe or not.</li>
           </ul></li>
         </ul>
-      </div>
-      <div id="Sec:UserChars" class="subsection">
+      </section>
+      <section id="Sec:UserChars" class="subsection">
         <h2>User Characteristics</h2>
         <ul class="list">
           <li>The end user of GlassBR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil engineering or structural engineering.</li>
           <li>The end user is expected to have an understanding of theory behind glass breakage and blast risk.</li>
           <li>The end user is expected to have basic computer literacy to handle the software.</li>
         </ul>
-      </div>
-      <div id="Sec:SysConstraints" class="subsection">
+      </section>
+      <section id="Sec:SysConstraints" class="subsection">
         <h2>System Constraints</h2>
         <p class="paragraph">
           There are no system constraints.
         </p>
-      </div>
-    </div>
-    <div id="Sec:SpecSystDesc" class="section">
+      </section>
+    </section>
+    <section id="Sec:SpecSystDesc" class="section">
       <h1>Specific System Description</h1>
       <p class="paragraph">
         This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
       </p>
-      <div id="Sec:ProbDesc" class="subsection">
+      <section id="Sec:ProbDesc" class="subsection">
         <h2>Problem Description</h2>
         <p class="paragraph">
           A system is needed to predict whether a glass slab can withstand a blast under given conditions.
         </p>
-        <div id="Sec:TermDefs" class="subsubsection">
+        <section id="Sec:TermDefs" class="subsubsection">
           <h3>Terminology and Definitions</h3>
           <p class="paragraph">
             This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from <a href="#astm2009">astm2009</a>.
@@ -686,8 +686,8 @@
               Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (<a href="#astm2016">astm2016</a>).
             </li>
           </ol>
-        </div>
-        <div id="Sec:PhysSyst" class="subsubsection">
+        </section>
+        <section id="Sec:PhysSyst" class="subsubsection">
           <h3>Physical System Description</h3>
           <p class="paragraph">
             The physical system of <span title="GlassBR">GlassBR</span>, as shown in <a href="#Figure:physSystImage">Fig:physSystImage</a>, includes the following elements:
@@ -706,8 +706,8 @@
               <figcaption>Figure: The physical system</figcaption>
             </figure>
           </div>
-        </div>
-        <div id="Sec:GoalStmt" class="subsubsection">
+        </section>
+        <section id="Sec:GoalStmt" class="subsubsection">
           <h3>Goal Statements</h3>
           <p class="paragraph">
             Given the dimensions of the glass plane, the glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statement is:
@@ -717,14 +717,14 @@
               Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
             </p>
           </div>
-        </div>
-      </div>
-      <div id="Sec:SolCharSpec" class="subsection">
+        </section>
+      </section>
+      <section id="Sec:SolCharSpec" class="subsection">
         <h2>Solution Characteristics Specification</h2>
         <p class="paragraph">
           The instance models that govern <span title="GlassBR">GlassBR</span> are presented in the <a href="#Sec:IMs">Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
         </p>
-        <div id="Sec:Assumps" class="subsubsection">
+        <section id="Sec:Assumps" class="subsubsection">
           <h3>Assumptions</h3>
           <p class="paragraph">
             This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
@@ -755,8 +755,8 @@
               ldfConstant: With reference to <a href="#assumpSV">A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in <span title="GlassBR">GlassBR</span>. (<span title="referenced by">RefBy</span>: <a href="#varValsOfmkE">LC:Variable-Values-of-m,k,E</a> and <a href="#DD:loadDurFactor">DD:loadDurFactor</a>.)
             </p>
           </div>
-        </div>
-        <div id="Sec:TMs" class="subsubsection">
+        </section>
+        <section id="Sec:TMs" class="subsubsection">
           <h3>Theoretical Models</h3>
           <p class="paragraph">
             This section focuses on the general equations and laws that <span title="GlassBR">GlassBR</span> is based on.
@@ -841,14 +841,14 @@
               <td><p class="paragraph"></p></td>
             </tr>
           </table>
-        </div>
-        <div id="Sec:GDs" class="subsubsection">
+        </section>
+        <section id="Sec:GDs" class="subsubsection">
           <h3>General Definitions</h3>
           <p class="paragraph">
             There are no general definitions.
           </p>
-        </div>
-        <div id="Sec:DDs" class="subsubsection">
+        </section>
+        <section id="Sec:DDs" class="subsubsection">
           <h3>Data Definitions</h3>
           <p class="paragraph">
             This section collects and defines all the data needed to build the instance models.
@@ -1244,8 +1244,8 @@
               </p></td>
             </tr>
           </table>
-        </div>
-        <div id="Sec:IMs" class="subsubsection">
+        </section>
+        <section id="Sec:IMs" class="subsubsection">
           <h3>Instance Models</h3>
           <p class="paragraph">
             This section transforms the problem defined in the <a href="#Sec:ProbDesc">problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href="#Sec:DDs">data definitions</a> to replace the abstract symbols in the models identified in <a href="#Sec:TMs">theoretical models</a> and <a href="#Sec:GDs">general definitions</a>.
@@ -1942,8 +1942,8 @@
               </p></td>
             </tr>
           </table>
-        </div>
-        <div id="Sec:DataConstraints" class="subsubsection">
+        </section>
+        <section id="Sec:DataConstraints" class="subsubsection">
           <h3>Data Constraints</h3>
           <p class="paragraph">
             The <a href="#Table:InDataConstraints">Input Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible. The <a href="#Sec:AuxConstants">auxiliary constants</a> give the values of the specification parameters used in the <a href="#Table:InDataConstraints">Input Data Constraints Table</a>.
@@ -2011,8 +2011,8 @@
               Input Data Constraints
             </p>
           </div>
-        </div>
-        <div id="Sec:CorSolProps" class="subsubsection">
+        </section>
+        <section id="Sec:CorSolProps" class="subsubsection">
           <h3>Properties of a Correct Solution</h3>
           <p class="paragraph">
             The <a href="#Table:OutDataConstraints">Output Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
@@ -2036,15 +2036,15 @@
               Output Data Constraints
             </p>
           </div>
-        </div>
-      </div>
-    </div>
-    <div id="Sec:Requirements" class="section">
+        </section>
+      </section>
+    </section>
+    <section id="Sec:Requirements" class="section">
       <h1>Requirements</h1>
       <p class="paragraph">
         This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
       </p>
-      <div id="Sec:FRs" class="subsection">
+      <section id="Sec:FRs" class="subsection">
         <h2>Functional Requirements</h2>
         <p class="paragraph">
           This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
@@ -2295,8 +2295,8 @@
             Required Outputs
           </p>
         </div>
-      </div>
-      <div id="Sec:NFRs" class="subsection">
+      </section>
+      <section id="Sec:NFRs" class="subsection">
         <h2>Non-Functional Requirements</h2>
         <p class="paragraph">
           This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -2321,9 +2321,9 @@
             Portablity: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
           </p>
         </div>
-      </div>
-    </div>
-    <div id="Sec:LCs" class="section">
+      </section>
+    </section>
+    <section id="Sec:LCs" class="section">
       <h1>Likely Changes</h1>
       <p class="paragraph">
         This section lists the likely changes (<span title="likely change">LC</span>) to be made to the software.
@@ -2345,8 +2345,8 @@
           Consider-More-than-Flexure-Glass: <a href="#assumpRT">A:responseType</a> - The software may be changed to consider more than just flexure of the glass.
         </p>
       </div>
-    </div>
-    <div id="Sec:UCs" class="section">
+    </section>
+    <section id="Sec:UCs" class="section">
       <h1>Unlikely Changes</h1>
       <p class="paragraph">
         This section lists the unlikely changes (<span title="unlikely change">UC</span>) to be made to the software.
@@ -2359,8 +2359,8 @@
           Accommodate-Altered-Glass: <a href="#assumpGC">A:glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
         </p>
       </div>
-    </div>
-    <div id="Sec:TraceMatrices" class="section">
+    </section>
+    <section id="Sec:TraceMatrices" class="section">
       <h1>Traceability Matrices and Graphs</h1>
       <p class="paragraph">
         The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href="#Table:TraceMatAvsA">Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href="#Table:TraceMatAvsAll">Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="#Table:TraceMatRefvsRef">Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href="#Table:TraceMatAllvsR">Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
@@ -3880,8 +3880,8 @@
         <li><a href="../../TraceyGraph/allvsr.svg">TraceGraphAllvsR</a></li>
         <li><a href="../../TraceyGraph/allvsall.svg">TraceGraphAllvsAll</a></li>
       </ul>
-    </div>
-    <div id="Sec:AuxConstants" class="section">
+    </section>
+    <section id="Sec:AuxConstants" class="section">
       <h1>Values of Auxiliary Constants</h1>
       <p class="paragraph">
         This section contains the standard values that are used for calculations in <span title="GlassBR">GlassBR</span>.
@@ -3983,8 +3983,8 @@
           Auxiliary Constants
         </p>
       </div>
-    </div>
-    <div id="Sec:References" class="section">
+    </section>
+    <section id="Sec:References" class="section">
       <h1>References</h1>
       <dl class="reference-list">
         <dt id="astm2009">[<b>astm2009</b>]</dt>
@@ -4028,8 +4028,8 @@
           Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https:&#x2F;&#x2F;doi.org&#x2F;10.1007&#x2F;s11155-006-9020-7</a>. pp. 83–107. 
         </dd>
       </dl>
-    </div>
-    <div id="Sec:Appendix" class="section">
+    </section>
+    <section id="Sec:Appendix" class="section">
       <h1>Appendix</h1>
       <p class="paragraph">
         This appendix holds the graphs (<a href="#Figure:demandVSsod">Fig:demandVSsod</a> and <a href="#Figure:dimlessloadVSaspect">Fig:dimlessloadVSaspect</a>) used for interpolating values needed in the models.
@@ -4046,6 +4046,6 @@
           <figcaption>Figure: Non dimensional lateral applied load (demand) or pressure (\hat{q}) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (J)</figcaption>
         </figure>
       </div>
-    </div>
+    </section>
   </body>
 </html>

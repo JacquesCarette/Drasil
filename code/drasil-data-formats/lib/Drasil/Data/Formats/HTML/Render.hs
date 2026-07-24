@@ -61,6 +61,7 @@ renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (map rend
 renderBody opt (List Ordered attrs items) = wrapBlock opt "ol" attrs (map renderIList items)
   where
     renderIList (LItem iAttrs ch) = renderBlockInline opt "li" iAttrs ch
+renderBody opt (Section attrs ch) = renderBlock opt "section" attrs ch
 renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (map renderDItem items)
   where
     renderDItem (DTerm iAttrs ch) = renderLine opt "dt" iAttrs ch

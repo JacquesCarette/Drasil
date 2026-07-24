@@ -25,6 +25,7 @@ dependencies:
 - split
 - directory
 - pretty
+- prettyprinter
 - drasil-gen
 - drasil-lang
 - sglpend

@@ -2,7 +2,7 @@
 -- | Printing helpers.
 module Language.Drasil.Printing.Import.Helpers (
   -- * Expression-related
-  parens, digitsProcess, processExpo,
+  parens,
   -- * Symbol and Term Resolution
   lookupC, lookupC', lookupSymb, lookupT, lookupS, lookupP,
   -- * Capitalization
@@ -27,36 +27,6 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation, stg, s
 -- | Helper for inserting parentheses.
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
-
--- | Processes the digits from the 'floatToDigits' function,
--- decimal point position, a counter, and exponent.
-digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
-digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
-digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] ++ replicate (3 - pos) (P.Int 0) ++ map P.Int ds
-digitsProcess (hd:tl) pos coun ex
-  | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
-  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-  | otherwise = [P.MO P.Point, P.Int hd] ++ map P.Int tl
-digitsProcess [] pos coun ex
-  | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
-  | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-  | otherwise = [P.MO P.Point, P.Int 0]
-
--- | Takes the exponent and the 'Int' of the base and gives
--- the decimal point position and processed exponent.
--- This function supports transferring scientific notation to
--- engineering notation.
--- References for standard of Engineering Notation:
---
--- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
---    intro-to-ee/a/ee-numbers-in-electrical-engineering
---
--- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
---
--- https://en.wikipedia.org/wiki/Scientific_notation
-processExpo :: Int -> (Int, Int)
-processExpo a = (r, a - r)
-  where r = 1 + mod (a -1) 3
 
 -- * Lookup/Term Resolution Functions
 

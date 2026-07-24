@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
+module Language.Drasil.Markdown.Print (genMDBook, pSpec, printMath) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))

@@ -37,6 +37,7 @@ data HTMLBody
   | TextFormat Format [Attr] [HTMLBody]
   | Heading HLevel [Attr] [HTMLBody]
   | List ListType [Attr] [LItem]
+  | Section [Attr] [HTMLBody]
   | Table [Attr] [Row]
   | DescriptionList [Attr] [DItem]
   | Anchor URL [Attr] [HTMLBody]

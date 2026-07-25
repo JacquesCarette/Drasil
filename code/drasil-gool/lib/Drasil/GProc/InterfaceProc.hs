@@ -8,13 +8,24 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..))
+import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..), Array,
+  AssignStatement, Argument, BooleanExpression, CommandLineArgs, DeclStatement,
+  CommentStatement, Comparison, ControlStatement, FuncAppStatement, PrintConsole,
+  ReadConsole, FileHandling, PrintFile, ReadFile, List, Literal, MathConstant,
+  NumericExpression, ParameterSym, Reference, Set, StringStatement,
+  ValueExpression, VariableValue)
 import Drasil.Shared.State (GS, FS, MS)
 import Drasil.Shared.AST (FileData, ModData, ProgData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
-class (SharedProg r vis stmt mthd, ProgramSym r vis stmt mthd prg)
+class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
+  CommandLineArgs r, CommentStatement r stmt, Comparison r,
+  ControlStatement r stmt, DeclStatement r stmt,  FuncAppStatement r stmt,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
+  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
+  VariableValue r, SharedProg r vis stmt mthd, ProgramSym r vis stmt mthd prg)
   => ProcProg r vis stmt mthd prg
 
 type Program = ProgData

@@ -11,9 +11,9 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
-  getCodeType, UnRepr(..), SharedProg, SharedStatement, Body, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  getCodeType, UnRepr(..), SharedProg, Body, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
   Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
@@ -96,7 +96,6 @@ instance Monad MatlabCode where
   MLC x >>= f = f x
 
 instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
-instance SharedStatement MatlabCode (Doc, Terminator)
 instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData
 
 instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ProgData where

@@ -14,21 +14,49 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 -- | Creates a program in GOOL to test reading and writing to files.
-fileTestsOO :: (OOProg r vis stmt mthd stvr attch prg) => OO.GSProgram r prg
+fileTestsOO
+  :: (OOProg r vis stmt mthd stvr attch prg)
+  => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
-fileTestsProc :: (ProcProg r vis stmt mthd prg) => GProc.GSProgram r prg
+fileTestsProc
+  :: (ProcProg r vis stmt mthd prg)
+  => GProc.GSProgram r prg
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
 
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
-fileTestMethod :: (SharedProg r vis stmt mthd) => MS (r mthd)
+fileTestMethod
+  ::
+    ( Literal r
+    , Comparison r
+    , List r stmt
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , ReadFile r stmt
+    , SharedProg r vis stmt mthd
+    )
+  => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
 -- | Generates functions that write to the file.
-writeStory :: (SharedProg r vis stmt mthd) => MS (r Block)
+writeStory
+  ::
+    ( Literal r
+    , Comparison r
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , ReadFile r stmt
+    , SharedProg r vis stmt mthd
+    )
+  => MS (r Block)
 writeStory = block [
   varDec (var "fileToWrite" outfile) mainFn,
 
@@ -50,13 +78,23 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (SharedProg r vis stmt mthd) => MS (r stmt)
+readStory :: (Comparison r, ReadFile r stmt, SharedProg r vis stmt mthd) => MS (r stmt)
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 
 -- | Prints the result of the 'readStory' function. Should be the same as
 -- what was given in 'writeStory'.
-goodBye :: (SharedProg r vis stmt mthd) => MS (r Block)
+goodBye
+  ::
+    ( Comparison r
+    , Literal r
+    , List r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , FileHandling r stmt
+    , SharedProg r vis stmt mthd
+    )
+  => MS (r Block)
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)),
   assert (listSize (valueOf (var "fileContents" (listType string))) ?> litInt 0)

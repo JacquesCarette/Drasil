@@ -6,13 +6,13 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
-  Value, SValue, SharedProg, SharedStatement, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  Value, SValue, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..),
   FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
   FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..),
@@ -55,7 +55,6 @@ instance Monad CodeInfoOO where
   CI x >>= f = f x
 
 instance SharedProg CodeInfoOO () () ()
-instance SharedStatement CodeInfoOO ()
 instance OOStatement CodeInfoOO ()
 instance OOProg CodeInfoOO () () () () () GOOLState
 

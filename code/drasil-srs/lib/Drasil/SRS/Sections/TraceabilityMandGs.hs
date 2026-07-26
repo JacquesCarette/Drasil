@@ -9,8 +9,7 @@ module Drasil.SRS.Sections.TraceabilityMandGs (
   tvInsModels, tvGoals, tvReqs, tvChanges
 ) where
 
-import Control.Lens((^.))
-import Data.Foldable (foldl')
+import Control.Lens ((^.))
 
 -- General Drasil
 import Drasil.Database (mkUid)

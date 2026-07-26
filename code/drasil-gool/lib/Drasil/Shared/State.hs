@@ -43,7 +43,6 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub)
-import Data.Foldable (foldl')
 import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map

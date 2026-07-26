@@ -18,7 +18,6 @@ module Drasil.Database.ChunkDB (
 ) where
 
 import Control.Lens ((^.))
-import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 

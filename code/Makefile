@@ -210,7 +210,7 @@ debug: setup_debug_vars test ##@Examples Run test target with better debugging t
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
 pr_ready: stackArgs += --force-dirty
-pr_ready: GHCFLAGS += -Werror -Wwarn=deprecations -fforce-recomp
+pr_ready: GHCFLAGS += -Werror -Wwarn=deprecations -Wwarn=x-partial -fforce-recomp
 pr_ready: all stan hlint check_whitespace ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."

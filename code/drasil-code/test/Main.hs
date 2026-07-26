@@ -1,7 +1,5 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where

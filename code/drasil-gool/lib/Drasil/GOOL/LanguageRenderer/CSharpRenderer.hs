@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render C# code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code

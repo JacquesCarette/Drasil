@@ -1,7 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 module Drasil.Shared.RendererClassesCommon (
   CommonRenderSym, ImportSym(..), import', RenderBody(..), BodyElim(..),
   RenderBlock(..), BlockElim(..), RenderType(..), VSUnOp, UnaryOpSym(..),

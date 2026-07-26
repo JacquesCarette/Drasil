@@ -1,8 +1,5 @@
-{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE RankNTypes #-}
-
 module Drasil.Generator.WriteSystem
   ( drasilMakefileReqOpts,
     concretizeAndWrite,

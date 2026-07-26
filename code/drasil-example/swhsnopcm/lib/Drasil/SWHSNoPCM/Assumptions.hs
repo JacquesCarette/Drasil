@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHSNoPCM.Assumptions (module Drasil.SWHSNoPCM.Assumptions) where --all of this file is exported
 
 import Language.Drasil

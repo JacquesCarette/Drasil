@@ -1,14 +1,8 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DerivingVia #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | MVP renderer for logging statements.
-
 module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
 import Drasil.Shared.InterfaceCommon

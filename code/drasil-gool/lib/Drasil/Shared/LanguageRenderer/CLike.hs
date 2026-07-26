@@ -1,6 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Implementations for C-like renderers are defined here.
 module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char,
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat,

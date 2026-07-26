@@ -1,4 +1,3 @@
-{-# LANGUAGE TupleSections #-}
 -- | Case Studies table for the different choices available when generating code from Drasil.
 -- To be used in the Drasil website.
 module Drasil.Website.CaseStudy (caseStudySec, caseStudyTable) where

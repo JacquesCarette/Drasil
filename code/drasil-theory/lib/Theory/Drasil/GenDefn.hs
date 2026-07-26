@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for General Definitions.
 module Theory.Drasil.GenDefn (
   -- * Type

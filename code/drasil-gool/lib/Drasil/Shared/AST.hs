@@ -1,4 +1,3 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
 module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
   AttachmentTag(..), onAttachment, AttachmentData(attachment, attachmentDoc), ad, FileData(filePath,
@@ -160,4 +159,3 @@ data BinderD = BindFormD {bindName :: String, bindType :: TypeData}
 
 bindFormD :: String -> TypeData -> BinderD
 bindFormD = BindFormD
-

@@ -1,6 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
 -- | Contains common implementations specific to GOOL
-
 module Drasil.GOOL.LanguageRenderer.CommonGOOL (
   constDecDef, classMethodCall, listAppend, listAdd, innerType
 ) where

@@ -1,5 +1,4 @@
-{-# LANGUAGE TemplateHaskell, TupleSections #-}
-
+{-# LANGUAGE TemplateHaskell #-}
 module Drasil.Shared.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS,

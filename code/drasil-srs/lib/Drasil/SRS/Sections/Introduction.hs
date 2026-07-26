@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | Defines functions used in creating an introduction section.
 module Drasil.SRS.Sections.Introduction (orgSec, introductionSection,
   purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where

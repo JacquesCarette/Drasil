@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Goals (goals, goalsInputs) where
 
 import Language.Drasil

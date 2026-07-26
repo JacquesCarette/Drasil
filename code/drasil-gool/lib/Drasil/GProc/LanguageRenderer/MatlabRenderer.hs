@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render MATLAB code is contained in this module.
 module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   -- * MATLAB Code Configuration -- defines syntax of all MATLAB code

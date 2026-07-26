@@ -1,7 +1,4 @@
-{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 -- | Contains chunks related to adding an expression to a quantitative concept.
 module Language.Drasil.Chunk.Eq (
   -- * Types

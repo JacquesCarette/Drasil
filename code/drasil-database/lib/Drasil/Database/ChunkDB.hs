@@ -1,6 +1,3 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 module Drasil.Database.ChunkDB (
   -- * Core database types and functions.
   ChunkDB,

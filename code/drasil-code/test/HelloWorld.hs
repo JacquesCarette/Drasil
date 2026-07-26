@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where

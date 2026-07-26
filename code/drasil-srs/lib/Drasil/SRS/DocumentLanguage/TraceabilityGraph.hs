@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators, TupleSections #-}
 -- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.SRS.DocumentLanguage.TraceabilityGraph
   (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where

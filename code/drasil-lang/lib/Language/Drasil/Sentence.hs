@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, PostfixOperators, TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers functions.
 module Language.Drasil.Sentence (

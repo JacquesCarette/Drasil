@@ -1,6 +1,4 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TupleSections #-}
 module Theory.Drasil.DifferentialModel (
   -- * Export Data Type
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..),

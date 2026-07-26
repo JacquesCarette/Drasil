@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.IMods (
   instModIntro, iMods, fctSfty, nrmShrFor, intsliceFs, crtSlpId
 ) where

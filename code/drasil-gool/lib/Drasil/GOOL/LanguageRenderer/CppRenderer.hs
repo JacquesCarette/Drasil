@@ -1,10 +1,4 @@
-{-# LANGUAGE TypeFamilies, Rank2Types #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE InstanceSigs #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
+{-# LANGUAGE TypeFamilies #-}
 -- | The logic to render C++ code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
@@ -2953,4 +2947,3 @@ cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins
 cppInOutParams ins outs both = map pointerParam both ++ map getParam ins ++
   map pointerParam outs
-

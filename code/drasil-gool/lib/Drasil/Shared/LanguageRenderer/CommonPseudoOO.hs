@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, modDoc', functionDoc, extVar,

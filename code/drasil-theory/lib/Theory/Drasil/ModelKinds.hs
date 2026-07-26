@@ -1,6 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators, GADTs  #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for creating models.
 module Theory.Drasil.ModelKinds (
   -- * Types

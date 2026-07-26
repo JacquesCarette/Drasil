@@ -1,4 +1,3 @@
-{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Class (
   ExprC(..),

@@ -51,19 +51,19 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, File, Body, Block, SVariable, SValue, Class,
-  CSStateVar, NamedArgs, Initializers, SharedProg, OOProg, CS, FS, MS, VS,
-  AttachmentSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
-  VariableElim(..), VariableValue(..), ScopeSym(..), ScopeData,
-  OOVariableSym(..), SelfSym(..), instanceVarSelf, VariableElim(..), ($->),
-  ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), objMethodCallMixedArgs, Reference(..), Array(..),
-  List(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  FileHandling(..), ReadFile(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue, TypeData, ParamData, TypeElim, OODeclStatement,
-  OOVariableValue, OOStatement, MathConstant, Argument, PrintFile, BodySym)
+  CSStateVar, NamedArgs, Initializers, OOProg, CS, FS, MS, VS, AttachmentSym(..),
+  bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
+  VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
+  instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
+  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..),
+  objMethodCallMixedArgs, Reference(..), Array(..), List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), FileHandling(..), ReadFile(..),
+  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
+  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
+  onStateValue, TypeData, ParamData, TypeElim, OODeclStatement, OOVariableValue,
+  OOStatement, MathConstant, Argument, PrintFile, BodySym)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -962,7 +962,7 @@ publicFuncProc
     , FileHandling r stmt
     , PrintFile r stmt
     , BodySym r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
     , VariableElim r
     )
   => Label
@@ -985,7 +985,7 @@ privateFuncProc
     , FileHandling r stmt
     , PrintFile r stmt
     , BodySym r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
     , VariableElim r
     )
   => Label
@@ -1010,7 +1010,7 @@ genMethodProc
     , FileHandling r stmt
     , PrintFile r stmt
     , BodySym r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
     , VariableElim r
     )
   => ([MS (r ParamData)] -> MS (r Body) -> MS (r mthd))
@@ -1055,9 +1055,10 @@ genFuncProc
     , Array r
     , List r stmt
     , Reference r
+    , MethodSym r vis stmt mthd
     , OO.Set r
-    , SharedProg r vis stmt mthd
     , TypeElim r
+    , VariableElim r
     )
   => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r Block)] -> GenState (MS (r mthd)))
   -> [StateVariable]
@@ -1095,9 +1096,10 @@ genModFuncsProc
     , Array r
     , List r stmt
     , Reference r
+    , MethodSym r vis stmt mthd
     , OO.Set r
-    , SharedProg r vis stmt mthd
     , TypeElim r
+    , VariableElim r
     )
   => Mod -> [GenState (MS (r mthd))]
 genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
@@ -1490,8 +1492,9 @@ genDataFuncProc
     , List r stmt
     , Reference r
     , OO.Set r
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
     , TypeElim r
+    , VariableElim r
     )
   => Name -> Description -> DataDesc -> GenState (MS (r mthd))
 genDataFuncProc nameTitle desc ddef = do
@@ -1504,10 +1507,12 @@ genDataFuncProc nameTitle desc ddef = do
 publicInOutFuncProc
   ::
     ( OO.Literal r
+    , VariableValue r
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , VariableElim r
     )
   => Label
   -> Description
@@ -1521,10 +1526,12 @@ publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n pu
 privateInOutFuncProc
   ::
     ( OO.Literal r
+    , VariableValue r
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , VariableElim r
     )
   => Label
   -> Description

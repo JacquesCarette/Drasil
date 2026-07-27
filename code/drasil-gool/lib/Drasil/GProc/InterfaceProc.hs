@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GProc.InterfaceProc (
   -- Types
@@ -8,24 +9,27 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SharedProg, MethodSym(..), Array,
+import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
   AssignStatement, Argument, BooleanExpression, CommandLineArgs, DeclStatement,
   CommentStatement, Comparison, ControlStatement, FuncAppStatement, PrintConsole,
   ReadConsole, FileHandling, PrintFile, ReadFile, List, Literal, MathConstant,
   NumericExpression, ParameterSym, Reference, Set, StringStatement,
-  ValueExpression, VariableValue)
+  ValueExpression, VariableValue, UnRepr, FunctionSym, ScopeSym, BinderSym,
+  InternalList, TypeElim, VariableElim)
 import Drasil.Shared.State (GS, FS, MS)
-import Drasil.Shared.AST (FileData, ModData, ProgData)
+import Drasil.Shared.AST (FileData, ModData, ProgData, TypeData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
-class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
-  CommandLineArgs r, CommentStatement r stmt, Comparison r,
+class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
+  BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
+  VariableElim r, Array r, AssignStatement r stmt, Argument r,
+  BooleanExpression r, CommandLineArgs r, CommentStatement r stmt, Comparison r,
   ControlStatement r stmt, DeclStatement r stmt,  FuncAppStatement r stmt,
   PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
   ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
   ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, SharedProg r vis stmt mthd, ProgramSym r vis stmt mthd prg)
+  VariableValue r, ProgramSym r vis stmt mthd prg)
   => ProcProg r vis stmt mthd prg
 
 type Program = ProgData

@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
@@ -24,14 +25,15 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, Body, Block, SVariable, SValue, NamedArgs, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(..), FunctionSym, MethodSym(..),
-  VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
-  ValueExpression, Array, List(listSize, listAdd), listOf, StatementSym(..),
-  AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
-  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
-  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
-  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
-  ParameterSym, Reference, Set, StringStatement, convType)
+  BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
+  ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
+  List(listSize, listAdd), listOf, StatementSym(..), AssignStatement,
+  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), Argument,
+  BooleanExpression, CommandLineArgs, CommentStatement, Comparison,
+  ControlStatement, PrintConsole, ReadConsole, FileHandling, PrintFile, ReadFile,
+  Literal, MathConstant, NumericExpression, ParameterSym, Reference, Set,
+  StringStatement, convType, UnRepr, ScopeSym, BinderSym, InternalList, TypeElim,
+  VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -43,8 +45,9 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (SharedProg r vis stmt mthd, OOStatement r stmt,
-  ProgramSym r vis stmt mthd stvr attch prg
+class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
+  BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
+  VariableElim r, OOStatement r stmt, ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
 
 class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,

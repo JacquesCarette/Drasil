@@ -1,10 +1,11 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
 module Helper (helperOO, helperProc) where
 
-import Drasil.GOOL (SharedProg, OOProg, File, FS, MS, bodyStatements,
-  TypeSym(..), DeclStatement(..), AssignStatement, ControlStatement(..), (&=),
-  VariableSym(var), Literal(..), VariableValue(..), NumericExpression(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(local))
+import Drasil.GOOL (OOProg, File, FS, MS, bodyStatements, TypeSym(..),
+  DeclStatement(..), AssignStatement, ControlStatement(..),
+  (&=), VariableSym(var), Literal(..), VariableValue(..),
+  NumericExpression(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
+  ScopeSym(local))
 import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (FileSym(..), ModuleSym(..))
@@ -27,11 +28,12 @@ helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 doubleAndAdd
   ::
     ( Literal r
+    , VariableValue r
     , NumericExpression r
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
     )
   => MS (r mthd)
 doubleAndAdd = docFunc "This function adds two numbers"

@@ -27,7 +27,7 @@ import Language.Drasil (Constraint(..), RealInterval(..), HasSpace(typ),
 import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
   oneLineCodeExprDoc)
 import Drasil.GOOL (Body, Block, SVariable, SValue, File, CS, FS, MS, CSStateVar,
-  Class, SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  Class, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
   Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
@@ -843,6 +843,7 @@ genCalcFuncProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -859,7 +860,9 @@ genCalcFuncProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , TypeElim r
+    , VariableElim r
     )
   => CodeDefinition -> GenState (MS (r mthd))
 genCalcFuncProc cdef = do
@@ -896,6 +899,7 @@ genCalcBlockProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -912,7 +916,7 @@ genCalcBlockProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , SharedProg r vis stmt mthd
+    , TypeElim r
     )
   => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Block))
 genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
@@ -929,6 +933,7 @@ genCaseBlockProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -945,7 +950,7 @@ genCaseBlockProc
     , List r stmt
     , Reference r
     , Set r
-    , SharedProg r vis stmt mthd
+    , TypeElim r
     )
   => CalcType
   -> CodeDefinition
@@ -970,6 +975,7 @@ genInputFormatProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -984,7 +990,9 @@ genInputFormatProc
     , List r stmt
     , Reference r
     , Set r
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , TypeElim r
+    , VariableElim r
     )
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputFormatProc s = do
@@ -998,6 +1006,7 @@ genInputFormatProc s = do
         ::
           ( NativeVector r
           , MathConstant r
+          , VariableValue r
           , BooleanExpression r
           , Comparison r
           , NumericExpression r
@@ -1012,7 +1021,9 @@ genInputFormatProc s = do
           , List r stmt
           , Reference r
           , Set r
-          , SharedProg r vis stmt mthd
+          , MethodSym r vis stmt mthd
+          , TypeElim r
+          , VariableElim r
           )
         => Bool -> GenState (Maybe (MS (r mthd)))
       genInFormat False = return Nothing
@@ -1030,6 +1041,7 @@ genInputDerivedProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -1046,7 +1058,9 @@ genInputDerivedProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , TypeElim r
+    , VariableElim r
     )
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputDerivedProc s = do
@@ -1060,6 +1074,7 @@ genInputDerivedProc s = do
         ::
           ( NativeVector r
           , MathConstant r
+          , VariableValue r
           , BooleanExpression r
           , Comparison r
           , NumericExpression r
@@ -1076,7 +1091,9 @@ genInputDerivedProc s = do
           , FileHandling r stmt
           , PrintFile r stmt
           , ReadFile r stmt
-          , SharedProg r vis stmt mthd
+          , MethodSym r vis stmt mthd
+          , TypeElim r
+          , VariableElim r
           )
         => Bool -> GenState (Maybe (MS (r mthd)))
       genDerived False = return Nothing
@@ -1093,6 +1110,7 @@ genInputDerivedProc s = do
 genInputConstraintsProc
   ::
     ( MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -1107,7 +1125,9 @@ genInputConstraintsProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ControlStatement r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , TypeElim r
+    , VariableElim r
     )
   => VisibilityTag -> GenState (Maybe (MS (r mthd)))
 genInputConstraintsProc s = do
@@ -1120,6 +1140,7 @@ genInputConstraintsProc s = do
       genConstraints
         ::
           ( MathConstant r
+          , VariableValue r
           , BooleanExpression r
           , Comparison r
           , NumericExpression r
@@ -1134,7 +1155,9 @@ genInputConstraintsProc s = do
           , FileHandling r stmt
           , PrintFile r stmt
           , ControlStatement r stmt
-          , SharedProg r vis stmt mthd
+          , MethodSym r vis stmt mthd
+          , TypeElim r
+          , VariableElim r
           )
         => Bool -> GenState (Maybe (MS (r mthd)))
       genConstraints False = return Nothing
@@ -1412,6 +1435,7 @@ genOutputFormatProc
   ::
     ( NativeVector r
     , MathConstant r
+    , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
@@ -1424,7 +1448,9 @@ genOutputFormatProc
     , ControlStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
+    , TypeElim r
+    , VariableElim r
     )
   => GenState (Maybe (MS (r mthd)))
 genOutputFormatProc = do
@@ -1435,6 +1461,7 @@ genOutputFormatProc = do
         ::
           ( NativeVector r
           , MathConstant r
+          , VariableValue r
           , BooleanExpression r
           , Comparison r
           , NumericExpression r
@@ -1447,7 +1474,9 @@ genOutputFormatProc = do
           , ControlStatement r stmt
           , FileHandling r stmt
           , PrintFile r stmt
-          , SharedProg r vis stmt mthd
+          , MethodSym r vis stmt mthd
+          , TypeElim r
+          , VariableElim r
           )
         => Maybe String -> GenState (Maybe (MS (r mthd)))
       genOutput Nothing = return Nothing

@@ -1,9 +1,9 @@
 module NameGenTest (nameGenTestOO, nameGenTestProc) where
 
-import Drasil.GOOL (SharedProg, OOProg, MS, BodySym(..), BlockSym(..),
-  TypeSym(..), VariableSym(var), Literal(..), DeclStatement(..),
-  ControlStatement(..), MethodSym(..), VariableValue(..), Comparison(..),
-  listSlice, List(..), ParameterSym(..), VisibilitySym(..), ScopeSym(..))
+import Drasil.GOOL (OOProg, MS, BodySym(..), BlockSym(..), TypeSym(..),
+  VariableSym(var), Literal(..), DeclStatement(..), ControlStatement(..),
+  MethodSym(..), VariableValue(..), Comparison(..), listSlice, List(..),
+  ParameterSym(..), VisibilitySym(..), ScopeSym(..), InternalList)
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -21,13 +21,16 @@ nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
 
 helper
-  :: ( Literal r
-     , Comparison r
-     , List r stmt
-     , DeclStatement r stmt
-     , ControlStatement r stmt
-     , SharedProg r vis stmt mthd
-     )
+  ::
+    ( Literal r
+    , VariableValue r
+    , Comparison r
+    , List r stmt
+    , InternalList r
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , MethodSym r vis stmt mthd
+    )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
   [block [listDec 2 result local],
@@ -38,13 +41,16 @@ helper = function "helper" private void [param temp] $ body
     result = var "result" (listType int)
 
 main
-  :: ( Literal r
-     , Comparison r
-     , List r stmt
-     , DeclStatement r stmt
-     , ControlStatement r stmt
-     , SharedProg r vis stmt mthd
-     )
+  ::
+    ( Literal r
+    , VariableValue r
+    , Comparison r
+    , List r stmt
+    , InternalList r
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , MethodSym r vis stmt mthd
+    )
   => MS (r mthd)
 main = mainFunction $ body
   [block [

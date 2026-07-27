@@ -11,17 +11,17 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
-  getCodeType, UnRepr(..), SharedProg, Body, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), NativeVector(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, VisibilitySym(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), funcApp, (&=))
+  getCodeType, UnRepr(..), Body, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
+  Set(..), NativeVector(..), InternalList(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
+  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  switchAsIf, VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -95,7 +95,6 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance SharedProg MatlabCode Doc (Doc, Terminator) MethodData
 instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData
 
 instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ProgData where

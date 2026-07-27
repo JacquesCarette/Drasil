@@ -6,9 +6,9 @@
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
-  Value, SValue, SharedProg, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  Value, SValue, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
   Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
@@ -54,7 +54,6 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfoOO () () ()
 instance OOStatement CodeInfoOO ()
 instance OOProg CodeInfoOO () () () () () GOOLState
 

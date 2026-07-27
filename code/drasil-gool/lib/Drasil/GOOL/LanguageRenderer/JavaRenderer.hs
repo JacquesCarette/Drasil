@@ -13,18 +13,18 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Body,
-  SVariable, Value, SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
+  SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
@@ -133,7 +133,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
 instance OOStatement JavaCode (Doc, Terminator)
 instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 

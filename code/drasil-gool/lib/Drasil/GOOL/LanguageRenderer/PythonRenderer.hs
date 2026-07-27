@@ -12,19 +12,18 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, Library,
-  Body, Variable, SVariable, Value, SValue, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..), Reference(..),
-  Array(..), List(..), Set(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable,
+  SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -123,7 +122,6 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
 instance OOStatement PythonCode (Doc, Terminator)
 instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
 

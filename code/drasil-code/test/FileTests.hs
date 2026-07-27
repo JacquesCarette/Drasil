@@ -2,11 +2,10 @@
 -- and write to files. See stable/gooltest for more details on what is generated through this.
 module FileTests (fileTestsOO, fileTestsProc) where
 
-import Drasil.GOOL (Block, MS, SharedProg, OOProg, BodySym(..), BlockSym(..),
-  TypeSym(..), DeclStatement(..), PrintConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), ControlStatement(..), VariableSym(var),
-  Literal(..), VariableValue(..), Comparison(..), List(..), MethodSym(..),
-  ScopeSym(..))
+import Drasil.GOOL (Block, MS, OOProg, BodySym(..), BlockSym(..), TypeSym(..),
+  DeclStatement(..), PrintConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), ControlStatement(..), VariableSym(var), Literal(..),
+  VariableValue(..), Comparison(..), List(..), MethodSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -31,6 +30,7 @@ fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
 fileTestMethod
   ::
     ( Literal r
+    , VariableValue r
     , Comparison r
     , List r stmt
     , DeclStatement r stmt
@@ -39,7 +39,7 @@ fileTestMethod
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , SharedProg r vis stmt mthd
+    , MethodSym r vis stmt mthd
     )
   => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
@@ -48,13 +48,13 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 writeStory
   ::
     ( Literal r
+    , VariableValue r
     , Comparison r
     , DeclStatement r stmt
     , ControlStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , SharedProg r vis stmt mthd
     )
   => MS (r Block)
 writeStory = block [
@@ -78,7 +78,7 @@ writeStory = block [
   listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
-readStory :: (Comparison r, ReadFile r stmt, SharedProg r vis stmt mthd) => MS (r stmt)
+readStory :: (VariableValue r, ReadFile r stmt) => MS (r stmt)
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 
@@ -88,11 +88,11 @@ goodBye
   ::
     ( Comparison r
     , Literal r
+    , VariableValue r
     , List r stmt
     , ControlStatement r stmt
     , PrintConsole r stmt
     , FileHandling r stmt
-    , SharedProg r vis stmt mthd
     )
   => MS (r Block)
 goodBye = block [

@@ -8,10 +8,10 @@ module Drasil.Shared.InterfaceCommon (
   NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
   InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..),
-  convScope, VariableElim(..), listOf, listVar, ValueSym(..), Argument(..),
-  Literal(..), litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..), convScope,
+  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
@@ -39,18 +39,6 @@ type Library = String
 
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
-
--- TODO [Brandon Bosman, 06/09/2026]: UnRepr can be removed from SharedProg
--- if we can root out its use from drasil-code
-
--- | Wrapper typeclass that bundles everything common between what is essential
--- for generating object-oriented and procedural programs.
-class (UnRepr r TypeData, FunctionSym r, InternalList r, VariableValue r,
-  IndexTranslator r, TypeElim r, VariableElim r, MethodSym r vis stmt mthd,
-  ScopeSym r, BinderSym r
-  ) => SharedProg r vis stmt mthd
-
--- Shared between OO and Procedural --
 
 class UnRepr repr contents where
   unRepr :: repr contents -> contents

@@ -55,13 +55,13 @@ import Drasil.GOOL (Label, File, Body, Block, SVariable, SValue, Class,
   instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Reference(..), Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), FileHandling(..), ReadFile(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
-  onStateValue, TypeData, ParamData, TypeElim, OODeclStatement, OOVariableValue,
-  OOStatement, MathConstant, Argument, PrintFile, BodySym)
+  objMethodCallMixedArgs, Reference(..), Array(..), List(..), MultiStatement(..),
+  AssignStatement(..), DeclStatement(..), ValueStatement(..), FileHandling(..),
+  ReadFile(..), StringStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
+  privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue, TypeData, ParamData, TypeElim, OODeclStatement,
+  OOVariableValue, OOStatement, MathConstant, Argument, PrintFile, BodySym)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -241,32 +241,61 @@ publicMethod n t = do
   genMethod (method n public instanceLevel t) n
 
 -- | Generates a private method.
-privateMethod :: (OOProg r vis stmt mthd stvr attch prg) => Label -> VS (r TypeData) -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MS (r Block)] ->
-  GenState (MS (r mthd))
+privateMethod
+  :: (OOProg r vis stmt mthd stvr attch prg)
+  => Label
+  -> VS (r TypeData)
+  -> Description
+  -> [ParameterChunk]
+  -> Maybe Description
+  -> [MS (r Block)]
+  -> GenState (MS (r mthd))
 privateMethod n t = do
   genMethod (method n private instanceLevel t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
-publicInOutFunc :: (OOProg r vis stmt mthd stvr attch prg) => Label -> Description -> [CodeVarChunk] ->
-  [CodeVarChunk] -> [MS (r Block)] -> GenState (MS (r mthd))
+publicInOutFunc
+  :: (OOProg r vis stmt mthd stvr attch prg)
+  => Label
+  -> Description
+  -> [CodeVarChunk]
+  -> [CodeVarChunk]
+  -> [MS (r Block)]
+  -> GenState (MS (r mthd))
 publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
-privateInOutMethod :: (OOProg r vis stmt mthd stvr attch prg) => Label -> Description -> [CodeVarChunk] ->
-  [CodeVarChunk] -> [MS (r Block)] -> GenState (MS (r mthd))
+privateInOutMethod
+  :: (OOProg r vis stmt mthd stvr attch prg)
+  => Label
+  -> Description
+  -> [CodeVarChunk]
+  -> [CodeVarChunk]
+  -> [MS (r Block)]
+  -> GenState (MS (r mthd))
 privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
   (docInOutMethod n private instanceLevel) n
 
 -- | Generates a constructor.
-genConstructor :: (OOProg r vis stmt mthd stvr attch prg) => Label -> Description -> [ParameterChunk] ->
-  [MS (r Block)] -> GenState (MS (r mthd))
+genConstructor
+  :: (OOProg r vis stmt mthd stvr attch prg)
+  => Label
+  -> Description
+  -> [ParameterChunk]
+  -> [MS (r Block)]
+  -> GenState (MS (r mthd))
 genConstructor n desc p = do
   genMethod nonInitConstructor n desc p Nothing
 
 -- | Generates a constructor that includes initialization of variables.
-genInitConstructor :: (OOProg r vis stmt mthd stvr attch prg) => Label -> Description -> [ParameterChunk]
-  -> Initializers r -> [MS (r Block)] -> GenState (MS (r mthd))
+genInitConstructor
+  :: (OOProg r vis stmt mthd stvr attch prg)
+  => Label
+  -> Description
+  -> [ParameterChunk]
+  -> Initializers r
+  -> [MS (r Block)]
+  -> GenState (MS (r mthd))
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
   Nothing
 
@@ -297,7 +326,7 @@ genMethod f n desc p r b = do
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc
-  :: (OOStatement r stmt, VariableElim r)
+  :: (MultiStatement r stmt, OOStatement r stmt, VariableElim r)
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
   -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r mthd))
   -> Label
@@ -539,8 +568,8 @@ elementSetBoolBfunc SContains = OO.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r vis stmt mthd stvr attch prg) =>
-  Mod -> GenState (FS (r File))
+genModDef
+  :: (OOProg r vis stmt mthd stvr attch prg) => Mod -> GenState (FS (r File))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
@@ -548,7 +577,8 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
                 map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r vis stmt mthd stvr attch prg) => Mod -> [GenState (MS (r mthd))]
+genModFuncs
+  :: (OOProg r vis stmt mthd stvr attch prg) => Mod -> [GenState (MS (r mthd))]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
@@ -607,7 +637,13 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( OOStatement r stmt
+    , MultiStatement r stmt
+    , ValueStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => FuncStmt -> GenState (MS (r stmt))
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
@@ -956,6 +992,7 @@ publicFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -979,6 +1016,7 @@ privateFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1004,6 +1042,7 @@ genMethodProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1042,9 +1081,11 @@ genFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
+    , ValueStatement r stmt
     , StringStatement r stmt
     , FileHandling r stmt
     , ReadFile r stmt
@@ -1083,9 +1124,11 @@ genModFuncsProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
+    , ValueStatement r stmt
     , StringStatement r stmt
     , FileHandling r stmt
     , ReadFile r stmt
@@ -1366,8 +1409,10 @@ convStmtProc
     , NativeVector r
     , Reference r
     , OO.Set r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
+    , ValueStatement r stmt
     , ControlStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -1480,6 +1525,7 @@ genDataFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , ControlStatement r stmt
     , StringStatement r stmt
@@ -1506,6 +1552,7 @@ publicInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1525,6 +1572,7 @@ privateInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1547,6 +1595,7 @@ genInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt

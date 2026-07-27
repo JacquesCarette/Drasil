@@ -27,13 +27,13 @@ import Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
   ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize, listAdd), listOf, StatementSym(..), AssignStatement,
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), Argument,
-  BooleanExpression, CommandLineArgs, CommentStatement, Comparison,
-  ControlStatement, PrintConsole, ReadConsole, FileHandling, PrintFile, ReadFile,
-  Literal, MathConstant, NumericExpression, ParameterSym, Reference, Set,
-  StringStatement, convType, UnRepr, ScopeSym, BinderSym, InternalList, TypeElim,
-  VariableElim)
+  List(listSize, listAdd), listOf, StatementSym, EmptyStatement, MultiStatement,
+  AssignStatement, ValueStatement, DeclStatement(listDecDef), FuncAppStatement,
+  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
+  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
+  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeElim, VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -47,7 +47,9 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- for generating an object-oriented program.
 class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
   BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
-  VariableElim r, OOStatement r stmt, ProgramSym r vis stmt mthd stvr attch prg
+  VariableElim r, OOStatement r stmt, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r stmt,
+  ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
 
 class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,

@@ -15,11 +15,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
   Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
+  StatementSym, EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
@@ -518,11 +519,17 @@ instance StatementElim JavaCode (Doc, Terminator) where
   statement = fst . unJC
   statementTerm = snd . unJC
 
-instance StatementSym JavaCode (Doc, Terminator) where
+instance StatementSym JavaCode (Doc, Terminator)
   -- Terminator determines how statements end
-  valStmt = G.valStmt Semi
+
+instance EmptyStatement JavaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JavaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement JavaCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement JavaCode (Doc, Terminator) where
   assign = G.assign Semi
@@ -978,6 +985,7 @@ jOut
     , ValueExpression r
     , VariableValue r
     , List r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

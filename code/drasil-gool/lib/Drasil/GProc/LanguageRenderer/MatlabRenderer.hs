@@ -11,12 +11,13 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  switchAsIf, VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), funcApp, (&=))
+  Set(..), NativeVector(..), InternalList(..), StatementSym, EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, VisibilitySym(..),
+  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..),
+  funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -400,10 +401,16 @@ instance StatementElim MatlabCode (Doc, Terminator) where
   statement = fst . unMLC
   statementTerm = snd . unMLC
 
-instance StatementSym MatlabCode (Doc, Terminator) where
-  valStmt = G.valStmt Semi
+instance StatementSym MatlabCode (Doc, Terminator)
+
+instance EmptyStatement MatlabCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement MatlabCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement MatlabCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi

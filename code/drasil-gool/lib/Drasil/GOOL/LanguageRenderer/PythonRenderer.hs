@@ -15,11 +15,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+  InternalList(..), StatementSym, EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), (&=), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -497,11 +498,17 @@ instance StatementElim PythonCode (Doc, Terminator) where
   statement = fst . unPC
   statementTerm = snd . unPC
 
-instance StatementSym PythonCode (Doc, Terminator) where
+instance StatementSym PythonCode (Doc, Terminator)
   -- Terminator determines how statements end
-  valStmt = G.valStmt Empty
+
+instance EmptyStatement PythonCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement PythonCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement PythonCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement PythonCode (Doc, Terminator) where
   assign = G.assign Empty
@@ -941,6 +948,7 @@ pyOut
     , Comparison r
     , VariableValue r
     , List r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

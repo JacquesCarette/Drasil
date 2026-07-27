@@ -26,7 +26,7 @@ import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (SValue, OOStatement, MS, VS, TypeSym(..), VariableValue(..),
-  StatementSym(..), DeclStatement(..), convType, convTypeOO, TypeData,
+  DeclStatement(..), ValueStatement(..), convType, convTypeOO, TypeData,
   FuncAppStatement, TypeElim, VariableElim, Argument, Set, ValueExpression,
   Comparison, BooleanExpression, MathConstant, List)
 import Drasil.GProc (NativeVector, Reference, NumericExpression)
@@ -35,7 +35,7 @@ import Drasil.GProc (NativeVector, Reference, NumericExpression)
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
 genAllInputCalls
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  :: (OOStatement r stmt, ValueStatement r stmt, TypeElim r, VariableElim r)
   => GenState [MS (r stmt)]
 genAllInputCalls = do
   gi <- genInputCall
@@ -61,7 +61,7 @@ genDerivedCall = do
 
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  :: (OOStatement r stmt, ValueStatement r stmt, TypeElim r, VariableElim r)
   => GenState (Maybe (MS (r stmt)))
 genConstraintCall = do
   icName <- genICName InputConstraintsFn
@@ -83,7 +83,7 @@ genCalcCall c = do
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  :: (OOStatement r stmt, ValueStatement r stmt, TypeElim r, VariableElim r)
   => GenState (Maybe (MS (r stmt)))
 genOutputCall = do
   woName <- genICName WriteOutput
@@ -166,6 +166,7 @@ genAllInputCallsProc
     , List r stmt
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState [MS (r stmt)]
@@ -204,6 +205,7 @@ genConstraintCallProc
     , List r stmt
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -253,6 +255,7 @@ genOutputCallProc
     , NativeVector r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))

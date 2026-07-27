@@ -134,7 +134,7 @@ containsInt
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 discardFileLine
-  :: (IG.InternalValueExp r, IC.StatementSym r stmt)
+  :: (IG.InternalValueExp r, IC.ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n
 
@@ -504,7 +504,7 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 inOutCall
-  :: (RC.InternalAssignStmt r stmt, IC.StatementSym r stmt, IC.VariableValue r)
+  :: (RC.InternalAssignStmt r stmt, IC.ValueStatement r stmt, IC.VariableValue r)
   => (Label -> VS (r TypeData) -> [SValue r] -> SValue r)
   -> Label
   -> [SValue r]

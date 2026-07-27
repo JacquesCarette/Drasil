@@ -7,7 +7,8 @@ module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 
 import Drasil.Shared.InterfaceCommon (Label, Body, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
-  getCodeType, convType, StatementSym, ValueExpression, IndexTranslator)
+  getCodeType, convType, ValueStatement, ValueExpression,
+  IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GProc.InterfaceProc (File, Module)
 import qualified Drasil.Shared.RendererClassesCommon as RC
@@ -81,14 +82,14 @@ innerType t = t >>= (convType . getInnerType . getCodeType)
 
 -- | Call to append a value to a list using a function call
 listAppend
-  :: (StatementSym r stmt, ValueExpression r)
+  :: (ValueStatement r stmt, ValueExpression r)
   => String -> SValue r -> SValue r -> MS (r stmt)
 listAppend fnName list val = IC.valStmt $
   funcApp fnName IC.void [list, val]
 
 -- | Call to insert a value into a list as a function call
 listAdd
-  :: (IndexTranslator r, StatementSym r stmt, ValueExpression r)
+  :: (IndexTranslator r, ValueStatement r stmt, ValueExpression r)
   => String -> SValue r -> SValue r -> SValue r -> MS (r stmt)
 listAdd fnName list idx val = IC.valStmt $
   funcApp fnName IC.void [list, IC.intToIndex idx, val]

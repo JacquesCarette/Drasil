@@ -56,17 +56,18 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, listAccess)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
-  listDecDef)
+  listDecDef, litSet)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extFuncAppMixedArgs, listSize, forEach')
+  extFuncAppMixedArgs, funcType, listSize, forEach')
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
-  increment1, decrement1)
+  increment1, decrement1, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
-  varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc)
+  varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
+  FuncData(fType, funcDoc), fd)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStateVar, mkStmtNoEnd,
@@ -83,8 +84,8 @@ import Control.Monad.State (modify)
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), vcat, hcat,
-  parens, brackets, braces, equals, punctuate, render)
+import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), ($$), vcat,
+  hcat, parens, brackets, braces, equals, punctuate, render)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -155,10 +156,10 @@ instance TypeSym MatlabCode where
   outfile = mlTy OutFile "file"
   referenceType = id -- Ignore reference types in "high-level" langauges for now; later on think about using boxed/unboxed types
   listType = mlListType
-  setType = undefined
+  setType = listType
   arrayType = listType -- Treat arrays and lists the same, as in Julia/Python
-  innerType = undefined
-  funcType = undefined
+  innerType = A.innerType
+  funcType = CS.funcType
   void = mlTy Void "void"
 
 instance TypeElim MatlabCode where
@@ -236,7 +237,7 @@ instance ValueSym MatlabCode where
   valueType v = valType <$> v
 
 instance Argument MatlabCode where
-  pointerArg = undefined
+  pointerArg = id
 
 instance Literal MatlabCode where
   litTrue = C.litTrue
@@ -248,7 +249,7 @@ instance Literal MatlabCode where
   litString = G.litString
   litArray = litList
   litList = mlLitList
-  litSet = undefined
+  litSet = CP.litSet id brackets
 
 instance MathConstant MatlabCode where
   pi = mkStateVal double (text "pi")
@@ -301,7 +302,7 @@ instance Comparison MatlabCode where
   (?!=) = typeBinExpr notEqualOp bool
 
 instance ValueExpression MatlabCode where
-  inlineIf = undefined
+  inlineIf = mlInlineIf
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs = CS.extFuncAppMixedArgs
   libFuncAppMixedArgs = CS.extFuncAppMixedArgs
@@ -314,7 +315,7 @@ instance RenderValue MatlabCode where
   printLnFunc = mlPrintFunc
   printFileFunc _ = mlPrintFunc
   printFileLnFunc _ = mlPrintFunc
-  cast = undefined
+  cast = mlCast
   call = G.call equals
   valFromData p i t' d = do
     t <- t'
@@ -381,11 +382,11 @@ instance InternalBinderElim MatlabCode where
   binderElim = undefined
 
 instance RenderFunction MatlabCode where
-  funcFromData = undefined
+  funcFromData d = onStateValue $ onCodeValue (`fd` d)
 
 instance FunctionElim MatlabCode where
-  functionType = undefined
-  function = undefined
+  functionType = onCodeValue fType
+  function = funcDoc . unMLC
 
 instance InternalAssignStmt MatlabCode (Doc, Terminator) where
   multiAssign = CP.multiAssign brackets
@@ -456,12 +457,12 @@ instance ReadFile MatlabCode (Doc, Terminator) where
   discardFileInput f = valStmt (mlReadLine f)
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
-  getFileInputAll = undefined
+  getFileInputAll f v = v &= funcApp "readlines" (listType string) [f]
 
 instance StringStatement MatlabCode (Doc, Terminator) where
-  stringSplit = undefined
-  stringListVals = undefined
-  stringListLists = undefined
+  stringSplit d vnew s = vnew &= funcApp "strsplit" (listType string) [s, litString [d]]
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FunctionSym MatlabCode where
 
@@ -484,7 +485,17 @@ instance ControlStatement MatlabCode (Doc, Terminator) where
   ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty mlEnd
   switch = switchAsIf
   ifExists = M.ifExists
-  for _ _ _ _ = error "MATLAB does not support C-style for loops; use forRange"
+  for initS cond updateS b = do
+    i <- initS
+    c <- zoom lensMStoVS cond
+    u <- updateS
+    bd <- b
+    mkStmtNoEnd (vcat [
+      RC.statement i <> text ";",
+      text "while" <+> RC.value c,
+      indent (RC.body bd),
+      indent (RC.statement u <> text ";"),
+      mlEnd])
   forRange i initv finalv stepv = forEach i (mlRange initv finalv stepv)
   forEach = CS.forEach' mlForEach
   while = C.while id empty mlEnd
@@ -695,6 +706,32 @@ mlPrint newLn f' _ v' = do
   stmtFromData (text "fprintf" <>
     parens (fileArg <> text ("'" ++ fmt ++ nl ++ "'") <> listSep' <> RC.value v))
     Semi
+
+mlInlineIf :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+  -> SValue MatlabCode
+mlInlineIf c' v1' v2' = do
+  c <- c'
+  v1 <- v1'
+  v2 <- v2'
+  mkStateVal (toState $ valueType v1)
+    (parens (parens (RC.value c) <+> text ".*" <+> parens (RC.value v1)
+    <+> text "+ ~" <> parens (RC.value c) <+> text ".*" <+> parens (RC.value v2)))
+
+mlCast :: VS (MatlabCode TypeData) -> SValue MatlabCode -> SValue MatlabCode
+mlCast t' v' = do
+  t <- t'
+  v <- v'
+  let vTp = getCodeType $ valueType v
+      tTp = getCodeType t
+      vDoc = RC.value v
+      mlCast' String Integer = text "str2double" <> parens vDoc
+      mlCast' String Float   = text "str2double" <> parens vDoc
+      mlCast' String Double  = text "str2double" <> parens vDoc
+      mlCast' String Boolean = text "logical" <> parens (text "str2double" <> parens vDoc)
+      mlCast' _      String  = text "num2str" <> parens vDoc
+      mlCast' _      Char    = text "char" <> parens vDoc
+      mlCast' _      _       = vDoc
+  mkVal t (mlCast' vTp tTp)
 
 mlEnd :: Doc
 mlEnd = text "end"

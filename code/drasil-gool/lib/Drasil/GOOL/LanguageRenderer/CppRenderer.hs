@@ -14,19 +14,18 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
 import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, Variable, SVariable, Value, SValue, NamedArgs, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), BinderSym(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), convScope, BinderElim (..), (&=))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Variable,
+  SVariable, Value, SValue, NamedArgs, BodySym(..), oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), convScope, BinderElim (..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, OOStatement, Class,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
@@ -142,9 +141,6 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
-  (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance (Pair p) => SharedStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOStatement (p CppSrcCode CppHdrCode) (Doc, Terminator)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
   (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData
@@ -1038,7 +1034,6 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
-instance SharedStatement CppSrcCode (Doc, Terminator) where
 instance OOStatement CppSrcCode (Doc, Terminator) where
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
@@ -1763,7 +1758,6 @@ instance Monad CppHdrCode where
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
 instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData
-instance SharedStatement CppHdrCode (Doc, Terminator) where
 instance OOStatement CppHdrCode (Doc, Terminator) where
 
 instance UnRepr CppHdrCode contents where

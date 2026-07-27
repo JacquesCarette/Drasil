@@ -8,14 +8,14 @@ module Drasil.Shared.InterfaceCommon (
   NamedArgs, MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
   InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, SharedStatement, UnRepr(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  ScopeSym(..), convScope, VariableElim(..), listOf, listVar, ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  UnRepr(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), ScopeSym(..), convScope,
+  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
+  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
   ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
@@ -39,27 +39,6 @@ type Library = String
 
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
-
--- TODO [Brandon Bosman, 06/09/2026]: UnRepr can be removed from SharedProg
--- if we can root out its use from drasil-code
-
--- | Wrapper typeclass that bundles everything common between what is essential
--- for generating object-oriented and procedural programs.
-class (UnRepr r TypeData, SharedStatement r stmt, FunctionSym r, InternalList r,
-  VariableValue r, IndexTranslator r, TypeElim r,
-  VariableElim r, MethodSym r vis stmt mthd, ScopeSym r, BinderSym r
-  ) => SharedProg r vis stmt mthd
-
-class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
-  CommandLineArgs r, CommentStatement r stmt, Comparison r,
-  ControlStatement r stmt, DeclStatement r stmt, FuncAppStatement r stmt,
-  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
-  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r
-  ) => SharedStatement r stmt
-
--- Shared between OO and Procedural --
 
 class UnRepr repr contents where
   unRepr :: repr contents -> contents

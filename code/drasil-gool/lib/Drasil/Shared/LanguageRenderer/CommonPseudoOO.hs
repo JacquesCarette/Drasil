@@ -530,11 +530,14 @@ mainBody b = do
   mthdFromData Pub empty
 
 inOutFunc
-  :: ( RC.InternalControlStmt r stmt
-     , IC.SharedStatement r stmt
+  :: ( IC.VariableValue r
+     , IC.ParameterSym r
+     , IC.DeclStatement r stmt
+     , IC.BodySym r stmt
+     , VariableElim r
      , RenderBody r
      , RenderType r
-     , VariableElim r
+     , RC.InternalControlStmt r stmt
      )
   => (VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd))
   -> [SVariable r]
@@ -633,7 +636,9 @@ openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
 openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
 openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 
-argExists :: (IC.SharedStatement r stmt) => Integer -> SValue r
+argExists
+  :: (IC.Literal r, IC.CommandLineArgs r, Comparison r, IC.List r stmt)
+  => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
 -- Python, C#, Swift, and Julia

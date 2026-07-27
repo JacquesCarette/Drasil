@@ -219,8 +219,6 @@ instance
 
 -- SharedProg Boilerplate
 
-instance (SharedProg r vis stmt mthd) => SharedProg (LoggingFor r) vis stmt mthd
-instance (SharedStatement r stmt, VariableElim r) => SharedStatement (LoggingFor r) stmt
 instance (G.OOStatement r stmt, VariableElim r) => G.OOStatement (LoggingFor r) stmt
 
 instance (VariableSym r) => VariableSym (LoggingFor r) where

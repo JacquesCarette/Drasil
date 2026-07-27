@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
@@ -24,10 +25,16 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, Body, Block, SVariable, SValue, NamedArgs, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
-  MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
-  ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
+  BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
+  ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
+  List(listSize, listAdd), listOf, StatementSym(..), AssignStatement,
+  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), Argument,
+  BooleanExpression, CommandLineArgs, CommentStatement, Comparison,
+  ControlStatement, PrintConsole, ReadConsole, FileHandling, PrintFile, ReadFile,
+  Literal, MathConstant, NumericExpression, ParameterSym, Reference, Set,
+  StringStatement, convType, UnRepr, ScopeSym, BinderSym, InternalList, TypeElim,
+  VariableElim)
+
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
@@ -38,13 +45,20 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (SharedProg r vis stmt mthd, OOStatement r stmt,
-  ProgramSym r vis stmt mthd stvr attch prg
+class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
+  BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
+  VariableElim r, OOStatement r stmt, ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
 
-class (SharedStatement r stmt, GetSet r, InternalValueExp r,
-  OOFuncAppStatement r stmt, OOVariableValue r, OODeclStatement r stmt,
-  OOFuncAppStatement r stmt, OOFunctionSym r, OOValueExpression r
+class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
+  CommandLineArgs r, CommentStatement r stmt, Comparison r,
+  ControlStatement r stmt, DeclStatement r stmt, FuncAppStatement r stmt,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
+  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
+  VariableValue r, GetSet r, InternalValueExp r, OOFuncAppStatement r stmt,
+  OOVariableValue r, OODeclStatement r stmt, OOFuncAppStatement r stmt,
+  OOFunctionSym r, OOValueExpression r
   ) => OOStatement r stmt
 
 type Program = ProgData

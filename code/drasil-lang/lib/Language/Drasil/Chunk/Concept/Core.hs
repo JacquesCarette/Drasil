@@ -26,8 +26,9 @@ sDom [d] = d
 sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
--- | The ConceptChunk datatype records a concept that contains an idea ('IdeaDict'),
--- a definition ('Sentence'), and an associated domain of knowledge (['UID']).
+-- | The 'ConceptChunk' datatype records a concept that contains a unique id ('UID'),
+-- a term ('NP'), a definition ('Sentence'), an optional abbreviation ('Maybe String'),
+-- and an associated domain of knowledge (['UID']).
 --
 -- Ex. The concept of "Accuracy" may be defined as the quality or state of being correct or precise.
 data ConceptChunk = ConDict { _uu :: UID -- ^ The 'UID' of the concept.

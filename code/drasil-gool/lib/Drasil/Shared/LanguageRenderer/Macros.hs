@@ -76,7 +76,20 @@ runStrategy l strats rv av = maybe
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
 listSlice
-  :: (IC.SharedStatement r stmt, ValueElim r, VariableElim r)
+  ::
+    ( IC.DeclStatement r stmt
+    , AssignStatement r stmt
+    , IC.ControlStatement r stmt
+    , IC.Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , IC.ValueExpression r
+    , IC.VariableValue r
+    , IC.List r stmt
+    , ValueElim r
+    , VariableElim r
+    )
   => Maybe (SValue r)
   -> Maybe (SValue r)
   -> Maybe (SValue r)
@@ -144,9 +157,23 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is positive
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (SValue): (setter, value) of bound
-makeSetterVal :: (IC.SharedStatement r stmt) => Label -> SValue r ->
-  Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> r ScopeData ->
-  (MS (r stmt), SValue r)
+makeSetterVal
+  ::
+    ( IC.DeclStatement r stmt
+    , Comparison r
+    , IC.IndexTranslator r
+    , IC.Literal r
+    , IC.ValueExpression r
+    , IC.VariableValue r
+    )
+  => Label
+  -> SValue r
+  -> Maybe Integer
+  -> Maybe (SValue r)
+  -> SValue r
+  -> SValue r
+  -> r ScopeData
+  -> (MS (r stmt), SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb  scp =
@@ -173,7 +200,16 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
 stringListLists
-  :: (S.RenderValue r, IC.SharedStatement r stmt, IC.TypeElim r, VariableElim r)
+  ::
+    ( IC.ControlStatement r stmt
+    , IC.Literal r
+    , NumericExpression r
+    , IC.VariableValue r
+    , IC.List r stmt
+    , IC.TypeElim r
+    , VariableElim r
+    , S.RenderValue r
+    )
   => [SVariable r] -> SValue r -> MS (r stmt)
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
@@ -199,8 +235,20 @@ stringListLists lsts sl = do
     v_i = IC.valueOf var_i
   checkList (getCodeType $ valueType slst)
 
-forRange :: (IC.SharedStatement r stmt) => SVariable r -> SValue r -> SValue r ->
-  SValue r -> MS (r Body) -> MS (r stmt)
+forRange
+  ::
+    ( IC.DeclStatement r stmt
+    , AssignStatement r stmt
+    , IC.ControlStatement r stmt
+    , Comparison r
+    , IC.VariableValue r
+    )
+  => SVariable r
+  -> SValue r
+  -> SValue r
+  -> SValue r
+  -> MS (r Body)
+  -> MS (r stmt)
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
 
@@ -233,7 +281,14 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
     where initv = IC.litInt 0
 
 arrayDecAsList
-  :: (IC.SharedStatement r stmt, VariableElim r)
+  ::
+    ( IC.DeclStatement r stmt
+    , IC.ControlStatement r stmt
+    , IC.Literal r
+    , IC.VariableValue r
+    , IC.List r stmt
+    , VariableElim r
+    )
   => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)
 arrayDecAsList len dflt vr scp = do
   vr' <- zoom lensMStoVS vr

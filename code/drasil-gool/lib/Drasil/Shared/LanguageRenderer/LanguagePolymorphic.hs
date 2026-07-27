@@ -371,9 +371,23 @@ objDecNew
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
-printList :: (IC.SharedStatement r stmt) => Integer -> SValue r ->
-  (SValue r -> MS (r stmt)) -> (String -> MS (r stmt)) ->
-  (String -> MS (r stmt)) -> MS (r stmt)
+printList
+  ::
+    ( IC.DeclStatement r stmt
+    , AssignStatement r stmt
+    , IC.ControlStatement r stmt
+    , IC.Literal r
+    , NumericExpression r
+    , Comparison r
+    , IC.VariableValue r
+    , IC.List r stmt
+    )
+  => Integer
+  -> SValue r
+  -> (SValue r -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> MS (r stmt)
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   IC.for (IC.varDecDef i IC.local (IC.litInt 0))
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++)
@@ -384,9 +398,15 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int
 
-printSet :: (IC.SharedStatement r stmt) => Integer -> SValue r ->
-  (SValue r -> MS (r stmt)) -> (String -> MS (r stmt)) ->
-  (String -> MS (r stmt)) -> VS (r TypeData) -> MS (r stmt)
+printSet
+  :: (IC.ControlStatement r stmt, IC.VariableValue r)
+  => Integer
+  -> SValue r
+  -> (SValue r -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> (String -> MS (r stmt))
+  -> VS (r TypeData)
+  -> MS (r stmt)
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ",
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
@@ -398,7 +418,20 @@ printObj :: ClassName -> (String -> MS (r stmt)) -> MS (r stmt)
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
-  :: (RC.InternalIOStmt r stmt, IC.SharedStatement r stmt, TypeElim r)
+  ::
+    ( PrintConsole r stmt
+    , PrintFile r stmt
+    , IC.DeclStatement r stmt
+    , AssignStatement r stmt
+    , IC.ControlStatement r stmt
+    , IC.Literal r
+    , NumericExpression r
+    , Comparison r
+    , IC.VariableValue r
+    , IC.List r stmt
+    , TypeElim r
+    , RC.InternalIOStmt r stmt
+    )
   => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn prLnFn

@@ -8,18 +8,18 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, SVariable, Value, SValue, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..),ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
+  SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), Set(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
@@ -128,8 +128,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance SharedProg JavaCode Doc (Doc, Terminator) MethodData
-instance SharedStatement JavaCode (Doc, Terminator)
 instance OOStatement JavaCode (Doc, Terminator)
 instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
@@ -973,7 +971,21 @@ jAssert condition errorMessage = vcat [
   ]
 
 jOut
-  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  ::
+    ( Literal r
+    , Comparison r
+    , NumericExpression r
+    , ValueExpression r
+    , VariableValue r
+    , List r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , InternalIOStmt r stmt
+    , TypeElim r
+    )
   => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getCodeType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v

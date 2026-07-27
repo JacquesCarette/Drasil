@@ -8,17 +8,17 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, Value, SValue, Variable, SVariable, Block, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, libFuncApp, IndexTranslator(..), Reference(..), Array(..),
-  List(..), Set(..), NativeVector(..), InternalList(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
+  Variable, SVariable, Block, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, libFuncApp,
+  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
+  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
   BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
@@ -107,8 +107,6 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance SharedProg JuliaCode Doc (Doc, Terminator) MethodData
-instance SharedStatement JuliaCode (Doc, Terminator)
 instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
 
 instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
@@ -973,7 +971,20 @@ jlPrint _ f' p' v' = do
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
-  :: (InternalIOStmt r stmt, SharedStatement r stmt, TypeElim r)
+  ::
+    ( Literal r
+    , NumericExpression r
+    , Comparison r
+    , VariableValue r
+    , List r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , TypeElim r
+    , InternalIOStmt r stmt
+    )
   => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v

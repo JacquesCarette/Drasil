@@ -8,18 +8,18 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, Block, Variable, SVariable, Value, SValue, BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..),  StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
+  SVariable, Value, SValue, BodySym(..), oneLiner, bodyStatements, BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, extFuncApp, IndexTranslator(..), Reference(..), Array(..),
+  List(..), Set(..), listSlice, InternalList(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
@@ -128,8 +128,6 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
-instance SharedStatement SwiftCode (Doc, Terminator)
 instance OOStatement SwiftCode (Doc, Terminator)
 instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 

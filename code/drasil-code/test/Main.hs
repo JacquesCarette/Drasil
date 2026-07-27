@@ -10,8 +10,9 @@ import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
-import Drasil.GOOL (OOProg, StrategyPattern, ObserverPattern, unJC, unPC, unCSC,
-  unCPPC, unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
+import Drasil.GOOL (OOProg, Literal, Comparison, List, StrategyPattern,
+  ObserverPattern, DeclStatement, ControlStatement, unJC, unPC, unCSC, unCPPC,
+  unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
 import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (GSProgram)
@@ -78,7 +79,16 @@ goolTestGroup n p =
 
 gProcTestGroup
   :: String
-  -> (forall r vis stmt mthd prg. (ProcProg r vis stmt mthd prg) => Proc.GSProgram r prg)
+  ->
+    ( forall r vis stmt mthd prg.
+      ( Literal r
+      , Comparison r
+      , List r stmt
+      , DeclStatement r stmt
+      , ControlStatement r stmt
+      , ProcProg r vis stmt mthd prg
+      )
+    => Proc.GSProgram r prg)
   -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
@@ -90,7 +100,17 @@ gProcTestGroup n p =
 
 gProcVectorTestGroup
   :: String
-  -> (forall r vis stmt mthd prg. (ProcProg r vis stmt mthd prg, NativeVector r) => Proc.GSProgram r prg)
+  ->
+    ( forall r vis stmt mthd prg.
+      ( Comparison r
+      , List r stmt
+      , NativeVector r
+      , DeclStatement r stmt
+      , ControlStatement r stmt
+      , ProcProg r vis stmt mthd prg
+      )
+    => Proc.GSProgram r prg
+    )
   -> TestTree
 gProcVectorTestGroup n p =
   goldenTestingGroup
@@ -102,10 +122,23 @@ gProcVectorTestGroup n p =
     ]
 
 genCodeProcNoMake
-  :: (ProcProg r vis stmt mthd ProgData, NativeVector r, Monad r')
+  ::
+    ( NativeVector r
+    , ProcProg r vis stmt mthd ProgData
+    , Monad r'
+    )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' stmt' mthd' prg'. (ProcProg s vis' stmt' mthd' prg', NativeVector s) => Proc.GSProgram s prg')
+  ->
+    ( forall s vis' stmt' mthd' prg'.
+      ( Comparison s
+      , List s stmt'
+      , NativeVector s
+      , DeclStatement s stmt'
+      , ProcProg s vis' stmt' mthd' prg'
+      )
+    => Proc.GSProgram s prg'
+    )
   -> [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =
   let

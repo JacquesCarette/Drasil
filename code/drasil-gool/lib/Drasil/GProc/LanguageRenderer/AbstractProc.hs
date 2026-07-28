@@ -1,5 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
+
 
 module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   buildModule, docMod, modFromData, innerType, arrayElem, listAppend,

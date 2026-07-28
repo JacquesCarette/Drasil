@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+
 -- | Contains renderer-related functions specific to GOOL
 
 module Drasil.GOOL.Renderers (

@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress)
   where
 

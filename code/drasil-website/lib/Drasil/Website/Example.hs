@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 -- | Create the list of Generated Examples for the Drasil website.
 module Drasil.Website.Example (
   Example(..), examples, exName,

@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Assumptions (assumptions,
   twoBody, isolated, newtonianGravity, nonRelativistic, pointMass,
   constantMass, inertialFrame, planar, nonzeroSeparation) where

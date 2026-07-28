@@ -1,8 +1,5 @@
-{-# LANGUAGE PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Redundant return" #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,

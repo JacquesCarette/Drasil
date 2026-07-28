@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.Assumptions (assumpSingle) where
 
 import Language.Drasil (ConceptInstance)

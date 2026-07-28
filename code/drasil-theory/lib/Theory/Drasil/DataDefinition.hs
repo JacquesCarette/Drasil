@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell, MultiParamTypeClasses #-}
+{-# LANGUAGE NoMonomorphismRestriction, TemplateHaskell #-}
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition (
   DataDefinition,

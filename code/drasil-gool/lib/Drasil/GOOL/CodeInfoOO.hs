@@ -1,7 +1,4 @@
-{-# LANGUAGE TypeFamilies, Rank2Types #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
+{-# LANGUAGE TypeFamilies #-}
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 

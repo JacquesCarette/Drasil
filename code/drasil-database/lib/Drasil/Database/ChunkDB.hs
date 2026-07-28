@@ -1,6 +1,3 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 module Drasil.Database.ChunkDB (
   -- * Core database types and functions.
   ChunkDB,
@@ -18,7 +15,6 @@ module Drasil.Database.ChunkDB (
 ) where
 
 import Control.Lens ((^.))
-import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 

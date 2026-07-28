@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.Common (
   boolRender, bool, extVar, funcType, extFuncAppMixedArgs, listAccessFunc,

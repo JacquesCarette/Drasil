@@ -1,6 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Language-polymorphic functions that are defined by GOOL code
 module Drasil.Shared.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy,

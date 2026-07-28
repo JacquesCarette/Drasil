@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase, FlexibleContexts #-}
-
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainProc, genMainFunc, genMainFuncProc, genInputClass,
   genInputDerived, genInputDerivedProc, genInputMod, genInputModProc,

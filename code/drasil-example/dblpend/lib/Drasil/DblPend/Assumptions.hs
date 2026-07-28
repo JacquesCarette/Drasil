@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Assumptions (twoDMotion, cartSys, cartSysR,
   yAxisDir, assumpBasic, assumpDouble) where
 

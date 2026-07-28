@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
-
 module Language.Drasil.Code.Imperative.FunctionCalls (
   genAllInputCalls, genAllInputCallsProc, genInputCall, genInputCallProc,
   genDerivedCall, genDerivedCallProc, genConstraintCall, genConstraintCallProc,

@@ -1,6 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The structure for a class of renderers is defined here.
 module Drasil.Shared.LanguageRenderer (
   -- * Common Syntax

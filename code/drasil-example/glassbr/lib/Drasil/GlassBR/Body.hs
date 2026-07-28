@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))

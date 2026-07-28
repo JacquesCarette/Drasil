@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.IMods (iMods, angleIM_1, angleIM_2) where
 
 import Prelude hiding (cos, sin)

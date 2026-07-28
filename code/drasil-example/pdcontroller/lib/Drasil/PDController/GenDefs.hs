@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.GenDefs (
   genDefns, gdPowerPlant
 ) where

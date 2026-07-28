@@ -1,6 +1,4 @@
-{-# LANGUAGE GADTs #-}
 {-# LANGUAGE TemplateHaskell #-}
-
 module Drasil.FileHandling.FileLayout
   ( -- * File Layout
     FileLayout,

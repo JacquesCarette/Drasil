@@ -1,7 +1,4 @@
-{-# LANGUAGE FlexibleContexts, QuasiQuotes #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE RankNTypes #-}
-
+{-# LANGUAGE QuasiQuotes #-}
 module Drasil.Generator.Code (
   -- * Generators
   genCode, genCodeZoo,

@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Java code is contained in this module
 module Drasil.GOOL.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code

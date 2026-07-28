@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators#-}
 module Drasil.DblPend.Goals (goals, goalsInputs) where
 
 import Control.Lens ((^.))

@@ -1,6 +1,4 @@
-{-# LANGUAGE PostfixOperators, Rank2Types, ScopedTypeVariables, TemplateHaskell,
-             FlexibleInstances, MultiParamTypeClasses, TupleSections #-}
-
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for creating mult-definitions.
 module Theory.Drasil.MultiDefn(
   -- * Types

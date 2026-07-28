@@ -1,6 +1,4 @@
-{-# LANGUAGE PostfixOperators, Rank2Types #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-{-# LANGUAGE FlexibleContexts #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, publicFuncProc, privateMethod, privateFuncProc, publicInOutFunc,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,

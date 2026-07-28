@@ -23,7 +23,6 @@ module Language.Drasil.Data.Citation (
 ) where
 
 import Control.Lens (Lens', (^.))
-import Data.Maybe (mapMaybe)
 
 import Drasil.Database (declareHasChunkRefs, Generically(..))
 
@@ -142,22 +141,27 @@ compareAuthYearTitle c1 c2
 getAuthorYearTitle :: HasFields c => c -> (People, Int, String)
 getAuthorYearTitle c = (a, y, t)
   where
+    fs :: [CiteField]
     fs = c ^. getFields
+
+    findFirst :: (CiteField -> Maybe a) -> String -> [CiteField] -> a
+    findFirst _     err  [] = error err
+    findFirst xtract err (x : xs) =
+       case xtract x of
+         Just z    -> z
+         Nothing -> findFirst xtract err xs
 
     justAuthor (Author x) = Just x
     justAuthor _          = Nothing
 
-    as = mapMaybe justAuthor fs
-    a = if not (null as) then head as else error "No author found"
+    a = findFirst justAuthor "No author found" fs
 
     justYear (Year x) = Just x
     justYear _        = Nothing
 
-    ys = mapMaybe justYear fs
-    y = if not (null ys) then head ys else error "No year found"
+    y = findFirst justYear "No year found" fs
 
     justTitle (Title x) = Just x
     justTitle _         = Nothing
 
-    ts = mapMaybe justTitle fs
-    t = if not (null ts) then head ts else error "No title found"
+    t = findFirst justTitle "No title found" fs

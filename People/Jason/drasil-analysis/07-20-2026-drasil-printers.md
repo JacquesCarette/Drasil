@@ -1,5 +1,19 @@
 # `drasil-printers` Shallow File Analysis
 
+## Summary
+
+[#4989](https://github.com/JacquesCarette/Drasil/issues/4989) is a great project and this file analysis affirms a considerable portion of the intended work outlined in that project. To continue however (I will not reiterate major work mentioned in that issue; most important, relevant one being about using intermediate output representations before rendering to `Doc`s), we should also:
+
+1. [ ] Work on erasing (rendering) `Citation`s earlier (at the level of the document language currently residing in `drasil-lang`) before it is converted into the `LayoutObj`/`Document` language residing in `drasil-printers`. This will require us to upgrade the `Spec` language with more features for text formatting (bold, italics, etc.).
+2. [ ] Work on erasing `Reference`s earlier too.
+3. [ ] Remove the `genJupyterLessonPlan` vs `genJupyterSRS` difference. We should opt for `genJupyterLessonPlan` short-term and wait for [#2346](https://github.com/JacquesCarette/Drasil/issues/2346) to 'fix' the results of the erasing `genJupyterSRS` (which generates a single cell) versus `genJupyterLessonPlan` (which renders every `LayoutObj` in its own cell).
+4. [ ] Move the mdBook generator _out_ of `drasil-printers`. `mdBook` _relies_ on `drasil-printers`, but there is much more knowledge that goes into building an mdBook project than that should be captured in `drasil-printers`.
+5. [ ] Move `drasil-printers/lib/Language/Drasil/Plain/Print.hs`, removing mention of `LayoutObj` and `Spec`, opting for directly rendering to `String`, so as to allow us to move the `Drasil.Code` modules in `drasil-lang` to be moved to `drasil-code`.
+6. [ ] Move `mdbook` to its own package. This is a package that should _depend_ on `drasil-printers` for `LayoutObj` and Markdown rendering, and `drasil-gool` for code rendering.
+7. [ ] We also need to be able to encode arbitrary code blocks in our `LayoutObj` language. This should not rely on `drasil-gool` nor `drasil-code` at all. It truly needs to be arbitrary with an optional tag for what language is used (if a real language was used).
+8. [ ] (Copied from later section: `/Import/**.hs`) `drasil-printers` should only be dependent on only one kind of package: intermediate document representation formats, including HTML, TeX, Markdown, `Doc`, etc. Even `Doc` (e.g., `prettyprinter`) is a stretch. Specific `Doc`s should be producible through rendering the HTML/TeX/Markdown/etc. External packages that need to typeset scientific documents should rely on `drasil-printers`' public API which also provides renderers for specific languages (e.g., HTML/TeX/Markdown/etc.).
+9. [ ] With (8), `drasil-printers` is an imprecise name. We should refine that. It would contain exclusively a generic scientific document typesetting (not 'writing'/'laying out') language and renderers for the generic scientific typesetting language to arbitrary supported document formats (TeX, HTML, Markdown, and Jupyter). "Project output formats" (such as mdBook) should rely on `drasil-printers` for running generic scientific document layout programs (i.e., for converting `Section`s into `LayoutObj`s/finally typesetting scientific documents). In this sense, `drasil-printers` is both an overlanguage (over HTML/TeX/etc.) and intermediate representation (for the generic scientific document layout language).
+
 ## `drasil-printers/lib/Language/Drasil/Config.hs`
 
 Contains two kinds of options:
@@ -37,7 +51,7 @@ We will ignore these files because they are being rewritten in [#5319](https://g
 
 This folder does not contain a JSON generator. It contains an IPYNB generator (Jupyter/Interactive Python Notebook generator).
 
-* [ ] Rename this folder to `IPYNB` OR `Jupyter`.
+* [ ] Rename this folder to `IPyNb` OR `Jupyter`. I prefer the former.
 
 ### `drasil-printers/lib/Language/Drasil/JSON/Helpers.hs`
 
@@ -69,7 +83,7 @@ genJupyterSRS (Document t a c) =
   in renderJSON pretty $ JObject $ ("cells", cells) : makeMetadata
 ```
 
-It is a massive problem that `drasil-printers` is aware of the existence of `drasil-srs` and `drasil-lesson-plan`. The difference between the two is that _effectively_ between using `printLO` and `printLO'`:
+Problem: `drasil-printers` is aware of the existence of `drasil-srs` and `drasil-lesson-plan`. The difference between the two is _effectively_ between using `printLO` or `printLO'`:
 
 ```haskell
 -- | Helper for rendering LayoutObjects into JSON
@@ -95,6 +109,10 @@ printLO' HDiv{}                           = mempty
     ```
     `printLO' Definition{}                     = []` would also need to be fixed.
 * [ ] Re-evaluate the constructors for `LayoutObj` to learn more about _how_ and _where_ the final renderer can really infer when things should be `LayoutObj`s should be split into cells or merged together as one.
+
+Another question: why does `drasil-printers` know about ipynb files? Yes, the answer is obvious: its a kind of file we want to generate. However, we also want ipynb files to contain arbitrary code snippets and and textual content. What we really want in a Jupyter notebook encoding is a unique type that sits atop the `Document`/`LayoutObj`-based document language in `drasil-printers` that contains extra support for nesting GOOL code in it. To make this work, we should move the Jupyter IPYNB file encoding to a new drasil subproject that depends on both `drasil-gool`/`drasil-code` and `drasil-printers`.
+
+* [ ] Create a concrete Jupyter notebook encoding and move it out of `drasil-printers`. It should rely on `drasil-printers` and show how the Jupyter notebooks can be rendered with both `drasil-printers` and `drasil-gool`.
 
 ## `drasil-printers/lib/Language/Drasil/Markdown/**.hs`
 
@@ -231,6 +249,7 @@ There is no clear reason why the majority of these exist in this file.
 * [ ] `Author` should be removed. Definitely information that should have been erased earlier.
 * [ ] `RefMap` appears to only be used in the mdBook generator. It should be moved there because the "reference" system also needs to be rebuilt and we don't want to encourage reusing this type.
 * [ ] `HDiv` should be investigated. It does not look like a good constructor in a generic object layout language.
+* [ ] `CodeBlock` contains `Contents` (a `Spec`/`Sentence`). It should support more than just that. Permitting an optional language annotation and an arbitrary `Doc` is probably best. That way we don't establish a dependency between `drasil-printers` and `drasil-gool`/etc. and also don't restrict ourselves to langauges supported by said packages.
 
 ### `drasil-printers/lib/Language/Drasil/Printing/PrintingInformation.hs`
 
@@ -261,6 +280,28 @@ A major issue with `PrintingInformation` is that it solely makes sense in the co
 ### `drasil-printers/lib/Language/Drasil/Printing/Import/**.hs`
 
 A folder that contains the "renderers" from the types in `drasil-lang` into the various "atom" types in `drasil-printers`: `Spec`, `Expr`, `Citation` as well as to the main layout programs: `Document` and `Project`.
+
+The problem with these modules is that they create heavy dependencies on other packages, which really ought to be dependent on `drasil-printers` for laying out their documents and rendering them. We previously had a code grouping/packaging style that grouped like-things (generators go in `drasil-gen`, printers go in `drasil-printers`, languages go in `drasil-lang`, etc.). This however creates complex dependency graphs that often created cycles when trying to move a few things around. We should move away from this style and create more independent packages.
+
+Claim: `drasil-printers` should only be dependent on only one kind of package: intermediate document representation formats, including HTML, TeX, Markdown, `Doc`, etc. Even `Doc` (e.g., `prettyprinter`) is a stretch. Specific `Doc`s should be producible through rendering the HTML/TeX/Markdown/etc. External packages that need to typeset scientific documents should rely on `drasil-printers`' public API which also provides renderers for specific languages (e.g., HTML/TeX/Markdown/etc.). In this sense, an arguably more appropriate name for `drasil-printers` is `drasil-sci-doc`.
+
+To make the above work, we should expose one or two things:
+
+1. A public interface from `drasil-printers` that assists with building `Expr`s, `Spec`s, and `LayoutObj`s.
+2. Perhaps: 3 typeclasses to tidy up some code, in a similar design as `ToFiles`:
+
+```haskell
+class TypesetExpr t opts | opts -> t where
+  typesetExpr :: opts -> t -> Expr
+
+class TypesetSentence t opts | opts -> t where
+  typesetSentence :: opts -> t -> Spec
+
+class TypesetLayout t opts | opts -> t where
+  typesetLayout :: opts -> t -> LayoutObj
+```
+
+Note: as @JacquesCarette mentioned previously, there will likely be a stateful monad we should build to avoid passing around `opts` everywhere. For now, a simple design suffices, but we should definitely move towards stateful rendering once code is cleaned up a little bit more.
 
 #### `drasil-printers/lib/Language/Drasil/Printing/Import/Citation.hs`
 

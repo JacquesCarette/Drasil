@@ -61,7 +61,7 @@ import Drasil.GOOL (Label, File, Body, Block, SVariable, SValue, Class,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar,
   privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
   CodeType(..), onStateValue, TypeData, ParamData, TypeElim, OODeclStatement,
-  OOVariableValue, OOStatement, MathConstant, Argument, PrintFile, BodySym)
+  OOVariableValue, MathConstant, Argument, PrintFile, BodySym, InternalValueExp)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -84,7 +84,22 @@ spaceCodeType s = do
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
 value
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r, OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , InternalValueExp r
+    , OOValueExpression r
+    , SelfSym r
+    , List r stmt
+    , Reference r
+    , OO.Set r
+    , TypeElim r
+    , VariableElim r
+    )
   => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 value u s t = do
   g <- get
@@ -180,7 +195,23 @@ classVariable c v = do
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkVal
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , OO.Set r
+    , Reference r
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
@@ -205,7 +236,7 @@ mkVar v = do
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParam
-  :: (OOStatement r stmt, VariableElim r)
+  :: (SelfSym r, VariableValue r, ParameterSym r, VariableElim r)
   => ParameterChunk -> GenState (MS (r ParamData))
 mkParam p = do
   v <- mkVar (quantvar p)
@@ -326,7 +357,17 @@ genMethod f n desc p r b = do
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc
-  :: (MultiStatement r stmt, OOStatement r stmt, VariableElim r)
+  ::
+    ( OO.Literal r
+    , VariableValue r
+    , SelfSym r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , BodySym r stmt
+    , VariableElim r
+    )
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
   -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r mthd))
   -> Label
@@ -354,7 +395,23 @@ genInOutFunc f docf n desc ins' outs' b = do
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExpr
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , OO.Set r
+    , Reference r
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeExpr -> GenState (SValue r)
 convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
@@ -445,7 +502,23 @@ convExpr (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , OO.Set r
+    , Reference r
+    , TypeElim r
+    , VariableElim r
+    )
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
@@ -516,7 +589,7 @@ unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (ValueSym r) => UFuncVV -> (SValue r -> SValue r)
+unopVV :: UFuncVV -> (SValue r -> SValue r)
 unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
@@ -638,8 +711,24 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt
   ::
-    ( OOStatement r stmt
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , Array r
+    , List r stmt
+    , OO.Set r
+    , Reference r
     , MultiStatement r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
     , ValueStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -754,7 +843,27 @@ genDataFunc nameTitle desc ddef = do
 -- this is really ugly!!
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readData
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , OOVariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , OO.Set r
+    , OODeclStatement r stmt
+    , ControlStatement r stmt
+    , StringStatement r stmt
+    , FileHandling r stmt
+    , ReadFile r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => DataDesc -> GenState [MS (r Block)]
 readData ddef = do
   g <- get
@@ -768,7 +877,16 @@ readData ddef = do
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
-          :: (OOStatement r stmt, VariableElim r)
+          ::
+            ( OO.Literal r
+            , OOVariableValue r
+            , List r stmt
+            , OODeclStatement r stmt
+            , ControlStatement r stmt
+            , StringStatement r stmt
+            , ReadFile r stmt
+            , VariableElim r
+            )
           => Data -> r ScopeData -> GenState [MS (r stmt)]
         inData (Singleton v) _ = do
             vv <- mkVar v
@@ -793,7 +911,13 @@ readData ddef = do
           return $ readLines ls
         ---------------
         lineData
-          :: (OOStatement r stmt, VariableElim r)
+          ::
+            ( OOVariableValue r
+            , List r stmt
+            , OODeclStatement r stmt
+            , StringStatement r stmt
+            , VariableElim r
+            )
           => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r stmt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
@@ -896,8 +1020,8 @@ variableProc s t = do
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, throw an error, since procedural renderers
 -- don't support 'Bundled' inputs yet.
-inputVariableProc :: (VariableSym r) => Structure -> ConstantRepr -> SVariable r ->
-  GenState (SVariable r)
+inputVariableProc
+  :: Structure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 inputVariableProc Unbundled _ v = return v
 inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
 
@@ -907,8 +1031,8 @@ inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers d
 -- If constants stored 'WithInputs', call 'inputVariable'.
 -- If constants are 'Inline'd, the generator should not be attempting to make a
 -- variable for one of the constants.
-constVariableProc :: (VariableSym r) => ConstantStructure -> ConstantRepr ->
-  SVariable r -> GenState (SVariable r)
+constVariableProc
+  :: ConstantStructure -> ConstantRepr -> SVariable r -> GenState (SVariable r)
 constVariableProc (Store Unbundled) _ v = return v
 constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
 constVariableProc WithInputs cr v = do
@@ -950,29 +1074,7 @@ mkVarProc v = do
 
 -- | Converts a 'Mod' to GOOL.
 genModDefProc
-  ::
-    ( NativeVector r
-    , MathConstant r
-    , BooleanExpression r
-    , Comparison r
-    , NumericExpression r
-    , ValueExpression r
-    , VariableValue r
-    , DeclStatement r stmt
-    , AssignStatement r stmt
-    , ControlStatement r stmt
-    , StringStatement r stmt
-    , FileHandling r stmt
-    , ReadFile r stmt
-    , PrintFile r stmt
-    , Argument r
-    , Array r
-    , List r stmt
-    , Reference r
-    , OO.Set r
-    , ProcProg r vis stmt mthd prg
-    , TypeElim r
-    )
+  :: (NativeVector r, ProcProg r vis stmt mthd prg)
   => Mod -> GenState (FS (r File))
 genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
@@ -996,7 +1098,6 @@ publicFuncProc
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt
     , MethodSym r vis stmt mthd
     , VariableElim r
     )
@@ -1020,7 +1121,6 @@ privateFuncProc
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt
     , MethodSym r vis stmt mthd
     , VariableElim r
     )
@@ -1046,7 +1146,6 @@ genMethodProc
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt
     , MethodSym r vis stmt mthd
     , VariableElim r
     )
@@ -1215,7 +1314,6 @@ readDataProc ddef = do
         lineData
           ::
             ( VariableValue r
-            , NativeVector r
             , List r stmt
             , DeclStatement r stmt
             , StringStatement r stmt

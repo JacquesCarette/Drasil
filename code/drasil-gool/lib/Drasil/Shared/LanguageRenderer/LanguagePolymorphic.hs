@@ -26,10 +26,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   MultiStatement(multi), AssignStatement((&++)), (&=), TypeElim(..),
   PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
-  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression)
+  VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
+  VariableValue, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (OOStatement, File, Module, Class, Initializers,
-  CSStateVar, newObj, objMethodCallNoParams, ($.), AttachmentSym(..))
+import Drasil.GOOL.InterfaceGOOL (File, Module, Class, Initializers, CSStateVar,
+  newObj, objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -554,7 +555,9 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
-initStmts :: (OOStatement r stmt) => Initializers r -> MS (r Body)
+initStmts
+  :: (VariableValue r, SelfSym r, AssignStatement r stmt, BodySym r stmt)
+  => Initializers r -> MS (r Body)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function

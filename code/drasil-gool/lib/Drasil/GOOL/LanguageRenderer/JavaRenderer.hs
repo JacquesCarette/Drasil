@@ -22,12 +22,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
-  OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
-  AttachmentSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  objMethodCall, selfMethodCall, newObj, InternalValueExp(..), OOFunctionSym(..),
-  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
+  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
+  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
+  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -129,7 +129,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOStatement JavaCode (Doc, Terminator)
 instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
 instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where

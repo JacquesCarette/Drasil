@@ -218,10 +218,6 @@ instance
 
 -- SharedProg Boilerplate
 
-instance
-  (G.OOStatement r stmt, MultiStatement r stmt, VariableElim r)
-  => G.OOStatement (LoggingFor r) stmt
-
 instance (VariableSym r) => VariableSym (LoggingFor r) where
   var = liftLogging var
   constant = liftLogging constant

@@ -16,6 +16,7 @@ import Drasil.GOOL (OOProg, Literal, Comparison, List, StrategyPattern,
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
 import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (GSProgram)
+import Drasil.TestingKit (testMain)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
@@ -28,12 +29,12 @@ import FileTests (fileTestsOO, fileTestsProc)
 import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 import VectorTest (vectorTestProc)
-import Test.Tasty (TestTree, defaultMain, testGroup)
+import Test.Tasty (TestTree, testGroup)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
-main = defaultMain codeGenTestGroup
+main = testMain codeGenTestGroup
 
 codeGenTestGroup :: TestTree
 codeGenTestGroup =

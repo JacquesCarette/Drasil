@@ -48,11 +48,14 @@ extra-deps:
 
 # Stan dependencies
 - dir-traverse-0.2.3.0@sha256:adcc128f201ff95131b15ffe41365dc99c50dc3fa3a910f021521dc734013bfa,2137
-- extensions-0.1.1.0@sha256:ff626b96e6b9eb8caecab416ac7731854f827c031d3115586079c1bf80e8efdf,5387
+- extensions-0.1.0.2@sha256:8de9ec6ebaa20fe9ccf78dd52c712de2a52f6ed9d33b5c3c6ce892f437acf412,5321
 - trial-0.0.0.0@sha256:6fd1cf747fa2da4770f9ea6088f7beecdd302cdead6a70030bc027b814a95d50,4410
 - trial-optparse-applicative-0.0.0.0@sha256:bf39583c25ff7b78ebe049b30ee7ec35714c7cfc2ee02d1e4e471c871668460d,2540
 - trial-tomland-0.0.0.0@sha256:822774d645b22e24e3dca3a5b6776fe36a7505f267f87b01409c386b923d57c7,2541
-- Cabal-syntax-3.16.1.0@sha256:17cf54d07d7aa65ea24ba4045912b8a8af065f10e429fd1811d43810b313c504,7778
+- Cabal-syntax-3.12.1.0@sha256:6dbb06fb08ff77520947fb4c1ef281c9cea5b8dc7fd9a41ad62273fa916cf4b2,7407
+
+# `make graphs` dependencies
+- Cabal-3.12.1.0@sha256:08be296ddd941b3f9be4bd125fbb3e6857f5c707b8d10464f6f1d30c91ca3e5f,13551
 
 # This configuration option allows the use of newer versions of dependencies than what is specified
 allow-newer: true
@@ -61,6 +64,7 @@ allow-newer: true
 # In this case, it's allowing newer versions of the 'stan' package.
 allow-newer-deps:
 - multiplate
+- extensions
 
 # Used only for a basic set of flags for haddock
 build:

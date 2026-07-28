@@ -41,7 +41,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
-  docMod, fileFromData, buildModule, modFromData, function, funcDecDef,
+  docMod, fileFromData, modFromData, function, funcDecDef,
   innerType)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
@@ -51,18 +51,18 @@ import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
-  greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litDouble,
-  litInt, litString, valStmt, emptyStmt, assign, funcAppMixedArgs, call, print,
-  ifCond, tryCatch, listAccess)
+  greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litChar,
+  litDouble, litInt, litString, valStmt, emptyStmt, assign,
+  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
-  listDecDef, litSet)
+  listDecDef, litSet, notNull)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
   extFuncAppMixedArgs, funcType, listSize, forEach')
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
-  increment1, decrement1, stringListVals, stringListLists)
+  increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
@@ -70,22 +70,22 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   FuncData(fType, funcDoc), fd)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
-  powerPrec, unExpr, unExpr', binExpr, mkStateVal, mkVal, mkStateVar, mkStmtNoEnd,
-  compEqualPrec, typeUnExpr, typeBinExpr)
+  powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
+  mkStateVar, mkStmtNoEnd, compEqualPrec, typeUnExpr, typeBinExpr)
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
-  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty)
-import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensMStoVS, revFiles,
-  setFileType, getMainDoc)
+  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat)
+import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
+  revFiles, setFileType, getMainDoc)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, text, (<>), (<+>), ($$), vcat,
-  hcat, parens, brackets, braces, equals, punctuate, render)
+import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, text, (<>), (<+>), vcat,
+  hcat, parens, brackets, braces, equals, quotes, punctuate, render)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -197,7 +197,7 @@ instance BinaryOpSym MatlabCode where
   multOp = G.multOp
   divideOp = G.divideOp
   powerOp = powerPrec "^"
-  moduloOp = undefined
+  moduloOp = multPrec "mod"
   andOp = C.andOp
   orOp = C.orOp
 
@@ -242,9 +242,9 @@ instance Argument MatlabCode where
 instance Literal MatlabCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = undefined
+  litChar = G.litChar quotes
   litDouble = G.litDouble
-  litFloat = undefined
+  litFloat f = mkStateVal float (text $ show (realToFrac f :: Double))
   litInt = G.litInt
   litString = G.litString
   litArray = litList
@@ -271,7 +271,7 @@ instance NumericExpression MatlabCode where
   (#-) = binExpr minusOp
   (#*) = binExpr multOp
   (#/) = binExpr divideOp
-  (#%) = undefined
+  (#%) = binExpr' moduloOp
   (#^) = binExpr powerOp
   log = unExpr logOp
   ln = unExpr lnOp
@@ -307,10 +307,10 @@ instance ValueExpression MatlabCode where
   extFuncAppMixedArgs = CS.extFuncAppMixedArgs
   libFuncAppMixedArgs = CS.extFuncAppMixedArgs
   lambda = undefined
-  notNull = undefined
+  notNull = CP.notNull "[]"
 
 instance RenderValue MatlabCode where
-  inputFunc = undefined
+  inputFunc = mkStateVal string (text "input" <> parens (text "'', 's'"))
   printFunc = mlPrintFunc
   printLnFunc = mlPrintFunc
   printFileFunc _ = mlPrintFunc
@@ -342,7 +342,7 @@ instance Array MatlabCode where
 
 instance List MatlabCode (Doc, Terminator) where
   listSize = CS.listSize "length"   -- length(v)
-  listAdd = undefined
+  listAdd = mlListAdd
   listAppend lst = listSet lst (listSize lst)
   listAccess = G.listAccess
   listSet = mlListSet
@@ -363,7 +363,7 @@ instance NativeVector MatlabCode where
   vecUnit a = a #/ vecMag a                  -- a / norm(a)
 
 instance InternalList MatlabCode where
-  listSlice' = undefined
+  listSlice' = M.listSlice
 
 instance InternalListFunc MatlabCode where
   listAccessFunc t v = intValue v >>= ((`funcFromData` t) . mlListAccessFunc)
@@ -437,8 +437,8 @@ instance PrintConsole MatlabCode (Doc, Terminator) where
   printStrLn = G.print True Nothing printLnFunc . litString
 
 instance ReadConsole MatlabCode (Doc, Terminator) where
-  getInput = undefined
-  discardInput = undefined
+  getInput = mlInput inputFunc
+  discardInput = valStmt inputFunc
 
 instance FileHandling MatlabCode (Doc, Terminator) where
   openFileR f n = f &= funcApp "fopen" infile [n, litString "r"]
@@ -566,10 +566,12 @@ instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
 instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
-  -- Function-file layout (runs in both MATLAB and Octave): the main code
-  -- becomes the entry function `function <name>(varargin) ... end` and comes
-  -- first, then the local functions. Command-line args map to varargin.
-  buildModule n _ = A.buildModule n (mlMainFunc n) (pure empty)
+  buildModule n _ fs = modFromData n (do
+    fns <- mapM (zoom lensFStoMS) fs
+    entryFn <- mlMainFunc n
+    let fnDocs = vibcat (map RC.method fns)
+        content = vibcat (filter (not . isEmpty) [entryFn, fnDocs])
+    return $ emptyIfEmpty content content)
 
 instance RenderMod MatlabCode where
   modFromData n = A.modFromData n (toCode . md n)
@@ -766,6 +768,21 @@ mlArrayElem arr' i' = do
   arr <- arr'
   mkStateVar (render $ RC.value arr) (A.innerType $ return $ valueType arr)
     (RC.value arr <> parens (RC.value i))
+
+mlListAdd :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlListAdd lst' idx' val' = do
+  lst <- zoom lensMStoVS lst'
+  idx <- zoom lensMStoVS (intToIndex idx')
+  v   <- zoom lensMStoVS val'
+  let lstDoc = RC.value lst
+      idxDoc = RC.value idx
+      valDoc = RC.value v
+      lvar = mkStateVar (render lstDoc) (toState $ valueType lst) lstDoc
+  lvar &= mkStateVal (toState $ valueType lst)
+    (brackets (lstDoc <> parens (text "1:" <> parens (idxDoc <+> text "- 1"))
+     <> text "," <+> valDoc
+     <> text "," <+> lstDoc <> parens (idxDoc <> text ":end")))
 
 mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
   -> MS (MatlabCode (Doc, Terminator))

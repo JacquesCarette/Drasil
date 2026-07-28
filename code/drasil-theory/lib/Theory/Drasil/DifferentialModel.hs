@@ -259,7 +259,6 @@ addIdentityValue n es = front ++ ident back
     ident [] = error "second half should not be empty"
     ident (_ : xs) = exactDbl 1 : xs
 
-
 -- | Add zeroes to Constants
 -- len is the size of new constant vector
 addIdentityConsts :: [Expr] -> Int -> [Expr]

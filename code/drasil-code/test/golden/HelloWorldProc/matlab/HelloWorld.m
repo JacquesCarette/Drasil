@@ -85,17 +85,17 @@ function HelloWorld(varargin)
     myOtherList(length(myOtherList) + 1) = 2.5;
     e = myOtherList(2);
     myOtherList(2) = 17.4;
-    myName = [];
+    myName = {};
     myName = strsplit("Brooks Mac", " ");
     fprintf('%s', "[");
     list_i1 = 0;
     while list_i1 < length(myName) - 1
-        fprintf('%s', myName(list_i1 + 1));
+        fprintf('%s', myName{list_i1 + 1});
         fprintf('%s', ", ");
         list_i1 = list_i1 + 1;
     end
     if length(myName) > 0
-        fprintf('%s', myName(length(myName) - 1 + 1));
+        fprintf('%s', myName{length(myName) - 1 + 1});
     end
     fprintf('%s\n', "]");
     boringList = [false, false, false, false, false];

@@ -21,7 +21,7 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
   FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   switchAsIf, VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), funcApp, (&=))
+  BinderElim(..), MethodSym(..), funcApp, (&=), bodyStatements)
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -66,7 +66,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
   varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
-  FuncData(fType, funcDoc), fd)
+  FuncData(fType, funcDoc), fd, ScopeData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
@@ -297,8 +297,8 @@ instance Comparison MatlabCode where
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
   (?>=) = typeBinExpr greaterEqualOp bool
-  (?==) = typeBinExpr equalOp bool
-  (?!=) = typeBinExpr notEqualOp bool
+  (?==) = mlStrCmp False
+  (?!=) = mlStrCmp True
 
 instance ValueExpression MatlabCode where
   inlineIf = mlInlineIf
@@ -364,10 +364,14 @@ instance InternalList MatlabCode where
   listSlice' = M.listSlice
 
 instance InternalListFunc MatlabCode where
-  listAccessFunc t v = intValue v >>= ((`funcFromData` t) . mlListAccessFunc)
+  listAccessFunc t v = do
+    t' <- t
+    iv <- intValue v
+    funcFromData (mlListAccessFunc (cType (unMLC t')) iv) (return t')
 
-mlListAccessFunc :: (CommonRenderSym r vis stmt mthd) => r Value -> Doc
-mlListAccessFunc v = parens $ RC.value v
+mlListAccessFunc :: CodeType -> MatlabCode Value -> Doc
+mlListAccessFunc String v = braces $ RC.value v
+mlListAccessFunc _      v = parens $ RC.value v
 
 instance BinderSym MatlabCode where
   binder = undefined
@@ -421,8 +425,7 @@ instance DeclStatement MatlabCode (Doc, Terminator) where
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
-  listDec _ v scp = CS.varDecDef v scp
-    (Just (mkStateVal (onStateValue variableType v) (brackets empty)))
+  listDec _ v scp = mlListDec v scp
   listDecDef = CP.listDecDef
   arrayDec _ _ = varDec
   arrayDecDef = listDecDef
@@ -456,7 +459,7 @@ instance ReadFile MatlabCode (Doc, Terminator) where
   discardFileInput f = valStmt (mlReadLine f)
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
-  getFileInputAll f v = v &= funcApp "readlines" (listType string) [f]
+  getFileInputAll f v = mlReadAllLines f v
 
 instance StringStatement MatlabCode (Doc, Terminator) where
   stringSplit d vnew s = vnew &= funcApp "strsplit" (listType string) [s, litString [d]]
@@ -734,6 +737,41 @@ mlCast t' v' = do
       mlCast' _      _       = vDoc
   mkVal t (mlCast' vTp tTp)
 
+mlStrCmp :: Bool -> SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlStrCmp neg v1' v2' = do
+  v1 <- v1'
+  v2 <- v2'
+  t  <- bool
+  let tp = getCodeType (valueType v1)
+      d  = text "strcmp" <> parens (RC.value v1 <> listSep' <> RC.value v2)
+      strDoc = if neg then text "~" <> d else d
+  case tp of
+    String -> mkVal t strDoc
+    _      -> if neg then typeBinExpr notEqualOp bool (return v1) (return v2)
+                     else typeBinExpr equalOp bool (return v1) (return v2)
+
+mlListDec :: SVariable MatlabCode -> MatlabCode ScopeData
+  -> MS (MatlabCode (Doc, Terminator))
+mlListDec v scp = do
+  vr <- zoom lensMStoVS v
+  let emptyInit = case getCodeType (variableType vr) of
+        List String -> braces empty
+        _           -> brackets empty
+  CS.varDecDef (return vr) scp
+    (Just (mkStateVal (toState $ variableType vr) emptyInit))
+
+mlReadAllLines :: SValue MatlabCode -> SVariable MatlabCode
+  -> MS (MatlabCode (Doc, Terminator))
+mlReadAllLines f v = do
+  let var_line = var "mlLine" string
+      v_line   = valueOf var_line
+      readLine = funcApp "fgetl" string [f]
+      cond     = funcApp "ischar" bool [v_line]
+  multi [var_line &= readLine,
+    while cond (bodyStatements
+      [listAppend (valueOf v) v_line,
+       var_line &= readLine])]
+
 mlEnd, mlElseIf :: Doc
 mlEnd = text "end"
 mlElseIf = text "elseif"
@@ -789,7 +827,11 @@ mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
 mlListSet lst' idx' val' = do
   lst <- zoom lensMStoVS lst'
   idx <- zoom lensMStoVS (intToIndex idx')
-  let lvar = mkStateVar (render $ RC.value lst)
+  let elTp = getCodeType (valueType lst)
+      wrap = case elTp of
+        List String -> braces
+        _           -> parens
+      lvar = mkStateVar (render $ RC.value lst)
                (A.innerType $ return $ valueType lst)
-               (RC.value lst <> parens (RC.value idx))
+               (RC.value lst <> wrap (RC.value idx))
   lvar &= val'

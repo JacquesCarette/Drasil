@@ -11,6 +11,8 @@ module Theory.Drasil.DifferentialModel (
 
 import Control.Lens (makeLenses, (^.), view)
 import Data.List (find)
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 
 import Drasil.Database (HasUID(uid), HasChunkRefs(..), mkUid)
 
@@ -69,11 +71,11 @@ data DifferentialModel = SystemOfLinearODEs {
   -- | dependent variable
   _depVar :: ConstrConcept,
   -- | coefficients matrix
-  _coefficients :: [[Expr]],
+  _coefficients :: NonEmpty (NonEmpty Expr),
   -- | unknowns column vector (orders)
   _unknowns :: [Unknown],
   -- | constant column vector
-  _dmConstants :: [Expr],
+  _dmConstants :: NonEmpty Expr,
   -- | meta data
   _dmconc :: ConceptChunk
 }
@@ -130,22 +132,23 @@ instance RequiresChecking DifferentialModel Expr Space where
 -- | Set the expression be a system of linear ODE to Ax = b
 formStdODE :: DifferentialModel -> ModelExpr
 formStdODE d
-  | size == 1 = formASingleODE (head (d ^. coefficients)) unknownVec (d ^. dmConstants)
+  | size == 1 = formASingleODE (NE.head (d ^. coefficients)) unknownVec (d ^. dmConstants)
   | otherwise = equiv (coeffsMatix $. columnVec unknownVec : constantVec)
-  where size = length (d ^. coefficients)
-        coeffsMatix = express(matrix (d ^. coefficients))
-        unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
-        constantVec = [express (columnVec (d ^. dmConstants))]
+  where
+    size = length (d ^. coefficients)
+    coeffsMatix = express(matrix (map NE.toList (NE.toList $ d ^. coefficients)))
+    unknownVec = formAllUnknown (d ^. unknowns) (d ^. depVar) (d ^. indepVar)
+    constantVec = [express (columnVec (NE.toList $ d ^. dmConstants))]
 
 -- | Set the single ODE to a flat equation form, "left hand side" = "right hand side"
-formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
+formASingleODE :: NonEmpty Expr -> [ModelExpr] -> NonEmpty Expr -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
-  where lhs = foldl1 ($+) (map (\x-> express (fst x) $* snd x) $ filterZeroCoeff coeffs unks)
-        rhs = map express consts
+  where lhs = foldl1 ($+) (map (\(x,y) -> express x $* y) $ filterZeroCoeff coeffs unks)
+        rhs = map express $ NE.toList consts
 
 -- | Remove zero coefficients for the displaying purpose
-filterZeroCoeff :: [Expr] -> [ModelExpr] -> [(Expr, ModelExpr)]
-filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip es mes
+filterZeroCoeff :: NonEmpty Expr -> [ModelExpr] -> [(Expr, ModelExpr)]
+filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip (NE.toList es) mes
 
 -- | Form all derivatives for the displaying purpose
 formAllUnknown :: [Unknown] -> ConstrConcept -> DefinedQuantityDict -> [ModelExpr]
@@ -164,7 +167,7 @@ formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy dep)
   conceptChuck:
     uid ('String'), term ('NP'), definition ('Sentence').
 -}
-makeASystemDE :: DefinedQuantityDict -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
+makeASystemDE :: DefinedQuantityDict -> ConstrConcept -> NonEmpty (NonEmpty Expr) -> [Unknown] -> NonEmpty Expr -> String -> NP -> Sentence -> DifferentialModel
 makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
  | length coeffs /= length const' =
   error "Length of coefficients matrix should equal to the length of the constant vector"
@@ -181,13 +184,12 @@ makeASingleDE indepVar'' depVar'' lhs const'' id'' term'' defn''
   error "Length of coefficients matrix should equal to the length of the constant vector"
  | not $ isCoeffsMatchUnknowns coeffs unks =
   error "The length of each row vector in coefficients need to equal to the length of unknowns vector"
- | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks [const''] (cncpt''' (mkUid id'') term'' defn'')
+ | otherwise = SystemOfLinearODEs indepVar'' depVar'' coeffs unks (const'' :| []) (cncpt''' (mkUid id'') term'' defn'')
   where unks = createAllUnknowns(findHighestOrder lhs ^. unk) depVar''
-        coeffs = [createCoefficients lhs unks]
+        coeffs = createCoefficients lhs unks :| []
 
 -- | Function to check whether dimension of coefficient is match with the unknown vector
-isCoeffsMatchUnknowns :: [[Expr]] -> [Unknown] -> Bool
-isCoeffsMatchUnknowns [] _ = error "Coefficients matrix can not be empty"
+isCoeffsMatchUnknowns :: NonEmpty (NonEmpty Expr) -> [Unknown] -> Bool
 isCoeffsMatchUnknowns _ [] = error "Unknowns column vector can not be empty"
 isCoeffsMatchUnknowns coeffs unks = foldr (\ x -> (&&) (length x == length unks)) True coeffs
 
@@ -209,10 +211,12 @@ createAllUnknowns highestUnk depv
   | otherwise = highestUnk : createAllUnknowns (highestUnk - 1) depv
 
 -- | Create Coefficients base on all possible unknowns
-createCoefficients :: LHS -> [Unknown] -> [Expr]
+createCoefficients :: LHS -> [Unknown] -> NonEmpty Expr
 createCoefficients [] _ = error "Left hand side is an empty list"
-createCoefficients _ [] = []
-createCoefficients lhs (x:xs) = genCoefficient (findCoefficient x lhs) : createCoefficients lhs xs
+createCoefficients _ [] = error "No unknowns"
+createCoefficients lhs (x:xs) =
+  genCoefficient (findCoefficient x lhs) :|
+  map (\z ->  genCoefficient (findCoefficient z lhs)) xs
 
 -- | Get the coefficient, if it is Nothing, return zero
 genCoefficient :: Maybe Term -> Expr
@@ -225,14 +229,15 @@ findCoefficient u = find(\x -> x ^. unk == u)
 
 -- | Reduce the order
 transUnknowns :: [Unknown] -> [Unknown]
-transUnknowns = tail
+transUnknowns [] = error "impossible, there are always unknowns"
+transUnknowns (_ : us) = us
 
--- | Reduce the target term, move the target to the left hand side and the rest of term to the right hand side. Then, reduce its coefficient--
-transCoefficients :: [Expr] -> [Expr]
-transCoefficients es
-  | head es == exactDbl 1 = mapNeg $ tail es
-  | otherwise = mapNeg $ tail $ map ($/ head es) es
-    where mapNeg = map (\x -> if x == exactDbl 0 then exactDbl 0 else neg x)
+-- | Reduce the target term, move the target to the left hand side and the rest
+-- of term to the right hand side. Then, reduce its coefficient.
+transCoefficients :: NonEmpty Expr -> [Expr]
+transCoefficients (e :| es) =
+  map (\x -> if x == zero then zero else neg x $/ e) es
+  where zero = exactDbl 0
 
 -- | Add the "Identity Matrix" to Coefficients
 -- len is the length of the identity row,
@@ -248,8 +253,12 @@ constIdentityRowVect len index = addIdentityValue index $ replicate len $ exactD
 
 -- | Recreate the identity row vector with identity value
 addIdentityValue :: Int -> [Expr] -> [Expr]
-addIdentityValue n es = fst splits ++ [exactDbl 1] ++ tail (snd splits)
-  where splits = splitAt n es
+addIdentityValue n es = front ++ ident back
+  where
+    (front, back) = splitAt n es
+    ident [] = error "second half should not be empty"
+    ident (_ : xs) = exactDbl 1 : xs
+
 
 -- | Add zeroes to Constants
 -- len is the size of new constant vector
@@ -260,15 +269,14 @@ addIdentityConsts expr len = replicate (len - 1) (exactDbl 0) ++ expr
 divideConstant :: Expr -> Expr -> Expr
 divideConstant a b
   | b == exactDbl 0 = error "Divisor can't be zero"
-  | b == exactDbl 1 = a
   | otherwise       = a $/ b
 
 -- | Construct an ODESolverFormat for solving the ODE.
 makeAODESolverFormat :: DifferentialModel -> ODESolverFormat
 makeAODESolverFormat dm = X' transEs transUnks transConsts
   where transUnks = transUnknowns $ dm ^. unknowns
-        transEs = addIdentityCoeffs [transCoefficients $ head (dm ^. coefficients)] (length transUnks) 0
-        transConsts = addIdentityConsts [head (dm ^. dmConstants) `divideConstant` head (head (dm ^. coefficients))] (length transUnks)
+        transEs = addIdentityCoeffs [transCoefficients $ NE.head (dm ^. coefficients)] (length transUnks) 0
+        transConsts = addIdentityConsts [NE.head (dm ^. dmConstants) `divideConstant` NE.head (NE.head (dm ^. coefficients))] (length transUnks)
 
 -- | Form well-formatted ODE equations which the ODE solvers can solve.
 {-

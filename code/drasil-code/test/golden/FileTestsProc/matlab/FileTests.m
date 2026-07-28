@@ -10,6 +10,7 @@ function FileTests(varargin)
     fileLine = fgetl(fileToRead);
     fgetl(fileToRead);
     assert(fileLine ~= "", "First line should not be empty.");
+    fileContents = [];
     
     fileContents = readlines(fileToRead);
     

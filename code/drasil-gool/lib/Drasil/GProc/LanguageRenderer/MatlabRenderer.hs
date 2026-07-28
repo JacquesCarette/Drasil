@@ -45,8 +45,7 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType)
 import qualified Drasil.Shared.LanguageRenderer as R (commentedMod,
   commentedItem, parameterList, body, addComments, multiStmt, sqrt, abs, log10,
-  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue,
-  elseIfLabel)
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, break, continue)
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, param, docFunc, var, multiBody, block, multiBlock, stmt, loopStmt,
@@ -56,11 +55,11 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
-  listDecDef, litSet, notNull)
+  listDecDef, litSet)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (andOp, orOp, litTrue,
   litFalse, while)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
-  extFuncAppMixedArgs, funcType, listSize, forEach')
+  funcType, listSize, forEach')
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
@@ -304,10 +303,10 @@ instance Comparison MatlabCode where
 instance ValueExpression MatlabCode where
   inlineIf = mlInlineIf
   funcAppMixedArgs = G.funcAppMixedArgs
-  extFuncAppMixedArgs = CS.extFuncAppMixedArgs
-  libFuncAppMixedArgs = CS.extFuncAppMixedArgs
+  extFuncAppMixedArgs _ = G.funcAppMixedArgs
+  libFuncAppMixedArgs _ = G.funcAppMixedArgs
   lambda = undefined
-  notNull = CP.notNull "[]"
+  notNull v = (?!) $ funcApp "isempty" bool [v]
 
 instance RenderValue MatlabCode where
   inputFunc = mkStateVal string (text "input" <> parens (text "'', 's'"))
@@ -337,8 +336,7 @@ instance Reference MatlabCode where
 instance Array MatlabCode where
   arrayElem = mlArrayElem
   arrayLength = listSize
-  arrayCopy arr = let arrTp = onStateValue valueType arr
-    in funcApp "copy" arrTp [arr]
+  arrayCopy = id
 
 instance List MatlabCode (Doc, Terminator) where
   listSize = CS.listSize "length"   -- length(v)
@@ -423,7 +421,8 @@ instance DeclStatement MatlabCode (Doc, Terminator) where
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
-  listDec _ = varDec
+  listDec _ v scp = CS.varDecDef v scp
+    (Just (mkStateVal (onStateValue variableType v) (brackets empty)))
   listDecDef = CP.listDecDef
   arrayDec _ _ = varDec
   arrayDecDef = listDecDef
@@ -482,7 +481,7 @@ instance ControlStatement MatlabCode (Doc, Terminator) where
     v <- zoom lensMStoVS v'
     var mlRet (toState (valueType v)) &= v'
   throw errMsg = valStmt $ funcApp "error" void [litString errMsg]
-  ifCond = G.ifCond id empty (OSpace empty) R.elseIfLabel empty mlEnd
+  ifCond = G.ifCond id empty (OSpace empty) mlElseIf empty mlEnd
   switch = switchAsIf
   ifExists = M.ifExists
   for initS cond updateS b = do
@@ -735,8 +734,9 @@ mlCast t' v' = do
       mlCast' _      _       = vDoc
   mkVal t (mlCast' vTp tTp)
 
-mlEnd :: Doc
+mlEnd, mlElseIf :: Doc
 mlEnd = text "end"
+mlElseIf = text "elseif"
 
 mlForEach :: (CommonRenderSym r vis stmt mthd) => r Variable ->
   r Value -> r Body -> Doc

@@ -1,6 +1,8 @@
 function NameGenTest(varargin)
     temp = [1, 2, 3];
+    result = [];
     
+    temp0 = [];
     i = 1;
     while i < 3
         temp0(length(temp0) + 1) = temp(i + 1);
@@ -14,6 +16,9 @@ function NameGenTest(varargin)
 end
 
 function helper(temp)
+    result = [];
+    
+    temp0 = [];
     i = 1;
     while i < 3
         temp0(length(temp0) + 1) = temp(i + 1);

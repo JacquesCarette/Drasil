@@ -39,7 +39,7 @@ function HelloWorld(varargin)
     fprintf('%s', "Length of arr2: ");
     fprintf('%g\n', length(arr2));
     myOtherList = [1.0, 1.5];
-    arr_copy = copy(arr);
+    arr_copy = arr;
     fprintf('%s', "Value of arr_copy: ");
     fprintf('%s', "[");
     list_i1 = 0;
@@ -85,6 +85,7 @@ function HelloWorld(varargin)
     myOtherList(length(myOtherList) + 1) = 2.5;
     e = myOtherList(2);
     myOtherList(2) = 17.4;
+    myName = [];
     myName = strsplit("Brooks Mac", " ");
     fprintf('%s', "[");
     list_i1 = 0;
@@ -117,12 +118,24 @@ function HelloWorld(varargin)
     
     % List slicing tests
     % Create variables for list slices
+    mySlicedList = [];
+    mySlicedList2 = [];
+    mySlicedList3 = [];
+    mySlicedList4 = [];
+    mySlicedList5 = [];
+    mySlicedList6 = [];
+    mySlicedList7 = [];
+    mySlicedList8 = [];
+    mySlicedList9 = [];
+    mySlicedList10 = [];
+    mySlicedList11 = [];
     
     % Create some variables for later tests
     x = 3;
     y = 1;
     z = -1;
     
+    temp = [];
     i = 1;
     while i < 3
         temp(length(temp) + 1) = myOtherList(i + 1);
@@ -130,6 +143,7 @@ function HelloWorld(varargin)
     end
     mySlicedList = temp;
     
+    temp0 = [];
     j = 1;
     while j < 4
         temp0(length(temp0) + 1) = myOtherList(j + 1);
@@ -137,6 +151,7 @@ function HelloWorld(varargin)
     end
     mySlicedList2 = temp0;
     
+    temp1 = [];
     k = 1;
     while k < length(myOtherList)
         temp1(length(temp1) + 1) = myOtherList(k + 1);
@@ -144,6 +159,7 @@ function HelloWorld(varargin)
     end
     mySlicedList3 = temp1;
     
+    temp2 = [];
     i0 = 3;
     while i0 < 1
         temp2(length(temp2) + 1) = myOtherList(i0 + 1);
@@ -151,6 +167,7 @@ function HelloWorld(varargin)
     end
     mySlicedList4 = temp2;
     
+    temp3 = [];
     i1 = 3;
     while i1 > 1
         temp3(length(temp3) + 1) = myOtherList(i1 + 1);
@@ -158,6 +175,7 @@ function HelloWorld(varargin)
     end
     mySlicedList5 = temp3;
     
+    temp4 = [];
     i2 = length(myOtherList) - 1;
     while i2 > 1
         temp4(length(temp4) + 1) = myOtherList(i2 + 1);
@@ -165,6 +183,7 @@ function HelloWorld(varargin)
     end
     mySlicedList6 = temp4;
     
+    temp5 = [];
     i3 = 3;
     while i3 > -1
         temp5(length(temp5) + 1) = myOtherList(i3 + 1);
@@ -172,6 +191,7 @@ function HelloWorld(varargin)
     end
     mySlicedList7 = temp5;
     
+    temp6 = [];
     i4 = 3;
     while 0 < i4 && i4 <= 3 && z < 0
         temp6(length(temp6) + 1) = myOtherList(i4 + 1);
@@ -179,6 +199,7 @@ function HelloWorld(varargin)
     end
     mySlicedList8 = temp6;
     
+    temp7 = [];
     i5 = x;
     while x <= i5 && i5 < y && z > 0 || y < i5 && i5 <= x && z < 0
         temp7(length(temp7) + 1) = myOtherList(i5 + 1);
@@ -186,6 +207,7 @@ function HelloWorld(varargin)
     end
     mySlicedList9 = temp7;
     
+    temp8 = [];
     endIdx = ((z > 0) .* (length(myOtherList)) + ~(z > 0) .* (-1));
     i6 = 2;
     while 2 <= i6 && i6 < endIdx + 1 && z > 0 || endIdx + 1 < i6 && i6 <= 2 && z < 0
@@ -194,6 +216,7 @@ function HelloWorld(varargin)
     end
     mySlicedList10 = temp8;
     
+    temp9 = [];
     endIdx0 = ((z > 0) .* (length(myOtherList)) + ~(z > 0) .* (-1));
     i7 = 2;
     while 2 <= i7 && i7 < endIdx0 + 1 && z > 0 || endIdx0 + 1 < i7 && i7 <= 2 && z < 0
@@ -202,6 +225,7 @@ function HelloWorld(varargin)
     end
     mySlicedList10 = temp9;
     
+    temp10 = [];
     i8 = y;
     while y <= i8 && i8 < x && z > 0 || x < i8 && i8 <= y && z < 0
         temp10(length(temp10) + 1) = myOtherList(i8 + 1);
@@ -360,7 +384,7 @@ function HelloWorld(varargin)
     fprintf('%s\n', "");
     if b >= 6
         dummy = "dummy";
-    else if b == 5
+    elseif b == 5
         % If body -----------------------------------------------------------------
         a = 5;
         b = a + 2;
@@ -374,6 +398,7 @@ function HelloWorld(varargin)
         d = d + 1;
         c = c - 1;
         b = b - 1;
+        myList = [];
         myConst = "Imconstant";
         fprintf('%s\n', myConst);
         fprintf('%g\n', a);
@@ -443,14 +468,14 @@ function HelloWorld(varargin)
     else
         fprintf('%s\n', varargin{6});
     end
-    if boringList ~= []
+    if ~(isempty(boringList))
         fprintf('%s\n', "Ew, boring list!");
     else
         fprintf('%s\n', "Great, no bores!");
     end
     if a == 5
         b = 10;
-    else if a == 0
+    elseif a == 0
         b = 5;
     else
         b = 0;
@@ -463,7 +488,7 @@ function HelloWorld(varargin)
         a = a + 1;
     end
     for num = myOtherList
-        fprintf('%g\n', Helper.doubleAndAdd(num, 1.0));
+        fprintf('%g\n', doubleAndAdd(num, 1.0));
     end
     try error("Good-bye!");
     catch e

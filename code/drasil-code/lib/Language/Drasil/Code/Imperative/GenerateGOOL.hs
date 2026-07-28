@@ -27,9 +27,9 @@ import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, File,
   OOProg, CS, FS, MS, VS, TypeData, ValueSym(..), Argument(..),
-  ValueExpression(..), OOValueExpression(..), SelfSym(..), VariableValue(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
-  TypeElim(..), objMethodCallMixedArgs, OOStatement)
+  ValueExpression(..), InternalValueExp, OOValueExpression(..), SelfSym(..),
+  VariableValue(..), FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..),
+  CodeType(..), TypeElim(..), objMethodCallMixedArgs)
 import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -144,7 +144,14 @@ fCall f vl ns = do
 --   calling a method on self. This assumes all private methods are dynamic,
 --   which is true for this generator.
 fApp
-  :: (OOStatement r stmt, TypeElim r)
+  ::
+    ( Argument r
+    , VariableValue r
+    , SelfSym r
+    , InternalValueExp r
+    , ValueExpression r
+    , TypeElim r
+    )
   => Name -> Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 fApp m s t vl ns = do
   g <- get
@@ -156,7 +163,7 @@ fApp m s t vl ns = do
 -- | Logic similar to 'fApp', but the self case is not required here
 -- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall
-  :: (OOStatement r stmt, TypeElim r)
+  :: (Argument r, OOValueExpression r, TypeElim r)
   => Name -> VS (r TypeData) -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)

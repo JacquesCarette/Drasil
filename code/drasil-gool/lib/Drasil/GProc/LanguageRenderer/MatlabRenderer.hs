@@ -425,7 +425,7 @@ instance DeclStatement MatlabCode (Doc, Terminator) where
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
-  listDec _ v scp = mlListDec v scp
+  listDec _ = mlListDec
   listDecDef = CP.listDecDef
   arrayDec _ _ = varDec
   arrayDecDef = listDecDef
@@ -459,7 +459,7 @@ instance ReadFile MatlabCode (Doc, Terminator) where
   discardFileInput f = valStmt (mlReadLine f)
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
-  getFileInputAll f v = mlReadAllLines f v
+  getFileInputAll = mlReadAllLines
 
 instance StringStatement MatlabCode (Doc, Terminator) where
   stringSplit d vnew s = vnew &= funcApp "strsplit" (listType string) [s, litString [d]]

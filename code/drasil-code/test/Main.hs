@@ -10,7 +10,7 @@ import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
-import Drasil.GOOL (OOProg, Literal, Comparison, List, StrategyPattern,
+import Drasil.GOOL (OOProg, Literal, Comparison, List, GetSet, StrategyPattern,
   ObserverPattern, DeclStatement, ControlStatement, unJC, unPC, unCSC, unCPPC,
   unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
@@ -60,6 +60,7 @@ goolTestGroup
   :: String
   -> ( forall r vis stmt mthd stvr attch prg.
        ( OOProg r vis stmt mthd stvr attch prg
+       , GetSet r
        , StrategyPattern r stmt
        , ObserverPattern r stmt
        ) => OO.GSProgram r prg
@@ -149,6 +150,7 @@ genCodeProcNoMake unRepr unRepr' p =
 genCodeGOOL
   ::
     ( OOProg r vis stmt mthd stvr attch ProgData
+    , GetSet r
     , StrategyPattern r stmt
     , ObserverPattern r stmt
     , SoftwareDossierSym r'
@@ -158,6 +160,7 @@ genCodeGOOL
   -> (r' PackageData -> PackageData)
   -> ( forall s vis' stmt' mthd' stvr' attch' prg'.
        ( OOProg s vis' stmt' mthd' stvr' attch' prg'
+       , GetSet s
        , StrategyPattern s stmt'
        , ObserverPattern s stmt'
        ) => OO.GSProgram s prg'

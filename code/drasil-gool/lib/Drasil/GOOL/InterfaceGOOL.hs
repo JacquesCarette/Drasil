@@ -6,7 +6,7 @@ module Drasil.GOOL.InterfaceGOOL (
   -- Types
   Program, GSProgram, File, Module, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
-  OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
   OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
@@ -45,21 +45,17 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
-  BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
-  VariableElim r, OOStatement r stmt, ProgramSym r vis stmt mthd stvr attch prg
+class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
+  MathConstant r, OOVariableValue r, BooleanExpression r, Comparison r,
+  NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
+  List r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
+  VariableValue r, ScopeSym r, BinderSym r, InternalList r,
+  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, CommentStatement r stmt,
+  OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
+  ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
+  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
-
-class (Array r, AssignStatement r stmt, Argument r, BooleanExpression r,
-  CommandLineArgs r, CommentStatement r stmt, Comparison r,
-  ControlStatement r stmt, DeclStatement r stmt, FuncAppStatement r stmt,
-  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
-  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, GetSet r, InternalValueExp r, OOFuncAppStatement r stmt,
-  OOVariableValue r, OODeclStatement r stmt, OOFuncAppStatement r stmt,
-  OOFunctionSym r, OOValueExpression r
-  ) => OOStatement r stmt
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

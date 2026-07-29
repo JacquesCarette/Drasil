@@ -27,9 +27,9 @@ import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(..))
 
--- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
--- Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
--- Used when we want to assign a quantity to a concept. Includes the space, symbol, and units for that quantity.
+-- | DefinedQuantityDict is a representation of a future value with information about its type ('Space'),
+-- unit (when applicable, 'UnitDefn'), and symbol (in different 'Stage' contexts, 'Symbol').
+-- Additionally, it contains a reference to the general concept the value is an instance of ('ConceptChunk').
 --
 -- Ex. A pendulum arm can be defined as a concept with a symbol (l), space (Real numbers), and units (cm, m, etc.).
 data DefinedQuantityDict = DQD { _con :: ConceptChunk

@@ -9,10 +9,11 @@ import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
   bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
   ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
-  BooleanExpression((?&&), (?||)), at, StatementSym(..),
-  AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
+  BooleanExpression((?&&), (?||)), List, at, StatementSym(..),
+  AssignStatement((&+=), (&-=), (&++)), (&=), convScope, VariableValue, BodySym,
+  ControlStatement, DeclStatement, Literal)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (($.), observerListName, OOStatement)
+import Drasil.GOOL.InterfaceGOOL (($.), observerListName, OOFunctionSym)
 import Drasil.Shared.RendererClassesCommon (RenderValue(cast),
   ValueElim(valueInt))
 import qualified Drasil.Shared.RendererClassesCommon as S (
@@ -262,19 +263,34 @@ obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
-  :: (OOStatement r stmt)
+  :: (VariableValue r, List r stmt, OOFunctionSym r, BodySym r stmt)
   => VS (r TypeData) -> VS (r FuncData) -> MS (r Body)
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
-  :: (OOStatement r stmt)
+  ::
+    ( Literal r
+    , VariableValue r
+    , Comparison r
+    , List r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , OOFunctionSym r
+    )
   => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
   where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
 notifyObservers'
-  :: (OOStatement r stmt)
+  ::
+    ( Literal r
+    , VariableValue r
+    , List r stmt
+    , ControlStatement r stmt
+    , OOFunctionSym r
+    )
   => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )
     (IC.litInt 1) (notify t f)

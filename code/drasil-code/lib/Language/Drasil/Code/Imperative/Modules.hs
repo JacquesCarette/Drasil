@@ -33,8 +33,9 @@ import Drasil.GOOL (Body, Block, SVariable, SValue, File, CS, FS, MS, CSStateVar
   extObjDecNewNoParams, PrintConsole(..), FileHandling(..), PrintFile(..),
   ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
   StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..),
-  TypeElim, VariableElim, OOStatement, Set, Reference, Argument, ValueExpression,
-  MathConstant, Array, StringStatement, FuncAppStatement)
+  TypeElim, VariableElim, Set, Reference, Argument, ValueExpression,
+  MathConstant, Array, StringStatement, FuncAppStatement, SelfSym,
+  InternalValueExp, OOValueExpression)
 import Drasil.GProc (ProcProg, NativeVector, ReadFile)
 
 import Drasil.Code.CodeExpr.Development
@@ -125,7 +126,24 @@ genMainFunc = do
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
 getInputDecl
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , OODeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 getInputDecl = do
   g <- get
@@ -162,7 +180,24 @@ getInputDecl = do
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
 initConsts
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , OODeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 initConsts = do
   g <- get
@@ -337,7 +372,26 @@ genInputConstraints s = do
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
 sfwrCBody cs = do
   g <- get
@@ -346,7 +400,26 @@ sfwrCBody cs = do
 
 -- | Generates input constraints code block for checking physical constraints.
 physCBody
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
 physCBody cs = do
   g <- get
@@ -356,7 +429,26 @@ physCBody cs = do
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => ConstraintBehaviour
   -> [(CodeVarChunk, [ConstraintCE])]
   -> GenState [MS (r stmt)]
@@ -379,7 +471,25 @@ chooseConstr cb cs = do
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
 constrWarn
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , PrintConsole r stmt
+    , BodySym r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrWarn c = do
   let q = fst c
@@ -391,7 +501,25 @@ constrWarn c = do
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
 constrExc
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrExc c = do
   let q = fst c
@@ -401,7 +529,24 @@ constrExc c = do
 
 -- | Generates set variable dec
 constrVarDec
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , DeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeVarChunk -> CodeExpr -> GenState (MS (r stmt))
 constrVarDec v e = do
   lb <- convExpr e
@@ -413,7 +558,24 @@ constrVarDec v e = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsg
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r stmt)]
 constraintViolatedMsg q s c = do
   pc <- printConstraint (showHasSymbImpl q) c
@@ -426,13 +588,47 @@ constraintViolatedMsg q s c = do
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
 printConstraint
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => String -> ConstraintCE -> GenState [MS (r stmt)]
 printConstraint v c = do
   g <- get
   let db = printfo g
       printConstraint'
-        :: (OOStatement r stmt, TypeElim r, VariableElim r)
+        ::
+          ( Argument r
+          , MathConstant r
+          , VariableValue r
+          , Literal r
+          , BooleanExpression r
+          , Comparison r
+          , NumericExpression r
+          , SelfSym r
+          , InternalValueExp r
+          , OOValueExpression r
+          , List r stmt
+          , Reference r
+          , Set r
+          , PrintConsole r stmt
+          , TypeElim r
+          , VariableElim r
+          )
         => String -> ConstraintCE -> GenState [MS (r stmt)]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
@@ -588,7 +784,25 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
    => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Block))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
@@ -601,7 +815,25 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r stmt
+    , Reference r
+    , Set r
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CalcType
   -> CodeDefinition
   -> Completeness

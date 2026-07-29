@@ -25,8 +25,7 @@ import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
--- with 'Constraint's and maybe a reasonable value (no units!).
--- Similar to 'ConstrainedChunk' but includes a definition and domain.
+-- with 'Constraint's and maybe a reasonable value.
 --
 -- Ex. Measuring the length of a pendulum arm could be a concept that has some reasonable value
 -- (between 1 cm and 2 m) and the constraint that the length cannot be a negative value.

@@ -34,6 +34,15 @@ import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.WellTyped (RequiresChecking(..))
 
+-- | A 'QDefinition' is a representation of a formula relating a 'DefinedQuantityDict'
+-- with an arbitrary expression 'e' given a (possibly empty) list of input variables.
+--
+-- Ex:
+--
+-- 1. 'F = ma' (with symbol F, space Real and unit Newtons)
+-- 2. 'f(t) = t^2' (with symbol f [displayed as f(t)], space Real and unit seconds^2)
+--
+-- A 'QDefinition' can be thought of as a 'MultiDefn' with only a single formula.
 data QDefinition e where
   QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
 

@@ -305,6 +305,7 @@ helloIfBody
     , BooleanExpression r
     , NumericExpression r
     , ValueExpression r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , PrintConsole r stmt
@@ -409,7 +410,6 @@ helloForLoop
   ::
     ( Literal r
     , VariableValue r
-    , AssignStatement r stmt
     , ControlStatement r stmt
     , PrintConsole r stmt
     )

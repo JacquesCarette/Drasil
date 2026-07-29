@@ -9,7 +9,7 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
+import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array, StatementSym,
   AssignStatement, Argument, BooleanExpression, CommandLineArgs, DeclStatement,
   CommentStatement, Comparison, ControlStatement, FuncAppStatement, PrintConsole,
   ReadConsole, FileHandling, PrintFile, ReadFile, List, Literal, MathConstant,
@@ -23,13 +23,14 @@ import Drasil.Shared.AST (FileData, ModData, ProgData, TypeData)
 -- for generating a procedural program.
 class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
   BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
-  VariableElim r, Array r, AssignStatement r stmt, Argument r,
-  BooleanExpression r, CommandLineArgs r, CommentStatement r stmt, Comparison r,
-  ControlStatement r stmt, DeclStatement r stmt,  FuncAppStatement r stmt,
-  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
-  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, ProgramSym r vis stmt mthd prg)
+  VariableElim r, Array r, StatementSym r stmt, AssignStatement r stmt,
+  Argument r, BooleanExpression r, CommandLineArgs r, CommentStatement r stmt,
+  Comparison r, ControlStatement r stmt, DeclStatement r stmt,
+  FuncAppStatement r stmt, PrintConsole r stmt, ReadConsole r stmt,
+  FileHandling r stmt, PrintFile r stmt, ReadFile r stmt, List r stmt, Literal r,
+  MathConstant r, NumericExpression r, ParameterSym r, Reference r, Set r,
+  StringStatement r stmt, ValueExpression r, VariableValue r,
+  ProgramSym r vis stmt mthd prg)
   => ProcProg r vis stmt mthd prg
 
 type Program = ProgData

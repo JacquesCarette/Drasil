@@ -12,7 +12,7 @@ import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon (Body, Variable, SVariable, MixedCall,
   Value, SValue, ValueSym, TypeSym(int), VariableElim(variableName), Label,
-  Library, funcApp, getCodeType, AssignStatement, ValueExpression)
+  Library, funcApp, getCodeType, StatementSym, AssignStatement, ValueExpression)
 import Drasil.Shared.RendererClassesCommon (scopeData, call,
   RenderFunction(funcFromData), RenderVariable, RenderValue, ValueElim,
   RenderStatement, ScopeElim, InternalVarElim)
@@ -71,7 +71,7 @@ forEach' f i' v' b' = do
 -- Python and Julia --
 
 varDecDef
-  :: (AssignStatement r stmt, ScopeElim r, VariableElim r)
+  :: (StatementSym r stmt, AssignStatement r stmt, ScopeElim r, VariableElim r)
   => SVariable r -> r ScopeData -> Maybe (SValue r) -> MS (r stmt)
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v

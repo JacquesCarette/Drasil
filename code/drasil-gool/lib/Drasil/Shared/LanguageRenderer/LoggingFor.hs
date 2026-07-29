@@ -99,7 +99,8 @@ logVarUpdate x =
   ]
 
 instance
-  ( AssignStatement r stmt
+  ( StatementSym r stmt
+  , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
@@ -124,7 +125,8 @@ instance (List r stmt) => List (LoggingFor r) stmt where
   indexOf = liftLogging indexOf
 
 instance
-  (DeclStatement r stmt
+  ( StatementSym r stmt
+  , DeclStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
@@ -156,7 +158,8 @@ instance (PrintConsole r stmt) => PrintConsole (LoggingFor r) stmt where
   printStrLn = liftLogging printStrLn
 
 instance
-  ( FileHandling r stmt
+  ( StatementSym r stmt
+  , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
   , VariableValue r
@@ -180,7 +183,8 @@ instance (PrintFile r stmt) => PrintFile (LoggingFor r) stmt where
   printFileStrLn = liftLogging printFileStrLn
 
 instance
-  ( FileHandling r stmt
+  ( StatementSym r stmt
+  , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
   , VariableValue r
@@ -196,7 +200,8 @@ instance
   getFileInputAll = liftLogging getFileInputAll
 
 instance
-  ( StringStatement r stmt
+  ( StatementSym r stmt
+  , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
@@ -412,7 +417,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg) => P.ProcProg (LoggingFor r) vis stmt mthd prg
+instance (StatementSym r stmt, P.ProcProg r vis stmt mthd prg) => P.ProcProg (LoggingFor r) vis stmt mthd prg
 
 instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
   buildModule = liftLogging P.buildModule

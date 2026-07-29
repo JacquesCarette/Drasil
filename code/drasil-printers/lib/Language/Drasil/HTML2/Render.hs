@@ -16,9 +16,7 @@ import Language.Drasil.Printing.Helpers (sqbrac)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec)
 
-import Language.Drasil.HTML2.Citation (printBib, htmlBibFormatter)
-import Language.Drasil.HTML2.Helpers (HTMLGenOptions(..), BibFormatter(..),
-  articleTitle, author, stylesheet)
+import Language.Drasil.HTML2.Citation (BibFormatter(..), printBib, htmlBibFormatter)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML)
 import Language.Drasil.Markdown.Print (printMath)
 
@@ -26,6 +24,14 @@ import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle
 import Drasil.Data.Formats.HTML hiding (Title, Row, Bold, ListType, Ordered,
   Unordered, span, Paragraph, Table, List, Figure)
 import qualified Drasil.Data.Formats.HTML as HTML
+
+-- | Options for converting layout objects ('LayoutObj's) into HTML AST
+data HTMLGenOptions = HTMLGO
+  { -- | Formatting rules for Bib
+    bibFmt :: BibFormatter,
+    -- | MathJax source URL
+    mathJaxSrc :: String
+  }
 
 -- | Generate an HTML document from a Drasil 'Document'.
 --   Arguments: Rendering options, Bib rendering options, CSS file name, `Document` to be rendered
@@ -39,8 +45,7 @@ genHTML rOpts fn (Document t a c) = HTML heads bodies
         inlineScript mathJaxScript,
         externalScript
           (T.pack $ mathJaxSrc rOpts)
-          [ Attr "type" "text/javascript",
-            Attr "id" "MathJax-script",
+          [ Attr "id" "MathJax-script",
             Attr "async" ""
           ]
       ]
@@ -91,13 +96,13 @@ loToHTML _ (Header n contents _) =
     toHLevel 3 = H4
     toHLevel 4 = H5
     toHLevel _ = H6
-loToHTML _ (List t) = [makeListHTML t]
+loToHTML _ (List t) = [buildListHtml t]
 loToHTML _ (Figure r c f wp) =
   [HTML.Div [Attr "id" (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
   where
     attrs = [Attr "width" (T.pack $ show wp ++ "%") | wp /= 100]
     captionText = maybe "" printSpec c
-loToHTML rOpts (Bib bib) = [printBib rOpts bib]
+loToHTML rOpts (Bib bib) = [printBib (bibFmt rOpts) bib]
 loToHTML _ Graph {} = []
 loToHTML _ Cell {} = []
 loToHTML _ CodeBlock {} = []
@@ -137,18 +142,18 @@ makeDefnHTML rOpts ps l =
 -----------------------------------------------------------------
 
 -- | Generates lists in HTML.
-makeListHTML :: ListType -> HTMLBody -- FIXME: ref id's should be folded into the li
-makeListHTML (Simple items) = HTML.Div [Attr "class" "list"] $
+buildListHtml :: ListType -> HTMLBody -- FIXME: ref id's should be folded into the li
+buildListHtml (Simple items) = HTML.Div [Attr "class" "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mbIdAttr l)
   (specToHTML b ++ [RawText ": "] ++ itemToHTML e)) items
-makeListHTML (Desc items) = HTML.Div [Attr "class" "list"] $
+buildListHtml (Desc items) = HTML.Div [Attr "class" "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mbIdAttr l)
   ([TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e)) items
-makeListHTML (Ordered items) = HTML.List HTML.Ordered [Attr "class" "list"] $
+buildListHtml (Ordered items) = HTML.List HTML.Ordered [Attr "class" "list"] $
   map (\(i, l) -> LItem (mbIdAttr l) (itemToHTML i)) items
-makeListHTML (Unordered items) = HTML.List HTML.Unordered [Attr "class" "list"] $
+buildListHtml (Unordered items) = HTML.List HTML.Unordered [Attr "class" "list"] $
   map (\(i, l) -> LItem (mbIdAttr l) (itemToHTML i)) items
-makeListHTML (Definitions items) = HTML.List HTML.Unordered [Attr "class" "hide-list-style-no-indent"] $
+buildListHtml (Definitions items) = HTML.List HTML.Unordered [Attr "class" "hide-list-style-no-indent"] $
   map (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b ++ [RawText " is the "] ++ itemToHTML e)) items
 
 -- | Convert @Maybe Spec@s int ID `Attr`s if the `Spec` exists.
@@ -158,4 +163,4 @@ mbIdAttr = maybe [] (\x -> [Attr "id" $ printSpec x])
 -- | Generates list items.
 itemToHTML :: ItemType -> [HTMLBody]
 itemToHTML (Flat s)     = specToHTML s
-itemToHTML (Nested s l) = specToHTML s ++ [makeListHTML l]
+itemToHTML (Nested s l) = specToHTML s ++ [buildListHtml l]

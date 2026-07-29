@@ -8,15 +8,16 @@ module Drasil.Data.Formats.HTML.Render (
 import qualified Data.Map as M
 import Data.Text (Text)
 import qualified Data.Text as T
-import Drasil.Data.Formats.HTML.Core
-  (Attr (..), Cell (..), CustomTag (..), DItem (..), Format (..), HLevel (..),
+import Drasil.Data.Formats.HTML.Core (
+  Attr (..), Cell (..), CustomTag (..), DItem (..), Format (..), HLevel (..),
   HTML (..), HTMLBody (..), HTMLHead (..), LItem (..), ListType (..), Row (..),
   TagType (..),
   )
-import Prettyprinter
-  (vcat, Doc, angles, dquotes, equals, hcat, hsep, indent, pretty, space)
+import Prettyprinter (
+  vcat, Doc, angles, dquotes, equals, hcat, hsep, indent, pretty, space
+  )
 
-data HTMLRenderOptions = HTMLBO
+data HTMLRenderOptions = HTMLRO
   { -- | What 'TagType' is each 'CustomTag'?
     customElementTagTypes :: M.Map CustomTag TagType,
     -- | The number of spaces to use for each level of indentation.
@@ -28,10 +29,8 @@ renderHTML :: HTMLRenderOptions -> HTML -> Doc ann
 renderHTML opt htmlTree =
   vcat
     [ "<!DOCTYPE html>",
-      angles "html",
-      indent (indentationSize opt) $ renderHeadSec opt heads,
-      indent (indentationSize opt) $ renderBodySec opt bodies,
-      angles "/html"
+      wrapBlock opt "html" []
+      [renderHeadSec opt heads, renderBodySec opt bodies]
     ]
   where HTML heads bodies = normalizeHTML htmlTree
 

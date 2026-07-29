@@ -50,7 +50,7 @@ defaultDrasilWebsiteGenOpts = DWGO genericCSS
 
 instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
   toFiles dw DWGO {..} =
-    [ file [ps|index.html|] html,
+    [ file [ps|index.html|] rendedHTML,
       file [ps|index.css|] css
     ]
     where
@@ -62,7 +62,7 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
       pd = makeDocument printSetting $ dw ^. indexDoc
 
       -- 2. Transform the TDL into HTML.
-      html = renderHTML (HTMLBO M.empty 2)
-        $ genHTML
-        (HTMLRO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
+      html = genHTML
+        (HTMLGO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
         "index" pd
+      rendedHTML = renderHTML (HTMLRO M.empty 2) html

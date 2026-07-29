@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Language.Drasil.HTML2.Citation (
-  printBib, htmlBibFormatter
+  BibFormatter(..), printBib, htmlBibFormatter
 ) where
 
 import Data.String (IsString)
@@ -9,9 +9,6 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.List (sortBy)
 
-import Language.Drasil.HTML2.Helpers (
-  HTMLGenOptions (..), BibFormatter (..), BibFormatter(..),
-  colon, period, comma, vol, pg, pp, no, ed, editedBy)
 import Language.Drasil.HTML2.Spec (specToHTML, printSpec)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
@@ -25,8 +22,18 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.Helpers (paren, sufxer, sufxPrint)
 
-import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), Attr(..), emphasis, Format(Emphasis))
+import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), Attr(..), emphasis, Format(Emphasis),
+  colon, period, comma, vol, pg, pp, no, ed, editedBy)
 import qualified Drasil.Data.Formats.HTML as HTML (Format(..))
+
+-- | Data type that carries functions that vary
+-- for bib printing
+data BibFormatter = BibFormatter
+  { -- | Emphasis (italics) rendering
+    emph :: [HTMLBody] -> [HTMLBody],
+    -- | Spec rendering
+    spec :: Spec -> [HTMLBody]
+  }
 
 -- | HTML specific bib rendering functions
 htmlBibFormatter :: BibFormatter
@@ -37,13 +44,13 @@ htmlBibFormatter =
   }
 
 -- | Makes a bilbliography for the document.
-printBib :: HTMLGenOptions -> BibRef -> HTMLBody
-printBib rOpts bib =
+printBib :: BibFormatter -> BibRef -> HTMLBody
+printBib bibForm bib =
   DescriptionList [Attr "class" "reference-list"] (concatMap renderCitation bib)
   where
     renderCitation :: Citation -> [DItem]
     renderCitation cite@(Cite e _ _) =
-      let (termDoc, detailsDoc) = renderCite (bibFmt rOpts) cite
+      let (termDoc, detailsDoc) = renderCite bibForm cite
           termHTML = [RawText "[", TextFormat HTML.Bold [] termDoc, RawText "]"]
        in [DTerm [Attr "id" (T.pack e)] termHTML, DDetails [] detailsDoc]
 

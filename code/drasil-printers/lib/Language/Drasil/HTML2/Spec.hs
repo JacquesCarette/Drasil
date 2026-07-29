@@ -9,17 +9,18 @@ import Data.Text (Text)
 import qualified Data.Text as T (pack)
 import Numeric (showEFloat)
 
+import Language.Drasil (Special (..))
 import Language.Drasil.Printing.AST (
-    Expr (..), Fonts (Bold, Emph), LinkType (Cite2, External, Internal),
-    OverSymb (Hat), Spacing (Thin), Spec
-    (E, EmptyS, HARDNL, Quote, Ref, S, Sp, Tooltip, (:+:))
+  Expr (..), Fonts (Bold, Emph), LinkType (Cite2, External, Internal),
+  OverSymb (Hat), Spacing (Thin), Spec
+  (E, EmptyS, HARDNL, Quote, Ref, S, Sp, Tooltip, (:+:)),
+  Fence (Abs, Curly, Norm, Paren), Ops (..),
   )
 import Drasil.Data.Formats.HTML (
   Attr (..), Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..), customTag
   )
 import qualified Drasil.Data.Formats.HTML as HTML (Format (Bold))
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
-import Language.Drasil.HTML2.Helpers (specialToString, fence, OpenClose(..), pOps)
 import Language.Drasil.Markdown.Print (printMath)
 
 -- | Transforms the Sentences ('Spec's) into Text
@@ -74,3 +75,75 @@ exprToHTML e =
   [RawText $ T.pack $ show $ mjDelimDisp $ printMath $ TeX.pExpr e]
   where
     mjDelimDisp d = PLegacy.text "\\(" <> d <> PLegacy.text "\\)"
+
+specialToString :: Special -> String
+specialToString Circle = "°"
+
+-- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
+data OpenClose = Open | Close
+
+-- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
+fence :: OpenClose -> Fence -> Text
+fence Open Paren = "("
+fence Close Paren = ")"
+fence Open Curly = "{"
+fence Close Curly = "}"
+fence _ Abs = "|"
+fence _ Norm = "||"
+
+-- | Converts expression operators into HTML characters (Text format).
+pOps :: Ops -> Text
+pOps IsIn = " ⋲ "
+pOps Integer = "ℤ"
+pOps Rational = "ℚ"
+pOps Real = "ℝ"
+pOps Natural = "ℕ"
+pOps Boolean = "𝔹"
+pOps Comma = ","
+pOps Prime = "′"
+pOps Log = "log"
+pOps Ln = "ln"
+pOps Sin = "sin"
+pOps Cos = "cos"
+pOps Tan = "tan"
+pOps Sec = "sec"
+pOps Csc = "csc"
+pOps Cot = "cot"
+pOps Arcsin = "arcsin"
+pOps Arccos = "arccos"
+pOps Arctan = "arctan"
+pOps Not = "¬"
+pOps Dim = "dim"
+pOps Exp = "e"
+pOps Neg = "−"
+pOps Cross = "⨯"
+pOps VAdd = "+"
+pOps VSub = "−"
+pOps Dot = "⋅"
+pOps Scale = " " -- same as Mul
+pOps Eq = " = " -- with spaces?
+pOps NEq = "≠"
+pOps Lt = " < " -- thin spaces make these more readable
+pOps Gt = " > "
+pOps LEq = " ≤ "
+pOps GEq = " ≥ "
+pOps Impl = " ⇒ "
+pOps Iff = " ⇔ "
+pOps Subt = "−"
+pOps And = " ∧ "
+pOps Or = " ∨ "
+pOps Add = "+"
+pOps Mul = " "
+pOps Summ = "∑"
+pOps Inte = "∫"
+pOps Prod = "∏"
+pOps Point = "."
+pOps Perc = "%"
+pOps LArrow = " ← "
+pOps RArrow = " → "
+pOps ForAll = " ∀ "
+pOps Partial = "∂"
+pOps SAdd = " + "
+pOps SRemove = " - "
+pOps SContains = " in "
+pOps SUnion = " and "

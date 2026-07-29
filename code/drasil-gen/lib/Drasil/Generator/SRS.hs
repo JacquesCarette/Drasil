@@ -52,9 +52,9 @@ prntDoc d pinfo fn Jupyter =
   [file [ps|{fn}.ipynb|] $ genJupyterSRS $ makeDocument pinfo d]
 prntDoc d pinfo fn HTML =
   [ file [ps|{fn}.html|]
-      $ renderHTML (HTMLBO M.empty 2)
+      $ renderHTML (HTMLRO M.empty 2)
       $ genHTML
-        (HTMLRO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
+        (HTMLGO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
       fn $ makeDocument pinfo d,
     file [ps|{fn}.css|] genericCSS
   ]

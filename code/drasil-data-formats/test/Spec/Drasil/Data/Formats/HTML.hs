@@ -26,8 +26,8 @@ blockquoteTag, inputTag :: CustomTag
 blockquoteTag = customTag "blockquote"
 inputTag      = customTag "input"
 
-testGenOptions :: HTMLRenderOptions
-testGenOptions = HTMLBO (M.fromList [
+testRenderOptions :: HTMLRenderOptions
+testRenderOptions = HTMLRO (M.fromList [
     (blockquoteTag, Standard),
     (inputTag, Void)
   ]) 2
@@ -109,9 +109,9 @@ renderHTMLTests =
       [osp|test/golden/html|]
       "Golden Tests"
       [ goldenTest "tagsHTMLTest" $
-          file [ps|tags.html|] $ renderHTML testGenOptions tagsHTMLTest,
+          file [ps|tags.html|] $ renderHTML testRenderOptions tagsHTMLTest,
 
         goldenTest "escapingHTMLTest" $
-          file [ps|escaping.html|] $ renderHTML testGenOptions  escapingHTMLTest
+          file [ps|escaping.html|] $ renderHTML testRenderOptions  escapingHTMLTest
       ]
     ]

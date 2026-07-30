@@ -90,7 +90,8 @@ listSlice
     , NumericExpression r
     , IC.ValueExpression r
     , IC.VariableValue r
-    , IC.List r stmt
+    , IC.List r
+    , IC.ListStatement r stmt
     , ValueElim r
     , VariableElim r
     )
@@ -189,7 +190,7 @@ makeSetterVal vName step _       _       lb rb  scp =
 stringListVals
   :: ( MultiStatement r stmt
      , IC.AssignStatement r stmt
-     , IC.List r stmt
+     , IC.List r
      , IC.Literal r
      , RenderValue r
      , IC.TypeElim r
@@ -211,7 +212,8 @@ stringListLists
     , IC.Literal r
     , NumericExpression r
     , IC.VariableValue r
-    , IC.List r stmt
+    , IC.List r
+    , IC.ListStatement r stmt
     , IC.TypeElim r
     , VariableElim r
     , S.RenderValue r
@@ -271,7 +273,7 @@ notify
   ::
     ( ValueStatement r stmt
     , VariableValue r
-    , List r stmt
+    , List r
     , OOFunctionSym r
     , BodySym r stmt
     )
@@ -283,7 +285,7 @@ notifyObservers
     ( Literal r
     , VariableValue r
     , Comparison r
-    , List r stmt
+    , List r
     , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
@@ -300,7 +302,7 @@ notifyObservers'
     ( ValueStatement r stmt
     , Literal r
     , VariableValue r
-    , List r stmt
+    , List r
     , ControlStatement r stmt
     , OOFunctionSym r
     )
@@ -316,7 +318,7 @@ arrayDecAsList
     , IC.ControlStatement r stmt
     , IC.Literal r
     , IC.VariableValue r
-    , IC.List r stmt
+    , IC.ListStatement r stmt
     , VariableElim r
     )
   => Integer -> SValue r -> SVariable r -> r ScopeData -> MS (r stmt)

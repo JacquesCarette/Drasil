@@ -11,13 +11,13 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
-  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, VisibilitySym(..),
-  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..),
-  funcApp, (&=))
+  ListStatement(..), Set(..), NativeVector(..), InternalList(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
+  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  switchAsIf, VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), funcApp, (&=))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -335,13 +335,15 @@ instance Array MatlabCode where
   arrayCopy arr = let arrTp = onStateValue valueType arr
     in funcApp "copy" arrTp [arr]
 
-instance List MatlabCode (Doc, Terminator) where
+instance List MatlabCode where
   listSize = CS.listSize "length"   -- length(v)
+  listAccess = G.listAccess
+  indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
+
+instance ListStatement MatlabCode (Doc, Terminator) where
   listAdd = undefined
   listAppend lst = listSet lst (listSize lst)
-  listAccess = G.listAccess
   listSet = mlListSet
-  indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance Set MatlabCode where
   contains s e = funcApp "ismember" bool [e, s]

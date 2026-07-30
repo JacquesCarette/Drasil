@@ -382,7 +382,7 @@ printList
     , NumericExpression r
     , Comparison r
     , IC.VariableValue r
-    , IC.List r stmt
+    , IC.List r
     )
   => Integer
   -> SValue r
@@ -431,7 +431,7 @@ print
     , NumericExpression r
     , Comparison r
     , IC.VariableValue r
-    , IC.List r stmt
+    , IC.List r
     , TypeElim r
     , RC.InternalIOStmt r stmt
     )

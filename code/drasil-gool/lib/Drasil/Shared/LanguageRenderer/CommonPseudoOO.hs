@@ -635,7 +635,7 @@ openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
 openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 
 argExists
-  :: (IC.Literal r, IC.CommandLineArgs r, Comparison r, IC.List r stmt)
+  :: (IC.Literal r, IC.CommandLineArgs r, Comparison r, IC.List r)
   => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 

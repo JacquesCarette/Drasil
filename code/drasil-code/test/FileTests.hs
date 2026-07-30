@@ -32,7 +32,7 @@ fileTestMethod
     ( Literal r
     , VariableValue r
     , Comparison r
-    , List r stmt
+    , List r
     , DeclStatement r stmt
     , ControlStatement r stmt
     , PrintConsole r stmt
@@ -89,7 +89,7 @@ goodBye
     ( Comparison r
     , Literal r
     , VariableValue r
-    , List r stmt
+    , List r
     , ControlStatement r stmt
     , PrintConsole r stmt
     , FileHandling r stmt

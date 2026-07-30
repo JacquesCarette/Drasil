@@ -27,7 +27,7 @@ import Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
   ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize, listAdd), listOf, EmptyStatement, MultiStatement,
+  List(listSize), ListStatement(listAdd), listOf, EmptyStatement, MultiStatement,
   ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
   VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
   CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
@@ -48,8 +48,8 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   MathConstant r, OOVariableValue r, BooleanExpression r, Comparison r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
-  List r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
-  VariableValue r, ScopeSym r, BinderSym r, InternalList r,
+  List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
+  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
   MethodSym r vis stmt mthd, TypeElim r, VariableElim r, EmptyStatement r stmt,
   MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
   OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
@@ -306,7 +306,9 @@ initObserverList :: (DeclStatement r stmt) => VS (r TypeData) -> [SValue r] ->
   r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (OOVariableValue r, List r stmt) => SValue r -> MS (r stmt)
+addObserver
+  :: (OOVariableValue r, List r, ListStatement r stmt)
+  => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList

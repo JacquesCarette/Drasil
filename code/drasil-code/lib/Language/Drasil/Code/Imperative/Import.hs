@@ -55,7 +55,7 @@ import Drasil.GOOL (Label, File, Body, Block, SVariable, SValue, Class,
   instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Reference(..), Array(..), List(..),
+  objMethodCallMixedArgs, Reference(..), Array(..), List(..), ListStatement(..),
   MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
   FileHandling(..), ReadFile(..), StringStatement(..), ControlStatement(..),
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
@@ -95,7 +95,7 @@ value
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -207,7 +207,7 @@ mkVal
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -378,7 +378,7 @@ convExpr
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -485,7 +485,7 @@ convCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -556,7 +556,7 @@ unopB :: (BooleanExpression r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (List r stmt) => UFuncVN -> (SValue r -> SValue r)
+unopVN :: (List r) => UFuncVN -> (SValue r -> SValue r)
 unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
@@ -576,7 +576,7 @@ eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
-laBfunc :: (List r stmt) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc :: (List r) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
 laBfunc IndexOf = indexOf
 
@@ -693,7 +693,8 @@ convStmt
     , InternalValueExp r
     , OOValueExpression r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , OO.Set r
     , MultiStatement r stmt
@@ -825,7 +826,8 @@ readData
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , OO.Set r
     , OODeclStatement r stmt
@@ -852,7 +854,8 @@ readData ddef = do
           ::
             ( OO.Literal r
             , OOVariableValue r
-            , List r stmt
+            , List r
+            , ListStatement r stmt
             , OODeclStatement r stmt
             , ControlStatement r stmt
             , StringStatement r stmt
@@ -885,7 +888,7 @@ readData ddef = do
         lineData
           ::
             ( OOVariableValue r
-            , List r stmt
+            , ListStatement r stmt
             , OODeclStatement r stmt
             , StringStatement r stmt
             , VariableElim r
@@ -912,13 +915,13 @@ readData ddef = do
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (List r stmt, OOVariableValue r)
+          :: (ListStatement r stmt, OOVariableValue r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (List r stmt, OOVariableValue r)
+          :: (ListStatement r stmt, OOVariableValue r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
@@ -949,7 +952,7 @@ valueProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -1024,7 +1027,7 @@ mkValProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -1063,7 +1066,7 @@ genModDefProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , ProcProg r vis stmt mthd prg
@@ -1188,7 +1191,8 @@ genFuncProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , MethodSym r vis stmt mthd
     , OO.Set r
@@ -1231,7 +1235,8 @@ genModFuncsProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , MethodSym r vis stmt mthd
     , OO.Set r
@@ -1258,7 +1263,8 @@ readDataProc
     , FileHandling r stmt
     , ReadFile r stmt
     , Argument r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -1279,7 +1285,8 @@ readDataProc ddef = do
           ::
             ( VariableValue r
             , NativeVector r
-            , List r stmt
+            , List r
+            , ListStatement r stmt
             , DeclStatement r stmt
             , ControlStatement r stmt
             , StringStatement r stmt
@@ -1312,7 +1319,7 @@ readDataProc ddef = do
           ::
             ( VariableValue r
             , NativeVector r
-            , List r stmt
+            , ListStatement r stmt
             , DeclStatement r stmt
             , StringStatement r stmt
             )
@@ -1338,13 +1345,13 @@ readDataProc ddef = do
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (List r stmt, VariableValue r)
+          :: (ListStatement r stmt, VariableValue r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (List r stmt, VariableValue r)
+          :: (ListStatement r stmt, VariableValue r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
@@ -1370,7 +1377,7 @@ convExprProc
     , NativeVector r
     , Reference r
     , OO.Set r
-    , List r stmt
+    , List r
     , TypeElim r
     )
   => CodeExpr -> GenState (SValue r)
@@ -1462,7 +1469,7 @@ convCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , OO.Set r
@@ -1501,7 +1508,8 @@ convStmtProc
     , Comparison r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , NativeVector r
     , Reference r
     , OO.Set r
@@ -1628,7 +1636,8 @@ genDataFuncProc
     , ReadFile r stmt
     , PrintFile r stmt
     , Argument r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , OO.Set r
     , MultiStatement r stmt

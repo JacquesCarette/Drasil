@@ -28,14 +28,15 @@ import Drasil.GOOL (Body, Block, SVariable, SValue, File, CS, FS, MS, CSStateVar
   Class, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
   Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), List(..), EmptyStatement(emptyStmt),
-  MultiStatement(multi), ValueStatement, AssignStatement(..), DeclStatement(..),
-  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, PrintConsole(..),
-  FileHandling(..), PrintFile(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-  convTypeOO, VisibilityTag(..), TypeElim, VariableElim, Set, Reference,
-  Argument, ValueExpression, MathConstant, Array, StringStatement,
-  FuncAppStatement, SelfSym, InternalValueExp, OOValueExpression)
+  BooleanExpression(..), Comparison(..), List(..), ListStatement(..),
+  EmptyStatement(emptyStmt), MultiStatement(multi), ValueStatement,
+  AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, PrintConsole(..), FileHandling(..), PrintFile(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
+  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..), TypeElim,
+  VariableElim, Set, Reference, Argument, ValueExpression, MathConstant, Array,
+  StringStatement, FuncAppStatement, SelfSym, InternalValueExp,
+  OOValueExpression)
 import Drasil.GProc (ProcProg, NativeVector, ReadFile)
 
 import Drasil.Code.CodeExpr.Development
@@ -137,7 +138,7 @@ getInputDecl
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , MultiStatement r stmt
@@ -192,7 +193,7 @@ initConsts
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , MultiStatement r stmt
@@ -385,7 +386,7 @@ sfwrCBody
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , EmptyStatement r stmt
@@ -414,7 +415,7 @@ physCBody
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , EmptyStatement r stmt
@@ -444,7 +445,7 @@ chooseConstr
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , EmptyStatement r stmt
@@ -487,7 +488,7 @@ constrWarn
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , PrintConsole r stmt
@@ -517,7 +518,7 @@ constrExc
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , ControlStatement r stmt
@@ -545,7 +546,7 @@ constrVarDec
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , DeclStatement r stmt
@@ -574,7 +575,7 @@ constraintViolatedMsg
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , PrintConsole r stmt
@@ -604,7 +605,7 @@ printConstraint
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , PrintConsole r stmt
@@ -627,7 +628,7 @@ printConstraint v c = do
           , SelfSym r
           , InternalValueExp r
           , OOValueExpression r
-          , List r stmt
+          , List r
           , Reference r
           , Set r
           , PrintConsole r stmt
@@ -800,7 +801,7 @@ genCalcBlock
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , AssignStatement r stmt
@@ -831,7 +832,7 @@ genCaseBlock
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , AssignStatement r stmt
@@ -924,7 +925,7 @@ genMainFuncProc
     , DeclStatement r stmt
     , FuncAppStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -973,7 +974,7 @@ initConstsProc
     , ValueExpression r
     , DeclStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -1090,7 +1091,8 @@ genCalcFuncProc
     , ValueExpression r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , Set r
     , MultiStatement r stmt
@@ -1148,7 +1150,7 @@ genCalcBlockProc
     , ValueExpression r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , DeclStatement r stmt
@@ -1189,7 +1191,7 @@ genCaseBlockProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , TypeElim r
@@ -1230,7 +1232,8 @@ genInputFormatProc
     , PrintFile r stmt
     , ReadFile r stmt
     , Argument r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , Set r
     , MethodSym r vis stmt mthd
@@ -1262,7 +1265,8 @@ genInputFormatProc s = do
           , PrintFile r stmt
           , ReadFile r stmt
           , Argument r
-          , List r stmt
+          , List r
+          , ListStatement r stmt
           , Reference r
           , Set r
           , MethodSym r vis stmt mthd
@@ -1292,7 +1296,7 @@ genInputDerivedProc
     , ValueExpression r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , MultiStatement r stmt
@@ -1326,7 +1330,7 @@ genInputDerivedProc s = do
           , ValueExpression r
           , Argument r
           , Array r
-          , List r stmt
+          , List r
           , Reference r
           , Set r
           , MultiStatement r stmt
@@ -1365,7 +1369,7 @@ genInputConstraintsProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , EmptyStatement r stmt
     , MultiStatement r stmt
     , DeclStatement r stmt
@@ -1397,7 +1401,7 @@ genInputConstraintsProc s = do
           , NativeVector r
           , Reference r
           , Set r
-          , List r stmt
+          , List r
           , EmptyStatement r stmt
           , MultiStatement r stmt
           , DeclStatement r stmt
@@ -1437,7 +1441,7 @@ sfwrCBodyProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , EmptyStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
@@ -1463,7 +1467,7 @@ physCBodyProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , EmptyStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
@@ -1490,7 +1494,7 @@ chooseConstrProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , EmptyStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
@@ -1526,7 +1530,7 @@ constrWarnProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , BodySym r stmt
     , TypeElim r
@@ -1553,7 +1557,7 @@ constrExcProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , ControlStatement r stmt
     , TypeElim r
@@ -1578,7 +1582,7 @@ constrVarDecProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , DeclStatement r stmt
     , TypeElim r
     )
@@ -1605,7 +1609,7 @@ constraintViolatedMsgProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , TypeElim r
     )
@@ -1632,7 +1636,7 @@ printConstraintProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , TypeElim r
     )
@@ -1652,7 +1656,7 @@ printConstraintProc c = do
           , NativeVector r
           , Reference r
           , Set r
-          , List r stmt
+          , List r
           , PrintConsole r stmt
           , TypeElim r
           )
@@ -1694,7 +1698,7 @@ genOutputFormatProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , MultiStatement r stmt
@@ -1721,7 +1725,7 @@ genOutputFormatProc = do
           , NumericExpression r
           , ValueExpression r
           , Argument r
-          , List r stmt
+          , List r
           , Reference r
           , Set r
           , MultiStatement r stmt
@@ -1763,7 +1767,7 @@ writeOutputValue
     , NumericExpression r
     , ControlStatement r stmt
     , PrintFile r stmt
-    , List r stmt
+    , List r
     )
   => SValue r -> SValue r -> Space -> [MS (r stmt)]
 writeOutputValue out = writeTop

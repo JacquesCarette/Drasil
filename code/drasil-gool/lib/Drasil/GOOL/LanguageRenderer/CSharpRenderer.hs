@@ -14,8 +14,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
@@ -435,13 +435,15 @@ instance Array CSharpCode where
     arrTp = onStateValue valueType arr
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
-instance List CSharpCode (Doc, Terminator) where
+instance List CSharpCode where
   listSize = C.listSize' csListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf csIndex
+
+instance ListStatement CSharpCode (Doc, Terminator) where
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
   contains = CP.contains csContains
@@ -942,7 +944,7 @@ csPrint
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , List r stmt
+    , List r
     , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt

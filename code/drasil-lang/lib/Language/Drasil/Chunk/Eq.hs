@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Contains chunks related to adding an expression to a quantitative concept.
 module Language.Drasil.Chunk.Eq (
   -- * Types
@@ -11,7 +12,7 @@ module Language.Drasil.Chunk.Eq (
   ConstQDef, SimpleQDef, ModelQDef
 ) where
 
-import Control.Lens ((^.), view, lens, Lens', to)
+import Control.Lens ((^.), view, to, makeLenses)
 import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
 import qualified Data.Set as Set
 
@@ -43,45 +44,39 @@ import Language.Drasil.WellTyped (RequiresChecking(..))
 -- 2. 'f(t) = t^2' (with symbol f [displayed as f(t)], space Real and unit seconds^2)
 --
 -- A 'QDefinition' can be thought of as a 'MultiDefn' with only a single formula.
-data QDefinition e where
-  QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
-
-qdQua :: Lens' (QDefinition e) DefinedQuantityDict
-qdQua = lens (\(QD qua _ _) -> qua) (\(QD _ ins e) qua' -> QD qua' ins e)
-
-qdInputs :: Lens' (QDefinition e) [UID]
-qdInputs = lens (\(QD _ ins _) -> ins) (\(QD qua _ e) ins' -> QD qua ins' e)
-
-qdExpr :: Lens' (QDefinition e) e
-qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
+data QDefinition e = QD { _qua :: DefinedQuantityDict
+                        , _inputs :: [UID]
+                        , _expr :: e
+                        }
+makeLenses ''QDefinition
 
 instance HasChunkRefs (QDefinition e) where
   chunkRefs q = Set.unions
-    [ chunkRefs (q ^. qdQua)
-    , Set.fromList (q ^. qdInputs)
+    [ chunkRefs (q ^. qua)
+    , Set.fromList (q ^. inputs)
     ]
   {-# INLINABLE chunkRefs #-}
 
-instance HasUID          (QDefinition e) where uid = qdQua . uid
-instance NamedIdea       (QDefinition e) where term = qdQua . term
-instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
-instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr
-instance HasSpace        (QDefinition e) where typ = qdQua . typ
-instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
-instance Definition      (QDefinition e) where defn = qdQua . defn
+instance HasUID          (QDefinition e) where uid = qua . uid
+instance NamedIdea       (QDefinition e) where term = qua . term
+instance Idea            (QDefinition e) where getA = getA . (^. qua)
+instance DefinesQuantity (QDefinition e) where defLhs = qua . to dqdWr
+instance HasSpace        (QDefinition e) where typ = qua . typ
+instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qua)
+instance Definition      (QDefinition e) where defn = qua . defn
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
-instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
-instance DefiningExpr     QDefinition    where defnExpr = qdExpr
+instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qua
+instance DefiningExpr     QDefinition    where defnExpr = expr
 instance Express e => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
-      f = case q ^. qdInputs of
+      f = case q ^. inputs of
         [] -> defines (sy q)
         is -> defines $ apply q (map M.C is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
-instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
+instance ConceptDomain (QDefinition e) where cdom = cdom . view qua
 
 instance RequiresChecking (QDefinition Expr) Expr Space where
   -- FIXME: Here, we are type-checking QDefinitions by building it as a relation
@@ -89,7 +84,7 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
+  requiredChecks q = pure (apply (q ^. qua) (map E.C (q ^. inputs)) $= (q ^. expr), Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.

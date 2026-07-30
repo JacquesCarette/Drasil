@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   bodyStatements, oneLiner, VisibilitySym(..),
   VariableElim(variableName, variableType), ValueSym(valueType),
   NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  StatementSym(multi), AssignStatement((&++)), (&=), TypeElim(..),
+  MultiStatement(multi), AssignStatement((&++)), (&=), TypeElim(..),
   PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
   VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
@@ -374,7 +374,7 @@ objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs
 
 printList
   ::
-    ( StatementSym r stmt
+    ( MultiStatement r stmt
     , IC.DeclStatement r stmt
     , AssignStatement r stmt
     , IC.ControlStatement r stmt
@@ -401,7 +401,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
         i = IC.var l_i IC.int
 
 printSet
-  :: (StatementSym r stmt, IC.ControlStatement r stmt, IC.VariableValue r)
+  :: (MultiStatement r stmt, IC.ControlStatement r stmt, IC.VariableValue r)
   => Integer
   -> SValue r
   -> (SValue r -> MS (r stmt))
@@ -421,7 +421,7 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
   ::
-    ( StatementSym r stmt
+    ( MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
     , IC.DeclStatement r stmt
@@ -447,7 +447,7 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getCodeType . valueType
           printStr printFileStr f
 
 closeFile
-  :: (IG.InternalValueExp r, StatementSym r stmt)
+  :: (IG.InternalValueExp r, IC.ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 

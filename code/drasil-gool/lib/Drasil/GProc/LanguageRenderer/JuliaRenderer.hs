@@ -15,12 +15,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, libFuncApp,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+  NativeVector(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  BinderSym(..), BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -442,10 +442,14 @@ instance StatementElim JuliaCode (Doc, Terminator) where
   statement = fst . unJLC
   statementTerm = snd . unJLC
 
-instance StatementSym JuliaCode (Doc, Terminator) where
-  valStmt = G.valStmt Empty
+instance EmptyStatement JuliaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JuliaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement JuliaCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement JuliaCode (Doc, Terminator) where
   assign = jlAssign
@@ -977,7 +981,7 @@ jlOut
     , Comparison r
     , VariableValue r
     , List r stmt
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

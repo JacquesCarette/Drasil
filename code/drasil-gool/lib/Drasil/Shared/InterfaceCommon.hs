@@ -15,12 +15,12 @@ module Drasil.Shared.InterfaceCommon (
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
   NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..), convType
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -405,15 +405,17 @@ listIndexExists lst index = listSize lst ?> index
 at :: (List r stmt) => SValue r -> SValue r -> SValue r
 at = listAccess
 
--- | A class for representing statements.
--- Usually `(Doc, Terminator)` is used for the representation.
-class (ValueSym r) => StatementSym r stmt | r -> stmt where
-  -- | Converts a value to statement
-  valStmt :: SValue r -> MS (r stmt)
+class EmptyStatement r stmt | r -> stmt where
   -- | Empty statement
   emptyStmt :: MS (r stmt)
+
+class MultiStatement r stmt | r -> stmt where
   -- | Consolidates a list of statements into a single statement
   multi     :: [MS (r stmt)] -> MS (r stmt)
+
+class ValueStatement r stmt | r -> stmt where
+  -- | Converts a value to statement
+  valStmt :: SValue r -> MS (r stmt)
 
 class (VariableSym r) => AssignStatement r stmt | r -> stmt where
   (&-=)  :: SVariable r -> SValue r -> MS (r stmt)

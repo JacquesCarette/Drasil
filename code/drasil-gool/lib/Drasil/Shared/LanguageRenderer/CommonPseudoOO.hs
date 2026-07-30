@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   SValue, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), VisibilitySym(..),
+  (&=), ValueStatement(valStmt), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (File, Module, Class, CSStateVar,
@@ -134,9 +134,9 @@ containsInt
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 discardFileLine
-  :: (IG.InternalValueExp r, IC.StatementSym r stmt)
+  :: (IG.InternalValueExp r, ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
-discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n
+discardFileLine n f = valStmt $ objMethodCallNoParams IC.string f n
 
 -- | An internal function for creating a class.
 --   Parameters: render function, class name, scope, parent, class variables,
@@ -504,7 +504,7 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 inOutCall
-  :: (RC.InternalAssignStmt r stmt, IC.StatementSym r stmt, IC.VariableValue r)
+  :: (RC.InternalAssignStmt r stmt, ValueStatement r stmt, IC.VariableValue r)
   => (Label -> VS (r TypeData) -> [SValue r] -> SValue r)
   -> Label
   -> [SValue r]

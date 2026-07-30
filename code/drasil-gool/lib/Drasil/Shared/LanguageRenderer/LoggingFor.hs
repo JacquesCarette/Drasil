@@ -99,7 +99,7 @@ logVarUpdate x =
   ]
 
 instance
-  ( StatementSym r stmt
+  ( MultiStatement r stmt
   , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
@@ -125,7 +125,7 @@ instance (List r stmt) => List (LoggingFor r) stmt where
   indexOf = liftLogging indexOf
 
 instance
-  ( StatementSym r stmt
+  ( MultiStatement r stmt
   , DeclStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
@@ -158,7 +158,7 @@ instance (PrintConsole r stmt) => PrintConsole (LoggingFor r) stmt where
   printStrLn = liftLogging printStrLn
 
 instance
-  ( StatementSym r stmt
+  ( MultiStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
@@ -183,7 +183,7 @@ instance (PrintFile r stmt) => PrintFile (LoggingFor r) stmt where
   printFileStrLn = liftLogging printFileStrLn
 
 instance
-  ( StatementSym r stmt
+  ( MultiStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
@@ -200,7 +200,7 @@ instance
   getFileInputAll = liftLogging getFileInputAll
 
 instance
-  ( StatementSym r stmt
+  ( MultiStatement r stmt
   , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
@@ -246,10 +246,14 @@ instance (TypeElim r) => TypeElim (LoggingFor r) where
 instance (ValueSym r) => ValueSym (LoggingFor r) where
   valueType = liftLogging valueType
 
-instance StatementSym r stmt => StatementSym (LoggingFor r) stmt where
-  valStmt = liftLogging valStmt
+instance EmptyStatement r stmt => EmptyStatement (LoggingFor r) stmt where
   emptyStmt = liftLogging emptyStmt
+
+instance MultiStatement r stmt => MultiStatement (LoggingFor r) stmt where
   multi = liftLogging multi
+
+instance ValueStatement r stmt => ValueStatement (LoggingFor r) stmt where
+  valStmt = liftLogging valStmt
 
 instance (Argument r) => Argument (LoggingFor r) where
   pointerArg = liftLogging pointerArg
@@ -417,7 +421,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (StatementSym r stmt, P.ProcProg r vis stmt mthd prg) => P.ProcProg (LoggingFor r) vis stmt mthd prg
+instance (P.ProcProg r vis stmt mthd prg) => P.ProcProg (LoggingFor r) vis stmt mthd prg
 
 instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
   buildModule = liftLogging P.buildModule

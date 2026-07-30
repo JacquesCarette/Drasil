@@ -55,13 +55,13 @@ import Drasil.GOOL (Label, File, Body, Block, SVariable, SValue, Class,
   instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Reference(..), Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), FileHandling(..), ReadFile(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
-  onStateValue, TypeData, ParamData, TypeElim, OODeclStatement, OOVariableValue,
-  MathConstant, Argument, PrintFile, BodySym, InternalValueExp)
+  objMethodCallMixedArgs, Reference(..), Array(..), List(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  FileHandling(..), ReadFile(..), StringStatement(..), ControlStatement(..),
+  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
+  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue, TypeData, ParamData, TypeElim, OODeclStatement,
+  OOVariableValue, MathConstant, Argument, PrintFile, BodySym, InternalValueExp)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -98,7 +98,6 @@ value
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -211,7 +210,6 @@ mkVal
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -335,7 +333,7 @@ genInOutFunc
     ( OO.Literal r
     , VariableValue r
     , SelfSym r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -383,7 +381,6 @@ convExpr
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -491,7 +488,6 @@ convCall
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -700,7 +696,8 @@ convStmt
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
     , DeclStatement r stmt
@@ -831,7 +828,6 @@ readData
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
     , OODeclStatement r stmt
     , ControlStatement r stmt
     , StringStatement r stmt
@@ -1058,7 +1054,6 @@ genModDefProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1093,7 +1088,7 @@ publicFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1117,7 +1112,7 @@ privateFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1143,7 +1138,7 @@ genMethodProc
   ::
     ( OO.Literal r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1182,7 +1177,8 @@ genFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1224,7 +1220,8 @@ genModFuncsProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1508,7 +1505,8 @@ convStmtProc
     , NativeVector r
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1633,7 +1631,7 @@ genDataFuncProc
     , List r stmt
     , Reference r
     , OO.Set r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , MethodSym r vis stmt mthd
     , TypeElim r
     , VariableElim r
@@ -1650,7 +1648,7 @@ publicInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1670,7 +1668,7 @@ privateInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1693,7 +1691,7 @@ genInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt

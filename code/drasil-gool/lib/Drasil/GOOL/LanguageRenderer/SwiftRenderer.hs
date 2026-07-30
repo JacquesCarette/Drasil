@@ -15,11 +15,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   funcAppNamedArgs, extFuncApp, IndexTranslator(..), Reference(..), Array(..),
-  List(..), Set(..), listSlice, InternalList(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..),
+  List(..), Set(..), listSlice, InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
@@ -503,10 +503,14 @@ instance StatementElim SwiftCode (Doc, Terminator) where
   statement = fst . unSC
   statementTerm = snd . unSC
 
-instance StatementSym SwiftCode (Doc, Terminator) where
-  valStmt = G.valStmt Empty
+instance EmptyStatement SwiftCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement SwiftCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement SwiftCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement SwiftCode (Doc, Terminator) where
   assign = G.assign Empty

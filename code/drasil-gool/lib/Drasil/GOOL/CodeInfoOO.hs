@@ -8,12 +8,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..),
-  BinderSym(..))
+  Set(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
@@ -294,10 +294,14 @@ instance InternalList CodeInfoOO where
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
 
-instance StatementSym CodeInfoOO () where
-  valStmt = zoom lensMStoVS . execute1
+instance EmptyStatement CodeInfoOO () where
   emptyStmt = noInfo
+
+instance MultiStatement CodeInfoOO () where
   multi    = executeList
+
+instance ValueStatement CodeInfoOO () where
+  valStmt = zoom lensMStoVS . execute1
 
 instance AssignStatement CodeInfoOO () where
   assign _ = zoom lensMStoVS . execute1

@@ -4,7 +4,7 @@ module HelloWorld (helloWorldOO, helloWorldProc) where
 
 import Drasil.GOOL (Body, Block, Class, SVariable, CS, MS, OOProg, BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
@@ -305,7 +305,7 @@ helloIfBody
     , BooleanExpression r
     , NumericExpression r
     , ValueExpression r
-    , StatementSym r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , PrintConsole r stmt

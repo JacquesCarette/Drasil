@@ -27,13 +27,13 @@ import Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
   ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize, listAdd), listOf, StatementSym, AssignStatement,
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), Argument,
-  BooleanExpression, CommandLineArgs, CommentStatement, Comparison,
-  ControlStatement, PrintConsole, ReadConsole, FileHandling, PrintFile, ReadFile,
-  Literal, MathConstant, NumericExpression, ParameterSym, Reference, Set,
-  StringStatement, convType, UnRepr, ScopeSym, BinderSym, InternalList, TypeElim,
-  VariableElim)
+  List(listSize, listAdd), listOf, EmptyStatement, MultiStatement,
+  ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
+  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
+  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
+  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeElim, VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -50,11 +50,12 @@ class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
   List r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
   VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, StatementSym r stmt,
-  CommentStatement r stmt, OODeclStatement r stmt, AssignStatement r stmt,
-  OOFuncAppStatement r stmt, ControlStatement r stmt, StringStatement r stmt,
-  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
-  ReadFile r stmt, ProgramSym r vis stmt mthd stvr attch prg
+  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
+  OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
+  ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
+  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
 
 type Program = ProgData

@@ -297,8 +297,8 @@ instance Comparison MatlabCode where
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
   (?>=) = typeBinExpr greaterEqualOp bool
-  (?==) = mlStrCmp False
-  (?!=) = mlStrCmp True
+  (?==) = mlEqOp False
+  (?!=) = mlEqOp True
 
 instance ValueExpression MatlabCode where
   inlineIf = mlInlineIf
@@ -370,8 +370,11 @@ instance InternalListFunc MatlabCode where
     funcFromData (mlListAccessFunc (cType (unMLC t')) iv) (return t')
 
 mlListAccessFunc :: CodeType -> MatlabCode Value -> Doc
-mlListAccessFunc String v = braces $ RC.value v
-mlListAccessFunc _      v = parens $ RC.value v
+mlListAccessFunc ct v = mlCellWrap ct $ RC.value v
+
+mlCellWrap :: CodeType -> Doc -> Doc
+mlCellWrap String = braces
+mlCellWrap _      = parens
 
 instance BinderSym MatlabCode where
   binder = undefined
@@ -737,8 +740,8 @@ mlCast t' v' = do
       mlCast' _      _       = vDoc
   mkVal t (mlCast' vTp tTp)
 
-mlStrCmp :: Bool -> SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
-mlStrCmp neg v1' v2' = do
+mlEqOp :: Bool -> SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
+mlEqOp neg v1' v2' = do
   v1 <- v1'
   v2 <- v2'
   t  <- bool
@@ -827,10 +830,9 @@ mlListSet :: SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
 mlListSet lst' idx' val' = do
   lst <- zoom lensMStoVS lst'
   idx <- zoom lensMStoVS (intToIndex idx')
-  let elTp = getCodeType (valueType lst)
-      wrap = case elTp of
-        List String -> braces
-        _           -> parens
+  let wrap = case getCodeType (valueType lst) of
+        List t -> mlCellWrap t
+        _      -> parens
       lvar = mkStateVar (render $ RC.value lst)
                (A.innerType $ return $ valueType lst)
                (RC.value lst <> wrap (RC.value idx))

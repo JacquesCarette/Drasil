@@ -14,13 +14,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
-  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
-  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
-  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
-  BinderSym(..), BinderElim(..), MethodSym(..))
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..),
+  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -437,13 +437,15 @@ instance Array PythonCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "copy" []
 
-instance List PythonCode (Doc, Terminator) where
+instance List PythonCode where
   listSize = CS.listSize pyListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf pyIndex
+
+instance ListStatement PythonCode (Doc, Terminator) where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
@@ -943,7 +945,7 @@ pyOut
     , NumericExpression r
     , Comparison r
     , VariableValue r
-    , List r stmt
+    , List r
     , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt

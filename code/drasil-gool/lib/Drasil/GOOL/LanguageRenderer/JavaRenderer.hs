@@ -14,8 +14,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
@@ -459,13 +459,15 @@ instance Array JavaCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "clone" []
 
-instance List JavaCode (Doc, Terminator) where
+instance List JavaCode where
   listSize = C.listSize "size"
+  listAccess = G.listAccess
+  indexOf = CP.indexOf jIndex
+
+instance ListStatement JavaCode (Doc, Terminator) where
   listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
-  listAccess = G.listAccess
   listSet list idx vl = valStmt $ objMethodCall void list jListSet [idx, vl]
-  indexOf = CP.indexOf jIndex
 
 instance Set JavaCode where
   contains = CP.contains jContains
@@ -980,7 +982,7 @@ jOut
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , List r stmt
+    , List r
     , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt

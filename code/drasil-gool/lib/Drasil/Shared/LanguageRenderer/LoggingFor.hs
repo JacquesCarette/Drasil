@@ -115,14 +115,16 @@ instance
     assign (lowerLogging x) (lowerLogging e)
     : logVarUpdate x
 
-instance (List r stmt) => List (LoggingFor r) stmt where
+instance (List r) => List (LoggingFor r) where
   listSize = liftLogging listSize
+  listAccess = liftLogging listAccess
+  indexOf = liftLogging indexOf
+
+instance (ListStatement r stmt) => ListStatement (LoggingFor r) stmt where
   listAdd = liftLogging listAdd
   listAppend = liftLogging listAppend
-  listAccess = liftLogging listAccess
   listSet = liftLogging listSet -- TODO [Brandon Bosman, 06/23/2026]: Add logging
                                 -- (Can't right now because RC.value isn't exposed)
-  indexOf = liftLogging indexOf
 
 instance
   ( MultiStatement r stmt

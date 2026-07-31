@@ -15,12 +15,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   funcAppNamedArgs, extFuncApp, IndexTranslator(..), Reference(..), Array(..),
-  List(..), Set(..), listSlice, InternalList(..), EmptyStatement(..),
-  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
+  List(..), ListStatement(..), Set(..), listSlice, InternalList(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
@@ -443,14 +444,16 @@ instance Array SwiftCode where
   arrayLength = listSize
   arrayCopy = id -- Swift uses value semantics for arrays
 
-instance List SwiftCode (Doc, Terminator) where
+instance List SwiftCode where
   listSize = C.listSize' swiftListSize
+  listAccess = G.listAccess
+  indexOf = swiftIndexOf
+
+instance ListStatement SwiftCode (Doc, Terminator) where
   listAdd list idx vl = let atArg = var swiftAt int
     in valStmt $ objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
   listAppend = CG.listAppend swiftListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = swiftIndexOf
 
 instance Set SwiftCode where
   contains = CP.contains swiftContains

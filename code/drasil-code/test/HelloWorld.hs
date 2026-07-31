@@ -11,8 +11,9 @@ import Drasil.GOOL (Body, Block, Class, SVariable, CS, MS, OOProg, BodySym(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
-  InternalList, MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall,
-  initializer, OODeclStatement(objDecDef), Set(..), ParameterSym(..))
+  ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
+  classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
+  ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -76,7 +77,8 @@ helloInitVariables
     , VariableValue r
     , Comparison r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Set r
     , DeclStatement r stmt
     , AssignStatement r stmt

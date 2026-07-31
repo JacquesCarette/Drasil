@@ -14,13 +14,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Variable,
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
-  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), BinderSym(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), convScope,
-  BinderElim(..), (&=))
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..),
+  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), convScope, BinderElim(..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
@@ -447,13 +447,15 @@ instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
   arrayLength = pair1 arrayLength arrayLength
   arrayCopy = pair1 arrayCopy arrayCopy
 
-instance (Pair p) => List (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
+  listAccess = pair2 listAccess listAccess
+  indexOf = pair2 indexOf indexOf
+
+instance (Pair p) => ListStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   listAdd l i v = pair3 listAdd listAdd (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = pair2 listAppend listAppend (zoom lensMStoVS l) (zoom lensMStoVS v)
-  listAccess = pair2 listAccess listAccess
   listSet l i v = pair3 listSet listSet (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
-  indexOf = pair2 indexOf indexOf
 
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
   contains = pair2 contains contains
@@ -1385,19 +1387,21 @@ instance Array CppSrcCode where
   arrayLength = listSize
   arrayCopy = id -- C++ automatically copies std::vectors on assignment
 
-instance List CppSrcCode (Doc, Terminator) where
+instance List CppSrcCode where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
+  listAccess = G.listAccess
+  indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
+
+instance ListStatement CppSrcCode (Doc, Terminator) where
   listAdd list idx vl = valStmt $
     objMethodCall void list cppListAdd [iterBegin list #+ idx, vl]
   listAppend = CG.listAppend cppListAppend
-  listAccess = G.listAccess
   listSet list idx vl = do
     listAccessVal <- zoom lensMStoVS (listAccess list idx)
     let listAccessVar =
           mkVar (render $ RC.value listAccessVal) (valueType listAccessVal) (RC.value listAccessVal)
     listAccessVar &= vl
-  indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance Set CppSrcCode where
   contains = CP.containsInt cppIndex cppIterEnd
@@ -2058,13 +2062,15 @@ instance Array CppHdrCode where
   arrayLength = listSize
   arrayCopy = id -- C++ automatically copies std::vectors on assignment
 
-instance List CppHdrCode (Doc, Terminator) where
+instance List CppHdrCode where
   listSize _ = mkStateVal void empty
+  listAccess _ _ = mkStateVal void empty
+  indexOf _ _ = mkStateVal void empty
+
+instance ListStatement CppHdrCode (Doc, Terminator) where
   listAdd _ _ _ = mkStmt empty
   listAppend _ _ = mkStmt empty
-  listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStmtNoEnd empty
-  indexOf _ _ = mkStateVal void empty
 
 instance Set CppHdrCode where
   contains _ _ = mkStateVal void empty

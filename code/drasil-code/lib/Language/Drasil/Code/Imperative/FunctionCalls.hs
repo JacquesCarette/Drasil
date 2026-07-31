@@ -47,7 +47,7 @@ genAllInputCalls
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , ValueStatement r stmt
@@ -91,7 +91,7 @@ genConstraintCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , ValueStatement r stmt
@@ -118,7 +118,7 @@ genCalcCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , DeclStatement r stmt
@@ -147,7 +147,7 @@ genOutputCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , ValueStatement r stmt
@@ -174,7 +174,7 @@ genFuncCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , TypeElim r
@@ -249,7 +249,7 @@ genAllInputCallsProc
     , NativeVector r
     , FuncAppStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , ValueStatement r stmt
@@ -288,7 +288,7 @@ genConstraintCallProc
     , ValueExpression r
     , NativeVector r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , ValueStatement r stmt
@@ -312,7 +312,7 @@ genCalcCallProc
     , ValueExpression r
     , DeclStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -337,7 +337,7 @@ genOutputCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -361,7 +361,7 @@ genFuncCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r

@@ -13,8 +13,8 @@ module Drasil.Shared.InterfaceCommon (
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
+  Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
   EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
@@ -314,25 +314,27 @@ class (IndexTranslator r) => Array r where
   -- | Given a source array, create a (shallow) copy of it
   arrayCopy :: SValue r -> SValue r
 
-class (IndexTranslator r) => List r stmt | r -> stmt where
+class (IndexTranslator r) => List r where
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
+  -- | Gets the value of an index of a list.
+  --   Arguments are: List, Index
+  listAccess :: SValue r -> SValue r -> SValue r
+  -- | Finds the index of the first occurrence of a value in a list.
+  --   Arguments are: List, Value
+  indexOf :: SValue r -> SValue r -> SValue r
+
+class ListStatement r stmt | r -> stmt where
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
   listAdd    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
   -- | Appens a value to a list.
   --   Arguments are: List, Value
   listAppend :: SValue r -> SValue r -> MS (r stmt)
-  -- | Gets the value of an index of a list.
-  --   Arguments are: List, Index
-  listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
-  -- | Finds the index of the first occurrence of a value in a list.
-  --   Arguments are: List, Value
-  indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Set r where
   -- | Checks membership
@@ -399,10 +401,10 @@ listSlice :: (InternalList r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r Block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
-listIndexExists :: (List r stmt, Comparison r) => SValue r -> SValue r -> SValue r
+listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 listIndexExists lst index = listSize lst ?> index
 
-at :: (List r stmt) => SValue r -> SValue r -> SValue r
+at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
 class EmptyStatement r stmt | r -> stmt where

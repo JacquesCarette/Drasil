@@ -98,7 +98,7 @@ fromEqn nm desc def symb sp un =
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 fromEqn' nm desc def symb sp =
   QD u (quantNoUnit u desc def symb sp) []
-  where u = (mkUid nm)
+  where u = mkUid nm
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: UID -> NP -> Sentence -> (Stage -> Symbol) ->

@@ -32,7 +32,7 @@ import Language.Drasil.Sentence (Sentence(..))
 -- Additionally, it contains a reference to the general concept the value is an instance of ('ConceptChunk').
 --
 -- Ex. A pendulum arm can be defined as a concept with a symbol (l), space (Real numbers), and units (cm, m, etc.).
-data DefinedQuantityDict = DQD { _uu :: UID 
+data DefinedQuantityDict = DQD { _uu :: UID
                                , _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space

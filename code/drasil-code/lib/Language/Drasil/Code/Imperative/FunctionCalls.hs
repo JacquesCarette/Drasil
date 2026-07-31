@@ -26,7 +26,7 @@ import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (SValue, MS, VS, TypeSym(..), VariableValue(..),
-  StatementSym(..), DeclStatement(..), convType, convTypeOO, TypeData,
+  ValueStatement(valStmt), DeclStatement(..), convType, convTypeOO, TypeData,
   FuncAppStatement, TypeElim, VariableElim, Argument, Set, ValueExpression,
   Comparison, BooleanExpression, MathConstant, List, SelfSym, OOFuncAppStatement,
   InternalValueExp, Literal, OOValueExpression)
@@ -50,7 +50,7 @@ genAllInputCalls
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
+    , ValueStatement r stmt
     , OOFuncAppStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -94,7 +94,7 @@ genConstraintCall
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
+    , ValueStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -121,7 +121,6 @@ genCalcCall
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
     , DeclStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -151,7 +150,7 @@ genOutputCall
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
+    , ValueStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -178,7 +177,6 @@ genFuncCall
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -254,7 +252,7 @@ genAllInputCallsProc
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState [MS (r stmt)]
@@ -293,7 +291,7 @@ genConstraintCallProc
     , List r stmt
     , Reference r
     , Set r
-    , StatementSym r stmt
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -343,7 +341,7 @@ genOutputCallProc
     , NativeVector r
     , Reference r
     , Set r
-    , StatementSym r stmt
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))

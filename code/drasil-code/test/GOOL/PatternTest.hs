@@ -4,7 +4,7 @@ module GOOL.PatternTest (patternTest) where
 
 import Drasil.GOOL (GSProgram, SVariable, SValue, OOProg, MS, VS, ProgramSym(..),
   FileSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
-  StatementSym(..), DeclStatement(..), PrintConsole(..), initObserverList,
+  ValueStatement(valStmt), DeclStatement(..), PrintConsole(..), initObserverList,
   addObserver, VariableSym(var), OOVariableSym(..), ScopeSym(..), Literal(..),
   VariableValue(..), OOValueExpression(..), extNewObj, OOFunctionSym(..),
   GetSet(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),

@@ -15,11 +15,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Variable,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  BinderSym(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), convScope, BinderElim (..), (&=))
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
+  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
+  FunctionSym, FuncAppStatement(..), BinderSym(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), convScope,
+  BinderElim(..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
@@ -515,10 +516,14 @@ instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) (Doc, Terminator) w
   statement s = RC.statement $ pfst s
   statementTerm s = statementTerm $ pfst s
 
-instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) (Doc, Terminator) where
-  valStmt = pair1 valStmt valStmt . zoom lensMStoVS
+instance (Pair p) => EmptyStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   emptyStmt = on2StateValues pair emptyStmt emptyStmt
+
+instance (Pair p) => MultiStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   multi = pair1List multi multi
+
+instance (Pair p) => ValueStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+  valStmt = pair1 valStmt valStmt . zoom lensMStoVS
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
@@ -1445,10 +1450,12 @@ instance StatementElim CppSrcCode (Doc, Terminator) where
   statement = fst . unCPPSC
   statementTerm = snd . unCPPSC
 
-instance StatementSym CppSrcCode (Doc, Terminator) where
-  valStmt = G.valStmt Semi
+instance EmptyStatement CppSrcCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+instance MultiStatement CppSrcCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+instance ValueStatement CppSrcCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement CppSrcCode (Doc, Terminator) where
   assign = G.assign Semi
@@ -2110,10 +2117,14 @@ instance StatementElim CppHdrCode (Doc, Terminator) where
   statement = fst . unCPPHC
   statementTerm = snd . unCPPHC
 
-instance StatementSym CppHdrCode (Doc, Terminator) where
-  valStmt _ = emptyStmt
+instance EmptyStatement CppHdrCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement CppHdrCode (Doc, Terminator) where
   multi _ = emptyStmt
+
+instance ValueStatement CppHdrCode (Doc, Terminator) where
+  valStmt _ = emptyStmt
 
 instance AssignStatement CppHdrCode (Doc, Terminator) where
   assign _ _ = emptyStmt

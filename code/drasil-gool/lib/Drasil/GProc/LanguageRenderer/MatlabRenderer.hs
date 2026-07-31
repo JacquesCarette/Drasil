@@ -72,7 +72,7 @@ import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
   onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat)
 import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
-  revFiles, setFileType, getMainDoc)
+  revFiles, setFileType, setModuleName, getMainDoc)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
@@ -374,6 +374,16 @@ mlCellWrap :: CodeType -> Doc -> Doc
 mlCellWrap String = braces
 mlCellWrap _      = parens
 
+mlExtractFuncName :: MatlabCode MethodData -> String
+mlExtractFuncName m = extractName $ lines $ render $ mthdDoc $ unMLC m
+  where extractName []     = ""
+        extractName (l:ls)
+          | take 1 l == "%" = extractName ls
+          | otherwise       = parseFuncLine (words l)
+        parseFuncLine ("function":_:"=":nm:_) = takeWhile (/= '(') nm
+        parseFuncLine ("function":nm:_)       = takeWhile (/= '(') nm
+        parseFuncLine _                       = ""
+
 instance BinderSym MatlabCode where
   binder = undefined
 
@@ -578,6 +588,9 @@ instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
     entryFn <- mlMainFunc n
     let fnDocs = vibcat (map RC.method fns)
         content = vibcat (filter (not . isEmpty) [entryFn, fnDocs])
+    case fns of
+      (f:_) | isEmpty entryFn -> modify (setModuleName (mlExtractFuncName f))
+      _                       -> return ()
     return $ emptyIfEmpty content content)
 
 instance RenderMod MatlabCode where

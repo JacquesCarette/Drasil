@@ -34,14 +34,15 @@ helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
 helloWorldProc
   :: (ProcProg r vis stmt mthd prg)
   => GProc.GSProgram r prg
-helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
+helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
   ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
   [helloWorldMainProc]), helperProc]
 
 -- | Description of program.
-description :: String
+description, descriptionProc :: String
 description = "Tests various GOOL functions. It should run without errors."
+descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
 myOtherList :: (VariableSym r) => SVariable r

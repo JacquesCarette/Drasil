@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
 import Drasil.Database (ChunkDB)

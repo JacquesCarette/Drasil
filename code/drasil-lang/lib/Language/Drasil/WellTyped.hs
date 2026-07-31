@@ -1,7 +1,3 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE RankNTypes #-}
-
 module Language.Drasil.WellTyped (
   RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent,

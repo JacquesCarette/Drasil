@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.Shared.LanguageRenderer.CommonPseudoOO (
   int, constructor, doxFunc, doxClass, doxMod, modDoc', functionDoc, extVar,
@@ -26,12 +24,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   SValue, MixedCall, bodyStatements, oneLiner,
   TypeSym(infile, outfile, innerType), TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), VisibilitySym(..),
+  (&=), ValueStatement(valStmt), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (File, Module, Class, CSStateVar,
   OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
-  objMethodCall, OOStatement)
+  objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
@@ -93,7 +91,7 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis stmt mthd stvr attch, OOStatement r stmt)
+  :: (OORenderSym r vis stmt mthd stvr attch)
   => Label -> [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r mthd)
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
@@ -136,9 +134,9 @@ containsInt
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 discardFileLine
-  :: (IG.InternalValueExp r, IC.StatementSym r stmt)
+  :: (IG.InternalValueExp r, ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
-discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n
+discardFileLine n f = valStmt $ objMethodCallNoParams IC.string f n
 
 -- | An internal function for creating a class.
 --   Parameters: render function, class name, scope, parent, class variables,
@@ -506,7 +504,7 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 inOutCall
-  :: (RC.InternalAssignStmt r stmt, IC.StatementSym r stmt, IC.VariableValue r)
+  :: (RC.InternalAssignStmt r stmt, ValueStatement r stmt, IC.VariableValue r)
   => (Label -> VS (r TypeData) -> [SValue r] -> SValue r)
   -> Label
   -> [SValue r]
@@ -637,7 +635,7 @@ openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
 openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 
 argExists
-  :: (IC.Literal r, IC.CommandLineArgs r, Comparison r, IC.List r stmt)
+  :: (IC.Literal r, IC.CommandLineArgs r, Comparison r, IC.List r)
   => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 

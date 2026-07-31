@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Swift code is contained in this module
 module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   -- * Swift Code Configuration -- defines syntax of all Swift code
@@ -20,15 +15,16 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   funcAppNamedArgs, extFuncApp, IndexTranslator(..), Reference(..), Array(..),
-  List(..), Set(..), listSlice, InternalList(..), StatementSym(..),
+  List(..), ListStatement(..), Set(..), listSlice, InternalList(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
   StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
-import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), convScope)
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallMixedArgs, objMethodCallNamedArgs,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
@@ -133,7 +129,6 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOStatement SwiftCode (Doc, Terminator)
 instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
 instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
@@ -449,14 +444,16 @@ instance Array SwiftCode where
   arrayLength = listSize
   arrayCopy = id -- Swift uses value semantics for arrays
 
-instance List SwiftCode (Doc, Terminator) where
+instance List SwiftCode where
   listSize = C.listSize' swiftListSize
+  listAccess = G.listAccess
+  indexOf = swiftIndexOf
+
+instance ListStatement SwiftCode (Doc, Terminator) where
   listAdd list idx vl = let atArg = var swiftAt int
     in valStmt $ objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
   listAppend = CG.listAppend swiftListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = swiftIndexOf
 
 instance Set SwiftCode where
   contains = CP.contains swiftContains
@@ -509,10 +506,14 @@ instance StatementElim SwiftCode (Doc, Terminator) where
   statement = fst . unSC
   statementTerm = snd . unSC
 
-instance StatementSym SwiftCode (Doc, Terminator) where
-  valStmt = G.valStmt Empty
+instance EmptyStatement SwiftCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement SwiftCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement SwiftCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement SwiftCode (Doc, Terminator) where
   assign = G.assign Empty

@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase, FlexibleContexts #-}
-
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainProc, genMainFunc, genMainFuncProc, genInputClass,
   genInputDerived, genInputDerivedProc, genInputMod, genInputModProc,
@@ -30,13 +28,15 @@ import Drasil.GOOL (Body, Block, SVariable, SValue, File, CS, FS, MS, CSStateVar
   Class, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   AttachmentSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData,
   Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), List(..), StatementSym(..),
+  BooleanExpression(..), Comparison(..), List(..), ListStatement(..),
+  EmptyStatement(emptyStmt), MultiStatement(multi), ValueStatement,
   AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, PrintConsole(..), FileHandling(..), PrintFile(..),
   ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
-  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..),
-  TypeElim, VariableElim, OOStatement, Set, Reference, Argument, ValueExpression,
-  MathConstant, Array, StringStatement, FuncAppStatement)
+  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..), TypeElim,
+  VariableElim, Set, Reference, Argument, ValueExpression, MathConstant, Array,
+  StringStatement, FuncAppStatement, SelfSym, InternalValueExp,
+  OOValueExpression)
 import Drasil.GProc (ProcProg, NativeVector, ReadFile)
 
 import Drasil.Code.CodeExpr.Development
@@ -127,7 +127,25 @@ genMainFunc = do
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
 getInputDecl
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , MultiStatement r stmt
+    , OODeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 getInputDecl = do
   g <- get
@@ -164,7 +182,25 @@ getInputDecl = do
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
 initConsts
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , MultiStatement r stmt
+    , OODeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 initConsts = do
   g <- get
@@ -339,7 +375,27 @@ genInputConstraints s = do
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , EmptyStatement r stmt
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
 sfwrCBody cs = do
   g <- get
@@ -348,7 +404,27 @@ sfwrCBody cs = do
 
 -- | Generates input constraints code block for checking physical constraints.
 physCBody
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , EmptyStatement r stmt
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => [(CodeVarChunk, [ConstraintCE])] -> GenState [MS (r stmt)]
 physCBody cs = do
   g <- get
@@ -358,7 +434,27 @@ physCBody cs = do
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , EmptyStatement r stmt
+    , DeclStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => ConstraintBehaviour
   -> [(CodeVarChunk, [ConstraintCE])]
   -> GenState [MS (r stmt)]
@@ -381,7 +477,25 @@ chooseConstr cb cs = do
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
 constrWarn
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , PrintConsole r stmt
+    , BodySym r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrWarn c = do
   let q = fst c
@@ -393,7 +507,25 @@ constrWarn c = do
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
 constrExc
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r Body)]
 constrExc c = do
   let q = fst c
@@ -403,7 +535,24 @@ constrExc c = do
 
 -- | Generates set variable dec
 constrVarDec
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , DeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeVarChunk -> CodeExpr -> GenState (MS (r stmt))
 constrVarDec v e = do
   lb <- convExpr e
@@ -415,7 +564,24 @@ constrVarDec v e = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsg
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeVarChunk -> String -> ConstraintCE -> GenState [MS (r stmt)]
 constraintViolatedMsg q s c = do
   pc <- printConstraint (showHasSymbImpl q) c
@@ -428,13 +594,47 @@ constraintViolatedMsg q s c = do
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
 printConstraint
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , PrintConsole r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => String -> ConstraintCE -> GenState [MS (r stmt)]
 printConstraint v c = do
   g <- get
   let db = printfo g
       printConstraint'
-        :: (OOStatement r stmt, TypeElim r, VariableElim r)
+        ::
+          ( Argument r
+          , MathConstant r
+          , VariableValue r
+          , Literal r
+          , BooleanExpression r
+          , Comparison r
+          , NumericExpression r
+          , SelfSym r
+          , InternalValueExp r
+          , OOValueExpression r
+          , List r
+          , Reference r
+          , Set r
+          , PrintConsole r stmt
+          , TypeElim r
+          , VariableElim r
+          )
         => String -> ConstraintCE -> GenState [MS (r stmt)]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
@@ -590,7 +790,25 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
    => CalcType -> CodeDefinition -> CodeExpr -> GenState (MS (r Block))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
@@ -603,7 +821,25 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CalcType
   -> CodeDefinition
   -> Completeness
@@ -684,10 +920,12 @@ genMainFuncProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , FuncAppStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -736,10 +974,11 @@ initConstsProc
     , ValueExpression r
     , DeclStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
+    , MultiStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -813,7 +1052,9 @@ checkInputClass = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDeclProc :: (DeclStatement r stmt) => GenState (Maybe (MS (r stmt)))
+getInputDeclProc
+  :: (MultiStatement r stmt, DeclStatement r stmt)
+  => GenState (Maybe (MS (r stmt)))
 getInputDeclProc = do
   g <- get
   let scp = convScope $ currentScope g
@@ -850,9 +1091,12 @@ genCalcFuncProc
     , ValueExpression r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , Set r
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -906,7 +1150,7 @@ genCalcBlockProc
     , ValueExpression r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , DeclStatement r stmt
@@ -947,7 +1191,7 @@ genCaseBlockProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , TypeElim r
@@ -980,6 +1224,7 @@ genInputFormatProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , ControlStatement r stmt
     , StringStatement r stmt
@@ -987,7 +1232,8 @@ genInputFormatProc
     , PrintFile r stmt
     , ReadFile r stmt
     , Argument r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , Set r
     , MethodSym r vis stmt mthd
@@ -1011,6 +1257,7 @@ genInputFormatProc s = do
           , Comparison r
           , NumericExpression r
           , ValueExpression r
+          , MultiStatement r stmt
           , DeclStatement r stmt
           , ControlStatement r stmt
           , StringStatement r stmt
@@ -1018,7 +1265,8 @@ genInputFormatProc s = do
           , PrintFile r stmt
           , ReadFile r stmt
           , Argument r
-          , List r stmt
+          , List r
+          , ListStatement r stmt
           , Reference r
           , Set r
           , MethodSym r vis stmt mthd
@@ -1048,9 +1296,10 @@ genInputDerivedProc
     , ValueExpression r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1081,9 +1330,10 @@ genInputDerivedProc s = do
           , ValueExpression r
           , Argument r
           , Array r
-          , List r stmt
+          , List r
           , Reference r
           , Set r
+          , MultiStatement r stmt
           , DeclStatement r stmt
           , AssignStatement r stmt
           , ControlStatement r stmt
@@ -1119,7 +1369,9 @@ genInputConstraintsProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
+    , EmptyStatement r stmt
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
     , FileHandling r stmt
@@ -1149,7 +1401,9 @@ genInputConstraintsProc s = do
           , NativeVector r
           , Reference r
           , Set r
-          , List r stmt
+          , List r
+          , EmptyStatement r stmt
+          , MultiStatement r stmt
           , DeclStatement r stmt
           , PrintConsole r stmt
           , FileHandling r stmt
@@ -1187,7 +1441,8 @@ sfwrCBodyProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
+    , EmptyStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
     , ControlStatement r stmt
@@ -1212,7 +1467,8 @@ physCBodyProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
+    , EmptyStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
     , ControlStatement r stmt
@@ -1238,7 +1494,8 @@ chooseConstrProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
+    , EmptyStatement r stmt
     , DeclStatement r stmt
     , PrintConsole r stmt
     , ControlStatement r stmt
@@ -1273,7 +1530,7 @@ constrWarnProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , BodySym r stmt
     , TypeElim r
@@ -1300,7 +1557,7 @@ constrExcProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , ControlStatement r stmt
     , TypeElim r
@@ -1325,7 +1582,7 @@ constrVarDecProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , DeclStatement r stmt
     , TypeElim r
     )
@@ -1352,7 +1609,7 @@ constraintViolatedMsgProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , TypeElim r
     )
@@ -1379,7 +1636,7 @@ printConstraintProc
     , NativeVector r
     , Reference r
     , Set r
-    , List r stmt
+    , List r
     , PrintConsole r stmt
     , TypeElim r
     )
@@ -1399,7 +1656,7 @@ printConstraintProc c = do
           , NativeVector r
           , Reference r
           , Set r
-          , List r stmt
+          , List r
           , PrintConsole r stmt
           , TypeElim r
           )
@@ -1441,9 +1698,10 @@ genOutputFormatProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , ControlStatement r stmt
     , FileHandling r stmt
@@ -1467,9 +1725,10 @@ genOutputFormatProc = do
           , NumericExpression r
           , ValueExpression r
           , Argument r
-          , List r stmt
+          , List r
           , Reference r
           , Set r
+          , MultiStatement r stmt
           , DeclStatement r stmt
           , ControlStatement r stmt
           , FileHandling r stmt
@@ -1508,7 +1767,7 @@ writeOutputValue
     , NumericExpression r
     , ControlStatement r stmt
     , PrintFile r stmt
-    , List r stmt
+    , List r
     )
   => SValue r -> SValue r -> Space -> [MS (r stmt)]
 writeOutputValue out = writeTop

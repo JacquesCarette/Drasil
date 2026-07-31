@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render MATLAB code is contained in this module.
 module Drasil.GProc.LanguageRenderer.MatlabRenderer (
   -- * MATLAB Code Configuration -- defines syntax of all MATLAB code
@@ -16,7 +11,8 @@ import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), NativeVector(..), InternalList(..), StatementSym(..),
+  ListStatement(..), Set(..), NativeVector(..), InternalList(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), DeclStatement(..), PrintConsole(..), ReadConsole(..),
   FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
   FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
@@ -338,13 +334,15 @@ instance Array MatlabCode where
   arrayLength = listSize
   arrayCopy = id
 
-instance List MatlabCode (Doc, Terminator) where
+instance List MatlabCode where
   listSize = CS.listSize "length"   -- length(v)
+  listAccess = G.listAccess
+  indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
+
+instance ListStatement MatlabCode (Doc, Terminator) where
   listAdd = mlListAdd
   listAppend lst = listSet lst (listSize lst)
-  listAccess = G.listAccess
   listSet = mlListSet
-  indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance Set MatlabCode where
   contains s e = funcApp "ismember" bool [e, s]
@@ -411,10 +409,14 @@ instance StatementElim MatlabCode (Doc, Terminator) where
   statement = fst . unMLC
   statementTerm = snd . unMLC
 
-instance StatementSym MatlabCode (Doc, Terminator) where
-  valStmt = G.valStmt Semi
+instance EmptyStatement MatlabCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement MatlabCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement MatlabCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi

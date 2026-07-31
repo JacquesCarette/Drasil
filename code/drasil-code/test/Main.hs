@@ -1,7 +1,5 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
@@ -12,12 +10,13 @@ import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
-import Drasil.GOOL (OOProg, Literal, Comparison, List, StrategyPattern,
+import Drasil.GOOL (OOProg, Literal, Comparison, GetSet, StrategyPattern,
   ObserverPattern, DeclStatement, ControlStatement, unJC, unPC, unCSC, unCPPC,
   unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
 import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (GSProgram)
+import Drasil.TestingKit (testMain)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
@@ -30,12 +29,12 @@ import FileTests (fileTestsOO, fileTestsProc)
 import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 import VectorTest (vectorTestProc)
-import Test.Tasty (TestTree, defaultMain, testGroup)
+import Test.Tasty (TestTree, testGroup)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
-main = defaultMain codeGenTestGroup
+main = testMain codeGenTestGroup
 
 codeGenTestGroup :: TestTree
 codeGenTestGroup =
@@ -62,6 +61,7 @@ goolTestGroup
   :: String
   -> ( forall r vis stmt mthd stvr attch prg.
        ( OOProg r vis stmt mthd stvr attch prg
+       , GetSet r
        , StrategyPattern r stmt
        , ObserverPattern r stmt
        ) => OO.GSProgram r prg
@@ -85,7 +85,6 @@ gProcTestGroup
     ( forall r vis stmt mthd prg.
       ( Literal r
       , Comparison r
-      , List r stmt
       , DeclStatement r stmt
       , ControlStatement r stmt
       , ProcProg r vis stmt mthd prg
@@ -106,7 +105,6 @@ gProcVectorTestGroup
   ->
     ( forall r vis stmt mthd prg.
       ( Comparison r
-      , List r stmt
       , NativeVector r
       , DeclStatement r stmt
       , ControlStatement r stmt
@@ -135,7 +133,6 @@ genCodeProcNoMake
   ->
     ( forall s vis' stmt' mthd' prg'.
       ( Comparison s
-      , List s stmt'
       , NativeVector s
       , DeclStatement s stmt'
       , ProcProg s vis' stmt' mthd' prg'
@@ -152,6 +149,7 @@ genCodeProcNoMake unRepr unRepr' p =
 genCodeGOOL
   ::
     ( OOProg r vis stmt mthd stvr attch ProgData
+    , GetSet r
     , StrategyPattern r stmt
     , ObserverPattern r stmt
     , SoftwareDossierSym r'
@@ -161,6 +159,7 @@ genCodeGOOL
   -> (r' PackageData -> PackageData)
   -> ( forall s vis' stmt' mthd' stvr' attch' prg'.
        ( OOProg s vis' stmt' mthd' stvr' attch' prg'
+       , GetSet s
        , StrategyPattern s stmt'
        , ObserverPattern s stmt'
        ) => OO.GSProgram s prg'

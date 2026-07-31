@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, generalDefinitions,
   normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,

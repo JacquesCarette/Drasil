@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module OOVector (ooVector) where
 
 import Drasil.GOOL

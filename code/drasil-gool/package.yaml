@@ -8,6 +8,9 @@ github:       JacquesCarette/Drasil
 homepage:     https://jacquescarette.github.io/Drasil/
 description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: GHC2024
+default-extensions: []
+
 extra-source-files: []
 
 dependencies:

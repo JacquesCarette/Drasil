@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
 module Drasil.Generator.SRS.TypeCheck (
   -- * Type check a Drasil 'System'
   typeCheckSI

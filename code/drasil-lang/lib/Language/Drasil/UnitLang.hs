@@ -7,7 +7,6 @@ module Language.Drasil.UnitLang (
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
-import Data.Foldable (foldl')
 
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)

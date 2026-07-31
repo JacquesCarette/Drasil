@@ -1,6 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.Shared.InterfaceCommon (
   -- Types
@@ -14,14 +13,14 @@ module Drasil.Shared.InterfaceCommon (
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
-  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  VisibilitySym(..), ParameterSym(..), MethodSym(..), BinderSym(..),
-  BinderElim(..), convType
+  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
+  Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), BinderSym(..), BinderElim(..), convType
   ) where
 
 import Data.Bifunctor (first)
@@ -66,7 +65,7 @@ type Block = Doc
 -- not for use by the compiler/interpreter
 -- but to improve readability of the generated code.
 -- See the bottom of page 2 of Brook's GOOL paper from 2020 for more details.
-class (StatementSym r stmt) => BlockSym r stmt where
+class BlockSym r stmt | r -> stmt where
   block   :: [MS (r stmt)] -> MS (r Block)
 
 -- | Class for representing a type.
@@ -315,25 +314,27 @@ class (IndexTranslator r) => Array r where
   -- | Given a source array, create a (shallow) copy of it
   arrayCopy :: SValue r -> SValue r
 
-class (IndexTranslator r, StatementSym r stmt) => List r stmt where
+class (IndexTranslator r) => List r where
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
+  -- | Gets the value of an index of a list.
+  --   Arguments are: List, Index
+  listAccess :: SValue r -> SValue r -> SValue r
+  -- | Finds the index of the first occurrence of a value in a list.
+  --   Arguments are: List, Value
+  indexOf :: SValue r -> SValue r -> SValue r
+
+class ListStatement r stmt | r -> stmt where
   -- | Inserts a value into a list.
   --   Arguments are: List, Index, Value
   listAdd    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
   -- | Appens a value to a list.
   --   Arguments are: List, Value
   listAppend :: SValue r -> SValue r -> MS (r stmt)
-  -- | Gets the value of an index of a list.
-  --   Arguments are: List, Index
-  listAccess :: SValue r -> SValue r -> SValue r
   -- | Sets the value of an index of a list.
   --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> MS (r stmt)
-  -- | Finds the index of the first occurrence of a value in a list.
-  --   Arguments are: List, Value
-  indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Set r where
   -- | Checks membership
@@ -400,23 +401,25 @@ listSlice :: (InternalList r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r Block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
-listIndexExists :: (List r stmt, Comparison r) => SValue r -> SValue r -> SValue r
+listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 listIndexExists lst index = listSize lst ?> index
 
-at :: (List r stmt) => SValue r -> SValue r -> SValue r
+at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
--- | A class for representing statements.
--- Usually `(Doc, Terminator)` is used for the representation.
-class (ValueSym r) => StatementSym r stmt | r -> stmt where
-  -- | Converts a value to statement
-  valStmt :: SValue r -> MS (r stmt)
+class EmptyStatement r stmt | r -> stmt where
   -- | Empty statement
   emptyStmt :: MS (r stmt)
+
+class MultiStatement r stmt | r -> stmt where
   -- | Consolidates a list of statements into a single statement
   multi     :: [MS (r stmt)] -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => AssignStatement r stmt where
+class ValueStatement r stmt | r -> stmt where
+  -- | Converts a value to statement
+  valStmt :: SValue r -> MS (r stmt)
+
+class (VariableSym r) => AssignStatement r stmt | r -> stmt where
   (&-=)  :: SVariable r -> SValue r -> MS (r stmt)
   infixl 1 &-=
   (&+=)  :: SVariable r -> SValue r -> MS (r stmt)
@@ -432,7 +435,7 @@ class (VariableSym r, StatementSym r stmt) => AssignStatement r stmt where
 infixr 1 &=
 (&=) = assign
 
-class (VariableSym r, StatementSym r stmt, ScopeSym r) => DeclStatement r stmt where
+class (VariableSym r, ScopeSym r) => DeclStatement r stmt | r -> stmt where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
   varDec       :: SVariable r -> r ScopeData -> MS (r stmt)
@@ -454,38 +457,38 @@ class (VariableSym r, StatementSym r stmt, ScopeSym r) => DeclStatement r stmt w
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body)
     -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => PrintConsole r stmt where
+class (VariableSym r) => PrintConsole r stmt | r -> stmt where
   print      :: SValue r -> MS (r stmt)
   printLn    :: SValue r -> MS (r stmt)
   -- TODO [Brandon Bosman, 07/23/2026]: Could these be helpers?
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => ReadConsole r stmt where
+class (VariableSym r) => ReadConsole r stmt | r -> stmt where
   getInput         :: SVariable r -> MS (r stmt)
   discardInput     :: MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => FileHandling r stmt where
+class (VariableSym r) => FileHandling r stmt | r -> stmt where
   openFileR :: SVariable r -> SValue r -> MS (r stmt)
   openFileW :: SVariable r -> SValue r -> MS (r stmt)
   openFileA :: SVariable r -> SValue r -> MS (r stmt)
   closeFile :: SValue r -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => PrintFile r stmt where
+class (VariableSym r) => PrintFile r stmt | r -> stmt where
   -- | Given the file handle and value to print, print the value to the file.
   printFile      :: SValue r -> SValue r -> MS (r stmt)
   printFileLn    :: SValue r -> SValue r -> MS (r stmt)
   printFileStr   :: SValue r -> String -> MS (r stmt)
   printFileStrLn :: SValue r -> String -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => ReadFile r stmt where
+class (VariableSym r) => ReadFile r stmt | r -> stmt where
   getFileInput     :: SValue r -> SVariable r -> MS (r stmt)
   discardFileInput :: SValue r -> MS (r stmt)
   getFileInputLine :: SValue r -> SVariable r -> MS (r stmt)
   discardFileLine  :: SValue r -> MS (r stmt)
   getFileInputAll  :: SValue r -> SVariable r -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => StringStatement r stmt where
+class (VariableSym r) => StringStatement r stmt | r -> stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.
@@ -501,11 +504,11 @@ class (ValueSym r) => FunctionSym r where
 type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
   MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => FuncAppStatement r stmt where
+class (VariableSym r) => FuncAppStatement r stmt | r -> stmt where
   inOutCall    ::            InOutCall r stmt
   extInOutCall :: Library -> InOutCall r stmt
 
-class (StatementSym r stmt) => CommentStatement r stmt where
+class CommentStatement r stmt | r -> stmt where
   comment :: String -> MS (r stmt)
 
 class (BodySym r stmt, VariableSym r) => ControlStatement r stmt where

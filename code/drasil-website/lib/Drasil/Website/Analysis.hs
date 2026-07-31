@@ -1,4 +1,3 @@
-{-# LANGUAGE TupleSections #-}
 -- | Contains all the information needed about the structure
 -- of the Drasil framework to be displayed on the Drasil website.
 module Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph) where

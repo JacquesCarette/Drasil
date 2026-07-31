@@ -1,10 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE InstanceSigs #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Julia code is contained in this module
 module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
@@ -20,13 +14,14 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, libFuncApp,
-  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
-  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
+  Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
+  switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -385,13 +380,15 @@ instance Array JuliaCode where
     arrTp = onStateValue valueType arr
     in funcApp "copy" arrTp [arr]
 
-instance List JuliaCode (Doc, Terminator) where
+instance List JuliaCode where
   listSize = CS.listSize jlListSize
+  listAccess = G.listAccess
+  indexOf = jlIndexOf
+
+instance ListStatement JuliaCode (Doc, Terminator) where
   listAdd = A.listAdd jlListAdd
   listAppend = A.listAppend jlListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = jlIndexOf
 
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
@@ -448,10 +445,14 @@ instance StatementElim JuliaCode (Doc, Terminator) where
   statement = fst . unJLC
   statementTerm = snd . unJLC
 
-instance StatementSym JuliaCode (Doc, Terminator) where
-  valStmt = G.valStmt Empty
+instance EmptyStatement JuliaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JuliaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement JuliaCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement JuliaCode (Doc, Terminator) where
   assign = jlAssign
@@ -982,7 +983,8 @@ jlOut
     , NumericExpression r
     , Comparison r
     , VariableValue r
-    , List r stmt
+    , List r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

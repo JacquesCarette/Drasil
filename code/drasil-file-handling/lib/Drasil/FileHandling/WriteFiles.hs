@@ -1,7 +1,4 @@
-{-# LANGUAGE FlexibleInstances #-}
-
 {- HLINT ignore "Use writeFile" -}
-
 module Drasil.FileHandling.WriteFiles
   ( Writeable (..),
     WritePolicy (..),

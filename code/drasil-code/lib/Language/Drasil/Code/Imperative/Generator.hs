@@ -1,6 +1,4 @@
-{-# LANGUAGE PatternSynonyms, FlexibleContexts, QuasiQuotes #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE PatternSynonyms, QuasiQuotes #-}
 -- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   SomeProgGenerator(..),

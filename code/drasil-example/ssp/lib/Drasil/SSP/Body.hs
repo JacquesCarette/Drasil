@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (si, mkSRS) where
 
 import qualified Data.List.NonEmpty as NE

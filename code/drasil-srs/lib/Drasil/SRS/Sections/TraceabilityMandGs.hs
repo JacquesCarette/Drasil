@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | Defines functions used to create the Traceability Matrices and Graphs section.
 module Drasil.SRS.Sections.TraceabilityMandGs (
   -- * Main Functions
@@ -9,8 +8,7 @@ module Drasil.SRS.Sections.TraceabilityMandGs (
   tvInsModels, tvGoals, tvReqs, tvChanges
 ) where
 
-import Control.Lens((^.))
-import Data.Foldable (foldl')
+import Control.Lens ((^.))
 
 -- General Drasil
 import Drasil.Database (mkUid)

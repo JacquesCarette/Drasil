@@ -1,8 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Python code is contained in this module
 module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
@@ -18,15 +14,16 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..),
+  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
   DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
   PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
   ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
   OOValueExpression(..), selfMethodCall, OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -122,7 +119,6 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOStatement PythonCode (Doc, Terminator)
 instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
 
 instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData where
@@ -441,13 +437,15 @@ instance Array PythonCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "copy" []
 
-instance List PythonCode (Doc, Terminator) where
+instance List PythonCode where
   listSize = CS.listSize pyListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf pyIndex
+
+instance ListStatement PythonCode (Doc, Terminator) where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
@@ -501,11 +499,14 @@ instance StatementElim PythonCode (Doc, Terminator) where
   statement = fst . unPC
   statementTerm = snd . unPC
 
-instance StatementSym PythonCode (Doc, Terminator) where
-  -- Terminator determines how statements end
-  valStmt = G.valStmt Empty
+instance EmptyStatement PythonCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement PythonCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement PythonCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement PythonCode (Doc, Terminator) where
   assign = G.assign Empty
@@ -944,7 +945,8 @@ pyOut
     , NumericExpression r
     , Comparison r
     , VariableValue r
-    , List r stmt
+    , List r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

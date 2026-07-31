@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body (
   mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
   externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskellQuotes, DeriveLift, DeriveGeneric #-}
+{-# LANGUAGE TemplateHaskellQuotes, DeriveGeneric #-}
 module Drasil.Metadata.Drasil (DrasilMeta(..), drasilMetaCfg) where
 
 import Data.Maybe (fromMaybe)

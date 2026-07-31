@@ -1,12 +1,12 @@
-{-# LANGUAGE GADTs, RankNTypes, TemplateHaskell #-}
--- | Define types and functions related to creating a system information database.
-
+{-# LANGUAGE TemplateHaskell #-}
+-- | Define types and functions related to creating a system information
+-- database.
+--
 -- Changes to System should be reflected in the 'Creating Your Project in
 -- Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 module Drasil.SRS.SmithEtAlSRS (
-  -- * System
-  -- ** Types
+  -- * System ** Types
   SmithEtAlSRS(..),
   Purpose, Background, Scope, Motivation,
   -- ** Lenses

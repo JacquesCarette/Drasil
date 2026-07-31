@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD,
          angFrequencyGD, periodPend) where

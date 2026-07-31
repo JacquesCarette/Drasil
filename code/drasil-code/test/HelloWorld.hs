@@ -1,19 +1,19 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
 import Drasil.GOOL (Body, Block, Class, SVariable, CS, MS, OOProg, BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
-  InternalList, MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall,
-  initializer, OODeclStatement(objDecDef), Set(..), ParameterSym(..))
+  ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
+  classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
+  ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -78,7 +78,8 @@ helloInitVariables
     , VariableValue r
     , Comparison r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Set r
     , DeclStatement r stmt
     , AssignStatement r stmt
@@ -307,6 +308,7 @@ helloIfBody
     , BooleanExpression r
     , NumericExpression r
     , ValueExpression r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , PrintConsole r stmt
@@ -411,7 +413,6 @@ helloForLoop
   ::
     ( Literal r
     , VariableValue r
-    , AssignStatement r stmt
     , ControlStatement r stmt
     , PrintConsole r stmt
     )

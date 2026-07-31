@@ -1,6 +1,4 @@
-{-# LANGUAGE PostfixOperators, Rank2Types, ScopedTypeVariables, TemplateHaskell,
-             FlexibleInstances, MultiParamTypeClasses, TupleSections #-}
-
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for creating mult-definitions.
 module Theory.Drasil.MultiDefn(
   -- * Types
@@ -21,7 +19,7 @@ import Language.Drasil hiding (DefiningExpr)
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
 --   the description, the defining (rhs) expression and the context domain(s).
 --   These are meant to be 'alternate' but equivalent definitions for a single
---   concept.
+--   'DefinedQuantityDict'.
 data DefiningExpr e = DefiningExpr
   { -- | UID
     _deUid :: UID,
@@ -47,8 +45,8 @@ instance HasChunkRefs (DefiningExpr e) where
   chunkRefs de = chunkRefs (de ^. rvDesc)
   {-# INLINABLE chunkRefs #-}
 
--- | 'MultiDefn's are QDefinition factories, used for showing one or more ways
---   we can define a QDefinition.
+-- | 'MultiDefn's are 'QDefinition' factories, used for showing one or more
+-- formulas which define a 'DefinedQuantityDict'.
 data MultiDefn e = MultiDefn{
   -- | UID
   _rUid :: UID,

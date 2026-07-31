@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render C# code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
@@ -19,15 +14,16 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, StateVar, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
@@ -132,7 +128,6 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOStatement CSharpCode (Doc, Terminator)
 instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
 instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
@@ -440,13 +435,15 @@ instance Array CSharpCode where
     arrTp = onStateValue valueType arr
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
-instance List CSharpCode (Doc, Terminator) where
+instance List CSharpCode where
   listSize = C.listSize' csListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf csIndex
+
+instance ListStatement CSharpCode (Doc, Terminator) where
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
   contains = CP.contains csContains
@@ -499,10 +496,14 @@ instance StatementElim CSharpCode (Doc, Terminator) where
   statement = fst . unCSC
   statementTerm = snd . unCSC
 
-instance StatementSym CSharpCode (Doc, Terminator) where
-  valStmt = G.valStmt Semi
+instance EmptyStatement CSharpCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement CSharpCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement CSharpCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement CSharpCode (Doc, Terminator) where
   assign = G.assign Semi
@@ -943,7 +944,8 @@ csPrint
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , List r stmt
+    , List r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

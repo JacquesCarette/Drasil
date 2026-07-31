@@ -25,7 +25,7 @@ helper
     ( Literal r
     , VariableValue r
     , Comparison r
-    , List r stmt
+    , List r
     , InternalList r
     , DeclStatement r stmt
     , ControlStatement r stmt
@@ -45,7 +45,7 @@ main
     ( Literal r
     , VariableValue r
     , Comparison r
-    , List r stmt
+    , List r
     , InternalList r
     , DeclStatement r stmt
     , ControlStatement r stmt

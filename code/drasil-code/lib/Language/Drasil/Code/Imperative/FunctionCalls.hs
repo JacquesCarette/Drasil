@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
-
 module Language.Drasil.Code.Imperative.FunctionCalls (
   genAllInputCalls, genAllInputCallsProc, genInputCall, genInputCallProc,
   genDerivedCall, genDerivedCallProc, genConstraintCall, genConstraintCallProc,
@@ -27,17 +25,36 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, OOStatement, MS, VS, TypeSym(..), VariableValue(..),
-  StatementSym(..), DeclStatement(..), convType, convTypeOO, TypeData,
+import Drasil.GOOL (SValue, MS, VS, TypeSym(..), VariableValue(..),
+  ValueStatement(valStmt), DeclStatement(..), convType, convTypeOO, TypeData,
   FuncAppStatement, TypeElim, VariableElim, Argument, Set, ValueExpression,
-  Comparison, BooleanExpression, MathConstant, List)
+  Comparison, BooleanExpression, MathConstant, List, SelfSym, OOFuncAppStatement,
+  InternalValueExp, Literal, OOValueExpression)
 import Drasil.GProc (NativeVector, Reference, NumericExpression)
 
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
 genAllInputCalls
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , ValueStatement r stmt
+    , OOFuncAppStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState [MS (r stmt)]
 genAllInputCalls = do
   gi <- genInputCall
@@ -47,7 +64,7 @@ genAllInputCalls = do
 
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall
-  :: (OOStatement r stmt, VariableElim r)
+  :: (VariableValue r, SelfSym r, OOFuncAppStatement r stmt, VariableElim r)
   => GenState (Maybe (MS (r stmt)))
 genInputCall = do
   giName <- genICName GetInput
@@ -55,7 +72,7 @@ genInputCall = do
 
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall
-  :: (OOStatement r stmt, VariableElim r)
+  :: (VariableValue r, SelfSym r, OOFuncAppStatement r stmt, VariableElim r)
   => GenState (Maybe (MS (r stmt)))
 genDerivedCall = do
   dvName <- genICName DerivedValuesFn
@@ -63,7 +80,24 @@ genDerivedCall = do
 
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , ValueStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 genConstraintCall = do
   icName <- genICName InputConstraintsFn
@@ -73,7 +107,24 @@ genConstraintCall = do
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
 genCalcCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , DeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeDefinition -> GenState (Maybe (MS (r stmt)))
 genCalcCall c = do
   g <- get
@@ -85,7 +136,24 @@ genCalcCall c = do
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , ValueStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 genOutputCall = do
   woName <- genICName WriteOutput
@@ -95,7 +163,23 @@ genOutputCall = do
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
 genFuncCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , Set r
+    , TypeElim r
+    , VariableElim r
+    )
   => Name
   -> VS (r TypeData)
   -> GenState [CodeVarChunk]
@@ -113,7 +197,7 @@ genFuncCall n t funcPs = do
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
 genInOutCall
-  :: (OOStatement r stmt, VariableElim r)
+  :: (VariableValue r, SelfSym r, OOFuncAppStatement r stmt, VariableElim r)
   => Name
   -> GenState [CodeVarChunk]
   -> GenState [CodeVarChunk]
@@ -165,9 +249,10 @@ genAllInputCallsProc
     , NativeVector r
     , FuncAppStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState [MS (r stmt)]
@@ -203,9 +288,10 @@ genConstraintCallProc
     , ValueExpression r
     , NativeVector r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -226,7 +312,7 @@ genCalcCallProc
     , ValueExpression r
     , DeclStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -251,10 +337,11 @@ genOutputCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -274,7 +361,7 @@ genFuncCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r

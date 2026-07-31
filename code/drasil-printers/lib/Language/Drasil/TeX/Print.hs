@@ -4,7 +4,6 @@ module Language.Drasil.TeX.Print (genTeX, pExpr, pUnit, spec, fence,
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
-import Data.Foldable (foldl')
 import Data.List (transpose, partition)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP

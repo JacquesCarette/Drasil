@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk) where
 
 import Language.Drasil hiding (organization)

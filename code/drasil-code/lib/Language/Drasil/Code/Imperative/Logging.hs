@@ -11,7 +11,7 @@ import Language.Drasil.Choices (Logging(..))
 
 import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), FileHandling(..),
+  VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
   PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
 
 -- | Generates the body of a function with the given name, list of parameters,
@@ -22,6 +22,7 @@ logBody
   ::
     ( Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -42,6 +43,7 @@ loggedMethod
   ::
     ( Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt

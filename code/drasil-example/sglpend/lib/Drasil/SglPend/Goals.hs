@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators#-}
 module Drasil.SglPend.Goals (goals, goalsInputs) where
 
 import Language.Drasil

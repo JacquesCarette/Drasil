@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Java code is contained in this module
 module Drasil.GOOL.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
@@ -19,19 +14,20 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
-  OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
-  OOTypeSym(..), OOVariableSym(..), SelfSym(..), StateVarSym(..),
-  AttachmentSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
-  objMethodCall, selfMethodCall, newObj, InternalValueExp(..), OOFunctionSym(..),
-  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
+  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
+  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
+  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -133,7 +129,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOStatement JavaCode (Doc, Terminator)
 instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
 instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
@@ -464,13 +459,15 @@ instance Array JavaCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "clone" []
 
-instance List JavaCode (Doc, Terminator) where
+instance List JavaCode where
   listSize = C.listSize "size"
+  listAccess = G.listAccess
+  indexOf = CP.indexOf jIndex
+
+instance ListStatement JavaCode (Doc, Terminator) where
   listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
-  listAccess = G.listAccess
   listSet list idx vl = valStmt $ objMethodCall void list jListSet [idx, vl]
-  indexOf = CP.indexOf jIndex
 
 instance Set JavaCode where
   contains = CP.contains jContains
@@ -523,11 +520,14 @@ instance StatementElim JavaCode (Doc, Terminator) where
   statement = fst . unJC
   statementTerm = snd . unJC
 
-instance StatementSym JavaCode (Doc, Terminator) where
-  -- Terminator determines how statements end
-  valStmt = G.valStmt Semi
+instance EmptyStatement JavaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JavaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement JavaCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement JavaCode (Doc, Terminator) where
   assign = G.assign Semi
@@ -982,7 +982,8 @@ jOut
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , List r stmt
+    , List r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

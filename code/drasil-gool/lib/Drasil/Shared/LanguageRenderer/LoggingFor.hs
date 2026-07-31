@@ -1,14 +1,8 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DerivingVia #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | MVP renderer for logging statements.
-
 module Drasil.Shared.LanguageRenderer.LoggingFor (LoggingFor(..)) where
 
 import Drasil.Shared.InterfaceCommon
@@ -105,7 +99,8 @@ logVarUpdate x =
   ]
 
 instance
-  ( AssignStatement r stmt
+  ( MultiStatement r stmt
+  , AssignStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
@@ -120,17 +115,20 @@ instance
     assign (lowerLogging x) (lowerLogging e)
     : logVarUpdate x
 
-instance (List r stmt) => List (LoggingFor r) stmt where
+instance (List r) => List (LoggingFor r) where
   listSize = liftLogging listSize
-  listAdd = liftLogging listAdd
-  listAppend = liftLogging listAppend
   listAccess = liftLogging listAccess
-  listSet = liftLogging listSet -- TODO [Brandon Bosman, 06/23/2026]: Add logging
-                                -- (Can't right now because RC.value isn't exposed)
   indexOf = liftLogging indexOf
 
+instance (ListStatement r stmt) => ListStatement (LoggingFor r) stmt where
+  listAdd = liftLogging listAdd
+  listAppend = liftLogging listAppend
+  listSet = liftLogging listSet -- TODO [Brandon Bosman, 06/23/2026]: Add logging
+                                -- (Can't right now because RC.value isn't exposed)
+
 instance
-  (DeclStatement r stmt
+  ( MultiStatement r stmt
+  , DeclStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
@@ -162,7 +160,8 @@ instance (PrintConsole r stmt) => PrintConsole (LoggingFor r) stmt where
   printStrLn = liftLogging printStrLn
 
 instance
-  ( FileHandling r stmt
+  ( MultiStatement r stmt
+  , FileHandling r stmt
   , PrintFile r stmt
   , ReadConsole r stmt
   , VariableValue r
@@ -186,7 +185,8 @@ instance (PrintFile r stmt) => PrintFile (LoggingFor r) stmt where
   printFileStrLn = liftLogging printFileStrLn
 
 instance
-  ( FileHandling r stmt
+  ( MultiStatement r stmt
+  , FileHandling r stmt
   , PrintFile r stmt
   , ReadFile r stmt
   , VariableValue r
@@ -202,7 +202,8 @@ instance
   getFileInputAll = liftLogging getFileInputAll
 
 instance
-  ( StringStatement r stmt
+  ( MultiStatement r stmt
+  , StringStatement r stmt
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
@@ -218,8 +219,6 @@ instance
     : concatMap logVarUpdate vrs
 
 -- SharedProg Boilerplate
-
-instance (G.OOStatement r stmt, VariableElim r) => G.OOStatement (LoggingFor r) stmt
 
 instance (VariableSym r) => VariableSym (LoggingFor r) where
   var = liftLogging var
@@ -249,10 +248,14 @@ instance (TypeElim r) => TypeElim (LoggingFor r) where
 instance (ValueSym r) => ValueSym (LoggingFor r) where
   valueType = liftLogging valueType
 
-instance StatementSym r stmt => StatementSym (LoggingFor r) stmt where
-  valStmt = liftLogging valStmt
+instance EmptyStatement r stmt => EmptyStatement (LoggingFor r) stmt where
   emptyStmt = liftLogging emptyStmt
+
+instance MultiStatement r stmt => MultiStatement (LoggingFor r) stmt where
   multi = liftLogging multi
+
+instance ValueStatement r stmt => ValueStatement (LoggingFor r) stmt where
+  valStmt = liftLogging valStmt
 
 instance (Argument r) => Argument (LoggingFor r) where
   pointerArg = liftLogging pointerArg

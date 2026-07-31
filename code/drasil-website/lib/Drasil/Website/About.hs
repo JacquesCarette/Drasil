@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | About Drasil
 module Drasil.Website.About (aboutSec) where
 

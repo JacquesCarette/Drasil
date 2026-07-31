@@ -1,6 +1,4 @@
-{-# LANGUAGE PostfixOperators, Rank2Types #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-{-# LANGUAGE FlexibleContexts #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, publicFuncProc, privateMethod, privateFuncProc, publicInOutFunc,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,
@@ -57,13 +55,13 @@ import Drasil.GOOL (Label, File, Body, Block, SVariable, SValue, Class,
   instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, Reference(..), Array(..), List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), FileHandling(..), ReadFile(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convType, convTypeOO, VisibilityTag(..), CodeType(..),
-  onStateValue, TypeData, ParamData, TypeElim, OODeclStatement, OOVariableValue,
-  OOStatement, MathConstant, Argument, PrintFile, BodySym)
+  objMethodCallMixedArgs, Reference(..), Array(..), List(..), ListStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  FileHandling(..), ReadFile(..), StringStatement(..), ControlStatement(..),
+  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
+  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue, TypeData, ParamData, TypeElim, OODeclStatement,
+  OOVariableValue, MathConstant, Argument, PrintFile, BodySym, InternalValueExp)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -86,7 +84,23 @@ spaceCodeType s = do
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
 value
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , OO.Set r
+    , TypeElim r
+    , VariableElim r
+    )
   => UID -> Name -> VS (r TypeData) -> GenState (SValue r)
 value u s t = do
   g <- get
@@ -182,7 +196,23 @@ classVariable c v = do
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkVal
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , VariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , OO.Set r
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
@@ -207,7 +237,7 @@ mkVar v = do
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParam
-  :: (OOStatement r stmt, VariableElim r)
+  :: (VariableValue r, SelfSym r, ParameterSym r, VariableElim r)
   => ParameterChunk -> GenState (MS (r ParamData))
 mkParam p = do
   v <- mkVar (quantvar p)
@@ -299,7 +329,17 @@ genMethod f n desc p r b = do
 -- for a documented function/method, the visibility, attachment, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc
-  :: (OOStatement r stmt, VariableElim r)
+  ::
+    ( OO.Literal r
+    , VariableValue r
+    , SelfSym r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , BodySym r stmt
+    , VariableElim r
+    )
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
   -> (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MS (r Body) -> MS (r mthd))
   -> Label
@@ -327,7 +367,23 @@ genInOutFunc f docf n desc ins' outs' b = do
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExpr
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , OO.Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , OO.Set r
+    , TypeElim r
+    , VariableElim r
+    )
   => CodeExpr -> GenState (SValue r)
 convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
@@ -418,7 +474,23 @@ convExpr (RealI c ri)  = do
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
 convCall
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , OO.Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , Reference r
+    , OO.Set r
+    , TypeElim r
+    , VariableElim r
+    )
   => UID
   -> [CodeExpr]
   -> [(UID, CodeExpr)]
@@ -484,7 +556,7 @@ unopB :: (BooleanExpression r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (List r stmt) => UFuncVN -> (SValue r -> SValue r)
+unopVN :: (List r) => UFuncVN -> (SValue r -> SValue r)
 unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
@@ -504,7 +576,7 @@ eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
-laBfunc :: (List r stmt) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc :: (List r) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
 laBfunc IndexOf = indexOf
 
@@ -609,7 +681,30 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , MathConstant r
+    , VariableValue r
+    , OO.Literal r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , Array r
+    , List r
+    , ListStatement r stmt
+    , Reference r
+    , OO.Set r
+    , MultiStatement r stmt
+    , ValueStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , DeclStatement r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => FuncStmt -> GenState (MS (r stmt))
 convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
@@ -720,7 +815,29 @@ genDataFunc nameTitle desc ddef = do
 -- this is really ugly!!
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readData
-  :: (OOStatement r stmt, TypeElim r, VariableElim r)
+  ::
+    ( Argument r
+    , OO.Literal r
+    , MathConstant r
+    , OOVariableValue r
+    , BooleanExpression r
+    , Comparison r
+    , NumericExpression r
+    , SelfSym r
+    , InternalValueExp r
+    , OOValueExpression r
+    , List r
+    , ListStatement r stmt
+    , Reference r
+    , OO.Set r
+    , OODeclStatement r stmt
+    , ControlStatement r stmt
+    , StringStatement r stmt
+    , FileHandling r stmt
+    , ReadFile r stmt
+    , TypeElim r
+    , VariableElim r
+    )
   => DataDesc -> GenState [MS (r Block)]
 readData ddef = do
   g <- get
@@ -734,7 +851,17 @@ readData ddef = do
     [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
-          :: (OOStatement r stmt, VariableElim r)
+          ::
+            ( OO.Literal r
+            , OOVariableValue r
+            , List r
+            , ListStatement r stmt
+            , OODeclStatement r stmt
+            , ControlStatement r stmt
+            , StringStatement r stmt
+            , ReadFile r stmt
+            , VariableElim r
+            )
           => Data -> r ScopeData -> GenState [MS (r stmt)]
         inData (Singleton v) _ = do
             vv <- mkVar v
@@ -759,7 +886,13 @@ readData ddef = do
           return $ readLines ls
         ---------------
         lineData
-          :: (OOStatement r stmt, VariableElim r)
+          ::
+            ( OOVariableValue r
+            , ListStatement r stmt
+            , OODeclStatement r stmt
+            , StringStatement r stmt
+            , VariableElim r
+            )
           => Maybe String -> LinePattern -> r ScopeData -> GenState [MS (r stmt)]
         lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
@@ -782,13 +915,13 @@ readData ddef = do
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (List r stmt, OOVariableValue r)
+          :: (ListStatement r stmt, OOVariableValue r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (List r stmt, OOVariableValue r)
+          :: (ListStatement r stmt, OOVariableValue r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))
@@ -819,7 +952,7 @@ valueProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -894,7 +1027,7 @@ mkValProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -933,7 +1066,7 @@ genModDefProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
     , Reference r
     , OO.Set r
     , ProcProg r vis stmt mthd prg
@@ -958,6 +1091,7 @@ publicFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -981,6 +1115,7 @@ privateFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1006,6 +1141,7 @@ genMethodProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1044,6 +1180,8 @@ genFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1053,7 +1191,8 @@ genFuncProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , MethodSym r vis stmt mthd
     , OO.Set r
@@ -1085,6 +1224,8 @@ genModFuncsProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1094,7 +1235,8 @@ genModFuncsProc
     , PrintFile r stmt
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , MethodSym r vis stmt mthd
     , OO.Set r
@@ -1121,7 +1263,8 @@ readDataProc
     , FileHandling r stmt
     , ReadFile r stmt
     , Argument r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , OO.Set r
     , TypeElim r
@@ -1142,7 +1285,8 @@ readDataProc ddef = do
           ::
             ( VariableValue r
             , NativeVector r
-            , List r stmt
+            , List r
+            , ListStatement r stmt
             , DeclStatement r stmt
             , ControlStatement r stmt
             , StringStatement r stmt
@@ -1175,7 +1319,7 @@ readDataProc ddef = do
           ::
             ( VariableValue r
             , NativeVector r
-            , List r stmt
+            , ListStatement r stmt
             , DeclStatement r stmt
             , StringStatement r stmt
             )
@@ -1201,13 +1345,13 @@ readDataProc ddef = do
           (innerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (List r stmt, VariableValue r)
+          :: (ListStatement r stmt, VariableValue r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (List r stmt, VariableValue r)
+          :: (ListStatement r stmt, VariableValue r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convType t))
@@ -1233,7 +1377,7 @@ convExprProc
     , NativeVector r
     , Reference r
     , OO.Set r
-    , List r stmt
+    , List r
     , TypeElim r
     )
   => CodeExpr -> GenState (SValue r)
@@ -1325,7 +1469,7 @@ convCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , OO.Set r
@@ -1364,10 +1508,13 @@ convStmtProc
     , Comparison r
     , Argument r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , NativeVector r
     , Reference r
     , OO.Set r
+    , MultiStatement r stmt
+    , ValueStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1489,9 +1636,11 @@ genDataFuncProc
     , ReadFile r stmt
     , PrintFile r stmt
     , Argument r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Reference r
     , OO.Set r
+    , MultiStatement r stmt
     , MethodSym r vis stmt mthd
     , TypeElim r
     , VariableElim r
@@ -1508,6 +1657,7 @@ publicInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1527,6 +1677,7 @@ privateInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1549,6 +1700,7 @@ genInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt

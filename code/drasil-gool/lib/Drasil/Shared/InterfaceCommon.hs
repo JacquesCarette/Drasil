@@ -65,7 +65,7 @@ type Block = Doc
 -- not for use by the compiler/interpreter
 -- but to improve readability of the generated code.
 -- See the bottom of page 2 of Brook's GOOL paper from 2020 for more details.
-class (StatementSym r stmt) => BlockSym r stmt where
+class BlockSym r stmt | r -> stmt where
   block   :: [MS (r stmt)] -> MS (r Block)
 
 -- | Class for representing a type.
@@ -314,7 +314,7 @@ class (IndexTranslator r) => Array r where
   -- | Given a source array, create a (shallow) copy of it
   arrayCopy :: SValue r -> SValue r
 
-class (IndexTranslator r, StatementSym r stmt) => List r stmt where
+class (IndexTranslator r) => List r stmt | r -> stmt where
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
@@ -415,7 +415,7 @@ class (ValueSym r) => StatementSym r stmt | r -> stmt where
   -- | Consolidates a list of statements into a single statement
   multi     :: [MS (r stmt)] -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => AssignStatement r stmt where
+class (VariableSym r) => AssignStatement r stmt | r -> stmt where
   (&-=)  :: SVariable r -> SValue r -> MS (r stmt)
   infixl 1 &-=
   (&+=)  :: SVariable r -> SValue r -> MS (r stmt)
@@ -431,7 +431,7 @@ class (VariableSym r, StatementSym r stmt) => AssignStatement r stmt where
 infixr 1 &=
 (&=) = assign
 
-class (VariableSym r, StatementSym r stmt, ScopeSym r) => DeclStatement r stmt where
+class (VariableSym r, ScopeSym r) => DeclStatement r stmt | r -> stmt where
   -- | Declare a variable without giving it a value.
   -- Not for use with arrays; use `arrayDec` instead.
   varDec       :: SVariable r -> r ScopeData -> MS (r stmt)
@@ -453,38 +453,38 @@ class (VariableSym r, StatementSym r stmt, ScopeSym r) => DeclStatement r stmt w
   funcDecDef   :: SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body)
     -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => PrintConsole r stmt where
+class (VariableSym r) => PrintConsole r stmt | r -> stmt where
   print      :: SValue r -> MS (r stmt)
   printLn    :: SValue r -> MS (r stmt)
   -- TODO [Brandon Bosman, 07/23/2026]: Could these be helpers?
   printStr   :: String -> MS (r stmt)
   printStrLn :: String -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => ReadConsole r stmt where
+class (VariableSym r) => ReadConsole r stmt | r -> stmt where
   getInput         :: SVariable r -> MS (r stmt)
   discardInput     :: MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => FileHandling r stmt where
+class (VariableSym r) => FileHandling r stmt | r -> stmt where
   openFileR :: SVariable r -> SValue r -> MS (r stmt)
   openFileW :: SVariable r -> SValue r -> MS (r stmt)
   openFileA :: SVariable r -> SValue r -> MS (r stmt)
   closeFile :: SValue r -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => PrintFile r stmt where
+class (VariableSym r) => PrintFile r stmt | r -> stmt where
   -- | Given the file handle and value to print, print the value to the file.
   printFile      :: SValue r -> SValue r -> MS (r stmt)
   printFileLn    :: SValue r -> SValue r -> MS (r stmt)
   printFileStr   :: SValue r -> String -> MS (r stmt)
   printFileStrLn :: SValue r -> String -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => ReadFile r stmt where
+class (VariableSym r) => ReadFile r stmt | r -> stmt where
   getFileInput     :: SValue r -> SVariable r -> MS (r stmt)
   discardFileInput :: SValue r -> MS (r stmt)
   getFileInputLine :: SValue r -> SVariable r -> MS (r stmt)
   discardFileLine  :: SValue r -> MS (r stmt)
   getFileInputAll  :: SValue r -> SVariable r -> MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => StringStatement r stmt where
+class (VariableSym r) => StringStatement r stmt | r -> stmt where
   -- | Given a char to split on, variable to store result in, and string to split,
   -- generates a statement splitting the string into a list of strings
   -- delimited by the char.
@@ -500,11 +500,11 @@ class (ValueSym r) => FunctionSym r where
 type InOutCall r stmt = Label -> [SValue r] -> [SVariable r] -> [SVariable r] ->
   MS (r stmt)
 
-class (VariableSym r, StatementSym r stmt) => FuncAppStatement r stmt where
+class (VariableSym r) => FuncAppStatement r stmt | r -> stmt where
   inOutCall    ::            InOutCall r stmt
   extInOutCall :: Library -> InOutCall r stmt
 
-class (StatementSym r stmt) => CommentStatement r stmt where
+class CommentStatement r stmt | r -> stmt where
   comment :: String -> MS (r stmt)
 
 class (BodySym r stmt, VariableSym r) => ControlStatement r stmt where

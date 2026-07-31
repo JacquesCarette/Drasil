@@ -50,6 +50,7 @@ genAllInputCalls
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , OOFuncAppStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -93,6 +94,7 @@ genConstraintCall
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -119,6 +121,7 @@ genCalcCall
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -148,6 +151,7 @@ genOutputCall
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -174,6 +178,7 @@ genFuncCall
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -249,6 +254,7 @@ genAllInputCallsProc
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , TypeElim r
     )
   => GenState [MS (r stmt)]
@@ -287,6 +293,7 @@ genConstraintCallProc
     , List r stmt
     , Reference r
     , Set r
+    , StatementSym r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -336,6 +343,7 @@ genOutputCallProc
     , NativeVector r
     , Reference r
     , Set r
+    , StatementSym r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))

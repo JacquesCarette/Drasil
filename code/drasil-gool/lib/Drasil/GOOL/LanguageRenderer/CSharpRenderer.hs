@@ -938,6 +938,7 @@ csPrint
     , ValueExpression r
     , VariableValue r
     , List r stmt
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

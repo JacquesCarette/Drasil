@@ -22,6 +22,7 @@ logBody
   ::
     ( Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -42,6 +43,7 @@ loggedMethod
   ::
     ( Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt

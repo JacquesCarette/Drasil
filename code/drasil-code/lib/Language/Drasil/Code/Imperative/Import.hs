@@ -98,6 +98,7 @@ value
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -210,6 +211,7 @@ mkVal
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -333,6 +335,7 @@ genInOutFunc
     ( OO.Literal r
     , VariableValue r
     , SelfSym r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -380,6 +383,7 @@ convExpr
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -487,6 +491,7 @@ convCall
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -695,6 +700,7 @@ convStmt
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
     , DeclStatement r stmt
@@ -825,6 +831,7 @@ readData
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , OODeclStatement r stmt
     , ControlStatement r stmt
     , StringStatement r stmt
@@ -1051,6 +1058,7 @@ genModDefProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1085,6 +1093,7 @@ publicFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1108,6 +1117,7 @@ privateFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1133,6 +1143,7 @@ genMethodProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1171,6 +1182,7 @@ genFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1212,6 +1224,7 @@ genModFuncsProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1495,6 +1508,7 @@ convStmtProc
     , NativeVector r
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -1619,6 +1633,7 @@ genDataFuncProc
     , List r stmt
     , Reference r
     , OO.Set r
+    , StatementSym r stmt
     , MethodSym r vis stmt mthd
     , TypeElim r
     , VariableElim r
@@ -1635,6 +1650,7 @@ publicInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1654,6 +1670,7 @@ privateInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
@@ -1676,6 +1693,7 @@ genInOutFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , StatementSym r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt

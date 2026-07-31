@@ -27,7 +27,7 @@ import Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
   ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize, listAdd), listOf, StatementSym(..), AssignStatement,
+  List(listSize, listAdd), listOf, StatementSym, AssignStatement,
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), Argument,
   BooleanExpression, CommandLineArgs, CommentStatement, Comparison,
   ControlStatement, PrintConsole, ReadConsole, FileHandling, PrintFile, ReadFile,
@@ -50,11 +50,11 @@ class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
   List r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
   VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, CommentStatement r stmt,
-  OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
-  ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
-  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  ProgramSym r vis stmt mthd stvr attch prg
+  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, StatementSym r stmt,
+  CommentStatement r stmt, OODeclStatement r stmt, AssignStatement r stmt,
+  OOFuncAppStatement r stmt, ControlStatement r stmt, StringStatement r stmt,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, ProgramSym r vis stmt mthd stvr attch prg
   ) => OOProg r vis stmt mthd stvr attch prg
 
 type Program = ProgData
@@ -295,7 +295,7 @@ extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 class (FuncAppStatement r stmt, OOVariableSym r) => OOFuncAppStatement r stmt where
   selfInOutCall :: InOutCall r stmt
 
-class (StatementSym r stmt, OOFunctionSym r) => ObserverPattern r stmt where
+class (OOFunctionSym r) => ObserverPattern r stmt | r -> stmt where
   notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 
 observerListName :: Label

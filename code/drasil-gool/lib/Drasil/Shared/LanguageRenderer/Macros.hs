@@ -57,7 +57,8 @@ strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
   RC.statement result])
 
 runStrategy
-  :: ( IC.AssignStatement r stmt
+  :: ( StatementSym r stmt
+     , IC.AssignStatement r stmt
      , RC.BodyElim r
      , Monad r
      , S.RenderStatement r stmt
@@ -78,7 +79,8 @@ runStrategy l strats rv av = maybe
 
 listSlice
   ::
-    ( IC.DeclStatement r stmt
+    ( StatementSym r stmt
+    , IC.DeclStatement r stmt
     , AssignStatement r stmt
     , IC.ControlStatement r stmt
     , IC.Literal r
@@ -160,7 +162,8 @@ listSlice beg end step vnew vold = do
 --   Output: (SValue): (setter, value) of bound
 makeSetterVal
   ::
-    ( IC.DeclStatement r stmt
+    ( StatementSym r stmt
+    , IC.DeclStatement r stmt
     , Comparison r
     , IC.IndexTranslator r
     , IC.Literal r
@@ -183,7 +186,8 @@ makeSetterVal vName step _       _       lb rb  scp =
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
 stringListVals
-  :: ( IC.AssignStatement r stmt
+  :: ( StatementSym r stmt
+     , IC.AssignStatement r stmt
      , IC.List r stmt
      , IC.Literal r
      , RenderValue r
@@ -263,7 +267,13 @@ obsList :: (IC.VariableValue r) => VS (r TypeData) -> SValue r
 obsList t = IC.valueOf $ listOf observerListName t
 
 notify
-  :: (VariableValue r, List r stmt, OOFunctionSym r, BodySym r stmt)
+  ::
+    ( VariableValue r
+    , List r stmt
+    , StatementSym r stmt
+    , OOFunctionSym r
+    , BodySym r stmt
+    )
   => VS (r TypeData) -> VS (r FuncData) -> MS (r Body)
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
@@ -273,6 +283,7 @@ notifyObservers
     , VariableValue r
     , Comparison r
     , List r stmt
+    , StatementSym r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt
@@ -288,6 +299,7 @@ notifyObservers'
     ( Literal r
     , VariableValue r
     , List r stmt
+    , StatementSym r stmt
     , ControlStatement r stmt
     , OOFunctionSym r
     )
@@ -298,7 +310,8 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
 
 arrayDecAsList
   ::
-    ( IC.DeclStatement r stmt
+    ( StatementSym r stmt
+    , IC.DeclStatement r stmt
     , IC.ControlStatement r stmt
     , IC.Literal r
     , IC.VariableValue r

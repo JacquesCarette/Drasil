@@ -120,10 +120,10 @@ multiDefnGenQD md de =
 
 -- | Convert 'MultiDefn's into 'QDefinition's via a specific 'DefiningExpr' (by 'UID').
 multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
-multiDefnGenQDByUID md u
-  | length matches == 1 = multiDefnGenQD md matched
-  | otherwise           = error $
-    "Invalid defining expression `" ++ show u ++ "` for QDef creation in MultiDefn `" ++ show u ++ "`"
+multiDefnGenQDByUID md u =
+  case matches of
+    [ matched ] ->  multiDefnGenQD md matched
+    _           -> error $
+      "Invalid defining expression `" ++ show u ++ "` for QDef creation in MultiDefn `" ++ show u ++ "`"
   where
     matches = NE.filter (\x -> x ^. uid == u) (md ^. rvs)
-    matched = head matches

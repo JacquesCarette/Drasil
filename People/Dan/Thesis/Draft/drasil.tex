@@ -45,7 +45,7 @@ evolution is expected.
 Unlike documentation generators like Doxygen, Javadoc, and Sphinx
 that take a code-centric view of the problem and rely on manual redundancy -- 
 i.e. natural-language explanations written as specially delimited
-comments which can then be weaved into API documentation alongside code -- 
+comments that can then be weaved into API documentation alongside code -- 
 Drasil takes a knowledge-centric, redundancy-limiting, fully traceable, 
 single-source approach to generating \sfs{}. The framework builds up knowledge 
 \emph{as needed} to solve concrete problems rather than attempting to encode 
@@ -54,7 +54,7 @@ adaptable to different domains and contexts early in its development.
 
 However, Drasil is not, nor is it intended to be, a panacea for all the woes of 
 software development. Even the seemingly well-defined problems of unnecessary 
-redundancy and manual duplication turn out to be large, many-headed beasts 
+redundancy and manual duplication turn out to be large, many-headed beasts, 
 which exist across a multitude of software domains; each with their own 
 benefits, drawbacks, and challenges.
 
@@ -65,12 +65,22 @@ would be useful for developing software to tackle a given problem, we recommend
 identifying those projects that are long-lived (10+ years) with \sfs{} 
 relevant to multiple stakeholders. For our purposes, as mentioned earlier, we 
 have focused on SC software that follows the input $\rightarrow$ process 
-$\rightarrow$ output pattern. SC software has the benefit of being relatively 
-slow to change, so models used today may not be updated or invalidated for some 
-time, if ever. Should that happen, the models will likely still be applicable 
-given a set of assumptions or assuming certain acceptable margins for error.
+$\rightarrow$ output pattern. Scientific computing often appears both stable 
+and change-prone, and that distinction is important for understanding 
+Drasil's intended scope. The underlying scientific knowledge is often 
+well-understood\citep{CaretteEtAl2023} enough to be captured explicitly, 
+even when the software built around it still evolves through maintenance, 
+changing assumptions, revised constraints, new outputs, or iterative model 
+refinement. In other words, Drasil is aimed at domains where the foundational 
+theory is stable enough to encode, while the artifacts derived from that theory 
+still benefit from frequent regeneration as the software changes. SC software 
+has the benefit of being grounded in relatively stable theories, so even when 
+models are revised or refined, older formulations are often still applicable under a set of 
+assumptions or within acceptable margins for error.
 
-With Drasil being built around this specific class of problems, we remain aware 
+With Drasil being built around long-lived, well-understood scientific 
+computing problems that follow an input $\rightarrow$ process $\rightarrow$ 
+output structure and involve \sfs{} for multiple stakeholders, we remain aware 
 that there are likely many in-built assumptions in its current state that could 
 affect its applicability to other domains. As such, we consider expanding 
 Drasil's reach as an avenue for future work.
@@ -144,7 +154,14 @@ the mechanism Drasil uses to represent this knowledge in a reusable and
 extensible way. To address these requirements, we borrow and re-purpose the 
 \emph{chunk} term from Literate Programming (LP), creating a simplified, 
 extensible, and ever-expanding hierarchy of chunks based on the needs for 
-capturing individual pieces of knowledge.
+capturing individual pieces of knowledge. A chunk hierarchy is the 
+organization of chunk types from simple, general building blocks to more 
+specialized ones that add additional structure or meaning. In Drasil, this 
+means later chunk types are constructed by extending earlier ones and reusing 
+the information they already encode. We use a hierarchy because many pieces of 
+scientific knowledge share common properties, and factoring those shared 
+properties into simpler chunk types reduces duplication while making it easier 
+to build richer, more specialized representations as needed.
 
 Our base chunk, \codeH{NamedChunk} is defined in Figure~\ref{fig:namedchunk} 
 and can be thought of as any uniquely identifiable term. It is composed of a 
@@ -184,13 +201,11 @@ using the \codeH{dcc} smart constructor}{fig:conceptchunk}
 These simple chunks are fine as a starting point, however, knowing the SC 
 domain we can already foresee the need for a variety of other chunks. For 
 brevity, we will only expand upon the chunks needed for the examples used in 
-this paper. More information, including detailed definitions of all the types 
-and current state of Drasil can be found in the wiki 
+this thesis. More information, including detailed definitions of all the types 
+and current state of Drasil can be found in the 
 (\href{https://github.com/JacquesCarette/Drasil/wiki/}
-{https://github.com/JacquesCarette/Drasil/wiki/}) or the Haddock documentation 
-which can be generated from the Drasil source code or found online at 
-\href{https://jacquescarette.github.io/Drasil/docs/full/}
-{https://jacquescarette.github.io/Drasil/docs/full/}
+{wiki}) or the \href{https://jacquescarette.github.io/Drasil/docs/full/}
+{Haddock documentation} which can be generated from the Drasil source code.
 
 \subsection{Chunk Combinatorics}
 \label{sec:chunky}
@@ -204,22 +219,26 @@ structures. This approach is essential for reducing duplication and supporting
 traceability, as it allows definitions and relationships to be constructed from 
 reusable components. To facilitate this, we introduce a Domain Specific 
 Language (DSL) for constructing and combining English-language sentences 
-(\codeH{Sentence}) which lets us define terms and their relationships in a 
+(\codeH{Sentence}), which lets us define terms and their relationships in a 
 flexible, compositional way.
 
-Even with extremely simple chunks we have seen the need for multiple chunk 
-types and a number of ways to construct instances of those types. The more we 
-extend our chunk hierarchy, the larger the number of possible combinations we 
-will need to account for. This is not only relevant to chunks themselves, but 
-also to the information they encode. Take, for instance, a term definition that 
-relies on other terminology that has been captured. In our effort to reduce 
-duplication and maintain a single source of information, we intend to be able 
-to create chunks with references to other chunks such that the definition can 
-use the known terminology.
+Even in the small progression we have already seen, the need for multiple 
+chunk types is apparent. A \codeH{NamedChunk} is sufficient for naming a 
+concept, but once we also want to capture its definition we must move to a 
+more specialized \codeH{ConceptChunk}. The more we extend our chunk 
+hierarchy to capture additional information such as symbols, units, and 
+equations, the larger the number of possible combinations we will need to 
+account for. This is not only relevant to chunks themselves, but 
+also to the information they encode. For instance, rather than defining 
+acceleration in isolation, we may want to define it as the rate of change of 
+velocity, where velocity is itself already a captured term. In our effort to 
+reduce duplication and maintain a single source of information, we therefore 
+intend to create chunks with references to other chunks such that a definition 
+can reuse already-captured terminology.
 
-To define a term with references to other terms, we need to ensure we are 
-creating our definitions by projecting relevant knowledge into the definition, 
-but also ensuring we have the flexibility to extend that knowledge. With that 
+To define terms (such as acceleration) in relation to previously captured terms 
+(such as velocity), we need a way to project existing knowledge into new 
+definitions while retaining the flexibility to extend that knowledge. With that 
 in mind, we created a Domain Specific Language (DSL) for creating and combining 
 (English language) sentences aptly called \codeH{Sentence}. In its most basic 
 form, \codeH{Sentence} will simply wrap a string. However, by defining a number 
@@ -230,8 +249,8 @@ be seen in Figure~\ref{fig:acceleration}. We use the \codeH{phrase} helper
 function to pull the appropriate sentence out of the \codeH{velocity} chunk and 
 the combinator (\codeH{+:+}) to concatenate the sentences. Note that 
 \codeH{position} uses a different smart constructor (for non-derived 
-definitions) and so doesn't require the sentence constructor (\codeH{S}) around 
-its definition.
+definitions as it is not derived from existing chunks) and so doesn't require 
+the sentence constructor (\codeH{S}) around its definition.
 
 We also make opportunistic use of composable accessors (commonly known in the 
 Haskell ecosystem as ``lenses") to help manage complexity when combining and 
@@ -244,7 +263,9 @@ readers who want the implementation details.}. In practice they let us build
 derived chunks by projecting the subparts we need, update specific components 
 (for instance a symbol or an attached unit) in a principled, immutable way, and 
 compose transformations cleanly when constructing larger chunks from smaller 
-ones. 
+ones. For example, starting from an existing concept for force, we can reuse 
+its name and definition while attaching a symbol and unit to construct a more 
+specialized chunk without rewriting the underlying knowledge.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={59-60,135-136,174-175}, 
@@ -257,17 +278,17 @@ well beyond simple names and definitions. Those examples highlighted the need
 for symbolic representations, equations, units, and explicit relationships 
 between concepts. While our motivating example of Newton's Second Law ($F=ma$) 
 covers some of these aspects, it also reveals gaps in our current chunk 
-definitions—particularly when it comes to capturing all relevant properties in 
-a reusable, traceable way.
+definitions particularly in our ability to capture symbols, units, equations, 
+and relationships between related quantities in a reusable, traceable way.
 
-For a better sense of what, exactly, we are missing, let us build on our 
-Newton's Second Law example and determine how we achieve an operational 
-definition of \emph{Force} as a chunk in Drasil. To fully represent force, we 
-need not only a name and definition, but also a symbolic representation ($F$), 
-a mathematical equation ($F=ma$), and associated units ($N$). Likewise, mass 
-and acceleration require their own symbols ($m$, $a$), definitions, and units 
-($kg$, $m/s^2$). This illustrates the necessity for chunk types that can encode 
-all these facets in a reusable and traceable manner.
+Building on those gaps, let us return to Newton’s Second Law and examine what 
+is required to achieve an operational definition of \emph{Force} as a chunk 
+in Drasil. To fully represent force, we need not only a name and definition, 
+but also a symbolic representation ($F$), a mathematical equation ($F=ma$), and 
+associated units ($N$). Likewise, mass and acceleration require their own 
+symbols ($m$, $a$), definitions, and units ($kg$, $m/s^2$). This illustrates 
+the necessity for chunk types that can encode all these facets in a reusable 
+and traceable manner.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={91-92}, 
@@ -281,7 +302,7 @@ numbers=none]{code/PhysicsQuantities.hs}
 
 We start by building a \codeH{ConceptChunk} for the Force concept as seen in 
 Figure~\ref{fig:forceCC}. It is built from a common noun (``force") and a 
-definition. Next we need to capture the units of measurement to the force 
+definition. Next we need to capture the units of measurement for the force 
 concept by defining what we have named a \codeH{UnitalChunk}. This definition 
 for force can be seen in Figure~\ref{fig:forceUC}. Note that we are not 
 re-defining force in this instance. We are instead using a smart constructor to 
@@ -296,7 +317,7 @@ another type of chunk known as a \codeH{UnitDefn} which are built atop a
 chunk that can be one of several other chunk types.\footnote{For brevity we are 
 glossing over many chunk definitions and the differences between them as there 
 are a large variety in use for even simple examples. They are covered in more 
-depth in the full technical documentation found on our github repository.}. 
+depth in the full technical documentation found on our GitHub repository.}. 
 Returning to the force \codeH{UnitalChunk}, the smart constructor \codeH{uc} we 
 are using will assume we are working in the real number space. There are 
 other smart constructors for other spaces, which are also captured using other 
@@ -362,18 +383,25 @@ multiplication and derivatives.
 firstnumber=194]{code/Expr.hs}
 }{Defining real number multiplication in \codeH{Expr}}{fig:mulRe}
 
-As an aside, we will elide details on how we arrived at the current 
-implementation of the expression DSL known as \codeH{Expr}, but suffice to say 
-it was driven by a practical, ``lowest common denominator" approach to 
-developing the operations that could be encoded and factoring out commonalities 
-much the same way we did with the rest of the case studies. With that in mind, 
+As an aside, we will elide the full implementation history of the expression 
+DSL known as \codeH{Expr} and instead focus on the design pressures that 
+shaped it. We needed a representation that was language-agnostic, 
+compositional, and expressive enough to capture the recurring mathematical 
+relationships seen across our case studies, while remaining simple enough to 
+support projection into multiple generated artifacts. As such, \codeH{Expr} 
+was designed by identifying the common operations required in practice and 
+factoring them into a reusable core rather than attempting to encode all of 
+mathematics at once. With that in mind, 
 we have encoded multiplication (for real numbers) as seen in 
 Figure~\ref{fig:mulRe}. \codeH{AssocA} refers to an associative arithmetic 
 operator which can be applied across a list of expressions (in this case, 
 \codeH{mulRe}, though addition and other associative operations look very 
 similar). Derivation is much simpler to encode, as it is simply a relationship 
 between two existing chunks, i.e. \codeH{deriv a b} represents taking the 
-derivative of \codeH{a} with respect to \codeH{b}.
+derivative of \codeH{a} with respect to \codeH{b}. This allows us to display 
+derivatives correctly as mathematical notation, but it does not mean 
+\codeH{Expr} itself captures the semantics of differentiation beyond that 
+structural relationship.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={16-16, 20-23}, 
@@ -421,7 +449,10 @@ In the previous sections, we used the idea of ``chunks" of knowledge as our
 building blocks. They range in complexity from simple single terms, to complex 
 relationships between expressions and overarching conceptual frameworks. Each 
 chunk is defined by a collection of structural properties, or fields, such as a 
-unique identifier, name, symbol, unit, or space. This ``atomic" information is 
+unique identifier, name, symbol, unit, or space\footnote{Here, a space refers to the 
+kind of values a quantity may inhabit, such as the real numbers, integers, 
+booleans, or vectors, and it constrains the operations and representations 
+that make sense for that quantity.}. This ``atomic" information is 
 generally encoded in simpler, more fundamental chunks. Complex chunks are 
 constructed by combining these simpler chunks into more elaborate structures, 
 which we can think of in terms of ``molecules'' compared to the ``atoms" of 
@@ -450,7 +481,7 @@ knowledge represented by given terms such as ``force", ``computer",
 ``priority", and so on.
 
 Figure~\ref{fig:chunkClasses} and Figure~\ref{fig:chunksClassified} show a 
-subset of the different ways we classify chunks and some example chunk types 
+representative subset of the different ways we classify chunks and some example chunk types 
 and how they would be classified, respectively. Note there is a one to many 
 relationship between a given chunk and its classifications. As you can see, the 
 \codeH{UnitalChunk} and \codeH{DefinedQuantityDict} are very closely related in 

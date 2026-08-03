@@ -195,6 +195,19 @@ Scalability concerns also merit attention: as the knowledge base grows,
 improved tools for discovery, efficient projection, and modularization will
 be essential to maintain developer productivity.
 
+A related limitation lies in the use of chunks themselves as the primary 
+representation for knowledge. Chunks work best when knowledge can be 
+decomposed into explicit, named, and reusable units with relatively stable 
+relationships. This makes them well suited to definitions, quantities, 
+equations, units, and other structured domain concepts, but less natural for 
+knowledge that is tacit, highly contextual, temporally evolving, or strongly 
+dependent on complex system state. In such cases, deciding how to factor the 
+knowledge into chunks and how to represent the relationships between them can 
+require substantial modelling effort, and some information may be awkward to 
+encode using the current chunk hierarchy. Relatedly, many dependencies must 
+still be specified explicitly rather than inferred automatically, which 
+increases authoring burden and limits scalability as the knowledge base grows.
+
 Drasil's current implementation is also limited primarily to scientific 
 computing software that follows an input $\rightarrow$ process $\rightarrow$ 
 output (IPO) paradigm. This constraint arises because Drasil currently works 

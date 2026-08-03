@@ -81,7 +81,7 @@ studies (see Section~\ref{sec:design_change} for related results).
 Both are members of the same software family, sharing core physical
 concepts and requirements but differing in specific details. Because the
 fundamental knowledge was already encoded for \sw{}, creating \np{} required
-only targeted extensions and modifications to existing chunks and recipes.
+only targeted removal of PCM-related chunks from the existing recipes.
 This reuse minimized duplication, ensured consistency across both projects,
 and allowed rapid adaptation of documentation and code for \np{}. The shared
 knowledge base made it straightforward to propagate improvements or
@@ -130,14 +130,17 @@ example illustrates how centralized knowledge surfacing both increases error
 visibility and enables concise, single-point fixes.
 
 \section{Human Factors and Usability}
+\label{sec:dis_usability}
 
 Experienced contributors adapted quickly to Drasil's patterns, but new users
 found the knowledge-capture DSL challenging. Two priorities emerge: improved
 discovery and search tools for the knowledge base, and higher-level authoring
-interfaces that present domain concepts in more familiar terms. In short: 
-Drasil desperately needs better tooling for authoring.
+interfaces that present domain concepts in more familiar terms \ds{Example: 
+dealing with domain concepts directly instead of something like dcc' heat 
+transfer ...}. In short: Drasil desperately needs better tooling for authoring.
 
 \section{Limitations and Directions for Validation}
+\label{sec:dis_limits}
 
 The current evidence is largely qualitative and anecdotal. Formal,
 controlled experiments are required to measure productivity gains,
@@ -162,10 +165,10 @@ be essential to maintain developer productivity.
 
 Drasil's current implementation is also limited primarily to scientific 
 computing software that follows an input $\rightarrow$ process $\rightarrow$ 
-output (IPO) paradigm. This constraint arises because such domains typically 
-feature well-defined requirements, structured models, and predictable outputs, 
-making it feasible to encode domain knowledge explicitly and project it into 
-multiple artifacts. 
+output (IPO) paradigm. This constraint arises because such domains are 
+well-understood~\citep{aslkdfn}, with structured models and predictable 
+outputs, making it feasible to encode domain knowledge explicitly, experiment 
+with assumptions, and project it into multiple artifacts. 
 
 In contrast, domains with less structured or more dynamic 
 requirements\textemdash{}such as interactive systems, event-driven 

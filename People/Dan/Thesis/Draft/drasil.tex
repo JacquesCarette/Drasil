@@ -461,12 +461,12 @@ with it.
 
 \fig{\begin{center}
 \includegraphics[width=\linewidth]{figures/ChunkClasses.png}
-\end{center}}{A subset of Drasil's Chunk Classification system showing some of 
-the encoded property relationships}{fig:chunkClasses}
+\end{center}}{A representative subset of Drasil's Chunk Classification system 
+showing some of the encoded property relationships}{fig:chunkClasses}
 
 \fig{\begin{center}
 \includegraphics[width=0.75\linewidth]{figures/ChunkClassified.png}
-\end{center}}{A subset of Drasil's chunks showing how chunks may 
+\end{center}}{A representative subset of Drasil's chunks showing how chunks may 
 belong to multiple classifications based on the underlying knowledge they 
 project.}{fig:chunksClassified}
 
@@ -1132,7 +1132,7 @@ representations, guarantees consistency and traceability throughout the
 software system. Changes need only be made once, and are reflected everywhere 
 $\hat{q}$ appears, reducing maintenance cost and risk of error.
 
-\subsection{Summary}
+\subsection{Rendering Summary}
 In summary, rendering and assembly are the final, crucial steps that 
 operationalize Drasil's knowledge-centric approach and translate the abstract 
 representations produced by our chunks and recipes into practical, high-quality 
@@ -1177,7 +1177,9 @@ Crucially, moving the case studies into Drasil made those mistakes trivial to
 locate and correct. A representative example is the SSP symbol inconsistency 
 (Issue \#348 on the GitHub issue tracker). The original SSP SRS used the pair 
 $S_i$ and $P_i$ (mobilized shear stress and resistive shear force respectively) 
-in one place and later switched $S_i$ to $\tau_i$ (resistive shear stress). 
+in one place and later switched $S_i$ to $\tau_i$ ($\tau_i$ originally was 
+defined as resistive shear stress, but was now being conflated with \ds{Finish 
+this sentence} ). 
 $\tau_i$ was also omitted from the Table of Symbols. To reiterate, that 
 inconsistency existed in the original case study and was not a generator bug 
 but an error in the source document we had accepted as our starting point. Once 

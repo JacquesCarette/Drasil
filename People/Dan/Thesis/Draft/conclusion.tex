@@ -2,20 +2,24 @@
 \label{c:conclusion}
 
 This thesis set out to address the persistent challenges of consistency,
-traceability, and maintainability in scientific software and documentation.
-The introduction established the need for a principled, automated approach to
-knowledge capture and artifact generation, motivating the development and
-evaluation of Drasil.
+traceability, and reproducibility in scientific software and documentation.
+Maintainability is treated here as a consequence of those properties: once
+domain knowledge lives in a single place, changes can be propagated through
+regeneration rather than repeated manual edits. The introduction established
+the need for a principled, automated approach to knowledge capture and
+artifact generation, motivating the development and evaluation of Drasil.
 
 The results chapter provided concrete evidence that Drasil's single-source
 architecture enforces consistency by construction, improves traceability
 through explicit provenance, and enhances reproducibility via deterministic
-artifact generation. Case studies demonstrated that local changes to domain
-knowledge propagate automatically across all generated outputs, reducing
-manual effort and the risk of inconsistencies. The results also highlighted
-practical benefits such as the automatic maintenance of supporting materials
-and the ease of creating new software family members by reusing and extending
-the knowledge base.
+artifact generation. Here, deterministic means that repeated runs from the
+same knowledge base and recipe set produce the same artifacts, unlike the
+stochastic variation associated with LLM-style generation. Case studies
+demonstrated that local changes to domain knowledge propagate automatically
+across all generated outputs, reducing manual effort and the risk of
+inconsistencies. The results also highlighted practical benefits such as the
+automatic maintenance of supporting materials and the ease of creating new
+software family members by reusing and extending the knowledge base.
 
 The discussion chapter interpreted these findings, emphasizing that Drasil's
 approach shifts the burden of correctness to the knowledge base, clarifies
@@ -28,59 +32,58 @@ The primary contribution of this thesis is the demonstration that a
 centralized, recipe-driven knowledge base can systematically address many of
 the recurring problems in scientific software engineering. By explicitly
 capturing domain knowledge and automating artifact generation, Drasil
-provides a scalable, extensible foundation for reliable, maintainable, and
-reproducible scientific software. The lessons learned and directions for
-future work outlined here position Drasil as both a practical tool and a
-platform for further research in automated knowledge capture and software
-generation.
+provides a scalable, extensible foundation for reliable and reproducible
+scientific software, while improving maintainability through explicit
+provenance, single-point maintenance, and software-family reuse. The lessons
+learned and directions for future work outlined here position Drasil as both
+a practical tool and a platform for further research in automated knowledge
+capture and software generation.
 
 \section{Summary of Main Contributions}
 
-This thesis presents the design and implementation of Drasil, a centralized,
-recipe-driven knowledge base created as part of this research to
-systematically address persistent challenges in scientific software
-engineering. Through a systematic analysis of the commonalities and
-differences among software artifacts, this work operationalizes our
-understanding of software engineering principles, enabling their direct
-application in automated artifact generation. By explicitly capturing domain
-knowledge and automating the generation of software and documentation
-artifacts, Drasil enforces consistency by construction, improves traceability
-through explicit provenance, and enhances reproducibility via deterministic
-outputs. Case studies presented in Chapter~\ref{c:results} show that local
-changes to domain knowledge propagate automatically across all generated
-outputs, reducing manual effort and minimizing the risk of inconsistencies.
-The architecture described in Chapter~\ref{c:drasil}, refined through
-iterative development and feedback, enables the reuse and
-extension of the knowledge base, facilitating the creation of new software
-family members and supporting the automatic maintenance of supporting
-materials. Collectively, these contributions provide a scalable and
-extensible foundation for reliable, maintainable, and reproducible
-scientific software.
+This thesis contributes Drasil: a framework involving a centralized, 
+recipe-driven knowledge base for generating software and documentation 
+from a single source of domain knowledge. It operationalizes our understanding 
+of software engineering principles\textemdash{}design for change, 
+separation of concerns (specifically with respect to the underlying knowledge 
+versus presentation), among others (as discussed in 
+Sections~\ref{sec:design_change} and 
+Chapter~\ref{c:discussion})\textemdash{}into concrete mechanisms for capture, 
+projection, and regeneration. By explicitly capturing domain knowledge and 
+automating artifact generation, Drasil preserves consistency by construction, 
+exposes provenance, and supports deterministic regeneration, as shown in
+Chapter~\ref{c:results}. Those case studies also demonstrate that local 
+changes propagate across generated outputs and that the knowledge base can be 
+extended and reused to produce software-family variants and supporting 
+materials with less manual effort. Taken together, these contributions offer a 
+practical basis for reproducible scientific software.
 
 
 \section{Limitations and Open Questions}
 
 While Drasil demonstrates significant progress toward automating knowledge
-capture and artifact generation, several limitations remain. The approach
-requires substantial upfront modeling effort and domain expertise, which may
-pose a barrier to adoption for new users or projects. Tooling and usability
-challenges persist, including the need for improved front-end interfaces and
-developer experience plugins to streamline onboarding and knowledge capture.
+capture and artifact generation, several important limitations remain, many of
+which were examined more fully in Chapter~\ref{c:discussion}. First, the
+evidence presented in this thesis is still primarily qualitative, so the
+benefits observed in the case studies should be understood as promising rather
+than definitively quantified (see Section~\ref{sec:dis_limits}). Formal validation is still needed to establish
+how well these results generalize across teams, projects, and scientific
+domains.
 
-Formal validation and empirical evaluation of Drasil's effectiveness are
-ongoing, and further experiments are needed to establish its generalizability
-across diverse scientific computing domains. At present, Drasil is primarily
-limited to scientific computing software that adheres to an input 
-$\rightarrow$ process $\rightarrow$ output paradigm, where requirements and 
-models are well-understood and structured. As the knowledge base grows, 
-scalability and efficient knowledge management will become increasingly 
-important challenges, particularly for discovery, projection, and 
-modularization of domain knowledge.
+Second, Drasil currently works best in domains where the relevant knowledge is
+well-understood~\cite{CaretteEtAl2023}, structured, and amenable to explicit capture. In its present
+form, this largely means scientific computing software that fits an input
+$\rightarrow$ process $\rightarrow$ output paradigm. Whether the same
+knowledge-centric approach can be extended effectively to more dynamic,
+interactive, or less formalized systems remains an open question (see Section~\ref{sec:dis_limits}).
 
-Extending Drasil to more dynamic or less formalized fields
-remains an open question. These limitations and open questions, discussed 
-in Chapter~\ref{c:discussion}, highlight important directions for future 
-work, which are outlined in the following section.
+Finally, the work of building and maintaining the knowledge base still demands
+substantial modelling effort and domain familiarity. As discussed in
+Section~\ref{sec:dis_usability}, this creates practical challenges for onboarding,
+tool usability, and long-term scalability (see also Section~\ref{sec:dis_limits}) as the body of captured knowledge
+grows. These limitations do not undermine the value of the approach, but they
+do define the current boundaries of its applicability and motivate the future
+directions outlined next.
 
 \section{Future Work}
 \label{sec:fw}
@@ -124,7 +127,11 @@ A key direction for future work is improving Drasil's ability to infer
 knowledge chunks and their relationships directly from recipes and other
 high-level specifications. Currently, much of the chunk structure and
 dependency information must be defined explicitly, which can be tedious and
-error-prone as projects scale. Automating chunk inference would reduce the
+error-prone as projects scale. For example, if a recipe references an equation 
+and the participating quantities are already known, Drasil could infer a missing 
+unit annotation for a derived chunk, or detect that the equation is dimensionally 
+inconsistent and flag that to the author.
+Automating chunk inference would reduce the
 need for manual list definitions and make knowledge capture more efficient
 and less repetitive. Achieving this will require advances in both recipe
 design and the underlying inference passes. Progress in this area will
@@ -146,17 +153,22 @@ Drasil's knowledge base, making it easier to support complex scientific
 domains and reduce the risk of subtle errors in generated artifacts.
 
 \subsection{Usability Enhancements}
-Improving usability is critical for lowering barriers to adoption and
-ensuring that domain experts can efficiently contribute and manage knowledge.
-Future work should focus on developing intuitive tooling, such as visual
-front-ends, drag-and-drop interfaces, and plugins for popular development
-environments. Enhanced authoring tools will streamline the process of
-defining and refining chunks, while improved onboarding resources and guided
-workflows will help new users become productive more quickly. Tooling for
-cross-referencing existing chunks will prevent duplication and facilitate
-knowledge discovery, supporting both the expansion and sophistication of the
-knowledge base. Collectively, these usability enhancements will make Drasil
-more accessible and effective for a wider range of users and projects.
+A major direction for future work is raising the level at which users interact
+with Drasil. As discussed in Section~\ref{sec:dis_usability}, the current
+knowledge-capture process places substantial demands on contributors, who must
+understand not only the domain concepts they wish to encode, but also the
+internal chunk and recipe abstractions used to represent them. Future work
+should therefore focus on interfaces and workflows that allow users to work
+more directly with domain knowledge itself, while leaving more of the
+structural and representational bookkeeping to the system.
+
+This could include guided authoring environments, stronger IDE support, and
+tools for discovering, reusing, and navigating existing knowledge in the
+database. The goal is not simply to make Drasil more convenient, but to make
+its knowledge-centric approach more accessible to domain experts who are not
+already deeply familiar with the framework. Progress in this area would help
+reduce onboarding costs, improve the maintainability of the knowledge base as
+it grows, and make the framework more practical for broader adoption.
 
 \subsection{Output Formats and Artifact Types}
 Expanding the range of output formats and artifact types is essential for
@@ -165,8 +177,13 @@ Future work should focus on supporting additional programming languages
 (by expanding the existing GOOL backend) and document formats, 
 such as docx or other widely used file types. 
 
-Introducing new artifact types, (ex. Jupyter notebooks, journal papers), 
-will further extend Drasil's utility beyond traditional software documentation.
+Jupyter notebook support has already been added since the period covered by
+this thesis, demonstrating that Drasil can be extended beyond its earlier set
+of generated artifacts.\footnote{Jupyter notebook generation was added by
+other members of the Drasil team after the main period of work discussed in 
+this thesis.} 
+Future work can build on that progress by introducing additional artifact types, such as journal
+papers, and by broadening support for other forms of technical communication.
 These enhancements will enable Drasil to serve the diverse needs of scientific 
 computing practitioners, educators, and researchers, and will help bridge the 
 gap between code, documentation, and knowledge dissemination.
@@ -185,13 +202,20 @@ communities.
 
 \subsection{Test Case Generation}
 
-Developing more robust automated test case generation is essential for
-ensuring the reliability and correctness of artifacts produced by Drasil.
-Future work should focus on enhancing the mechanisms for generating
-comprehensive and meaningful test cases that reflect both domain knowledge
-and software requirements. Improvements in this area will help verify
-artifact integrity and support the adoption of Drasil in safety-critical
-and high-assurance scientific computing projects.
+Developing more robust automated test case generation is an important direction
+for future work, both for improving confidence in generated artifacts and for
+strengthening Drasil's support for verification activities. A useful first step
+toward this goal is a better understanding of testing artifacts themselves:
+which kinds of tests, relations, and supporting terminology should be captured
+and how they should be represented. Crawford's analysis of software testing
+terminology provides an initial foundation for this line of work by
+systematically cataloguing test approaches and exposing inconsistencies in how
+testing concepts are defined and related \cite{Crawford2025}. Building on that
+kind of groundwork, future work could explore how test knowledge should be
+captured in Drasil so that comprehensive and meaningful test cases can be
+generated from both domain knowledge and software requirements. Progress in
+this area would help verify artifact integrity and support the adoption of
+Drasil in safety-critical and high-assurance scientific computing projects.
 
 \subsection{Experiments and Validation}
 \label{sec:fw:exp}
@@ -235,12 +259,12 @@ automated, knowledge-centric scientific software engineering.
 \section{Broader Impact and Personal Reflection}
 
 The development of Drasil represents a step toward more principled and
-automated scientific software engineering. By centralizing domain knowledge
-and enabling systematic artifact generation, Drasil has the potential to
-improve reliability, reproducibility, and maintainability across a wide
-range of scientific computing projects. Its approach may influence future
-tools and methodologies, encouraging the adoption of knowledge-centric
-practices in both research and industry.
+automated scientific software engineering. More broadly, it suggests that
+knowledge-centric methods can play a larger role in how scientific software is
+documented, maintained, and communicated across communities of researchers,
+developers, and other stakeholders. In that sense, Drasil is not only a tool
+for generating artifacts, but also an example of how software engineering
+practice can be reorganized around explicit, reusable knowledge.
 
 Drasil's evolution has been shaped by its iterative development process,
 where feedback from case studies and practical use continually informed
@@ -259,11 +283,12 @@ formative, shaping my perspective on the future of scientific software.
 
 \section{Closing Remarks}
 
-This thesis has demonstrated the feasibility and benefits of a knowledge-
-centric approach to scientific software engineering. By operationalizing
+This thesis has demonstrated the feasibility and benefits of a knowledge-centric
+approach to scientific software engineering. By operationalizing
 software engineering principles and automating the generation of software
 and documentation artifacts, Drasil offers a scalable solution to persistent
-challenges of consistency, traceability, and maintainability. The work
+challenges of consistency, traceability, and reproducibility, while improving
+maintainability through centralized knowledge and regeneration. The work
 presented here lays the groundwork for further advances in knowledge capture
 and automated artifact generation, and invites continued research and
 collaboration to realize the full potential of this approach.

@@ -672,19 +672,19 @@ instance RenderMethod PythonCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod PythonCode Doc MethodData AttachmentData where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
     pms <- sequence ps
-    toCode . mthd . pyMethod n a sl pms <$> b
+    toCode . mthd n . pyMethod n a sl pms <$> b
   intFunc m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
-    pure $ toCode $ mthd $ pyFunction n pms bd
+    pure $ toCode $ mthd n $ pyFunction n pms bd
   destructor _ = error $ CP.destructorError pyName
 
 instance MethodElim PythonCode MethodData where

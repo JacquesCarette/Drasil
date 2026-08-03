@@ -59,7 +59,7 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
-  updateMod, MethodData, mthd, updateMthd, ParamData, paramVar, paramDoc, pd,
+  updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
   varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
   FuncData(fType, funcDoc), fd, ScopeData)
@@ -374,16 +374,6 @@ mlCellWrap :: CodeType -> Doc -> Doc
 mlCellWrap String = braces
 mlCellWrap _      = parens
 
-mlExtractFuncName :: MatlabCode MethodData -> String
-mlExtractFuncName m = extractName $ lines $ render $ mthdDoc $ unMLC m
-  where extractName []     = ""
-        extractName (l:ls)
-          | take 1 l == "%" = extractName ls
-          | otherwise       = parseFuncLine (words l)
-        parseFuncLine ("function":_:"=":nm:_) = takeWhile (/= '(') nm
-        parseFuncLine ("function":nm:_)       = takeWhile (/= '(') nm
-        parseFuncLine _                       = ""
-
 instance BinderSym MatlabCode where
   binder = undefined
 
@@ -560,24 +550,21 @@ instance MethodSym MatlabCode Doc (Doc, Terminator) MethodData where
     pms  <- mapM param (both ++ ins)
     rets <- mapM (zoom lensMStoVS) (both ++ outs)
     bod  <- b
-    pure $ toCode $ mthd $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
+    pure $ toCode $ mthd n $ mlFuncDoc n (map RC.variable rets) pms (RC.body bod)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod MatlabCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance ProcRenderMethod MatlabCode Doc MethodData where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
     bod <- b
-    -- A function with a non-void return type declares the output variable
-    -- 'result' in its header (function result = name(...)); returnStmt then
-    -- assigns to it. Void functions declare no output.
     let outs = [text mlRet | cType (unMLC tp) /= Void]
-    pure $ toCode $ mthd $ mlFuncDoc n outs pms (RC.body bod)
+    pure $ toCode $ mthd n $ mlFuncDoc n outs pms (RC.body bod)
 
 instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
@@ -589,7 +576,7 @@ instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
     let fnDocs = vibcat (map RC.method fns)
         content = vibcat (filter (not . isEmpty) [entryFn, fnDocs])
     case fns of
-      (f:_) | isEmpty entryFn -> modify (setModuleName (mlExtractFuncName f))
+      (f:_) | isEmpty entryFn -> modify (setModuleName (mthdName (unMLC f)))
       _                       -> return ()
     return $ emptyIfEmpty content content)
 

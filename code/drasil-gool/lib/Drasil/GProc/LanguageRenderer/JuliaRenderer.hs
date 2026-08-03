@@ -574,12 +574,12 @@ instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
 instance RenderMethod JuliaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance ProcRenderMethod JuliaCode Doc MethodData where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
-    toCode . mthd . jlIntFunc n pms <$> b
+    toCode . mthd n . jlIntFunc n pms <$> b
 
 instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC

@@ -687,7 +687,7 @@ instance RenderMethod JavaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod JavaCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
@@ -700,7 +700,7 @@ instance OORenderMethod JavaCode Doc MethodData Doc where
     let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es))
           (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs)
-    pure $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
+    pure $ toCode $ mthd n $ jMethod n (map exc excs) s p tp pms bd
   intFunc = intMethod
   destructor _ = error $ CP.destructorError jName
 

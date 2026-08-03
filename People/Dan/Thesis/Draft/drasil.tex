@@ -1176,10 +1176,9 @@ case studies that caused us to rework and improve them for the future.
 Crucially, moving the case studies into Drasil made those mistakes trivial to 
 locate and correct. A representative example is the SSP symbol inconsistency 
 (Issue \#348 on the GitHub issue tracker). The original SSP SRS used the pair 
-$S_i$ and $P_i$ (mobilized shear stress and resistive shear force respectively) 
-in one place and later switched $S_i$ to $\tau_i$ ($\tau_i$ originally was 
-defined as resistive shear stress, but was now being conflated with \ds{Finish 
-this sentence} ). 
+$S_i$ and $P_i$ in one place and later replaced $P_i$ with $\tau_i$. This 
+blurred the distinction between shear force and shear stress, since $\tau_i$ 
+denotes shear stress rather than resistive shear force. 
 $\tau_i$ was also omitted from the Table of Symbols. To reiterate, that 
 inconsistency existed in the original case study and was not a generator bug 
 but an error in the source document we had accepted as our starting point. Once 

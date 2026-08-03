@@ -36,7 +36,7 @@ helloWorldProc
   => GProc.GSProgram r prg
 helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
-  ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
+  ["Brooks MacLachlan", "Brandon Bosman", "Xinlu Yan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
   [helloWorldMainProc]), helperProc]
 
 -- | Description of program.

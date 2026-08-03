@@ -32,7 +32,8 @@ import Language.Drasil.Sentence (Sentence(..))
 -- Additionally, it contains a reference to the general concept the value is an instance of ('ConceptChunk').
 --
 -- Ex. A pendulum arm can be defined as a concept with a symbol (l), space (Real numbers), and units (cm, m, etc.).
-data DefinedQuantityDict = DQD { _con :: ConceptChunk
+data DefinedQuantityDict = DQD { _uu :: UID
+                               , _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
@@ -50,7 +51,7 @@ instance HasChunkRefs DefinedQuantityDict where
   {-# INLINABLE chunkRefs #-}
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
-instance HasUID        DefinedQuantityDict where uid = con . uid
+instance HasUID        DefinedQuantityDict where uid = uu
 -- | Equal if 'UID's are equal.
 instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the term ('NP') of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
@@ -84,7 +85,7 @@ quant ::
   Space ->
   -- | The unit of the quantity.
   UnitDefn -> DefinedQuantityDict
-quant u trm def s sp un = DQD (cncpt''' u trm def) (const s) sp (Just un)
+quant u trm def s sp un = DQD u (cncpt''' u trm def) (const s) sp (Just un)
 
 -- | Construct a 'DefinedQuantityDict' (/with/ a unit and a symbol dependent on stage)
 quant' ::
@@ -100,7 +101,7 @@ quant' ::
   Space ->
   -- | The unit of the quantity.
   UnitDefn -> DefinedQuantityDict
-quant' u trm def s sp un = DQD (cncpt''' u trm def) s sp (Just un)
+quant' u trm def s sp un = DQD u (cncpt''' u trm def) s sp (Just un)
 
 -- | Construct a 'DefinedQuantityDict' (/with/ an optional unit, optional
 -- abbreviation and a symbol dependent on stage)
@@ -119,7 +120,7 @@ quantAU ::
   Space ->
   -- | The (optional) unit of the quantity.
   Maybe UnitDefn -> DefinedQuantityDict
-quantAU u trm def a = DQD cc
+quantAU u trm def a = DQD u cc
   where cc = maybe (cncpt''' u trm def) (cncpt'' u trm def) a
 
 -- | Construct a 'DefinedQuantityDict' (/without/ a unit)
@@ -134,7 +135,7 @@ quantNoUnit ::
   Symbol ->
   -- | The 'Space' of the quantity.
   Space -> DefinedQuantityDict
-quantNoUnit u trm def s sp = DQD (cncpt''' u trm def) (const s) sp Nothing
+quantNoUnit u trm def s sp = DQD u (cncpt''' u trm def) (const s) sp Nothing
 
 -- | Construct a 'DefinedQuantityDict' (/wihout/ a unit and /with/ a symbol dependent on stage)
 quantNoUnit' ::
@@ -148,29 +149,29 @@ quantNoUnit' ::
   (Stage -> Symbol) ->
   -- | The 'Space' of the quantity.
   Space -> DefinedQuantityDict
-quantNoUnit' u trm def s sp = DQD (cncpt''' u trm def) s sp Nothing
+quantNoUnit' u trm def s sp = DQD u (cncpt''' u trm def) s sp Nothing
 
 {-# DEPRECATED dqd, dqd', dqdNoUnit, dqdNoUnit'
   "Smart constructors allow externally-known chunk nesting; use one of `quant, quant', quantNoUnit, quantNoUnit'` instead." #-}
 
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: ConceptChunk -> Symbol -> Space -> UnitDefn -> DefinedQuantityDict
-dqd c s sp = DQD c (const s) sp . Just
+dqd c s sp = DQD (c ^. uid) c (const s) sp . Just
 
 -- | Similar to 'dqd', but without any units.
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
-dqdNoUnit c s sp = DQD c (const s) sp Nothing
+dqdNoUnit c s sp = DQD (c ^. uid) c (const s) sp Nothing
 
 dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
-dqdNoUnit' c s sp = DQD c s sp Nothing
+dqdNoUnit' c s sp = DQD (c ^. uid) c s sp Nothing
 
 -- | Similar to 'dqd', but the 'Symbol' is now dependent on the 'Stage'.
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
-dqd' = DQD
+dqd' c = DQD (c ^. uid) c
 
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
+dqdWr c = DQD (c ^. uid) (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | Makes a variable that is implementation-only.
 implVar :: UID -> NP -> String -> Space -> Symbol -> DefinedQuantityDict

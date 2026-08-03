@@ -40,11 +40,12 @@ import Language.Drasil.WellTyped (RequiresChecking(..))
 --
 -- Ex:
 --
--- 1. 'F = ma' (with symbol F, space Real and unit Newtons)
--- 2. 'f(t) = t^2' (with symbol f [displayed as f(t)], space Real and unit seconds^2)
+-- 1. @F = ma@ (with symbol F, space Real and unit Newtons)
+-- 2. @f(t) = t^2@ (with symbol f [displayed as f(t)], space Real and unit seconds^2)
 --
 -- A 'QDefinition' can be thought of as a 'MultiDefn' with only a single formula.
-data QDefinition e = QD { _qua :: DefinedQuantityDict
+data QDefinition e = QD { _uu :: UID
+                        , _qua :: DefinedQuantityDict
                         , _inputs :: [UID]
                         , _expr :: e
                         }
@@ -57,7 +58,7 @@ instance HasChunkRefs (QDefinition e) where
     ]
   {-# INLINABLE chunkRefs #-}
 
-instance HasUID          (QDefinition e) where uid = qua . uid
+instance HasUID          (QDefinition e) where uid = uu
 instance NamedIdea       (QDefinition e) where term = qua . term
 instance Idea            (QDefinition e) where getA = getA . (^. qua)
 instance DefinesQuantity (QDefinition e) where defLhs = qua . to dqdWr
@@ -90,29 +91,32 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
 -- 'Space', unit, and defining expression.
 fromEqn :: String -> NP -> Sentence -> Symbol -> Space -> UnitDefn -> e -> QDefinition e
 fromEqn nm desc def symb sp un =
-  QD (quant (mkUid nm) desc def symb sp un) []
+  QD u (quant u desc def symb sp un) []
+  where u = mkUid nm
 
 -- | Same as 'fromEqn', but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 fromEqn' nm desc def symb sp =
-  QD (quantNoUnit (mkUid nm) desc def symb sp) []
+  QD u (quantNoUnit u desc def symb sp) []
+  where u = mkUid nm
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> UnitDefn -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (quant' nm desc def symb sp un) []
+  QD nm (quant' nm desc def symb sp un) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 fromEqnSt' nm desc def symb sp =
-  QD (quantNoUnit' nm desc def symb sp) []
+  QD nm (quantNoUnit' nm desc def symb sp) []
 
 -- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
   QDefinition e
 fromEqnSt'' nm desc def symb sp =
-  QD (quantNoUnit' (mkUid nm) desc def symb sp) []
+  QD u (quantNoUnit' u desc def symb sp) []
+  where u = mkUid nm
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space ->
@@ -134,6 +138,7 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 ec c = QD
+  (c ^. uid)
   (quantAU (c ^. uid) (c ^. term) EmptyS Nothing (symbol c) (c ^. typ) (getUnit c))
   []
 
@@ -144,6 +149,7 @@ mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
                IsChunk i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
+  (f ^. uid)
   (quantAU (f ^. uid) n s Nothing (symbol f) (f ^. typ) u)
   (map (^. uid) is)
 

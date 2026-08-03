@@ -36,8 +36,9 @@ correction.
 Additionally, all domain knowledge must be explicitly encoded, which prevents
 dangling references or undefined symbols as observed in a number of 
 early passes over the original case study documentation (for example, issue 
-\#348 in the issue tracker which will be discussed in more detail in 
-Section~\ref{sec:quality} and Section~\ref{sec:dis_reproducibility}).
+\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348} in the issue 
+tracker which will be discussed in more detail in Section~\ref{sec:quality} and 
+Section~\ref{sec:dis_reproducibility}).
 
 \subsection{Traceability and Maintainability}
 Every generated element (formulae, symbols, tables, code identifiers) can be
@@ -49,82 +50,101 @@ required to locate the origin of a definition or relation during maintenance
 tasks and refactoring: it was trivial to identify the source to edit rather than
 hunting through multiple artifacts.
 
-For example, in the GlassBR case study (see issue~\#349), a unit conversion
-was embedded implicitly in the original documentation. With Drasil, it was
-straightforward to use the generated traceability information to identify the
-exact chunk from which the formula was produced. That made it clear where the
-conversion logic belonged: instead of leaving the division by 1000 implicit in
-the rendered equation, we made the conversion explicit in the source chunk
-itself. After regeneration, the corrected expression appeared consistently in
-the SRS and in the source code computations derived from that chunk,
-demonstrating more explicitly how traceability supports single-point
+For example, in the GlassBR case study (see 
+issue~\href{https://github.com/JacquesCarette/Drasil/issues/349}{\#349}), a 
+unit conversion was embedded implicitly in the original documentation. With 
+Drasil, it was straightforward to use the generated traceability information to 
+identify the exact chunk from which the formula was produced. That made it 
+clear where the conversion logic belonged: instead of leaving the division by 
+1000 implicit in the rendered equation, we made the conversion explicit in the 
+source chunk itself. After regeneration, the corrected expression appeared 
+consistently in the SRS and in the source code computations derived from that 
+chunk, demonstrating more explicitly how traceability supports single-point
 maintenance.
 
 \subsection{Reproducibility and Determinism}
-Artifact generation in Drasil is fully deterministic: repeated generation runs,
-from the same knowledge base and recipe set, produce byte-for-byte equivalent
-outputs for generated softifacts as compared to the then-current stable 
+Artifact generation in Drasil is fully deterministic: regenerating the same
+\sfs{} from the same knowledge base and recipe set produces
+byte-for-byte equivalent outputs when compared to the then-current stable 
 versions. These outputs were confirmed using a diff tool that runs as part of an 
 automated regression test suite.
 
 Furthermore, repeatability checks executed during the case study 
-reimplementations confirmed that regenerating artifacts after 
+reimplementations confirmed that regenerating \sfs{} after 
 environment-consistent builds did not introduce nondeterministic differences, 
-supporting reproducibility guarantees that are important for scientific 
-software.
+supporting the stronger notion of reproducibility discussed in
+Section~\ref{sec:bg_reproducibility}. When the knowledge base and recipe set
+are preserved, the same \sfs{} can be regenerated exactly while keeping the
+assumptions and design decisions used to create them explicit. This means that
+Drasil contributes more than repeatable execution of an existing workflow: it
+preserves the structured knowledge needed to recreate documentation and code
+without depending on tacit steps or manual reconstruction. In that sense, the
+reproducibility benefit observed in the case studies was not only that outputs
+could be regenerated unchanged, but that the knowledge required to regenerate
+them remained available, inspectable, and reusable.
 
 \section{Observations: Case Studies and Reimplementations}
 We reimplemented each of our case studies using Drasil and recorded
-measurable outcomes for generated artifacts and the knowledge source that
+measurable outcomes for generated \sfs{} and the knowledge source that
 produced them.
 
 For the GlassBR case study, the Drasil implementation generated a multi-page 
 SRS (44 pages in the final PDF) and produced working implementations
-in multiple target languages. The complete SRS recipe for GlassBR is
-contained in a single source file of under 370 lines of Haskell
-(including comments and imports). This line count refers only to the
-GlassBR-specific recipe and does not include the shared base knowledge
-(units, symbols, common chunks, and generic recipes) that are stored
-separately in the global knowledge base and are reused across case studies. 
-\ds{Add table with shared base knowledge and generator infrastructure that does 
-not need to be edited (unless adding a new chunk type). Use footnotes to denote 
-``we did the hard part here'' and ``this might need to be extended''}
+in multiple target languages. In the repository snapshot used for this study,
+the GlassBR case study itself comprised 1651 lines of handwritten,
+example-specific Haskell built on top of approximately 44,269 lines of shared
+Drasil infrastructure, and generated 1778 lines of SRS \LaTeX{}, 4461 lines
+of SRS HTML, and 7625 lines of source code.
+
+At the time of writing, the six case studies considered here were built on top
+of approximately 44,269 lines of shared Drasil infrastructure Haskell. All
+line counts reported below were measured from the repository snapshot current
+at the time of writing and may increase or decrease as the codebase and
+generated artifacts evolve.
 
 \begin{table}[h]
 \centering
-\caption{Summary statistics for Drasil case study SRS reimplementations}
+\caption{Snapshot statistics for Drasil case study reimplementations at the time of writing}
 \label{tab:case_study_stats}
-\begin{tabular}{|l|c|c|}
+\footnotesize
+\begin{tabular}{|p{2.2cm}|c|c|c|c|c|}
 \hline
 \textbf{\rule{0pt}{3ex}Case Study} & \textbf{SRS Pages} & 
-\textbf{Recipe LOC$^1$} \\
+\textbf{\shortstack{Example-Specific\\Haskell LOC$^\dagger$}} &
+\textbf{\shortstack{Generated SRS\\TeX LOC$^\dagger$}} &
+\textbf{\shortstack{Generated SRS\\HTML LOC$^\dagger$}} &
+\textbf{\shortstack{Generated\\Code LOC$^{\dagger\ddagger}$}} \\
 \hline
-\rule{0pt}{3ex}GlassBR & 44 & 370 \\
-SWHS    & 50 & 560$^2$ \\
-NoPCM   & 32 & 316 \\
-SSP     & 84 & 380 \\
-Projectile & 31 & 209 \\
-GamePhysics & 46 & 424 \\
+\rule{0pt}{3ex}GlassBR & 44 & 1651 & 1778 & 4461 & 7625 \\
+SWHS    & 50 & 2273 & 1949 & 6354 & -- \\
+NoPCM   & 32 & 674  & 1209 & 3494 & 1760 \\
+SSP     & 84 & 3036 & 2993 & 9459 & -- \\
+Projectile & 31 & 1377 & 1244 & 3214 & 4768 \\
+GamePhysics & 46 & 2029 & 1841 & 4767 & -- \\
 \hline
 \end{tabular}
 \begin{flushleft}
-% I couldn't get regular footnotes working in a tabular env, so this is a 
-% workaround
 \footnotesize
-$^1$ Including comments and import statements
+$^\dagger$ All line counts were measured by an automated script over the
+current repository snapshot at the time of writing and may increase or
+decrease as the codebase, generators, and emitted artifacts evolve.
 
-$^2$ This is an outlier due to excessive use of comments. Without comments it 
-would be 386 lines.
+$^\ddagger$ A dash indicates that no
+corresponding generated source tree was present in the checked-in stable
+snapshot for that case study.
 \end{flushleft}
 \end{table}
 
 Comparable results were observed for other reimplemented case studies:
-each system produced a multi-page SRS and a modest-sized recipe or set of
-recipes (tens to a few hundred lines) that captured the system-specific
-knowledge. See Table~\ref{tab:case_study_stats} for a summary. Generated
-code for each system followed the same pattern: language-agnostic knowledge
-encoded as chunks and recipes was emitted to multiple target languages with
-consistent identifiers and traceability annotations.
+each system combined a modest-sized handwritten example layer with larger
+generated documentation artifacts and, where present in the stable snapshot,
+generated code. See Table~\ref{tab:case_study_stats} for a summary. Across
+the six case studies, the handwritten example-specific layer totals 11,040
+lines of Haskell, while the generated artifacts total 11,014 lines of SRS
+\LaTeX{}, 31,749 lines of SRS HTML, and 14,153 lines of source code.
+Generated code for each system followed the same pattern: language-agnostic
+knowledge encoded as chunks and recipes was emitted to multiple target
+languages with consistent identifiers and traceability annotations.
 
 Generated code and documentation remained consistent after edits to the
 knowledge base, with regeneration producing updated artifacts across all 
@@ -163,7 +183,7 @@ that assumption visible, allowing it to be documented properly in the generated
 SRS and ensuring that the generated code reflected the correct physical 
 interpretation.
 
-A similar example arose in the GlassBR case study (see issue \#349), where an 
+A similar example arose in the GlassBR case study (see issue~\href{https://github.com/JacquesCarette/Drasil/issues/349}{\#349}), where an 
 implicit division by 1000 for unit conversion was embedded in the original 
 documentation. Drasil's explicit chunk encoding surfaced this hidden 
 assumption, enabling a single-point correction that propagated to all generated 

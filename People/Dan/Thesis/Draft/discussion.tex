@@ -105,12 +105,27 @@ core knowledge. This design for change streamlines the creation and
 maintenance of software families, and supports rapid, reliable adaptation to
 evolving requirements.
 
-\subsection{Reproducibility and error visibility}
+\subsection{Reproducibility, provenance, and error visibility}
 \label{sec:dis_reproducibility}
-Artifact generation was deterministic in our case studies: regenerating from
-the same knowledge base produced identical textual outputs. At the same
-time, defects in the knowledge base appear across all generated artifacts,
-which increases visibility and simplifies root-cause correction.
+Artifact generation was deterministic in our case studies, but the more
+important point is that Drasil makes reproducibility auditable. Each artifact
+is generated from a specific knowledge base together with a specific recipe, so
+the provenance of an output includes not only what was generated, but which
+family member and configuration produced it. In the \sw{}/\np{} family, for
+example, the combination of the shared knowledge base and the recipe's choice
+to include or exclude PCM-related chunks determines whether a generated SRS,
+table, figure, or source file belongs to \sw{} or \np{}. That information is
+part of the artifact's generation path rather than tacit build knowledge.
+
+This matters for reproducibility because reproducing an artifact requires more
+than rerunning an opaque workflow. If the relevant revision of the knowledge
+base and the corresponding recipe are preserved, then the exact family member
+that produced a given artifact can be identified and regenerated. In principle,
+version control can pin both inputs to a particular repository state, making it
+possible to reproduce the exact byte-for-byte output rather than merely a
+similar artifact produced by a related system. At the same time, defects in
+the knowledge base appear across all generated artifacts, which increases
+visibility and simplifies root-cause correction.
 
 Recall Issue \href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348} 
 from \sp{} mentioned in Section~\ref{sec:quality}. To 
@@ -135,10 +150,9 @@ semantic chunk representing the quantity, unify the identifier and unit within
 that chunk, and regenerate. The result was immediate and verifiable: the SRS,
 tables, and generated code all used the same identifier and unit, table
 cross-references resolved, and no further manual edits were necessary. This 
-example illustrates how centralized knowledge surfacing both increases error 
-visibility: it made the inconsistent use of $P_i$ and $\tau_i$, the missing 
+example illustrates two benefits of centralized knowledge: it made the inconsistent use of $P_i$ and $\tau_i$, the missing 
 definition of $\tau_i$, and the resulting unit mismatch immediately apparent,
-enabling concise, single-point fixes.
+and it enabled concise, single-point fixes.
 
 \section{Human Factors and Usability}
 \label{sec:dis_usability}

@@ -45,6 +45,18 @@ import Language.Drasil.TeX.Preamble (genPreamble)
 genTeX :: Document -> L.ShowTableOfContents -> PrintingInformation -> TP.Doc
 genTeX doc toC sm = runPrint (buildStd sm toC doc) Text
 
+-- FIXME: See 'genTeX' and 'buildStd'.
+--
+-- When producing an SRS, we _manually_ produce a ToC. However, for TeX, we have
+-- the option of using a "native feature" to produce the ToC _for us_. This is a
+-- good hint to us that this choice about whether to render a table of contents
+-- or not should not be part of SRSDecl but should be a later option. This also
+-- makes sense doubly-so because "Table of Contents" is a very common feature of
+-- many documents.
+--
+-- Idea: Create a new 'Section' constructor that allows us to encodes a "Table
+-- of Contents." This can be optionally rendered through a later "choice."
+
 -- | Helper to build the document.
 buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
 buildStd sm toC (Document t a c) =

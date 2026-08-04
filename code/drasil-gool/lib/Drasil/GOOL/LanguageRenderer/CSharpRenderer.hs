@@ -664,14 +664,14 @@ instance RenderMethod CSharpCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod CSharpCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
     pms <- sequence ps
-    toCode . mthd . renderMethod n s p tp pms <$> b
+    toCode . mthd n . renderMethod n s p tp pms <$> b
   intFunc = intMethod
   destructor _ = error $ CP.destructorError csName
 

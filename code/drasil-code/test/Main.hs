@@ -96,7 +96,8 @@ gProcTestGroup n p =
     ([osp|test/build|] </> [ps|{n}|])
     ([osp|test/golden|] </> [ps|{n}|])
     n
-    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProc unMLC unMLP p
     ]
 
 gProcVectorTestGroup

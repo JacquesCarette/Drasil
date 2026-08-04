@@ -102,11 +102,11 @@ motivate the need for the Drasil framework and inform its design.
 
 To simplify the process of identifying redundancies and patterns, we have chosen
 several case studies developed using common artifact templates, specifically 
-those used by \smithea{} \ds{source?} Also, as previously mentioned in 
-Section~\ref{sec:scope}, our case study software systems follow the 
-\mbox{$`input'~\rightarrow~`process'~\rightarrow~`output'$} pattern. These 
-systems cover a variety of use cases, to help avoid over-specializing into one 
-particular system type. 
+those used by \smithea{}\cite{SmithEtAl2007,SmithAndLai2005} Also, as 
+previously mentioned in Section~\ref{sec:scope}, our case study software 
+systems follow the \mbox{$`input'~\rightarrow~`process'~\rightarrow~`output'$} 
+pattern. These systems cover a variety of use cases, to help avoid 
+over-specializing into one particular system type. 
 
 The majority of the aforementioned case studies were developed by other teams 
 at McMaster University to address real engineering problems outside of our 
@@ -342,11 +342,14 @@ comparison, where the few system-specific differences can be marked directly.
 Looking at the (truncated for space) Table of Symbols, Table of Units, and 
 Table of Abbreviations and Acronyms sections (Figures~\ref{fig:gbrtou}, 
 \ref{fig:gbrtos}, and~\ref{fig:gbrtoa}) across the case studies, we can see 
-that, barring the table values themselves, they are almost identical. More 
-specifically, these sections show that tabular structure itself recurs as a 
-common way of organizing and projecting knowledge within the artifacts. The 
-Table of Symbols is simply a table of values, akin to a glossary, specific to 
-the symbols that appear throughout the rest of the document. For each of those 
+that, barring the table values themselves, they are almost identical between 
+the case studies. More importantly, this repetition makes explicit one of the 
+structural patterns that recurs throughout the artifacts: reference-style 
+knowledge is often organized and projected in tabular form. In other words, 
+the recurring feature is not only the specific entries in these sections, but 
+the table structure itself as a reusable way of presenting knowledge. The Table 
+of Symbols is simply a table of values, akin to a glossary, specific to the 
+symbols that appear throughout the rest of the document. For each of those 
 symbols, we see the symbol itself, a brief description of what that symbol 
 represents, and the units it is measured in, if applicable. Similarly, the 
 Table of Units lists the Syst\`eme International d'Unit\'es (SI) Units used 
@@ -371,7 +374,7 @@ the subtleties of \emph{what} is contained therein\footnote{The breakdown
 details are omitted for brevity and due to their monotonous nature, although 
 the overall process is very much akin to the breakdown of the Reference 
 Material section.} it should be unsurprising that each section maps to the 
-definition provided in the \smithea{} template. However, the kinds of 
+definition provided in the \smithea{}\ template. However, the kinds of 
 information contained in those sections differ substantially. Some material is 
 generic boilerplate, such as the introductory text describing the purpose and 
 organization of each section of the SRS. Some is clearly system-specific, such 
@@ -400,8 +403,8 @@ out in the SRS. For example, one might have an input/output module for handling
 user input and giving the user feedback through the display (i.e.\ via print 
 commands or some other output), or a calculations module that contains all of 
 the calculation functions being performed in the normal operation of the given 
-software system. The \smithea{} MG template also includes a traceability matrix 
-for ease of verifying which requirements are fulfilled by which modules. 
+software system. The \smithea{}\ MG template also includes a traceability 
+matrix for ease of verifying which requirements are fulfilled by which modules. 
 Finally, the MG includes considerations for anticipated or unlikely changes 
 that the system may undergo during its lifecycle.
 
@@ -466,7 +469,7 @@ not analyze these representations in detail here, however, because for our
 purposes they largely restate relationships already visible in the module 
 decomposition. Generally, the next \sf{} would be the MIS, but as it is 
 structured so similarly to the MG (one section per module, each section 
-organized in a very similar way, a repeated use hierarchy, etc.) we will skip 
+organized in a very similar way, a repeated use hierarchy, etc.)\ we will skip 
 it for brevity. The MIS includes novel system-specific, implementation-level 
 information denoting the interfaces between modules, but for our current 
 exercise does not provide any revelations beyond that of the MG.
@@ -630,18 +633,17 @@ the Table of Units is pure boilerplate, repeated verbatim and applicable to
 \emph{any} software system using SI units. The introduction to the Table of 
 Symbols is similarly boilerplate, although it admits minor variations. This is 
 easy to see by comparing the earlier \gb{} example in Figure~\ref{fig:gbrtos} 
-with Figure~\ref{fig:gptos} (\gp{}): It is easy to see that \gp{} explicitly 
-states its vector notation convention, whereas \gb{} does not, because vectors 
-do not arise in that case study. In both figures, `B' highlights repeated 
-boilerplate structure while `P' highlights the problem-specific entries. Here, 
-``problem-specific'' intentionally bundles together domain-specific and 
-system-specific content, since these figures support that coarser distinction 
-much more clearly than a finer split. The later SWHS/NoPCM example will make 
-that finer split more visible by marking the small number of explicitly 
-system-specific additions. Even at this coarser level, the variability between 
-systems is greater than a mere change in symbol choice, confirming that 
-genuinely problem-specific knowledge is being encoded within this repeated 
-structure.
+with Figure~\ref{fig:gptos} (\gp{}): \gp{} explicitly states its vector 
+notation convention, whereas \gb{} does not, because vectors do not arise in 
+that case study. In both figures, `B' highlights repeated boilerplate structure 
+while `P' highlights the problem-specific entries. Here, ``problem-specific'' 
+intentionally bundles together domain-specific and system-specific content, 
+since these figures support that coarser distinction much more clearly than a 
+finer split. The later SWHS/NoPCM example will make that finer split more 
+visible by marking the small number of explicitly system-specific additions. 
+Even at this coarser level, the variability between systems is greater than a 
+mere change in symbol choice, confirming that genuinely problem-specific 
+knowledge is being encoded within this repeated structure.
 
 \fig{
 \centering
@@ -928,7 +930,7 @@ represented in various forms, such as mathematical equations, natural
 language descriptions, code snippets, diagrams, and more, while remaining the 
 same underlying knowledge. This definition underlies our later discussion of 
 knowledge chunks and projections in Chapter~\ref{c:drasil}, especially 
-Section~\ref{sec:kcChunk}: Capturing Knowledge via Chunks.
+Section~\ref{sec:kcChunk}: Capturing knowledge via chunks.
 
 \emph{For clarity in the following examples, we will use set notation to 
 describe relationships between knowledge and projections. This is not intended 

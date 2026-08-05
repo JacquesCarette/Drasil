@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Drasil.Data.Formats.HTML.Render (
-    renderHTML,
-    HTMLRenderOptions(..)
+    renderHTML, HTMLRenderOptions(..),
+    wrapLine
 ) where
 
 import Prettyprinter (

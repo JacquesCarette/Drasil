@@ -13,7 +13,7 @@ import Drasil.Database (HasUID(..), HasChunkRefs(..), UID, mkUid)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr, quant, quantAU, quantNoUnit)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
-  Definition(defn), ConceptDomain(cdom), Concept, Quantity,
+  Definition(defn), Concept, Quantity,
   Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
@@ -53,8 +53,6 @@ instance HasSpace      ConstrConcept where typ = defq . typ
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 -- | Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Definition    ConstrConcept where defn = defq . defn
--- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance ConceptDomain ConstrConcept where cdom = cdom . view defq
 -- | Finds the 'Constraint's of a 'ConstrConcept'.
 instance Constrained   ConstrConcept where constraints  = constr'
 -- | Finds a reasonable value for the 'ConstrConcept'.

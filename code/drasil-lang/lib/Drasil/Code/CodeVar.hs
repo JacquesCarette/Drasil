@@ -13,7 +13,7 @@ import Drasil.Database (HasUID(uid), (+++), declareHasChunkRefs, Generically(..)
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Concept,
-  Definition(defn), ConceptDomain (cdom))
+  Definition(defn))
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
@@ -57,7 +57,6 @@ instance Idea          CodeChunk where getA = getA . view qc
 -- | Finds the Definition contained in the 'DefinedQuantityDict' used to make the CodeChunk
 instance Definition    CodeChunk where defn = qc . defn
 
-instance ConceptDomain CodeChunk where cdom = cdom . view qc
 -- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasSpace      CodeChunk where typ = qc . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
@@ -83,7 +82,6 @@ instance Idea          CodeVarChunk where getA = getA . view ccv
 
 instance Definition    CodeVarChunk where defn = ccv . defn
 
-instance ConceptDomain CodeVarChunk where cdom = cdom . view ccv
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasSpace      CodeVarChunk where typ = ccv . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeVarChunk'.
@@ -119,8 +117,6 @@ instance NamedIdea     CodeFuncChunk where term = ccf . term
 instance Idea          CodeFuncChunk where getA = getA . view ccf
 -- | Finds the Definition of the 'CodeChunk' used to make the 'CodeFuncChunk'
 instance Definition    CodeFuncChunk where defn = ccf . defn
--- | Finds the ConceptDomain of the 'CodeChunk' used to make the 'CodeFuncChunk'
-instance ConceptDomain CodeFuncChunk where cdom = cdom . view ccf
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasSpace      CodeFuncChunk where typ = ccf . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeFuncChunk'.

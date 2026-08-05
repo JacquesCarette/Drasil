@@ -17,7 +17,7 @@ import qualified Data.List.NonEmpty as NE
 import Drasil.Database (HasUID(uid), HasChunkRefs(..), mkUid)
 
 import Language.Drasil
-  (ConceptChunk, cncpt''', Express(..), ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..)
+  (ConceptChunk, cncpt''', Express(..), Definition(..), Idea(..), NamedIdea(..)
   , ModelExpr, NP, Sentence, Expr, ModelExprC(nthderiv, equiv), DefinedQuantityDict
   , ExprC(..), columnVec, ConstrConcept, LiteralC(exactDbl, int), RequiresChecking (requiredChecks)
   , Space, HasSpace (..))
@@ -120,8 +120,6 @@ instance NamedIdea     DifferentialModel where term = dmconc . term
 instance Idea          DifferentialModel where getA = getA . view dmconc
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
 instance Definition    DifferentialModel where defn = dmconc . defn
--- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
-instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 -- | Convert the 'DifferentialModel' into the model expression language.
 instance Express       DifferentialModel where express = formStdODE
 

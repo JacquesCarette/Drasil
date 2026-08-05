@@ -148,9 +148,9 @@ hForceOnPendulumMD :: MultiDefn ModelExpr
 hForceOnPendulumMD = mkMultiDefnForQuant xForce EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "hForceOnPendulumViaComponent"
-                      [] EmptyS $ express E.hForceOnPendulumViaComponent,
+                      EmptyS $ express E.hForceOnPendulumViaComponent,
                     mkDefiningExpr "hForceOnPendulumViaAngle"
-                      [] EmptyS $ express E.hForceOnPendulumViaAngle
+                      EmptyS $ express E.hForceOnPendulumViaAngle
                   ]
 
 hForceOnPendulumDeriv :: Derivation
@@ -165,9 +165,9 @@ vForceOnPendulumMD :: MultiDefn ModelExpr
 vForceOnPendulumMD = mkMultiDefnForQuant yForce EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "vForceOnPendulumViaComponent"
-                      [] EmptyS $ express E.vForceOnPendulumViaComponent,
+                      EmptyS $ express E.vForceOnPendulumViaComponent,
                     mkDefiningExpr "vForceOnPendulumViaAngle"
-                      [] EmptyS $ express E.vForceOnPendulumViaAngle
+                      EmptyS $ express E.vForceOnPendulumViaAngle
                   ]
 
 vForceOnPendulumDeriv :: Derivation

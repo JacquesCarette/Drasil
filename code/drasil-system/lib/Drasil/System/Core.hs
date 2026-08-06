@@ -25,7 +25,7 @@ type Motivation = [Sentence]
 
 data SystemMeta = SystemMeta
   { _projName   :: ProjectName
-  , _sysName    :: CI -- FIXME: This should not be a CI.
+  , _sysName    :: CI -- FIXME: All usage of `sysName` should be removed in favour of `projName`.
   , _authors    :: People
   , _purpose    :: Purpose
   , _background :: Background

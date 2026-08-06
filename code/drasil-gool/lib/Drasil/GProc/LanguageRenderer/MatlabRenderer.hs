@@ -48,7 +48,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   negateOp, plusOp, minusOp, multOp, divideOp, equalOp, greaterOp,
   greaterEqualOp, lessOp, lessEqualOp, csc, sec, cot, valueOf, litChar,
   litDouble, litInt, litString, valStmt, emptyStmt, assign,
-  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess)
+  funcAppMixedArgs, call, print, ifCond, tryCatch, listAccess, smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (mainBody,
   functionDoc, docInOutFunc', inOutCall, multiAssign, intToIndex', indexToInt',
   listDecDef, litSet)
@@ -421,7 +421,7 @@ instance ValueStatement MatlabCode (Doc, Terminator) where
 instance AssignStatement MatlabCode (Doc, Terminator) where
   assign = G.assign Semi
   (&-=) vr v = vr &= (valueOf vr #- v)
-  (&+=) vr v = vr &= (valueOf vr #+ v)
+  (&+=) vr v = vr &= G.smartAdd (valueOf vr) v
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -709,6 +709,7 @@ mlPrint newLn f' _ v' = do
   mf <- traverse (zoom lensMStoVS) f'
   let fmt = case cType (valType (unMLC v)) of
               String -> "%s"
+              Char   -> "%c"
               _      -> "%g"
       nl = if newLn then "\\n" else ""
       fileArg = maybe empty (\fv -> RC.value fv <> listSep') mf

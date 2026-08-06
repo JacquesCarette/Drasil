@@ -4,7 +4,7 @@ module Drasil.DblPend.Body (
   userCharacteristicsIntro, tMods
 ) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
@@ -12,6 +12,7 @@ import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (constants, genDefns)
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
 
@@ -95,8 +96,11 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   Bibliography                -- Adds reference section
   ]
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "dblpendProjName") "DblPend" "dblpend"
+
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [dong]
+si = mkSmithEtAlICO projName progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints constants symbols

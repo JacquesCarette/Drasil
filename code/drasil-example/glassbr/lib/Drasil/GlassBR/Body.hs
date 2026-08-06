@@ -6,8 +6,9 @@ import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Drasil.SRS hiding (constants)
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -47,8 +48,11 @@ import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "glassBRProjName") "GlassBR" "glassbr"
+
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName
+si = mkSmithEtAlICO projName progName
   [nikitha, spencerSmith] [purp] [background] [scope] []
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants symbolsWCodeSymbols

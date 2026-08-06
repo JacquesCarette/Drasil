@@ -1,9 +1,10 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS hiding (genDefns)
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -81,9 +82,12 @@ mkSRS
      ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "pdcontrollerProjName") "PDController" "pdcontroller"
+
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [naveen]
+  projName progName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
   inputs outputs inpConstrained pidConstants allSymbols

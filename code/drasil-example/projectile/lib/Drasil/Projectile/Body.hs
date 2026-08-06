@@ -1,10 +1,11 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Drasil.SRS hiding (constants, genDefns)
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -124,8 +125,11 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
   S "etc.")]
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "projectileProjName") "Projectile" "projectile"
+
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName
+si = mkSmithEtAlICO projName progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods

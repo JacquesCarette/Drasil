@@ -18,14 +18,13 @@ module Drasil.SRS.SmithEtAlSRS (
 ) where
 
 import Control.Lens (makeClassy, (^.))
-import Data.Char (isSpace, toLower)
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
 import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
-  Constrained, ConstQDef, abrv, DefinedQuantityDict)
+  Constrained, ConstQDef, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
 import Drasil.System (SystemMeta, Background, HasSystemMeta(..),
@@ -38,7 +37,6 @@ data SmithEtAlSRS where
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   { _meta         :: SystemMeta
-  , _programName  :: String
   , _theoryModels :: [TheoryModel]
   , _genDefns     :: [GenDefn]
   , _dataDefns    :: [DataDefinition]
@@ -70,10 +68,8 @@ mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
     NE.NonEmpty h -> NE.NonEmpty i -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
     ChunkDB -> SmithEtAlSRS
 mkSmithEtAlICO pn nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
-  = ICO (mkSystemMeta pn nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
+  = ICO (mkSystemMeta pn nm ppl prps bkgrd scp motive db) tms gds dds ims hs is js
       cqds qs mempty mempty
-  where
-    progName = map toLower $ filter (not . isSpace) $ abrv nm
 
 -- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> SmithEtAlSRS -> [UID]

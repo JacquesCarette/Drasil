@@ -20,7 +20,7 @@ import Drasil.Database (UID, findOrErr)
 import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
-import Drasil.System (systemdb, HasSystemMeta(..))
+import Drasil.System (systemdb, HasSystemMeta(..), projHRName)
 import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Drasil.Code.CodeVar (CodeIdea(..))
@@ -204,7 +204,7 @@ modExportMap cs chs@Choices {
     ++ getExpInputFormat prn chs extIns
     ++ getExpCalcs prn chs (cs ^. execOrder)
     ++ getExpOutput prn chs (cs ^. outputs)
-  where prn = cs ^. programName
+  where prn = cs ^. projHRName
         ins = cs ^. inputs
         extIns = cs ^. extInputs
         ds = cs ^. derivedInputs

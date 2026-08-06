@@ -7,14 +7,14 @@ where
 import Data.Text (Text)
 
 data Markdown =
-    Heading Int (Maybe Text) [Markdown]
-  | Div Text [Markdown]
-  | Code (Maybe Text) Text
+    Heading Int (Maybe Text) [Markdown] -- ^ Heading level, optional ID and content
+  | Div Text [Markdown] -- ^ ID and content
+  | Code (Maybe Text) Text -- ^ Optional language and code content
   | Quote [Markdown]
-  | Link URL [Markdown]
-  | Image Source [Markdown] (Maybe Text)
+  | Link URL [Markdown] -- ^ URL and content
+  | Image Source [Markdown] (Maybe Text) -- ^ Source, content and optional ID
   | List ListType [ListItem]
-  | Table [[Markdown]] [[Markdown]] (Maybe [Markdown]) (Maybe Text)
+  | Table [[Markdown]] [[Markdown]] (Maybe [Markdown]) (Maybe Text) -- ^ Header rows, data rows, optional caption and optional ID
   | Paragraph [Markdown]
   | Bold [Markdown]
   | Italic [Markdown]

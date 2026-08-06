@@ -16,7 +16,8 @@ import qualified Data.Text as T (concatMap)
 -- | Options for rendering 'Markdown'.
 data MDRenderOptions = MDRO {
     mdFlavour :: MDFlavour,
-    tableStyle :: TableStyle
+    tableStyle :: TableStyle,
+    formatChar :: Char
 }
 
 -- | Markdown Flavour: Markdown extension/variant
@@ -56,8 +57,10 @@ renderMDElem rOpt (Table headerRows dataRows captionOpt idOpt) =
     renderedHeaders = map (renderRow rOpt colWidths) headerRows
     renderedData    = map (renderRow rOpt colWidths) dataRows
 renderMDElem rOpt (Paragraph ch) = line <> hcat (map (renderMDElem rOpt) ch) <> line
-renderMDElem rOpt (Bold ch) = "**" <> hcat (map (renderMDElem rOpt) ch) <> "**"
-renderMDElem rOpt (Italic ch) = "*" <> hcat (map (renderMDElem rOpt) ch) <> "*"
+renderMDElem rOpt (Bold ch) = pretty (replicate 2 (formatChar rOpt)) <>
+  hcat (map (renderMDElem rOpt) ch) <> pretty (replicate 2 (formatChar rOpt))
+renderMDElem rOpt (Italic ch) =
+  pretty (formatChar rOpt) <> hcat (map (renderMDElem rOpt) ch) <> pretty (formatChar rOpt)
 renderMDElem _ (RawText t) = pretty (escapeMDText t)
 renderMDElem _ Line = "----"
 

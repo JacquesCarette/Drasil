@@ -17,7 +17,8 @@ mdTests = testGroup "Drasil.Data.Formats.MD" [ renderMDTests ]
 testRenderOptions :: MDRenderOptions
 testRenderOptions = MDRO {
   mdFlavour = Pandoc,
-  tableStyle = Pretty
+  tableStyle = Pretty,
+  formatChar = '*'
 }
 
 tagsMDTest :: [Markdown]

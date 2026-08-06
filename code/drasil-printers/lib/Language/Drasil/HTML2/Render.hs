@@ -2,7 +2,7 @@
 
 -- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML.Print.html).
 module Language.Drasil.HTML2.Render(
-  genHTML, BibFormatter(..), htmlBibFormatter, HTMLGenOptions(..),
+  genHTML, HTMLGenOptions(..),
   renderHTML
 ) where
 
@@ -16,7 +16,7 @@ import Language.Drasil.Printing.Helpers (sqbrac)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec)
 
-import Language.Drasil.HTML2.Citation (BibFormatter(..), printBib, htmlBibFormatter)
+import Language.Drasil.HTML2.Citation (printBib)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML, articleTitle, author)
 import Language.Drasil.Markdown.Print (printMath)
 
@@ -26,12 +26,7 @@ import Drasil.Data.Formats.HTML hiding (Title, Row, Bold, ListType, Ordered,
 import qualified Drasil.Data.Formats.HTML as HTML
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
-data HTMLGenOptions = HTMLGO
-  { -- | Formatting rules for Bib
-    bibFmt :: BibFormatter,
-    -- | MathJax source URL
-    mathJaxSrc :: String
-  }
+newtype HTMLGenOptions = HTMLGO {mathJaxSrc :: String}
 
 -- | Generate an HTML document from a Drasil 'Document'.
 --   Arguments: Rendering options, Bib rendering options, CSS file name, `Document` to be rendered
@@ -102,7 +97,7 @@ loToHTML _ (Figure r c f wp) =
   where
     attrs = [Attr "width" (T.pack $ show wp ++ "%") | wp /= 100]
     captionText = maybe "" printSpec c
-loToHTML rOpts (Bib bib) = [printBib (bibFmt rOpts) bib]
+loToHTML _ (Bib bib) = [printBib bib]
 loToHTML _ Graph {} = []
 loToHTML _ Cell {} = []
 loToHTML _ CodeBlock {} = []

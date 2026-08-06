@@ -18,8 +18,7 @@ import Drasil.System (HasProjectName (..), HasSystemMeta (..), SystemMeta, ToFil
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Document (Document)
 import Language.Drasil.Printers (HTMLGenOptions (..), Notation (Engineering),
-  genHTML, renderHTML, genericCSS,
-  htmlBibFormatter, piSys, makeDocument)
+  genHTML, renderHTML, genericCSS, piSys, makeDocument)
 
 data DrasilWebsite = DW
   { _sm :: SystemMeta,
@@ -62,6 +61,6 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
 
       -- 2. Transform the TDL into HTML.
       html = genHTML
-        (HTMLGO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
+        (HTMLGO "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
         "index" pd
       renderedHTML = renderHTML (HTMLRO M.empty 2) html

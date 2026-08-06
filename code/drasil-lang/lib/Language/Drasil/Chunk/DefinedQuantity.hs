@@ -18,7 +18,7 @@ import qualified Data.Set as Set
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
-  Definition(defn), ConceptDomain(cdom), Quantity)
+  Definition(defn), Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, cncpt'', cncpt''')
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit))
@@ -60,8 +60,6 @@ instance NamedIdea     DefinedQuantityDict where term = con . term
 instance Idea          DefinedQuantityDict where getA = getA . view con
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance Definition    DefinedQuantityDict where defn = con . defn
--- | Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
-instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 -- | Finds the 'Space' of the 'DefinedQuantityDict'.
 instance HasSpace      DefinedQuantityDict where typ = spa
 -- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.

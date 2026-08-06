@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
-  Definition(defn), ConceptDomain(cdom), Concept, Quantity,
+  Definition(defn), Concept, Quantity,
   Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
@@ -67,8 +67,6 @@ instance HasReasVal     UncertQ where reasVal = reasV'
 instance MayHaveRationale   UncertQ where rationale = rationale'
 -- | Finds definition of the 'DefinedQuantityDict' used to make the 'UncertQ'.
 instance Definition     UncertQ where defn = defq . defn
--- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'UncertQ'.
-instance ConceptDomain  UncertQ where cdom = cdom . view defq
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'UncertQ'.
 instance MayHaveUnit    UncertQ where getUnit = getUnit . view defq
 -- | Convert the symbol of the 'UncertQ' to a 'ModelExpr'.

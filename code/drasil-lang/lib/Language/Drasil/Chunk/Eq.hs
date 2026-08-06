@@ -20,7 +20,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Definition(defn), Quantity,
-  ConceptDomain(cdom), Express(express), Concept)
+  Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
   dqdWr, quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
@@ -77,7 +77,6 @@ instance Express e => Express (QDefinition e) where
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
-instance ConceptDomain (QDefinition e) where cdom = cdom . view qua
 
 instance RequiresChecking (QDefinition Expr) Expr Space where
   -- FIXME: Here, we are type-checking QDefinitions by building it as a relation

@@ -10,7 +10,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (HasUID(uid), UID)
 
-import Language.Drasil.Classes (ConceptDomain(cdom), Concept)
+import Language.Drasil.Classes (Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.NamedIdea (NamedIdea (..), Idea (..))
@@ -75,4 +75,4 @@ cncpt''' u trm defn = ConDict u trm Nothing defn []
 
 -- | For projecting out to the 'ConceptChunk' data-type.
 cw :: Concept c => c -> ConceptChunk
-cw c = ConDict (c ^. uid) (c ^. term) (getA c) (c ^. D.defn) (cdom c)
+cw c = ConDict (c ^. uid) (c ^. term) (getA c) (c ^. D.defn) []

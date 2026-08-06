@@ -224,9 +224,9 @@ xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant xForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle1"
-                      [] EmptyS E.xForceWithAngle_1]
+                      EmptyS E.xForceWithAngle_1]
 
 xForceDeriv_1 :: Derivation
 xForceDeriv_1 = mkDerivName (D.toSent $ phraseNP (force `onThe` firstObject)) [eS' xForceMD_1]
@@ -242,9 +242,9 @@ yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant yForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "yForceWithAngle1"
-                      [] EmptyS E.yForceWithAngle_1]
+                      EmptyS E.yForceWithAngle_1]
 
 yForceDeriv_1 :: Derivation
 yForceDeriv_1 = mkDerivName (D.toSent $ phraseNP (force `onThe` firstObject)) [eS' yForceMD_1]
@@ -260,9 +260,9 @@ xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant xForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "xForceWithAngle2"
-                      [] EmptyS E.xForceWithAngle_2]
+                      EmptyS E.xForceWithAngle_2]
 
 xForceDeriv_2 :: Derivation
 xForceDeriv_2 = mkDerivName (D.toSent $ phraseNP (force `onThe` secondObject)) [eS' xForceMD_2]
@@ -278,9 +278,9 @@ yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant yForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
-                      [] EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS $ express $ forceGQD ^. defnExpr,
                     mkDefiningExpr "yForceWithAngle2"
-                      [] EmptyS E.yForceWithAngle_2]
+                      EmptyS E.yForceWithAngle_2]
 
 yForceDeriv_2 :: Derivation
 yForceDeriv_2 = mkDerivName (D.toSent $ phraseNP (force `onThe` secondObject)) [eS' yForceMD_2]

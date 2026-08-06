@@ -48,8 +48,8 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 newtonLUGModel :: ModelKind ModelExpr
 newtonLUGModel = equationalRealmN (nounPhraseSP "Newton's law of universal gravitation") $
   mkMultiDefnForQuant fOfGravity EmptyS $ NE.fromList [
-    mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* sy dVect),
-    mkDefiningExpr "newtonLUGviaForm"  [] EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* (sy distMass $/ sy dispNorm))
+    mkDefiningExpr "newtonLUGviaDeriv" EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* sy dVect),
+    mkDefiningExpr "newtonLUGviaForm"  EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel

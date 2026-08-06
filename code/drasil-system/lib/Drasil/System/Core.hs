@@ -2,15 +2,16 @@ module Drasil.System.Core (
   Purpose, Background, Scope, Motivation,
   SystemMeta,
   HasSystemMeta(..),
+  projRepoName, projHRName,
   mkSystemMeta,
 ) where
 
-import Control.Lens (makeClassy)
+import Control.Lens (Lens', makeClassy)
 
 import Drasil.Database (ChunkDB)
 import Language.Drasil (Sentence, People, CI)
 
-import Drasil.System.ProjectName (ProjectName)
+import Drasil.System.ProjectName (ProjectName, repo, humanReadable)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -34,6 +35,14 @@ data SystemMeta = SystemMeta
   }
 
 makeClassy ''SystemMeta
+
+-- | Lens to access the repository name from any structure with 'HasSystemMeta'.
+projRepoName :: HasSystemMeta a => Lens' a String
+projRepoName = projName . repo
+
+-- | Lens to access the human-readable project name from any structure with 'HasSystemMeta'.
+projHRName :: HasSystemMeta a => Lens' a String
+projHRName = projName . humanReadable
 
 mkSystemMeta :: ProjectName -> CI -> People -> Purpose -> Background -> Scope ->
   Motivation -> ChunkDB -> SystemMeta

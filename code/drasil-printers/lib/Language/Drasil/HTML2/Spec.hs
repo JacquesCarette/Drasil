@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Language.Drasil.HTML2.Spec (
-  printSpec, specToHTML, exprToHTML
+  printSpec, specToHTML, exprToHTML,
+  colon, period, comma, vol, pg, pp, no, ed, editedBy,
+  articleTitle, author
 ) where
 
 import Text.PrettyPrint as PLegacy (text)
@@ -17,16 +19,17 @@ import Language.Drasil.Printing.AST (
   Fence (Abs, Curly, Norm, Paren), Ops (..),
   )
 import Drasil.Data.Formats.HTML (
-  Attr (..), Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..), customTag
+  Attr (..), Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..),
+  customTag, HLevel(..)
   )
-import qualified Drasil.Data.Formats.HTML as HTML (Format (Bold))
+import qualified Drasil.Data.Formats.HTML as HTML (Format (Bold), HTMLBody(Div))
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
 import Language.Drasil.Markdown.Print (printMath)
 
 -- | Transforms the Sentences ('Spec's) into Text
 printSpec :: Spec -> Text
 printSpec (S s) = T.pack s
-printSpec (E e) = T.pack $ show $ printMath $ TeX.pExpr e
+printSpec (E e) = T.pack $ show $ printMath $ TeX.pExpr e -- TODO: Remove `show` once LaTeX render is using Prettyprinter
 printSpec (a :+: b) = printSpec a <> printSpec b
 printSpec HARDNL = " "
 printSpec (Sp s) = T.pack $ specialToString s
@@ -147,3 +150,18 @@ pOps SAdd = " + "
 pOps SRemove = " - "
 pOps SContains = " in "
 pOps SUnion = " and "
+
+colon, period, comma, vol, pg, pp, no, ed, editedBy :: HTMLBody
+colon = RawText ": "
+period = RawText ". "
+comma = RawText ", "
+vol = RawText "vol. "
+pg = RawText "pg. "
+pp = RawText "pp. "
+no = RawText "no. "
+ed = RawText " ed., "
+editedBy = RawText "Edited by "
+
+articleTitle, author :: [HTMLBody] -> HTMLBody
+articleTitle t = HTML.Div [Attr "class" "title"] [Heading H1 [] t]
+author a       = HTML.Div [Attr "class" "author"] [Heading H2 [] a]

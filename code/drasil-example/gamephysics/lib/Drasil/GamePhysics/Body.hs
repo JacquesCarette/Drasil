@@ -1,9 +1,10 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -83,8 +84,11 @@ mkSRS = [TableOfContents,
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "gamephysicsProjName") "GamePhysics" "gamephysics"
+
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [alex, luthfi, olu]
+si = mkSmithEtAlICO projName progName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
   inputSymbols outputSymbols inputConstraints [] symbols

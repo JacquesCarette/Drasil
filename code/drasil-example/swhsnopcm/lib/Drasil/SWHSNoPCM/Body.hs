@@ -4,12 +4,13 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
@@ -137,9 +138,12 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "swhsNoPCMProjName") "SWHSNoPCM" "swhsnopcm"
+
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [thulasi]
+  projName progName [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs

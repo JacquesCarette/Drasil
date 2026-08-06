@@ -10,6 +10,8 @@ import Control.Lens (makeClassy)
 import Drasil.Database (ChunkDB)
 import Language.Drasil (Sentence, People, CI)
 
+import Drasil.System.ProjectName (ProjectName)
+
 -- | Project Example purpose.
 type Purpose = [Sentence]
 -- | Project Example background information, used in the 'What' section of
@@ -21,7 +23,8 @@ type Scope = [Sentence]
 type Motivation = [Sentence]
 
 data SystemMeta = SystemMeta
-  { _sysName    :: CI -- FIXME: This should not be a CI.
+  { _projName   :: ProjectName
+  , _sysName    :: CI -- FIXME: This should not be a CI.
   , _authors    :: People
   , _purpose    :: Purpose
   , _background :: Background
@@ -32,6 +35,6 @@ data SystemMeta = SystemMeta
 
 makeClassy ''SystemMeta
 
-mkSystemMeta :: CI -> People -> Purpose -> Background -> Scope -> Motivation ->
-  ChunkDB -> SystemMeta
+mkSystemMeta :: ProjectName -> CI -> People -> Purpose -> Background -> Scope ->
+  Motivation -> ChunkDB -> SystemMeta
 mkSystemMeta = SystemMeta

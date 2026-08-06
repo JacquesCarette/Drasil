@@ -2,12 +2,13 @@ module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRS hiding (genDefns)
+import Drasil.System (ProjectName, mkProjectName)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -82,8 +83,11 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   Bibliography                    -- Adds reference section
   ]
 
+projName :: ProjectName
+projName = mkProjectName (mkUid "sglpendProjName") "SglPend" "sglpend"
+
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [olu]
+si = mkSmithEtAlICO projName progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints [] allSymbols

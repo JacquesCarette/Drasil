@@ -18,7 +18,7 @@ module Drasil.SRS.SmithEtAlSRS (
 ) where
 
 import Control.Lens (makeClassy, (^.))
-import Data.Char (isSpace)
+import Data.Char (isSpace, toLower)
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
@@ -29,7 +29,7 @@ import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
 import Drasil.System (SystemMeta, Background, HasSystemMeta(..),
-  mkSystemMeta, Motivation, Purpose, Scope)
+  mkSystemMeta, Motivation, Purpose, Scope, ProjectName)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -65,15 +65,15 @@ instance HasSystemMeta SmithEtAlSRS where
 mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  CI -> People -> Purpose -> Background -> Scope -> Motivation ->
+  ProjectName -> CI -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     NE.NonEmpty h -> NE.NonEmpty i -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
     ChunkDB -> SmithEtAlSRS
-mkSmithEtAlICO nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
-  = ICO (mkSystemMeta nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
+mkSmithEtAlICO pn nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
+  = ICO (mkSystemMeta pn nm ppl prps bkgrd scp motive db) progName tms gds dds ims hs is js
       cqds qs mempty mempty
   where
-    progName = filter (not . isSpace) $ abrv nm
+    progName = map toLower $ filter (not . isSpace) $ abrv nm
 
 -- | Find what chunks reference a specific chunk.
 refbyLookup :: UID -> SmithEtAlSRS -> [UID]

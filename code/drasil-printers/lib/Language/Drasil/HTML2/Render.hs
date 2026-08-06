@@ -17,7 +17,7 @@ import Language.Drasil.Printing.Helpers (sqbrac)
 import qualified Language.Drasil.TeX.Print as TeX (spec)
 
 import Language.Drasil.HTML2.Citation (BibFormatter(..), printBib, htmlBibFormatter)
-import Language.Drasil.HTML2.Spec (printSpec, specToHTML)
+import Language.Drasil.HTML2.Spec (printSpec, specToHTML, articleTitle, author)
 import Language.Drasil.Markdown.Print (printMath)
 
 import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle(Pretty))
@@ -122,10 +122,6 @@ makeTableHTML ts (l : lls) r b t =
     captionNode = HTML.Paragraph [Attr "class" "caption"] (specToHTML t)
     wrapperAttrs = [Attr "id" (printSpec r)]
 
------------------------------------------------------------------
-------------------BEGIN DEFINITION PRINTING----------------------
------------------------------------------------------------------
-
 -- | Generates definition tables.
 makeDefnHTML :: HTMLGenOptions -> [(String, [LayoutObj])] -> Spec -> [HTMLBody]
 makeDefnHTML _ [] _ = error "Empty definition"
@@ -136,10 +132,6 @@ makeDefnHTML rOpts ps l =
       dataRows = map ( \(f, d) -> HTML.Row [] [THeader [] [RawText (T.pack f)],
         TData [] (concatMap (loToHTML rOpts) d)]) ps
    in [HTML.Table attrs (refRow : dataRows)]
-
------------------------------------------------------------------
-------------------BEGIN LIST PRINTING----------------------------
------------------------------------------------------------------
 
 -- | Generates lists in HTML.
 buildListHtml :: ListType -> HTMLBody -- FIXME: ref id's should be folded into the li

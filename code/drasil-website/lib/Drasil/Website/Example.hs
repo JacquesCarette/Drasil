@@ -8,7 +8,7 @@ import Control.Lens ((^.), lens)
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
-import Drasil.System (sysName, purpose, HasSystemMeta(..), projHRName, projRepoName)
+import Drasil.System (purpose, HasSystemMeta(..), projHRName, projRepoName)
 import Drasil.SRS (SmithEtAlSRS(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Drasil.Generator (codedHRName, codedDirName, Format(..))
@@ -100,7 +100,7 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{systemE = si} = S (abrv $ si ^. sysName) +:+ S " - To" +:+ foldlSent (si ^. purpose)
+    nameAndDesc E{systemE = si} = S (si ^. projHRName) +:+ S "- To" +:+ foldlSent (si ^. purpose)
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]

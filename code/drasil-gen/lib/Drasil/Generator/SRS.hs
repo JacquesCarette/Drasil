@@ -12,8 +12,7 @@ import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
 import Language.Drasil.Printers (genericCSS, genHTML, renderHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
-  genJupyterSRS, makeDocument, makeProject, HTMLGenOptions(..),
-  htmlBibFormatter)
+  genJupyterSRS, makeDocument, makeProject, HTMLGenOptions(..))
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
@@ -54,7 +53,7 @@ prntDoc d pinfo fn HTML =
   [ file [ps|{fn}.html|]
       $ renderHTML (HTMLRO M.empty 2)
       $ genHTML
-        (HTMLGO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
+        (HTMLGO "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
       fn $ makeDocument pinfo d,
     file [ps|{fn}.css|] genericCSS
   ]

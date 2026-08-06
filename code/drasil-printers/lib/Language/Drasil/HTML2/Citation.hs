@@ -9,7 +9,9 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.List (sortBy)
 
-import Language.Drasil.HTML2.Spec (specToHTML, printSpec)
+import Language.Drasil.HTML2.Spec (
+  specToHTML, printSpec, colon, period, comma, vol, pg, pp, no, ed, editedBy
+  )
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', CitationKind(..), numList)
@@ -22,8 +24,9 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.Helpers (paren, sufxer, sufxPrint)
 
-import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), Attr(..), emphasis, Format(Emphasis),
-  colon, period, comma, vol, pg, pp, no, ed, editedBy)
+import Drasil.Data.Formats.HTML (
+  HTMLBody(..), DItem(..), Attr(..), emphasis, Format(Emphasis)
+  )
 import qualified Drasil.Data.Formats.HTML as HTML (Format(..))
 
 -- | Data type that carries functions that vary

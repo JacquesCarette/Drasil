@@ -4,9 +4,7 @@ module Drasil.Data.Formats.HTML.Core
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
     Attr(..), bold, emphasis, subscript, superscript, span, figureImage,
-    inlineScript, externalScript,
-    articleTitle, author, stylesheet,
-    colon, period, comma, vol, pg, pp, no, ed, editedBy
+    inlineScript, externalScript, stylesheet
   )
 where
 
@@ -145,21 +143,6 @@ inlineScript = Script []
 -- | Creates an external script. Requires a source file/URL and allows optional attributes.
 externalScript :: File -> [Attr] -> HTMLHead
 externalScript src attrs = Script (Attr "src" src : Attr "type" "text/javascript" : attrs) ""
-
-colon, period, comma, vol, pg, pp, no, ed, editedBy :: HTMLBody
-colon = RawText ": "
-period = RawText ". "
-comma = RawText ", "
-vol = RawText "vol. "
-pg = RawText "pg. "
-pp = RawText "pp. "
-no = RawText "no. "
-ed = RawText " ed., "
-editedBy = RawText "Edited by "
-
-articleTitle, author :: [HTMLBody] -> HTMLBody
-articleTitle t = Div [Attr "class" "title"] [Heading H1 [] t]
-author a       = Div [Attr "class" "author"] [Heading H2 [] a]
 
 -- | Create the link to the CSS file
 stylesheet :: Text -> HTMLHead

@@ -50,7 +50,7 @@ defaultDrasilWebsiteGenOpts = DWGO genericCSS
 
 instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
   toFiles dw DWGO {..} =
-    [ file [ps|index.html|] rendedHTML,
+    [ file [ps|index.html|] renderedHTML,
       file [ps|index.css|] css
     ]
     where
@@ -65,4 +65,4 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
       html = genHTML
         (HTMLGO htmlBibFormatter "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
         "index" pd
-      rendedHTML = renderHTML (HTMLRO M.empty 2) html
+      renderedHTML = renderHTML (HTMLRO M.empty 2) html

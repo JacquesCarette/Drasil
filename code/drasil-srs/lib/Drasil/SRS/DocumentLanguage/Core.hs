@@ -128,9 +128,9 @@ newtype StkhldrSec = StkhldrProg [StkhldrSub]
 -- | Stakeholders subsections.
 data StkhldrSub where
   -- | May have a client.
-  Client :: CI -> Sentence -> StkhldrSub
+  Client :: Sentence -> StkhldrSub
   -- | May have a customer.
-  Cstmr  :: CI -> StkhldrSub
+  Cstmr  :: StkhldrSub
 
 -- ** General System Description Section
 
@@ -301,8 +301,8 @@ instance Multiplate DLPlate where
     intro' (IChar s1 s2 s3) = pure $ IChar s1 s2 s3
     intro' (IOrgSec s1) = pure $ IOrgSec s1
     stk (StkhldrProg progs) = StkhldrProg <$> traverse (stkSub p) progs
-    stk' (Client c s) = pure $ Client c s
-    stk' (Cstmr c) = pure (Cstmr c)
+    stk' (Client s) = pure $ Client s
+    stk' Cstmr = pure Cstmr
     gs (GSDProg x) = GSDProg <$> traverse (gsdSub p) x
     gs' (SysCntxt c) = pure $ SysCntxt c
     gs' (UsrChars c) = pure $ UsrChars c

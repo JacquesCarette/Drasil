@@ -1,8 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Python code is contained in this module
 module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
@@ -12,21 +8,22 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Library, Body, Variable, SVariable, Value, SValue, MixedCtorCall,
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable,
+  SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..),
+  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
+  DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
+  PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
   OOValueExpression(..), selfMethodCall, OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -122,9 +119,6 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance SharedProg PythonCode Doc (Doc, Terminator) MethodData
-instance SharedStatement PythonCode (Doc, Terminator)
-instance OOStatement PythonCode (Doc, Terminator)
 instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
 
 instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData where
@@ -443,13 +437,15 @@ instance Array PythonCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "copy" []
 
-instance List PythonCode (Doc, Terminator) where
+instance List PythonCode where
   listSize = CS.listSize pyListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf pyIndex
+
+instance ListStatement PythonCode (Doc, Terminator) where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
@@ -503,11 +499,14 @@ instance StatementElim PythonCode (Doc, Terminator) where
   statement = fst . unPC
   statementTerm = snd . unPC
 
-instance StatementSym PythonCode (Doc, Terminator) where
-  -- Terminator determines how statements end
-  valStmt = G.valStmt Empty
+instance EmptyStatement PythonCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement PythonCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement PythonCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement PythonCode (Doc, Terminator) where
   assign = G.assign Empty
@@ -542,30 +541,34 @@ instance OODeclStatement PythonCode (Doc, Terminator) where
     modify (addModuleImport lib)
     varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
-instance IOStatement PythonCode (Doc, Terminator) where
+instance PrintConsole PythonCode (Doc, Terminator) where
   print      = pyOut False Nothing printFunc
   printLn    = pyOut True  Nothing printFunc
   printStr   = print   . litString
   printStrLn = printLn . litString
 
-  printFile f      = pyOut False (Just f) printFunc
-  printFileLn f    = pyOut True  (Just f) printFunc
-  printFileStr f   = printFile f   . litString
-  printFileStrLn f = printFileLn f . litString
-
+instance ReadConsole PythonCode (Doc, Terminator) where
   getInput = pyInput inputFunc
   discardInput = valStmt inputFunc
-  getFileInput f = pyInput (readline f)
-  discardFileInput f = valStmt (readline f)
 
+instance FileHandling PythonCode (Doc, Terminator) where
   openFileR f n = f &= CP.openFileR' n
   openFileW f n = f &= CP.openFileW' n
   openFileA f n = f &= CP.openFileA' n
   closeFile = G.closeFile pyClose
 
+instance ReadFile PythonCode (Doc, Terminator) where
+  getFileInput f = pyInput (readline f)
+  discardFileInput f = valStmt (readline f)
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine pyReadline
   getFileInputAll f v = v &= readlines f
+
+instance PrintFile PythonCode (Doc, Terminator) where
+  printFile f      = pyOut False (Just f) printFunc
+  printFileLn f    = pyOut True  (Just f) printFunc
+  printFileStr f   = printFile f   . litString
+  printFileStrLn f = printFileLn f . litString
 
 instance StringStatement PythonCode (Doc, Terminator) where
   stringSplit d vnew s = assign vnew (objAccess s (splitFunc d))
@@ -669,19 +672,19 @@ instance RenderMethod PythonCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod PythonCode Doc MethodData AttachmentData where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
     pms <- sequence ps
-    toCode . mthd . pyMethod n a sl pms <$> b
+    toCode . mthd n . pyMethod n a sl pms <$> b
   intFunc m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
-    pure $ toCode $ mthd $ pyFunction n pms bd
+    pure $ toCode $ mthd n $ pyFunction n pms bd
   destructor _ = error $ CP.destructorError pyName
 
 instance MethodElim PythonCode MethodData where
@@ -937,8 +940,22 @@ pyPrint newLn f' p' v' = do
     mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
 pyOut
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  ::
+    ( Literal r
+    , NumericExpression r
+    , Comparison r
+    , VariableValue r
+    , List r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , InternalIOStmt r stmt
+    , TypeElim r
+    )
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getCodeType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = G.print newLn f printFn v

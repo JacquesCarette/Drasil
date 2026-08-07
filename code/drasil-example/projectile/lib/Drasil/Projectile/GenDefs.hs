@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 
 import Prelude hiding (cos, sin)

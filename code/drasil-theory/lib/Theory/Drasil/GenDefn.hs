@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines types and functions for General Definitions.
 module Theory.Drasil.GenDefn (
   -- * Type
@@ -39,8 +39,6 @@ instance NamedIdea          GenDefn where term        = mk . term
 instance Idea               GenDefn where getA        = getA . (^. mk)
 -- | Finds the definition of the 'GenDefn'.
 instance Definition         GenDefn where defn        = mk . defn
--- | Finds the domain of the 'GenDefn'.
-instance ConceptDomain      GenDefn where cdom        = cdom . (^. mk)
 -- | Converts the 'GenDefn's related expression into a 'ModelExpr'.
 instance Express            GenDefn where express     = express . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.

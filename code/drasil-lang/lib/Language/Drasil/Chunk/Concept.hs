@@ -4,20 +4,17 @@ module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
   ConceptChunk, cncpt, cncpt', cncpt'', cncpt''', cw,
-  -- ** From a 'ConceptChunk'
-  ConceptInstance, cic
   ) where
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(uid), nsUid, UID, mkUid)
+import Drasil.Database (HasUID(uid), UID)
 
-import Language.Drasil.Classes (ConceptDomain(cdom), Concept)
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
-import Language.Drasil.Sentence (Sentence(S))
+import Language.Drasil.Classes (Concept)
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict))
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.NamedIdea (NamedIdea (..), Idea (..))
-import Language.Drasil.NaturalLanguage.English.NounPhrase (NP, pn)
-import Language.Drasil.ShortName (shortname')
+import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import qualified Language.Drasil.Classes as D (defn)
 
 -- FIXME: There should only be two smart constructors ultimately for
@@ -78,13 +75,4 @@ cncpt''' u trm defn = ConDict u trm Nothing defn []
 
 -- | For projecting out to the 'ConceptChunk' data-type.
 cw :: Concept c => c -> ConceptChunk
-cw c = ConDict (c ^. uid) (c ^. term) (getA c) (c ^. D.defn) (cdom c)
-
--- | Constructor for a 'ConceptInstance'. Takes in the Reference Address
--- ('String'), a definition ('Sentence'), a short name ('String'), and a domain
--- (for explicit tagging).
-cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-cic u d sn dom = ConInst (nsUid "instance" $ icc ^. uid) icc u $ shortname' (S sn)
-  where
-    icc = cc (mkUid u) (pn sn) d [dom]
-    cc u' n d' l = ConDict u' n Nothing d' $ map (^. uid) l
+cw c = ConDict (c ^. uid) (c ^. term) (getA c) (c ^. D.defn) []

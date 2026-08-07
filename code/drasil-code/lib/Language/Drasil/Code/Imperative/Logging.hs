@@ -11,15 +11,24 @@ import Language.Drasil.Choices (Logging(..))
 
 import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), IOStatement(..),
-  lensMStoVS, ScopeSym(..), VariableSym, SharedStatement)
+  VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
+  PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
 -- function calls, statements that log how the function was called are added to
 -- the beginning of the body.
 logBody
-  :: (SharedStatement r smt, VariableElim r)
+  ::
+    ( Literal r
+    , VariableValue r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , BodySym r stmt
+    , VariableElim r
+    )
   => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r Body))
 logBody n vars b = do
   g <- get
@@ -31,7 +40,16 @@ logBody n vars b = do
 -- used as the first block in the function, to log that it was called and what
 -- inputs it was called with.
 loggedMethod
-  :: (SharedStatement r smt, VariableElim r)
+  ::
+    ( Literal r
+    , VariableValue r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , BlockSym r stmt
+    , VariableElim r
+    )
   => FilePath -> Label -> [SVariable r] -> MS (r Block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,

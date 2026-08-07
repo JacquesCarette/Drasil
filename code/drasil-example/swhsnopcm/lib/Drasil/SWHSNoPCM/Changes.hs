@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil

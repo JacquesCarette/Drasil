@@ -1,7 +1,5 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
@@ -12,12 +10,13 @@ import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
-import Drasil.GOOL (OOProg, unJC, unPC, unCSC, unCPPC, unSC,
-  initialState, ProgData(..), headers, sources, mainMod,
-  GOOLState)
+import Drasil.GOOL (OOProg, Literal, Comparison, GetSet, StrategyPattern,
+  ObserverPattern, DeclStatement, ControlStatement, unJC, unPC, unCSC, unCPPC,
+  unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
 import Drasil.GProc (ProcProg, NativeVector, unJLC, unMLC)
 import qualified Drasil.GProc as Proc (GSProgram)
+import Drasil.TestingKit (testMain)
 import Drasil.TestingKit.Golden (goldenTestingGroup, goldenTest)
 import Language.Drasil.Code (ImplementationType(..), makeSds, toFileLayout)
 import Language.Drasil.GOOL (SoftwareDossierSym(..), package,
@@ -30,12 +29,12 @@ import FileTests (fileTestsOO, fileTestsProc)
 import OOVector (ooVector)
 import NameGenTest (nameGenTestOO, nameGenTestProc)
 import VectorTest (vectorTestProc)
-import Test.Tasty (TestTree, defaultMain, testGroup)
+import Test.Tasty (TestTree, testGroup)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, OOVector, PatternTest, and NameGenTest)
 -- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO ()
-main = defaultMain codeGenTestGroup
+main = testMain codeGenTestGroup
 
 codeGenTestGroup :: TestTree
 codeGenTestGroup =
@@ -60,7 +59,13 @@ codeGenTestGroup =
 
 goolTestGroup
   :: String
-  -> (forall r vis smt md svr att prg. (OOProg r vis smt md svr att prg) => OO.GSProgram r prg)
+  -> ( forall r vis stmt mthd stvr attch prg.
+       ( OOProg r vis stmt mthd stvr attch prg
+       , GetSet r
+       , StrategyPattern r stmt
+       , ObserverPattern r stmt
+       ) => OO.GSProgram r prg
+     )
   -> TestTree
 goolTestGroup n p =
   goldenTestingGroup
@@ -76,19 +81,37 @@ goolTestGroup n p =
 
 gProcTestGroup
   :: String
-  -> (forall r vis smt md prg. (ProcProg r vis smt md prg) => Proc.GSProgram r prg)
+  ->
+    ( forall r vis stmt mthd prg.
+      ( Literal r
+      , Comparison r
+      , DeclStatement r stmt
+      , ControlStatement r stmt
+      , ProcProg r vis stmt mthd prg
+      )
+    => Proc.GSProgram r prg)
   -> TestTree
 gProcTestGroup n p =
   goldenTestingGroup
     ([osp|test/build|] </> [ps|{n}|])
     ([osp|test/golden|] </> [ps|{n}|])
     n
-    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProc unMLC unMLP p
     ]
 
 gProcVectorTestGroup
   :: String
-  -> (forall r vis smt md prg. (ProcProg r vis smt md prg, NativeVector r) => Proc.GSProgram r prg)
+  ->
+    ( forall r vis stmt mthd prg.
+      ( Comparison r
+      , NativeVector r
+      , DeclStatement r stmt
+      , ControlStatement r stmt
+      , ProcProg r vis stmt mthd prg
+      )
+    => Proc.GSProgram r prg
+    )
   -> TestTree
 gProcVectorTestGroup n p =
   goldenTestingGroup
@@ -100,10 +123,22 @@ gProcVectorTestGroup n p =
     ]
 
 genCodeProcNoMake
-  :: (ProcProg r vis smt md ProgData, NativeVector r, Monad r')
+  ::
+    ( NativeVector r
+    , ProcProg r vis stmt mthd ProgData
+    , Monad r'
+    )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg', NativeVector s) => Proc.GSProgram s prg')
+  ->
+    ( forall s vis' stmt' mthd' prg'.
+      ( Comparison s
+      , NativeVector s
+      , DeclStatement s stmt'
+      , ProcProg s vis' stmt' mthd' prg'
+      )
+    => Proc.GSProgram s prg'
+    )
   -> [FileLayout]
 genCodeProcNoMake unRepr unRepr' p =
   let
@@ -112,10 +147,23 @@ genCodeProcNoMake unRepr unRepr' p =
   in seq gs' $ toFileLayout (progMods prog) ++ aux
 
 genCodeGOOL
-  :: (OOProg r vis smt md svr att ProgData, SoftwareDossierSym r', Monad r')
+  ::
+    ( OOProg r vis stmt mthd stvr attch ProgData
+    , GetSet r
+    , StrategyPattern r stmt
+    , ObserverPattern r stmt
+    , SoftwareDossierSym r'
+    , Monad r'
+    )
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' svr' att' prg'. (OOProg s vis' smt' md' svr' att' prg') => OO.GSProgram s prg')
+  -> ( forall s vis' stmt' mthd' stvr' attch' prg'.
+       ( OOProg s vis' stmt' mthd' stvr' attch' prg'
+       , GetSet s
+       , StrategyPattern s stmt'
+       , ObserverPattern s stmt'
+       ) => OO.GSProgram s prg'
+     )
   -> [FileLayout]
 genCodeGOOL unRepr unRepr' p =
   let
@@ -124,10 +172,10 @@ genCodeGOOL unRepr unRepr' p =
   in genCode' (unRepr p') gs' unRepr'
 
 genCodeProc
-  :: (ProcProg r vis smt md ProgData, SoftwareDossierSym r', Monad r')
+  :: (ProcProg r vis stmt mthd ProgData, SoftwareDossierSym r', Monad r')
   => (r ProgData -> ProgData)
   -> (r' PackageData -> PackageData)
-  -> (forall s vis' smt' md' prg'. (ProcProg s vis' smt' md' prg') => Proc.GSProgram s prg')
+  -> (forall s vis' stmt' mthd' prg'. (ProcProg s vis' stmt' mthd' prg') => Proc.GSProgram s prg')
   -> [FileLayout]
 genCodeProc unRepr unRepr' p =
   let

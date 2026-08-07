@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Swift code is contained in this module
 module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   -- * Swift Code Configuration -- defines syntax of all Swift code
@@ -13,21 +8,23 @@ module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, Block, Variable, SVariable, Value, SValue, BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), getTypeString,
-  VariableSym(..), VisibilitySym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  IndexTranslator(..), Reference(..), Array(..), List(..), Set(..), listSlice,
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), convScope)
-import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, OOStatement, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
+  SVariable, Value, SValue, BodySym(..), oneLiner, bodyStatements, BlockSym(..),
+  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, extFuncApp, IndexTranslator(..), Reference(..), Array(..),
+  List(..), ListStatement(..), Set(..), listSlice, InternalList(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
+  BinderElim(..), MethodSym(..), convScope)
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallMixedArgs, objMethodCallNamedArgs,
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
@@ -132,9 +129,6 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance SharedProg SwiftCode Doc (Doc, Terminator) MethodData
-instance SharedStatement SwiftCode (Doc, Terminator)
-instance OOStatement SwiftCode (Doc, Terminator)
 instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
 instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
@@ -450,14 +444,16 @@ instance Array SwiftCode where
   arrayLength = listSize
   arrayCopy = id -- Swift uses value semantics for arrays
 
-instance List SwiftCode (Doc, Terminator) where
+instance List SwiftCode where
   listSize = C.listSize' swiftListSize
+  listAccess = G.listAccess
+  indexOf = swiftIndexOf
+
+instance ListStatement SwiftCode (Doc, Terminator) where
   listAdd list idx vl = let atArg = var swiftAt int
     in valStmt $ objMethodCallMixedArgs void list swiftListAdd [vl] [(atArg, idx)]
   listAppend = CG.listAppend swiftListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = swiftIndexOf
 
 instance Set SwiftCode where
   contains = CP.contains swiftContains
@@ -510,10 +506,14 @@ instance StatementElim SwiftCode (Doc, Terminator) where
   statement = fst . unSC
   statementTerm = snd . unSC
 
-instance StatementSym SwiftCode (Doc, Terminator) where
-  valStmt = G.valStmt Empty
+instance EmptyStatement SwiftCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement SwiftCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement SwiftCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement SwiftCode (Doc, Terminator) where
   assign = G.assign Empty
@@ -542,27 +542,17 @@ instance OODeclStatement SwiftCode (Doc, Terminator) where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement SwiftCode (Doc, Terminator) where
+instance PrintConsole SwiftCode (Doc, Terminator) where
   print      = swiftOut False Nothing printFunc
   printLn    = swiftOut True  Nothing printLnFunc
   printStr   = swiftOut False Nothing printFunc   . litString
   printStrLn = swiftOut True  Nothing printLnFunc . litString
 
-  printFile f      = swiftOut False (Just f) (printFileFunc f)
-  printFileLn f    = swiftOut True  (Just f) (printFileLnFunc f)
-  printFileStr f   = swiftOut False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = swiftOut True  (Just f) (printFileLnFunc f) . litString
-
+instance ReadConsole SwiftCode (Doc, Terminator) where
   getInput v = v &= swiftInput v swiftReadLineFunc
   discardInput = valStmt swiftReadLineFunc
-  getFileInput _ v = do
-    wi <- getWordIndex
-    li <- getLineIndex
-    modify incrementWord
-    v &= swiftInput v
-      (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
-  discardFileInput _ = modify incrementWord >> emptyStmt
 
+instance FileHandling SwiftCode (Doc, Terminator) where
   openFileR v pth = do
     v' <- zoom lensMStoVS v
     scpData <- getVarScope $ variableName v'
@@ -573,6 +563,20 @@ instance IOStatement SwiftCode (Doc, Terminator) where
   openFileA = swiftOpenFileWA True
   closeFile = swiftCloseFile
 
+instance PrintFile SwiftCode (Doc, Terminator) where
+  printFile f      = swiftOut False (Just f) (printFileFunc f)
+  printFileLn f    = swiftOut True  (Just f) (printFileLnFunc f)
+  printFileStr f   = swiftOut False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = swiftOut True  (Just f) (printFileLnFunc f) . litString
+
+instance ReadFile SwiftCode (Doc, Terminator) where
+  getFileInput _ v = do
+    wi <- getWordIndex
+    li <- getLineIndex
+    modify incrementWord
+    v &= swiftInput v
+      (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
+  discardFileInput _ = modify incrementWord >> emptyStmt
   getFileInputLine _ v = do
     v' <- zoom lensMStoVS v
     scpData <- getVarScope $ variableName v'
@@ -703,7 +707,7 @@ instance RenderMethod SwiftCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod SwiftCode Doc MethodData Doc where
   intMethod _ = swiftMethod
@@ -800,8 +804,6 @@ swiftArgVal v' = do
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
 
 -- Putting "gool" in these names to avoid name conflicts
--- The `local` is a hack, but Swift doesn't care about scope
--- and I don't want to change the IOStatement API just for this
 swiftContentsVar, swiftLineVar :: SVariable SwiftCode
 swiftContentsVar = var "goolContents" (listType $ listType string)
 swiftLineVar = var "goolLine" (listType string)
@@ -1151,16 +1153,14 @@ swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData ->
   MS (SwiftCode (Doc, Terminator))
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
+  innerTp <- zoom lensMStoVS (innerType $ return $ variableType v)
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   let bind ClassLevel = classLevel :: SwiftCode Doc
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))
-
-replaceBrackets :: String -> String
-replaceBrackets str = "<" ++ (init . tail) str ++ ">"
+    <+> text (swiftSet ++ "<" ++ getTypeString innerTp ++ ">"))
 
 swiftThrowDoc :: (ValueElim r) => r Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg

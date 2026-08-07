@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
 module Drasil.SRS.DocumentLanguage.Core (
   DocDesc, DocSection(..), RefSec(..), IntroSec(..), StkhldrSec(..), GSDSec(..),

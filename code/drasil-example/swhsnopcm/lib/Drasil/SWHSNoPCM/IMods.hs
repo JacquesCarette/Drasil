@@ -1,6 +1,7 @@
 module Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, eBalanceOnWtrRC) where
 
 import Control.Lens ((^.))
+import Data.List.NonEmpty (NonEmpty((:|)), singleton)
 
 import Data.Drasil.Citations (koothoor2013)
 import Data.Drasil.Concepts.Documentation (goal)
@@ -57,18 +58,18 @@ eBalanceOnWtrRC =
     "eBalanceOnWtrRC"
     (nounPhraseSP $ "Energy balance on " ++ "water to find the temperature of the water")
     (tempW ^. defn)
-    where coeffs = [[exactDbl 1, recip_ (sy tauW)]]
+    where coeffs = singleton (exactDbl 1 :| [recip_ (sy tauW)])
           unknowns = [1, 0]
-          constants = [recip_ (sy tauW) $* sy tempC]
+          constants = singleton $ recip_ (sy tauW) $* sy tempC
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
-   sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0),
-   sParen (unwrap $ getUnit tempW) `S.and_` eS (exactDbl 100),
-   sParen (unwrap $ getUnit tempW), S "are the", D.toSent (pluralNP ((melting `and_`
+   unitInParen tempW, S "where", eS (exactDbl 0),
+   unitInParen tempW `S.and_` eS (exactDbl 100),
+   unitInParen tempW, S "are the", D.toSent (pluralNP ((melting `and_`
    boilPt) `of_PSNPNI` water)) `sC` S "respectively", sParen (refS assumpWAL)]]
 
 ----------------------------------------------

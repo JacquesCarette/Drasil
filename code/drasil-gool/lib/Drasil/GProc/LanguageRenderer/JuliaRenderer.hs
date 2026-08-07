@@ -1,10 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE InstanceSigs #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Julia code is contained in this module
 module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
@@ -14,18 +8,20 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, Value, SValue, Variable, SVariable, Block, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), getTypeString, VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, libFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  NativeVector(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ScopeSym(..), ParameterSym(..), BinderSym(..),
-  BinderElim(..), MethodSym(..), (&=), switchAsIf, convScope)
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
+  Variable, SVariable, Block, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, libFuncApp,
+  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
+  Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
+  ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
+  switchAsIf, convScope)
 import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
@@ -112,8 +108,6 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance SharedProg JuliaCode Doc (Doc, Terminator) MethodData
-instance SharedStatement JuliaCode (Doc, Terminator)
 instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
 
 instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
@@ -386,13 +380,15 @@ instance Array JuliaCode where
     arrTp = onStateValue valueType arr
     in funcApp "copy" arrTp [arr]
 
-instance List JuliaCode (Doc, Terminator) where
+instance List JuliaCode where
   listSize = CS.listSize jlListSize
+  listAccess = G.listAccess
+  indexOf = jlIndexOf
+
+instance ListStatement JuliaCode (Doc, Terminator) where
   listAdd = A.listAdd jlListAdd
   listAppend = A.listAppend jlListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = jlIndexOf
 
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
@@ -449,10 +445,14 @@ instance StatementElim JuliaCode (Doc, Terminator) where
   statement = fst . unJLC
   statementTerm = snd . unJLC
 
-instance StatementSym JuliaCode (Doc, Terminator) where
-  valStmt = G.valStmt Empty
+instance EmptyStatement JuliaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JuliaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement JuliaCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement JuliaCode (Doc, Terminator) where
   assign = jlAssign
@@ -473,25 +473,31 @@ instance DeclStatement JuliaCode (Doc, Terminator) where
   constDecDef = jlConstDecDef
   funcDecDef = A.funcDecDef
 
-instance IOStatement JuliaCode (Doc, Terminator) where
+instance PrintConsole JuliaCode (Doc, Terminator) where
   print      = jlOut False Nothing printFunc
   printLn    = jlOut True  Nothing printLnFunc
   printStr   = jlOut False Nothing printFunc   . litString
   printStrLn = jlOut True  Nothing printLnFunc . litString
 
+instance ReadConsole JuliaCode (Doc, Terminator) where
+  getInput = jlInput inputFunc
+  discardInput = valStmt inputFunc
+
+instance FileHandling JuliaCode (Doc, Terminator) where
+  openFileR f n = f &= CP.openFileR' n
+  openFileW f n = f &= CP.openFileW' n
+  openFileA f n = f &= CP.openFileA' n
+  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
+
+instance PrintFile JuliaCode (Doc, Terminator) where
   printFile f      = jlOut False (Just f) printFunc
   printFileLn f    = jlOut True (Just f) printLnFunc
   printFileStr f   = printFile   f . litString
   printFileStrLn f = printFileLn f . litString
 
-  getInput = jlInput inputFunc
-  discardInput = valStmt inputFunc
+instance ReadFile JuliaCode (Doc, Terminator) where
   getFileInput f = jlInput (readLine f)
   discardFileInput f = valStmt (readLine f)
-  openFileR f n = f &= CP.openFileR' n
-  openFileW f n = f &= CP.openFileW' n
-  openFileA f n = f &= CP.openFileA' n
-  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
   getFileInputAll f v = v &= readLines f
@@ -568,12 +574,12 @@ instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
 instance RenderMethod JuliaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance ProcRenderMethod JuliaCode Doc MethodData where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
-    toCode . mthd . jlIntFunc n pms <$> b
+    toCode . mthd n . jlIntFunc n pms <$> b
 
 instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
@@ -972,8 +978,22 @@ jlPrint _ f' p' v' = do
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  ::
+    ( Literal r
+    , NumericExpression r
+    , Comparison r
+    , VariableValue r
+    , List r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , TypeElim r
+    , InternalIOStmt r stmt
+    )
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v

@@ -1,5 +1,4 @@
-{-# LANGUAGE TemplateHaskell, TupleSections #-}
-
+{-# LANGUAGE TemplateHaskell #-}
 module Drasil.Shared.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS,
@@ -43,7 +42,6 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub)
-import Data.Foldable (foldl')
 import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
@@ -60,8 +58,8 @@ data GOOLState = GS {
                                      -- needed when using extClassVarAccess and obj
 
   -- Only used in Java and Swift, to generate correct "throws Exception" declarations
-  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- md exceptions thrown
-  _callMap :: Map QualifiedName [QualifiedName], -- md other methods it calls
+  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- map of exceptions thrown by methods
+  _callMap :: Map QualifiedName [QualifiedName], -- mthd other methods it calls
 
   -- Only used for Swift
   _throwUsed :: Bool, -- to add code so Strings can be used as Errors

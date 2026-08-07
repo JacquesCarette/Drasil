@@ -1,5 +1,4 @@
-{-# LANGUAGE GADTs, TemplateHaskell #-}
-{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec (
   -- * Types

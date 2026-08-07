@@ -1,5 +1,3 @@
-{-# LANGUAGE ConstraintKinds #-}
-
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
     -- * Classes
@@ -64,7 +62,7 @@ class ConceptDomain c where
 
 -- TODO: conceptual type synonym?
 -- | Concepts are 'Idea's with definitions and domains.
-type Concept c = (Idea c, Definition c, ConceptDomain c)
+type Concept c = (Idea c, Definition c)
 -- TODO: Would the below make this a bit better to work with?
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 

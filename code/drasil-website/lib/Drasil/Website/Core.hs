@@ -1,9 +1,6 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TemplateHaskell #-}
-
 module Drasil.Website.Core
   ( DrasilWebsite,
     mkDrasilWebsite,

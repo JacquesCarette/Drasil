@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Assumptions (assumptions,
   twoBody, isolated, newtonianGravity, nonRelativistic, pointMass,
   constantMass, inertialFrame, planar, nonzeroSeparation) where
@@ -7,7 +6,8 @@ import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
-import Language.Drasil.Document (fromSource, fromSources, namedRef)
+import Language.Drasil.Document (ConceptInstance, cic, fromSource,
+  fromSources, namedRef)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, consVals)
 import Data.Drasil.Concepts.Physics (gravity, twoD)

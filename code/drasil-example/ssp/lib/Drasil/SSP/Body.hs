@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (si, mkSRS) where
 
 import qualified Data.List.NonEmpty as NE
@@ -8,7 +7,7 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat)
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)

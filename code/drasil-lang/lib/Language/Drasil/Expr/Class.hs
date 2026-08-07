@@ -1,4 +1,3 @@
-{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Class (
   ExprC(..),
@@ -272,7 +271,11 @@ instance ExprC Expr where
   -- | Smart constructor for subtracting two expressions.
   ($-) = ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
-  ($/) = ArithBinaryOp Frac
+  ($/) n (Lit (Int 1)) = n
+  ($/) n (Lit (Dbl 1.0)) = n
+  ($/) n (Lit (ExactDbl 1)) = n
+  ($/) n d = ArithBinaryOp Frac n d
+
   -- | Smart constructor for rasing the first expression to the power of the second.
   ($^) = ArithBinaryOp Pow
 

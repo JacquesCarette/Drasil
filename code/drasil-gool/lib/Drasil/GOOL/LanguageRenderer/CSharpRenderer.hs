@@ -1,9 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render C# code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
@@ -13,20 +8,22 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, SharedStatement,
-  Label, Body, SVariable, Value, SValue, BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym,
-  FuncAppStatement(..), CommentStatement(..), BinderSym(..), BinderElim(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, OOStatement, StateVar, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
+  SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
@@ -89,8 +86,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize',
   increment, increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew,
-  switch, for, while, intFunc, multiAssignError, multiReturnError,
-  multiTypeError)
+  switch, for, while, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -132,9 +128,6 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance SharedProg CSharpCode Doc (Doc, Terminator) MethodData
-instance SharedStatement CSharpCode (Doc, Terminator)
-instance OOStatement CSharpCode (Doc, Terminator)
 instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
 
 instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
@@ -442,13 +435,15 @@ instance Array CSharpCode where
     arrTp = onStateValue valueType arr
     in cast arrTp (objMethodCall arrTp arr "Clone" [])
 
-instance List CSharpCode (Doc, Terminator) where
+instance List CSharpCode where
   listSize = C.listSize' csListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf csIndex
+
+instance ListStatement CSharpCode (Doc, Terminator) where
   listAdd = CG.listAdd csListAdd
   listAppend = CG.listAppend csListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
   contains = CP.contains csContains
@@ -501,10 +496,14 @@ instance StatementElim CSharpCode (Doc, Terminator) where
   statement = fst . unCSC
   statementTerm = snd . unCSC
 
-instance StatementSym CSharpCode (Doc, Terminator) where
-  valStmt = G.valStmt Semi
+instance EmptyStatement CSharpCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement CSharpCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement CSharpCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement CSharpCode (Doc, Terminator) where
   assign = G.assign Semi
@@ -532,27 +531,31 @@ instance OODeclStatement CSharpCode (Doc, Terminator) where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
 
-instance IOStatement CSharpCode (Doc, Terminator) where
+instance PrintConsole CSharpCode (Doc, Terminator) where
   print      = csPrint False Nothing printFunc
   printLn    = csPrint True  Nothing printLnFunc
   printStr   = csPrint False Nothing printFunc   . litString
   printStrLn = csPrint True  Nothing printLnFunc . litString
 
-  printFile f      = csPrint False (Just f) (printFileFunc f)
-  printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
-  printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
-  printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
-
+instance ReadConsole CSharpCode (Doc, Terminator) where
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = csDiscardInput inputFunc
-  getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
-  discardFileInput f = valStmt $ csFileInput f
 
+instance FileHandling CSharpCode (Doc, Terminator) where
   openFileR = CP.openFileR csOpenFileR
   openFileW = CP.openFileW csOpenFileWorA
   openFileA = CP.openFileA csOpenFileWorA
   closeFile = G.closeFile csClose
 
+instance PrintFile CSharpCode (Doc, Terminator) where
+  printFile f      = csPrint False (Just f) (printFileFunc f)
+  printFileLn f    = csPrint True  (Just f) (printFileLnFunc f)
+  printFileStr f   = csPrint False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = csPrint True  (Just f) (printFileLnFunc f) . litString
+
+instance ReadFile CSharpCode (Doc, Terminator) where
+  getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
+  discardFileInput f = valStmt $ csFileInput f
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine csReadLine
   getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)
@@ -661,15 +664,15 @@ instance RenderMethod CSharpCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod CSharpCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
     pms <- sequence ps
-    toCode . mthd . renderMethod n s p tp pms <$> b
-  intFunc = C.intFunc
+    toCode . mthd n . renderMethod n s p tp pms <$> b
+  intFunc = intMethod
   destructor _ = error $ CP.destructorError csName
 
 instance MethodElim CSharpCode MethodData where
@@ -916,14 +919,14 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: AttachmentTag -> MS (CSharpCode smt) -> MS (CSharpCode smt)
+csVarDec :: AttachmentTag -> MS (CSharpCode stmt) -> MS (CSharpCode stmt)
 csVarDec ClassLevel _ = error "ClassLevel variables can't be declared locally to a function in C#. Use stateVar to make a ClassLevel state variable instead."
 csVarDec InstanceLevel d = d
 
 csInOut :: (VS (CSharpCode TypeData) -> [MS (CSharpCode ParamData)] ->
-  MS (CSharpCode Body) -> MS (CSharpCode md)) ->
+  MS (CSharpCode Body) -> MS (CSharpCode mthd)) ->
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] ->
-  MS (CSharpCode Body) -> MS (CSharpCode md)
+  MS (CSharpCode Body) -> MS (CSharpCode mthd)
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $
   valueOf v))
@@ -935,8 +938,23 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
   (onCodeValue (updateParam csOut)) . param) outs) b
 
 csPrint
-  :: (InternalIOStmt r smt, SharedStatement r smt, TypeElim r)
-  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r smt)
+  ::
+    ( Comparison r
+    , Literal r
+    , NumericExpression r
+    , ValueExpression r
+    , VariableValue r
+    , List r
+    , MultiStatement r stmt
+    , DeclStatement r stmt
+    , AssignStatement r stmt
+    , ControlStatement r stmt
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , InternalIOStmt r stmt
+    , TypeElim r
+    )
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 csPrint newLn f printFn v = zoom lensMStoVS v >>= csPrint' . getCodeType . valueType
   where csPrint' (Array _) = multi [printStr "[",
           print $ extFuncApp "string" "Join" string [litString ", ", v],

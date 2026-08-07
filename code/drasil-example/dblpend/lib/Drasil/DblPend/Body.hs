@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Body (
   mkSRS, si, justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
@@ -9,7 +8,7 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat)
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (constants, genDefns)

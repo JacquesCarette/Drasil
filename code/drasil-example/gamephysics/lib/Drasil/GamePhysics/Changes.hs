@@ -1,11 +1,11 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Document (chgsStart, maybeExpanded, maybeChanged)
+import Language.Drasil.Document (ConceptInstance, chgsStart, cic,
+  maybeExpanded, maybeChanged)
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)

@@ -1,6 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The structure for a class of renderers is defined here.
 module Drasil.Shared.LanguageRenderer (
   -- * Common Syntax
@@ -216,9 +213,9 @@ stateVarList = vcat
 -- Controls --
 
 switch
-  :: (BodyElim r, StatementElim r smt, ValueElim r)
+  :: (BodyElim r, StatementElim r stmt, ValueElim r)
   => (Doc -> Doc)
-  -> r smt
+  -> r stmt
   -> r Value
   -> r Body
   -> [(r Value, r Body)]

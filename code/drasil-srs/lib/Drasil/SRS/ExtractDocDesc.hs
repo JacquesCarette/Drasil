@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase, Rank2Types #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.SRS.ExtractDocDesc (

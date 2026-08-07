@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
   lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation,
   convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where

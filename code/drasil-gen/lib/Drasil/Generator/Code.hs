@@ -1,7 +1,4 @@
-{-# LANGUAGE FlexibleContexts, QuasiQuotes #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE RankNTypes #-}
-
+{-# LANGUAGE QuasiQuotes #-}
 module Drasil.Generator.Code (
   -- * Generators
   genCode, genCodeZoo,
@@ -49,7 +46,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
     genLangCode Matlab = genCallProc Matlab unMLC unMLP
 
     genCall
-      :: (OOProg progRepr vis smt md svr att prg, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (OOProg progRepr vis stmt mthd stvr attch prg, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)
@@ -62,7 +59,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
     genCallProc
-      :: (ProcProg progRepr vis smt md prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
+      :: (ProcProg progRepr vis stmt mthd prg, NativeVector progRepr, SoftwareDossierSym packRepr, Monad packRepr)
       => Lang
       -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)

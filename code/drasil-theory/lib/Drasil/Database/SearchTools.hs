@@ -56,16 +56,11 @@ data DomDefn = DomDefn { domain :: [UID], definition :: Sentence }
 -- and definition. If nothing is found, an error is thrown.
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve f db trg
-  | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
   | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c
-  | (Just c) <- find trg db :: Maybe UnitDefn            = go f c
-  | (Just c) <- find trg db :: Maybe InstanceModel       = go f c
-  | (Just c) <- find trg db :: Maybe GenDefn             = go f c
-  | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
   | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
   | otherwise = error $ "Definition: `" ++ show trg ++ "` not found in ConceptMap"
   where
-    go :: Concept c => ([UID] -> Sentence -> r) -> c -> r
+    go :: (Concept c, ConceptDomain c) => ([UID] -> Sentence -> r) -> c -> r
     go f' c = f' (cdom c) (c ^. defn)
 
 defResolve' :: ChunkDB -> UID -> DomDefn

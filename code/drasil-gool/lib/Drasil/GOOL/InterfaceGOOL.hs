@@ -1,11 +1,12 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
   Program, GSProgram, File, Module, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
-  OOProg, OOStatement, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
   OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
   extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
@@ -24,10 +25,16 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, Body, Block, SVariable, SValue, NamedArgs, MixedCtorCall,
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, SharedStatement, BodySym(body), TypeSym(..), FunctionSym,
-  MethodSym(..), VariableSym(var), ValueSym(valueType), VariableValue(valueOf),
-  ValueExpression, List(listSize, listAdd), listOf, StatementSym(..),
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
+  BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
+  ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
+  List(listSize), ListStatement(listAdd), listOf, EmptyStatement, MultiStatement,
+  ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
+  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
+  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
+  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeElim, VariableElim)
+
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
@@ -36,104 +43,131 @@ import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FileData, FuncData,
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (SharedProg r vis smt md, OOStatement r smt,
-  ProgramSym r vis smt md svr att prg, ObserverPattern r smt,
-  StrategyPattern r smt
-  ) => OOProg r vis smt md svr att prg
-
-class (SharedStatement r smt, GetSet r, InternalValueExp r, OOFuncAppStatement r smt,
-  OOVariableValue r, OODeclStatement r smt, OOFuncAppStatement r smt,
-  OOFunctionSym r, OOValueExpression r
-  ) => OOStatement r smt
+-- | Wrapper typeclass that bundles everything essential
+-- for generating an object-oriented program.
+class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
+  MathConstant r, OOVariableValue r, BooleanExpression r, Comparison r,
+  NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
+  List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
+  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
+  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
+  OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
+  ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
+  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  ProgramSym r vis stmt mthd stvr attch prg
+  ) => OOProg r vis stmt mthd stvr attch prg
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
-class (FileSym r vis smt md svr att) => ProgramSym r vis smt md svr att prg | r -> prg where
+-- | Class for representing a program.
+-- Usually 'ProgData' is used for the representation.
+class (FileSym r vis stmt mthd stvr attch) => ProgramSym r vis stmt mthd stvr attch prg | r -> prg where
+  -- | Given program name, program purpose, and list of files,
+  -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r File)] -> GSProgram r prg
 
 type File = FileData
 
-class (ModuleSym r vis smt md svr att) => FileSym r vis smt md svr att where
+-- | Class for representing a file.
+class (ModuleSym r vis stmt mthd stvr attch) => FileSym r vis stmt mthd stvr attch where
+  -- | Given a module, generates a representation of a file.
+  -- (Implicit assumption: exactly one module per file)
   fileDoc :: FS (r Module) -> FS (r File)
 
-  -- Module description, watermark, list of author names, date as a String, file to comment
+  -- | Given module description, watermark, list of author names,
+  -- date as a String, and file to comment, creates a __documented module__
+  -- (i.e. module with a header comment)
   docMod :: String -> String -> [String] -> String -> FS (r File) -> FS (r File)
 
 type Module = ModData
 
-class (ClassSym r vis smt md svr att) => ModuleSym r vis smt md svr att where
-  -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [MS (r md)] -> [CS (r Class)] -> FS (r Module)
+-- | Class for representing a module.
+class (ClassSym r vis stmt mthd stvr attch) => ModuleSym r vis stmt mthd stvr attch where
+  -- | Given module name, list of import names, list of module functions,
+  -- and list of module classes, generates a representation of a module.
+  buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
 
 type Class = Doc
 
-class (OOMethodSym r vis smt md att, StateVarSym r vis svr att) => ClassSym r vis smt md svr att where
+-- | Class for representing an OO class.
+class (OOMethodSym r vis stmt mthd attch, StateVarSym r vis stvr attch) => ClassSym r vis stmt mthd stvr attch where
   -- | Main external method for creating a class.
-  --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> CS (r Class)
-  -- | Creates an extra class.
-  --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> CS (r Class)
-  -- | Creates a class implementing interfaces.
-  --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r svr] -> [MS (r md)] ->
-    [MS (r md)] -> CS (r Class)
+  -- Inputs: parent class, variables, constructor(s), methods
+  buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
+    [MS (r mthd)] -> CS (r Class)
+  -- | Creates an extra class, i.e. with a different name than the module name.
+  -- Inputs: class name, the rest are the same as buildClass.
+  extraClass :: Label -> Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->
+    [MS (r mthd)] -> CS (r Class)
+  -- | Creates a class implementing a list of interfaces.
+  -- Inputs: class name, interface names, variables, constructor(s), methods
+  implementingClass :: Label -> [Label] -> [CSStateVar r stvr] -> [MS (r mthd)] ->
+    [MS (r mthd)] -> CS (r Class)
 
   docClass :: String -> CS (r Class) -> CS (r Class)
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis smt md, AttachmentSym r att) => OOMethodSym r vis smt md att where
-  method      :: Label -> r vis -> r att -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MS (r Body) -> MS (r md)
-  getMethod   :: SVariable r -> MS (r md)
-  setMethod   :: SVariable r -> MS (r md)
-  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r md)
+class (MethodSym r vis stmt mthd, AttachmentSym r attch) => OOMethodSym r vis stmt mthd attch where
+  method      :: Label -> r vis -> r attch -> VS (r TypeData) ->
+    [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  getMethod   :: SVariable r -> MS (r mthd)
+  setMethod   :: SVariable r -> MS (r mthd)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
-  inOutMethod :: Label -> r vis -> r att -> InOutFunc r md
-  docInOutMethod :: Label -> r vis -> r att -> DocInOutFunc r md
+  inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd
+  docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd
 
-privMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+privMethod :: (OOMethodSym r vis stmt mthd attch) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis smt md att) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r md)
+pubMethod :: (OOMethodSym r vis stmt mthd attch) => Label -> VS (r TypeData) ->
+  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
-  Initializers r -> MS (r md)
+initializer :: (OOMethodSym r vis stmt mthd attch) => [MS (r ParamData)] ->
+  Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis smt md att) => [MS (r ParamData)] ->
-  MS (r Body) -> MS (r md)
+nonInitConstructor :: (OOMethodSym r vis stmt mthd attch) => [MS (r ParamData)] ->
+  MS (r Body) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
 type StateVar = Doc
-type CSStateVar r svr = CS (r svr)
+type CSStateVar r stvr = CS (r stvr)
 
-class (VisibilitySym r vis, AttachmentSym r att, VariableSym r) => StateVarSym r vis svr att | r -> svr where
-  stateVar :: r vis -> r att -> SVariable r -> CSStateVar r svr
-  stateVarDef :: r vis -> r att -> SVariable r -> SValue r -> CSStateVar r svr
-  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r svr
+-- | Class for representing class variables, both instance- and class-level.
+-- Used when creating a class, to hold extra information about `Attachment`
+-- and `Visibility`.
+-- Usually 'Doc' is used for the representation.
+class (VisibilitySym r vis, AttachmentSym r attch, VariableSym r) => StateVarSym r vis stvr attch | r -> stvr where
+  -- | Given a visibility, attachment, and variable, represent the declaration
+  -- of a state variable with no initial value.
+  stateVar :: r vis -> r attch -> SVariable r -> CSStateVar r stvr
+  -- | Given a visibility, attachment, variable, and initial value,
+  -- represent the declaration of a state variable with the given initial value.
+  stateVarDef :: r vis -> r attch -> SVariable r -> SValue r -> CSStateVar r stvr
+  -- | Given a visibility, variable, and value, represent the declaration of
+  -- a state constant with the given value.
+  constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r stvr
 
-privDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+privDVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+pubDVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis svr att) => SVariable r -> CSStateVar r svr
+pubSVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance
-class AttachmentSym r att | r -> att where
-  classLevel  :: r att
-  instanceLevel :: r att
+class AttachmentSym r attch | r -> attch where
+  classLevel  :: r attch
+  instanceLevel :: r attch
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VS (r TypeData)
@@ -185,7 +219,10 @@ extNewObj l t vs = extNewObjMixedArgs l t vs []
 libNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
 libNewObj l t vs = libNewObjMixedArgs l t vs []
 
+-- TODO [Brandon Bosman, 07/22/2026]: Give this a better name
+-- | A class for representing method calls, both instance- and class-level
 class (ValueSym r) => InternalValueExp r where
+  -- TODO [Brandon Bosman, 07/22/2026]: rename this to `instanceMethodCallMixedArgs'`
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of
   --   positional arguments, and a list of named arguments.
@@ -239,42 +276,44 @@ classMethodCallNoParams :: (InternalValueExp r) => VS (r TypeData) -> VS (r Type
   Label -> SValue r
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class (DeclStatement r smt, OOVariableSym r) => OODeclStatement r smt where
-  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r smt)
+class (DeclStatement r stmt, OOVariableSym r) => OODeclStatement r stmt where
+  objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
   --             as it is inferred from the variable's type.
-  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r smt)
+  objDecNew    :: SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
   extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
-    -> MS (r smt)
+    -> MS (r stmt)
 
-objDecNewNoParams :: (OODeclStatement r smt) => SVariable r -> r ScopeData
-  -> MS (r smt)
+objDecNewNoParams :: (OODeclStatement r stmt) => SVariable r -> r ScopeData
+  -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
-extObjDecNewNoParams :: (OODeclStatement r smt) => Library -> SVariable r ->
-  r ScopeData -> MS (r smt)
+extObjDecNewNoParams :: (OODeclStatement r stmt) => Library -> SVariable r ->
+  r ScopeData -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
-class (FuncAppStatement r smt, OOVariableSym r) => OOFuncAppStatement r smt where
-  selfInOutCall :: InOutCall r smt
+class (FuncAppStatement r stmt, OOVariableSym r) => OOFuncAppStatement r stmt where
+  selfInOutCall :: InOutCall r stmt
 
-class (StatementSym r smt, OOFunctionSym r) => ObserverPattern r smt where
-  notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r smt)
+class (OOFunctionSym r) => ObserverPattern r stmt | r -> stmt where
+  notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r smt) => VS (r TypeData) -> [SValue r] ->
-  r ScopeData -> MS (r smt)
+initObserverList :: (DeclStatement r stmt) => VS (r TypeData) -> [SValue r] ->
+  r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (OOVariableValue r, List r smt) => SValue r -> MS (r smt)
+addObserver
+  :: (OOVariableValue r, List r, ListStatement r stmt)
+  => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (BodySym r smt, VariableSym r) => StrategyPattern r smt where
+class (BodySym r stmt, VariableSym r) => StrategyPattern r stmt where
   runStrategy :: Label -> [(Label, MS (r Body))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MS (r Block)
 

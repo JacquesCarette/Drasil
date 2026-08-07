@@ -3,7 +3,7 @@ module Drasil.Generator.Code (
   -- * Generators
   genCode, genCodeZoo,
   -- * Internal Functions
-  codedDirName
+  codedHRName, codedDirName
 ) where
 
 import Prelude hiding (id)
@@ -17,7 +17,7 @@ import Drasil.FileHandling (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
   OOProg, LoggingFor (unLC))
 import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
-import Language.Drasil (Space(..), Expr)
+import Language.Drasil (Space(..), Expr, abrv)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
   Architecture(impType, modularity),
@@ -30,7 +30,8 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
-import Drasil.SRS (SmithEtAlSRS, programName)
+import Drasil.SRS (SmithEtAlSRS)
+import Drasil.System (HasSystemMeta(..))
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
@@ -80,23 +81,25 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
 genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]
 genCodeZoo syst = mapM $ \chcs -> do
-    let dir = map toLower $ codedDirName (syst ^. programName) chcs
+    let dir = codedDirName syst chcs
     layout <- genCode syst chcs
     return $ directory [ps|{dir}|] [layout]
 
--- | Find name of folders created for a "zoo" of executable softifacts.
---
--- FIXME: This is a hack. The generation phase should emit what artifacts it
--- created.
-codedDirName :: String -> Choices -> String
-codedDirName n Choices {
+-- | Human-readable name for coded variants (e.g. "Projectile_U_P_NoL_U_WI_V_D").
+codedHRName :: HasSystemMeta sys => sys -> Choices -> String
+codedHRName sys Choices {
   architecture = a,
   optFeats = o,
   dataInfo = d,
   maps = m} =
-  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
+  intercalate "_" $ abrv (sys ^. projName) :
+    [codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
     codedStruct $ inputStructure d, codedConStruct $ constStructure d,
     codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
+
+-- | Lowercase folder name for a "zoo" of executable softifacts (e.g. "projectile_u_p_nol_u_wi_v_d").
+codedDirName :: HasSystemMeta sys => sys -> Choices -> String
+codedDirName sys chcs = map toLower $ codedHRName sys chcs
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"

@@ -1,18 +1,17 @@
 -- | Create the list of Generated Examples for the Drasil website.
 module Drasil.Website.Example (
-  Example(..), examples, exName,
+  Example(..), examples,
   exampleSec, exampleRefs, allExampleSI
 ) where
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), lens)
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
-import Drasil.System (sysName, purpose)
-import Drasil.SRS (SmithEtAlSRS(..), programName)
+import Drasil.System (purpose, HasSystemMeta(..), repo)
+import Drasil.SRS (SmithEtAlSRS(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
-import Data.Char (toLower)
-import Drasil.Generator (codedDirName, Format(..))
+import Drasil.Generator (codedHRName, codedDirName, Format(..))
 
 import qualified Drasil.BinaryStar.Body as BSS (si)
 import qualified Drasil.DblPend.Body as DblPend (si)
@@ -54,6 +53,12 @@ data Example = E {
   -- | Generated documents & doxygen path
   srsDoxPath :: FilePath
 }
+instance HasSystemMeta Example where
+  systemMeta = lens systemE (\x y -> x {systemE = y}) . systemMeta
+
+abrvE :: Example -> String
+abrvE = abrv . systemE
+
 -- TODO: Automate the gathering of system information, descriptions, and choices.
 
 -- | Records example system information.
@@ -97,23 +102,23 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{systemE = si} = S (abrv $ si ^. sysName) +:+ S " - To" +:+ foldlSent (si ^. purpose)
+    nameAndDesc E{systemE = si} = S (abrv si) +:+ S "- To" +:+ foldlSent (si ^. purpose)
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
 individualExList ex@E{choicesE = [], codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ exName ex) (S "[HTML]")
-  +:+ namedRef (getSRSRef srsP TeX $ exName ex) (S "[PDF]")
-  +:+ namedRef (getSRSRef srsP MDBook $ exName ex) (S "[mdBook]")]
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML ex) (S "[HTML]")
+  +:+ namedRef (getSRSRef srsP TeX ex) (S "[PDF]")
+  +:+ namedRef (getSRSRef srsP MDBook ex) (S "[mdBook]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ exName ex) (S "[HTML]")
-  +:+ namedRef (getSRSRef srsP TeX $ exName ex) (S "[PDF]")
-  +:+ namedRef (getSRSRef srsP MDBook $ exName ex) (S "[mdBook]")
-  +:+ namedRef (getSRSRef srsP Jupyter $ exName ex) (S "[Jupyter (HTML)]"),
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML ex) (S "[HTML]")
+  +:+ namedRef (getSRSRef srsP TeX ex) (S "[PDF]")
+  +:+ namedRef (getSRSRef srsP MDBook ex) (S "[mdBook]")
+  +:+ namedRef (getSRSRef srsP Jupyter ex) (S "[Jupyter (HTML)]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftJlEx)]
     where
@@ -132,16 +137,19 @@ versionList getRef ex@E{choicesE = chcs} =
   map versionItem chcs
   where
     -- Version item displays version name and appends the languages of generated code below.
-    versionItem chc = Flat $ S (verName chc) +:+ foldlSent_ (map (makeLangRef chc) $ lang chc)
+    versionItem chc = Flat $ S (verHRName chc) +:+ foldlSent_ (map (makeLangRef chc) $ lang chc)
     -- Makes references to the generated languages and formats them nicely.
-    makeLangRef chc lng = namedRef (getRef ex lng $ verName chc) $ S $ "[" ++ showLang lng ++ "]"
+    makeLangRef chc lng = namedRef (getRef ex lng $ verDirName chc) $ S $ "[" ++ showLang lng ++ "]"
 
     -- Determine the version name based on the system name and if there is more than one set of choices.
-    verName chc = case chcs of
+    verHRName chc = case chcs of
       -- If there is one set of choices, then the program does not have multiple versions.
-      [_] -> exName ex
+      [_] -> abrvE ex
       -- If the above two don't match, we have more than one set of choices and must display every version.
-      _   -> codedDirName (exName ex) chc
+      _   -> codedHRName ex chc
+    verDirName chc = case chcs of
+      [_] -> ex ^. projName . repo
+      _   -> codedDirName ex chc
 
 -- | Show function to display program languages to user.
 showLang :: Lang -> String
@@ -205,8 +213,7 @@ getCodeRef ex@E{choicesE = chcs} l verName =
     refShortNm = shortname' $ S refUID
 
     -- System name, different between one set of choices and multiple sets.
-    exFolder = map toLower $ exName ex ++
-      if length chcs > 1 then "/" ++ verName else ""
+    exFolder = ex ^. projName . repo ++ if length chcs > 1 then "/" ++ verName else ""
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -218,7 +225,7 @@ buildDrasilExSrcRef ex =
     refUID = "srcCodeRef" ++ exFolder
     refURI = path ++ "code/drasil-example/" ++ exFolder
     refShortNm = shortname' $ S refUID
-    exFolder = map toLower $ exName ex
+    exFolder = ex ^. projName . repo
     path = codePath ex
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
@@ -227,48 +234,47 @@ getDoxRef ex@E{choicesE = chcs} l verName =
   makeURI refUID refURI refShortNm
   where
     refUID = "doxRef" ++ progName ++ programLang
-    refURI = getDoxPath (srsDoxPath ex) progName programLang
+    refURI = getDoxPath (srsDoxPath ex) (ex ^. projName . repo) programLang
     refShortNm = shortname' $ S refUID
 
-    progName = exName ex
+    progName = abrvE ex
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of
       [_] -> convertLang l
-      _   -> map toLower verName ++ "/" ++ convertLang l
+      _   -> verName ++ "/" ++ convertLang l
 
 -- | Make references for each of the generated SRS files.
-getSRSRef :: FilePath -> Format -> String -> Reference
+getSRSRef :: FilePath -> Format -> Example -> Reference
 getSRSRef path format ex = makeURI refUID (getSRSPath path format ex) $ shortname' $ S refUID
   where
-    refUID = show format ++ "Ref" ++ ex
+    refUID = show format ++ "Ref" ++ abrvE ex
 
--- | Get the paths of where each reference exist for SRS files. Some example abbreviations have spaces,
--- so we just filter those out.
-getSRSPath :: FilePath -> Format -> String -> FilePath
-getSRSPath path format ex = path ++ map toLower ex ++ "/SRS/" ++ show format ++ "/" ++ sufx format
+-- | Get the paths of where each reference exist for SRS files.
+getSRSPath :: FilePath -> Format -> Example -> FilePath
+getSRSPath path format ex = path ++ (ex ^. projName . repo) ++ "/SRS/" ++ show format ++ "/" ++ sufx format
   where
     sufx MDBook  = "book"
-    sufx HTML    = ex ++ "_SRS.html"
-    sufx TeX     = ex ++ "_SRS.pdf"
-    sufx Jupyter = ex ++ "_SRS.html"
+    sufx HTML    = abrvE ex ++ "_SRS.html"
+    sufx TeX     = abrvE ex ++ "_SRS.pdf"
+    sufx Jupyter = abrvE ex ++ "_SRS.html"
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
 -- | Uses 'repoRt' path (codePath in this module).
-getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower ex ++ "/src/" ++ programLang -- need repoCommit path
+getCodePath path ex programLang = path ++ "code/stable/" ++ ex ++ "/src/" ++ programLang -- need repoCommit path
 -- | Uses 'exRt' path (srsDoxPath in this module).
-getDoxPath path ex programLang = path ++ map toLower ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
+getDoxPath path ex programLang = path ++ ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]
 exampleRefs codePth srsDoxPth =
   concatMap getCodeRefDB (examples codePth srsDoxPth) ++
   concatMap getDoxRefDB (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth HTML . exName) (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth TeX . exName) (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth MDBook . exName) (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth Jupyter . exName) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth HTML) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth TeX) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth MDBook) (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth Jupyter) (examples codePth srsDoxPth) ++
   map buildDrasilExSrcRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.
@@ -276,11 +282,7 @@ exampleRefs codePth srsDoxPth =
 getCodeRefDB, getDoxRefDB :: Example -> [Reference]
 getCodeRefDB ex = concatMap (\x -> map (\y -> getCodeRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName = codedDirName (exName ex)
+    verName = codedDirName ex
 getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang x) $ choicesE ex
   where
-    verName = codedDirName (exName ex)
-
--- | Helper to pull the system name (abbreviation) from an 'Example'.
-exName :: Example -> String
-exName E{systemE = si} = si ^. programName
+    verName = codedDirName ex

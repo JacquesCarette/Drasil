@@ -1,10 +1,11 @@
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.SRS hiding (constants)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn)
 
@@ -197,9 +198,12 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 -- System Information --
 ------------------------------
 
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "bssProjName") (nounPhraseSP "BSS") "BSS"
+
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [authorName]
+  projName progName [authorName]
   [probDescIntro] [background] [scope] [motivation]
   tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols

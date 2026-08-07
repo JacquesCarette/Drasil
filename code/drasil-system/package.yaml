@@ -21,6 +21,7 @@ dependencies:
 - drasil-database
 - drasil-file-handling
 - drasil-lang
+- drasil-utils
 
 ghc-options:
 - -Wall

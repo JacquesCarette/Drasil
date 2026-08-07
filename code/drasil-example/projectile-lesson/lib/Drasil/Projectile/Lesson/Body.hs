@@ -5,7 +5,7 @@ import Language.Drasil.Document
 import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.LessonPlan (LessonPlan, mkLessonPlan, LsnDesc, LsnChapter(..))
-import Drasil.System (mkSystemMeta)
+import Drasil.System (mkSystemMeta, ProjectName, mkCommonProjName)
 
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
   speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,
@@ -32,9 +32,12 @@ nbDecl = [
     BibSec
   ]
 
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "projLsnPlanProjName") (nounPhraseSP "Projectile Motion Lesson") "Projectile Lesson"
+
 si :: LessonPlan
-si = mkLessonPlan
-  (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
+si = mkLessonPlan $
+  mkSystemMeta projName projectileMotionLesson [spencerSmith] [] [] [] [] symbMap
 
 symbMap :: ChunkDB
 symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] []

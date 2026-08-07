@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, mkUid, insertAll)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(..), mkSystemMeta)
+import Drasil.System (HasSystemMeta(sysName), mkSystemMeta, ProjectName, mkCommonProjName)
 import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
@@ -57,10 +57,15 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "drasilWebProjName") (nounPhraseSP "Drasil Website") "Website"
+
 webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] db') d
-  where db' = insertAll (allRefs fl) $ insertAll (websiteLCs fl) $ insertAll ss symbMap
+webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite meta d
+  where
+    meta = mkSystemMeta projName webName [] [] [] [] [] db'
+    db' = insertAll (allRefs fl) $ insertAll (websiteLCs fl) $ insertAll ss symbMap
 webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.

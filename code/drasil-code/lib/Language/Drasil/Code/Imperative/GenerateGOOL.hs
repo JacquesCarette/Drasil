@@ -23,7 +23,6 @@ import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, File,
   OOProg, CS, FS, MS, VS, TypeData, ValueSym(..), Argument(..),
@@ -62,7 +61,7 @@ genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState ->
   GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
-  let n = g ^. programName
+  let n = abrv g
       cms = g ^. commented
       v = getDoxOutput g
   return $ if not (null cms) then doxConfig n s v else Nothing
@@ -71,7 +70,7 @@ genDoxConfig s = do
 genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
-  let n = g ^. programName
+  let n = abrv g
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.

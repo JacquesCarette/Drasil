@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances, UndecidableInstances #-}
 module Drasil.System.Core (
   Purpose, Background, Scope, Motivation,
   SystemMeta,
@@ -5,10 +6,12 @@ module Drasil.System.Core (
   mkSystemMeta,
 ) where
 
-import Control.Lens (makeClassy)
+import Control.Lens ((^.), makeClassy)
 
-import Drasil.Database (ChunkDB)
-import Language.Drasil (Sentence, People, CI)
+import Drasil.Database (ChunkDB, HasUID(..), HasChunkRefs(..))
+import Language.Drasil (Sentence, People, CI, NamedIdea(..), Idea(..), CommonIdea(..))
+
+import Drasil.System.ProjectName (ProjectName, title, abbreviation)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -21,7 +24,8 @@ type Scope = [Sentence]
 type Motivation = [Sentence]
 
 data SystemMeta = SystemMeta
-  { _sysName    :: CI -- FIXME: This should not be a CI.
+  { _projName   :: ProjectName
+  , _sysName    :: CI -- FIXME: All usage of `sysName` should be removed in favour of `projName`.
   , _authors    :: People
   , _purpose    :: Purpose
   , _background :: Background
@@ -32,6 +36,21 @@ data SystemMeta = SystemMeta
 
 makeClassy ''SystemMeta
 
-mkSystemMeta :: CI -> People -> Purpose -> Background -> Scope -> Motivation ->
-  ChunkDB -> SystemMeta
+instance HasUID SystemMeta where
+  uid = projName . uid
+
+instance HasChunkRefs SystemMeta where
+  chunkRefs x = chunkRefs (x ^. projName)
+
+instance NamedIdea SystemMeta where
+  term = projName . title
+
+instance Idea SystemMeta where
+  getA x = Just (x ^. projName . abbreviation)
+
+instance CommonIdea SystemMeta where
+  abrv x = x ^. projName . abbreviation
+
+mkSystemMeta :: ProjectName -> CI -> People -> Purpose -> Background -> Scope ->
+  Motivation -> ChunkDB -> SystemMeta
 mkSystemMeta = SystemMeta

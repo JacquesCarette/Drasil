@@ -3,13 +3,14 @@ module Drasil.SSP.Body (si, mkSRS) where
 import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
   foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -56,9 +57,12 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "sspProjName") (nounPhraseSP "Slope Stability analysis Program") "SSP"
+
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [henryFrankis, brooks]
+  projName progName [henryFrankis, brooks]
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
   inputs outputs constrained [] symbols

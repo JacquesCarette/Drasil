@@ -9,10 +9,10 @@ import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),
   ConstantRepr(..))
 import Drasil.SRS (SmithEtAlSRS)
-import Drasil.Generator (codedDirName)
+import Drasil.Generator (codedHRName)
 import Drasil.GOOL (CodeType(..))
 
-import Drasil.Website.Example (examples, Example(..), exName)
+import Drasil.Website.Example (examples, Example(..))
 
 -- * Case Studies Section
 
@@ -64,12 +64,12 @@ data CaseStudy = CS {
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy ex@E{systemE = si, choicesE = [x]}
-  = [CS{systemCS = si, progName = S $ exName ex, choicesCS = x}]
+mkCaseStudy E{systemE = si, choicesE = [x]}
+  = [CS{systemCS = si, progName = S $ abrv si, choicesCS = x}]
 mkCaseStudy ex@E{systemE = si, choicesE = xs}
   = map (\x -> CS{
       systemCS = si,
-      progName = S $ codedDirName (exName ex) x, choicesCS = x
+      progName = S $ codedHRName ex x, choicesCS = x
     }) xs
 
 -- * Display 'CaseStudy' Information as a Table

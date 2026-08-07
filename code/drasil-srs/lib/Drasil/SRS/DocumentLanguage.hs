@@ -162,7 +162,7 @@ mkSections si dd mbib = map (either renderRefSec id) partialRender
     render :: DocSection -> Section
     render TableOfContents      = mkToC dd
     render (IntroSec is)        = mkIntroSec si is
-    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (StkhldrSec sts)     = mkStkhldrSec (si ^. sysName) sts
     render (SSDSec ss)          = mkSSDSec si ss
     render (AuxConstntSec acs)  = mkAuxConsSec (si ^. sysName) acs
     render Bibliography         = mkBib $ fromMaybe [] mbib
@@ -264,12 +264,12 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 -- ** Stakeholders
 
 -- | Helper for making the Stakeholders section.
-mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec :: Idea c => c -> StkhldrSec -> Section
+mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
-    mkSubs (Client kWrd details) = Stk.tClientF kWrd details
-    mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
+    mkSubs (Client details) = Stk.tClientF progN details
+    mkSubs Cstmr            = Stk.tCustomerF progN
 
 -- ** General System Description
 

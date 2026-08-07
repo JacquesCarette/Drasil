@@ -121,8 +121,8 @@ mktStkhldrSec (StkhldrProg l) =
   mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ map mktSub l
   where
     mktSub :: StkhldrSub -> Sentence
-    mktSub (Client _ _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
-    mktSub (Cstmr _)    = namedRef SRS.clientLabel   $ D.toSent $ titleizeNP $ the Doc.client
+    mktSub (Client _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
+    mktSub Cstmr      = namedRef SRS.clientLabel   $ D.toSent $ titleizeNP $ the Doc.client
 
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType

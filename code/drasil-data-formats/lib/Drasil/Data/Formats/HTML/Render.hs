@@ -1,83 +1,85 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Drasil.Data.Formats.HTML.Render (
-    renderHTML,
-    HTMLRenderOptions(..)
+  renderHTML,
+  HTMLRenderOptions (..),
 ) where
 
-import Prettyprinter (
-  Doc, hcat, hsep, indent, vcat, angles, dquotes, equals, space, pretty)
+import qualified Data.Map as M
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Data.Map as M
-
 import Drasil.Data.Formats.HTML.Core (
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..),
-    Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
-    Attr(..)
+  Attr (..), Cell (..), CustomTag (..), DItem (..), Format (..), HLevel (..),
+  HTML (..), HTMLBody (..), HTMLHead (..), LItem (..), ListType (..), Row (..),
+  TagType (..),
+  )
+import Prettyprinter (
+  vcat, Doc, angles, dquotes, equals, hcat, hsep, indent, pretty, space
   )
 
-newtype HTMLRenderOptions = HTMLRO {
-  -- | What 'TagType' is each 'CustomTag'?
-  customElementTagTypes :: M.Map CustomTag TagType
+data HTMLRenderOptions = HTMLRO
+  { -- | What 'TagType' is each 'CustomTag'?
+    customElementTagTypes :: M.Map CustomTag TagType,
+    -- | The number of spaces to use for each level of indentation.
+    indentationSize :: Int
   }
 
 -- | Render 'HTML' to a 'Doc'
-renderHTML :: HTMLRenderOptions ->  HTML -> Doc ann
-renderHTML opt(HTML heads bodies) =
-  vcat ["<!DOCTYPE html>", angles "html",
-    renderHeadSec heads,
-    renderBodySec opt bodies,
-    angles "/html"]
+renderHTML :: HTMLRenderOptions -> HTML -> Doc ann
+renderHTML opt htmlTree =
+  vcat
+    [ "<!DOCTYPE html>",
+      wrapBlock opt "html" []
+      [renderHeadSec opt heads, renderBodySec opt bodies]
+    ]
+  where HTML heads bodies = normalizeHTML htmlTree
 
 -- | Render the 'head' section
-renderHeadSec :: [HTMLHead] -> Doc ann
-renderHeadSec heads = wrapBlock "head" [] (map renderHead heads)
+renderHeadSec :: HTMLRenderOptions -> [HTMLHead] -> Doc ann
+renderHeadSec opt heads = wrapBlock opt "head" [] (map (renderHead opt) heads)
 
 -- | Render the 'body' section
 renderBodySec :: HTMLRenderOptions -> [HTMLBody] -> Doc ann
-renderBodySec opt bodies = wrapBlock "body" [] (map (renderBody opt) bodies)
+renderBodySec opt bodies = wrapBlock opt "body" [] (map (renderBody opt) bodies)
 
 -- | Render 'head' elements
-renderHead :: HTMLHead -> Doc ann
-renderHead (Link relation file attrs) =
+renderHead :: HTMLRenderOptions -> HTMLHead -> Doc ann
+renderHead _ (Link relation file attrs) =
   angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
-renderHead (Title txt)        = wrapBlock "title" [] [pretty (escapeHTMLText txt)]
-renderHead (Meta attrs)       = angles ("meta" <> renderAttrs attrs)
-renderHead (Script attrs txt) = angles ("script" <> renderAttrs attrs) <> pretty txt <> angles "/script"
+renderHead _ (Title txt) = wrapLine "title" [] [pretty (escapeHTMLText txt)]
+renderHead _ (Meta attrs) = angles ("meta" <> renderAttrs attrs)
+renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt]
 
 -- | Render 'body' elements
 renderBody :: HTMLRenderOptions -> HTMLBody -> Doc ann
-renderBody opt  (Div attrs ch)       = renderBlock opt "div" attrs ch
-renderBody opt  (Paragraph attrs ch) = renderLine opt "p" attrs ch
-
-renderBody opt  (List Unordered attrs items) = wrapBlock "ul" attrs (map renderIList items)
-  where renderIList (LItem iAttrs ch) = renderBlock opt "li" iAttrs ch
-renderBody opt  (List Ordered attrs items) = wrapBlock "ol" attrs (map renderIList items)
-  where renderIList (LItem iAttrs ch) = renderBlock opt "li" iAttrs ch
-
-renderBody opt  (DescriptionList attrs items) = wrapBlock "dl" attrs (map renderDItem items)
-  where renderDItem (DTerm iAttrs ch)    = renderLine opt "dt" iAttrs ch
-        renderDItem (DDetails iAttrs ch) = renderBlock opt "dd" iAttrs ch
-
-renderBody opt  (Table attr rows)    = wrapBlock "table" attr (map renderRow rows)
-  where renderRow (Row attrs cells)    = wrapBlock "tr" attrs (map renderCell cells)
-        renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch
-        renderCell (TData cAttrs ch)   = renderLine opt "td" cAttrs ch
-
-renderBody opt  (Figure attrs ch)     = renderBlock opt "figure" attrs ch
-renderBody opt  (FigCaption attrs ch) = renderLine opt "figcaption" attrs ch
-
-renderBody opt  (TextFormat fmt attrs ch) = renderLine opt (fmtTag fmt) attrs ch
-renderBody opt  (Heading lvl attrs ch)    = renderLine opt (headTag lvl) attrs ch
-renderBody opt  (Anchor url attrs ch)     = renderLine opt "a" (Attr "href" url : attrs) ch
-renderBody _  (Img source altTxt attrs) = angles ("img" <> renderAttrs (Attr "src" source : Attr "alt" altTxt : attrs))
-renderBody _  (RawText txt)             = pretty (escapeHTMLText txt)
-
+renderBody opt (Div attrs ch) = renderBlock opt "div" attrs ch
+renderBody opt (Paragraph attrs ch) = renderBlockInline opt "p" attrs ch
+renderBody opt (List Unordered attrs items) = wrapBlock opt "ul" attrs (map renderIList items)
+  where
+    renderIList (LItem iAttrs ch) = renderLine opt "li" iAttrs ch
+renderBody opt (List Ordered attrs items) = wrapBlock opt "ol" attrs (map renderIList items)
+  where
+    renderIList (LItem iAttrs ch) = renderBlockInline opt "li" iAttrs ch
+renderBody opt (Section attrs ch) = renderBlock opt "section" attrs ch
+renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (map renderDItem items)
+  where
+    renderDItem (DTerm iAttrs ch) = renderLine opt "dt" iAttrs ch
+    renderDItem (DDetails iAttrs ch) = renderBlockInline opt "dd" iAttrs ch
+renderBody opt (Table attr rows) = wrapBlock opt "table" attr (map renderRow rows)
+  where
+    renderRow (Row attrs cells) = wrapBlock opt "tr" attrs (map renderCell cells)
+    renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch
+    renderCell (TData cAttrs ch) = renderLine opt "td" cAttrs ch
+renderBody opt (Figure attrs ch) = renderBlock opt "figure" attrs ch
+renderBody opt (FigCaption attrs ch) = renderLine opt "figcaption" attrs ch
+renderBody opt (TextFormat fmt attrs ch) = renderLine opt (fmtTag fmt) attrs ch
+renderBody opt (Heading lvl attrs ch) = renderLine opt (headTag lvl) attrs ch
+renderBody opt (Anchor url attrs ch) = renderLine opt "a" (Attr "href" url : attrs) ch
+renderBody _ (Img source altTxt attrs) = angles ("img" <> renderAttrs (Attr "src" source : Attr "alt" altTxt : attrs))
+renderBody _ (RawText txt) = pretty (escapeHTMLText txt)
 renderBody opt (Custom (CT tagName) attrs ch)
-  | Just Void <- M.lookup (CT tagName) (customElementTagTypes opt) = angles (pretty tagName <> renderAttrs attrs)
+  | Just Void <- M.lookup (CT tagName) (customElementTagTypes opt) = angles (pretty tagName <> renderAttrs attrs <> " /")
   | otherwise = renderBlock opt tagName attrs ch
-
 renderBody _ (Comment cmmnt) = "<!-- " <> pretty cmmnt <> "-->"
 
 -- | Internal: gets tag from text format
@@ -99,22 +101,39 @@ headTag H6 = "h6"
 
 -- | Render the element and its children in the same line
 renderLine :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderLine opt tag attrs = wrapLine tag attrs . map (renderBody opt)
+renderLine opt tag attrs ch = wrapLine tag attrs $ map (renderBody opt) ch
 
 -- | Render the children breaking lines
 renderBlock :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
-renderBlock opt tag attrs = wrapBlock tag attrs . map (renderBody opt)
+renderBlock opt tag attrs ch = wrapBlock opt tag attrs $ map (renderBody opt) ch
+
+-- | Render the element as a block, but keep all children on a single indented line
+renderBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [HTMLBody] -> Doc ann
+renderBlockInline _ tag attrs [] = wrapLine tag attrs []
+renderBlockInline opt tag attrs ch = wrapBlockInline opt tag attrs (map (renderBody opt) ch)
 
 -- | Wrap an element with tag and its children breaking lines
-wrapBlock :: Text -> [Attr] -> [Doc ann] -> Doc ann
-wrapBlock tag attrs docs =
-  vcat [ angles (pretty tag <> renderAttrs attrs), indent 2 (vcat docs),
-  angles ("/" <> pretty tag) ]
+wrapBlock :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
+wrapBlock opt tag attrs docs =
+  vcat
+    [ angles (pretty tag <> renderAttrs attrs),
+      indent (indentationSize opt) (vcat docs),
+      angles ("/" <> pretty tag)
+    ]
 
 -- | Wrap an element with tag and its children in the same line
 wrapLine :: Text -> [Attr] -> [Doc ann] -> Doc ann
 wrapLine tag attrs docs =
   angles (pretty tag <> renderAttrs attrs) <> hcat docs <> angles ("/" <> pretty tag)
+
+-- | Wrap an element with tags on separate lines, but children on the same line
+wrapBlockInline :: HTMLRenderOptions -> Text -> [Attr] -> [Doc ann] -> Doc ann
+wrapBlockInline opt tag attrs docs =
+  vcat [
+    angles (pretty tag <> renderAttrs attrs),
+    indent (indentationSize opt) (hcat docs),
+    angles ("/" <> pretty tag)
+  ]
 
 -- | Render attribute in the format 'key="value"'
 renderAttrs :: [Attr] -> Doc ann
@@ -138,3 +157,36 @@ escapeHTMLText = T.concatMap escapeChar
     escapeChar '\'' = "&#39;"
     escapeChar '/'  = "&#x2F;"
     escapeChar c    = T.singleton c
+
+-- | Normalizes the whole HTML tree at once
+normalizeHTML :: HTML -> HTML
+normalizeHTML (HTML heads bodies) = HTML heads (normalizeBody bodies)
+
+-- | Normalizes body elements, merging adjacent `RawText`
+normalizeBody :: [HTMLBody] -> [HTMLBody]
+normalizeBody [] = []
+normalizeBody (RawText a : RawText b : rest) = normalizeBody (RawText (a <> b) : rest)
+normalizeBody (x : xs) = normalizeNode x : normalizeBody xs
+
+-- | Normalizes children from each node
+normalizeNode :: HTMLBody -> HTMLBody
+normalizeNode (Div attrs ch) = Div attrs (normalizeBody ch)
+normalizeNode (Paragraph attrs ch) = Paragraph attrs (normalizeBody ch)
+normalizeNode (List t attrs items) = List t attrs (map normItem items)
+  where normItem (LItem a ch) = LItem a (normalizeBody ch)
+normalizeNode (DescriptionList attrs items) = DescriptionList attrs (map normDItem items)
+  where
+    normDItem (DTerm a ch) = DTerm a (normalizeBody ch)
+    normDItem (DDetails a ch) = DDetails a (normalizeBody ch)
+normalizeNode (Table attrs rows) = Table attrs (map normRow rows)
+  where
+    normRow (Row a cells) = Row a (map normCell cells)
+    normCell (THeader a ch) = THeader a (normalizeBody ch)
+    normCell (TData a ch) = TData a (normalizeBody ch)
+normalizeNode (Figure attrs ch) = Figure attrs (normalizeBody ch)
+normalizeNode (FigCaption attrs ch) = FigCaption attrs (normalizeBody ch)
+normalizeNode (TextFormat fmt attrs ch) = TextFormat fmt attrs (normalizeBody ch)
+normalizeNode (Heading lvl attrs ch) = Heading lvl attrs (normalizeBody ch)
+normalizeNode (Anchor url attrs ch) = Anchor url attrs (normalizeBody ch)
+normalizeNode (Custom ct attrs ch) = Custom ct attrs (normalizeBody ch)
+normalizeNode node = node

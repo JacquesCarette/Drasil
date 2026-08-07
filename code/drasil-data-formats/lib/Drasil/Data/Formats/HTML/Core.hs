@@ -1,8 +1,10 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Drasil.Data.Formats.HTML.Core
   ( -- * HTML
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
-    Attr(..), bold, emphasis, subscript, superscript, span, figureImage
+    Attr(..), bold, emphasis, subscript, superscript, span, figureImage,
+    inlineScript, externalScript, stylesheet
   )
 where
 
@@ -35,6 +37,7 @@ data HTMLBody
   | TextFormat Format [Attr] [HTMLBody]
   | Heading HLevel [Attr] [HTMLBody]
   | List ListType [Attr] [LItem]
+  | Section [Attr] [HTMLBody]
   | Table [Attr] [Row]
   | DescriptionList [Attr] [DItem]
   | Anchor URL [Attr] [HTMLBody]
@@ -129,6 +132,18 @@ span attrs txt = TextFormat Span attrs [RawText txt]
 
 -- | Creates a figure containing an image and a caption.
 -- The provided attributes are applied to the Figure
-figureImage :: [Attr] -> File -> Text -> Text -> HTMLBody
-figureImage attrs src altText captionTxt =
-  Figure attrs [Img src altText [], FigCaption [] [RawText captionTxt]]
+figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
+figureImage attrsFig attrsImg src altText captionTxt =
+  Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]
+
+-- | Creates an inline script. Does not allow any attributes.
+inlineScript :: Text -> HTMLHead
+inlineScript = Script []
+
+-- | Creates an external script. Requires a source file/URL and allows optional attributes.
+externalScript :: File -> [Attr] -> HTMLHead
+externalScript src attrs = Script (Attr "src" src : Attr "type" "text/javascript" : attrs) ""
+
+-- | Create the link to the CSS file
+stylesheet :: Text -> HTMLHead
+stylesheet css = Link "stylesheet" (css <> ".css") [Attr "type" "text/css"]

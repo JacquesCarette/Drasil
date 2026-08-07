@@ -25,6 +25,7 @@ dependencies:
 - split
 - directory
 - pretty
+- prettyprinter
 - drasil-gen
 - drasil-lang
 - sglpend
@@ -50,6 +51,7 @@ library:
   - drasil-printers
   - drasil-srs
   - drasil-system
+  - drasil-data-formats
   source-dirs: lib
 
 executables:

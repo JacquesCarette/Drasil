@@ -56,7 +56,7 @@ import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
 import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
-  tOfAbbAcc)
+  tOfAbbAcc, inModel)
 import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -252,12 +252,13 @@ mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
   where
+    im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
     mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro (IChar assumed topic asset) =
       Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])
-    mkSubIntro (IOrgSec b s t) = Intro.orgSec b s t
+    mkSubIntro (IOrgSec t) = Intro.orgSec inModel im t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders

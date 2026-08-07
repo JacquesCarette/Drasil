@@ -14,7 +14,7 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8, TextEncoding)
 import System.Environment (lookupEnv)
 
 import Drasil.FileHandling (OverwritePolicy (..), PathSegment, directory, localPath, ps, writeFiles, FileLayout)
-import Drasil.System (HasSystemMeta (..), ToFiles (..), projRepoName)
+import Drasil.System (HasSystemMeta (..), ToFiles (..), repo)
 
 import Drasil.Generator.ChunkDump (buildDebuggingFiles)
 
@@ -66,7 +66,7 @@ drasilMakefileReqOpts :: WriteOptions
 drasilMakefileReqOpts =
   WO OverwriteAllowed dirName utf8 (CheckEnvVar "DEBUG_ENV" [ps|.drasil|])
   where
-    dirName sys = let nm = sys ^. projRepoName
+    dirName sys = let nm = sys ^. projName . repo
                    in [ps|{nm}|]
 
 -- | Internal: 'DebugDataPolicy' eliminator.

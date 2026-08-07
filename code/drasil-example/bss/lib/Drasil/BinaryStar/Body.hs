@@ -199,7 +199,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ------------------------------
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "bssProjName") "BSS"
+projName = mkCommonProjName (mkUid "bssProjName") (nounPhraseSP "BSS") "BSS"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

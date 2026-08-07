@@ -86,7 +86,7 @@ mkSRS = [TableOfContents,
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "gamephysicsProjName") "GamePhysics"
+projName = mkCommonProjName (mkUid "gamephysicsProjName") (nounPhraseSP "GamePhysics") "GamePhysics"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [alex, luthfi, olu]

@@ -108,7 +108,7 @@ t1QD :: SimpleQDef
 t1QD = mkQuantDef t1 $ sy t0 $+ sy dt
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "templateProjName") "Template"
+projName = mkCommonProjName (mkUid "templateProjName") (nounPhraseSP "Template") "Template"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

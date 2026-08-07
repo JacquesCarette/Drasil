@@ -23,10 +23,10 @@ import qualified Data.List.NonEmpty as NE
 
 import Drasil.FileHandling.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
-import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
+import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid, HasChunkRefs(..))
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified Drasil.SRS as S
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), systemdb)
 import Drasil.SRS (HasSmithEtAlSRS(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
@@ -84,6 +84,21 @@ instance HasSmithEtAlSRS CodeSpec where
 
 instance HasSystemMeta CodeSpec where
   systemMeta = srs . systemMeta
+
+instance HasUID CodeSpec where
+  uid = srs . uid
+
+instance HasChunkRefs CodeSpec where
+  chunkRefs x = chunkRefs (x ^. srs)
+
+instance NamedIdea CodeSpec where
+  term = srs . term
+
+instance Idea CodeSpec where
+  getA x = getA (x ^. srs)
+
+instance CommonIdea CodeSpec where
+  abrv x = abrv (x ^. srs)
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a

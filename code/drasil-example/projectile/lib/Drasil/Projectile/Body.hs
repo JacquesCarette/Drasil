@@ -126,7 +126,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "projectileProjName") "Projectile"
+projName = mkCommonProjName (mkUid "projectileProjName") (nounPhraseSP "Projectile") "Projectile"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName

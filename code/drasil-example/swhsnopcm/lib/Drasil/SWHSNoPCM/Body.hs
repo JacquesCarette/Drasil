@@ -140,7 +140,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "swhsNoPCMProjName") "SWHSNoPCM"
+projName = mkCommonProjName (mkUid "swhsNoPCMProjName") (nounPhraseSP "SWHSNoPCM") "SWHSNoPCM"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

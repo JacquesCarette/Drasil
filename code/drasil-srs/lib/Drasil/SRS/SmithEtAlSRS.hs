@@ -22,9 +22,9 @@ import qualified Data.List.NonEmpty as NE
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
-import Drasil.Database (UID, HasUID(..), ChunkDB)
+import Drasil.Database (UID, HasUID(..), ChunkDB, HasChunkRefs(..))
 import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
-  Constrained, ConstQDef, DefinedQuantityDict)
+  Constrained, ConstQDef, DefinedQuantityDict, NamedIdea(..), Idea(..), CommonIdea(..))
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
 import Drasil.System (SystemMeta, Background, HasSystemMeta(..),
@@ -58,6 +58,21 @@ makeClassy ''SmithEtAlSRS
 
 instance HasSystemMeta SmithEtAlSRS where
   systemMeta = meta
+
+instance HasUID SmithEtAlSRS where
+  uid = systemMeta . uid
+
+instance HasChunkRefs SmithEtAlSRS where
+  chunkRefs x = chunkRefs (x ^. systemMeta)
+
+instance NamedIdea SmithEtAlSRS where
+  term = systemMeta . term
+
+instance Idea SmithEtAlSRS where
+  getA x = getA (x ^. systemMeta)
+
+instance CommonIdea SmithEtAlSRS where
+  abrv x = abrv (x ^. systemMeta)
 
 -- | Build a 'System'.
 mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,

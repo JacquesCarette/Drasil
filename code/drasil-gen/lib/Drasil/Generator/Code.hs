@@ -17,7 +17,7 @@ import Drasil.FileHandling (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
   OOProg, LoggingFor (unLC))
 import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
-import Language.Drasil (Space(..), Expr)
+import Language.Drasil (Space(..), Expr, abrv)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
   Architecture(impType, modularity),
@@ -31,7 +31,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.SRS (SmithEtAlSRS)
-import Drasil.System (projHRName, HasSystemMeta)
+import Drasil.System (HasSystemMeta(..))
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
@@ -92,7 +92,7 @@ codedHRName sys Choices {
   optFeats = o,
   dataInfo = d,
   maps = m} =
-  intercalate "_" $ sys ^. projHRName :
+  intercalate "_" $ abrv (sys ^. projName) :
     [codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
     codedStruct $ inputStructure d, codedConStruct $ constStructure d,
     codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]

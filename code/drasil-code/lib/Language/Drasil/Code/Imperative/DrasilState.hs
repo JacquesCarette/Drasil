@@ -16,11 +16,11 @@ import Data.Set (Set)
 import Data.Map (Map, fromList)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
 
-import Drasil.Database (UID, findOrErr)
-import Language.Drasil (Space, Expr, DefinedQuantityDict)
+import Drasil.Database (UID, findOrErr, HasUID(..), HasChunkRefs(..))
+import Language.Drasil (Space, Expr, DefinedQuantityDict, abrv, NamedIdea(..), Idea(..), CommonIdea(..))
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
-import Drasil.System (systemdb, HasSystemMeta(..), projHRName)
+import Drasil.System (systemdb, HasSystemMeta(..))
 import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Drasil.Code.CodeVar (CodeIdea(..))
@@ -180,6 +180,21 @@ instance HasSystemMeta DrasilState where
 instance HasSmithEtAlSRS DrasilState where
   smithEtAlSRS = dsCodeSpec . smithEtAlSRS
 
+instance HasUID DrasilState where
+  uid = dsCodeSpec . uid
+
+instance HasChunkRefs DrasilState where
+  chunkRefs x = chunkRefs (x ^. dsCodeSpec)
+
+instance NamedIdea DrasilState where
+  term = dsCodeSpec . term
+
+instance Idea DrasilState where
+  getA x = getA (x ^. dsCodeSpec)
+
+instance CommonIdea DrasilState where
+  abrv x = abrv (x ^. dsCodeSpec)
+
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
 addToDesignLog :: Space -> CodeType -> Doc -> DrasilState -> DrasilState
@@ -204,7 +219,7 @@ modExportMap cs chs@Choices {
     ++ getExpInputFormat prn chs extIns
     ++ getExpCalcs prn chs (cs ^. execOrder)
     ++ getExpOutput prn chs (cs ^. outputs)
-  where prn = cs ^. projHRName
+  where prn = abrv cs
         ins = cs ^. inputs
         extIns = cs ^. extInputs
         ds = cs ^. derivedInputs

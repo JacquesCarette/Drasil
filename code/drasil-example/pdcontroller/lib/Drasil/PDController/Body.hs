@@ -83,7 +83,7 @@ mkSRS
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "pdcontrollerProjName") "PDController"
+projName = mkCommonProjName (mkUid "pdcontrollerProjName") (nounPhraseSP "PDController") "PDController"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

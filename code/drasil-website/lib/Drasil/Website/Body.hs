@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB, mkUid, insertAll)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(sysName), mkSystemMeta, ProjectName, mkProjectName)
+import Drasil.System (HasSystemMeta(sysName), mkSystemMeta, ProjectName, mkCommonProjName)
 import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
@@ -58,7 +58,7 @@ data FolderLocation = Folder {
     }
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "drasilWebProjName") "Drasil Website" "Website"
+projName = mkCommonProjName (mkUid "drasilWebProjName") (nounPhraseSP "Drasil Website") "Website"
 
 webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!

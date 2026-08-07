@@ -86,7 +86,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "sglpendProjName") "SglPend"
+projName = mkCommonProjName (mkUid "sglpendProjName") (nounPhraseSP "SglPend") "SglPend"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [olu]

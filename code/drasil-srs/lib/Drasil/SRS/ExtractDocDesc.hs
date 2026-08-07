@@ -93,8 +93,8 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
       (IOrgSec s1) -> maybeToList s1,
     stkSub = Constant . f <$> \case
-      (Client _ s) -> [s]
-      (Cstmr _) -> [],
+      (Client s) -> [s]
+      Cstmr -> [],
     pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs

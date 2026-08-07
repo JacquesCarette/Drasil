@@ -27,13 +27,13 @@ import Drasil.Shared.InterfaceCommon (
   -- Typeclasses
   BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
   ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize, listAdd), listOf, StatementSym(..), AssignStatement,
-  DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), Argument,
-  BooleanExpression, CommandLineArgs, CommentStatement, Comparison,
-  ControlStatement, PrintConsole, ReadConsole, FileHandling, PrintFile, ReadFile,
-  Literal, MathConstant, NumericExpression, ParameterSym, Reference, Set,
-  StringStatement, convType, UnRepr, ScopeSym, BinderSym, InternalList, TypeElim,
-  VariableElim)
+  List(listSize), ListStatement(listAdd), listOf, EmptyStatement, MultiStatement,
+  ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
+  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
+  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
+  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeElim, VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -48,9 +48,10 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   MathConstant r, OOVariableValue r, BooleanExpression r, Comparison r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
-  List r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
-  VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, CommentStatement r stmt,
+  List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
+  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
+  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
   OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
   ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
   ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
@@ -295,7 +296,7 @@ extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 class (FuncAppStatement r stmt, OOVariableSym r) => OOFuncAppStatement r stmt where
   selfInOutCall :: InOutCall r stmt
 
-class (StatementSym r stmt, OOFunctionSym r) => ObserverPattern r stmt where
+class (OOFunctionSym r) => ObserverPattern r stmt | r -> stmt where
   notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 
 observerListName :: Label
@@ -305,7 +306,9 @@ initObserverList :: (DeclStatement r stmt) => VS (r TypeData) -> [SValue r] ->
   r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (OOVariableValue r, List r stmt) => SValue r -> MS (r stmt)
+addObserver
+  :: (OOVariableValue r, List r, ListStatement r stmt)
+  => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList

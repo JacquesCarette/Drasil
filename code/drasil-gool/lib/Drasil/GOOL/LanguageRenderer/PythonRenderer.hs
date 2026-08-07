@@ -14,8 +14,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..), Set(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  extFuncApp, IndexTranslator(..), Reference(..), Array(..), List(..),
+  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), (&=),
   DeclStatement(..), PrintConsole(..), ReadConsole(..), FileHandling(..),
   PrintFile(..), ReadFile(..), StringStatement(..), FunctionSym,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
@@ -436,13 +437,15 @@ instance Array PythonCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "copy" []
 
-instance List PythonCode (Doc, Terminator) where
+instance List PythonCode where
   listSize = CS.listSize pyListSize
+  listAccess = G.listAccess
+  indexOf = CP.indexOf pyIndex
+
+instance ListStatement PythonCode (Doc, Terminator) where
   listAdd = CG.listAdd pyInsert
   listAppend = CG.listAppend pyAppendFunc
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
@@ -496,11 +499,14 @@ instance StatementElim PythonCode (Doc, Terminator) where
   statement = fst . unPC
   statementTerm = snd . unPC
 
-instance StatementSym PythonCode (Doc, Terminator) where
-  -- Terminator determines how statements end
-  valStmt = G.valStmt Empty
+instance EmptyStatement PythonCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement PythonCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement PythonCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
 
 instance AssignStatement PythonCode (Doc, Terminator) where
   assign = G.assign Empty
@@ -666,19 +672,19 @@ instance RenderMethod PythonCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod PythonCode Doc MethodData AttachmentData where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
     pms <- sequence ps
-    toCode . mthd . pyMethod n a sl pms <$> b
+    toCode . mthd n . pyMethod n a sl pms <$> b
   intFunc m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
-    pure $ toCode $ mthd $ pyFunction n pms bd
+    pure $ toCode $ mthd n $ pyFunction n pms bd
   destructor _ = error $ CP.destructorError pyName
 
 instance MethodElim PythonCode MethodData where
@@ -939,7 +945,8 @@ pyOut
     , NumericExpression r
     , Comparison r
     , VariableValue r
-    , List r stmt
+    , List r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

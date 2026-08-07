@@ -4,15 +4,16 @@ module HelloWorld (helloWorldOO, helloWorldProc) where
 
 import Drasil.GOOL (Body, Block, Class, SVariable, CS, MS, OOProg, BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
   StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
-  InternalList, MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall,
-  initializer, OODeclStatement(objDecDef), Set(..), ParameterSym(..))
+  ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
+  classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
+  ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -33,14 +34,15 @@ helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
 helloWorldProc
   :: (ProcProg r vis stmt mthd prg)
   => GProc.GSProgram r prg
-helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
+helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
-  ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
+  ["Brooks MacLachlan", "Brandon Bosman", "Xinlu Yan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
   [helloWorldMainProc]), helperProc]
 
 -- | Description of program.
-description :: String
+description, descriptionProc :: String
 description = "Tests various GOOL functions. It should run without errors."
+descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
 myOtherList :: (VariableSym r) => SVariable r
@@ -76,7 +78,8 @@ helloInitVariables
     , VariableValue r
     , Comparison r
     , Array r
-    , List r stmt
+    , List r
+    , ListStatement r stmt
     , Set r
     , DeclStatement r stmt
     , AssignStatement r stmt
@@ -305,6 +308,7 @@ helloIfBody
     , BooleanExpression r
     , NumericExpression r
     , ValueExpression r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , PrintConsole r stmt
@@ -409,7 +413,6 @@ helloForLoop
   ::
     ( Literal r
     , VariableValue r
-    , AssignStatement r stmt
     , ControlStatement r stmt
     , PrintConsole r stmt
     )

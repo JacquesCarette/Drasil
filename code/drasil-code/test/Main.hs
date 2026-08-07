@@ -10,7 +10,7 @@ import System.OsPath (osp)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 import Drasil.FileHandling (FileLayout, directory, ps, ps, (</>))
-import Drasil.GOOL (OOProg, Literal, Comparison, List, GetSet, StrategyPattern,
+import Drasil.GOOL (OOProg, Literal, Comparison, GetSet, StrategyPattern,
   ObserverPattern, DeclStatement, ControlStatement, unJC, unPC, unCSC, unCPPC,
   unSC, initialState, ProgData(..), headers, sources, mainMod, GOOLState)
 import qualified Drasil.GOOL as OO (unCI, GSProgram)
@@ -85,7 +85,6 @@ gProcTestGroup
     ( forall r vis stmt mthd prg.
       ( Literal r
       , Comparison r
-      , List r stmt
       , DeclStatement r stmt
       , ControlStatement r stmt
       , ProcProg r vis stmt mthd prg
@@ -97,7 +96,8 @@ gProcTestGroup n p =
     ([osp|test/build|] </> [ps|{n}|])
     ([osp|test/golden|] </> [ps|{n}|])
     n
-    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p
+    [ goldenTest "julia" $ directory [ps|julia|] $ genCodeProc unJLC unJLP p,
+      goldenTest "matlab" $ directory [ps|matlab|] $ genCodeProc unMLC unMLP p
     ]
 
 gProcVectorTestGroup
@@ -105,7 +105,6 @@ gProcVectorTestGroup
   ->
     ( forall r vis stmt mthd prg.
       ( Comparison r
-      , List r stmt
       , NativeVector r
       , DeclStatement r stmt
       , ControlStatement r stmt
@@ -134,7 +133,6 @@ genCodeProcNoMake
   ->
     ( forall s vis' stmt' mthd' prg'.
       ( Comparison s
-      , List s stmt'
       , NativeVector s
       , DeclStatement s stmt'
       , ProcProg s vis' stmt' mthd' prg'

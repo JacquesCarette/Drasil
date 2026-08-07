@@ -14,12 +14,13 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), BinderSym(..), BinderElim(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
+  Reference(..), Array(..), List(..), ListStatement(..), Set(..),
+  InternalList(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+  AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  BinderSym(..), BinderElim(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
@@ -458,13 +459,15 @@ instance Array JavaCode where
     arrTp = onStateValue valueType arr
     in objMethodCall arrTp arr "clone" []
 
-instance List JavaCode (Doc, Terminator) where
+instance List JavaCode where
   listSize = C.listSize "size"
+  listAccess = G.listAccess
+  indexOf = CP.indexOf jIndex
+
+instance ListStatement JavaCode (Doc, Terminator) where
   listAdd = CG.listAdd jListAdd
   listAppend = CG.listAppend jListAdd
-  listAccess = G.listAccess
   listSet list idx vl = valStmt $ objMethodCall void list jListSet [idx, vl]
-  indexOf = CP.indexOf jIndex
 
 instance Set JavaCode where
   contains = CP.contains jContains
@@ -517,11 +520,14 @@ instance StatementElim JavaCode (Doc, Terminator) where
   statement = fst . unJC
   statementTerm = snd . unJC
 
-instance StatementSym JavaCode (Doc, Terminator) where
-  -- Terminator determines how statements end
-  valStmt = G.valStmt Semi
+instance EmptyStatement JavaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JavaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
+
+instance ValueStatement JavaCode (Doc, Terminator) where
+  valStmt = G.valStmt Semi
 
 instance AssignStatement JavaCode (Doc, Terminator) where
   assign = G.assign Semi
@@ -681,7 +687,7 @@ instance RenderMethod JavaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
 
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
 instance OORenderMethod JavaCode Doc MethodData Doc where
   intMethod m n s p t ps b = do
@@ -694,7 +700,7 @@ instance OORenderMethod JavaCode Doc MethodData Doc where
     let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es))
           (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs)
-    pure $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
+    pure $ toCode $ mthd n $ jMethod n (map exc excs) s p tp pms bd
   intFunc = intMethod
   destructor _ = error $ CP.destructorError jName
 
@@ -976,7 +982,8 @@ jOut
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
-    , List r stmt
+    , List r
+    , MultiStatement r stmt
     , DeclStatement r stmt
     , AssignStatement r stmt
     , ControlStatement r stmt

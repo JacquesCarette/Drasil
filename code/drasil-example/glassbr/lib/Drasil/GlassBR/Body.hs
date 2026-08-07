@@ -33,7 +33,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab, ptOfExplsn, con',
   glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, load, probBreak,
-  stdOffDist)
+  stdOffDist, cis')
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
@@ -111,7 +111,7 @@ ideaDicts =
   [lateralLoad, materialProprty] ++ con'
 
 cis :: [CI]
-cis = [progName]
+cis = progName : cis'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon

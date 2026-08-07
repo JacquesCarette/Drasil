@@ -11,13 +11,13 @@ module Language.Drasil.Chunk.UncertainQuantity (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), HasChunkRefs(..), UID)
 
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), cuc')
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
-  Definition(defn), ConceptDomain(cdom), Concept, Quantity,
+  Definition(defn), Concept, Quantity,
   Constrained(constraints), HasReasVal(reasVal), MayHaveRationale(rationale))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
@@ -32,7 +32,8 @@ import Language.Drasil.Uncertainty
 -- Contains the same information as a 'ConstrConcept' with an added 'Uncertainty'.
 --
 -- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
-data UncertQ = UQ { _defq       :: DefinedQuantityDict
+data UncertQ = UQ { _uu         :: UID
+                  , _defq       :: DefinedQuantityDict
                   , _constr'    :: [ConstraintE]
                   , _reasV'     :: Maybe Expr
                   , _rationale' :: Maybe Sentence
@@ -47,7 +48,7 @@ instance HasChunkRefs UncertQ where
 -- | Equal if 'UID's are equal.
 instance Eq             UncertQ where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'UncertQ'.
-instance HasUID         UncertQ where uid = defq . uid
+instance HasUID         UncertQ where uid = uu
 -- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'UncertQ'.
 instance NamedIdea      UncertQ where term = defq . term
 -- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'UncertQ'.
@@ -66,8 +67,6 @@ instance HasReasVal     UncertQ where reasVal = reasV'
 instance MayHaveRationale   UncertQ where rationale = rationale'
 -- | Finds definition of the 'DefinedQuantityDict' used to make the 'UncertQ'.
 instance Definition     UncertQ where defn = defq . defn
--- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'UncertQ'.
-instance ConceptDomain  UncertQ where cdom = cdom . view defq
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'UncertQ'.
 instance MayHaveUnit    UncertQ where getUnit = getUnit . view defq
 -- | Convert the symbol of the 'UncertQ' to a 'ModelExpr'.
@@ -77,7 +76,7 @@ instance Express        UncertQ where express = sy
 -- | Smart constructor that requires a 'Quantity', a percentage, and a reasonable value with an 'Uncertainty'.
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
   c -> Uncertainty -> UncertQ
-uq q = UQ (dqdWr q) (q ^. constraints) (q ^. reasVal) Nothing
+uq q = UQ (q ^. uid) (dqdWr q) (q ^. constraints) (q ^. reasVal) Nothing
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
 -- | Uncertainty quantity ('uq') but with a constraint.
@@ -92,4 +91,4 @@ uqcND nam trm sym un space cs val = uq (cuc' nam trm "" sym un space cs val)
 
 -- | Directly wraps a 'ConstrConcept' with an 'Uncertainty', preserving all fields (including rationale).
 uqDirect :: ConstrConcept -> Uncertainty -> UncertQ
-uqDirect c = UQ (dqdWr c) (c ^. constraints) (c ^. reasVal) (c ^. rationale)
+uqDirect c = UQ (c ^. uid) (dqdWr c) (c ^. constraints) (c ^. reasVal) (c ^. rationale)

@@ -8,12 +8,12 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  Set(..), InternalList(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), PrintConsole(..), ReadConsole(..),
-  FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
-  FunctionSym, FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), VisibilitySym(..),
-  BinderSym(..))
+  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
@@ -271,13 +271,15 @@ instance Array CodeInfoOO where
   arrayLength _ = return $ error "[arrayLength] The return value of this isn't used, and the thunk shouldn't fire."
   arrayCopy _ = return $ error "[arrayCopy] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance List CodeInfoOO () where
+instance List CodeInfoOO where
   listSize       = execute1
+  listAccess     = execute2
+  indexOf        = execute2
+
+instance ListStatement CodeInfoOO () where
   listAdd l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
   listAppend l v = execute2 (zoom lensMStoVS l) (zoom lensMStoVS v)
-  listAccess     = execute2
   listSet l i v  = execute3 (zoom lensMStoVS l) (zoom lensMStoVS i) (zoom lensMStoVS v)
-  indexOf        = execute2
 
 instance Set CodeInfoOO where
   contains = execute2
@@ -294,10 +296,14 @@ instance InternalList CodeInfoOO where
 instance BinderSym CodeInfoOO where
   binder _ _ = noInfoBinder
 
-instance StatementSym CodeInfoOO () where
-  valStmt = zoom lensMStoVS . execute1
+instance EmptyStatement CodeInfoOO () where
   emptyStmt = noInfo
+
+instance MultiStatement CodeInfoOO () where
   multi    = executeList
+
+instance ValueStatement CodeInfoOO () where
+  valStmt = zoom lensMStoVS . execute1
 
 instance AssignStatement CodeInfoOO () where
   assign _ = zoom lensMStoVS . execute1

@@ -1,6 +1,7 @@
 module Drasil.BinaryStar.Goals (goals, goalsInputs) where
 
 import Language.Drasil
+import Language.Drasil.Document (ConceptInstance, cic)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)

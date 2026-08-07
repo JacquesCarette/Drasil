@@ -3,6 +3,7 @@ module Drasil.GamePhysics.Goals (goals, linearGS, angularGS) where
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
+import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)

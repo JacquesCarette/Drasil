@@ -4,9 +4,10 @@ module Drasil.Generator.CommonKnowledge (
 ) where
 
 import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13)
-import Language.Drasil (IdeaDict, Citation, ConceptChunk, ConceptInstance,
-  DefinedQuantityDict, UnitDefn, CI)
-import Language.Drasil.Document (LabelledContent, Reference, Section)
+import Language.Drasil (IdeaDict, Citation, ConceptChunk, DefinedQuantityDict,
+  UnitDefn, CI)
+import Language.Drasil.Document (ConceptInstance, LabelledContent, Reference,
+  Section)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource,
   smithEtAl2007, smithLai2005, smithKoothoor2016, koothoor2013)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)

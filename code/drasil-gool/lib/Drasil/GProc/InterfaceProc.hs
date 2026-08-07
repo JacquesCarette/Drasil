@@ -10,9 +10,10 @@ module Drasil.GProc.InterfaceProc (
   ) where
 
 import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
-  AssignStatement, Argument, BooleanExpression, CommandLineArgs, DeclStatement,
-  CommentStatement, Comparison, ControlStatement, FuncAppStatement, PrintConsole,
-  ReadConsole, FileHandling, PrintFile, ReadFile, List, Literal, MathConstant,
+  EmptyStatement, MultiStatement, ValueStatement, AssignStatement, Argument,
+  BooleanExpression, CommandLineArgs, DeclStatement, CommentStatement,
+  Comparison, ControlStatement, FuncAppStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, List, ListStatement, Literal, MathConstant,
   NumericExpression, ParameterSym, Reference, Set, StringStatement,
   ValueExpression, VariableValue, UnRepr, FunctionSym, ScopeSym, BinderSym,
   InternalList, TypeElim, VariableElim)
@@ -23,13 +24,15 @@ import Drasil.Shared.AST (FileData, ModData, ProgData, TypeData)
 -- for generating a procedural program.
 class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
   BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
-  VariableElim r, Array r, AssignStatement r stmt, Argument r,
-  BooleanExpression r, CommandLineArgs r, CommentStatement r stmt, Comparison r,
-  ControlStatement r stmt, DeclStatement r stmt,  FuncAppStatement r stmt,
+  VariableElim r, Array r, EmptyStatement r stmt, MultiStatement r stmt,
+  ValueStatement r stmt, AssignStatement r stmt, Argument r, BooleanExpression r,
+  CommandLineArgs r, CommentStatement r stmt, Comparison r,
+  ControlStatement r stmt, DeclStatement r stmt, FuncAppStatement r stmt,
   PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
-  ReadFile r stmt, List r stmt, Literal r, MathConstant r, NumericExpression r,
-  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
-  VariableValue r, ProgramSym r vis stmt mthd prg)
+  ReadFile r stmt, List r, ListStatement r stmt, Literal r, MathConstant r,
+  NumericExpression r, ParameterSym r, Reference r, Set r,
+  StringStatement r stmt, ValueExpression r, VariableValue r,
+  ProgramSym r vis stmt mthd prg)
   => ProcProg r vis stmt mthd prg
 
 type Program = ProgData

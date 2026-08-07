@@ -26,7 +26,7 @@ import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (SValue, MS, VS, TypeSym(..), VariableValue(..),
-  StatementSym(..), DeclStatement(..), convType, convTypeOO, TypeData,
+  ValueStatement(valStmt), DeclStatement(..), convType, convTypeOO, TypeData,
   FuncAppStatement, TypeElim, VariableElim, Argument, Set, ValueExpression,
   Comparison, BooleanExpression, MathConstant, List, SelfSym, OOFuncAppStatement,
   InternalValueExp, Literal, OOValueExpression)
@@ -47,9 +47,10 @@ genAllInputCalls
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , OOFuncAppStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -90,9 +91,10 @@ genConstraintCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -116,7 +118,7 @@ genCalcCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , DeclStatement r stmt
@@ -145,9 +147,10 @@ genOutputCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -171,7 +174,7 @@ genFuncCall
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
     , TypeElim r
@@ -246,9 +249,10 @@ genAllInputCallsProc
     , NativeVector r
     , FuncAppStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState [MS (r stmt)]
@@ -284,9 +288,10 @@ genConstraintCallProc
     , ValueExpression r
     , NativeVector r
     , Argument r
-    , List r stmt
+    , List r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -307,7 +312,7 @@ genCalcCallProc
     , ValueExpression r
     , DeclStatement r stmt
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
@@ -332,10 +337,11 @@ genOutputCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r
+    , ValueStatement r stmt
     , TypeElim r
     )
   => GenState (Maybe (MS (r stmt)))
@@ -355,7 +361,7 @@ genFuncCallProc
     , NumericExpression r
     , ValueExpression r
     , Argument r
-    , List r stmt
+    , List r
     , NativeVector r
     , Reference r
     , Set r

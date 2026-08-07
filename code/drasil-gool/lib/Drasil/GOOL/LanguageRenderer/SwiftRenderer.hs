@@ -1153,16 +1153,14 @@ swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode ScopeData ->
   MS (SwiftCode (Doc, Terminator))
 swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
+  innerTp <- zoom lensMStoVS (innerType $ return $ variableType v)
   modify $ useVarName (variableName v)
   modify $ setVarScope (variableName v) (scopeData scp)
   let bind ClassLevel = classLevel :: SwiftCode Doc
       bind InstanceLevel = instanceLevel :: SwiftCode Doc
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))
-
-replaceBrackets :: String -> String
-replaceBrackets str = "<" ++ (init . tail) str ++ ">"
+    <+> text (swiftSet ++ "<" ++ getTypeString innerTp ++ ">"))
 
 swiftThrowDoc :: (ValueElim r) => r Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg

@@ -7,12 +7,12 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{enumitem}
 \usepackage{tabularray}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{adjustbox}
-\usepackage{enumitem}
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
@@ -27,6 +27,29 @@
 \maketitle
 \tableofcontents
 \newpage
+\section{Table of Contents}
+\label{Sec:ToC}
+An outline of all sections included in this SRS is recorded here for easy reference.
+
+\begin{itemize}
+\item{\hyperref[Sec:ToC]{Table of Contents}}
+\item{\hyperref[Sec:RefMat]{Reference Material}}
+\begin{itemize}
+\item{\hyperref[Sec:ToU]{Table of Units}}
+\item{\hyperref[Sec:ToS]{Table of Symbols}}
+\end{itemize}
+\item{\hyperref[Sec:Intro]{Introduction}}
+\item{\hyperref[Sec:SpecSystDesc]{Specific System Description}}
+\begin{itemize}
+\item{\hyperref[Sec:SolCharSpec]{Solution Characteristics Specification}}
+\begin{itemize}
+\item{\hyperref[Sec:TMs]{Theoretical Models}}
+\item{\hyperref[Sec:GDs]{General Definitions}}
+\item{\hyperref[Sec:DDs]{Data Definitions}}
+\item{\hyperref[Sec:IMs]{Instance Models}}
+\end{itemize}
+\end{itemize}
+\end{itemize}
 \section{Reference Material}
 \label{Sec:RefMat}
 This section records information for easy reference.

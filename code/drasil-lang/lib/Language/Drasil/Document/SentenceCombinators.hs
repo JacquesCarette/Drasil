@@ -11,7 +11,7 @@ module Language.Drasil.Document.SentenceCombinators (
   -- | See Reference-related Functions as well.
   addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  chWithUnit, unitInParen, unitSym, fterms, eqN, eqnWSource,
+  chWithUnit, unitInParen, unitSym, phraseWithUnit, fterms, eqN, eqnWSource,
   -- * List-related Functions
   bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
@@ -147,13 +147,17 @@ bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 unitSym :: MayHaveUnit a => a -> Sentence
 unitSym = maybe EmptyS (Sy . usymb) . getUnit
 
--- | Formats a unit in parentheses. Outputs "(unit)".
+-- | Formats a unit in parentheses. Outputs "(unit)", or 'EmptyS' if no unit exists.
 unitInParen :: MayHaveUnit a => a -> Sentence
-unitInParen = sParen . unitSym
+unitInParen x = maybe EmptyS (sParen . Sy . usymb) (getUnit x)
 
 -- | Outputs "ch x (unit of x)". For introducing a quantity with its symbol and unit.
 chWithUnit :: (Quantity a, MayHaveUnit a) => a -> Sentence
 chWithUnit x = ch x +:+ unitInParen x
+
+-- | Outputs "phrase x (unit of x)". For introducing a concept with its name and unit.
+phraseWithUnit :: (NamedIdea a, MayHaveUnit a) => a -> Sentence
+phraseWithUnit x = phrase x +:+ unitInParen x
 
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.

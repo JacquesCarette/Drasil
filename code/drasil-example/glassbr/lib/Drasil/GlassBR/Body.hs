@@ -8,7 +8,7 @@ import qualified Language.Drasil.Development as D
 
 import Drasil.Database (ChunkDB, mkUid)
 import Drasil.SRS hiding (constants)
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -49,7 +49,7 @@ import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "glassBRProjName") "GlassBR" "glassbr"
+projName = mkCommonProjName (mkUid "glassBRProjName") "GlassBR"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName

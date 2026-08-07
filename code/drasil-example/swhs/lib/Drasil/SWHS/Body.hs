@@ -10,7 +10,7 @@ import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import Drasil.SRS
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
@@ -60,7 +60,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   tempW, thickness, watE)
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "swhsProjName") "SWHS" "swhs"
+projName = mkCommonProjName (mkUid "swhsProjName") "SWHS"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

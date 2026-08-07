@@ -10,7 +10,7 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
@@ -140,7 +140,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "swhsNoPCMProjName") "SWHSNoPCM" "swhsnopcm"
+projName = mkCommonProjName (mkUid "swhsNoPCMProjName") "SWHSNoPCM"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

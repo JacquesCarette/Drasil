@@ -4,7 +4,7 @@ import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -86,7 +86,7 @@ mkSRS = [TableOfContents,
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "gamephysicsProjName") "GamePhysics" "gamephysics"
+projName = mkCommonProjName (mkUid "gamephysicsProjName") "GamePhysics"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [alex, luthfi, olu]

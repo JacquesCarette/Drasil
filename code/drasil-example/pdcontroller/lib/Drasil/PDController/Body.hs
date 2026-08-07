@@ -4,7 +4,7 @@ import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS hiding (genDefns)
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -83,7 +83,7 @@ mkSRS
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "pdcontrollerProjName") "PDController" "pdcontroller"
+projName = mkCommonProjName (mkUid "pdcontrollerProjName") "PDController"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

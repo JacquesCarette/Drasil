@@ -5,7 +5,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.SRS hiding (constants)
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn)
 
@@ -199,7 +199,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ------------------------------
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "bssProjName") "BSS" "bss"
+projName = mkCommonProjName (mkUid "bssProjName") "BSS"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

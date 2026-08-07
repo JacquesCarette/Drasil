@@ -8,7 +8,7 @@ import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRS hiding (genDefns)
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
@@ -86,7 +86,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "sglpendProjName") "SglPend" "sglpend"
+projName = mkCommonProjName (mkUid "sglpendProjName") "SglPend"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [olu]

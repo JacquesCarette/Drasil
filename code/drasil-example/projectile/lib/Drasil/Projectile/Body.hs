@@ -5,7 +5,7 @@ import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Drasil.SRS hiding (constants, genDefns)
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -126,7 +126,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "projectileProjName") "Projectile" "projectile"
+projName = mkCommonProjName (mkUid "projectileProjName") "Projectile"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName

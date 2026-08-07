@@ -11,11 +11,11 @@ import Data.List (sort)
 
 import Data.Containers.ListUtils (nubOrd)
 
--- | Replaces all elements of a target list that belong to a provided "bad"
---   input list.
-replaceAll :: Eq a => [a] -> a -> [a] -> [a]
-replaceAll bad repl (c:cs) | c `elem` bad = repl : replaceAll bad repl cs
-                           | otherwise    = c : replaceAll bad repl cs
+-- | Replaces all elements of a target list that satisfy a predicate.
+replaceAll :: (a -> Bool) -> a -> [a] -> [a]
+replaceAll p repl (c:cs)
+  | p c        = repl : replaceAll p repl cs
+  | otherwise = c : replaceAll p repl cs
 replaceAll _   _    it                    = it
 
 -- | Checks if the first set is a subset of the second.

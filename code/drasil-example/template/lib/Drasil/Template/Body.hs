@@ -72,7 +72,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],
+     AuxConsProg [],
   Bibliography]
 
 inputs :: NE.NonEmpty DefinedQuantityDict

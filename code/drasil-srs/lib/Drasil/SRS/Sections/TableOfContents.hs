@@ -180,7 +180,7 @@ mktTraceabilitySec (TraceabilityProg _) = Flat $ namedRef SRS.traceMatricesLabel
 
 -- | Helper for creating the 'Values of Auxiliary Constants' section ToC entry
 mktAuxConsSec :: AuxConstntSec -> ItemType
-mktAuxConsSec (AuxConsProg _ _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ titleize  Doc.consVals
+mktAuxConsSec (AuxConsProg _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ titleize  Doc.consVals
 
 -- | Helper for creating the 'References' section ToC entry
 mktBib :: ItemType

@@ -9,7 +9,7 @@ import qualified Language.Drasil.Development as D
 import Drasil.Database (ChunkDB)
 import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -63,7 +63,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
+     IOrgSec (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
       [Client progName $ D.toSent (phraseNP (a_ company))

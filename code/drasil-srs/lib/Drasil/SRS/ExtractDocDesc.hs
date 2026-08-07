@@ -28,7 +28,7 @@ secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
 secConPlate mCon mSec = preorderFold $ purePlate {
   refSec = Constant <$> \(RefProg c _) -> mCon [c],
   introSub = Constant <$> \case
-    (IOrgSec _ s _) -> mSec [s]
+    (IOrgSec _) -> mempty
     _ -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
@@ -91,7 +91,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
+      (IOrgSec s1) -> maybeToList s1,
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -125,7 +125,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     getIntroSub (IPurpose ss) = ss
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
+    getIntroSub (IOrgSec s1) = maybeToList s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))

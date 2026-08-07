@@ -10,7 +10,6 @@ import Theory.Drasil (DataDefinition, GenDefn)
 
 import qualified Drasil.SRS.Concepts as SRS
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   interface, output_, physical, software, sysCont, softwareConstraint,
@@ -48,7 +47,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose,
       IScope scope,
       IChar [] charsOfReader [],
-      IOrgSec inModel (SRS.inModel [] []) Nothing
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg

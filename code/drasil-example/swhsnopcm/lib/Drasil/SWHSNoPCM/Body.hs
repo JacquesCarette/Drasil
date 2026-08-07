@@ -10,7 +10,6 @@ import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS
-import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
@@ -97,7 +96,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
-    , IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
+    , IOrgSec (Just orgDocEnd)
     ],
   GSDSec $
     GSDProg

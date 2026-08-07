@@ -240,7 +240,7 @@ newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 -- ** Values of Auxiliary Constants Section
 
 -- | Values of Auxiliary Constants section.
-data AuxConstntSec = AuxConsProg CI [ConstQDef]
+newtype AuxConstntSec = AuxConsProg [ConstQDef]
 
 -- ** Appendix Section
 
@@ -328,7 +328,7 @@ instance Multiplate DLPlate where
     ucp (UCsProg c) = pure $ UCsProg c
     ts (TraceabilityProg progs) = pure $ TraceabilityProg progs
     es (OffShelfSolnsProg contents) = pure $ OffShelfSolnsProg contents
-    acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
+    acs (AuxConsProg qdef) = pure $ AuxConsProg qdef
     aps (AppndxProg con) = pure $ AppndxProg con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
     (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)

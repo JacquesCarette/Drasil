@@ -1,17 +1,17 @@
+{-# LANGUAGE FlexibleInstances, UndecidableInstances #-}
 module Drasil.System.Core (
   Purpose, Background, Scope, Motivation,
   SystemMeta,
   HasSystemMeta(..),
-  projRepoName, projHRName,
   mkSystemMeta,
 ) where
 
-import Control.Lens (Lens', makeClassy)
+import Control.Lens ((^.), makeClassy)
 
-import Drasil.Database (ChunkDB)
-import Language.Drasil (Sentence, People, CI)
+import Drasil.Database (ChunkDB, HasUID(..), HasChunkRefs(..))
+import Language.Drasil (Sentence, People, CI, NamedIdea(..), Idea(..), CommonIdea(..))
 
-import Drasil.System.ProjectName (ProjectName, repo, humanReadable)
+import Drasil.System.ProjectName (ProjectName, title, abbreviation)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -36,13 +36,20 @@ data SystemMeta = SystemMeta
 
 makeClassy ''SystemMeta
 
--- | Lens to access the repository name from any structure with 'HasSystemMeta'.
-projRepoName :: HasSystemMeta a => Lens' a String
-projRepoName = projName . repo
+instance HasUID SystemMeta where
+  uid = projName . uid
 
--- | Lens to access the human-readable project name from any structure with 'HasSystemMeta'.
-projHRName :: HasSystemMeta a => Lens' a String
-projHRName = projName . humanReadable
+instance HasChunkRefs SystemMeta where
+  chunkRefs x = chunkRefs (x ^. projName)
+
+instance NamedIdea SystemMeta where
+  term = projName . title
+
+instance Idea SystemMeta where
+  getA x = Just (x ^. projName . abbreviation)
+
+instance CommonIdea SystemMeta where
+  abrv x = x ^. projName . abbreviation
 
 mkSystemMeta :: ProjectName -> CI -> People -> Purpose -> Background -> Scope ->
   Motivation -> ChunkDB -> SystemMeta

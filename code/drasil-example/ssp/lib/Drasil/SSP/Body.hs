@@ -58,7 +58,7 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "sspProjName") "SSP"
+projName = mkCommonProjName (mkUid "sspProjName") (nounPhraseSP "Slope Stability analysis Program") "SSP"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

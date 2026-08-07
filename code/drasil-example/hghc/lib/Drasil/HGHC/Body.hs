@@ -14,7 +14,7 @@ import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "hghcProjName") "HGHC"
+projName = mkCommonProjName (mkUid "hghcProjName") (nounPhraseSP "HGHC") "HGHC"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

@@ -33,7 +33,7 @@ nbDecl = [
   ]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "projLsnPlanProjName") "Projectile Lesson"
+projName = mkCommonProjName (mkUid "projLsnPlanProjName") (nounPhraseSP "Projectile Lesson") "Projectile Lesson"
 
 si :: LessonPlan
 si = mkLessonPlan $

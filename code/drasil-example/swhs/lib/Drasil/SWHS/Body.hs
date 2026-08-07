@@ -59,7 +59,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   tempW, thickness, watE)
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "swhsProjName") "SWHS"
+projName = mkCommonProjName (mkUid "swhsProjName") (nounPhraseSP "SWHS") "SWHS"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

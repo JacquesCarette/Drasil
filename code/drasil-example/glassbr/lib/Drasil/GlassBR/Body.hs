@@ -49,7 +49,7 @@ import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "glassBRProjName") "GlassBR"
+projName = mkCommonProjName (mkUid "glassBRProjName") (nounPhraseSP "GlassBR") "GlassBR"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName

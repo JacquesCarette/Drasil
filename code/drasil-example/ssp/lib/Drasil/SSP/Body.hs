@@ -3,14 +3,13 @@ module Drasil.SSP.Body (si, mkSRS) where
 import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
   foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (assumpt,
   genDefn, dataDefn, datCon)
@@ -46,7 +45,7 @@ import Drasil.SSP.Defs (crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
-import Drasil.SSP.MetaConcepts (progName)
+import Drasil.SSP.MetaConcepts (progName, projName)
 import Drasil.SSP.IMods (instModIntro, iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
@@ -56,9 +55,6 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "sspProjName") (nounPhraseSP "Slope Stability analysis Program") "SSP"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

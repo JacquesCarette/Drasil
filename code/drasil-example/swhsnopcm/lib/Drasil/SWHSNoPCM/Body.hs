@@ -4,7 +4,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -56,7 +56,7 @@ import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
 import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
-import Drasil.SWHSNoPCM.MetaConcepts (progName)
+import Drasil.SWHSNoPCM.MetaConcepts (progName, projName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
@@ -137,9 +137,6 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "swhsNoPCMProjName") (nounPhraseSP "SWHSNoPCM") "SWHSNoPCM"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

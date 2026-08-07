@@ -2,13 +2,12 @@ module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRS hiding (genDefns)
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -31,7 +30,7 @@ import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
 import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
-import Drasil.SglPend.MetaConcepts (progName)
+import Drasil.SglPend.MetaConcepts (progName, projName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
@@ -82,9 +81,6 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
      AuxConsProg [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "sglpendProjName") (nounPhraseSP "SglPend") "SglPend"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [olu]

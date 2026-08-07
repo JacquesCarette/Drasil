@@ -6,11 +6,10 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import Drasil.SRS
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -48,7 +47,7 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
-import Drasil.SWHS.MetaConcepts (progName, progName')
+import Drasil.SWHS.MetaConcepts (progName, progName', projName)
 import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
   verifyEnergyOutput, funcReqsTables)
@@ -57,9 +56,6 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   simTime, specParamValList, symbols, tempC, tempPCM,
   tempW, thickness, watE)
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "swhsProjName") (nounPhraseSP "SWHS") "SWHS"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

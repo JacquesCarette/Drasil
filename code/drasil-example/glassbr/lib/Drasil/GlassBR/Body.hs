@@ -6,9 +6,8 @@ import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Drasil.SRS hiding (constants)
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -39,7 +38,7 @@ import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
-import Drasil.GlassBR.MetaConcepts (progName)
+import Drasil.GlassBR.MetaConcepts (progName, projName)
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
@@ -47,9 +46,6 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "glassBRProjName") (nounPhraseSP "GlassBR") "GlassBR"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName

@@ -1,11 +1,10 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 import Drasil.SRS hiding (constants, genDefns)
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -45,7 +44,7 @@ import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
-import Drasil.Projectile.MetaConcepts (progName)
+import Drasil.Projectile.MetaConcepts (progName, projName)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
@@ -123,9 +122,6 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "bullets" `sC` S "etc."), S "the flight" `S.of_` S "balls" `S.in_`
   S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
   S "etc.")]
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "projectileProjName") (nounPhraseSP "Projectile") "Projectile"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName

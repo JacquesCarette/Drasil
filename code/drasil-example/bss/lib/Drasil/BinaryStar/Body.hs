@@ -1,11 +1,10 @@
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Drasil.SRS hiding (constants)
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn)
 
@@ -20,7 +19,7 @@ import Data.Drasil.Concepts.Physics (gravity, twoD, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Language.Drasil.Document
 
-import Drasil.BinaryStar.MetaConcepts (progName)
+import Drasil.BinaryStar.MetaConcepts (progName, projName)
 import Drasil.BinaryStar.Concepts (ideaDicts, conceptChunks, starOne, starTwo,
   gravInteraction, ccsFortermsAndDefsTbl)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
@@ -196,9 +195,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ------------------------------
 -- System Information --
 ------------------------------
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "bssProjName") (nounPhraseSP "BSS") "BSS"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

@@ -4,7 +4,7 @@ module Drasil.DblPend.Body (
   userCharacteristicsIntro, tMods
 ) where
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
@@ -12,7 +12,6 @@ import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (constants, genDefns)
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
 
@@ -42,7 +41,7 @@ import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
-import Drasil.DblPend.MetaConcepts (progName)
+import Drasil.DblPend.MetaConcepts (progName, projName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
@@ -94,9 +93,6 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
      AuxConsProg [], -- Adds Auxilliary constraint section
   Bibliography                -- Adds reference section
   ]
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "dblpendProjName") (nounPhraseSP "DblPend") "DblPend"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [dong]

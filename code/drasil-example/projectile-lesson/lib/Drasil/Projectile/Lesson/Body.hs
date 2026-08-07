@@ -5,7 +5,7 @@ import Language.Drasil.Document
 import Drasil.Database (ChunkDB, mkUid)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.LessonPlan (LessonPlan, mkLessonPlan, LsnDesc, LsnChapter(..))
-import Drasil.System (mkSystemMeta, ProjectName, mkCommonProjName)
+import Drasil.System (mkSystemMeta)
 
 import qualified Data.Drasil.Quantities.Physics as Qs (iSpeed, ixSpeed, iySpeed,
   speed, constAccel, gravitationalAccel, xAccel, yAccel, time, ixPos, iyPos,
@@ -18,10 +18,11 @@ import Data.Drasil.People (spencerSmith)
 import Drasil.Projectile.Concepts (ideaDicts, defs)
 import Drasil.Projectile.Expressions (equations)
 
-import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
-import Drasil.Projectile.Lesson.Review (reviewSecs)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, caseProbSecs, figures)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
+import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
+import Drasil.Projectile.Lesson.MetaConcepts (projName)
+import Drasil.Projectile.Lesson.Review (reviewSecs)
 
 nbDecl :: LsnDesc
 nbDecl = [
@@ -31,9 +32,6 @@ nbDecl = [
     Example exampleContent,
     BibSec
   ]
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "projLsnPlanProjName") (nounPhraseSP "Projectile Motion Lesson") "Projectile Lesson"
 
 si :: LessonPlan
 si = mkLessonPlan $

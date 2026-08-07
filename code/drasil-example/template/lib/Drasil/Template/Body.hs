@@ -14,12 +14,13 @@ import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
 import Language.Drasil.ShortHands (lT)
 import Drasil.SRS
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
 import Data.Drasil.Citations
+
+import Drasil.Template.MetaConcepts (projName)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -103,9 +104,6 @@ t1DD = ddENoRefs t1QD Nothing "t1" []
 
 t1QD :: SimpleQDef
 t1QD = mkQuantDef t1 $ sy t0 $+ sy dt
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "templateProjName") (nounPhraseSP "Template") "Template"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

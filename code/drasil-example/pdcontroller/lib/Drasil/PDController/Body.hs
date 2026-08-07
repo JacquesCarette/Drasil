@@ -1,10 +1,9 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS hiding (genDefns)
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -22,7 +21,7 @@ import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
-import Drasil.PDController.MetaConcepts (progName)
+import Drasil.PDController.MetaConcepts (progName, projName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
@@ -80,9 +79,6 @@ mkSRS
 
      ReqrmntSec $ ReqsProg [FReqsSub funcReqsTables, NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
-
-projName :: ProjectName
-projName = mkCommonProjName (mkUid "pdcontrollerProjName") (nounPhraseSP "PDController") "PDController"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

@@ -10,7 +10,7 @@ import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (assumpt,
   genDefn, dataDefn, datCon)
@@ -58,7 +58,7 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "sspProjName") "SSP" "ssp"
+projName = mkCommonProjName (mkUid "sspProjName") "SSP"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

@@ -2,7 +2,7 @@ module Drasil.HGHC.Body (si, mkSRS) where
 
 import Drasil.Database (ChunkDB, mkUid)
 import Drasil.SRS
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 
@@ -14,7 +14,7 @@ import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "hghcProjName") "HGHC" "hghc"
+projName = mkCommonProjName (mkUid "hghcProjName") "HGHC"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO

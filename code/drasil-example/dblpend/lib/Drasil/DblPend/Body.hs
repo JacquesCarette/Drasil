@@ -12,7 +12,7 @@ import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (constants, genDefns)
-import Drasil.System (ProjectName, mkProjectName)
+import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
 
@@ -96,7 +96,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 projName :: ProjectName
-projName = mkProjectName (mkUid "dblpendProjName") "DblPend" "dblpend"
+projName = mkCommonProjName (mkUid "dblpendProjName") "DblPend"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName progName [dong]

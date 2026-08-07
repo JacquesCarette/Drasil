@@ -91,7 +91,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [], -- Adds Auxilliary constraint section
+     AuxConsProg [], -- Adds Auxilliary constraint section
   Bibliography                -- Adds reference section
   ]
 

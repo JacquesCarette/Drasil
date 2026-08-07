@@ -60,7 +60,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],
-  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
+  auxConsSec = Constant <$> \(AuxConsProg qdef) -> go qdef
   }) where
       go :: Express a => [a] -> [ModelExpr]
       go = map express
@@ -116,7 +116,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
     traceSec = Constant . f <$> \(TraceabilityProg progs) ->
       concatMap (\(TraceConfig _ ls s _ _) -> s : ls) progs,
-    auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef
+    auxConsSec = Constant . f <$> \(AuxConsProg qdef) -> def qdef
   } where
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)

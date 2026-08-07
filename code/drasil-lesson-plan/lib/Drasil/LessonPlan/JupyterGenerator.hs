@@ -12,7 +12,7 @@ import Drasil.FileHandling
 import Language.Drasil hiding (Options)
 import Language.Drasil.Document (Section, Document(Notebook), Contents(UlC),
   ulcc, RawContent(Bib), section, makeSecRef)
-import Drasil.System (HasSystemMeta(..), ToFiles(..))
+import Drasil.System (HasSystemMeta(..), ToFiles(..), ProjectName, projName)
 import Drasil.Metadata.Documentation (notebook)
 import qualified Drasil.Metadata.Documentation as Doc (caseProb, introduction,
   learnObj, review, summary, example, appendix, reference)
@@ -29,7 +29,7 @@ data JupyterGenOptions = JupyterGenOptions {
   -- | A title combinator that mixes 'Notebook' (passed as the first argument)
   -- with the title of the 'LessonPlan'. To be used as the /actual title/ used
   -- in the final generated document.
-  titleComb :: CI -> CI -> Sentence,
+  titleComb :: CI -> ProjectName -> Sentence,
   -- | The name of the file to be outputted (no extension, @.ipynb@ is added
   -- later).
   fileName :: String
@@ -42,7 +42,7 @@ instance ToFiles LessonPlan JupyterGenOptions where
       -- Steps:
 
       -- 1. Transform `LessonPlan` into SDL (Semantic Document language).
-      nm = notebook `titleComb` (plan ^. sysName)
+      nm = notebook `titleComb` (plan ^. projName)
       as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
       -- FIXME: These sections should be inserted into the ChunkDB but doing so
       -- (currently) creates a "duplicate chunk insertion" error /because/ the

@@ -305,7 +305,7 @@ instance ValueExpression MatlabCode where
   notNull v = (?!) $ funcApp "isempty" bool [v]
 
 instance RenderValue MatlabCode where
-  inputFunc = mkStateVal string (text "input" <> parens (text "'', 's'"))
+  inputFunc = funcApp "input" string [litString "", litString "s"]
   printFunc = mlPrintFunc
   printLnFunc = mlPrintFunc
   printFileFunc _ = mlPrintFunc
@@ -733,15 +733,16 @@ mlCast t' v' = do
   v <- v'
   let vTp = getCodeType $ valueType v
       tTp = getCodeType t
-      vDoc = RC.value v
-      mlCast' String Integer = text "str2double" <> parens vDoc
-      mlCast' String Float   = text "str2double" <> parens vDoc
-      mlCast' String Double  = text "str2double" <> parens vDoc
-      mlCast' String Boolean = text "logical" <> parens (text "str2double" <> parens vDoc)
-      mlCast' _      String  = text "num2str" <> parens vDoc
-      mlCast' _      Char    = text "char" <> parens vDoc
-      mlCast' _      _       = vDoc
-  mkVal t (mlCast' vTp tTp)
+      rv  = return v
+      rt  = return t
+  case (vTp, tTp) of
+    (String, Integer) -> funcApp "str2double" rt [rv]
+    (String, Float)   -> funcApp "str2double" rt [rv]
+    (String, Double)  -> funcApp "str2double" rt [rv]
+    (String, Boolean) -> funcApp "logical" rt [funcApp "str2double" double [rv]]
+    (_,      String)  -> funcApp "num2str" rt [rv]
+    (_,      Char)    -> funcApp "char" rt [rv]
+    _                 -> return v
 
 mlEqOp :: Bool -> SValue MatlabCode -> SValue MatlabCode -> SValue MatlabCode
 mlEqOp neg v1' v2' = do

@@ -92,7 +92,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD)
+  ScopeData, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -129,28 +129,28 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
+instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
 
   docMod = G.docMod CP.modDoc' swiftExt
 
-instance RenderFile SwiftCode where
+instance RenderFile SwiftCode FileData where
   top _ = toCode empty
   bottom = toCode empty
 

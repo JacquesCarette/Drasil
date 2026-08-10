@@ -94,7 +94,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, updateParam, ProgData(..), progD, TypeData(..), ValData(..),
   vd, updateValDoc, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..),
-  bindFormD)
+  bindFormD, FileData)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -128,28 +128,28 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
 
   docMod = CP.doxMod csExt
 
-instance RenderFile CSharpCode where
+instance RenderFile CSharpCode FileData where
   top _ = toCode empty
   bottom = toCode empty
 

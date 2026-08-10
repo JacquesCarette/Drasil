@@ -89,7 +89,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, VarData(..), vard, ScopeData,
-  BinderD(..), bindFormD)
+  BinderD(..), bindFormD, FileData)
 import Drasil.Shared.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import Drasil.Shared.Helpers (emptyIfNull, toCode, toState, onCodeValue,
@@ -129,27 +129,27 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData
 
-instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
+instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
 instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
 
   docMod = CP.doxMod jExt
 
-instance RenderFile JavaCode where
+instance RenderFile JavaCode FileData where
   top _ = toCode empty
   bottom = toCode empty
 

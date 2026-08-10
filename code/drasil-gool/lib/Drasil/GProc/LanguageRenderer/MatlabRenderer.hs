@@ -62,7 +62,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
   varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
-  FuncData(fType, funcDoc), fd, ScopeData)
+  FuncData(fType, funcDoc), fd, ScopeData, FileData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
@@ -91,27 +91,27 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData FileData ProgData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ProgData where
+instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData FileData
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode Doc (Doc, Terminator) MethodData where
+instance FileSym MatlabCode Doc (Doc, Terminator) MethodData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m
   docMod = A.docMod mlExt
 
-instance RenderFile MatlabCode where
+instance RenderFile MatlabCode FileData where
   top _ = toCode empty
   bottom = toCode empty
   commentedMod = on2StateValues (on2CodeValues R.commentedMod)

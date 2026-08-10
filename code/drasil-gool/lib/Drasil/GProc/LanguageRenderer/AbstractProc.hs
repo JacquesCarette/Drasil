@@ -9,7 +9,7 @@ import Drasil.Shared.InterfaceCommon (Label, Body, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GProc.InterfaceProc (File, Module)
+import Drasil.GProc.InterfaceProc (Module)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
 import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
@@ -31,7 +31,7 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
 -- Files --
 
-fileDoc :: (RP.RenderFile r) => String -> FS (r Module) -> FS (r File)
+fileDoc :: (RP.RenderFile r file) => String -> FS (r Module) -> FS (r file)
 fileDoc ext md = do
   m <- md
   nm <- getModuleName
@@ -40,7 +40,7 @@ fileDoc ext md = do
 
 fileFromData
   :: (RP.ModuleElim r)
-  => (FilePath -> r Module -> r File) -> FilePath -> FS (r Module) -> FS (r File)
+  => (FilePath -> r Module -> r file) -> FilePath -> FS (r Module) -> FS (r file)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
@@ -66,8 +66,8 @@ buildModule n imps bot fs = RP.modFromData n (do
   return $ emptyIfEmpty fnDocs (vibcat (filter (not . isEmpty) [is, fnDocs])))
 
 docMod
-  :: (RP.RenderFile r)
-  => String -> String -> String -> [String] -> String -> FS (r File) -> FS (r File)
+  :: (RP.RenderFile r file)
+  => String -> String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 docMod e d wm a dt fl = RP.commentedMod fl
   (RC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)
 
@@ -104,7 +104,7 @@ arrayElem arr' i' = do
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (RP.ProcRenderSym r vis stmt mthd) => SVariable r -> r ScopeData ->
+funcDecDef :: (RP.ProcRenderSym r vis stmt mthd file) => SVariable r -> r ScopeData ->
   [SVariable r] -> MS (r Body) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

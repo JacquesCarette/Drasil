@@ -86,7 +86,7 @@ egetSecCon (Con c) = extractMExprs c
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
+    introSec = Constant . f <$> \(IntroProg s1 s2s s3) -> s1 : (s2s ++ concatMap getIntroSub s3),
     introSub = Constant . f <$> \case
       (IPurpose s) -> s
       (IScope s) -> [s]

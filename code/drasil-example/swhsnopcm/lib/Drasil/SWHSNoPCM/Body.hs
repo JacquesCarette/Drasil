@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
-import Data.Drasil.Concepts.Software (softwarecon)
+import Data.Drasil.Concepts.Software (softwarecon, program)
 import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
@@ -92,7 +92,7 @@ mkSRS = [TableOfContents,
    tsymb [TSPurpose, SymbConvention [Lit htTrans, Doc' progName], SymbOrder, VectorUnits],
    TAandA],
   IntroSec $
-    IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
+    IntroProg (introStart +:+ introStartNoPCM) [extraInfoSent]
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
@@ -176,13 +176,12 @@ allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 --------------------------
 
 -- To get this generating properly we need to add a constructor for custom plural and capital case, see #3535
-introStartNoPCM :: Sentence
+introStartNoPCM, extraInfoSent :: Sentence
 introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
 
-introEnd :: Sentence -> CI -> Sentence
-introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
-  S "will be referred to as", titleize pro, sParen (short pro),
-  S "based on the original" `sC` S "manually created version" `S.of_` namedRef externalLinkRef' (S "SWHSNoPCM")]
+extraInfoSent = foldlSent [S "The ", phrase program,
+  S "is based on the original, manually created version of",
+  namedRef externalLinkRef' (S "SWHSNoPCM")]
 
 externalLinkRef' :: Reference
 externalLinkRef' = makeURI "SWHSNoPCM_SRSLink"

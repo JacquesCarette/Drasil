@@ -29,7 +29,7 @@ mkSRS = [TableOfContents,
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
-  IntroProg EmptyS (phrase progName)
+  IntroProg EmptyS []
     [ IPurpose $ purpDoc progName Verbose,
       IScope EmptyS,
       IChar [] [] [],

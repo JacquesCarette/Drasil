@@ -43,7 +43,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase progName)
+       IntroProg introPara []
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec (Just orgSecEnd)],

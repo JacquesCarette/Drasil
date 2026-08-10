@@ -295,9 +295,9 @@ mkSSDSec si (SSDProg l) =
 
 -- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SmithEtAlSRS -> ProblemDescription -> Section
-mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
+mkSSDProb si (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
-        mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+        mkSubPD (PhySysDesc parts dif extra) = SSD.physSystDesc (si ^. sysName) parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
 -- | Helper for making the Solution Characteristics Specification section.

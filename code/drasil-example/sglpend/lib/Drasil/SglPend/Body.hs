@@ -59,7 +59,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     SSDProg
       [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
+      , PhySysDesc physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble

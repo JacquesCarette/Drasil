@@ -102,7 +102,7 @@ mkSRS = [TableOfContents,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],
   IntroSec $
-    IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
+    IntroProg (introStart +:+ introStartSWHS) [extraInfoSent]
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
@@ -167,7 +167,7 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   S "fossil fuels" `sC` S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
-introStartSWHS :: Sentence
+introStartSWHS, extraInfoSent :: Sentence
 introStartSWHS = foldlSent [D.toSent $ atStartNP' $ progName ^. term, S "incorporating",
   phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
   phrase enerSrc `S.and_` S "provide a novel way of storing" +:+. phrase energy,
@@ -177,12 +177,9 @@ introStartSWHS = foldlSent [D.toSent $ atStartNP' $ progName ^. term, S "incorpo
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
 
-introEnd :: Sentence -> CI -> Sentence
-introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
-  phrase program, S "will be referred to as", titleize pro, sParen (short pro),
-  S "based on the original" `sC` S "manually created version of" +:+
+extraInfoSent = foldlSent [S "The ", phrase program,
+  S "is based on the original, manually created version of",
   namedRef externalLinkRef (S "SWHS")]
-  -- SSP has same style sentence here
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "SWHS_SRSLink"

@@ -45,7 +45,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg (justification progName) (phrase progName)
+    IntroProg (justification progName) []
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],

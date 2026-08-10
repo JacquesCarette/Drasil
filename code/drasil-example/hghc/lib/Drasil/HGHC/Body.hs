@@ -25,7 +25,7 @@ mkSRS = [TableOfContents,
     RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit nuclearPhys, Manual fp]]],
     IntroSec $
-    IntroProg introPara (phrase progName) [],
+    IntroProg introPara [] [],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
           TMs [] []

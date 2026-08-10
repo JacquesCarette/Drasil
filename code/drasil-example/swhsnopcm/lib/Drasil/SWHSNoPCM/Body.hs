@@ -4,13 +4,12 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS
-import Drasil.System (ProjectName, mkCommonProjName)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
@@ -162,8 +161,9 @@ conceptChunks =
   meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns citations labelledContent'
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
+    NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

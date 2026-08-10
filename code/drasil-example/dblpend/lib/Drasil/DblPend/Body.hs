@@ -4,7 +4,7 @@ module Drasil.DblPend.Body (
   userCharacteristicsIntro, tMods
 ) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
@@ -122,8 +122,9 @@ conceptChunks =
   gravitationalConst, gravity] ++ defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
-  dataDefs iMods genDefns tMods concIns citations labelledContent'
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
+    dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

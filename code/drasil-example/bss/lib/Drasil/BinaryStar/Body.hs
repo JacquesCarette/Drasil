@@ -1,6 +1,6 @@
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -218,11 +218,11 @@ cis :: [CI]
 cis = [progName]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge []
-  symbols ideaDicts cis conceptChunks
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
-  ([] :: [GenDefn]) tMods concIns
-  citations (labelledContent ++ funcReqsTables)
+symbMap = insert projName $
+  withCommonKnowledge [] symbols ideaDicts cis conceptChunks
+    ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
+    ([] :: [GenDefn]) tMods concIns
+    citations (labelledContent ++ funcReqsTables)
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs

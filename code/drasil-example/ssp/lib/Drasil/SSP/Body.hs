@@ -3,7 +3,7 @@ module Drasil.SSP.Body (si, mkSRS) where
 import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
@@ -136,8 +136,9 @@ conceptChunks =
   [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks
-  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks
+    [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -25,7 +25,7 @@ import Language.Drasil.Development (shortdep)
 import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
 
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..), projTitleS)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Drasil.SRS.GetChunks (resolveAllVars)
 
@@ -80,7 +80,7 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Creates a document from a 'System', a document description ('SRSDecl'), and
 -- a title combinator.
-mkDoc :: SmithEtAlSRS -> SRSDecl -> (CI -> CI -> Sentence) -> (Document, SmithEtAlSRS)
+mkDoc :: SmithEtAlSRS -> SRSDecl -> (Sentence -> Sentence -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       -- /Pre-generate/ the SRS artifact. It is missing content involving
@@ -95,7 +95,7 @@ mkDoc si srsDecl headingComb =
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
-      heading = srs `headingComb` (si' ^. sysName)
+      heading = titleize srs `headingComb` projTitleS (si ^. projectName)
       authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl

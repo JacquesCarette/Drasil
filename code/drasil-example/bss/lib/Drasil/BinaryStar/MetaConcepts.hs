@@ -11,4 +11,5 @@ progName = commonIdea (mkUid "bss")
   (pn "Binary Star System Simulator") "BSS" [physics]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "bssProjName") (nounPhraseSP "BSS") "BSS"
+projName = mkCommonProjName (mkUid "bssProjName")
+  (pn "Binary Star System Simulator") "BSS"

@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Body (mkSRS, si) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS
@@ -114,8 +114,9 @@ conceptChunks =
   CP.elasticity]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols [] cis conceptChunks []
-  dataDefs iMods generalDefns tMods concIns citations labelledContent
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbols [] cis conceptChunks []
+    dataDefs iMods generalDefns tMods concIns citations labelledContent
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -1,6 +1,6 @@
 module Drasil.HGHC.Body (si, mkSRS) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
@@ -54,4 +54,5 @@ cis :: [CI]
 cis = [progName]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis [] [] dataDefs [] [] [] [] [] []
+symbMap = insert projName $
+  withCommonKnowledge [] symbols ideaDicts cis [] [] dataDefs [] [] [] [] [] []

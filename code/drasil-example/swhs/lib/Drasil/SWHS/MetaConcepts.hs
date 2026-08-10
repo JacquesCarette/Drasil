@@ -16,4 +16,5 @@ progName' = commonIdea (mkUid "swhsPCM") (nounPhraseSP "solar water heating syst
   []
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "swhsProjName") (nounPhraseSP "solar water heating system") "SWHS"
+projName = mkCommonProjName (mkUid "swhsProjName")
+  (pn "Solar Water Heating Systems Incorporating PCM") "SWHS"

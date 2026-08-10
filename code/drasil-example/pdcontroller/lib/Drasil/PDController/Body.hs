@@ -1,6 +1,6 @@
 module Drasil.PDController.Body (si, mkSRS, pidODEInfo) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS hiding (genDefns)
@@ -122,9 +122,10 @@ allSymbols = physicscon ++ symbols ++
   map dqdWr pidConstants
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs allSymbols [] cis conceptChunks []
-  dataDefinitions instanceModels genDefns theoreticalModels conceptInstances
-  citations labelledContent'
+symbMap = insert projName $
+  withCommonKnowledge allRefs allSymbols [] cis conceptChunks []
+    dataDefinitions instanceModels genDefns theoreticalModels conceptInstances
+    citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

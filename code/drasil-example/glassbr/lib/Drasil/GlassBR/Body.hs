@@ -6,7 +6,7 @@ import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
@@ -116,8 +116,9 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks []
-  GB.dataDefs iMods [] tMods concIns citations labCon
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks
+    [] GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)

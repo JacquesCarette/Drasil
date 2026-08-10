@@ -13,4 +13,5 @@ progName = commonIdea (mkUid "swhsNoPCM")
   NP.S "Solar Water Heating System with no Phase Change Material") "SWHSNoPCM" [materialEng]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "swhsNoPCMProjName") (nounPhraseSP "SWHSNoPCM") "SWHSNoPCM"
+projName = mkCommonProjName (mkUid "swhsNoPCMProjName")
+  (pn' "Solar Water Heating System With No Phase Change Material") "SWHSNoPCM"

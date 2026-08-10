@@ -11,7 +11,7 @@ import Data.Char (toLower, isAlphaNum)
 import Data.List.Extras (replaceAll)
 
 import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
-import Language.Drasil (NP, Sentence(Ch), SentenceStyle, TermCapitalization(CapW))
+import Language.Drasil (NP, Sentence(Ch), SentenceStyle(..), TermCapitalization(CapW))
 
 data ProjectName = PN
   { _pnUID        :: UID,
@@ -56,8 +56,8 @@ mkCommonProjName u ttl ab = mkProjectName u ttl ab frmtr
   where
     frmtr = map toLower . replaceAll (not . isAlphaNum) '-'
 
-projTitleS :: SentenceStyle -> ProjectName -> Sentence
-projTitleS ss = Ch ss CapW . (^. uid)
+projTitleS :: ProjectName -> Sentence
+projTitleS = Ch TermStyle CapW . (^. uid)
 
-projAbrvS :: SentenceStyle -> ProjectName -> Sentence
-projAbrvS ss = Ch ss CapW . (^. uid)
+projAbrvS :: ProjectName -> Sentence
+projAbrvS = Ch ShortStyle CapW . (^. uid)

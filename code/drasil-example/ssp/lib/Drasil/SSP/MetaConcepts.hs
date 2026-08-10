@@ -9,4 +9,5 @@ progName :: CI
 progName = commonIdea (mkUid "ssp") (pn' "Slope Stability analysis Program") "SSP" [civilEng]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "sspProjName") (nounPhraseSP "Slope Stability analysis Program") "SSP"
+projName = mkCommonProjName (mkUid "sspProjName")
+  (pn' "Slope Stability analysis Program") "SSP"

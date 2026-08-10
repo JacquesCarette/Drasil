@@ -28,7 +28,7 @@ import Drasil.System (HasProjectName(..))
 -- structure (and debug data) for an example.
 writeSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO ([FileLayout], SmithEtAlSRS)
 writeSmithEtAlSrs syst srsDecl srsFileName = do
-  let (srs, syst') = mkDoc syst srsDecl S.forT
+  let (srs, syst') = mkDoc syst srsDecl S.forT'
   typeCheckSI syst' -- FIXME: This should be done on `System` creation *or* chunk creation!
   let layout = genSmithEtAlSrs syst' srs srsFileName
   pure (layout, syst')

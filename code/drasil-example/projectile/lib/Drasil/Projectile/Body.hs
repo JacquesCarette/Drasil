@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body (si, mkSRS) where
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
@@ -158,8 +158,9 @@ conceptChunks =
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] dataDefs
-  iMods genDefns tMods concIns citations labelledContent'
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] dataDefs
+    iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

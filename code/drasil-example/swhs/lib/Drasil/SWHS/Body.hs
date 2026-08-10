@@ -6,7 +6,7 @@ module Drasil.SWHS.Body (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB)
+import Drasil.Database (ChunkDB, insert)
 import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import Drasil.SRS
@@ -85,8 +85,9 @@ conceptChunks =
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
-  SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
+symbMap = insert projName $
+  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
+    SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

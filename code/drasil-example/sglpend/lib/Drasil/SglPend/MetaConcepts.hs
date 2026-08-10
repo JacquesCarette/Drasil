@@ -9,4 +9,5 @@ progName :: CI
 progName = commonIdea (mkUid "sglPendulum") (pn "Single Pendulum") "SglPend" [physics]
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "sglpendProjName") (nounPhraseSP "SglPend") "SglPend"
+projName = mkCommonProjName (mkUid "sglpendProjName")
+  (pn "Single Pendulum") "SglPend"

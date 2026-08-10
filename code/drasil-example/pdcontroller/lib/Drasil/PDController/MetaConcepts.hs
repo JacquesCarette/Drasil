@@ -8,4 +8,5 @@ progName :: CI
 progName = commonIdea (mkUid "pdControllerApp") (pn "PD Controller") "PD Controller" []
 
 projName :: ProjectName
-projName = mkCommonProjName (mkUid "pdcontrollerProjName") (nounPhraseSP "PDController") "PDController"
+projName = mkCommonProjName (mkUid "pdcontrollerProjName")
+  (pn "PD Controller") "PDController"

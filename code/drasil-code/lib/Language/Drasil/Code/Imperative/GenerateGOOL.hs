@@ -25,11 +25,11 @@ import Drasil.Metadata (watermark)
 import Drasil.System (HasSystemMeta(..))
 import Drasil.SRS (HasSmithEtAlSRS(..))
 
-import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, File,
-  OOProg, CS, FS, MS, VS, TypeData, ValueSym(..), Argument(..),
-  ValueExpression(..), InternalValueExp, OOValueExpression(..), SelfSym(..),
-  VariableValue(..), FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..),
-  CodeType(..), TypeElim(..), objMethodCallMixedArgs)
+import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, OOProg, CS,
+  FS, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
+  InternalValueExp, OOValueExpression(..), SelfSym(..), VariableValue(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
+  TypeElim(..), objMethodCallMixedArgs)
 import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -37,9 +37,14 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImports :: (OOProg r vis stmt mthd stvr attch prg) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r mthd)))] -> [GenState (Maybe (CS (r Class)))] ->
-  GenState (FS (r File))
+genModuleWithImports
+  :: (OOProg r vis stmt mthd stvr attch prg file)
+  => Name
+  -> Description
+  -> [Import]
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> [GenState (Maybe (CS (r Class)))]
+  -> GenState (FS (r file))
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -52,9 +57,13 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModule :: (OOProg r vis stmt mthd stvr attch prg) => Name -> Description ->
-  [GenState (Maybe (MS (r mthd)))] -> [GenState (Maybe (CS (r Class)))] ->
-  GenState (FS (r File))
+genModule
+  :: (OOProg r vis stmt mthd stvr attch prg file)
+  => Name
+  -> Description
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> [GenState (Maybe (CS (r Class)))]
+  -> GenState (FS (r file))
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
@@ -185,8 +194,13 @@ fAppInOut m n ins outs both = do
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImportsProc :: (ProcProg r vis stmt mthd prg) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r mthd)))] -> GenState (FS (r File))
+genModuleWithImportsProc
+  :: (ProcProg r vis stmt mthd prg file)
+  => Name
+  -> Description
+  -> [Import]
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> GenState (FS (r file))
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -198,8 +212,12 @@ genModuleWithImportsProc n desc is maybeMs = do
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModuleProc :: (ProcProg r vis stmt mthd prg) => Name -> Description ->
-  [GenState (Maybe (MS (r mthd)))] -> GenState (FS (r File))
+genModuleProc
+  :: (ProcProg r vis stmt mthd prg file)
+  => Name
+  -> Description
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> GenState (FS (r file))
 genModuleProc n desc = genModuleWithImportsProc n desc []
 
 -- | Function call generator.

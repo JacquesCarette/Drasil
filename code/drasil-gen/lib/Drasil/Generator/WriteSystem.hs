@@ -14,7 +14,7 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8, TextEncoding)
 import System.Environment (lookupEnv)
 
 import Drasil.FileHandling (OverwritePolicy (..), PathSegment, directory, localPath, ps, writeFiles, FileLayout)
-import Drasil.System (HasSystemMeta (..), ToFiles (..), repo)
+import Drasil.System (HasSystemMeta (..), ToFiles (..), HasProjectName(..))
 
 import Drasil.Generator.ChunkDump (buildDebuggingFiles)
 
@@ -45,7 +45,7 @@ data WriteOptions = WO
   { -- | Are we allowed to overwrite files or not?
     overwritePolicy :: OverwritePolicy,
     -- | What is the name of the subfolder to be created?
-    localDirName :: forall sys. HasSystemMeta sys => sys -> PathSegment,
+    localDirName :: forall sys. (HasSystemMeta sys, HasProjectName sys) => sys -> PathSegment,
     -- | What is the expected text encoding scheme?
     textEncoding :: TextEncoding,
     -- | Should debugging data be written?
@@ -66,7 +66,7 @@ drasilMakefileReqOpts :: WriteOptions
 drasilMakefileReqOpts =
   WO OverwriteAllowed dirName utf8 (CheckEnvVar "DEBUG_ENV" [ps|.drasil|])
   where
-    dirName sys = let nm = sys ^. projName . repo
+    dirName sys = let nm = sys ^. projRepoName
                    in [ps|{nm}|]
 
 -- | Internal: 'DebugDataPolicy' eliminator.

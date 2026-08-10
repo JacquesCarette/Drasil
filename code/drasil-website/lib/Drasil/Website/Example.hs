@@ -8,7 +8,7 @@ import Control.Lens ((^.), lens)
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
-import Drasil.System (purpose, HasSystemMeta(..), repo)
+import Drasil.System (purpose, HasSystemMeta(..), HasProjectName(..))
 import Drasil.SRS (SmithEtAlSRS(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Drasil.Generator (codedHRName, codedDirName, Format(..))
@@ -53,11 +53,12 @@ data Example = E {
   -- | Generated documents & doxygen path
   srsDoxPath :: FilePath
 }
+
 instance HasSystemMeta Example where
   systemMeta = lens systemE (\x y -> x {systemE = y}) . systemMeta
 
-abrvE :: Example -> String
-abrvE = abrv . systemE
+instance HasProjectName Example where
+  projectName = systemMeta . projectName
 
 -- TODO: Automate the gathering of system information, descriptions, and choices.
 
@@ -102,7 +103,7 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{systemE = si} = S (abrv si) +:+ S "- To" +:+ foldlSent (si ^. purpose)
+    nameAndDesc E{systemE = si} = S (si ^. projAbrv) +:+ S "- To" +:+ foldlSent (si ^. purpose)
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
@@ -144,11 +145,11 @@ versionList getRef ex@E{choicesE = chcs} =
     -- Determine the version name based on the system name and if there is more than one set of choices.
     verHRName chc = case chcs of
       -- If there is one set of choices, then the program does not have multiple versions.
-      [_] -> abrvE ex
+      [_] -> ex ^. projAbrv
       -- If the above two don't match, we have more than one set of choices and must display every version.
       _   -> codedHRName ex chc
     verDirName chc = case chcs of
-      [_] -> ex ^. projName . repo
+      [_] -> ex ^. projRepoName
       _   -> codedDirName ex chc
 
 -- | Show function to display program languages to user.
@@ -213,7 +214,7 @@ getCodeRef ex@E{choicesE = chcs} l verName =
     refShortNm = shortname' $ S refUID
 
     -- System name, different between one set of choices and multiple sets.
-    exFolder = ex ^. projName . repo ++ if length chcs > 1 then "/" ++ verName else ""
+    exFolder = ex ^. projRepoName ++ if length chcs > 1 then "/" ++ verName else ""
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -225,7 +226,7 @@ buildDrasilExSrcRef ex =
     refUID = "srcCodeRef" ++ exFolder
     refURI = path ++ "code/drasil-example/" ++ exFolder
     refShortNm = shortname' $ S refUID
-    exFolder = ex ^. projName . repo
+    exFolder = ex ^. projRepoName
     path = codePath ex
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
@@ -233,11 +234,10 @@ getDoxRef :: Example -> Lang -> String -> Reference
 getDoxRef ex@E{choicesE = chcs} l verName =
   makeURI refUID refURI refShortNm
   where
-    refUID = "doxRef" ++ progName ++ programLang
-    refURI = getDoxPath (srsDoxPath ex) (ex ^. projName . repo) programLang
+    refUID = "doxRef" ++ (ex ^. projAbrv) ++ programLang
+    refURI = getDoxPath (srsDoxPath ex) (ex ^. projRepoName) programLang
     refShortNm = shortname' $ S refUID
 
-    progName = abrvE ex
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of
@@ -248,16 +248,16 @@ getDoxRef ex@E{choicesE = chcs} l verName =
 getSRSRef :: FilePath -> Format -> Example -> Reference
 getSRSRef path format ex = makeURI refUID (getSRSPath path format ex) $ shortname' $ S refUID
   where
-    refUID = show format ++ "Ref" ++ abrvE ex
+    refUID = show format ++ "Ref" ++ (ex ^. projAbrv)
 
 -- | Get the paths of where each reference exist for SRS files.
 getSRSPath :: FilePath -> Format -> Example -> FilePath
-getSRSPath path format ex = path ++ (ex ^. projName . repo) ++ "/SRS/" ++ show format ++ "/" ++ sufx format
+getSRSPath path format ex = path ++ (ex ^. projRepoName) ++ "/SRS/" ++ show format ++ "/" ++ sufx format
   where
     sufx MDBook  = "book"
-    sufx HTML    = abrvE ex ++ "_SRS.html"
-    sufx TeX     = abrvE ex ++ "_SRS.pdf"
-    sufx Jupyter = abrvE ex ++ "_SRS.html"
+    sufx HTML    = ex ^. projAbrv ++ "_SRS.html"
+    sufx TeX     = ex ^. projAbrv ++ "_SRS.pdf"
+    sufx Jupyter = ex ^. projAbrv ++ "_SRS.html"
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath

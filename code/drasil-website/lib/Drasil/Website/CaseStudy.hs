@@ -2,15 +2,18 @@
 -- To be used in the Drasil website.
 module Drasil.Website.CaseStudy (caseStudySec, caseStudyTable) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
 import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),
   ConstantRepr(..))
-import Drasil.SRS (SmithEtAlSRS)
 import Drasil.Generator (codedHRName)
 import Drasil.GOOL (CodeType(..))
+import Drasil.SRS (SmithEtAlSRS)
+import Drasil.System (HasProjectName(..))
 
 import Drasil.Website.Example (examples, Example(..))
 
@@ -65,7 +68,7 @@ data CaseStudy = CS {
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
 mkCaseStudy E{systemE = si, choicesE = [x]}
-  = [CS{systemCS = si, progName = S $ abrv si, choicesCS = x}]
+  = [CS{systemCS = si, progName = S $ si ^. projAbrv, choicesCS = x}]
 mkCaseStudy ex@E{systemE = si, choicesE = xs}
   = map (\x -> CS{
       systemCS = si,

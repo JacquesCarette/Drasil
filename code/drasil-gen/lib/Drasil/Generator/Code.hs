@@ -17,7 +17,7 @@ import Drasil.FileHandling (FileLayout, directory, ps)
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
   OOProg, LoggingFor (unLC))
 import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
-import Language.Drasil (Space(..), Expr, abrv)
+import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
   Architecture(impType, modularity),
@@ -31,7 +31,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.SRS (SmithEtAlSRS)
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
@@ -95,19 +95,19 @@ genCodeZoo syst = mapM $ \chcs -> do
     return $ directory [ps|{dir}|] [layout]
 
 -- | Human-readable name for coded variants (e.g. "Projectile_U_P_NoL_U_WI_V_D").
-codedHRName :: HasSystemMeta sys => sys -> Choices -> String
+codedHRName :: (HasProjectName sys) => sys -> Choices -> String
 codedHRName sys Choices {
   architecture = a,
   optFeats = o,
   dataInfo = d,
   maps = m} =
-  intercalate "_" $ abrv (sys ^. projName) :
+  intercalate "_" $ sys ^. projAbrv :
     [codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o,
     codedStruct $ inputStructure d, codedConStruct $ constStructure d,
     codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
 
 -- | Lowercase folder name for a "zoo" of executable softifacts (e.g. "projectile_u_p_nol_u_wi_v_d").
-codedDirName :: HasSystemMeta sys => sys -> Choices -> String
+codedDirName :: (HasSystemMeta sys, HasProjectName sys) => sys -> Choices -> String
 codedDirName sys chcs = map toLower $ codedHRName sys chcs
 
 codedMod :: Modularity -> String

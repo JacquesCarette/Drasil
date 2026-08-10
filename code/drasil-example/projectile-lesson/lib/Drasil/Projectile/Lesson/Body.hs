@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB, mkUid, insert)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.LessonPlan (LessonPlan, mkLessonPlan, LsnDesc, LsnChapter(..))
 import Drasil.System (mkSystemMeta)
@@ -38,7 +38,8 @@ si = mkLessonPlan $
   mkSystemMeta projName projectileMotionLesson [spencerSmith] [] [] [] [] symbMap
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] []
+symbMap = insert projName $
+  withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] []
   [] [] [] [] labelledContent
 
 cis :: [CI]

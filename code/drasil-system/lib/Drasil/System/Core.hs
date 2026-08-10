@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleInstances, UndecidableInstances #-}
 module Drasil.System.Core (
   Purpose, Background, Scope, Motivation,
   SystemMeta,
@@ -7,11 +6,12 @@ module Drasil.System.Core (
 ) where
 
 import Control.Lens ((^.), makeClassy)
+import Data.Set qualified as S (unions)
 
 import Drasil.Database (ChunkDB, HasUID(..), HasChunkRefs(..))
-import Language.Drasil (Sentence, People, CI, NamedIdea(..), Idea(..), CommonIdea(..))
+import Language.Drasil (Sentence, People, CI)
 
-import Drasil.System.ProjectName (ProjectName, title, abbreviation)
+import Drasil.System.ProjectName (ProjectName, HasProjectName(..))
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -33,23 +33,23 @@ data SystemMeta = SystemMeta
   , _motivation :: Motivation
   , _systemdb   :: ChunkDB
   }
-
 makeClassy ''SystemMeta
 
 instance HasUID SystemMeta where
   uid = projName . uid
 
+instance HasProjectName SystemMeta where
+  projectName = projName
+
 instance HasChunkRefs SystemMeta where
-  chunkRefs x = chunkRefs (x ^. projName)
-
-instance NamedIdea SystemMeta where
-  term = projName . title
-
-instance Idea SystemMeta where
-  getA x = Just (x ^. projName . abbreviation)
-
-instance CommonIdea SystemMeta where
-  abrv x = x ^. projName . abbreviation
+  chunkRefs x = S.unions [
+      chunkRefs (x ^. projName),
+      chunkRefs (x ^. sysName),
+      chunkRefs (x ^. authors),
+      chunkRefs (x ^. background),
+      chunkRefs (x ^. scope),
+      chunkRefs (x ^. motivation)
+    ]
 
 mkSystemMeta :: ProjectName -> CI -> People -> Purpose -> Background -> Scope ->
   Motivation -> ChunkDB -> SystemMeta

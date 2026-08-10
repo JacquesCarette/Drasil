@@ -1,16 +1,17 @@
 {-# LANGUAGE TemplateHaskell, DerivingVia #-}
 module Drasil.System.ProjectName (
   ProjectName,
-  title, abbreviation, repo,
-  mkProjectName, mkCommonProjName
+  mkProjectName, mkCommonProjName,
+  HasProjectName(..),
+  projTitleS, projAbrvS
 ) where
 
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLensesFor, makeClassyFor)
 import Data.Char (toLower, isAlphaNum)
 import Data.List.Extras (replaceAll)
 
 import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
-import Language.Drasil (NP, NamedIdea(..), Idea(..), CommonIdea(..))
+import Language.Drasil (NP, Sentence(Ch), SentenceStyle, TermCapitalization(CapW))
 
 data ProjectName = PN
   { _pnUID        :: UID,
@@ -23,7 +24,11 @@ data ProjectName = PN
     _repo         :: String
   }
 declareHasChunkRefs ''ProjectName
-makeLenses ''ProjectName
+makeLensesFor [("_pnUID", "pnUID")] ''ProjectName
+makeClassyFor "HasProjectName" "projectName" [("_title", "projTitle"), ("_abbreviation", "projAbrv"), ("_repo", "projRepoName")] ''ProjectName
+
+instance HasUID ProjectName where
+  uid = pnUID
 
 -- FIXME: Need to create a 'suitable name' policy. Ideas:
 --
@@ -51,14 +56,8 @@ mkCommonProjName u ttl ab = mkProjectName u ttl ab frmtr
   where
     frmtr = map toLower . replaceAll (not . isAlphaNum) '-'
 
-instance HasUID ProjectName where
-  uid = pnUID
+projTitleS :: SentenceStyle -> ProjectName -> Sentence
+projTitleS ss = Ch ss CapW . (^. uid)
 
-instance NamedIdea ProjectName where
-  term = title
-
-instance Idea ProjectName where
-  getA pn = Just (pn ^. abbreviation)
-
-instance CommonIdea ProjectName where
-  abrv pn = pn ^. abbreviation
+projAbrvS :: SentenceStyle -> ProjectName -> Sentence
+projAbrvS ss = Ch ss CapW . (^. uid)

@@ -36,7 +36,6 @@ import Drasil.Metadata.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 -- Other docLang
 import Drasil.SRS.DocDecl (SRSDecl, mkDocDesc)
-import qualified Drasil.SRS.DocDecl as DD
 import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),
@@ -97,10 +96,9 @@ mkDoc si srsDecl headingComb =
       -- 'Reference's) and the true list of bibliography entries known.
       heading = srs `headingComb` (si' ^. sysName)
       authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
-      toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
       sections' = mkSections si' dd' (Just refdCites)
-  in (Document heading authorsList toc sections', si')
+  in (Document heading authorsList sections', si')
 
 -- * Functions to Fill 'ChunkDB'
 
@@ -398,12 +396,3 @@ mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
 mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
-
--- ** Find Table of Contents
-
--- Find more concise way to do this
--- | Finds whether the Table of Contents is in a SRSDecl.
-findToC :: SRSDecl -> ShowTableOfContents
-findToC [] = NoToC
-findToC (DD.TableOfContents:_) = ToC
-findToC (_:dds) = findToC dds

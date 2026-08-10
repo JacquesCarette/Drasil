@@ -7,7 +7,7 @@ import System.Environment (getEnv, lookupEnv)
 
 import Drasil.Generator (concretizeAndWrite, drasilMakefileReqOpts)
 import Language.Drasil (Sentence(S))
-import Language.Drasil.Document (Document(Document), ShowTableOfContents(NoToC), namedRef)
+import Language.Drasil.Document (Document(Document), namedRef)
 import Drasil.Website.Core (defaultDrasilWebsiteGenOpts)
 
 import Drasil.Website.Body (FolderLocation (..), gitHubRef, sections,
@@ -62,7 +62,7 @@ main = do
 
       --  FIXME: Author is hack for now to show up in proper spot.
       author = namedRef gitHubRef (S "Link to GitHub Repository")
-      websiteDoc = Document (S websiteTitle) author NoToC $ sections allFolders
+      websiteDoc = Document (S websiteTitle) author $ sections allFolders
       syst = webSys websiteDoc allFolders
 
   concretizeAndWrite syst defaultDrasilWebsiteGenOpts drasilMakefileReqOpts

@@ -24,7 +24,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- | Translates from 'Document' to a printable representation of 'T.Document'.
 makeDocument :: PrintingInformation -> Document -> T.Document
-makeDocument sm (Document titleLb authorName _ sections) =
+makeDocument sm (Document titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 makeDocument sm (Notebook titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout' sm sections)
@@ -32,7 +32,7 @@ makeDocument sm (Notebook titleLb authorName sections) =
 -- | Translates from 'Document' to a printable representation of 'T.Project'.
 makeProject :: PrintingInformation -> Document -> T.Project
 makeProject _ Notebook {} = error "Unsupported format: Notebook"
-makeProject sm (Document titleLb authorName _ sections) =
+makeProject sm (Document titleLb authorName sections) =
   T.Project (spec sm titleLb) (spec sm authorName) refMap files
   where
     files   = createFiles sm sections

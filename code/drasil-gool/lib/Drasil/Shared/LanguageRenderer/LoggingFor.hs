@@ -423,7 +423,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg file) => P.ProcProg (LoggingFor r) vis stmt mthd prg file
+instance (P.ProcProg r vis stmt mthd file prg) => P.ProcProg (LoggingFor r) vis stmt mthd file prg
 
 instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
   buildModule = liftLogging P.buildModule
@@ -432,7 +432,7 @@ instance (P.FileSym r vis stmt mthd file) => P.FileSym (LoggingFor r) vis stmt m
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
-instance (P.ProgramSym r vis stmt mthd prg file) => P.ProgramSym (LoggingFor r) vis stmt mthd prg file where
+instance (P.ProgramSym r vis stmt mthd file prg) => P.ProgramSym (LoggingFor r) vis stmt mthd file prg where
   prog = liftLogging P.prog
 
 -- GOOL
@@ -515,7 +515,7 @@ instance (G.FileSym r vis stmt mthd stvr attch file) => G.FileSym (LoggingFor r)
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis stmt mthd stvr attch prg file) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr attch prg file where
+instance (G.ProgramSym r vis stmt mthd stvr attch file prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr attch file prg where
   prog = liftLogging G.prog
 
 instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where

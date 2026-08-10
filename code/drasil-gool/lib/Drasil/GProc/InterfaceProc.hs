@@ -32,8 +32,8 @@ class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
   ReadFile r stmt, List r, ListStatement r stmt, Literal r, MathConstant r,
   NumericExpression r, ParameterSym r, Reference r, Set r,
   StringStatement r stmt, ValueExpression r, VariableValue r,
-  ProgramSym r vis stmt mthd prg file)
-  => ProcProg r vis stmt mthd prg file
+  ProgramSym r vis stmt mthd file prg)
+  => ProcProg r vis stmt mthd file prg
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)

@@ -129,21 +129,21 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData ProgData
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData where
+instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
+instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
@@ -745,7 +745,7 @@ instance RenderClass SwiftCode Doc MethodData StateVar where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will

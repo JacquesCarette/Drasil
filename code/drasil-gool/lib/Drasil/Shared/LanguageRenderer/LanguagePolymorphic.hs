@@ -29,8 +29,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
   VariableValue, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (Module, Class, Initializers, CSStateVar,
-  newObj, objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
+import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
+  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -44,7 +44,8 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   RenderMod(updateModuleDoc))
 import qualified Drasil.GOOL.RendererClassesOO as RO
 import Drasil.Shared.AST (AttachmentTag(..), Terminator(..), isSource,
-  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData, FuncData)
+  ScopeTag(Local), ScopeData, sd, TypeData(..), BinderD, ParamData, FuncData,
+  ModData)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getNestDegree,
   on2StateWrapped)
@@ -547,14 +548,14 @@ method
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis stmt mthd stvr attch file)
+  :: (OORenderSym r vis stmt mthd stvr attch mod file)
   => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis stmt mthd stvr attch file)
+  :: (OORenderSym r vis stmt mthd stvr attch mod file)
   => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
@@ -605,14 +606,14 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 
 -- Modules --
 
-modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FS (r Module)
+modFromData :: Label -> (Doc -> r ModData) -> FS Doc -> FS (r ModData)
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
 fileDoc
   :: (RC.BlockElim r, RenderMod r, RenderFile r file)
-  => String -> (r Module -> r Block) -> r Block -> FS (r Module) -> FS (r file)
+  => String -> (r ModData -> r Block) -> r Block -> FS (r ModData) -> FS (r file)
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -644,7 +645,7 @@ docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt
 
 fileFromData
   :: (RO.ModuleElim r)
-  => (FilePath -> r Module -> r file) -> FilePath -> FS (r Module) -> FS (r file)
+  => (FilePath -> r ModData -> r file) -> FilePath -> FS (r ModData) -> FS (r file)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

@@ -4,7 +4,7 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  Program, GSProgram, Module, Class, StateVar, CSStateVar, Initializers,
+  Program, GSProgram, Class, StateVar, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
@@ -38,8 +38,7 @@ import Drasil.Shared.InterfaceCommon (
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
 import Drasil.Shared.State (GS, FS, CS, MS, VS)
-import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData, ModData,
-  ProgData)
+import Drasil.Shared.AST (ScopeData, TypeData, ParamData, FuncData, ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -55,8 +54,8 @@ class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
   ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
   ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  ProgramSym r vis stmt mthd stvr attch file prg
-  ) => OOProg r vis stmt mthd stvr attch file prg
+  ProgramSym r vis stmt mthd stvr attch mod file prg
+  ) => OOProg r vis stmt mthd stvr attch mod file prg
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
@@ -64,30 +63,28 @@ type GSProgram a prg = GS (a prg)
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
 class
-  (FileSym r vis stmt mthd stvr attch file)
-  => ProgramSym r vis stmt mthd stvr attch file prg | r -> prg where
+  (FileSym r vis stmt mthd stvr attch mod file)
+  => ProgramSym r vis stmt mthd stvr attch mod file prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r file)] -> GSProgram r prg
 
 -- | Class for representing a file.
-class (ModuleSym r vis stmt mthd stvr attch) => FileSym r vis stmt mthd stvr attch file | r -> file where
+class (ModuleSym r vis stmt mthd stvr attch mod) => FileSym r vis stmt mthd stvr attch mod file | r -> file where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
-  fileDoc :: FS (r Module) -> FS (r file)
+  fileDoc :: FS (r mod) -> FS (r file)
 
   -- | Given module description, watermark, list of author names,
   -- date as a String, and file to comment, creates a __documented module__
   -- (i.e. module with a header comment)
   docMod :: String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 
-type Module = ModData
-
 -- | Class for representing a module.
-class (ClassSym r vis stmt mthd stvr attch) => ModuleSym r vis stmt mthd stvr attch where
+class (ClassSym r vis stmt mthd stvr attch) => ModuleSym r vis stmt mthd stvr attch mod | r -> mod where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
-  buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
+  buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r mod)
 
 type Class = Doc
 

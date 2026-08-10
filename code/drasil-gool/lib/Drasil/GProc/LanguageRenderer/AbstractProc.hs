@@ -9,10 +9,9 @@ import Drasil.Shared.InterfaceCommon (Label, Body, SValue, SVariable,
   VariableElim(variableName, variableType), VisibilitySym(..), funcApp,
   getCodeType, convType, ValueStatement(..), ValueExpression, IndexTranslator)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GProc.InterfaceProc (Module)
 import qualified Drasil.Shared.RendererClassesCommon as RC
 import qualified Drasil.GProc.RendererClassesProc as RP
-import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData)
+import Drasil.Shared.AST (isSource, ScopeData, TypeData, ParamData, ModData)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)
@@ -31,7 +30,7 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty, brackets, (<>), render)
 
 -- Files --
 
-fileDoc :: (RP.RenderFile r file) => String -> FS (r Module) -> FS (r file)
+fileDoc :: (RP.RenderFile r file) => String -> FS (r ModData) -> FS (r file)
 fileDoc ext md = do
   m <- md
   nm <- getModuleName
@@ -40,7 +39,7 @@ fileDoc ext md = do
 
 fileFromData
   :: (RP.ModuleElim r)
-  => (FilePath -> r Module -> r file) -> FilePath -> FS (r Module) -> FS (r file)
+  => (FilePath -> r ModData -> r file) -> FilePath -> FS (r ModData) -> FS (r file)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'
@@ -53,11 +52,11 @@ fileFromData f fpath mdl' = do
         else s)
   return $ f fpath mdl
 
--- Parameters: Module name, Doc for imports, Doc to put at bottom of module,
+-- Parameters: ModData name, Doc for imports, Doc to put at bottom of module,
 -- methods
 buildModule
   :: (RC.MethodElim r mthd, RP.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> [MS (r mthd)] -> FS (r Module)
+  => Label -> FS Doc -> FS Doc -> [MS (r mthd)] -> FS (r ModData)
 buildModule n imps bot fs = RP.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
@@ -71,7 +70,7 @@ docMod
 docMod e d wm a dt fl = RP.commentedMod fl
   (RC.docComment $ CP.modDoc' d wm a dt . addExt e <$> getModuleName)
 
-modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FS (r Module)
+modFromData :: Label -> (Doc -> r ModData) -> FS Doc -> FS (r ModData)
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Lists and Arrays --
@@ -104,8 +103,9 @@ arrayElem arr' i' = do
       vRender = RC.value arr <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (RP.ProcRenderSym r vis stmt mthd file) => SVariable r -> r ScopeData ->
-  [SVariable r] -> MS (r Body) -> MS (r stmt)
+funcDecDef
+  :: (RP.ProcRenderSym r vis stmt mthd mod file)
+  => SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr

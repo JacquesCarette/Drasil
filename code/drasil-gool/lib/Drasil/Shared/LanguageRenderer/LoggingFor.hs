@@ -423,21 +423,21 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd file prg) => P.ProcProg (LoggingFor r) vis stmt mthd file prg
+instance (P.ProcProg r vis stmt mthd mod file prg) => P.ProcProg (LoggingFor r) vis stmt mthd mod file prg
 
-instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
+instance (P.ModuleSym r vis stmt mthd mod) => P.ModuleSym (LoggingFor r) vis stmt mthd mod where
   buildModule = liftLogging P.buildModule
 
-instance (P.FileSym r vis stmt mthd file) => P.FileSym (LoggingFor r) vis stmt mthd file where
+instance (P.FileSym r vis stmt mthd mod file) => P.FileSym (LoggingFor r) vis stmt mthd mod file where
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
-instance (P.ProgramSym r vis stmt mthd file prg) => P.ProgramSym (LoggingFor r) vis stmt mthd file prg where
+instance (P.ProgramSym r vis stmt mthd mod file prg) => P.ProgramSym (LoggingFor r) vis stmt mthd mod file prg where
   prog = liftLogging P.prog
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd stvr attch file prg) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch file prg
+instance (G.OOProg r vis stmt mthd stvr attch mod file prg) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch mod file prg
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -508,14 +508,14 @@ instance (G.ClassSym r vis stmt mthd stvr attch) => G.ClassSym (LoggingFor r) vi
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis stmt mthd stvr attch) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch where
+instance (G.ModuleSym r vis stmt mthd stvr attch mod) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch mod where
   buildModule = liftLogging G.buildModule
 
-instance (G.FileSym r vis stmt mthd stvr attch file) => G.FileSym (LoggingFor r) vis stmt mthd stvr attch file where
+instance (G.FileSym r vis stmt mthd stvr attch mod file) => G.FileSym (LoggingFor r) vis stmt mthd stvr attch mod file where
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis stmt mthd stvr attch file prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr attch file prg where
+instance (G.ProgramSym r vis stmt mthd stvr attch mod file prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr attch mod file prg where
   prog = liftLogging G.prog
 
 instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where

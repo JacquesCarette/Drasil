@@ -119,21 +119,21 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ProgData
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData FileData ProgData
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ProgData where
+instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData FileData
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
 
-instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData where
+instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m
@@ -725,7 +725,7 @@ instance RenderClass PythonCode Doc MethodData StateVar where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports

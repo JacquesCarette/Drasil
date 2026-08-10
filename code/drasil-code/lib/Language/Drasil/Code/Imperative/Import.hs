@@ -247,7 +247,7 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -261,7 +261,7 @@ publicFunc n t desc ps r b = do
 
 -- | Generates a public method.
 publicMethod
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -274,7 +274,7 @@ publicMethod n t = do
 
 -- | Generates a private method.
 privateMethod
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> VS (r TypeData)
   -> Description
@@ -287,7 +287,7 @@ privateMethod n t = do
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -298,7 +298,7 @@ publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> Description
   -> [CodeVarChunk]
@@ -310,7 +310,7 @@ privateInOutMethod n = genInOutFunc (inOutMethod n private instanceLevel)
 
 -- | Generates a constructor.
 genConstructor
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -321,7 +321,7 @@ genConstructor n desc p = do
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Label
   -> Description
   -> [ParameterChunk]
@@ -335,7 +335,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => ([MS (r ParamData)] -> MS (r Body) -> MS (r mthd))
   -> Label
   -> Description
@@ -642,7 +642,7 @@ elementSetBoolBfunc SContains = OO.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r vis stmt mthd stvr attch file prg) =>
+genModDef :: (OOProg r vis stmt mthd stvr attch mod file prg) =>
   Mod -> GenState (FS (r file))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
@@ -652,20 +652,20 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
 
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncs
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Mod -> [GenState (MS (r mthd))]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Mod -> [GenState (CS (r Class))]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => (Name -> Maybe Name -> Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] -> GenState (CS (r Class)))
   -> M.Class
   -> GenState (CS (r Class))
@@ -684,7 +684,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
 genFunc
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => (Name -> VS (r TypeData) -> Description -> [ParameterChunk] -> Maybe Description -> [MS (r Block)] -> GenState (MS (r mthd)))
   -> [StateVariable]
   -> Func
@@ -837,7 +837,7 @@ convStmt (FAppend a b) = do
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
 genDataFunc
-  :: (OOProg r vis stmt mthd stvr attch file prg)
+  :: (OOProg r vis stmt mthd stvr attch mod file prg)
   => Name -> Description -> DataDesc -> GenState (MS (r mthd))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -1102,7 +1102,7 @@ genModDefProc
     , List r
     , Reference r
     , OO.Set r
-    , ProcProg r vis stmt mthd file prg
+    , ProcProg r vis stmt mthd mod file prg
     , TypeElim r
     )
   => Mod -> GenState (FS (r file))

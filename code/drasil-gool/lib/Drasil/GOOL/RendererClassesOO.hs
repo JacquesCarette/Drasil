@@ -8,10 +8,10 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
-import qualified Drasil.GOOL.InterfaceGOOL as IG (Module, Class, CSStateVar,
+import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..), FileSym(..),
   GetSet(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
+import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData, ModData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -19,13 +19,14 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd, IG.FileSym r vis stmt mthd stvr attch file,
-  IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
-  IG.StrategyPattern r stmt, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r vis mthd stvr, ClassElim r,
-  RenderFile r file, InternalGetSet r, OORenderMethod r vis mthd attch,
-  RenderMod r, ModuleElim r, StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis stmt mthd stvr attch file
+class (CommonRenderSym r vis stmt mthd,
+  IG.FileSym r vis stmt mthd stvr attch mod file, IG.InternalValueExp r,
+  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r stmt,
+  IG.OOVariableValue r, IG.OOValueExpression r, RenderClass r vis mthd stvr,
+  ClassElim r, RenderFile r file, InternalGetSet r,
+  OORenderMethod r vis mthd attch, RenderMod r, ModuleElim r,
+  StateVarElim r stvr, PermElim r attch
+  ) => OORenderSym r vis stmt mthd stvr attch mod file
 
 -- OO-Only Typeclasses --
 
@@ -33,12 +34,12 @@ class (BlockCommentSym r) => RenderFile r file | r -> file where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r IG.Module -> r Block
+  top :: r ModData -> r Block
   bottom :: r Block
 
   commentedMod :: FS (r file) -> FS (r Doc) -> FS (r file)
 
-  fileFromData :: FilePath -> FS (r IG.Module) -> FS (r file)
+  fileFromData :: FilePath -> FS (r ModData) -> FS (r file)
 
 class PermElim r attch where
   perm :: r attch -> Doc
@@ -82,8 +83,8 @@ class ClassElim r where
   class' :: r IG.Class -> Doc
 
 class RenderMod r where
-  modFromData :: String -> FS Doc -> FS (r IG.Module)
-  updateModuleDoc :: (Doc -> Doc) -> r IG.Module -> r IG.Module
+  modFromData :: String -> FS Doc -> FS (r ModData)
+  updateModuleDoc :: (Doc -> Doc) -> r ModData -> r ModData
 
 class ModuleElim r where
-  module' :: r IG.Module -> Doc
+  module' :: r ModData -> Doc

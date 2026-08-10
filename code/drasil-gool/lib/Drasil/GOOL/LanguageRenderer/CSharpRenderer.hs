@@ -128,21 +128,21 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData ProgData
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData where
+instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
+instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
@@ -704,7 +704,7 @@ instance RenderClass CSharpCode Doc MethodData StateVar where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode where

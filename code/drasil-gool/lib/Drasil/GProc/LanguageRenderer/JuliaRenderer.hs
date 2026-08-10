@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
   switchAsIf, convScope)
-import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
+import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -109,21 +109,21 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData FileData ProgData
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ModData FileData ProgData
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData FileData ProgData where
+instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ModData FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData ModData FileData
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
-instance FileSym JuliaCode Doc (Doc, Terminator) MethodData FileData where
+instance FileSym JuliaCode Doc (Doc, Terminator) MethodData ModData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m
@@ -585,7 +585,7 @@ instance ProcRenderMethod JuliaCode Doc MethodData where
 instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
-instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData ModData where
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
@@ -853,7 +853,7 @@ jlForEach i lstVar b = vcat [
 
 -- | Creates the contents of a module in Julia
 jlModContents
-  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode Module)
+  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode ModData)
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports

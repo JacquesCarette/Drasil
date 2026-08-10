@@ -4,7 +4,7 @@
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  Program, GSProgram, Module,
+  Program, GSProgram,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
@@ -18,7 +18,7 @@ import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
   ValueExpression, VariableValue, UnRepr, FunctionSym, ScopeSym, BinderSym,
   InternalList, TypeElim, VariableElim)
 import Drasil.Shared.State (GS, FS, MS)
-import Drasil.Shared.AST (ModData, ProgData, TypeData)
+import Drasil.Shared.AST (ProgData, TypeData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
@@ -32,34 +32,32 @@ class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
   ReadFile r stmt, List r, ListStatement r stmt, Literal r, MathConstant r,
   NumericExpression r, ParameterSym r, Reference r, Set r,
   StringStatement r stmt, ValueExpression r, VariableValue r,
-  ProgramSym r vis stmt mthd file prg)
-  => ProcProg r vis stmt mthd file prg
+  ProgramSym r vis stmt mthd mod file prg)
+  => ProcProg r vis stmt mthd mod file prg
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
 
 -- | Class for representing a program.
 -- Usually 'ProgData' is used for the representation.
-class (FileSym r vis stmt mthd file) => ProgramSym r vis stmt mthd file prg | r -> prg where
+class (FileSym r vis stmt mthd mod file) => ProgramSym r vis stmt mthd mod file prg | r -> prg where
   -- | Given program name, program purpose, and list of files,
   -- Generates a representation of a program.
   prog :: Label -> Label -> [FS (r file)] -> GSProgram r prg
 
 -- | Class for representing a file.
-class (ModuleSym r vis stmt mthd) => FileSym r vis stmt mthd file | r -> file where
+class (ModuleSym r vis stmt mthd mod) => FileSym r vis stmt mthd mod file | r -> file where
   -- | Given a module, generates a representation of a file.
   -- (Implicit assumption: exactly one module per file)
-  fileDoc :: FS (r Module) -> FS (r file)
+  fileDoc :: FS (r mod) -> FS (r file)
 
   -- | Given module description, watermark, list of author names,
   -- date as a String, and file to comment, creates a __documented module__
   -- (i.e. module with a header comment)
   docMod :: String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 
-type Module = ModData
-
 -- | Class for representing a module.
-class (MethodSym r vis stmt mthd) => ModuleSym r vis stmt mthd where
+class (MethodSym r vis stmt mthd) => ModuleSym r vis stmt mthd mod | r -> mod where
   -- | Given module name, list of import names, and list of module functions,
   -- generates a representation of a module.
-  buildModule :: Label -> [Label] -> [MS (r mthd)] -> FS (r Module)
+  buildModule :: Label -> [Label] -> [MS (r mthd)] -> FS (r mod)

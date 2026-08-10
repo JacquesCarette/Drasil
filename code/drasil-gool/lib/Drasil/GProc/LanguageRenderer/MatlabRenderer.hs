@@ -59,10 +59,10 @@ import qualified Drasil.Shared.LanguageRenderer.Common as CS (varDecDef,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   increment1, decrement1, listSlice, stringListVals, stringListLists)
 import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
-  updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar, paramDoc, pd,
-  ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
-  varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
-  FuncData(fType, funcDoc), fd, ScopeData, FileData)
+  updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar,
+  paramDoc, pd, ProgData, TypeData, cType, vd, val, valPrec, valInt, valType,
+  opDoc, opPrec, varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
+  FuncData(fType, funcDoc), fd, ScopeData, FileData, ModData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
@@ -91,21 +91,21 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData FileData ProgData
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ModData FileData ProgData
 
-instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData FileData ProgData where
+instance ProgramSym MatlabCode Doc (Doc, Terminator) MethodData ModData FileData ProgData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData FileData
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData ModData FileData
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
 
-instance FileSym MatlabCode Doc (Doc, Terminator) MethodData FileData where
+instance FileSym MatlabCode Doc (Doc, Terminator) MethodData ModData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc mlExt m
@@ -569,7 +569,7 @@ instance ProcRenderMethod MatlabCode Doc MethodData where
 instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData ModData where
   buildModule n _ fs = modFromData n (do
     fns <- mapM (zoom lensFStoMS) fs
     entryFn <- mlMainFunc n

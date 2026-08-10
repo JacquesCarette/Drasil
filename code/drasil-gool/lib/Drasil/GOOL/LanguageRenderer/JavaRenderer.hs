@@ -129,20 +129,20 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData ProgData
 
-instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ProgData where
+instance ProgramSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData ProgData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
 instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
+instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ModData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
@@ -733,7 +733,7 @@ instance RenderClass JavaCode Doc MethodData StateVar where
 instance ClassElim JavaCode where
   class' = unJC
 
-instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod JavaCode where

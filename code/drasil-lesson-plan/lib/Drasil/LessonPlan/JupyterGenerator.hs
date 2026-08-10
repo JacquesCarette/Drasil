@@ -42,7 +42,7 @@ instance ToFiles LessonPlan JupyterGenOptions where
       -- Steps:
 
       -- 1. Transform `LessonPlan` into SDL (Semantic Document language).
-      nm = (titleize notebook) `titleComb` (projTitleS TermStyle $ plan ^. projName)
+      nm = titleize notebook `titleComb` projTitleS TermStyle $ plan ^. projName
       as = foldlList Comma List $ map (S . fullName) $ plan ^. authors
       -- FIXME: These sections should be inserted into the ChunkDB but doing so
       -- (currently) creates a "duplicate chunk insertion" error /because/ the

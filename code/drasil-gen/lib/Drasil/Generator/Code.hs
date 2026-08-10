@@ -31,7 +31,7 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
 import Drasil.SRS (SmithEtAlSRS)
-import Drasil.System (HasSystemMeta(..), HasProjectName(..))
+import Drasil.System (HasProjectName(..))
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
@@ -107,7 +107,7 @@ codedHRName sys Choices {
     codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
 
 -- | Lowercase folder name for a "zoo" of executable softifacts (e.g. "projectile_u_p_nol_u_wi_v_d").
-codedDirName :: (HasSystemMeta sys, HasProjectName sys) => sys -> Choices -> String
+codedDirName :: (HasProjectName sys) => sys -> Choices -> String
 codedDirName sys chcs = map toLower $ codedHRName sys chcs
 
 codedMod :: Modularity -> String

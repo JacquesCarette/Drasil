@@ -22,7 +22,7 @@ import Drasil.Generator.Code (genCode, genCodeZoo)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
 import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 import Drasil.Generator.WriteSystem (setSystemLocale)
-import Drasil.System (HasSystemMeta(..), HasProjectName(..))
+import Drasil.System (HasProjectName(..))
 
 -- | Internal: Generate documents and construct the SRS directory layout
 -- structure (and debug data) for an example.

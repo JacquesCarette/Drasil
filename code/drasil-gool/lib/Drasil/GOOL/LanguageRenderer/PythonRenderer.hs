@@ -440,6 +440,7 @@ instance Array PythonCode where
 instance List PythonCode where
   listSize = CS.listSize pyListSize
   listAccess = G.listAccess
+  listLast v = listAccess v (litInt (-1))
   indexOf = CP.indexOf pyIndex
 
 instance ListStatement PythonCode (Doc, Terminator) where

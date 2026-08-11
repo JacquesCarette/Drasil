@@ -447,6 +447,7 @@ instance Array SwiftCode where
 instance List SwiftCode where
   listSize = C.listSize' swiftListSize
   listAccess = G.listAccess
+  listLast v = listAccess v (listSize v #- litInt 1)
   indexOf = swiftIndexOf
 
 instance ListStatement SwiftCode (Doc, Terminator) where

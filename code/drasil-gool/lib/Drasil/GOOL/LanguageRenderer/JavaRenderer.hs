@@ -462,6 +462,7 @@ instance Array JavaCode where
 instance List JavaCode where
   listSize = C.listSize "size"
   listAccess = G.listAccess
+  listLast v = listAccess v (listSize v #- litInt 1)
   indexOf = CP.indexOf jIndex
 
 instance ListStatement JavaCode (Doc, Terminator) where

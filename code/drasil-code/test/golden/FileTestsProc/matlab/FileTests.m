@@ -26,7 +26,7 @@ function FileTests(varargin)
         list_i1 = list_i1 + 1;
     end
     if length(fileContents) > 0
-        fprintf('%s', fileContents{length(fileContents) - 1 + 1});
+        fprintf('%s', fileContents{end});
     end
     fprintf('%s\n', "]");
     assert(length(fileContents) > 0, "fileContents should not be empty.");

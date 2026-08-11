@@ -30,7 +30,7 @@ mkSRS = [TableOfContents,
     ],
   IntroSec $
   IntroProg EmptyS []
-    [ IPurpose $ purpDoc progName Verbose,
+    [ IPurpose (StdPurp Verbose),
       IScope EmptyS,
       IChar [] [] [],
       IOrgSec Nothing

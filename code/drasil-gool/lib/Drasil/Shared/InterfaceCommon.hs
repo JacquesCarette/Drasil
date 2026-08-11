@@ -321,6 +321,9 @@ class (IndexTranslator r) => List r where
   -- | Gets the value of an index of a list.
   --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
+  -- | Gets the last element of a list.
+  --   Arguments are: List
+  listLast   :: SValue r -> SValue r
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r

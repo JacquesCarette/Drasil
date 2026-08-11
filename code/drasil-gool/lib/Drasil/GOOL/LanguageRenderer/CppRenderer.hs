@@ -450,6 +450,7 @@ instance (Pair p) => Array (p CppSrcCode CppHdrCode) where
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAccess = pair2 listAccess listAccess
+  listLast = pair1 listLast listLast
   indexOf = pair2 indexOf indexOf
 
 instance (Pair p) => ListStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
@@ -1391,6 +1392,7 @@ instance List CppSrcCode where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
   listAccess = G.listAccess
+  listLast v = listAccess v (listSize v #- litInt 1)
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance ListStatement CppSrcCode (Doc, Terminator) where
@@ -2065,6 +2067,7 @@ instance Array CppHdrCode where
 instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAccess _ _ = mkStateVal void empty
+  listLast _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
 
 instance ListStatement CppHdrCode (Doc, Terminator) where

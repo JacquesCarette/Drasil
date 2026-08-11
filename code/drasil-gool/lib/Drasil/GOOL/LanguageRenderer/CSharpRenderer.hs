@@ -438,6 +438,7 @@ instance Array CSharpCode where
 instance List CSharpCode where
   listSize = C.listSize' csListSize
   listAccess = G.listAccess
+  listLast v = listAccess v (listSize v #- litInt 1)
   indexOf = CP.indexOf csIndex
 
 instance ListStatement CSharpCode (Doc, Terminator) where

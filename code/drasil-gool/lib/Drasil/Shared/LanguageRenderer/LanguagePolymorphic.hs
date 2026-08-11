@@ -396,7 +396,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++)
     (bodyStatements [prFn (IC.listAccess v (IC.valueOf i)), prStrFn ", "]),
   ifNoElse [(IC.listSize v ?> IC.litInt 0, oneLiner $
-    prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))],
+    prFn (IC.listLast v))],
   prLnFn "]"]
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int

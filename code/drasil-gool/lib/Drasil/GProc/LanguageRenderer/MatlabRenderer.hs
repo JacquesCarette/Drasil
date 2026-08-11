@@ -70,7 +70,8 @@ import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
-  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat)
+  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat,
+  getInnerType)
 import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
   revFiles, setFileType, setModuleName, getMainDoc)
 
@@ -337,6 +338,11 @@ instance Array MatlabCode where
 instance List MatlabCode where
   listSize = CS.listSize "length"   -- length(v)
   listAccess = G.listAccess
+  listLast v = do
+    v' <- v
+    let t = A.innerType $ return $ valueType v'
+        innerCt = getInnerType $ cType $ unMLC $ valueType v'
+    mkStateVal t (RC.value v' <> mlCellWrap innerCt (text "end"))
   indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance ListStatement MatlabCode (Doc, Terminator) where

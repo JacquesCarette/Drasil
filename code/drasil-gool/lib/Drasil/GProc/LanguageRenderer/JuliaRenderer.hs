@@ -383,6 +383,10 @@ instance Array JuliaCode where
 instance List JuliaCode where
   listSize = CS.listSize jlListSize
   listAccess = G.listAccess
+  listLast v = do
+    v' <- v
+    let t = A.innerType $ return $ valueType v'
+    mkStateVal t (RC.value v' <> brackets (text "end"))
   indexOf = jlIndexOf
 
 instance ListStatement JuliaCode (Doc, Terminator) where

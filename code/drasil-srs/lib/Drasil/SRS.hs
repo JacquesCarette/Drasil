@@ -16,6 +16,7 @@ module Drasil.SRS (
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
+  PurposeDescription(..),
   -- *** Functions
   -- Drasil.DocumentLanguage
   mkDoc,
@@ -34,8 +35,6 @@ module Drasil.SRS (
   -- Drasil.Sections.AuxiliaryConstants
   tableOfConstants,
   -- ** Introduction
-  -- Drasil.Sections.Introduction
-  purpDoc,
   -- ** Reference Material
   -- Drasil.Sections.ReferenceMaterial
   intro, emptySectSentPlu, emptySectSentSing,
@@ -63,12 +62,11 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), TUIntro(..))
+  TSIntro(..), TUIntro(..), PurposeDescription(..))
 import Drasil.SRS.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
 import Drasil.SRS.Sections.AuxiliaryConstants (tableOfConstants)
-import Drasil.SRS.Sections.Introduction (purpDoc)
 import Drasil.SRS.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
 import Drasil.SRS.Sections.Requirements (mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR,

@@ -84,6 +84,8 @@ function HelloWorld(varargin)
     myOtherList = [myOtherList(1:(3 - 1)), 2.0, myOtherList(3:end)];
     myOtherList(length(myOtherList) + 1) = 2.5;
     e = myOtherList(2);
+    fprintf('%s', "Last element of myOtherList: ");
+    fprintf('%g\n', myOtherList(end));
     myOtherList(2) = 17.4;
     myName = {};
     myName = strsplit("Brooks Mac", " ");

@@ -423,12 +423,12 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg file) => P.ProcProg (LoggingFor r) vis stmt mthd prg file
+instance (P.ProcProg r vis stmt mthd prg file mod) => P.ProcProg (LoggingFor r) vis stmt mthd prg file mod
 
-instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
+instance (P.ModuleSym r vis stmt mthd mod) => P.ModuleSym (LoggingFor r) vis stmt mthd mod where
   buildModule = liftLogging P.buildModule
 
-instance (P.FileSym r vis stmt mthd file) => P.FileSym (LoggingFor r) vis stmt mthd file where
+instance (P.FileSym r file mod) => P.FileSym (LoggingFor r) file mod where
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
@@ -437,7 +437,7 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd stvr attch prg file) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg file
+instance (G.OOProg r vis stmt mthd stvr attch prg file mod) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg file mod
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -508,10 +508,10 @@ instance (G.ClassSym r vis stmt mthd stvr attch) => G.ClassSym (LoggingFor r) vi
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis stmt mthd stvr attch) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch where
+instance (G.ModuleSym r vis stmt mthd stvr attch mod) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch mod where
   buildModule = liftLogging G.buildModule
 
-instance (G.FileSym r vis stmt mthd stvr attch file) => G.FileSym (LoggingFor r) vis stmt mthd stvr attch file where
+instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 

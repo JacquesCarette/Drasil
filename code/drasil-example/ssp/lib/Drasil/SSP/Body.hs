@@ -3,7 +3,7 @@ module Drasil.SSP.Body (si, mkSRS) where
 import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
-import Drasil.Database (ChunkDB, insert)
+import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (Verb, number, organization, variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
@@ -13,6 +13,7 @@ import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (assumpt,
   genDefn, dataDefn, datCon)
+import Drasil.System (projAbrvS, ProjectName)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -136,9 +137,8 @@ conceptChunks =
   [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks
-    [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks
+  [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -218,7 +218,7 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
-   phrase softwareSys, S "itself" +:+. sParen (short progName),
+   phrase softwareSys, S "itself" +:+. sParen (projAbrvS projName),
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxFig1 :: LabelledContent
@@ -233,7 +233,7 @@ sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide" +:+ D.toSent (phraseNP (the input_)) +:+ S "data related to" +:+
   D.toSent (phraseNP (the soilLyr)) :+: S "(s) and water table (if applicable)" `sC`
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
-  S "required by" +:+ short progName,
+  S "required by" +:+ projAbrvS projName,
   S "Ensure that consistent units are used for" +:+ D.toSent (pluralNP (combineNINI input_ variable)),
   S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (D.toSent $ pluralNP (combineNINI software assumption))
   +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+
@@ -253,7 +253,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -264,13 +264,13 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- userContraints intro below
 
 userCharIntro :: Contents
-userCharIntro = userChar progName [S "Calculus", titleize Doc.physics]
+userCharIntro = userChar projName [S "Calculus", titleize Doc.physics]
   [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle,
   S "unit weight"]
 
-userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
+userChar :: ProjectName -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
-  D.toSent (atStartNP (the endUser)) `S.of_` short pname,
+  D.toSent (atStartNP (the endUser)) `S.of_` projAbrvS pname,
   S "should have an understanding" `S.of_` S "undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC`
@@ -312,7 +312,7 @@ physSystParts = map foldlSent [
 figPhysSyst :: LabelledContent
 figPhysSyst = llccFig "PhysicalSystem" $
   fig (foldlSent_ [S "An example", D.toSent (phraseNP (slope `for` analysis)),
-  S "by", short progName `sC` S "where the dashed line represents the",
+  S "by", projAbrvS projName `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
 physSystContents :: [Contents]

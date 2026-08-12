@@ -1,6 +1,6 @@
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
-import Drasil.Database (ChunkDB, insert)
+import Drasil.Database (ChunkDB)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -33,6 +33,7 @@ import Drasil.BinaryStar.Changes (likelyChgs, unlikelyChgs)
 import Drasil.BinaryStar.Expressions (energyExpr)
 import Drasil.BinaryStar.IMods (iMods)
 import Drasil.BinaryStar.TMods (tMods)
+import Drasil.System (projAbrvS)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -123,7 +124,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (projAbrvS projName) +:+. EmptyS,
    S "Arrows" `S.are` S "used to show the data flow between the",
    D.toSent (phraseNP (system `andIts` environment))]
 
@@ -158,7 +159,7 @@ sysCtxSysResp =
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -169,7 +170,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 --------------------------------
 usrCharsIntro :: Contents
 usrCharsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
+  [S "The", phrase endUser `S.of_` projAbrvS projName,
    S "should have an understanding of",
    S "undergraduate level 1 physics (Newtonian mechanics)" `sC`
    S "undergraduate level 1" +:+ phrase calculus `S.and_` plural ode]
@@ -214,15 +215,9 @@ motivation = foldlSent_ [S "To simulate how a binary star system evolves over ti
 authorName :: Person
 authorName = person "Xinlu" "Yan"
 
-cis :: [CI]
-cis = [progName]
-
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge [] symbols ideaDicts cis conceptChunks
-    ([] :: [UnitDefn]) ([] :: [DataDefinition]) iMods
-    ([] :: [GenDefn]) tMods concIns
-    citations (labelledContent ++ funcReqsTables)
+symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks
+  [] [] iMods [] tMods concIns citations (labelledContent ++ funcReqsTables)
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs

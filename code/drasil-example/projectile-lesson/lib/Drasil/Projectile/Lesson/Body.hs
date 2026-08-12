@@ -38,8 +38,7 @@ si = mkLessonPlan $
   mkSystemMeta projName projectileMotionLesson [spencerSmith] [] [] [] [] symbMap
 
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts cis conceptChunks [] [] []
   [] [] [] [] labelledContent
 
 cis :: [CI]

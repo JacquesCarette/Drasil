@@ -6,13 +6,14 @@ import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
 
-import Drasil.Database (ChunkDB, insert)
+import Drasil.Database (ChunkDB)
 import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -58,7 +59,7 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab progName) []
+    IntroProg (startIntro software blstRskInvWGlassSlab) []
     [IPurpose (StdPurp Verbose),
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
@@ -109,16 +110,12 @@ ideaDicts :: [IdeaDict]
 ideaDicts =
   [lateralLoad, materialProprty] ++ con'
 
-cis :: [CI]
-cis = progName : cis'
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks
-    [] GB.dataDefs iMods [] tMods concIns citations labCon
+symbMap = withCommonKnowledge projName allRefs symbolsWCodeSymbols ideaDicts cis' conceptChunks
+  [] GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
@@ -167,15 +164,15 @@ auxiliaryConstants = assumptionConstants ++ specParamVals
 
 {--INTRODUCTION--}
 
-startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
-startIntro prgm _ sysName = foldlSent [
+startIntro :: (NamedIdea n) => n -> Sentence -> Sentence
+startIntro prgm _ = foldlSent [
   atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+
   S "itself" `S.and_` S "also potentially from the secondary" +:+
   S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+.
   purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_`
   S "from a small fertilizer truck bomb." +:+
-  S "The document describes the program called", short sysName,
+  S "The document describes the program called", projAbrvS projName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "GlassBR")]
 
@@ -222,7 +219,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", (sParen (short progName) !.),
+   phrase softwareSys, S "itself", (sParen (projAbrvS projName) !.),
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
    `andIts` environment))]
 
@@ -251,7 +248,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $

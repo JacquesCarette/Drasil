@@ -161,9 +161,8 @@ conceptChunks =
   meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
-    NoPCM.iMods genDefs tMods concIns citations labelledContent'
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
+  NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

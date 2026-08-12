@@ -88,7 +88,7 @@ conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
   pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
+symbMap = withCommonKnowledge projName [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

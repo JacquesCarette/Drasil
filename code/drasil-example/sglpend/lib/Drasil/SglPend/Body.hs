@@ -45,15 +45,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg (justification progName) []
+    IntroProg (justification projName) []
       [IPurpose (StdPurp Verbose),
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec Nothing],
   GSDSec $
     GSDProg [
-      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName],
+      SysCntxt [sysCtxIntro projName, LlC sysCtxFig1, sysCtxDesc, sysCtxList projName],
+      UsrChars [userCharacteristicsIntro projName],
       SystCons [] []],
   SSDSec $
     SSDProg
@@ -104,10 +104,8 @@ allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols
 
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge allRefs allSymbols ideaDicts cis
-    conceptChunks [] dataDefs iMods genDefns tMods concIns citations
-    labelledContent'
+symbMap = withCommonKnowledge projName allRefs allSymbols ideaDicts cis
+  conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

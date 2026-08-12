@@ -1,6 +1,6 @@
 module Drasil.HGHC.Body (si, mkSRS) where
 
-import Drasil.Database (ChunkDB, insert)
+import Drasil.Database (ChunkDB)
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
@@ -11,6 +11,7 @@ import Drasil.HGHC.MetaConcepts (progName, projName)
 
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
+import Drasil.System (projTitleS)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
@@ -42,7 +43,7 @@ introPara = foldlSent [
   S "performance and safety. Engineers therefore rely on dependable calculations",
   S "of the heat transfer coefficients used for simulating the temperature.",
   S "This document describes the requirements of a program called",
-  phrase progName]
+  projTitleS projName]
 
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
@@ -50,9 +51,6 @@ purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to 
 ideaDicts :: [IdeaDict]
 ideaDicts = [fp, nuclearPhys]
 
-cis :: [CI]
-cis = [progName]
-
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge [] symbols ideaDicts cis [] [] dataDefs [] [] [] [] [] []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts [] [] [] dataDefs
+  [] [] [] [] [] []

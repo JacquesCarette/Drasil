@@ -3,7 +3,7 @@ module Drasil.Generator.CommonKnowledge (
   withCommonKnowledge
 ) where
 
-import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13)
+import Drasil.Database (empty, insertAll, ChunkDB, insertAllOutOfOrder13, insert)
 import Language.Drasil (IdeaDict, Citation, ConceptChunk, DefinedQuantityDict,
   UnitDefn, CI)
 import Language.Drasil.Document (ConceptInstance, LabelledContent, Reference,
@@ -23,16 +23,17 @@ import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 import Drasil.Metadata.Domains (compScience, softEng, mathematics, progLanguage, civilEng,
   materialEng, documentc, knowledgemng)
+import Drasil.System (ProjectName)
 
 -- | Create a `ChunkDB` containing background knowledge common to all of
 -- Drasil's existing case studies. This means knowledge related to the
 -- SmithEtAl-esque SRS, mathematics, physics, general science, basic software,
 -- and general documentation.
-withCommonKnowledge :: [Reference] -> [DefinedQuantityDict] -> [IdeaDict] -> [CI] ->
-    [ConceptChunk] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
-    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Citation] ->
-    [LabelledContent] -> ChunkDB
-withCommonKnowledge = insertAllOutOfOrder13 basisCDB
+withCommonKnowledge :: ProjectName -> [Reference] -> [DefinedQuantityDict] ->
+    [IdeaDict] -> [CI] -> [ConceptChunk] -> [UnitDefn] -> [DataDefinition] ->
+    [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
+    [Citation] -> [LabelledContent] -> ChunkDB
+withCommonKnowledge projN = insertAllOutOfOrder13 (insert projN basisCDB)
 
 -- | The 'basis' chunk database to all of Drasil's case studies, containing
 -- common background knowledge, including that related to the SRS, mathematics,

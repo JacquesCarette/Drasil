@@ -8,7 +8,7 @@ module Drasil.Template.Body (mkSRS, si) where
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
-import Drasil.Database (ChunkDB, mkUid, insert)
+import Drasil.Database (ChunkDB, mkUid)
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
@@ -127,12 +127,8 @@ concIns :: [ConceptInstance]
 concIns = [inputValues, outputValues]
 
 symbMap :: ChunkDB
-symbMap = insert projName $
-  withCommonKnowledge []
-    symbols [] cis conceptChunks
-    ([] :: [UnitDefn]) dataDefs ([] :: [InstanceModel])
-    ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
-    citations [inputValuesTable]
+symbMap = withCommonKnowledge projName [] symbols [] cis conceptChunks []
+  dataDefs [] [] [] concIns citations [inputValuesTable]
 
 citations :: BibRef
 citations = [parnasClements1986]

@@ -44,10 +44,10 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
-  MathConstant r, OOVariableValue r, BooleanExpression r, Comparison r,
-  NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
-  List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
+class (UnRepr r TypeData, Argument r, BodySym r stmt, CommandLineArgs r,
+  Literal r, MathConstant r, OOVariableValue r, BooleanExpression r,
+  Comparison r, NumericExpression r, InternalValueExp r, OOValueExpression r,
+  Array r, List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
   ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
   MethodSym r vis stmt mthd, OOMethodSym r vis mthd attch,
   ClassSym r vis mthd stvr attch, TypeElim r, VariableElim r,

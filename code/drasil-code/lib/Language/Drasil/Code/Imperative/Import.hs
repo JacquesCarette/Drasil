@@ -715,7 +715,8 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , OO.Literal r
@@ -849,7 +850,8 @@ genDataFunc nameTitle desc ddef = do
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readData
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , OO.Literal r
     , MathConstant r
     , OOVariableValue r
@@ -885,7 +887,8 @@ readData ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
           ::
-            ( OO.Literal r
+            ( BodySym r stmt
+            , OO.Literal r
             , OOVariableValue r
             , List r
             , ListStatement r stmt
@@ -1283,7 +1286,8 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readDataProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , BooleanExpression r
     , Comparison r
@@ -1316,7 +1320,8 @@ readDataProc ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
           ::
-            ( VariableValue r
+            ( BodySym r stmt
+            , VariableValue r
             , NativeVector r
             , List r
             , ListStatement r stmt
@@ -1533,7 +1538,8 @@ convCallProc c x ns f libf = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmtProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r

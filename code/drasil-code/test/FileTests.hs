@@ -47,7 +47,8 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 -- | Generates functions that write to the file.
 writeStory
   ::
-    ( Literal r
+    ( BlockSym r stmt
+    , Literal r
     , VariableValue r
     , Comparison r
     , DeclStatement r stmt
@@ -86,7 +87,8 @@ readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
 -- what was given in 'writeStory'.
 goodBye
   ::
-    ( Comparison r
+    ( BlockSym r stmt
+    , Comparison r
     , Literal r
     , VariableValue r
     , List r

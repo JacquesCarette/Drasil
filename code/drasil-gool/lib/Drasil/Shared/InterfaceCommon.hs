@@ -511,7 +511,7 @@ class (VariableSym r) => FuncAppStatement r stmt | r -> stmt where
 class CommentStatement r stmt | r -> stmt where
   comment :: String -> MS (r stmt)
 
-class (BodySym r stmt, VariableSym r) => ControlStatement r stmt where
+class (VariableSym r) => ControlStatement r stmt | r -> stmt where
   break :: MS (r stmt)
   continue :: MS (r stmt)
 
@@ -539,7 +539,9 @@ class (BodySym r stmt, VariableSym r) => ControlStatement r stmt where
 
   assert :: SValue r -> SValue r -> MS (r stmt)
 
-ifNoElse :: (ControlStatement r stmt) => [(SValue r, MS (r Body))] -> MS (r stmt)
+ifNoElse
+  :: (BodySym r stmt, ControlStatement r stmt)
+  => [(SValue r, MS (r Body))] -> MS (r stmt)
 ifNoElse bs = ifCond bs $ body []
 
 switchAsIf :: (ControlStatement r stmt, Comparison r) => SValue r ->

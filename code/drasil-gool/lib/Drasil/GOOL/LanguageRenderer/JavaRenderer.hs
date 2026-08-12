@@ -977,7 +977,8 @@ jAssert condition errorMessage = vcat [
 
 jOut
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , Comparison r
     , NumericExpression r
     , ValueExpression r

@@ -941,7 +941,8 @@ pyPrint newLn f' p' v' = do
 
 pyOut
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r

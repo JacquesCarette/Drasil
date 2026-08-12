@@ -385,7 +385,8 @@ genInputConstraints s = do
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , Literal r
@@ -414,7 +415,8 @@ sfwrCBody cs = do
 -- | Generates input constraints code block for checking physical constraints.
 physCBody
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , Literal r
@@ -444,7 +446,8 @@ physCBody cs = do
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , Literal r
@@ -517,7 +520,8 @@ constrWarn c = do
 -- followed by throwing an exception.
 constrExc
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , Literal r
@@ -802,7 +806,8 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , Literal r
@@ -833,7 +838,8 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , Literal r
@@ -1155,7 +1161,8 @@ genCalcFuncProc cdef = do
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlockProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1189,7 +1196,8 @@ genCalcBlockProc CalcReturn _ e = block <$> liftS (returnStmt <$> convExprProc e
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlockProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1445,7 +1453,8 @@ genInputConstraintsProc s = do
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBodyProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1471,7 +1480,8 @@ sfwrCBodyProc cs = do
 -- | Generates input constraints code block for checking physical constraints.
 physCBodyProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1498,7 +1508,8 @@ physCBodyProc cs = do
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstrProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1561,7 +1572,8 @@ constrWarnProc c = do
 -- followed by throwing an exception.
 constrExcProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1775,7 +1787,8 @@ genOutputFormatProc = do
 
 writeOutputValue
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , VariableValue r
     , Comparison r
     , NumericExpression r

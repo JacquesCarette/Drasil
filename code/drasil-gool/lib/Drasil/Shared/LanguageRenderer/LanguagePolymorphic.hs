@@ -375,7 +375,8 @@ objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs
 
 printList
   ::
-    ( MultiStatement r stmt
+    ( BodySym r stmt
+    , MultiStatement r stmt
     , IC.DeclStatement r stmt
     , AssignStatement r stmt
     , IC.ControlStatement r stmt
@@ -402,7 +403,12 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
         i = IC.var l_i IC.int
 
 printSet
-  :: (MultiStatement r stmt, IC.ControlStatement r stmt, IC.VariableValue r)
+  ::
+    ( BodySym r stmt
+    , MultiStatement r stmt
+    , IC.ControlStatement r stmt
+    , IC.VariableValue r
+    )
   => Integer
   -> SValue r
   -> (SValue r -> MS (r stmt))
@@ -422,7 +428,8 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
   ::
-    ( MultiStatement r stmt
+    ( BodySym r stmt
+    , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
     , IC.DeclStatement r stmt

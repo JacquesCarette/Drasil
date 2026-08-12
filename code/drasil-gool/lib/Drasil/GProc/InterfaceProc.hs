@@ -16,14 +16,14 @@ import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
   FileHandling, PrintFile, ReadFile, List, ListStatement, Literal, MathConstant,
   NumericExpression, ParameterSym, Reference, Set, StringStatement,
   ValueExpression, VariableValue, UnRepr, FunctionSym, ScopeSym, BinderSym,
-  InternalList, TypeElim, VariableElim)
+  InternalList, TypeElim, VariableElim, BodySym)
 import Drasil.Shared.State (GS, FS, MS)
 import Drasil.Shared.AST (ProgData, TypeData)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
-class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
-  BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
+class (UnRepr r TypeData, BodySym r stmt, FunctionSym r, VariableValue r,
+  ScopeSym r, BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
   VariableElim r, Array r, EmptyStatement r stmt, MultiStatement r stmt,
   ValueStatement r stmt, AssignStatement r stmt, Argument r, BooleanExpression r,
   CommandLineArgs r, CommentStatement r stmt, Comparison r,

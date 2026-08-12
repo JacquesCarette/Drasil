@@ -979,7 +979,8 @@ jlPrint _ f' p' v' = do
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r

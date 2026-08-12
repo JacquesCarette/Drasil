@@ -939,7 +939,8 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
 
 csPrint
   ::
-    ( Comparison r
+    ( BodySym r stmt
+    , Comparison r
     , Literal r
     , NumericExpression r
     , ValueExpression r

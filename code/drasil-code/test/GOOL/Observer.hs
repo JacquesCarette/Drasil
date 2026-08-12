@@ -17,7 +17,7 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis stmt mthd stvr attch prg file mod) => FS (r file)
+observer :: (OOProg r vis stmt mthd stvr attch prg file mod bod) => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
@@ -32,9 +32,9 @@ selfX = instanceVarSelf x
 -- | Helper function to create the class.
 helperClass
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , ClassSym r vis mthd stvr attch
-    , OOMethodSym r vis mthd attch
+    , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
     , Literal r
     , OOVariableValue r
@@ -46,9 +46,9 @@ helperClass = buildClass Nothing [stateVar public instanceLevel x]
 -- | Default value for observer class is 5.
 observerConstructor
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , VariableSym r
-    , OOMethodSym r vis mthd attch
+    , OOMethodSym r vis mthd attch bod
     , Literal r
     )
   => MS (r mthd)
@@ -57,8 +57,8 @@ observerConstructor = initializer [] [(x, litInt 5)]
 -- | Create the @printNum@ method.
 printNumMethod
   ::
-    ( BodySym r stmt
-    , OOMethodSym r vis mthd attch
+    ( BodySym r stmt bod
+    , OOMethodSym r vis mthd attch bod
     , VisibilitySym r vis
     , PrintConsole r stmt
     , OOVariableValue r

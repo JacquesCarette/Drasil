@@ -6,7 +6,7 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
+import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue,
   bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
   ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
@@ -32,8 +32,8 @@ import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists
-  :: (IC.ControlStatement r stmt, IC.ValueExpression r)
-  => SValue r -> MS (r Body) -> MS (r Body) -> MS (r stmt)
+  :: (IC.ControlStatement r stmt bod, IC.ValueExpression r)
+  => SValue r -> MS (r bod) -> MS (r bod) -> MS (r stmt)
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
 decrement1
@@ -52,21 +52,21 @@ increment1
 increment1 vr = vr &+= IC.litInt 1
 
 strat
-  :: (RC.BodyElim r, Monad r, RC.StatementElim r stmt)
-  => MS (r stmt) -> MS (r Body) -> MS (r Doc)
+  :: (RC.BodyElim r bod, Monad r, RC.StatementElim r stmt)
+  => MS (r stmt) -> MS (r bod) -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b,
   RC.statement result])
 
 runStrategy
   :: ( EmptyStatement r stmt
      , IC.AssignStatement r stmt
-     , RC.BodyElim r
+     , RC.BodyElim r bod
      , Monad r
      , S.RenderStatement r stmt
      , RC.StatementElim r stmt
      )
   => Label
-  -> [(Label, MS (r Body))]
+  -> [(Label, MS (r bod))]
   -> Maybe (SValue r)
   -> Maybe (SVariable r)
   -> MS (r Doc)
@@ -80,11 +80,11 @@ runStrategy l strats rv av = maybe
 
 listSlice
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , EmptyStatement r stmt
-    , IC.DeclStatement r stmt
+    , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
-    , IC.ControlStatement r stmt
+    , IC.ControlStatement r stmt bod
     , IC.Literal r
     , BooleanExpression r
     , Comparison r
@@ -166,7 +166,7 @@ listSlice beg end step vnew vold = do
 makeSetterVal
   ::
     ( EmptyStatement r stmt
-    , IC.DeclStatement r stmt
+    , IC.DeclStatement r stmt bod
     , Comparison r
     , IC.IndexTranslator r
     , IC.Literal r
@@ -209,8 +209,8 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
 
 stringListLists
   ::
-    ( BodySym r stmt
-    , IC.ControlStatement r stmt
+    ( BodySym r stmt bod
+    , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , IC.VariableValue r
@@ -247,9 +247,9 @@ stringListLists lsts sl = do
 
 forRange
   ::
-    ( IC.DeclStatement r stmt
+    ( IC.DeclStatement r stmt bod
     , AssignStatement r stmt
-    , IC.ControlStatement r stmt
+    , IC.ControlStatement r stmt bod
     , Comparison r
     , IC.VariableValue r
     )
@@ -257,7 +257,7 @@ forRange
   -> SValue r
   -> SValue r
   -> SValue r
-  -> MS (r Body)
+  -> MS (r bod)
   -> MS (r stmt)
 forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
   (IC.valueOf i ?< finalv) (i &+= stepv)
@@ -277,22 +277,22 @@ notify
     , VariableValue r
     , List r
     , OOFunctionSym r
-    , BodySym r stmt
+    , BodySym r stmt bod
     )
-  => VS (r TypeData) -> VS (r FuncData) -> MS (r Body)
+  => VS (r TypeData) -> VS (r FuncData) -> MS (r bod)
 notify t f = oneLiner $ valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , VariableValue r
     , Comparison r
     , List r
     , ValueStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , OOFunctionSym r
     )
   => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
@@ -302,12 +302,12 @@ notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
 
 notifyObservers'
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , ValueStatement r stmt
     , Literal r
     , VariableValue r
     , List r
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , OOFunctionSym r
     )
   => VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
@@ -317,10 +317,10 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
 
 arrayDecAsList
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , MultiStatement r stmt
-    , IC.DeclStatement r stmt
-    , IC.ControlStatement r stmt
+    , IC.DeclStatement r stmt bod
+    , IC.ControlStatement r stmt bod
     , IC.Literal r
     , IC.VariableValue r
     , IC.ListStatement r stmt

@@ -91,7 +91,7 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData FileData ModData
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body
 
 instance ProgramSym MatlabCode ProgData FileData where
   prog n st files = do
@@ -99,8 +99,8 @@ instance ProgramSym MatlabCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData FileData ModData
+instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData Body
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData FileData ModData Body
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -121,14 +121,14 @@ instance ImportSym MatlabCode where
   langImport = undefined
   modImport = undefined
 
-instance BodySym MatlabCode (Doc, Terminator) where
+instance BodySym MatlabCode (Doc, Terminator) Body where
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 
-instance RenderBody MatlabCode where
+instance RenderBody MatlabCode Body where
   multiBody = G.multiBody
 
-instance BodyElim MatlabCode where
+instance BodyElim MatlabCode Body where
   body = unMLC
 
 instance BlockSym MatlabCode (Doc, Terminator) where
@@ -425,7 +425,7 @@ instance AssignStatement MatlabCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement MatlabCode (Doc, Terminator) where
+instance DeclStatement MatlabCode (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -480,7 +480,7 @@ instance FuncAppStatement MatlabCode (Doc, Terminator) where
 instance CommentStatement MatlabCode (Doc, Terminator) where
   comment = G.comment mlCmtStart
 
-instance ControlStatement MatlabCode (Doc, Terminator) where
+instance ControlStatement MatlabCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
   -- MATLAB has no `return <expr>`: a function returns by assigning its named
@@ -537,7 +537,7 @@ instance ParamElim MatlabCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc MethodData where
+instance MethodSym MatlabCode Doc MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -558,7 +558,7 @@ instance RenderMethod MatlabCode MethodData where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance ProcRenderMethod MatlabCode Doc MethodData where
+instance ProcRenderMethod MatlabCode Doc MethodData Body where
   intFunc _ n _ t ps b = do
     pms <- sequence ps
     tp  <- t
@@ -783,14 +783,14 @@ mlEnd, mlElseIf :: Doc
 mlEnd = text "end"
 mlElseIf = text "elseif"
 
-mlForEach :: (CommonRenderSym r vis stmt mthd) => r Variable ->
-  r Value -> r Body -> Doc
+mlForEach :: (CommonRenderSym r vis stmt mthd bod) => r Variable ->
+  r Value -> r bod -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,
   mlEnd]
 
-mlRange :: (CommonRenderSym r vis stmt mthd) => SValue r -> SValue r ->
+mlRange :: (CommonRenderSym r vis stmt mthd bod) => SValue r -> SValue r ->
   SValue r -> SValue r
 mlRange initv finalv stepv = do
   ini <- initv
@@ -799,7 +799,7 @@ mlRange initv finalv stepv = do
   d <- double
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
-mlTryCatch :: (CommonRenderSym r vis stmt mthd) => r Body -> r Body -> Doc
+mlTryCatch :: (CommonRenderSym r vis stmt mthd bod) => r bod -> r bod -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",
   indent $ RC.body tryB,

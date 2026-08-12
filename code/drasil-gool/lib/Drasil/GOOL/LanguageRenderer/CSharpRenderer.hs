@@ -128,7 +128,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -136,8 +136,8 @@ instance ProgramSym CSharpCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData
+instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData Body
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -169,15 +169,15 @@ instance PermElim CSharpCode Doc where
   perm = unCSC
   binding = error $ CP.bindingError csName
 
-instance BodySym CSharpCode (Doc, Terminator) where
+instance BodySym CSharpCode (Doc, Terminator) Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance RenderBody CSharpCode where
+instance RenderBody CSharpCode Body where
   multiBody = G.multiBody
 
-instance BodyElim CSharpCode where
+instance BodyElim CSharpCode Body where
   body = unCSC
 
 instance BlockSym CSharpCode (Doc, Terminator) where
@@ -512,7 +512,7 @@ instance AssignStatement CSharpCode (Doc, Terminator) where
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CSharpCode (Doc, Terminator) where
+instance DeclStatement CSharpCode (Doc, Terminator) Body where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
     C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
@@ -526,7 +526,7 @@ instance DeclStatement CSharpCode (Doc, Terminator) where
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
-instance OODeclStatement CSharpCode (Doc, Terminator) where
+instance OODeclStatement CSharpCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -578,7 +578,7 @@ instance OOFuncAppStatement CSharpCode (Doc, Terminator) where
 instance CommentStatement CSharpCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement CSharpCode (Doc, Terminator) where
+instance ControlStatement CSharpCode (Doc, Terminator) Body where
   break =  mkStmt R.break
   continue =  mkStmt R.continue
 
@@ -609,7 +609,7 @@ instance ControlStatement CSharpCode (Doc, Terminator) where
 instance ObserverPattern CSharpCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CSharpCode where
+instance StrategyPattern CSharpCode Body where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CSharpCode Doc where
@@ -642,7 +642,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc MethodData where
+instance MethodSym CSharpCode Doc MethodData Body where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -651,7 +651,7 @@ instance MethodSym CSharpCode Doc MethodData where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc MethodData Doc where
+instance OOMethodSym CSharpCode Doc MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -666,7 +666,7 @@ instance RenderMethod CSharpCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod CSharpCode Doc MethodData Doc where
+instance OORenderMethod CSharpCode Doc MethodData Doc Body where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
@@ -939,7 +939,7 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
 
 csPrint
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Comparison r
     , Literal r
     , NumericExpression r
@@ -947,9 +947,9 @@ csPrint
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , InternalIOStmt r stmt

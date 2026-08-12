@@ -7,8 +7,7 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue,
-  MethodSym)
+import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue, MethodSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..), FileSym(..),
   GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym, OOMethodSym,
@@ -21,15 +20,15 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd, MethodSym r vis mthd,
-  IG.OOMethodSym r vis mthd attch, IG.ClassSym r vis mthd stvr attch,
+class (CommonRenderSym r vis stmt mthd bod, MethodSym r vis mthd bod,
+  IG.OOMethodSym r vis mthd attch bod, IG.ClassSym r vis mthd stvr attch,
   IG.ModuleSym r mod mthd, IG.FileSym r file mod, IG.InternalValueExp r,
-  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r,
+  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r bod,
   IG.OOVariableValue r, IG.OOValueExpression r, RenderClass r vis mthd stvr,
   ClassElim r, RenderFile r file mod, InternalGetSet r,
-  OORenderMethod r vis mthd attch, RenderMod r mod, ModuleElim r mod,
+  OORenderMethod r vis mthd attch bod, RenderMod r mod, ModuleElim r mod,
   StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis stmt mthd stvr attch file mod
+  ) => OORenderSym r vis stmt mthd stvr attch file mod bod
 
 -- OO-Only Typeclasses --
 
@@ -55,15 +54,15 @@ class InternalGetSet r where
 class (MethodTypeSym r) => OOMethodTypeSym r where
   construct :: Label -> MSMthdType r
 
-class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch | r -> vis attch where
+class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch bod | r -> vis attch bod where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->
-    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    MSMthdType r -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r attch
-    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    -> MSMthdType r -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 

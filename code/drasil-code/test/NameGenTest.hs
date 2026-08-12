@@ -10,27 +10,27 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
-nameGenTestOO :: OOProg r vis stmt mthd stvr attch prg file mod => OO.GSProgram r prg
+nameGenTestOO :: OOProg r vis stmt mthd stvr attch prg file mod bod => OO.GSProgram r prg
 nameGenTestOO = OO.prog "NameGenTest" "" [OO.fileDoc $ OO.buildModule
   "NameGenTest" [] [main, helper] []]
 
 nameGenTestProc
-  :: (ProcProg r vis stmt mthd prg file mod)
+  :: (ProcProg r vis stmt mthd prg file mod bod)
   => GProc.GSProgram r prg
 nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
   "NameGenTest" [] [main, helper]]
 
 helper
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , VariableValue r
     , Comparison r
     , List r
     , InternalList r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
-    , MethodSym r vis mthd
+    , DeclStatement r stmt bod
+    , ControlStatement r stmt bod
+    , MethodSym r vis mthd bod
     )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
@@ -43,15 +43,15 @@ helper = function "helper" private void [param temp] $ body
 
 main
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , VariableValue r
     , Comparison r
     , List r
     , InternalList r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
-    , MethodSym r vis mthd
+    , DeclStatement r stmt bod
+    , ControlStatement r stmt bod
+    , MethodSym r vis mthd bod
     )
   => MS (r mthd)
 main = mainFunction $ body

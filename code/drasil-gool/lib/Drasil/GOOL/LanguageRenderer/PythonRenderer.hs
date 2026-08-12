@@ -725,7 +725,7 @@ instance RenderClass PythonCode Doc MethodData StateVar where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData where
+instance ModuleSym PythonCode ModData MethodData where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports

@@ -704,7 +704,7 @@ instance RenderClass CSharpCode Doc MethodData StateVar where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
+instance ModuleSym CSharpCode ModData MethodData where
   buildModule n = CP.buildModule' n langImport
 
 instance RenderMod CSharpCode ModData where

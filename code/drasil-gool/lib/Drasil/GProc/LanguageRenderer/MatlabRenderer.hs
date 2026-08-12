@@ -569,7 +569,7 @@ instance ProcRenderMethod MatlabCode Doc MethodData where
 instance MethodElim MatlabCode MethodData where
   method = mthdDoc . unMLC
 
-instance ModuleSym MatlabCode Doc (Doc, Terminator) MethodData ModData where
+instance ModuleSym MatlabCode ModData MethodData where
   buildModule n _ fs = modFromData n (do
     fns <- mapM (zoom lensFStoMS) fs
     entryFn <- mlMainFunc n

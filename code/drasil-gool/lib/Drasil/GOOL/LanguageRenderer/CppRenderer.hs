@@ -813,7 +813,7 @@ instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode)
 instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
   class' c = RC.class' $ pfst c
 
-instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ModData where
+instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) ModData MethodData where
   buildModule n is ms cs = do
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is)
@@ -1705,7 +1705,7 @@ instance RenderClass CppSrcCode (Doc, VisibilityTag) MethodData StateVarData whe
 instance ClassElim CppSrcCode where
   class' = unCPPSC
 
-instance ModuleSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ModData where
+instance ModuleSym CppSrcCode ModData MethodData where
   buildModule n is ms cs = CP.buildModule n (do
     ds <- getDefines
     lis <- getLangImports
@@ -2344,7 +2344,7 @@ instance RenderClass CppHdrCode (Doc, VisibilityTag) MethodData StateVarData whe
 instance ClassElim CppHdrCode where
   class' = unCPPHC
 
-instance ModuleSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ModData where
+instance ModuleSym CppHdrCode ModData MethodData where
   buildModule n is = CP.buildModule n (do
     ds <- getHeaderDefines
     lis <- getHeaderLangImports

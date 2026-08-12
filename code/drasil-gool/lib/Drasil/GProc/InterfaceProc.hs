@@ -32,7 +32,8 @@ class (UnRepr r TypeData, FunctionSym r, VariableValue r, ScopeSym r,
   ReadFile r stmt, List r, ListStatement r stmt, Literal r, MathConstant r,
   NumericExpression r, ParameterSym r, Reference r, Set r,
   StringStatement r stmt, ValueExpression r, VariableValue r,
-  ModuleSym r vis stmt mthd mod, FileSym r file mod, ProgramSym r prg file)
+  MethodSym r vis stmt mthd, ModuleSym r mod mthd, FileSym r file mod,
+  ProgramSym r prg file)
   => ProcProg r vis stmt mthd prg file mod
 
 type Program = ProgData
@@ -57,7 +58,7 @@ class FileSym r file mod | r -> file mod where
   docMod :: String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 
 -- | Class for representing a module.
-class (MethodSym r vis stmt mthd) => ModuleSym r vis stmt mthd mod | r -> mod where
+class ModuleSym r mod mthd | r -> mod mthd where
   -- | Given module name, list of import names, and list of module functions,
   -- generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> FS (r mod)

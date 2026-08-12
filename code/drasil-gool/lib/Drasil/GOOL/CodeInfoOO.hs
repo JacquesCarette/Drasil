@@ -501,7 +501,7 @@ instance ClassSym CodeInfoOO () () () () () where
     _ <- c
     return $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance ModuleSym CodeInfoOO () () () () () () where
+instance ModuleSym CodeInfoOO () () where
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes

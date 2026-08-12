@@ -385,7 +385,7 @@ instance List JuliaCode where
   listAccess = G.listAccess
   listLast v = do
     v' <- v
-    let t = A.innerType $ return $ valueType v'
+    let t = innerType $ return $ valueType v'
     mkStateVal t (RC.value v' <> brackets (text "end"))
   indexOf = jlIndexOf
 

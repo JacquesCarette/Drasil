@@ -51,6 +51,7 @@ import Drasil.Metadata.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
 import Drasil.SRS.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.SRS.Concepts as SRS
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.System (ProjectName, projAbrvS)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.
@@ -98,10 +99,10 @@ introNoTermDefn :: Contents
 introNoTermDefn = mkParagraph $ emptySectSentPlu [term_, definition]
 
 -- | General introduction for the Physical System Description section.
-physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
+physSystDesc :: ProjectName -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc _        []    _  _     = SRS.physSyst [mkParagraph $ emptySectSentPlu [physSyst]] []
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
-  where intro = mkParagraph $ foldlSentCol [D.toSent (atStartNP (the physicalSystem)) `S.of_` short progName `sC`
+  where intro = mkParagraph $ foldlSentCol [D.toSent (atStartNP (the physicalSystem)) `S.of_` projAbrvS progName `sC`
                 S "as shown in", refS fg `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
@@ -116,9 +117,9 @@ goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
                                    else D.toSent (pluralNP (the goalStmt)) +: S "are"
 
 -- | General introduction for the Solution Characteristics Specification section. Takes the program name and a section of instance models.
-solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
+solutionCharSpecIntro :: ProjectName -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [D.toSent $ atStartNP' (the inModel),
-  S "that govern", short progName, S "are presented in the" +:+.
+  S "that govern", projAbrvS progName, S "are presented in the" +:+.
   namedRef instModelSection (titleize inModel +:+ titleize sec),
   D.toSent $ atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
@@ -140,15 +141,15 @@ assumpIntro _  = mkParagraph $ foldlSent
                   S "by providing more detail"]
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
-thModF :: (Idea a) => a -> [Contents] -> Section
+thModF :: ProjectName -> [Contents] -> Section
 thModF _        []            = SRS.thModel [thModIntroNoContent] []
 thModF progName otherContents = SRS.thModel (thModIntro progName :
                                               otherContents) []
 
 -- | Creates a eneralized Theoretical Model introduction given the program name.
-thModIntro :: (Idea a) => a -> Contents
+thModIntro :: ProjectName -> Contents
 thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
-  phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
+  phrase general, plural equation `S.and_` S "laws that", projAbrvS progName, S "is based on"]
 
 thModIntroNoContent :: Contents
 thModIntroNoContent = mkParagraph $ emptySectSentPlu [thModel]

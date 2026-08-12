@@ -3,7 +3,7 @@ module Drasil.System.ProjectName (
   ProjectName,
   mkProjectName, mkCommonProjName,
   HasProjectName(..),
-  projTitleS, projAbrvS
+  projTitleS, projAbrvS, introduceProjName
 ) where
 
 import Control.Lens ((^.), makeLensesFor, makeClassyFor)
@@ -11,7 +11,7 @@ import Data.Char (toLower, isAlphaNum)
 import Data.List.Extras (replaceAll)
 
 import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
-import Language.Drasil (NP, Sentence(Ch), SentenceStyle(..), TermCapitalization(CapW))
+import Language.Drasil (NP, Sentence(Ch), SentenceStyle(..), TermCapitalization(CapW), sParen, (+:+))
 
 data ProjectName = PN
   { _pnUID        :: UID,
@@ -61,3 +61,6 @@ projTitleS = Ch TermStyle CapW . (^. uid)
 
 projAbrvS :: ProjectName -> Sentence
 projAbrvS = Ch ShortStyle CapW . (^. uid)
+
+introduceProjName :: ProjectName -> Sentence
+introduceProjName proj = projTitleS proj +:+ sParen (projAbrvS proj)

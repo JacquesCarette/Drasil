@@ -41,7 +41,7 @@ import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
-import Drasil.DblPend.MetaConcepts (progName, projName)
+import Drasil.DblPend.MetaConcepts (projName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
@@ -96,7 +96,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO projName progName [dong]
+si = mkSmithEtAlICO projName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints constants symbols

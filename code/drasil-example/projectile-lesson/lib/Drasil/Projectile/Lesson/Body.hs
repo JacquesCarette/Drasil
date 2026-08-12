@@ -2,7 +2,7 @@ module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB)
 import Drasil.Generator (withCommonKnowledge)
 import Drasil.LessonPlan (LessonPlan, mkLessonPlan, LsnDesc, LsnChapter(..))
 import Drasil.System (mkSystemMeta)
@@ -35,14 +35,11 @@ nbDecl = [
 
 si :: LessonPlan
 si = mkLessonPlan $
-  mkSystemMeta projName projectileMotionLesson [spencerSmith] [] [] [] [] symbMap
+  mkSystemMeta projName [spencerSmith] [] [] [] [] symbMap
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName [] symbols ideaDicts cis conceptChunks [] [] []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts [] conceptChunks [] [] []
   [] [] [] [] labelledContent
-
-cis :: [CI]
-cis = [projectileMotionLesson]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = defs ++ [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
@@ -53,9 +50,6 @@ symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAcce
   Qs.gravitationalAccel, Qs.xAccel, Qs.yAccel, Qs.time, Qs.ixPos, Qs.iyPos,
   Qs.xPos, Qs.yPos, Qs.ixVel, Qs.iyVel, Qs.xVel, Qs.yVel, Qs.scalarPos,
   Qs.iPos, Qs.height]
-
-projectileMotionLesson :: CI
-projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "projectile-lesson" []
 
 labelledContent :: [LabelledContent]
 labelledContent = equations ++ figures

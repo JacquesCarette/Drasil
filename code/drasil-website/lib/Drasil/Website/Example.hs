@@ -1,14 +1,14 @@
 -- | Create the list of Generated Examples for the Drasil website.
 module Drasil.Website.Example (
   Example(..), examples,
-  exampleSec, exampleRefs, allExampleSI
+  exampleSec, exampleRefs, allExampleSI, allExampleProjNames
 ) where
 
 import Control.Lens ((^.), lens)
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
-import Drasil.System (purpose, HasSystemMeta(..), HasProjectName(..))
+import Drasil.System (ProjectName, purpose, HasSystemMeta(..), HasProjectName(..))
 import Drasil.SRS (SmithEtAlSRS(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Drasil.Generator (codedHRName, codedDirName, Format(..))
@@ -76,6 +76,9 @@ allExampleSI = [
   SglPend.si,
   SSP.si,
   SWHS.si]
+
+allExampleProjNames :: [ProjectName]
+allExampleProjNames = map (^. projectName) allExampleSI
 
 -- To developer: Fill this list in when more examples can run code. The list
 -- needs to be of this form since projectile comes with a list of choice combos.

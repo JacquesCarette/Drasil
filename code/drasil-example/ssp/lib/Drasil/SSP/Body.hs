@@ -46,7 +46,7 @@ import Drasil.SSP.Defs (crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
-import Drasil.SSP.MetaConcepts (progName, projName)
+import Drasil.SSP.MetaConcepts (projName)
 import Drasil.SSP.IMods (instModIntro, iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
@@ -59,7 +59,7 @@ resourcePath = "../../../../datafiles/ssp/"
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName [henryFrankis, brooks]
+  projName [henryFrankis, brooks]
   [purp] [] [] []
   tMods generalDefinitions dataDefs iMods
   inputs outputs constrained [] symbols
@@ -128,16 +128,13 @@ ideaDicts :: [IdeaDict]
 ideaDicts =
   defs
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   defs' ++ softwarecon ++ solidcon ++ physicalcon ++
   [distance, friction, linear, velocity, gravity, stress, fbd, position]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis conceptChunks
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns citations labCon
 
 -- | Holds all references and links used in the document.

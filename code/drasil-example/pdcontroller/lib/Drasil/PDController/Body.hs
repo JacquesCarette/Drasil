@@ -21,7 +21,7 @@ import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
-import Drasil.PDController.MetaConcepts (progName, projName)
+import Drasil.PDController.MetaConcepts (projName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
@@ -82,7 +82,7 @@ mkSRS
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName [naveen]
+  projName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
   inputs outputs inpConstrained pidConstants allSymbols

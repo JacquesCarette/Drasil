@@ -48,7 +48,7 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
-import Drasil.SWHS.MetaConcepts (progName, progName', projName, swhs)
+import Drasil.SWHS.MetaConcepts (projName, swhs)
 import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
   verifyEnergyOutput, funcReqsTables)
@@ -60,7 +60,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName' [thulasi, brooks, spencerSmith]
+  projName [thulasi, brooks, spencerSmith]
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
   inputs outputs constrained specParamValList symbols
@@ -78,7 +78,7 @@ ideaDicts :: [IdeaDict]
 ideaDicts = [materialProprty, swhs]
 
 cis :: [CI]
-cis = progName' : progName : [phsChgMtrl]
+cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

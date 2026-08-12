@@ -191,7 +191,6 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 mkRefSec :: SmithEtAlSRS -> DocDesc -> RefSec -> [Section] -> Section
 mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
   where
-    sysNameUID = si ^. sysName . uid
     projNameUID = si ^. projName . uid
     db = si ^. systemdb
 
@@ -211,7 +210,7 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
 
     mkSubRef TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations [sysNameUID, projNameUID] renderedSecs db]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations [projNameUID] renderedSecs db]
         []
 
 collectDocumentAbbreviations :: [UID] -> [Section] -> ChunkDB -> [TermAbbr]

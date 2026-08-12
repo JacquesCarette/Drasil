@@ -37,7 +37,7 @@ import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.MetaConcepts (progName, projName)
+import Drasil.GamePhysics.MetaConcepts (projName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
@@ -85,7 +85,7 @@ mkSRS = [TableOfContents,
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO projName progName [alex, luthfi, olu]
+si = mkSmithEtAlICO projName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
   inputSymbols outputSymbols inputConstraints [] symbols

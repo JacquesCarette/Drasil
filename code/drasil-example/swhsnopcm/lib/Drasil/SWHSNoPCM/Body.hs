@@ -56,7 +56,7 @@ import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
 import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
-import Drasil.SWHSNoPCM.MetaConcepts (progName, projName)
+import Drasil.SWHSNoPCM.MetaConcepts (projName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
@@ -141,7 +141,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName [thulasi]
+  projName [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
@@ -155,7 +155,7 @@ ideaDicts :: [IdeaDict]
 ideaDicts = [htTrans, materialProprty, swhs]
 
 cis :: [CI]
-cis = [progName, phsChgMtrl]
+cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

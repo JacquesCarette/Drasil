@@ -46,7 +46,7 @@ import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
-import Drasil.Projectile.MetaConcepts (progName, projName)
+import Drasil.Projectile.MetaConcepts (projName)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
@@ -105,7 +105,7 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   phrase program, S "to solve and model these types of" +:+. plural problem,
   S "Common", plural example `S.of_` D.toSent (phraseNP (combineNINI projectile motion)),
   S "include" +:+. foldlList Comma List projectileExamples,
-  S "The document describes the program called", phrase progName,
+  S "The document describes the program called", projTitleS projName,
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
   namedRef externalLinkRef (S "Projectile")]
 scope = foldlSent_ [D.toSent $ phraseNP (NP.the (analysis `ofA` twoD)),
@@ -124,7 +124,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO projName progName
+si = mkSmithEtAlICO projName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
@@ -149,16 +149,13 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbols ideaDicts cis
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
 

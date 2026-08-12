@@ -23,8 +23,8 @@ import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 
 import Drasil.Database (UID, HasUID(..), ChunkDB)
-import Language.Drasil (Quantity, MayHaveUnit, Concept, People, CI,
-  Constrained, ConstQDef, DefinedQuantityDict)
+import Language.Drasil (Quantity, MayHaveUnit, Concept, People, Constrained,
+  ConstQDef, DefinedQuantityDict)
 import Theory.Drasil (TheoryModel, GenDefn, DataDefinition, InstanceModel)
 
 import Drasil.System (SystemMeta, Background, HasSystemMeta(..), mkSystemMeta,
@@ -66,12 +66,12 @@ instance HasProjectName SmithEtAlSRS where
 mkSmithEtAlICO :: (Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
-  ProjectName -> CI -> People -> Purpose -> Background -> Scope -> Motivation ->
+  ProjectName -> People -> Purpose -> Background -> Scope -> Motivation ->
     [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
     NE.NonEmpty h -> NE.NonEmpty i -> [j] -> [ConstQDef] -> [DefinedQuantityDict] ->
     ChunkDB -> SmithEtAlSRS
-mkSmithEtAlICO pn nm ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
-  = ICO (mkSystemMeta pn nm ppl prps bkgrd scp motive db) tms gds dds ims hs is js
+mkSmithEtAlICO pn ppl prps bkgrd scp motive tms gds dds ims hs is js cqds qs db
+  = ICO (mkSystemMeta pn ppl prps bkgrd scp motive db) tms gds dds ims hs is js
       cqds qs mempty mempty
 
 -- | Find what chunks reference a specific chunk.

@@ -107,7 +107,7 @@ t1QD = mkQuantDef t1 $ sy t0 $+ sy dt
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName [authorName]
+  projName [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs ([] :: [InstanceModel])
   inputs outputs
@@ -117,9 +117,6 @@ si = mkSmithEtAlICO
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList $ inputs <> outputs
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = []
 
@@ -127,7 +124,7 @@ concIns :: [ConceptInstance]
 concIns = [inputValues, outputValues]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName [] symbols [] cis conceptChunks []
+symbMap = withCommonKnowledge projName [] symbols [] [] conceptChunks []
   dataDefs [] [] [] concIns citations [inputValuesTable]
 
 citations :: BibRef
@@ -139,10 +136,6 @@ resourcePath = "../../../../datafiles/dblpend/" -- FIXME: Change to your resourc
 figTemp :: LabelledContent
 figTemp = llccFig "dblpend" $ figWithWidth EmptyS
   (resourcePath ++ "dblpend.png") 60
-
--- MOVE TO CONCEPTS
-progName :: CI -- FIXME: Replace "template" with the name of your project!
-progName = commonIdea (mkUid "templateName") (pn "Template") "Template" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

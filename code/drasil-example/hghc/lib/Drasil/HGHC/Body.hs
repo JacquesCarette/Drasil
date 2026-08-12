@@ -7,7 +7,7 @@ import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
-import Drasil.HGHC.MetaConcepts (progName, projName)
+import Drasil.HGHC.MetaConcepts (projName)
 
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
@@ -15,7 +15,7 @@ import Drasil.System (projTitleS)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName [spencerSmith]
+  projName [spencerSmith]
   [purp] [] [] []
   [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) [] symbols

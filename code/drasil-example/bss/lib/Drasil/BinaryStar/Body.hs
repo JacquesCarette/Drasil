@@ -19,7 +19,7 @@ import Data.Drasil.Concepts.Physics (gravity, twoD, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Language.Drasil.Document
 
-import Drasil.BinaryStar.MetaConcepts (progName, projName)
+import Drasil.BinaryStar.MetaConcepts (projName)
 import Drasil.BinaryStar.Concepts (ideaDicts, conceptChunks, starOne, starTwo,
   gravInteraction, ccsFortermsAndDefsTbl)
 import Drasil.BinaryStar.LabelledContent (labelledContent, figBSS, sysCtxFig1)
@@ -199,7 +199,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  projName progName [authorName]
+  projName [authorName]
   [probDescIntro] [background] [scope] [motivation]
   tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols

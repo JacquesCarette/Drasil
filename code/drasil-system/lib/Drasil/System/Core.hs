@@ -9,7 +9,7 @@ import Control.Lens ((^.), makeClassy)
 import Data.Set qualified as S (unions)
 
 import Drasil.Database (ChunkDB, HasUID(..), HasChunkRefs(..))
-import Language.Drasil (Sentence, People, CI)
+import Language.Drasil (Sentence, People)
 
 import Drasil.System.ProjectName (ProjectName, HasProjectName(..))
 
@@ -25,7 +25,6 @@ type Motivation = [Sentence]
 
 data SystemMeta = SystemMeta
   { _projName   :: ProjectName
-  , _sysName    :: CI -- FIXME: All usage of `sysName` should be removed in favour of `projName`.
   , _authors    :: People
   , _purpose    :: Purpose
   , _background :: Background
@@ -44,13 +43,12 @@ instance HasProjectName SystemMeta where
 instance HasChunkRefs SystemMeta where
   chunkRefs x = S.unions [
       chunkRefs (x ^. projName),
-      chunkRefs (x ^. sysName),
       chunkRefs (x ^. authors),
       chunkRefs (x ^. background),
       chunkRefs (x ^. scope),
       chunkRefs (x ^. motivation)
     ]
 
-mkSystemMeta :: ProjectName -> CI -> People -> Purpose -> Background -> Scope ->
+mkSystemMeta :: ProjectName -> People -> Purpose -> Background -> Scope ->
   Motivation -> ChunkDB -> SystemMeta
 mkSystemMeta = SystemMeta

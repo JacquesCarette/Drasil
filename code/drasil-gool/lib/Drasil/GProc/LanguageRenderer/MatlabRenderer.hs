@@ -340,7 +340,7 @@ instance List MatlabCode where
   listAccess = G.listAccess
   listLast v = do
     v' <- v
-    let t = A.innerType $ return $ valueType v'
+    let t = innerType $ return $ valueType v'
         innerCt = getInnerType $ cType $ unMLC $ valueType v'
     mkStateVal t (RC.value v' <> mlCellWrap innerCt (text "end"))
   indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1

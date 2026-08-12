@@ -518,5 +518,5 @@ instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where
 instance (G.ProgramSym r prg file) => G.ProgramSym (LoggingFor r) prg file where
   prog = liftLogging G.prog
 
-instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where
+instance (G.StrategyPattern r) => G.StrategyPattern (LoggingFor r) where
   runStrategy = liftLogging G.runStrategy

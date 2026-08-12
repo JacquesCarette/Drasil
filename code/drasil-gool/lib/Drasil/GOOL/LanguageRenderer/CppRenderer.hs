@@ -662,7 +662,7 @@ instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) (Doc, Terminator)
   notifyObservers f t = pair2 notifyObservers notifyObservers
     (zoom lensMStoVS f) (zoom lensMStoVS t)
 
-instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
   -- How I handle values with both State and Maybe might cause problems later on,
   -- because it will make the state transitions run twice for the value in the
   -- Maybe. For now, given what we store in the State for Values/Variables, this
@@ -1598,7 +1598,7 @@ instance ControlStatement CppSrcCode (Doc, Terminator) where
 instance ObserverPattern CppSrcCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CppSrcCode (Doc, Terminator) where
+instance StrategyPattern CppSrcCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CppSrcCode (Doc, VisibilityTag) where
@@ -2227,7 +2227,7 @@ instance ControlStatement CppHdrCode (Doc, Terminator) where
 instance ObserverPattern CppHdrCode (Doc, Terminator) where
   notifyObservers _ _ = emptyStmt
 
-instance StrategyPattern CppHdrCode (Doc, Terminator) where
+instance StrategyPattern CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
 
 instance VisibilitySym CppHdrCode (Doc, VisibilityTag) where

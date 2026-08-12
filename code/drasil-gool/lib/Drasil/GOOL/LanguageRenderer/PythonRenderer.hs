@@ -617,7 +617,7 @@ instance ControlStatement PythonCode (Doc, Terminator) where
 instance ObserverPattern PythonCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern PythonCode (Doc, Terminator) where
+instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym PythonCode Doc where

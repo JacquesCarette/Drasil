@@ -632,7 +632,7 @@ instance ControlStatement JavaCode (Doc, Terminator) where
 instance ObserverPattern JavaCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern JavaCode (Doc, Terminator) where
+instance StrategyPattern JavaCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym JavaCode Doc where

@@ -437,7 +437,7 @@ instance ObserverPattern CodeInfoOO () where
     _ <- zoom lensMStoVS f
     return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance StrategyPattern CodeInfoOO () where
+instance StrategyPattern CodeInfoOO where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe (return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl

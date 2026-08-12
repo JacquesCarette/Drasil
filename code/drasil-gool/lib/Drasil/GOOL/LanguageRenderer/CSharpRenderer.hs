@@ -609,7 +609,7 @@ instance ControlStatement CSharpCode (Doc, Terminator) where
 instance ObserverPattern CSharpCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CSharpCode (Doc, Terminator) where
+instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CSharpCode Doc where

@@ -651,7 +651,7 @@ instance ControlStatement SwiftCode (Doc, Terminator) where
 instance ObserverPattern SwiftCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern SwiftCode (Doc, Terminator) where
+instance StrategyPattern SwiftCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym SwiftCode Doc where

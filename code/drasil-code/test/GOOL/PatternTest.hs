@@ -41,7 +41,7 @@ patternTest
   ::
     ( OOProg r vis stmt mthd stvr attch prg file mod
     , GetSet r
-    , StrategyPattern r stmt
+    , StrategyPattern r
     , ObserverPattern r stmt
   ) => GSProgram r prg
 patternTest = prog progName "" [fileDoc (buildModule progName []
@@ -52,7 +52,7 @@ patternTestMainMethod
   ::
     ( OOProg r vis stmt mthd stvr attch prg file mod
     , GetSet r
-    , StrategyPattern r stmt
+    , StrategyPattern r
     , ObserverPattern r stmt
   ) => MS (r mthd)
 patternTestMainMethod = mainFunction (body [block [

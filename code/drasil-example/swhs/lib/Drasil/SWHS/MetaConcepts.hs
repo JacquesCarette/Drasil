@@ -1,9 +1,14 @@
-module Drasil.SWHS.MetaConcepts (progName, progName', projName) where
+module Drasil.SWHS.MetaConcepts (swhs, progName, progName', projName) where
 
 import Drasil.Database (mkUid)
 import Language.Drasil
 import Drasil.System (ProjectName, mkCommonProjName)
 import Data.Drasil.Domains (materialEng)
+
+swhs :: IdeaDict
+swhs = idea (mkUid "swhsIdea")
+  (nounPhrase "solar water heating system" "solar water heating systems")
+  "SWHS"
 
 progName :: CI
 progName = commonIdea (mkUid "swhsName") (nounPhrase "solar water heating system"

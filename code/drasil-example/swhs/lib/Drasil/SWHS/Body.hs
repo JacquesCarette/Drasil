@@ -16,6 +16,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (ProjectName, projAbrvS)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
@@ -47,7 +48,7 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
-import Drasil.SWHS.MetaConcepts (progName, progName', projName)
+import Drasil.SWHS.MetaConcepts (progName, progName', projName, swhs)
 import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, nfRequirements,
   verifyEnergyOutput, funcReqsTables)
@@ -74,7 +75,7 @@ motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable",
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 ideaDicts :: [IdeaDict]
-ideaDicts = [materialProprty]
+ideaDicts = [materialProprty, swhs]
 
 cis :: [CI]
 cis = progName' : progName : [phsChgMtrl]
@@ -109,8 +110,8 @@ mkSRS = [TableOfContents,
      IOrgSec (Just orgDocEnd)
     ],
   GSDSec $ GSDProg
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
-    , UsrChars [userChars progName]
+    [ SysCntxt [sysCntxtDesc projName, LlC sysCntxtFig, sysCntxtRespIntro projName, systContRespBullets projName]
+    , UsrChars [userChars projName]
     , SystCons [] []
     ],
   SSDSec $
@@ -140,8 +141,8 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 tSymbIntro :: [TSIntro]
-tSymbIntro = [TSPurpose, SymbConvention
-  [Lit heatTrans, Doc' progName], SymbOrder, VectorUnits]
+tSymbIntro = [TSPurpose, SymbConvention [Lit heatTrans, Doc' swhs],
+  SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -168,16 +169,18 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 introStartSWHS, extraInfoSent :: Sentence
-introStartSWHS = foldlSent [D.toSent $ atStartNP' $ progName ^. term, S "incorporating",
-  phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
-  phrase enerSrc `S.and_` S "provide a novel way of storing" +:+. phrase energy,
-  atStart progName', S "improve over the traditional", plural progName,
-  S "because of their smaller size. The smaller size" `S.is` S "possible because" `S.ofThe` S "ability" `S.of_`
-  short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
+introStartSWHS = foldlSent [D.toSent $ atStartNP' $ swhs ^. term,
+  S "incorporating", phrase phsChgMtrl, sParen (short phsChgMtrl),
+  S "use a renewable", phrase enerSrc `S.and_`
+  S "provide a novel way of storing" +:+. phrase energy, atStart swhs,
+  S "incorporating", short phsChgMtrl, S "improve over the traditional",
+  plural swhs, S "because of their smaller size. The smaller size" `S.is`
+  S "possible because" `S.ofThe` S "ability" `S.of_` short phsChgMtrl,
+  S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
 
-extraInfoSent = foldlSent [S "The ", phrase program,
+extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
   namedRef externalLinkRef (S "SWHS")]
 
@@ -235,7 +238,8 @@ orgDocEnd = foldlSent [D.toSent (atStartNP' (the inModel)),
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`
   S "algebraic", plural equation, S "that", phrase model,
-  (D.toSent (phraseNP (the progName')) !.), short progName, S "solves these", short ode :+: S "s"]
+  phrase swhs, S "incorporating" +:+. phrase phaseChangeMaterial,
+  projAbrvS projName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to
@@ -261,23 +265,23 @@ orgDocEnd = foldlSent [D.toSent (atStartNP' (the inModel)),
 -- 3.1 : System Context --
 --------------------------
 
-sysCntxtDesc :: CI -> Contents
+sysCntxtDesc :: ProjectName -> Contents
 sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` D.toSent (phraseNP (the user)) +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
-  sParen (short pro), S "Arrows" `S.are` S "used to show the", plural datum,
+  sParen (projAbrvS pro), S "Arrows" `S.are` S "used to show the", plural datum,
   S "flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
-sysCntxtRespIntro :: CI -> Contents
-sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
+sysCntxtRespIntro :: ProjectName -> Contents
+sysCntxtRespIntro pro = foldlSPCol [projAbrvS pro +:+. S "is mostly self-contained",
   S "The only external interaction" `S.is` S "through the", phrase user +:+.
   S "interface", S "responsibilities" `S.the_ofTheC` D.toSent (phraseNP (user `andThe`
   system)) `S.are` S "as follows"]
 
-systContRespBullets :: CI -> Contents
+systContRespBullets :: ProjectName -> Contents
 systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
-  [titleize user +: S "Responsibilities", short prog +: S "Responsibilities"]
+  [titleize user +: S "Responsibilities", projAbrvS prog +: S "Responsibilities"]
   $ map bulletFlat [userResp, swhsResp]
 
 userResp :: [Sentence]
@@ -301,8 +305,8 @@ swhsResp = map foldlSent_ [
 -- 3.2 : User Characteristics --
 --------------------------------
 
-userChars :: CI -> Contents
-userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
+userChars :: ProjectName -> Contents
+userChars pro = foldlSP [S "The end", phrase user `S.of_` projAbrvS pro,
   S "should have an understanding" `S.of_` S "undergraduate Level 1 Calculus" `S.and_`
   titleize Doc.physics]
 
@@ -476,7 +480,7 @@ propsDeriv = [
   propCorSolDeriv2,
   propCorSolDeriv3 pcmE energy phsChgMtrl water,
   propCorSolDeriv4,
-  propCorSolDeriv5 equation progName rightSide]
+  propCorSolDeriv5 equation projName rightSide]
 
 propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> DefinedQuantityDict ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
@@ -512,12 +516,12 @@ propCorSolDeriv4 = unlbldExpr
   (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
+propCorSolDeriv5 :: ConceptChunk -> ProjectName -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   `S.and_` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,
-  S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `S.and_`
+  S "computed by" +:+. projAbrvS pro, S "The relative",
+  S "error between the results computed by", projAbrvS pro `S.and_`
   S "the results calculated from the", short rs, S "of these",
   plural eq, S "should be less than", ch consTol, refS verifyEnergyOutput]
 

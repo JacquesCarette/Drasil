@@ -4,10 +4,11 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.Database (ChunkDB, insert)
+import Drasil.Database (ChunkDB)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projTitleS, projAbrvS)
 
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
@@ -61,6 +62,7 @@ import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
+import Drasil.SWHS.MetaConcepts (swhs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -89,7 +91,7 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
-   tsymb [TSPurpose, SymbConvention [Lit htTrans, Doc' progName], SymbOrder, VectorUnits],
+   tsymb [TSPurpose, SymbConvention [Lit htTrans, Doc' swhs], SymbOrder, VectorUnits],
    TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) [extraInfoSent]
@@ -100,8 +102,8 @@ mkSRS = [TableOfContents,
     ],
   GSDSec $
     GSDProg
-      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
-      , UsrChars [userChars progName]
+      [ SysCntxt [sysCntxtDesc projName, LlC sysCntxtFig, sysCntxtRespIntro projName, systContRespBullets projName]
+      , UsrChars [userChars projName]
       , SystCons [] []
       ],
   SSDSec $
@@ -150,7 +152,7 @@ purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
 
 ideaDicts :: [IdeaDict]
-ideaDicts = [htTrans, materialProprty]
+ideaDicts = [htTrans, materialProprty, swhs]
 
 cis :: [CI]
 cis = [progName, phsChgMtrl]
@@ -177,7 +179,7 @@ allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 
 -- To get this generating properly we need to add a constructor for custom plural and capital case, see #3535
 introStartNoPCM, extraInfoSent :: Sentence
-introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
+introStartNoPCM = projTitleS projName +:+ S "provide a novel way of storing" +:+. phrase energy
 
 extraInfoSent = foldlSent [S "The ", phrase program,
   S "is based on the original, manually created version of",
@@ -212,8 +214,8 @@ orgDocEnd :: Sentence
 orgDocEnd = foldlSent [D.toSent (atStartNP (the inModel)),
   S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
   D.toSent (atStartNP (the inModel)), S "provides the", titleize ode,
-  sParen (short ode), S "that models the" +:+. phrase progName,
-  short progName, S "solves this", short ode]
+  sParen (short ode), S "that models the" +:+. projTitleS projName,
+  projAbrvS projName, S "solves this", short ode]
 
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION

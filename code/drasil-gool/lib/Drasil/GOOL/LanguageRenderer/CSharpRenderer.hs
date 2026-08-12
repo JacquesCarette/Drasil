@@ -651,7 +651,7 @@ instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym CSharpCode Doc MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod

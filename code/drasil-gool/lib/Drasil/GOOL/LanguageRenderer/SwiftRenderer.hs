@@ -694,7 +694,7 @@ instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym SwiftCode Doc MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod

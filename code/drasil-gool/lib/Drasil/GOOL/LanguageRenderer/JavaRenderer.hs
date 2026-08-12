@@ -674,7 +674,7 @@ instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym JavaCode Doc MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod

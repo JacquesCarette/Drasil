@@ -2,10 +2,10 @@
 module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
-  AttachmentSym(..), oneLiner, TypeSym(..), PrintConsole(..), VariableSym(..),
-  SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
-  VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  AttachmentSym(..), BodySym, oneLiner, TypeSym(..), PrintConsole(..),
+  VariableSym(..), SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..),
+  OOVariableValue, VisibilitySym(..), OOMethodSym(..), initializer,
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -32,8 +32,9 @@ selfX = instanceVarSelf x
 -- | Helper function to create the class.
 helperClass
   ::
-    ( ClassSym r vis mthd stvr attch
-    , OOMethodSym r vis stmt mthd attch
+    ( BodySym r stmt
+    , ClassSym r vis mthd stvr attch
+    , OOMethodSym r vis mthd attch
     , PrintConsole r stmt
     , Literal r
     , OOVariableValue r
@@ -43,11 +44,25 @@ helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (OOMethodSym r vis stmt mthd attch, Literal r) => MS (r mthd)
+observerConstructor
+  ::
+    ( BodySym r stmt
+    , VariableSym r
+    , OOMethodSym r vis mthd attch
+    , Literal r
+    )
+  => MS (r mthd)
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (OOMethodSym r vis stmt mthd attch, PrintConsole r stmt,
-  OOVariableValue r) => MS (r mthd)
+printNumMethod
+  ::
+    ( BodySym r stmt
+    , OOMethodSym r vis mthd attch
+    , VisibilitySym r vis
+    , PrintConsole r stmt
+    , OOVariableValue r
+    )
+  => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $
   oneLiner $ printLn $ valueOf selfX

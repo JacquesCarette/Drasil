@@ -49,13 +49,14 @@ class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
   List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
   ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  OOMethodSym r vis stmt mthd attch, ClassSym r vis mthd stvr attch,
-  TypeElim r, VariableElim r, EmptyStatement r stmt, MultiStatement r stmt,
-  ValueStatement r stmt, CommentStatement r stmt, OODeclStatement r stmt,
-  AssignStatement r stmt, OOFuncAppStatement r stmt, ControlStatement r stmt,
-  StringStatement r stmt, PrintConsole r stmt, ReadConsole r stmt,
-  FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
+  MethodSym r vis stmt mthd, OOMethodSym r vis mthd attch,
+  ClassSym r vis mthd stvr attch, TypeElim r, VariableElim r,
+  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
+  CommentStatement r stmt, OODeclStatement r stmt, AssignStatement r stmt,
+  OOFuncAppStatement r stmt, ControlStatement r stmt, StringStatement r stmt,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, ModuleSym r mod mthd, FileSym r file mod,
+  ProgramSym r prg file
   ) => OOProg r vis stmt mthd stvr attch prg file mod
 
 type Program = ProgData
@@ -86,7 +87,7 @@ class ModuleSym r mod mthd | r -> mod mthd where
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r mod)
 
 type Class = Doc
--- OOMethodSym r vis stmt mthd attch,
+
 -- | Class for representing an OO class.
 class (StateVarSym r vis stvr attch) => ClassSym r vis mthd stvr attch | r -> mthd where
   -- | Main external method for creating a class.
@@ -106,7 +107,7 @@ class (StateVarSym r vis stvr attch) => ClassSym r vis mthd stvr attch | r -> mt
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (MethodSym r vis stmt mthd, AttachmentSym r attch) => OOMethodSym r vis stmt mthd attch where
+class (AttachmentSym r attch) => OOMethodSym r vis mthd attch | r -> vis mthd where
   method      :: Label -> r vis -> r attch -> VS (r TypeData) ->
     [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)
@@ -117,19 +118,22 @@ class (MethodSym r vis stmt mthd, AttachmentSym r attch) => OOMethodSym r vis st
   inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd
   docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd
 
-privMethod :: (OOMethodSym r vis stmt mthd attch) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+privMethod
+  :: (OOMethodSym r vis mthd attch, VisibilitySym r vis)
+  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
-pubMethod :: (OOMethodSym r vis stmt mthd attch) => Label -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+pubMethod
+  :: (OOMethodSym r vis mthd attch, VisibilitySym r vis)
+  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
-initializer :: (OOMethodSym r vis stmt mthd attch) => [MS (r ParamData)] ->
-  Initializers r -> MS (r mthd)
+initializer
+  :: (OOMethodSym r vis mthd attch, BodySym r stmt)
+  => [MS (r ParamData)] -> Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis stmt mthd attch) => [MS (r ParamData)] ->
+nonInitConstructor :: (OOMethodSym r vis mthd attch) => [MS (r ParamData)] ->
   MS (r Body) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 

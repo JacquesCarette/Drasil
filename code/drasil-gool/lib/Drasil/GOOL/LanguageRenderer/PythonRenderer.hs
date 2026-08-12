@@ -659,7 +659,7 @@ instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData AttachmentData where
+instance OOMethodSym PythonCode Doc MethodData AttachmentData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod

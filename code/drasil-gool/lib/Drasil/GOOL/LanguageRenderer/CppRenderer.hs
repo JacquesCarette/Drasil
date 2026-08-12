@@ -731,7 +731,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode)
     (map (zoom lensMStoVS . snd) bs)
 
 instance (Pair p) => OOMethodSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
+    (Doc, VisibilityTag) MethodData AttachmentData where
   method n s p t = pairValListVal
     (method n (pfst s) (pfst p)) (method n (psnd s) (psnd p))
     (zoom lensMStoVS t)
@@ -1649,7 +1649,7 @@ instance MethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData 
   inOutFunc n s = cppsInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
+instance OOMethodSym CppSrcCode (Doc, VisibilityTag) MethodData AttachmentData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -2273,7 +2273,7 @@ instance MethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData 
   inOutFunc n s = cpphInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData AttachmentData where
+instance OOMethodSym CppHdrCode (Doc, VisibilityTag) MethodData AttachmentData where
   method = G.method
   getMethod v = zoom lensMStoVS v >>= (\v' -> method (getterName $ variableName
     v') public instanceLevel (toState $ variableType v') [] (toState $ toCode empty))

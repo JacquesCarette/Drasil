@@ -23,7 +23,7 @@ import Drasil.Shared.AST (ProgData, TypeData)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating a procedural program.
 class (UnRepr r TypeData, BodySym r stmt, FunctionSym r, VariableValue r,
-  ScopeSym r, BinderSym r, InternalList r, MethodSym r vis stmt mthd, TypeElim r,
+  ScopeSym r, BinderSym r, InternalList r, MethodSym r vis mthd, TypeElim r,
   VariableElim r, Array r, EmptyStatement r stmt, MultiStatement r stmt,
   ValueStatement r stmt, AssignStatement r stmt, Argument r, BooleanExpression r,
   CommandLineArgs r, CommentStatement r stmt, Comparison r,
@@ -32,8 +32,7 @@ class (UnRepr r TypeData, BodySym r stmt, FunctionSym r, VariableValue r,
   ReadFile r stmt, List r, ListStatement r stmt, Literal r, MathConstant r,
   NumericExpression r, ParameterSym r, Reference r, Set r,
   StringStatement r stmt, ValueExpression r, VariableValue r,
-  MethodSym r vis stmt mthd, ModuleSym r mod mthd, FileSym r file mod,
-  ProgramSym r prg file)
+  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file)
   => ProcProg r vis stmt mthd prg file mod
 
 type Program = ProgData

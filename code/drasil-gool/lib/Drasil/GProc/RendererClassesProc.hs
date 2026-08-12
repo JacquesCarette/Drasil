@@ -6,7 +6,7 @@ module Drasil.GProc.RendererClassesProc (
   ProcRenderMethod(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, MethodSym)
+import Drasil.Shared.InterfaceCommon (Label, Block, Body, MethodSym, BodySym)
 import qualified Drasil.GProc.InterfaceProc as IP (FileSym(..), ModuleSym)
 import Drasil.Shared.State (FS, MS)
 import Drasil.Shared.AST (ParamData)
@@ -16,7 +16,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
-class (CommonRenderSym r vis stmt mthd, MethodSym r vis stmt mthd,
+class (CommonRenderSym r vis stmt mthd, BodySym r stmt, MethodSym r vis mthd,
   IP.ModuleSym r mod mthd, IP.FileSym r file mod, RenderFile r file mod,
   RenderMod r mod, ModuleElim r mod, ProcRenderMethod r vis mthd
   ) => ProcRenderSym r vis stmt mthd file mod

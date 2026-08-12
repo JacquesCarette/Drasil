@@ -352,7 +352,7 @@ instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
   private = liftLogging private
   public = liftLogging public
 
-instance (MethodSym r vis stmt mthd) => MethodSym (LoggingFor r) vis stmt mthd where
+instance (MethodSym r vis mthd) => MethodSym (LoggingFor r) vis mthd where
   docMain = liftLogging docMain
   function = liftLogging function
   mainFunction = liftLogging mainFunction

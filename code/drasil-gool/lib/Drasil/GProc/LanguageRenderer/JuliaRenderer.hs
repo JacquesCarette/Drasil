@@ -562,7 +562,7 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JuliaCode Doc MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody

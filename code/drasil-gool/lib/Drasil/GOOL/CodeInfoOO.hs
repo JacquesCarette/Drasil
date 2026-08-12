@@ -451,7 +451,7 @@ instance ParameterSym CodeInfoOO where
   param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () () where
+instance MethodSym CodeInfoOO () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"

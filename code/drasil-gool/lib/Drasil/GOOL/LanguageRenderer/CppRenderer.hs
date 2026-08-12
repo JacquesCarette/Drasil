@@ -708,8 +708,7 @@ instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
   parameter p = RC.parameter $ pfst p
 
-instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) MethodData where
   docMain = pair1 docMain docMain
   function n s t = pairValListVal
     (function n (pfst s)) (function n (psnd s))
@@ -1631,7 +1630,7 @@ instance ParamElim CppSrcCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCPPSC
 
-instance MethodSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance MethodSym CppSrcCode (Doc, VisibilityTag) MethodData where
   docMain b = commentedFunc (docComment $ toState $ functionDox mainDesc
     [(argc, argcDesc), (argv, argvDesc)] [mainReturnDesc]) (mainFunction b)
   function = G.function
@@ -2264,7 +2263,7 @@ instance ParamElim CppHdrCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCPPHC
 
-instance MethodSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData where
+instance MethodSym CppHdrCode (Doc, VisibilityTag) MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction _ = modifyReturn (setVisibility Pub) $ toCode $ mthd Pub empty

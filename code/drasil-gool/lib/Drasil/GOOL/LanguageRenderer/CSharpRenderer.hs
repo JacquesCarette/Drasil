@@ -642,7 +642,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
+instance MethodSym CSharpCode Doc MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain

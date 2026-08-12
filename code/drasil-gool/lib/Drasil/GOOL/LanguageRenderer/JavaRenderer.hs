@@ -665,7 +665,7 @@ instance ParamElim JavaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JavaCode Doc MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string mainFunc

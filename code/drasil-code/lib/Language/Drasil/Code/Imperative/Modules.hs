@@ -933,7 +933,8 @@ genMainProc = genModuleProc "Control" "Controls the flow of the program"
 -- Returns Nothing if the user chose to generate a library.
 genMainFuncProc
   ::
-    ( CommandLineArgs r
+    ( BodySym r stmt
+    , CommandLineArgs r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -949,7 +950,7 @@ genMainFuncProc
     , NativeVector r
     , Reference r
     , Set r
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     )
   => GenState (Maybe (MS (r mthd)))
@@ -1102,7 +1103,8 @@ genCalcModProc = do
 -- generate code is found by looking it up in the external library map.
 genCalcFuncProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1124,7 +1126,7 @@ genCalcFuncProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     , VariableElim r
     )
@@ -1239,7 +1241,8 @@ genCaseBlockProc t v c cs = do
 -- | | Generates a function for reading inputs from a file.
 genInputFormatProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1258,7 +1261,7 @@ genInputFormatProc
     , ListStatement r stmt
     , Reference r
     , Set r
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     , VariableElim r
     )
@@ -1272,7 +1275,8 @@ genInputFormatProc s = do
       getFunc Priv = privateInOutFuncProc
       genInFormat
         ::
-          ( NativeVector r
+          ( BodySym r stmt
+          , NativeVector r
           , MathConstant r
           , VariableValue r
           , BooleanExpression r
@@ -1291,7 +1295,7 @@ genInputFormatProc s = do
           , ListStatement r stmt
           , Reference r
           , Set r
-          , MethodSym r vis stmt mthd
+          , MethodSym r vis mthd
           , TypeElim r
           , VariableElim r
           )
@@ -1309,7 +1313,8 @@ genInputFormatProc s = do
 -- | Generates a function for calculating derived inputs.
 genInputDerivedProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1329,7 +1334,7 @@ genInputDerivedProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     , VariableElim r
     )
@@ -1343,7 +1348,8 @@ genInputDerivedProc s = do
       getFunc Priv = privateInOutFuncProc
       genDerived
         ::
-          ( NativeVector r
+          ( BodySym r stmt
+          , NativeVector r
           , MathConstant r
           , VariableValue r
           , BooleanExpression r
@@ -1363,7 +1369,7 @@ genInputDerivedProc s = do
           , FileHandling r stmt
           , PrintFile r stmt
           , ReadFile r stmt
-          , MethodSym r vis stmt mthd
+          , MethodSym r vis mthd
           , TypeElim r
           , VariableElim r
           )
@@ -1381,7 +1387,8 @@ genInputDerivedProc s = do
 -- | Generates function that checks constraints on the input.
 genInputConstraintsProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
@@ -1399,7 +1406,7 @@ genInputConstraintsProc
     , FileHandling r stmt
     , PrintFile r stmt
     , ControlStatement r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     , VariableElim r
     )
@@ -1413,7 +1420,8 @@ genInputConstraintsProc s = do
       getFunc Priv = privateFuncProc
       genConstraints
         ::
-          ( MathConstant r
+          ( BodySym r stmt
+          , MathConstant r
           , VariableValue r
           , BooleanExpression r
           , Comparison r
@@ -1431,7 +1439,7 @@ genInputConstraintsProc s = do
           , FileHandling r stmt
           , PrintFile r stmt
           , ControlStatement r stmt
-          , MethodSym r vis stmt mthd
+          , MethodSym r vis mthd
           , TypeElim r
           , VariableElim r
           )
@@ -1716,7 +1724,8 @@ genOutputModProc = do
 -- | Generates a function for printing output values.
 genOutputFormatProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1732,7 +1741,7 @@ genOutputFormatProc
     , ControlStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     , VariableElim r
     )
@@ -1743,7 +1752,8 @@ genOutputFormatProc = do
   woName <- genICName WriteOutput
   let genOutput
         ::
-          ( NativeVector r
+          ( BodySym r stmt
+          , NativeVector r
           , MathConstant r
           , VariableValue r
           , BooleanExpression r
@@ -1759,7 +1769,7 @@ genOutputFormatProc = do
           , ControlStatement r stmt
           , FileHandling r stmt
           , PrintFile r stmt
-          , MethodSym r vis stmt mthd
+          , MethodSym r vis mthd
           , TypeElim r
           , VariableElim r
           )

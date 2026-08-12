@@ -22,14 +22,15 @@ nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
 
 helper
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , VariableValue r
     , Comparison r
     , List r
     , InternalList r
     , DeclStatement r stmt
     , ControlStatement r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     )
   => MS (r mthd)
 helper = function "helper" private void [param temp] $ body
@@ -42,14 +43,15 @@ helper = function "helper" private void [param temp] $ body
 
 main
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , VariableValue r
     , Comparison r
     , List r
     , InternalList r
     , DeclStatement r stmt
     , ControlStatement r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     )
   => MS (r mthd)
 main = mainFunction $ body

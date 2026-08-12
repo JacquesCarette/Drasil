@@ -684,7 +684,7 @@ instance ParamElim SwiftCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance MethodSym SwiftCode Doc MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody

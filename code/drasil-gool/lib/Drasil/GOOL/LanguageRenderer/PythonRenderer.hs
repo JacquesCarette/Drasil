@@ -650,7 +650,7 @@ instance ParamElim PythonCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
+instance MethodSym PythonCode Doc MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody

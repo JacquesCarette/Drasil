@@ -481,7 +481,7 @@ instance StateVarSym CodeInfoOO () () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () () () () where
+instance ClassSym CodeInfoOO () () () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms

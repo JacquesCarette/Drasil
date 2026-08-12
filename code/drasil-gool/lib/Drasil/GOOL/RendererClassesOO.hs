@@ -21,7 +21,7 @@ import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
 class (CommonRenderSym r vis stmt mthd,
-  IG.OOMethodSym r vis stmt mthd attch, IG.ClassSym r vis stmt mthd stvr attch,
+  IG.OOMethodSym r vis stmt mthd attch, IG.ClassSym r vis mthd stvr attch,
   IG.ModuleSym r mod mthd, IG.FileSym r file mod, IG.InternalValueExp r,
   IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r stmt,
   IG.OOVariableValue r, IG.OOValueExpression r, RenderClass r vis mthd stvr,

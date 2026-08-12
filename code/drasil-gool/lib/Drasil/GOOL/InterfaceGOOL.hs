@@ -49,7 +49,7 @@ class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
   List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
   ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  OOMethodSym r vis stmt mthd attch, ClassSym r vis stmt mthd stvr attch,
+  OOMethodSym r vis stmt mthd attch, ClassSym r vis mthd stvr attch,
   TypeElim r, VariableElim r, EmptyStatement r stmt, MultiStatement r stmt,
   ValueStatement r stmt, CommentStatement r stmt, OODeclStatement r stmt,
   AssignStatement r stmt, OOFuncAppStatement r stmt, ControlStatement r stmt,
@@ -86,9 +86,9 @@ class ModuleSym r mod mthd | r -> mod mthd where
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r mod)
 
 type Class = Doc
-
+-- OOMethodSym r vis stmt mthd attch,
 -- | Class for representing an OO class.
-class (OOMethodSym r vis stmt mthd attch, StateVarSym r vis stvr attch) => ClassSym r vis stmt mthd stvr attch where
+class (StateVarSym r vis stvr attch) => ClassSym r vis mthd stvr attch | r -> mthd where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->

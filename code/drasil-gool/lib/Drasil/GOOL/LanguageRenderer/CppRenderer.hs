@@ -784,7 +784,7 @@ instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
+    (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -1684,7 +1684,7 @@ instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData AttachmentData
 instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
+instance ClassSym CppSrcCode (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -2320,7 +2320,7 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData AttachmentData
 instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
+instance ClassSym CppHdrCode (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

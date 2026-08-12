@@ -30,8 +30,15 @@ selfX :: (SelfSym r, VariableValue r) => SVariable r
 selfX = instanceVarSelf x
 
 -- | Helper function to create the class.
-helperClass :: (ClassSym r vis stmt mthd stvr attch, PrintConsole r stmt, Literal r,
-  OOVariableValue r) => CS (r Class)
+helperClass
+  ::
+    ( ClassSym r vis mthd stvr attch
+    , OOMethodSym r vis stmt mthd attch
+    , PrintConsole r stmt
+    , Literal r
+    , OOVariableValue r
+    )
+  => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 

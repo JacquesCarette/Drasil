@@ -331,7 +331,7 @@ htPCMNotes = map foldlSent [
   [ch pcmE, S "for the", phrase solid, short phsChgMtrl `S.is` S "found using",
    refS sensHtE `S.for` phrase sensHeat :+: S "ing, with",
    D.toSent (phraseNP (heatCapSpec `the_ofThe` solid)), short phsChgMtrl `sC` chWithUnit htCapSP `S.andThe` phrase change `S.inThe`
-   short phsChgMtrl, phrase temp, S "from the", phrase tempInit, unitInParen tempInit],
+   short phsChgMtrl, phrase temp, S "from the", phraseWithUnit tempInit],
   [ch pcmE, S "for the melted", short phsChgMtrl, sParen (eS (sy tempPCM $> sy pcmInitMltE)),
    S "is found using", refS sensHtE `S.for` D.toSent (phraseNP (sensHeat `ofThe` liquid)),
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`

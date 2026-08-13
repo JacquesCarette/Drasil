@@ -71,7 +71,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local)
+  defaultOptSpace, local, smartSub)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVarAccess,
   constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc,
@@ -438,7 +438,8 @@ instance Array CSharpCode where
 instance List CSharpCode where
   listSize = C.listSize' csListSize
   listAccess = G.listAccess
-  listLast v = listAccess v (listSize v #- litInt 1)
+  listAccessFromEnd v n = listAccess v (G.smartSub (listSize v #- litInt 1) n)
+  listLast v = listAccessFromEnd v (litInt 0)
   indexOf = CP.indexOf csIndex
 
 instance ListStatement CSharpCode (Doc, Terminator) where

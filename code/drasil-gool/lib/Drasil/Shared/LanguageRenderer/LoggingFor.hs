@@ -118,6 +118,7 @@ instance
 instance (List r) => List (LoggingFor r) where
   listSize = liftLogging listSize
   listAccess = liftLogging listAccess
+  listAccessFromEnd = liftLogging listAccessFromEnd
   listLast = liftLogging listLast
   indexOf = liftLogging indexOf
 

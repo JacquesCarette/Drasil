@@ -14,9 +14,8 @@ import Control.Lens ((^.))
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.SRS (SRSDecl, mkDoc, SmithEtAlSRS)
+import Drasil.SRS (SRSDecl, SmithEtAlSRS)
 import Language.Drasil.Code (Choices)
-import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Generator.Code (genCode, genCodeZoo)
 import Drasil.Generator.SRS (genSmithEtAlSrs)
@@ -28,10 +27,8 @@ import Drasil.System (HasProjectName(..))
 -- structure (and debug data) for an example.
 writeSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> IO [FileLayout]
 writeSmithEtAlSrs syst srsDecl srsFileName = do
-  let (srs, syst') = mkDoc syst srsDecl S.forT'
   typeCheckSI syst -- FIXME: This should be done on `System` creation *or* chunk creation!
-  let layout = genSmithEtAlSrs syst' srs srsFileName
-  pure layout
+  pure $ genSmithEtAlSrs syst srsDecl srsFileName
 
 -- | A case study that only outputs an SRS in each of our supported variants.
 caseStudyMainSRS :: SmithEtAlSRS -> SRSDecl -> String -> IO ()

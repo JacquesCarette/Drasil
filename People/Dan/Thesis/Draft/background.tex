@@ -585,29 +585,30 @@ A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
 method called ``Literate Software Development''
 (LSD)~\cite{AlMatiiAndBoujarwah2002}. Box structure can be summarized as the
 idea of different views that are abstractions that communicate the same
-information in different levels of detail, for different purposes. Box
-structures consist of black box, state machine, and clear box structures. The
+information at different levels of detail, for different purposes. Box
+structures consist of black box, state box, and clear box structures. The
 black box gives an external (user) view of the system and consists of stimuli
-and responses; the state machine makes the state data of the system visible (it
+and responses; the state box makes the state data of the system visible (it
 defines the data stored between stimuli); and the clear box gives an internal
 (designer's) view describing how data are processed, typically referring to
 smaller black boxes~\cite{Mills1986}. These three structures can be nested as
 many times as necessary to describe a system.
 
 LSD was developed with the intent to overcome the disadvantages of both LP and
-box structure. It was intended to overcome LP's inability to specify interfaces
-between modules, the inability to decompose boxes and implement the design
-created by box structures, as well as the lack of tools to support box
-structure~\cite{Deck1996}.
+box structure~\cite{AlMatiiAndBoujarwah2002}. It was intended to overcome LP's
+inability to specify interfaces between modules, the inability to decompose
+boxes and implement the design created by box structures, as well as the lack
+of tools to support box
+structure~\cite{AlMatiiAndBoujarwah2002,Deck1996}.
 
 The framework developed for LSD, ``WebBox'', expanded LP and box structures in a
 variety of ways. It included new chunk types, the ability to refine chunks, the
 ability to specify interfaces and communication between boxes, and the ability
-to decompose boxes at any level. However, literate software (and LSD) remains
-primarily code-focused with very little support for creating other software
-artifacts, in much the same way as LP. That emphasis limits its usefulness in
-settings where teams rely on a broader collection of artifacts for
-communication, review, and maintenance.
+to decompose boxes at any level~\cite{AlMatiiAndBoujarwah2002}. For our
+purposes, however, these extensions remain focused on code and its box-structure
+design, with little support for creating other kinds of \sfs{}. That emphasis
+limits its usefulness in settings where teams rely on a broader collection of
+artifacts for communication, review, and maintenance.
 
 \section{Generative Programming and Metaprogramming}
 

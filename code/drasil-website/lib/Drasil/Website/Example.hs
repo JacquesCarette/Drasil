@@ -9,9 +9,9 @@ import Control.Lens ((^.), lens)
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
 import Drasil.System (ProjectName, purpose, HasSystemMeta(..), HasProjectName(..))
-import Drasil.SRS (SmithEtAlSRS(..))
+import Drasil.SRS (SmithEtAlSRS(..), Format(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
-import Drasil.Generator (codedHRName, codedDirName, Format(..))
+import Drasil.Generator (codedHRName, codedDirName)
 
 import qualified Drasil.BinaryStar.Body as BSS (si)
 import qualified Drasil.DblPend.Body as DblPend (si)

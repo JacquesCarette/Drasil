@@ -1,5 +1,5 @@
 -- | Defines output formats for the different documents we can generate.
-module Drasil.Generator.Formats (
+module Drasil.SRS.Generator.Formats (
   -- * Types (Printing Options)
   Filename, Format(..)
 ) where

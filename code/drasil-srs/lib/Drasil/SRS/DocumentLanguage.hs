@@ -1,10 +1,9 @@
 {-# Language TupleSections #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
--- representation of information, to something more informative.
--- Over time, we'll want to have a cleaner separation, but doing that
--- all at once would break too much for too long.  So we start here
--- instead.
+-- representation of information, to something more informative. Over time,
+-- we'll want to have a cleaner separation, but doing that all at once would
+-- break too much for too long. So we start here instead.
 module Drasil.SRS.DocumentLanguage (mkDoc) where
 
 -- General Haskell

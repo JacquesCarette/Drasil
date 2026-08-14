@@ -1,7 +1,8 @@
 {-# LANGUAGE QuasiQuotes #-}
-module Drasil.Generator.SRS (
+module Drasil.SRS.Generator (
   -- * SRS Generator
-  genSmithEtAlSrs
+  genSmithEtAlSrs,
+  typeCheckSI
 ) where
 
 import Prelude hiding (id)
@@ -16,12 +17,16 @@ import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.SRS (mkGraphInfo, SmithEtAlSRS, mkDoc, SRSDecl)
 import Drasil.System (systemdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.Generator.Formats (Filename, Format(..))
-import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
+import Drasil.SRS.DocDecl (SRSDecl)
+import Drasil.SRS.DocumentLanguage (mkDoc)
+import Drasil.SRS.DocumentLanguage.TraceabilityGraph (mkGraphInfo)
+import Drasil.SRS.Generator.Formats (Filename, Format(..))
+import Drasil.SRS.Generator.TraceabilityGraphs (outputDot)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
+import Drasil.SRS.TypeCheck (typeCheckSI)
 
 -- | Generate Drasil's SRS (in HTML, TeX, Jupyter, and MDBook formats).
 genSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> [FileLayout]

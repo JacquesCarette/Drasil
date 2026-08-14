@@ -2,34 +2,32 @@
 \label{c:background}
 
 This chapter surveys foundational concepts and approaches that underpin the 
-thesis. Each section is selected to clarify the context, motivations, and 
-limitations of the work. We structure the review as follows:
+thesis. Rather than attempting an exhaustive survey of software engineering 
+techniques, we focus on approaches relevant to a particular problem: software 
+systems are represented through multiple artifacts, often created for different 
+purposes and audiences, that nevertheless describe aspects of the same 
+underlying system. Maintaining the relationships between these artifacts is an 
+established concern in software engineering, particularly in requirements 
+traceability, where requirements are related to downstream development 
+artifacts throughout the software 
+lifecycle~\cite{GotelAndFinkelstein1994, WinklerAndPilgrim2010}.
 
-\begin{itemize}
-  \item First we introduce literature around software artifacts, emphasizing 
-  	their role in communication, maintenance, and verification within 
-  	software engineering.
-  \item Next we examine software reuse, software families, and reproducible 
-	research, highlighting strategies for leveraging prior work and domain 
-	knowledge.
-  \item Then we discuss literate approaches to software development to motivate
-    the integration of documentation and code.
-  \item Finally, we review Generative programming as a means of automating 
-  	artifact creation from high-level specifications.
-\end{itemize}
+We first examine software artifacts and their role in communicating 
+requirements, design decisions, and implementation details. We then examine 
+software reuse and software families, focusing on approaches that exploit 
+commonality within and across related systems. Literate approaches are 
+considered because they demonstrate how executable and explanatory 
+representations can be developed from a common source~\cite{Knuth1984}. 
+Finally, generative programming and related techniques demonstrate how 
+higher-level representations can be transformed into concrete software 
+artifacts~\cite{Czarnecki2000,Taha2006}.
 
-We have selected specific topic areas following a criterion for inclusion 
-regarding the direct relevance to our central problem: improving the 
-production and maintenance of software artifacts through automation and 
-knowledge reuse. Topics are selected if they inform the design, implementation, 
-or evaluation of the proposed approach. Areas such as Model-Driven Engineering 
-(MDE), or Knowledge-Based Software Engineering (KBSE)\footnote{While KBSE 
-shares some conceptual overlap, its primary concerns (such as expert systems, 
-rule-based reasoning, and formal methods) do not directly inform the design, 
-implementation, or evaluation of Drasil.} while significant in the broader 
-literature, are excluded unless they directly intersect with the thesis's 
-scope. This ensures the chapter remains focused and purposeful, rather 
-than exhaustive.
+Together, these areas provide several pieces of the problem addressed by this 
+thesis: maintaining related representations, reusing common information, and 
+automatically deriving artifacts from higher-level descriptions. The remainder 
+of this chapter examines those pieces individually before 
+Chapter~\ref{c:process} considers how they interact in the software systems 
+used as case studies in this thesis.
 
 \section{Software Artifacts}
 \label{sec:sfs}
@@ -53,9 +51,29 @@ built, and how it will be tested. \SFS{} also provide a record of the decisions
 that were made during the development process, which is important for future 
 maintenance/modification of the software or for compliance reasons. Combined 
 with the former, this gives us a means to verify and validate the software 
-against its original requirements and design. The production, maintenance, and 
-use of \sfs{} is largely dependent on the specific design process being used 
-within a team.
+against its original requirements and design. 
+
+Because these \sfs{} describe related aspects of the same software system, 
+relationships naturally exist between them. Requirements influence design 
+decisions, design decisions are realized in source code, and verification 
+activities provide evidence that the resulting implementation satisfies its 
+requirements. Traceability provides an explicit means of recording and 
+following some of these relationships throughout the software lifecycle 
+\cite{GotelAndFinkelstein1994,WinklerAndPilgrim2010}. Maintaining these 
+relationships is important as the software evolves, since changes to one 
+artifact may require corresponding changes to others.
+
+Traceability and consistency are related, but distinct. Traceability concerns
+whether a relationship between elements of different \sfs{} can be followed,
+while consistency concerns whether those related elements agree with one
+another~\cite{Galster2011}. A trace link can help reveal a disagreement, but
+the presence of that link does not guarantee consistency. Conversely, two
+artifacts may agree even when the relationship between them has not been
+recorded. Maintaining software as it evolves requires attention to both
+properties.
+
+The production, maintenance, and 
+use of \sfs{} is largely dependent on the specific design process being used.
 
 \fig{
 \begin{center}
@@ -105,27 +123,43 @@ Test Cases; Verification and Validation Report \\
 
 Software design can follow a number of different design processes, each with 
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
-model (Figure~\ref{fig:Waterfall}) of software 
-development~\cite{PfleegerAndAtlee2010Ch2}, which often does not work in 
-practice~\cite{??}. \ds{Need this source.}
-However, Parnas and Clements~\cite{ParnasAndClements1986} detailed what they 
-dubbed a ``rational" design process; an idealized version of software 
+model of software development~\cite{PfleegerAndAtlee2010Ch2} 
+(Figure~\ref{fig:Waterfall}) whose sequential nature can 
+make it difficult to accommodate changes in requirements as development 
+progresses~\cite{ChariEtAl2018, NurmulianiEtAl2004}.
+In contrast, Parnas and Clements~\cite{ParnasAndClements1986} detailed what 
+they dubbed a ``rational" design process; an idealized version of software 
 development that includes what needs to be documented in corresponding \sfs{}.
 The rational design process is not meant to be a linear process like the 
 Waterfall model, but instead an iterative process using section stubs for 
 information that is not yet available or not fully clear during the time of 
 writing. Those stubs are then filled in over the development process, and 
 existing documentation is updated so it appears to have been created in a 
-linear fashion for ease of review later in the software lifecycle. The rational 
+linear fashion for ease of review later in the software lifecycle.
+
+The rational design process is particularly relevant to this thesis because it 
+treats documentation as an integral part of software development rather than 
+solely as a record produced after implementation. Parnas and Clements 
+explicitly acknowledge that the information required to produce a rational 
+design is not available all at once, and therefore distinguish the actual 
+iterative development process from the organized documentation ultimately 
+produced for review~\cite{ParnasAndClements1986}. Later work by Parnas 
+similarly emphasizes precise documentation as an important part of producing 
+understandable and maintainable software~\cite{Parnas2010,ParnasEtAl1994}.
+
+The rational 
 design process involves the steps listed in the first column of 
 Table~\ref{tab:RatWatComp}.
 
 Parnas provided a list of the most important documents~\cite{Parnas2010} 
 required for the rational design process, which 
-Smith~\cite{Smith2016} expanded upon by including complimentary 
+Smith~\cite{Smith2016} expanded upon by including complementary 
 artifacts such as source code, verification and validation plans, test cases, 
-and build instructions. While there have been many proposed artifacts, the 
-following collection covers those most relevant to this thesis:
+and build instructions. Smith's adaptation is particularly relevant in the 
+context of scientific software, where the rational process is used to organize 
+the development and maintenance of the collection of artifacts considered 
+throughout this thesis~\cite{Smith2016}. While there have been many proposed 
+artifacts, the following collection covers those most relevant to this thesis:
 
 \cardifact{Software Requirements Specification}{Contains the functional and 
 nonfunctional requirements detailing what the desired software system should 
@@ -160,12 +194,8 @@ that of the rational design process. Using the waterfall model as an example,
 we can see (Table~\ref{tab:RatWatComp}) the rational design process and its 
 artifacts map onto the model in a very straightforward manner.
 
-As mentioned earlier, \sfs{} are important to development in a number of ways, 
-such as easing the burden of maintenance and training. We outline the artifacts 
-we are most interested in below with a brief description of their purpose.
-
 Parnas~\citep{Parnas2010} does an excellent job of defining the target audience 
-for each of the most common \sfs{} and we extend that alongside our work. A 
+for each of the most common \sfs{}, and we extend that perspective here. A 
 summary can be found in Table~\ref{tab:sfsummary}.
 
 \begin{table}[h!]
@@ -227,9 +257,31 @@ problem that \sf{} is solving}
 \endgroup
 \end{table}
 
+Although these \sfs{} differ in purpose, audience, and level of abstraction,
+they describe different aspects of the same software system.
+Requirements constrain design and implementation, verification artifacts
+assess the resulting behaviour, and domain concepts recur wherever
+stakeholders need them. Because these relationships cross artifact boundaries,
+separately edited descriptions can diverge and weaken established traceability
+relationships~\cite{Galster2011,WinklerAndPilgrim2010}.
+
+Some repetition remains unavoidable because artifacts serve different
+purposes. The distinction relevant to this thesis is not simply how often a
+piece of information appears, but how many independently editable versions of
+it exist. For example, an equation rendered in a document and implemented as
+source code may legitimately appear twice; the maintenance risk comes from
+each version acting as its own authority. We use \emph{unnecessary redundancy}
+to describe this latter situation.
+
+This distinction leads naturally to software reuse. If common implementation,
+structure, or domain information can be identified and represented once, it
+may still be used in several places without requiring a corresponding number
+of authoritative versions, i.e.\ some of the repeated manual synchronization 
+effort may be avoided.
+
 \section{Software Reuse and Software Families}
 
-In this section we look at ways in which others have attempted to avoid 
+We now look at ways in which others have attempted to avoid 
 ``reinventing the wheel" by providing means to reuse software, in part or 
 whole, and reuse the analysis and design efforts of those that came before.
 We focus on software families (software product lines), component-based 
@@ -247,9 +299,10 @@ and promoting knowledge reuse across the software lifecycle.
 
 Software/program families, or software product lines, refer to a group of 
 related systems sharing a common set of features, functionality, and 
-design~\cite{Pohl2005}. These systems are typically designed to serve a 
-specific domain or market, and are often developed using a common set of core 
-technologies and design principles.
+design while differing at explicitly identified points of 
+variation~\cite{Pohl2005,Kang1990}. These systems are typically designed to 
+serve a specific domain or class of related problems, allowing development 
+effort to be shared across multiple family members.
 
 A central concept in software/program families is the distinction between 
 \emph{commonalities} and \emph{variabilities}~\cite{Bosch2000,Pohl2005}. 
@@ -263,52 +316,67 @@ configuration options, feature selections, or architectural choices.
 Identifying and systematically managing these parameters is essential for 
 effective reuse and automation in software product lines, as it allows 
 developers to generate tailored systems while maintaining consistency and 
-reducing duplication.
+reducing duplication. Approaches such as Feature-Oriented Domain Analysis make 
+these shared and variable properties explicit by analyzing a domain in terms of 
+features that characterize members of the family~\cite{Kang1990}.
 
-One well-known example of a software family is the Microsoft Office suite. Each 
-program in the suite is used for a specific application (word 
-processing, spreadsheet management, presentation tools, etc), yet they all have 
-similar design principles and user interface features. A user who understands 
-how to use one of the software family members will have an intuitive sense of 
-how to use the others thanks to the common design features. 
+A related approach is \emph{commonality analysis}, which explicitly
+documents both the properties shared by members of a family and the
+parameters by which those members may vary~\cite{Weiss1997}. Rather than
+treating each program as an independent development effort, commonality
+analysis attempts to characterize the family itself. This supports reuse
+because the shared portions of the family can be identified once, while
+variation is captured explicitly rather than being rediscovered separately
+for each system.
 
-Another, much larger scale, software family is that of the GNU/Linux operating 
-system (OS) and its various distributions\cite{AttarianEtAl2013}. There are 
-many variations on the OS depending on the user's needs. For an everyday 
-computer desktop experience, there are general purpose distributions (Ubuntu, 
-Linux Mint, Fedora, Red Hat, etc.). For server/data center applications, there
-are specialized server distributions (Ubuntu Server, Fedora Server, Debian, 
-etc.). For systems running on embedded hardware there are lightweight, 
-specialized, embedded distributions built for specific architecture (Armbian, 
-RaspbianOS, RedSleeve, etc.). There are even specialized distributions that are 
-meant to be run without persistent storage for specific applications like 
-penetration/network testing (Kali Linux, Backbox, Parrot Security OS, 
-BlackArch, etc.). However, if you are familiar with one particular flavour of 
-Linux, you'll likely be comfortable moving between several of the distributions
-built upon the same cores. You may even be familiar moving to other *NIX based 
-systems like MacOS/Unix.
+This family-oriented view has also been applied specifically to scientific
+computing. Smith, McCutchan, and Cao examine program families in scientific
+computing as a means of identifying and exploiting common structure across
+related scientific applications~\cite{SmithMcCutchanAndCao2007}. Subsequent
+work applies commonality analysis to families of physical models, showing
+that the common information may include not only implementation structure,
+but also scientific concepts, assumptions, equations, and other model-level
+information~\cite{SmithEtAl2008}. Similar analyses have been carried out for
+mesh-generating software and other scientific software 
+families~\cite{SmithAndChen2004,SmithAndChen2004b}.
 
-\ds{ Add a blurb here about spinning up a kernel through parameterized options 
-and how that can create a fully customized family member.}
+This broader notion of commonality is particularly important for this
+thesis. If two scientific software systems are members of the same family,
+their shared material may extend beyond reusable source-code components to
+the underlying scientific and engineering information used to describe the
+problem. Requirements, mathematical models, assumptions, terminology, and
+documentation structure may therefore exhibit commonality alongside the
+implementation itself. Identifying these relationships provides an
+opportunity to reuse more than code: analysis and documentation effort may
+also be shared across family members~\cite{SmithEtAl2008,SmithAndChen2004}.
 
-Software/program families can provide a range of benefits to both developers 
-and end-users. For developers, software families can increase 
-productivity by providing a reusable set of core technologies and design 
-principles~\cite{Pohl2005}. This can help reduce the time and effort required 
-to develop new systems, and improve the quality and consistency of the 
-resulting software. For end-users, program families provide a range of 
-usability and functional benefits. Common features and UI elements improve the 
-user experience by making it easier for users to learn and use multiple 
-systems~\cite{Bosch2000}. By also providing a range of related 
-applications, such as those provided by the Microsoft office suite, software 
-families help meet users' needs across a wider range of domains.
+The Linux kernel provides a large-scale example of explicitly managed
+variability. Its configuration space includes hardware support, device
+drivers, services, security options, and other features that can be selected
+to produce different system configurations. Studies of Linux as an evolving
+software product line illustrate that such variability is not static, but
+must itself be managed as a family evolves over time~\cite{AttarianEtAl2013}.
+
+The main benefit of a family-oriented approach for this thesis is therefore
+systematic reuse. By identifying what is common across a family and
+representing variation explicitly, developers can avoid repeatedly
+constructing closely related systems from scratch~\cite{Pohl2005,Weiss1997}. In 
+scientific computing, this reuse can extend to physical models and requirements 
+in addition to implementation 
+structures~\cite{SmithMcCutchanAndCao2007,SmithEtAl2008}. This motivates a 
+broader discussion of software reuse: what portions of a software-development 
+effort can be reused, and at what level should that reuse occur?
 
 \subsection{Software Reuse}
 
-Reusing software is an ideal means of reducing costs. If we can avoid spending 
-time developing new software and instead use some existing application (or a 
-part therein), we save time and money. There have been many proposals on ways 
-to encourage software reuse, each with their own merits and drawbacks.
+Software reuse aims to reduce repeated development effort by making use of
+assets produced for previous systems. However, what constitutes a reusable 
+asset can vary considerably. Reuse may occur at the level of complete
+applications, source-code components, architectures, domain models, or the
+knowledge used to describe and construct a family of systems. Different
+approaches to reuse therefore differ not only in how reusable assets are
+combined, but in \emph{what} they treat as 
+reusable~\cite{Pohl2005,Kang1990,Czarnecki2000}.
 
 Component based software engineering (CBSE) is one such example. CBSE is an 
 approach to software development that emphasizes using pre-built software 
@@ -337,7 +405,13 @@ form larger applications~\cite{OracleJavaBeans}.
 The largest challenge of CBSE is ensuring components are compatible with others 
 and can be integrated into a larger system without conflicts or errors. In an 
 effort to address this challenge, numerous approaches to component 
-compatibility testing have been proposed~\cite{Wu2001}. This limitation motivates our approach to explore reuse beyond mere composition, focusing instead on capturing and reusing domain knowledge to generate consistent, compatible artifacts.
+compatibility testing have been proposed~\cite{Wu2001}. A related challenge is
+that frameworks such as CORBA and JavaBeans preserve important architectural
+decisions into run time, where the abstractions that support reuse can also
+carry non-trivial performance costs. These limitations have motivated interest
+in forms of reuse that go beyond composition alone and instead emphasize the
+capture and reuse of domain knowledge, including approaches that shift more of
+the design burden to generation time rather than run time.
 
 Others have attempted to provide frameworks for reuse as well. For example,
 Neighbors~\cite{Neighbors1980,Neighbors1984,Neighbors1989} proposed a method
@@ -354,19 +428,21 @@ developers can automatically generate significant portions of a software
 system, reducing manual coding effort. While Draco itself is not widely 
 used, its approach anticipated later developments in software product lines and
 generative programming by emphasizing the explicit capture and reuse of domain
-knowledge~\cite{Neighbors1984,Czarnecki2000}. We draw inspiration from Draco's focus on domain knowledge reuse and automated artifact generation in our own approach.
+knowledge~\cite{Neighbors1984,Czarnecki2000}.
 
 \subsection{Reproducible Research}
 \label{sec:bg_reproducibility}
 
-Being able to reproduce computational results is fundamental to good science.
+Being able to reproduce computational results is fundamental to good
+science~\cite{Peng2011}.
 For research software, however, reproducibility is often undermined by
 undocumented assumptions, missing dependencies, version drift in libraries and
 build tools, and changes in the computational environment~\cite{Storer2017,
 Canon2020,AkhlaghiEtAl2021}. These problems make previously published results
 difficult to recreate reliably and can threaten confidence in the software and
 the scientific conclusions derived from it, echoing the broader
-reproducibility crisis highlighted in the scientific literature~\cite{Baker2016}.
+reproducibility crisis highlighted in the scientific 
+literature~\cite{Baker2016}.
 
 It is also useful to distinguish reproducibility from replicability.
 Reproducibility concerns rerunning the original computational workflow and
@@ -375,7 +451,8 @@ Replicability is a stronger goal: an independent researcher should be able to
 reconstruct the results from the documented theories, assumptions, and design
 decisions without relying on the original implementation. Both goals become
 difficult when essential knowledge remains tacit or scattered across papers,
-scripts, notebooks, and build infrastructure~\cite{IonescuAndJansson2013}.
+scripts, notebooks, and build infrastructure~\cite{RougierEtAl2017,
+AkhlaghiEtAl2021}.
 
 Existing work in reproducible research has often emphasized combining
 narrative, code, and data in a single package. For example, \emph{compendia}
@@ -385,8 +462,8 @@ the author~\cite{GentlemanAndLang2012}. Similarly, tools such as
 Sweave~\cite{Leisch2002}, SASweave~\cite{LenthEtAl2007},
 Statweave~\cite{Lenth2009}, Scribble~\cite{FlattEtAl2009}, 
 Org-mode~\cite{SchulteEtAl2012}, and Jupyter notebooks~\cite{Jupyter} support 
-literate workflows in which executable code is presented alongside explanatory 
-text.
+literate workflows (see Section~\ref{sec:literate} in which executable code is 
+presented alongside explanatory text.
 
 These approaches improve transparency, but they do not guarantee
 reproducibility on their own. In practice, notebook-based workflows can still
@@ -394,24 +471,16 @@ suffer from hidden dependencies, execution-order problems, and weak capture of
 environment details~\cite{PimentelEtAl2019}. Containers help address some of
 the environment problem by packaging software stacks more explicitly, but they
 do not by themselves capture the domain knowledge, assumptions, and design
-rationale needed for long-term regeneration and reuse~\cite{Canon2020,
-AkhlaghiEtAl2021}.
-
-Drasil addresses a different point in this design space. Rather than focusing
-on a single linear document or a frozen execution environment, Drasil codifies
-domain knowledge, assumptions, design choices, and artifact structure in a
-single knowledge base. From that source it generates multiple, interrelated
-artifacts, including documentation, code, and supporting materials. This
-approach strengthens reproducibility because a software system can be
-regenerated from an explicit declarative source, and it supports replicability
-by making the underlying knowledge and decisions visible instead of tacit.
+rationale needed for long-term regeneration, reuse, and independent
+reconstruction~\cite{Canon2020,AkhlaghiEtAl2021}.
 
 \section{Literate Approaches to Software Development}
+\label{sec:literate}
 
 There have been several approaches attempting to combine development of program 
 code with documentation. Literate Programming and literate software are two 
-such approaches that have influenced the direction of this thesis. Each of 
-these approaches is outlined in the following sections.
+such approaches that have influenced the direction of this thesis, which we now 
+outline.
 
 \subsection{Literate Programming}
 
@@ -438,16 +507,17 @@ using LP ends up with more consistent documentation and
 code~\cite{ShumAndCook1993}. There are many downsides to having inconsistent 
 documentation while developing or maintaining 
 code~\cite{Kotula2000,Thimbleby1986}, while the benefits of consistent 
-documentation are numerous~\cite{Hyman1990, Kotula2000} including improved 
-maintainability and ease of future modifications, reduced risk of introducing 
-errors during updates, enhanced onboarding and training for new team members, 
-better communication among stakeholders, and increased confidence in overall 
-software quality. With the advantages and disadvantages of good documentation 
+documentation are numerous, including improved maintainability and ease of
+future modifications, reduced risk of introducing errors during updates,
+enhanced onboarding and training for new team members, better communication
+among stakeholders, and increased confidence in overall software
+quality~\cite{Hyman1990,Kotula2000,Parnas2010,ParnasAndClements1986,
+ParnasEtAl1994}. With the advantages and disadvantages of good documentation
 in mind we see that more effective, maintainable code can be produced if 
 properly using LP~\cite{PieterseKourieAndBoake2004}.
 
-Regardless of the benefits of LP, it has not been very popular with 
-developers~\cite{ShumAndCook1993}. However, there are
+Despite these proposed benefits, early accounts found that LP had not been
+widely adopted~\cite{ShumAndCook1993}. However, there are
 several successful examples of LP's use in SC. Two such literate programs that 
 come to mind are VNODE-LP~\cite{Nedialkov2006} and ``Physically Based 
 Rendering: From Theory to Implementation''~\cite{PharrAndHumphreys2004} a 
@@ -463,8 +533,8 @@ documentation simultaneously, that documentation is comprised of a single
 artifact which may not cover the same material as standard artifacts software 
 engineers expect (see Section~\ref{sec:sfs} for more details). LP also does not 
 simplify the development process: documentation and code are written as usual, 
-and there is the additional effort of re-ordering the chunks. It is also 
-challenging to use LP when requirements and design choices change, as those 
+and there is the additional effort of organizing and relating the chunks. It is
+also challenging to use LP when requirements and design choices change, as those
 changes may affect many different chunks. That is not to say LP does not have 
 benefits, the LP development process allows developers to follow a more natural 
 flow in development by writing chunks in whichever order they wish, keep the 
@@ -472,46 +542,42 @@ documentation and code updated simultaneously (in theory)
 because of their co-location, and automatically incorporate code chunks into 
 the documentation to reduce some information duplication.
 
-There have been many attempts to increase LP's popularity by focusing on 
-changing the output language or removing the text processor dependency. Several
-new tools such as CWeb (for the C language), DOC++ (for C++), noweb 
-(programming language independent), and others were developed. Other tools such 
-as javadoc (for Java) and Doxygen (for multiple languages) were also influenced 
-by LP, but differ in that they are merely document extraction tools. They do 
-not contain the chunking features which allow for re-ordering algorithms.
+There have been many attempts to increase LP's popularity by focusing on
+changing the output language or removing the text processor
+dependency~\cite{PieterseKourieAndBoake2004}. Several new tools such as CWEB
+(for the C language), noweb (programming language independent), and others were
+developed. Other tools such as DOC++ (for C++), javadoc (for Java), and Doxygen
+(for multiple languages) were also influenced by LP, but differ in that they are
+merely document extraction tools~\cite{DOCppManual,OracleJavadoc,DoxygenManual}.
+They do not contain the
+chunking features which allow for re-ordering algorithms.
 
 With new tools came new features including, but not limited to, phantom
 abstracting~\cite{ShumAndCook1993}, a ``What You See Is What You Get'' (WYSIWYG)
 editor~\cite{FritzsonGunnarssonAndJirstrand2002}, and even movement away from 
 the ``one source'' idea~\cite{Simonis2003}.
 
-While LP is still not mainstream~\cite{Ramsey1994}, these more robust 
-tools helped drive the understanding behind what exactly LP tools must 
-do. In certain domains LP is becoming more standardized, for 
-example: Agda, Haskell, and R support LP to some extent, even though it is not 
-yet common practice. R has good tool support, with the most popular being
-Sweave~\cite{Leisch2002}, however it is designed to dynamically create
-up-to-date reports or manuals by running embedded code as opposed to being used
-as part of the software development process. 
+Classical LP did not become a mainstream software-development
+methodology~\cite{JonesEtAl2020}, but its core idea of combining code with
+explanatory text has been widely adopted through computational notebooks,
+particularly in data science~\cite{PimentelEtAl2019,BondEtAl2026}. These more
+robust tools helped drive the understanding behind what exactly LP tools must
+do. Some languages, including Agda and Haskell, directly support literate source
+files~\cite{AgdaLiterateProgramming,GHCUsersGuide}. R instead has an ecosystem
+of tools for literate data analysis and dynamic documents, including R Markdown
+and the earlier Sweave~\cite{XieEtAl2018,Leisch2002}. These tools, however, are
+primarily designed to dynamically create up-to-date reports and other documents
+by running embedded code, as opposed to being used as part of the software
+development process.
 
-Drasil draws inspiration from LP in its emphasis on integrating documentation 
-and code, and in its goal of improving the understandability and 
-maintainability of scientific software. Drasil differs from LP in several 
-important ways. First, while LP focuses on producing a single, human-readable 
-artifact that interleaves code and documentation, Drasil is designed to 
-generate multiple, distinct artifacts from a single, unified knowledge base. 
-This approach addresses the needs of software engineering processes that 
-require a variety of artifacts for
-different stakeholders and purposes, going beyond the single-document focus of
-traditional LP.
-
-Second, Drasil explicitly models domain knowledge, enabling automated 
-consistency across all generated artifacts. In contrast, LP relies on manual 
-synchronization between code and documentation. Drasil's knowledge-centric 
-approach facilitates reuse, traceability, and automated updates, making it 
-better suited for environments where change is frequent and artifact 
-consistency is critical. Drasil can be seen as a generalization and extension 
-of LP, retaining its core strengths while addressing its limitations.
+For our purposes, LP remains valuable for its emphasis on explanation and
+readability, but conventional LP uses a single source artifact to generate a
+program and its accompanying documentation~\cite{PieterseKourieAndBoake2004}.
+Although the code and explanatory text are co-located, their semantic
+consistency must still be maintained manually. Any other, related \sfs{}
+outside the literate source must likewise be synchronized separately, making
+it difficult to support broader traceability needs in software engineering
+practice.
 
 \subsection{Literate Software}
 
@@ -539,81 +605,106 @@ variety of ways. It included new chunk types, the ability to refine chunks, the
 ability to specify interfaces and communication between boxes, and the ability
 to decompose boxes at any level. However, literate software (and LSD) remains
 primarily code-focused with very little support for creating other software
-artifacts, in much the same way as LP. Drasil aims to extend the principles of 
-LSD by generating a comprehensive suite of software artifacts from a single 
-knowledge base. This broader scope addresses the needs of modern software 
-engineering practices, which require diverse artifacts for various 
-stakeholders, thereby enhancing the utility and applicability of the literate 
-approach and making it better suited for environments where artifact diversity 
-and traceability are essential.
+artifacts, in much the same way as LP. That emphasis limits its usefulness in
+settings where teams rely on a broader collection of artifacts for
+communication, review, and maintenance.
 
-\section{Generative Programming}
+\section{Generative Programming and Metaprogramming}
 
-Generative programming is an approach to software development that focuses on 
-automating the process of generating code from high-level 
-specifications~\cite{Czarnecki2000,Taha2006}. By writing a program 
-specification and feeding it to the generator, one does not have to manually 
-implement the desired program.
+The ideas now associated with generative programming and metaprogramming are
+more general than early code-generation tools alone. At a high level, they
+concern the use of specifications, models, templates, and staged
+transformations to synthesize software from a more abstract representation.
+This reflects a long-standing goal in software engineering: to capture
+recurring structure and variability explicitly so that families of related
+systems can be derived consistently rather than assembled one-by-one by hand.
+The broader literature on domain-specific languages (DSLs), software product
+lines (SPLs), and feature-oriented development frames this as a problem of
+structuring the generation space, not simply of emitting source code from a
+template~\cite{Czarnecki2000,Taha2006,wasowski2023}.
 
-One of the primary benefits of generative programming is that it can help to 
-increase productivity and reduce the time and effort required to develop 
-software~\cite{Czarnecki2000}. By automating the generation of code, developers 
-can focus on high-level design and specification, rather than low-level 
-implementation details.
+A useful way to interpret modern generative approaches is through the
+software-product-line lens. Product lines are increasingly used to manage the
+growing demand for custom-tailored software variants, allowing a common core
+to be implemented once while variability is expressed explicitly through
+feature selections and configuration decisions~\cite{bordis2020}.
+This is not only a productivity issue; it is also a correctness and
+maintainability issue, since a family can be reasoned about and validated as a
+whole rather than as a set of unrelated implementations. The same theme appears
+in studies of highly-configurable systems, where features evolve over both
+space and time and are often implemented using annotation mechanisms such as
+preprocessor directives; such work emphasizes that variability is not static,
+but a long-lived design concern that must be managed across evolution as well
+as configuration~\cite{michelon2021}.
 
-Generative programming has the added benefit of helping to improve the quality 
-of software by reducing the risk of errors and 
-inconsistencies~\cite{Czarnecki2000,Taha2006}. Since the code is generated 
-automatically from high-level specifications, there is less room for human 
-error, and the generated code is typically more consistent and predictable.
+This broader view also explains why metaprogramming is often treated as a more
+general concept than generation alone. Template metaprogramming, macros,
+partial evaluation, DSLs, and compiler/interpreter generation all share the
+same underlying idea: the programmer expresses a problem at a higher level of
+abstraction, and the system constructs or specializes lower-level
+implementation artifacts from that specification. In DSL-based settings,
+variability can be encoded as language-level abstractions or model libraries,
+allowing new concepts to be introduced without procedural duplication and with
+more systematic reuse~\cite{gerasimov2024, shaikhha2024}. Recent
+work on low-code platforms similarly suggests that DSLs can provide a structured
+way to support SPL engineering by expressing domain constructs and product
+configurations in a form that is closer to the problem domain than to raw
+implementation code~\cite{bragancca2021}.
 
-There are also some potential drawbacks to generative programming. For 
-instance, the generated code may not always be optimal or 
-efficient~\cite{Czarnecki2000,Taha2006}. As the code is generated 
-automatically, it may not take into account all of the nuance or complexity
-of the underlying system potentially leading to suboptimal performance or other 
-issues.
+The main benefits of this broader perspective are familiar: increased
+productivity, systematic reuse, and reduced opportunity for inconsistency
+across generated artifacts. However, the modern literature also highlights a
+more subtle point: the true challenge is not simply generation, but the design
+of the generation space itself. This includes the specification language, the
+constraints that define valid combinations, the feature model or variability
+model, the transformation rules, and the mechanisms by which generated
+artifacts are assembled and validated. In product-line and DSL settings, these
+issues are often more important than the mechanics of template expansion alone.
 
-Generative programming also requires a significant upfront investment in time 
-and effort to develop the generators and other tools needed to automate the 
-process of code generation~\cite{Czarnecki2000,Taha2006}. This means it is 
-often not worth the effort to use generative programming for one-off projects.
+Examples from the wider ecosystem illustrate the same trend. Parser generators
+such as ANTLR provide a declarative description of grammar and generate
+recognizers from it; API and web tooling such as Swagger Codegen and the
+OpenAPI Generator generate client/server scaffolding from structured
+specifications; compiler infrastructure and DSL tooling similarly rely on
+higher-level abstractions to synthesize optimized code. These tools show the
+breadth of the generative tradition, but they also point to a more general
+lesson: when variability is modeled explicitly, generation becomes a way to
+manage complexity rather than merely a shortcut for writing code.
 
-There are a large number of generative programming tools available today. Some, 
-like template metaprogramming (TMP) tools, are built into a number of 
-programming languages (C++, Rust, Scala, Java, Go, Python, etc.) and offer 
-varying levels of support for generative programming. Others are widely used 
-across a multitude of disparate domains. For example, \textbf{ANTLR} (Another 
-Tool for Language Recognition) automatically generates parsers and lexers from 
-grammar specifications, enabling rapid development of compilers and 
-interpreters~\cite{Parr1995}. \textbf{YACC} (Yet Another Compiler Compiler) and 
-its derivatives serve a similar purpose for C-based 
-toolchains~\cite{Johnson1975}. In web development, frameworks like 
-\textbf{Yeoman} scaffold entire web applications by generating boilerplate 
-code, configuration files, and project structure~\cite{Baumgartner2016}. 
-\textbf{Swagger Codegen} and the \textbf{OpenAPI Generator} produce client 
-libraries, server stubs, and API documentation from OpenAPI specifications, 
-streamlining the development of RESTful services~\cite{openapi2025, 
-swagger2025}. In embedded systems, tools such as \textbf{Simulink Coder} 
-generate C/C++ code from graphical models, facilitating deployment on hardware 
-targets~\cite{Chaturvedi2017}. These examples illustrate the breadth of 
-generative programming, from language processing to web and embedded systems, 
-and demonstrate how code generators can accelerate development and improve 
-consistency across software projects.
+For this thesis, the significance of generative programming lies in this broader
+idea of deriving multiple related artifacts from a shared specification. The
+important point is not simply that code can be generated automatically, but
+that engineering knowledge can be captured once, expressed declaratively, and
+then reused to produce consistent artifacts across a family of related software
+products or deliverables.
 
-However, current generators still tend to focus primarily on the code, but the 
-same techniques can be used to generate other software artifacts as well. 
-Drasil aims to utilize code generation to produce a comprehensive suite of 
-software artifacts, from a single knowledge base. This holistic approach 
-ensures consistency across all artifacts and addresses the diverse needs of 
-modern software engineering practices.
+This perspective is intentionally narrower than AI-mediated code synthesis. The
+work here treats generation as a specification-driven, deterministic process in
+which variability is modeled explicitly and transformed through well-defined
+rules, rather than as a form of unconstrained natural-language generation. This
+keeps the emphasis on disciplined reuse and artifact consistency, not on the
+broader question of whether large language models can generate code.
 
-\ds{Not using LLMs or AI models for generation}
+\textbf{Relation to Model-Driven Engineering.} Model-Driven Engineering (MDE)
+treats models as primary development artifacts and uses transformations to
+derive or synchronize other representations, including implementation
+artifacts. Model-transformation approaches differ in their source and target
+representations, directionality, and degree of automation~\cite{Czarnecki2003}.
+Making these transformations explicit can also provide opportunities to record
+and maintain traceability as the resulting artifacts
+evolve~\cite{WinklerAndPilgrim2010}.
 
-\ds{cover meta-programming here as well -> broad strokes. We rely on GOOL so in 
-many ways it doesn't matter how much I understand about code gen. According to 
-Jacques -> can pass the buck. }
+Although MDE shares the general goal of deriving software artifacts from
+higher-level representations, it was not used as a methodological starting
+point for this thesis. Our work instead developed from the bottom up through
+the analysis of concrete scientific-computing case studies and the practical
+requirements of the artifacts they contained. We therefore did not adopt MDE
+as an overarching methodology or commit to a particular modeling standard,
+development process, or tooling ecosystem. Doing so at the outset would have
+expanded the scope of the work and introduced the commitments of a broader
+modeling framework before their value had been demonstrated for our context.
 
-\ds{Add section for model driven engineering explaining that we did not look 
-into it to avoid biasing our approach (practical example-driven requirements 
-for our model)}
+MDE is included here as relevant related work and as a retrospective point of
+comparison, rather than as the theoretical basis from which our approach was
+derived. Any similarities should therefore not be read as indicating that this
+work adopted MDE terminology, methods, or frameworks.

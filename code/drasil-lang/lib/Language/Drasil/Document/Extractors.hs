@@ -13,7 +13,7 @@ import Data.Maybe (mapMaybe)
 import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB, find)
-import Language.Drasil.Chunk.Citation (Citation, BibRef)
+import Language.Drasil.Document.Citation.Core (Citation, BibRef)
 import Language.Drasil.Data.Citation (compareAuthYearTitle)
 import Language.Drasil.Document.Core (RawContent(..), ListTuple, ItemType(..),
   ListType(..), HasContents(..))

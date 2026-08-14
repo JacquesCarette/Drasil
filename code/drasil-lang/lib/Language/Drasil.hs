@@ -241,7 +241,7 @@ import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, 
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
   HasReasVal(reasVal), MayHaveRationale(rationale), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
-import Language.Drasil.Chunk.Citation (
+import Language.Drasil.Document.Citation.Core (
     Citation, EntryID, BibRef
   , HasCitation(..)
   , citeID, citeKind

@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 -- | Defines the chunk type to hold citations.
-module Language.Drasil.Chunk.Citation (
+module Language.Drasil.Document.Citation.Core (
   -- * Types
   Citation, BibRef, EntryID,
   -- * Class

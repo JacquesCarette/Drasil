@@ -293,6 +293,14 @@ fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
+  where
+    constraintToExpr (Range _ ri) = express $ realInterval c ri
+    constraintToExpr (Elem _ set) = express set
+
 -- | Creates the Properties of a Correct Solution section.
 -- If there are variables in c with any constraints, the table will be generated.
 -- If the second argument con is provided (e.g. a paragraph), it will be placed

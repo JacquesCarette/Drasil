@@ -183,9 +183,6 @@ module Language.Drasil (
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
 
   -- ** Folding functions
-  -- *** Expression-related
-  , foldConstraints
-
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSent
   , foldlSent_,foldlSentCol, foldOpts, foldNums, numList

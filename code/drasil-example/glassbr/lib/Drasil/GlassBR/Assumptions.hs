@@ -2,8 +2,8 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
   assumpGL, assumpBC, assumpRT, assumpLDFC, assumptionConstants,
   assumptions) where
 
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 import qualified Drasil.SRS.Concepts as SRS (valsOfAuxCons)
 import Language.Drasil.Chunk.Concept.NamedCombinators

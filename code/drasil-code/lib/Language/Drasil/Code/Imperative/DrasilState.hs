@@ -21,7 +21,6 @@ import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
 import Drasil.System (systemdb, HasSystemMeta(..), HasProjectName(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
@@ -179,9 +178,6 @@ instance HasSystemMeta DrasilState where
 
 instance HasProjectName DrasilState where
   projectName = systemMeta . projectName
-
-instance HasSmithEtAlSRS DrasilState where
-  smithEtAlSRS = dsCodeSpec . smithEtAlSRS
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.

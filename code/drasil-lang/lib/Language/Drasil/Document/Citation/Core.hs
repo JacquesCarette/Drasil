@@ -21,7 +21,7 @@ import Drasil.Database (HasUID(..), UID, showUID, mkUid, declareHasChunkRefs,
 
 import Language.Drasil.People (People)
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
-import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField,
+import Language.Drasil.Document.Citation.Components (HasFields(..), CitationKind(..), CiteField,
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))

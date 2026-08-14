@@ -261,7 +261,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
+import Language.Drasil.Document.Citation.Components (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor
   , address, bookTitle, howPublished, howPublishedU, institution, journal, note

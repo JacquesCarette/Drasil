@@ -9,6 +9,7 @@ packages:
 - drasil-data
 - drasil-data-formats
 - drasil-database
+- drasil-document-writing
 - drasil-srs
 - drasil-example/bss
 - drasil-example/dblpend

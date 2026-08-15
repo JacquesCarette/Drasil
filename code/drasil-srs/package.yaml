@@ -23,6 +23,7 @@ dependencies:
 - transformers
 - multiplate
 - drasil-database
+- drasil-document-writing
 - drasil-lang
 - drasil-metadata
 - drasil-system

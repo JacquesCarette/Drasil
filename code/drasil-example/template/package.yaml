@@ -28,6 +28,7 @@ library:
   dependencies:
   - drasil-data
   - drasil-database
+  - drasil-document-writing
   - drasil-lang
   - drasil-srs
   - drasil-theory

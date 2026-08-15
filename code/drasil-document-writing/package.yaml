@@ -1,9 +1,9 @@
 spec-version: 0.36.0
-name:         drasil-printers
-version:      0.1.10.0
+name:         drasil-document-writing
+version:      0.1.1.0
 author:       "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:   "Jacques Carette"
-synopsis:     A framework for code and document generation for scientific software - Printers SubPackage
+synopsis:     A framework for code and document generation for scientific software - Utils SubPackage
 github:       JacquesCarette/Drasil
 homepage:     https://jacquescarette.github.io/Drasil/
 description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -11,27 +11,19 @@ description:  Please see the README on GitHub at <https://github.com/JacquesCare
 language: GHC2024
 default-extensions:
 - StrictData
+- StandaloneDeriving
+- DerivingVia
+- DeriveGeneric
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
-- pretty
-- prettyprinter
 - containers
-- MissingH
-- filepath
-- directory
-- drasil-data-formats
-- drasil-document-writing
+- Decimal
+- lens
 - drasil-database
-- drasil-file-handling
 - drasil-lang
-- drasil-theory
-- prettyprinter
-- split
-- text
 
 ghc-options:
 - -Wall
@@ -41,4 +33,4 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Language.Drasil.Printers
+  - Language.Drasil.Document

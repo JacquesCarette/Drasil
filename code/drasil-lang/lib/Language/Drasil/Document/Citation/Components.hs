@@ -25,9 +25,7 @@ module Language.Drasil.Document.Citation.Components (
 import Control.Lens (Lens', (^.))
 
 import Drasil.Database (declareHasChunkRefs, Generically(..))
-
-import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.Data.Date (Month(..))
+import Language.Drasil (People, comparePeople, Month(..))
 
 -- | Fields used in citations.
 data CiteField = Address      String

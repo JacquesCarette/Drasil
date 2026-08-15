@@ -6,17 +6,15 @@ module Language.Drasil.Document.ConceptInstance (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..), nsUid, mkUid)
+import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..),
+  nsUid, mkUid)
+import Language.Drasil (ConceptChunk, sDom, NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, Sentence (S), pn, cncpt')
 
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk, sDom)
-import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Document.Labels ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
-import Language.Drasil.Sentence (Sentence (S))
-import Language.Drasil.NaturalLanguage.English.NounPhrase (pn)
-import Language.Drasil.Chunk.Concept (cncpt')
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName,
+  shortname')
 
 -- | Contains a 'ConceptChunk', reference address, and a 'ShortName'.
 -- It is a concept that can be referred to, or rather, a instance of where a concept is applied.

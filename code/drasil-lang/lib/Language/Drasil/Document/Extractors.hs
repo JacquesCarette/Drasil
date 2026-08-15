@@ -13,13 +13,14 @@ import Data.Maybe (mapMaybe)
 import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB, find)
+import Language.Drasil (ModelExpr, Sentence(..), eS, eS')
+import Language.Drasil.Development (lnames)
+
 import Language.Drasil.Document.Citation.Core (Citation, BibRef)
 import Language.Drasil.Document.Citation.Components (compareAuthYearTitle)
 import Language.Drasil.Document.Core (RawContent(..), ListTuple, ItemType(..),
   ListType(..), HasContents(..))
 import Language.Drasil.Document.Sections (Section(Section), SecCons(..))
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Sentence (lnames, Sentence(..), eS, eS')
 
 -- | Extracts all referenced 'UID's from things that have 'RawContent's.
 extractChRefs :: HasContents a => [a] -> S.Set UID

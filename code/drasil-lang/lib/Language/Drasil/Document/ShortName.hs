@@ -5,8 +5,7 @@ module Language.Drasil.Document.ShortName (
 ) where
 
 import Drasil.Database (declareHasChunkRefs, Generically(..))
-
-import Language.Drasil.Sentence (Sentence)
+import Language.Drasil (Sentence)
 
 -- * Type
 

@@ -27,8 +27,7 @@ import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs), NamedIdea(..),
   MayHaveUnit(..), HasUnitSymbol(..), Quantity, Concept, Definition(..),
   ModelExpr, Sentence(S, Percent, (:+:), Sy, EmptyS), eS, ch, sParen, sDash,
   (+:+), sC, (+:+.), (!.), (+:), capSent, foldlList, SepType(Comma),
-  FoldType(List), foldlSent, fterms)
-import Language.Drasil.Development.Sentence (short, atStart, titleize, phrase, plural)
+  FoldType(List), foldlSent, fterms, short, atStart, titleize, phrase, plural)
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))

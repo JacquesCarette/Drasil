@@ -18,6 +18,7 @@ dependencies:
 - lens
 - containers
 - drasil-database
+- drasil-document-writing
 - drasil-file-handling
 - drasil-lang
 - drasil-metadata

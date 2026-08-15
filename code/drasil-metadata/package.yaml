@@ -19,6 +19,7 @@ dependencies:
 - aeson
 - template-haskell
 - drasil-database
+- drasil-document-writing
 - drasil-lang
 - lens
 

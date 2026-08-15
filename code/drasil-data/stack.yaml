@@ -30,11 +30,12 @@ resolver: lts-24.51
 #   - wai
 packages:
 - .
-- ../drasil-lang
-- ../drasil-utils
 - ../drasil-database
+- ../drasil-document-writing
+- ../drasil-lang
 - ../drasil-metadata
 - ../drasil-theory
+- ../drasil-utils
 
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as

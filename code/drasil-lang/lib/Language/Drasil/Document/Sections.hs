@@ -17,7 +17,7 @@ import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
   LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent)
-import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
+import Language.Drasil.Document.Labels (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
 import Language.Drasil.Document.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))

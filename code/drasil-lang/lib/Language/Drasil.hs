@@ -62,10 +62,6 @@ module Language.Drasil (
   , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
   , Express(..)
-  -- *** References
-  -- Language.Drasil.Symbol
-  , HasRefAddress(getRefAdd)
-  , Referable(..)
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
@@ -113,11 +109,6 @@ module Language.Drasil (
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
-
-  -- ** Referencing
-  -- Language.Drasil.Label.Type
-  , getAdd, prepend
-  , LblType(RP, Citation, URI), IRefProg(..)
 
   -- Language.Drasil.Data.Date
   , Month(..)
@@ -242,7 +233,6 @@ import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, fullName, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.Label.Type hiding (name)
 
 import Language.Drasil.UnitLang (USymb(US))
 import Language.Drasil.Uncertainty

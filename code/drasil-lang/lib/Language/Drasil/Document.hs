@@ -7,6 +7,7 @@ module Language.Drasil.Document (
   module Language.Drasil.Document.Core,
   module Language.Drasil.Document.DecoratedReference,
   module Language.Drasil.Document.Extractors,
+  module Language.Drasil.Document.Labels,
   module Language.Drasil.Document.Reference,
   module Language.Drasil.Document.Sections,
   module Language.Drasil.Document.SentenceCombinators
@@ -19,6 +20,7 @@ import Language.Drasil.Document.Contents
 import Language.Drasil.Document.Core
 import Language.Drasil.Document.DecoratedReference
 import Language.Drasil.Document.Extractors
+import Language.Drasil.Document.Labels
 import Language.Drasil.Document.Reference
 import Language.Drasil.Document.Sections
 import Language.Drasil.Document.SentenceCombinators

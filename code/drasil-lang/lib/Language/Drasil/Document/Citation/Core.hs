@@ -20,7 +20,7 @@ import Drasil.Database (HasUID(..), UID, showUID, mkUid, declareHasChunkRefs,
   Generically(..))
 
 import Language.Drasil.People (People)
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Citation.Components (HasFields(..), CitationKind(..), CiteField,
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)

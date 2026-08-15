@@ -10,7 +10,8 @@ module Language.Drasil.Document (
   module Language.Drasil.Document.Labels,
   module Language.Drasil.Document.Reference,
   module Language.Drasil.Document.Sections,
-  module Language.Drasil.Document.SentenceCombinators
+  module Language.Drasil.Document.SentenceCombinators,
+  module Language.Drasil.Document.ShortName
 ) where
 
 import Language.Drasil.Document.Citation.Core
@@ -24,3 +25,4 @@ import Language.Drasil.Document.Labels
 import Language.Drasil.Document.Reference
 import Language.Drasil.Document.Sections
 import Language.Drasil.Document.SentenceCombinators
+import Language.Drasil.Document.ShortName

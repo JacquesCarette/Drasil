@@ -7,7 +7,7 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance, shortname')
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)

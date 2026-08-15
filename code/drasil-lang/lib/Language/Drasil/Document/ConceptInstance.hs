@@ -9,7 +9,7 @@ import Control.Lens (makeLenses, (^.), view)
 import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..), nsUid, mkUid)
 
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk, sDom)
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Document.Labels ((+::+), defer, name, raw,

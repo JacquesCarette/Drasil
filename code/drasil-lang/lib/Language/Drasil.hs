@@ -136,8 +136,6 @@ module Language.Drasil (
   -- Language.Drasil.Development.Sentence
   , introduceAbb, introduceAbbPlrl, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
-  -- Language.Drasil.ShortName
-  , ShortName, shortname', getSentSN, HasShortName(..)
 
   -- * Sentence Fold-type utilities.
   -- | From "Utils.Drasil.Fold". Defines many general fold functions
@@ -218,7 +216,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.NaturalLanguage.English.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)

@@ -35,7 +35,7 @@ import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
   ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
 import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
 import Language.Drasil.Sentence.Generators (fterms)
-import Language.Drasil.ShortName (HasShortName(..))
+import Language.Drasil.Document.ShortName (HasShortName(..))
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
 import Language.Drasil.Document.Reference (refS, namedRef)
 import Language.Drasil.Document.Sections (Section)

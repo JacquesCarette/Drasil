@@ -181,7 +181,7 @@ the modules outlined in the System Design Document/Module Guide.}
 \cardifact{Program Source Code}{The source code of the implemented software 
 system.} 
 \cardifact{Verification and Validation Plan}{Uses the system requirements to 
-document acceptance criteria for each requirement that can be validated.}
+document acceptance criteria for each requirement that can be verified.}
 \cardifact{Test cases}{Implementation of the Verification and Validation Plan 
 in source code (where applicable) or as a step-by-step guide for testers.} 
 \cardifact{Verification and Validation Report}{Report outlining the results 
@@ -342,6 +342,16 @@ because the shared portions of the family can be identified once, while
 variation is captured explicitly rather than being rediscovered separately
 for each system.
 
+These methods characterize a family, but do not prescribe how its members are
+implemented. Component-based and generative techniques provide two possible
+implementation strategies. For a component-based approach to support a family,
+the components or their composition must expose the parameters of variation so
+that family members can be constructed by selecting, configuring, or replacing
+components (see Section~\ref{sec:bg_software_reuse}). Generative approaches
+instead use selected features or other higher-level specifications to generate
+or specialize family members (see Section~\ref{sec:bg_generative})~\cite{Pohl2005,
+Czarnecki2000}.
+
 This family-oriented view has also been applied specifically to scientific
 computing. Smith, McCutchan, and Cao examine program families in scientific
 computing as a means of identifying and exploiting common structure across
@@ -383,6 +393,7 @@ broader discussion of software reuse: what portions of a software-development
 effort can be reused, and at what level should that reuse occur?
 
 \subsection{Software Reuse}
+\label{sec:bg_software_reuse}
 
 Software reuse aims to reduce repeated development effort by making use of
 assets produced for previous systems. However, what constitutes a reusable 
@@ -473,15 +484,17 @@ the scientific conclusions derived from it, echoing the broader
 reproducibility crisis highlighted in the scientific 
 literature~\cite{Baker2016}.
 
-It is also useful to distinguish reproducibility from replicability.
-Reproducibility concerns rerunning the original computational workflow and
-obtaining the same results from the same code, data, and computational context.
-Replicability is a stronger goal: an independent researcher should be able to
-reconstruct the results from the documented theories, assumptions, and design
-decisions without relying on the original implementation. Both goals become
-difficult when essential knowledge remains tacit or scattered across papers,
-scripts, notebooks, and build infrastructure~\cite{RougierEtAl2017,
-AkhlaghiEtAl2021}.
+It is also useful to distinguish reproducibility from replicability. Following
+the terminology used by Rougier et al.~\cite{RougierEtAl2017}, reproducibility
+concerns rerunning the original computational workflow and obtaining the same
+results from the same code and data. Strict reproducibility assumes an
+identical computational environment, although scientific software should also
+remain robust under relevant changes to that environment. Replicability is a
+stronger goal: an independent researcher should be able to reconstruct the
+results from the documented theories, assumptions, and design decisions
+without relying on the original implementation. Both goals become difficult
+when essential knowledge remains tacit or scattered across papers, scripts,
+notebooks, and build infrastructure~\cite{RougierEtAl2017,AkhlaghiEtAl2021}.
 
 Existing work in reproducible research has often emphasized combining
 narrative, code, and data in a single package. For example, \emph{compendia}
@@ -498,10 +511,15 @@ These approaches improve transparency, but they do not guarantee
 reproducibility on their own. In practice, notebook-based workflows can still
 suffer from hidden dependencies, execution-order problems, and weak capture of
 environment details~\cite{PimentelEtAl2019}. Containers help address some of
-the environment problem by packaging software stacks more explicitly, but they
-do not by themselves capture the domain knowledge, assumptions, and design
-rationale needed for long-term regeneration, reuse, and independent
-reconstruction~\cite{Canon2020,AkhlaghiEtAl2021}.
+the environment problem by packaging software stacks more
+explicitly~\cite{Canon2020}. However, preserving a snapshot of an environment
+is not the same as sustaining reproducibility as technologies evolve: host
+platforms, package sources, languages, and libraries can become incompatible
+or unavailable. Long-term reproducibility therefore also requires dependency
+and build information that is sufficiently complete, inspectable, and
+maintainable to reconstruct or adapt the workflow. Environment capture does
+not by itself preserve the domain knowledge, assumptions, and design rationale
+needed for independent reconstruction~\cite{AkhlaghiEtAl2021}.
 
 \section{Literate Approaches to Software Development}
 \label{sec:literate}
@@ -546,15 +564,17 @@ in mind we see that more effective, maintainable code can be produced if
 properly using LP~\cite{PieterseKourieAndBoake2004}.
 
 Despite these proposed benefits, early accounts found that LP had not been
-widely adopted~\cite{ShumAndCook1993}. However, there are
-several successful examples of LP's use in SC\@. Two such literate programs that
-come to mind are VNODE-LP~\cite{Nedialkov2006} and ``Physically Based 
-Rendering: From Theory to Implementation''~\cite{PharrAndHumphreys2004} a 
-literate program and textbook on the subject matter. Shum and 
-Cook~\cite{ShumAndCook1993} discuss the main issues behind LP's lack of 
-popularity which can be summed up as dependency on a 
-particular output language or text processor, and the lack of flexibility on 
-what should be presented or suppressed in the output.
+widely adopted~\cite{ShumAndCook1993}. Some successful applications, however,
+demonstrate additional benefits of the approach. VNODE-LP was developed
+entirely using LP so that its mathematical theory, documentation, and source
+code could be reviewed together, making it easier for a human expert to verify
+that the implementation correctly translates the underlying
+theory~\cite{Nedialkov2006}. Another example is ``Physically Based Rendering:
+From Theory to Implementation'', a literate program and textbook on the subject
+matter~\cite{PharrAndHumphreys2004}. Shum and Cook~\cite{ShumAndCook1993}
+discuss the main issues behind LP's lack of popularity, which can be summed up
+as dependency on a particular output language or text processor, and the lack
+of flexibility in what should be presented or suppressed in the output.
 
 There are several other factors which contribute to LP's lack of popularity and 
 slow adoption thus far. While LP allows a developer to write their code and its 
@@ -588,13 +608,14 @@ the ``one source'' idea~\cite{Simonis2003}.
 
 Classical LP did not become a mainstream software-development
 methodology~\cite{JonesEtAl2020}, but its core idea of combining code with
-explanatory text has been widely adopted through computational notebooks,
-particularly in data science~\cite{PimentelEtAl2019,BondEtAl2026}. These more
-robust tools helped drive the understanding behind what exactly LP tools must
-do. Some languages, including Agda and Haskell, directly support literate source
-files~\cite{AgdaLiterateProgramming,GHCUsersGuide}. R instead has an ecosystem
-of tools for literate data analysis and dynamic documents, including R Markdown
-and the earlier Sweave~\cite{XieEtAl2018,Leisch2002}. These tools, however, are
+explanatory text has been widely adopted through computational notebooks such
+as Jupyter, particularly in data science~\cite{Jupyter,PimentelEtAl2019,
+BondEtAl2026}. These more robust tools helped drive the understanding behind
+what exactly LP tools must do. Some languages, including Agda and Haskell,
+directly support literate source files~\cite{AgdaLiterateProgramming,
+GHCUsersGuide}. R instead has an ecosystem of tools for literate data analysis
+and dynamic documents, including R Markdown and the earlier
+Sweave~\cite{XieEtAl2018,Leisch2002}. These tools, however, are
 primarily designed to dynamically create up-to-date reports and other documents
 by running embedded code, as opposed to being used as part of the software
 development process.
@@ -640,6 +661,7 @@ limits its usefulness in settings where teams rely on a broader collection of
 artifacts for communication, review, and maintenance.
 
 \section{Generative Programming and Metaprogramming}
+\label{sec:bg_generative}
 
 The ideas now associated with generative programming and metaprogramming are
 more general than early code-generation tools alone. At a high level, they
@@ -676,6 +698,11 @@ constraints that define valid combinations, the feature model or variability
 model, the transformation rules, and the mechanisms by which generated
 artifacts are assembled and validated. In product-line and DSL settings, these
 issues are often more important than the mechanics of template expansion alone.
+This additional layer can also make a generated system more difficult to
+understand and debug. Developers may need to reason across the input
+specification, transformation rules, and generated artifacts, while the output
+alone may not reveal why a particular structure or design decision was
+produced~\cite{Czarnecki2000}.
 
 Examples from the wider ecosystem illustrate the same trend. Parser generators
 such as ANTLR generate recognizers from declarative grammar
@@ -692,7 +719,7 @@ automatically, but that engineering knowledge can be captured once, expressed
 declaratively, and then reused to produce consistent artifacts across a family
 of related software products or deliverables.
 
-\textbf{Relation to Model-Driven Engineering.} Model-Driven Engineering (MDE)
+Model-Driven Engineering (MDE) provides a closely related perspective. It
 treats models as primary development artifacts and uses transformations to
 derive or synchronize other representations, including implementation
 artifacts. Model-transformation approaches differ in their source and target

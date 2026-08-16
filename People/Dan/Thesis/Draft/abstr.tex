@@ -1,3 +1,30 @@
 \prefacesection{Abstract}
 
-Abstract here (no more than 300 words)
+Scientific software projects rely on collections of related artifacts,
+including requirements specifications, design documents, source code, tests,
+and build instructions. These artifacts present overlapping knowledge to
+different audiences, but maintaining independently editable representations
+introduces unnecessary redundancy and creates opportunities for omissions,
+inconsistency, and loss of traceability. This thesis investigates how a
+knowledge-centric approach can reduce that maintenance burden while preserving
+the distinct forms that software artifacts require.
+
+The work first analyzes artifacts from scientific-computing case studies to
+identify recurring structures, shared domain knowledge, and repeated
+projections of the same information. These observations inform Drasil, a
+framework that represents this knowledge (concepts, definitions, symbols, units, equations,
+and their relationships) as reusable, typed chunks. Artifact recipes
+select and organize those chunks, while deterministic generators render the
+resulting structures as documentation, source code, and supporting files.
+
+Reimplementations of six case studies provide observational evidence that this
+single-source approach enforces consistency across generated artifacts,
+preserves explicit provenance, and supports reproducible generation. Encoding
+knowledge explicitly also exposed missing definitions, inconsistent symbols,
+implicit conversions, and undocumented assumptions in the original artifacts.
+Related systems reused shared knowledge to produce software-family variants
+with targeted changes. These benefits require greater up-front modeling effort
+and impose an onboarding cost on new contributors. The thesis therefore
+establishes the feasibility and practical value of knowledge-centric artifact
+generation while identifying improved authoring support, broader domain
+coverage, and controlled empirical validation as priorities for future work.

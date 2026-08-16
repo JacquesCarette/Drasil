@@ -1,5 +1,17 @@
 \prefacesection{Lay Abstract}
 
-A lay abstract of not more 150 words must be included explaining the key goals 
-and contributions of the thesis in lay terms that is accessible to the general 
-public. 
+Scientific software is supported by more than source code. Requirements,
+design documents, equations, tests, and build instructions often repeat the
+same facts in different forms. When people update each artifact separately,
+the copies can disagree or important details can be omitted. This thesis
+presents Drasil, a framework that stores scientific and engineering knowledge
+once and uses it to generate consistent software and documentation. Drasil
+represents concepts, symbols, units, equations, and relationships as reusable
+``chunks,'' then uses ``recipes'' to select and arrange them for different
+audiences. Reimplementing six scientific-computing case studies showed that
+corrections made in one place propagated through generated artifacts, hidden
+assumptions and inconsistencies became easier to detect, and closely related
+software variants could reuse shared knowledge. The approach also has costs:
+knowledge must be encoded carefully, and new contributors face a learning
+curve. These results motivate better authoring tools and broader empirical
+validation.

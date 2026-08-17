@@ -43,11 +43,12 @@ supporting long-lived, well-understood domains where frequent maintenance or
 evolution is expected. 
 
 Unlike documentation generators like Doxygen, Javadoc, and Sphinx
-that take a code-centric view of the problem and rely on manual redundancy -- 
-i.e. natural-language explanations written as specially delimited
-comments that can then be weaved into API documentation alongside code -- 
-Drasil takes a knowledge-centric, redundancy-limiting, fully traceable, 
-single-source approach to generating \sfs{}. The framework builds up knowledge 
+that take a code-centric view of the problem and rely on manual
+redundancy\textemdash{}that is, natural-language explanations written as
+specially delimited comments that can then be woven into API documentation
+alongside code\textemdash{}Drasil takes a knowledge-centric,
+redundancy-limiting, fully traceable, single-source approach to generating
+\sfs{}. The framework builds up knowledge
 \emph{as needed} to solve concrete problems rather than attempting to encode 
 all possible information from the start, allowing it to be flexible and 
 adaptable to different domains and contexts early in its development.
@@ -188,7 +189,7 @@ for each datatype when multiple variants exist and could be used in a given
 place. Looking at the \codeH{ConceptChunk} example, we can see two different 
 smart constructors (\codeH{cnIES} and \codeH{cn'}) being used to create the 
 \codeH{NP} instance. Both smart constructors create an instance of \codeH{NP}, 
-but in this case the smart constructor used defines given properties (i.e. 
+but in this case the smart constructor used defines given properties (i.e.,
 pluralization rules of the noun phrase used as a term) for the instance to 
 simplify construction.
 
@@ -397,7 +398,7 @@ Figure~\ref{fig:mulRe}. \codeH{AssocA} refers to an associative arithmetic
 operator which can be applied across a list of expressions (in this case, 
 \codeH{mulRe}, though addition and other associative operations look very 
 similar). Derivation is much simpler to encode, as it is simply a relationship 
-between two existing chunks, i.e. \codeH{deriv a b} represents taking the 
+between two existing chunks, i.e., \codeH{deriv a b} represents taking the
 derivative of \codeH{a} with respect to \codeH{b}. This allows us to display 
 derivatives correctly as mathematical notation, but it does not mean 
 \codeH{Expr} itself captures the semantics of differentiation beyond that 
@@ -609,7 +610,7 @@ generated \sf{}. For example, we alluded to vector representations earlier
 (Section~\ref{sec:chunky}) which we currently can display using either bold 
 typeface or italics. This choice must be made using the \codeH{TypogConvention} 
 datatype which lists the choices made 
-(ex. \codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of 
+(e.g., \codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of
 the SRS recipe if vectors are included in the \sf{}. Our \gb{} example does not 
 make use of this convention, however the \gp{} case study does.
 
@@ -639,9 +640,9 @@ chunks encoding the given information}
 \hline
  \textbf{Property} & \textbf{Chunk(s) Referenced}
 \\ \hline
-	\_sys & System name (ex. ``\gb{}'').
+	\_sys & System name (e.g., ``\gb{}'').
 \\ \hline
-	\_kind & \SF{} type we are defining (ex. SRS).
+	\_kind & \SF{} type we are defining (e.g., SRS).
 \\ \hline
 	\_authors & List of authors of the \sf{}.
 \\ \hline
@@ -739,7 +740,7 @@ The executable-code recipe for GlassBR somewhat mirrors the document recipe in
 structure but emphasizes implementation choices: module layout, data 
 representation, target languages, optional features, and constraint-handling 
 strategies. Practically, we supply the modules and computational relationships 
-(the mathematical execution order), target languages (ex. Python, C++, Java), 
+(the mathematical execution order), target languages (e.g., Python, C++, Java),
 modularity (single file or separated modules), data bundling (structs/classes), 
 and logging/documentation options. 
 
@@ -854,12 +855,12 @@ definition}{fig:choicesDefn}
 	(whether to split into modules or generate a single flat file) and 
 	implementation type (library to be consumed or standalone program)
 \\ \hline 
-	dataInfo & Data structure and representation choices. (Ex. bundle inputs 
+	dataInfo & Data structure and representation choices. (e.g., bundle inputs
 	together into a class/struct, define constants inline, use the languages 
 	constant mechanism, etc.)
 \\\hline 
 	maps & Mapping of Drasil concepts and mathematical spaces to code concepts 
-	and types in the target language(s) (ex. One could map the concept of $\pi$ 
+	and types in the target language(s) (e.g., one could map the concept of $\pi$
 	with the language's built-in $\pi$ and the $\mathbb{R}$ space to 
 	single/double precision floating point numbers)
 \\\hline 
@@ -870,7 +871,7 @@ definition}{fig:choicesDefn}
 	whether to throw a warning or exception for physical/software constraints 
 	independently.
 \\\hline 
-	extLibs & List of external libraries to use (ex. for solving specific 
+	extLibs & List of external libraries to use (e.g., for solving specific
 	classes of mathematics problems). These libraries are external to Drasil 
 	and give the option for users to link to optimized, well-established 
 	libraries rather than reimplementing them from scratch in Drasil.
@@ -885,8 +886,8 @@ property has been set so the generated code will be output in five different
 programming languages: Python, C++, C\#, Java, and Swift. This is a good 
 demonstration of Drasil's ability to target multiple platforms from a 
 single knowledge base. The \codeH{architecture} is configured as modular, with 
-input-related functions separated into their own modules (
-\codeH{Modular Separated}), and the implementation type is set to 
+input-related functions separated into their own modules
+(\codeH{Modular Separated}), and the implementation type is set to
 \codeH{Program}, meaning the generated code will be a complete, runnable 
 application rather than just a library. 
 
@@ -987,20 +988,20 @@ rendering}{fig:genTeX}
 For executable code artifacts, Drasil uses GOOL~\cite{Costabile2012, 
 Carette2020GOOL, maclachlan2020} as an intermediate layer. GOOL provides a 
 collection of type-safe combinators and abstractions for representing object-oriented and 
-procedural constructs in a language-agnostic manner. The code recipe (ex. a 
+procedural constructs in a language-agnostic manner. The code recipe (e.g., a
 \codeH{CodeSpec}) is first translated into a GOOL abstract syntax tree (AST), 
 which is then emitted as source code in one or more target languages. The 
 design and implementation of GOOL itself are treated in the cited works; for 
 our purposes, the important point is that it provides an intermediate 
 representation between the recipe and the emitted code.
 
-In brief, the code emission process follows a straightforward translation 
-process: The code recipe and its referenced chunks are traversed to construct a 
-GOOL AST, representing classes, functions, variables, and control flow; The 
-GOOL backend is invoked for each specified target language, translating the AST 
-into concrete source code (ex. Python, C++, Java, C\#); Auxiliary files (such 
-as README, Doxygen config, and sample input files) are generated via dedicated 
-routines.
+In brief, code emission follows three stages. First, the code recipe and its
+referenced chunks are traversed to construct a GOOL AST representing classes,
+functions, variables, and control flow. Next, the GOOL backend is invoked for
+each specified target language, translating the AST into concrete source code
+(e.g., Python, C++, Java, or C\#). Finally, dedicated routines generate
+auxiliary files such as a README, Doxygen configuration, and sample input
+files.
 
 \subsubsection{Example: Emitting \gb{} Code in Python}
 For \gb{}, suppose the code recipe specifies Python as a target. The 
@@ -1009,7 +1010,7 @@ generation process calls \codeH{generateCode} in
 AST and then emits Python code by invoking the Python backend. The resulting 
 code includes all functions, data structures, and comments specified in the 
 recipe and choices object, as well as any automatically generated traceability 
-links (ex. comments referencing requirements or data definitions). 
+links (e.g., comments referencing requirements or data definitions).
 Figure~\ref{fig:generateCode} shows the relevant code path.
 
 \fig{\codeBlock{ImperativeGenerator}{98}{113}}{\codeH{generateCode} and
@@ -1119,7 +1120,7 @@ Table of Units and Table of Abbreviations, if required, are generated by
 traversing the relevant lists in the system information object, ensuring 
 consistency and completeness. The completed document is output as a 
 \texttt{.tex} file with $\hat{q}$ fully integrated and accessible 
-alongside all other relevant auxiliary files (ex. \texttt{.bib} file for 
+alongside all other relevant auxiliary files (e.g., a \texttt{.bib} file for
 citations). A makefile is also generated to 
 enable the user to easily create a human-readable PDF file from the \LaTeX{} 
 source and auxiliary files.
@@ -1243,7 +1244,7 @@ issues was essentially a focused edit to a minuscule subset of the captured
 knowledge, not a widespread rewrite.
 
 This pattern repeats across many issues: we would find a mismatch between a
-case study and our Drasil output, or some as-yet unencoded knowledge (ex. 
+case study and our Drasil output, or some as-yet unencoded knowledge (e.g.,
 implicit assumptions) that made the generated artifacts inconsistent or 
 unclear, update the chunk(s) that encoded the offending knowledge, and 
 regenerate. That workflow was the dominant mode of refinement of the original
@@ -1258,7 +1259,7 @@ engineering effort. One example of this is changing our Chunk hierarchy to
 include derived-unit chunks. After we determined the need for \codeH{Unital} 
 chunks which tied units to captured knowledge, it was obvious that the units 
 themselves would need to be able to represent their relationships, particularly 
-for those derived from standard SI units (ex. $m/s^2$). This involved the 
+for those derived from standard SI units (e.g., $m/s^2$). This involved the
 addition of new combinators for creating \codeH{UnitDefn} chunks (examples of 
 some of these combinators have already been shown in Figure~\ref{fig:accelU}).
 

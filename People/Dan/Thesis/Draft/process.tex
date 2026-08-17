@@ -458,7 +458,7 @@ Figure~\ref{fig:gbrmgcm}.
 
 Each module is described by its secrets, services, and what it will be 
 implemented by. For example, a given module could be implemented by the 
-operating system (OS), the system being described (ex. \gb{}), or a third party 
+operating system (OS), the system being described (e.g., \gb{}), or a third party
 system/library that will interoperate with the given system.
 
 Finally, the MG includes a traceability matrix and use hierarchy diagram. 
@@ -724,7 +724,7 @@ Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. The
 same term was previously defined with fewer details in the table of symbols, as 
 well as showing up implicitly or in passing in the MG (Figure~\ref{fig:gbrmgcm} 
 and the \emph{loadASTM} module respectively), and implemented in the Source 
-Code (Figure~\ref{fig:gbrsrccalc} lines 11-14). A non-exhaustive list of places 
+Code (Figure~\ref{fig:gbrsrccalc} lines 11--14). A non-exhaustive list of places
 where $\hat{q}$ appears helps make the repetition more explicit. The numbered 
 callouts in Figure~\ref{fig:gbrddq} highlight several of the direct references 
 within the data definition itself:
@@ -740,7 +740,7 @@ definition.
 in other SRS data definitions such as the Stress Distribution Factor ($J$) and 
 Non-Factored Load ($\mathit{NFL}$), in the SRS calculation of Capacity ($LR$) 
 through intermediary quantities such as $\mathit{NFL}$, in the MG, and in the 
-source code (Figure~\ref{fig:gbrsrccalc}, lines 11-14).
+source code (Figure~\ref{fig:gbrsrccalc}, lines 11--14).
 \end{itemize}
 
 
@@ -950,8 +950,8 @@ projection functions directly repeat knowledge verbatim i.e.\ $p(K) \equiv K$
 for some set of knowledge $K$. It should be noted in our case that as long as 
 the projection used contains the full definition and context of a piece of 
 knowledge, that projection is considered an identity projection 
-\textbf{regardless of changes to notation} (ex. ``$x = y$'' vs ``$y = x$'') or
-language (ex. ``$x = y$'' vs ``$x$ is equal to $y$'' vs ``x est \'egal \`a y'').
+\textbf{regardless of changes to notation} (e.g., ``$x = y$'' vs ``$y = x$'') or
+language (e.g., ``$x = y$'' vs ``$x$ is equal to $y$'' vs ``x est \'egal \`a y'').
 An identity projection is providing the knowledge chunk in full. 
 Non-identity projections require using representations that elide some details 
 of the knowledge at hand to make it more palatable for the audience of the 
@@ -977,7 +977,7 @@ Section~\ref{sec:patterns}) that context is highly important and the sheer
 scope of knowledge to be organized may become unwieldy. After breaking down 
 multiple case studies, we believe collecting knowledge chunks into categories 
 based on their domain(s) is a more easily navigable and maintainable approach. 
-This also allows us to keep some context information at a meta-level (ex. 
+This also allows us to keep some context information at a meta-level (e.g.,
 physics knowledge would be categorized into a physics knowledge base). Then for
 any given system, we would likely only need to reference across a handful of 
 contexts (knowledge bases) relevant to the domain.
@@ -987,7 +987,7 @@ to the domain of \sf{} writing itself. This kind of meta-knowledge would be
 useful to have readily available in its own knowledge base. The same could be
 said for things like SI Unit definitions, while they only apply to measuring 
 physical properties, we see some domains built off of physics that operate at a 
-higher level of assumed understanding (ex. Chemistry abstracts some of the 
+higher level of assumed understanding (e.g., Chemistry abstracts some of the
 physics details, while being directly reliant on them).
 
 Some of the knowledge used in our \sfs{} is derived from other, more 

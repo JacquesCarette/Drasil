@@ -17,7 +17,7 @@ import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, Sp, S, E, (:+:)),
   Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
@@ -110,7 +110,6 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s 
     escapeChars c = [c]
 pSpec (Tooltip _ s) = pSpec s
 pSpec (Sp s)    = text $ unPH $ special s
-pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)

@@ -170,7 +170,7 @@ representing the term.
 
 \fig{
 \lstinputlisting[language=Haskell, firstline=33, lastline=43, 
-firstnumber=33]{code/NamedIdea.hs}}{NamedChunk Definition}{fig:namedchunk}
+firstnumber=33]{code/NamedIdea.hs}}{\codeH{NamedChunk} definition}{fig:namedchunk}
 
 A single node does not a hierarchy make, but with the root \codeH{NamedChunk} 
 defined, we can begin to progressively extend it to cover any new chunk types 
@@ -326,12 +326,12 @@ chunks elsewhere in Drasil (see: \codeH{Language.Drasil.Space}).
 \fig{
 \lstinputlisting[language=Haskell, linerange={21-30}, 
 firstnumber=21]{code/SI_Units.hs}
-}{The fundamental SI Units as Captured in Drasil}{fig:Data.Drasil.SI}
+}{The fundamental SI units as captured in Drasil}{fig:Data.Drasil.SI}
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={11-20}, 
 firstnumber=11]{code/PhysicsUnits.hs}
-}{Examples of chunks for units derived from other SI Unit chunks}{fig:accelU}
+}{Examples of chunks for units derived from other SI unit chunks}{fig:accelU}
 
 Now we approach the terms mass and acceleration in a similar manner. To 
 clarify, for each physical quantity we wish to represent in Drasil (such as 
@@ -425,7 +425,7 @@ natural language description.
 \fig{
 \lstinputlisting[language=Haskell, linerange={34-42}, 
 numbers=none]{code/PhysicsEquations.hs}
-}{Newton's second law of motion as a \emph{Chunk}}{fig:newtonChunk}
+}{Newton's second law of motion as a \emph{chunk}}{fig:newtonChunk}
 
 The \codeH{Expr} DSL grants us flexibility in defining relationships without 
 imposing any particular structure on a chunk other than ``contains an 
@@ -492,14 +492,14 @@ with it.
 
 \fig{\begin{center}
 \includegraphics[width=\linewidth]{figures/ChunkClasses.png}
-\end{center}}{A representative subset of Drasil's Chunk Classification system 
+\end{center}}{A representative subset of Drasil's chunk classification system
 showing some of the encoded property relationships}{fig:chunkClasses}
 
 \fig{\begin{center}
 \includegraphics[width=0.75\linewidth]{figures/ChunkClassified.png}
 \end{center}}{A representative subset of Drasil's chunks showing how chunks may 
 belong to multiple classifications based on the underlying knowledge they 
-project.}{fig:chunksClassified}
+project}{fig:chunksClassified}
 
 We now have a compact, well-typed vocabulary for representing domain knowledge: 
 chunks and classifications give us named concepts, quantities, units, and 
@@ -560,7 +560,7 @@ to follow, and it has led to some interesting results.
 
 \fig{
 \codeBlock{DocDecl}{25}{42}
-}{Recipe Language for SRS}{fig:recipeSRS}
+}{Recipe language for an SRS}{fig:recipeSRS}
 
 As an example, let us take a look at the recipe language we have defined for an 
 SRS using the \smithea{}\ template. Looking at the \codeH{DocSection} 
@@ -581,7 +581,7 @@ way of presenting scientific knowledge to stakeholders.
 
 \fig{
 \codeBlock{DocDecl}{88}{98}
-}{\codeH{ReqrmntSec} Decomposition and Definitions}{fig:recipeReqSec}
+}{\codeH{ReqrmntSec} decomposition and definitions}{fig:recipeReqSec}
 
 As the given recipe so far has provided nothing but structure, you may be 
 wondering how we populate it with the appropriate knowledge chunks to produce a 
@@ -595,7 +595,7 @@ studies (\gb{}).
 \codeBlock{Body}{54}{55}
 \vdots{}
 \codeBlock{Body}{85}{126}
-}{SRS Recipe for \gb{}}{fig:glassBRSRSRecipe}
+}{SRS recipe for \gb{}}{fig:glassBRSRSRecipe}
 
 The recipe for the \gb{} SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
 This should look familiar, as it follows a similar structure to the \smithea{}
@@ -620,7 +620,7 @@ object (Figure~\ref{fig:systemInformation}).
 
 \fig{
 \codeBlock{Body}{63}{81}
-}{System Information for \gb{}}{fig:systemInformation}
+}{System information for \gb{}}{fig:systemInformation}
 
 The system information object uses helper functions to keep track of the lists 
 of chunks necessary for filling in the sections of our \sf{}, the SRS. Each 
@@ -632,8 +632,8 @@ refinement pass) as they are derived from other chunks with the use of
 helper functions and could be inferred.
 
 \begin{table}[]
-\caption{System information object breakdown - every property is represented by 
-chunks encoding given information}
+\caption{System information object breakdown: every property is represented by
+chunks encoding the given information}
 \label{tab:siBreakdown}
 \begin{tabular}{| P{.2\linewidth} | p{.8\linewidth}|}
 \hline
@@ -762,12 +762,12 @@ of the knowledge chunks and functions they encapsulate.
 Body.hs
 \codeBlock{Body}{57}{58}
 Choices.hs
-\codeBlock{Choices}{13}{27}}{The Recipe for \gb's Executable 
-Code}{fig:gbCodeRecipe}
+\codeBlock{Choices}{13}{27}}{Recipe for \gb{}'s executable
+code}{fig:gbCodeRecipe}
 
 \fig{
 \codeBlock{CodeSpec}{41}{72}
-}{The Recipe Language for Executable Code (CodeSpec)}{fig:codeSpec}
+}{Recipe language for executable code (\codeH{CodeSpec})}{fig:codeSpec}
 
 The \codeH{CodeSpec} DSL itself is defined in Figure~\ref{fig:codeSpec}, and 
 a subsection of its key fields are summarized in 
@@ -980,7 +980,7 @@ function, which recursively walks the document tree produced by the recipe,
 emitting \LaTeX{} code for sections, equations, and tables. 
 Figure~\ref{fig:genTeX} shows the entry point to this process.
 
-\fig{\codeBlock{TeXPrint}{41}{44}}{\codeH{genTeX} function for LaTeX 
+\fig{\codeBlock{TeXPrint}{41}{44}}{\codeH{genTeX} function for \LaTeX{}
 rendering}{fig:genTeX}
 
 \subsubsection{Code Rendering: GOOL and Target Language Emission}
@@ -1012,8 +1012,8 @@ recipe and choices object, as well as any automatically generated traceability
 links (ex. comments referencing requirements or data definitions). 
 Figure~\ref{fig:generateCode} shows the relevant code path.
 
-\fig{\codeBlock{ImperativeGenerator}{98}{113}}{generateCode and genPackage for 
-code rendering}{fig:generateCode}
+\fig{\codeBlock{ImperativeGenerator}{98}{113}}{\codeH{generateCode} and
+\codeH{genPackage} for code rendering}{fig:generateCode}
 
 \subsection{Assembly: Producing the Final \SF{} Set}
 Once rendering is complete, the generated document or code sections must be 
@@ -1059,7 +1059,7 @@ into a development environment. Because these outputs are directly derived from
 the same knowledge base that informed the SRS, Drasil ensures that the 
 implementation remains consistent with the documentation.
 
-\fig{\codeBlock{CodeGeneration}{28}{38}}{createCodeFiles for code 
+\fig{\codeBlock{CodeGeneration}{28}{38}}{\codeH{createCodeFiles} for code
 output}{fig:createCodeFiles}
 
 \subsection{A \gb{} Example: From Chunk Definition to Final SRS Rendering}
@@ -1105,8 +1105,8 @@ projects only the symbol, a brief description, and the units. The rendering
 engine formats these projections according to the conventions of the target 
 output.
 
-\fig{\TeXBlock{GlassBR_SRS}{750}{799}}{Raw generated \LaTeX of the $\hat{q}$ 
-Data Definition}{fig:rawDD}
+\fig{\TeXBlock{GlassBR_SRS}{750}{799}}{Raw generated \LaTeX{} for the $\hat{q}$
+data definition}{fig:rawDD}
 
 During rendering, the SRS generator traverses the recipe and, for each chunk 
 referenced, projects and formats it for the target output. 
@@ -1172,7 +1172,7 @@ we've seen before in Figure~\ref{fig:gbrsrccalc}. The generated code maintains
 traceability through naming conventions and comments drawn from the original 
 chunk. The final Python output can be seen in Figure~\ref{fig:qhatPython}.
 
-\fig{\pyBlock{GenCalculations}{34}{40}}{$\hat{q}$ as defined in the generated 
+\fig{\pyBlock{GenCalculations}{34}{40}}{$\hat{q}$ as defined in generated
 Python code}{fig:qhatPython}
 
 \subsubsection{Discussion}

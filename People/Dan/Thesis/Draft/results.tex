@@ -41,6 +41,7 @@ tracker which will be discussed in more detail in Section~\ref{sec:quality} and
 Section~\ref{sec:dis_reproducibility}).
 
 \subsection{Traceability and Maintainability}
+\label{sec:res_traceability}
 Every generated element (formulae, symbols, tables, code identifiers) can be
 traced back to a named knowledge chunk or recipe. The generation pipeline
 produces traceability matrices and reference-material tables as part of normal
@@ -167,32 +168,35 @@ constants, and unstated domain assumptions. Fixing those issues at the
 knowledge level eliminated their occurrences across documentation and code
 simultaneously.
 
-An instructive, concrete example is issue~\#348 from the issue tracker.
-In the original \sp{} artifacts several closely related symbols (for shear
-stress and associated forces) were used inconsistently across sections and
-tables. When the \sp{} content was encoded as Drasil chunks these 
-inconsistencies became immediately visible: the same semantic item was 
-projected with conflicting identifiers, and cross-references did not align (see 
-Sections~\ref{sec:iterefine} and~\ref{sec:dis_consistency} for more details).
-Correcting the underlying chunk in the knowledge base removed the 
-inconsistencies from all generated artifacts (SRS and code) after regeneration. 
-During the investigation of the same issue, it was also discovered that one of 
-the terms had an implicit unit vector ``into the page'' that was not documented 
-in the original artifacts. Encoding the unit vector explicitly in Drasil made 
-that assumption visible, allowing it to be documented properly in the generated 
-SRS and ensuring that the generated code reflected the correct physical 
-interpretation.
+An instructive, concrete example is
+issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348},
+described in detail earlier in Section~\ref{sec:iterefine}. In the original
+\sp{} artifacts, several closely related symbols for shear stress and
+associated forces were used inconsistently across sections and tables. When
+the \sp{} content was encoded as Drasil chunks, these inconsistencies became
+immediately visible: related semantic items had conflicting identifiers, and
+the reference material did not align with the equations. Correcting the
+underlying chunks removed the inconsistencies from all generated artifacts
+(SRS and code) after regeneration.
 
-A similar example arose in the GlassBR case study (see issue~\href{https://github.com/JacquesCarette/Drasil/issues/349}{\#349}), where an 
-implicit division by 1000 for unit conversion was embedded in the original 
-documentation. Drasil's explicit chunk encoding surfaced this hidden 
-assumption, enabling a single-point correction that propagated to all generated 
-artifacts. Similar issues surfaced throughout the reimplementations, including 
-inconsistent symbol names, missing symbol definitions, implicit unit 
-conversions, undocumented unit vectors, mismatched units across tables and 
-equations, and unstated domain assumptions. Taken together, these recurring 
-issue types reinforced that centralized and formalized knowledge capture makes 
-such problems easier to detect, localize, and correct.
+During the investigation of the same issue, an apparent unit mismatch was
+traced to an undocumented assumption of 1~m depth ``into the page.''
+Encoding that assumption explicitly in Drasil made it visible, allowed it to
+be documented properly in the generated SRS, and ensured that the generated
+code reflected the intended physical interpretation.
+
+A similar example arose in the GlassBR case study
+(issue~\href{https://github.com/JacquesCarette/Drasil/issues/349}{\#349}),
+discussed earlier in Section~\ref{sec:res_traceability}, where an implicit
+division by 1000 for unit conversion was embedded in the original
+documentation. Drasil's explicit chunk encoding surfaced this hidden
+assumption, enabling a single-point correction that propagated to all
+generated artifacts. Similar issues surfaced throughout the reimplementations,
+including inconsistent symbol names, missing symbol definitions, implicit unit
+conversions, mismatched units across tables and equations, and unstated domain
+assumptions. Taken together, these recurring issue types reinforced that
+centralized and formalized knowledge capture makes such problems easier to
+detect, localize, and correct.
 
 \subsection{Design for Change and Software Families}
 \label{sec:design_change}

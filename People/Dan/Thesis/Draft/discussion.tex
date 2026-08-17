@@ -25,31 +25,26 @@ single canonical edit replaces repeated, artifact-level fixes. The primary
 tradeoff is increased upfront modelling effort and the need for disciplined
 knowledge capture.
 
-Disciplined knowledge capture also forces clarification of implicit assumptions
-that would otherwise lead to inconsistencies. For example, in the \sp{} case
-study (\href{https://github.com/JacquesCarette/Drasil/issues/348}{Issue \#348}, 
-referenced in Sections~\ref{sec:iterefine} and~\ref{sec:quality}), the original
-artifacts used the
-closely related symbols $S_i$, $P_i$, and $\tau_i$ inconsistently across
-equations and tables. In particular, later equations replaced $P_i$ with
-$\tau_i$, even though $\tau_i$ denotes shear stress rather than resistive shear force and
-was omitted from the Table of Symbols. Encoding the symbols as Drasil chunks
-while reimplementing the original manually written \sp{} case study in Drasil
-made the inconsistency explicit and enforced a single canonical name and
-identifier, eliminating the
-inconsistencies across all generated artifacts.
+Disciplined knowledge capture also replaces separately maintained
+representations with shared, canonical ones. The \sp{} case study provides a
+concrete example in
+issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348}. A
+detailed account appears earlier in Section~\ref{sec:iterefine}, with the
+resulting quality evidence summarized in Section~\ref{sec:quality}.
 
-Similarly, as we are forced to encode all domain knowledge explicitly in 
-Drasil, it is impossible to end up in a situation where we have undefined 
-symbols or equations that reference missing quantities. A concrete example of 
-this appeared in the same issue 
-(\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348}): the 
-symbol $\tau_i$ was used in equations in the original SRS, but did not appear 
-in the table of symbols or have a formal definition. When encoding the 
-knowledge in Drasil, we had to define these symbols explicitly as chunks, 
-which ensured that they were 
-properly documented in the generated SRS and correctly referenced in the 
-generated code.
+The original, manually created artifacts used the closely related symbols
+$S_i$, $P_i$, and $\tau_i$ inconsistently across equations and tables. In
+particular, later equations replaced $P_i$ with $\tau_i$, even though $\tau_i$
+denotes shear stress rather than resistive shear force. The symbol $\tau_i$ was
+also omitted from the Table of Symbols and lacked a formal definition.
+
+In Drasil, each quantity is captured once as a chunk with a canonical
+definition, symbol, and unit. Equations, the Table of Symbols, and generated
+code are then projected from those chunks rather than maintained
+independently. Once the three quantities were represented correctly in the
+knowledge base, every generated artifact drew on the same definitions and
+identifiers. Their agreement was therefore a consequence of construction,
+not of manually finding and synchronizing every occurrence.
 
 A further benefit of this approach is that several supporting sections, such as 
 the many tables in the Reference Materials section of the SRS as well as the 
@@ -127,32 +122,28 @@ similar artifact produced by a related system. At the same time, defects in
 the knowledge base appear across all generated artifacts, which increases
 visibility and simplifies root-cause correction.
 
-Recall Issue \href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348} 
-from \sp{} mentioned in Section~\ref{sec:quality}. To 
-summarize, the issue was that some closely related symbols had their uses mixed 
-up in several places in the original case study. In more detail, the \sp{} 
-inconsistencies manifested in three concrete ways:
+Issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348} from
+\sp{} also illustrates the relationship between provenance and error
+visibility. The issue is described in detail earlier in
+Section~\ref{sec:iterefine} and its result is summarized in
+Section~\ref{sec:quality}. The inconsistencies manifested in three concrete
+ways:
 \begin{enumerate}
-\item Multiple names and short identifiers for the same physical quantity 
-across equations and tables.
-\item Implicit or mismatched units appearing in different tables.
-\item References and captions that used variant labels, breaking 
-cross-references.
+\item The symbols $S_i$, $P_i$, and $\tau_i$ were used inconsistently across
+equations and tables, blurring the distinction between shear force and shear
+stress.
+\item The symbol $\tau_i$ appeared in equations but was omitted from the Table
+of Symbols and lacked a formal definition.
+\item An apparent unit mismatch was traced to an undocumented assumption of
+1~m depth ``into the page.''
 \end{enumerate}
 
-Encoding the \sp{} concepts as chunks forced a 
-single canonical name, an explicit unit declaration, and a
-consistent label for each concept that could not get switched to a different 
-symbol.
-
-Using Drasil, the remediation followed a small, local workflow: identify the 
-semantic chunk representing the quantity, unify the identifier and unit within 
-that chunk, and regenerate. The result was immediate and verifiable: the SRS,
-tables, and generated code all used the same identifier and unit, table
-cross-references resolved, and no further manual edits were necessary. This 
-example illustrates two benefits of centralized knowledge: it made the inconsistent use of $P_i$ and $\tau_i$, the missing 
-definition of $\tau_i$, and the resulting unit mismatch immediately apparent,
-and it enabled concise, single-point fixes.
+Encoding the \sp{} concepts as chunks tied each quantity to a canonical
+definition, symbol, and unit. The remediation therefore followed a small,
+local workflow: correct the relevant chunks and regenerate. The result was
+immediate and verifiable across the SRS, reference tables, and generated code.
+In this way, the provenance supplied by chunks made the shared root
+cause visible and enabled a concise, single-point fix.
 
 \section{Human Factors and Usability}
 \label{sec:dis_usability}

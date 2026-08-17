@@ -1097,25 +1097,17 @@ etc.) of the document. This step is about specifying what
 knowledge is relevant and where it should appear, not about how it is rendered.
 
 \subsubsection{Step 3: Generation and Rendering}
-When the generator is invoked to produce the SRS (ex.\ as a \LaTeX{} document), 
-it traverses the recipe, visiting each section. For the Data Definitions 
-section, it projects the full definition of $\hat{q}$, including its symbol, 
-description, units, and defining equation. For the Table of Symbols, it 
-projects only the symbol, a brief description, and the units. The rendering 
-engine formats these projections according to the conventions of the target 
-output.
+When the generator is invoked to produce the SRS (e.g., as a \LaTeX{}
+document), it traverses the recipe and projects each chunk according to the
+section. For the Data Definitions section, it projects the full definition of
+$\hat{q}$, including its symbol, description, units, and defining equation;
+for the Table of Symbols, it projects only the symbol, a brief description,
+and the units. The rendering engine then formats those projections for the
+target output, as illustrated by the generated \LaTeX{} in
+Figure~\ref{fig:rawDD}.
 
 \fig{\TeXBlock{GlassBR_SRS}{750}{799}}{Raw generated \LaTeX{} for the $\hat{q}$
 data definition}{fig:rawDD}
-
-During rendering, the SRS generator traverses the recipe and, for each chunk 
-referenced, projects and formats it for the target output. 
-For the Data Definitions section, it projects the full definition of $\hat{q}$, 
-including its symbol, description, units, and defining equation 
-(Figure~\ref{fig:rawDD}). For the Table of Symbols, it projects only the 
-symbol, a brief description, and the units. The rendering engine formats these 
-projections according to the conventions of the target output (as a \LaTeX{} 
-table or section).
 
 \subsubsection{Step 4: Assembly and Output}
 

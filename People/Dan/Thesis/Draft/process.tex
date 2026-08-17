@@ -156,7 +156,7 @@ The Projectile case study, was the first example of a system
 created solely in Drasil, i.e.\ we did not have a manually created version to 
 compare and contrast with through development. As such, it will not be 
 referenced often since it did not inform Drasil's design or development until 
-much further in our process. The Projectile case study was created post-facto 
+much further in our process. The Projectile case study was created post facto
 to provide a simple, understandable example for a general audience as it 
 requires, at most, a high-school level understanding of physics. 
 
@@ -432,7 +432,7 @@ choices over other (reasonable) ones given the opportunity. There is nothing
 system-specific, nor specific to the given problem domain of the case study.
 
 Following through the table of contents into the ``Anticipated and Unlikely 
-Changes" section, we see that again the introductions to this section and 
+Changes'' section, we see that again the introductions to this section and
 its subsections are generic boilerplate, however the details of each section 
 are not. Both subsections are written in the same way: as a list of labeled 
 changes (AC\# for anticipated change, UC\# for unlikely change). This is the 
@@ -459,7 +459,7 @@ Figure~\ref{fig:gbrmgcm}.
 Each module is described by its secrets, services, and what it will be 
 implemented by. For example, a given module could be implemented by the 
 operating system (OS), the system being described (ex. \gb{}), or a third party 
-system/library that will inter-operate with the given system.
+system/library that will interoperate with the given system.
 
 Finally, the MG includes a traceability matrix and use hierarchy diagram. 
 These provide visual summaries of how modules relate to the system's 
@@ -696,7 +696,7 @@ refer to. Within one domain, there may be several acronyms that look identical,
 but mean different things, for example: PM can refer to a Product Manager, 
 Project Manager, Program Manager, Portfolio Manager, etc.
 
-By continuing to breakdown the SRS and other \sfs{}, we are able to find many 
+By continuing to break down the SRS and other \sfs{}, we are able to find many
 more patterns of knowledge repetition. For example, we see the same concept 
 being introduced in multiple areas within a single artifact and across 
 artifacts in a project.
@@ -777,7 +777,7 @@ definition is irrelevant to our audience in this example. What matters is the
 symbolic reference, which we share a common understanding of.} The audience, on 
 the other hand, engages in \emph{knowledge transformation}, whereby they 
 consume the representation and transform it into their own internal 
-representation, based on their personal knowledge-base.
+representation, based on their personal knowledge base.
 
 Returning to the context of software systems, if we broaden our view from a 
 single system, to a software family, we can also find patterns of commonality 
@@ -933,7 +933,7 @@ represented in various forms, such as mathematical equations, natural
 language descriptions, code snippets, diagrams, and more, while remaining the 
 same underlying knowledge. This definition underlies our later discussion of 
 knowledge chunks and projections in Chapter~\ref{c:drasil}, especially 
-Section~\ref{sec:kcChunk}: Capturing knowledge via chunks.
+Section~\ref{sec:kcChunk}.
 
 \emph{For clarity in the following examples, we will use set notation to 
 describe relationships between knowledge and projections. This is not intended 
@@ -950,8 +950,8 @@ projection functions directly repeat knowledge verbatim i.e.\ $p(K) \equiv K$
 for some set of knowledge $K$. It should be noted in our case that as long as 
 the projection used contains the full definition and context of a piece of 
 knowledge, that projection is considered an identity projection 
-\textbf{regardless of changes to notation} (ex. ``$x = y$" vs ``$y = x$") or 
-language (ex. ``$x = y$" vs ``$x$ is equal to $y$" vs ``x est \'egal \`a y"). 
+\textbf{regardless of changes to notation} (ex. ``$x = y$'' vs ``$y = x$'') or
+language (ex. ``$x = y$'' vs ``$x$ is equal to $y$'' vs ``x est \'egal \`a y'').
 An identity projection is providing the knowledge chunk in full. 
 Non-identity projections require using representations that elide some details 
 of the knowledge at hand to make it more palatable for the audience of the 
@@ -978,13 +978,13 @@ scope of knowledge to be organized may become unwieldy. After breaking down
 multiple case studies, we believe collecting knowledge chunks into categories 
 based on their domain(s) is a more easily navigable and maintainable approach. 
 This also allows us to keep some context information at a meta-level (ex. 
-Physics knowledge would be categorized into a Physics knowledge-base). Then for 
+physics knowledge would be categorized into a physics knowledge base). Then for
 any given system, we would likely only need to reference across a handful of 
-contexts (knowledge-bases) relevant to the domain.
+contexts (knowledge bases) relevant to the domain.
 
 There is also knowledge fundamental to all \sfs{}\textemdash{}it is contextual 
 to the domain of \sf{} writing itself. This kind of meta-knowledge would be 
-useful to have readily available in its own knowledge-base. The same could be 
+useful to have readily available in its own knowledge base. The same could be
 said for things like SI Unit definitions, while they only apply to measuring 
 physical properties, we see some domains built off of physics that operate at a 
 higher level of assumed understanding (ex. Chemistry abstracts some of the 
@@ -1007,7 +1007,7 @@ these cases, we want to use the derived knowledge in place of the core
 knowledge.
 
 Being able to specify our level of abstraction through the progressive 
-application of projection functions eludes to another necessary piece of 
+application of projection functions alludes to another necessary piece of
 knowledge organization: the projection functions themselves. As we project out 
 core knowledge that we know of as otherwise commonly derived concepts (like the 
 Joule example above), we should also like to store them in some form. For 
@@ -1022,11 +1022,11 @@ We want to take a fluid and practical approach to organizing knowledge, such
 that we can keep domain-related knowledge chunks together with useful 
 derivations. We want to separate knowledge in unrelated domains, such that it 
 is straightforward to look up whatever we need with relative ease. The 
-specific implementation for organization will be detailed later (See 
-Chapter~\ref{sec:kc}).
+specific implementation for organization will be detailed later (See
+Section~\ref{sec:kc}).
 
 In summary, this approach to organizing knowledge (grouping related information 
-into domain-specific knowledge-bases and supporting flexible projection) lays 
+into domain-specific knowledge bases and supporting flexible projection) lays
 the conceptual foundation for Drasil's framework. By making explicit how 
 knowledge is structured and accessed, we address the root causes of redundancy 
 and inconsistency identified earlier in this chapter. This organizational 

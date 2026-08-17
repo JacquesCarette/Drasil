@@ -6,7 +6,7 @@ of our case studies using Drasil. Content here is primarily illustrative:
 concrete examples, issue identifiers, and sample artifacts that document how the
 single-source approach affected consistency, traceability, and
 reimplementation effort. Formal, controlled experiments are future work
-(see Chapter~\ref{sec:fw:exp}). For interpretation and implications of these
+(see Section~\ref{sec:fw:exp}). For interpretation and implications of these
 observations, see Chapter~\ref{c:discussion}.
 
 \section{Value in the Mundane}
@@ -14,7 +14,7 @@ observations, see Chapter~\ref{c:discussion}.
 This section highlights routine, practical benefits that emerged from the
 reimplementations. Each subsection focuses on a specific, often-overlooked
 advantage \textemdash{} consistency, traceability, and reproducibility 
-\textemdash{} and shows how these ``mundane" improvements materially reduce
+\textemdash{} and shows how these ``mundane'' improvements materially reduce
 maintenance effort and increase confidence in generated artifacts.
 
 \subsection{Consistency by Construction}
@@ -160,7 +160,7 @@ interpretive discussion in Section~\ref{sec:dis_traceability}.
 \label{sec:quality}
 Because all artifacts are derived from the same knowledge, a defect in the
 knowledge base manifested consistently across every generated artifact. This
-property made defects more visible (``pervasive bugs"), which in turn aided
+property made defects more visible (``pervasive bugs''), which in turn aided
 discovery and correction. During reimplementations, categories of problems
 that were revealed included inconsistent symbol naming, implicit numeric
 constants, and unstated domain assumptions. Fixing those issues at the
@@ -173,7 +173,7 @@ stress and associated forces) were used inconsistently across sections and
 tables. When the \sp{} content was encoded as Drasil chunks these 
 inconsistencies became immediately visible: the same semantic item was 
 projected with conflicting identifiers, and cross-references did not align (see 
-Sections~\ref{sec:iterefine} and \ref{sec:dis_consistency} for more details). 
+Sections~\ref{sec:iterefine} and~\ref{sec:dis_consistency} for more details).
 Correcting the underlying chunk in the knowledge base removed the 
 inconsistencies from all generated artifacts (SRS and code) after regeneration. 
 During the investigation of the same issue, it was also discovered that one of 
@@ -230,7 +230,7 @@ recipe omits PCM-related content \\
 \end{table}
 
 For example, producing the NoPCM variant from SWHS required removing all 
-reference to PCM by excluding the PCM-related chunks. The majority of the 
+references to PCM by excluding the PCM-related chunks. The majority of the
 knowledge base and recipes were reused without change, demonstrating the 
 efficiency of the single-source approach for software families. Table~\ref{tab:swhs_nopcm} summarizes the key differences between the SWHS and NoPCM Drasil
 implementations, highlighting which chunks and concepts were unique to each
@@ -258,6 +258,6 @@ generated artifacts, and deterministic reproducibility. These benefits
 manifested in lower ongoing synchronization effort, higher visibility of
 domain assumptions and defects, and faster family-wide changes when those
 domain choices were encoded explicitly. The observations collected
-during the reimplementations supports these claims while also documenting the
+during the reimplementations support these claims while also documenting the
 practical cost of initial knowledge capture and onboarding.
 

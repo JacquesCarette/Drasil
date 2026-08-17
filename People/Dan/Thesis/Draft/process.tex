@@ -111,11 +111,12 @@ over-specializing into one particular system type.
 The majority of the aforementioned case studies were developed by other teams 
 at McMaster University to address real engineering problems outside of our 
 research group. Table~\ref{tab:case-studies} provides a high-level reference to 
-each case study. For each system, the GitHub repository contains the artifacts 
-relevant to our analysis, namely the documents and implementation materials 
-that expose the system's requirements, design decisions, and implementation 
-details. These include, where available, artifacts such as the SRS, Module 
-Guide, MIS, source code, and other supporting materials.
+each case study. For each system, the GitHub repository contains the artifacts
+relevant to our analysis, namely the documents and implementation materials
+that expose the system's requirements, design decisions, and implementation
+details. These include, where available, the Software Requirements Specification
+(SRS), Module Guide (MG), Module Interface Specification (MIS), source code, and
+other supporting materials.
 
 \begin{table}
 \centering
@@ -196,9 +197,9 @@ that a comprehensive overview would be excessively lengthy.
 \subsection{SRS}
 \label{sec:breakdown:srs}
 
-To start, we look at the Software Requirements Specification (SRS). The SRS
-(or some incarnation of it) is one of the most important artifacts for any
-software project as it specifies what problem the software is trying to solve.
+To start, we look at the SRS. The SRS (or some incarnation of it) is one of the
+most important artifacts for any software project, as it specifies what problem
+the software is trying to solve.
 There are many ways to state this problem, and the template from \smithea{}\ 
 has given us a strong starting point. Figure~\ref{fig:SRSToC} shows the table 
 of contents for an SRS using the \smithea{}\ template.
@@ -396,8 +397,8 @@ mind, we can move on to the MG and source code.
 \subsection{Module Guide}
 \label{sec:breakdown:mg}
 
-The module guide (MG) is a \sf{} that details the architecture of a given 
-software system. It holds a number of design decisions around sensibly grouping 
+The MG is a \sf{} that details the architecture of a given software system. It
+holds a number of design decisions around sensibly grouping
 functionalities within the system into modules to fulfill the requirements laid 
 out in the SRS. For example, one might have an input/output module for handling 
 user input and giving the user feedback through the display (i.e.\ via print 
@@ -540,8 +541,9 @@ of it to be system- and problem-domain specific. Looking into the source of our
 case studies, we find this to be largely true for the computational core, while 
 also observing recurring implementation-level boilerplate across projects. For 
 example, tasks such as reading inputs, writing outputs, and managing files are 
-often structured very similarly between systems, and some later-added numerical 
-components, such as ODE solvers, are generic rather than domain-specific.
+often structured very similarly between systems, and some later-added
+numerical components, such as ordinary differential equation (ODE) solvers, are
+generic rather than domain-specific.
 
 Returning to our example of the MG from \gb{} (Figure~\ref{fig:gbrmgtoc}) and 
 comparing it to the python source code structure shown in 
@@ -568,8 +570,9 @@ see a number of calculation functions, including those that calculate the
 probability of glass breakage, demand (also known as \emph{load} or $q$), and 
 capacity (also known as \emph{load resistance} or $LR$) as outlined in the 
 \emph{secrets} section of the Calc module definition in the MG. We also see a 
-number of intermediary calculation functions required to calculate these values 
-(for example \code{python}|calc_NFL| and its dependencies).
+number of intermediary calculation functions required to calculate these
+values (for example, \code{python}|calc_NFL|, which calculates the non-factored
+load (NFL), and its dependencies).
 
 The source code provides clear instructions to the machine on how to calculate 
 each of these values and their intermediaries; it provides the actionable steps 

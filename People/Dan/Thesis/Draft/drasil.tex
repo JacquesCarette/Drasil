@@ -217,9 +217,9 @@ extending our chunk hierarchy multiplies the possible combinations and
 relationships between chunks, and how this enables us to build richer knowledge 
 structures. This approach is essential for reducing duplication and supporting 
 traceability, as it allows definitions and relationships to be constructed from 
-reusable components. To facilitate this, we introduce a Domain Specific 
-Language (DSL) for constructing and combining English-language sentences 
-(\codeH{Sentence}), which lets us define terms and their relationships in a 
+reusable components. To facilitate this, we introduce a domain-specific
+language (DSL) for constructing and combining English-language sentences
+(\codeH{Sentence}), which lets us define terms and their relationships in a
 flexible, compositional way.
 
 Even in the small progression we have already seen, the need for multiple 
@@ -236,11 +236,11 @@ reduce duplication and maintain a single source of information, we therefore
 intend to create chunks with references to other chunks such that a definition 
 can reuse already-captured terminology.
 
-To define terms (such as acceleration) in relation to previously captured terms 
-(such as velocity), we need a way to project existing knowledge into new 
-definitions while retaining the flexibility to extend that knowledge. With that 
-in mind, we created a Domain Specific Language (DSL) for creating and combining 
-(English language) sentences aptly called \codeH{Sentence}. In its most basic 
+To define terms (such as acceleration) in relation to previously captured terms
+(such as velocity), we need a way to project existing knowledge into new
+definitions while retaining the flexibility to extend that knowledge. With that
+in mind, we created the \codeH{Sentence} DSL for creating and combining English-
+language sentences. In its most basic
 form, \codeH{Sentence} will simply wrap a string. However, by defining a number 
 of helper functions and other useful utilities, our \codeH{Sentence} DSL can be 
 used to combine, change case, pluralize, and more. A simple example of a series 
@@ -700,13 +700,14 @@ those are all we should need to generate our SRS. As an aside, the complete
 recipe for the SRS specification of \gb{}\footnote{Not including chunks 
 referenced from within our knowledge bases and core Drasil infrastructure,
 as they can be shared, reused, and are not necessarily specific to only this 
-system.} including the system information object is contained in a single file 
-in less than 370 lines of code\footnote{Including many comments, whitespace, 
-and import statements.}. Teasing our results: the generated SRS in PDF format 
-is 44 pages in length (with the generated \LaTeX{} source being 1742 
-lines\footnote{at time of writing}). This is partially due to our ability to 
-strip away all of the common boilerplate text that we need not worry about 
-right now, as that will be a problem for the generator (Section~\ref{sec:gen}). 
+system.} including the system information object is contained in a single file
+in fewer than 370 lines of code.\footnote{Including many comments, whitespace,
+and import statements.} Teasing our results: the generated SRS is a 44-page
+Portable Document Format (PDF) file (with the generated \LaTeX{} source being
+1,742 lines\footnote{At time of writing.}). This is partially due to our
+ability to strip away all of the common boilerplate text that we need not worry
+about right now, as that will be a problem for the generator
+(Section~\ref{sec:gen}).
 As it stands we have created the recipe language to represent what we truly 
 want out of a recipe: a simplified, unnecessary-duplication-avoiding, fully 
 traceable representation of our target \sf{}.
@@ -817,11 +818,12 @@ As with the SRS recipe, the code recipe references knowledge chunks defined
 elsewhere. For example, the list of input variables is defined in 
 \codeH{Unitals.hs} just as they were for the SRS. Similarly, the modules to be 
 generated are defined in \codeH{ModuleDefs.hs} and make reference to other 
-chunks (both system specific and generic) from our knowledge-base. Looking 
-into the modules, we can see the \codeH{readTableMod} module, for example, is 
-defined as shown in Figure~\ref{fig:readTableMod}. This module provides a 
-function for reading ASTM glass data from a file, encapsulating both the 
-knowledge of the data format and the implementation logic required for code 
+chunks (both system specific and generic) from our knowledge-base. Looking
+into the modules, we can see that the \codeH{readTableMod} module, for example,
+is defined as shown in Figure~\ref{fig:readTableMod}. This module provides a
+function for reading ASTM International glass data from a file, encapsulating
+both the knowledge of the data format and the implementation logic required for
+code
 generation.
 
 \fig{\codeBlock{ModuleDefs}{30}{39}}
@@ -941,9 +943,10 @@ At its core, Drasil treats recipes as ``little programs". Rendering in Drasil
 refers to the process by which these abstract, language-agnostic structures 
 defined in recipes are transformed into specific output formats suitable for 
 end-users and stakeholders. This stage bridges the gap between the high-level, 
-reusable knowledge representations and the diverse forms required for practical 
-use (ex. \LaTeX{}, HTML, PDF, or source code in various programming 
-languages). Drasil achieves this through a set of dedicated \emph{printers} 
+reusable knowledge representations and the diverse forms required for practical
+use (e.g., \LaTeX{}, Hypertext Markup Language (HTML), PDF, or source code in
+various programming languages). Drasil achieves this through a set of dedicated
+\emph{printers}
 and, for code, through the use of the Generic Object-Oriented Language 
 (GOOL)\cite{Costabile2012, Carette2020GOOL}. Each printer is designed to 
 interpret the structured data produced by the recipe and knowledge projection 
@@ -960,9 +963,9 @@ specialized printers for each supported format:
     document as \LaTeX{} source, suitable for PDF generation.
     \item \codeH{genHTML} in \codeH{Language.Drasil.HTML.Print} --- produces 
     HTML for web-based consumption.
-    \item \codeH{genJSON} in \codeH{Language.Drasil.JSON.Print} --- outputs a 
-    machine-readable JSON representation, supporting further processing or 
-    integration.
+    \item \codeH{genJSON} in \codeH{Language.Drasil.JSON.Print} --- outputs a
+    machine-readable JavaScript Object Notation (JSON) representation,
+    supporting further processing or integration.
 \end{itemize}
 
 Each printer traverses the recipe structure, visiting each section and 
@@ -1014,9 +1017,10 @@ code rendering}{fig:generateCode}
 \subsection{Assembly: Producing the Final \SF{} Set}
 Once rendering is complete, the generated document or code sections must be 
 assembled into coherent artifacts ready for distribution and use. Assembly 
-includes writing the primary artifacts to disk (ex. *.tex, *.html, *.py, *.cpp 
-files), generating auxiliary files (ex.\ Makefiles, CSS, README, example input 
-files), linking cross-references, and ensuring the integrity of tables, 
+includes writing the primary artifacts to disk (e.g., \texttt{.tex},
+\texttt{.html}, \texttt{.py}, and \texttt{.cpp} files), generating auxiliary
+files (e.g., Makefiles, Cascading Style Sheets (CSS), README files, and example
+input files), linking cross-references, and ensuring the integrity of tables,
 figures, and code modules. The remainder of this section illustrates these 
 steps in practice.
 
@@ -1150,10 +1154,10 @@ choices such as type mapping and function structure.
 
 \subsubsection{Rendering via GOOL}
 
-During code generation, Drasil translates the recipe and referenced chunks into 
-a GOOL (General Object-Oriented Language) intermediate representation. The 
-$\hat{q}$ chunk, for example, is mapped to a function definition within the 
-GOOL AST, preserving its formula and metadata. This intermediate form enables 
+During code generation, Drasil translates the recipe and referenced chunks into
+a GOOL intermediate representation. The $\hat{q}$ chunk, for example, is mapped
+to a function definition within the GOOL abstract syntax tree (AST), preserving
+its formula and metadata. This intermediate form enables
 Drasil to emit code in multiple target languages without duplicating logic. As 
 GOOL is not the subject of this thesis, we will elide the GOOL-specific details 
 and continue down the code generation pipeline.

@@ -1,20 +1,83 @@
 \prefacesection{Notation, Definitions, and Abbreviations}
-\ds{TODO: Update this}
+
 \section*{Notation}
 \begin{description}[font=\rmfamily\bfseries, leftmargin=3cm, style=nextline]
-	\item[$A \leq B$] A is less than or equal to B
+    \item[$K$, $L$, $M$] Sets used illustratively to denote chunks of related
+    knowledge. This set notation supports the conceptual discussion in
+    Chapter~\ref{c:process}; it is not a formal model of Drasil's chunk types.
+    \item[$p(\cdot)$] A projection function that selects and presents knowledge
+    for a particular artifact, audience, or context.
+    \item[$p(K) \equiv K$] An identity projection, which presents the full
+    knowledge represented by $K$, possibly using different notation or
+    language.
+    \item[$p(K) \subset K$] A non-identity projection, which intentionally
+    omits some details represented by $K$.
+    \item[$\textit{input} \rightarrow \textit{process} \rightarrow
+    \textit{output}$] The computational pattern that defines the primary class
+    of scientific software considered in this thesis.
 \end{description}
 
 \section*{Definitions}
 \begin{description}[font=\rmfamily\bfseries, leftmargin=3cm, style=nextline]
-	\item[\SF] A portmanteau of `software' and `artifact'. The term refers to 
-	any of the artifacts (documentation, code, test cases, build instructions, 
-	etc.) created during a software project's development.
+    \item[Knowledge] Information that has been structured and contextualized
+    to be meaningful and useful. It includes facts, concepts, definitions,
+    theories, and relationships relevant to a domain or problem.
+    \item[Knowledge chunk] A reusable, uniquely identifiable representation of
+    related knowledge. Chunks may encode names, definitions, symbols, units,
+    expressions, or relationships and may be composed into richer structures.
+    \item[Knowledge projection] A context-specific presentation of selected
+    knowledge for a particular artifact or audience.
+    \item[Recipe] An intermediate specification that selects knowledge and
+    defines how it is organized in one or more generated \sfs{}.
+    \item[\SF] A portmanteau of ``software'' and ``artifact.'' The term refers
+    to any artifact produced during software development that conveys
+    knowledge, including documentation, source code, test cases, and build
+    instructions.
+    \item[Unnecessary redundancy] Multiple independently editable,
+    authoritative representations of the same knowledge. Repeated renderings
+    derived from one source are not considered unnecessary redundancy.
 \end{description}
 
 \section*{Abbreviations}
 \begin{description}[font=\rmfamily\bfseries, leftmargin=3cm, style=nextline]
-	\item[QA] Quality Assurance
-	\item[SI] Syst\`eme International d'Unit\'es
-	\item[SRS] Software Requirements Specification
+    \item[AI] Artificial Intelligence
+    \item[API] Application Programming Interface
+    \item[AST] Abstract Syntax Tree
+    \item[CBSE] Component-Based Software Engineering
+    \item[CI/CD] Continuous Integration and Continuous Delivery
+    \item[CORBA] Common Object Request Broker Architecture
+    \item[CSS] Cascading Style Sheets
+    \item[DD] Data Definition
+    \item[DSL] Domain-Specific Language
+    \item[GOOL] Generic Object-Oriented Language
+    \item[HGHC] Drasil's minimal heat-transfer case study involving the
+    coefficients $h_g$ and $h_c$
+    \item[HTML] Hypertext Markup Language
+    \item[IDE] Integrated Development Environment
+    \item[IM] Instance Model
+    \item[IPO] Input--Process--Output
+    \item[JSON] JavaScript Object Notation
+    \item[LLM] Large Language Model
+    \item[LOC] Lines of Code
+    \item[LP] Literate Programming
+    \item[LSD] Literate Software Development
+    \item[MDE] Model-Driven Engineering
+    \item[MG] Module Guide
+    \item[MIS] Module Interface Specification
+    \item[ML] Machine Learning
+    \item[NFL] Non-Factored Load
+    \item[NoPCM] Solar Water Heating System with No Phase-Change Material
+    \item[ODE] Ordinary Differential Equation
+    \item[OS] Operating System
+    \item[PCM] Phase-Change Material
+    \item[PDF] Portable Document Format
+    \item[QA] Quality Assurance
+    \item[SC] Scientific Computing
+    \item[SI] International System of Units
+    \item[SPL] Software Product Line
+    \item[SRS] Software Requirements Specification
+    \item[SSP] Slope Stability Analysis Program
+    \item[SWHS] Solar Water Heating System
+    \item[TM] Theoretical Model
+    \item[WYSIWYG] What You See Is What You Get
 \end{description}

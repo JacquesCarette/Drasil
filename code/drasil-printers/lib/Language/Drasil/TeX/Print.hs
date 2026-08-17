@@ -17,7 +17,7 @@ import qualified Language.Drasil.Display as LD
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple),
-  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)),
+  Spec(Quote, EmptyS, Ref, S, Sp, E, (:+:)),
   Fence(Norm, Abs, Curly, Paren), Expr,
   Ops(..), Spacing(Thin), Fonts(Emph, Bold),
   Expr(..), OverSymb(Hat), Label,
@@ -236,7 +236,6 @@ specLength (Ref (Cite2 n)   r i ) = length r + specLength i + specLength n --may
 specLength (Ref External _ t) = specLength t
 specLength EmptyS      = 0
 specLength (Quote q)   = 4 + specLength q
-specLength HARDNL      = 0
 
 -- | Invalid characters, not included in an expression.
 dontCount :: String
@@ -264,7 +263,6 @@ needs (S _)         = Text
 needs (Tooltip _ s) = needs s
 needs (E _)         = Math
 needs (Sp _)        = Math
-needs HARDNL        = Text
 needs Ref{}         = Text
 needs EmptyS        = Text
 needs (Quote _)     = Text
@@ -285,7 +283,6 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars c = [c]
 spec (Tooltip _ s) = spec s
 spec (Sp s) = pure $ text $ unPL $ L.special s
-spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)
 spec (Ref (Cite2 n) r _) = cite r (info n)
   where

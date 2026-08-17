@@ -28,16 +28,14 @@ requirements. It also acknowledged tradeoffs, such as the increased upfront
 modeling and onboarding effort, and identified the need for improved tooling
 and formal validation.
 
-The primary contribution of this thesis is the demonstration that a
-centralized, recipe-driven knowledge base can systematically address many of
-the recurring problems in scientific software engineering. By explicitly
-capturing domain knowledge and automating artifact generation, Drasil
-provides a scalable, extensible foundation for reliable and reproducible
-scientific software, while improving maintainability through explicit
-provenance, single-point maintenance, and software-family reuse. The lessons
-learned and directions for future work outlined here position Drasil as both
-a practical tool and a platform for further research in automated knowledge
-capture and software generation.
+Taken together, these findings answer the thesis's motivating question: within
+the class of scientific software considered here, Drasil demonstrates that
+independently maintained representations can be replaced with projections from
+a centralized, recipe-driven knowledge base. The approach does not eliminate
+repeated presentation; it makes the captured knowledge and recipes, rather than
+each generated occurrence, authoritative. The following sections summarize
+this contribution, its present limitations, and the work needed to validate and
+extend it.
 
 \section{Summary of Main Contributions}
 
@@ -70,8 +68,8 @@ than definitively quantified (see Section~\ref{sec:dis_limits}). Formal validati
 how well these results generalize across teams, projects, and scientific
 domains.
 
-Second, Drasil currently works best in domains where the relevant knowledge is
-well-understood~\cite{CaretteEtAl2023}, structured, and amenable to explicit capture. In its present
+Second, Drasil works best in well-understood~\cite{CaretteEtAl2023} domains
+where the knowledge is structured and amenable to explicit capture. In its present
 form, this largely means scientific computing software that fits an input
 $\rightarrow$ process $\rightarrow$ output paradigm. Whether the same
 knowledge-centric approach can be extended effectively to more dynamic,
@@ -283,7 +281,7 @@ formative, shaping my perspective on the future of scientific software.
 This thesis has demonstrated the feasibility and benefits of a knowledge-centric
 approach to scientific software engineering. By operationalizing
 software engineering principles and automating the generation of software
-and documentation artifacts, Drasil offers a scalable solution to persistent
+and documentation artifacts, Drasil offers a solution to persistent
 challenges of consistency, traceability, and reproducibility, while improving
 maintainability through centralized knowledge and regeneration. The work
 presented here lays the groundwork for further advances in knowledge capture

@@ -122,28 +122,26 @@ similar artifact produced by a related system. At the same time, defects in
 the knowledge base appear across all generated artifacts, which increases
 visibility and simplifies root-cause correction.
 
-Issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348} from
-\sp{} also illustrates the relationship between provenance and error
-visibility. The issue is described in detail earlier in
-Section~\ref{sec:iterefine} and its result is summarized in
-Section~\ref{sec:quality}. The inconsistencies manifested in three concrete
-ways:
+Issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348}
+also illustrates how provenance and error visibility interact. The
+inconsistency described in Section~\ref{sec:quality} and analyzed in
+Section~\ref{sec:dis_consistency} did not appear as a single isolated defect.
+Instead, it manifested in several places:
 \begin{enumerate}
-\item The symbols $S_i$, $P_i$, and $\tau_i$ were used inconsistently across
-equations and tables, blurring the distinction between shear force and shear
-stress.
-\item The symbol $\tau_i$ appeared in equations but was omitted from the Table
-of Symbols and lacked a formal definition.
-\item An apparent unit mismatch was traced to an undocumented assumption of
-1~m depth ``into the page.''
+\item Closely related force and stress quantities were represented by
+conflicting symbols.
+\item The reference material did not define every symbol used in the equations.
+\item An undocumented depth assumption made the units appear inconsistent.
 \end{enumerate}
 
-Encoding the \sp{} concepts as chunks tied each quantity to a canonical
-definition, symbol, and unit. The remediation therefore followed a small,
-local workflow: correct the relevant chunks and regenerate. The result was
-immediate and verifiable across the SRS, reference tables, and generated code.
-In this way, the provenance supplied by chunks made the shared root
-cause visible and enabled a concise, single-point fix.
+Taken separately, these problems in the original artifacts could appear to be
+unrelated notation, reference-material, and dimensional errors. Encoding the
+\sp{} knowledge made their relationship explicit: all three arose from an
+incomplete or inconsistent representation of the relevant physical quantities
+and assumptions. The explicit links between generated elements and their source
+chunks then made it possible to verify that, after the inconsistencies were
+corrected and the artifacts were generated using Drasil, each affected
+projection reflected the corrected knowledge.
 
 \section{Human Factors and Usability}
 \label{sec:dis_usability}
@@ -179,8 +177,7 @@ approaches, quantifying differences in initial productivity, long-term
 maintenance, and defect reduction. These metrics will be essential for 
 substantiating the qualitative benefits observed in this thesis. Feedback from 
 such studies will also guide the development of improved authoring tools and 
-onboarding resources, helping to lower the initial ramp-up cost and make Drasil 
-accessible to a broader range of users.
+onboarding resources, with an aim to make Drasil accessible to a broader range of users.
 
 Scalability concerns also merit attention: as the knowledge base grows,
 improved tools for discovery, efficient projection, and modularization will

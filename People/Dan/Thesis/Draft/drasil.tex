@@ -31,8 +31,8 @@ maintainable software.
 This section provides a high-level overview of Drasil's motivation and 
 approach, setting the stage for the technical details that follow. To 
 understand why Drasil is needed, consider the challenges of manually writing 
-and maintaining a full range of \sfs{}: the process is redundant, tedious, and 
-often leads to divergent \sfs{}. Drasil is a purpose-built framework created to 
+and maintaining multiple \sfs{}: the process is redundant, tedious, and
+often causes these artifacts to diverge. Drasil is a purpose-built framework created to
 tackle these problems. It is designed to generate a wide range of \sfs{} from a 
 single, unified source of domain knowledge. By capturing the essential 
 concepts, relationships, and requirements of a software system as reusable, 
@@ -504,10 +504,8 @@ project}{fig:chunksClassified}
 
 We now have a compact, well-typed vocabulary for representing domain knowledge: 
 chunks and classifications give us named concepts, quantities, units, and 
-relationships that are easy to reason about. That vocabulary is only useful if 
-we can turn it into artifacts people consume. To convert that vocabulary into 
-artifacts people actually use, we need a way to operationalize those chunks. In 
-Drasil that means using recipes.
+relationships that are easy to reason about. The next step is to operationalize
+that vocabulary as artifacts people consume.
 
 \section{Recipes: Codifying Structure}
 \label{sec:recipes}

@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
-  SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
+  Value, SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -129,15 +129,15 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData Body
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body
+instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
@@ -169,7 +169,7 @@ instance PermElim JavaCode Doc where
   perm = unJC
   binding = error $ CP.bindingError jName
 
-instance BodySym JavaCode Body where
+instance BodySym JavaCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -180,13 +180,13 @@ instance RenderBody JavaCode Body where
 instance BodyElim JavaCode Body where
   body = unJC
 
-instance BlockSym JavaCode (Doc, Terminator) where
+instance BlockSym JavaCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock JavaCode where
+instance RenderBlock JavaCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim JavaCode where
+instance BlockElim JavaCode Block where
   block = unJC
 
 instance TypeSym JavaCode where
@@ -475,7 +475,7 @@ instance Set JavaCode where
   setRemove = CP.setMethodCall jListRemove
   setUnion = CP.setMethodCall jListUnion
 
-instance InternalList JavaCode where
+instance InternalList JavaCode Block where
   listSlice' = M.listSlice
 
 instance InternalGetSet JavaCode where
@@ -632,7 +632,7 @@ instance ControlStatement JavaCode (Doc, Terminator) Body where
 instance ObserverPattern JavaCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern JavaCode Body where
+instance StrategyPattern JavaCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym JavaCode Doc where
@@ -977,8 +977,8 @@ jAssert condition errorMessage = vcat [
 
 jOut
   ::
-    ( BodySym r bod
-    , BlockSym r stmt
+    ( BodySym r bod block
+    , BlockSym r block stmt
     , Literal r
     , Comparison r
     , NumericExpression r

@@ -129,7 +129,7 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
@@ -137,8 +137,8 @@ instance ProgramSym SwiftCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData Body
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body
+instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
@@ -170,7 +170,7 @@ instance PermElim SwiftCode Doc where
   perm = unSC
   binding = error $ CP.bindingError swiftName
 
-instance BodySym SwiftCode Body where
+instance BodySym SwiftCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -181,13 +181,13 @@ instance RenderBody SwiftCode Body where
 instance BodyElim SwiftCode Body where
   body = unSC
 
-instance BlockSym SwiftCode (Doc, Terminator) where
+instance BlockSym SwiftCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock SwiftCode where
+instance RenderBlock SwiftCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim SwiftCode where
+instance BlockElim SwiftCode Block where
   block = unSC
 
 instance TypeSym SwiftCode where
@@ -461,7 +461,7 @@ instance Set SwiftCode where
   setRemove = CP.setMethodCall swiftListRemove
   setUnion = CP.setMethodCall swiftUnion
 
-instance InternalList SwiftCode where
+instance InternalList SwiftCode Block where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalGetSet SwiftCode where
@@ -651,7 +651,7 @@ instance ControlStatement SwiftCode (Doc, Terminator) Body where
 instance ObserverPattern SwiftCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern SwiftCode Body where
+instance StrategyPattern SwiftCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym SwiftCode Doc where

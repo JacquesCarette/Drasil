@@ -108,7 +108,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
@@ -116,8 +116,8 @@ instance ProgramSym JuliaCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData Body
-instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData ModData Body
+instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
@@ -144,7 +144,7 @@ instance ImportSym JuliaCode where
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
 
-instance BodySym JuliaCode Body where
+instance BodySym JuliaCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
@@ -155,13 +155,13 @@ instance RenderBody JuliaCode Body where
 instance BodyElim JuliaCode Body where
   body = unJLC
 
-instance BlockSym JuliaCode (Doc, Terminator) where
+instance BlockSym JuliaCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock JuliaCode where
+instance RenderBlock JuliaCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim JuliaCode where
+instance BlockElim JuliaCode Block where
   block = unJLC
 
 instance TypeSym JuliaCode where
@@ -404,7 +404,7 @@ instance NativeVector JuliaCode where
   vecMag a   = libFuncApp "LinearAlgebra" "norm" double [a]
   vecUnit a  = a #/ vecMag a
 
-instance InternalList JuliaCode where
+instance InternalList JuliaCode Block where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalListFunc JuliaCode where
@@ -979,8 +979,8 @@ jlPrint _ f' p' v' = do
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
   ::
-    ( BodySym r bod
-    , BlockSym r stmt
+    ( BodySym r bod block
+    , BlockSym r block stmt
     , Literal r
     , NumericExpression r
     , Comparison r

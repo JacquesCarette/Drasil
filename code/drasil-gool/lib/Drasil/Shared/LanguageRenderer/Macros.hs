@@ -6,9 +6,9 @@ module Drasil.Shared.LanguageRenderer.Macros (
 ) where
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue,
-  bodyStatements, oneLiner, VariableElim(..), getCodeType, listOf,
-  ValueSym(valueType), NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
+import Drasil.Shared.InterfaceCommon (Label, SVariable, SValue, bodyStatements,
+  oneLiner, VariableElim(..), getCodeType, listOf, ValueSym(valueType),
+  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), List, at, EmptyStatement(emptyStmt),
   MultiStatement(multi), ValueStatement(valStmt),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope, VariableValue, BodySym,
@@ -80,8 +80,8 @@ runStrategy l strats rv av = maybe
 
 listSlice
   ::
-    ( BodySym r bod
-    , IC.BlockSym r stmt
+    ( BodySym r bod block
+    , IC.BlockSym r block stmt
     , EmptyStatement r stmt
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -102,7 +102,7 @@ listSlice
   -> Maybe (SValue r)
   -> SVariable r
   -> SValue r
-  -> MS (r Block)
+  -> MS (r block)
 listSlice beg end step vnew vold = do
 
   l_temp <- genVarName [] "temp"
@@ -210,8 +210,8 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
 
 stringListLists
   ::
-    ( BodySym r bod
-    , IC.BlockSym r stmt
+    ( BodySym r bod block
+    , IC.BlockSym r block stmt
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
@@ -279,16 +279,16 @@ notify
     , VariableValue r
     , List r
     , OOFunctionSym r
-    , BodySym r bod
-    , IC.BlockSym r stmt
+    , BodySym r bod block
+    , IC.BlockSym r block stmt
     )
   => VS (r TypeData) -> VS (r FuncData) -> MS (r bod)
 notify t f = oneLiner $ valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
   ::
-    ( BodySym r bod
-    , IC.BlockSym r stmt
+    ( BodySym r bod block
+    , IC.BlockSym r block stmt
     , Literal r
     , VariableValue r
     , Comparison r
@@ -306,8 +306,8 @@ notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
 
 notifyObservers'
   ::
-    ( BodySym r bod
-    , IC.BlockSym r stmt
+    ( BodySym r bod block
+    , IC.BlockSym r block stmt
     , ValueStatement r stmt
     , Literal r
     , VariableValue r
@@ -322,8 +322,8 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
 
 arrayDecAsList
   ::
-    ( BodySym r bod
-    , IC.BlockSym r stmt
+    ( BodySym r bod block
+    , IC.BlockSym r block stmt
     , MultiStatement r stmt
     , IC.DeclStatement r stmt bod
     , IC.ControlStatement r stmt bod

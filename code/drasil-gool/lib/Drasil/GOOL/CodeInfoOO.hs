@@ -51,7 +51,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () GOOLState () () ()
+instance OOProg CodeInfoOO () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -76,14 +76,14 @@ instance AttachmentSym CodeInfoOO () where
   classLevel  = toCode ()
   instanceLevel = toCode ()
 
-instance BodySym CodeInfoOO () where
+instance BodySym CodeInfoOO () () where
   body b = do
     sequence_ b
     return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
   addComments _ _ = return $ return $ error "[addComments] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance BlockSym CodeInfoOO () where
+instance BlockSym CodeInfoOO () () where
   block b = do
     sequence_ b
     return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
@@ -287,7 +287,7 @@ instance Set CodeInfoOO where
   setRemove = execute2
   setUnion = execute2
 
-instance InternalList CodeInfoOO where
+instance InternalList CodeInfoOO () where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe (return $ error "[listSlice'] The return value of this isn't used, and the thunk shouldn't fire.")) [b,e,s]
     _ <- vl
@@ -437,7 +437,7 @@ instance ObserverPattern CodeInfoOO () where
     _ <- zoom lensMStoVS f
     return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance StrategyPattern CodeInfoOO () where
+instance StrategyPattern CodeInfoOO () () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe (return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl

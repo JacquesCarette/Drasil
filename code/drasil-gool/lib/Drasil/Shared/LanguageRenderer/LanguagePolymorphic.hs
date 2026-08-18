@@ -17,13 +17,12 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Block,
-  Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  bodyStatements, oneLiner, VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(valueType),
-  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  MultiStatement(multi), AssignStatement((&++)), (&=), TypeElim(..),
-  PrintConsole(printStr, printStrLn),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
+  SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall, bodyStatements,
+  oneLiner, VisibilitySym(..), VariableElim(variableName, variableType),
+  ValueSym(valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, MultiStatement(multi), AssignStatement((&++)), (&=),
+  TypeElim(..), PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
   VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
   VariableValue, BlockSym, BodySym)
@@ -79,7 +78,7 @@ block
   => [MS (r stmt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Block)] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
@@ -374,8 +373,8 @@ objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs
 
 printList
   ::
-    ( BlockSym r stmt
-    , BodySym r bod
+    ( BlockSym r block stmt
+    , BodySym r bod block
     , MultiStatement r stmt
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -404,8 +403,8 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
 
 printSet
   ::
-    ( BlockSym r stmt
-    , BodySym r bod
+    ( BlockSym r block stmt
+    , BodySym r bod block
     , MultiStatement r stmt
     , IC.ControlStatement r stmt bod
     , IC.VariableValue r
@@ -429,8 +428,8 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
   ::
-    ( BlockSym r stmt
-    , BodySym r bod
+    ( BlockSym r block stmt
+    , BodySym r bod block
     , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
@@ -556,14 +555,14 @@ method
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
@@ -574,8 +573,8 @@ initStmts
     ( VariableValue r
     , SelfSym r
     , AssignStatement r stmt
-    , BlockSym r stmt
-    , BodySym r bod
+    , BlockSym r block stmt
+    , BodySym r bod block
     )
   => Initializers r -> MS (r bod)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
@@ -626,8 +625,8 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 -- Files --
 
 fileDoc
-  :: (RC.BlockElim r, RenderMod r mod, RenderFile r file mod)
-  => String -> (r mod -> r Block) -> r Block -> FS (r mod) -> FS (r file)
+  :: (RC.BlockElim r block, RenderMod r mod, RenderFile r file mod)
+  => String -> (r mod -> r block) -> r block -> FS (r mod) -> FS (r file)
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName

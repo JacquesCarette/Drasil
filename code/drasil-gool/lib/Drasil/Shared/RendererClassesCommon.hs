@@ -12,11 +12,11 @@ module Drasil.Shared.RendererClassesCommon (
   MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Block, Variable, SVariable,
-  Value, SValue, MixedCall, TypeSym(..), VariableElim(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), ValueExpression(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), IndexTranslator(..), List(..), ListStatement, InternalList(..),
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value,
+  SValue, MixedCall, TypeSym(..), VariableElim(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  IndexTranslator(..), List(..), ListStatement, InternalList(..),
   AssignStatement(..), DeclStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
@@ -27,13 +27,13 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (BodySym r bod, BlockSym r stmt, AssignStatement r stmt,
+class (BodySym r bod block, BlockSym r block stmt, AssignStatement r stmt,
   DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
   CommentStatement r stmt, ControlStatement r stmt bod, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, IndexTranslator r, List r,
-  ListStatement r stmt, InternalList r, VariableElim r, BinderElim r,
-  RenderBlock r, BlockElim r, RenderBody r bod, BodyElim r bod,
+  ListStatement r stmt, InternalList r block, VariableElim r, BinderElim r,
+  RenderBlock r block, BlockElim r block, RenderBody r bod, BodyElim r bod,
   InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
   ParamElim r, RenderVisibility r vis, VisibilityElim r vis,
   InternalAssignStmt r stmt, InternalIOStmt r stmt, InternalControlStmt r stmt,
@@ -42,7 +42,7 @@ class (BodySym r bod, BlockSym r stmt, AssignStatement r stmt,
   ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
   BlockCommentElim r, ValueExpression r, RenderMethod r mthd, MethodElim r mthd,
   ParameterSym r, ScopeElim r
-  ) => CommonRenderSym r vis stmt mthd bod
+  ) => CommonRenderSym r vis stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -61,11 +61,11 @@ class RenderBody r bod | r -> bod where
 class BodyElim r bod | r -> bod where
   body :: r bod -> Doc
 
-class RenderBlock r where
-  multiBlock :: [MS (r Block)] -> MS (r Block)
+class RenderBlock r block | r -> block where
+  multiBlock :: [MS (r block)] -> MS (r block)
 
-class BlockElim r where
-  block :: r Block -> Doc
+class BlockElim r block | r -> block where
+  block :: r block -> Doc
 
 class RenderType r where
   multiType :: [VS (r TypeData)] -> VS (r TypeData)

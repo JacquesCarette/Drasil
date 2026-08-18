@@ -8,7 +8,7 @@ module Drasil.GOOL.LanguageRenderer.CppRenderer (
 import Drasil.FileHandling.Legacy (blank, indent, indentList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Variable,
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   SVariable, Value, SValue, NamedArgs, BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
@@ -136,7 +136,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body
+instance (Pair p) => OOProg (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData ModData Body Block
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
@@ -147,7 +147,7 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData wher
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
 
-instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) (Doc, Terminator) MethodData Body
+instance (Pair p) => CommonRenderSym (p CppSrcCode CppHdrCode) (Doc, VisibilityTag) (Doc, Terminator) MethodData Body Block
 
 instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
@@ -177,7 +177,7 @@ instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) AttachmentData where
   perm p = RC.perm $ pfst p
   binding p = binding $ pfst p
 
-instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) Body where
+instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) Body Block where
   body = pair1List body body
 
   addComments s = pair1 (addComments s) (addComments s)
@@ -188,13 +188,13 @@ instance (Pair p) => RenderBody (p CppSrcCode CppHdrCode) Body where
 instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) Body where
   body b = RC.body $ pfst b
 
-instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) (Doc, Terminator) where
+instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) Block (Doc, Terminator) where
   block = pair1List block block
 
-instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) Block where
   multiBlock = pair1List multiBlock multiBlock
 
-instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) where
+instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) Block where
   block b = RC.block $ pfst b
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
@@ -459,7 +459,7 @@ instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
   setRemove = pair2 setRemove setRemove
   setUnion = pair2 setUnion setUnion
 
-instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) Block where
   listSlice' b e s vr vl = pair2
     (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e)
       (fmap (onStateValue pfst) s))
@@ -661,7 +661,7 @@ instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) (Doc, Terminator)
   notifyObservers f t = pair2 notifyObservers notifyObservers
     (zoom lensMStoVS f) (zoom lensMStoVS t)
 
-instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) Body where
+instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) Body Block where
   -- How I handle values with both State and Maybe might cause problems later on,
   -- because it will make the state transitions run twice for the value in the
   -- Maybe. For now, given what we store in the State for Values/Variables, this
@@ -1027,8 +1027,8 @@ instance Monad CppSrcCode where
 instance ProgramSym CppSrcCode ProgData FileData where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 
-instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData Body
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body
+instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData Body Block
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
@@ -1062,7 +1062,7 @@ instance PermElim CppSrcCode AttachmentData where
   perm = attachmentDoc . unCPPSC
   binding = attachment . unCPPSC
 
-instance BodySym CppSrcCode Body where
+instance BodySym CppSrcCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -1073,13 +1073,13 @@ instance RenderBody CppSrcCode Body where
 instance BodyElim CppSrcCode Body where
   body = unCPPSC
 
-instance BlockSym CppSrcCode (Doc, Terminator) where
+instance BlockSym CppSrcCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock CppSrcCode where
+instance RenderBlock CppSrcCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim CppSrcCode where
+instance BlockElim CppSrcCode Block where
   block = unCPPSC
 
 instance TypeSym CppSrcCode where
@@ -1401,7 +1401,7 @@ instance Set CppSrcCode where
   setRemove = CP.setMethodCall cppListRemove
   setUnion = error "not done yet"
 
-instance InternalList CppSrcCode where
+instance InternalList CppSrcCode Block where
   listSlice' = M.listSlice
 
 instance InternalGetSet CppSrcCode where
@@ -1594,7 +1594,7 @@ instance ControlStatement CppSrcCode (Doc, Terminator) Body where
 instance ObserverPattern CppSrcCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CppSrcCode Body where
+instance StrategyPattern CppSrcCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CppSrcCode (Doc, VisibilityTag) where
@@ -1751,8 +1751,8 @@ instance Applicative CppHdrCode where
 instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
-instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData Body
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body
+instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData Body Block
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData ModData Body Block
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
@@ -1785,7 +1785,7 @@ instance PermElim CppHdrCode AttachmentData where
   perm = attachmentDoc . unCPPHC
   binding = attachment . unCPPHC
 
-instance BodySym CppHdrCode Body where
+instance BodySym CppHdrCode Body Block where
   body _ = toState $ toCode empty
 
   addComments _ _ = toState $ toCode empty
@@ -1796,13 +1796,13 @@ instance RenderBody CppHdrCode Body where
 instance BodyElim CppHdrCode Body where
   body = unCPPHC
 
-instance BlockSym CppHdrCode (Doc, Terminator) where
+instance BlockSym CppHdrCode Block (Doc, Terminator) where
   block _ = toState $ toCode empty
 
-instance RenderBlock CppHdrCode where
+instance RenderBlock CppHdrCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim CppHdrCode where
+instance BlockElim CppHdrCode Block where
   block = unCPPHC
 
 instance TypeSym CppHdrCode where
@@ -2070,7 +2070,7 @@ instance Set CppHdrCode where
   setRemove _ _ = mkStateVal void empty
   setUnion _ _ = mkStateVal void empty
 
-instance InternalList CppHdrCode where
+instance InternalList CppHdrCode Block where
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
 instance InternalGetSet CppHdrCode where
@@ -2223,7 +2223,7 @@ instance ControlStatement CppHdrCode (Doc, Terminator) Body where
 instance ObserverPattern CppHdrCode (Doc, Terminator) where
   notifyObservers _ _ = emptyStmt
 
-instance StrategyPattern CppHdrCode Body where
+instance StrategyPattern CppHdrCode Body Block where
   runStrategy _ _ _ _ = toState $ toCode empty
 
 instance VisibilitySym CppHdrCode (Doc, VisibilityTag) where

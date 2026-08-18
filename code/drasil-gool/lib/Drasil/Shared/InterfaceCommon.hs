@@ -46,27 +46,29 @@ type Body = Doc
 
 -- | Class for representing a `Body`, which is basically a lexical scope of code.
 -- Examples include a function body, the branch(es) of an `if`-statement, etc.
-class BodySym r bod | r -> bod where
-  -- | Given a list of `Block`s, create a `Body` of them.
-  body           :: [MS (r Block)] -> MS (r bod)
+class BodySym r  bod block | r -> bod block where
+  -- | Given a list of `block`s, create a `Body` of them.
+  body           :: [MS (r block)] -> MS (r bod)
   -- | Given a comment and a body, add the comment as a header for the body.
   addComments :: Label -> MS (r bod) -> MS (r bod)
 
-bodyStatements :: (BlockSym r stmt, BodySym r bod) => [MS (r stmt)] -> MS (r bod)
+bodyStatements
+  :: (BlockSym r block stmt, BodySym r bod block) => [MS (r stmt)] -> MS (r bod)
 bodyStatements sts = body [block sts]
 
-oneLiner :: (BlockSym r stmt, BodySym r bod) => MS (r stmt) -> MS (r bod)
+oneLiner
+  :: (BlockSym r block stmt, BodySym r bod block) => MS (r stmt) -> MS (r bod)
 oneLiner tp = bodyStatements [tp]
 
 type Block = Doc
 
--- | Class for representing a `Block` of code.
--- A `Block` is a series of statements grouped together,
+-- | Class for representing a `block` of code.
+-- A `block` is a series of statements grouped together,
 -- not for use by the compiler/interpreter
 -- but to improve readability of the generated code.
 -- See the bottom of page 2 of Brook's GOOL paper from 2020 for more details.
-class BlockSym r stmt | r -> stmt where
-  block   :: [MS (r stmt)] -> MS (r Block)
+class BlockSym r block stmt | r -> block stmt where
+  block   :: [MS (r stmt)] -> MS (r block)
 
 -- | Class for representing a type.
 class TypeSym r where
@@ -384,9 +386,9 @@ class (IndexTranslator r, Literal r) => NativeVector r where
   --   Argument is: Vector
   vecUnit :: SValue r -> SValue r
 
-class (ValueSym r) => InternalList r where
+class (ValueSym r) => InternalList r block | r -> block where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r)
-    -> SVariable r -> SValue r -> MS (r Block)
+    -> SVariable r -> SValue r -> MS (r block)
 
 -- | Creates a slice of a list and assigns it to a variable.
 --   Arguments are:
@@ -397,8 +399,8 @@ class (ValueSym r) => InternalList r where
 --   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
 --   (optional) Step (if Nothing, then defaults to 1)
-listSlice :: (InternalList r) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r Block)
+listSlice :: (InternalList r block) => SVariable r -> SValue r ->
+  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
 
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
@@ -540,7 +542,7 @@ class (VariableSym r) => ControlStatement r stmt bod | r -> stmt bod where
   assert :: SValue r -> SValue r -> MS (r stmt)
 
 ifNoElse
-  :: (BodySym r bod, ControlStatement r stmt bod)
+  :: (BodySym r bod block, ControlStatement r stmt bod)
   => [(SValue r, MS (r bod))] -> MS (r stmt)
 ifNoElse bs = ifCond bs $ body []
 

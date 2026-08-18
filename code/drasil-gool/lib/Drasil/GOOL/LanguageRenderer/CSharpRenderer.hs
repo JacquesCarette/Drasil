@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
-  SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
+  Value, SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -128,7 +128,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -136,8 +136,8 @@ instance ProgramSym CSharpCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData Body
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body
+instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
@@ -169,7 +169,7 @@ instance PermElim CSharpCode Doc where
   perm = unCSC
   binding = error $ CP.bindingError csName
 
-instance BodySym CSharpCode Body where
+instance BodySym CSharpCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -180,13 +180,13 @@ instance RenderBody CSharpCode Body where
 instance BodyElim CSharpCode Body where
   body = unCSC
 
-instance BlockSym CSharpCode (Doc, Terminator) where
+instance BlockSym CSharpCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock CSharpCode where
+instance RenderBlock CSharpCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim CSharpCode where
+instance BlockElim CSharpCode Block where
   block = unCSC
 
 instance TypeSym CSharpCode where
@@ -451,7 +451,7 @@ instance Set CSharpCode where
   setRemove = CP.setMethodCall csListRemove
   setUnion = CP.setMethodCall csUnionWith
 
-instance InternalList CSharpCode where
+instance InternalList CSharpCode Block where
   listSlice' = M.listSlice
 
 instance InternalGetSet CSharpCode where
@@ -609,7 +609,7 @@ instance ControlStatement CSharpCode (Doc, Terminator) Body where
 instance ObserverPattern CSharpCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CSharpCode Body where
+instance StrategyPattern CSharpCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CSharpCode Doc where
@@ -939,8 +939,8 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
 
 csPrint
   ::
-    ( BodySym r bod
-    , BlockSym r stmt
+    ( BodySym r bod block
+    , BlockSym r block stmt
     , Comparison r
     , Literal r
     , NumericExpression r

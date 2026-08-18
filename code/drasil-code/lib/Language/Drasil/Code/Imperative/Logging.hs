@@ -9,7 +9,7 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, Block, SVariable, SValue, MS, BodySym(..),
+import Drasil.GOOL (Label, block, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
   VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
   PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
@@ -26,11 +26,11 @@ logBody
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BlockSym r stmt
-    , BodySym r bod
+    , BlockSym r block stmt
+    , BodySym r bod block
     , VariableElim r
     )
-  => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r bod))
+  => Label -> [SVariable r] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
   return $ body $
@@ -48,10 +48,10 @@ loggedMethod
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BlockSym r stmt
+    , BlockSym r block stmt
     , VariableElim r
     )
-  => FilePath -> Label -> [SVariable r] -> MS (r Block)
+  => FilePath -> Label -> [SVariable r] -> MS (r block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),

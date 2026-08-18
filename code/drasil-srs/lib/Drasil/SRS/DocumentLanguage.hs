@@ -164,7 +164,7 @@ mkSections si dd mbib = map (either renderRefSec id) partialRender
     render (IntroSec is)        = mkIntroSec si is
     render (StkhldrSec sts)     = mkStkhldrSec sts
     render (SSDSec ss)          = mkSSDSec si ss
-    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render (AuxConstntSec acs)  = mkAuxConsSec (si ^. sysName) acs
     render Bibliography         = mkBib $ fromMaybe [] mbib
     render (GSDSec gs')         = mkGSDSec gs'
     render (ReqrmntSec r)       = mkReqrmntSec r
@@ -384,8 +384,8 @@ mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 -- ** Auxiliary Constants
 
 -- | Helper for making the Values of Auxiliary Constants section.
-mkAuxConsSec :: AuxConstntSec -> Section
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
+mkAuxConsSec :: Idea c => c -> AuxConstntSec -> Section
+mkAuxConsSec c (AuxConsProg listOfCons) = AC.valsOfAuxConstantsF c $ sortBySymbol listOfCons
 
 -- ** References
 

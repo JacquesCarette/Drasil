@@ -105,7 +105,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName [],
+  AuxConstntSec $ AuxConsProg [],
   Bibliography]
 
 purp :: Sentence

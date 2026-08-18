@@ -137,10 +137,9 @@ hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
-  (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData
+  (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData FileData
 
-instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData where
+instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) ProgData FileData where
   prog n st mods = do
     m <-  mapM (zoom lensGStoFS) mods
     let fm = map pfst m
@@ -156,12 +155,12 @@ instance (Pair p) => UnRepr (p CppSrcCode CppHdrCode) contents where
   unRepr c = unCPPSC $ pfst c
 
 instance (Pair p) => FileSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
+    (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData where
   fileDoc = pair1 fileDoc fileDoc
 
   docMod d wm a dt = pair1 (docMod d wm a dt) (docMod d wm a dt)
 
-instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) FileData where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
 
@@ -1032,23 +1031,23 @@ instance Applicative CppSrcCode where
 instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
-instance ProgramSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData ProgData where
+instance ProgramSym CppSrcCode ProgData FileData where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 
 instance CommonRenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData
+instance OORenderSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData
 
 instance UnRepr CppSrcCode contents where
   unRepr = unCPPSC
 
-instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
+instance FileSym CppSrcCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData where
   fileDoc m = do
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
 
   docMod = CP.doxMod cppSrcExt
 
-instance RenderFile CppSrcCode where
+instance RenderFile CppSrcCode FileData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -1760,19 +1759,19 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance CommonRenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData
-instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData
+instance OORenderSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData
 
 instance UnRepr CppHdrCode contents where
   unRepr = unCPPHC
 
-instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData where
+instance FileSym CppHdrCode (Doc, VisibilityTag) (Doc, Terminator) MethodData StateVarData AttachmentData FileData where
   fileDoc m = do
     modify (setFileType Header)
     G.fileDoc cppHdrExt top bottom m
 
   docMod = CP.doxMod cppHdrExt
 
-instance RenderFile CppHdrCode where
+instance RenderFile CppHdrCode FileData where
   top = onCodeValue cpphtop
   bottom = toCode endif
 

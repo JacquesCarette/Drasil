@@ -1,9 +1,9 @@
 -- | re-export smart constructors for external code writing
-module Drasil.GOOL (Label, GSProgram, File, Body, Block, CS, FS, MS, VS,
-  SVariable, SValue, CSStateVar, Class, Module, NamedArgs, Initializers,
-  OOProg, ProgramSym(..), FileSym(..), AttachmentSym(..), BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..),
-  BinderSym(..), EmptyStatement(..), MultiStatement(..), ValueStatement(..),
+module Drasil.GOOL (Label, GSProgram, Body, Block, CS, FS, MS, VS, SVariable,
+  SValue, CSStateVar, Class, Module, NamedArgs, Initializers, OOProg,
+  ProgramSym(..), FileSym(..), AttachmentSym(..), BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), BinderSym(..),
+  EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
   objDecNewNoParams, extObjDecNewNoParams, PrintConsole(..), ReadConsole(..),
   FileHandling(..), PrintFile(..), ReadFile(..), StringStatement(..),
@@ -49,7 +49,7 @@ import Drasil.Shared.InterfaceCommon (Label, Body, Block, SVariable, SValue,
   VisibilitySym(..), convType,
   -- TODO [Brandon Bosman, 06/09/2026]: Remove these imports
   TypeElim(..), getTypeString)
-import Drasil.GOOL.InterfaceGOOL (GSProgram, File, Module, Class, CSStateVar,
+import Drasil.GOOL.InterfaceGOOL (GSProgram, Module, Class, CSStateVar,
   Initializers, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
   instanceVarSelf, ($->), AttachmentSym(..), privMethod, pubMethod, initializer,

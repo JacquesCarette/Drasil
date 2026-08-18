@@ -1,7 +1,7 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module GOOL.Observer (observer, observerName, printNum, x) where
 
-import Drasil.GOOL (File, SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
+import Drasil.GOOL (SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
   AttachmentSym(..), oneLiner, TypeSym(..), PrintConsole(..), VariableSym(..),
   SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..), OOVariableValue,
   VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
@@ -17,7 +17,7 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis stmt mthd stvr attch prg) => FS (r File)
+observer :: (OOProg r vis stmt mthd stvr attch prg file) => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 

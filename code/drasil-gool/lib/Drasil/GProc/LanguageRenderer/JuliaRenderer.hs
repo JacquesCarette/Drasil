@@ -79,7 +79,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
 import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
   ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
   ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
-  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD)
+  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
@@ -108,27 +108,27 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
+instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
-instance FileSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance FileSym JuliaCode Doc (Doc, Terminator) MethodData FileData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m
   docMod = A.docMod jlExt
 
-instance RenderFile JuliaCode where
+instance RenderFile JuliaCode FileData where
   top _ = toCode empty
   bottom = toCode empty
 

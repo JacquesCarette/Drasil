@@ -129,7 +129,7 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
@@ -137,19 +137,19 @@ instance ProgramSym JavaCode ProgData FileData where
     endStatement)))
 
 instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
 
-instance FileSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
+instance FileSym JavaCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
 
   docMod = CP.doxMod jExt
 
-instance RenderFile JavaCode FileData where
+instance RenderFile JavaCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -733,14 +733,14 @@ instance RenderClass JavaCode Doc MethodData StateVar where
 instance ClassElim JavaCode where
   class' = unJC
 
-instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
   buildModule n = CP.buildModule' n langImport
 
-instance RenderMod JavaCode where
+instance RenderMod JavaCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim JavaCode where
+instance ModuleElim JavaCode ModData where
   module' = modDoc . unJC
 
 instance BlockCommentSym JavaCode where

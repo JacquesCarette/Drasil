@@ -47,7 +47,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
     genCall
       ::
-        ( OOProg progRepr vis stmt mthd stvr attch prg file
+        ( OOProg progRepr vis stmt mthd stvr attch prg file mod
         , SoftwareDossierSym packRepr
         , Monad packRepr
         )
@@ -64,7 +64,7 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
 
     genCallProc
       ::
-        ( ProcProg progRepr vis stmt mthd prg file
+        ( ProcProg progRepr vis stmt mthd prg file mod
         , NativeVector progRepr
         , SoftwareDossierSym packRepr
         , Monad packRepr

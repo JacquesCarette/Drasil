@@ -128,7 +128,7 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData
 
 instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
@@ -137,19 +137,19 @@ instance ProgramSym CSharpCode ProgData FileData where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData where
+instance FileSym CSharpCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
 
   docMod = CP.doxMod csExt
 
-instance RenderFile CSharpCode FileData where
+instance RenderFile CSharpCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -704,14 +704,14 @@ instance RenderClass CSharpCode Doc MethodData StateVar where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
   buildModule n = CP.buildModule' n langImport
 
-instance RenderMod CSharpCode where
+instance RenderMod CSharpCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim CSharpCode where
+instance ModuleElim CSharpCode ModData where
   module' = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where

@@ -119,7 +119,7 @@ generator l dt sd chs cs = let
 
 data SomeProgGenerator where
   SomeProgGenerator
-    :: forall repr vis stmt mthd stvr attch prg file. (OOProg repr vis stmt mthd stvr attch prg file)
+    :: forall repr vis stmt mthd stvr attch prg file mod. (OOProg repr vis stmt mthd stvr attch prg file mod)
     => (repr prg -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
@@ -177,7 +177,7 @@ insertFile (p, d) m =
 -- used by the language renderer.
 genPackage
   ::
-    ( OOProg progRepr vis stmt mthd stvr attch prg file
+    ( OOProg progRepr vis stmt mthd stvr attch prg file mod
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -222,7 +222,7 @@ genPackage unRepr = do
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgram
-  :: (OOProg r vis stmt mthd stvr attch prg file)
+  :: (OOProg r vis stmt mthd stvr attch prg file mod)
   => GenState (OO.GSProgram r prg)
 genProgram = do
   g <- get
@@ -235,14 +235,14 @@ genProgram = do
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModules
-  :: (OOProg r vis stmt mthd stvr attch prg file)
+  :: (OOProg r vis stmt mthd stvr attch prg file mod)
   => Modularity -> GenState [FS (r file)]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
 genUnmodular
-  :: (OOProg r vis stmt mthd stvr attch prg file) => GenState (FS (r file))
+  :: (OOProg r vis stmt mthd stvr attch prg file mod) => GenState (FS (r file))
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -262,7 +262,7 @@ genUnmodular = do
 
 -- | Generates all modules for an SCS program.
 genModules
-  :: (OOProg r vis stmt mthd stvr attch prg file) => GenState [FS (r file)]
+  :: (OOProg r vis stmt mthd stvr attch prg file mod) => GenState [FS (r file)]
 genModules = do
   g <- get
   mn     <- genMain
@@ -281,7 +281,7 @@ genModules = do
 generateCodeProc
   ::
     ( NativeVector progRepr
-    , ProcProg progRepr vis stmt mthd prg file
+    , ProcProg progRepr vis stmt mthd prg file mod
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -312,7 +312,7 @@ generateCodeProc l unReprProg unReprPack g =
 genPackageProc
   ::
     ( NativeVector progRepr
-    , ProcProg progRepr vis stmt mthd prg file
+    , ProcProg progRepr vis stmt mthd prg file mod
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -354,7 +354,7 @@ genPackageProc unRepr = do
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgramProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg file)
+  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod)
   => GenState (Proc.GSProgram r prg)
 genProgramProc = do
   g <- get
@@ -366,14 +366,14 @@ genProgramProc = do
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModulesProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg file)
+  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod)
   => Modularity -> GenState [FS (r file)]
 chooseModulesProc Unmodular = liftS genUnmodularProc
 chooseModulesProc Modular = genModulesProc
 
 -- | Generates an entire SCS program as a single module.
 genUnmodularProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg file)
+  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod)
   => GenState (FS (r file))
 genUnmodularProc = do
   g <- get
@@ -393,7 +393,7 @@ genUnmodularProc = do
 
 -- | Generates all modules for an SCS program.
 genModulesProc
-  :: ( NativeVector r, ProcProg r vis stmt mthd prg file)
+  :: ( NativeVector r, ProcProg r vis stmt mthd prg file mod)
   => GenState [FS (r file)]
 genModulesProc = do
   g <- get

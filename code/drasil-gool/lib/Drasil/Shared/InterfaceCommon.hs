@@ -46,16 +46,16 @@ type Body = Doc
 
 -- | Class for representing a `Body`, which is basically a lexical scope of code.
 -- Examples include a function body, the branch(es) of an `if`-statement, etc.
-class (BlockSym r stmt) => BodySym r stmt bod | r -> bod where
+class BodySym r bod | r -> bod where
   -- | Given a list of `Block`s, create a `Body` of them.
   body           :: [MS (r Block)] -> MS (r bod)
   -- | Given a comment and a body, add the comment as a header for the body.
   addComments :: Label -> MS (r bod) -> MS (r bod)
 
-bodyStatements :: (BodySym r stmt bod) => [MS (r stmt)] -> MS (r bod)
+bodyStatements :: (BlockSym r stmt, BodySym r bod) => [MS (r stmt)] -> MS (r bod)
 bodyStatements sts = body [block sts]
 
-oneLiner :: (BodySym r stmt bod) => MS (r stmt) -> MS (r bod)
+oneLiner :: (BlockSym r stmt, BodySym r bod) => MS (r stmt) -> MS (r bod)
 oneLiner tp = bodyStatements [tp]
 
 type Block = Doc
@@ -540,7 +540,7 @@ class (VariableSym r) => ControlStatement r stmt bod | r -> stmt bod where
   assert :: SValue r -> SValue r -> MS (r stmt)
 
 ifNoElse
-  :: (BodySym r stmt bod, ControlStatement r stmt bod)
+  :: (BodySym r bod, ControlStatement r stmt bod)
   => [(SValue r, MS (r bod))] -> MS (r stmt)
 ifNoElse bs = ifCond bs $ body []
 

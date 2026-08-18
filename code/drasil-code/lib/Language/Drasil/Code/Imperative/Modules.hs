@@ -385,7 +385,8 @@ genInputConstraints s = do
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -415,7 +416,8 @@ sfwrCBody cs = do
 -- | Generates input constraints code block for checking physical constraints.
 physCBody
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -446,7 +448,8 @@ physCBody cs = do
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -504,7 +507,8 @@ constrWarn
     , Reference r
     , Set r
     , PrintConsole r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , TypeElim r
     , VariableElim r
     )
@@ -520,7 +524,8 @@ constrWarn c = do
 -- followed by throwing an exception.
 constrExc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -806,7 +811,8 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlock
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -838,7 +844,8 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -933,7 +940,8 @@ genMainProc = genModuleProc "Control" "Controls the flow of the program"
 -- Returns Nothing if the user chose to generate a library.
 genMainFuncProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , CommandLineArgs r
     , MathConstant r
     , VariableValue r
@@ -1103,7 +1111,8 @@ genCalcModProc = do
 -- generate code is found by looking it up in the external library map.
 genCalcFuncProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , VariableValue r
@@ -1163,7 +1172,8 @@ genCalcFuncProc cdef = do
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
 genCalcBlockProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , VariableValue r
@@ -1198,7 +1208,8 @@ genCalcBlockProc CalcReturn _ e = block <$> liftS (returnStmt <$> convExprProc e
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlockProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , VariableValue r
@@ -1241,7 +1252,8 @@ genCaseBlockProc t v c cs = do
 -- | | Generates a function for reading inputs from a file.
 genInputFormatProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , VariableValue r
@@ -1275,7 +1287,8 @@ genInputFormatProc s = do
       getFunc Priv = privateInOutFuncProc
       genInFormat
         ::
-          ( BodySym r stmt bod
+          ( BlockSym r stmt
+          , BodySym r bod
           , NativeVector r
           , MathConstant r
           , VariableValue r
@@ -1313,7 +1326,8 @@ genInputFormatProc s = do
 -- | Generates a function for calculating derived inputs.
 genInputDerivedProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , VariableValue r
@@ -1348,7 +1362,8 @@ genInputDerivedProc s = do
       getFunc Priv = privateInOutFuncProc
       genDerived
         ::
-          ( BodySym r stmt bod
+          ( BlockSym r stmt
+          , BodySym r bod
           , NativeVector r
           , MathConstant r
           , VariableValue r
@@ -1387,7 +1402,8 @@ genInputDerivedProc s = do
 -- | Generates function that checks constraints on the input.
 genInputConstraintsProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1420,7 +1436,8 @@ genInputConstraintsProc s = do
       getFunc Priv = privateFuncProc
       genConstraints
         ::
-          ( BodySym r stmt bod
+          ( BlockSym r stmt
+          , BodySym r bod
           , MathConstant r
           , VariableValue r
           , BooleanExpression r
@@ -1461,7 +1478,8 @@ genInputConstraintsProc s = do
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBodyProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1488,7 +1506,8 @@ sfwrCBodyProc cs = do
 -- | Generates input constraints code block for checking physical constraints.
 physCBodyProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1516,7 +1535,8 @@ physCBodyProc cs = do
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstrProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1565,7 +1585,8 @@ constrWarnProc
     , Set r
     , List r
     , PrintConsole r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , TypeElim r
     )
   => (CodeVarChunk, [ConstraintCE]) -> GenState [MS (r bod)]
@@ -1580,7 +1601,8 @@ constrWarnProc c = do
 -- followed by throwing an exception.
 constrExcProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1724,7 +1746,8 @@ genOutputModProc = do
 -- | Generates a function for printing output values.
 genOutputFormatProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , VariableValue r
@@ -1752,7 +1775,8 @@ genOutputFormatProc = do
   woName <- genICName WriteOutput
   let genOutput
         ::
-          ( BodySym r stmt bod
+          ( BlockSym r stmt
+          , BodySym r bod
           , NativeVector r
           , MathConstant r
           , VariableValue r
@@ -1797,7 +1821,8 @@ genOutputFormatProc = do
 
 writeOutputValue
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , Comparison r

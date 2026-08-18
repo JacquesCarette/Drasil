@@ -22,7 +22,8 @@ nameGenTestProc = GProc.prog "NameGenTest" "" [GProc.fileDoc $ GProc.buildModule
 
 helper
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , Comparison r
@@ -43,7 +44,8 @@ helper = function "helper" private void [param temp] $ body
 
 main
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , Comparison r

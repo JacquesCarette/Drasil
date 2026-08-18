@@ -76,7 +76,7 @@ instance AttachmentSym CodeInfoOO () where
   classLevel  = toCode ()
   instanceLevel = toCode ()
 
-instance BodySym CodeInfoOO () () where
+instance BodySym CodeInfoOO () where
   body b = do
     sequence_ b
     return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."

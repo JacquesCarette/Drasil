@@ -29,7 +29,8 @@ fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
 fileTestMethod
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , Comparison r

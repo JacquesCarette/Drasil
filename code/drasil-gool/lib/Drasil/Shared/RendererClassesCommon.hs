@@ -19,7 +19,7 @@ import Drasil.Shared.InterfaceCommon (Label, Library, Block, Variable, SVariable
   Comparison(..), IndexTranslator(..), List(..), ListStatement, InternalList(..),
   AssignStatement(..), DeclStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ParameterSym(..), BinderElim(..), UnRepr(..), BodySym)
+  ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -27,14 +27,15 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (BodySym r stmt bod, AssignStatement r stmt, DeclStatement r stmt bod,
-  StringStatement r stmt, FuncAppStatement r stmt, CommentStatement r stmt,
-  ControlStatement r stmt bod, Argument r, Literal r, MathConstant r,
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, IndexTranslator r, List r, ListStatement r stmt, InternalList r,
-  VariableElim r, BinderElim r, RenderBlock r, BlockElim r, RenderBody r bod,
-  BodyElim r bod, InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r,
-  RenderParam r, ParamElim r, RenderVisibility r vis, VisibilityElim r vis,
+class (BodySym r bod, BlockSym r stmt, AssignStatement r stmt,
+  DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
+  CommentStatement r stmt, ControlStatement r stmt bod, Argument r, Literal r,
+  MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
+  BooleanExpression r, Comparison r, IndexTranslator r, List r,
+  ListStatement r stmt, InternalList r, VariableElim r, BinderElim r,
+  RenderBlock r, BlockElim r, RenderBody r bod, BodyElim r bod,
+  InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
+  ParamElim r, RenderVisibility r vis, VisibilityElim r vis,
   InternalAssignStmt r stmt, InternalIOStmt r stmt, InternalControlStmt r stmt,
   RenderStatement r stmt, StatementElim r stmt, RenderType r, RenderValue r,
   ValueElim r, RenderVariable r, InternalVarElim r, InternalBinderElim r,

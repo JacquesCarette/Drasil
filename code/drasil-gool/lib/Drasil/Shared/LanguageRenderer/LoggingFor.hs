@@ -296,7 +296,7 @@ instance (Comparison r) => Comparison (LoggingFor r) where
 instance (BlockSym r stmt) => BlockSym (LoggingFor r) stmt where
   block = liftLogging block
 
-instance (BodySym r stmt bod) => BodySym (LoggingFor r) stmt bod where
+instance (BodySym r bod) => BodySym (LoggingFor r) bod where
   body = liftLogging body
   addComments = liftLogging addComments
 

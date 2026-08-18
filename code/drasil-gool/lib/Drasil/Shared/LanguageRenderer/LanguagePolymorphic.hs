@@ -1,5 +1,4 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Redundant return" #-}
+{-e# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
@@ -27,7 +26,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Block,
   PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
   VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
-  VariableValue, BodySym)
+  VariableValue, BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
   objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
@@ -375,7 +374,8 @@ objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs
 
 printList
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MultiStatement r stmt
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -404,7 +404,8 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
 
 printSet
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MultiStatement r stmt
     , IC.ControlStatement r stmt bod
     , IC.VariableValue r
@@ -428,7 +429,8 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
@@ -568,7 +570,13 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
 initStmts
-  :: (VariableValue r, SelfSym r, AssignStatement r stmt, BodySym r stmt bod)
+  ::
+    ( VariableValue r
+    , SelfSym r
+    , AssignStatement r stmt
+    , BlockSym r stmt
+    , BodySym r bod
+    )
   => Initializers r -> MS (r bod)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 

@@ -314,7 +314,8 @@ helloIfBody
     , AssignStatement r stmt
     , PrintConsole r stmt
     , ReadConsole r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     )
   => MS (r bod)
 helloIfBody = addComments "If body" (body [
@@ -385,14 +386,15 @@ helloIfBody = addComments "If body" (body [
 
 -- | Print the 5th given argument.
 helloElseBody
-  :: (CommandLineArgs r, PrintConsole r stmt, BodySym r stmt bod)
+  :: (CommandLineArgs r, PrintConsole r stmt, BlockSym r stmt, BodySym r bod)
   => MS (r bod)
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
 helloIfExists
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , VariableValue r
     , ControlStatement r stmt bod
     , PrintConsole r stmt
@@ -404,7 +406,8 @@ helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
 -- | Creates a switch statement.
 helloSwitch
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , AssignStatement r stmt
@@ -418,7 +421,8 @@ helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &
 -- | Creates a for loop.
 helloForLoop
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , ControlStatement r stmt bod
@@ -432,7 +436,8 @@ helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
 -- | Creates a while loop.
 helloWhileLoop
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , Comparison r
@@ -447,7 +452,8 @@ helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
 -- | Creates a for-each loop.
 helloForEachLoop
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Literal r
     , VariableValue r
     , ValueExpression r
@@ -462,7 +468,12 @@ helloForEachLoop = forEach i (valueOf myOtherList)
 
 -- | Creates a try statement to catch an intentional error.
 helloTryCatch
-  :: (BodySym r stmt bod, ControlStatement r stmt bod, PrintConsole r stmt)
+  ::
+    ( BlockSym r stmt
+    , BodySym r bod
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    )
   => MS (r stmt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))

@@ -80,7 +80,8 @@ runStrategy l strats rv av = maybe
 
 listSlice
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , IC.BlockSym r stmt
     , EmptyStatement r stmt
     , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -209,7 +210,8 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
 
 stringListLists
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , IC.BlockSym r stmt
     , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
@@ -277,14 +279,16 @@ notify
     , VariableValue r
     , List r
     , OOFunctionSym r
-    , BodySym r stmt bod
+    , BodySym r bod
+    , IC.BlockSym r stmt
     )
   => VS (r TypeData) -> VS (r FuncData) -> MS (r bod)
 notify t f = oneLiner $ valStmt $ at (obsList t) observerIdxVal $. f
 
 notifyObservers
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , IC.BlockSym r stmt
     , Literal r
     , VariableValue r
     , Comparison r
@@ -302,7 +306,8 @@ notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
 
 notifyObservers'
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , IC.BlockSym r stmt
     , ValueStatement r stmt
     , Literal r
     , VariableValue r
@@ -317,7 +322,8 @@ notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t 
 
 arrayDecAsList
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , IC.BlockSym r stmt
     , MultiStatement r stmt
     , IC.DeclStatement r stmt bod
     , IC.ControlStatement r stmt bod

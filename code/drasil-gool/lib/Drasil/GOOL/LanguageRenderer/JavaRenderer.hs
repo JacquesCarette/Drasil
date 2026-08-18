@@ -169,7 +169,7 @@ instance PermElim JavaCode Doc where
   perm = unJC
   binding = error $ CP.bindingError jName
 
-instance BodySym JavaCode (Doc, Terminator) Body where
+instance BodySym JavaCode Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -977,7 +977,8 @@ jAssert condition errorMessage = vcat [
 
 jOut
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , BlockSym r stmt
     , Literal r
     , Comparison r
     , NumericExpression r

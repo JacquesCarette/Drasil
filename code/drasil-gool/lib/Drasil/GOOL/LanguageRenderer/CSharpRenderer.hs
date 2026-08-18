@@ -169,7 +169,7 @@ instance PermElim CSharpCode Doc where
   perm = unCSC
   binding = error $ CP.bindingError csName
 
-instance BodySym CSharpCode (Doc, Terminator) Body where
+instance BodySym CSharpCode Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -939,7 +939,8 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
 
 csPrint
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , BlockSym r stmt
     , Comparison r
     , Literal r
     , NumericExpression r

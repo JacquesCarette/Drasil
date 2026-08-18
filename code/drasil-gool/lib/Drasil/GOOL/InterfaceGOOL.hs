@@ -25,15 +25,15 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, Block, SVariable, SValue, NamedArgs, MixedCtorCall, PosCall,
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
-  ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
-  List(listSize), ListStatement(listAdd), listOf, EmptyStatement, MultiStatement,
-  ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
-  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
-  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
-  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
-  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
-  BinderSym, InternalList, TypeElim, VariableElim)
+  BodySym(body), BlockSym, TypeSym(..), FunctionSym, MethodSym(..),
+  VariableSym(var), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
+  Array, List(listSize), ListStatement(listAdd), listOf, EmptyStatement,
+  MultiStatement, ValueStatement, AssignStatement, DeclStatement(listDecDef),
+  FuncAppStatement, VisibilitySym(..), Argument, BooleanExpression,
+  CommandLineArgs, CommentStatement, Comparison, ControlStatement, PrintConsole,
+  ReadConsole, FileHandling, PrintFile, ReadFile, Literal, MathConstant,
+  NumericExpression, ParameterSym, Reference, Set, StringStatement, convType,
+  UnRepr, ScopeSym, BinderSym, InternalList, TypeElim, VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -44,12 +44,12 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (UnRepr r TypeData, Argument r, BodySym r stmt bod, CommandLineArgs r,
-  Literal r, MathConstant r, OOVariableValue r, BooleanExpression r,
-  Comparison r, NumericExpression r, InternalValueExp r, OOValueExpression r,
-  Array r, List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
-  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
+class (UnRepr r TypeData, Argument r, BodySym r bod, BlockSym r stmt,
+  CommandLineArgs r, Literal r, MathConstant r, OOVariableValue r,
+  BooleanExpression r, Comparison r, NumericExpression r, InternalValueExp r,
+  OOValueExpression r, Array r, List r, ListStatement r stmt, Reference r, Set r,
+  OOFunctionSym r, ParameterSym r, VariableValue r, ScopeSym r, BinderSym r,
+  InternalList r, MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
   ClassSym r vis mthd stvr attch, TypeElim r, VariableElim r,
   EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
   CommentStatement r stmt, OODeclStatement r stmt bod, AssignStatement r stmt,
@@ -129,7 +129,7 @@ pubMethod
 pubMethod n = method n public instanceLevel
 
 initializer
-  :: (OOMethodSym r vis mthd attch bod, BodySym r stmt bod)
+  :: (OOMethodSym r vis mthd attch bod, BodySym r bod)
   => [MS (r ParamData)] -> Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 

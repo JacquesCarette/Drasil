@@ -366,7 +366,8 @@ genInOutFunc
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , VariableElim r
     )
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
@@ -715,7 +716,8 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , MathConstant r
     , VariableValue r
@@ -850,7 +852,8 @@ genDataFunc nameTitle desc ddef = do
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readData
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , Argument r
     , OO.Literal r
     , MathConstant r
@@ -887,7 +890,8 @@ readData ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
           ::
-            ( BodySym r stmt bod
+            ( BlockSym r stmt
+            , BodySym r bod
             , OO.Literal r
             , OOVariableValue r
             , List r
@@ -1131,7 +1135,8 @@ publicFuncProc
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , MethodSym r vis mthd bod
     , VariableElim r
     )
@@ -1155,7 +1160,8 @@ privateFuncProc
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , MethodSym r vis mthd bod
     , VariableElim r
     )
@@ -1181,7 +1187,8 @@ genMethodProc
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , MethodSym r vis mthd bod
     , VariableElim r
     )
@@ -1209,7 +1216,8 @@ genMethodProc f n desc p r b = do
 -- declared variables.
 genFuncProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , BooleanExpression r
@@ -1254,7 +1262,8 @@ genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncsProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , BooleanExpression r
@@ -1288,7 +1297,8 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readDataProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , BooleanExpression r
@@ -1322,7 +1332,8 @@ readDataProc ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
           ::
-            ( BodySym r stmt bod
+            ( BlockSym r stmt
+            , BodySym r bod
             , VariableValue r
             , NativeVector r
             , List r
@@ -1540,7 +1551,8 @@ convCallProc c x ns f libf = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmtProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , MathConstant r
     , VariableValue r
     , BooleanExpression r
@@ -1663,7 +1675,8 @@ convStmtProc (FAppend a b) = do
 -- 'DataDesc'.
 genDataFuncProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , NativeVector r
     , MathConstant r
     , BooleanExpression r
@@ -1697,7 +1710,8 @@ genDataFuncProc nameTitle desc ddef = do
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFuncProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , OO.Literal r
     , VariableValue r
     , MultiStatement r stmt
@@ -1718,7 +1732,8 @@ publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n pu
 -- | Generates a private function, defined by its inputs and outputs.
 privateInOutFuncProc
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r stmt
+    , BodySym r bod
     , OO.Literal r
     , VariableValue r
     , MultiStatement r stmt
@@ -1748,7 +1763,8 @@ genInOutFuncProc
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , VariableElim r
     )
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))

@@ -177,7 +177,7 @@ instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) AttachmentData where
   perm p = RC.perm $ pfst p
   binding p = binding $ pfst p
 
-instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) (Doc, Terminator) Body where
+instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) Body where
   body = pair1List body body
 
   addComments s = pair1 (addComments s) (addComments s)
@@ -1062,7 +1062,7 @@ instance PermElim CppSrcCode AttachmentData where
   perm = attachmentDoc . unCPPSC
   binding = attachment . unCPPSC
 
-instance BodySym CppSrcCode (Doc, Terminator) Body where
+instance BodySym CppSrcCode Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
@@ -1785,7 +1785,7 @@ instance PermElim CppHdrCode AttachmentData where
   perm = attachmentDoc . unCPPHC
   binding = attachment . unCPPHC
 
-instance BodySym CppHdrCode (Doc, Terminator) Body where
+instance BodySym CppHdrCode Body where
   body _ = toState $ toCode empty
 
   addComments _ _ = toState $ toCode empty

@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ValueStatement(valStmt), ControlStatement(returnStmt), VisibilitySym(..),
-  MethodSym(function), funcApp, listSize)
+  MethodSym(function), funcApp, listSize, BlockSym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, CSStateVar, OOTypeSym(obj),
   AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
@@ -546,7 +546,8 @@ inOutFunc
   :: ( IC.VariableValue r
      , IC.ParameterSym r
      , IC.DeclStatement r stmt bod
-     , IC.BodySym r stmt bod
+     , BlockSym r stmt
+     , IC.BodySym r bod
      , VariableElim r
      , RenderBody r bod
      , RenderType r

@@ -160,7 +160,7 @@ instance PermElim PythonCode AttachmentData where
   perm = attachmentDoc . unPC
   binding = attachment . unPC
 
-instance BodySym PythonCode (Doc, Terminator) Body where
+instance BodySym PythonCode Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
@@ -941,7 +941,8 @@ pyPrint newLn f' p' v' = do
 
 pyOut
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , BlockSym r stmt
     , Literal r
     , NumericExpression r
     , Comparison r

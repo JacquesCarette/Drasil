@@ -26,7 +26,8 @@ logBody
     , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt bod
+    , BlockSym r stmt
+    , BodySym r bod
     , VariableElim r
     )
   => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r bod))

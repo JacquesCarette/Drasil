@@ -144,7 +144,7 @@ instance ImportSym JuliaCode where
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
 
-instance BodySym JuliaCode (Doc, Terminator) Body where
+instance BodySym JuliaCode Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
@@ -979,7 +979,8 @@ jlPrint _ f' p' v' = do
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod
+    , BlockSym r stmt
     , Literal r
     , NumericExpression r
     , Comparison r

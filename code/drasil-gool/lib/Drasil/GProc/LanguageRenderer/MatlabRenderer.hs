@@ -121,7 +121,7 @@ instance ImportSym MatlabCode where
   langImport = undefined
   modImport = undefined
 
-instance BodySym MatlabCode (Doc, Terminator) Body where
+instance BodySym MatlabCode Body where
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 

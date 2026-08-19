@@ -33,6 +33,7 @@ packages:
 - ../drasil-code
 - ../drasil-data
 - ../drasil-database
+- ../drasil-document-writing
 - ../drasil-srs
 - ../drasil-file-handling
 - ../drasil-gool

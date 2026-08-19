@@ -12,8 +12,8 @@ module Language.Drasil.Document.DecoratedReference (
 import Control.Lens ((^.), makeLenses, Lens')
 
 import Drasil.Database (HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
+import Language.Drasil (RefInfo(..))
 
-import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Document.Reference (Reference, ref)
 import Language.Drasil.Document.Labels (HasRefAddress(..))
 import Language.Drasil.Document.ShortName (HasShortName(..))

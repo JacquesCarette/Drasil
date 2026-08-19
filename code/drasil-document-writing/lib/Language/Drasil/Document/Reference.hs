@@ -13,10 +13,10 @@ module Language.Drasil.Document.Reference (
 import Control.Lens ((^.), makeLenses, Lens')
 
 import Drasil.Database (UID, HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
+import Language.Drasil (Sentence(Ref, EmptyS), RefInfo(..))
 
 import Language.Drasil.Document.Labels (LblType, HasRefAddress(..))
 import Language.Drasil.Document.ShortName (HasShortName(..), ShortName)
-import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 
 -- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
 -- a human-readable shortname ('ShortName'), and any extra information about the reference ('RefInfo').

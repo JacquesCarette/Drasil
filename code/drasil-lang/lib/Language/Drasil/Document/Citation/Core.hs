@@ -25,7 +25,7 @@ import Language.Drasil.Document.Citation.Components (HasFields(..), CitationKind
   author, chapter, pages, editor, bookTitle, title,
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
+import Language.Drasil.Document.Labels (LblType(Citation), Referable(..), HasRefAddress(..))
 
 -- | A list of 'Citation's.
 type BibRef = [Citation]

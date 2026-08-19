@@ -29,7 +29,7 @@ import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(..))
 import Language.Drasil.Classes (HasUnitSymbol(..), Quantity, Concept, Definition(..))
 import Language.Drasil.Development.Sentence (short, atStart, titleize, phrase, plural)
-import Language.Drasil.Label.Type (Referable)
+import Language.Drasil.Document.Labels (Referable)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
   ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)

@@ -73,7 +73,7 @@ data PDSub where
   -- | Terms and Definitions.
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
   -- | Physical System Description.
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  PhySysDesc :: [Sentence] -> LabelledContent -> [Contents] -> PDSub
   -- | Goals.
   Goals :: [Sentence] -> PDSub
 
@@ -139,7 +139,7 @@ mkDocDesc sys = map sec where
 
   pdSub :: PDSub -> DL.PDSub
   pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c
-  pdSub (PhySysDesc i s lc c) = DL.PhySysDesc i s lc c
+  pdSub (PhySysDesc s lc c) = DL.PhySysDesc s lc c
   pdSub (Goals s) = DL.Goals s $ fromConcInsDB goalStmtDom
 
   scsSub :: SCSSub -> DL.SCSSub

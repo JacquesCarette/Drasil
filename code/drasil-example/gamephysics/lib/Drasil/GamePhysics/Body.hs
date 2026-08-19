@@ -48,7 +48,7 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro []
-  [IPurpose $ purpDoc progName Verbose,
+  [IPurpose (StdPurp Verbose),
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec Nothing],

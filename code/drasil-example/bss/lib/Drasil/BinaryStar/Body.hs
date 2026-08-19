@@ -44,7 +44,7 @@ mkSRS = [TableOfContents,
     ],
   IntroSec $
   IntroProg introBlurb []
-    [ IPurpose $ purpDoc progName Verbose,
+    [ IPurpose (StdPurp Verbose),
       IScope scope,
       IChar [] charsOfReader [],
       IOrgSec Nothing

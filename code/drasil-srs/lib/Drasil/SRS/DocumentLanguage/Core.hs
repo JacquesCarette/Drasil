@@ -6,7 +6,8 @@ module Drasil.SRS.DocumentLanguage.Core (
   TraceabilitySec(..), AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..),
   DerivationDisplay(..), Emphasis(..), GSDSub(..), IntroSub(..), LFunc(..),
   Literature(..), RefTab(..), StkhldrSub(..), TConvention(..), TSIntro(..),
-  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID
+  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID,
+  PurposeDescription(..)
 ) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
@@ -16,7 +17,7 @@ import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict.
 import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat)
+import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat, Verbosity)
 
 -- * Document Types
 
@@ -112,13 +113,15 @@ data IntroSec = IntroProg Sentence [Sentence] [IntroSub]
 -- | Introduction subsections.
 data IntroSub where
   -- | Describes purpose of the system.
-  IPurpose :: [Sentence] -> IntroSub
+  IPurpose :: PurposeDescription -> IntroSub
   -- | Describes scope of the system.
   IScope   :: Sentence -> IntroSub
   -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   -- | Organises the section.
   IOrgSec  :: Maybe Sentence -> IntroSub
+
+data PurposeDescription = StdPurp Verbosity | CustomPurp [[Sentence]]
 
 -- ** Stakeholders Section
 

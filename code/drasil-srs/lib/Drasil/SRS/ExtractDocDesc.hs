@@ -87,11 +87,7 @@ sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
     introSec = Constant . f <$> \(IntroProg s1 s2s s3) -> s1 : (s2s ++ concatMap getIntroSub s3),
-    introSub = Constant . f <$> \case
-      (IPurpose s) -> s
-      (IScope s) -> [s]
-      (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec s1) -> maybeToList s1,
+    introSub = Constant . f <$> getIntroSub,
     stkSub = Constant . f <$> \case
       (Client s) -> [s]
       Cstmr -> [],
@@ -122,7 +118,8 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     def = map (^. defn)
 
     getIntroSub :: IntroSub -> [Sentence]
-    getIntroSub (IPurpose ss) = ss
+    getIntroSub (IPurpose (CustomPurp ps)) = concat ps
+    getIntroSub (IPurpose (StdPurp _)) = []
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
     getIntroSub (IOrgSec s1) = maybeToList s1

@@ -103,7 +103,7 @@ mkSRS = [TableOfContents,
     TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) [extraInfoSent]
-    [IPurpose $ purpDoc progName Verbose,
+    [IPurpose (StdPurp Verbose),
      IScope scope,
      IChar [] charsOfReader [],
      IOrgSec (Just orgDocEnd)

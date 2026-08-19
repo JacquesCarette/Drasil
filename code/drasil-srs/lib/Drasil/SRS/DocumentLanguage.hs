@@ -254,7 +254,7 @@ mkIntroSec si (IntroProg probIntro extraInfo l) =
   where
     im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
-    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc si intro
     mkSubIntro (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro (IChar assumed topic asset) =
       Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])

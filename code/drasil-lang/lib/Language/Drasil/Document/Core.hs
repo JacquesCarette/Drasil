@@ -12,7 +12,7 @@ import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.Document.Citation.Core (BibRef)
-import Language.Drasil.ShortName (HasShortName(shortname))
+import Language.Drasil.Document.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Document.Labels (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))

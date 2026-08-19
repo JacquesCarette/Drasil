@@ -16,7 +16,7 @@ import Drasil.Database (HasUID(..), IsChunk, declareHasChunkRefs, Generically(..
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Document.Reference (Reference, ref)
 import Language.Drasil.Document.Labels (HasRefAddress(..))
-import Language.Drasil.ShortName (HasShortName(..))
+import Language.Drasil.Document.ShortName (HasShortName(..))
 
 -- | For holding a 'Reference' that is decorated with extra information (ex. page numbers, equation sources, etc.).
 data DecRef = DR {

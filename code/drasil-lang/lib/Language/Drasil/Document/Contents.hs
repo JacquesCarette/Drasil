@@ -25,7 +25,7 @@ import Language.Drasil.Document.Labels (Referable(refAdd))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Sentence.Fold (foldlSent_, foldlSent, foldlSentCol)
-import Language.Drasil.ShortName (HasShortName(..), getSentSN)
+import Language.Drasil.Document.ShortName (HasShortName(..), getSentSN)
 
 -- | Displays a given expression and attaches a 'Reference' to it.
 lbldExpr :: ModelExpr -> Reference -> LabelledContent

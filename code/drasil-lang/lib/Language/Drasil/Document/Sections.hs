@@ -13,7 +13,7 @@ import Control.Lens ((^.), makeLenses, view)
 import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid, HasChunkRefs(..))
 import qualified Data.Set as Set
 
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
   LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent)

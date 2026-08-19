@@ -9,9 +9,10 @@ import Drasil.Database (UID)
 import Drasil.Database.SearchTools (termResolve', TermAbbr(..), refResolve)
 import Language.Drasil (Sentence(..), NP, NounPhrase(..), (+:+), sParen,
   atStartNP, atStartNP', titleizeNP, titleizeNP', foldNums, checkValidStr,
-  getSentSN, SentenceStyle(..), TermCapitalization(..), ShortName, RefInfo(..))
+  SentenceStyle(..), TermCapitalization(..), RefInfo(..))
 import Language.Drasil.Development (toSent)
-import Language.Drasil.Document (Reference(..), IRefProg(..), LblType(..))
+import Language.Drasil.Document (Reference(..), IRefProg(..), LblType(..),
+  ShortName, getSentSN)
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, sysdb)
 import Language.Drasil.Printing.Import.ExprCommon (lookupSymb)

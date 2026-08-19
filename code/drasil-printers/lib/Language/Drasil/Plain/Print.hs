@@ -80,8 +80,6 @@ specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = doubleQuotes $ specDoc f s
-specDoc MultiLine HARDNL = text "\n"
-specDoc OneLine HARDNL = error "HARDNL encountered in attempt to format linearly"
 
 -- | Helper for printing units in 'Doc' format.
 unitDoc :: SingleLine -> USymb -> Doc

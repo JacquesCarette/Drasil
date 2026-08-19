@@ -16,30 +16,33 @@ import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
-import Drasil.SRS (mkGraphInfo, SmithEtAlSRS)
+import Drasil.SRS (mkGraphInfo, SmithEtAlSRS, mkDoc, SRSDecl)
 import Drasil.System (systemdb)
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.Generator.Formats (Filename, Format(..))
 import Drasil.Generator.SRS.TraceabilityGraphs (outputDot)
 
 -- | Generate Drasil's SRS (in HTML, TeX, Jupyter, and MDBook formats).
-genSmithEtAlSrs :: SmithEtAlSRS -> Document -> String -> [FileLayout]
-genSmithEtAlSrs syst doc srsFileName =
+genSmithEtAlSrs :: SmithEtAlSRS -> SRSDecl -> String -> [FileLayout]
+genSmithEtAlSrs syst srsDecl srsFileName =
   [ srsLayout,
     traceyLayout
   ]
   where
-    pinfo = piSys (syst ^. systemdb) Equational Engineering
+    (srsDoc, syst') = mkDoc syst srsDecl S.forT'
+
+    pinfo = piSys (syst' ^. systemdb) Equational Engineering
     srsLayout =
       directory [ps|SRS|] $
         map
           ( \x ->
               let x' = show x
               in directory [ps|{x'}|] $
-                    prntDoc doc pinfo srsFileName x
+                    prntDoc srsDoc pinfo srsFileName x
           )
           [HTML, TeX, Jupyter, MDBook]
-    traceyLayout = outputDot (mkGraphInfo syst)
+    traceyLayout = outputDot (mkGraphInfo syst')
 
 -- | Internal: Render an SRS in a specified 'Format' and lay out artifacts into
 -- a `[FileLayout]`.

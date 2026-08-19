@@ -4,7 +4,8 @@ module Language.Drasil.Printing.Citation (
   BibRef, Citation(..), CiteField(..), HP(..)
 ) where
 
-import Language.Drasil (People, EntryID, CitationKind, Month)
+import Language.Drasil (People, Month)
+import Language.Drasil.Document (EntryID, CitationKind)
 
 import Language.Drasil.Printing.AST (Spec)
 

@@ -2,8 +2,8 @@ module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 
 import Drasil.Database (ChunkDB)

@@ -10,7 +10,7 @@ module Data.Drasil.Concepts.Documentation (
   ) where
 
 import Drasil.Database (mkUid)
-import Language.Drasil hiding (organization, year, label, variable, sec)
+import Language.Drasil hiding (label, variable, sec)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.Metadata.Domains (softEng)

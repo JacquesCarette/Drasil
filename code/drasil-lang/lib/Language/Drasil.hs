@@ -61,10 +61,6 @@ module Language.Drasil (
   , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
   , Express(..)
-  -- *** References
-  -- Language.Drasil.Symbol
-  , HasRefAddress(getRefAdd)
-  , Referable(..)
   -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
@@ -115,40 +111,8 @@ module Language.Drasil (
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
 
-  -- ** Referencing
-  -- Language.Drasil.Label.Type
-  , getAdd, prepend
-  , LblType(RP, Citation, URI), IRefProg(..)
-
-  -- *** Citations
-  -- Language.Drasil.Chunk.Citation
-  , EntryID, Citation, BibRef
-  , HasCitation(getCitations)
-  , HasFields(getFields)
-  -- accessors
-  , citeID, citeKind
-  -- smart constructors
-  , cArticle, cBookA, cBookE, cBooklet
-  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
-  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished
   -- Language.Drasil.Data.Date
   , Month(..)
-  -- Language.Drasil.Data.Citation; should be moved to Language.Drasil.Development
-  , CiteField(..), HP(..), CitationKind(..)
-  , compareAuthYearTitle
-    -- CiteFields smart constructors
-      -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
   -- Language.Drasil.People
   , People, Person, person, HasName, fullName, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
@@ -173,8 +137,6 @@ module Language.Drasil (
   -- Language.Drasil.Development.Sentence
   , introduceAbb, introduceAbbPlrl, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
-  -- Language.Drasil.ShortName
-  , ShortName, shortname', getSentSN, HasShortName(..)
 
   -- * Sentence Fold-type utilities.
   -- | From "Utils.Drasil.Fold". Defines many general fold functions
@@ -184,9 +146,6 @@ module Language.Drasil (
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
 
   -- ** Folding functions
-  -- *** Expression-related
-  , foldConstraints
-
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSent
   , foldlSent_,foldlSentCol, foldOpts, foldNums, numList
@@ -245,14 +204,6 @@ import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, 
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
   HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
-import Language.Drasil.Chunk.Citation (
-    Citation, EntryID, BibRef
-  , HasCitation(..)
-  , citeID, citeKind
-  , cArticle, cBookA, cBookE, cBooklet
-  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
-  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished)
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom)
@@ -265,16 +216,8 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ, ConstQDef, SimpleQDef, ModelQDef)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
-  , HasFields(getFields)
-  , author, editor
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-  , chapter, edition, number, volume, year, month, pages
-  , compareAuthYearTitle)
 import Language.Drasil.NaturalLanguage.English.NounPhrase
 import Language.Drasil.ReasonableValue (ReasonableValue, rationale, reasV, reasonableValue)
-import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
@@ -289,7 +232,6 @@ import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, fullName, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.Label.Type hiding (name)
 
 import Language.Drasil.UnitLang (USymb(US))
 import Language.Drasil.Uncertainty

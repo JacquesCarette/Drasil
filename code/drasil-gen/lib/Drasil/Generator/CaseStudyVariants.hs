@@ -14,12 +14,10 @@ import Control.Lens ((^.))
 
 import Drasil.FileHandling (FileLayout, OverwritePolicy(..), directory, localPath, ps,
   writeFiles)
-import Drasil.SRS (SRSDecl, SmithEtAlSRS)
+import Drasil.SRS (SRSDecl, SmithEtAlSRS, genSmithEtAlSrs, typeCheckSI)
 import Language.Drasil.Code (Choices)
 
 import Drasil.Generator.Code (genCode, genCodeZoo)
-import Drasil.Generator.SRS (genSmithEtAlSrs)
-import Drasil.Generator.SRS.TypeCheck (typeCheckSI)
 import Drasil.Generator.WriteSystem (setSystemLocale)
 import Drasil.System (HasProjectName(..))
 

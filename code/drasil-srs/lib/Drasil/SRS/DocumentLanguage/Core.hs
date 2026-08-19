@@ -12,8 +12,8 @@ module Drasil.SRS.DocumentLanguage.Core (
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
 import Drasil.Database (UID, IsChunk)
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (Manual, Verb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat)

@@ -7,8 +7,8 @@ module Drasil.SWHS.Body (
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (inModel)

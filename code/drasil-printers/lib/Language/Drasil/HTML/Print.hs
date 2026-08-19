@@ -18,9 +18,8 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', special, checkValidStr, CitationKind(..),
-  numList)
-import Language.Drasil.Document (MaxWidthPercent)
+  rendPersLFM'', special, checkValidStr, numList)
+import Language.Drasil.Document (CitationKind(..), MaxWidthPercent)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,

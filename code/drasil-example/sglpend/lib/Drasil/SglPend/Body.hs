@@ -3,8 +3,8 @@ module Drasil.SglPend.Body (mkSRS, si) where
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRS hiding (genDefns)

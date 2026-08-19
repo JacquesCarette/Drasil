@@ -4,6 +4,7 @@ module Drasil.SSP.References (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Document
 
 import Data.Drasil.Citations (jnlCGJ, parnasClements1986, hibbeler2004)
 import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,

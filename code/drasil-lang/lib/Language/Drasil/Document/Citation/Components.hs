@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 -- | Contains all necessary types and constructors for citing sources in Drasil.
-module Language.Drasil.Data.Citation (
+module Language.Drasil.Document.Citation.Components (
   -- * Types
   CiteField(..), HP(..), CitationKind(..),
   -- * Class

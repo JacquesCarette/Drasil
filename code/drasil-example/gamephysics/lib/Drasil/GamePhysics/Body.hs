@@ -19,7 +19,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
@@ -52,7 +51,7 @@ mkSRS = [TableOfContents,
   [IPurpose $ purpDoc progName Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec inModel (SRS.inModel [] []) Nothing],
+   IOrgSec Nothing],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],

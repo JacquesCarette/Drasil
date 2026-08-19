@@ -5,14 +5,12 @@ import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
-import Data.Drasil.Concepts.Theory (dataDefn)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
@@ -48,7 +46,7 @@ mkSRS
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)],
+          IOrgSec (Just orgSecEnd)],
      GSDSec $
        GSDProg
          [SysCntxt

@@ -31,7 +31,6 @@ import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, ca
 import Data.Drasil.Concepts.Math (cartesian, ode, graph)
 import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
@@ -62,7 +61,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) Nothing],
+       IOrgSec Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],

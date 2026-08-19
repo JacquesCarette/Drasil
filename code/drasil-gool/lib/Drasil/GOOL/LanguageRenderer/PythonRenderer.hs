@@ -81,7 +81,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad)
+  AttachmentData(..), ad, FileData)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -119,28 +119,28 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData where
+instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
 
-instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance FileSym PythonCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m
 
   docMod = CP.doxMod pyExt
 
-instance RenderFile PythonCode where
+instance RenderFile PythonCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -725,7 +725,7 @@ instance RenderClass PythonCode Doc MethodData StateVar where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ModData where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports
@@ -740,11 +740,11 @@ instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar Attachme
         (modImport :: Label -> PythonCode Doc)) mis)])
     (pure empty) getMainDoc
 
-instance RenderMod PythonCode where
+instance RenderMod PythonCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim PythonCode where
+instance ModuleElim PythonCode ModData where
   module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where

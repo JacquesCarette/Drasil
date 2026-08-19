@@ -11,7 +11,6 @@ import Language.Drasil hiding (variable)
 import Language.Drasil.Document hiding (organization)
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
@@ -107,7 +106,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
+     IOrgSec (Just orgDocEnd)
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
@@ -137,7 +136,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName specParamValList,
+  AuxConstntSec $ AuxConsProg specParamValList,
   Bibliography]
 
 tSymbIntro :: [TSIntro]

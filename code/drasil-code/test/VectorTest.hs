@@ -17,7 +17,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 vectorTestProc
   ::
     ( NativeVector r
-    , ProcProg r vis stmt mthd prg
+    , ProcProg r vis stmt mthd prg file mod
     )
   => GProc.GSProgram r prg
 vectorTestProc = GProc.prog "VectorTest" ""
@@ -29,7 +29,7 @@ vectorTestProc = GProc.prog "VectorTest" ""
 vectorOps
   ::
     ( NativeVector r
-    , ProcProg r vis stmt mthd prg
+    , ProcProg r vis stmt mthd prg file mod
     )
   => MS (r mthd)
 vectorOps =

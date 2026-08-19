@@ -103,7 +103,7 @@ overviewParagraph programDefinition introSubs =
      S "of this", endingSentence]
 
 -- | Constructor for Purpose of Document section that each example controls.
-purpDocPara1 :: CI -> Sentence
+purpDocPara1 :: Idea c => c -> Sentence
 purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
   S "record the", plural requirement, S "of" +:+. short proName,
   atStart' goal `sC` plural assumption `sC` plural thModel `sC`
@@ -117,7 +117,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
 
 -- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
 -- Verbosity controls if the 'developmentProcessParagraph' is added or not.
-purpDoc :: CI -> Verbosity -> [Sentence]
+purpDoc :: Idea c => c -> Verbosity -> [Sentence]
 purpDoc proName Verbose = [purpDocPara1 proName, developmentProcessParagraph]
 purpDoc proName Succinct = [purpDocPara1 proName]
 

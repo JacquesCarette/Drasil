@@ -29,8 +29,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
   VariableValue, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (File, Module, Class, Initializers, CSStateVar,
-  newObj, objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
+import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
+  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -546,12 +546,16 @@ method
   -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
+getMethod
+  :: (OORenderSym r vis stmt mthd stvr attch file mod)
+  => SVariable r -> MS (r mthd)
 getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
-setMethod :: (OORenderSym r vis stmt mthd stvr attch) => SVariable r -> MS (r mthd)
+setMethod
+  :: (OORenderSym r vis stmt mthd stvr attch file mod)
+  => SVariable r -> MS (r mthd)
 setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
@@ -601,14 +605,14 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 
 -- Modules --
 
-modFromData :: Label -> (Doc -> r Module) -> FS Doc -> FS (r Module)
+modFromData :: Label -> (Doc -> r mod) -> FS Doc -> FS (r mod)
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
 fileDoc
-  :: (RC.BlockElim r, RenderMod r, RenderFile r)
-  => String -> (r Module -> r Block) -> r Block -> FS (r Module) -> FS (r File)
+  :: (RC.BlockElim r, RenderMod r mod, RenderFile r file mod)
+  => String -> (r mod -> r Block) -> r Block -> FS (r mod) -> FS (r file)
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
@@ -626,21 +630,21 @@ fileDoc ext topb botb mdl = do
 --   dt is the date
 --   fl is the file
 docMod
-  :: (RenderFile r)
+  :: (RenderFile r file mod)
   => ModuleDocRenderer
   -> String
   -> String
   -> String
   -> [String]
   -> String
-  -> FS (r File)
-  -> FS (r File)
+  -> FS (r file)
+  -> FS (r file)
 docMod mdr e wm d a dt fl = commentedMod fl (docComment $ mdr wm d a dt . addExt e
   <$> getModuleName)
 
 fileFromData
-  :: (RO.ModuleElim r)
-  => (FilePath -> r Module -> r File) -> FilePath -> FS (r Module) -> FS (r File)
+  :: (RO.ModuleElim r mod)
+  => (FilePath -> r mod -> r file) -> FilePath -> FS (r mod) -> FS (r file)
 fileFromData f fpath mdl' = do
   -- Add this file to list of files as long as it is not empty
   mdl <- mdl'

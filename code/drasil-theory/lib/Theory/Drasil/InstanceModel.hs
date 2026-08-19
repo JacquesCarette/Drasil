@@ -45,6 +45,8 @@ instance HasChunkRefs InstanceModel where
     [ chunkRefs (imd ^. mk)
     , chunkRefs (map fst (imd ^. imInputs))
     , chunkRefs (imd ^. imOutput . _1)
+    , chunkRefs (imd ^. rf)
+    , chunkRefs (imd ^. deri)
     , chunkRefs (lb imd)
     , chunkRefs (imd ^. notes)
     ]

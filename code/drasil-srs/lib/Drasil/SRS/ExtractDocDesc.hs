@@ -28,7 +28,7 @@ secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
 secConPlate mCon mSec = preorderFold $ purePlate {
   refSec = Constant <$> \(RefProg c _) -> mCon [c],
   introSub = Constant <$> \case
-    (IOrgSec _ s _) -> mSec [s]
+    (IOrgSec _) -> mempty
     _ -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
@@ -60,7 +60,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],
-  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
+  auxConsSec = Constant <$> \(AuxConsProg qdef) -> go qdef
   }) where
       go :: Express a => [a] -> [ModelExpr]
       go = map express
@@ -91,10 +91,10 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
+      (IOrgSec s1) -> maybeToList s1,
     stkSub = Constant . f <$> \case
-      (Client _ s) -> [s]
-      (Cstmr _) -> [],
+      (Client s) -> [s]
+      Cstmr -> [],
     pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
@@ -116,7 +116,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
     traceSec = Constant . f <$> \(TraceabilityProg progs) ->
       concatMap (\(TraceConfig _ ls s _ _) -> s : ls) progs,
-    auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef
+    auxConsSec = Constant . f <$> \(AuxConsProg qdef) -> def qdef
   } where
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
@@ -125,7 +125,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     getIntroSub (IPurpose ss) = ss
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
+    getIntroSub (IOrgSec s1) = maybeToList s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))

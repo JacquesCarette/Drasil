@@ -92,7 +92,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD)
+  ScopeData, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -129,28 +129,28 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
+instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance FileSym SwiftCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
 
   docMod = G.docMod CP.modDoc' swiftExt
 
-instance RenderFile SwiftCode where
+instance RenderFile SwiftCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -745,7 +745,7 @@ instance RenderClass SwiftCode Doc MethodData StateVar where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will
@@ -763,11 +763,11 @@ instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
       (zoom lensFStoMS swiftStringError) getMainDoc
         (map pure fns) (map pure cls)
 
-instance RenderMod SwiftCode where
+instance RenderMod SwiftCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim SwiftCode where
+instance ModuleElim SwiftCode ModData where
   module' = modDoc . unSC
 
 instance BlockCommentSym SwiftCode where

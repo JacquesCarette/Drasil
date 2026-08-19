@@ -18,10 +18,7 @@ import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
-
-import qualified Drasil.SRS.Concepts as SRS
 import Data.Drasil.Citations
-import Data.Drasil.Concepts.Theory (inModel)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -36,7 +33,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose,
       IScope EmptyS,
       IChar [] [] [],
-      IOrgSec inModel (SRS.inModel [] []) Nothing
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
@@ -72,7 +69,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],
+     AuxConsProg [],
   Bibliography]
 
 inputs :: NE.NonEmpty DefinedQuantityDict

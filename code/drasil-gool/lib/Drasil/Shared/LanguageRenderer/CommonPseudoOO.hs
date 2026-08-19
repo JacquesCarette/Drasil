@@ -27,9 +27,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   (&=), ValueStatement(valStmt), ControlStatement(returnStmt), VisibilitySym(..),
   MethodSym(function), funcApp, listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC
-import Drasil.GOOL.InterfaceGOOL (File, Module, Class, CSStateVar,
-  OOTypeSym(obj), AttachmentSym(..), Initializers, objMethodCallNoParams,
-  objMethodCall)
+import Drasil.GOOL.InterfaceGOOL (Class, CSStateVar, OOTypeSym(obj),
+  AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
@@ -91,7 +90,7 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis stmt mthd stvr attch)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod)
   => Label -> [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r mthd)
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
@@ -103,8 +102,15 @@ doxFunc = docFunc functionDox
 doxClass :: (RG.RenderClass r vis mthd stvr) => String -> CS (r Class) -> CS (r Class)
 doxClass = docClass classDox
 
-doxMod :: (RG.RenderFile r) => String -> String -> String -> [String] ->
-  String -> FS (r File) -> FS (r File)
+doxMod
+  :: (RG.RenderFile r file mod)
+  => String
+  -> String
+  -> String
+  -> [String]
+  -> String
+  -> FS (r file)
+  -> FS (r file)
 doxMod = docMod moduleDox
 
 -- Python, Java, and C# --
@@ -163,8 +169,14 @@ intClass f n s i svrs cstrs mths = do
 -- after imports), Doc to put at bottom of module, methods, classes
 -- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule
-  :: (RG.ClassElim r, RC.MethodElim r mthd, RG.RenderMod r)
-  => Label -> FS Doc -> FS Doc -> FS Doc -> [MS (r mthd)] -> [CS (r Class)] -> FS (r Module)
+  :: (RG.ClassElim r, RC.MethodElim r mthd, RG.RenderMod r mod)
+  => Label
+  -> FS Doc
+  -> FS Doc
+  -> FS Doc
+  -> [MS (r mthd)]
+  -> [CS (r Class)]
+  -> FS (r mod)
 buildModule n imps topDoc bot fs cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
@@ -256,7 +268,9 @@ mainDesc, argsDesc :: String
 mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
-docMain :: (OORenderSym r vis stmt mthd stvr attch) => MS (r Body) -> MS (r mthd)
+docMain
+  :: (OORenderSym r vis stmt mthd stvr attch file mod)
+  => MS (r Body) -> MS (r mthd)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
 
@@ -280,13 +294,13 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   ms is the class methods
 --   cs is the classes
 buildModule'
-  :: (OORenderSym r vis stmt mthd stvr attch, UnRepr r Doc)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod, UnRepr r Doc)
   => Label
   -> (String -> r Doc)
   -> [Label]
   -> [MS (r mthd)]
   -> [CS (r Class)]
-  -> FS (r Module)
+  -> FS (r mod)
 buildModule' n inc is ms cs = RG.modFromData n (do
   cls <- mapM (zoom lensFStoCS)
           (if null ms then cs else IG.buildClass Nothing [] [] ms : cs)
@@ -381,7 +395,7 @@ destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
 stateVarDef
-  :: (OORenderSym r vis stmt mthd stvr attch, Monad r)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod, Monad r)
   => r vis -> r attch -> SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility  s) (RG.perm p) . RC.statement)
@@ -444,7 +458,7 @@ openFileW
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
-  :: (Monad r, OORenderSym r vis stmt mthd stvr attch)
+  :: (Monad r, OORenderSym r vis stmt mthd stvr attch file mod)
   => r vis -> r attch -> SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
@@ -491,7 +505,7 @@ listDec
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis stmt mthd stvr attch)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r Body) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v

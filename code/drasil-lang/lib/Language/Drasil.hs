@@ -56,7 +56,6 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , Quantity
   , HasReasVal(reasVal)
-  , MayHaveRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
   , IsUnit(getUnits)
@@ -104,6 +103,8 @@ module Language.Drasil (
   , ConstrConcept(..)
   , constrained', constrainedWithRationale, cuc', cuc'', cucNoUnit', constrainedNRV'
   , cnstrw'
+  -- Language.Drasil.ReasonableValue
+  , ReasonableValue, reasonableValue, reasV, rationale
   -- Language.Drasil.Chunk.UncertainQuantity
   , UncertQ, uq, uqc, uqcND, uqDirect
   -- Language.Drasil.Uncertainty
@@ -201,7 +202,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), MayHaveRationale(rationale), DefiningExpr(defnExpr), Quantity)
+  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
@@ -216,6 +217,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.NaturalLanguage.English.NounPhrase
+import Language.Drasil.ReasonableValue (ReasonableValue, rationale, reasV, reasonableValue)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)

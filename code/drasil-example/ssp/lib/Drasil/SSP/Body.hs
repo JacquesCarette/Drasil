@@ -11,7 +11,7 @@ import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (inModel, assumpt,
+import qualified Drasil.SRS.Concepts as SRS (assumpt,
   genDefn, dataDefn, datCon)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -75,7 +75,7 @@ mkSRS = [TableOfContents,
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec inModel (SRS.inModel [] []) (Just orgSecEnd)
+    , IOrgSec (Just orgSecEnd)
     ],
     --FIXME: issue #235
   GSDSec $ GSDProg
@@ -105,7 +105,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName [],
+  AuxConstntSec $ AuxConsProg [],
   Bibliography]
 
 purp :: Sentence

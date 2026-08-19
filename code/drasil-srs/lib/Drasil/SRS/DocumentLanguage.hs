@@ -56,7 +56,7 @@ import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
 import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
-  tOfAbbAcc)
+  tOfAbbAcc, inModel)
 import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -162,9 +162,9 @@ mkSections si dd mbib = map (either renderRefSec id) partialRender
     render :: DocSection -> Section
     render TableOfContents      = mkToC dd
     render (IntroSec is)        = mkIntroSec si is
-    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (StkhldrSec sts)     = mkStkhldrSec (si ^. sysName) sts
     render (SSDSec ss)          = mkSSDSec si ss
-    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render (AuxConstntSec acs)  = mkAuxConsSec (si ^. sysName) acs
     render Bibliography         = mkBib $ fromMaybe [] mbib
     render (GSDSec gs')         = mkGSDSec gs'
     render (ReqrmntSec r)       = mkReqrmntSec r
@@ -252,23 +252,24 @@ mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
   where
+    im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
     mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro (IChar assumed topic asset) =
       Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])
-    mkSubIntro (IOrgSec b s t) = Intro.orgSec b s t
+    mkSubIntro (IOrgSec t) = Intro.orgSec inModel im t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders
 
 -- | Helper for making the Stakeholders section.
-mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec :: Idea c => c -> StkhldrSec -> Section
+mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
-    mkSubs (Client kWrd details) = Stk.tClientF kWrd details
-    mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
+    mkSubs (Client details) = Stk.tClientF progN details
+    mkSubs Cstmr            = Stk.tCustomerF progN
 
 -- ** General System Description
 
@@ -384,8 +385,8 @@ mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 -- ** Auxiliary Constants
 
 -- | Helper for making the Values of Auxiliary Constants section.
-mkAuxConsSec :: AuxConstntSec -> Section
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
+mkAuxConsSec :: Idea c => c -> AuxConstntSec -> Section
+mkAuxConsSec c (AuxConsProg listOfCons) = AC.valsOfAuxConstantsF c $ sortBySymbol listOfCons
 
 -- ** References
 

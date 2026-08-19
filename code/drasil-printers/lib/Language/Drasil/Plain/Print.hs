@@ -29,22 +29,24 @@ import Drasil.Code.CodeExpr (CodeExpr)
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
 
--- | Create expressions for a document in 'Doc' format.
-exprDoc :: SingleLine -> Expr -> Doc
-exprDoc = pExprDoc
+-- | Helper for printing a HasSymbol in Implementation Stage on one line.
+showHasSymbImpl :: L.HasSymbol x => x -> String
+showHasSymbImpl = render . pExprDoc OneLine . symbol . codeSymb
 
--- | Create code expressions for a document in 'Doc' format.
--- assumes someone has already makde the code expression into an expression
-codeExprDoc :: SingleLine -> Expr -> Doc
-codeExprDoc = pExprDoc
+-- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
+oneLineSentenceDoc :: PrintingInformation -> L.Sentence -> Doc
+oneLineSentenceDoc pinfo = specDoc OneLine . spec pinfo
 
--- | Create sentences for a document in 'Doc' format.
-sentenceDoc :: SingleLine -> Spec -> Doc
-sentenceDoc = specDoc
+-- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
+oneLineExprDoc :: PrintingInformation -> L.Expr -> Doc
+oneLineExprDoc pinfo e = pExprDoc OneLine (expr e pinfo)
 
--- | Create symbols for a document in 'Doc' format.
-symbolDoc :: Symbol -> Doc
-symbolDoc = pExprDoc OneLine . symbol
+oneLineCodeExprDoc :: PrintingInformation -> CodeExpr -> Doc
+oneLineCodeExprDoc pinfo = pExprDoc OneLine . codeExpr pinfo
+
+-- | Creates a 'OneLine' 'unitDoc'.
+oneLineUnitDoc :: USymb -> Doc
+oneLineUnitDoc = unitDoc OneLine
 
 -- | Helper for printing expressions in 'Doc' format. Display format of an expression may change regarding the 'SingleLine'.
 pExprDoc :: SingleLine -> Expr -> Doc
@@ -186,22 +188,3 @@ fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"
 fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"
-
--- | Helper for printing a HasSymbol in Implementation Stage
-showHasSymbImpl :: L.HasSymbol x => x -> String
-showHasSymbImpl = render . symbolDoc . codeSymb
-
--- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
-oneLineSentenceDoc :: PrintingInformation -> L.Sentence -> Doc
-oneLineSentenceDoc pinfo = sentenceDoc OneLine . spec pinfo
-
--- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
-oneLineExprDoc :: PrintingInformation -> L.Expr -> Doc
-oneLineExprDoc pinfo e = exprDoc OneLine (expr e pinfo)
-
-oneLineCodeExprDoc :: PrintingInformation -> CodeExpr -> Doc
-oneLineCodeExprDoc pinfo = codeExprDoc OneLine . codeExpr pinfo
-
--- | Creates a 'OneLine' 'unitDoc'.
-oneLineUnitDoc :: USymb -> Doc
-oneLineUnitDoc = unitDoc OneLine

@@ -745,7 +745,7 @@ instance RenderClass SwiftCode Doc MethodData StateVar where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ModData where
+instance ModuleSym SwiftCode ModData MethodData where
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will

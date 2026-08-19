@@ -549,14 +549,14 @@ method n s p t = intMethod False n s p (mType t)
 getMethod
   :: (OORenderSym r vis stmt mthd stvr attch file mod)
   => SVariable r -> MS (r mthd)
-getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
+getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
   :: (OORenderSym r vis stmt mthd stvr attch file mod)
   => SVariable r -> MS (r mthd)
-setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
+setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 

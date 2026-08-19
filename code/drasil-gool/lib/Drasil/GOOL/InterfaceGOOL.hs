@@ -49,13 +49,13 @@ class (UnRepr r TypeData, Argument r, CommandLineArgs r, Literal r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r,
   List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
   ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  MethodSym r vis stmt mthd, TypeElim r, VariableElim r, EmptyStatement r stmt,
-  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
-  OODeclStatement r stmt, AssignStatement r stmt, OOFuncAppStatement r stmt,
-  ControlStatement r stmt, StringStatement r stmt, PrintConsole r stmt,
-  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  ModuleSym r vis stmt mthd stvr attch mod, FileSym r file mod,
-  ProgramSym r prg file
+  OOMethodSym r vis stmt mthd attch, ClassSym r vis stmt mthd stvr attch,
+  TypeElim r, VariableElim r, EmptyStatement r stmt, MultiStatement r stmt,
+  ValueStatement r stmt, CommentStatement r stmt, OODeclStatement r stmt,
+  AssignStatement r stmt, OOFuncAppStatement r stmt, ControlStatement r stmt,
+  StringStatement r stmt, PrintConsole r stmt, ReadConsole r stmt,
+  FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
   ) => OOProg r vis stmt mthd stvr attch prg file mod
 
 type Program = ProgData
@@ -80,7 +80,7 @@ class FileSym r file mod | r -> file mod where
   docMod :: String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 
 -- | Class for representing a module.
-class (ClassSym r vis stmt mthd stvr attch) => ModuleSym r vis stmt mthd stvr attch mod | r -> mod where
+class ModuleSym r mod mthd | r -> mod mthd where
   -- | Given module name, list of import names, list of module functions,
   -- and list of module classes, generates a representation of a module.
   buildModule :: Label -> [Label] -> [MS (r mthd)] -> [CS (r Class)] -> FS (r mod)

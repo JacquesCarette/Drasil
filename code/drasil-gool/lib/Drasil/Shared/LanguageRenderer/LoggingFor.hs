@@ -425,7 +425,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 instance (P.ProcProg r vis stmt mthd prg file mod) => P.ProcProg (LoggingFor r) vis stmt mthd prg file mod
 
-instance (P.ModuleSym r vis stmt mthd mod) => P.ModuleSym (LoggingFor r) vis stmt mthd mod where
+instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
 
 instance (P.FileSym r file mod) => P.FileSym (LoggingFor r) file mod where
@@ -508,7 +508,7 @@ instance (G.ClassSym r vis stmt mthd stvr attch) => G.ClassSym (LoggingFor r) vi
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis stmt mthd stvr attch mod) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch mod where
+instance (G.ModuleSym r mod mthd) => G.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging G.buildModule
 
 instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where

@@ -4,4 +4,5 @@ import Drasil.Database (mkUid)
 import Language.Drasil
 
 progName :: CI
-progName = commonIdea (mkUid "pdControllerApp") (pn "PD Controller") "PD Controller" []
+progName = commonIdea (mkUid "pdControllerApp")
+  (pn "Proportional Differential Controller") "PD Controller" []

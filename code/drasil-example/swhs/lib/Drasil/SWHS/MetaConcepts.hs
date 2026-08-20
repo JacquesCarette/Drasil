@@ -1,15 +1,14 @@
-module Drasil.SWHS.MetaConcepts (progName, progName') where
+module Drasil.SWHS.MetaConcepts (swhs, projName) where
 
 import Drasil.Database (mkUid)
 import Language.Drasil
-import Data.Drasil.Domains (materialEng)
+import Drasil.System (ProjectName, mkCommonProjName)
 
-progName :: CI
-progName = commonIdea (mkUid "swhsName") (nounPhrase "solar water heating system"
-  "solar water heating systems") "SWHS" [materialEng]
-
--- HACK: should re-decompose this noun phrase back into components!
-progName' :: CI
-progName' = commonIdea (mkUid "swhsPCM") (nounPhraseSP "solar water heating systems incorporating PCM")
+swhs :: IdeaDict
+swhs = idea (mkUid "swhsIdea")
+  (nounPhrase "solar water heating system" "solar water heating systems")
   "SWHS"
-  []
+
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "swhsProjName")
+  (pn "Solar Water Heating Systems Incorporating PCM") "SWHS"

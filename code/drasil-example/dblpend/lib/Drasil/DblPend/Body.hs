@@ -41,11 +41,12 @@ import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
-import Drasil.DblPend.MetaConcepts (progName)
+import Drasil.DblPend.MetaConcepts (projName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
 import Drasil.DblPend.References (citations)
+import Drasil.System (projTitleS, projAbrvS, ProjectName)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -57,15 +58,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA        -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg (justification progName) []
+    IntroProg (justification projName) []
       [IPurpose (StdPurp Verbose),
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec Nothing],
   GSDSec $
     GSDProg [
-      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName],
+      SysCntxt [sysCtxIntro projName, LlC sysCtxFig1, sysCtxDesc, sysCtxList projName],
+      UsrChars [userCharacteristicsIntro projName],
       SystCons [] []],
   SSDSec $
     SSDProg
@@ -95,7 +96,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [dong]
+si = mkSmithEtAlICO projName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints constants symbols
@@ -113,16 +114,13 @@ background = foldlSent_ [D.toSent $ phraseNP (a_ pendulum), S "consists" `S.of_`
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
   gravitationalConst, gravity] ++ defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts [] conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
@@ -142,15 +140,15 @@ concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------
 -- Section : INTRODUCTION --
 ------------------------------
-justification :: CI -> Sentence
-justification prog = foldlSent
+justification ::ProjectName -> Sentence
+justification projN = foldlSent
   [ D.toSent $ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass,
     S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
    (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
     S "it is useful to have a", phrase program, S "to simulate",
     D.toSent $ phraseNP (motion `the_ofThe` pendulum),
    (S "to exhibit its chaotic characteristics" !.),
-    S "The document describes the program called", phrase prog,
+    S "The document describes the program called", projTitleS projN,
     S ", which is based on the original, manually created version of" +:+
     namedRef externalLinkRef (S "Double Pendulum")]
 
@@ -193,12 +191,12 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-sysCtxIntro :: CI -> Contents
-sysCtxIntro prog = foldlSP
+sysCtxIntro :: ProjectName -> Contents
+sysCtxIntro projN = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short prog) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (projAbrvS projN) +:+. EmptyS,
    S "Arrows" `S.are` S "used to show the data flow between the", D.toSent (phraseNP (system
    `andIts` environment))]
 
@@ -208,10 +206,10 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent (phraseNP (pr
    phrase interface, S "The responsibilities" `S.ofThe` D.toSent (phraseNP (user
    `andThe` system)), S "are as follows"]
 
-sysCtxUsrResp :: CI -> [Sentence]
-sysCtxUsrResp prog = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
+sysCtxUsrResp :: ProjectName -> [Sentence]
+sysCtxUsrResp projN = [S "Provide initial" +:+ D.toSent (pluralNP (condition `ofThePS`
   physical)) +:+ S "state" `S.ofThe` phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
-  phrase prog `sC` S "ensuring no errors in the" +:+
+  projTitleS projN `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units" `S.are` S "used for" +:+. D.toSent (pluralNP (combineNINI input_ Doc.variable)),
   S "Ensure required" +:+
@@ -227,20 +225,20 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S "Calculate the required" +:+. plural output_,
   S "Generate the required" +:+. plural graph]
 
-sysCtxResp :: CI -> [Sentence]
-sysCtxResp prog = [titleize user +:+ S "Responsibilities",
-  short prog +:+ S "Responsibilities"]
+sysCtxResp :: ProjectName -> [Sentence]
+sysCtxResp projN = [titleize user +:+ S "Responsibilities",
+  projAbrvS projN +:+ S "Responsibilities"]
 
-sysCtxList :: CI -> Contents
-sysCtxList prog = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp prog) $
-  map bulletFlat [sysCtxUsrResp prog, sysCtxSysResp]
+sysCtxList :: ProjectName -> Contents
+sysCtxList projN = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp projN) $
+  map bulletFlat [sysCtxUsrResp projN, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
-userCharacteristicsIntro :: CI -> Contents
-userCharacteristicsIntro prog = foldlSP
-  [S "The", phrase endUser `S.of_` short prog,
+userCharacteristicsIntro :: ProjectName -> Contents
+userCharacteristicsIntro projN = foldlSP
+  [S "The", phrase endUser `S.of_` projAbrvS projN,
    S "should have an understanding of",
    phrase highSchoolPhysics `sC` phrase highSchoolCalculus `S.and_` plural ode]
 

@@ -20,8 +20,7 @@ import Drasil.Database (UID, findOrErr)
 import Language.Drasil (Space, Expr, DefinedQuantityDict)
 import Language.Drasil.Printers (PrintingInformation)
 import Drasil.GOOL (VisibilityTag(..), CodeType)
-import Drasil.System (systemdb, HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
+import Drasil.System (systemdb, HasSystemMeta(..), HasProjectName(..))
 
 import Drasil.Code.CodeVar (CodeIdea(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
@@ -177,8 +176,8 @@ instance HasCodeSpec DrasilState where
 instance HasSystemMeta DrasilState where
   systemMeta = dsCodeSpec . systemMeta
 
-instance HasSmithEtAlSRS DrasilState where
-  smithEtAlSRS = dsCodeSpec . smithEtAlSRS
+instance HasProjectName DrasilState where
+  projectName = systemMeta . projectName
 
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
@@ -204,7 +203,7 @@ modExportMap cs chs@Choices {
     ++ getExpInputFormat prn chs extIns
     ++ getExpCalcs prn chs (cs ^. execOrder)
     ++ getExpOutput prn chs (cs ^. outputs)
-  where prn = cs ^. programName
+  where prn = cs ^. projAbrv
         ins = cs ^. inputs
         extIns = cs ^. extInputs
         ds = cs ^. derivedInputs

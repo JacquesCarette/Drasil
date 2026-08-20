@@ -18,7 +18,6 @@
 |RefBy       |Referenced by                      |
 |Refname     |Reference Name                     |
 |SRS         |Software Requirements Specification|
-|SWHS        |Solar Water Heating System         |
 |TM          |Theoretical Model                  |
 |UC          |Unlikely Change                    |
 |Uncert.     |Typical Uncertainty                |

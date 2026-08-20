@@ -30,7 +30,7 @@ import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
 import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
-import Drasil.SglPend.MetaConcepts (progName)
+import Drasil.SglPend.MetaConcepts (projName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
@@ -45,15 +45,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg (justification progName) []
+    IntroProg (justification projName) []
       [IPurpose (StdPurp Verbose),
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec Nothing],
   GSDSec $
     GSDProg [
-      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-      UsrChars [userCharacteristicsIntro progName],
+      SysCntxt [sysCtxIntro projName, LlC sysCtxFig1, sysCtxDesc, sysCtxList projName],
+      UsrChars [userCharacteristicsIntro projName],
       SystCons [] []],
   SSDSec $
     SSDProg
@@ -83,7 +83,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [olu]
+si = mkSmithEtAlICO projName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints [] allSymbols
@@ -91,9 +91,6 @@ si = mkSmithEtAlICO progName [olu]
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
-
-cis :: [CI]
-cis = [progName]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -104,9 +101,8 @@ allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs allSymbols ideaDicts cis
-  conceptChunks [] dataDefs iMods genDefns tMods concIns citations
-  labelledContent'
+symbMap = withCommonKnowledge projName allRefs allSymbols ideaDicts []
+  conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

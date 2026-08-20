@@ -1,10 +1,12 @@
 -- | Re-export document language types and functions for easy use in other packages.
 module Drasil.SRS (
   module Drasil.SRS.SmithEtAlSRS,
+  module Drasil.SRS.Generator,
+  module Drasil.SRS.Generator.Formats,
+  module Drasil.SRS.TypeCheck,
+
   -- * Document Language
   -- ** SRS
-  -- | For generating Software Requirements Specifications.
-
   -- *** Types
   -- Drasil.DocDecl
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -18,8 +20,6 @@ module Drasil.SRS (
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   PurposeDescription(..),
   -- *** Functions
-  -- Drasil.DocumentLanguage
-  mkDoc,
   -- * Subsection Functions
   -- ** Definitions and Models
   -- Drasil.DocumentLanguage.Definitions
@@ -29,8 +29,6 @@ module Drasil.SRS (
   mkGraphInfo, traceyGraphGetRefs,
   -- Drasil.Sections.TraceabilityMandGs
   traceMatStandard, traceMatOtherReq,
-  -- Drasil.Tracetable
-  generateTraceMap,
   -- ** Auxiliary Constants
   -- Drasil.Sections.AuxiliaryConstants
   tableOfConstants,
@@ -56,7 +54,6 @@ module Drasil.SRS (
 import Drasil.SRS.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.SRS.DocumentLanguage (mkDoc)
 import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
@@ -75,5 +72,8 @@ import Drasil.SRS.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', i
 import Drasil.SRS.Sections.TableOfSymbols (tsymb, tsymb'')
 import Drasil.SRS.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
 import Drasil.SRS.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
+
+import Drasil.SRS.Generator
+import Drasil.SRS.Generator.Formats
 import Drasil.SRS.SmithEtAlSRS
-import Drasil.SRS.TraceTable (generateTraceMap)
+import Drasil.SRS.TypeCheck

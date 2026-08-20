@@ -12,15 +12,20 @@ language: GHC2024
 default-extensions:
 - StrictData
 - TemplateHaskell
+- StandaloneDeriving
+- DerivingVia
+- DeriveGeneric
 
 extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - lens
 - drasil-database
 - drasil-file-handling
 - drasil-lang
+- drasil-utils
 
 ghc-options:
 - -Wall

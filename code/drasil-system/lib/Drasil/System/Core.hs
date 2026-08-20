@@ -5,10 +5,13 @@ module Drasil.System.Core (
   mkSystemMeta,
 ) where
 
-import Control.Lens (makeClassy)
+import Control.Lens ((^.), makeClassy)
+import Data.Set qualified as S (unions)
 
-import Drasil.Database (ChunkDB)
-import Language.Drasil (Sentence, People, CI)
+import Drasil.Database (ChunkDB, HasUID(..), HasChunkRefs(..))
+import Language.Drasil (Sentence, People)
+
+import Drasil.System.ProjectName (ProjectName, HasProjectName(..))
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -21,7 +24,7 @@ type Scope = [Sentence]
 type Motivation = [Sentence]
 
 data SystemMeta = SystemMeta
-  { _sysName    :: CI -- FIXME: This should not be a CI.
+  { _projName   :: ProjectName
   , _authors    :: People
   , _purpose    :: Purpose
   , _background :: Background
@@ -29,9 +32,23 @@ data SystemMeta = SystemMeta
   , _motivation :: Motivation
   , _systemdb   :: ChunkDB
   }
-
 makeClassy ''SystemMeta
 
-mkSystemMeta :: CI -> People -> Purpose -> Background -> Scope -> Motivation ->
-  ChunkDB -> SystemMeta
+instance HasUID SystemMeta where
+  uid = projName . uid
+
+instance HasProjectName SystemMeta where
+  projectName = projName
+
+instance HasChunkRefs SystemMeta where
+  chunkRefs x = S.unions [
+      chunkRefs (x ^. projName),
+      chunkRefs (x ^. authors),
+      chunkRefs (x ^. background),
+      chunkRefs (x ^. scope),
+      chunkRefs (x ^. motivation)
+    ]
+
+mkSystemMeta :: ProjectName -> People -> Purpose -> Background -> Scope ->
+  Motivation -> ChunkDB -> SystemMeta
 mkSystemMeta = SystemMeta

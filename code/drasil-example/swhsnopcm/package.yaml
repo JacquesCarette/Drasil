@@ -33,6 +33,7 @@ library:
   - drasil-database
   - drasil-lang
   - drasil-srs
+  - drasil-system
   - drasil-theory
   - drasil-utils
   source-dirs: lib

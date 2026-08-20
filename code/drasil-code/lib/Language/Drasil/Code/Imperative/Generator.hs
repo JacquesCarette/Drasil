@@ -21,8 +21,7 @@ import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg, NativeVector)
 import qualified Drasil.GProc as Proc (GSProgram, ProgramSym(..))
 import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
-import Drasil.System (HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -227,7 +226,7 @@ genProgram
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
-  let n = g ^. programName
+  let n = g ^. projAbrv
   -- FIXME: The below code does `Doc -> String` conversion!
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
   return $ OO.prog n p ms
@@ -249,7 +248,7 @@ genUnmodular = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = g ^. programName
+  let n = g ^. projAbrv
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
@@ -359,7 +358,7 @@ genProgramProc
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
-  let n = g ^. programName
+  let n = g ^. projAbrv
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
   return $ Proc.prog n p ms
 
@@ -381,7 +380,7 @@ genUnmodularProc = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = g ^. programName
+  let n = g ^. projAbrv
       cls = any (`member` clsMap g) [giName, dvName, icName]
   if cls then error "genUnmodularProc: Procedural renderers do not support classes"
   else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))

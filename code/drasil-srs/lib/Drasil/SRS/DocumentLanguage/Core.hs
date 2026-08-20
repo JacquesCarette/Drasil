@@ -105,10 +105,9 @@ data LFunc where
 
 -- ** Introduction Section
 
--- | Introduction section. Contents are top level followed by a list of
--- subsections.
+-- | Introduction section. Contents are top level (an introductory blurb and an
+-- optional, extra paragraph) followed by a list of subsections.
 data IntroSec = IntroProg Sentence [Sentence] [IntroSub]
-  -- ^ Temporary, will be modified once we've figured out more about the section.
 
 -- | Introduction subsections.
 data IntroSub where

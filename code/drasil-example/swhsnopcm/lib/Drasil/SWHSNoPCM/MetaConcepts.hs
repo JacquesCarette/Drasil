@@ -6,4 +6,4 @@ import Drasil.System (ProjectName, mkCommonProjName)
 
 projName :: ProjectName
 projName = mkCommonProjName (mkUid "swhsNoPCMProjName")
-  (pn' "Solar Water Heating System With No Phase Change Material") "SWHSNoPCM"
+  (pn' "Solar Water Heating System with no Phase Change Material") "SWHSNoPCM"

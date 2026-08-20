@@ -9,7 +9,7 @@
 ## What 
  
 
-> Background: Solar Water Heating System With No Phase Change Material provide a novel way of storing energy..
+> Background: Solar Water Heating System with no Phase Change Material provide a novel way of storing energy..
 
 > Scope: Thermal analysis of a single solar water heating tank.
 

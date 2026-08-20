@@ -7,7 +7,8 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
+import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue,
+  MethodSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..), FileSym(..),
   GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym, OOMethodSym,
@@ -20,10 +21,10 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd,
-  IG.OOMethodSym r vis stmt mthd attch, IG.ClassSym r vis stmt mthd stvr attch,
+class (CommonRenderSym r vis stmt mthd, MethodSym r vis mthd,
+  IG.OOMethodSym r vis mthd attch, IG.ClassSym r vis mthd stvr attch,
   IG.ModuleSym r mod mthd, IG.FileSym r file mod, IG.InternalValueExp r,
-  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r stmt,
+  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r,
   IG.OOVariableValue r, IG.OOValueExpression r, RenderClass r vis mthd stvr,
   ClassElim r, RenderFile r file mod, InternalGetSet r,
   OORenderMethod r vis mthd attch, RenderMod r mod, ModuleElim r mod,

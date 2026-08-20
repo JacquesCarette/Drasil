@@ -609,7 +609,7 @@ instance ControlStatement CSharpCode (Doc, Terminator) where
 instance ObserverPattern CSharpCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CSharpCode (Doc, Terminator) where
+instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CSharpCode Doc where
@@ -642,7 +642,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
+instance MethodSym CSharpCode Doc MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -651,7 +651,7 @@ instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym CSharpCode Doc MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -686,7 +686,7 @@ instance StateVarSym CSharpCode Doc StateVar Doc where
 instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ClassSym CSharpCode Doc MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -939,7 +939,8 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
 
 csPrint
   ::
-    ( Comparison r
+    ( BodySym r stmt
+    , Comparison r
     , Literal r
     , NumericExpression r
     , ValueExpression r

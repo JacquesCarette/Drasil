@@ -617,7 +617,7 @@ instance ControlStatement PythonCode (Doc, Terminator) where
 instance ObserverPattern PythonCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern PythonCode (Doc, Terminator) where
+instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym PythonCode Doc where
@@ -650,7 +650,7 @@ instance ParamElim PythonCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
+instance MethodSym PythonCode Doc MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -659,7 +659,7 @@ instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData AttachmentData where
+instance OOMethodSym PythonCode Doc MethodData AttachmentData where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -699,7 +699,7 @@ instance StateVarSym PythonCode Doc Doc AttachmentData where
 instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance ClassSym PythonCode Doc MethodData StateVar AttachmentData where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
@@ -941,7 +941,8 @@ pyPrint newLn f' p' v' = do
 
 pyOut
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r

@@ -632,7 +632,7 @@ instance ControlStatement JavaCode (Doc, Terminator) where
 instance ObserverPattern JavaCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern JavaCode (Doc, Terminator) where
+instance StrategyPattern JavaCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym JavaCode Doc where
@@ -665,7 +665,7 @@ instance ParamElim JavaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JavaCode Doc MethodData where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string mainFunc
@@ -674,7 +674,7 @@ instance MethodSym JavaCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym JavaCode Doc MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -715,7 +715,7 @@ instance StateVarSym JavaCode Doc Doc Doc where
 instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
-instance ClassSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ClassSym JavaCode Doc MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
@@ -977,7 +977,8 @@ jAssert condition errorMessage = vcat [
 
 jOut
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , Comparison r
     , NumericExpression r
     , ValueExpression r

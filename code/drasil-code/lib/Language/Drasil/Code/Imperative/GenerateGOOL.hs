@@ -92,7 +92,7 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (ClassSym r vis stmt mthd stvr attch) => ClassType -> Name -> Maybe Name ->
+mkClass :: (ClassSym r vis mthd stvr attch) => ClassType -> Name -> Maybe Name ->
   Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] ->
     GenState [MS (r mthd)] -> GenState (CS (r Class))
 mkClass s n l desc vs cstrs mths = do
@@ -111,13 +111,13 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (ClassSym r vis stmt mthd stvr attch) => Name -> Maybe Name -> Description ->
+primaryClass :: (ClassSym r vis mthd stvr attch) => Name -> Maybe Name -> Description ->
   [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] ->
   GenState (CS (r Class))
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (ClassSym r vis stmt mthd stvr attch) => Name -> Maybe Name -> Description ->
+auxClass :: (ClassSym r vis mthd stvr attch) => Name -> Maybe Name -> Description ->
   [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] ->
   GenState (CS (r Class))
 auxClass = mkClass Auxiliary

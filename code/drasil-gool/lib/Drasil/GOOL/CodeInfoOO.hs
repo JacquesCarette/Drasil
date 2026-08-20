@@ -437,7 +437,7 @@ instance ObserverPattern CodeInfoOO () where
     _ <- zoom lensMStoVS f
     return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance StrategyPattern CodeInfoOO () where
+instance StrategyPattern CodeInfoOO where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe (return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl
@@ -451,7 +451,7 @@ instance ParameterSym CodeInfoOO where
   param        _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
   pointerParam _ = return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance MethodSym CodeInfoOO () () () where
+instance MethodSym CodeInfoOO () () where
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -462,7 +462,7 @@ instance MethodSym CodeInfoOO () () () where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfoOO () () () () where
+instance OOMethodSym CodeInfoOO () () () where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -481,7 +481,7 @@ instance StateVarSym CodeInfoOO () () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () () () () where
+instance ClassSym CodeInfoOO () () () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms

@@ -651,7 +651,7 @@ instance ControlStatement SwiftCode (Doc, Terminator) where
 instance ObserverPattern SwiftCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern SwiftCode (Doc, Terminator) where
+instance StrategyPattern SwiftCode where
   runStrategy = M.runStrategy
 
 instance VisibilitySym SwiftCode Doc where
@@ -684,7 +684,7 @@ instance ParamElim SwiftCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance MethodSym SwiftCode Doc MethodData where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -694,7 +694,7 @@ instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym SwiftCode Doc MethodData Doc where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -727,7 +727,7 @@ instance StateVarSym SwiftCode Doc Doc Doc where
 instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ClassSym SwiftCode Doc MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

@@ -62,7 +62,7 @@ goolTestGroup
   -> ( forall r vis stmt mthd stvr attch prg file mod.
        ( OOProg r vis stmt mthd stvr attch prg file mod
        , GetSet r
-       , StrategyPattern r stmt
+       , StrategyPattern r
        , ObserverPattern r stmt
        ) => OO.GSProgram r prg
      )
@@ -150,7 +150,7 @@ genCodeGOOL
   ::
     ( OOProg r vis stmt mthd stvr attch ProgData file mod
     , GetSet r
-    , StrategyPattern r stmt
+    , StrategyPattern r
     , ObserverPattern r stmt
     , SoftwareDossierSym r'
     , Monad r'
@@ -160,7 +160,7 @@ genCodeGOOL
   -> ( forall s vis' stmt' mthd' stvr' attch' prg' file' mod'.
        ( OOProg s vis' stmt' mthd' stvr' attch' prg' file' mod'
        , GetSet s
-       , StrategyPattern s stmt'
+       , StrategyPattern s
        , ObserverPattern s stmt'
        ) => OO.GSProgram s prg'
      )

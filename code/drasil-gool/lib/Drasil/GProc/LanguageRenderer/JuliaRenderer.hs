@@ -562,7 +562,7 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JuliaCode Doc MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -979,7 +979,8 @@ jlPrint _ f' p' v' = do
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
   ::
-    ( Literal r
+    ( BodySym r stmt
+    , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r

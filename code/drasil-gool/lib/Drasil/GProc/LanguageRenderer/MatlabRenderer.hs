@@ -537,7 +537,7 @@ instance ParamElim MatlabCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unMLC
 
-instance MethodSym MatlabCode Doc (Doc, Terminator) MethodData where
+instance MethodSym MatlabCode Doc MethodData where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody

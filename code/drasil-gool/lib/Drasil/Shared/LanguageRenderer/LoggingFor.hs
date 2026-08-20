@@ -352,7 +352,7 @@ instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
   private = liftLogging private
   public = liftLogging public
 
-instance (MethodSym r vis stmt mthd) => MethodSym (LoggingFor r) vis stmt mthd where
+instance (MethodSym r vis mthd) => MethodSym (LoggingFor r) vis mthd where
   docMain = liftLogging docMain
   function = liftLogging function
   mainFunction = liftLogging mainFunction
@@ -489,7 +489,7 @@ instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
 
-instance (G.OOMethodSym r vis stmt mthd attch) => G.OOMethodSym (LoggingFor r) vis stmt mthd attch where
+instance (G.OOMethodSym r vis mthd attch) => G.OOMethodSym (LoggingFor r) vis mthd attch where
   method = liftLogging G.method
   getMethod = liftLogging G.getMethod
   setMethod = liftLogging G.setMethod
@@ -502,7 +502,7 @@ instance (G.StateVarSym r vis stvr attch) => G.StateVarSym (LoggingFor r) vis st
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis stmt mthd stvr attch) => G.ClassSym (LoggingFor r) vis stmt mthd stvr attch where
+instance (G.ClassSym r vis mthd stvr attch) => G.ClassSym (LoggingFor r) vis mthd stvr attch where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
@@ -518,5 +518,5 @@ instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where
 instance (G.ProgramSym r prg file) => G.ProgramSym (LoggingFor r) prg file where
   prog = liftLogging G.prog
 
-instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where
+instance (G.StrategyPattern r) => G.StrategyPattern (LoggingFor r) where
   runStrategy = liftLogging G.runStrategy

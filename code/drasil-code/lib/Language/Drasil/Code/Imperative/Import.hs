@@ -715,7 +715,8 @@ genFunc _ _ (FData (FuncData n desc ddef)) = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , MathConstant r
     , VariableValue r
     , OO.Literal r
@@ -849,7 +850,8 @@ genDataFunc nameTitle desc ddef = do
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readData
   ::
-    ( Argument r
+    ( BodySym r stmt
+    , Argument r
     , OO.Literal r
     , MathConstant r
     , OOVariableValue r
@@ -885,7 +887,8 @@ readData ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
           ::
-            ( OO.Literal r
+            ( BodySym r stmt
+            , OO.Literal r
             , OOVariableValue r
             , List r
             , ListStatement r stmt
@@ -1129,7 +1132,7 @@ publicFuncProc
     , FileHandling r stmt
     , PrintFile r stmt
     , BodySym r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , VariableElim r
     )
   => Label
@@ -1153,7 +1156,7 @@ privateFuncProc
     , FileHandling r stmt
     , PrintFile r stmt
     , BodySym r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , VariableElim r
     )
   => Label
@@ -1179,7 +1182,7 @@ genMethodProc
     , FileHandling r stmt
     , PrintFile r stmt
     , BodySym r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , VariableElim r
     )
   => ([MS (r ParamData)] -> MS (r Body) -> MS (r mthd))
@@ -1206,7 +1209,8 @@ genMethodProc f n desc p r b = do
 -- declared variables.
 genFuncProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , BooleanExpression r
     , Comparison r
@@ -1227,7 +1231,7 @@ genFuncProc
     , List r
     , ListStatement r stmt
     , Reference r
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , OO.Set r
     , TypeElim r
     , VariableElim r
@@ -1250,7 +1254,8 @@ genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 -- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncsProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , BooleanExpression r
     , Comparison r
@@ -1271,7 +1276,7 @@ genModFuncsProc
     , List r
     , ListStatement r stmt
     , Reference r
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , OO.Set r
     , TypeElim r
     , VariableElim r
@@ -1283,7 +1288,8 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 -- | Read from a data description into an 'MS Block' of 'MS Statement's.
 readDataProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , BooleanExpression r
     , Comparison r
@@ -1316,7 +1322,8 @@ readDataProc ddef = do
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData
           ::
-            ( VariableValue r
+            ( BodySym r stmt
+            , VariableValue r
             , NativeVector r
             , List r
             , ListStatement r stmt
@@ -1533,7 +1540,8 @@ convCallProc c x ns f libf = do
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmtProc
   ::
-    ( MathConstant r
+    ( BodySym r stmt
+    , MathConstant r
     , VariableValue r
     , BooleanExpression r
     , NumericExpression r
@@ -1655,7 +1663,8 @@ convStmtProc (FAppend a b) = do
 -- 'DataDesc'.
 genDataFuncProc
   ::
-    ( NativeVector r
+    ( BodySym r stmt
+    , NativeVector r
     , MathConstant r
     , BooleanExpression r
     , Comparison r
@@ -1674,7 +1683,7 @@ genDataFuncProc
     , Reference r
     , OO.Set r
     , MultiStatement r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , TypeElim r
     , VariableElim r
     )
@@ -1688,13 +1697,14 @@ genDataFuncProc nameTitle desc ddef = do
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFuncProc
   ::
-    ( OO.Literal r
+    ( BodySym r stmt
+    , OO.Literal r
     , VariableValue r
     , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , VariableElim r
     )
   => Label
@@ -1708,13 +1718,14 @@ publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n pu
 -- | Generates a private function, defined by its inputs and outputs.
 privateInOutFuncProc
   ::
-    ( OO.Literal r
+    ( BodySym r stmt
+    , OO.Literal r
     , VariableValue r
     , MultiStatement r stmt
     , DeclStatement r stmt
     , FileHandling r stmt
     , PrintFile r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd
     , VariableElim r
     )
   => Label

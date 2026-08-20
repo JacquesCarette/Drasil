@@ -8,7 +8,7 @@ module Drasil.System.ProjectName (
 ) where
 
 import Control.Lens ((^.), makeLensesFor, makeClassyFor)
-import Data.Char (toLower, isAlphaNum)
+import Data.Char (toLower, isAlphaNum, isPrint)
 import Data.List.Extras (replaceAll)
 
 import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..))
@@ -36,29 +36,26 @@ makeClassyFor "HasProjectName" "projectName" [("_title", "projTitle"), ("_abbrev
 instance HasUID ProjectName where
   uid = pnUID
 
--- FIXME: Need to create a 'suitable name' policy. Ideas:
---
--- Title: Any NP.
---
--- Abbreviation:
--- 1. Non-empty
--- 2. No special whitespace (\t, \r, \n, \f, \v)
--- 3. <64 chars?
---
--- Repo Name:
--- 1. Non-empty
--- 2. Valid chars: lowercase alphanumeric or '-' only
--- 3. <64 chars?
-
 -- | Construct a 'ProjectName' from a 'UID', title ('NP'), abbreviation ('String'),
 -- and repository name formatter ('String -> String'). Errors if the repository
 -- name contains characters other than alphanumeric characters or @'-'@.
+--
+-- Abbreviation rules:
+-- 1. Non-empty, maximum of 64 chars.
+-- 2. Only printable characters.
+--
+-- Repo name rules:
+-- 1. Non-empty, maximum of 64 chars.
+-- 2. Lowercase alphanumeric or '-' only.
 mkProjectName :: UID -> NP -> String -> (String -> String) -> ProjectName
-mkProjectName u ttl ab rpoF
-  | all (\c -> isAlphaNum c || c == '-') rpo = PN u ttl ab rpo
-  | otherwise          = error "Project repo name must be alphanumeric."
+mkProjectName u title abrv abrv2repoF
+  | not (all isPrint abrv)                         = error "Project abbreviation may only contain printable characters."
+  | length abrv > 64 || null abrv                  = error "Project abbreviation must be between [1,64] characters long."
+  | any (\c -> not (isAlphaNum c) && c /= '-') rpo = error "Project repository name must be alphanumeric."
+  | length rpo > 64 || null rpo                    = error "Project repository name must be between [1,64] characters long."
+  | otherwise          = PN u title abrv rpo
   where
-    rpo = rpoF ab
+    rpo = abrv2repoF abrv
 
 -- | Construct a 'ProjectName' using a common repository name formatting rule
 -- (lowercase, naively replace non-alphanumeric characters with @'-'@s).

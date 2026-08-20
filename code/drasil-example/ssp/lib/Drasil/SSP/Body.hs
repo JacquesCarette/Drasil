@@ -68,8 +68,8 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
-  IntroSec $ IntroProg startIntro kSent
-    [ IPurpose $ purpDoc progName Verbose
+  IntroSec $ IntroProg startIntro [extraInfoSent]
+    [ IPurpose (StdPurp Verbose)
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
@@ -86,7 +86,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc progName physSystParts figPhysSyst physSystContents
+        , PhySysDesc physSystParts figPhysSyst physSystContents
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -161,7 +161,7 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 --automatically generated in mkSRS
 
 -- SECTION 2 --
-startIntro, kSent :: Sentence
+startIntro, extraInfoSent :: Sentence
 startIntro = foldlSent [D.toSent (atStartNP (a_ slope)), S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
   S "water" `sC` S "is subject" `S.toThe` S "influence" `S.of_` (D.toSent (phraseNP (gravity `onThe` mass)) !.),
@@ -175,15 +175,10 @@ startIntro = foldlSent [D.toSent (atStartNP (a_ slope)), S "of geological",
   S "assessment" `S.ofThe` S "safety" `S.ofA` phrase slope `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `S.and_`
-  S "an index" `S.of_` S "its relative stability known as the" +:+. phrase fs]
+  S "an index" `S.of_` S "its relative stability known as the" +:+ phrase fs]
 
-kSent = keySent ssa progName
-
-keySent :: (Idea a, Idea b) => a -> b -> Sentence
-keySent probType pname = foldlSent_ [(D.toSent (phraseNP (NP.a_ (combineNINI probType problem))) !.),
-  S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb pname,
-  S "based on the original, manually created version of" +:+
+extraInfoSent = foldlSent [S "The ", phrase program,
+  S "is based on the original, manually created version of",
   namedRef externalLinkRef (S "SSP")]
 
 externalLinkRef :: Reference

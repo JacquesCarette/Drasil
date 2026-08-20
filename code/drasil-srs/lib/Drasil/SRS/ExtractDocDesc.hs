@@ -37,7 +37,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
   pdSub = Constant <$> \case
     (TermsAndDefs _ _) -> mempty
-    (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
+    (PhySysDesc _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
     (Constraints _ c) -> mCon [inDataConstTbl c]
@@ -86,12 +86,8 @@ egetSecCon (Con c) = extractMExprs c
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
-    introSub = Constant . f <$> \case
-      (IPurpose s) -> s
-      (IScope s) -> [s]
-      (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec s1) -> maybeToList s1,
+    introSec = Constant . f <$> \(IntroProg s1 s2s s3) -> s1 : (s2s ++ concatMap getIntroSub s3),
+    introSub = Constant . f <$> getIntroSub,
     stkSub = Constant . f <$> \case
       (Client s) -> [s]
       Cstmr -> [],
@@ -99,7 +95,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ extractSents' cs
+      (PhySysDesc s lc cs) -> s ++ extractSents lc ++ extractSents' cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -122,7 +118,8 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     def = map (^. defn)
 
     getIntroSub :: IntroSub -> [Sentence]
-    getIntroSub (IPurpose ss) = ss
+    getIntroSub (IPurpose (CustomPurp ps)) = concat ps
+    getIntroSub (IPurpose (StdPurp _)) = []
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
     getIntroSub (IOrgSec s1) = maybeToList s1
@@ -139,7 +136,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
 
     getPDSub :: PDSub -> [Sentence]
     getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ extractSents' cs
+    getPDSub (PhySysDesc s lc cs) = s ++ extractSents lc ++ extractSents' cs
     getPDSub (Goals s c) = s ++ def c
 
 -- | Extracts 'Sentence's from a document description.

@@ -249,12 +249,12 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
+mkIntroSec si (IntroProg probIntro extraInfo l) =
+  Intro.introductionSection probIntro si extraInfo l $ map mkSubIntro l
   where
     im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
-    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc si intro
     mkSubIntro (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro (IChar assumed topic asset) =
       Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])
@@ -295,9 +295,9 @@ mkSSDSec si (SSDProg l) =
 
 -- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SmithEtAlSRS -> ProblemDescription -> Section
-mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
+mkSSDProb si (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
-        mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+        mkSubPD (PhySysDesc parts dif extra) = SSD.physSystDesc (si ^. sysName) parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
 -- | Helper for making the Solution Characteristics Specification section.

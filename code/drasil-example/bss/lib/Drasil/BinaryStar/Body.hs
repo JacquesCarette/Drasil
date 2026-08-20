@@ -43,8 +43,8 @@ mkSRS = [TableOfContents,
     , TAandA
     ],
   IntroSec $
-  IntroProg introBlurb (phrase progName)
-    [ IPurpose $ purpDoc progName Verbose,
+  IntroProg introBlurb []
+    [ IPurpose (StdPurp Verbose),
       IScope scope,
       IChar [] charsOfReader [],
       IOrgSec Nothing
@@ -59,7 +59,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
       [ TermsAndDefs Nothing ccsFortermsAndDefsTbl
-      , PhySysDesc progName physSystParts figBSS []
+      , PhySysDesc physSystParts figBSS []
       , Goals goalsInputs
       ]
       , SSDSolChSpec $ SCSProg

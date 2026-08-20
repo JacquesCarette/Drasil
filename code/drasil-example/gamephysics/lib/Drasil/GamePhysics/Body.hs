@@ -47,8 +47,8 @@ import Drasil.GamePhysics.GenDefs (generalDefns)
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short progName)
-  [IPurpose $ purpDoc progName Verbose,
+  IntroSec $ IntroProg para1_introduction_intro []
+  [IPurpose (StdPurp Verbose),
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec Nothing],

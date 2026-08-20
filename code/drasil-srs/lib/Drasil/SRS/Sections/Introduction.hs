@@ -1,7 +1,8 @@
 -- | Defines functions used in creating an introduction section.
 module Drasil.SRS.Sections.Introduction (orgSec, introductionSection,
-  purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
+  purposeOfDoc, scopeOfRequirements, charIntRdrF) where
 
+import Control.Lens ((^.))
 import Data.Maybe (maybeToList)
 
 -- Generic Drasil
@@ -11,6 +12,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
 import Drasil.SRS.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (sysName)
 
 -- Vocabulary
 import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
@@ -27,8 +29,9 @@ import Drasil.Metadata.Software.Products (sciCompS)
 -- Other docLang
 import qualified Drasil.SRS.Concepts as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.SRS.DocumentLanguage.Core (IntroSub(..))
+import Drasil.SRS.DocumentLanguage.Core (IntroSub(..), PurposeDescription(..))
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 
 -----------------------
 --     Constants     --
@@ -77,30 +80,31 @@ introSubToSentence IOrgSec {} = [S.the_ofThe (phrase organization) (phrase docum
 -- | Constructor for the Introduction section. In order, the parameters are:
 --
 --     * problemIntroduction - 'Sentence' introducing the specific example problem.
---     * programDefinition  - 'Sentence' definition of the specific example.
+--     * programDefinition  - 'SmithEtAlSRS' definition of the specific example.
+--     * extraInfo          - List of extra 'Sentence's to include in the overview paragraph.
 --     * introSubs          - List of IntroSub describing what subsections exist.
 --     * subSections        - List of subsections for this section.
-introductionSection :: Sentence -> Sentence -> [IntroSub] -> [Section] -> Section
-introductionSection EmptyS              programDefinition introSubs = SRS.intro
+introductionSection :: Sentence -> SmithEtAlSRS -> [Sentence] -> [IntroSub] -> [Section] -> Section
+introductionSection EmptyS              programDefinition extraInfo introSubs = SRS.intro
   [mkParagraph $ emptySectSentSing [problemIntro],
-  overviewParagraph programDefinition introSubs]
-introductionSection problemIntroduction programDefinition introSubs = SRS.intro
-  [mkParagraph problemIntroduction, overviewParagraph programDefinition introSubs]
+  overviewParagraph programDefinition extraInfo introSubs]
+introductionSection problemIntroduction programDefinition extraInfo introSubs = SRS.intro
+  [mkParagraph problemIntroduction, overviewParagraph programDefinition extraInfo introSubs]
 
 -- | Constructor for the overview paragraph for the Introduction.
--- Takes the definition of the specific example being generated ('Sentence')
--- and the list of IntroSub to dynamically generate the roadmap.
-overviewParagraph :: Sentence -> [IntroSub] -> Contents
-overviewParagraph programDefinition introSubs =
+-- Takes the definition of the specific example being generated ('Sentence'),
+-- additional information ('[Sentence]'), and the list of IntroSub to dynamically generate the roadmap.
+overviewParagraph :: SmithEtAlSRS -> [Sentence] -> [IntroSub] -> Contents
+overviewParagraph si extraInfo introSubs =
   let subsectionsSentence = introductionSubsections introSubs
       -- Build the sentence ending based on whether there are subsections
       endingSentence = case subsectionsSentence of
         EmptyS -> phrase document  -- No subsections, end with just "document"
         _      -> phrase document :+: subsectionsSentence  -- Has subsections, add them
-  in foldlSP [S "The following", phrase section_,
-     S "provides an overview of the", introduceAbb srs, S "for" +:+.
-     programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
-     S "of this", endingSentence]
+  in foldlSP ([S "The following", phrase section_,
+     S "provides an overview of the", introduceAbb srs, S "for the",
+     introduceAbb (si ^. sysName) +:+. S "program"] ++ extraInfo ++ [S "This", phrase section_, S "explains the", phrase purpose,
+     S "of this", endingSentence])
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: Idea c => c -> Sentence
@@ -115,22 +119,15 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   short srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"]
 
--- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
--- Verbosity controls if the 'developmentProcessParagraph' is added or not.
-purpDoc :: Idea c => c -> Verbosity -> [Sentence]
-purpDoc proName Verbose = [purpDocPara1 proName, developmentProcessParagraph]
-purpDoc proName Succinct = [purpDocPara1 proName]
-
 -- | Constructor for Purpose of Document subsection. Takes a list of 'Sentence's that:
 --
 --     * Given one element: explains the purpose of the specific example.
 --     * Given two elements: explains the purpose of the specific example and the development process.
 --     * Otherwise: Uses the default 'developmentProcessParagraph'.
-purposeOfDoc :: [Sentence] -> Section
-purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc [mkParagraph purposeOfProgram] []
-purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc
-  [mkParagraph purposeOfProgram, mkParagraph developmentProcess] []
-purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
+purposeOfDoc :: SmithEtAlSRS -> PurposeDescription -> Section
+purposeOfDoc srd (StdPurp Succinct) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. sysName] []
+purposeOfDoc srd (StdPurp Verbose) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. sysName, mkParagraph developmentProcessParagraph] []
+purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (map (mkParagraph . foldlSent_) ss) []
 
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.

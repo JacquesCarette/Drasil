@@ -113,6 +113,8 @@ int main(int argc, const char *argv[]) {
     myOtherList.push_back(2.5);
     double e;
     e = myOtherList.at(1);
+    std::cout << "Last element of myOtherList: ";
+    std::cout << myOtherList.at((int)(myOtherList.size()) - 1) << std::endl;
     myOtherList.at(1) = 17.4;
     vector<string> myName(7);
     myName.clear();

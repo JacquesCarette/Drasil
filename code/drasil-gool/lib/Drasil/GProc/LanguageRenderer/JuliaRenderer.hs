@@ -36,8 +36,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
-  uOp, bOp, variable, value, function, statement, visibility, parameter, method,
-  blockComment')
+  uOp, bOp, variable, value, valueInt, function, statement, visibility,
+  parameter, method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
@@ -92,8 +92,8 @@ import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat,
-  quotes, doubleQuotes, parens, equals, colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, integer, (<>), (<+>), empty,
+  brackets, vcat, quotes, doubleQuotes, parens, equals, colon)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 jlExt :: String
@@ -383,6 +383,16 @@ instance Array JuliaCode where
 instance List JuliaCode where
   listSize = CS.listSize jlListSize
   listAccess = G.listAccess
+  listAccessFromEnd v n = do
+    v' <- v
+    n' <- n
+    let t = innerType $ return $ valueType v'
+        idx = case RC.valueInt n' of
+          Just 0  -> text "end"
+          Just i  -> text "end" <+> text "-" <+> integer i
+          Nothing -> text "end" <+> text "-" <+> RC.value n'
+    mkStateVal t (RC.value v' <> brackets idx)
+  listLast v = listAccessFromEnd v (litInt 0)
   indexOf = jlIndexOf
 
 instance ListStatement JuliaCode (Doc, Terminator) where

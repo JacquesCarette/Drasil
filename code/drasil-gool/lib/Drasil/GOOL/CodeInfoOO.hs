@@ -274,6 +274,8 @@ instance Array CodeInfoOO where
 instance List CodeInfoOO where
   listSize       = execute1
   listAccess     = execute2
+  listAccessFromEnd = execute2
+  listLast       = execute1
   indexOf        = execute2
 
 instance ListStatement CodeInfoOO () where

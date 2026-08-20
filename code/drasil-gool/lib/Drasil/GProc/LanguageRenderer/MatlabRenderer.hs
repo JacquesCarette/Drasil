@@ -32,8 +32,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (body, block, uOp,
-  bOp, variable, value, function, statement, visibility, parameter, method,
-  blockComment')
+  bOp, variable, value, valueInt, function, statement, visibility, parameter,
+  method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
@@ -70,7 +70,8 @@ import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
 import Drasil.Shared.LanguageRenderer (listSep', valueList, intValue)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import Drasil.Shared.Helpers (toCode, toState, onCodeValue, onStateValue,
-  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat)
+  onCodeList, onStateList, on2CodeValues, on2StateValues, emptyIfEmpty, vibcat,
+  getInnerType)
 import Drasil.Shared.State (MS, VS, FS, lensGStoFS, lensFStoMS, lensMStoVS,
   revFiles, setFileType, setModuleName, getMainDoc)
 
@@ -79,8 +80,9 @@ import Control.Monad.State (modify)
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, text, (<>), (<+>), vcat,
-  hcat, parens, brackets, braces, equals, quotes, punctuate, render)
+import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, text, integer, (<>),
+  (<+>), vcat, hcat, parens, brackets, braces, equals, quotes, punctuate,
+  render)
 
 newtype MatlabCode a = MLC {unMLC :: a} deriving Functor
 
@@ -337,6 +339,17 @@ instance Array MatlabCode where
 instance List MatlabCode where
   listSize = CS.listSize "length"   -- length(v)
   listAccess = G.listAccess
+  listAccessFromEnd v n = do
+    v' <- v
+    n' <- n
+    let t = innerType $ return $ valueType v'
+        innerCt = getInnerType $ cType $ unMLC $ valueType v'
+        idx = case RC.valueInt n' of
+          Just 0  -> text "end"
+          Just i  -> text "end" <+> text "-" <+> integer i
+          Nothing -> text "end" <+> text "-" <+> RC.value n'
+    mkStateVal t (RC.value v' <> mlCellWrap innerCt idx)
+  listLast v = listAccessFromEnd v (litInt 0)
   indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance ListStatement MatlabCode (Doc, Terminator) where

@@ -4,8 +4,6 @@ module Drasil.SWHS.Body (
   sysCntxtRespIntro, userChars
 ) where
 
-import Control.Lens ((^.))
-
 import Drasil.Database (ChunkDB)
 import Language.Drasil hiding (organization, variable)
 import Language.Drasil.Document
@@ -169,10 +167,10 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 introStartSWHS, extraInfoSent :: Sentence
-introStartSWHS = foldlSent [D.toSent $ atStartNP' $ swhs ^. term,
+introStartSWHS = foldlSent [atStart' swhs,
   S "incorporating", phrase phsChgMtrl, sParen (short phsChgMtrl),
   S "use a renewable", phrase enerSrc `S.and_`
-  S "provide a novel way of storing" +:+. phrase energy, atStart swhs,
+  S "provide a novel way of storing" +:+. phrase energy, atStart' swhs,
   S "incorporating", short phsChgMtrl, S "improve over the traditional",
   plural swhs, S "because of their smaller size. The smaller size" `S.is`
   S "possible because" `S.ofThe` S "ability" `S.of_` short phsChgMtrl,

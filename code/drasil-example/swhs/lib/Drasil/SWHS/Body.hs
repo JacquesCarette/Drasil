@@ -235,9 +235,8 @@ orgDocEnd = foldlSent [D.toSent (atStartNP' (the inModel)),
   S "to be solved" `S.are` S "referred to as" +:+.
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`
-  S "algebraic", plural equation, S "that", phrase model,
-  phrase swhs, S "incorporating" +:+. phrase phaseChangeMaterial,
-  projAbrvS projName, S "solves these", short ode :+: S "s"]
+  S "algebraic", plural equation, S "that", phrase model +:+.
+  phrase swhs, projAbrvS projName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to

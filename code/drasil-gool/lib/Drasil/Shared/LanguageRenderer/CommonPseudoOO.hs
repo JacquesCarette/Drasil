@@ -25,7 +25,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), varDecDef, bool,
   TypeElim(..), getCodeType, getTypeString,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ValueStatement(valStmt), ControlStatement(returnStmt), VisibilitySym(..),
-  MethodSym(function), funcApp, listSize)
+  MethodSym(function), funcApp, listSize, BlockSym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, CSStateVar, OOTypeSym(obj),
   AttachmentSym(..), Initializers, objMethodCallNoParams, objMethodCall)
@@ -90,7 +90,7 @@ int :: (Monad r) => VS (r TypeData)
 int = typeFromData Integer intRender (text intRender)
 
 constructor
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => Label -> [MS (r ParamData)] -> Initializers r -> MS (r bod) -> MS (r mthd)
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
@@ -269,7 +269,7 @@ mainDesc = "Controls the flow of the program"
 argsDesc = "List of command-line arguments"
 
 docMain
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => MS (r bod) -> MS (r mthd)
 docMain b = commentedFunc (docComment $ toState $ functionDox
   mainDesc [(args, argsDesc)] []) (IC.mainFunction b)
@@ -294,7 +294,7 @@ mainFunction s n = RG.intFunc True n public classLevel (mType IC.void)
 --   ms is the class methods
 --   cs is the classes
 buildModule'
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod, UnRepr r Doc)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block, UnRepr r Doc)
   => Label
   -> (String -> r Doc)
   -> [Label]
@@ -395,13 +395,13 @@ destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
 stateVarDef
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod, Monad r)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block, Monad r)
   => r vis -> r attch -> SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility  s) (RG.perm p) . RC.statement)
   (RC.stmt $ IC.varDecDef vr IC.local vl)
 
-constVar :: (CommonRenderSym r vis stmt mthd bod, Monad r) => Doc -> r vis ->
+constVar :: (CommonRenderSym r vis stmt mthd bod block, Monad r) => Doc -> r vis ->
   SVariable r -> SValue r -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) p . RC.statement) (RC.stmt $ IC.constDecDef vr IC.local vl)
@@ -458,7 +458,7 @@ openFileW
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
 stateVar
-  :: (Monad r, OORenderSym r vis stmt mthd stvr attch file mod bod)
+  :: (Monad r, OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => r vis -> r attch -> SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.visibility s) (RG.perm p) . RC.statement) (RC.stmt $ IC.varDec v IC.local)
@@ -505,7 +505,7 @@ listDec
 listDec v scp = listDecDef v scp []
 
 funcDecDef
-  :: (OORenderSym r vis stmt mthd stvr attch file mod bod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => SVariable r -> r ScopeData -> [SVariable r] -> MS (r bod) -> MS (r stmt)
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
@@ -546,7 +546,8 @@ inOutFunc
   :: ( IC.VariableValue r
      , IC.ParameterSym r
      , IC.DeclStatement r stmt bod
-     , IC.BodySym r stmt bod
+     , BlockSym r block stmt
+     , IC.BodySym r bod block
      , VariableElim r
      , RenderBody r bod
      , RenderType r

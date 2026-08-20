@@ -293,10 +293,10 @@ instance (Comparison r) => Comparison (LoggingFor r) where
   (?==) = liftLogging (?==)
   (?!=) = liftLogging (?!=)
 
-instance (BlockSym r stmt) => BlockSym (LoggingFor r) stmt where
+instance (BlockSym r block stmt) => BlockSym (LoggingFor r) block stmt where
   block = liftLogging block
 
-instance (BodySym r stmt bod) => BodySym (LoggingFor r) stmt bod where
+instance (BodySym r bod block) => BodySym (LoggingFor r) bod block where
   body = liftLogging body
   addComments = liftLogging addComments
 
@@ -326,7 +326,7 @@ instance (FuncAppStatement r stmt) => FuncAppStatement (LoggingFor r) stmt where
 
 instance (FunctionSym r) => FunctionSym (LoggingFor r) where
 
-instance (InternalList r) => InternalList (LoggingFor r) where
+instance (InternalList r block) => InternalList (LoggingFor r) block where
   listSlice' = liftLogging listSlice'
 
 instance (Literal r) => Literal (LoggingFor r) where
@@ -423,7 +423,7 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg file mod bod) => P.ProcProg (LoggingFor r) vis stmt mthd prg file mod bod
+instance (P.ProcProg r vis stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis stmt mthd prg file mod bod block
 
 instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
@@ -437,7 +437,7 @@ instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd stvr attch prg file mod bod) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg file mod bod
+instance (G.OOProg r vis stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -518,5 +518,5 @@ instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where
 instance (G.ProgramSym r prg file) => G.ProgramSym (LoggingFor r) prg file where
   prog = liftLogging G.prog
 
-instance (G.StrategyPattern r bod) => G.StrategyPattern (LoggingFor r) bod where
+instance (G.StrategyPattern r bod block) => G.StrategyPattern (LoggingFor r) bod block where
   runStrategy = liftLogging G.runStrategy

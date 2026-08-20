@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable,
-  SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
+  Variable, SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -119,7 +119,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -127,8 +127,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData Body
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body
+instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -160,7 +160,7 @@ instance PermElim PythonCode AttachmentData where
   perm = attachmentDoc . unPC
   binding = attachment . unPC
 
-instance BodySym PythonCode (Doc, Terminator) Body where
+instance BodySym PythonCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
@@ -171,13 +171,13 @@ instance RenderBody PythonCode Body where
 instance BodyElim PythonCode Body where
   body = unPC
 
-instance BlockSym PythonCode (Doc, Terminator) where
+instance BlockSym PythonCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock PythonCode where
+instance RenderBlock PythonCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim PythonCode where
+instance BlockElim PythonCode Block where
   block = unPC
 
 instance TypeSym PythonCode where
@@ -453,7 +453,7 @@ instance Set PythonCode where
   setRemove = CP.setMethodCall pyRemove
   setUnion = CP.setMethodCall pyUnion
 
-instance InternalList PythonCode where
+instance InternalList PythonCode Block where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
@@ -617,7 +617,7 @@ instance ControlStatement PythonCode (Doc, Terminator) Body where
 instance ObserverPattern PythonCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern PythonCode Body where
+instance StrategyPattern PythonCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym PythonCode Doc where
@@ -941,7 +941,8 @@ pyPrint newLn f' p' v' = do
 
 pyOut
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod block
+    , BlockSym r block stmt
     , Literal r
     , NumericExpression r
     , Comparison r

@@ -6,7 +6,7 @@ module Drasil.GProc.LanguageRenderer.MatlabRenderer (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Value, SValue, Variable, SVariable,
-  getCodeType, UnRepr(..), Body, BodySym(..), BlockSym(..), TypeSym(..),
+  getCodeType, UnRepr(..), Body, Block, BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -91,7 +91,7 @@ instance Applicative MatlabCode where
 instance Monad MatlabCode where
   MLC x >>= f = f x
 
-instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body
+instance ProcProg MatlabCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
 instance ProgramSym MatlabCode ProgData FileData where
   prog n st files = do
@@ -99,8 +99,8 @@ instance ProgramSym MatlabCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData Body
-instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData FileData ModData Body
+instance CommonRenderSym MatlabCode Doc (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym MatlabCode Doc (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr MatlabCode inner where
   unRepr = unMLC
@@ -121,7 +121,7 @@ instance ImportSym MatlabCode where
   langImport = undefined
   modImport = undefined
 
-instance BodySym MatlabCode (Doc, Terminator) Body where
+instance BodySym MatlabCode Body Block where
   body = onStateList (onCodeList R.body)
   addComments s = onStateValue (onCodeValue (R.addComments s mlCmtStart))
 
@@ -131,13 +131,13 @@ instance RenderBody MatlabCode Body where
 instance BodyElim MatlabCode Body where
   body = unMLC
 
-instance BlockSym MatlabCode (Doc, Terminator) where
+instance BlockSym MatlabCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock MatlabCode where
+instance RenderBlock MatlabCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim MatlabCode where
+instance BlockElim MatlabCode Block where
   block = unMLC
 
 instance TypeSym MatlabCode where
@@ -358,7 +358,7 @@ instance NativeVector MatlabCode where
   vecMag a = funcApp "norm" double [a]       -- norm(a)
   vecUnit a = a #/ vecMag a                  -- a / norm(a)
 
-instance InternalList MatlabCode where
+instance InternalList MatlabCode Block where
   listSlice' = M.listSlice
 
 instance InternalListFunc MatlabCode where
@@ -783,15 +783,17 @@ mlEnd, mlElseIf :: Doc
 mlEnd = text "end"
 mlElseIf = text "elseif"
 
-mlForEach :: (CommonRenderSym r vis stmt mthd bod) => r Variable ->
-  r Value -> r bod -> Doc
+mlForEach
+  :: (CommonRenderSym r vis stmt mthd bod block)
+  => r Variable -> r Value -> r bod -> Doc
 mlForEach i lstVar b = vcat [
   text "for" <+> RC.variable i <+> equals <+> RC.value lstVar,
   indent $ RC.body b,
   mlEnd]
 
-mlRange :: (CommonRenderSym r vis stmt mthd bod) => SValue r -> SValue r ->
-  SValue r -> SValue r
+mlRange
+  :: (CommonRenderSym r vis stmt mthd bod block)
+  => SValue r -> SValue r -> SValue r -> SValue r
 mlRange initv finalv stepv = do
   ini <- initv
   fin <- finalv
@@ -799,7 +801,8 @@ mlRange initv finalv stepv = do
   d <- double
   mkVal d (RC.value ini <> text ":" <> RC.value stp <> text ":" <> RC.value fin)
 
-mlTryCatch :: (CommonRenderSym r vis stmt mthd bod) => r bod -> r bod -> Doc
+mlTryCatch
+  :: (CommonRenderSym r vis stmt mthd bod block) => r bod -> r bod -> Doc
 mlTryCatch tryB catchB = vcat [
   text "try",
   indent $ RC.body tryB,

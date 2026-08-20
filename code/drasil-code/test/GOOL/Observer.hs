@@ -2,7 +2,7 @@
 module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
-  AttachmentSym(..), BodySym, oneLiner, TypeSym(..), PrintConsole(..),
+  AttachmentSym(..), BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..),
   VariableSym(..), SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..),
   OOVariableValue, VisibilitySym(..), OOMethodSym(..), initializer,
   StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -17,7 +17,7 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 -- | Creates the observer class.
-observer :: (OOProg r vis stmt mthd stvr attch prg file mod bod) => FS (r file)
+observer :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => FS (r file)
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
@@ -32,7 +32,8 @@ selfX = instanceVarSelf x
 -- | Helper function to create the class.
 helperClass
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r block stmt
+    , BodySym r bod block
     , ClassSym r vis mthd stvr attch
     , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
@@ -46,7 +47,7 @@ helperClass = buildClass Nothing [stateVar public instanceLevel x]
 -- | Default value for observer class is 5.
 observerConstructor
   ::
-    ( BodySym r stmt bod
+    ( BodySym r bod block
     , VariableSym r
     , OOMethodSym r vis mthd attch bod
     , Literal r
@@ -57,7 +58,8 @@ observerConstructor = initializer [] [(x, litInt 5)]
 -- | Create the @printNum@ method.
 printNumMethod
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r block stmt
+    , BodySym r bod block
     , OOMethodSym r vis mthd attch bod
     , VisibilitySym r vis
     , PrintConsole r stmt

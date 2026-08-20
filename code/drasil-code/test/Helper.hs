@@ -1,8 +1,8 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
 module Helper (helperOO, helperProc) where
 
-import Drasil.GOOL (OOProg, FS, MS, bodyStatements, BodySym, TypeSym(..),
-  DeclStatement(..), AssignStatement, ControlStatement(..),
+import Drasil.GOOL (OOProg, FS, MS, bodyStatements, BodySym, BlockSym,
+  TypeSym(..), DeclStatement(..), AssignStatement, ControlStatement(..),
   (&=), VariableSym(var), Literal(..), VariableValue(..),
   NumericExpression(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
   ScopeSym(local))
@@ -14,20 +14,21 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.
 helperOO
-  :: (OOProg r vis stmt mthd stvr attch prg file mod bod)
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
   => FS (r file)
 helperOO = OO.fileDoc (OO.buildModule "Helper" [] [doubleAndAdd] [])
 
 -- | Creates Helper module that contains an addition function.
 helperProc
-  :: (ProcProg r vis stmt mthd prg file mod bod)
+  :: (ProcProg r vis stmt mthd prg file mod bod block)
   => FS (r file)
 helperProc = GProc.fileDoc (GProc.buildModule "Helper" [] [doubleAndAdd])
 
 -- | Creates a function that doubles the arguments and adds them together.
 doubleAndAdd
   ::
-    ( BodySym r stmt bod
+    ( BlockSym r block stmt
+    , BodySym r bod block
     , Literal r
     , VariableValue r
     , NumericExpression r

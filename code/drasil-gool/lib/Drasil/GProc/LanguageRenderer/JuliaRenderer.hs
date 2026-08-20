@@ -108,7 +108,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData ModData
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body
 
 instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
@@ -116,8 +116,8 @@ instance ProgramSym JuliaCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData ModData
+instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData Body
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData ModData Body
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
@@ -144,15 +144,15 @@ instance ImportSym JuliaCode where
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
 
-instance BodySym JuliaCode (Doc, Terminator) where
+instance BodySym JuliaCode (Doc, Terminator) Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
 
-instance RenderBody JuliaCode where
+instance RenderBody JuliaCode Body where
   multiBody = G.multiBody
 
-instance BodyElim JuliaCode where
+instance BodyElim JuliaCode Body where
   body = unJLC
 
 instance BlockSym JuliaCode (Doc, Terminator) where
@@ -461,7 +461,7 @@ instance AssignStatement JuliaCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement JuliaCode (Doc, Terminator) where
+instance DeclStatement JuliaCode (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -516,7 +516,7 @@ instance FuncAppStatement JuliaCode (Doc, Terminator) where
 instance CommentStatement JuliaCode (Doc, Terminator) where
   comment = G.comment jlCmtStart
 
-instance ControlStatement JuliaCode (Doc, Terminator) where
+instance ControlStatement JuliaCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
   returnStmt = G.returnStmt Empty
@@ -562,7 +562,7 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc MethodData where
+instance MethodSym JuliaCode Doc MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -576,7 +576,7 @@ instance RenderMethod JuliaCode MethodData where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance ProcRenderMethod JuliaCode Doc MethodData where
+instance ProcRenderMethod JuliaCode Doc MethodData Body where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
     toCode . mthd n . jlIntFunc n pms <$> b
@@ -843,8 +843,8 @@ jlSpace = OSpace {oSpace = empty}
 
 -- | Creates a for-each loop in Julia
 jlForEach
-  :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r Body -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -870,8 +870,8 @@ jlModContents n is = A.buildModule n (do
 -- | Creates a function.  n is function name, pms is list of parameters, and
 --   bod is body.
 jlIntFunc
-  :: (BodyElim r, ParamElim r)
-  => Label -> [r ParamData] -> r Body -> Doc
+  :: (BodyElim r bod, ParamElim r)
+  => Label -> [r ParamData] -> r bod -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,
@@ -885,7 +885,7 @@ jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 jlThrow :: (ValueElim r) => r Value -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
-jlTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+jlTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 jlTryCatch tryB catchB = vcat [
   tryLabel,
   indent $ RC.body tryB,
@@ -979,16 +979,16 @@ jlPrint _ f' p' v' = do
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , TypeElim r

@@ -14,14 +14,14 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO
-  :: (OOProg r vis stmt mthd stvr attch prg file mod)
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod)
   => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
 fileTestsProc
-  :: (ProcProg r vis stmt mthd prg file mod)
+  :: (ProcProg r vis stmt mthd prg file mod bod)
   => GProc.GSProgram r prg
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
@@ -29,18 +29,18 @@ fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
 fileTestMethod
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , VariableValue r
     , Comparison r
     , List r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
+    , DeclStatement r stmt bod
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , MethodSym r vis mthd
+    , MethodSym r vis mthd bod
     )
   => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
@@ -52,8 +52,8 @@ writeStory
     , Literal r
     , VariableValue r
     , Comparison r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
+    , DeclStatement r stmt bod
+    , ControlStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
@@ -93,7 +93,7 @@ goodBye
     , Literal r
     , VariableValue r
     , List r
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , FileHandling r stmt
     )

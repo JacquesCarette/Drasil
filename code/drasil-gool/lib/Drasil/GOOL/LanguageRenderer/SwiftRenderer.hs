@@ -129,7 +129,7 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body
 
 instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
@@ -137,8 +137,8 @@ instance ProgramSym SwiftCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData
+instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData Body
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
@@ -170,15 +170,15 @@ instance PermElim SwiftCode Doc where
   perm = unSC
   binding = error $ CP.bindingError swiftName
 
-instance BodySym SwiftCode (Doc, Terminator) where
+instance BodySym SwiftCode (Doc, Terminator) Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance RenderBody SwiftCode where
+instance RenderBody SwiftCode Body where
   multiBody = G.multiBody
 
-instance BodyElim SwiftCode where
+instance BodyElim SwiftCode Body where
   body = unSC
 
 instance BlockSym SwiftCode (Doc, Terminator) where
@@ -522,7 +522,7 @@ instance AssignStatement SwiftCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement SwiftCode (Doc, Terminator) where
+instance DeclStatement SwiftCode (Doc, Terminator) Body where
   varDec = swiftVarDec swiftVar
   varDecDef = C.varDecDef Empty
   setDecDef = C.setDecDef Empty
@@ -537,7 +537,7 @@ instance DeclStatement SwiftCode (Doc, Terminator) where
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement SwiftCode (Doc, Terminator) where
+instance OODeclStatement SwiftCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -615,7 +615,7 @@ instance OOFuncAppStatement SwiftCode (Doc, Terminator) where
 instance CommentStatement SwiftCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement SwiftCode (Doc, Terminator) where
+instance ControlStatement SwiftCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
 
@@ -651,7 +651,7 @@ instance ControlStatement SwiftCode (Doc, Terminator) where
 instance ObserverPattern SwiftCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern SwiftCode where
+instance StrategyPattern SwiftCode Body where
   runStrategy = M.runStrategy
 
 instance VisibilitySym SwiftCode Doc where
@@ -684,7 +684,7 @@ instance ParamElim SwiftCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc MethodData where
+instance MethodSym SwiftCode Doc MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -694,7 +694,7 @@ instance MethodSym SwiftCode Doc MethodData where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc MethodData Doc where
+instance OOMethodSym SwiftCode Doc MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -709,7 +709,7 @@ instance RenderMethod SwiftCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod SwiftCode Doc MethodData Doc where
+instance OORenderMethod SwiftCode Doc MethodData Doc Body where
   intMethod _ = swiftMethod
   intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName
@@ -1166,14 +1166,14 @@ swiftThrowDoc :: (ValueElim r) => r Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach
-  :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r Body -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
   bodyEnd]
 
-swiftTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+swiftTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 swiftTryCatch tb cb = vcat [
   swiftDo <+> lbrace,
   indent $ RC.body tb,

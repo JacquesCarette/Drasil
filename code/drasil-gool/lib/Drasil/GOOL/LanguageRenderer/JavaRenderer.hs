@@ -129,15 +129,15 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData
+instance OOProg JavaCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body
 
 instance ProgramSym JavaCode ProgData FileData where
   prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles .
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n
     endStatement)))
 
-instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData
-instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData
+instance CommonRenderSym JavaCode Doc (Doc, Terminator) MethodData Body
+instance OORenderSym JavaCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body
 
 instance UnRepr JavaCode contents where
   unRepr = unJC
@@ -169,15 +169,15 @@ instance PermElim JavaCode Doc where
   perm = unJC
   binding = error $ CP.bindingError jName
 
-instance BodySym JavaCode (Doc, Terminator) where
+instance BodySym JavaCode (Doc, Terminator) Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance RenderBody JavaCode where
+instance RenderBody JavaCode Body where
   multiBody = G.multiBody
 
-instance BodyElim JavaCode where
+instance BodyElim JavaCode Body where
   body = unJC
 
 instance BlockSym JavaCode (Doc, Terminator) where
@@ -536,7 +536,7 @@ instance AssignStatement JavaCode (Doc, Terminator) where
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement JavaCode (Doc, Terminator) where
+instance DeclStatement JavaCode (Doc, Terminator) Body where
   varDec = C.varDec classLevel instanceLevel empty
   varDecDef = C.varDecDef Semi
   setDec = varDec
@@ -549,7 +549,7 @@ instance DeclStatement JavaCode (Doc, Terminator) where
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 
-instance OODeclStatement JavaCode (Doc, Terminator) where
+instance OODeclStatement JavaCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -604,7 +604,7 @@ instance OOFuncAppStatement JavaCode (Doc, Terminator) where
 instance CommentStatement JavaCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement JavaCode (Doc, Terminator) where
+instance ControlStatement JavaCode (Doc, Terminator) Body where
   break = mkStmt R.break
   continue = mkStmt R.continue
 
@@ -632,7 +632,7 @@ instance ControlStatement JavaCode (Doc, Terminator) where
 instance ObserverPattern JavaCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern JavaCode where
+instance StrategyPattern JavaCode Body where
   runStrategy = M.runStrategy
 
 instance VisibilitySym JavaCode Doc where
@@ -665,7 +665,7 @@ instance ParamElim JavaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJC
 
-instance MethodSym JavaCode Doc MethodData where
+instance MethodSym JavaCode Doc MethodData Body where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string mainFunc
@@ -674,7 +674,7 @@ instance MethodSym JavaCode Doc MethodData where
   inOutFunc n s = jInOut (function n s)
   docInOutFunc n s = jDocInOut (inOutFunc n s)
 
-instance OOMethodSym JavaCode Doc MethodData Doc where
+instance OOMethodSym JavaCode Doc MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -689,7 +689,7 @@ instance RenderMethod JavaCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod JavaCode Doc MethodData Doc where
+instance OORenderMethod JavaCode Doc MethodData Doc Body where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -961,7 +961,7 @@ jThrowDoc :: (ValueElim r) => r Value -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <>
   parens (RC.value errMsg)
 
-jTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+jTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -977,7 +977,7 @@ jAssert condition errorMessage = vcat [
 
 jOut
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , Comparison r
     , NumericExpression r
@@ -985,9 +985,9 @@ jOut
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , InternalIOStmt r stmt

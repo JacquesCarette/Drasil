@@ -9,7 +9,7 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, Body, Block, SVariable, SValue, MS, BodySym(..),
+import Drasil.GOOL (Label, Block, SVariable, SValue, MS, BodySym(..),
   BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
   VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
   PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
@@ -23,13 +23,13 @@ logBody
     ( Literal r
     , VariableValue r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
-    , BodySym r stmt
+    , BodySym r stmt bod
     , VariableElim r
     )
-  => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r Body))
+  => Label -> [SVariable r] -> [MS (r Block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
   return $ body $
@@ -44,7 +44,7 @@ loggedMethod
     ( Literal r
     , VariableValue r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
     , BlockSym r stmt

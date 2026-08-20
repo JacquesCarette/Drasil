@@ -119,7 +119,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body
 
 instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
@@ -127,8 +127,8 @@ instance ProgramSym PythonCode ProgData FileData where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData
+instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData Body
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
@@ -160,15 +160,15 @@ instance PermElim PythonCode AttachmentData where
   perm = attachmentDoc . unPC
   binding = attachment . unPC
 
-instance BodySym PythonCode (Doc, Terminator) where
+instance BodySym PythonCode (Doc, Terminator) Body where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
-instance RenderBody PythonCode where
+instance RenderBody PythonCode Body where
   multiBody = G.multiBody
 
-instance BodyElim PythonCode where
+instance BodyElim PythonCode Body where
   body = unPC
 
 instance BlockSym PythonCode (Doc, Terminator) where
@@ -515,7 +515,7 @@ instance AssignStatement PythonCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement PythonCode (Doc, Terminator) where
+instance DeclStatement PythonCode (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -534,7 +534,7 @@ instance DeclStatement PythonCode (Doc, Terminator) where
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode (Doc, Terminator) where
+instance OODeclStatement PythonCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
@@ -586,7 +586,7 @@ instance OOFuncAppStatement PythonCode (Doc, Terminator) where
 instance CommentStatement PythonCode (Doc, Terminator) where
   comment = G.comment pyCommentStart
 
-instance ControlStatement PythonCode (Doc, Terminator) where
+instance ControlStatement PythonCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
 
@@ -617,7 +617,7 @@ instance ControlStatement PythonCode (Doc, Terminator) where
 instance ObserverPattern PythonCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern PythonCode where
+instance StrategyPattern PythonCode Body where
   runStrategy = M.runStrategy
 
 instance VisibilitySym PythonCode Doc where
@@ -650,7 +650,7 @@ instance ParamElim PythonCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc MethodData where
+instance MethodSym PythonCode Doc MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -659,7 +659,7 @@ instance MethodSym PythonCode Doc MethodData where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc MethodData AttachmentData where
+instance OOMethodSym PythonCode Doc MethodData AttachmentData Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -674,7 +674,7 @@ instance RenderMethod PythonCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod PythonCode Doc MethodData AttachmentData where
+instance OORenderMethod PythonCode Doc MethodData AttachmentData Body where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -941,16 +941,16 @@ pyPrint newLn f' p' v' = do
 
 pyOut
   ::
-    ( BodySym r stmt
+    ( BodySym r stmt bod
     , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , InternalIOStmt r stmt
@@ -975,18 +975,18 @@ pyThrow :: (ValueElim r) => r Value -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach
-  :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r Body -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (BodyElim r, ValueElim r) => r Value -> r Body -> Doc
+pyWhile :: (BodyElim r bod, ValueElim r) => r Value -> r bod -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
 
-pyTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+pyTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 pyTryCatch tryB catchB = vcat [
   tryLabel <> colon,
   indent $ RC.body tryB,
@@ -1029,8 +1029,8 @@ pyMethod n attch slf ps b = let
        pyDef <+> text n <> parens (implicitParam <> implicitComma <> pms) <> colon,
        indent bodyD]
 
-pyFunction :: (BodyElim r, ParamElim r) => Label ->
-  [r ParamData] -> r Body -> Doc
+pyFunction
+  :: (BodyElim r bod, ParamElim r) => Label -> [r ParamData] -> r bod -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

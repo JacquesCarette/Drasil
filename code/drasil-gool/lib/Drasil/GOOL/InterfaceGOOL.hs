@@ -22,8 +22,8 @@ module Drasil.GOOL.InterfaceGOOL (
 
 import Drasil.Shared.InterfaceCommon (
   -- Types
-  Label, Library, Body, Block, SVariable, SValue, NamedArgs, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, Block, SVariable, SValue, NamedArgs, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   BodySym(body), TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
   ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
@@ -44,20 +44,20 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
-class (UnRepr r TypeData, Argument r, BodySym r stmt, CommandLineArgs r,
+class (UnRepr r TypeData, Argument r, BodySym r stmt bod, CommandLineArgs r,
   Literal r, MathConstant r, OOVariableValue r, BooleanExpression r,
   Comparison r, NumericExpression r, InternalValueExp r, OOValueExpression r,
   Array r, List r, ListStatement r stmt, Reference r, Set r, OOFunctionSym r,
   ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r,
-  MethodSym r vis mthd, OOMethodSym r vis mthd attch,
+  MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
   ClassSym r vis mthd stvr attch, TypeElim r, VariableElim r,
   EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
-  CommentStatement r stmt, OODeclStatement r stmt, AssignStatement r stmt,
-  OOFuncAppStatement r stmt, ControlStatement r stmt, StringStatement r stmt,
+  CommentStatement r stmt, OODeclStatement r stmt bod, AssignStatement r stmt,
+  OOFuncAppStatement r stmt, ControlStatement r stmt bod, StringStatement r stmt,
   PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
   ReadFile r stmt, ModuleSym r mod mthd, FileSym r file mod,
   ProgramSym r prg file
-  ) => OOProg r vis stmt mthd stvr attch prg file mod
+  ) => OOProg r vis stmt mthd stvr attch prg file mod bod
 
 type Program = ProgData
 type GSProgram a prg = GS (a prg)
@@ -107,34 +107,35 @@ class (StateVarSym r vis stvr attch) => ClassSym r vis mthd stvr attch | r -> mt
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (AttachmentSym r attch) => OOMethodSym r vis mthd attch | r -> vis mthd where
+class (AttachmentSym r attch) => OOMethodSym r vis mthd attch bod | r -> vis mthd bod where
   method      :: Label -> r vis -> r attch -> VS (r TypeData) ->
-    [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)
   setMethod   :: SVariable r -> MS (r mthd)
-  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r Body) -> MS (r mthd)
+  constructor :: [MS (r ParamData)] -> Initializers r -> MS (r bod) -> MS (r mthd)
 
   -- inOutMethod and docInOutMethod both need AttachmentSym
-  inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd
-  docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd
+  inOutMethod :: Label -> r vis -> r attch -> InOutFunc r mthd bod
+  docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd bod
 
 privMethod
-  :: (OOMethodSym r vis mthd attch, VisibilitySym r vis)
-  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  :: (OOMethodSym r vis mthd attch bod, VisibilitySym r vis)
+  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
 pubMethod
-  :: (OOMethodSym r vis mthd attch, VisibilitySym r vis)
-  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  :: (OOMethodSym r vis mthd attch bod, VisibilitySym r vis)
+  => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 
 initializer
-  :: (OOMethodSym r vis mthd attch, BodySym r stmt)
+  :: (OOMethodSym r vis mthd attch bod, BodySym r stmt bod)
   => [MS (r ParamData)] -> Initializers r -> MS (r mthd)
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (OOMethodSym r vis mthd attch) => [MS (r ParamData)] ->
-  MS (r Body) -> MS (r mthd)
+nonInitConstructor
+  :: (OOMethodSym r vis mthd attch bod)
+  => [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 nonInitConstructor ps = constructor ps []
 
 type StateVar = Doc
@@ -276,7 +277,7 @@ classMethodCallNoParams :: (InternalValueExp r) => VS (r TypeData) -> VS (r Type
   Label -> SValue r
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class (DeclStatement r stmt, OOVariableSym r) => OODeclStatement r stmt where
+class (DeclStatement r stmt bod, OOVariableSym r) => OODeclStatement r stmt bod where
   objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
@@ -285,11 +286,11 @@ class (DeclStatement r stmt, OOVariableSym r) => OODeclStatement r stmt where
   extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
     -> MS (r stmt)
 
-objDecNewNoParams :: (OODeclStatement r stmt) => SVariable r -> r ScopeData
+objDecNewNoParams :: (OODeclStatement r stmt bod) => SVariable r -> r ScopeData
   -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
-extObjDecNewNoParams :: (OODeclStatement r stmt) => Library -> SVariable r ->
+extObjDecNewNoParams :: (OODeclStatement r stmt bod) => Library -> SVariable r ->
   r ScopeData -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
@@ -302,8 +303,9 @@ class (OOFunctionSym r) => ObserverPattern r stmt | r -> stmt where
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r stmt) => VS (r TypeData) -> [SValue r] ->
-  r ScopeData -> MS (r stmt)
+initObserverList
+  :: (DeclStatement r stmt bod)
+  => VS (r TypeData) -> [SValue r] -> r ScopeData -> MS (r stmt)
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
@@ -313,8 +315,8 @@ addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (VariableSym r) => StrategyPattern r where
-  runStrategy :: Label -> [(Label, MS (r Body))] -> Maybe (SValue r) ->
+class (VariableSym r) => StrategyPattern r bod | r -> bod where
+  runStrategy :: Label -> [(Label, MS (r bod))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MS (r Block)
 
 class (FunctionSym r) => OOFunctionSym r where

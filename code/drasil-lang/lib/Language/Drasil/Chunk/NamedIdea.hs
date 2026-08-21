@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.NamedIdea (
 import Control.Lens ((^.), makeLenses, Lens')
 
 import Drasil.Database (UID, HasUID(..), declareHasChunkRefs, Generically(..),
-  IsChunk)
+  IsChunk, nsUid)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
 
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as being worthy
@@ -47,7 +47,12 @@ instance HasUID    IdeaDict where uid = uu
 -- | Finds the term ('NP') of the 'IdeaDict' used to make the 'IdeaDict'.
 instance NamedIdea IdeaDict where term = np
 -- | Finds the abbreviation of the 'IdeaDict'.
-instance Idea      IdeaDict where getA = mabbr
+instance Idea      IdeaDict where getA :: IdeaDict -> Maybe String
+                                  getA = mabbr
+
+ideaNs :: UID -> UID
+ideaNs = id
+-- ideaNs = nsUid "idea"
 
 -- | Construct an 'IdeaDict' (/with/ an acronym/abbreviation).
 idea ::
@@ -57,7 +62,7 @@ idea ::
   NP ->
   -- | The 'term's acronym/abbreviation.
   String -> IdeaDict
-idea u t accAbbr = IdeaDict u t (Just accAbbr)
+idea u t accAbbr = IdeaDict (ideaNs u) t (Just accAbbr)
 
 -- | Construct an 'IdeaDict' (/without/ an acronym/abbreviation).
 idea' ::
@@ -65,4 +70,4 @@ idea' ::
   UID ->
   -- | The 'term' being declared.
   NP -> IdeaDict
-idea' u t = IdeaDict u t Nothing
+idea' u t = IdeaDict (ideaNs u) t Nothing

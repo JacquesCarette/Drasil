@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.CommonIdea (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..))
+import Drasil.Database (UID, HasUID(uid), declareHasChunkRefs, Generically(..), nsUid)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -39,13 +39,17 @@ instance Idea          CI where getA = Just . view ab
 -- | Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
 
+commonIdeaNs :: UID -> UID
+commonIdeaNs = id
+-- commonIdeaNs = nsUid "commonIdea"
+
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a
 -- list of 'IdeaDict' (should be domains).
 -- Note: should be polymorphic in 'IdeaDict', but currently causes issues with
 -- ambiguous type variables, punting for now.
 commonIdea :: UID -> NP -> String -> [IdeaDict] -> CI
-commonIdea x y z = CI (idea' x y) z . map (^.uid)
+commonIdea x y z = CI (idea' (commonIdeaNs x) y) z . map (^.uid)
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

@@ -10,7 +10,6 @@ desktop.ini
 .projectile
 
 # Drasil/Haskell
-*.cabal
 .cabal-sandbox
 .hsenv
 .stack-work
@@ -18,6 +17,7 @@ cabal.config
 cabal.sandbox.config
 cabal-dev
 dist
+dist-newstyle
 *.o
 *.hi
 *.chi

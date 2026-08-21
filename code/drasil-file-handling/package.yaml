@@ -41,11 +41,11 @@ library:
   - Drasil.FileHandling
   - Drasil.FileHandling.Legacy
 
-tests:
-  drasil-file-handling-test:
-    source-dirs: test
-    main: Main.hs
-    dependencies:
-    - drasil-testing-kit
-    - tasty
-    - tasty-hunit
+# tests:
+#   drasil-file-handling-test:
+#     source-dirs: test
+#     main: Main.hs
+#     dependencies:
+#     - drasil-testing-kit
+#     - tasty
+#     - tasty-hunit

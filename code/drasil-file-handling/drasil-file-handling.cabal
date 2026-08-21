@@ -1,0 +1,51 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-file-handling
+version:        0.1.1.0
+synopsis:       A framework for code and document generation for scientific software - file-handling SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.FileHandling
+      Drasil.FileHandling.Legacy
+  other-modules:
+      Drasil.FileHandling.CommonPaths
+      Drasil.FileHandling.FileLayout
+      Drasil.FileHandling.FilePath
+      Drasil.FileHandling.Legacy.Document
+      Drasil.FileHandling.Legacy.FilePath
+      Drasil.FileHandling.WriteFiles
+  hs-source-dirs:
+      lib
+  default-extensions:
+      DeriveFunctor
+      ImportQualifiedPost
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -threaded
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , directory
+    , file-io >=0.1.6
+    , filepath
+    , os-string
+    , pretty
+    , prettyprinter
+    , template-haskell
+    , text
+  default-language: GHC2024

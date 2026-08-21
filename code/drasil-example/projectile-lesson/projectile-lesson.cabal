@@ -1,0 +1,63 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           projectile-lesson
+version:        0.1.24.0
+synopsis:       A framework for code and document generation for scientific software - Example SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.Projectile.Lesson.Body
+      Drasil.Projectile.Lesson.CaseProb
+      Drasil.Projectile.Lesson.Example
+      Drasil.Projectile.Lesson.Figures
+      Drasil.Projectile.Lesson.LearnObj
+      Drasil.Projectile.Lesson.Review
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , drasil-data
+    , drasil-database
+    , drasil-gen
+    , drasil-lang
+    , drasil-lesson-plan
+    , drasil-system
+    , lens
+    , projectile
+  default-language: GHC2024
+
+executable projectile-lesson
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -threaded -O2 -main-is Main
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , drasil-gen
+    , drasil-lang
+    , drasil-lesson-plan
+    , lens
+    , projectile
+    , projectile-lesson
+  default-language: GHC2024

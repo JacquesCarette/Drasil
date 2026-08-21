@@ -1,0 +1,74 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-meta-analysis
+version:        0.1.1.0
+synopsis:       A framework for code and document generation for scientific software - meta-analysis SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.Meta.Analysis.DataPrinters.Dot
+      Drasil.Meta.Analysis.DataPrinters.HTML
+      Drasil.Meta.Analysis.DirectoryController
+      Drasil.Meta.Analysis.SourceCodeReaderCI
+      Drasil.Meta.Analysis.SourceCodeReaderT
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , directory
+    , filepath
+    , split
+    , text
+  default-language: GHC2024
+
+executable classinstdepgen
+  main-is: ClassInstDepGen.hs
+  hs-source-dirs:
+      app/classinstdepgen
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -main-is ClassInstDepGen
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , directory
+    , drasil-meta-analysis
+    , filepath
+    , split
+    , text
+  default-language: GHC2024
+
+executable typedepgen
+  main-is: TypeDepGen.hs
+  hs-source-dirs:
+      app/typedepgen
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -main-is TypeDepGen
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , directory
+    , drasil-meta-analysis
+    , filepath
+    , split
+    , text
+  default-language: GHC2024

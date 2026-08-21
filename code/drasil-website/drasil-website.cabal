@@ -1,0 +1,96 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-website
+version:        0.1.0.0
+synopsis:       Using the Drasil generators to create Drasil's website
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.Website.About
+      Drasil.Website.Analysis
+      Drasil.Website.Body
+      Drasil.Website.CaseStudy
+      Drasil.Website.Core
+      Drasil.Website.Documentation
+      Drasil.Website.Example
+      Drasil.Website.GettingStarted
+      Drasil.Website.Introduction
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , bss
+    , containers
+    , dblpend
+    , directory
+    , drasil-code
+    , drasil-data
+    , drasil-database
+    , drasil-file-handling
+    , drasil-gen
+    , drasil-gool
+    , drasil-lang
+    , drasil-printers
+    , drasil-srs
+    , drasil-system
+    , gamephysics
+    , glassbr
+    , hghc
+    , lens
+    , pdcontroller
+    , pretty
+    , projectile
+    , sglpend
+    , split
+    , ssp
+    , swhs
+    , swhsnopcm
+    , template
+  default-language: GHC2024
+
+executable website
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -threaded -O2 -main-is Main
+  build-depends:
+      base >=4.7 && <5
+    , bss
+    , containers
+    , dblpend
+    , directory
+    , drasil-gen
+    , drasil-lang
+    , drasil-website
+    , gamephysics
+    , glassbr
+    , hghc
+    , lens
+    , pdcontroller
+    , pretty
+    , projectile
+    , sglpend
+    , split
+    , ssp
+    , swhs
+    , swhsnopcm
+    , template
+  default-language: GHC2024

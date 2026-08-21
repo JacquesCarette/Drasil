@@ -38,7 +38,7 @@ module Language.Drasil.Chunk.Concept.NamedCombinators (
 
 import Control.Lens ((^.))
 
-import Drasil.Database ((+++!))
+import Drasil.Database ((+++!), (+++!!))
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, idea')
 import Language.Drasil.Classes (Idea, NamedIdea(..))
@@ -239,18 +239,18 @@ a_Gen f t = nounPhrase'' (S "a" :+: f t) (S "a" :+: f t) CapFirst CapWords
 -- /Does not preserve abbreviations/.
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 compoundNC t1 t2 = idea'
-  (t1 +++! t2) (compoundPhrase (t1 ^. term) (t2 ^. term))
+  (t1 +++!! t2) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC' but both terms are pluralized for pluralNP case.
 compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 compoundNCPP t1 t2 = idea'
-  (t1 +++! t2) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
+  (t1 +++!! t2) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except pluralNP cases are customizable.
 compoundNCGen :: (NamedIdea a, NamedIdea b) =>
   (NP -> NPStruct) -> (NP -> NPStruct) -> a -> b -> IdeaDict
 compoundNCGen f1 f2 t1 t2 = idea'
-  (t1 +++! t2)
+  (t1 +++!! t2)
   (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except for pluralNP case, where first parameter gets pluralized while second one stays singular.

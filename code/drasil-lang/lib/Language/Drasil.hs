@@ -87,7 +87,7 @@ module Language.Drasil (
   , dqd, dqd', dqdNoUnit, dqdNoUnit', dqdWr
   , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.UnitDefn
-  , UnitDefn(..)
+  , UnitDefn
   , fromUDefn, unitCon, makeDerU
   , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
   , scale, shift
@@ -100,7 +100,7 @@ module Language.Drasil (
   , ConstraintReason(..), Constraint(..), ConstraintE
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
-  , ConstrConcept(..)
+  , ConstrConcept
   , constrained', constrainedWithRationale, cuc', cuc'', cucNoUnit', constrainedNRV'
   , cnstrw'
   -- Language.Drasil.ReasonableValue

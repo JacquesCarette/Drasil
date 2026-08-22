@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-data-formats
+version:        0.0.1
+synopsis:       A framework for code and document generation for scientific software
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Jason Balaci, Daphne Jarabek, Camila Shibata, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.Data.Formats.CSV
+      Drasil.Data.Formats.JSON
+      Drasil.Data.Formats.HTML
+  other-modules:
+      Drasil.Data.Formats.CSV.Core
+      Drasil.Data.Formats.CSV.Render
+      Drasil.Data.Formats.HTML.Core
+      Drasil.Data.Formats.HTML.Render
+      Drasil.Data.Formats.JSON.Core
+      Drasil.Data.Formats.JSON.Render
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , prettyprinter
+    , scientific
+    , text
+  default-language: GHC2024
+
+test-suite drasil-data-formats-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Spec.Drasil.Data.Formats
+      Spec.Drasil.Data.Formats.CSV
+      Spec.Drasil.Data.Formats.HTML
+      Spec.Drasil.Data.Formats.JSON
+  hs-source-dirs:
+      test
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , drasil-data-formats
+    , drasil-file-handling
+    , drasil-testing-kit
+    , filepath
+    , prettyprinter
+    , scientific
+    , tasty
+    , tasty-hunit
+    , text
+  default-language: GHC2024

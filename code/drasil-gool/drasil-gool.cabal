@@ -1,0 +1,70 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-gool
+version:        0.1.1.0
+synopsis:       A framework for code and document generation for scientific software - GOOL SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Brooks MacLachlan
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.GOOL
+      Drasil.GProc
+  other-modules:
+      Drasil.GOOL.CodeInfoOO
+      Drasil.GOOL.InterfaceGOOL
+      Drasil.GOOL.LanguageRenderer.CommonGOOL
+      Drasil.GOOL.LanguageRenderer.CppRenderer
+      Drasil.GOOL.LanguageRenderer.CSharpRenderer
+      Drasil.GOOL.LanguageRenderer.JavaRenderer
+      Drasil.GOOL.LanguageRenderer.PythonRenderer
+      Drasil.GOOL.LanguageRenderer.SwiftRenderer
+      Drasil.GOOL.RendererClassesOO
+      Drasil.GOOL.Renderers
+      Drasil.GProc.InterfaceProc
+      Drasil.GProc.LanguageRenderer.AbstractProc
+      Drasil.GProc.LanguageRenderer.JuliaRenderer
+      Drasil.GProc.LanguageRenderer.MatlabRenderer
+      Drasil.GProc.RendererClassesProc
+      Drasil.GProc.Renderers
+      Drasil.Shared.AST
+      Drasil.Shared.Classes
+      Drasil.Shared.CodeAnalysis
+      Drasil.Shared.CodeType
+      Drasil.Shared.Helpers
+      Drasil.Shared.InterfaceCommon
+      Drasil.Shared.LanguageRenderer
+      Drasil.Shared.LanguageRenderer.CLike
+      Drasil.Shared.LanguageRenderer.Common
+      Drasil.Shared.LanguageRenderer.CommonPseudoOO
+      Drasil.Shared.LanguageRenderer.Constructors
+      Drasil.Shared.LanguageRenderer.LanguagePolymorphic
+      Drasil.Shared.LanguageRenderer.LoggingFor
+      Drasil.Shared.LanguageRenderer.Macros
+      Drasil.Shared.RendererClassesCommon
+      Drasil.Shared.State
+  hs-source-dirs:
+      lib
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , composition
+    , containers
+    , drasil-file-handling
+    , drasil-utils
+    , lens
+    , mtl
+    , pretty
+  default-language: GHC2024

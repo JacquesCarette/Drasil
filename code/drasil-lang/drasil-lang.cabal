@@ -1,0 +1,115 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-lang
+version:        0.1.60.0
+synopsis:       A framework for code and document generation for scientific software - Language SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.Code.Classes
+      Drasil.Code.CodeExpr
+      Drasil.Code.CodeExpr.Development
+      Drasil.Code.CodeVar
+      Language.Drasil
+      Language.Drasil.Chunk.Concept.NamedCombinators
+      Language.Drasil.Development
+      Language.Drasil.Display
+      Language.Drasil.Document
+      Language.Drasil.Expr.Development
+      Language.Drasil.Literal.Development
+      Language.Drasil.ModelExpr.Development
+      Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators
+      Language.Drasil.Sentence.Combinators
+      Language.Drasil.ShortHands
+  other-modules:
+      Drasil.Code.CodeExpr.Class
+      Drasil.Code.CodeExpr.Convert
+      Drasil.Code.CodeExpr.Extract
+      Drasil.Code.CodeExpr.Lang
+      Drasil.Code.CodeExpr.Precedence
+      Language.Drasil.Chunk.CommonIdea
+      Language.Drasil.Chunk.Concept
+      Language.Drasil.Chunk.Concept.Core
+      Language.Drasil.Chunk.Constrained
+      Language.Drasil.Chunk.DefinedQuantity
+      Language.Drasil.Chunk.Eq
+      Language.Drasil.Chunk.NamedIdea
+      Language.Drasil.Chunk.UncertainQuantity
+      Language.Drasil.Chunk.UnitDefn
+      Language.Drasil.Classes
+      Language.Drasil.Constraint
+      Language.Drasil.Data.Date
+      Language.Drasil.Development.Sentence
+      Language.Drasil.Document.Citation.Components
+      Language.Drasil.Document.Citation.Core
+      Language.Drasil.Document.ConceptInstance
+      Language.Drasil.Document.Contents
+      Language.Drasil.Document.Core
+      Language.Drasil.Document.DecoratedReference
+      Language.Drasil.Document.Extractors
+      Language.Drasil.Document.Labels
+      Language.Drasil.Document.Reference
+      Language.Drasil.Document.Sections
+      Language.Drasil.Document.SentenceCombinators
+      Language.Drasil.Document.ShortName
+      Language.Drasil.Expr.Class
+      Language.Drasil.Expr.Extract
+      Language.Drasil.Expr.Lang
+      Language.Drasil.Expr.Precedence
+      Language.Drasil.ExprClasses
+      Language.Drasil.Literal.Class
+      Language.Drasil.Literal.Lang
+      Language.Drasil.ModelExpr.Class
+      Language.Drasil.ModelExpr.Convert
+      Language.Drasil.ModelExpr.Extract
+      Language.Drasil.ModelExpr.Lang
+      Language.Drasil.ModelExpr.Precedence
+      Language.Drasil.NaturalLanguage.English.NounPhrase
+      Language.Drasil.NaturalLanguage.English.NounPhrase.Core
+      Language.Drasil.People
+      Language.Drasil.ReasonableValue
+      Language.Drasil.Sentence
+      Language.Drasil.Sentence.Fold
+      Language.Drasil.Sentence.Generators
+      Language.Drasil.Space
+      Language.Drasil.Stages
+      Language.Drasil.Symbol
+      Language.Drasil.Symbol.Helpers
+      Language.Drasil.Uncertainty
+      Language.Drasil.Unicode
+      Language.Drasil.UnitLang
+      Language.Drasil.WellTyped
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+      StandaloneDeriving
+      DerivingVia
+      DeriveGeneric
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      Decimal
+    , aeson
+    , base >=4.7 && <5
+    , containers
+    , drasil-database
+    , drasil-utils
+    , lens
+    , split
+    , text
+    , unicode-names >=3.2.0.0
+  default-language: GHC2024

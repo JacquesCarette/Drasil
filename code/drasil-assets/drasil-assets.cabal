@@ -1,0 +1,69 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-assets
+version:        0.0.1
+synopsis:       A framework for code and document generation for scientific software - Assets SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Jason Balaci, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.Assets
+  other-modules:
+      Drasil.Assets.Core
+      Drasil.Assets.FromLocalPath
+  hs-source-dirs:
+      lib
+  default-extensions:
+      ImportQualifiedPost
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , directory
+    , drasil-file-handling
+    , file-io >=0.1.6
+    , filepath
+    , template-haskell
+    , text
+  default-language: GHC2024
+
+test-suite drasil-assets-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Spec.Drasil.Assets
+  hs-source-dirs:
+      test
+  default-extensions:
+      ImportQualifiedPost
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , directory
+    , drasil-assets
+    , drasil-file-handling
+    , drasil-testing-kit
+    , file-io >=0.1.6
+    , filepath
+    , prettyprinter
+    , tasty
+    , tasty-hunit
+    , template-haskell
+    , text
+  default-language: GHC2024

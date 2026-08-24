@@ -1,45 +1,40 @@
 \prefacesection{Abstract}
 
-Scientific software is represented by more than executable code. Requirements
-specifications, design documents, source code, and build instructions present
-overlapping knowledge to different audiences. Repetition across these artifacts
-is often necessary; the maintenance problem arises when each occurrence is
-independently editable and can therefore become inconsistent, incomplete, or
-untraceable. This fragmentation increases maintenance effort and allows the
-documented models and their implementations to diverge, undermining confidence
-in the correctness and reproducibility of scientific results. This thesis
-investigates whether explicitly capturing shared knowledge and generating its
-artifact-specific presentations can reduce that burden.
+Scientific software is represented by more than executable code. Requirements,
+designs, source code, and build instructions present overlapping knowledge to
+different audiences. Repetition across these artifacts is often necessary, but
+independently editable occurrences can become inconsistent, incomplete, or
+untraceable. This fragmentation increases maintenance effort and allows
+documented models and implementations to diverge, undermining confidence in the
+correctness and reproducibility of scientific results. This thesis investigates
+whether capturing shared knowledge explicitly and generating artifact-specific
+presentations can reduce that burden.
 
 Drawing on six \mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}
-scientific-computing case studies, the work analyzes requirements, design, and
-implementation artifacts to identify recurring structures, common domain
-knowledge, and system-specific variation.
-These observations inform Drasil, an extensible knowledge-centric framework
-implemented as lightweight domain-specific languages embedded in Haskell.
-Drasil represents concepts, definitions, symbols, units, equations, their
-relationships, and more as reusable chunks. Recipes select and organize those 
-chunks for particular artifacts and audiences; deterministic generators render 
-the resulting structures as requirements specifications, executable source code 
-in multiple languages, and supporting files such as build instructions.
+scientific-computing case studies, this work analyzes requirements, design, and
+implementation artifacts to identify recurring structures, shared domain
+knowledge, and system-specific variation. These observations inform Drasil, an
+extensible knowledge-centric framework implemented as lightweight
+domain-specific languages in Haskell. Drasil represents concepts, definitions,
+symbols, units, equations, relationships, and more as reusable chunks. Recipes
+organize chunks for particular artifacts and audiences; deterministic generators
+render requirements specifications, executable code in multiple languages, and
+build files.
 
-Implementing the six case studies in Drasil provides observational evidence that
-this architecture produces consistency by construction, explicit provenance,
-and deterministic regeneration. Knowledge-level edits propagated across
-generated documentation and code, while explicit encoding exposed missing
-definitions, inconsistent symbols, implicit unit conversions, and undocumented
-assumptions in the original artifacts. These findings suggest that explicit
-knowledge capture is not only a means of generating consistent outputs; the act
-of encoding knowledge also serves as a diagnostic process that makes omissions
-and contradictions easier to detect and localize. Reuse of shared knowledge for
-two related systems also demonstrated how targeted changes can produce
-software-family variants without duplicating their common content. These
-results are not a controlled measurement of productivity or defect reduction:
-Drasil requires substantial up-front modelling, imposes a nontrivial onboarding
-cost, and
-currently works best for well-understood scientific software of the kind
-considered here. Within that scope, the thesis demonstrates the feasibility of
+Implementing the case studies in Drasil provides observational evidence of
+consistency by construction, explicit provenance, and deterministic
+regeneration. Knowledge-level edits propagated across documentation and code.
+Encoding also exposed missing definitions, inconsistent symbols, implicit unit
+conversions, and undocumented assumptions in the original artifacts, suggesting
+that knowledge capture serves as a diagnostic process that makes omissions and
+contradictions easier to detect and localize. Reusing shared knowledge for two
+related systems demonstrated that targeted changes can produce software-family
+variants without duplicating common content.
+
+These results do not constitute controlled measurements of productivity or
+defect reduction. Drasil requires substantial up-front modelling, imposes an
+onboarding cost, and currently works best for well-understood scientific
+software. Within that scope, this thesis demonstrates the feasibility of
 replacing separately maintained representations with explicit knowledge and
-generated projections, and identifies authoring support, broader knowledge
-representation, and controlled empirical validation as priorities for future
-work.
+generated projections. Future priorities include improved authoring support,
+broader knowledge representation, and controlled empirical validation.

@@ -3,10 +3,7 @@
 
 Drasil is a framework designed to address the challenges of generating 
 consistent, traceable, and maintainable scientific software artifacts from a 
-single source of domain knowledge. The name ``Drasil'' is derived from
-Yggdrasil, the world tree of Norse mythology, whose branches spread across many
-realms, and reflects how our framework spans the many domains and contexts
-relevant to software generation. In this chapter, we provide a guided tour of 
+single source of domain knowledge. In this chapter, we provide a guided tour of 
 Drasil's architecture and implementation, focusing on how knowledge is 
 captured, organized, and operationalized to produce both documentation and 
 executable code. 
@@ -30,7 +27,7 @@ maintainable software.
 
 This section provides a high-level overview of Drasil's motivation and 
 approach, setting the stage for the technical details that follow. To 
-understand why Drasil is needed, consider the challenges of manually writing 
+understand why Drasil is needed, recall the challenges of manually writing 
 and maintaining multiple \sfs{}: the process is redundant, tedious, and
 often causes these artifacts to diverge. Drasil is a purpose-built framework created to
 tackle these problems. It is designed to generate a wide range of \sfs{} from a 
@@ -42,7 +39,7 @@ framework emphasizes reducing manual duplication, ensuring traceability, and
 supporting long-lived, well-understood domains where frequent maintenance or 
 evolution is expected. 
 
-Unlike documentation generators like Doxygen, Javadoc, and Sphinx
+Unlike documentation generators like Doxygen and Javadoc
 that take a code-centric view of the problem and rely on manual
 redundancy\textemdash{}that is, natural-language explanations written as
 specially delimited comments that can then be woven into API documentation
@@ -65,8 +62,9 @@ will undergo frequent maintenance and/or changes. In deciding whether Drasil
 would be useful for developing software to tackle a given problem, we recommend 
 identifying those projects that are long-lived (10+ years) with \sfs{} 
 relevant to multiple stakeholders. For our purposes, as mentioned earlier, we 
-have focused on SC software that follows the input $\rightarrow$ process 
-$\rightarrow$ output pattern. Scientific computing often appears both stable 
+have focused on SC software that follows the 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}} pattern. 
+Scientific computing often appears both stable 
 and change-prone, and that distinction is important for understanding 
 Drasil's intended scope. The underlying scientific knowledge is often 
 well-understood\citep{CaretteEtAl2023} enough to be captured explicitly, 
@@ -78,13 +76,6 @@ still benefit from frequent regeneration as the software changes. SC software
 has the benefit of being grounded in relatively stable theories, so even when 
 models are revised or refined, older formulations are often still applicable under a set of 
 assumptions or within acceptable margins for error.
-
-With Drasil being built around long-lived, well-understood scientific 
-computing problems that follow an input $\rightarrow$ process $\rightarrow$ 
-output structure and involve \sfs{} for multiple stakeholders, we remain aware 
-that there are likely many in-built assumptions in its current state that could 
-affect its applicability to other domains. As such, we consider expanding 
-Drasil's reach as an avenue for future work.
 
 The Drasil framework relies on a knowledge-centric approach to software 
 specification and development. We attempt to codify the foundational theory 
@@ -204,8 +195,8 @@ domain we can already foresee the need for a variety of other chunks. For
 brevity, we will only expand upon the chunks needed for the examples used in 
 this thesis. More information, including detailed definitions of all the types 
 and current state of Drasil can be found in the 
-(\href{https://github.com/JacquesCarette/Drasil/wiki/}
-{wiki}) or the \href{https://jacquescarette.github.io/Drasil/docs/full/}
+\href{https://github.com/JacquesCarette/Drasil/wiki/}
+{wiki} or the \href{https://jacquescarette.github.io/Drasil/docs/full/}
 {Haddock documentation} which can be generated from the Drasil source code.
 
 \subsection{Chunk Combinatorics}
@@ -240,8 +231,8 @@ can reuse already-captured terminology.
 To define terms (such as acceleration) in relation to previously captured terms
 (such as velocity), we need a way to project existing knowledge into new
 definitions while retaining the flexibility to extend that knowledge. With that
-in mind, we created the \codeH{Sentence} DSL for creating and combining English-
-language sentences. In its most basic
+in mind, we created the \codeH{Sentence} DSL for creating and combining 
+English-language sentences. In its most basic
 form, \codeH{Sentence} will simply wrap a string. However, by defining a number 
 of helper functions and other useful utilities, our \codeH{Sentence} DSL can be 
 used to combine, change case, pluralize, and more. A simple example of a series 
@@ -287,9 +278,7 @@ is required to achieve an operational definition of \emph{Force} as a chunk
 in Drasil. To fully represent force, we need not only a name and definition, 
 but also a symbolic representation ($F$), a mathematical equation ($F=ma$), and 
 associated units ($N$). Likewise, mass and acceleration require their own 
-symbols ($m$, $a$), definitions, and units ($kg$, $m/s^2$). This illustrates 
-the necessity for chunk types that can encode all these facets in a reusable 
-and traceable manner.
+symbols ($m$, $a$), definitions, and units ($kg$, $m/s^2$).
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={91-92}, 
@@ -309,16 +298,17 @@ for force can be seen in Figure~\ref{fig:forceUC}. Note that we are not
 re-defining force in this instance. We are instead using a smart constructor to 
 build atop the existing force chunk (\codeH{CP.force}) and adding a symbolic 
 representation (\codeH{vec cF}, which is shorthand for the selected vector 
-representation\footnote{More on this in Section~\ref{sec:recipes}} of the 
+representation\footnote{More on this in Section~\ref{sec:recipes}.} of the 
 capital letter \emph{F}). We also must capture the units used to measure force
 (\codeH{newton}) which are defined in \codeH{Data.Drasil.SI_Units} and can be 
 seen in Figure~\ref{fig:Data.Drasil.SI}. The SI Units are captured using 
 another type of chunk known as a \codeH{UnitDefn} which are built atop a 
 \codeH{ConceptChunk} and \codeH{UnitSymbol}. The \codeH{UnitSymbol} is also a 
-chunk that can be one of several other chunk types.\footnote{For brevity we are 
+chunk that can be one of several other chunk types\footnote{For brevity we are 
 glossing over many chunk definitions and the differences between them as there 
 are a large variety in use for even simple examples. They are covered in more 
-depth in the full technical documentation found on our GitHub repository.}. 
+depth in the full technical documentation found on our 
+\href{https://www.github.com/jacquescarette/drasil}{GitHub repository}.}. 
 Returning to the force \codeH{UnitalChunk}, the smart constructor \codeH{uc} we 
 are using will assume we are working in the real number space. There are 
 other smart constructors for other spaces, which are also captured using other 
@@ -357,8 +347,8 @@ throughout the generated artifacts.
 Now we have almost everything we need to finish our definition of Newton's 
 second law. Everything thus far has been defined in natural language using our 
 \codeH{Sentence} DSL, but it is not well-suited to the one piece we are 
-currently missing: a way to define expressions relating chunks in a language 
-agnostic (mathematics) representation.
+currently missing: a way to define expressions relating chunks in a 
+language-agnostic (mathematics) representation.
 
 \subsection{Relating Chunks via Expressions}
 \label{sec:expr}
@@ -397,12 +387,11 @@ we have encoded multiplication (for real numbers) as seen in
 Figure~\ref{fig:mulRe}. \codeH{AssocA} refers to an associative arithmetic 
 operator which can be applied across a list of expressions (in this case, 
 \codeH{mulRe}, though addition and other associative operations look very 
-similar). Derivation is much simpler to encode, as it is simply a relationship 
-between two existing chunks, i.e., \codeH{deriv a b} represents taking the
-derivative of \codeH{a} with respect to \codeH{b}. This allows us to display 
-derivatives correctly as mathematical notation, but it does not mean 
-\codeH{Expr} itself captures the semantics of differentiation beyond that 
-structural relationship.
+similar). Differentiation is represented structurally: \codeH{deriv a b} records the 
+expression \codeH{a} and the quantity \codeH{b} with respect to which it is 
+differentiated. This is enough for Drasil to render the corresponding 
+mathematical notation, but Drasil does not maintain a semantic understanding of
+what it means, mathematically, to differentiate.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={16-16, 20-23}, 
@@ -450,11 +439,12 @@ In the previous sections, we used the idea of ``chunks'' of knowledge as our
 building blocks. They range in complexity from simple single terms, to complex 
 relationships between expressions and overarching conceptual frameworks. Each 
 chunk is defined by a collection of structural properties, or fields, such as a 
-unique identifier, name, symbol, unit, or space\footnote{Here, a space refers to the 
-kind of values a quantity may inhabit, such as the real numbers, integers, 
-booleans, or vectors, and it constrains the operations and representations 
-that make sense for that quantity.}. This ``atomic'' information is
-generally encoded in simpler, more fundamental chunks. Complex chunks are 
+unique identifier, name, symbol, unit, or space\footnote{Here, a space refers 
+to the kind of values a quantity may inhabit, such as the real numbers, 
+integers, booleans, or vectors, and it constrains the operations and 
+representations that make sense for that quantity.}.
+This ``atomic'' information is generally encoded in simpler, more fundamental 
+chunks. Complex chunks are 
 constructed by combining these simpler chunks into more elaborate structures, 
 which we can think of in terms of ``molecules'' compared to the ``atoms'' of
 basic chunks. With the increasing complexity and variety of chunk types, it 
@@ -467,10 +457,10 @@ types of domain knowledge.
 We have developed a classification system for chunks grouping them based on 
 the properties we can project. For example, all chunks encoding things that are 
 measured with units would be instances of the \codeH{Unitary} type\footnote{
-  It is important to note that these classifications are based on the ability 
-  to project certain information. In the codebase we often use lenses to access 
-  or manipulate these fields, as they may be projected from component chunks 
-  rather than being directly stored in the chunk itself.
+  These classifications are based on the ability 
+  to project specific information. We often use lenses to access 
+  or manipulate these fields, as they may be projected from component chunks
+  embedded within the referenced chunk or stored on it directly.
 }. Chunks that capture quantities, whether Unitary or not, would be instances 
 of the \codeH{Quantity} type. As we simplify, we end up determining what 
 qualifies something as a chunk in the first place. That is, what is the root 
@@ -531,8 +521,7 @@ to be consumed and produce the final \sf{}. A recipe not only allows us to
 structure where knowledge should be presented, but also gives us tools for 
 automatically generating non-trivial sections of our \sfs{}. For example, a 
 traceability matrix can be automatically generated by traversing the tree of 
-relationships between chunks within a recipe. We'll discuss that in 
-more depth in Section~\ref{sec:gen}.
+relationships between chunks within a recipe. 
 
 As we saw in Section~\ref{sec:patterns}, there are patterns of repetition for 
 the way knowledge is projected and organized within and between our \sfs{}. The 
@@ -574,7 +563,7 @@ specifies both the structure of our expected \sf{} and the knowledge (chunks)
 contained therein. While it may seem like it, this does not collapse knowledge 
 capture and presentation into a single concern: the knowledge remains encoded 
 independently in reusable chunks, while the recipe specifies how that knowledge 
-should be selected and organized for a particular artifact. For an SRS in 
+should be selected and organized for a particular \sf{}. For an SRS in 
 particular, this is a natural fit, since the template is itself a systematic 
 way of presenting scientific knowledge to stakeholders.
 
@@ -584,8 +573,7 @@ way of presenting scientific knowledge to stakeholders.
 
 As the given recipe so far has provided nothing but structure, you may be 
 wondering how we populate it with the appropriate knowledge chunks to produce a 
-\sf{}? For that, we should look at a specific example from one of our case 
-studies (\gb{}).
+\sf{}? For that, we should look at a specific example from our \gb{} case study.
 
 \subsection{Example: SRS Recipe for \gb{}}
 \label{sec:glassBRSRSRecipe}
@@ -622,13 +610,13 @@ object (Figure~\ref{fig:systemInformation}).
 }{System information for \gb{}}{fig:systemInformation}
 
 The system information object uses helper functions to keep track of the lists 
-of chunks necessary for filling in the sections of our \sf{}, the SRS. Each 
-piece of the object consists of one or more chunks to be used in filling in the 
-relevant sections. A quick description of each property can be found in 
-Table~\ref{tab:siBreakdown}, but it should be noted that some of the defined 
-properties are only there for convenience (and/or remain only until the next 
-refinement pass) as they are derived from other chunks with the use of 
-helper functions and could be inferred.
+of chunks necessary for filling in the sections of our SRS. 
+Each piece of the object consists of one or more chunks to be 
+used in filling in the relevant sections. A quick description of each property 
+can be found in Table~\ref{tab:siBreakdown}, but it should be noted that some 
+of the defined properties are only there for convenience (and/or remain only 
+until the next refinement pass) as they are derived from other chunks with the 
+use of helper functions and could be inferred.
 
 \begin{table}[]
 \caption{System information object breakdown: every property is represented by
@@ -716,7 +704,8 @@ on to creating our generator for the finished SRS document. As the other \sf{}
 recipes were developed in tandem with the SRS, they follow a similar structure 
 and in the interest of brevity we will skip the breakdown of each recipe. It is 
 left to the reader to investigate them by diving into our examples via the 
-Drasil GitHub repository. However, there is one \sf{} that is significantly
+\href{https://github.com/jacquescarette/drasil}{Drasil GitHub repository}. 
+However, there is one \sf{} that is significantly
 different, and
 as such, we will go into more depth in discussing in the following section: the 
 executable code recipe. Said recipe allows us to not only specify knowledge and 
@@ -817,8 +806,8 @@ manual duplication.
 As with the SRS recipe, the code recipe references knowledge chunks defined 
 elsewhere. For example, the list of input variables is defined in 
 \codeH{Unitals.hs} just as they were for the SRS. Similarly, the modules to be 
-generated are defined in \codeH{ModuleDefs.hs} and make reference to other 
-chunks (both system specific and generic) from our knowledge base. Looking
+generated are defined in the \codeH{ModuleDefs.hs} file and make reference to 
+other chunks (both system specific and generic) from our knowledge base. Looking
 into the modules, we can see that the \codeH{readTableMod} module, for example,
 is defined as shown in Figure~\ref{fig:readTableMod}. This module provides a
 function for reading ASTM International glass data from a file, encapsulating
@@ -909,22 +898,10 @@ ready for use in a variety of environments.
 By structuring the executable code recipe in this way, Drasil ensures that all 
 generated code is fully traceable to the underlying knowledge base and any 
 external libraries. Any change in the knowledge chunks or their relationships 
-is automatically reflected in the generated code, just as it is in the 
-documentation. This approach minimizes duplication, maximizes consistency, and 
-enables reliable code generation for scientific computing applications.
-
-\subsection{Operational Summary}
-
-Having established how Drasil captures, organizes, and operationalizes 
-knowledge through both documentation and executable code recipes, we are now 
-poised to explore the final step in Drasil's operation: turning these 
-structured specifications into tangible \sfs{}. The next piece of the story 
-will show how Drasil takes these recipes and, through a unified process, 
-produces the diverse \sfs{} required by different stakeholders. In the 
-following section, we delve into the mechanisms and philosophy behind Drasil's 
-generation and rendering, showing how the framework brings together all the 
-ingredients we've discussed to deliver consistent, traceable, and maintainable 
-\sfs{}.
+is automatically reflected in the generated code, as in the documentation, 
+after re-running the generation process. This approach minimizes duplication, 
+maximizes consistency, and enables reliable code generation for scientific 
+computing applications.
 
 \section{Cooking It All Up: Generation and Rendering}
 \label{sec:gen}
@@ -937,7 +914,8 @@ stages are responsible for transforming the intermediate representations
 (recipes and their referenced chunks) into tangible, concrete, consumable 
 \sfs{}, such as documents and executable code.
 
-\subsection{Rendering: From Abstract Structure to Concrete Formats}
+\subsection{Rendering: 
+Abstract Structure to Concrete Formats}
 
 At its core, Drasil treats recipes as ``little programs''. Rendering in Drasil
 refers to the process by which these abstract, language-agnostic structures 
@@ -1166,26 +1144,16 @@ chunk. The final Python output can be seen in Figure~\ref{fig:qhatPython}.
 \fig{\pyBlock{GenCalculations}{34}{40}}{$\hat{q}$ as defined in generated
 Python code}{fig:qhatPython}
 
-\subsubsection{Discussion}
-
-This example demonstrates how Drasil's architecture ensures that any update to
-the definition or formula of $\hat{q}$ is automatically propagated to the 
-generated code, just as it is to documentation artifacts. The use of a 
-knowledge-centric pipeline, combined with language-agnostic intermediate 
-representations, guarantees consistency and traceability throughout the 
-software system. Changes need only be made once, and are reflected everywhere 
-$\hat{q}$ appears, reducing maintenance cost and risk of error.
-
-\subsection{Rendering Summary}
-In summary, rendering and assembly are the final, crucial steps that 
-operationalize Drasil's knowledge-centric approach and translate the abstract 
-representations produced by our chunks and recipes into practical, high-quality 
-\sfs{}. The examples from \gb{} demonstrate the practical effectiveness of this 
-approach for both documentation and code.
-
-The next section will discuss how iteration and refinement were used in the 
-creation of Drasil, and how the framework enables rapid evolution of both 
-knowledge and artifacts.
+\subsection{Generation and Rendering Summary}
+Taken together, these examples show how Drasil separates knowledge capture from 
+artifact production. Recipes select and organize the relevant chunks, rendering 
+translates their projections into target-specific representations, and assembly 
+combines those representations with cross-references and supporting files to 
+produce complete artifacts. These artifacts need not present the knowledge 
+identically; each recipe selects and structures it for its particular purpose 
+while retaining a traceable connection to the same source. Consequently, 
+changes to shared knowledge can be propagated across the generated artifact set 
+without maintaining separate copies of that knowledge.
 
 \section{Seasoning to Taste: Iteration and Refinement}
 \label{sec:iterefine}

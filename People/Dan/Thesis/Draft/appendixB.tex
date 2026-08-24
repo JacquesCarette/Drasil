@@ -1,63 +1,15 @@
-\chapter{Long Tables}
-\label{appendix_b}
+\chapter{GlassBR Module Guide}
+\label{appendix:glassbr-mg}
 
-This appendix demonstrates the use of a long table that spans multiple pages.
-
+\vspace*{\fill}
 \begin{center}
-\begin{longtable}{P{3cm}P{3cm}P{2.5cm}P{3.5cm}}
-\toprule
-\hline
-\textbf{Col A} & \textbf{Col B} & \textbf{Col C} & \textbf{Col D} \\ \midrule
-
-\endfirsthead
-\multicolumn{4}{c}{\textit{Continued from previous page}} \\ \hline
-\textbf{Col A} & \textbf{Col B} & \textbf{Col C} & \textbf{Col D} \\ \hline
-\endhead
-\hline \multicolumn{4}{r}{\textit{Continued on the next page}} \\
-\endfoot
-\hline
-\endlastfoot
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-A & B & C & D \\ \midrule
-
-\hline
-\end{longtable}
+    \textbf{GlassBR Module Guide}\\[2em]
+    The following appendix contains the full GlassBR Module Guide.
 \end{center}
+\vspace*{\fill}
+\clearpage
+
+\includepdf[
+  pages=-,
+  pagecommand={\thispagestyle{embeddedappendix}}
+]{appendices/glassbr_mg.pdf}

@@ -104,14 +104,17 @@ To simplify the process of identifying redundancies and patterns, we have chosen
 several case studies developed using common artifact templates, specifically 
 those used by \smithea{}\cite{SmithEtAl2007,SmithAndLai2005} Also, as 
 previously mentioned in Section~\ref{sec:scope}, our case study software 
-systems follow the \mbox{$`input'~\rightarrow~`process'~\rightarrow~`output'$} 
+systems follow the 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}
 pattern. These systems cover a variety of use cases, to help avoid 
 over-specializing into one particular system type. 
 
 The majority of the aforementioned case studies were developed by other teams 
 at McMaster University to address real engineering problems outside of our 
 research group. Table~\ref{tab:case-studies} provides a high-level reference to 
-each case study. For each system, the GitHub repository contains the artifacts
+each case study. For each system, the 
+\href{https://github.com/jacquesCarette/drasil}{GitHub repository} contains the 
+artifacts
 relevant to our analysis, namely the documents and implementation materials
 that expose the system's requirements, design decisions, and implementation
 details. These include, where available, the Software Requirements Specification
@@ -270,18 +273,15 @@ studies' SRS documents to get a deeper understanding of what each section truly
 represents. Figures~\ref{fig:gbrtou}, \ref{fig:gbrtos}, 
 and~\ref{fig:gbrtoa} show the reference sections of the SRS for \gb. Each of 
 the case studies' SRS contains a similar section so for 
-brevity we will omit the others here, but they can be found in the GitHub 
-repository. We will try to ignore any superficial differences (spelling, 
+brevity we will omit the others here, but they can be found in the 
+\href{https://github.com/jacquesCarette/drasil}{GitHub repository}. We will try 
+to ignore any superficial differences (spelling, 
 grammar, phrasing, etc.) in each of the case studies while we look for 
 commonality. We are also trying to determine how the non-superficial 
 differences relate to the document template, general problem domain, and 
-specific system information. In the annotated Table of Symbols figures used in 
-this chapter, `B' denotes repeated boilerplate structure and `P' denotes a 
-bundled set of problem-specific entries, including both domain-specific and 
-system-specific content. We use that coarser label here because these figures 
-make the shared structure clear, but do not visually support a reliable finer 
-distinction. We return to that finer distinction later in the SWHS/NoPCM 
-comparison, where the few system-specific differences can be marked directly.
+specific system information. The annotated Table of Symbols figures used in this
+chapter distinguish repeated boilerplate (`B') from problem-specific content (`P')
+at a deliberately coarse level. We will refine this distinction later.
 
 \begin{figure}[H]
 \centering
@@ -392,7 +392,7 @@ Observing the contents of an SRS template adhere to said template may seem
 mundane, but it is a necessary step before we can move on to other \sfs{}. 
 Without understanding what the SRS template intends to convey it is hard to 
 assess whether or not the case study SRS conveys that information. With that in 
-mind, we can move on to the MG and source code.
+mind, we can move on to the MG and, following that, the source code.
 
 \subsection{Module Guide}
 \label{sec:breakdown:mg}
@@ -417,7 +417,9 @@ that the system may undergo during its lifecycle.
 {fig:gbrmgtoc}
 
 Figure~\ref{fig:gbrmgtoc} shows the table of contents for the \gb{} case 
-study's MG. Again, for the sake of brevity we will omit the other case studies 
+study's MG. The full \gb{} MG can be found in 
+Appendix~\ref{appendix:glassbr-mg}. Again, for the sake of brevity we will 
+omit the other case studies 
 here, even though we engaged in the same breakdown process for each of them. 
 Just as with the SRS we are looking for commonality and understanding of 
 what the document is trying to portray to the reader. As such we will ignore 
@@ -454,14 +456,16 @@ modules. The Level 1 headings are almost entirely generic boilerplate, with
 common examples including Hardware-Hiding, Behaviour-Hiding, and Software 
 Decision modules. The Level 2 modules, by contrast, are problem-domain or 
 system-specific. An example of a system-specific module is shown in 
-Figure~\ref{fig:gbrmgcm}.
+Figure~\ref{fig:gbrmgcm}; the complete module decomposition can be found in 
+Appendix~\ref{appendix:glassbr-mg}.
 
 Each module is described by its secrets, services, and what it will be 
 implemented by. For example, a given module could be implemented by the 
 operating system (OS), the system being described (e.g., \gb{}), or a third party
 system/library that will interoperate with the given system.
 
-Finally, the MG includes a traceability matrix and use hierarchy diagram. 
+Finally, the MG includes a traceability matrix and use hierarchy diagram, both 
+of which can be found in Appendix~\ref{appendix:glassbr-mg}. 
 These provide visual summaries of how modules relate to the system's 
 requirements and to one another, respectively. The traceability matrix makes 
 the connection between the SRS and MG especially explicit, whereas many of the 
@@ -693,13 +697,9 @@ SWHS, NoPCM, or Projectile. Finally, acronyms are very context-dependent. They
 are often specific to a given domain and, without a coinciding definition, it 
 can be very difficult for even the target audience to understand what they 
 refer to. Within one domain, there may be several acronyms that look identical, 
-but mean different things, for example: PM can refer to a Product Manager, 
-Project Manager, Program Manager, Portfolio Manager, etc.
+but mean different things. As an example from industry: PM can refer to a 
+Product Manager, Project Manager, Program Manager, Portfolio Manager, etc.
 
-By continuing to break down the SRS and other \sfs{}, we are able to find many
-more patterns of knowledge repetition. For example, we see the same concept 
-being introduced in multiple areas within a single artifact and across 
-artifacts in a project.
 \fig{
 \centering
 \begin{tikzpicture}
@@ -720,12 +720,16 @@ artifacts in a project.
 \end{tikzpicture}}
 {Data definition for dimensionless load ($\hat{q}$) from the \gb{} SRS}
 {fig:gbrddq}
+
+By continuing to break down the SRS and other \sfs{}, we are able to find many
+more patterns of knowledge repetition. For example, we see the same concept 
+being introduced in multiple areas within a single artifact and across 
+artifacts in a project.
 Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. The 
 same term was previously defined with fewer details in the table of symbols, as 
 well as showing up implicitly or in passing in the MG (Figure~\ref{fig:gbrmgcm} 
 and the \emph{loadASTM} module respectively), and implemented in the Source 
-Code (Figure~\ref{fig:gbrsrccalc} lines 11--14). A non-exhaustive list of places
-where $\hat{q}$ appears helps make the repetition more explicit. The numbered 
+Code (Figure~\ref{fig:gbrsrccalc} lines 11--14). The numbered 
 callouts in Figure~\ref{fig:gbrddq} highlight several of the direct references 
 within the data definition itself:
 
@@ -896,56 +900,35 @@ repetition, but to determine how that underlying knowledge should be captured
 and organized so that appropriate projections can be generated consistently. 
 This is the problem to which we now turn.
 
-These patterns directly inform the requirements and architecture of Drasil. By 
-understanding them, we reveal specific challenges and opportunities for 
-automation and consistency in software artifact generation. Drasil must be able 
-to capture shared definitions, relations, and explanations once, distinguish 
-reusable boilerplate from domain-specific and system-specific knowledge, and 
-project that knowledge consistently into different artifacts and sections. This 
-directly targets the maintenance problems identified above: repeated manual 
-updates, cross-artifact drift, and inconsistencies between related 
-representations of the same knowledge. In this sense, Drasil is intended to 
-operationalize these patterns by reducing unnecessary duplication while 
-preserving the context-specific projections that different audiences require. 
-The following sections build on this foundation.
-
 \section{Organizing Knowledge: A Fluid Approach}
-
-Recognizing patterns of redundancy and knowledge projection, we are left with a 
-crucial question: how should knowledge itself be captured and organized to 
-support consistent, flexible reuse across artifacts? While our analysis has 
-revealed the importance of knowledge projections and the risks of redundancy, 
-it remains unclear what form the underlying knowledge base should take, or how 
-it should be structured to enable effective projection. In the following 
-section, we turn to this open problem, exploring conceptual approaches to 
-knowledge capture and organization that can lay the groundwork for Drasil's 
-design.
 
 To this point we have been referring to an intuitive, albeit nebulous concept 
 of \emph{knowledge} without explicitly defining it. Because this concept is 
 central to the remainder of this chapter and to the design of Drasil, we make 
 our intended meaning explicit here. In this thesis, we propose the following 
-working definition of knowledge: knowledge is information that has been 
-structured and contextualized to be meaningful and useful. On this view, 
-knowledge encompasses facts, concepts, definitions, theories, and 
-relationships relevant to a particular domain or problem. It may be 
+working definition of knowledge: 
+\begin{quote} Knowledge is information that has been 
+structured and contextualized to be meaningful and useful.\end{quote}
+With this view, knowledge encompasses facts, concepts, definitions, theories, 
+and relationships relevant to a particular domain or problem. It may be 
 represented in various forms, such as mathematical equations, natural 
 language descriptions, code snippets, diagrams, and more, while remaining the 
 same underlying knowledge. This definition underlies our later discussion of 
 knowledge chunks and projections in Chapter~\ref{c:drasil}, especially 
 Section~\ref{sec:kcChunk}.
 
-\emph{For clarity in the following examples, we will use set notation to 
-describe relationships between knowledge and projections. This is not intended 
-as a formalization, but rather as a familiar mathematical juxtaposition to help 
-illustrate the concepts.} Here, we use $K$ to denote a set, or in our 
-terminology a \emph{chunk}, of one or more related pieces of information. Under 
-the working definition above, each $K$ may represent a single fact, a 
-definition, or a tightly connected set of information relevant to a particular 
-concept or artifact.
+To connect this working definition to the patterns observed in the previous 
+section, we need a simple way to describe how a \sf{} presents all or part of 
+some underlying knowledge. \emph{For the following examples, we will use set 
+notation to describe relationships between knowledge and projections. This is 
+not intended as a formalization, but rather as an illustrative juxtaposition 
+with familiar mathematical concepts.} Here, we use $K$ to denote a 
+set, or in our terminology a \emph{chunk}, of one or more related pieces of 
+information. Under the working definition above, each $K$ may represent a 
+single fact, a definition, or a tightly connected set of information relevant 
+to a particular concept or artifact.
 
-Given the patterns across \sfs{} we observed in the previous section, we can 
-generalize knowledge projections to their projection functions. Identity 
+Using this notation, we can describe knowledge projections as functions. Identity 
 projection functions directly repeat knowledge verbatim i.e.\ $p(K) \equiv K$ 
 for some set of knowledge $K$. It should be noted in our case that as long as 
 the projection used contains the full definition and context of a piece of 
@@ -1022,7 +1005,7 @@ We want to take a fluid and practical approach to organizing knowledge, such
 that we can keep domain-related knowledge chunks together with useful 
 derivations. We want to separate knowledge in unrelated domains, such that it 
 is straightforward to look up whatever we need with relative ease. The 
-specific implementation for organization will be detailed later (See
+specific implementation for organization will be detailed later (see
 Section~\ref{sec:kc}).
 
 In summary, this approach to organizing knowledge (grouping related information 
@@ -1036,16 +1019,12 @@ discussed later in the thesis.
 
 \section{Summary: The Seeds of Drasil}
 
-This final section synthesizes the chapter's findings, highlighting the key 
-insights that inform the design of Drasil. By summarizing our process and 
-rationale, we prepare the reader for the transition from analysis to 
-implementation in the following chapter.
-
 Through this chapter, as part of our effort to reduce unnecessary redundancy 
 across the software development process, we have taken an approach to breaking 
 down \sfs{} to the core knowledge they present and looked for commonalities in 
 that knowledge between them. We use several case study systems that fit our 
-scope (\mbox{input~$\rightarrow$~process~$\rightarrow$~output}) as examples to 
+scope (\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}) as 
+examples to 
 give a concrete, applied base to the work.
 
 Taken together, the case studies show that the same information recurs in a 

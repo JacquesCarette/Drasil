@@ -171,6 +171,13 @@
   \end{figure}
 }
 
+\fancypagestyle{embeddedappendix}{
+  \fancyhf{}
+  \rfoot{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
 %Tables
 %\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 % ********************************
@@ -229,21 +236,21 @@
         \setcounter{equation}{0}
         \setcounter{table}{0}
 
+% The bibliography is set up to allow for multiple bib files
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references,drasil}
+
 \begin{appendix}
     \include{appendixA}
         \setcounter{figure}{0}
         \setcounter{equation}{0}
         \setcounter{table}{0}
 
-%    \include{appendixB}
-%        \setcounter{figure}{0}
-%        \setcounter{equation}{0}
-%        \setcounter{table}{0}
+    \include{appendixB}
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
 \end{appendix}
-
-% The bibliography is set up to allow for multiple bib files
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{references,drasil}
 
 \label{NumDocumentPages}
 

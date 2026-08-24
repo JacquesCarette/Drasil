@@ -26,22 +26,17 @@ tradeoff is increased upfront modelling effort and the need for disciplined
 knowledge capture.
 
 Disciplined knowledge capture also replaces separately maintained
-representations with shared, canonical ones. The \sp{} case study provides a
-concrete example in
-issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348}. A
-detailed account appears earlier in Section~\ref{sec:iterefine}, with the
-resulting quality evidence summarized in Section~\ref{sec:quality}.
-
-The original, manually created artifacts used the closely related symbols
-$S_i$, $P_i$, and $\tau_i$ inconsistently across equations and tables. In
-particular, later equations replaced $P_i$ with $\tau_i$, even though $\tau_i$
-denotes shear stress rather than resistive shear force. The symbol $\tau_i$ was
-also omitted from the Table of Symbols and lacked a formal definition.
+representations with shared, canonical ones. The \sp{} symbol inconsistency
+documented in
+issue~\href{https://github.com/JacquesCarette/Drasil/issues/348}{\#348} provides
+a concrete example. A detailed account appears earlier in
+Section~\ref{sec:iterefine}, with the resulting quality evidence summarized in
+Section~\ref{sec:quality}.
 
 In Drasil, each quantity is captured once as a chunk with a canonical
 definition, symbol, and unit. Equations, the Table of Symbols, and generated
 code are then projected from those chunks rather than maintained
-independently. Once the three quantities were represented correctly in the
+independently. Once the affected quantities were represented correctly in the
 knowledge base, every generated artifact drew on the same definitions and
 identifiers. Their agreement was therefore a consequence of construction,
 not of manually finding and synchronizing every occurrence.
@@ -146,7 +141,7 @@ projection reflected the corrected knowledge.
 \section{Human Factors and Usability}
 \label{sec:dis_usability}
 
-Experienced contributors adapted quickly to Drasil's patterns, but new users
+New users
 found the knowledge-capture DSL challenging. In practice, the difficulty was
 not usually understanding the domain concept itself, but understanding how to
 encode that concept in Drasil's abstractions. For example, a contributor may
@@ -197,8 +192,9 @@ still be specified explicitly rather than inferred automatically, which
 increases authoring burden and limits scalability as the knowledge base grows.
 
 Drasil's current implementation is also limited primarily to scientific 
-computing software that follows an input $\rightarrow$ process $\rightarrow$ 
-output (IPO) paradigm. This constraint arises because Drasil currently works 
+computing software that follows an 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}} paradigm. This 
+constraint arises because Drasil currently works 
 best in domains where the relevant knowledge is 
 well-understood~\citep{CaretteEtAl2023}, structured, and amenable to explicit 
 capture. This does not mean that such software has simple or fixed 

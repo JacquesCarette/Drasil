@@ -1,7 +1,7 @@
 \chapter{Conclusion}
 \label{c:conclusion}
 
-This thesis set out to address the persistent challenges of consistency,
+We set out to address the persistent challenges of consistency,
 traceability, and reproducibility in scientific software and documentation.
 Maintainability is treated here as a consequence of those properties: once
 domain knowledge lives in a single place, changes can be propagated through
@@ -41,25 +41,22 @@ extend it.
 
 This thesis contributes Drasil: a framework involving a centralized, 
 recipe-driven knowledge base for generating software and documentation 
-from a single source of domain knowledge. It operationalizes our understanding 
-of software engineering principles\textemdash{}design for change, 
-separation of concerns (specifically with respect to the underlying knowledge 
-versus presentation), among others (as discussed in 
-Section~\ref{sec:design_change} and
-Chapter~\ref{c:discussion})\textemdash{}into concrete mechanisms for capture, 
-projection, and regeneration. By explicitly capturing domain knowledge and 
+from a single source of domain knowledge. Drasil applies design for change and 
+separation of concerns by centralizing reusable knowledge, separating it from 
+artifact-specific presentation, and using recipes to govern its projection and 
+regeneration (see Section~\ref{sec:design_change} and 
+Chapter~\ref{c:discussion}). By explicitly capturing domain knowledge and 
 automating artifact generation, Drasil preserves consistency by construction, 
 exposes provenance, and supports deterministic regeneration, as shown in
-Chapter~\ref{c:results}. Those case studies also demonstrate that local 
-changes propagate across generated outputs and that the knowledge base can be 
-extended and reused to produce software-family variants and supporting 
-materials with less manual effort. Taken together, these contributions offer a 
-practical basis for reproducible scientific software.
+Chapter~\ref{c:results}. The case studies further demonstrate the practical 
+consequences of these properties: local changes propagate across generated 
+outputs, while the knowledge base can be extended and reused to produce
+software-family variants and supporting materials with less manual effort.
 
 
 \section{Limitations and Open Questions}
 
-While Drasil demonstrates significant progress toward automating knowledge
+While Drasil demonstrates significant progress toward domain knowledge
 capture and artifact generation, several important limitations remain, many of
 which were examined more fully in Chapter~\ref{c:discussion}. First, the
 evidence presented in this thesis is still primarily qualitative, so the
@@ -70,8 +67,9 @@ domains.
 
 Second, Drasil works best in well-understood~\cite{CaretteEtAl2023} domains
 where the knowledge is structured and amenable to explicit capture. In its present
-form, this largely means scientific computing software that fits an input
-$\rightarrow$ process $\rightarrow$ output paradigm. Whether the same
+form, this largely means scientific computing software that fits an 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}} paradigm. 
+Whether the same
 knowledge-centric approach can be extended effectively to more dynamic,
 interactive, or less formalized systems remains an open question (see Section~\ref{sec:dis_limits}).
 
@@ -162,11 +160,11 @@ structural and representational bookkeeping to the system.
 
 This could include guided authoring environments, stronger support for
 integrated development environments (IDEs), and tools for discovering, reusing,
-and navigating existing knowledge in the database. The goal is not simply to make
-its knowledge-centric approach more accessible to domain experts who are not
-already deeply familiar with the framework. Progress in this area would help
-reduce onboarding costs, improve the maintainability of the knowledge base as
-it grows, and make the framework more practical for broader adoption.
+and navigating existing knowledge in the database. The goal is not simply to 
+make its knowledge-centric approach more accessible to domain experts who are 
+not already deeply familiar with the framework. The goal is to make knowledge 
+capture more accessible to domain experts while keeping a growing knowledge 
+base navigable and maintainable.
 
 \subsection{Output Formats and Artifact Types}
 Expanding the range of output formats and artifact types is essential for
@@ -175,16 +173,15 @@ Future work should focus on supporting additional programming languages
 (by expanding the existing GOOL backend) and document formats, 
 such as DOCX or other widely used file types.
 
-Jupyter notebook support has already been added since the period covered by
-this thesis, demonstrating that Drasil can be extended beyond its earlier set
-of generated artifacts.\footnote{Jupyter notebook generation was added by
-other members of the Drasil team after the main period of work discussed in 
-this thesis.} 
-Future work can build on that progress by introducing additional artifact types, such as journal
-papers, and by broadening support for other forms of technical communication.
-These enhancements will enable Drasil to serve the diverse needs of scientific 
-computing practitioners, educators, and researchers, and will help bridge the 
-gap between code, documentation, and knowledge dissemination.
+Since the period covered by this thesis, other members of the Drasil team have 
+added support for generating Jupyter notebooks, providing an initial example of 
+how Drasil's output set can be extended.
+Future work can build on that progress by introducing additional artifact 
+types, such as journal papers, and by broadening support for other forms of 
+technical communication. These enhancements will enable Drasil to serve the 
+diverse needs of scientific computing practitioners, educators, and 
+researchers, and will help bridge the gap between code, documentation, and 
+knowledge dissemination.
 
 \subsection{Natural Language Variants}
 Supporting multiple natural language variants and context-sensitive artifact
@@ -232,10 +229,12 @@ their results can guide improvements to authoring support, onboarding, and
 scalability, while also strengthening the case for broader adoption within the 
 scientific computing and software engineering communities.
 
-\subsection{Extending Beyond Input $\rightarrow$ Process $\rightarrow$ Output}
+\subsection{Extending Beyond 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}}
 
-Extending Drasil beyond the input $\rightarrow$ process $\rightarrow$ 
-output paradigm represents a significant challenge and opportunity for future 
+Extending Drasil beyond the 
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}} paradigm 
+represents a significant challenge and opportunity for future 
 work. Many scientific and engineering applications involve interactive, 
 event-driven, or stateful behaviors that do not fit neatly into the current 
 modeling framework. Addressing these domains will require advances in flexible
@@ -247,10 +246,6 @@ formalized processes, and will help realize the vision of fully
 automated, knowledge-centric artifact generation across scientific
 computing.
 
-As Drasil continues to develop, ongoing research and collaboration will be
-essential to realizing its full potential and advancing the practice of
-automated, knowledge-centric scientific software engineering.
-
 \section{Broader Impact and Personal Reflection}
 
 The development of Drasil represents a step toward more principled and
@@ -258,7 +253,7 @@ automated scientific software engineering. More broadly, it suggests that
 knowledge-centric methods can play a larger role in how scientific software is
 documented, maintained, and communicated across communities of researchers,
 developers, and other stakeholders. In that sense, Drasil is not only a tool
-for generating artifacts, but also an example of how software engineering
+for generating \sfs{}, but also an example of how software engineering
 practice can be reorganized around explicit, reusable knowledge.
 
 Drasil's evolution has been shaped by its iterative development process,

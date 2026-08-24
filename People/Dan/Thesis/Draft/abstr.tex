@@ -5,9 +5,11 @@ specifications, design documents, source code, and build instructions present
 overlapping knowledge to different audiences. Repetition across these artifacts
 is often necessary; the maintenance problem arises when each occurrence is
 independently editable and can therefore become inconsistent, incomplete, or
-untraceable. This thesis investigates whether explicitly capturing shared
-knowledge and generating its artifact-specific presentations can reduce that
-burden.
+untraceable. This fragmentation increases maintenance effort and allows the
+documented models and their implementations to diverge, undermining confidence
+in the correctness and reproducibility of scientific results. This thesis
+investigates whether explicitly capturing shared knowledge and generating its
+artifact-specific presentations can reduce that burden.
 
 Drawing on six \mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}
 scientific-computing case studies, the work analyzes requirements, design, and
@@ -26,11 +28,15 @@ this architecture produces consistency by construction, explicit provenance,
 and deterministic regeneration. Knowledge-level edits propagated across
 generated documentation and code, while explicit encoding exposed missing
 definitions, inconsistent symbols, implicit unit conversions, and undocumented
-assumptions in the original artifacts. Reuse of shared knowledge for two related
-systems also demonstrated how targeted changes can produce software-family
-variants without duplicating their common content. These results are not a
-controlled measurement of productivity or defect reduction: Drasil requires
-substantial up-front modelling, imposes a nontrivial onboarding cost, and
+assumptions in the original artifacts. These findings suggest that explicit
+knowledge capture is not only a means of generating consistent outputs; the act
+of encoding knowledge also serves as a diagnostic process that makes omissions
+and contradictions easier to detect and localize. Reuse of shared knowledge for
+two related systems also demonstrated how targeted changes can produce
+software-family variants without duplicating their common content. These
+results are not a controlled measurement of productivity or defect reduction:
+Drasil requires substantial up-front modelling, imposes a nontrivial onboarding
+cost, and
 currently works best for well-understood scientific software of the kind
 considered here. Within that scope, the thesis demonstrates the feasibility of
 replacing separately maintained representations with explicit knowledge and

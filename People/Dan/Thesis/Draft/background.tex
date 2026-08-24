@@ -75,9 +75,6 @@ artifacts may agree even when the relationship between them has not been
 recorded. Maintaining software as it evolves requires attention to both
 properties.
 
-The production, maintenance, and 
-use of \sfs{} is largely dependent on the specific design process being used.
-
 \fig{
 \begin{center}
 \includegraphics[width=\linewidth]{figures/Waterfall.png}
@@ -127,11 +124,11 @@ Test Cases; Verification and Validation Report \\
 Software design can follow a number of different design processes, each with 
 their own collection of \sfs{}. A common, traditional approach is the Waterfall 
 model of software development~\cite{PfleegerAndAtlee2010Ch2} 
-(Figure~\ref{fig:Waterfall}), which organizes development as a sequence of
-phases. After requirements have been baselined, resolving change requests
-caused by new requirements can increase effort and defects in Waterfall
-projects~\cite{ChariEtAl2018}.
-More generally, requirements can continue to evolve throughout development as
+(Figure~\ref{fig:Waterfall}), which organizes development as a sequence of 
+phases. After requirements have been baselined, resolving change requests 
+caused by new requirements can increase effort and defects in Waterfall 
+projects~\cite{ChariEtAl2018}. 
+More generally, requirements can continue to evolve throughout development as 
 customer needs and organizational policies change and developers gain a better
 understanding of the product~\cite{NurmulianiEtAl2004}.
 In contrast, Parnas and Clements~\cite{ParnasAndClements1986} detailed what 
@@ -156,9 +153,8 @@ understandable and maintainable software~\cite{Parnas2010,ParnasEtAl1994}.
 
 The rational 
 design process involves the steps listed in the first column of 
-Table~\ref{tab:RatWatComp}.
-
-Parnas provided a list of the most important documents~\cite{Parnas2010} 
+Table~\ref{tab:RatWatComp}. Parnas provided a list of the most important 
+documents~\cite{Parnas2010} 
 required for the rational design process, which 
 Smith~\cite{Smith2016} expanded upon by including complementary 
 artifacts such as source code, verification and validation plans, test cases, 
@@ -525,9 +521,9 @@ needed for independent reconstruction~\cite{AkhlaghiEtAl2021}.
 \label{sec:literate}
 
 There have been several approaches attempting to combine development of program 
-code with documentation. Literate Programming and literate software are two 
-such approaches that have influenced the direction of this thesis, which we now 
-outline.
+code with documentation. Literate Programming and Literate Software Development 
+(LSD) are two such approaches that have influenced the direction of this 
+thesis, which we now outline.
 
 \subsection{Literate Programming}
 
@@ -539,8 +535,8 @@ task~\cite{Knuth1984}.
 Developing literate programs involves breaking algorithms down into
 \emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}
 which are small and easily understandable. The chunks are ordered to follow a 
-``psychological order''~\cite{PieterseKourieAndBoake2004} if
-you will, that promotes understanding. They do not have to be written in the 
+``psychological order''~\cite{PieterseKourieAndBoake2004} that promotes 
+understanding. They do not have to be written in the 
 same order that a computer would read them. It should also be noted that in a 
 literate program, the code and documentation are kept together in one source. 
 To extract runnable code, a process known as \emph{tangle} must be performed on 
@@ -593,14 +589,13 @@ the documentation to reduce some information duplication.
 
 There have been many attempts to increase LP's popularity by focusing on
 changing the output language or removing the text processor
-dependency~\cite{PieterseKourieAndBoake2004}. Several new tools such as CWEB
-(for the C language), noweb (programming language independent), and others were
-developed. Other tools such as DOC++ (for C++), javadoc (for Java), and Doxygen
+dependency~\cite{PieterseKourieAndBoake2004}. Some of these tools included CWEB 
+(for the C language) and noweb (programming language independent). Other tools 
+such as DOC++ (for C++), javadoc (for Java), and Doxygen
 (for multiple languages) were also influenced by LP, but differ in that they are
 merely document extraction tools~\cite{DOCppManual,OracleJavadoc,DoxygenManual}.
 They do not contain the
 chunking features which allow for re-ordering algorithms.
-
 With new tools came new features including, but not limited to, phantom
 abstracting~\cite{ShumAndCook1993}, a ``What You See Is What You Get'' (WYSIWYG)
 editor~\cite{FritzsonGunnarssonAndJirstrand2002}, and even movement away from 

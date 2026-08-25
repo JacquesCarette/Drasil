@@ -11,4 +11,4 @@ swhs = idea (mkUid "swhsIdea")
 
 projName :: ProjectName
 projName = mkCommonProjName (mkUid "swhsProjName")
-  (pn "Solar Water Heating Systems Incorporating PCM") "SWHS"
+  (pn "Solar Water Heating Systems incorporating PCM") "SWHS"

@@ -63,8 +63,8 @@ import Drasil.Shared.AST (Terminator(..), FileType(Combined), fileD, md,
   updateMod, MethodData, mthd, mthdName, updateMthd, ParamData, paramVar, paramDoc, pd,
   ProgData, TypeData, cType, vd, val, valPrec, valInt, valType, opDoc, opPrec,
   varName, varType, varBind, varDoc, vard, progD, mthdDoc, modDoc,
-  FuncData(fType, funcDoc), fd, ScopeData, sd, ScopeTag(..), BinderD,
-  FileData, ModData)
+  FuncData(fType, funcDoc), fd, ScopeData, sd, ScopeTag(..),
+  BinderD(bindName, bindType), bindFormD, FileData, ModData)
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.LanguageRenderer.Constructors (typeFromData, unOpPrec,
   powerPrec, multPrec, unExpr, unExpr', binExpr, binExpr', mkStateVal, mkVal,
@@ -352,9 +352,9 @@ instance ListStatement MatlabCode (Doc, Terminator) where
 
 instance Set MatlabCode where
   contains s e = funcApp "ismember" bool [e, s]
-  setAdd = undefined
-  setRemove = undefined
-  setUnion = undefined
+  setAdd s e = funcApp "union" void [s, litList int [e]]
+  setRemove s e = funcApp "setdiff" void [s, litList int [e]]
+  setUnion a b = funcApp "union" void [a, b]
 
 instance NativeVector MatlabCode where
   vecScale = binExpr multOp           -- s * v
@@ -381,14 +381,14 @@ mlCellWrap String = braces
 mlCellWrap _      = parens
 
 instance BinderSym MatlabCode where
-  binder = undefined
+  binder nm tp = onCodeValue (bindFormD nm) <$> tp
 
 instance BinderElim MatlabCode where
-  binderName = undefined
-  binderType = undefined
+  binderName = bindName . unMLC
+  binderType = onCodeValue bindType
 
 instance InternalBinderElim MatlabCode where
-  binderElim = undefined
+  binderElim = text . bindName . unMLC
 
 instance RenderFunction MatlabCode where
   funcFromData d = onStateValue $ onCodeValue (`fd` d)

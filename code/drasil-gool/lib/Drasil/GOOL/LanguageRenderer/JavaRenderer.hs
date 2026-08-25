@@ -72,7 +72,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, function, buildClass,
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData,
-  defaultOptSpace, local, smartSub)
+  defaultOptSpace, local, smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char,
@@ -462,7 +462,7 @@ instance Array JavaCode where
 instance List JavaCode where
   listSize = C.listSize "size"
   listAccess = G.listAccess
-  listAccessFromEnd v n = listAccess v (G.smartSub (listSize v #- litInt 1) n)
+  listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
   listLast v = listAccessFromEnd v (litInt 0)
   indexOf = CP.indexOf jIndex
 

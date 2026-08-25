@@ -92,7 +92,7 @@ import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, integer, (<>), (<+>), empty,
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty,
   brackets, vcat, quotes, doubleQuotes, parens, equals, colon)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
 
@@ -389,8 +389,7 @@ instance List JuliaCode where
     let t = innerType $ return $ valueType v'
         idx = case RC.valueInt n' of
           Just 0  -> text "end"
-          Just i  -> text "end" <+> text "-" <+> integer i
-          Nothing -> text "end" <+> text "-" <+> RC.value n'
+          _       -> text "end" <+> text "-" <+> RC.value n'
     mkStateVal t (RC.value v' <> brackets idx)
   listLast v = listAccessFromEnd v (litInt 0)
   indexOf = jlIndexOf

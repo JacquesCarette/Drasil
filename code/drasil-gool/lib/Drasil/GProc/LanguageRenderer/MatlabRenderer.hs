@@ -80,7 +80,7 @@ import Control.Monad.State (modify)
 
 import Drasil.FileHandling.Legacy (indent)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, text, integer, (<>),
+import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, text, (<>),
   (<+>), vcat, hcat, parens, brackets, braces, equals, quotes, punctuate,
   render)
 
@@ -346,8 +346,7 @@ instance List MatlabCode where
         innerCt = getInnerType $ cType $ unMLC $ valueType v'
         idx = case RC.valueInt n' of
           Just 0  -> text "end"
-          Just i  -> text "end" <+> text "-" <+> integer i
-          Nothing -> text "end" <+> text "-" <+> RC.value n'
+          _       -> text "end" <+> text "-" <+> RC.value n'
     mkStateVal t (RC.value v' <> mlCellWrap innerCt idx)
   listLast v = listAccessFromEnd v (litInt 0)
   indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1

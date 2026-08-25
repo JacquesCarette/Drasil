@@ -72,7 +72,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct,
   param, method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData, defaultOptSpace, local,
-  smartSub)
+  smartAdd)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarAccessCheck)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
@@ -1386,7 +1386,7 @@ instance List CppSrcCode where
   -- TODO [Brandon Bosman, 06/10/2026]: Check if the cast is really necessary
   listSize v = cast int (C.listSize "size" v)
   listAccess = G.listAccess
-  listAccessFromEnd v n = listAccess v (G.smartSub (listSize v #- litInt 1) n)
+  listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
   listLast v = listAccessFromEnd v (litInt 0)
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 

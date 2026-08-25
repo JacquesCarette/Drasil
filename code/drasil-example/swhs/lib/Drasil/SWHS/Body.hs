@@ -167,7 +167,7 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   D.toSent (pluralNP (enerSrc `and_PS` energy)), S "storage technology"]
 
 introStartSWHS, extraInfoSent :: Sentence
-introStartSWHS = foldlSent [atStart' swhs,
+introStartSWHS = foldlSent [atStart' swhs, sParen (short swhs),
   S "incorporating", phrase phsChgMtrl, sParen (short phsChgMtrl),
   S "use a renewable", phrase enerSrc `S.and_`
   S "provide a novel way of storing" +:+. phrase energy, atStart' swhs,

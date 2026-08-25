@@ -14,7 +14,7 @@ module Drasil.Shared.InterfaceCommon (
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp, exists,
   IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
-  Set(..), NativeVector(..), InternalList(..), listSlice, listIndexExists, at,
+  Set(..), NativeVector(..), InternalList(..), listSlice, listLast, listIndexExists, at,
   EmptyStatement(..), MultiStatement(..), ValueStatement(..),
   AssignStatement(..), (&=), DeclStatement(..), PrintConsole(..),
   ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
@@ -326,8 +326,6 @@ class (IndexTranslator r) => List r where
   -- | Gets an element from the end of a list.
   --   Arguments are: List, Offset (0 = last, 1 = second-to-last, ...)
   listAccessFromEnd :: SValue r -> SValue r -> SValue r
-  -- | Gets the last element of a list.
-  listLast   :: SValue r -> SValue r
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
@@ -407,6 +405,10 @@ class (ValueSym r) => InternalList r block | r -> block where
 listSlice :: (InternalList r block) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MS (r block)
 listSlice vnew vold b e tp = listSlice' b e tp vnew vold
+
+-- | Gets the last element of a list.
+listLast :: (List r, Literal r) => SValue r -> SValue r
+listLast v = listAccessFromEnd v (litInt 0)
 
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 listIndexExists lst index = listSize lst ?> index

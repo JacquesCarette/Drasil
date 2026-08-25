@@ -3,7 +3,7 @@
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
 import Drasil.GOOL (Class, SVariable, CS, MS, OOProg, BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
+  bodyStatements, oneLiner, BlockSym(..), listSlice, listLast, TypeSym(..), OOTypeSym(..),
   MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),

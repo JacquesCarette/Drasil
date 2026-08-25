@@ -391,7 +391,6 @@ instance List JuliaCode where
           Just 0  -> text "end"
           _       -> text "end" <+> text "-" <+> RC.value n'
     mkStateVal t (RC.value v' <> brackets idx)
-  listLast v = listAccessFromEnd v (litInt 0)
   indexOf = jlIndexOf
 
 instance ListStatement JuliaCode (Doc, Terminator) where

@@ -439,7 +439,6 @@ instance List CSharpCode where
   listSize = C.listSize' csListSize
   listAccess = G.listAccess
   listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
-  listLast v = listAccessFromEnd v (litInt 0)
   indexOf = CP.indexOf csIndex
 
 instance ListStatement CSharpCode (Doc, Terminator) where

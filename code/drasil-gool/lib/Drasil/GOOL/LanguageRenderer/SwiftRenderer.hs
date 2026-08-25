@@ -448,7 +448,6 @@ instance List SwiftCode where
   listSize = C.listSize' swiftListSize
   listAccess = G.listAccess
   listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
-  listLast v = listAccessFromEnd v (litInt 0)
   indexOf = swiftIndexOf
 
 instance ListStatement SwiftCode (Doc, Terminator) where

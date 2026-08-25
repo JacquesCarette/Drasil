@@ -448,7 +448,6 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAccess = pair2 listAccess listAccess
   listAccessFromEnd = pair2 listAccessFromEnd listAccessFromEnd
-  listLast = pair1 listLast listLast
   indexOf = pair2 indexOf indexOf
 
 instance (Pair p) => ListStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
@@ -1387,7 +1386,6 @@ instance List CppSrcCode where
   listSize v = cast int (C.listSize "size" v)
   listAccess = G.listAccess
   listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
-  listLast v = listAccessFromEnd v (litInt 0)
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance ListStatement CppSrcCode (Doc, Terminator) where
@@ -2063,7 +2061,6 @@ instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAccess _ _ = mkStateVal void empty
   listAccessFromEnd _ _ = mkStateVal void empty
-  listLast _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
 
 instance ListStatement CppHdrCode (Doc, Terminator) where

@@ -348,7 +348,6 @@ instance List MatlabCode where
           Just 0  -> text "end"
           _       -> text "end" <+> text "-" <+> RC.value n'
     mkStateVal t (RC.value v' <> mlCellWrap innerCt idx)
-  listLast v = listAccessFromEnd v (litInt 0)
   indexOf lst v = funcApp "find" int [lst ?== v, litInt 1] #- litInt 1
 
 instance ListStatement MatlabCode (Doc, Terminator) where

@@ -441,7 +441,6 @@ instance List PythonCode where
   listSize = CS.listSize pyListSize
   listAccess = G.listAccess
   listAccessFromEnd v n = listAccess v (G.smartSub (litInt (-1)) n)
-  listLast v = listAccessFromEnd v (litInt 0)
   indexOf = CP.indexOf pyIndex
 
 instance ListStatement PythonCode (Doc, Terminator) where

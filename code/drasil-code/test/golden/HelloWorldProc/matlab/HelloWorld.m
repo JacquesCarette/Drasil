@@ -116,6 +116,25 @@ function HelloWorld(varargin)
     s = [4, 7, 5];
     assert(ismember(7, s), "Set s should contain 7");
     
+    % Set operation and lambda tests
+    s = union(s, [10]);
+    s = setdiff(s, [7]);
+    s = union(s, [20, 30]);
+    fprintf('%s', "Set after operations: ");
+    fprintf('%s', "[");
+    list_i1 = 0;
+    while list_i1 < length(s) - 1
+        fprintf('%g', s(list_i1 + 1));
+        fprintf('%s', ", ");
+        list_i1 = list_i1 + 1;
+    end
+    if length(s) > 0
+        fprintf('%g', s(length(s) - 1 + 1));
+    end
+    fprintf('%s\n', "]");
+    myLambda = @(x) x * 2.0;
+    fprintf('%s\n', "Lambda defined successfully");
+    
     % List slicing tests
     % Create variables for list slices
     mySlicedList = [];

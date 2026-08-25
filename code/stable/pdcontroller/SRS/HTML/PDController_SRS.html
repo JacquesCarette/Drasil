@@ -347,7 +347,7 @@
           Automatic process control with a controller (<span title="proportional">P</span>/<span title="proportional integral">PI</span>/<span title="proportional derivative">PD</span>/<span title="proportional integral derivative">PID</span>) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of <a href="https://github.com/muralidn/CAS741-Fall20/tree/master">PD Controller</a> that can be used to tune the gain constants.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for the PD Controller (<span title="PD Controller">PD Controller</span>) program. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the software requirements specification (<span title="software requirements specification">SRS</span>) for the PD Controller (<span title="PD Controller">PDController</span>) program. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -369,7 +369,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of <span title="PD Controller">PD Controller</span> can have a lower level of expertise, as explained in <a href="#Sec:UserChars">Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of <span title="PD Controller">PDController</span> can have a lower level of expertise, as explained in <a href="#Sec:UserChars">Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -525,7 +525,7 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of <span title="PD Controller">PD Controller</span>, as shown in <a href="#Figure:pidSysDiagram">Fig:pidSysDiagram</a>, includes the following elements:
+                  The physical system of <span title="PD Controller">PDController</span>, as shown in <a href="#Figure:pidSysDiagram">Fig:pidSysDiagram</a>, includes the following elements:
                 </p>
                 <div class="list">
                   <p>
@@ -567,7 +567,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern <span title="PD Controller">PD Controller</span> are presented in the <a href="#Sec:IMs">Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="PD Controller">PDController</span> are presented in the <a href="#Sec:IMs">Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -638,7 +638,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that <span title="PD Controller">PD Controller</span> is based on.
+                  This section focuses on the general equations and laws that <span title="PD Controller">PDController</span> is based on.
                 </p>
                 <div id="TM:laplaceTransform">
                   <table class="defn-table">

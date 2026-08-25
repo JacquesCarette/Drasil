@@ -4,11 +4,9 @@ module Drasil.Website.Body (
   gitHubRef, sections, websiteTitle,
 ) where
 
-import Control.Lens ((^.))
-
 import Drasil.Database (ChunkDB, mkUid, insertAll)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(..), mkSystemMeta)
+import Drasil.System (mkSystemMeta, ProjectName, mkCommonProjName)
 import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
@@ -16,7 +14,7 @@ import Language.Drasil.Document
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
 import Drasil.Website.CaseStudy (caseStudySec, caseStudyTable)
-import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
+import Drasil.Website.Example (exampleSec, exampleRefs, allExampleProjNames)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph)
 import Drasil.Website.GettingStarted (gettingStartedSec)
@@ -57,10 +55,18 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "drasilWebProjName") (nounPhraseSP "Drasil Website") "Website"
+
 webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] db') d
-  where db' = insertAll (allRefs fl) $ insertAll (websiteLCs fl) $ insertAll ss symbMap
+webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite meta d
+  where
+    meta = mkSystemMeta projName [] [] [] [] [] db'
+    db' = insertAll allExampleProjNames
+        $ insertAll (allRefs fl)
+        $ insertAll (websiteLCs fl)
+        $ insertAll ss symbMap
 webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
@@ -76,14 +82,14 @@ ideaDicts :: [IdeaDict]
 ideaDicts = [glaSlab, idglass, intrslce, slope, factor]
 
 cis :: [CI]
-cis = [webName, phsChgMtrl] ++ map (^. sysName) allExampleSI
+cis = [phsChgMtrl]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [pendulum, motion, rigidBody, blast, heatTrans, sWHT, water,
   pidC, target, projectile, crtSlpSrf, shearForce, normForce, slpSrf, fsConcept]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
+symbMap = withCommonKnowledge projName [] [] ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
@@ -103,10 +109,6 @@ websiteLCs fl = [
   , dependencyGraph (graphRt fl) "drasil-website"
   , dependencyGraph (graphRt fl) "drasil-all-pkgs-deps"
   ]
-
--- | Used for system name and kind inside of 'si'.
-webName :: CI
-webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "website" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

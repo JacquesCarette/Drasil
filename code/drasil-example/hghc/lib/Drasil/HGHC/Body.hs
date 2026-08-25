@@ -7,14 +7,15 @@ import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
-import Drasil.HGHC.MetaConcepts (progName)
+import Drasil.HGHC.MetaConcepts (projName)
 
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
+import Drasil.System (projTitleS)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [spencerSmith]
+  projName [spencerSmith]
   [purp] [] [] []
   [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) [] symbols
@@ -42,7 +43,7 @@ introPara = foldlSent [
   S "performance and safety. Engineers therefore rely on dependable calculations",
   S "of the heat transfer coefficients used for simulating the temperature.",
   S "This document describes the requirements of a program called",
-  phrase progName]
+  projTitleS projName]
 
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
@@ -50,8 +51,6 @@ purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to 
 ideaDicts :: [IdeaDict]
 ideaDicts = [fp, nuclearPhys]
 
-cis :: [CI]
-cis = [progName]
-
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis [] [] dataDefs [] [] [] [] [] []
+symbMap = withCommonKnowledge projName [] symbols ideaDicts [] [] [] dataDefs
+  [] [] [] [] [] []

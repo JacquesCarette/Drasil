@@ -150,7 +150,7 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore, a simulation of the PD Controller with a Second Order System is created in this project based on the original, manually created version of \hyperref{https://github.com/muralidn/CAS741-Fall20/tree/master}{}{}{PD Controller} that can be used to tune the gain constants.
 
-The following section provides an overview of the software requirements specification (SRS) for the PD Controller (PD Controller) program. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the software requirements specification (SRS) for the PD Controller (PDController) program. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -162,7 +162,7 @@ The scope of the requirements includes a PD Control Loop with three subsystems, 
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of PD Controller can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
+Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of PDController can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
@@ -247,7 +247,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of PD Controller, as shown in \hyperref[Figure:pidSysDiagram]{Fig:pidSysDiagram}, includes the following elements:
+The physical system of PDController, as shown in \hyperref[Figure:pidSysDiagram]{Fig:pidSysDiagram}, includes the following elements:
 
 \begin{description}[font=\normalfont]
 \item[PS1:]{The Summing Point.}
@@ -270,7 +270,7 @@ Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step T
 \end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern PD Controller are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern PDController are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -291,7 +291,7 @@ This section simplifies the original problem and helps in developing the theoret
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-This section focuses on the general equations and laws that PD Controller is based on.
+This section focuses on the general equations and laws that PDController is based on.
 
 \medskip
 \noindent

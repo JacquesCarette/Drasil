@@ -14,8 +14,7 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8, TextEncoding)
 import System.Environment (lookupEnv)
 
 import Drasil.FileHandling (OverwritePolicy (..), PathSegment, directory, localPath, ps, writeFiles, FileLayout)
-import Drasil.System (HasSystemMeta (..), ToFiles (..))
-import Language.Drasil (CommonIdea (abrv))
+import Drasil.System (HasSystemMeta (..), ToFiles (..), HasProjectName(..))
 
 import Drasil.Generator.ChunkDump (buildDebuggingFiles)
 
@@ -46,7 +45,7 @@ data WriteOptions = WO
   { -- | Are we allowed to overwrite files or not?
     overwritePolicy :: OverwritePolicy,
     -- | What is the name of the subfolder to be created?
-    localDirName :: forall sys. HasSystemMeta sys => sys -> PathSegment,
+    localDirName :: forall sys. (HasSystemMeta sys, HasProjectName sys) => sys -> PathSegment,
     -- | What is the expected text encoding scheme?
     textEncoding :: TextEncoding,
     -- | Should debugging data be written?
@@ -67,12 +66,8 @@ drasilMakefileReqOpts :: WriteOptions
 drasilMakefileReqOpts =
   WO OverwriteAllowed dirName utf8 (CheckEnvVar "DEBUG_ENV" [ps|.drasil|])
   where
-    dirName sys = let ab = abrv $ sys ^. systemMeta . sysName
-                   in [ps|{ab}|]
-
--- FIXME: Both `abrv` usage and `sysName` usage above is dubious. We need to
--- replace this field with something better, such as project name and project
--- shortname (repo name).
+    dirName sys = let nm = sys ^. projRepoName
+                   in [ps|{nm}|]
 
 -- | Internal: 'DebugDataPolicy' eliminator.
 debugData :: HasSystemMeta sys => sys -> DebugDataPolicy -> IO (Maybe FileLayout)

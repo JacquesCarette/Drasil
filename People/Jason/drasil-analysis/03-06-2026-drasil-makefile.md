@@ -19,7 +19,7 @@ Namespace carrying an AST of a `Makefile` as well as helper functions, a DSL for
 
 Declares types for building a `Makefile`, declaring it as a list of `Rule`s.
 
-1. [ ] `type Annotation` is really a "comment" and is referred to as a comment everywhere else. This alias should just be renamed to `Comment`.
+1. [ ] `type Annotation = [String]` is really a "comment" and is referred to as a comment everywhere else. This alias should just be renamed to `Comment`. Furthermore, instead of manually splitting annotations/comments up across lines (which is what the list bit is for), we should have the pretty-printer deal with automatically hard-wrapping.
 2. [ ] There are 3 constructors with unconventional names: `M`, `R`, and `C`. These should be renamed to things more appropriate (I would prefer `Makefile`, `Rule`, and `Cmd`, respectively).
 3. [ ] The Makefile encoding should contain a `NonEmpty` list of `Rule`s, not a simple `[Rule]` which admits empty rule sets. The head of this list should also be understood as the _default target_. However, see (4).
 4. [ ] The Makefile encoding does not admit extra whitespace, comments, _assignments_, nor imports. A `Makefile` should really be understood as a list of these (along with `Rule`s, of course).
@@ -38,7 +38,7 @@ Declares types for building a `Makefile`, declaring it as a list of `Rule`s.
     endif
     ```
 6. [ ] `CommandOpts` is an incomplete enumeration. Commands can also be silenced (`@`) or forced to always be run (`+`, ignoring dry run).
-7. [ ] All usage of `Annotation` is a single-entry list or an empty list. We should consider changing this type alias to a `Maybe String`. Long `String`s can be hard-wrapped automatically (and realistically, this is a kind of "choice").
+7. [ ] `Annotation` is only 'attached' to other rules. We should be able to write arbitrary comments within a `Makefile` (i.e., we need to recognize a `Makefile` as a sequence of something more than just rules). Annotations on individual shell commands are helpful, however. We should add that and remove attaching annotations (descriptive comments) before rules.
 8. [ ] We should rename `.AST` to `.Core`.
 
 Overall, the Makefile AST is incomplete. It works fine for our current purposes, but the variables issue is a leaky abstraction that should be fixed.

@@ -1,6 +1,6 @@
 # Shallow File Analysis
 
-## `drasil-code`
+## [`drasil-code`](../../../code/drasil-code)
 
 Overall, I believe that before we make major architectural changes, we should:
 
@@ -13,11 +13,11 @@ In particular after breaking up `-code`, we should take many smaller refactoring
 
 Something that was very nice is how validating this analysis was to me in my previous analysis about the projectile variations and where choices are made. The problem is now how we pivot to that structure, which we will definitely need to make in many small steps.
 
-### `./lib/Language/Drasil/GOOL.hs`
+### [`drasil-code/lib/Language/Drasil/GOOL.hs`](../../../code/drasil-code/lib/Language/Drasil/GOOL.hs)
 
 Reexport file (primarily of things in the `Language.Drasil.Code.Imperative.GOOL.LanguageRenderer` but also `SoftwareDossierSym` and `PackageData`). It does not export anything from `drasil-gool`.
 
-### `./lib/Language/Drasil/Choices.hs`
+### [`drasil-code/lib/Language/Drasil/Choices.hs`](../../../code/drasil-code/lib/Language/Drasil/Choices.hs)
 
 A giant list of generation options (types, constructors, and the mega `Choices` type).
 
@@ -25,7 +25,7 @@ One particularly dubious thing is that it contains a list of output source code 
 
 One major issue with `Choices` is that the `Lang` type does not include any language-specific options. Having to deal with each language in a special way across each other choice and area of code is very cumbersome.
 
-### `./lib/Language/Drasil/Chunk/Code.hs`
+### [`drasil-code/lib/Language/Drasil/Chunk/Code.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/Code.hs)
 
 Contains some very suspicious code:
 
@@ -51,7 +51,7 @@ The dependency issue chain between `drasil-printers`, `drasil-code`, and `drasil
 
 It also contains `ccObjVar`, a constructor for `CodeVarChunk`, that relies on the orphaned instances mentioned earlier. This code belongs next to the definition of `CodeVarChunk`.
 
-### `./lib/Language/Drasil/Chunk/CodeBase.hs`
+### [`drasil-code/lib/Language/Drasil/Chunk/CodeBase.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/CodeBase.hs)
 
 As of [#5217](https://github.com/JacquesCarette/Drasil/pull/5217), this file only contains:
 
@@ -74,7 +74,7 @@ varResolve  m x = quantvar (findOrErr x m :: DefinedQuantityDict)
 3. [ ] `varResolve` makes me question both `quantvar` and `CodeVarChunk`. It suggests we can delete `CodeVarChunk` without any real loss of information. Or perhaps that we're not using `CodeVarChunk` in a meaningful way.
 4. [ ] `varResovle` also indicates that we are not inserting actual `CodeVarChunk`s into the `ChunkDB` (bad, because we try to retrieve it later).
 
-### `./lib/Language/Drasil/Chunk/CodeDefinition.hs`
+### [`drasil-code/lib/Language/Drasil/Chunk/CodeDefinition.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/CodeDefinition.hs)
 
 Contains two interesting data types:
 
@@ -103,11 +103,11 @@ This type is really used for declaring which quantity will be defined by which f
 
 This type is used in `ICOSolutionSearch.hs`, which indicates that we are abusing it. We need another type to represent steps in a calculation algorithm for an ICO problem.
 
-### `./lib/Language/Drasil/Chunk/ConstraintMap.hs`
+### [`drasil-code/lib/Language/Drasil/Chunk/ConstraintMap.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/ConstraintMap.hs)
 
 Contains a map of `UID`s to constraints. Instead of attaching them here, it would be good for them to be attached to the variable definitions. One thing that's dubious is that it knows about physical- and software-imposed constraints. That information looks like it should be erased by now, or perhaps be renamed to "semantic" and "solution."
 
-### `./lib/Language/Drasil/Chunk/NamedArgument.hs`
+### [`drasil-code/lib/Language/Drasil/Chunk/NamedArgument.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/NamedArgument.hs)
 
 Contains a single data definition:
 
@@ -142,7 +142,7 @@ makeLenses ''NamedArgument
 
 `NamedArgument` looks like an attempt to capture something meaningful, but I'm not sure if a `newtype` wrapper around a `DefinedQuantityDict` is enough.
 
-### `./lib/Language/Drasil/Chunk/Parameter.hs`
+### [`drasil-code/lib/Language/Drasil/Chunk/Parameter.hs`](../../../code/drasil-code/lib/Language/Drasil/Chunk/Parameter.hs)
 
 Similar to `NamedArgument.hs`, contains data types:
 
@@ -158,17 +158,17 @@ makeLenses ''ParameterChunk
 
 These inherit everything `CodeChunk`. Alternative to my earlier suggestion regarding `NamedArgument`, we should check to see if we can replace `NamedArgument` with a variant of `ParameterChunk`.
 
-### `./lib/Language/Drasil/Code.hs`
+### [`drasil-code/lib/Language/Drasil/Code.hs`](../../../code/drasil-code/lib/Language/Drasil/Code.hs)
 
 Reexport file. Contains far too many things. It is very unclear _why_ it exports everything in that single file, and it almost definitely exports things that should be split off into other re-export modules. For example, manual module-building is uncommon work (appearing only in `glassbr`) and involves very delicate work. It should likely be split off into a separate module that re-exports everything related to manual module-building.
 
-### `./lib/Language/Drasil/Code/CodeQuantityDicts.hs`
+### [`drasil-code/lib/Language/Drasil/Code/CodeQuantityDicts.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/CodeQuantityDicts.hs)
 
-Contains the basic `DefinedQuantityDict`s needed to generate the examples and a list of them (`codeDQDs`) for use in `drasil-gen/../CommonKnowledge.hs`. 
+Contains the basic `DefinedQuantityDict`s needed to generate the examples and a list of them (`codeDQDs`) for use in `drasil-gen/lib/Drasil/Generator/CommonKnowledge.hs`. 
 
 1. [ ] These `codeDQDs` should probably only be inserted during _code-generation-time_. i.e., it should be removed from `drasil-gen` and moved to the code generation function (wherever that may be).
 
-### `./lib/Language/Drasil/Code/Lang.hs`
+### [`drasil-code/lib/Language/Drasil/Code/Lang.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Lang.hs)
 
 Contains a single type: `Lang`, indicating the supported generation options that `drasil-code`'s renderer offers. Note that this is related to an _option_. What we really need from `drasil-code` is a namespace called `Renderer`. `Renderer` should contain all the options and doodads necessary to configure it. Then we need a core AST/IR for `drasil-code` separated into another namespace. This way, we can concretely say that this is or is not a part of the AST/IR.
 
@@ -176,7 +176,7 @@ Contains a single type: `Lang`, indicating the supported generation options that
 
 3.5 files that are heavily related.
 
-#### `./lib/Language/Drasil/Code/DataDesc.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/DataDesc.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/DataDesc.hs)
 
 `DataDesc.hs` contains a language (`DataDesc`) for describing the shape of program input files. We use this in two ways:
 
@@ -191,17 +191,17 @@ It looks to me like `DataDesc` has a coherent design somewhere, but I don't imme
 
 Also, our current usage of `DataDesc` locks us into strictly using it. Programs often read CSVs, TSVs, pandas/pickle, YAML, and JSON.
 
-#### `./lib/Language/Drasil/Code/Imperative/WriteInput.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/WriteInput.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/WriteInput.hs)
 
 Contains code related to _writing_ a sample input file (knowledge held within Drasil).
 
-#### `./lib/Language/Drasil/Code/Imperative/ReadInput.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/ReadInput.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/ReadInput.hs)
 
 Contains code related to _reading_ a sample input file into Drasil.
 
 Together with `WriteInput.hs`, we appear to parse a sample input file with Drasil using a `DataDesc` and then write the same data out using the same `DataDesc` to our generated folders.
 
-#### `./lib/Language/Drasil/Code/Imperative/Import.hs` (The $.5$)
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs) (The $.5$)
 
 This is the $.5$ because it is a very large file and only contains:
 
@@ -218,7 +218,7 @@ genDataFunc nameTitle desc ddef = do
 
 This code is a bit confusing. It's not quite clear how the generated code fits into the bigger picture of the program.
 
-### `./lib/Language/Drasil/Code/Imperative/ConceptMatch.hs`
+### [`drasil-code/lib/Language/Drasil/Code/Imperative/ConceptMatch.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/ConceptMatch.hs)
 
 I already wrote about this in [#1862](https://github.com/JacquesCarette/Drasil/issues/1862#issuecomment-3009017292). The idea is really good. The idea is that we can substitute our concepts with other ones, such as language-native concepts.
 
@@ -226,7 +226,7 @@ For example, we can have our own implementation of `sin` or we can use the one f
 
 In some sense, this has the potential to be one of the most important files in `drasil-code` (if not the most).
 
-### `./lib/Language/Drasil/Code/Imperative/Doxygen/Import.hs`
+### [`drasil-code/lib/Language/Drasil/Code/Imperative/Doxygen/Import.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Doxygen/Import.hs)
 
 This file is massive, containing a Doxygen config with only a few options filled in. We should look into trimming it down a bit, at least deleting the Doxygen config comments. This file appears to be directly extraced from a copy-pasted Doxygen config. What we really should have is an encoding (a record or a map) of a Doxygen config, with a bunch of switches for each option. 
 
@@ -234,7 +234,7 @@ This file is massive, containing a Doxygen config with only a few options filled
 
 In these two files, the "invisible programmer," the one that knows how to convert an ICO problem flexibly encoded in the SRS, is captured. Their actions are sound for our problems, but it's not clear enough why they do what they do nor how their work functions. I say "invisible programmer" because it looks like a lot of tacit knowledge is being captured in these two files but we're only seeing an operationally functional axis of that knowledge. We need to decompose it a bit more to reveal where more choices can be exposed.
 
-#### `./lib/Language/Drasil/CodeSpec.hs`
+#### [`drasil-code/lib/Language/Drasil/CodeSpec.hs`](../../../code/drasil-code/lib/Language/Drasil/CodeSpec.hs)
 
 Contains a "Code Specification" (`CodeSpec`) that contains all the information necessary for the generator to function. The smart constructor for `CodeSpec` has type: `codeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec`.
 
@@ -249,7 +249,7 @@ The problem with `CodeSpec` is that it captures too many things at once and is t
 
 (I'm going to need to refine my terminology used for the 3rd point here. The best way is likely to take one of the examples and run it through this model/problem framing to see how it works.)
 
-#### `./lib/Language/Drasil/ICOSolutionSearch.hs`
+#### [`drasil-code/lib/Language/Drasil/ICOSolutionSearch.hs`](../../../code/drasil-code/lib/Language/Drasil/ICOSolutionSearch.hs)
 
 About solving the execution order for an ICO problem.
 
@@ -263,7 +263,7 @@ Note:
 
 ### Manually Constructed Code
 
-#### `./lib/Language/Drasil/Mod.hs`
+#### [`drasil-code/lib/Language/Drasil/Mod.hs`](../../../code/drasil-code/lib/Language/Drasil/Mod.hs)
 
 This file contains an AST for building modules (heavily OO-inspired class files), objects, and function bodies.
 
@@ -273,19 +273,23 @@ This file contains an AST for building modules (heavily OO-inspired class files)
 
 ### External Libraries
 
-These 3 files deserve more than a shallow file analysis. They are outside the scope of this work for now.
+These files deserve more than a shallow file analysis. They are outside the scope of this work for now.
 
-#### `./lib/Language/Drasil/Code/ExternalLibrary.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/ExternalLibrary.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/ExternalLibrary.hs)
 
 This code contains sensible documentation. I'm not going to think about this file too much right now but it looks not too bad. Low priority.
 
-#### `./lib/Language/Drasil/Code/ExternalLibraryCall.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/ExternalLibraryCall.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/ExternalLibraryCall.hs)
 
 There are a myriad of smart constructors that do very little. We should look more carefully into this file.
 
-#### `./lib/Language/Drasil/Code/ExtLibImport.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/ExtLibImport.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/ExtLibImport.hs)
 
 Supports the previous two files.
+
+#### [`drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs`](../../../code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs)
+
+Defines and collects information about ODE solvers from concrete external libraries (SciPy for Python, Oslo for C#, Apache Commons for Java, and Odeint for C++).
 
 ### ODEs
 
@@ -297,7 +301,7 @@ Currently, to generate code, we make it _work_, but the way we make it work is q
 
 This deserves more than a shallow file analysis.
 
-### `./lib/Language/Drasil/Data/ODEInfo.hs`
+#### [`drasil-code/lib/Language/Drasil/Data/ODEInfo.hs`](../../../code/drasil-code/lib/Language/Drasil/Data/ODEInfo.hs)
 
 Contains basic information for how an ODE should be solved. This files deserve more than a shallow file analysis. At a surface level, it contains a record, a smart constructor, and a function:
 
@@ -306,11 +310,11 @@ Contains basic information for how an ODE should be solved. This files deserve m
 createFinalExpr :: DifferentialModel -> [CodeExpr]
 ```
 
-### `./lib/Language/Drasil/Data/ODELibPckg.hs`
+#### [`drasil-code/lib/Language/Drasil/Data/ODELibPckg.hs`](../../../code/drasil-code/lib/Language/Drasil/Data/ODELibPckg.hs)
 
 Contains an encoding of an "ODE library package" that is usable for solving some ODE problems. There's one assumption about these instances that is undocumented: that the ODE packages each have good support for each kind of ODE problem we support. Each one has different capabilities. We can enforce these capability restrictions with runtime `error`s.
 
-### `./lib/Language/Drasil/Code/Imperative/GenODE.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/GenODE.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GenODE.hs)
 
 Surprisingly carries very little about generating ODE-related code. Rather, it contains 1 function that is used to validate) that a language is supported by a specific ODE library and contains 2 functions that create messages (`Choice`s-related errors or design-logging, for `designLog.txt` files).
 
@@ -318,11 +322,11 @@ Surprisingly carries very little about generating ODE-related code. Rather, it c
 
 We should consider creating a namespace for comments (which contain human-readable descriptions).
 
-#### `./lib/Language/Drasil/Code/Imperative/Comments.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Comments.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Comments.hs)
 
 Contains 5 functions related to _rendering_ descriptions, units, comments, etc. into text. This file has more to do with rendering comments than building or encoding them.
 
-#### `./lib/Language/Drasil/Code/Imperative/Descriptions.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Descriptions.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Descriptions.hs)
 
 Contains renderers for generating descriptive comments about various areas of the generated code. There is a lot of tacit information about the implementation of the code generator that lives here.
 
@@ -334,25 +338,25 @@ Contains renderers for generating descriptive comments about various areas of th
 
 The same analysis applies to the following files:
 
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/CppRenderer.hs`
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/CSharpRenderer.hs`
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/JavaRenderer.hs`
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/JuliaRenderer.hs`
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/MatlabRenderer.hs`
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/PythonRenderer.hs`
-* `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/SwiftRenderer.hs`
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/CppRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/CppRenderer.hs)
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/CSharpRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/CSharpRenderer.hs)
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/JavaRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/JavaRenderer.hs)
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/JuliaRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/JuliaRenderer.hs)
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/MatlabRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/MatlabRenderer.hs)
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/PythonRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/PythonRenderer.hs)
+* [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/SwiftRenderer.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/SwiftRenderer.hs)
 
 An implementation of a "software dossier" custom to that specific language.
 
 * [ ] Are the monads used anywhere?
 * [ ] The typeclass usage for `SoftwareDossierSym` looks like over-engineering. We should reevaluate the design.
 
-#### `./lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer/LanguagePolymorphic.hs)
 
 Contains:
 
 1. 3 renderers for software-dossier-related things (Doxygen, README, Makefile) with options.
-2. A default doxygen config.
+2. A default Doxygen config.
 3. Two helper functions:
     * [ ] `noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable`. Used in the definition of `makefile` in each of the aforementioned `XRenderer.hs` files. Hints at a design issue: we don't need to copy-paste this code in each `XRenderer.hs` file, but we should have some single piece of code that goes to those languages and asks for one compiler/renderer function.
     * [ ] `docIfEnabled :: [Comments] -> DocConfig -> Maybe DocConfig`. I won't comment on this one. It just needs some more analysis, but it looks like we should try to delete this function.
@@ -361,7 +365,7 @@ Contains:
 
 We have [README](#readme-generation) and [Makefile](#makefile-generation) ASTs and generators not directly placed in the `SoftwareDossier` namespace that should be moved there.
 
-#### `./lib/Language/Drasil/SoftwareDossier/SoftwareDossierSym.hs`
+#### [`drasil-code/lib/Language/Drasil/SoftwareDossier/SoftwareDossierSym.hs`](../../../code/drasil-code/lib/Language/Drasil/SoftwareDossier/SoftwareDossierSym.hs)
 
 ```haskell
 -- | Members of this class must have a doxygen configuration, ReadMe file,
@@ -379,7 +383,7 @@ class SoftwareDossierSym r where
   unReprDoc :: r Doc -> Doc
 ```
 
-#### `./lib/Language/Drasil/SoftwareDossier/FileNames.hs`
+#### [`drasil-code/lib/Language/Drasil/SoftwareDossier/FileNames.hs`](../../../code/drasil-code/lib/Language/Drasil/SoftwareDossier/FileNames.hs)
 
 Contains the following:
 
@@ -406,14 +410,14 @@ What I really see with this file is spread our code around about unconventional 
 
 #### README Generation
 
-##### `./lib/Language/Drasil/Code/Imperative/README/Core.hs`
+##### [`drasil-code/lib/Language/Drasil/Code/Imperative/README/Core.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/README/Core.hs)
 
 Contains an encoding of an idiomatic README file, containing things we would want to see in a "good" README. "Good" here meaning "containing the things we would normally expect or like to see in a README file."
 
 * [ ] Rename `ReadMeInfo` to `README` or `IdiomaticREADME`.
 * [ ] I know this data type is at least partially influenced by a few papers. We should note that here.
 
-##### `./lib/Language/Drasil/Code/Imperative/README/Render.hs`
+##### [`drasil-code/lib/Language/Drasil/Code/Imperative/README/Render.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/README/Render.hs)
 
 Contains the Markdown renderer for the README file. It doesn't actually use a proper Markdown IR, it just immediately jumps to rendering Markdown code. This is a known issue, a part of [#4989](https://github.com/JacquesCarette/Drasil/issues/4989).
 
@@ -421,17 +425,17 @@ Contains the Markdown renderer for the README file. It doesn't actually use a pr
 
 Both of these files need to be moved to a `Makefile` namespace, preferably within `SoftwareDossier` for now (even though I don't think that will be its final home).
 
-##### `./lib/Language/Drasil/Code/Imperative/Build/AST.hs`
+##### [`drasil-code/lib/Language/Drasil/Code/Imperative/Build/AST.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Build/AST.hs)
 
 This file contains a mix of data types that together resemble the common components of a `Makefile` (arguably something more generic than a `Makefile`, but the data types are specialized to `Makefile`s). However, the overall structure is difficult to understand. This code can be cleaned up (re-organized and comments updated) before we decide on how to "fix" it.
 
-##### `./lib/Language/Drasil/Code/Imperative/Build/Import.hs`
+##### [`drasil-code/lib/Language/Drasil/Code/Imperative/Build/Import.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Build/Import.hs)
 
 * [ ] The filename is confusing. It does not import something and convert it into a `Makefile`, it generates a `Makefile` `Doc` using `drasil-makefile`. We should rename it to `Render.hs` or `Generate.hs`.
 
 ### The Code Generator
 
-#### `./lib/Language/Drasil/Code/Imperative/DrasilState.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/DrasilState.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/DrasilState.hs)
 
 One piece of code that jumped out at me:
 
@@ -462,13 +466,13 @@ Aside: The bundling/unbundling feature is good and bad. One on hand, it is sensi
 
 The rest of this file contains things related to `SoftwareDossier`-related 'choices'. This file deserves more than a shallow file analysis because it contains a mix of things that look over-engineered and under-engineered. We will need time to delicately disentangle what's going on here.
 
-#### `./lib/Language/Drasil/Code/Imperative/FunctionCalls.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/FunctionCalls.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/FunctionCalls.hs)
 
 Contains constructors for various kinds of function calls, specialized to our various "internal concepts" (which are identifiers that will be used in the generated outputs).
 
 * [ ] Function calls should know nothing about the ICO problem. Currently, it knows too much. This will not be an "easy" fix.
 
-#### `./lib/Language/Drasil/Code/Imperative/GenerateGOOL.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/GenerateGOOL.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/GenerateGOOL.hs)
 
 This file needs to be broken up and deleted. It aggregates some of the renderers related to the software-dossier-related things (i.e., `Makefile`s, `Doxygen`, `README`) and then smart constructors that sit atop GOOL. I wonder if some of these things are better off being in `drasil-gool`. 
 
@@ -478,13 +482,13 @@ data ClassType = Primary | Auxiliary
 
 This file also defines the above datatype for differentiating between a "primary module" from "auxiliary modules." I don't understand the difference between a primary and auxiliary module. From a very quick scan, it looks like what it really wants to establish is the difference between a file containing a program entry point or not.
 
-#### `./lib/Language/Drasil/Code/Imperative/Generator.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Generator.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Generator.hs)
 
 The "top-level" generator file used to create a `DrasilState` generate that is then used to generate the final software artifacts.
 
 This file is worth deeper investigation. Out of scope for this pass.
 
-#### `./lib/Language/Drasil/Code/Imperative/Helpers.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Helpers.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Helpers.hs)
 
 Contains two functions:
 
@@ -503,7 +507,7 @@ convScope MainFn = mainFn
 * [ ] `convScope` should be moved closer to the definition of `ScopeType`.
 * [ ] `liftS` looks ok, but it's only used in two modules. We should see if we can move it to one of them.
 
-#### `./lib/Language/Drasil/Code/Imperative/Import.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs)
 
 Contains a mix of various things:
 
@@ -511,15 +515,15 @@ Contains a mix of various things:
 * `CodeExpr -> GOOL` interpretation.
 * Various code generators (`DataDesc`-related, functions, variables, etc.).
 
-#### `./lib/Language/Drasil/Code/Imperative/Logging.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Logging.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Logging.hs)
 
 Contains a code generator for building code that describes how other code is called (i.e., 'logging').
 
-#### `./lib/Language/Drasil/Code/Imperative/Modules.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Modules.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Modules.hs)
 
 This file deserves a delicate reading. It contains very little code related to generating modules and a lot of code related to generating the content of said modules. The code related to the contents of the modules should likely be moved elsewhere, purely on the basis that those code snippets can be used without a 'modular' `Choices` configuration option selected.
 
-#### `./lib/Language/Drasil/Code/Imperative/Parameters.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/Parameters.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/Parameters.hs)
 
 Contains code related to gathering the input parameters for the generated 'calculation' functions, (derived) input functions, and output functions. Contains some problematic assumptions, for example:
 
@@ -533,11 +537,11 @@ getCalcParams c = do
 
 `delete (quantvar c)` is a problem. Without it, our 'complex' case studies fail to generate sensible code! This code works from an operational POV, but, for example, for programs involving time series, this would generate bad code.
 
-#### `./lib/Language/Drasil/Code/Imperative/SpaceMatch.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/Imperative/SpaceMatch.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/Imperative/SpaceMatch.hs)
 
 Inside of `Choices` is a "`space->type` preference" map that is used to encode which final types a user would prefer the final language use. Keyword: preference. The code in this file takes those preferences and tries to realize them into a final `space->type` map that is usable for the desired programming language.
 
-#### `./lib/Language/Drasil/Code/PackageData.hs`
+#### [`drasil-code/lib/Language/Drasil/Code/PackageData.hs`](../../../code/drasil-code/lib/Language/Drasil/Code/PackageData.hs)
 
 Contains a single data type, a pattern and a smart constructor for the type:
 

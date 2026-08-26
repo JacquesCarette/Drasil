@@ -1,21 +1,21 @@
-# Shallow Analysis
+# Shallow File Analysis
 
-## `drasil-build`
+## [`drasil-makefile`](../../../code/drasil-makefile)
 
-### `Build.Drasil`
+### [`drasil-makefile/lib/Drasil/Makefile.hs`](../../../code/drasil-makefile/lib/Drasil/Makefile.hs)
 
-Reexports smart constructors for building a Makefile from `Build.Drasil.Make.*`.
+Re-exports smart constructors for building a Makefile from `Drasil.Makefile.Make.*`.
 
-1. [ ] The API should be straightforward enough such that we can immediately reexport entire modules rather than each import individually.
-2. [ ] Should be renamed to `Drasil.Build` (as per #1211).
+1. [ ] The API should be straightforward enough such that we can immediately re-export entire modules rather than each import individually.
+2. [X] ~~Should be renamed to `Drasil.Build` (as per #1211).~~ Renamed project to `drasil-makefile` and module to `Drasil.Makefile` instead. [#4976](https://github.com/JacquesCarette/Drasil/pull/4976)
 
-### `Build.Drasil.Make`
+### [`drasil-makefile/lib/Drasil/Makefile/Make/`](../../../code/drasil-makefile/lib/Drasil/Makefile/Make)
 
-Namespace carrying an AST of a `Makefile` as well as a `Doc`-renderer for the AST and a "rule transformer" (a typeclass that defines a single function, `makeRule`, that is intended to capture how a Makefile can be generated for [?] for a specific type).
+Namespace carrying an AST of a `Makefile` as well as helper functions, a DSL for Makefile expressions/variables (`MakeString`), and a `Doc`-renderer for the AST.
 
-1. [ ] Should be renamed to `Drasil.Build.Makefile`.
+1. [X] ~~Should be renamed to `Drasil.Build.Makefile`.~~ Moved under `Drasil.Makefile.Make` in `drasil-makefile`. [#4976](https://github.com/JacquesCarette/Drasil/pull/4976)
 
-#### `Build.Drasil.Make.AST`
+#### [`drasil-makefile/lib/Drasil/Makefile/Make/AST.hs`](../../../code/drasil-makefile/lib/Drasil/Makefile/Make/AST.hs)
 
 Declares types for building a `Makefile`, declaring it as a list of `Rule`s.
 
@@ -43,7 +43,7 @@ Declares types for building a `Makefile`, declaring it as a list of `Rule`s.
 
 Overall, the Makefile AST is incomplete. It works fine for our current purposes, but the variables issue is a leaky abstraction that should be fixed.
 
-#### `Build.Drasil.Helpers`
+#### [`drasil-makefile/lib/Drasil/Makefile/Make/Helpers.hs`](../../../code/drasil-makefile/lib/Drasil/Makefile/Make/Helpers.hs)
 
 Only 3 functions are necessary to export:
 
@@ -58,18 +58,20 @@ Only 3 functions are necessary to export:
 1. [ ] `addCommonFeatures` needs to be rebuilt.
 2. [ ] `tab` and `msIndent` are good, but are very generic functions. We should consider moving them elsewhere.
 
-We should consider creating another package (e.g., `drasil-doc` or `drasil-artifacts` that exports a bunch of features atop `pretty`), such as `tab` and `msIndent`. We can also take this as an opportunity to slowly move packages towards `prettyprinter` (the modern, `Text`-based document writer). Doing so would mean contributing to #4475. Two birds (rebuilding the Makefile AST/printer and beginning the move towards `prettyprinter`) with one stone.
+We should consider creating another package (e.g., `drasil-doc` or `drasil-artifacts` / `drasil-file-handling` that exports a bunch of features atop `pretty`), such as `tab` and `msIndent`. We can also take this as an opportunity to slowly move packages towards `prettyprinter` (the modern, `Text`-based document writer). Doing so would mean contributing to #4475. Two birds (rebuilding the Makefile AST/printer and beginning the move towards `prettyprinter`) with one stone.
 
-#### `Build.Drasil.Import`
+#### `drasil-makefile/lib/Drasil/Makefile/Make/Import.hs` (Deleted)
 
-Only 2 things are necessary to export:
+Formerly `Build.Drasil.Import` (or `Build.Drasil.Make.Import`).
+
+Exported:
 
 1. `RuleTransformer(..)`: A typeclass used to capture how arbitrary things can be translated into a list of `Rule`s.
-2. `toMake`: A function that uses `RuleTransformer` to build a `Makefile`.
+2. `toMake`: A function that used `RuleTransformer` to build a `Makefile`.
 
-`RuleTransformer` is only instantiated for two things:
+`RuleTransformer` was previously instantiated for two things:
 
-1. `DocSpec`: This is very bad because there is a lot of hard-coded discussion of specific target formats and document categories (the SRS!). This is deserving of being broken up further.
+1. `DocSpec`: This was very bad because there was a lot of hard-coded discussion of specific target formats and document categories (the SRS!).
   ```haskell
   -- | Allows the creation of Makefiles for documents that use LaTeX.
   instance RuleTransformer DocSpec where
@@ -89,7 +91,7 @@ Only 2 things are necessary to export:
         server = mkCheckedCommand $ makeS "mdbook serve --open"
     makeRule _ = []
   ```
-2. `CodeHarness`: Similarly, worth breaking up. It does not expose any configuration options. For Python-based projects for example, no `build` step is necessary, but this code will [always build it](https://github.com/JacquesCarette/Drasil/blob/main/code/stable/dblpend/src/python/Makefile).
+2. `CodeHarness`: Similarly, did not expose any configuration options. For Python-based projects for example, no `build` step is necessary, but this code always built it.
   ```haskell
   -- | Transforms information in 'CodeHarness' into a list of Makefile rules.
   instance RuleTransformer CodeHarness where
@@ -113,17 +115,15 @@ Only 2 things are necessary to export:
         buildTarget = makeS "build"
   ```
 
-1. [ ] `.Import` is not a name I quite like. Is it importing something else or is something importing it? It defines an interface for generating things into `Makefile`s. Either way, there's probably a better name: `Builder`. Alternatively, this code can be merged into `.AST`/`.Core`. It's unclear why this file separation is strictly necessary.
-2. [ ] The `RuleTransformer` does not support any sort of configuration. Is this really necessary? This typeclass seems like an over-engineering attempt. It doesn't appear to add anything of value and it is currently the only way to form a `Makefile` (not just a list of `Rule`s) -- why? I think we can (should) remove it.
+1. [X] ~~`.Import` is not a name I quite like. Is it importing something else or is something importing it? It defines an interface for generating things into `Makefile`s. Either way, there's probably a better name: `Builder`. Alternatively, this code can be merged into `.AST`/`.Core`. It's unclear why this file separation is strictly necessary.~~ Removed in [e9bf2e1218](https://github.com/JacquesCarette/Drasil/commit/e9bf2e1218435bb98edfdb8fe9c57cf09ce49877).
+2. [X] ~~The `RuleTransformer` does not support any sort of configuration. Is this really necessary? This typeclass seems like an over-engineering attempt. It doesn't appear to add anything of value and it is currently the only way to form a `Makefile` (not just a list of `Rule`s) -- why? I think we can (should) remove it.~~ Removed in [e9bf2e1218](https://github.com/JacquesCarette/Drasil/commit/e9bf2e1218435bb98edfdb8fe9c57cf09ce49877). Makefile generation for `DocSpec` was moved to `drasil-gen` (`Drasil.Generator.Formats.buildMakefile`) and for `CodeHarness` (imperative build configs) to `drasil-code` (`Language.Drasil.Code.Imperative.Build.Import.buildMakefile`).
 
-`Makefile`s should be specialized to more choices. I believe this code should be redesigned.
-
-#### `Build.Drasil.MakeString`
+#### [`drasil-makefile/lib/Drasil/Makefile/Make/MakeString.hs`](../../../code/drasil-makefile/lib/Drasil/Makefile/Make/MakeString.hs)
 
 Contains a language for building Makefile expressions and declaring variables.
 
 This language should be audited properly. It looks like it would work for our very specific usecase of `Makefile`s in Drasil, but be very limiting for everything else.
 
-#### `Build.Drasil.Print`
+#### [`drasil-makefile/lib/Drasil/Makefile/Make/Print.hs`](../../../code/drasil-makefile/lib/Drasil/Makefile/Make/Print.hs)
 
 There isn't much to this file. It only contains a renderer for `Makefile`s to `Doc`s. Very standard. However, it would benefit from having its own options/choices. For example, `.PHONY` is commonly placed above each 'abstract' rule definition. We use the single-list-style, but the additive-style is also common.

@@ -22,11 +22,13 @@ dependencies:
 - composition
 - drasil-utils
 - drasil-file-handling
+- typeclass-graph-plugin
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -Wmissing-export-lists
+- -fplugin=TypeclassGraphPlugin
 
 library:
   source-dirs: lib

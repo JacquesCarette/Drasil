@@ -7,7 +7,7 @@ synopsis:     Using the Drasil generators to create Drasil's website
 homepage:     https://jacquescarette.github.io/Drasil/
 description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
-language: Haskell2010
+language: GHC2024
 default-extensions:
 - StrictData
 
@@ -20,20 +20,13 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
 - lens
 - split
 - directory
-- drasil-data
-- drasil-database
-- drasil-srs
-- drasil-code
-- drasil-gool
+- pretty
 - drasil-gen
 - drasil-lang
-- drasil-printers
-- drasil-system
-- drasil-theory
-- drasil-utils
 - sglpend
 - dblpend
 - gamephysics
@@ -48,6 +41,15 @@ dependencies:
 - template
 
 library:
+  dependencies:
+  - drasil-code
+  - drasil-data
+  - drasil-database
+  - drasil-file-handling
+  - drasil-gool
+  - drasil-printers
+  - drasil-srs
+  - drasil-system
   source-dirs: lib
 
 executables:

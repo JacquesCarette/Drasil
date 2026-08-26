@@ -1,9 +1,9 @@
-module Language.Drasil.Printing.Import.Citation (layCite, layField) where
+module Language.Drasil.Printing.Import.Citation (layCite) where
 
 import Control.Lens ((^.))
 
 import Drasil.Database (showUID)
-import Language.Drasil (Citation, CiteField(..), HP (..), citeKind, HasFields (..))
+import Language.Drasil.Document (Citation, CiteField(..), HP(..), citeKind, HasFields(..))
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P

@@ -4,13 +4,12 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Document
 import qualified Language.Drasil.Development as D
-import Drasil.SRS
+import Drasil.SRS hiding (constants, genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.SRS.Concepts as SRS
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
@@ -23,7 +22,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity,
   rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Concepts.Theory (inModel)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -41,6 +39,7 @@ import Drasil.Projectile.Changes (likelyChgs)
 import Drasil.Projectile.Concepts (launcher, projectile, target, defs,
   ideaDicts)
 import Drasil.Projectile.DataDefs (dataDefs)
+import Drasil.Projectile.Expressions (equations)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
@@ -65,7 +64,7 @@ mkSRS = [TableOfContents,
       [ IPurpose $ purpDoc progName Verbose
       , IScope scope
       , IChar [] charsOfReader []
-      , IOrgSec inModel (SRS.inModel [] []) Nothing],
+      , IOrgSec Nothing],
   GSDSec $
       GSDProg
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
@@ -96,7 +95,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-    AuxConsProg progName constants,
+    AuxConsProg constants,
   Bibliography
   ]
 
@@ -129,11 +128,11 @@ si = mkSmithEtAlICO progName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
-  inputs outputs (map cnstrw' constrained) constants symbols
-  labelledContent' symbMap allRefs
+  inputs outputs constrained constants symbols
+  symbMap
 
 labelledContent' :: [LabelledContent]
-labelledContent' = labelledContent ++ funcReqsTables
+labelledContent' = labelledContent ++ funcReqsTables ++ equations
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -159,7 +158,7 @@ conceptChunks =
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] dataDefs
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] dataDefs
   iMods genDefns tMods concIns citations labelledContent'
 
 -- | Holds all references and links used in the document.

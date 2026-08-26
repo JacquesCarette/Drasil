@@ -1,10 +1,4 @@
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE InstanceSigs #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
-
 -- | The logic to render Julia code is contained in this module
 module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
@@ -14,20 +8,22 @@ module Drasil.GProc.LanguageRenderer.JuliaRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), SharedProg, Label, VSType,
-  SValue, SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), getCodeType, getTypeString, VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
+  Variable, SVariable, Block, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), getTypeString, VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, IndexTranslator(..),
-  Reference(..), Array(..), List(..), Set(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, libFuncApp,
+  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
+  Set(..), NativeVector(..), InternalList(..), EmptyStatement(..),
+  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
+  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
   switchAsIf, convScope)
-import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
-  FileSym(..), ModuleSym(..))
+import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
@@ -80,15 +76,14 @@ import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   innerType, arrayElem, funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists, arrayDecAsList)
-import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
-  ParamData(..), ProgData(..), TypeData(..), ValData(..), vd, VarData(..),
-  vard, progD, fd, pd, updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..),
-  bindFormD)
+import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
+  ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
+  ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
+  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.Shared.State (lensGStoFS, revFiles, setFileType, lensMStoVS,
-  getModuleImports, addModuleImportVS, getLangImports, getLibImports,
+import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
+  lensMStoVS, getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genVarNameIf, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -113,30 +108,27 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance SharedProg JuliaCode
-instance ProcProg JuliaCode
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
-instance ProgramSym JuliaCode where
-  type Program JuliaCode = ProgData
+instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode
-instance ProcRenderSym JuliaCode
+instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
-instance FileSym JuliaCode where
-  type File JuliaCode = FileData
+instance FileSym JuliaCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m
   docMod = A.docMod jlExt
 
-instance RenderFile JuliaCode where
+instance RenderFile JuliaCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -152,26 +144,24 @@ instance ImportSym JuliaCode where
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
 
-instance BodySym JuliaCode where
-  type Body JuliaCode = Doc
+instance BodySym JuliaCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
 
-instance RenderBody JuliaCode where
+instance RenderBody JuliaCode Body where
   multiBody = G.multiBody
 
-instance BodyElim JuliaCode where
+instance BodyElim JuliaCode Body where
   body = unJLC
 
-instance BlockSym JuliaCode where
-  type Block JuliaCode = Doc
+instance BlockSym JuliaCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock JuliaCode where
+instance RenderBlock JuliaCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim JuliaCode where
+instance BlockElim JuliaCode Block where
   block = unJLC
 
 instance TypeSym JuliaCode where
@@ -190,6 +180,9 @@ instance TypeSym JuliaCode where
   innerType = A.innerType
   funcType = CS.funcType
   void = jlVoidType
+
+instance TypeElim JuliaCode where
+  getCodeType = cType . unJLC
 
 instance RenderType JuliaCode where
   multiType ts = do
@@ -245,7 +238,6 @@ instance ScopeElim JuliaCode where
   scopeData = unJLC
 
 instance VariableSym JuliaCode where
-  type Variable JuliaCode = VarData
   var = G.var
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
@@ -264,7 +256,6 @@ instance RenderVariable JuliaCode where
     toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JuliaCode where
-  type Value JuliaCode = ValData
   valueType v = valType <$> v
 
 instance Argument JuliaCode where
@@ -391,11 +382,13 @@ instance Array JuliaCode where
 
 instance List JuliaCode where
   listSize = CS.listSize jlListSize
+  listAccess = G.listAccess
+  indexOf = jlIndexOf
+
+instance ListStatement JuliaCode (Doc, Terminator) where
   listAdd = A.listAdd jlListAdd
   listAppend = A.listAppend jlListAppend
-  listAccess = G.listAccess
   listSet = CP.listSet
-  indexOf = jlIndexOf
 
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
@@ -403,7 +396,15 @@ instance Set JuliaCode where
   setRemove s e = funcApp "delete!" void [s, e]
   setUnion a b = funcApp "union!" void [a, b]
 
-instance InternalList JuliaCode where
+instance NativeVector JuliaCode where
+  vecScale = binExpr multOp
+  vecAdd   = binExpr plusOp
+  vecIndex = G.listAccess
+  vecDot a b = libFuncApp "LinearAlgebra" "dot" double [a, b]
+  vecMag a   = libFuncApp "LinearAlgebra" "norm" double [a]
+  vecUnit a  = a #/ vecMag a
+
+instance InternalList JuliaCode Block where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalListFunc JuliaCode where
@@ -426,38 +427,41 @@ instance FunctionElim JuliaCode where
   functionType = onCodeValue fType
   function = funcDoc . unJLC
 
-instance InternalAssignStmt JuliaCode where
+instance InternalAssignStmt JuliaCode (Doc, Terminator) where
   multiAssign = CP.multiAssign id
 
-instance InternalIOStmt JuliaCode where
+instance InternalIOStmt JuliaCode (Doc, Terminator) where
   printSt = jlPrint
 
-instance InternalControlStmt JuliaCode where
+instance InternalControlStmt JuliaCode (Doc, Terminator) where
   multiReturn = CP.multiReturn id
 
-instance RenderStatement JuliaCode where
+instance RenderStatement JuliaCode (Doc, Terminator) where
   stmt = G.stmt
   loopStmt = G.loopStmt
   stmtFromData d t = toState $ toCode (d, t)
 
-instance StatementElim JuliaCode where
+instance StatementElim JuliaCode (Doc, Terminator) where
   statement = fst . unJLC
   statementTerm = snd . unJLC
 
-instance StatementSym JuliaCode where
-  type Statement JuliaCode = (Doc, Terminator)
-  valStmt = G.valStmt Empty
+instance EmptyStatement JuliaCode (Doc, Terminator) where
   emptyStmt = G.emptyStmt
+
+instance MultiStatement JuliaCode (Doc, Terminator) where
   multi = onStateList (onCodeList R.multiStmt)
 
-instance AssignStatement JuliaCode where
+instance ValueStatement JuliaCode (Doc, Terminator) where
+  valStmt = G.valStmt Empty
+
+instance AssignStatement JuliaCode (Doc, Terminator) where
   assign = jlAssign
   (&-=) = jlSubAssign
   (&+=) = jlIncrement
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement JuliaCode where
+instance DeclStatement JuliaCode (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -469,45 +473,50 @@ instance DeclStatement JuliaCode where
   constDecDef = jlConstDecDef
   funcDecDef = A.funcDecDef
 
-instance IOStatement JuliaCode where
+instance PrintConsole JuliaCode (Doc, Terminator) where
   print      = jlOut False Nothing printFunc
   printLn    = jlOut True  Nothing printLnFunc
   printStr   = jlOut False Nothing printFunc   . litString
   printStrLn = jlOut True  Nothing printLnFunc . litString
 
+instance ReadConsole JuliaCode (Doc, Terminator) where
+  getInput = jlInput inputFunc
+  discardInput = valStmt inputFunc
+
+instance FileHandling JuliaCode (Doc, Terminator) where
+  openFileR f n = f &= CP.openFileR' n
+  openFileW f n = f &= CP.openFileW' n
+  openFileA f n = f &= CP.openFileA' n
+  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
+
+instance PrintFile JuliaCode (Doc, Terminator) where
   printFile f      = jlOut False (Just f) printFunc
   printFileLn f    = jlOut True (Just f) printLnFunc
   printFileStr f   = printFile   f . litString
   printFileStrLn f = printFileLn f . litString
 
-  getInput = jlInput inputFunc
-  discardInput = valStmt inputFunc
+instance ReadFile JuliaCode (Doc, Terminator) where
   getFileInput f = jlInput (readLine f)
   discardFileInput f = valStmt (readLine f)
-  openFileR f n = f &= CP.openFileR' n
-  openFileW f n = f &= CP.openFileW' n
-  openFileA f n = f &= CP.openFileA' n
-  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
   getFileInputAll f v = v &= readLines f
 
-instance StringStatement JuliaCode where
+instance StringStatement JuliaCode (Doc, Terminator) where
   stringSplit d vnew s = vnew &= funcApp jlSplit (listType string) [s, litString [d]]
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
 instance FunctionSym JuliaCode where
-  type Function JuliaCode = FuncData
 
-instance FuncAppStatement JuliaCode where
+instance FuncAppStatement JuliaCode (Doc, Terminator) where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
-instance CommentStatement JuliaCode where
+instance CommentStatement JuliaCode (Doc, Terminator) where
   comment = G.comment jlCmtStart
 
-instance ControlStatement JuliaCode where
+instance ControlStatement JuliaCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
   returnStmt = G.returnStmt Empty
@@ -525,26 +534,21 @@ instance ControlStatement JuliaCode where
     errMsg <- zoom lensMStoVS errorMessage
     mkStmtNoEnd (jlAssert cond errMsg)
 
-instance VisibilitySym JuliaCode where
-  type Visibility JuliaCode = Doc
+instance VisibilitySym JuliaCode Doc where
 
   private = toCode empty -- Julia doesn't have private/public members
   public = toCode empty
 
-instance RenderVisibility JuliaCode where
+instance RenderVisibility JuliaCode Doc where
   visibilityFromData _ = toCode
 
-instance VisibilityElim JuliaCode where
+instance VisibilityElim JuliaCode Doc where
   visibility = unJLC
 
 instance MethodTypeSym JuliaCode where
-  type MethodType JuliaCode = TypeData
-
   mType = zoom lensMStoVS
 
 instance ParameterSym JuliaCode where
-  type Parameter JuliaCode = ParamData
-
   param = G.param jlParam
   pointerParam = param
 
@@ -558,8 +562,7 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode where
-  type Method JuliaCode = MethodData
+instance MethodSym JuliaCode Doc MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -568,29 +571,28 @@ instance MethodSym JuliaCode where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance RenderMethod JuliaCode where
+instance RenderMethod JuliaCode MethodData where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-  mthdFromData _ d = toState $ toCode $ mthd d
+  mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance ProcRenderMethod JuliaCode where
+instance ProcRenderMethod JuliaCode Doc MethodData Body where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
-    toCode . mthd . jlIntFunc n pms <$> b
+    toCode . mthd n . jlIntFunc n pms <$> b
 
-instance MethodElim JuliaCode where
+instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
-instance ModuleSym JuliaCode where
-  type Module JuliaCode = ModData
+instance ModuleSym JuliaCode ModData MethodData where
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
-instance RenderMod JuliaCode where
+instance RenderMod JuliaCode ModData where
   modFromData n = A.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim JuliaCode where
+instance ModuleElim JuliaCode ModData where
   module' = modDoc . unJLC
 
 instance BlockCommentSym JuliaCode where
@@ -620,10 +622,10 @@ jlFile = "IOStream"
 jlVoid = "Nothing"
 
 -- The only consistent way of creating floats is by casting
-jlLitFloat :: (CommonRenderSym r) => Float -> SValue r
+jlLitFloat :: (RenderValue r, TypeSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
-jlLitList :: VSType JuliaCode -> [SValue JuliaCode] -> SValue JuliaCode
+jlLitList :: VS (JuliaCode TypeData) -> [SValue JuliaCode] -> SValue JuliaCode
 jlLitList t' es = do
   t <- t'
   let lt' = listType t'
@@ -631,7 +633,7 @@ jlLitList t' es = do
   let typeDec = if null es then renderType t else empty
   mkStateVal lt' (typeDec <> brackets (valueList elems))
 
-jlCast :: VSType JuliaCode -> SValue JuliaCode -> SValue JuliaCode
+jlCast :: VS (JuliaCode TypeData) -> SValue JuliaCode -> SValue JuliaCode
 jlCast t' v' = do
   t <- t'
   v <- v'
@@ -652,21 +654,21 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlAssign :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlAssign :: SVariable JuliaCode -> SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
 jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
 
-jlSubAssign :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlSubAssign :: SVariable JuliaCode -> SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
 jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   scpData <- getVarScope (variableName vr) -- Need to do global declarations
   mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
 
-jlIncrement :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlIncrement :: SVariable JuliaCode -> SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
 jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
@@ -679,8 +681,11 @@ jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
 jlGlobal :: Doc
 jlGlobal = text "global"
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r ScopeData -> SValue r
-  -> MSStatement r
+jlConstDecDef
+  :: SVariable JuliaCode
+  -> JuliaCode ScopeData
+  -> SValue JuliaCode
+  -> MS (JuliaCode (Doc, Terminator))
 jlConstDecDef v' scp def' = do
   let scpData = scopeData scp
   v <- zoom lensMStoVS v'
@@ -697,7 +702,11 @@ jlListAdd    = "insert!"
 jlListAppend = "append!"
 jlListAbsdex = "findfirst"
 
-jlIndexOf :: (SharedProg r) => SValue r -> SValue r -> SValue r
+jlIndexOf
+  :: (IndexTranslator r, ValueExpression r, BinderSym r, VariableValue r, Comparison r)
+  => SValue r
+  -> SValue r
+  -> SValue r
 jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'
@@ -706,8 +715,13 @@ jlIndexOf l v = do
 
 -- List slicing in Julia.  See HelloWorld.jl to see the full suite of
 -- possible outputs of this function.
-jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
-  Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
+jlListSlice
+  :: SVariable JuliaCode
+  -> SValue JuliaCode
+  -> Maybe (SValue JuliaCode)
+  -> Maybe (SValue JuliaCode)
+  -> SValue JuliaCode
+  -> MS (JuliaCode Block)
 jlListSlice vn vo beg end step = do
 
   vnew <- zoom lensMStoVS vn
@@ -756,8 +770,14 @@ jlListSlice vn vo beg end step = do
       setToSlice
     ]
 
-jlListSlice' :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r ->
-  SValue r -> SValue r -> Maybe Integer -> MSStatement r
+jlListSlice'
+  :: SVariable JuliaCode
+  -> SValue JuliaCode
+  -> SValue JuliaCode
+  -> SValue JuliaCode
+  -> SValue JuliaCode
+  -> Maybe Integer
+  -> MS (JuliaCode (Doc, Terminator))
 jlListSlice' vn vo beg end step mStep = do
   vold  <- zoom lensMStoVS vo
   beg'  <- zoom lensMStoVS beg
@@ -770,7 +790,7 @@ jlListSlice' vn vo beg end step mStep = do
   vn &= theSlice
 
 -- Other functionality
-jlRange :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+jlRange :: SValue JuliaCode -> SValue JuliaCode -> SValue JuliaCode -> SValue JuliaCode
 jlRange initv finalv stepv = do
   t <- listType int
   iv <- initv
@@ -822,15 +842,17 @@ jlSpace :: OptionalSpace
 jlSpace = OSpace {oSpace = empty}
 
 -- | Creates a for-each loop in Julia
-jlForEach :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+jlForEach
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
   jlEnd]
 
 -- | Creates the contents of a module in Julia
-jlModContents :: Label -> [Label] -> [SMethod JuliaCode] ->
-  FSModule JuliaCode
+jlModContents
+  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode ModData)
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
@@ -847,21 +869,23 @@ jlModContents n is = A.buildModule n (do
 -- Functions
 -- | Creates a function.  n is function name, pms is list of parameters, and
 --   bod is body.
-jlIntFunc :: (CommonRenderSym r) => Label -> [r (Parameter r)] ->
-  r (Body r) -> Doc
+jlIntFunc
+  :: (BodyElim r bod, ParamElim r)
+  => Label -> [r ParamData] -> r bod -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,
         jlEnd]
 
-jlLambda :: (CommonRenderSym r) => [r BinderD] -> r (Value r) -> Doc
+jlLambda :: (InternalBinderElim r, ValueElim r) => [r BinderD] ->
+  r Value -> Doc
 jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
-jlThrow :: (CommonRenderSym r) => r (Value r) -> Doc
+jlThrow :: (ValueElim r) => r Value -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
-jlTryCatch :: (CommonRenderSym r) => r (Body r) -> r (Body r) -> Doc
+jlTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 jlTryCatch tryB catchB = vcat [
   tryLabel,
   indent $ RC.body tryB,
@@ -877,7 +901,7 @@ includeLabel = text "include"
 importLabel = text "import"
 
 -- Assertions
-jlAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+jlAssert :: (ValueElim r) => r Value -> r Value -> Doc
 jlAssert condition errorMessage = vcat [
   text "@assert" <+> RC.value condition <+> RC.value errorMessage
   ]
@@ -890,44 +914,46 @@ jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlParam :: JuliaCode (Variable JuliaCode) -> Doc
+jlParam :: JuliaCode Variable -> Doc
 jlParam v = RC.variable v <> jlType <> renderType (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
-jlIntType :: (Monad r) => VSType r
+jlIntType :: (Monad r) => VS (r TypeData)
 jlIntType = typeFromData Integer jlIntConc (text jlIntConc)
 
-jlFloatType :: (Monad r) => VSType r
+jlFloatType :: (Monad r) => VS (r TypeData)
 jlFloatType = typeFromData Float jlFloatConc (text jlFloatConc)
 
-jlDoubleType :: (Monad r) => VSType r
+jlDoubleType :: (Monad r) => VS (r TypeData)
 jlDoubleType = typeFromData Double jlDoubleConc (text jlDoubleConc)
 
-jlCharType :: (Monad r) => VSType r
+jlCharType :: (Monad r) => VS (r TypeData)
 jlCharType = typeFromData Char jlCharConc (text jlCharConc)
 
-jlStringType :: (Monad r) => VSType r
+jlStringType :: (Monad r) => VS (r TypeData)
 jlStringType = typeFromData String jlStringConc (text jlStringConc)
 
-jlInfileType :: (Monad r) => VSType r
+jlInfileType :: (Monad r) => VS (r TypeData)
 jlInfileType = typeFromData InFile jlFile (text jlFile)
 
-jlOutfileType :: (Monad r) => VSType r
+jlOutfileType :: (Monad r) => VS (r TypeData)
 jlOutfileType = typeFromData OutFile jlFile (text jlFile)
 
-jlListType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
+jlListType :: (Monad r, TypeElim r, UnRepr r TypeData) =>
+  VS (r TypeData) -> VS (r TypeData)
 jlListType t' = do
   t <- t'
   let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (List $ getCodeType t) typeName (text typeName)
 
-jlSetType :: (Monad r, UnRepr r TypeData) => VSType r -> VSType r
+jlSetType :: (Monad r, TypeElim r, UnRepr r TypeData) =>
+  VS (r TypeData) -> VS (r TypeData)
 jlSetType t' = do
   t <- t'
   let typeName = jlSetConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (Set $ getCodeType t) typeName (text typeName)
 
-jlVoidType :: (Monad r) => VSType r
+jlVoidType :: (Monad r) => VS (r TypeData)
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
 
 jlNull :: Label
@@ -941,7 +967,7 @@ jlModStart n = jlMod <+> text n
 
 -- IO
 jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->
-  SValue JuliaCode -> MSStatement JuliaCode
+  SValue JuliaCode -> MS (JuliaCode (Doc, Terminator))
 -- Printing to console
 jlPrint _ f' p' v' = do
   f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f' -- The file to print to
@@ -951,13 +977,30 @@ jlPrint _ f' p' v' = do
   mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
 
 -- jlPrint can handle lists, so don't use G.print for lists
-jlOut :: (CommonRenderSym r, UnRepr r TypeData) => Bool -> Maybe (SValue r) ->
-  SValue r -> SValue r -> MSStatement r
+jlOut
+  ::
+    ( BodySym r bod block
+    , BlockSym r block stmt
+    , Literal r
+    , NumericExpression r
+    , Comparison r
+    , VariableValue r
+    , List r
+    , MultiStatement r stmt
+    , DeclStatement r stmt bod
+    , AssignStatement r stmt
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    , PrintFile r stmt
+    , TypeElim r
+    , InternalIOStmt r stmt
+    )
+  => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MS (r stmt)
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getCodeType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
 
-jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MSStatement JuliaCode
+jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MS (JuliaCode (Doc, Terminator))
 jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc
@@ -967,7 +1010,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getCodeType . variableType)
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"
 
-readLine, readLines :: (CommonRenderSym r) => SValue r -> SValue r
+readLine, readLines :: (ValueExpression r) => SValue r -> SValue r
 readLine f = funcApp jlReadLineFunc string [f]
 readLines f = funcApp jlReadLinesFunc (listType string) [f]
 
@@ -982,7 +1025,8 @@ jlCloseFunc = "close"
 jlArgs :: Label
 jlArgs = "ARGS"
 
-jlParse :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> SValue r
+jlParse :: (RenderValue r, ValueExpression r) => Label -> VS (r TypeData) ->
+  SValue r -> SValue r
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]

@@ -1,6 +1,3 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 module Drasil.Database.ChunkDB (
   -- * Core database types and functions.
   ChunkDB,
@@ -10,7 +7,7 @@ module Drasil.Database.ChunkDB (
   findUnused,
   find, findOrErr,
   findAll, findAll',
-  dependants, dependantsOrErr,
+  dependants, dependantsOrErr, allDependants,
   findTypeOf,
   insert, insertAll,
   -- * Temporary functions
@@ -18,7 +15,6 @@ module Drasil.Database.ChunkDB (
 ) where
 
 import Control.Lens ((^.))
-import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
@@ -111,7 +107,11 @@ dependants u cdb = do
 -- | Find all chunks that depend on a specific one, throwing a hard error if the
 -- dependency chunk is not found.
 dependantsOrErr :: UID -> ChunkDB -> [UID]
-dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
+dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . dependants u
+
+-- | List all chunks with dependants.
+allDependants :: ChunkDB -> M.Map UID [UID]
+allDependants = M.filter (not . null) . M.map snd . chunkTable
 
 -- | Find the type of a chunk by its 'UID'.
 findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
@@ -153,7 +153,7 @@ insert0 cdb c = cdb'
 -- chunk).
 insert :: TypeableChunk a => a -> ChunkDB -> ChunkDB
 insert c cdb
-  | c ^. uid `elem` chunkRefs c =
+  | S.member (c ^. uid) $ chunkRefs c =
       error $ "Chunk `" ++ show (c ^. uid) ++ "` cannot reference itself as a dependancy."
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."

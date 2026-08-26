@@ -9,9 +9,8 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
 import Drasil.FileHandling.Legacy (blank)
 import Language.Drasil hiding (space, Matrix)
 import Language.Drasil.Expr.Development (Expr(Matrix))
-import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
-  unitDoc, PrintingInformation)
-import Language.Drasil.Printing.Import (expr, spec)
+import Language.Drasil.Printers (PrintingInformation, oneLineSentenceDoc,
+  oneLineExprDoc, oneLineUnitDoc)
 
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
   LinePattern(..), getDataInputs, isJunk)
@@ -30,7 +29,7 @@ convDataDesc _ ds [] = if all isJunk ds then replicate (length ds) blank
 convDataDesc db (JunkData : ds@(Singleton _ : _)) es = docLine db ds ' ' es
 convDataDesc db (JunkData : ds@(Line _ dl : _)) es = docLine db ds dl es
 convDataDesc db (JunkData : ds@(Lines _ _ dl : _)) es = docLine db ds dl es
-convDataDesc db (Singleton _ : ds) (e:es) = eDoc db e : convDataDesc db ds es
+convDataDesc db (Singleton _ : ds) (e:es) = oneLineExprDoc db e : convDataDesc db ds es
 convDataDesc db (Line (Straight dis) dl : ds) es = let
   (l,ls) = splitAt (length dis) es
   in dataLine db dl l : convDataDesc db ds ls
@@ -61,14 +60,14 @@ convDataDesc db (JunkData : ds) es = blank : convDataDesc db ds es
 
 -- | Helper to create a data line with the given delimeter.
 dataLine :: PrintingInformation -> Delim -> [Expr] -> Doc
-dataLine db dl = hcat . intersperse (char dl) . map (eDoc db)
+dataLine db dl = hcat . intersperse (char dl) . map (oneLineExprDoc db)
 
 -- | Helper to create document lines with a data description, delimiter, and expressions.
 docLine :: PrintingInformation -> DataDesc -> Delim -> [Expr] -> [Doc]
 docLine db ds dl es = let dis = getDataInputs (head ds)
   in text "#" <+> hcat (intersperse (char dl <> space)
-  (map (\di -> (sDoc db . phrase) di <+>
-  maybe empty (parens . uDoc . usymb) (getUnit di)) dis))
+  (map (\di -> (oneLineSentenceDoc db . phrase) di <+>
+  maybe empty (parens . oneLineUnitDoc . usymb) (getUnit di)) dis))
   : convDataDesc db ds es
 
 -- | Order vectors.
@@ -88,15 +87,3 @@ orderMtxs ms = transpose $ map getMtxLists ms
 getMtxLists :: Expr -> [[Expr]]
 getMtxLists (Matrix l) = l
 getMtxLists _ = error "makeInputFile encountered unexpected type, expected matrix"
-
--- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
-sDoc :: PrintingInformation -> Sentence -> Doc
-sDoc pinfo = sentenceDoc OneLine . spec pinfo
-
--- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
-eDoc :: PrintingInformation -> Expr -> Doc
-eDoc pinfo e = exprDoc OneLine (expr e pinfo)
-
--- | Creates a 'OneLine' 'unitDoc'.
-uDoc :: USymb -> Doc
-uDoc = unitDoc OneLine

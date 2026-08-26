@@ -1,18 +1,15 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.BinaryStar.Body (mkSRS, si) where
 
 import Drasil.Database (ChunkDB)
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Drasil.SRS
+import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn)
 
 import qualified Drasil.SRS.Concepts as SRS
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Documentation (assumption, endUser, input_,
   interface, output_, physical, software, sysCont, softwareConstraint,
@@ -50,7 +47,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose,
       IScope scope,
       IChar [] charsOfReader [],
-      IOrgSec inModel (SRS.inModel [] []) Nothing
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
@@ -84,7 +81,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName constants,
+     AuxConsProg constants,
   Bibliography]
 
 ------------------------------
@@ -205,7 +202,7 @@ si = mkSmithEtAlICO
   [probDescIntro] [background] [scope] [motivation]
   tMods ([] :: [GenDefn]) ([] :: [DataDefinition]) iMods
   inputs outputs inConstraints constants symbols
-  (labelledContent ++ funcReqsTables) symbMap []
+  symbMap
 
 background :: Sentence
 background = foldlSent_ [S "Binary star systems are common in astronomy.",

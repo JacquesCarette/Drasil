@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 module Drasil.Code.CodeExpr.Convert (
     expr, realInterval, constraint,
     CanGenCode(..)

@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | Introduce the Drasil website.
 module Drasil.Website.Introduction (introSec) where
 

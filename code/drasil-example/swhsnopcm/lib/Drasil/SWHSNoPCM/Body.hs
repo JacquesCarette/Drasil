@@ -8,10 +8,8 @@ import Drasil.Database (ChunkDB)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Drasil.SRS
-import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Drasil.Generator (withCommonKnowledge)
 import Data.Drasil.People (thulasi)
 
@@ -98,7 +96,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
-    , IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
+    , IOrgSec (Just orgDocEnd)
     ],
   GSDSec $
     GSDProg
@@ -129,7 +127,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName specParamValList,
+  AuxConstntSec $ AuxConsProg specParamValList,
   Bibliography]
 
 concIns :: [ConceptInstance]
@@ -145,8 +143,8 @@ si = mkSmithEtAlICO
   [purp] [introStartNoPCM] [scope] [motivation]
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   inputs outputs
-  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList) symbols
-  labelledContent' symbMap allRefs
+  (map cnstrw' constrained ++ [tempW, watE]) (piConst : specParamValList) symbols
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` D.toSent (phraseNP (water `inA` sWHT))]
@@ -163,7 +161,7 @@ conceptChunks =
   meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

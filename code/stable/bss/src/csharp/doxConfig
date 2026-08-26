@@ -139,7 +139,7 @@ ALWAYS_DETAILED_SEC    = NO
 
 # If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all
 # inherited members of a class in the documentation of that class as if those
-# members were ordinary class members. Constructors, destructors and assignment
+# members were ordinary class members. Constructors and assignment
 # operators of the base classes will not be shown.
 # The default value is: NO.
 
@@ -589,8 +589,8 @@ SORT_MEMBER_DOCS       = YES
 SORT_BRIEF_DOCS        = NO
 
 # If the SORT_MEMBERS_CTORS_1ST tag is set to YES then doxygen will sort the
-# (brief and detailed) documentation of class members so that constructors and
-# destructors are listed first. If set to NO the constructors will appear in the
+# (brief and detailed) documentation of class members so that constructors
+# are listed first. If set to NO the constructors will appear in the
 # respective orders defined by SORT_BRIEF_DOCS and SORT_MEMBER_DOCS.
 # Note: If SORT_BRIEF_DOCS is set to NO this option is ignored for sorting brief
 # member documentation.

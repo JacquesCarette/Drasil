@@ -1,14 +1,13 @@
-{-# LANGUAGE GADTs, TemplateHaskell #-}
-{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec (
   -- * Types
   Input, Output, Const, Derived, ConstantMap,
-  CodeSpec, OldCodeSpec(..),
+  CodeSpec,
   -- * Typeclasses
-  HasOldCodeSpec(..),
+  HasCodeSpec(..),
   -- * Constructors
-  codeSpec,
+  mkCodeSpec,
   -- * ODEs
   getODE, mapODE,
   -- * Hacks
@@ -16,7 +15,7 @@ module Language.Drasil.CodeSpec (
 ) where
 
 import Prelude hiding (const)
-import Control.Lens ((^.), makeLenses, Lens', makeClassyFor, set)
+import Control.Lens ((^.), makeClassy, set)
 import Data.List (nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
@@ -24,11 +23,11 @@ import qualified Data.List.NonEmpty as NE
 
 import Drasil.FileHandling.Legacy (RelativeFile)
 import Language.Drasil hiding (None)
-import Language.Drasil.Display (Symbol(Variable))
 import Drasil.Database (ChunkDB, UID, HasUID(..), insertAll, mkUid)
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
-import qualified Drasil.System as S
-import Drasil.System (HasSmithEtAlSRS(..), HasSystemMeta(..), programName)
+import qualified Drasil.SRS as S
+import Drasil.System (HasSystemMeta(..))
+import Drasil.SRS (HasSmithEtAlSRS(..))
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Data.List.Extras (subsetOf)
 
@@ -38,7 +37,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..),
   odeLibReqs, odeInfoReqs)
 import Language.Drasil.Chunk.CodeBase (codevars, varResolve)
-import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
+import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..))
 import Language.Drasil.ICOSolutionSearch (Def, solveExecOrder)
 
 -- | Program input.
@@ -52,12 +51,9 @@ type Derived = CodeDefinition
 -- | Maps constants to their respective 'CodeDefinition'.
 type ConstantMap = Map.Map UID CodeDefinition
 
--- | Old Code specifications. Holds information needed to generate code.
-data OldCodeSpec = OldCodeSpec {
-  -- | Program name.
-  _pName :: Name,
-  -- | Authors.
-  _authors :: People,
+-- | Code Specification. Holds system information and options.
+data CodeSpec = CS {
+  _srs :: S.SmithEtAlSRS,
   -- | All inputs.
   _inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -74,49 +70,20 @@ data OldCodeSpec = OldCodeSpec {
   -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
   _cMap :: ConstraintCEMap,
   -- | List of all constants used in the problem.
-  _constants :: [Const],
+  _constDefns :: [Const],
   -- | Map containing all constants used in the problem.
   _constMap :: ConstantMap,
   -- | Additional modules required in the generated code, which Drasil cannot yet
   -- automatically define.
-  _mods :: [Mod],  -- medium hack
-  -- | The database of all chunks used in the problem.
-  _systemdb :: ChunkDB
-  }
-
-makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
-  [   ("_pName", "pNameO")
-    , ("_authors", "authorsO")
-    , ("_inputs", "inputsO")
-    , ("_extInputs", "extInputsO")
-    , ("_derivedInputs", "derivedInputsO")
-    , ("_outputs", "outputsO")
-    , ("_configFiles", "configFilesO")
-    , ("_execOrder", "execOrderO")
-    , ("_cMap", "cMapO")
-    , ("_constants", "constantsO")
-    , ("_constMap", "constMapO")
-    , ("_mods", "modsO")
-    , ("_systemdb", "systemdbO")
-    ] ''OldCodeSpec
-
--- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
-data CodeSpec = CS {
-  _system' :: S.SmithEtAlSRS,
-  _oldCode :: OldCodeSpec
+  _mods :: [Mod]  -- medium hack
 }
-makeLenses ''CodeSpec
+makeClassy ''CodeSpec
 
 instance HasSmithEtAlSRS CodeSpec where
-  smithEtAlSRS :: Lens' CodeSpec S.SmithEtAlSRS
-  smithEtAlSRS = system'
+  smithEtAlSRS = srs
 
 instance HasSystemMeta CodeSpec where
-  systemMeta = system' . systemMeta
-
-instance HasOldCodeSpec CodeSpec where
-  oldCodeSpec :: Lens' CodeSpec OldCodeSpec
-  oldCodeSpec = oldCode
+  systemMeta = srs . systemMeta
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -134,30 +101,17 @@ mapODE Nothing = []
 mapODE (Just ode) = map odeDef $ odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
--- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
-codeSpec si chs = CS {
-  _system' = si',
-  _oldCode = oldcodeSpec si' chs
-}
-  where
-    els = extLibs chs
-    libReqs = concatMap odeLibReqs els
-    infoReqs = concatMap odeInfoReqs els
-    db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
-    si' = set systemdb db' si
-
--- | Generates an 'OldCodeSpec' from 'SmithEtAlSRS', 'Choices', and a list of
--- 'Mod's. This function extracts various components (e.g., inputs, outputs,
--- constraints, etc.) from 'SmithEtAlSRS' to populate the 'OldCodeSpec'
--- structure.
-oldcodeSpec :: S.SmithEtAlSRS -> Choices -> OldCodeSpec
-oldcodeSpec sys@S.ICO{ S._inputs = ins
-                     , S._outputs = outs
-                     , S._constraints = cs
-                     , S._constants = cnsts } chs =
-  let ddefs = sys ^. dataDefns
-      n = sys ^. programName
+mkCodeSpec :: S.SmithEtAlSRS -> Choices -> CodeSpec
+mkCodeSpec si@S.ICO{ S._inputs = ins
+                    , S._outputs = outs
+                    , S._constraints = cs
+                    , S._constants = cnsts } chs =
+  let els = extLibs chs
+      libReqs = concatMap odeLibReqs els
+      infoReqs = concatMap odeInfoReqs els
+      db' = insertAll (libReqs ++ infoReqs) $ si ^. systemdb
+      sys = set systemdb db' si
+      ddefs = sys ^. dataDefns
       db = sys ^. systemdb
       inputs' = map quantvar $ NE.toList ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
@@ -171,9 +125,8 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
       outs' = map quantvar $ NE.toList outs
       allInputs = inputs' ++ map quantvar derived
       exOrder = solveExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
-  in OldCodeSpec {
-        _pName = n,
-        _authors = sys ^. authors,
+  in CS {
+        _srs = sys,
         _inputs = allInputs,
         _extInputs = inputs',
         _derivedInputs = derived,
@@ -181,10 +134,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
         _configFiles = defaultConfigFiles chs,
         _execOrder = exOrder,
         _cMap = constraintMap cs,
-        _constants = const',
+        _constDefns = const',
         _constMap = assocToMap const',
-        _mods = extraMods chs,
-        _systemdb = db
+        _mods = extraMods chs
       }
 
 -- medium hacks ---
@@ -192,9 +144,9 @@ oldcodeSpec sys@S.ICO{ S._inputs = ins
 -- | Convert a 'Func' to an implementation-stage 'DefinedQuantityDict' representing the
 -- function.
 asVC :: Func -> DefinedQuantityDict
-asVC (FDef (FuncDef n d _ _ _ _)) = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
-asVC (FDef (CtorDef n d _ _ _))   = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
-asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (Variable n) Real
+asVC (FDef (FuncDef n d _ _ _ _)) = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
+asVC (FDef (CtorDef n d _ _ _))   = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
+asVC (FData (FuncData n d _))     = quantNoUnit (mkUid n) (nounPhraseSP n) (S d) (variable n) Real
 
 -- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID

@@ -12,15 +12,14 @@ import Drasil.Database (HasUID(..))
 import Drasil.Database.SearchTools (DomDefn (definition), defResolve')
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)
-import Language.Drasil.Printing.Import (spec)
+import Language.Drasil.Printers (oneLineSentenceDoc, oneLineUnitDoc)
+import Drasil.System (systemdb)
 
 -- | Gets a plain renderering of the term for a chunk.
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
 getTermDoc c = do
   g <- get
-  return $ sentenceDoc OneLine $ spec (printfo g) $ phrase $ codeChunk c
+  return $ oneLineSentenceDoc (printfo g) $ phrase $ codeChunk c
 
 -- | Gets a plain rendering of the definition of a chunk, preceded by a colon
 -- as it is intended to follow the term for the chunk. Returns empty if the
@@ -28,14 +27,14 @@ getTermDoc c = do
 getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
-  let db = codeSpec g ^. systemdbO
-  return $ ((<+>) colon . sentenceDoc OneLine . spec (printfo g))
+  let db = g ^. systemdb
+  return $ ((<+>) colon . oneLineSentenceDoc (printfo g))
     (definition $ defResolve' db (codeChunk c ^. uid))
 
 -- | Gets a plain rendering of the unit of a chunk in parentheses,
 -- or empty if it has no unit.
 getUnitsDoc :: (CodeIdea c) => c -> Doc
-getUnitsDoc c = maybe empty (parens . unitDoc OneLine . usymb)
+getUnitsDoc c = maybe empty (parens . oneLineUnitDoc . usymb)
   (getUnit $ codeChunk c)
 
 -- | Generates a comment string for a chunk, including the term,

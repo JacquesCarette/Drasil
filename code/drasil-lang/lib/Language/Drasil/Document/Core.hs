@@ -11,10 +11,10 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 import Drasil.Database (HasChunkRefs(..), HasUID(..), UID)
 
 import Language.Drasil.Expr.Lang (Expr)
-import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.ShortName (HasShortName(shortname))
+import Language.Drasil.Document.Citation.Core (BibRef)
+import Language.Drasil.Document.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
+import Language.Drasil.Document.Labels (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Document.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
@@ -138,7 +138,7 @@ prependLabel EqnBlock{}     = prepend "EqnB"
 prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
-prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"
+prependLabel Paragraph{}    = prepend "Par" -- error "Shouldn't reference paragraphs"
 prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

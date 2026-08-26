@@ -1,37 +1,64 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Drasil.GProc.InterfaceProc (
   -- Types
-  GSProgram, SFile, FSModule,
+  Program, GSProgram,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
-  MethodSym)
-import Drasil.Shared.State (GS, FS)
+import Drasil.Shared.InterfaceCommon (Label, MethodSym(..), Array,
+  EmptyStatement, MultiStatement, ValueStatement, AssignStatement, Argument,
+  BooleanExpression, CommandLineArgs, DeclStatement, CommentStatement,
+  Comparison, ControlStatement, FuncAppStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, List, ListStatement, Literal, MathConstant,
+  NumericExpression, ParameterSym, Reference, Set, StringStatement,
+  ValueExpression, VariableValue, UnRepr, FunctionSym, ScopeSym, BinderSym,
+  InternalList, TypeElim, VariableElim, BodySym, BlockSym)
+import Drasil.Shared.State (GS, FS, MS)
+import Drasil.Shared.AST (ProgData, TypeData)
 
-class (SharedProg r, ProgramSym r
-  ) => ProcProg r
+-- | Wrapper typeclass that bundles everything essential
+-- for generating a procedural program.
+class (UnRepr r TypeData, BodySym r bod block, BlockSym r block stmt,
+  FunctionSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
+  MethodSym r vis mthd bod, TypeElim r, VariableElim r, Array r,
+  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
+  AssignStatement r stmt, Argument r, BooleanExpression r, CommandLineArgs r,
+  CommentStatement r stmt, Comparison r, ControlStatement r stmt bod,
+  DeclStatement r stmt bod, FuncAppStatement r stmt, PrintConsole r stmt,
+  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  List r, ListStatement r stmt, Literal r, MathConstant r, NumericExpression r,
+  ParameterSym r, Reference r, Set r, StringStatement r stmt, ValueExpression r,
+  VariableValue r, ModuleSym r mod mthd, FileSym r file mod,
+  ProgramSym r prg file)
+  => ProcProg r vis stmt mthd prg file mod bod block
 
-type GSProgram a = GS (a (Program a))
+type Program = ProgData
+type GSProgram a prg = GS (a prg)
 
-class (FileSym r) => ProgramSym r where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+-- | Class for representing a program.
+-- Usually 'ProgData' is used for the representation.
+class ProgramSym r prg file | r -> prg file where
+  -- | Given program name, program purpose, and list of files,
+  -- Generates a representation of a program.
+  prog :: Label -> Label -> [FS (r file)] -> GSProgram r prg
 
-type SFile a = FS (a (File a))
+-- | Class for representing a file.
+class FileSym r file mod | r -> file mod where
+  -- | Given a module, generates a representation of a file.
+  -- (Implicit assumption: exactly one module per file)
+  fileDoc :: FS (r mod) -> FS (r file)
 
-class (ModuleSym r) => FileSym r where
-  type File r
-  fileDoc :: FSModule r -> SFile r
+  -- | Given module description, watermark, list of author names,
+  -- date as a String, and file to comment, creates a __documented module__
+  -- (i.e. module with a header comment)
+  docMod :: String -> String -> [String] -> String -> FS (r file) -> FS (r file)
 
-  -- Module description, watermark, list of author names, date as a String, file to comment
-  docMod :: String -> String -> [String] -> String -> SFile r -> SFile r
-
-type FSModule a = FS (a (Module a))
-
-class (MethodSym r) => ModuleSym r where
-  type Module r
-  -- Module name, import names, module functions
-  buildModule :: Label -> [Label] -> [SMethod r] -> FSModule r
+-- | Class for representing a module.
+class ModuleSym r mod mthd | r -> mod mthd where
+  -- | Given module name, list of import names, and list of module functions,
+  -- generates a representation of a module.
+  buildModule :: Label -> [Label] -> [MS (r mthd)] -> FS (r mod)

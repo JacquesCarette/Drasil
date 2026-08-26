@@ -1,23 +1,25 @@
-{-# LANGUAGE LambdaCase, Rank2Types #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
 module Drasil.SRS.ExtractDocDesc (
   getDocDesc, egetDocDesc,
-  sentencePlate
+  sentencePlate,
+  extractUnits
 ) where
 
 import Control.Lens((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, mapMaybe)
 
-import Language.Drasil (Sentence, Definition(..), ModelExpr,
-  HasAdditionalNotes(..), Express(express))
+import Drasil.Database (ChunkDB, HasUID (..), findOrErr)
+import Language.Drasil (Sentence, Definition(..), ModelExpr, HasAdditionalNotes(..),
+  Express(express), DefinedQuantityDict, UnitDefn, Quantity, MayHaveUnit(..), IsUnit(..))
 import Language.Drasil.Document (HasContents, Section(Section), SecCons(..),
   sentToExp, extractSents, extractSents', extractMExprs, getSec)
 import Theory.Drasil (Derivation(..), MayHaveDerivation(..))
 
 import Drasil.SRS.DocumentLanguage.Core
+import Drasil.SRS.GetChunks (resolveAllVars)
 import Drasil.SRS.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 -- | Creates a section contents plate that contains diferrent system subsections.
@@ -26,7 +28,7 @@ secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
 secConPlate mCon mSec = preorderFold $ purePlate {
   refSec = Constant <$> \(RefProg c _) -> mCon [c],
   introSub = Constant <$> \case
-    (IOrgSec _ s _) -> mSec [s]
+    (IOrgSec _) -> mempty
     _ -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
@@ -58,7 +60,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],
-  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
+  auxConsSec = Constant <$> \(AuxConsProg qdef) -> go qdef
   }) where
       go :: Express a => [a] -> [ModelExpr]
       go = map express
@@ -89,10 +91,10 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ s1 s2) -> maybeToList s2 ++ getSec s1,
+      (IOrgSec s1) -> maybeToList s1,
     stkSub = Constant . f <$> \case
-      (Client _ s) -> [s]
-      (Cstmr _) -> [],
+      (Client s) -> [s]
+      Cstmr -> [],
     pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
@@ -114,7 +116,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
     traceSec = Constant . f <$> \(TraceabilityProg progs) ->
       concatMap (\(TraceConfig _ ls s _ _) -> s : ls) progs,
-    auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef
+    auxConsSec = Constant . f <$> \(AuxConsProg qdef) -> def qdef
   } where
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
@@ -123,7 +125,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     getIntroSub (IPurpose ss) = ss
     getIntroSub (IScope s) = [s]
     getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-    getIntroSub (IOrgSec _ s1 s2) = maybeToList s2 ++ getSec s1
+    getIntroSub (IOrgSec s1) = maybeToList s1
 
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
@@ -147,3 +149,15 @@ getDocDesc = fmGetDocDesc (sentencePlate id)
 -- description), so we use this function. But 'sentencePlate' does not include
 -- all 'Sentence's! Some only appear when rendering (at least, after
 -- `mkSections` is used on a `DocDesc` to create `[Section]`).
+
+-- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
+extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
+extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
+
+-- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
+-- their units (i.e., what units their units are defined with).
+collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
+
+getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
+getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

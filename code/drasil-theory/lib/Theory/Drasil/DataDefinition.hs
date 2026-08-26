@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell, MultiParamTypeClasses #-}
+{-# LANGUAGE NoMonomorphismRestriction, TemplateHaskell #-}
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition (
   DataDefinition,
@@ -8,7 +8,8 @@ module Theory.Drasil.DataDefinition (
 
 import Control.Lens
 
-import Drasil.Database (UID, HasUID(..), showUID, HasChunkRefs(..), nsUid)
+import Drasil.Database (UID, HasUID(..), showUID, nsUid,
+  declareHasChunkRefs, Generically(..))
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.Metadata.TheoryConcepts (dataDefn)
@@ -55,13 +56,8 @@ ddPkt lpkt = lens g s
     s (DDE  qd pkt) a' = DDE  qd (pkt & lpkt .~ a')
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
 
-instance HasChunkRefs DataDefinition where
-  chunkRefs dd = mconcat
-    [ either chunkRefs chunkRefs (qdFromDD dd)
-    , chunkRefs (dd ^. ddPkt pktSN)
-    , chunkRefs (dd ^. ddPkt pktSS)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''DDPkt
+declareHasChunkRefs ''DataDefinition
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
 instance HasUID             DataDefinition where uid = ddPkt pktUID
@@ -92,8 +88,6 @@ instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
 instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
 -- | Finds the reference address of a 'DataDefinition where'.
 instance HasRefAddress      DataDefinition where getRefAdd l = RP (prepend $ abrv l) (l ^. ddPkt pktS)
--- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition where'.
-instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 -- | Finds the idea of a 'DataDefinition where' (abbreviation).
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 -- | Finds the reference address of a 'DataDefinition where'.

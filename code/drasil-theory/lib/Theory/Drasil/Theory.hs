@@ -8,7 +8,7 @@ module Theory.Drasil.Theory (
 
 import Control.Lens (view, makeLenses, (^.))
 
-import Drasil.Database (HasUID(..), showUID, HasChunkRefs(..))
+import Drasil.Database (HasUID(..), showUID, declareHasChunkRefs, Generically(..))
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.Metadata.TheoryConcepts (thModel)
@@ -41,14 +41,7 @@ data TheoryModel = TM
   , _notes :: [Sentence]
   }
 makeLenses ''TheoryModel
-
-instance HasChunkRefs TheoryModel where
-  chunkRefs tm' = mconcat
-    [ chunkRefs (tm' ^. mk)
-    , chunkRefs (lb tm')
-    , chunkRefs (tm' ^. notes)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''TheoryModel
 
 -- | Finds the 'UID' of a 'TheoryModel'.
 instance HasUID             TheoryModel where uid = mk . uid
@@ -62,8 +55,6 @@ instance Definition         TheoryModel where defn = mk . defn
 instance HasReference       TheoryModel where getReferences l = map ref $ rf l-}
 -- | Finds 'DecRef's contained in the 'TheoryModel'.
 instance HasDecRef          TheoryModel where getDecRefs = rf
--- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
-instance ConceptDomain      TheoryModel where cdom = cdom . view mk
 -- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 

@@ -1,7 +1,3 @@
-{-# LANGUAGE GADTs                 #-}
-{-# LANGUAGE InstanceSigs          #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module Language.Drasil.Literal.Lang (Literal(..)) where
 
 import Language.Drasil.Space (Space (..))

@@ -1,4 +1,5 @@
-{-# Language TemplateHaskell #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
+{-# LANGUAGE TemplateHaskell #-}
 -- | Defines a type used to hold referencing information.
 module Language.Drasil.Document.Reference (
   -- * Type
@@ -11,10 +12,10 @@ module Language.Drasil.Document.Reference (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk)
+import Drasil.Database (UID, HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
 
-import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
-import Language.Drasil.ShortName (HasShortName(..), ShortName)
+import Language.Drasil.Document.Labels (LblType, HasRefAddress(..))
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 
 -- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
@@ -30,9 +31,7 @@ class HasReference c where
   -- | Provides a 'Lens' to the 'Reference's.
   getReferences :: Lens' c [Reference]
 
-instance HasChunkRefs Reference where
-  chunkRefs r = chunkRefs (shortname r)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''Reference
 
 -- | Equal if 'UID's are equal.
 instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)
@@ -65,9 +64,9 @@ namedRef r s = namedComplexRef r s None
 
 -- | Takes a 'Reference' with additional display info. Uses the internal shortname for its display name.
 complexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
-complexRef r = Ref (ref r ^. uid) EmptyS
+complexRef r = Ref (r ^. uid) EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
 namedComplexRef :: (IsChunk r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
-namedComplexRef r = Ref (ref r ^. uid)
+namedComplexRef r = Ref (r ^. uid)

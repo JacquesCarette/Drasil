@@ -8,8 +8,8 @@ import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
 import Drasil.Database (IsChunk, mkUid)
 import Language.Drasil (Space(..), nounPhraseSP,
   label, sub, HasSymbol(..), Symbol, ExprC(..), DefinedQuantityDict, implVar)
-import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.ShortHands
+import Language.Drasil.Display (Symbol(Integ))
+import Language.Drasil.ShortHands (lX, lY, lZ, lV, lI, lJ, lK)
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod,
   asVC, funcDef, fDecDef, ffor, funcData, quantvar,
   multiLine, packmod, repeated, singleLine)

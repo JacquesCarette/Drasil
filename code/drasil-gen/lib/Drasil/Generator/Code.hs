@@ -1,7 +1,4 @@
-{-# LANGUAGE FlexibleContexts, QuasiQuotes #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE RankNTypes #-}
-
+{-# LANGUAGE QuasiQuotes #-}
 module Drasil.Generator.Code (
   -- * Generators
   genCode, genCodeZoo,
@@ -17,13 +14,12 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
 import Drasil.FileHandling (FileLayout, directory, ps)
-import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData, OOProg, LoggingFor (unLC))
-import qualified Drasil.GOOL as OO
-import Drasil.GProc (unJLC, unMLC, ProcProg)
-import qualified Drasil.GProc as Proc
+import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, CodeType(..), ProgData,
+  OOProg, LoggingFor (unLC))
+import Drasil.GProc (unJLC, unMLC, ProcProg, NativeVector)
 import Language.Drasil (Space(..), Expr)
 import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
-  generator, readWithDataDesc, sampleInputDD, codeSpec,
+  generator, readWithDataDesc, sampleInputDD, mkCodeSpec,
   Architecture(impType, modularity),
   Choices(Choices, maps, lang, architecture, optFeats, dataInfo),
   ConstantRepr(..), ConstantStructure(..),
@@ -31,10 +27,10 @@ import Language.Drasil.Code (getSampleData, generateCode, generateCodeProc,
   LogConfig(logging), Logging(LogVar), Maps(spaceMatch), Modularity(..),
   OptionalFeatures(logConfig), SpaceMatch, Structure(..),
   Lang(Julia, Java, Python, CSharp, Cpp, Swift, Matlab),
-  HasOldCodeSpec(extInputsO), CodeSpec, SomeProgGenerator(..))
+  HasCodeSpec(extInputs), CodeSpec, SomeProgGenerator(..))
 import Language.Drasil.GOOL (unPP, unJP, unCSP, unCPPP, unSP, unJLP, unMLP,
   PackageData, SoftwareDossierSym)
-import Drasil.System (SmithEtAlSRS, programName)
+import Drasil.SRS (SmithEtAlSRS, programName)
 
 -- | Generate an ICO-style executable software artifact.
 genCode :: SmithEtAlSRS -> Choices -> IO FileLayout
@@ -50,9 +46,13 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
     genLangCode Matlab = genCallProc Matlab unMLC unMLP
 
     genCall
-      :: (OOProg progRepr, SoftwareDossierSym packRepr, Monad packRepr)
+      ::
+        ( OOProg progRepr vis stmt mthd stvr attch prg file mod bod block
+        , SoftwareDossierSym packRepr
+        , Monad packRepr
+        )
       => Lang
-      -> (progRepr (OO.Program progRepr) -> ProgData)
+      -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)
       -> IO FileLayout
     genCall lng unProgRepr unPackRepr = do
@@ -63,9 +63,14 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCode lng realUnProgRepr unPackRepr $ generator lng time samples chs spec
 
     genCallProc
-      :: (ProcProg progRepr, SoftwareDossierSym packRepr, Monad packRepr)
+      ::
+        ( ProcProg progRepr vis stmt mthd prg file mod bod block
+        , NativeVector progRepr
+        , SoftwareDossierSym packRepr
+        , Monad packRepr
+        )
       => Lang
-      -> (progRepr (Proc.Program progRepr) -> ProgData)
+      -> (progRepr prg -> ProgData)
       -> (packRepr PackageData -> PackageData)
       -> IO FileLayout
     genCallProc lng unProgRepr unPackRepr = do
@@ -74,12 +79,12 @@ genCode syst chs = directory [ps|src|] <$> traverse genLangCode (lang chs)
       pure $ generateCodeProc lng unProgRepr unPackRepr $ generator lng time samples chs spec
 
     spec :: CodeSpec
-    spec = codeSpec syst chs
+    spec = mkCodeSpec syst chs
 
     readSampleData :: IO [Expr]
     readSampleData =
       case getSampleData chs of
-        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputsO)
+        Just sd -> readWithDataDesc sd $ sampleInputDD (spec ^. extInputs)
         Nothing -> pure []
 
 genCodeZoo :: SmithEtAlSRS -> [Choices] -> IO [FileLayout]

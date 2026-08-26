@@ -1,24 +1,20 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel, output)
-import Drasil.SRS
+import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Physics (motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
@@ -53,7 +49,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) Nothing],
+       IOrgSec Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -82,7 +78,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],  -- Adds Auxilliary constraint section
+     AuxConsProg [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
 
@@ -91,7 +87,7 @@ si = mkSmithEtAlICO progName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints [] allSymbols
-  labelledContent' symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
@@ -108,7 +104,7 @@ allSymbols :: [DefinedQuantityDict]
 allSymbols = map (^. output) iMods ++ symbols
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] allSymbols ideaDicts cis
+symbMap = withCommonKnowledge allRefs allSymbols ideaDicts cis
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations
   labelledContent'
 

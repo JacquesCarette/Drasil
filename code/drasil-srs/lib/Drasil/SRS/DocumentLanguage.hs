@@ -5,17 +5,16 @@
 -- Over time, we'll want to have a cleaner separation, but doing that
 -- all at once would break too much for too long.  So we start here
 -- instead.
-module Drasil.SRS.DocumentLanguage (mkDoc, findAllRefs) where
+module Drasil.SRS.DocumentLanguage (mkDoc) where
 
 -- General Haskell
 import Control.Lens ((^.), set)
 import Data.Either (rights)
 import Data.Function (on)
 import Data.List (nub, sortBy, (\\))
-import Data.Maybe (maybeToList, mapMaybe, isJust, fromMaybe)
+import Data.Maybe (maybeToList, isJust, fromMaybe)
 import qualified Data.Map as Map (keys)
 import qualified Data.Set as Set
-import qualified Data.Map.Strict as M
 
 -- General Drasil
 import Language.Drasil
@@ -23,11 +22,11 @@ import Language.Drasil.Document
 import Language.Drasil.Display (compsy)
 import Language.Drasil.Development (shortdep)
 
-import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..), invert)
-import Drasil.Database.SearchTools (findAllConcInsts,
-  TermAbbr, shortForm, termResolve')
+import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
+import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
 
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..))
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Drasil.SRS.GetChunks (resolveAllVars)
 
 -- Vocabulary
@@ -44,10 +43,10 @@ import Drasil.SRS.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
-  TSIntro(..), UCsSec(..), getTraceConfigUID)
+  TSIntro(..), UCsSec(..))
 import Drasil.SRS.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.SRS.ExtractDocDesc (getDocDesc, egetDocDesc, extractUnits)
 import Drasil.SRS.TraceTable (generateTraceMap)
 
 import Drasil.SRS.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -57,8 +56,7 @@ import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
 import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
-  tOfAbbAcc)
-import Drasil.SRS.References (secRefs)
+  tOfAbbAcc, inModel)
 import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -93,7 +91,7 @@ mkDoc si srsDecl headingComb =
       refdCites = extractSectionsBib (si ^. systemdb) sections
       -- Injects "traceability" maps into the 'ChunkDB' and adds missing
       -- 'LabelledContent' (the generated traceability-related tables).
-      si' = buildTraceMaps dd $ fillReferences sections refdCites si
+      si' = buildTraceMaps dd si
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
@@ -127,8 +125,12 @@ buildTraceMaps sd si
         -- later generation pipeline that produces the ".dot" files for which
         -- the main Drasil Makefile converts to SVGs (via `make tracegraphs`).
         tdb = generateTraceMap sd
-    in set lbldCntnt (si ^. lbldCntnt ++ tglcs)
-     $ set systemdb (insertAll tglcs db)
+        traceMats = map (\(TraceConfig u _ desc cols rows) ->
+          TM.generateTraceTableView u desc cols rows si) $ traceMatStandard si
+        db' = insertAll tglcs
+            $ insertAll traceMats
+            $ insertAll traceyGraphGetRefs db
+    in set systemdb db'
      $ set traceTable tdb
      $ set refbyTable (invert tdb) si
   | otherwise = si
@@ -137,50 +139,6 @@ buildTraceMaps sd si
     containsTraceSec ((TraceabilitySec _):_) = True
     containsTraceSec (_:ss)                = containsTraceSec ss
     containsTraceSec []                    = False
-
--- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: [Section] -> [Citation] -> SmithEtAlSRS -> SmithEtAlSRS
-fillReferences allSections cites si = si2
-  where
-    -- get old chunk database + ref database
-    chkdb = si ^. systemdb
-    -- get refs from SRSDecl. Should include all section labels and labelled content.
-    refsFromSRS = concatMap findAllRefs allSections
-    -- get refs from the stuff already inside the chunk database
-    ddefs   = si ^. dataDefns
-    gdefs   = si ^. genDefns
-    imods   = si ^. instModels
-    tmods   = si ^. theoryModels
-    lblCon  = si ^. lbldCntnt
-    concIns = findAllConcInsts chkdb
-    newRefs = M.fromList $ map (\x -> (x ^. uid, x)) $ refsFromSRS
-      ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
-      ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs ++ map ref cites
-      ++ map ref ddefs ++ map ref gdefs ++ map ref imods
-      ++ map ref tmods ++ map ref concIns ++ map ref lblCon
-    si2 = set refTable (M.union (si ^. refTable) newRefs) si
-
--- | Recursively find all references in a section (meant for getting at 'LabelledContent').
-findAllRefs :: Section -> [Reference]
-findAllRefs (Section _ cs r) = r : concatMap findRefSecCons cs
-  where
-    findRefSecCons :: SecCons -> [Reference]
-    findRefSecCons (Sub s) = findAllRefs s
-    findRefSecCons (Con (LlC (LblC _ rf _))) = [rf]
-    findRefSecCons _ = []
-
--- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
-extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnitDeps cdb $ resolveAllVars (getDocDesc dd) (egetDocDesc dd) cdb
-
--- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
--- their units (i.e., what units their units are defined with).
-collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
-
-getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- * Section Creator Functions
 
@@ -204,9 +162,9 @@ mkSections si dd mbib = map (either renderRefSec id) partialRender
     render :: DocSection -> Section
     render TableOfContents      = mkToC dd
     render (IntroSec is)        = mkIntroSec si is
-    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (StkhldrSec sts)     = mkStkhldrSec (si ^. sysName) sts
     render (SSDSec ss)          = mkSSDSec si ss
-    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render (AuxConstntSec acs)  = mkAuxConsSec (si ^. sysName) acs
     render Bibliography         = mkBib $ fromMaybe [] mbib
     render (GSDSec gs')         = mkGSDSec gs'
     render (ReqrmntSec r)       = mkReqrmntSec r
@@ -294,23 +252,24 @@ mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
   where
+    im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
     mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro (IChar assumed topic asset) =
       Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])
-    mkSubIntro (IOrgSec b s t) = Intro.orgSec b s t
+    mkSubIntro (IOrgSec t) = Intro.orgSec inModel im t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders
 
 -- | Helper for making the Stakeholders section.
-mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec :: Idea c => c -> StkhldrSec -> Section
+mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
-    mkSubs (Client kWrd details) = Stk.tClientF kWrd details
-    mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
+    mkSubs (Client details) = Stk.tClientF progN details
+    mkSubs Cstmr            = Stk.tCustomerF progN
 
 -- ** General System Description
 
@@ -409,9 +368,9 @@ mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
+    notNull xs = not (null (header (TM.layoutUIDs xs si) si))
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
-      not $ null (header (TM.layoutUIDs rows si) si)
-         || null (header (TM.layoutUIDs cols si) si)) progs
+      notNull rows && notNull cols) progs
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SmithEtAlSRS -> [Sentence]
@@ -426,8 +385,8 @@ mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 -- ** Auxiliary Constants
 
 -- | Helper for making the Values of Auxiliary Constants section.
-mkAuxConsSec :: AuxConstntSec -> Section
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
+mkAuxConsSec :: Idea c => c -> AuxConstntSec -> Section
+mkAuxConsSec c (AuxConsProg listOfCons) = AC.valsOfAuxConstantsF c $ sortBySymbol listOfCons
 
 -- ** References
 

@@ -1,10 +1,9 @@
-{-# LANGUAGE GADTs #-}
--- | Document declaration types and functions for generating Software Requirement Specifications.
-
--- Changes to DocSection and its subections should be reflected in the 'Creating Your Project
--- in Drasil' tutorial found on the wiki:
+-- | Document declaration types and functions for generating Software
+-- Requirement Specifications.
+--
+-- Changes to DocSection and its subections should be reflected in the 'Creating
+-- Your Project in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-
 module Drasil.SRS.DocDecl (
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..), PDSub(..),
   ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..), SolChSpec(..),
@@ -18,7 +17,8 @@ import Control.Lens((^.))
 import Language.Drasil hiding (sec)
 import Language.Drasil.Document
 import Drasil.Database (HasUID(..), findAll)
-import Drasil.System (SmithEtAlSRS, HasSmithEtAlSRS(..), systemdb)
+import Drasil.System (systemdb)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 
 -- Vocabulary
 import Drasil.Metadata.Documentation (assumpDom, funcReqDom, goalStmtDom,
@@ -94,7 +94,7 @@ data SCSSub where
   -- | Instance models.
   IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   -- | Properties of a correct solution.
   CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 

@@ -8,10 +8,10 @@ module Language.Drasil.Chunk.NamedArgument (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Drasil.Database (HasUID(..), HasChunkRefs(..))
+import Drasil.Database (HasUID(..), declareHasChunkRefs, Generically(..))
 import Language.Drasil (HasSpace(..), HasSymbol(..),
   Idea(..), MayHaveUnit(..), NamedIdea(..), Quantity,
-  DefinedQuantityDict, Concept, dqdWr, Definition (defn), ConceptDomain (cdom))
+  DefinedQuantityDict, Concept, dqdWr, Definition (defn))
 
 import Drasil.Code.Classes (IsArgumentName)
 
@@ -19,10 +19,7 @@ import Drasil.Code.Classes (IsArgumentName)
 -- but with more of a focus on generating code arguments.
 newtype NamedArgument = NA {_qtd :: DefinedQuantityDict}
 makeLenses ''NamedArgument
-
-instance HasChunkRefs NamedArgument where
-  chunkRefs na = chunkRefs (na ^. qtd)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''NamedArgument
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'NamedArgument'.
 instance HasUID         NamedArgument where uid = qtd . uid
@@ -33,13 +30,10 @@ instance Idea           NamedArgument where getA = getA . view qtd
 
 instance Definition     NamedArgument where defn = qtd . defn
 
-instance ConceptDomain  NamedArgument where cdom = cdom . view qtd
 -- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'NamedArgument'.
 instance HasSpace       NamedArgument where typ = qtd . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'NamedArgument'.
 instance HasSymbol      NamedArgument where symbol = symbol . view qtd
--- | 'NamedArgument's have a 'Quantity'.
-instance Quantity       NamedArgument where
 -- | 'NamedArgument's have an argument name.
 instance IsArgumentName NamedArgument where
 -- | Equal if 'UID's are equal.

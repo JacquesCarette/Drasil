@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.IModel (instanceModels, imPD, imPDRC) where
 
 import Data.Drasil.Quantities.Physics (time)

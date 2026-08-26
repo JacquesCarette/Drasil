@@ -36,14 +36,10 @@ instance NamedIdea        CodeDefinition where term = cchunk . term
 instance Idea             CodeDefinition where getA = getA . view cchunk
 -- | Finds the Definition of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance Definition       CodeDefinition where defn = cchunk . defn
--- | Finds the concept domains of the 'CodeChunk' used to make the 'CodeDefinition'
-instance ConceptDomain    CodeDefinition where cdom = cdom . view cchunk
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasSpace         CodeDefinition where typ = cchunk . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
--- | 'CodeDefinition's have a 'Quantity'.
-instance Quantity         CodeDefinition
 -- | Finds the code name of a 'CodeDefinition'.
 -- 'Function' 'CodeDefinition's are named with the function prefix to distinguish
 -- them from the corresponding variable version.

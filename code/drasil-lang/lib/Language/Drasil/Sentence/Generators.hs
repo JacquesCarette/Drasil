@@ -1,6 +1,6 @@
 -- | Functions that create sentences from other data
 module Language.Drasil.Sentence.Generators (
-  fromSource, fterms, getTandS,
+  fterms, getTandS,
   -- this does not belong here...
   checkValidStr
   ) where
@@ -9,15 +9,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (NamedIdea(..), Quantity)
 import Language.Drasil.Development.Sentence (phrase)
-import Language.Drasil.Label.Type (Referable)
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NP)
-import Language.Drasil.Document.Reference (refS)
-import Language.Drasil.Sentence (Sentence(S),(+:+), sParen, ch)
-import Language.Drasil.ShortName (HasShortName(..))
-
--- | Wraps "from @reference@" in parentheses.
-fromSource :: (Referable r, HasShortName r) => r -> Sentence
-fromSource r = sParen (S "from" +:+ refS r)
+import Language.Drasil.Sentence (Sentence,(+:+), ch)
 
 -- | Apply a binary function to the terms of two named ideas, instead of to the named
 -- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of

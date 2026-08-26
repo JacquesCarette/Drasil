@@ -1,6 +1,5 @@
 module Drasil.Projectile.Lesson.Body (si, nbDecl) where
 
-import Data.List (nub)
 import Language.Drasil
 import Language.Drasil.Document
 import Drasil.Database (ChunkDB, mkUid)
@@ -17,11 +16,11 @@ import qualified Data.Drasil.Concepts.Physics as CCs (motion, acceleration,
 import Data.Drasil.People (spencerSmith)
 
 import Drasil.Projectile.Concepts (ideaDicts, defs)
-import Drasil.Projectile.Expressions (eqnRefs)
+import Drasil.Projectile.Expressions (equations)
 
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewSecs)
-import Drasil.Projectile.Lesson.CaseProb (caseProbCont, caseProbSecs, figRefs)
+import Drasil.Projectile.Lesson.CaseProb (caseProbCont, caseProbSecs, figures)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
 nbDecl :: LsnDesc
@@ -36,10 +35,10 @@ nbDecl = [
 si :: LessonPlan
 si = mkLessonPlan
   (mkSystemMeta projectileMotionLesson [spencerSmith] [] [] [] [] symbMap)
-  allRefs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] [] [] [] [] [] []
+symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] [] []
+  [] [] [] [] labelledContent
 
 cis :: [CI]
 cis = [projectileMotionLesson]
@@ -55,7 +54,7 @@ symbols = [horiz_velo, Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAcce
   Qs.iPos, Qs.height]
 
 projectileMotionLesson :: CI
-projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "Projectile Motion" []
+projectileMotionLesson = commonIdea (mkUid "projMotLsn") (pn "Projectile Motion Lesson") "projectile-lesson" []
 
-allRefs :: [Reference]
-allRefs = nub (figRefs ++ eqnRefs)
+labelledContent :: [LabelledContent]
+labelledContent = equations ++ figures

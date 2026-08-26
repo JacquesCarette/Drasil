@@ -20,11 +20,11 @@ This section collects and defines all the data needed to build the instance mode
 
 <div align="center">
 
-## Volume of water {#DD:waterVolume.pcm}
+## Volume of water {#DD:waterVolume_pcm}
 
 </div>
 
-|Refname    |DD:waterVolume.pcm                                                                                                                                                                                                                                           |
+|Refname    |DD:waterVolume_pcm                                                                                                                                                                                                                                           |
 |:----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |Label      |Volume of water                                                                                                                                                                                                                                              |
 |Symbol     |\\({V\_{\text{W}}}\\)                                                                                                                                                                                                                                        |
@@ -49,7 +49,7 @@ This section collects and defines all the data needed to build the instance mode
 |Equation   |\\[{V\_{\text{tank}}}=π\\,\left(\frac{D}{2}\right)^{2}\\,L\\]                                                                                                                                                                                                                                                  |
 |Description|<ul><li>\\({V\_{\text{tank}}}\\) is the volume of the cylindrical tank (\\({\text{m}^{3}}\\))</li><li>\\(π\\) is the ratio of circumference to diameter for any circle (Unitless)</li><li>\\(D\\) is the diameter of tank (\\({\text{m}}\\))</li><li>\\(L\\) is the length of tank (\\({\text{m}}\\))</li></ul>|
 |Source     |--                                                                                                                                                                                                                                                                                                             |
-|RefBy      |[FR:Find-Mass](./SecFRs.md#findMass) and [DD:waterVolume_pcm](./SecDDs.md#DD:waterVolume.pcm)                                                                                                                                                                                                                  |
+|RefBy      |[FR:Find-Mass](./SecFRs.md#findMass) and [DD:waterVolume_pcm](./SecDDs.md#DD:waterVolume_pcm)                                                                                                                                                                                                                  |
 
 <div align="center">
 

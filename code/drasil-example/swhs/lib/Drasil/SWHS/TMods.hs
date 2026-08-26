@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
   nwtnCooling, sensHtE, sensHtETemplate, tMods) where
 

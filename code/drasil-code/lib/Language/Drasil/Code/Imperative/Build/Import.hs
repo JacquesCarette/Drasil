@@ -43,13 +43,13 @@ buildMakefile d b r s m = printMakefile $ mkMakefile $ maybe [mkRule (openingCom
     buildTarget = makeS "build"
 
 openingComments :: ProgData -> Annotation
-openingComments m = [watermark,"Project Name: " ++ progName m, progPurpAdd m]
+openingComments m = [watermark, "Project Name: " ++ progName m, progPurpAdd m]
 
 -- | Helper that renders project purpose into a string if there is one.
 progPurpAdd :: ProgData -> String
-progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++
-                  capitalize (progPurp m)
-                else []
+progPurpAdd m
+  | not (null $ progPurp m) = "Project Purpose: " ++ capitalize (progPurp m)
+  | otherwise = ""
 
 -- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
 renderBuildName :: SoftwareDossierState -> ProgData -> NameOpts -> BuildName -> MakeString

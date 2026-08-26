@@ -44,18 +44,27 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText
 
 -- | Generate a mdBook SRS
 genMDBook :: Project -> [FileLayout]
-genMDBook p@(Project t _ rm _) =
+genMDBook p@(Project t a rm fs) =
   [ file [ps|book.toml|] (makeBook rm t)
   , file [ps|.drasil-requirements.csv|] (makeRequirements p)
-  , directory [ps|src|] (map (\(fn, d) -> file [ps|{fn}.md|] d) (build' p))
+  , directory [ps|src|] (map (\(fn, d) -> file [ps|{fn}.md|] d) fs'')
   ]
-
--- | Build the mdBook Docs, called by genMD'
-build' :: Project -> [(Filename, Doc)]
-build' p@(Project _ _ rm d) =
-  printSummary rm files : map (print' rm) files
   where
-    files = createTitleFile p : d
+    -- Create "title page" file
+    titlePageFile = File t "title" 0 [Header 0 t EmptyS, Paragraph a]
+    fs' = titlePageFile : fs
+    -- Create "summary page" file
+    summary = ("SUMMARY", vcat $ map (summaryItem rm) fs')
+    -- Render all pages into Markdown
+    fs'' = summary : map (print' rm) fs'
+
+-- | Helper for rendering a 'SUMMARY.md' item
+summaryItem :: RefMap -> File -> Doc
+summaryItem rm (File t n d _) = bullet <+> lbl <> ref
+  where
+    bullet = text (replicate (d*2) ' ') <> text "-"
+    lbl    = brackets $ pSpec rm t
+    ref    = parens $ text $ "./" ++ n ++ ".md"
 
 -- | Prints the .toml config file for mdBook.
 makeBook :: RefMap -> Spec -> Doc
@@ -116,24 +125,6 @@ print' rm (File _ n _ c) = (n, print rm c)
 -- into a single Doc
 print :: RefMap -> [LayoutObj] -> Doc
 print rm = vsep . map (printLO rm)
-
--- | Renders a 'SUMMARY.md' file
-printSummary :: RefMap -> [File] -> (Filename, Doc)
-printSummary rm f = ("SUMMARY", vcat $ map (summaryItem rm) f)
-
--- | Helper for rendering a 'SUMMARY.md' item
-summaryItem :: RefMap -> File -> Doc
-summaryItem rm (File t n d _) = bullet <+> lbl <> ref
-  where
-    bullet = text (replicate (d*2) ' ') <> text "-"
-    lbl    = brackets $ pSpec rm t
-    ref    = parens $ text $ "./" ++ n ++ ".md"
-
--- | Create a title page file for a Project
-createTitleFile :: Project -> File
-createTitleFile (Project t a _ _) = File t "title" 0 cons
-  where
-    cons = [Header 0 t EmptyS, Paragraph a]
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------

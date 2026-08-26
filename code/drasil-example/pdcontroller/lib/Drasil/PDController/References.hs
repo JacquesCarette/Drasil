@@ -5,6 +5,7 @@ module Drasil.PDController.References (
 import Data.Drasil.Citations (laplaceWiki, pidWiki)
 
 import Language.Drasil
+import Language.Drasil.Document
 
 citations :: BibRef
 citations = [johnson2008, abbasi2015, laplaceWiki, pidWiki]

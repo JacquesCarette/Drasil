@@ -6,20 +6,19 @@ module Drasil.Website.Body (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (ChunkDB, mkUid)
+import Drasil.Database (ChunkDB, mkUid, insertAll)
 import Drasil.Generator (withCommonKnowledge)
-import Drasil.System (HasSystemMeta(..), mkSystemMeta, DrasilWebsite,
-  mkDrasilWebsite)
+import Drasil.System (HasSystemMeta(..), mkSystemMeta)
+import Drasil.Website.Core (DrasilWebsite, mkDrasilWebsite)
 import Language.Drasil
 import Language.Drasil.Document
-import Drasil.SRS (findAllRefs)
 
 import Drasil.Website.Introduction (introSec)
 import Drasil.Website.About (aboutSec)
-import Drasil.Website.CaseStudy (caseStudySec)
+import Drasil.Website.CaseStudy (caseStudySec, caseStudyTable)
 import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
-import Drasil.Website.Analysis (analysisSec, analysisRefs)
+import Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph)
 import Drasil.Website.GettingStarted (gettingStartedSec)
 import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
 import Drasil.GlassBR.Concepts (glaSlab, idglass, blast)
@@ -60,7 +59,9 @@ data FolderLocation = Folder {
 
 webSys :: Document -> FolderLocation -> DrasilWebsite
 -- FIXME: Missing metadata!
-webSys d = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] symbMap) d . allRefs
+webSys d@(Document _ _ _ ss) fl = mkDrasilWebsite (mkSystemMeta webName [] [] [] [] [] db') d
+  where db' = insertAll (allRefs fl) $ insertAll (websiteLCs fl) $ insertAll ss symbMap
+webSys Notebook{} _ = error "DrasilWebsite expects a `Document`"
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
@@ -92,11 +93,20 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ exampleRefs (repoRt fl) (exRt fl)
   ++ docRefs (docsRt fl)
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
-  ++ concatMap findAllRefs (sections fl)
+
+-- | List of all 'LabelledContent's necessary for the website.
+websiteLCs :: FolderLocation -> [LabelledContent]
+websiteLCs fl = [
+    imageContent
+  , caseStudyTable
+  , graphsTable (typeGraphFolder fl) (classInstFolder fl) (packages fl)
+  , dependencyGraph (graphRt fl) "drasil-website"
+  , dependencyGraph (graphRt fl) "drasil-all-pkgs-deps"
+  ]
 
 -- | Used for system name and kind inside of 'si'.
 webName :: CI
-webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
+webName = commonIdea (mkUid "websiteName") (cn websiteTitle) "website" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

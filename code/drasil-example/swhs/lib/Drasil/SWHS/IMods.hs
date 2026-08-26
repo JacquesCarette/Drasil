@@ -78,8 +78,8 @@ balWtrDesc = map foldlSent [
    eS (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", short ode, S "applies as long as the", phrase water `S.is` EmptyS `S.in_`
    phrase liquid, S "form" `sC` eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))),
-   sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0), sParen (unwrap $ getUnit tempW) `S.and_`
-   eS (exactDbl 100), sParen (unwrap $ getUnit tempW) `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
+   unitInParen tempW, S "where", eS (exactDbl 0), unitInParen tempW `S.and_`
+   eS (exactDbl 100), unitInParen tempW `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
    boilPt) `of_PSNPNI` water))) `sC` S "respectively",
    fromSources [assumpWAL, assumpAPT]]]
 
@@ -291,11 +291,11 @@ htWtrNotes :: [Sentence]
 htWtrNotes = map foldlSent [
   [S "The above", phrase equation `S.is` S "derived using", refS sensHtE],
   [D.toSent (atStartNP (NP.the (change `in_`temp))) `S.isThe` S "difference between the",
-   phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
-  ch tempW `S.andThe` phrase tempInit `sC` ch tempInit, sParen (unwrap $ getUnit tempInit)],
+   phrase temp, S "at", phrase time, ch time, unitInParen tInitMelt `sC`
+  ch tempW `S.andThe` phrase tempInit `sC` chWithUnit tempInit],
   [S "This", phrase equation, S "applies as long as",
    eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))) :+:
-  unwrap (getUnit tempW), sParen $ refS assumpWAL `sC` refS assumpAPT]]
+  unitSym tempW, sParen $ refS assumpWAL `sC` refS assumpAPT]]
 
 ---------
 -- IM4 --
@@ -330,24 +330,23 @@ htPCMNotes = map foldlSent [
    refS sensHtE `S.and_` refS latentHtE],
   [ch pcmE, S "for the", phrase solid, short phsChgMtrl `S.is` S "found using",
    refS sensHtE `S.for` phrase sensHeat :+: S "ing, with",
-   D.toSent (phraseNP (heatCapSpec `the_ofThe` solid)), short phsChgMtrl `sC` ch htCapSP,
-   sParen (unwrap $ getUnit htCapSP) `S.andThe` phrase change `S.inThe`
-   short phsChgMtrl, phrase temp, S "from the", phrase tempInit, sParen (unwrap $ getUnit tempInit)],
+   D.toSent (phraseNP (heatCapSpec `the_ofThe` solid)), short phsChgMtrl `sC` chWithUnit htCapSP `S.andThe` phrase change `S.inThe`
+   short phsChgMtrl, phrase temp, S "from the", phrase tempInit, unitInParen tempInit],
   [ch pcmE, S "for the melted", short phsChgMtrl, sParen (eS (sy tempPCM $> sy pcmInitMltE)),
    S "is found using", refS sensHtE `S.for` D.toSent (phraseNP (sensHeat `ofThe` liquid)),
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
   [D.toSent (atStartNP (the energy)), S "required to melt all" `S.ofThe` short phsChgMtrl `S.is`
-   eS (sy htFusion $* sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
+   eS (sy htFusion $* sy pcmMass), unitInParen pcmInitMltE,
    fromSource ddHtFusion],
   [D.toSent (atStartNP (NP.the (change `in_` temp))) `S.is` eS (sy tempPCM $- sy tempMeltP),
-   sParen (unwrap $ getUnit tempMeltP)],
+   unitInParen tempMeltP],
   [ch pcmE, S "during", phrase melting `S.ofThe` short phsChgMtrl `S.is` S "found using the",
    phrase energy, S "required at", S "instant" +:+
    phrase melting `S.the_ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",
    phrase latentHeat, phrase energy, S "added" `S.toThe` short phsChgMtrl `sC`
-   ch latentEP, sParen (unwrap $ getUnit latentEP), S "since the", phrase time, S "when",
-   phrase melting, S "began", ch tInitMelt, sParen (unwrap $ getUnit tInitMelt)],
+   chWithUnit latentEP, S "since the", phrase time, S "when",
+   phrase melting, S "began", chWithUnit tInitMelt],
   [D.toSent (atStartNP (NP.the (combineNINI heat energy))) `S.for` phrase boiling `S.ofThe` short phsChgMtrl,
    S "is not detailed" `sC` S "since the", short phsChgMtrl `S.is` S "assumed to either be in a",
    phrase solid `S.or_` phrase liquid, S "state", sParen (refS assumpNGSP),

@@ -10,6 +10,9 @@ module Drasil.GlassBR.Concepts (
   glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad,
 
+  -- * CIs
+  cis',
+
   -- * Tools
   glassType, glassTypeAbbrs
 ) where
@@ -25,6 +28,9 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 con' :: [IdeaDict]
 con' = [idglass, iGlass, lGlass, beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
+
+cis' :: [CI]
+cis' = [annealed, fullyT, heatS]
 
 {-Terminology-}
 

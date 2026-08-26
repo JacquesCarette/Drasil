@@ -8,12 +8,12 @@ module Drasil.Code.CodeVar (
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Drasil.Database (HasUID(uid), (+++), HasChunkRefs(..))
+import Drasil.Database (HasUID(uid), (+++), declareHasChunkRefs, Generically(..))
 
 import Drasil.Code.Classes (Callable)
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Classes (Quantity, Idea(getA), NamedIdea(..), Concept,
-  Definition(defn), ConceptDomain (cdom))
+  Definition(defn))
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
@@ -45,10 +45,8 @@ data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
                        , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
 makeLenses ''CodeChunk
-
-instance HasChunkRefs CodeChunk where
-  chunkRefs cc = chunkRefs (cc ^. qc)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''VarOrFunc
+declareHasChunkRefs ''CodeChunk
 
 -- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasUID        CodeChunk where uid = qc . uid
@@ -59,13 +57,10 @@ instance Idea          CodeChunk where getA = getA . view qc
 -- | Finds the Definition contained in the 'DefinedQuantityDict' used to make the CodeChunk
 instance Definition    CodeChunk where defn = qc . defn
 
-instance ConceptDomain CodeChunk where cdom = cdom . view qc
 -- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasSpace      CodeChunk where typ = qc . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasSymbol     CodeChunk where symbol = symbol . view qc
--- | 'CodeChunk's have a 'Quantity'.
-instance Quantity      CodeChunk
 -- | Equal if 'UID's are equal.
 instance Eq            CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
@@ -76,13 +71,7 @@ instance MayHaveUnit   CodeChunk where getUnit = getUnit . view qc
 data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
                             _obv :: Maybe CodeChunk}
 makeLenses ''CodeVarChunk
-
-instance HasChunkRefs CodeVarChunk where
-  chunkRefs cvc = mconcat
-    [ chunkRefs (cvc ^. ccv)
-    , chunkRefs (cvc ^. obv)
-    ]
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CodeVarChunk
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasUID        CodeVarChunk where uid = ccv . uid
@@ -93,13 +82,10 @@ instance Idea          CodeVarChunk where getA = getA . view ccv
 
 instance Definition    CodeVarChunk where defn = ccv . defn
 
-instance ConceptDomain CodeVarChunk where cdom = cdom . view ccv
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasSpace      CodeVarChunk where typ = ccv . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasSymbol     CodeVarChunk where symbol = symbol . view ccv
--- | 'CodeVarChunk's have a 'Quantity'.
-instance Quantity      CodeVarChunk
 -- | Equal if 'UID's are equal.
 instance Eq            CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeVarChunk'.
@@ -121,10 +107,7 @@ listToArray c = newSpc (c ^. typ)
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
-
-instance HasChunkRefs CodeFuncChunk where
-  chunkRefs cfc = chunkRefs (cfc ^. ccf)
-  {-# INLINABLE chunkRefs #-}
+declareHasChunkRefs ''CodeFuncChunk
 
 -- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasUID        CodeFuncChunk where uid = ccf . uid
@@ -134,14 +117,10 @@ instance NamedIdea     CodeFuncChunk where term = ccf . term
 instance Idea          CodeFuncChunk where getA = getA . view ccf
 -- | Finds the Definition of the 'CodeChunk' used to make the 'CodeFuncChunk'
 instance Definition    CodeFuncChunk where defn = ccf . defn
--- | Finds the ConceptDomain of the 'CodeChunk' used to make the 'CodeFuncChunk'
-instance ConceptDomain CodeFuncChunk where cdom = cdom . view ccf
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasSpace      CodeFuncChunk where typ = ccf . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasSymbol     CodeFuncChunk where symbol = symbol . view ccf
--- | 'CodeFuncChunk's have a 'Quantity'.
-instance Quantity      CodeFuncChunk
 -- | Functions are Callable.
 instance Callable      CodeFuncChunk
 -- | Equal if 'UID's are equal.

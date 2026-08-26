@@ -2,7 +2,6 @@ module Drasil.FileHandling.Legacy.FilePath (
   RelativeFile, relativeFile, relFileToStr
 ) where
 
-import Data.List (foldl')
 import System.FilePath (isAbsolute, isValid, hasExtension, splitDirectories)
 
 -- | A valid, relative file path with an extension in canonical form.

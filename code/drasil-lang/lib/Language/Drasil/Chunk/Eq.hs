@@ -1,7 +1,5 @@
-{-# LANGUAGE RankNTypes, FlexibleInstances, GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
+{-# LANGUAGE TemplateHaskell #-}
 -- | Contains chunks related to adding an expression to a quantitative concept.
 module Language.Drasil.Chunk.Eq (
   -- * Types
@@ -14,7 +12,7 @@ module Language.Drasil.Chunk.Eq (
   ConstQDef, SimpleQDef, ModelQDef
 ) where
 
-import Control.Lens ((^.), view, lens, Lens', to)
+import Control.Lens ((^.), view, to, makeLenses)
 import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
 import qualified Data.Set as Set
 
@@ -22,7 +20,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Definition(defn), Quantity,
-  ConceptDomain(cdom), Express(express), Concept)
+  Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
   dqdWr, quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
@@ -37,46 +35,48 @@ import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.WellTyped (RequiresChecking(..))
 
-data QDefinition e where
-  QD :: DefinedQuantityDict -> [UID] -> e -> QDefinition e
-
-qdQua :: Lens' (QDefinition e) DefinedQuantityDict
-qdQua = lens (\(QD qua _ _) -> qua) (\(QD _ ins e) qua' -> QD qua' ins e)
-
-qdInputs :: Lens' (QDefinition e) [UID]
-qdInputs = lens (\(QD _ ins _) -> ins) (\(QD qua _ e) ins' -> QD qua ins' e)
-
-qdExpr :: Lens' (QDefinition e) e
-qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
+-- | A 'QDefinition' is a representation of a formula relating a 'DefinedQuantityDict'
+-- with an arbitrary expression 'e' given a (possibly empty) list of input variables.
+--
+-- Ex:
+--
+-- 1. @F = ma@ (with symbol F, space Real and unit Newtons)
+-- 2. @f(t) = t^2@ (with symbol f [displayed as f(t)], space Real and unit seconds^2)
+--
+-- A 'QDefinition' can be thought of as a 'MultiDefn' with only a single formula.
+data QDefinition e = QD { _uu :: UID
+                        , _qua :: DefinedQuantityDict
+                        , _inputs :: [UID]
+                        , _expr :: e
+                        }
+makeLenses ''QDefinition
 
 instance HasChunkRefs (QDefinition e) where
   chunkRefs q = Set.unions
-    [ chunkRefs (q ^. qdQua)
-    , Set.fromList (q ^. qdInputs)
+    [ chunkRefs (q ^. qua)
+    , Set.fromList (q ^. inputs)
     ]
   {-# INLINABLE chunkRefs #-}
 
-instance HasUID          (QDefinition e) where uid = qdQua . uid
-instance NamedIdea       (QDefinition e) where term = qdQua . term
-instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
-instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr
-instance HasSpace        (QDefinition e) where typ = qdQua . typ
-instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
-instance Definition      (QDefinition e) where defn = qdQua . defn
-instance Quantity        (QDefinition e) where
+instance HasUID          (QDefinition e) where uid = uu
+instance NamedIdea       (QDefinition e) where term = qua . term
+instance Idea            (QDefinition e) where getA = getA . (^. qua)
+instance DefinesQuantity (QDefinition e) where defLhs = qua . to dqdWr
+instance HasSpace        (QDefinition e) where typ = qua . typ
+instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qua)
+instance Definition      (QDefinition e) where defn = qua . defn
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
-instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
-instance DefiningExpr     QDefinition    where defnExpr = qdExpr
+instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qua
+instance DefiningExpr     QDefinition    where defnExpr = expr
 instance Express e => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
-      f = case q ^. qdInputs of
+      f = case q ^. inputs of
         [] -> defines (sy q)
         is -> defines $ apply q (map M.C is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.
-instance ConceptDomain (QDefinition e) where cdom = cdom . view qdQua
 
 instance RequiresChecking (QDefinition Expr) Expr Space where
   -- FIXME: Here, we are type-checking QDefinitions by building it as a relation
@@ -84,35 +84,38 @@ instance RequiresChecking (QDefinition Expr) Expr Space where
   -- "normal" way does not work for Functions because it leaves function input
   -- parameters left unchecked. It's probably preferred to be doing type
   -- checking at time of chunk creation rather than here, really.
-  requiredChecks (QD q is e) = pure (apply q (map E.C is) $= e, Boolean)
+  requiredChecks q = pure (apply (q ^. qua) (map E.C (q ^. inputs)) $= (q ^. expr), Boolean)
 
 -- | Create a 'QDefinition' with a 'UID' (as a 'String'), term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
 fromEqn :: String -> NP -> Sentence -> Symbol -> Space -> UnitDefn -> e -> QDefinition e
 fromEqn nm desc def symb sp un =
-  QD (quant (mkUid nm) desc def symb sp un) []
+  QD u (quant u desc def symb sp un) []
+  where u = mkUid nm
 
 -- | Same as 'fromEqn', but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> e -> QDefinition e
 fromEqn' nm desc def symb sp =
-  QD (quantNoUnit (mkUid nm) desc def symb sp) []
+  QD u (quantNoUnit u desc def symb sp) []
+  where u = mkUid nm
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> UnitDefn -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (quant' nm desc def symb sp un) []
+  QD nm (quant' nm desc def symb sp un) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 fromEqnSt' nm desc def symb sp =
-  QD (quantNoUnit' nm desc def symb sp) []
+  QD nm (quantNoUnit' nm desc def symb sp) []
 
 -- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
   QDefinition e
 fromEqnSt'' nm desc def symb sp =
-  QD (quantNoUnit' (mkUid nm) desc def symb sp) []
+  QD u (quantNoUnit' u desc def symb sp) []
+  where u = mkUid nm
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space ->
@@ -134,6 +137,7 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
 ec c = QD
+  (c ^. uid)
   (quantAU (c ^. uid) (c ^. term) EmptyS Nothing (symbol c) (c ^. typ) (getUnit c))
   []
 
@@ -144,6 +148,7 @@ mkFuncDef0 :: (IsChunk f, HasSymbol f, HasSpace f,
                IsChunk i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
+  (f ^. uid)
   (quantAU (f ^. uid) n s Nothing (symbol f) (f ^. typ) u)
   (map (^. uid) is)
 

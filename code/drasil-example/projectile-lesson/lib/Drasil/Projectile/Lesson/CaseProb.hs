@@ -1,5 +1,5 @@
 module Drasil.Projectile.Lesson.CaseProb (
-  caseProbCont, caseProbSecs, figRefs
+  caseProbCont, caseProbSecs, figures
 ) where
 
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
@@ -18,6 +18,9 @@ import Language.Drasil.Document
 import Language.Drasil.ShortHands
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
+
+figures :: [LabelledContent]
+figures = [figCSandA]
 
 caseProbCont :: [Contents]
 caseProbCont = []
@@ -206,10 +209,6 @@ stepFiveCont = foldlSP [S "Use the equations from Step 4" `sC` S "together with 
 motionSent :: Sentence
 motionSent = S "This value can be substituted" `S.inThe` S "equations for" +:+ phrase constAccel +:
              S "given above (ref) to yield the following"
-
--- References --
-figRefs :: [Reference]
-figRefs = [ref figCSandA]
 
 foot, accelinftU :: UnitDefn
 foot = fund "foot" "length" "ft"

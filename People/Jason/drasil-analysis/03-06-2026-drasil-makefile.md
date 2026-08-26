@@ -39,7 +39,6 @@ Declares types for building a `Makefile`, declaring it as a list of `Rule`s.
     ```
 6. [ ] `CommandOpts` is an incomplete enumeration. Commands can also be silenced (`@`) or forced to always be run (`+`, ignoring dry run).
 7. [ ] `Annotation` is only 'attached' to other rules. We should be able to write arbitrary comments within a `Makefile` (i.e., we need to recognize a `Makefile` as a sequence of something more than just rules). Annotations on individual shell commands are helpful, however. We should add that and remove attaching annotations (descriptive comments) before rules.
-8. [ ] We should rename `.AST` to `.Core`.
 
 Overall, the Makefile AST is incomplete. It works fine for our current purposes, but the variables issue is a leaky abstraction that should be fixed.
 

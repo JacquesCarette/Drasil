@@ -9,7 +9,6 @@ import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Drasil.Database (ChunkDB, mkUid)
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 import Language.Drasil
 import Language.Drasil.Document
 import Language.Drasil.Display (Symbol(Atop, Integ), Decoration(..))
@@ -19,10 +18,7 @@ import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
-
-import qualified Drasil.SRS.Concepts as SRS
 import Data.Drasil.Citations
-import Data.Drasil.Concepts.Theory (inModel)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -37,7 +33,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose,
       IScope EmptyS,
       IChar [] [] [],
-      IOrgSec inModel (SRS.inModel [] []) Nothing
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
@@ -73,7 +69,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],
+     AuxConsProg [],
   Bibliography]
 
 inputs :: NE.NonEmpty DefinedQuantityDict
@@ -114,7 +110,7 @@ si = mkSmithEtAlICO
   ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs ([] :: [InstanceModel])
   inputs outputs
   ([] :: [ConstrConcept]) ([] :: [ConstQDef]) symbols
-  [] symbMap []
+  symbMap
 
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList $ inputs <> outputs

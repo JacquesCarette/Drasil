@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 -- | Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
 module Drasil.SRS.DocumentLanguage.Core (
   DocDesc, DocSection(..), RefSec(..), IntroSec(..), StkhldrSec(..), GSDSec(..),
@@ -13,8 +12,8 @@ module Drasil.SRS.DocumentLanguage.Core (
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
 import Drasil.Database (UID, IsChunk)
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (Manual, Verb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat)
@@ -119,7 +118,7 @@ data IntroSub where
   -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   -- | Organises the section.
-  IOrgSec  :: CI -> Section -> Maybe Sentence -> IntroSub
+  IOrgSec  :: Maybe Sentence -> IntroSub
 
 -- ** Stakeholders Section
 
@@ -129,9 +128,9 @@ newtype StkhldrSec = StkhldrProg [StkhldrSub]
 -- | Stakeholders subsections.
 data StkhldrSub where
   -- | May have a client.
-  Client :: CI -> Sentence -> StkhldrSub
+  Client :: Sentence -> StkhldrSub
   -- | May have a customer.
-  Cstmr  :: CI -> StkhldrSub
+  Cstmr  :: StkhldrSub
 
 -- ** General System Description Section
 
@@ -190,7 +189,7 @@ data SCSSub where
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
   --FIXME: Work in Progress ^
   -- | Properties of a correct solution.
@@ -241,7 +240,7 @@ newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 -- ** Values of Auxiliary Constants Section
 
 -- | Values of Auxiliary Constants section.
-data AuxConstntSec = AuxConsProg CI [ConstQDef]
+newtype AuxConstntSec = AuxConsProg [ConstQDef]
 
 -- ** Appendix Section
 
@@ -300,10 +299,10 @@ instance Multiplate DLPlate where
     intro' (IPurpose s) = pure $ IPurpose s
     intro' (IScope s) = pure $ IScope s
     intro' (IChar s1 s2 s3) = pure $ IChar s1 s2 s3
-    intro' (IOrgSec c sect s2) = pure $ IOrgSec c sect s2
+    intro' (IOrgSec s1) = pure $ IOrgSec s1
     stk (StkhldrProg progs) = StkhldrProg <$> traverse (stkSub p) progs
-    stk' (Client c s) = pure $ Client c s
-    stk' (Cstmr c) = pure (Cstmr c)
+    stk' (Client s) = pure $ Client s
+    stk' Cstmr = pure Cstmr
     gs (GSDProg x) = GSDProg <$> traverse (gsdSub p) x
     gs' (SysCntxt c) = pure $ SysCntxt c
     gs' (UsrChars c) = pure $ UsrChars c
@@ -329,7 +328,7 @@ instance Multiplate DLPlate where
     ucp (UCsProg c) = pure $ UCsProg c
     ts (TraceabilityProg progs) = pure $ TraceabilityProg progs
     es (OffShelfSolnsProg contents) = pure $ OffShelfSolnsProg contents
-    acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
+    acs (AuxConsProg qdef) = pure $ AuxConsProg qdef
     aps (AppndxProg con) = pure $ AppndxProg con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
     (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)

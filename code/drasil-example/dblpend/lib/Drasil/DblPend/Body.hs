@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Body (
   mkSRS, si, justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
@@ -6,16 +5,15 @@ module Drasil.DblPend.Body (
 ) where
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization)
+import Language.Drasil
 import Language.Drasil.Document (makeURI, ulcc, Section, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat)
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance, shortname')
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (TheoryModel)
-import Drasil.SRS
+import Drasil.SRS hiding (constants, genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
@@ -33,7 +31,6 @@ import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, ca
 import Data.Drasil.Concepts.Math (cartesian, ode, graph)
 import Data.Drasil.Concepts.Physics (gravity, pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
@@ -64,7 +61,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) Nothing],
+       IOrgSec Nothing],
   GSDSec $
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -93,7 +90,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [], -- Adds Auxilliary constraint section
+     AuxConsProg [], -- Adds Auxilliary constraint section
   Bibliography                -- Adds reference section
   ]
 
@@ -102,7 +99,7 @@ si = mkSmithEtAlICO progName [dong]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
   inputs outputs inConstraints constants symbols
-  labelledContent' symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -125,7 +122,7 @@ conceptChunks =
   gravitationalConst, gravity] ++ defs
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
   dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

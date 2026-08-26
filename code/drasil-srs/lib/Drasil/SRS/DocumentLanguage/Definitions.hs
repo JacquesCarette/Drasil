@@ -17,7 +17,8 @@ import Data.Maybe (mapMaybe)
 
 -- rest of Drasil
 import Drasil.Database (ChunkDB, UID, HasUID(..), find)
-import Drasil.System (SmithEtAlSRS, systemdb, refbyLookup)
+import Drasil.System (systemdb)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, refbyLookup)
 import Language.Drasil
 import Language.Drasil.Document
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,

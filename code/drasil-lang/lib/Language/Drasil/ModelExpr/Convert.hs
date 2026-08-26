@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 -- | Defines functions to convert from the base expression language to 'ModelExpr's.
 module Language.Drasil.ModelExpr.Convert (expr) where
 

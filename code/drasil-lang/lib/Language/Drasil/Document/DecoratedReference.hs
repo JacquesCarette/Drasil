@@ -11,12 +11,12 @@ module Language.Drasil.Document.DecoratedReference (
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-import Drasil.Database (HasUID(..), IsChunk, HasChunkRefs(..))
+import Drasil.Database (HasUID(..), IsChunk, declareHasChunkRefs, Generically(..))
 
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Document.Reference (Reference, ref)
-import Language.Drasil.Label.Type (HasRefAddress(..))
-import Language.Drasil.ShortName (HasShortName(..))
+import Language.Drasil.Document.Labels (HasRefAddress(..))
+import Language.Drasil.Document.ShortName (HasShortName(..))
 
 -- | For holding a 'Reference' that is decorated with extra information (ex. page numbers, equation sources, etc.).
 data DecRef = DR {
@@ -24,6 +24,7 @@ data DecRef = DR {
   refInfo :: RefInfo
 }
 makeLenses ''DecRef
+declareHasChunkRefs ''DecRef
 
 -- | A class that contains a list of decorated references ('DecRef's).
 class HasDecRef c where
@@ -35,9 +36,6 @@ instance Eq            DecRef where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the 'UID' of a 'Reference'.
 instance HasUID        DecRef where uid = rf . uid
 
-instance HasChunkRefs DecRef where
-  chunkRefs r = chunkRefs (r ^. rf)
-  {-# INLINABLE chunkRefs #-}
 -- | Finds the reference address contained in a 'Reference' (through a 'LblType').
 instance HasRefAddress DecRef where getRefAdd (DR r _) = getRefAdd r
 -- | Finds the shortname of the reference address used for the 'Reference'.

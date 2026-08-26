@@ -5,31 +5,15 @@ module Language.Drasil.Sentence.Fold (
   -- to make different kinds of lists based on the options defined here.
   EnumType(..), WrapType(..), SepType(..), FoldType(..),
   -- * Folding Functions
-  -- ** Expression-related
-  foldConstraints,
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSent, foldlSent_,
   foldlSentCol, foldOpts, foldNums, numList
 ) where
 
-import Language.Drasil.Classes ( Express(express), Quantity )
-import Language.Drasil.Constraint
-    ( Constraint(Range, Elem), ConstraintE )
-import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
-import Language.Drasil.Sentence
-    ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
+import Language.Drasil.Sentence (Sentence(S, EmptyS, (:+:)), sParen, (+:+), sC,
+  (+:+.), (+:))
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
 import Data.List.Extras (foldle, foldle1)
-import Data.Foldable (foldl')
-
--- TODO: This looks like it should be moved to wherever uses it, it's too specific.
--- | Helper for formatting a list of constraints.
-foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
-foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
-  where
-    constraintToExpr (Range _ ri) = express $ realInterval c ri
-    constraintToExpr (Elem _ set) = express set
 
 -- | Partial function application of 'foldle' for sentences specifically.
 -- Folds with spaces and adds a period (".") at the end.

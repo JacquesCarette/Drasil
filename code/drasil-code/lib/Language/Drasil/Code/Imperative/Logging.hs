@@ -9,17 +9,28 @@ import Control.Monad.State (get)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, HasChoices(..))
 import Language.Drasil.Choices (Logging(..))
 
-import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, SharedProg,
-  BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), IOStatement(..),
-  lensMStoVS, ScopeSym(..))
+import Drasil.GOOL (Label, block, SVariable, SValue, MS, BodySym(..),
+  BlockSym(..), TypeSym(..), var, VariableElim(..), Literal(..),
+  VariableValue(..), MultiStatement(..), DeclStatement(..), FileHandling(..),
+  PrintFile(..), lensMStoVS, ScopeSym(..), VariableSym)
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
 -- function calls, statements that log how the function was called are added to
 -- the beginning of the body.
-logBody :: (SharedProg r) => Label -> [SVariable r] -> [MSBlock r] ->
-  GenState (MSBody r)
+logBody
+  ::
+    ( Literal r
+    , VariableValue r
+    , MultiStatement r stmt
+    , DeclStatement r stmt bod
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , BlockSym r block stmt
+    , BodySym r bod block
+    , VariableElim r
+    )
+  => Label -> [SVariable r] -> [MS (r block)] -> GenState (MS (r bod))
 logBody n vars b = do
   g <- get
   return $ body $
@@ -29,7 +40,18 @@ logBody n vars b = do
 -- and the names and values of the passed list of variables. Intended to be
 -- used as the first block in the function, to log that it was called and what
 -- inputs it was called with.
-loggedMethod :: (SharedProg r) => FilePath -> Label -> [SVariable r] -> MSBlock r
+loggedMethod
+  ::
+    ( Literal r
+    , VariableValue r
+    , MultiStatement r stmt
+    , DeclStatement r stmt bod
+    , FileHandling r stmt
+    , PrintFile r stmt
+    , BlockSym r block stmt
+    , VariableElim r
+    )
+  => FilePath -> Label -> [SVariable r] -> MS (r block)
 loggedMethod lName n vars = block [
       varDec varLogFile local,
       openFileA varLogFile (litString lName),
@@ -50,9 +72,9 @@ loggedMethod lName n vars = block [
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (SharedProg r) => SVariable r
+varLogFile :: (VariableSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (SharedProg r) => SValue r
+valLogFile :: (VariableValue r) => SValue r
 valLogFile = valueOf varLogFile

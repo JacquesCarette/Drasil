@@ -34,8 +34,6 @@ instance NamedIdea     RelationConcept where term = conc . term
 instance Idea          RelationConcept where getA = getA . view conc
 -- | Finds the definition contained in the 'ConceptChunk' used to make the 'RelationConcept'.
 instance Definition    RelationConcept where defn = conc . defn
--- | Finds the domain of the 'ConceptChunk' used to make the 'RelationConcept'.
-instance ConceptDomain RelationConcept where cdom = cdom . view conc
 -- | Convert the 'RelationConcept' into the model expression language.
 instance Express       RelationConcept where express = (^. rel)
 

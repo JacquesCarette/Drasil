@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators, TupleSections #-}
 -- | Defines functions to create traceability graphs in SRS documents.
 module Drasil.SRS.DocumentLanguage.TraceabilityGraph
   (traceMGF, traceyGraphGetRefs, genTraceGraphLabCons, mkGraphInfo, resourcePath) where
@@ -11,9 +10,10 @@ import Data.Maybe (fromMaybe)
 import Language.Drasil hiding (Space(..))
 import Language.Drasil.Document
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Database (UID, find, isRegistered, (+++.), mkUid, ChunkDB)
+import Drasil.Database (UID, find, isRegistered, mkUid, ChunkDB)
 import Drasil.Database.SearchTools (termResolve', shortForm)
-import Drasil.System (SmithEtAlSRS, systemdb)
+import Drasil.System (systemdb)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 import Theory.Drasil (DataDefinition, InstanceModel, GenDefn, TheoryModel)
 
 -- Vocabulary (from Metadata)
@@ -161,15 +161,13 @@ graphShows r end = refS (makeFigRef' r) +:+ S "shows the" +:+ plural dependency 
 allvsallDesc :: Sentence
 allvsallDesc = S "dependencies of assumptions, models, definitions, requirements, goals, and changes with each other"
 
--- | Create a list of traceability graph references.
-traceGLst :: Contents
-traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
-
 -- | The Traceability Graph contents.
 traceGCon :: [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
-traceGCon = map LlC genTraceGraphLabCons
-            ++ [mkParagraph $ S "For convenience, the following graphs can be\
-               \ found at the links below:", traceGLst]
+traceGCon = map LlC genTraceGraphLabCons ++ [mkParagraph $ S
+  "For convenience, the following graphs can be found at the links below:", traceGLst]
+  where
+    traceGLst = UlC $ ulcc $ Enumeration $ Bullet $
+      map ((, Nothing) . Flat . refS) traceyGraphGetRefs
 
 -- | Generate the `LabelledContent` chunks
 genTraceGraphLabCons :: [LabelledContent]
@@ -193,14 +191,10 @@ traceyGraphPath :: String -> String
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
 traceyGraphPaths = map (\x -> resourcePath ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
+traceyGraphGetRefs = zipWith (\x y -> makeURI' x y (shortname' $ S $ show x)) traceGUIDs traceyGraphPaths
 -- for actual use in creating the graph figures
 traceyGraphPath f = resourcePath ++ "/" ++ f ++ ".svg"
 
 -- | Traceability graphs reference path.
 resourcePath :: String
 resourcePath = "../../TraceyGraph"
-
--- | Helper to create a list of traceability graph references.
-folderList' :: [ItemType]
-folderList' = map (Flat . (\x -> Ref (x +++. "Link") EmptyS None)) traceGUIDs

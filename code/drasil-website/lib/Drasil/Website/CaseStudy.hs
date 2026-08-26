@@ -1,7 +1,6 @@
-{-# LANGUAGE TupleSections #-}
 -- | Case Studies table for the different choices available when generating code from Drasil.
 -- To be used in the Drasil website.
-module Drasil.Website.CaseStudy (caseStudySec) where
+module Drasil.Website.CaseStudy (caseStudySec, caseStudyTable) where
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Document
@@ -9,7 +8,7 @@ import Language.Drasil.Code (Choices(..), Architecture(..), DataInfo(..),
   Maps(..), OptionalFeatures(..), Modularity(..), ImplementationType(..),
   Logging, LogConfig(logging), Structure(..), ConstantStructure(..),
   ConstantRepr(..))
-import Drasil.System (SmithEtAlSRS)
+import Drasil.SRS (SmithEtAlSRS)
 import Drasil.Generator (codedDirName)
 import Drasil.GOOL (CodeType(..))
 
@@ -21,9 +20,12 @@ import Drasil.Website.Example (examples, Example(..), exName)
 caseStudySec :: Section
 caseStudySec =
   section (S caseStudiesTitle) -- Title
-  [mkParagraph $ S caseStudiesDesc, mkFig (makeTabRef "CaseStudy") mkCaseTable,
+  [mkParagraph $ S caseStudiesDesc, LlC caseStudyTable,
     mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] -- Contents
   [] $ makeSecRef "CaseStudy" $ S caseStudiesTitle -- Section Reference
+
+caseStudyTable :: LabelledContent
+caseStudyTable = mkRawLC mkCaseTable (makeTabRef "CaseStudy")
 
 caseStudiesTitle, caseStudiesDesc, legendIntro :: String
 -- | Section title.

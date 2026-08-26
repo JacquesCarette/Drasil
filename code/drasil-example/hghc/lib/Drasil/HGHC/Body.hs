@@ -3,8 +3,7 @@ module Drasil.HGHC.Body (si, mkSRS) where
 import Drasil.Database (ChunkDB)
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
+import Language.Drasil
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
@@ -19,7 +18,7 @@ si = mkSmithEtAlICO
   [purp] [] [] []
   [] [] dataDefs []
   htInputs htOutputs ([] :: [ConstrConcept]) [] symbols
-  [] symbMap []
+  symbMap
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

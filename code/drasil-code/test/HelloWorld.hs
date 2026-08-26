@@ -1,19 +1,19 @@
-{-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SClass, SVariable,
-  SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  listSlice, TypeSym(..), OOTypeSym(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  CommentStatement(..), ControlStatement(..), VariableSym(..), OOVariableSym(..),
-  SelfSym(..), StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..),
-  VariableValue(..), VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
+import Drasil.GOOL (Class, SVariable, CS, MS, OOProg, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
+  MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
+  PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
+  ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
+  StateVarSym(..), ClassSym(..), ScopeSym(..), Literal(..), VariableValue(..),
+  VisibilitySym(..), CommandLineArgs(..), AttachmentSym(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
-  MethodSym(..), OOMethodSym(..), objMethodCall, classMethodCall, initializer,
-  OODeclStatement(objDecDef), Set(..), ParameterSym(..))
+  ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
+  classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
+  ParameterSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -25,28 +25,31 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldOO :: (OOProg r) => OO.GSProgram r
+helloWorldOO :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => OO.GSProgram r prg
 helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description watermark
   ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
   [helloWorldMainOO] [helloWorldClass]), helperOO]
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorldProc :: (ProcProg r) => GProc.GSProgram r
-helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
+helloWorldProc
+  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  => GProc.GSProgram r prg
+helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod descriptionProc
   watermark
-  ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
+  ["Brooks MacLachlan", "Brandon Bosman", "Xinlu Yan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
   [helloWorldMainProc]), helperProc]
 
 -- | Description of program.
-description :: String
+description, descriptionProc :: String
 description = "Tests various GOOL functions. It should run without errors."
+descriptionProc = "Tests various GProc functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (SharedProg r) => SVariable r
+myOtherList :: (VariableSym r) => SVariable r
 myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainOO :: (OOProg r) => SMethod r
+helloWorldMainOO :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => MS (r mthd)
 helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -57,7 +60,9 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
       helloForEachLoop, helloTryCatch]]))
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMainProc :: (ProcProg r) => SMethod r
+helloWorldMainProc
+  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  => MS (r mthd)
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
@@ -67,7 +72,24 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
       helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
-helloInitVariables :: (SharedProg r) => MSBlock r
+helloInitVariables
+  ::
+    ( BlockSym r block stmt
+    , Literal r
+    , VariableValue r
+    , Comparison r
+    , Array r
+    , List r
+    , ListStatement r stmt
+    , Set r
+    , DeclStatement r stmt bod
+    , AssignStatement r stmt
+    , ControlStatement r stmt bod
+    , StringStatement r stmt
+    , CommentStatement r stmt
+    , PrintConsole r stmt
+    )
+  => MS (r block)
 helloInitVariables = block [comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
@@ -76,7 +98,7 @@ helloInitVariables = block [comment "Initializing variables",
   printLn $ valueOf (var "arr" (arrayType int)),
   printStr "Length of arr: ",
   printLn $ arrayLength (valueOf $ var "arr" (arrayType int)),
-  arrayDec 3 (var "arr2" (arrayType int)) mainFn,
+  arrayDec 3 (litInt 0) (var "arr2" (arrayType int)) mainFn,
   arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 0) &= litInt 4,
   arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 1) &= litInt 5,
   arrayElem (valueOf $ var "arr2" (arrayType int)) (litInt 2) &= litInt 6,
@@ -86,7 +108,7 @@ helloInitVariables = block [comment "Initializing variables",
   printLn $ arrayLength (valueOf $ var "arr2" (arrayType int)),
   listDecDef myOtherList mainFn [litDouble 1.0,
     litDouble 1.5],
-  arrayDec 3 (var "arr_copy" (arrayType int)) mainFn,
+  arrayDec 3 (litInt 0) (var "arr_copy" (arrayType int)) mainFn,
   var "arr_copy" (arrayType int) &= arrayCopy (valueOf (var "arr" (arrayType int))),
   printStr "Value of arr_copy: ",
   printLn $ valueOf (var "arr_copy" (arrayType int)),
@@ -117,7 +139,7 @@ helloInitVariables = block [comment "Initializing variables",
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
 
-objectTests :: (OOProg r) => MSBlock r
+objectTests :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => MS (r block)
 objectTests = block [comment "Object tests",
   varDecDef (var "t1" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 5]),
   varDecDef (var "t2" (obj "TestClass")) mainFn (newObj (obj "TestClass") [litInt 4]),
@@ -138,7 +160,7 @@ objectTests = block [comment "Object tests",
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9,
-  mySlicedList10, mySlicedList11 :: (SharedProg r) => SVariable r
+  mySlicedList10, mySlicedList11 :: (VariableSym r) => SVariable r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -151,7 +173,17 @@ mySlicedList9 = var "mySlicedList9" (listType double)
 mySlicedList10 = var "mySlicedList10" (listType double)
 mySlicedList11 = var "mySlicedList11" (listType double)
 
-listSliceTests :: (SharedProg r) => [MSBlock r]
+listSliceTests
+  ::
+    ( Literal r
+    , VariableValue r
+    , InternalList r block
+    , DeclStatement r stmt bod
+    , CommentStatement r stmt
+    , PrintConsole r stmt
+    , BlockSym r block stmt
+    )
+  => [MS (r block)]
 listSliceTests = [
 
   -- | Declare variables for list slices
@@ -270,7 +302,22 @@ listSliceTests = [
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}
-helloIfBody :: (SharedProg r) => MSBody r
+helloIfBody
+  ::
+    ( Literal r
+    , VariableValue r
+    , BooleanExpression r
+    , NumericExpression r
+    , ValueExpression r
+    , MultiStatement r stmt
+    , DeclStatement r stmt bod
+    , AssignStatement r stmt
+    , PrintConsole r stmt
+    , ReadConsole r stmt
+    , BlockSym r block stmt
+    , BodySym r bod block
+    )
+  => MS (r bod)
 helloIfBody = addComments "If body" (body [
   block [
     varDec (var "c" int) mainFn,
@@ -338,44 +385,100 @@ helloIfBody = addComments "If body" (body [
     printLn (cot (litDouble 1.0))]])
 
 -- | Print the 5th given argument.
-helloElseBody :: (SharedProg r) => MSBody r
+helloElseBody
+  :: (CommandLineArgs r, PrintConsole r stmt, BlockSym r block stmt, BodySym r bod block)
+  => MS (r bod)
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
-helloIfExists :: (SharedProg r) => MSStatement r
+helloIfExists
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , VariableValue r
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    )
+  => MS (r stmt)
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
-helloSwitch :: (SharedProg r) => MSStatement r
+helloSwitch
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , Literal r
+    , VariableValue r
+    , AssignStatement r stmt
+    , ControlStatement r stmt bod
+    )
+  => MS (r stmt)
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
 -- | Creates a for loop.
-helloForLoop :: (SharedProg r) => MSStatement r
+helloForLoop
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , Literal r
+    , VariableValue r
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    )
+  => MS (r stmt)
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
   where i = var "i" int
 
 -- | Creates a while loop.
-helloWhileLoop :: (SharedProg r) => MSStatement r
+helloWhileLoop
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , Literal r
+    , VariableValue r
+    , Comparison r
+    , AssignStatement r stmt
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    )
+  => MS (r stmt)
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (var "a" int)])
 
 -- | Creates a for-each loop.
-helloForEachLoop :: (SharedProg r) => MSStatement r
+helloForEachLoop
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , Literal r
+    , VariableValue r
+    , ValueExpression r
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    )
+  => MS (r stmt)
 helloForEachLoop = forEach i (valueOf myOtherList)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
   where i = var "num" double
 
 -- | Creates a try statement to catch an intentional error.
-helloTryCatch :: (SharedProg r) => MSStatement r
+helloTryCatch
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , ControlStatement r stmt bod
+    , PrintConsole r stmt
+    )
+  => MS (r stmt)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 
-helloWorldClass :: (OOProg r) => SClass r
+helloWorldClass :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => CS (r Class)
 helloWorldClass = extraClass "TestClass" Nothing
   [stateVar public instanceLevel (var "a" int)]
   [initializer [param $ var "a" int]

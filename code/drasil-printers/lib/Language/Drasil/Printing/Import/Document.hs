@@ -7,7 +7,6 @@ import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.Map (fromList)
 
-import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Document
 import Drasil.Code.CodeExpr.Development (expr)
 
@@ -137,13 +136,11 @@ lay sm (LlC x) = layLabelled sm x
 lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
 -- | Helper that translates 'LabelledContent's to a printable representation of 'T.LayoutObj'.
--- Called internally by 'lay'.
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm (LblC _ _ (EqnBlock c))          = T.EqnBlock (P.E (modelExpr c sm))
 layLabelled sm x@(LblC _ _ (Figure c f wp hc))  = T.Figure
   (P.S $ getAdd $ getRefAdd x)
   (if hc == WithCaption then Just (spec sm c) else Nothing)
@@ -154,13 +151,10 @@ layLabelled sm x@(LblC _ _ (Graph ps w h t))    = T.Graph
 layLabelled sm x@(LblC _ _ (Defini pairs)) =
   T.Definition (layPairs pairs) (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
-layLabelled sm (LblC _ _ (Paragraph c))         = T.Paragraph (spec sm c)
 layLabelled sm x@(LblC _ _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S $ refAdd x ++ "Deriv"
-layLabelled sm (LblC _ _ (Enumeration cs))      = T.List $ makeL sm cs
-layLabelled  _ (LblC _ _ (Bib bib))             = T.Bib $ map layCite bib
-layLabelled sm (LblC _ _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr sm (expr c)))
+layLabelled sm (LblC _ _ rc)                    = layUnlabelled sm rc
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.

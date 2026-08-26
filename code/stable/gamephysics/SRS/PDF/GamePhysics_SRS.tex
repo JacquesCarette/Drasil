@@ -436,11 +436,11 @@ Label & Newton's law of universal gravitation
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}}
+           \resizeExpression{{\symbf{F}_{\symbf{g}}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{F}$ is the force (${\text{N}}$)}
+              \item{${\symbf{F}_{\symbf{g}}}$ is the force of gravity (${\text{N}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
               \item{${m_{1}}$ is the mass of the first body (${\text{kg}}$)}
               \item{${m_{2}}$ is the mass of the second body (${\text{kg}}$)}
@@ -1455,12 +1455,12 @@ RefBy &
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Input Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of reasonable values is intended to provide examples of values that are physically admissible.
 
 \begin{longtblr}
 [caption={Input Data Constraints}]
 {colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Reasonable Value} & \textbf{Uncert.}
 \\
 ${C_{\text{R}}}$ & $0\leq{}{C_{\text{R}}}\leq{}1$ & -- & $0.8$ & 10$\%$
 \\

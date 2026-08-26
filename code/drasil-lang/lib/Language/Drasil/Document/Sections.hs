@@ -11,14 +11,13 @@ module Language.Drasil.Document.Sections (
 import Control.Lens ((^.), makeLenses, view)
 
 import Drasil.Database (UID, HasUID(..), (+++.), mkUid, nsUid, HasChunkRefs(..))
-import Data.String.Extras (repUnd)
 import qualified Data.Set as Set
 
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
   LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent)
-import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
+import Language.Drasil.Document.Labels (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
 import Language.Drasil.Document.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
@@ -92,27 +91,27 @@ llcc u lbl sn = LblC u (Reference u lbl sn)
 
 -- | Helper for creating labelled content with a figure reference.
 llccFig :: String -> RawContent -> LabelledContent
-llccFig rs = llcc (docUid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
+llccFig rs = llcc (docUid rs) (RP (prepend "Fig") ("Figure:" ++ rs)) (shortname' (S rs))
 
 -- | Helper for creating labelled content with a table reference.
 llccTab :: String -> RawContent -> LabelledContent
-llccTab rs = llcc (docUid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
+llccTab rs = llcc (docUid rs) (RP (prepend "Tab") ("Table:" ++ rs)) (shortname' (S rs))
 
 -- | Helper for creating labelled content with an equation reference.
 llccEqn :: String -> RawContent -> LabelledContent
-llccEqn rs = llcc (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
+llccEqn rs = llcc (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ rs)) (shortname' (S rs))
 
 -- | Helper for creating labelled content with a UID-based figure reference.
 llccFig' :: UID -> RawContent -> LabelledContent
-llccFig' rs = llcc (docNs rs) (RP (prepend "Fig") ("Figure:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+llccFig' rs = llcc (docNs rs) (RP (prepend "Fig") ("Figure:" ++ show rs)) (shortname' (S $ show rs))
 
 -- | Helper for creating labelled content with a UID-based table reference.
 llccTab' :: UID -> RawContent -> LabelledContent
-llccTab' rs = llcc (docNs rs) (RP (prepend "Tab") ("Table:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+llccTab' rs = llcc (docNs rs) (RP (prepend "Tab") ("Table:" ++ show rs)) (shortname' (S $ show rs))
 
 -- | Helper for creating labelled content with a UID-based equation reference.
 llccEqn' :: UID -> RawContent -> LabelledContent
-llccEqn' rs = llcc (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+llccEqn' rs = llcc (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ show rs)) (shortname' (S $ show rs))
 
 -- | Smart constructor for unlabelled content chunks (no 'Reference').
 ulcc :: RawContent -> UnlabelledContent
@@ -171,47 +170,44 @@ docNs = nsUid "doc"
 docUid :: String -> UID
 docUid = docNs . mkUid
 
--- FIXME: horrible hacks.
--- FIXME: May need UID checker function here.
--- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference (docUid rs) (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
+makeTabRef rs = Reference (docUid rs) (RP (prepend "Tab") ("Table:" ++ rs)) (shortname' (S rs))
 
 -- | Create a reference for a figure. Takes in the name of a figure (which will also be used for its shortname).
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference (docUid rs) (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
+makeFigRef rs = Reference (docUid rs) (RP (prepend "Fig") ("Figure:" ++ rs)) (shortname' (S rs))
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
-makeSecRef r s = Reference (mkUid $ r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
+makeSecRef r s = Reference (mkUid $ r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ r))
   (shortname' s)
 
 -- | Create a reference for a equation. Takes in the name of the equation (which will also be used for its shortname).
 makeEqnRef :: String -> Reference
-makeEqnRef rs = Reference (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
+makeEqnRef rs = Reference (docUid rs) (RP (prepend "Eqn") ("Equation:" ++ rs)) (shortname' (S rs))
 
 -- | Create a reference for a 'URI'. Takes in a 'UID' (as a 'String'), a reference address, and a shortname.
 makeURI :: String -> String -> ShortName -> Reference
-makeURI u r = Reference (mkUid u) (URI r)
+makeURI = makeURI' . mkUid
 
 -- | Variants of 'makeTabRef' that takes a 'UID' instead of a 'String'.
 makeTabRef' :: UID -> Reference
-makeTabRef' rs = Reference (docNs rs) (RP (prepend "Tab") ("Table:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+makeTabRef' rs = Reference (docNs rs) (RP (prepend "Tab") ("Table:" ++ show rs)) (shortname' (S $ show rs))
 
 -- | Variants of 'makeFigRef' that takes a 'UID' instead of a 'String'.
 makeFigRef' :: UID -> Reference
-makeFigRef' rs = Reference (docNs rs) (RP (prepend "Fig") ("Figure:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+makeFigRef' rs = Reference (docNs rs) (RP (prepend "Fig") ("Figure:" ++ show rs)) (shortname' (S $ show rs))
 
 -- | Variants of 'makeSecRef' that takes a 'UID' instead of a 'String'.
 makeSecRef' :: UID -> Sentence -> Reference
-makeSecRef' r s = Reference (r +++. "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd (show r)))
+makeSecRef' r s = Reference (r +++. "Label") (RP (prepend "Sec") ("Sec:" ++ show r))
   (shortname' s)
 
 -- | Variants of 'makeEqnRef' that takes a 'UID' instead of a 'String'.
 makeEqnRef' :: UID -> Reference
-makeEqnRef' rs = Reference (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ repUnd (show rs))) (shortname' (S $ show rs))
+makeEqnRef' rs = Reference (docNs rs) (RP (prepend "Eqn") ("Equation:" ++ show rs)) (shortname' (S $ show rs))
 
 -- | Variants of 'makeURI' that takes a 'UID' instead of a 'String'.
 makeURI' :: UID -> String -> ShortName -> Reference
-makeURI' u r = Reference u (URI r)
+makeURI' u r = Reference (nsUid "links" u) (URI r)

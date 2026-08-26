@@ -15,14 +15,14 @@ import Control.Lens ((^.), _1, _2, over)
 
 import Drasil.Database (HasUID(..), (+++), mkUid)
 import Language.Drasil (HasSymbol(symbol), MayHaveUnit(getUnit),
-  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
-  compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
-import Language.Drasil.Display (Symbol(Label, Concat))
+  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array,
+  Vect, Reference), implVar, implVar', compoundPhrase, nounPhrase, nounPhraseSP,
+  label, sub, Idea(getA), NamedIdea(term), Stage(..), Definition (defn), (+:+),
+  Sentence (S), DefinedQuantityDict, dqdWr, implVarAU')
 
 import Drasil.Code.CodeExpr
 import Drasil.Code.CodeExpr.Development
-import Drasil.Code.CodeVar (CodeVarChunk, CodeFuncChunk, quantvar, quantfunc,
+import Drasil.Code.CodeVar (CodeVarChunk (..), CodeFuncChunk, quantvar, quantfunc,
   listToArray)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -63,10 +63,10 @@ scipyCall info = externalLibCall [
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
       [matrix [initVal info], tInit info],
-    initSolListWithValFill (solListVar info) (matrix [initVal info]),
+    initSolListWithValFill (solListVar info False) (matrix [initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
     (libCallFill [basicArgFill (field r t $+ stepSize (odeOpts info))])
-    (solListVar info)]]
+    (solListVar info False)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
         chooseMethod RK45 = (2, solveMethodFill)
@@ -199,8 +199,8 @@ osloCall info = externalLibCall [
   mandatoryStepsFill [
     callStepFill (libCallFill $ map basicArgFill
       [tInit info, tFinal info, stepSize $ odeOpts info]),
-    StatementF [solListVar info] [],
-    StatementF [solListVar info] [int $ toInteger $ length $ initVal info]
+    StatementF [solListVar info False] [],
+    StatementF [solListVar info False] [int $ toInteger $ length $ initVal info]
     ]]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
@@ -246,7 +246,7 @@ rTol = quantvar $ implVar (mkUid "rTol_oslo") (nounPhrase
   Real (label "RelativeTolerance")
 sol = quantvar $ implVar (mkUid "sol_oslo") (nounPhrase
   "container for ODE information" "containers for ODE information")
-  "the container for ODE information" solT(label "sol")
+  "the container for ODE information" solT (label "sol")
 points = quantvar $ implVar (mkUid "points_oslo") (nounPhrase
   "container holding ODE solution" "containers holding ODE solution")
   "the container holding the ODE solution"
@@ -376,9 +376,9 @@ apacheODECall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill (map (basicArgFill . ($ odeOpts info)) [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
-      customObjArgFill [pubStateVar $ solListVar info] (implementationFill [
-        methodInfoFill [] [initSolListFromArrayFill $ solListVar info], methodInfoFill []
-          [callStepFill $ libCallFill [], appendCurrSolFill $ solListVar info]])],
+      customObjArgFill [pubStateVar $ solListVar info False] (implementationFill [
+        methodInfoFill [] [initSolListFromArrayFill $ solListVar info False], methodInfoFill []
+          [callStepFill $ libCallFill [], appendCurrSolFill $ solListVar info False]])],
     callStepFill $ libCallFill $ customObjArgFill
       (map privStateVar $ otherVars info)
       (implementationFill [
@@ -389,7 +389,7 @@ apacheODECall info = externalLibCall [
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
       : map basicArgFill [tInit info, matrix [initVal info], tFinal info,
         matrix [initVal info]],
-    assignSolFromObjFill $ solListVar info]]
+    assignSolFromObjFill $ solListVar info False]]
   where chooseMethod Adams = 0
         chooseMethod RK45 = 1
         chooseMethod _ = error odeMethodUnavailable
@@ -471,16 +471,16 @@ adamsC = quantfunc $ implVar (mkUid "adams_ctor_apache") (nounPhrase
   "constructor for an Adams-Bashforth integrator"
   "constructors for an Adams-Bashforth integrator")
   "the constructors for an Adams-Bashforth integrator"
-  (Actor adams) (Label adams)
+  (Actor adams) (label adams)
 dp54C = quantfunc $ implVar (mkUid "dp54_ctor_apache") (nounPhrase
   "constructor for a Dormand-Prince 5-4 integrator"
   "constructors for a Dormand-Prince 5-4 integrator")
   "the constructors for a Dormand-Prince 5-4 integrator"
-  (Actor dp54) (Label dp54)
+  (Actor dp54) (label dp54)
 stepHandlerCtor = quantfunc $ implVar (mkUid "StepHandler_ctor_apache") (nounPhrase
   "constructor for StepHandler" "constructors for StepHandler")
   "the constructor for StepHandler"
-  (Actor $ "ODE" ++ sh) (Label $ "ODE" ++ sh)
+  (Actor $ "ODE" ++ sh) (label $ "ODE" ++ sh)
 addStepHandler = quantfunc $ implVar (mkUid "addStepHandler_apache") (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")
@@ -571,10 +571,10 @@ odeintCall info = externalLibCall [
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [matrix [initVal info], tInit info, tFinal info,
       stepSize $ odeOpts info] ++ [
-    customObjArgFill [privStateVar $ solListVar info] (customClassFill [
-      constructorInfoFill [unnamedParamFill $ solListVar info]
-        [(solListVar info, sy $ solListVar info)] [],
-      methodInfoFill [] [appendCurrSolFill $ solListVar info]])]]
+    customObjArgFill [privStateVar $ solListVar info True]
+      (customClassFill [constructorInfoFill [unnamedParamFill $ solListVar info False]
+         [(solListVar info True, UnaryOp MakeRef (sy $ solListVar info False))] [],
+         methodInfoFill [] [appendCurrSolFill $ solListVar info True]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map
           basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
         chooseMethod Adams = (1, [callStepFill $ libCallFill []])
@@ -621,22 +621,22 @@ rkdp5C = quantfunc $ implVar (mkUid "rkdp5_odeint") (nounPhrase
   "constructor for stepper using Runge-Kutta-Dopri5 method"
   "constructors for stepper using Runge-Kutta-Dopri5 method")
   "the constructor for stepper using the Runge-Kutta-Dopri5 method"
-  (Actor rkdp5) (Label rkdp5)
+  (Actor rkdp5) (label rkdp5)
 makeControlled = quantfunc $ implVar (mkUid "make_controlled_odeint") (nounPhrase
   "function for adding error control to a stepper"
   "functions for adding error control to a stepper")
   "the function for adding error control to a stepper"
-  (Actor "auto") (Label $ odeNameSpace ++ "make_controlled")
+  (Actor "auto") (label $ odeNameSpace ++ "make_controlled")
 adamsBashC = quantfunc $ implVar (mkUid "adamsBash_odeint") (nounPhrase
   "constructor for stepper using Adams-Bashforth method"
   "constructors for stepper using Adams-Bashforth method")
   "the constructor for stepper using the Adams-Bashforth method"
-  (Actor adamsBash) (Label adamsBash)
+  (Actor adamsBash) (label adamsBash)
 integrateConst = quantfunc $ implVar (mkUid "integrate_const_odeint") (nounPhrase
   "function for integrating with a constant step size"
   "functions for integrating with a constant step size")
   "the function for integrating with a constant step size"
-  Void (Label $ odeNameSpace ++ "integrate_const")
+  Void (label $ odeNameSpace ++ "integrate_const")
 odeOp = quantfunc $ implVar (mkUid "ode_operator_odeint") (nounPhrase
   "method defining override for calling ODE object"
   "methods defining override for calling ODE object")
@@ -691,11 +691,16 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 -- | Solution list chunk constructor. Wraps the dependent variable's type in
 -- an extra 'Vect' so that the generated code declares a list-of-vectors
 -- (e.g. @vector<vector<double>>@) instead of a flat list.
-solListVar :: ODEInfo -> CodeVarChunk
-solListVar info = quantvar $ implVarAU' (dv +++ "sol")
-  (compoundPhrase (dv ^. term) (nounPhraseSP "solution list"))
-  (S "list of solutions for" +:+ (dv ^. defn)) (getA dv)
-  (Vect (dv ^. typ)) (symbol dv Implementation) (getUnit dv)
+solListVar :: ODEInfo -> Bool -> CodeVarChunk
+solListVar info isRef =
+  let suffix  = "sol" ++ if isRef then "ref" else ""
+      np      = (if isRef then "reference to the " else "") ++ "solution list"
+      desc    = (if isRef then "reference to the " else "") ++ "list of solutions for"
+      outerTp = if isRef then Reference . Vect else Vect
+  in quantvar $ implVarAU' (dv +++ suffix)
+    (compoundPhrase (dv ^. term) (nounPhraseSP np))
+    (S desc +:+ (dv ^. defn)) (getA dv)
+    (outerTp (dv ^. typ)) (symbol dv Implementation) (getUnit dv)
   where dv = depVar info
 
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
@@ -703,7 +708,7 @@ diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVarAU' (c +++ "d" )
   (compoundPhrase (nounPhraseSP "change in") (c ^. term))
   (S "the change in" +:+ (c ^. defn)) (getA c)
-  (c ^. typ) (Concat [label "d", symbol c Implementation]) (getUnit c)
+  (c ^. typ) (label "d" <> symbol c Implementation) (getUnit c)
 
 -- FIXME: This is surely a hack, but I can't think of a better way right now.
 -- | Some libraries use an array instead of a list to internally represent the ODE.
@@ -756,5 +761,6 @@ odeInfoChunks info =
                , arrayVecDepVar info
                , diffCodeChunk dv
                , listToArray $ diffCodeChunk dv
-               , solListVar info
+               , solListVar info False
+               , solListVar info True
                ]

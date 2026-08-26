@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body (
   mkSRS, si, charsOfReader, dataContMid, motivation, introStart,
   externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
@@ -8,17 +7,15 @@ module Drasil.SWHS.Body (
 import Control.Lens ((^.))
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
@@ -66,7 +63,7 @@ si = mkSmithEtAlICO
   [purp] [] [scope] [motivation]
   tMods genDefs SWHS.dataDefs iMods
   inputs outputs constrained specParamValList symbols
-  labelledContent' symbMap allRefs
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -88,8 +85,8 @@ conceptChunks =
   CP.mechEnergy, CP.pressure]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbols ideaDicts cis conceptChunks [] SWHS.dataDefs
-  insModel genDefs tMods concIns citations labelledContent'
+symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks []
+  SWHS.dataDefs insModel genDefs tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables
@@ -109,7 +106,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec inModel (SRS.inModel [] []) (Just orgDocEnd)
+     IOrgSec (Just orgDocEnd)
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
@@ -139,7 +136,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName specParamValList,
+  AuxConstntSec $ AuxConsProg specParamValList,
   Bibliography]
 
 tSymbIntro :: [TSIntro]

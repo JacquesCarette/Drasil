@@ -1,9 +1,10 @@
 module Drasil.Database.Dump (
-    ChunkType, DumpedChunkDB, dumpChunkDB
+    ChunkType, DumpedChunkDB, dumpChunkDB, dumpChunkDeps
 ) where
 
 import Drasil.Database.UID (UID)
-import Drasil.Database.ChunkDB (findAll', typesRegistered, ChunkDB)
+import Drasil.Database.ChunkDB (findAll', typesRegistered, ChunkDB, allDependants)
+import Drasil.Database.Maps (invert)
 
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as SM
@@ -16,3 +17,11 @@ type DumpedChunkDB = Map ChunkType [UID]
 
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
 dumpChunkDB cdb = SM.fromList $ map (\ty -> (show ty, findAll' ty cdb)) (typesRegistered cdb)
+
+type Dependencies = Map UID [UID]
+type Dependants = Map UID [UID]
+
+-- | Dump all chunk dependants and dependencies.
+dumpChunkDeps :: ChunkDB -> (Dependants, Dependencies)
+dumpChunkDeps db = (invert allDeps, allDeps)
+  where allDeps = allDependants db

@@ -23,6 +23,7 @@
   * [Design Choices](Design-Choices)
   * [Drasil's Terminology](Terminology)
   * [Guidelines for Adding New Types and Typeclasses](Guidelines-for-Adding-New-Types-and-Typeclasses-in-Drasil)
+  * [Idealized Process](Idealized-Process)
 * [Readings](Readings)
 * Misc.
   * [Journals and Societies](Journals-and-Societies)

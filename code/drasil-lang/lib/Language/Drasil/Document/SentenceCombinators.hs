@@ -11,9 +11,9 @@ module Language.Drasil.Document.SentenceCombinators (
   -- | See Reference-related Functions as well.
   addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  unwrap, fterms, eqN, eqnWSource,
+  chWithUnit, unitInParen, unitSym, fterms, eqN, eqnWSource,
   -- * List-related Functions
-  bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
+  bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList
@@ -23,13 +23,19 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
-import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs) , UnitDefn, MayHaveUnit(..)
-  , HasUnitSymbol(usymb), Quantity, Concept, Definition(defn), NamedIdea(..)
-  , HasShortName(..) , short, atStart, titleize, phrase, plural
-  , ModelExpr
-  , Sentence(S, Percent, (:+:), Sy, EmptyS), eS
-  , ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent, fromSource, fterms
-  , foldlList, SepType(Comma), FoldType(List), foldlSent , Referable)
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
+import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(..))
+import Language.Drasil.Classes (HasUnitSymbol(..), Quantity, Concept, Definition(..))
+import Language.Drasil.Development.Sentence (short, atStart, titleize, phrase, plural)
+import Language.Drasil.Document.Labels (Referable)
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
+  ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
+import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
+import Language.Drasil.Sentence.Generators (fterms)
+import Language.Drasil.Document.ShortName (HasShortName(..))
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
 import Language.Drasil.Document.Reference (refS, namedRef)
 import Language.Drasil.Document.Sections (Section)
@@ -81,7 +87,7 @@ mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
 
 -- | Takes an amount as a 'Sentence' and appends a unit to it.
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
-fmtU n u  = n +:+ unwrap (getUnit u)
+fmtU n u  = n +:+ unitSym u
 
 -- | Formats typical uncertainty data to be displayed.
 typUncr :: (Double, Maybe Int) -> Sentence
@@ -123,12 +129,6 @@ mkTableFromColumns l =
     replaceEmptyS EmptyS = S "--"
     replaceEmptyS s      = s
 
--- | Makes 'Sentence's from an item and its reference.
--- Takes the title of reference as a 'String' and a
--- 'Sentence' containing the full reference. Wraps the full reference in parenthesis.
-itemRefToSent :: String -> Sentence -> Sentence
-itemRefToSent a b = S a +:+ sParen b
-
 -- | Takes a list and a 'Section', then generates a list of that section's reference to
 -- match the length of the list.
 makeListRef :: [a] -> Section -> [Sentence]
@@ -143,10 +143,17 @@ bulletFlat = Bullet . noRefs . map Flat
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 
--- | Get a unit symbol if there is one.
-unwrap :: Maybe UnitDefn -> Sentence
-unwrap (Just a) = Sy $ usymb a
-unwrap Nothing  = EmptyS
+-- | Get a unit symbol as a 'Sentence' if one exists.
+unitSym :: MayHaveUnit a => a -> Sentence
+unitSym = maybe EmptyS (Sy . usymb) . getUnit
+
+-- | Formats a unit in parentheses. Outputs "(unit)".
+unitInParen :: MayHaveUnit a => a -> Sentence
+unitInParen = sParen . unitSym
+
+-- | Outputs "ch x (unit of x)". For introducing a quantity with its symbol and unit.
+chWithUnit :: (Quantity a, MayHaveUnit a) => a -> Sentence
+chWithUnit x = ch x +:+ unitInParen x
 
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.
@@ -204,6 +211,10 @@ tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. de
 -- | Appends "following @reference@" to the end of a 'Sentence'.
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` r = preceding +:+ S "following" +:+ refS r
+
+-- | Wraps "from @reference@" in parentheses.
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+fromSource r = sParen (S "from" +:+ refS r)
 
 -- | Similar to `fromSource` but takes a list of references instead of one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence

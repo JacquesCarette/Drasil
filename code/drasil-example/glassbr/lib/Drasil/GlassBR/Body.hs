@@ -1,20 +1,18 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 
 import Drasil.Database (ChunkDB)
-import Drasil.SRS
+import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (SmithEtAlSRS, mkSmithEtAlICO)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -35,7 +33,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab, ptOfExplsn, con',
   glass, blast, blastTy, bomb, explosion, glassTy, glBreakage, load, probBreak,
-  stdOffDist)
+  stdOffDist, cis')
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
@@ -54,9 +52,7 @@ si = mkSmithEtAlICO progName
   [nikitha, spencerSmith] [purp] [background] [scope] []
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants symbolsWCodeSymbols
-  labCon
   symbMap
-  allRefs
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -67,12 +63,12 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
+     IOrgSec (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
-      [Client progName $ D.toSent (phraseNP (a_ company))
+      [Client $ D.toSent (phraseNP (a_ company))
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (fullName mCampidelli),
-      Cstmr progName],
+      Cstmr],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
@@ -97,7 +93,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName auxiliaryConstants,
+  AuxConstntSec $ AuxConsProg auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
 
@@ -115,13 +111,13 @@ ideaDicts =
   [lateralLoad, materialProprty] ++ con'
 
 cis :: [CI]
-cis = [progName]
+cis = progName : cis'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge [] symbolsWCodeSymbols ideaDicts cis conceptChunks []
+symbMap = withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks []
   GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
@@ -130,9 +126,7 @@ symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
--- FIXME: GlassBR needs `map ref citations` pre-created or else the code
--- generator fails due to a missing reference to `astm2009`.
-allRefs = externalLinkRef : map ref citations
+allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs

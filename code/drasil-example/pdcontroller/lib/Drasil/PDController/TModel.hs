@@ -1,4 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.TModel (
   theoreticalModels,
   tmLaplace, tmSOSystem, tmInvLaplace

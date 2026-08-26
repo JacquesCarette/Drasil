@@ -9,12 +9,9 @@ module Language.Drasil.Development (
   , NPStruct(S, (:+:), (:-:), P)
   -- Sentence.Extract
   , sdep, shortdep, lnames, lnames'
-  -- * UID
-  , showUID
 ) where
 
 import Language.Drasil.Development.Sentence (toSent)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct(..))
 import Language.Drasil.Sentence (sdep, shortdep, lnames, lnames')
-import Drasil.Database (showUID)

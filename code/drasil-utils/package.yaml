@@ -8,7 +8,7 @@ github:       JacquesCarette/Drasil
 homepage:     https://jacquescarette.github.io/Drasil/
 description:  Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
-language: Haskell2010
+language: GHC2024
 default-extensions:
 - StrictData
 
@@ -28,5 +28,3 @@ library:
   exposed-modules:
   - Utils.Drasil
   - Data.List.Extras
-  - Data.String.Extras
-

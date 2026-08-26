@@ -1,5 +1,3 @@
-{-# LANGUAGE ConstraintKinds #-}
-
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
     -- * Classes
@@ -13,7 +11,6 @@ module Language.Drasil.Classes (
   , Quantity
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
-  , MayHaveRationale(rationale)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
@@ -34,8 +31,8 @@ import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express, mexpress))
+import Language.Drasil.ReasonableValue (ReasonableValue)
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
 
@@ -64,7 +61,7 @@ class ConceptDomain c where
 
 -- TODO: conceptual type synonym?
 -- | Concepts are 'Idea's with definitions and domains.
-type Concept c = (Idea c, Definition c, ConceptDomain c)
+type Concept c = (Idea c, Definition c)
 -- TODO: Would the below make this a bit better to work with?
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 
@@ -85,17 +82,12 @@ class Constrained c where
 -- | A 'Quantity' that could have a reasonable value.
 class HasReasVal c where
   -- | Provides a 'Lens' to the possible reasonable value.
-  reasVal     :: Lens' c (Maybe Expr)
-
--- | A chunk that may have a rationale explaining why a value or constraint was chosen.
-class MayHaveRationale c where
-  -- | Provides a 'Lens' to the possible rationale 'Sentence'.
-  rationale   :: Lens' c (Maybe Sentence)
+  reasVal     :: Lens' c (Maybe ReasonableValue)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a 'Symbol'.
 -- In theory, it should also restrict to being a part of 'MayHaveUnit', but that causes
 -- all sorts of import cycles (or lots of orphans).
-class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
+type Quantity c = (Idea c, HasSpace c, HasSymbol c)
 
 -- TODO: potential alternative design for "Quantity"?
 --

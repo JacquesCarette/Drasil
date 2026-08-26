@@ -121,8 +121,8 @@ mktStkhldrSec (StkhldrProg l) =
   mkHeaderItem (namedRef SRS.stakeholderLabel $ titleize' Doc.stakeholder) $ map mktSub l
   where
     mktSub :: StkhldrSub -> Sentence
-    mktSub (Client _ _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
-    mktSub (Cstmr _)    = namedRef SRS.clientLabel   $ D.toSent $ titleizeNP $ the Doc.client
+    mktSub (Client _) = namedRef SRS.customerLabel $ D.toSent $ titleizeNP $ the Doc.customer
+    mktSub Cstmr      = namedRef SRS.clientLabel   $ D.toSent $ titleizeNP $ the Doc.client
 
 -- | Helper for creating the 'General System Description' section ToC entry
 mktGSDSec :: GSDSec -> ItemType
@@ -180,7 +180,7 @@ mktTraceabilitySec (TraceabilityProg _) = Flat $ namedRef SRS.traceMatricesLabel
 
 -- | Helper for creating the 'Values of Auxiliary Constants' section ToC entry
 mktAuxConsSec :: AuxConstntSec -> ItemType
-mktAuxConsSec (AuxConsProg _ _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ titleize  Doc.consVals
+mktAuxConsSec (AuxConsProg _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ titleize  Doc.consVals
 
 -- | Helper for creating the 'References' section ToC entry
 mktBib :: ItemType
@@ -193,4 +193,3 @@ mktAppndxSec (AppndxProg _) = Flat $ namedRef SRS.appendixLabel $ titleize  Doc.
 -- | Helper for creating the 'Off-The-Shelf Solutions' section ToC entry
 mktOffShelfSolnSec :: OffShelfSolnsSec -> ItemType
 mktOffShelfSolnSec (OffShelfSolnsProg _) = Flat $ namedRef SRS.offShelfSolnsLabel $ titleize' Doc.offShelfSolution
-

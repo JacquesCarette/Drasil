@@ -15,7 +15,7 @@ Something that was very nice is how validating this analysis was to me in my pre
 
 ### `./lib/Language/Drasil/GOOL.hs`
 
-Re-export file.
+Reexport file (primarily of things in the `Language.Drasil.Code.Imperative.GOOL.LanguageRenderer` but also `SoftwareDossierSym` and `PackageData`). It does not export anything from `drasil-gool`.
 
 ### `./lib/Language/Drasil/Choices.hs`
 

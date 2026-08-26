@@ -52,6 +52,29 @@
   callnum/.style={circle, draw=annotred, fill=white, font=\scriptsize\bfseries, inner sep=1pt, line width=1pt}
 }
 
+\newcommand{\takeawayicon}{%
+    \tikz[baseline=0.0ex,x=1.1pt,y=1.1pt]{%
+        \draw[annotblue,line width=1pt,rounded corners=1pt]
+            (1,6) -- (3,8) -- (7,8) -- (9,6) -- (7.8,0) -- (2.2,0) -- cycle;
+        \draw[annotblue,line width=1pt] (1,6) -- (9,6);
+        \draw[annotblue,line width=1pt]
+            (2,7.2) .. controls (2,11) and (8,11) .. (8,7.2);
+    }%
+}
+
+\newcommand{\takeaway}[1]{%
+    \begin{center}
+    \setlength{\fboxsep}{9pt}%
+    \fcolorbox{annotblue}{annotblue!7}{%
+        \begin{minipage}{0.88\linewidth}
+        {\color{annotblue}\large\bfseries
+        \takeawayicon\hspace{0.55em}Takeaway}\par\smallskip
+        #1
+        \end{minipage}%
+    }
+    \end{center}
+}
+
 
 \usepackage{listings}				   % For code
 \lstdefinestyle{mystyle}{

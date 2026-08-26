@@ -1144,16 +1144,13 @@ chunk. The final Python output can be seen in Figure~\ref{fig:qhatPython}.
 \fig{\pyBlock{GenCalculations}{34}{40}}{$\hat{q}$ as defined in generated
 Python code}{fig:qhatPython}
 
-\subsection{Generation and Rendering Summary}
-Taken together, these examples show how Drasil separates knowledge capture from 
-artifact production. Recipes select and organize the relevant chunks, rendering 
-translates their projections into target-specific representations, and assembly 
-combines those representations with cross-references and supporting files to 
-produce complete artifacts. These artifacts need not present the knowledge 
-identically; each recipe selects and structures it for its particular purpose 
-while retaining a traceable connection to the same source. Consequently, 
-changes to shared knowledge can be propagated across the generated artifact set 
-without maintaining separate copies of that knowledge.
+\takeaway{Drasil separates knowledge capture from artifact production. Recipes
+select and organize the relevant chunks, rendering translates their projections
+into target-specific representations, and assembly combines those
+representations with cross-references and supporting files. Each artifact can
+present knowledge differently for its purpose while remaining traceably
+connected to the same source, allowing changes to propagate without maintaining
+separate copies of that knowledge.}
 
 \section{Seasoning to Taste: Iteration and Refinement}
 \label{sec:iterefine}
@@ -1229,13 +1226,13 @@ for those derived from standard SI units (e.g., $m/s^2$). This involved the
 addition of new combinators for creating \codeH{UnitDefn} chunks (examples of 
 some of these combinators have already been shown in Figure~\ref{fig:accelU}).
 
-In short, we learned how to improve Drasil by trying to reproduce existing case 
-studies, encoding what we needed as chunks, and then correcting or extending 
-the chunks when mismatches were discovered. Fixes were either small edits to 
-the knowledge base (cheap to apply, and automatically, consistently propagated 
-to all generated outputs) or an extension of the way we chose to capture 
-knowledge (new chunk types or combinators to encode previously un-encodable 
-knowledge or relationships between chunks).
+\takeaway{We learned how to improve Drasil by trying to reproduce existing case
+studies, encoding what we needed as chunks, and then correcting or extending
+the chunks when mismatches were discovered. Fixes were either small edits to
+the knowledge base (cheap to apply and automatically, consistently propagated
+to all generated outputs) or an extension of the way we chose to capture
+knowledge (new chunk types or combinators to encode previously un-encodable
+knowledge or relationships between chunks).}
 
 \section{Summary}
 

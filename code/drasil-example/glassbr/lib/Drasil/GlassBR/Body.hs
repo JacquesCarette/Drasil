@@ -46,6 +46,7 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
+import Drasil.GlassBR.Units (units)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO progName
@@ -117,8 +118,8 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks []
-  GB.dataDefs iMods [] tMods concIns citations labCon
+symbMap = withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis
+  conceptChunks units GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
 symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)

@@ -28,7 +28,7 @@ import qualified Data.Set as S
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), TypeableChunk,
   mkChunk, unChunk, chunkType)
 import Drasil.Database.Maps (invert)
-import Drasil.Database.UID (HasUID(..), UID)
+import Drasil.Database.UID (HasUID(..), UID, showUID)
 
 -- | A chunk that depends on another.
 type Dependant = UID
@@ -222,7 +222,12 @@ insertAllOutOfOrder13 strtr as bs cs ds es fs gs hs is js ks ls ms =
     chTab = M.unionWith
       (\(x, _) _ -> error $ "duplicate chunk found in mass insertion: " ++ show (x ^. uid))
       (chunkTable strtr)
-      (M.fromList $ map (\c -> (c ^. uid, (c, []))) calt)
+      (M.fromListWith
+        (\(c1, _) (c2, _) -> error
+          $ "insertAllOutOfOrder error: UID `" ++ showUID c1 ++
+            "` is shared between two different chunks of types: `" ++
+            show (chunkType c1) ++ "` and `" ++ show (chunkType c2) ++ "`")
+        $ map (\c -> (c ^. uid, (c, []))) calt)
 
     -- Merge the chunk-deps table with that existing chunks table
     chTabWDeps = M.foldlWithKey'

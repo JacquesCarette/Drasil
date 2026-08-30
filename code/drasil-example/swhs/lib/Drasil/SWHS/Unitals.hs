@@ -29,7 +29,6 @@ import qualified Data.List.NonEmpty as NE
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : units ++ unitless ++ map dqdWr constrained
  ++ unitalChuncks ++ map dqdWr specParamValList ++
-   map dqdWr [htFusionMin, htFusionMax, coilSAMax] ++
    map dqdWr [absTol, relTol]
 
 -- Symbols with Units --
@@ -39,7 +38,7 @@ units = [surArea, area, sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
   vol, density, mass, time]
 
 unitalChuncks :: [DefinedQuantityDict]
-unitalChuncks = units ++ [inSA, outSA, htCapL, htCapS, htCapV,
+unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass, heatCapSpec,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
@@ -196,8 +195,7 @@ thickness = quant  (mkUid "thickness") (nounPhraseSP "Minimum thickness of a she
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, surface, eta, meltFrac, gradient, fracMin, consTol,
-            aspectRatio, aspectRatioMin, aspectRatioMax]
+unitless = [uNormalVect, surface, eta, meltFrac, gradient, aspectRatio]
 
 eta, meltFrac, fracMin, consTol, aspectRatio, aspectRatioMin, aspectRatioMax :: DefinedQuantityDict
 

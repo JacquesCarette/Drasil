@@ -64,7 +64,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, specParamValList, outputs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : concepts ++ map dqdWr constrained ++
+symbols = concepts ++ map dqdWr constrained ++
   [gradient, pi_, uNormalVect, surface] ++ symbolConcepts ++
   map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 

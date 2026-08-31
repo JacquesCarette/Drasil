@@ -8,22 +8,25 @@ Drasil's architecture and implementation, focusing on how knowledge is
 captured, organized, and operationalized to produce both documentation and 
 executable code. 
 
-We begin by motivating the need for Drasil and outlining its core principles. 
-Next, we delve into the mechanisms for capturing and classifying knowledge, 
-introducing the concept of ``chunks'' and their role in building a reusable
-knowledge base. We then describe how this knowledge is structured into recipes 
-that specify the content and organization of generated artifacts. The chapter 
-continues with a detailed look at Drasil's generation and rendering pipeline, 
-illustrating how abstract representations are transformed into concrete 
-outputs. Finally, we discuss the iterative refinement process that underpins 
-Drasil's development and summarize the key takeaways for our approach to 
-software generation.
+We begin by motivating the need for Drasil and outlining its core principles
+(Section~\ref{sec:nutshell}). Next, we delve into the mechanisms for capturing
+and classifying knowledge (Section~\ref{sec:kc}), introducing the concept of
+``chunks'' and their role in building a reusable knowledge base. We then
+describe how this knowledge is structured into recipes
+(Section~\ref{sec:recipes}) that specify the content and organization of
+generated artifacts. The chapter continues with a detailed look at Drasil's
+generation and rendering pipeline (Section~\ref{sec:gen}), illustrating how
+abstract representations are transformed into concrete outputs. Finally, we
+discuss the iterative refinement process that underpins Drasil's development
+(Section~\ref{sec:iterefine}) and summarize the key takeaways for our approach
+to software generation (Section~\ref{sec:drasil_summary}).
 
 Throughout, our aim is to show not just what Drasil does, but why each 
 component is necessary and how the pieces fit together to support reliable, 
 maintainable software.
       
 \section{Drasil in a Nutshell}
+\label{sec:nutshell}
 
 This section provides a high-level overview of Drasil's motivation and 
 approach, setting the stage for the technical details that follow. To 
@@ -190,7 +193,7 @@ lastline=82, firstnumber=76]{code/Math.hs}}{Some example instances of
 \codeH{ConceptChunk} 
 using the \codeH{dcc} smart constructor}{fig:conceptchunk}
 
-These simple chunks are fine as a starting point, however, knowing the SC 
+These simple chunks are fine as a starting point; however, knowing the SC 
 domain we can already foresee the need for a variety of other chunks. For 
 brevity, we will only expand upon the chunks needed for the examples used in 
 this thesis. More information, including detailed definitions of all the types 
@@ -250,7 +253,8 @@ projecting chunks. Conceptually, these are lightweight, composable getters and
 setters that let us focus on the logical structure of a chunk (its name, 
 symbol, sentence, expression, units, etc.) without repeatedly writing 
 boilerplate navigation code for nested fields\footnote{Concrete lens usage and 
-examples are available in the code found in the project repository for 
+examples are available in the code found in the 
+\href{https://www.github.com/jacquescarette/drasil}{project repository} for 
 readers who want the implementation details.}. In practice they let us build 
 derived chunks by projecting the subparts we need, update specific components 
 (for instance a symbol or an attached unit) in a principled, immutable way, and 
@@ -407,10 +411,10 @@ of both with its own natural language semantics that allow us to refer to it
 specifically. The full definition for this particular chunk can then be found 
 in Figure~\ref{fig:newtonChunk}. The chunk is defined relative to force and the 
 expression captured in Figure~\ref{fig:newton}, alongside a new identifier and 
-description. Notice we are building off of other chunks throughout each piece 
-of the chunk's definition, thus giving us perfect traceability from beginning 
-to end, regardless of whether we are looking at a defining expression or 
-natural language description.
+description. Notice that we are building off of other chunks throughout each 
+piece of the chunk's definition, thus giving us perfect traceability from 
+beginning to end, regardless of whether we are looking at a defining expression 
+or natural language description.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={34-42}, 
@@ -598,7 +602,7 @@ typeface or italics. This choice must be made using the \codeH{TypogConvention}
 datatype which lists the choices made 
 (e.g., \codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of
 the SRS recipe if vectors are included in the \sf{}. Our \gb{} example does not 
-make use of this convention, however the \gp{} case study does.
+make use of this convention; however, the \gp{} case study does.
 
 As for the chunks necessary for generating the \sf{}, each section includes 
 references to them through supplied lists in something we call the 
@@ -1235,6 +1239,7 @@ knowledge (new chunk types or combinators to encode previously un-encodable
 knowledge or relationships between chunks).}
 
 \section{Summary}
+\label{sec:drasil_summary}
 
 In this chapter we have described the architecture and implementation choices 
 that make Drasil practical: a knowledge-centric pipeline built from reusable, 
@@ -1256,7 +1261,8 @@ The chunk hierarchy and its classification system give us the levers we need to
 balance expressivity and reuse. Simple chunks (NamedChunk, ConceptChunk) let us 
 represent terminology and definitions; richer chunks (UnitalChunk, UnitDefn, 
 DataDefn, InstanceModel) let us attach units, symbols, and executable 
-expressions; and the Expr / Sentence DSLs give us language-agnostic ways to 
+expressions; and the Expr/Sentence DSLs give us 
+language-agnostic ways to 
 express mathematics and narrative. Recipes then select and arrange those chunks 
 for particular stakeholders so that the same underlying knowledge can be 
 rendered as an SRS, a module guide, or multi-language source code with full 

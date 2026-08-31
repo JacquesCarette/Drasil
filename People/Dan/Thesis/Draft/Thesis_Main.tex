@@ -25,6 +25,7 @@
 \PassOptionsToPackage{hyphens}{url}
 \usepackage[colorlinks=true]{hyperref} % Linking to LaTeX labels and external 
 %URLs
+\usepackage{lastpage} % Robust reference to the final shipped page
 \numberwithin{equation}{section} % Numbers equations based on their section
 
 % Additional packages
@@ -274,8 +275,6 @@
         \setcounter{equation}{0}
         \setcounter{table}{0}
 \end{appendix}
-
-\label{NumDocumentPages}
 
 \end{document}
 % ********************************

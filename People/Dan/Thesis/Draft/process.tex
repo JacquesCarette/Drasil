@@ -28,10 +28,15 @@ to the framework's evolution.
 \section{A Minimal Motivating Example: HGHC}
 \label{sec:hghc-mini}
 
-Before delving into the full complexity of our case studies and artifact 
-templates, it is helpful to illustrate the core problem of knowledge redundancy 
-with a minimal, toy example. For this, we use the ``HGHC'' system, a simple 
-heat transfer case study included in the Drasil repository.
+Before delving into the full complexity of our case studies and artifact
+templates, it is helpful to illustrate the core problem of knowledge redundancy
+with a minimal, toy example. For this, we use the ``HGHC'' system, a simple heat
+transfer case study based on legacy software for the thermal analysis of a fuel
+pin in a nuclear reactor. The case study and its SRS predate this thesis and
+were developed as part of earlier work investigating document-driven
+development for nuclear safety analysis~\cite{SmithAndKoothoor2016}. The
+resulting example is included in the
+\href{https://www.github.com/jacquescarette/drasil}{Drasil repository}.
 
 The HGHC example's SRS specifies what problem the software is trying to solve.
 In this case, it should model heat transfer coefficients in nuclear fuel rods, 
@@ -59,8 +64,8 @@ $k_c$, $h_p$, $h_b$, or $\tau_c$ have units associated with them nor are they
 defined in the table of symbols, despite their presence in the equations and 
 data definitions for $h_g$ and $h_c$.
 
-As this is a toy example, it may seem contrived to have missing information. 
-However we ran into exactly these sorts of issues with our real-world case 
+Although we use HGHC as a toy example here, these omissions are not contrived.
+We ran into exactly these sorts of issues with our real-world case
 studies. In this example, while we can easily identify and rectify omissions, 
 it highlights a key issue: even in a simple system, knowledge is repeated 
 across different sections of a single \sf{}, and critical definitions can be 
@@ -92,34 +97,48 @@ categorized, and addressed these issues in the development of Drasil.
 
 \section{A (Very) Brief Introduction to Our Case Study Systems}
 
-To ground our analysis in reality and move beyond abstract principles, this 
-thesis draws on a set of detailed case studies. These case studies serve not 
-only to illustrate the prevalence and impact of redundant knowledge in \sfs{}, 
-but also to provide a concrete basis for systematically identifying, comparing, 
-and generalizing patterns of redundancy and knowledge organization. By 
-examining systems developed using common artifact templates, we are able to 
-motivate the need for the Drasil framework and inform its design. 
+To ground our analysis in reality and move beyond abstract principles, this
+thesis draws on a set of detailed case studies that predate and were developed
+independently of this work. Most of their underlying systems were existing
+scientific computing projects developed by other teams at McMaster University
+to address real engineering problems outside of our research group. Their
+artifacts were later redeveloped using Document Driven Design and
+software engineering best practices to evaluate the effect of these methods on
+scientific software and its documentation~\cite{SmithJegatheesanAndKelly2016}.
+Although the artifacts were produced after the original systems, they present
+the requirements and design as if a rational development process had been
+followed.
 
-To simplify the process of identifying redundancies and patterns, we have chosen
-several case studies developed using common artifact templates, specifically 
-those used by \smithea{}\cite{SmithEtAl2007,SmithAndLai2005} Also, as 
-previously mentioned in Section~\ref{sec:scope}, our case study software 
-systems follow the 
-\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}}
-pattern. These systems cover a variety of use cases, to help avoid 
-over-specializing into one particular system type. 
+This history is important for the analysis that follows. The case studies were
+not created for this thesis, and significant effort was devoted to making their
+documentation high quality using the ideas available at the time. The
+omissions and inconsistencies identified later should therefore not be read as
+evidence that the artifacts were produced carelessly. Instead, they show that
+even a concerted manual documentation effort can leave the kinds of duplicated
+or missing knowledge that Drasil is intended to prevent.
 
-The majority of the aforementioned case studies were developed by other teams 
-at McMaster University to address real engineering problems outside of our 
-research group. Table~\ref{tab:case-studies} provides a high-level reference to 
-each case study. For each system, the 
-\href{https://github.com/jacquesCarette/drasil}{GitHub repository} contains the 
-artifacts
-relevant to our analysis, namely the documents and implementation materials
-that expose the system's requirements, design decisions, and implementation
-details. These include, where available, the Software Requirements Specification
-(SRS), Module Guide (MG), Module Interface Specification (MIS), source code, and
-other supporting materials.
+These case studies serve not only to illustrate the prevalence and impact of
+redundant knowledge in \sfs{}, but also to provide a concrete basis for
+systematically identifying, comparing, and generalizing patterns of redundancy
+and knowledge organization. By examining systems developed using common
+artifact templates, we are able to motivate the need for the Drasil framework
+and inform its design.
+
+To simplify the process of identifying redundancies and patterns, we selected
+several of these prior case studies because they were developed using common
+artifact templates. Also, as previously mentioned in Section~\ref{sec:scope},
+our case study software systems follow the
+\mbox{\emph{input~$\rightarrow$~process~$\rightarrow$~output}} pattern. These
+systems cover a variety of use cases, to help avoid over-specializing into one
+particular system type. Table~\ref{tab:case-studies} provides a high-level
+reference to each case study. For each system, the
+\href{https://github.com/smiths/caseStudies}{case studies GitHub repository} 
+contains the
+artifacts relevant to our analysis, namely the documents and implementation
+materials that expose the system's requirements, design decisions, and
+implementation details. These include, where available, the Software
+Requirements Specification (SRS), Module Guide (MG), Module Interface
+Specification (MIS), source code, and other supporting materials.
 
 \begin{table}
 \centering
@@ -163,7 +182,7 @@ much further in our process. The Projectile case study was created post facto
 to provide a simple, understandable example for a general audience as it 
 requires, at most, a high-school level understanding of physics. 
 
-After carefully selecting our case studies, we went about a practical approach
+After selecting our case studies, we went about a practical approach
 to find and remove redundancies. The first step was to break down each artifact
 type and understand exactly what they are trying to convey.
 
@@ -273,9 +292,9 @@ studies' SRS documents to get a deeper understanding of what each section truly
 represents. Figures~\ref{fig:gbrtou}, \ref{fig:gbrtos}, 
 and~\ref{fig:gbrtoa} show the reference sections of the SRS for \gb. Each of 
 the case studies' SRS contains a similar section so for 
-brevity we will omit the others here, but they can be found in the 
-\href{https://github.com/jacquesCarette/drasil}{GitHub repository}. We will try 
-to ignore any superficial differences (spelling, 
+brevity we will omit the others here, but they can be found in the
+\href{https://github.com/smiths/caseStudies}{case studies GitHub repository}.
+We will try to ignore any superficial differences (spelling, 
 grammar, phrasing, etc.) in each of the case studies while we look for 
 commonality. We are also trying to determine how the non-superficial 
 differences relate to the document template, general problem domain, and 
@@ -479,7 +498,7 @@ it for brevity. The MIS includes novel system-specific, implementation-level
 information denoting the interfaces between modules, but for our current 
 exercise does not provide any revelations beyond that of the MG.
 
-The MG gives us a very clear picture of \textit{decisions} made by the system 
+The MG gives us a clear picture of \textit{decisions} made by the system 
 designers, as opposed to the knowledge of the system domain, problem being 
 solved, and requirements of an acceptable solution provided in the SRS. The MG 
 provides platform and implementation-specific decisions, which will eventually 
@@ -492,7 +511,7 @@ mind, let us move on to dissecting the source code.
 The source code is arguably the most important \sf{} in any given software 
 system since it serves as the set of instructions that a computer executes
 to solve the given problem. With only the other \sfs{} and without the 
-source code, we would have a very well defined problem and acceptance criteria 
+source code, we would have a well-defined problem and acceptance criteria 
 for a possible solution, but would never actually solve the problem.
 
 \fig{
@@ -545,7 +564,7 @@ of it to be system- and problem-domain specific. Looking into the source of our
 case studies, we find this to be largely true for the computational core, while 
 also observing recurring implementation-level boilerplate across projects. For 
 example, tasks such as reading inputs, writing outputs, and managing files are 
-often structured very similarly between systems, and some later-added
+often structured similarly between systems, and some later-added
 numerical components, such as ordinary differential equation (ODE) solvers, are
 generic rather than domain-specific.
 
@@ -581,8 +600,8 @@ load (NFL), and its dependencies).
 The source code provides clear instructions to the machine on how to calculate 
 each of these values and their intermediaries; it provides the actionable steps 
 to solve the given problem. When we compare the code with relevant sections of 
-the SRS, specifically the Data Definitions (DDs) for each term, we can see a 
-very obvious transformation from one form to the other. For a concrete 
+the SRS, specifically the Data Definitions (DDs) for each term, we can see an 
+obvious transformation from one form to the other. For a concrete 
 example, compare the data definition for $\hat{q}$ shown later in 
 Figure~\ref{fig:gbrddq} with its corresponding implementation 
 (\code{python}|calc_q_hat|) in Figure~\ref{fig:gbrsrccalc}: the symbol used by 
@@ -686,19 +705,20 @@ gpdots.south)+(3pt,-3pt)$);
 {fig:gptos}
 
 The reference section of the SRS conveys a substantial amount of knowledge in a 
-very straightforward and organized manner. The basic units provided in the 
+straightforward and organized manner. The basic units provided in the 
 table of units give a prime example of fundamental, global knowledge shared 
 across domains. Nearly any system involving physical quantities will use one or 
 more of these units. On the other hand, the table of symbols provides 
 problem-specific knowledge that will not be useful across unrelated domains. 
 For example, the stress distribution factor $J$ from \gb{} may appear in 
 several related problems, but would be unlikely to be seen in something like 
-SWHS, NoPCM, or Projectile. Finally, acronyms are very context-dependent. They 
+SWHS, NoPCM, or Projectile. Finally, acronyms are context-dependent. They 
 are often specific to a given domain and, without a coinciding definition, it 
-can be very difficult for even the target audience to understand what they 
-refer to. Within one domain, there may be several acronyms that look identical, 
-but mean different things. As an example from industry: PM can refer to a 
-Product Manager, Project Manager, Program Manager, Portfolio Manager, etc.
+can be difficult for even the target audience to understand what they 
+refer to. Within and across domains, the same acronym may carry several
+meanings. For example, PM can refer to a Product Manager, Project Manager,
+Program Manager, Portfolio Manager, etc.\ in industry, while in politics it
+commonly refers to a Prime Minister.
 
 \fig{
 \centering
@@ -938,9 +958,12 @@ language (e.g., ``$x = y$'' vs ``$x$ is equal to $y$'' vs ``x est \'egal \`a y''
 An identity projection is providing the knowledge chunk in full. 
 Non-identity projections require using representations that elide some details 
 of the knowledge at hand to make it more palatable for the audience of the 
-given \sf{} i.e.\ $p(K) \subset K$. Similarly, we can have multivariant 
-projection functions (whether identity or not) which project knowledge from 
-several places into one form, i.e.\ $p(K,L,M) \subseteq K\cup L\cup M$.
+given \sf{} i.e.\ $p(K) \subset K$. Similarly, let $L$ and $M$ denote
+additional sets of knowledge, where $K$, $L$, and $M$ are pairwise distinct
+($K \neq L$, $K \neq M$, and $L \neq M$). We can then have multivariant
+projection functions (whether identity or not) which project knowledge from
+several places into one form, i.e.\
+$p(K,L,M) \subseteq K\cup L\cup M$.
 
 In all cases, we have some fully defined knowledge and then we apply 
 a projection function to retrieve the necessary information for our \sf{}. We 

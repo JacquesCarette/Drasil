@@ -22,15 +22,17 @@ costs, and the granularity at which they organized software. Our purpose is to
 separate those practical limitations from the conceptual lessons that remain
 useful for Drasil.
 
-We begin with software artifacts and rational design, which establish why a
-system requires several representations for different stakeholders. We then
-consider software families and successive approaches to reuse, moving from
-complete programs and implementation components toward domain analysis and
-generative techniques. Literate approaches and reproducible research show the
-benefits, as well as the limits, of keeping executable and explanatory material
-together. Finally, generative programming and Model-Driven Engineering (MDE)
-provide a point of comparison for deriving software from higher-level
-representations.
+We begin with software artifacts and rational design (Section~\ref{sec:sfs}), 
+which establish why a system requires several representations for different 
+stakeholders. We then consider software families and successive
+approaches to reuse (Section~\ref{sec:bg_families}), moving from complete 
+programs and implementation components toward domain analysis and generative 
+techniques. Literate approaches (Section~\ref{sec:literate}) and reproducible 
+research (Section~\ref{sec:bg_reproducibility}) show the benefits, as well as 
+the limits, of keeping executable and explanatory material together. Finally, 
+generative programming and Model-Driven Engineering (MDE) 
+(Section~\ref{sec:bg_generative}) provide a point of comparison for deriving 
+software from higher-level representations.
 
 Although newer model-driven approaches address related problems, we do not
 take a general modeling framework as our methodological starting
@@ -207,10 +209,10 @@ under so-called ``epics'', ``stories'', and ``tasks'' as opposed to a singular
 requirements artifact, and the acceptance criteria listed on those tickets make 
 up the validation and verification plan. 
 
-Regardless of the process, most attempt to document very similar information to 
+Most processes attempt to document very similar information to 
 that of the rational design process. Using the waterfall model as an example, 
-we can see (Table~\ref{tab:RatWatComp}) the rational design process and its 
-artifacts map onto the model in a very straightforward manner.
+we can see (Table~\ref{tab:RatWatComp}) that the rational design process and 
+its artifacts map onto the model in a straightforward manner.
 
 Parnas~\citep{Parnas2010} does an excellent job of defining the target audience 
 for each of the most common \sfs{}, and we extend that perspective here. A 
@@ -244,7 +246,7 @@ they address}
     QA analysts  & 
 
     Outlines implementation decisions around the separation of functionality 
-    into modules and give an overview of each module.
+    into modules and gives an overview of each module.
 \\ \hline
     Module Interface Specifications & 
 
@@ -288,7 +290,8 @@ purposes. The distinction that matters for our approach is not simply how
 often a piece of information appears, but how many independently editable
 versions of it exist. For example, an equation rendered in a document and implemented as
 source code may legitimately appear twice; the maintenance risk comes from
-each version acting as its own authority. We use \emph{unnecessary redundancy}
+each version acting as its own authority. We use the term
+\emph{unnecessary redundancy}
 to describe this latter situation.
 
 \takeaway{Multiple artifacts are legitimate and necessary
@@ -301,6 +304,7 @@ still be presented in several places without a corresponding increase in manual
 synchronization effort.}
 
 \section{Software Reuse and Software Families}
+\label{sec:bg_families}
 
 One response to unnecessary redundancy is software reuse. We now look at ways
 in which others have attempted to avoid
@@ -333,7 +337,7 @@ A central concept in software/program families is the distinction between
 shared by all members of the family, forming the stable core that defines the 
 family's identity. In contrast, \emph{variabilities} capture the aspects that 
 can differ among family members, enabling customization or adaptation to 
-specific requirements or contexts. These variabilities are typically managed 
+specific requirements or contexts. These variabilities are typically summarized 
 through explicit \emph{parameters of variation}, which may include 
 configuration options, feature selections, or architectural
 choices~\cite{Weiss1998}.
@@ -500,7 +504,7 @@ explicit across related systems. CBSE demonstrates the benefits of composing
 tested implementations, while also illustrating the limits of treating large
 implementation components as the primary reusable unit. Draco extends reuse to
 domain analysis and transformations. For Drasil, the resulting lesson is that
-reuse might extend below programs and components to the domain knowledge shared
+reuse can extend below programs and components to the domain knowledge shared
 across multiple \sfs{}.}
 
 \section{Literate Approaches to Software Development}
@@ -510,7 +514,7 @@ The preceding approaches concern what can be reused across related systems.
 Literate approaches address a related problem within a system: how program code
 and documentation can be developed together. Literate Programming (LP) and
 Literate Software Development (LSD) are two such approaches that have
-influenced Drasil's development and that we now outline. We consider the
+influenced Drasil's development. We consider the
 ideas they contribute separately from the adoption of their particular methods
 and tools.
 
@@ -717,7 +721,7 @@ data, narrative, dependencies, and build information closely enough that a
 computation can be rerun and inspected. Co-location and environment capture do
 not, however, preserve all domain knowledge, assumptions, design rationale, or
 semantic relationships among \sfs{}. These limitations kept deterministic
-generation and explicit knowledge capture in view as complementary goals during
+generation and explicit knowledge capture as complementary goals during
 Drasil's development.}
 
 \section{Generative Programming and Metaprogramming}

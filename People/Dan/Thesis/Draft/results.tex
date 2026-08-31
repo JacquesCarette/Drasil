@@ -53,7 +53,8 @@ hunting through multiple artifacts.
 
 For example, in the GlassBR case study (see 
 issue~\href{https://github.com/JacquesCarette/Drasil/issues/363}{\#363}), a 
-unit conversion was embedded implicitly in the original documentation. With 
+unit conversion was incorrectly embedded implicitly in the original 
+documentation. With 
 Drasil, it was straightforward to use the generated traceability information to 
 identify the exact chunk from which the formula was produced. That made it 
 clear where the conversion logic belonged: instead of leaving the division by 
@@ -121,6 +122,8 @@ NoPCM   & 32 & 674  & 1209 & 3494 & 1760 \\
 SSP     & 84 & 3036 & 2993 & 9459 & -- \\
 Projectile & 31 & 1377 & 1244 & 3214 & 4768 \\
 GamePhysics & 46 & 2029 & 1841 & 4767 & -- \\
+\hline
+\rule{0pt}{3ex}Total & 287 & 11040 & 11014 & 31749 & 14153 \\
 \hline
 \end{tabular}
 }

@@ -13,7 +13,7 @@ import Drasil.GOOL (Class, SVariable, CS, MS, OOProg, BodySym(..),
   ValueExpression(..), extFuncApp, newObj, Reference(..), Array(..), List(..),
   ListStatement(..), InternalList, MethodSym(..), OOMethodSym(..), objMethodCall,
   classMethodCall, initializer, OODeclStatement(objDecDef), Set(..),
-  ParameterSym(..))
+  ParameterSym(..), BinderSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -63,7 +63,7 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables, objectTests] ++ lis
 helloWorldMainProc
   :: (ProcProg r vis stmt mthd prg file mod bod block)
   => MS (r mthd)
-helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+helloWorldMainProc = mainFunction (body ([ helloInitVariables, helloProcTests] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
       (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (var "dummy" string) mainFn (litString "dummy")]),
@@ -138,6 +138,34 @@ helloInitVariables = block [comment "Initializing variables",
   setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
   assert (contains (valueOf (var "s" (setType int))) (litInt 7))
     (litString "Set s should contain 7")]
+
+helloProcTests
+  ::
+    ( BlockSym r block stmt
+    , Literal r
+    , VariableValue r
+    , NumericExpression r
+    , Set r
+    , ValueExpression r
+    , BinderSym r
+    , DeclStatement r stmt bod
+    , AssignStatement r stmt
+    , CommentStatement r stmt
+    , PrintConsole r stmt
+    )
+  => MS (r block)
+helloProcTests = block [
+  comment "Set operation and lambda tests",
+  var "s" (setType int) &= setAdd (valueOf (var "s" (setType int))) (litInt 10),
+  var "s" (setType int) &= setRemove (valueOf (var "s" (setType int))) (litInt 7),
+  var "s" (setType int) &= setUnion (valueOf (var "s" (setType int)))
+    (litSet int [litInt 20, litInt 30]),
+  printStr "Set after operations: ",
+  printLn (valueOf (var "s" (setType int))),
+  varDecDef (var "myLambda" double) mainFn
+    (lambda [binder "x" double]
+      (valueOf (var "x" double) #* litDouble 2.0)),
+  printLn $ litString "Lambda defined successfully"]
 
 objectTests :: (OOProg r vis stmt mthd stvr attch prg file mod bod block) => MS (r block)
 objectTests = block [comment "Object tests",

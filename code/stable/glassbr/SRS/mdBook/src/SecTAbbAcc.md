@@ -6,12 +6,15 @@
 |:-----------|:----------------------------------|
 |A           |Assumption                         |
 |AN          |Annealed                           |
+|AN          |Annealed                           |
 |AR          |Aspect Ratio                       |
 |DD          |Data Definition                    |
+|FT          |Fully Tempered                     |
 |FT          |Fully Tempered                     |
 |GD          |General Definition                 |
 |GS          |Goal Statement                     |
 |GTF         |Glass Type Factor                  |
+|HS          |Heat Strengthened                  |
 |HS          |Heat Strengthened                  |
 |IG          |Insulating Glass                   |
 |IM          |Instance Model                     |

@@ -34,6 +34,10 @@ makeProject _ Notebook {} = error "Unsupported format: Notebook"
 makeProject sm (Document titleLb authorName _ sections) =
   T.Project (spec sm titleLb) (spec sm authorName) refMap files
   where
+    -- FIXME: Multi-file SRS generation is done 'too late'. It is based on
+    -- splitting a `Document` up into multiple files by section, when the input
+    -- should have been multiple documents instead. Document splitting is an
+    -- unsafe operation.
     files   = createFiles sm sections
     refMap = fromList $ concatMap createRefMap' files
 

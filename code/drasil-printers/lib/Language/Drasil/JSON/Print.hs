@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
 module Language.Drasil.JSON.Print (
   genJupyterLessonPlan, genJupyterSRS
@@ -95,8 +94,7 @@ printLO' (Bib bib)                        = [markdownCell $ makeBib bib]
 printLO' Graph{}                          = []
 printLO' (CodeBlock contents)             = [codeCell $ cSpec contents]
 
--- | Called by build, uses 'printLO' to render the layout
--- objects in Doc format.
+-- | Called by build, uses 'printLO' to render the layout objects in Doc format.
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
@@ -139,9 +137,6 @@ pExpr (Over Hat s)   = pExpr s <> text "&#770;"
 pExpr (MO o)         = text $ pOps o
 pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
 pExpr (Font Bold e)  = pExpr e
---pExpr (Font Bold e)  = bold $ pExpr e -- used before
---pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
---pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs
 pExpr e              = printMath $ toMath $ TeX.pExpr e
 
@@ -221,6 +216,7 @@ makeHeaderCols l = text header $$ text (genMDtable ++ "|")
 
 makeColumns ls = text "|" <> hcat (punctuate (text "|") (map pSpec ls)) <> text "|"
 
+-- FIXME: Move this to `drasil-utils`. Also, `count e = length . filter (== e)`.
 count :: Char -> String -> Int
 count _ [] = 0
 count c (x:xs)

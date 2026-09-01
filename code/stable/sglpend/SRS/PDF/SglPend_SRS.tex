@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{enumitem}
 \usepackage{tabularray}
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -14,7 +15,6 @@
 \usepackage{graphics}
 \usepackage{svg}
 \usepackage{float}
-\usepackage{enumitem}
 \usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
@@ -34,6 +34,59 @@
 \maketitle
 \tableofcontents
 \newpage
+\section{Table of Contents}
+\label{Sec:ToC}
+An outline of all sections included in this SRS is recorded here for easy reference.
+
+\begin{itemize}
+\item{\hyperref[Sec:ToC]{Table of Contents}}
+\item{\hyperref[Sec:RefMat]{Reference Material}}
+\begin{itemize}
+\item{\hyperref[Sec:ToU]{Table of Units}}
+\item{\hyperref[Sec:ToS]{Table of Symbols}}
+\item{\hyperref[Sec:TAbbAcc]{Abbreviations and Acronyms}}
+\end{itemize}
+\item{\hyperref[Sec:Intro]{Introduction}}
+\begin{itemize}
+\item{\hyperref[Sec:DocPurpose]{Purpose of Document}}
+\item{\hyperref[Sec:ReqsScope]{Scope of Requirements}}
+\item{\hyperref[Sec:ReaderChars]{Characteristics of Intended Reader}}
+\item{\hyperref[Sec:DocOrg]{Organization of Document}}
+\end{itemize}
+\item{\hyperref[Sec:GenSysDesc]{General System Description}}
+\begin{itemize}
+\item{\hyperref[Sec:SysContext]{System Context}}
+\item{\hyperref[Sec:UserChars]{User Characteristics}}
+\item{\hyperref[Sec:SysConstraints]{System Constraints}}
+\end{itemize}
+\item{\hyperref[Sec:SpecSystDesc]{Specific System Description}}
+\begin{itemize}
+\item{\hyperref[Sec:ProbDesc]{Problem Description}}
+\begin{itemize}
+\item{\hyperref[Sec:TermDefs]{Terminology and Definitions}}
+\item{\hyperref[Sec:PhysSyst]{Physical System Description}}
+\item{\hyperref[Sec:GoalStmt]{Goal Statements}}
+\end{itemize}
+\item{\hyperref[Sec:SolCharSpec]{Solution Characteristics Specification}}
+\begin{itemize}
+\item{\hyperref[Sec:Assumps]{Assumptions}}
+\item{\hyperref[Sec:TMs]{Theoretical Models}}
+\item{\hyperref[Sec:GDs]{General Definitions}}
+\item{\hyperref[Sec:DDs]{Data Definitions}}
+\item{\hyperref[Sec:IMs]{Instance Models}}
+\item{\hyperref[Sec:DataConstraints]{Data Constraints}}
+\item{\hyperref[Sec:CorSolProps]{Properties of a Correct Solution}}
+\end{itemize}
+\end{itemize}
+\item{\hyperref[Sec:Requirements]{Requirements}}
+\begin{itemize}
+\item{\hyperref[Sec:FRs]{Functional Requirements}}
+\item{\hyperref[Sec:NFRs]{Non-Functional Requirements}}
+\end{itemize}
+\item{\hyperref[Sec:TraceMatrices]{Traceability Matrices and Graphs}}
+\item{\hyperref[Sec:AuxConstants]{Values of Auxiliary Constants}}
+\item{\hyperref[Sec:References]{References}}
+\end{itemize}
 \section{Reference Material}
 \label{Sec:RefMat}
 This section records information for easy reference.

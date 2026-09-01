@@ -4,7 +4,7 @@ module Language.Drasil.Document.Sections (
   section, fig, figNoCap, figWithWidth, figNoCapWithWidth, Section(..),
   SecCons(..) , llcc, llccFig, llccTab, llccEqn, llccFig', llccTab', llccEqn',
   ulcc, Document(..), mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..),
-  checkToC, makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI,
+  makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI,
   makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI'
 ) where
 
@@ -60,7 +60,7 @@ instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "S
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.
-data Document = Document Title Author ShowTableOfContents [Section]
+data Document = Document Title Author [Section]
               | Notebook Title Author [Section]
 
 -- Temporarily data type for 'notebook' document, might be extended or use 'Document' instead
@@ -68,19 +68,6 @@ data Document = Document Title Author ShowTableOfContents [Section]
 
 -- | Determines whether or not the table of contents appears on the generated artifacts.
 data ShowTableOfContents = ToC | NoToC
-
--- Medium hack for now. This function is unable to tell if the section
--- is for a table of contents, as that doesn't appear until docLang.
--- This function is needed by the TeX printer, as TeX carries its own form of creating
--- a table of contents. However, the printer package is compiled before the docLang one.
--- | Manually removes the first section of a document (table of contents section).
--- temp fix for Notebook (see if we need this in notebook later)
-checkToC :: Document -> Document
-checkToC (Document t a toC sc) =
-  case toC of
-    ToC -> Document t a toC $ drop 1 sc
-    _   -> Document t a toC sc
-checkToC (Notebook t a sc) = Notebook t a sc
 
 -- * Content Constructors
 

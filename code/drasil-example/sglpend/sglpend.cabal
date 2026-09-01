@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           sglpend
+version:        0.1.24.0
+synopsis:       A framework for code and document generation for scientific software - Example SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Drasil.SglPend.Assumptions
+      Drasil.SglPend.Body
+      Drasil.SglPend.DataDefs
+      Drasil.SglPend.Derivations
+      Drasil.SglPend.Expressions
+      Drasil.SglPend.GenDefs
+      Drasil.SglPend.Goals
+      Drasil.SglPend.IMods
+      Drasil.SglPend.LabelledContent
+      Drasil.SglPend.MetaConcepts
+      Drasil.SglPend.Requirements
+      Drasil.SglPend.Unitals
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , dblpend
+    , directory
+    , drasil-data
+    , drasil-database
+    , drasil-gen
+    , drasil-lang
+    , drasil-srs
+    , drasil-theory
+    , drasil-utils
+    , lens
+  default-language: GHC2024
+
+executable sglpend
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  default-extensions:
+      StrictData
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -threaded -O2 -main-is Main
+  build-depends:
+      base >=4.7 && <5
+    , dblpend
+    , directory
+    , drasil-gen
+    , lens
+    , sglpend
+  default-language: GHC2024

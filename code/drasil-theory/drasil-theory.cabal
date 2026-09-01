@@ -1,0 +1,51 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-theory
+version:        0.1.0.0
+synopsis:       A framework for code and document generation for scientific software - Theory SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Theory.Drasil
+      Drasil.Database.SearchTools
+  other-modules:
+      Theory.Drasil.Classes
+      Theory.Drasil.Components.Derivation
+      Theory.Drasil.ConstraintSet
+      Theory.Drasil.DataDefinition
+      Theory.Drasil.DifferentialModel
+      Theory.Drasil.GenDefn
+      Theory.Drasil.InstanceModel
+      Theory.Drasil.ModelKinds
+      Theory.Drasil.MultiDefn
+      Theory.Drasil.RelationConcept
+      Theory.Drasil.Theory
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+      StandaloneDeriving
+      DerivingVia
+      DeriveGeneric
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , drasil-database
+    , drasil-lang
+    , drasil-metadata
+    , lens
+  default-language: GHC2024

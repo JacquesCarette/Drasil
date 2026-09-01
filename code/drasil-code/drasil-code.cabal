@@ -1,0 +1,144 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           drasil-code
+version:        0.1.9.0
+synopsis:       A framework for code and document generation for scientific software - Code SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Language.Drasil.Code
+      Language.Drasil.GOOL
+      Data.Drasil.ExternalLibraries.ODELibraries
+  other-modules:
+      Language.Drasil.Choices
+      Language.Drasil.Chunk.Code
+      Language.Drasil.Chunk.CodeBase
+      Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
+      Language.Drasil.Chunk.NamedArgument
+      Language.Drasil.Chunk.Parameter
+      Language.Drasil.Code.CodeQuantityDicts
+      Language.Drasil.Code.DataDesc
+      Language.Drasil.Code.ExternalLibrary
+      Language.Drasil.Code.ExternalLibraryCall
+      Language.Drasil.Code.ExtLibImport
+      Language.Drasil.Code.Imperative.Build.AST
+      Language.Drasil.Code.Imperative.Build.Import
+      Language.Drasil.Code.Imperative.Comments
+      Language.Drasil.Code.Imperative.ConceptMatch
+      Language.Drasil.Code.Imperative.Descriptions
+      Language.Drasil.Code.Imperative.Doxygen.Import
+      Language.Drasil.Code.Imperative.DrasilState
+      Language.Drasil.Code.Imperative.FunctionCalls
+      Language.Drasil.Code.Imperative.GenerateGOOL
+      Language.Drasil.Code.Imperative.Generator
+      Language.Drasil.Code.Imperative.GenODE
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.MatlabRenderer
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
+      Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
+      Language.Drasil.Code.Imperative.Helpers
+      Language.Drasil.Code.Imperative.Import
+      Language.Drasil.Code.Imperative.Logging
+      Language.Drasil.Code.Imperative.Modules
+      Language.Drasil.Code.Imperative.Parameters
+      Language.Drasil.Code.Imperative.ReadInput
+      Language.Drasil.Code.Imperative.README.Core
+      Language.Drasil.Code.Imperative.README.Render
+      Language.Drasil.Code.Imperative.SpaceMatch
+      Language.Drasil.Code.Imperative.WriteInput
+      Language.Drasil.Code.Lang
+      Language.Drasil.Code.PackageData
+      Language.Drasil.CodeSpec
+      Language.Drasil.Data.ODEInfo
+      Language.Drasil.Data.ODELibPckg
+      Language.Drasil.ICOSolutionSearch
+      Language.Drasil.Mod
+      Language.Drasil.SoftwareDossier.FileNames
+      Language.Drasil.SoftwareDossier.SoftwareDossierSym
+  hs-source-dirs:
+      lib
+  default-extensions:
+      StrictData
+      StandaloneDeriving
+      DerivingVia
+      DeriveGeneric
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , deriving-compat
+    , directory
+    , drasil-database
+    , drasil-file-handling
+    , drasil-gool
+    , drasil-lang
+    , drasil-makefile
+    , drasil-metadata
+    , drasil-printers
+    , drasil-srs
+    , drasil-system
+    , drasil-theory
+    , drasil-utils
+    , filepath
+    , lens
+    , mtl
+    , pretty
+    , split
+  default-language: GHC2024
+
+test-suite codegenTest
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      FileTests
+      GOOL.Observer
+      GOOL.PatternTest
+      HelloWorld
+      Helper
+      NameGenTest
+      OOVector
+      VectorTest
+  hs-source-dirs:
+      test
+  default-extensions:
+      StrictData
+      StandaloneDeriving
+      DerivingVia
+      DeriveGeneric
+  ghc-options: -Wall -Wredundant-constraints -Wmissing-export-lists -threaded -O2 -main-is Main
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , deriving-compat
+    , directory
+    , drasil-code
+    , drasil-file-handling
+    , drasil-gool
+    , drasil-metadata
+    , drasil-testing-kit
+    , filepath
+    , lens
+    , mtl
+    , pretty
+    , split
+    , tasty
+  default-language: GHC2024

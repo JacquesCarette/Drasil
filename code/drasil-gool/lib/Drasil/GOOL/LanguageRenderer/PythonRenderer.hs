@@ -70,7 +70,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   subAssign, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, local)
+  fileFromData, local, smartSub)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
@@ -440,6 +440,7 @@ instance Array PythonCode where
 instance List PythonCode where
   listSize = CS.listSize pyListSize
   listAccess = G.listAccess
+  listAccessFromEnd v n = listAccess v (G.smartSub (litInt (-1)) n)
   indexOf = CP.indexOf pyIndex
 
 instance ListStatement PythonCode (Doc, Terminator) where

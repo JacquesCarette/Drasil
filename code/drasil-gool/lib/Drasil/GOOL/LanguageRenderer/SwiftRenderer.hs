@@ -71,7 +71,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
   construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
   buildClass, implementingClass, docClass, commentedClass, modFromData, docMod,
-  fileDoc, fileFromData, defaultOptSpace, local)
+  fileDoc, fileFromData, defaultOptSpace, local, smartAdd)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
   classVarAccess, intClass, buildModule, modDoc', contains, bindingError,
@@ -447,6 +447,7 @@ instance Array SwiftCode where
 instance List SwiftCode where
   listSize = C.listSize' swiftListSize
   listAccess = G.listAccess
+  listAccessFromEnd v n = listAccess v (listSize v #- G.smartAdd (litInt 1) n)
   indexOf = swiftIndexOf
 
 instance ListStatement SwiftCode (Doc, Terminator) where

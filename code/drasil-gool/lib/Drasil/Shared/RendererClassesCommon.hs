@@ -7,9 +7,9 @@ module Drasil.Shared.RendererClassesCommon (
   InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..),
-  MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
+  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MethodTypeSym(..),
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
+  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value,
@@ -202,10 +202,8 @@ class BlockCommentSym r where
 class BlockCommentElim r where
   blockComment' :: r Doc -> Doc
 
-type MSMthdType a = MS (a TypeData)
-
 class (TypeSym r) => MethodTypeSym r where
-  mType    :: VS (r TypeData) -> MSMthdType r
+  mType    :: VS (r TypeData) -> MS (r TypeData)
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r mthd | r -> mthd where
   -- | Takes a BlockComment and a method and generates a function.

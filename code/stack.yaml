@@ -58,7 +58,7 @@ extra-deps:
 - Cabal-3.12.1.0@sha256:08be296ddd941b3f9be4bd125fbb3e6857f5c707b8d10464f6f1d30c91ca3e5f,13551
 
 # Brandon's custom GHC plugin
-- ../../typeclass-graph-plugin
+- ../People/Brandon-Bosman/typeclass-graph-plugin
 
 # This configuration option allows the use of newer versions of dependencies than what is specified
 allow-newer: true

@@ -5,7 +5,7 @@ packages:
 - ../../drasil-code
 - ../../drasil-data
 - ../../drasil-database
-- ../../drasil-srs
+- ../../drasil-document-writing
 - ../../drasil-file-handling
 - ../../drasil-gen
 - ../../drasil-gool
@@ -13,6 +13,7 @@ packages:
 - ../../drasil-makefile
 - ../../drasil-metadata
 - ../../drasil-printers
+- ../../drasil-srs
 - ../../drasil-system
 - ../../drasil-theory
 - ../../drasil-utils

@@ -21,6 +21,7 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - drasil-database
+- drasil-document-writing
 - drasil-lang
 - drasil-metadata
 

@@ -19,7 +19,7 @@ import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip), Label,
+  Expr(..), Spec(Quote, EmptyS, Ref, E, (:+:), Tooltip), Label,
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold),
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
@@ -157,7 +157,6 @@ pSpec :: RefMap -> Spec -> Doc
 pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)"
 pSpec rm (Tooltip _ s) = pSpec rm s
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
-pSpec _ HARDNL     = text "\n"
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 EmptyS) r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 n)      r a) = reflinkInfo rm r (pSpec rm a) (pSpec rm n)

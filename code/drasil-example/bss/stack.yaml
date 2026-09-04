@@ -6,11 +6,12 @@ packages:
 - ../../drasil-code
 - ../../drasil-data
 - ../../drasil-database
-- ../../drasil-srs
+- ../../drasil-document-writing
 - ../../drasil-gen
 - ../../drasil-gool
 - ../../drasil-lang
 - ../../drasil-printers
+- ../../drasil-srs
 - ../../drasil-theory
 - ../../drasil-utils
 

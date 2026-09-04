@@ -102,8 +102,8 @@ overviewParagraph si extraInfo introSubs =
         EmptyS -> phrase document  -- No subsections, end with just "document"
         _      -> phrase document :+: subsectionsSentence  -- Has subsections, add them
   in foldlSP ([S "The following", phrase section_,
-     S "provides an overview of the", introduceAbb srs, S "for the",
-     introduceAbb (si ^. sysName) +:+. S "program"] ++ extraInfo ++ [S "This", phrase section_, S "explains the", phrase purpose,
+     S "provides an overview of the", introduceAbb srs, S "for" +:+.
+     short (si ^. sysName)] ++ extraInfo ++ [S "This", phrase section_, S "explains the", phrase purpose,
      S "of this", endingSentence])
 
 -- | Constructor for Purpose of Document section that each example controls.

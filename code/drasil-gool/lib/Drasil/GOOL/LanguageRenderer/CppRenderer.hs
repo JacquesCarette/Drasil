@@ -36,9 +36,9 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MSMthdType, MethodTypeSym(..),
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment', InternalBinderElim(binderElim), RenderValue(call))
@@ -2793,19 +2793,27 @@ cppsFunction n t ps b = vcat [
   indent (RC.body b),
   bodyEnd]
 
-cppsIntFunc :: (CppSrcCode TypeData -> [CppSrcCode ParamData] ->
-  CppSrcCode Body -> Doc) -> CppSrcCode (Doc, VisibilityTag) ->
-  MSMthdType CppSrcCode -> [MS (CppSrcCode ParamData)] ->
-  MS (CppSrcCode Body) -> MS (CppSrcCode MethodData)
+cppsIntFunc
+  :: (CppSrcCode TypeData -> [CppSrcCode ParamData] -> CppSrcCode Body -> Doc)
+  -> CppSrcCode (Doc, VisibilityTag)
+  -> MS (CppSrcCode TypeData)
+  -> [MS (CppSrcCode ParamData)]
+  -> MS (CppSrcCode Body)
+  -> MS (CppSrcCode MethodData)
 cppsIntFunc f s t ps b = do
   modify (setVisibility (snd $ unCPPSC s))
   tp <- t
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
-cpphIntFunc :: Label -> CppHdrCode (Doc, VisibilityTag) ->
-  CppHdrCode attch -> MSMthdType CppHdrCode ->
-  [MS (CppHdrCode ParamData)] -> MS (CppHdrCode Body) -> MS (CppHdrCode MethodData)
+cpphIntFunc
+  :: Label
+  -> CppHdrCode (Doc, VisibilityTag)
+  -> CppHdrCode attch
+  -> MS (CppHdrCode TypeData)
+  -> [MS (CppHdrCode ParamData)]
+  -> MS (CppHdrCode Body)
+  -> MS (CppHdrCode MethodData)
 cpphIntFunc n s _ t ps _ = do
     modify (setVisibility (snd $ unCPPHC s))
     tp <- t

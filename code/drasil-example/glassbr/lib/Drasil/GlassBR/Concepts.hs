@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Concepts (
   -- * IdeaDicts
   beam, cantilever, edge, glaSlab, glass, plane, responseTy, blastRisk, glaPlane,
-  idglass, ptOfExplsn, con', iGlass, lGlass,
+  ptOfExplsn, con', iGlass, lGlass,
 
   -- * ConceptChunks
   annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadDurFac,
@@ -26,7 +26,7 @@ import Data.Drasil.Concepts.Documentation (response, type_)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 
 con' :: [IdeaDict]
-con' = [idglass, iGlass, lGlass, beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
+con' = [iGlass, lGlass, beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
 cis' :: [CI]
@@ -34,9 +34,8 @@ cis' = [annealed, fullyT, heatS]
 
 {-Terminology-}
 
-idglass, iGlass, lGlass, beam, blastRisk, cantilever, edge, glaPlane, glaSlab,
+iGlass, lGlass, beam, blastRisk, cantilever, edge, glaPlane, glaSlab,
   plane, glass, ptOfExplsn, responseTy :: IdeaDict
-idglass    = idea' (mkUid "glass")      (cn'          "Glass")
 iGlass     = idea  (mkUid "iGlass")     (nounPhraseSP "insulating glass")   "IG"
 lGlass     = idea  (mkUid "lGlass")     (nounPhraseSP "laminated glass")    "LG"
 beam       = idea' (mkUid "beam")       (cn'          "beam")
@@ -55,7 +54,7 @@ annealedGl, aspectRatioCon, fTemperedGl, glTyFac, hStrengthGl, loadDurFac, loadR
   glassGeo, glassTy, glassWL, glBreakage, lateral, lite, load, longDurLoad, modE, notSafe, probBreak,
   safeMessage, shortDurLoad, specA, specDeLoad :: ConceptChunk
 
-annealedGl  = cncpt'' (mkUid "annealed")
+annealedGl  = cncpt'' (mkUid "annealedGl")
   (nounPhraseSP "annealed")
   (S "a flat, monolithic, glass lite which has uniform thickness where" +:+
   S "the residual surface stresses are almost zero, as defined in"+:+ refS astm2016)
@@ -71,7 +70,7 @@ aspectRatioCon = cncpt'' (mkUid "aR")
     "equal to or greater than 0.5")
   "AR"
 
-fTemperedGl = cncpt'' (mkUid "fullyT")
+fTemperedGl = cncpt'' (mkUid "fullyTGl")
   (nounPhraseSP "fully tempered")
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
@@ -87,7 +86,7 @@ glTyFac     = cncpt'' (mkUid "glassTypeFac")
    S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
   "GTF"
 
-hStrengthGl = cncpt'' (mkUid "heatS")
+hStrengthGl = cncpt'' (mkUid "heatSGl")
   (nounPhraseSP "heat strengthened")
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
@@ -182,9 +181,9 @@ glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map (short . snd) glassType
 
 annealed, fullyT, heatS :: CI
-annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [idglass]
-fullyT        = commonIdea (mkUid "fullyT")        (nounPhraseSP "fully tempered")          "FT"       [idglass]
-heatS         = commonIdea (mkUid "heatS")         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
+annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [glass]
+fullyT        = commonIdea (mkUid "fullyT")        (nounPhraseSP "fully tempered")          "FT"       [glass]
+heatS         = commonIdea (mkUid "heatS")         (nounPhraseSP "heat strengthened")       "HS"       [glass]
 
 glassType :: [(Integer, CI)]
 glassType = [(1, annealed), (4, fullyT), (2, heatS)]

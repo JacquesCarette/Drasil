@@ -21,7 +21,7 @@ import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs, graphsTable, dependencyGraph)
 import Drasil.Website.GettingStarted (gettingStartedSec)
 import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
-import Drasil.GlassBR.Concepts (glaSlab, idglass, blast)
+import Drasil.GlassBR.Concepts (glaSlab, glass, blast)
 import Data.Drasil.Concepts.Thermodynamics (heatTrans)
 import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
 import Drasil.PDController.Concepts (pidC)
@@ -73,7 +73,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 ideaDicts :: [IdeaDict]
-ideaDicts = [glaSlab, idglass, intrslce, slope, factor]
+ideaDicts = [glass, glaSlab, intrslce, slope, factor]
 
 cis :: [CI]
 cis = [webName, phsChgMtrl] ++ map (^. sysName) allExampleSI

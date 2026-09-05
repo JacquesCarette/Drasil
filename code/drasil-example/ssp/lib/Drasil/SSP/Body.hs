@@ -69,7 +69,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
-    [ IPurpose $ purpDoc progName Verbose
+    [ IPurpose (StdPurp Verbose)
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,

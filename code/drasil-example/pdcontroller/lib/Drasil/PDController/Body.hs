@@ -44,7 +44,8 @@ mkSRS
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
        IntroProg introPara (phrase progName)
-         [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
+         [IPurpose (CustomPurp [[introPurposeOfDoc]]),
+          IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec (Just orgSecEnd)],
      GSDSec $

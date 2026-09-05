@@ -58,7 +58,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
-      [IPurpose $ purpDoc progName Verbose,
+      [IPurpose (StdPurp Verbose),
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec Nothing],

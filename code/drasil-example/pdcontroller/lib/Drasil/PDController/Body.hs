@@ -64,7 +64,7 @@ mkSRS
               -- alternative definitions for use in the `Terminology and
               -- Definitions` section.
               [TermsAndDefs Nothing defs,
-               PhySysDesc progName sysParts sysFigure [],
+               PhySysDesc sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg

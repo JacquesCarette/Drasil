@@ -75,7 +75,7 @@ mkSRS = [TableOfContents,
   SSDSec $
     SSDProg
       [SSDProblem $ PDProg purp [termsAndDesc]
-        [ PhySysDesc progName physSystParts physSystFig []
+        [ PhySysDesc physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions

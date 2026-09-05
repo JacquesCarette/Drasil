@@ -171,7 +171,7 @@ data PDSub where
   -- | Terms and definitions.
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
   -- | Physical system description.
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  PhySysDesc :: [Sentence] -> LabelledContent -> [Contents] -> PDSub
   -- | Goals.
   Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
@@ -316,7 +316,7 @@ instance Multiplate DLPlate where
     pd (PDProg s sect progs) = PDProg s sect <$> traverse (pdSub p) progs
     pd' (TermsAndDefs s cs) = pure $ TermsAndDefs s cs
     pd' (Goals s ci) = pure $ Goals s ci
-    pd' (PhySysDesc nm s lc c) = pure $ PhySysDesc nm s lc c
+    pd' (PhySysDesc s lc c) = pure $ PhySysDesc s lc c
     sc (Assumptions c) = pure (Assumptions c)
     sc (TMs s f t) = pure $ TMs s f t
     sc (GDs s f g d) = pure $ GDs s f g d

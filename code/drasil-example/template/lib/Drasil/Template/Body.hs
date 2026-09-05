@@ -45,7 +45,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg EmptyS []                --  This adds a is used to define the problem your system will solve
       [ TermsAndDefs Nothing ([] :: [ConceptChunk])   -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc progName [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
+      , PhySysDesc [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals []
       ] -- This adds a goals section and goals input is defined for the preample of the goal.

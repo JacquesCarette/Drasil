@@ -37,7 +37,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
   pdSub = Constant <$> \case
     (TermsAndDefs _ _) -> mempty
-    (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
+    (PhySysDesc _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
     (Constraints _ c) -> mCon [inDataConstTbl c]
@@ -95,7 +95,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s lc cs) -> s ++ extractSents lc ++ extractSents' cs
+      (PhySysDesc s lc cs) -> s ++ extractSents lc ++ extractSents' cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -136,7 +136,7 @@ sentencePlate f = appendPlate (secConPlate (f . extractSents') $ f . concatMap g
 
     getPDSub :: PDSub -> [Sentence]
     getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
-    getPDSub (PhySysDesc _ s lc cs) = s ++ extractSents lc ++ extractSents' cs
+    getPDSub (PhySysDesc s lc cs) = s ++ extractSents lc ++ extractSents' cs
     getPDSub (Goals s c) = s ++ def c
 
 -- | Extracts 'Sentence's from a document description.

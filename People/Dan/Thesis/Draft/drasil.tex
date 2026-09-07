@@ -70,7 +70,7 @@ have focused on SC software that follows the
 Scientific computing often appears both stable 
 and change-prone, and that distinction is important for understanding 
 Drasil's intended scope. The underlying scientific knowledge is often 
-well-understood\citep{CaretteEtAl2023} enough to be captured explicitly, 
+well-understood~\citep{CaretteEtAl2023} enough to be captured explicitly,
 even when the software built around it still evolves through maintenance, 
 changing assumptions, revised constraints, new outputs, or iterative model 
 refinement. In other words, Drasil is aimed at domains where the foundational 
@@ -103,7 +103,7 @@ Before we can generate useful software artifacts, we must first capture and
 organize the underlying domain knowledge in a form that is both reusable and 
 operational. To illustrate what this entails, consider a concrete example from 
 the domain of scientific computing: Newton's Second Law of 
-motion~\cite{Newton1687}. To use this law in both documentation and code, we 
+motion~\citep{Newton1687}. To use this law in both documentation and code, we
 need to capture several distinct pieces of knowledge:
 
 \begin{itemize}
@@ -930,7 +930,7 @@ use (e.g., \LaTeX{}, Hypertext Markup Language (HTML), PDF, or source code in
 various programming languages). Drasil achieves this through a set of dedicated
 \emph{printers}
 and, for code, through the use of the Generic Object-Oriented Language 
-(GOOL)\cite{Costabile2012, Carette2020GOOL}. Each printer is designed to 
+(GOOL)~\citep{Costabile2012, Carette2020GOOL}. Each printer is designed to
 interpret the structured data produced by the recipe and knowledge projection 
 stages and emit output in the desired format, handling both content and 
 layout\footnote{To some respect, depending on the desired output format. For 
@@ -965,7 +965,7 @@ Figure~\ref{fig:genTeX} shows the entry point to this process.
 rendering}{fig:genTeX}
 
 \subsubsection{Code Rendering: GOOL and Target Language Emission}
-For executable code artifacts, Drasil uses GOOL~\cite{Costabile2012, 
+For executable code artifacts, Drasil uses GOOL~\citep{Costabile2012,
 Carette2020GOOL, maclachlan2020} as an intermediate layer. GOOL provides a 
 collection of type-safe combinators and abstractions for representing object-oriented and 
 procedural constructs in a language-agnostic manner. The code recipe (e.g., a

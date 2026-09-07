@@ -213,6 +213,7 @@ consistent variants of the same artifact family.
 \centering
 \caption{Key differences between SWHS and NoPCM Drasil implementations}
 \label{tab:swhs_nopcm}
+\makebox[\textwidth][c]{%
 \begin{tabular}{|p{3.5cm}|c|c|p{6cm}|}
 \hline
 \textbf{\rule{0pt}{3ex}Element} & \textbf{SWHS} & \textbf{NoPCM} & 
@@ -231,6 +232,7 @@ Tank/water properties  & Yes           & Yes            & Shared \\
 Exclude PCM & Shared recipe structure with variant-specific chunk selection \\
 \hline
 \end{tabular}
+}%
 \end{table}
 
 For example, producing the NoPCM variant from SWHS did not require rewriting 

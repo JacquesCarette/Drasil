@@ -177,7 +177,7 @@ startIntro = foldlSent [D.toSent (atStartNP (a_ slope)), S "of geological",
   S "most likely to experience", phrase slip `S.and_`
   S "an index" `S.of_` S "its relative stability known as the" +:+ phrase fs]
 
-extraInfoSent = foldlSent [S "The ", phrase program,
+extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
   namedRef externalLinkRef (S "SSP")]
 

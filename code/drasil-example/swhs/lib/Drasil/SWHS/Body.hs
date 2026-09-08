@@ -177,7 +177,7 @@ introStartSWHS = foldlSent [D.toSent $ atStartNP' $ progName ^. term, S "incorpo
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
 
-extraInfoSent = foldlSent [S "The ", phrase program,
+extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
   namedRef externalLinkRef (S "SWHS")]
 

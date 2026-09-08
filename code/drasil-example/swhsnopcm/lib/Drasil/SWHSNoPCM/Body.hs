@@ -179,7 +179,7 @@ allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 introStartNoPCM, extraInfoSent :: Sentence
 introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
 
-extraInfoSent = foldlSent [S "The ", phrase program,
+extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
   namedRef externalLinkRef' (S "SWHSNoPCM")]
 

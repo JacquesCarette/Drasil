@@ -14,7 +14,7 @@ module Drasil.GlassBR.Concepts (
   cis',
 
   -- * Tools
-  glassType, glassTypeAbbrs
+  glassType
 ) where
 
 import Drasil.Database (mkUid)
@@ -178,7 +178,7 @@ specDeLoad    = cncpt''' (mkUid "specDeLoad")    (nounPhraseSP "specified design
   (S "the magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority")
 
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map (short . snd) glassType
+glassTypeAbbrs = map short [annealedGl, fTemperedGl, hStrengthGl]
 
 annealed, fullyT, heatS :: CI
 annealed      = commonIdea (mkUid "annealed")      (nounPhraseSP "annealed")                "AN"       [glass]

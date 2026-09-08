@@ -60,7 +60,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName) []
-    [IPurpose $ purpDoc progName Verbose,
+    [IPurpose (StdPurp Verbose),
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec (Just orgOfDocIntroEnd)],
@@ -74,7 +74,7 @@ mkSRS = [TableOfContents,
   SSDSec $
     SSDProg
       [SSDProblem $ PDProg purp [termsAndDesc]
-        [ PhySysDesc progName physSystParts physSystFig []
+        [ PhySysDesc physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions

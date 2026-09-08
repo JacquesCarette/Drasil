@@ -17,8 +17,8 @@ import Drasil.Shared.State (FS, CS, VS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
+  MethodTypeSym(..), RenderMethod(..))
 
 class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
   IG.OOMethodSym r vis mthd attch bod, IG.ClassSym r vis mthd stvr attch,
@@ -52,17 +52,17 @@ class InternalGetSet r where
   setFunc :: VS (r TypeData) -> SVariable r -> SValue r -> VS (r FuncData)
 
 class (MethodTypeSym r) => OOMethodTypeSym r where
-  construct :: Label -> MSMthdType r
+  construct :: Label -> MS (r TypeData)
 
 class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch bod | r -> vis attch bod where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->
-    MSMthdType r -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+    MS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r attch
-    -> MSMthdType r -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+    -> MS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 

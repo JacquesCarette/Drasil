@@ -30,14 +30,14 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
-import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  ImportSym(..), RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
@@ -1190,9 +1190,14 @@ swiftParam :: Doc -> SwiftCode Variable -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> renderType (variableType v)
 
-swiftMethod :: Label -> SwiftCode Doc ->
-  SwiftCode Doc -> MSMthdType SwiftCode ->
-  [MS (SwiftCode ParamData)] -> MS (SwiftCode Body) -> MS (SwiftCode MethodData)
+swiftMethod
+  :: Label
+  -> SwiftCode Doc
+  -> SwiftCode Doc
+  -> MS (SwiftCode TypeData)
+  -> [MS (SwiftCode ParamData)]
+  -> MS (SwiftCode Body)
+  -> MS (SwiftCode MethodData)
 swiftMethod n s p t ps b = do
   tp <- t
   pms <- sequence ps

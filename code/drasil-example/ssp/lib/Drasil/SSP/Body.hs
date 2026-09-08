@@ -69,7 +69,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro [extraInfoSent]
-    [ IPurpose $ purpDoc progName Verbose
+    [ IPurpose (StdPurp Verbose)
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
@@ -86,7 +86,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc progName physSystParts figPhysSyst physSystContents
+        , PhySysDesc physSystParts figPhysSyst physSystContents
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions

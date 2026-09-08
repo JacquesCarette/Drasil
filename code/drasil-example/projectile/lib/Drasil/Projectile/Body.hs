@@ -61,7 +61,7 @@ mkSRS = [TableOfContents,
       ],
   IntroSec $
     IntroProg justification []
-      [ IPurpose $ purpDoc progName Verbose
+      [ IPurpose (StdPurp Verbose)
       , IScope scope
       , IChar [] charsOfReader []
       , IOrgSec Nothing],
@@ -74,7 +74,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc progName physSystParts figLaunch []
+        , PhySysDesc physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile,
                   S "geometric layout" `S.the_ofThe` phrase launcher `S.and_` phrase target]]
       , SSDSolChSpec $ SCSProg

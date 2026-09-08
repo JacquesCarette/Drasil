@@ -1,6 +1,6 @@
 -- | Defines functions used in creating an introduction section.
 module Drasil.SRS.Sections.Introduction (orgSec, introductionSection,
-  purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
+  purposeOfDoc, scopeOfRequirements, charIntRdrF) where
 
 import Control.Lens ((^.))
 import Data.Maybe (maybeToList)
@@ -29,7 +29,7 @@ import Drasil.Metadata.Software.Products (sciCompS)
 -- Other docLang
 import qualified Drasil.SRS.Concepts as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.SRS.DocumentLanguage.Core (IntroSub(..))
+import Drasil.SRS.DocumentLanguage.Core (IntroSub(..), PurposeDescription(..))
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 
@@ -119,22 +119,15 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   short srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"]
 
--- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
--- Verbosity controls if the 'developmentProcessParagraph' is added or not.
-purpDoc :: Idea c => c -> Verbosity -> [Sentence]
-purpDoc proName Verbose = [purpDocPara1 proName, developmentProcessParagraph]
-purpDoc proName Succinct = [purpDocPara1 proName]
-
 -- | Constructor for Purpose of Document subsection. Takes a list of 'Sentence's that:
 --
 --     * Given one element: explains the purpose of the specific example.
 --     * Given two elements: explains the purpose of the specific example and the development process.
 --     * Otherwise: Uses the default 'developmentProcessParagraph'.
-purposeOfDoc :: [Sentence] -> Section
-purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc [mkParagraph purposeOfProgram] []
-purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc
-  [mkParagraph purposeOfProgram, mkParagraph developmentProcess] []
-purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
+purposeOfDoc :: SmithEtAlSRS -> PurposeDescription -> Section
+purposeOfDoc srd (StdPurp Succinct) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. sysName] []
+purposeOfDoc srd (StdPurp Verbose) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. sysName, mkParagraph developmentProcessParagraph] []
+purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (map (mkParagraph . foldlSent_) ss) []
 
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.

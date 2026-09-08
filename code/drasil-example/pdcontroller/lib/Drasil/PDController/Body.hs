@@ -44,7 +44,8 @@ mkSRS
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
        IntroProg introPara []
-         [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
+         [IPurpose (CustomPurp [[introPurposeOfDoc]]),
+          IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec (Just orgSecEnd)],
      GSDSec $
@@ -63,7 +64,7 @@ mkSRS
               -- alternative definitions for use in the `Terminology and
               -- Definitions` section.
               [TermsAndDefs Nothing defs,
-               PhySysDesc progName sysParts sysFigure [],
+               PhySysDesc sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg

@@ -13,8 +13,8 @@ module Drasil.SRS.DocumentLanguage.Core (
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
 import Drasil.Database (UID, IsChunk)
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (Manual, Verb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat, Verbosity)
@@ -191,7 +191,7 @@ data SCSSub where
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
   --FIXME: Work in Progress ^
   -- | Properties of a correct solution.

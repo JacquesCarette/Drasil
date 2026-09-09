@@ -1,7 +1,8 @@
 -- | Defines citations used internally in Drasil.
 module Drasil.Metadata.Citations where
 
-import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
+import Language.Drasil
+import Language.Drasil.Document
 import Drasil.Metadata.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem,
   pcClements, pjAgerfalk, spencerSmith, rKhedri)
 

@@ -24,6 +24,7 @@ module Drasil.SRS.Sections.SpecificSystemDescription (
 
 -- General Haskell
 import Control.Lens ((^.), over)
+import Control.Lens.Prism (_Just)
 import Data.Maybe
 
 -- General Drasil
@@ -202,7 +203,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   namedRef r4 (plural genDefn)]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
-datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) =>
+datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   Sentence -> [c] -> Section
 datConF _ [] = SRS.datCon [mkParagraph $ emptySectSentPlu [datumConstraint]] []
 datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
@@ -257,7 +258,7 @@ mkDataConstraintTable col rf lab = llccTab' rf $ uncurry Table
 
 -- | Creates the input Data Constraints Table.
 -- If any quantity has a rationale, a Rationale column is included.
-inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) =>
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable (baseCols ++ rationaleCols ++ uncertCols)
             (inDatumConstraint ^. uid) $ titleize' inDatumConstraint
@@ -267,10 +268,10 @@ inDataConstTbl qlst = mkDataConstraintTable (baseCols ++ rationaleCols ++ uncert
     baseCols = [(S "Var", map ch sorted),
                 (titleize' physicalConstraint, map fmtPhys sorted),
                 (titleize' softwareConstraint, map fmtSfwr sorted),
-                (S "Reasonable Value", map (\q -> fmtU (eS $ express $ getRVal q) q) sorted)]
+                (S "Reasonable Value", map (\q -> fmtU (eS $ express $ getRVal q ^. reasV) q) sorted)]
     uncertCols = [(short typUnc, map (\q -> typUncr (uncVal q, uncPrec q)) sorted)]
-    hasAnyRationale = any (\q -> isJust (q ^. rationale)) sorted
-    rationaleCols = [(S "Rationale", map (\q -> fromMaybe EmptyS (q ^. rationale)) sorted) |
+    hasAnyRationale = any (\q -> isJust (q ^. reasVal)) sorted
+    rationaleCols = [(S "Rationale", map (\q -> fromMaybe EmptyS (q ^. reasVal . _Just . rationale)) sorted) |
       hasAnyRationale]
 
 -- | Creates the output Data Constraints Table.
@@ -293,6 +294,14 @@ fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 -- | Formats Software Constraints into a 'Sentence'.
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
+  where
+    constraintToExpr (Range _ ri) = express $ realInterval c ri
+    constraintToExpr (Elem _ set) = express set
 
 -- | Creates the Properties of a Correct Solution section.
 -- If there are variables in c with any constraints, the table will be generated.

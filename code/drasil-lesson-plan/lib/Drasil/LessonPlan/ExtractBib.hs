@@ -4,7 +4,6 @@ module Drasil.LessonPlan.ExtractBib (extractBib) where
 import qualified Data.Set as S
 
 import Drasil.Database (UID, ChunkDB)
-import Language.Drasil
 import Language.Drasil.Document
 
 import Drasil.LessonPlan.Document

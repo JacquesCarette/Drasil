@@ -4,10 +4,10 @@ import qualified Data.List.NonEmpty as NE
 import Prelude hiding (sin, cos, tan)
 
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (Verb, number, organization, variable)
+import Language.Drasil hiding (variable)
 import Language.Drasil.Document (fig, llccFig, makeURI, ulcc, Contents(..),
   LabelledContent, RawContent(..), Reference, namedRef, refS, foldlSP,
-  foldlSPCol, bulletNested, bulletFlat, ConceptInstance)
+  foldlSPCol, bulletNested, bulletFlat, ConceptInstance, shortname')
 import qualified Language.Drasil.Development as D
 import Drasil.SRS
 import Drasil.Generator (withCommonKnowledge)
@@ -175,7 +175,7 @@ startIntro = foldlSent [D.toSent (atStartNP (a_ slope)), S "of geological",
   S "most likely to experience", phrase slip `S.and_`
   S "an index" `S.of_` S "its relative stability known as the" +:+ phrase fs]
 
-extraInfoSent = foldlSent [S "The ", phrase program,
+extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
   namedRef externalLinkRef (S "SSP")]
 

@@ -66,7 +66,7 @@ import Drasil.SWHS.MetaConcepts (swhs)
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = dqdWr watE : concepts ++ map dqdWr constrained ++
+symbols = concepts ++ map dqdWr constrained ++
   [gradient, pi_, uNormalVect, surface] ++ symbolConcepts ++
   map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++ map dqdWr (NE.toList outputs)
 
@@ -181,7 +181,7 @@ allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 introStartNoPCM, extraInfoSent :: Sentence
 introStartNoPCM = projTitleS projName +:+ S "provide a novel way of storing" +:+. phrase energy
 
-extraInfoSent = foldlSent [S "The ", phrase program,
+extraInfoSent = foldlSent [S "The", phrase program,
   S "is based on the original, manually created version of",
   namedRef externalLinkRef' (S "SWHSNoPCM")]
 

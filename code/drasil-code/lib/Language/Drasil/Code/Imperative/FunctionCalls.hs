@@ -121,7 +121,7 @@ genCalcCall
     , List r
     , Reference r
     , Set r
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , TypeElim r
     , VariableElim r
     )
@@ -310,7 +310,7 @@ genCalcCallProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , Argument r
     , List r
     , NativeVector r

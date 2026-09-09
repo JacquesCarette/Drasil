@@ -2,18 +2,18 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Body, VSBinder, Variable,
-  Value, SValue, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), IndexTranslator(..), Reference(..), Array(..), List(..),
-  ListStatement(..), Set(..), InternalList(..), EmptyStatement(..),
-  MultiStatement(..), ValueStatement(..), AssignStatement(..), DeclStatement(..),
-  PrintConsole(..), ReadConsole(..), FileHandling(..), PrintFile(..),
-  ReadFile(..), StringStatement(..), FunctionSym, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), VisibilitySym(..), BinderSym(..))
+import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
+  SValue, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..),
+  IndexTranslator(..), Reference(..), Array(..), List(..), ListStatement(..),
+  Set(..), InternalList(..), EmptyStatement(..), MultiStatement(..),
+  ValueStatement(..), AssignStatement(..), DeclStatement(..), PrintConsole(..),
+  ReadConsole(..), FileHandling(..), PrintFile(..), ReadFile(..),
+  StringStatement(..), FunctionSym, FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
   SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
@@ -51,7 +51,7 @@ instance Applicative CodeInfoOO where
 instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance OOProg CodeInfoOO () () () () () GOOLState () ()
+instance OOProg CodeInfoOO () () () () () GOOLState () () () ()
 
 instance UnRepr CodeInfoOO contents where
   unRepr = unCI
@@ -76,14 +76,14 @@ instance AttachmentSym CodeInfoOO () where
   classLevel  = toCode ()
   instanceLevel = toCode ()
 
-instance BodySym CodeInfoOO () where
+instance BodySym CodeInfoOO () () where
   body b = do
     sequence_ b
     return $ return $ error "[body] The return value of this isn't used, and the thunk shouldn't fire."
 
   addComments _ _ = return $ return $ error "[addComments] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance BlockSym CodeInfoOO () where
+instance BlockSym CodeInfoOO () () where
   block b = do
     sequence_ b
     return $ return $ error "[block] The return value of this isn't used, and the thunk shouldn't fire."
@@ -287,7 +287,7 @@ instance Set CodeInfoOO where
   setRemove = execute2
   setUnion = execute2
 
-instance InternalList CodeInfoOO where
+instance InternalList CodeInfoOO () where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe (return $ error "[listSlice'] The return value of this isn't used, and the thunk shouldn't fire.")) [b,e,s]
     _ <- vl
@@ -312,7 +312,7 @@ instance AssignStatement CodeInfoOO () where
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfoOO () where
+instance DeclStatement CodeInfoOO () () where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
   setDec               _ _ = noInfo
@@ -326,7 +326,7 @@ instance DeclStatement CodeInfoOO () where
     _ <- bod
     return $ return $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OODeclStatement CodeInfoOO () where
+instance OODeclStatement CodeInfoOO () () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeListErr
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeListErr
@@ -383,7 +383,7 @@ instance OOFuncAppStatement CodeInfoOO () where
 instance CommentStatement CodeInfoOO () where
   comment _ = noInfo
 
-instance ControlStatement CodeInfoOO () where
+instance ControlStatement CodeInfoOO () () where
   break    = noInfo
   continue = noInfo
 
@@ -437,7 +437,7 @@ instance ObserverPattern CodeInfoOO () where
     _ <- zoom lensMStoVS f
     return $ return $ error "The return value of this isn't used, and the thunk shouldn't fire."
 
-instance StrategyPattern CodeInfoOO () where
+instance StrategyPattern CodeInfoOO () () where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe (return $ return $ error "[runStrategy] The return value of this isn't used, and the thunk shouldn't fire.") vl
@@ -481,7 +481,7 @@ instance StateVarSym CodeInfoOO () () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () () () () where
+instance ClassSym CodeInfoOO () () () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
@@ -501,7 +501,7 @@ instance ClassSym CodeInfoOO () () () () () where
     _ <- c
     return $ error "[docClass] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance ModuleSym CodeInfoOO () () () () () () where
+instance ModuleSym CodeInfoOO () () where
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes
@@ -519,13 +519,13 @@ noInfoScope = return $ sd Global -- Hack
 noInfoBinder :: VSBinder CodeInfoOO
 noInfoBinder = return $ return $ bindFormD "" (td Void "" empty) -- Hack
 
-updateMEMandCM :: String -> MS (CodeInfoOO Body) -> MS (CodeInfoOO ())
+updateMEMandCM :: String -> MS (CodeInfoOO ()) -> MS (CodeInfoOO ())
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(SValue CodeInfoOO, MS (CodeInfoOO Body))] -> MS (CodeInfoOO Body) ->
+evalConds :: [(SValue CodeInfoOO, MS (CodeInfoOO ()))] -> MS (CodeInfoOO ()) ->
   MS (CodeInfoOO ())
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs

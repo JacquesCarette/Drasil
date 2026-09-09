@@ -2,8 +2,8 @@ module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 
 import Drasil.Database (ChunkDB)
@@ -11,7 +11,6 @@ import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
 import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.System (projAbrvS)
 
@@ -40,13 +39,14 @@ import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (projName)
-import Drasil.GlassBR.ModuleDefs (allMods, implVars)
+import Drasil.GlassBR.ModuleDefs (implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
+import Drasil.GlassBR.Units (units)
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName
@@ -114,12 +114,11 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs symbolsWCodeSymbols ideaDicts cis' conceptChunks
-  [] GB.dataDefs iMods [] tMods concIns citations labCon
+symbMap = withCommonKnowledge projName allRefs symbolsWCodeSymbols ideaDicts cis'
+  conceptChunks units GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  ++ implVars ++ symbols
+symbolsWCodeSymbols = implVars ++ symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

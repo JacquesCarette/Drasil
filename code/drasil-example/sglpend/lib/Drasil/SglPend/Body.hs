@@ -1,12 +1,10 @@
 module Drasil.SglPend.Body (mkSRS, si) where
 
-import Control.Lens ((^.))
-
 import Drasil.Database (ChunkDB)
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
-import Theory.Drasil (TheoryModel, output)
+import Theory.Drasil (TheoryModel)
 import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
@@ -86,7 +84,7 @@ si :: SmithEtAlSRS
 si = mkSmithEtAlICO projName [olu]
   [purp] [] [] []
   tMods genDefns dataDefs iMods
-  inputs outputs inConstraints [] allSymbols
+  inputs outputs inConstraints [] symbols
   symbMap
 
 purp :: Sentence
@@ -97,11 +95,8 @@ conceptChunks =
   physicalcon ++ [angular, displacement, iPos, pendulum, motion,
   gravitationalConst, gravity, rigidBody, weight, shm] ++ defs
 
-allSymbols :: [DefinedQuantityDict]
-allSymbols = map (^. output) iMods ++ symbols
-
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge projName allRefs allSymbols ideaDicts []
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
   conceptChunks [] dataDefs iMods genDefns tMods concIns citations labelledContent'
 
 labelledContent' :: [LabelledContent]

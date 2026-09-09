@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Redundant return" #-}
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, obj, negateOp, csc, sec, cot, equalOp,
@@ -18,16 +17,15 @@ module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
-  Variable, SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall,
-  bodyStatements, oneLiner, VisibilitySym(..),
-  VariableElim(variableName, variableType), ValueSym(valueType),
-  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
-  MultiStatement(multi), AssignStatement((&++)), (&=), TypeElim(..),
-  PrintConsole(printStr, printStrLn),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
+  SVariable, Value, SValue, NamedArgs, MixedCall, MixedCtorCall, bodyStatements,
+  oneLiner, VisibilitySym(..), VariableElim(variableName, variableType),
+  ValueSym(valueType), NumericExpression((#+), (#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, MultiStatement(multi), AssignStatement((&++)), (&=),
+  TypeElim(..), PrintConsole(printStr, printStrLn),
   PrintFile(printFile, printFileStr, printFileStrLn), ifNoElse, convType,
   VSBinder, BinderElim(..), getCodeType, getTypeString, ValueExpression,
-  VariableValue, BodySym)
+  VariableValue, BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
   objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
@@ -70,7 +68,7 @@ import qualified Text.PrettyPrint.HughesPJ as D
 
 -- Bodies --
 
-multiBody :: (RC.BodyElim r, Monad r) => [MS (r Body)] -> MS (r Doc)
+multiBody :: (RC.BodyElim r bod, Monad r) => [MS (r bod)] -> MS (r Doc)
 multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
@@ -80,7 +78,7 @@ block
   => [MS (r stmt)] -> MS (r Doc)
 block sts = onStateList (toCode . R.block . map RC.statement) (map RC.stmt sts)
 
-multiBlock :: (RC.BlockElim r, Monad r) => [MS (r Block)] -> MS (r Doc)
+multiBlock :: (RC.BlockElim r block, Monad r) => [MS (r block)] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
@@ -369,16 +367,18 @@ subAssign t vr' v' = do
   stmtFromData (R.subAssign vr v) t
 
 objDecNew
-  :: (IC.DeclStatement r stmt, IG.OOValueExpression r, VariableElim r)
+  :: (IC.DeclStatement r stmt bod, IG.OOValueExpression r, VariableElim r)
   => SVariable r -> r ScopeData -> [SValue r] -> MS (r stmt)
 objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList
   ::
-    ( MultiStatement r stmt
-    , IC.DeclStatement r stmt
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , MultiStatement r stmt
+    , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
-    , IC.ControlStatement r stmt
+    , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , Comparison r
@@ -402,7 +402,13 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
         i = IC.var l_i IC.int
 
 printSet
-  :: (MultiStatement r stmt, IC.ControlStatement r stmt, IC.VariableValue r)
+  ::
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , MultiStatement r stmt
+    , IC.ControlStatement r stmt bod
+    , IC.VariableValue r
+    )
   => Integer
   -> SValue r
   -> (SValue r -> MS (r stmt))
@@ -422,12 +428,14 @@ printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
 print
   ::
-    ( MultiStatement r stmt
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , MultiStatement r stmt
     , PrintConsole r stmt
     , PrintFile r stmt
-    , IC.DeclStatement r stmt
+    , IC.DeclStatement r stmt bod
     , AssignStatement r stmt
-    , IC.ControlStatement r stmt
+    , IC.ControlStatement r stmt bod
     , IC.Literal r
     , NumericExpression r
     , Comparison r
@@ -489,15 +497,15 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 4th parameter is the syntax for ending a block in an if-condition
 -- 5th parameter is the syntax for ending an if-statement
 ifCond
-  :: (RC.BodyElim r, RenderStatement r stmt, ValueElim r)
+  :: (RC.BodyElim r bod, RenderStatement r stmt, ValueElim r)
   => (Doc -> Doc)
   -> Doc
   -> OptionalSpace
   -> Doc
   -> Doc
   -> Doc
-  -> [(SValue r, MS (r Body))]
-  -> MS (r Body)
+  -> [(SValue r, MS (r bod))]
+  -> MS (r bod)
   -> MS (r stmt)
 ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
 ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
@@ -516,8 +524,8 @@ ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
       >>= (mkStmtNoEnd . vcat)
 
-tryCatch :: (RenderStatement r stmt) => (r Body -> r Body -> Doc) ->
-  MS (r Body) -> MS (r Body) -> MS (r stmt)
+tryCatch :: (RenderStatement r stmt) => (r bod -> r bod -> Doc) ->
+  MS (r bod) -> MS (r bod) -> MS (r stmt)
 tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
@@ -536,38 +544,44 @@ param f v' = do
   paramFromData v' $ f v
 
 method
-  :: (OORenderMethod r vis mthd attch)
+  :: (OORenderMethod r vis mthd attch bod)
   => Label
   -> r vis
   -> r attch
   -> VS (r TypeData)
   -> [MS (r ParamData)]
-  -> MS (r Body)
+  -> MS (r bod)
   -> MS (r mthd)
 method n s p t = intMethod False n s p (mType t)
 
 getMethod
-  :: (OORenderSym r vis stmt mthd stvr attch file mod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
-getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName
+getMethod v = zoom lensMStoVS v >>= (\vr -> method (getterName $ variableName
   vr) public instanceLevel (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.instanceVarSelf v)
 
 setMethod
-  :: (OORenderSym r vis stmt mthd stvr attch file mod)
+  :: (OORenderSym r vis stmt mthd stvr attch file mod bod block)
   => SVariable r -> MS (r mthd)
-setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
+setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
   vr) public instanceLevel IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.instanceVarSelf v &= IC.valueOf v
 
 initStmts
-  :: (VariableValue r, SelfSym r, AssignStatement r stmt, BodySym r stmt)
-  => Initializers r -> MS (r Body)
+  ::
+    ( VariableValue r
+    , SelfSym r
+    , AssignStatement r stmt
+    , BlockSym r block stmt
+    , BodySym r bod block
+    )
+  => Initializers r -> MS (r bod)
 initStmts = bodyStatements . map (\(vr, vl) -> IG.instanceVarSelf vr &= vl)
 
 function
-  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch)
-  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  :: (AttachmentSym r attch, OORenderMethod r vis mthd attch bod)
+  => Label -> r vis -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 function n s t = RO.intFunc False n s classLevel (mType t)
 
 docFuncRepr :: (RenderMethod r mthd) => FuncDocRenderer -> String ->
@@ -611,8 +625,8 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 -- Files --
 
 fileDoc
-  :: (RC.BlockElim r, RenderMod r mod, RenderFile r file mod)
-  => String -> (r mod -> r Block) -> r Block -> FS (r mod) -> FS (r file)
+  :: (RC.BlockElim r block, RenderMod r mod, RenderFile r file mod)
+  => String -> (r mod -> r block) -> r block -> FS (r mod) -> FS (r file)
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName

@@ -7,19 +7,19 @@ module Drasil.Shared.RendererClassesCommon (
   InternalBinderElim(..), RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..),
-  MethodElim(..), BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
+  StatementElim(..), RenderVisibility(..), VisibilityElim(..), MethodTypeSym(..),
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
+  BlockCommentSym(..), BlockCommentElim(..), ScopeElim(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Body, Block, Variable,
-  SVariable, Value, SValue, MixedCall, TypeSym(..), VariableElim(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  ValueExpression(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), IndexTranslator(..), List(..),
-  ListStatement, InternalList(..), AssignStatement(..), DeclStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ParameterSym(..), BinderElim(..), UnRepr(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, SVariable, Value,
+  SValue, MixedCall, TypeSym(..), VariableElim(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), ValueExpression(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  IndexTranslator(..), List(..), ListStatement, InternalList(..),
+  AssignStatement(..), DeclStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ParameterSym(..), BinderElim(..), UnRepr(..), BodySym, BlockSym)
 import Drasil.Shared.AST (AttachmentTag, Terminator, VisibilityTag, ScopeData,
   OpData, BinderD, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (MS, VS)
@@ -27,21 +27,22 @@ import Drasil.Shared.State (MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (AssignStatement r stmt, DeclStatement r stmt, StringStatement r stmt,
-  FuncAppStatement r stmt, CommentStatement r stmt, ControlStatement r stmt,
-  Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, IndexTranslator r,
-  List r, ListStatement r stmt, InternalList r, VariableElim r, BinderElim r,
-  RenderBlock r, BlockElim r, RenderBody r, BodyElim r, InternalListFunc r,
-  RenderFunction r, FunctionElim r, OpElim r, RenderParam r, ParamElim r,
-  RenderVisibility r vis, VisibilityElim r vis, InternalAssignStmt r stmt,
-  InternalIOStmt r stmt, InternalControlStmt r stmt, RenderStatement r stmt,
-  StatementElim r stmt, RenderType r, RenderValue r, ValueElim r,
-  RenderVariable r, InternalVarElim r, InternalBinderElim r, ImportSym r,
-  UnaryOpSym r, BinaryOpSym r, BlockCommentSym r, BlockCommentElim r,
-  ValueExpression r, RenderMethod r mthd, MethodElim r mthd, ParameterSym r,
-  ScopeElim r
-  ) => CommonRenderSym r vis stmt mthd
+class (BodySym r bod block, BlockSym r block stmt, AssignStatement r stmt,
+  DeclStatement r stmt bod, StringStatement r stmt, FuncAppStatement r stmt,
+  CommentStatement r stmt, ControlStatement r stmt bod, Argument r, Literal r,
+  MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
+  BooleanExpression r, Comparison r, IndexTranslator r, List r,
+  ListStatement r stmt, InternalList r block, VariableElim r, BinderElim r,
+  RenderBlock r block, BlockElim r block, RenderBody r bod, BodyElim r bod,
+  InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r,
+  ParamElim r, RenderVisibility r vis, VisibilityElim r vis,
+  InternalAssignStmt r stmt, InternalIOStmt r stmt, InternalControlStmt r stmt,
+  RenderStatement r stmt, StatementElim r stmt, RenderType r, RenderValue r,
+  ValueElim r, RenderVariable r, InternalVarElim r, InternalBinderElim r,
+  ImportSym r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r,
+  BlockCommentElim r, ValueExpression r, RenderMethod r mthd, MethodElim r mthd,
+  ParameterSym r, ScopeElim r
+  ) => CommonRenderSym r vis stmt mthd bod block
 
 -- Common Typeclasses --
 
@@ -54,17 +55,17 @@ class ImportSym r where
 import' :: (UnRepr r Doc) => r Doc -> Doc
 import' = unRepr
 
-class RenderBody r where
-  multiBody :: [MS (r Body)] -> MS (r Body)
+class RenderBody r bod | r -> bod where
+  multiBody :: [MS (r bod)] -> MS (r bod)
 
-class BodyElim r where
-  body :: r Body -> Doc
+class BodyElim r bod | r -> bod where
+  body :: r bod -> Doc
 
-class RenderBlock r where
-  multiBlock :: [MS (r Block)] -> MS (r Block)
+class RenderBlock r block | r -> block where
+  multiBlock :: [MS (r block)] -> MS (r block)
 
-class BlockElim r where
-  block :: r Block -> Doc
+class BlockElim r block | r -> block where
+  block :: r block -> Doc
 
 class RenderType r where
   multiType :: [VS (r TypeData)] -> VS (r TypeData)
@@ -201,10 +202,8 @@ class BlockCommentSym r where
 class BlockCommentElim r where
   blockComment' :: r Doc -> Doc
 
-type MSMthdType a = MS (a TypeData)
-
 class (TypeSym r) => MethodTypeSym r where
-  mType    :: VS (r TypeData) -> MSMthdType r
+  mType    :: VS (r TypeData) -> MS (r TypeData)
 
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r mthd | r -> mthd where
   -- | Takes a BlockComment and a method and generates a function.

@@ -6,13 +6,13 @@ import Control.Lens ((^.))
 import Data.Maybe (maybeToList)
 
 -- Generic Drasil
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
 import Drasil.SRS.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.System (ProjectName, HasSystemMeta(projName), projAbrvS, introduceProjName)
+import Drasil.System (ProjectName, HasSystemMeta(projName), projAbrvS)
 
 -- Vocabulary
 import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
@@ -102,9 +102,9 @@ overviewParagraph si extraInfo introSubs =
         EmptyS -> phrase document  -- No subsections, end with just "document"
         _      -> phrase document :+: subsectionsSentence  -- Has subsections, add them
   in foldlSP ([S "The following", phrase section_,
-     S "provides an overview of the", introduceAbb srs, S "for the",
-     introduceProjName (si ^. projName) +:+. S "program"] ++ extraInfo ++ [S "This", phrase section_, S "explains the", phrase purpose,
-     S "of this", endingSentence])
+    S "provides an overview of the", introduceAbb srs, S "for" +:+. (projAbrvS $ si ^. projName)]
+    ++ extraInfo ++
+    [S "This", phrase section_, S "explains the", phrase purpose, S "of this", endingSentence])
 
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: ProjectName -> Sentence

@@ -7,26 +7,28 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body, SVariable, SValue)
+import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue, MethodSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..), FileSym(..),
-  GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym)
+  GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym, OOMethodSym,
+  ClassSym)
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
+  MethodTypeSym(..), RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd,
-  IG.ModuleSym r vis stmt mthd stvr attch mod, IG.FileSym r file mod,
-  IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
-  IG.StrategyPattern r stmt, IG.OOVariableValue r, IG.OOValueExpression r,
-  RenderClass r vis mthd stvr, ClassElim r, RenderFile r file mod,
-  InternalGetSet r, OORenderMethod r vis mthd attch, RenderMod r mod,
-  ModuleElim r mod, StateVarElim r stvr, PermElim r attch
-  ) => OORenderSym r vis stmt mthd stvr attch file mod
+class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
+  IG.OOMethodSym r vis mthd attch bod, IG.ClassSym r vis mthd stvr attch,
+  IG.ModuleSym r mod mthd, IG.FileSym r file mod, IG.InternalValueExp r,
+  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r bod block,
+  IG.OOVariableValue r, IG.OOValueExpression r, RenderClass r vis mthd stvr,
+  ClassElim r, RenderFile r file mod, InternalGetSet r,
+  OORenderMethod r vis mthd attch bod, RenderMod r mod, ModuleElim r mod,
+  StateVarElim r stvr, PermElim r attch
+  ) => OORenderSym r vis stmt mthd stvr attch file mod bod block
 
 -- OO-Only Typeclasses --
 
@@ -50,17 +52,17 @@ class InternalGetSet r where
   setFunc :: VS (r TypeData) -> SVariable r -> SValue r -> VS (r FuncData)
 
 class (MethodTypeSym r) => OOMethodTypeSym r where
-  construct :: Label -> MSMthdType r
+  construct :: Label -> MS (r TypeData)
 
-class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch | r -> vis attch where
+class (RenderMethod r mthd, OOMethodTypeSym r) => OORenderMethod r vis mthd attch bod | r -> vis attch bod where
   -- | Main method?, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r vis -> r attch ->
-    MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    MS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
   -- | True for main function, name, public/private, classLevel/instanceLevel,
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r vis -> r attch
-    -> MSMthdType r -> [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+    -> MS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 
   destructor :: [IG.CSStateVar r stvr] -> MS (r mthd)
 

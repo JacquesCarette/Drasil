@@ -43,7 +43,7 @@ mkSRS = [TableOfContents,
     , TAandA
     ],
   IntroSec $
-  IntroProg introBlurb (phrase progName)
+  IntroProg introBlurb []
     [ IPurpose (StdPurp Verbose),
       IScope scope,
       IChar [] charsOfReader [],

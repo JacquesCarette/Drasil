@@ -249,8 +249,8 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
+mkIntroSec si (IntroProg probIntro extraInfo l) =
+  Intro.introductionSection probIntro si extraInfo l $ map mkSubIntro l
   where
     im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section

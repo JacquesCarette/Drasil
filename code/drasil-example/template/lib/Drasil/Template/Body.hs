@@ -18,10 +18,9 @@ import Drasil.Generator (withCommonKnowledge)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, ddENoRefs)
 import Data.Drasil.Concepts.Documentation (output_, funcReqDom)
 import Data.Drasil.SI_Units (second)
-
-import qualified Drasil.SRS.Concepts as SRS
 import Data.Drasil.Citations
-import Data.Drasil.Concepts.Theory (inModel)
+
+import Drasil.Template.MetaConcepts (projName)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -32,11 +31,11 @@ mkSRS = [TableOfContents,
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
-  IntroProg EmptyS (phrase progName)
-    [ IPurpose $ purpDoc progName Verbose,
+  IntroProg EmptyS []
+    [ IPurpose (StdPurp Verbose),
       IScope EmptyS,
       IChar [] [] [],
-      IOrgSec inModel (SRS.inModel [] []) Nothing
+      IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
@@ -48,7 +47,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg EmptyS []                --  This adds a is used to define the problem your system will solve
       [ TermsAndDefs Nothing ([] :: [ConceptChunk])   -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc progName [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
+      , PhySysDesc [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals []
       ] -- This adds a goals section and goals input is defined for the preample of the goal.
@@ -72,7 +71,7 @@ mkSRS = [TableOfContents,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],
+     AuxConsProg [],
   Bibliography]
 
 inputs :: NE.NonEmpty DefinedQuantityDict
@@ -108,7 +107,7 @@ t1QD = mkQuantDef t1 $ sy t0 $+ sy dt
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [authorName]
+  projName [authorName]
   [] [] [] []
   ([] :: [TheoryModel]) ([] :: [GenDefn]) dataDefs ([] :: [InstanceModel])
   inputs outputs
@@ -118,9 +117,6 @@ si = mkSmithEtAlICO
 symbols :: [DefinedQuantityDict]
 symbols = NE.toList $ inputs <> outputs
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = []
 
@@ -128,11 +124,8 @@ concIns :: [ConceptInstance]
 concIns = [inputValues, outputValues]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge []
-  symbols [] cis conceptChunks
-  ([] :: [UnitDefn]) dataDefs ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns
-  citations [inputValuesTable]
+symbMap = withCommonKnowledge projName [] symbols [] [] conceptChunks []
+  dataDefs [] [] [] concIns citations [inputValuesTable]
 
 citations :: BibRef
 citations = [parnasClements1986]
@@ -143,10 +136,6 @@ resourcePath = "../../../../datafiles/dblpend/" -- FIXME: Change to your resourc
 figTemp :: LabelledContent
 figTemp = llccFig "dblpend" $ figWithWidth EmptyS
   (resourcePath ++ "dblpend.png") 60
-
--- MOVE TO CONCEPTS
-progName :: CI -- FIXME: Replace "template" with the name of your project!
-progName = commonIdea (mkUid "templateName") (pn "Template") "Template" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

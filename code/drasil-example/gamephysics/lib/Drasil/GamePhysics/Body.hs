@@ -9,6 +9,7 @@ import qualified Drasil.SRS.Concepts as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
@@ -19,7 +20,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.Concepts.Theory (inModel)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
@@ -37,7 +37,7 @@ import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.MetaConcepts (progName)
+import Drasil.GamePhysics.MetaConcepts (projName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
@@ -48,11 +48,11 @@ import Drasil.GamePhysics.GenDefs (generalDefns)
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short progName)
-  [IPurpose $ purpDoc progName Verbose,
+  IntroSec $ IntroProg para1_introduction_intro []
+  [IPurpose (StdPurp Verbose),
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec inModel (SRS.inModel [] []) Nothing],
+   IOrgSec Nothing],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
@@ -80,12 +80,12 @@ mkSRS = [TableOfContents,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg progName [],
+    AuxConstntSec $ AuxConsProg [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName [alex, luthfi, olu]
+si = mkSmithEtAlICO projName [alex, luthfi, olu]
   [purp] [] [] []
   tMods generalDefns dataDefs iMods
   inputSymbols outputSymbols inputConstraints [] symbols
@@ -106,7 +106,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 --FIXME: All named ideas, not just acronyms.
 
 cis :: [CI]
-cis = [progName, centreMass]
+cis = [centreMass]
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
@@ -115,7 +115,7 @@ conceptChunks =
   CP.elasticity]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols [] cis conceptChunks []
+symbMap = withCommonKnowledge projName allRefs symbols [] cis conceptChunks []
   dataDefs iMods generalDefns tMods concIns citations labelledContent
 
 -- | Holds all references and links used in the document.
@@ -189,7 +189,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (projAbrvS projName) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", D.toSent (phraseNP (system `andIts` environment))]
 
 sysCtxDesc :: Contents
@@ -223,7 +223,7 @@ sysCtxSysResp = [S "Determine if the" +:+ D.toSent (pluralNP (input_ `and_PS`
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -235,7 +235,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
+  [S "The", phrase endUser `S.of_` projAbrvS projName,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `S.and_` S "an understanding of", phrase highSchoolPhysics]
 

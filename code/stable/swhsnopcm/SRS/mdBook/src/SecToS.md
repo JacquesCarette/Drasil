@@ -1,6 +1,6 @@
 # Table of Symbols {#Sec:ToS}
 
-The symbols used in this document are summarized in the [Table of Symbols](./SecToS.md#Table:ToS) along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems with no phase change material. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+The symbols used in this document are summarized in the [Table of Symbols](./SecToS.md#Table:ToS) along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 
 <div id="Table:ToS"></div>
 

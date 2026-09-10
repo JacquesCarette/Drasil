@@ -22,14 +22,13 @@ import Language.Drasil.Code.Imperative.README.Core (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), SoftwareDossierFile(..))
 import Language.Drasil.Mod (Name, Description, Import)
 import Drasil.Metadata (watermark)
-import Drasil.System (HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
-import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, File,
-  OOProg, CS, FS, MS, VS, TypeData, ValueSym(..), Argument(..),
-  ValueExpression(..), InternalValueExp, OOValueExpression(..), SelfSym(..),
-  VariableValue(..), FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..),
-  CodeType(..), TypeElim(..), objMethodCallMixedArgs)
+import Drasil.GOOL (SVariable, SValue, Class, CSStateVar, NamedArgs, OOProg, CS,
+  FS, MS, VS, TypeData, ValueSym(..), Argument(..), ValueExpression(..),
+  InternalValueExp, OOValueExpression(..), SelfSym(..), VariableValue(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), CodeType(..),
+  TypeElim(..), objMethodCallMixedArgs)
 import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
@@ -37,9 +36,14 @@ import qualified Drasil.GOOL as OO (FileSym(..), ModuleSym(..))
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImports :: (OOProg r vis stmt mthd stvr attch prg) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r mthd)))] -> [GenState (Maybe (CS (r Class)))] ->
-  GenState (FS (r File))
+genModuleWithImports
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  => Name
+  -> Description
+  -> [Import]
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> [GenState (Maybe (CS (r Class)))]
+  -> GenState (FS (r file))
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -52,9 +56,13 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   return $ commMod $ OO.fileDoc $ OO.buildModule n is (catMaybes ms) (catMaybes cs)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModule :: (OOProg r vis stmt mthd stvr attch prg) => Name -> Description ->
-  [GenState (Maybe (MS (r mthd)))] -> [GenState (Maybe (CS (r Class)))] ->
-  GenState (FS (r File))
+genModule
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  => Name
+  -> Description
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> [GenState (Maybe (CS (r Class)))]
+  -> GenState (FS (r file))
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
@@ -62,7 +70,7 @@ genDoxConfig :: (SoftwareDossierSym r) => SoftwareDossierState ->
   GenState (Maybe (r FileLayout))
 genDoxConfig s = do
   g <- get
-  let n = g ^. programName
+  let n = g ^. projAbrv
       cms = g ^. commented
       v = getDoxOutput g
   return $ if not (null cms) then doxConfig n s v else Nothing
@@ -71,7 +79,7 @@ genDoxConfig s = do
 genReadMe :: (SoftwareDossierSym r) => ReadMeInfo -> GenState (Maybe (r FileLayout))
 genReadMe rmi = do
   g <- get
-  let n = g ^. programName
+  let n = g ^. projAbrv
   return $ getReadMe (getSoftwareDossierFiles g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
@@ -83,7 +91,7 @@ data ClassType = Primary | Auxiliary
 -- | Generates a primary or auxiliary class with the given name, description,
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
-mkClass :: (ClassSym r vis stmt mthd stvr attch) => ClassType -> Name -> Maybe Name ->
+mkClass :: (ClassSym r vis mthd stvr attch) => ClassType -> Name -> Maybe Name ->
   Description -> [CSStateVar r stvr] -> GenState [MS (r mthd)] ->
     GenState [MS (r mthd)] -> GenState (CS (r Class))
 mkClass s n l desc vs cstrs mths = do
@@ -102,13 +110,13 @@ mkClass s n l desc vs cstrs mths = do
     else c
 
 -- | Generates a primary class.
-primaryClass :: (ClassSym r vis stmt mthd stvr attch) => Name -> Maybe Name -> Description ->
+primaryClass :: (ClassSym r vis mthd stvr attch) => Name -> Maybe Name -> Description ->
   [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] ->
   GenState (CS (r Class))
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
-auxClass :: (ClassSym r vis stmt mthd stvr attch) => Name -> Maybe Name -> Description ->
+auxClass :: (ClassSym r vis mthd stvr attch) => Name -> Maybe Name -> Description ->
   [CSStateVar r stvr] -> GenState [MS (r mthd)] -> GenState [MS (r mthd)] ->
   GenState (CS (r Class))
 auxClass = mkClass Auxiliary
@@ -185,8 +193,13 @@ fAppInOut m n ins outs both = do
 -- 'CommentFunc', a module-level Doxygen comment is still created, though it only
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
-genModuleWithImportsProc :: (ProcProg r vis stmt mthd prg) => Name -> Description ->
-  [Import] -> [GenState (Maybe (MS (r mthd)))] -> GenState (FS (r File))
+genModuleWithImportsProc
+  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  => Name
+  -> Description
+  -> [Import]
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> GenState (FS (r file))
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -198,8 +211,12 @@ genModuleWithImportsProc n desc is maybeMs = do
   return $ commMod $ Proc.fileDoc $ Proc.buildModule n is (catMaybes ms)
 
 -- | Generates a module for when imports do not need to be explicitly stated.
-genModuleProc :: (ProcProg r vis stmt mthd prg) => Name -> Description ->
-  [GenState (Maybe (MS (r mthd)))] -> GenState (FS (r File))
+genModuleProc
+  :: (ProcProg r vis stmt mthd prg file mod bod block)
+  => Name
+  -> Description
+  -> [GenState (Maybe (MS (r mthd)))]
+  -> GenState (FS (r file))
 genModuleProc n desc = genModuleWithImportsProc n desc []
 
 -- | Function call generator.

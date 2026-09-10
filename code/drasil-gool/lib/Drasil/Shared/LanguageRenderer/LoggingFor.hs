@@ -128,13 +128,13 @@ instance (ListStatement r stmt) => ListStatement (LoggingFor r) stmt where
 
 instance
   ( MultiStatement r stmt
-  , DeclStatement r stmt
+  , DeclStatement r stmt bod
   , FileHandling r stmt
   , PrintFile r stmt
   , VariableValue r
   , VariableElim r
   , Literal r
-  ) => DeclStatement (LoggingFor r) stmt where
+  ) => DeclStatement (LoggingFor r) stmt bod where
   varDec = liftLogging varDec
   varDecDef vr scp vl = liftLogging $ multi $
     varDecDef (lowerLogging vr) (lowerLogging scp) (lowerLogging vl)
@@ -293,14 +293,14 @@ instance (Comparison r) => Comparison (LoggingFor r) where
   (?==) = liftLogging (?==)
   (?!=) = liftLogging (?!=)
 
-instance (BlockSym r stmt) => BlockSym (LoggingFor r) stmt where
+instance (BlockSym r block stmt) => BlockSym (LoggingFor r) block stmt where
   block = liftLogging block
 
-instance (BodySym r stmt) => BodySym (LoggingFor r) stmt where
+instance (BodySym r bod block) => BodySym (LoggingFor r) bod block where
   body = liftLogging body
   addComments = liftLogging addComments
 
-instance (ControlStatement r stmt) => ControlStatement (LoggingFor r) stmt where
+instance (ControlStatement r stmt bod) => ControlStatement (LoggingFor r) stmt bod where
   break = liftLogging break
   continue = liftLogging continue
   returnStmt = liftLogging returnStmt
@@ -326,7 +326,7 @@ instance (FuncAppStatement r stmt) => FuncAppStatement (LoggingFor r) stmt where
 
 instance (FunctionSym r) => FunctionSym (LoggingFor r) where
 
-instance (InternalList r) => InternalList (LoggingFor r) where
+instance (InternalList r block) => InternalList (LoggingFor r) block where
   listSlice' = liftLogging listSlice'
 
 instance (Literal r) => Literal (LoggingFor r) where
@@ -352,7 +352,7 @@ instance (VisibilitySym r vis) => VisibilitySym (LoggingFor r) vis where
   private = liftLogging private
   public = liftLogging public
 
-instance (MethodSym r vis stmt mthd) => MethodSym (LoggingFor r) vis stmt mthd where
+instance (MethodSym r vis mthd bod) => MethodSym (LoggingFor r) vis mthd bod where
   docMain = liftLogging docMain
   function = liftLogging function
   mainFunction = liftLogging mainFunction
@@ -423,21 +423,21 @@ instance (NativeVector lang) => NativeVector (LoggingFor lang) where
 
 -- GProc
 
-instance (P.ProcProg r vis stmt mthd prg) => P.ProcProg (LoggingFor r) vis stmt mthd prg
+instance (P.ProcProg r vis stmt mthd prg file mod bod block) => P.ProcProg (LoggingFor r) vis stmt mthd prg file mod bod block
 
-instance (P.ModuleSym r vis stmt mthd) => P.ModuleSym (LoggingFor r) vis stmt mthd where
+instance (P.ModuleSym r mod mthd) => P.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging P.buildModule
 
-instance (P.FileSym r vis stmt mthd) => P.FileSym (LoggingFor r) vis stmt mthd where
+instance (P.FileSym r file mod) => P.FileSym (LoggingFor r) file mod where
   fileDoc = liftLogging P.fileDoc
   docMod = liftLogging P.docMod
 
-instance (P.ProgramSym r vis stmt mthd prg) => P.ProgramSym (LoggingFor r) vis stmt mthd prg where
+instance (P.ProgramSym r prg file) => P.ProgramSym (LoggingFor r) prg file where
   prog = liftLogging P.prog
 
 -- GOOL
 
-instance (G.OOProg r vis stmt mthd stvr attch prg) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg
+instance (G.OOProg r vis stmt mthd stvr attch prg file mod bod block) => G.OOProg (LoggingFor r) vis stmt mthd stvr attch prg file mod bod block
 
 instance (G.GetSet r) => G.GetSet (LoggingFor r) where
   get = liftLogging G.get
@@ -457,8 +457,8 @@ instance (G.OOVariableSym r) => G.OOVariableSym (LoggingFor r) where
   extClassVarAccess = liftLogging G.extClassVarAccess
   instanceVarAccess = liftLogging G.instanceVarAccess
 
-instance (DeclStatement (LoggingFor r) stmt, G.OODeclStatement r stmt) =>
-    G.OODeclStatement (LoggingFor r) stmt where
+instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt bod) =>
+    G.OODeclStatement (LoggingFor r) stmt bod where
   objDecDef = liftLogging G.objDecDef
   objDecNew = liftLogging G.objDecNew
   extObjDecNew = liftLogging G.extObjDecNew
@@ -489,7 +489,7 @@ instance (G.AttachmentSym r attch) => G.AttachmentSym (LoggingFor r) attch where
   classLevel = liftLogging G.classLevel
   instanceLevel = liftLogging G.instanceLevel
 
-instance (G.OOMethodSym r vis stmt mthd attch) => G.OOMethodSym (LoggingFor r) vis stmt mthd attch where
+instance (G.OOMethodSym r vis mthd attch bod) => G.OOMethodSym (LoggingFor r) vis mthd attch bod where
   method = liftLogging G.method
   getMethod = liftLogging G.getMethod
   setMethod = liftLogging G.setMethod
@@ -502,21 +502,21 @@ instance (G.StateVarSym r vis stvr attch) => G.StateVarSym (LoggingFor r) vis st
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis stmt mthd stvr attch) => G.ClassSym (LoggingFor r) vis stmt mthd stvr attch where
+instance (G.ClassSym r vis mthd stvr attch) => G.ClassSym (LoggingFor r) vis mthd stvr attch where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass
   docClass = liftLogging G.docClass
 
-instance (G.ModuleSym r vis stmt mthd stvr attch) => G.ModuleSym (LoggingFor r) vis stmt mthd stvr attch where
+instance (G.ModuleSym r mod mthd) => G.ModuleSym (LoggingFor r) mod mthd where
   buildModule = liftLogging G.buildModule
 
-instance (G.FileSym r vis stmt mthd stvr attch) => G.FileSym (LoggingFor r) vis stmt mthd stvr attch where
+instance (G.FileSym r file mod) => G.FileSym (LoggingFor r) file mod where
   fileDoc = liftLogging G.fileDoc
   docMod = liftLogging G.docMod
 
-instance (G.ProgramSym r vis stmt mthd stvr attch prg) => G.ProgramSym (LoggingFor r) vis stmt mthd stvr attch prg where
+instance (G.ProgramSym r prg file) => G.ProgramSym (LoggingFor r) prg file where
   prog = liftLogging G.prog
 
-instance (G.StrategyPattern r stmt) => G.StrategyPattern (LoggingFor r) stmt where
+instance (G.StrategyPattern r bod block) => G.StrategyPattern (LoggingFor r) bod block where
   runStrategy = liftLogging G.runStrategy

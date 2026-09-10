@@ -428,9 +428,9 @@ function HelloWorld(varargin)
         end
         fprintf('%s\n', "]");
         fprintf('%s\n', "Type an int");
-        d = str2double(input('', 's'));
+        d = str2double(input("", "s"));
         fprintf('%s\n', "Type another");
-        input('', 's');
+        input("", "s");
         
         fprintf('%s\n', " too");
         fprintf('%s', "boo");

@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 import Drasil.FileHandling.Legacy (indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, SVariable, Value,
-  SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
+  Value, SValue, BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
   getTypeString, VariableSym(..), VisibilitySym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -94,7 +94,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, updateParam, ProgData(..), progD, TypeData(..), ValData(..),
   vd, updateValDoc, AttachmentTag(..), VarData(..), vard, ScopeData, BinderD(..),
-  bindFormD)
+  bindFormD, FileData)
 import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on2StateWrapped, onCodeList, onStateList)
@@ -128,28 +128,28 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
+instance OOProg CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
-instance ProgramSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
+instance ProgramSym CSharpCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData
-instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance CommonRenderSym CSharpCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr CSharpCode contents where
   unRepr = unCSC
 
-instance FileSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance FileSym CSharpCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
 
   docMod = CP.doxMod csExt
 
-instance RenderFile CSharpCode where
+instance RenderFile CSharpCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -169,24 +169,24 @@ instance PermElim CSharpCode Doc where
   perm = unCSC
   binding = error $ CP.bindingError csName
 
-instance BodySym CSharpCode (Doc, Terminator) where
+instance BodySym CSharpCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance RenderBody CSharpCode where
+instance RenderBody CSharpCode Body where
   multiBody = G.multiBody
 
-instance BodyElim CSharpCode where
+instance BodyElim CSharpCode Body where
   body = unCSC
 
-instance BlockSym CSharpCode (Doc, Terminator) where
+instance BlockSym CSharpCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock CSharpCode where
+instance RenderBlock CSharpCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim CSharpCode where
+instance BlockElim CSharpCode Block where
   block = unCSC
 
 instance TypeSym CSharpCode where
@@ -451,7 +451,7 @@ instance Set CSharpCode where
   setRemove = CP.setMethodCall csListRemove
   setUnion = CP.setMethodCall csUnionWith
 
-instance InternalList CSharpCode where
+instance InternalList CSharpCode Block where
   listSlice' = M.listSlice
 
 instance InternalGetSet CSharpCode where
@@ -512,7 +512,7 @@ instance AssignStatement CSharpCode (Doc, Terminator) where
   (&++) = C.increment1
   (&--) = C.decrement1
 
-instance DeclStatement CSharpCode (Doc, Terminator) where
+instance DeclStatement CSharpCode (Doc, Terminator) Body where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $
     C.varDec classLevel instanceLevel empty v scp)
   varDecDef = C.varDecDef Semi
@@ -526,7 +526,7 @@ instance DeclStatement CSharpCode (Doc, Terminator) where
   constDecDef = CG.constDecDef
   funcDecDef = csFuncDecDef
 
-instance OODeclStatement CSharpCode (Doc, Terminator) where
+instance OODeclStatement CSharpCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -578,7 +578,7 @@ instance OOFuncAppStatement CSharpCode (Doc, Terminator) where
 instance CommentStatement CSharpCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement CSharpCode (Doc, Terminator) where
+instance ControlStatement CSharpCode (Doc, Terminator) Body where
   break =  mkStmt R.break
   continue =  mkStmt R.continue
 
@@ -609,7 +609,7 @@ instance ControlStatement CSharpCode (Doc, Terminator) where
 instance ObserverPattern CSharpCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers
 
-instance StrategyPattern CSharpCode (Doc, Terminator) where
+instance StrategyPattern CSharpCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym CSharpCode Doc where
@@ -642,7 +642,7 @@ instance ParamElim CSharpCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unCSC
 
-instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
+instance MethodSym CSharpCode Doc MethodData Body where
   docMain = CP.docMain
   function = G.function
   mainFunction = CP.mainFunction string csMain
@@ -651,7 +651,7 @@ instance MethodSym CSharpCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = csInOut (function n s)
   docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
-instance OOMethodSym CSharpCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym CSharpCode Doc MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -666,7 +666,7 @@ instance RenderMethod CSharpCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod CSharpCode Doc MethodData Doc where
+instance OORenderMethod CSharpCode Doc MethodData Doc Body where
   intMethod m n s p t ps b = do
     modify (if m then setCurrMain else id)
     tp <- t
@@ -686,7 +686,7 @@ instance StateVarSym CSharpCode Doc StateVar Doc where
 instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ClassSym CSharpCode Doc MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -704,14 +704,14 @@ instance RenderClass CSharpCode Doc MethodData StateVar where
 instance ClassElim CSharpCode where
   class' = unCSC
 
-instance ModuleSym CSharpCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym CSharpCode ModData MethodData where
   buildModule n = CP.buildModule' n langImport
 
-instance RenderMod CSharpCode where
+instance RenderMod CSharpCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim CSharpCode where
+instance ModuleElim CSharpCode ModData where
   module' = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where
@@ -939,16 +939,18 @@ csInOut f ins outs both b = f void (map (onStateValue (onCodeValue
 
 csPrint
   ::
-    ( Comparison r
+    ( BodySym r bod block
+    , BlockSym r block stmt
+    , Comparison r
     , Literal r
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , InternalIOStmt r stmt

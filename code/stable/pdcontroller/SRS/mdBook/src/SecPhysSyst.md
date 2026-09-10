@@ -1,6 +1,6 @@
 # Physical System Description {#Sec:PhysSyst}
 
-The physical system of PD Controller, as shown in [Fig:pidSysDiagram](./SecPhysSyst.md#Figure:pidSysDiagram), includes the following elements:
+The physical system of PDController, as shown in [Fig:pidSysDiagram](./SecPhysSyst.md#Figure:pidSysDiagram), includes the following elements:
 
 PS1: The Summing Point.
 

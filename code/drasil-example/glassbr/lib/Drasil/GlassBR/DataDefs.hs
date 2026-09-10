@@ -122,7 +122,7 @@ anGlass = glassTypeHelper annealedGl
 ftGlass = glassTypeHelper fTemperedGl
 hsGlass = glassTypeHelper hStrengthGl
 
-glassTypeHelper :: ConceptChunk -> Sentence
+glassTypeHelper :: Idea c => c -> Sentence
 glassTypeHelper t = short t `S.is` phrase t +:+. phrase glass
 
 calofDemandDesc :: Sentence

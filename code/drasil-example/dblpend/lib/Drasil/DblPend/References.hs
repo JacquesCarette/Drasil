@@ -1,6 +1,6 @@
 module Drasil.DblPend.References (citations) where
 
-import Language.Drasil (BibRef)
+import Language.Drasil.Document (BibRef)
 import Data.Drasil.Citations (accelerationWiki, velocityWiki,
  parnasClements1986, hibbeler2004)
 

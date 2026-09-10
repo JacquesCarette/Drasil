@@ -27,8 +27,8 @@ import Drasil.FileHandling.Legacy (blank, indent, indentList)
 import Utils.Drasil (capitalize, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (Label, Library, Body, Variable, Value,
-  SValue, ValueSym(..), TypeElim(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, Variable, Value, SValue,
+  ValueSym(..), TypeElim(..))
 import Drasil.Shared.RendererClassesCommon (ValueElim, StatementElim, BodyElim,
   InternalVarElim, InternalBinderElim, ParamElim)
 import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
@@ -213,12 +213,12 @@ stateVarList = vcat
 -- Controls --
 
 switch
-  :: (BodyElim r, StatementElim r stmt, ValueElim r)
+  :: (BodyElim r bod, StatementElim r stmt, ValueElim r)
   => (Doc -> Doc)
   -> r stmt
   -> r Value
-  -> r Body
-  -> [(r Value, r Body)]
+  -> r bod
+  -> [(r Value, r bod)]
   -> Doc
 switch f st v defBody cs =
   let caseDoc (l, result) = vcat [

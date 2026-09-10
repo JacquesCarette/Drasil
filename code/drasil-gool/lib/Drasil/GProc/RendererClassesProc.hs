@@ -6,41 +6,42 @@ module Drasil.GProc.RendererClassesProc (
   ProcRenderMethod(..)
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, Block, Body)
-import qualified Drasil.GProc.InterfaceProc as IP (File, Module, FileSym(..))
+import Drasil.Shared.InterfaceCommon (Label, Block, MethodSym)
+import qualified Drasil.GProc.InterfaceProc as IP (FileSym(..), ModuleSym)
 import Drasil.Shared.State (FS, MS)
-import Drasil.Shared.AST (ParamData)
+import Drasil.Shared.AST (ParamData, TypeData)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
-  RenderMethod(..), MSMthdType)
+  RenderMethod(..))
 
-class (CommonRenderSym r vis stmt mthd, IP.FileSym r vis stmt mthd, RenderFile r,
-  RenderMod r, ModuleElim r, ProcRenderMethod r vis mthd
-  ) => ProcRenderSym r vis stmt mthd
+class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
+  IP.ModuleSym r mod mthd, IP.FileSym r file mod, RenderFile r file mod,
+  RenderMod r mod, ModuleElim r mod, ProcRenderMethod r vis mthd bod
+  ) => ProcRenderSym r vis stmt mthd file mod bod block
 -- Procedural-Only Typeclasses --
 
-class (BlockCommentSym r) => RenderFile r where
+class (BlockCommentSym r) => RenderFile r file mod | r -> file mod where
   -- top and bottom are only used for pre-processor guards for C++ header
   -- files. FIXME: Remove them (generation of pre-processor guards can be
   -- handled by fileDoc instead)
-  top :: r IP.Module -> r Block
+  top :: r mod -> r Block
   bottom :: r Block
 
-  commentedMod :: FS (r IP.File) -> FS (r Doc) -> FS (r IP.File)
+  commentedMod :: FS (r file) -> FS (r Doc) -> FS (r file)
 
-  fileFromData :: FilePath -> FS (r IP.Module) -> FS (r IP.File)
+  fileFromData :: FilePath -> FS (r mod) -> FS (r file)
 
-class RenderMod r where
-  modFromData :: String -> FS Doc -> FS (r IP.Module)
-  updateModuleDoc :: (Doc -> Doc) -> r IP.Module -> r IP.Module
+class RenderMod r mod | r -> mod where
+  modFromData :: String -> FS Doc -> FS (r mod)
+  updateModuleDoc :: (Doc -> Doc) -> r mod -> r mod
 
-class ModuleElim r where
-  module' :: r IP.Module -> Doc
+class ModuleElim r mod | r -> mod where
+  module' :: r mod -> Doc
 
-class (RenderMethod r mthd) => ProcRenderMethod r vis mthd | r -> vis where
+class (RenderMethod r mthd) => ProcRenderMethod r vis mthd bod | r -> vis bod where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
-  intFunc     :: Bool -> Label -> r vis -> MSMthdType r ->
-    [MS (r ParamData)] -> MS (r Body) -> MS (r mthd)
+  intFunc     :: Bool -> Label -> r vis -> MS (r TypeData) ->
+    [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)

@@ -22,7 +22,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Value, SValue,
   CommentStatement(..), ControlStatement(..), VisibilitySym(..), ScopeSym(..),
   ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..), (&=),
   switchAsIf, convScope)
-import Drasil.GProc.InterfaceProc (ProcProg, Module, ProgramSym(..), FileSym(..),
+import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -79,7 +79,7 @@ import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
 import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..),
   ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..),
   ProgData(..), TypeData(..), ValData(..), vd, VarData(..), vard, progD, fd, pd,
-  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD)
+  updateMthd, ScopeTag(..), ScopeData(..), sd, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.Shared.State (FS, MS, VS, lensGStoFS, revFiles, setFileType,
@@ -108,27 +108,27 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData
+instance ProcProg JuliaCode Doc (Doc, Terminator) MethodData ProgData FileData ModData Body Block
 
-instance ProgramSym JuliaCode Doc (Doc, Terminator) MethodData ProgData where
+instance ProgramSym JuliaCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData
-instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData
+instance CommonRenderSym JuliaCode Doc (Doc, Terminator) MethodData Body Block
+instance ProcRenderSym JuliaCode Doc (Doc, Terminator) MethodData FileData ModData Body Block
 
 instance UnRepr JuliaCode inner where
   unRepr = unJLC
 
-instance FileSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance FileSym JuliaCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     A.fileDoc jlExt m
   docMod = A.docMod jlExt
 
-instance RenderFile JuliaCode where
+instance RenderFile JuliaCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -144,24 +144,24 @@ instance ImportSym JuliaCode where
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
                       importLabel <+> text "." <> modName]
 
-instance BodySym JuliaCode (Doc, Terminator) where
+instance BodySym JuliaCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
 
-instance RenderBody JuliaCode where
+instance RenderBody JuliaCode Body where
   multiBody = G.multiBody
 
-instance BodyElim JuliaCode where
+instance BodyElim JuliaCode Body where
   body = unJLC
 
-instance BlockSym JuliaCode (Doc, Terminator) where
+instance BlockSym JuliaCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock JuliaCode where
+instance RenderBlock JuliaCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim JuliaCode where
+instance BlockElim JuliaCode Block where
   block = unJLC
 
 instance TypeSym JuliaCode where
@@ -404,7 +404,7 @@ instance NativeVector JuliaCode where
   vecMag a   = libFuncApp "LinearAlgebra" "norm" double [a]
   vecUnit a  = a #/ vecMag a
 
-instance InternalList JuliaCode where
+instance InternalList JuliaCode Block where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalListFunc JuliaCode where
@@ -461,7 +461,7 @@ instance AssignStatement JuliaCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement JuliaCode (Doc, Terminator) where
+instance DeclStatement JuliaCode (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -516,7 +516,7 @@ instance FuncAppStatement JuliaCode (Doc, Terminator) where
 instance CommentStatement JuliaCode (Doc, Terminator) where
   comment = G.comment jlCmtStart
 
-instance ControlStatement JuliaCode (Doc, Terminator) where
+instance ControlStatement JuliaCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
   returnStmt = G.returnStmt Empty
@@ -562,7 +562,7 @@ instance ParamElim JuliaCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unJLC
 
-instance MethodSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance MethodSym JuliaCode Doc MethodData Body where
   docMain = mainFunction
   function = A.function
   mainFunction = CP.mainBody
@@ -576,7 +576,7 @@ instance RenderMethod JuliaCode MethodData where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance ProcRenderMethod JuliaCode Doc MethodData where
+instance ProcRenderMethod JuliaCode Doc MethodData Body where
   intFunc _ n _ _ ps b = do
     pms <- sequence ps
     toCode . mthd n . jlIntFunc n pms <$> b
@@ -584,15 +584,15 @@ instance ProcRenderMethod JuliaCode Doc MethodData where
 instance MethodElim JuliaCode MethodData where
   method = mthdDoc . unJLC
 
-instance ModuleSym JuliaCode Doc (Doc, Terminator) MethodData where
+instance ModuleSym JuliaCode ModData MethodData where
   buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
-instance RenderMod JuliaCode where
+instance RenderMod JuliaCode ModData where
   modFromData n = A.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim JuliaCode where
+instance ModuleElim JuliaCode ModData where
   module' = modDoc . unJLC
 
 instance BlockCommentSym JuliaCode where
@@ -843,8 +843,8 @@ jlSpace = OSpace {oSpace = empty}
 
 -- | Creates a for-each loop in Julia
 jlForEach
-  :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r Body -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -852,7 +852,7 @@ jlForEach i lstVar b = vcat [
 
 -- | Creates the contents of a module in Julia
 jlModContents
-  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode Module)
+  :: Label -> [Label] -> [MS (JuliaCode MethodData)] -> FS (JuliaCode ModData)
 jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
@@ -870,8 +870,8 @@ jlModContents n is = A.buildModule n (do
 -- | Creates a function.  n is function name, pms is list of parameters, and
 --   bod is body.
 jlIntFunc
-  :: (BodyElim r, ParamElim r)
-  => Label -> [r ParamData] -> r Body -> Doc
+  :: (BodyElim r bod, ParamElim r)
+  => Label -> [r ParamData] -> r bod -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
         indent $ RC.body bod,
@@ -885,7 +885,7 @@ jlLambda ps ex = binderList ps <+> arrow <+> RC.value ex
 jlThrow :: (ValueElim r) => r Value -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
-jlTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+jlTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 jlTryCatch tryB catchB = vcat [
   tryLabel,
   indent $ RC.body tryB,
@@ -979,15 +979,17 @@ jlPrint _ f' p' v' = do
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut
   ::
-    ( Literal r
+    ( BodySym r bod block
+    , BlockSym r block stmt
+    , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , TypeElim r

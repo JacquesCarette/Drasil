@@ -14,8 +14,9 @@ import Language.Drasil.HTML2.Spec (
   )
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', CitationKind(..), numList)
+  rendPersLFM'', numList)
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
+import Language.Drasil.Document (CitationKind(..))
 
 import Language.Drasil.Printing.AST (Spec(S))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,

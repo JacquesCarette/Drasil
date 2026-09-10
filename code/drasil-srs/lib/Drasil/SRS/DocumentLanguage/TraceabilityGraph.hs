@@ -119,9 +119,9 @@ checkUIDAbbrev s t
   | Just x <- find t s :: Maybe GenDefn         = abrv x
   | Just x <- find t s :: Maybe TheoryModel     = abrv x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
-  | Just _ <- find t s :: Maybe LabelledContent = show t
-  | Just _ <- find t s :: Maybe Citation        = ""
-  | otherwise = error $ show t ++ "Caught."
+  | otherwise = error $ "`" ++ show t
+    ++ "` is neither a DD/IM/GD/TM/ConceptInstance or non-existent. It should "
+    ++ "not have been attempted to be displayed in a traceability graph."
 
 -- | Similar to 'checkUID' but gets reference addresses for display.
 checkUIDRefAdd :: ChunkDB -> UID -> String
@@ -131,9 +131,9 @@ checkUIDRefAdd s t
   | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe TheoryModel     = getAdd $ getRefAdd x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Just _ <- find t s :: Maybe LabelledContent = show t
-  | Just _ <- find t s :: Maybe Citation        = ""
-  | otherwise                                   = error $ show t ++ "Caught."
+  | otherwise = error $ "`" ++ show t
+    ++ "` is neither a DD/IM/GD/TM/ConceptInstance or non-existent. It should "
+    ++ "not have been attempted to be displayed in a traceability graph."
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

@@ -30,14 +30,14 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
-import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
-  ImportSym(..), RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
-  RenderType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..),
-  ValueElim(valuePrec, valueInt), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..), InternalBinderElim(..))
 import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
@@ -92,7 +92,7 @@ import Drasil.Shared.AST (Terminator(..), VisibilityTag(..), qualName,
   FileType(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), ValData(..), vd, AttachmentTag(..), VarData(..), vard,
-  ScopeData, BinderD(..), bindFormD)
+  ScopeData, BinderD(..), bindFormD, FileData)
 import Drasil.Shared.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.Shared.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -129,28 +129,28 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData
+instance OOProg SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData FileData ModData Body Block
 
-instance ProgramSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc ProgData where
+instance ProgramSym SwiftCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData
-instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc
+instance CommonRenderSym SwiftCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc FileData ModData Body Block
 
 instance UnRepr SwiftCode contents where
   unRepr = unSC
 
-instance FileSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance FileSym SwiftCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
 
   docMod = G.docMod CP.modDoc' swiftExt
 
-instance RenderFile SwiftCode where
+instance RenderFile SwiftCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -170,24 +170,24 @@ instance PermElim SwiftCode Doc where
   perm = unSC
   binding = error $ CP.bindingError swiftName
 
-instance BodySym SwiftCode (Doc, Terminator) where
+instance BodySym SwiftCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance RenderBody SwiftCode where
+instance RenderBody SwiftCode Body where
   multiBody = G.multiBody
 
-instance BodyElim SwiftCode where
+instance BodyElim SwiftCode Body where
   body = unSC
 
-instance BlockSym SwiftCode (Doc, Terminator) where
+instance BlockSym SwiftCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock SwiftCode where
+instance RenderBlock SwiftCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim SwiftCode where
+instance BlockElim SwiftCode Block where
   block = unSC
 
 instance TypeSym SwiftCode where
@@ -461,7 +461,7 @@ instance Set SwiftCode where
   setRemove = CP.setMethodCall swiftListRemove
   setUnion = CP.setMethodCall swiftUnion
 
-instance InternalList SwiftCode where
+instance InternalList SwiftCode Block where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalGetSet SwiftCode where
@@ -522,7 +522,7 @@ instance AssignStatement SwiftCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement SwiftCode (Doc, Terminator) where
+instance DeclStatement SwiftCode (Doc, Terminator) Body where
   varDec = swiftVarDec swiftVar
   varDecDef = C.varDecDef Empty
   setDecDef = C.setDecDef Empty
@@ -537,7 +537,7 @@ instance DeclStatement SwiftCode (Doc, Terminator) where
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement SwiftCode (Doc, Terminator) where
+instance OODeclStatement SwiftCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -615,7 +615,7 @@ instance OOFuncAppStatement SwiftCode (Doc, Terminator) where
 instance CommentStatement SwiftCode (Doc, Terminator) where
   comment = G.comment commentStart
 
-instance ControlStatement SwiftCode (Doc, Terminator) where
+instance ControlStatement SwiftCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
 
@@ -651,7 +651,7 @@ instance ControlStatement SwiftCode (Doc, Terminator) where
 instance ObserverPattern SwiftCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern SwiftCode (Doc, Terminator) where
+instance StrategyPattern SwiftCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym SwiftCode Doc where
@@ -684,7 +684,7 @@ instance ParamElim SwiftCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unSC
 
-instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
+instance MethodSym SwiftCode Doc MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -694,7 +694,7 @@ instance MethodSym SwiftCode Doc (Doc, Terminator) MethodData where
 
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
-instance OOMethodSym SwiftCode Doc (Doc, Terminator) MethodData Doc where
+instance OOMethodSym SwiftCode Doc MethodData Doc Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -709,7 +709,7 @@ instance RenderMethod SwiftCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod SwiftCode Doc MethodData Doc where
+instance OORenderMethod SwiftCode Doc MethodData Doc Body where
   intMethod _ = swiftMethod
   intFunc _ n s _ = swiftMethod n s instanceLevel
   destructor _ = error $ CP.destructorError swiftName
@@ -727,7 +727,7 @@ instance StateVarSym SwiftCode Doc Doc Doc where
 instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ClassSym SwiftCode Doc MethodData StateVar Doc where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -745,7 +745,7 @@ instance RenderClass SwiftCode Doc MethodData StateVar where
 instance ClassElim SwiftCode where
   class' = unSC
 
-instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
+instance ModuleSym SwiftCode ModData MethodData where
   buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will
@@ -763,11 +763,11 @@ instance ModuleSym SwiftCode Doc (Doc, Terminator) MethodData StateVar Doc where
       (zoom lensFStoMS swiftStringError) getMainDoc
         (map pure fns) (map pure cls)
 
-instance RenderMod SwiftCode where
+instance RenderMod SwiftCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim SwiftCode where
+instance ModuleElim SwiftCode ModData where
   module' = modDoc . unSC
 
 instance BlockCommentSym SwiftCode where
@@ -1166,14 +1166,14 @@ swiftThrowDoc :: (ValueElim r) => r Value -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
 swiftForEach
-  :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r Body -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 swiftForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
   indent $ RC.body b,
   bodyEnd]
 
-swiftTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+swiftTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 swiftTryCatch tb cb = vcat [
   swiftDo <+> lbrace,
   indent $ RC.body tb,
@@ -1190,9 +1190,14 @@ swiftParam :: Doc -> SwiftCode Variable -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> renderType (variableType v)
 
-swiftMethod :: Label -> SwiftCode Doc ->
-  SwiftCode Doc -> MSMthdType SwiftCode ->
-  [MS (SwiftCode ParamData)] -> MS (SwiftCode Body) -> MS (SwiftCode MethodData)
+swiftMethod
+  :: Label
+  -> SwiftCode Doc
+  -> SwiftCode Doc
+  -> MS (SwiftCode TypeData)
+  -> [MS (SwiftCode ParamData)]
+  -> MS (SwiftCode Body)
+  -> MS (SwiftCode MethodData)
 swiftMethod n s p t ps b = do
   tp <- t
   pms <- sequence ps

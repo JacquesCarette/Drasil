@@ -1,8 +1,8 @@
-module Drasil.GlassBR.MetaConcepts (progName) where
+module Drasil.GlassBR.MetaConcepts (projName) where
 
 import Drasil.Database (mkUid)
 import Language.Drasil
-import Drasil.GlassBR.Concepts (idglass)
+import Drasil.System (ProjectName, mkCommonProjName)
 
-progName :: CI
-progName = commonIdea (mkUid "glassBR") (pn "GlassBR") "GlassBR"  [idglass]
+projName :: ProjectName
+projName = mkCommonProjName (mkUid "glassBRProjName") (nounPhraseSP "GlassBR") "GlassBR"

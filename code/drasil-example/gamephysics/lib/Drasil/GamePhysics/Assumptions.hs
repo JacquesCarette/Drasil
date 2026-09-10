@@ -2,7 +2,7 @@ module Drasil.GamePhysics.Assumptions (
   assumptions, assumpCT, assumpDI, assumpCAJI, assumpOT, assumpOD, assumpAD
 ) where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil
 import Language.Drasil.Document (ConceptInstance, cic)
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)

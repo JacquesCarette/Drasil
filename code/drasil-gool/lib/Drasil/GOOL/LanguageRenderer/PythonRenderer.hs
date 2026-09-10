@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Drasil.FileHandling.Legacy (blank, indent)
 
 import Drasil.Shared.CodeType (CodeType(..))
-import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Variable,
-  SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
+import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
+  Variable, SVariable, Value, SValue, MixedCtorCall, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), getTypeString, VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -81,7 +81,7 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, MethodData(..), mthd, updateMthd, OpData(..),
   ParamData(..), pd, ProgData(..), progD, TypeData(..), ValData(..), vd,
   VarData(..), vard, BinderD(..), bindFormD, AttachmentTag(..),
-  AttachmentData(..), ad)
+  AttachmentData(..), ad, FileData)
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -119,28 +119,28 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
-instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData
+instance OOProg PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData FileData ModData Body Block
 
-instance ProgramSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData ProgData where
+instance ProgramSym PythonCode ProgData FileData where
   prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData
-instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData
+instance CommonRenderSym PythonCode Doc (Doc, Terminator) MethodData Body Block
+instance OORenderSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData FileData ModData Body Block
 
 instance UnRepr PythonCode contents where
   unRepr = unPC
 
-instance FileSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance FileSym PythonCode FileData ModData where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m
 
   docMod = CP.doxMod pyExt
 
-instance RenderFile PythonCode where
+instance RenderFile PythonCode FileData ModData where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -160,24 +160,24 @@ instance PermElim PythonCode AttachmentData where
   perm = attachmentDoc . unPC
   binding = attachment . unPC
 
-instance BodySym PythonCode (Doc, Terminator) where
+instance BodySym PythonCode Body Block where
   body = onStateList (onCodeList R.body)
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
-instance RenderBody PythonCode where
+instance RenderBody PythonCode Body where
   multiBody = G.multiBody
 
-instance BodyElim PythonCode where
+instance BodyElim PythonCode Body where
   body = unPC
 
-instance BlockSym PythonCode (Doc, Terminator) where
+instance BlockSym PythonCode Block (Doc, Terminator) where
   block = G.block
 
-instance RenderBlock PythonCode where
+instance RenderBlock PythonCode Block where
   multiBlock = G.multiBlock
 
-instance BlockElim PythonCode where
+instance BlockElim PythonCode Block where
   block = unPC
 
 instance TypeSym PythonCode where
@@ -453,7 +453,7 @@ instance Set PythonCode where
   setRemove = CP.setMethodCall pyRemove
   setUnion = CP.setMethodCall pyUnion
 
-instance InternalList PythonCode where
+instance InternalList PythonCode Block where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
@@ -515,7 +515,7 @@ instance AssignStatement PythonCode (Doc, Terminator) where
   (&++) = M.increment1
   (&--) = M.decrement1
 
-instance DeclStatement PythonCode (Doc, Terminator) where
+instance DeclStatement PythonCode (Doc, Terminator) Body where
   varDec v scp = CS.varDecDef v scp Nothing
   varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
@@ -534,7 +534,7 @@ instance DeclStatement PythonCode (Doc, Terminator) where
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode (Doc, Terminator) where
+instance OODeclStatement PythonCode (Doc, Terminator) Body where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
@@ -586,7 +586,7 @@ instance OOFuncAppStatement PythonCode (Doc, Terminator) where
 instance CommentStatement PythonCode (Doc, Terminator) where
   comment = G.comment pyCommentStart
 
-instance ControlStatement PythonCode (Doc, Terminator) where
+instance ControlStatement PythonCode (Doc, Terminator) Body where
   break = mkStmtNoEnd R.break
   continue = mkStmtNoEnd R.continue
 
@@ -617,7 +617,7 @@ instance ControlStatement PythonCode (Doc, Terminator) where
 instance ObserverPattern PythonCode (Doc, Terminator) where
   notifyObservers = M.notifyObservers'
 
-instance StrategyPattern PythonCode (Doc, Terminator) where
+instance StrategyPattern PythonCode Body Block where
   runStrategy = M.runStrategy
 
 instance VisibilitySym PythonCode Doc where
@@ -650,7 +650,7 @@ instance ParamElim PythonCode where
   parameterType = variableType . onCodeValue paramVar
   parameter = paramDoc . unPC
 
-instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
+instance MethodSym PythonCode Doc MethodData Body where
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
@@ -659,7 +659,7 @@ instance MethodSym PythonCode Doc (Doc, Terminator) MethodData where
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
-instance OOMethodSym PythonCode Doc (Doc, Terminator) MethodData AttachmentData where
+instance OOMethodSym PythonCode Doc MethodData AttachmentData Body where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -674,7 +674,7 @@ instance RenderMethod PythonCode MethodData where
 
   mthdFromData _ d = toState $ toCode $ mthd "" d
 
-instance OORenderMethod PythonCode Doc MethodData AttachmentData where
+instance OORenderMethod PythonCode Doc MethodData AttachmentData Body where
   intMethod m n _ a _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -699,7 +699,7 @@ instance StateVarSym PythonCode Doc Doc AttachmentData where
 instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance ClassSym PythonCode Doc MethodData StateVar AttachmentData where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError
@@ -725,7 +725,7 @@ instance RenderClass PythonCode Doc MethodData StateVar where
 instance ClassElim PythonCode where
   class' = unPC
 
-instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar AttachmentData where
+instance ModuleSym PythonCode ModData MethodData where
   buildModule n is = CP.buildModule n (do
     lis <- getLangImports
     libis <- getLibImports
@@ -740,11 +740,11 @@ instance ModuleSym PythonCode Doc (Doc, Terminator) MethodData StateVar Attachme
         (modImport :: Label -> PythonCode Doc)) mis)])
     (pure empty) getMainDoc
 
-instance RenderMod PythonCode where
+instance RenderMod PythonCode ModData where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
-instance ModuleElim PythonCode where
+instance ModuleElim PythonCode ModData where
   module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
@@ -941,15 +941,17 @@ pyPrint newLn f' p' v' = do
 
 pyOut
   ::
-    ( Literal r
+    ( BodySym r bod block
+    , BlockSym r block stmt
+    , Literal r
     , NumericExpression r
     , Comparison r
     , VariableValue r
     , List r
     , MultiStatement r stmt
-    , DeclStatement r stmt
+    , DeclStatement r stmt bod
     , AssignStatement r stmt
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , PrintFile r stmt
     , InternalIOStmt r stmt
@@ -974,18 +976,18 @@ pyThrow :: (ValueElim r) => r Value -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach
-  :: (BodyElim r, InternalVarElim r, ValueElim r)
-  => r Variable -> r Value -> r Body -> Doc
+  :: (BodyElim r bod, InternalVarElim r, ValueElim r)
+  => r Variable -> r Value -> r bod -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (BodyElim r, ValueElim r) => r Value -> r Body -> Doc
+pyWhile :: (BodyElim r bod, ValueElim r) => r Value -> r bod -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
 
-pyTryCatch :: (BodyElim r) => r Body -> r Body -> Doc
+pyTryCatch :: (BodyElim r bod) => r bod -> r bod -> Doc
 pyTryCatch tryB catchB = vcat [
   tryLabel <> colon,
   indent $ RC.body tryB,
@@ -1028,8 +1030,8 @@ pyMethod n attch slf ps b = let
        pyDef <+> text n <> parens (implicitParam <> implicitComma <> pms) <> colon,
        indent bodyD]
 
-pyFunction :: (BodyElim r, ParamElim r) => Label ->
-  [r ParamData] -> r Body -> Doc
+pyFunction
+  :: (BodyElim r bod, ParamElim r) => Label -> [r ParamData] -> r bod -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

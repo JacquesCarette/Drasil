@@ -15,14 +15,13 @@ import Text.PrettyPrint.HughesPJ (empty, isEmpty, vcat)
 
 import Drasil.FileHandling (FileLayout, file, directory, exactFile, ps)
 import Language.Drasil
-import Drasil.GOOL (OOProg, File, FS, VisibilityTag(..), headers, sources,
-  mainMod, ProgData(..), initialState, FileData(..), modDoc)
+import Drasil.GOOL (OOProg, FS, VisibilityTag(..), headers, sources, mainMod,
+  ProgData(..), initialState, FileData(..), modDoc)
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg, NativeVector)
 import qualified Drasil.GProc as Proc (GSProgram, ProgramSym(..))
 import Language.Drasil.Printers (piSys, Notation(..), oneLineSentenceDoc)
-import Drasil.System (HasSystemMeta(..))
-import Drasil.SRS (HasSmithEtAlSRS(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..))
 
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
@@ -119,7 +118,7 @@ generator l dt sd chs cs = let
 
 data SomeProgGenerator where
   SomeProgGenerator
-    :: forall repr vis stmt mthd stvr attch prg. (OOProg repr vis stmt mthd stvr attch prg)
+    :: forall repr vis stmt mthd stvr attch prg file mod bod block. (OOProg repr vis stmt mthd stvr attch prg file mod bod block)
     => (repr prg -> ProgData) -> SomeProgGenerator
 
 -- | Generates a package with the given 'DrasilState'. The passed
@@ -176,7 +175,11 @@ insertFile (p, d) m =
 -- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
 genPackage
-  :: (OOProg progRepr vis stmt mthd stvr attch prg, SoftwareDossierSym packRepr, Monad packRepr)
+  ::
+    ( OOProg progRepr vis stmt mthd stvr attch prg file mod bod block
+    , SoftwareDossierSym packRepr
+    , Monad packRepr
+    )
   => (progRepr prg -> ProgData)
   -> GenState (packRepr PackageData)
 genPackage unRepr = do
@@ -217,30 +220,36 @@ genPackage unRepr = do
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
-genProgram :: (OOProg r vis stmt mthd stvr attch prg) => GenState (OO.GSProgram r prg)
+genProgram
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  => GenState (OO.GSProgram r prg)
 genProgram = do
   g <- get
   ms <- chooseModules $ g ^. modular
-  let n = g ^. programName
+  let n = g ^. projAbrv
   -- FIXME: The below code does `Doc -> String` conversion!
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r vis stmt mthd stvr attch prg) => Modularity -> GenState [FS (r File)]
+chooseModules
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  => Modularity -> GenState [FS (r file)]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r vis stmt mthd stvr attch prg) => GenState (FS (r File))
+genUnmodular
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  => GenState (FS (r file))
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = g ^. programName
+  let n = g ^. projAbrv
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
@@ -252,7 +261,9 @@ genUnmodular = do
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 
 -- | Generates all modules for an SCS program.
-genModules :: (OOProg r vis stmt mthd stvr attch prg) => GenState [FS (r File)]
+genModules
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
+  => GenState [FS (r file)]
 genModules = do
   g <- get
   mn     <- genMain
@@ -271,7 +282,7 @@ genModules = do
 generateCodeProc
   ::
     ( NativeVector progRepr
-    , ProcProg progRepr vis stmt mthd prg
+    , ProcProg progRepr vis stmt mthd prg file mod bod block
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -302,7 +313,7 @@ generateCodeProc l unReprProg unReprPack g =
 genPackageProc
   ::
     ( NativeVector progRepr
-    , ProcProg progRepr vis stmt mthd prg
+    , ProcProg progRepr vis stmt mthd prg file mod bod block
     , SoftwareDossierSym packRepr
     , Monad packRepr
     )
@@ -344,34 +355,34 @@ genPackageProc unRepr = do
 
 -- | Generates an SCS program based on the problem and the user's design choices.
 genProgramProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg)
+  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
   => GenState (Proc.GSProgram r prg)
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ g ^. modular
-  let n = g ^. programName
+  let n = g ^. projAbrv
   let p = show $ oneLineSentenceDoc (printfo g) $ foldlSent $ g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModulesProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg)
-  => Modularity -> GenState [FS (r File)]
+  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  => Modularity -> GenState [FS (r file)]
 chooseModulesProc Unmodular = liftS genUnmodularProc
 chooseModulesProc Modular = genModulesProc
 
 -- | Generates an entire SCS program as a single module.
 genUnmodularProc
-  :: (NativeVector r, ProcProg r vis stmt mthd prg)
-  => GenState (FS (r File))
+  :: (NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  => GenState (FS (r file))
 genUnmodularProc = do
   g <- get
   umDesc <- unmodularDesc
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = g ^. programName
+  let n = g ^. projAbrv
       cls = any (`member` clsMap g) [giName, dvName, icName]
   if cls then error "genUnmodularProc: Procedural renderers do not support classes"
   else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))
@@ -383,8 +394,8 @@ genUnmodularProc = do
 
 -- | Generates all modules for an SCS program.
 genModulesProc
-  :: ( NativeVector r, ProcProg r vis stmt mthd prg)
-  => GenState [FS (r File)]
+  :: ( NativeVector r, ProcProg r vis stmt mthd prg file mod bod block)
+  => GenState [FS (r file)]
 genModulesProc = do
   g <- get
   mn     <- genMainProc

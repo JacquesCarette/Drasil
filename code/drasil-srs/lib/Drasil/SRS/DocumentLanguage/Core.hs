@@ -6,17 +6,18 @@ module Drasil.SRS.DocumentLanguage.Core (
   TraceabilitySec(..), AuxConstntSec(..), AppndxSec(..), OffShelfSolnsSec(..),
   DerivationDisplay(..), Emphasis(..), GSDSub(..), IntroSub(..), LFunc(..),
   Literature(..), RefTab(..), StkhldrSub(..), TConvention(..), TSIntro(..),
-  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID
+  TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID,
+  PurposeDescription(..)
 ) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
 import Drasil.Database (UID, IsChunk)
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (Manual, Verb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat)
+import Drasil.SRS.DocumentLanguage.Definitions (Fields, TraceViewCat, Verbosity)
 
 -- * Document Types
 
@@ -104,21 +105,22 @@ data LFunc where
 
 -- ** Introduction Section
 
--- | Introduction section. Contents are top level followed by a list of
--- subsections.
-data IntroSec = IntroProg Sentence Sentence [IntroSub]
-  -- ^ Temporary, will be modified once we've figured out more about the section.
+-- | Introduction section. Contents are top level (an introductory blurb and an
+-- optional, extra paragraph) followed by a list of subsections.
+data IntroSec = IntroProg Sentence [Sentence] [IntroSub]
 
 -- | Introduction subsections.
 data IntroSub where
   -- | Describes purpose of the system.
-  IPurpose :: [Sentence] -> IntroSub
+  IPurpose :: PurposeDescription -> IntroSub
   -- | Describes scope of the system.
   IScope   :: Sentence -> IntroSub
   -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   -- | Organises the section.
-  IOrgSec  :: CI -> Section -> Maybe Sentence -> IntroSub
+  IOrgSec  :: Maybe Sentence -> IntroSub
+
+data PurposeDescription = StdPurp Verbosity | CustomPurp [[Sentence]]
 
 -- ** Stakeholders Section
 
@@ -128,9 +130,9 @@ newtype StkhldrSec = StkhldrProg [StkhldrSub]
 -- | Stakeholders subsections.
 data StkhldrSub where
   -- | May have a client.
-  Client :: CI -> Sentence -> StkhldrSub
+  Client :: Sentence -> StkhldrSub
   -- | May have a customer.
-  Cstmr  :: CI -> StkhldrSub
+  Cstmr  :: StkhldrSub
 
 -- ** General System Description Section
 
@@ -168,7 +170,7 @@ data PDSub where
   -- | Terms and definitions.
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
   -- | Physical system description.
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  PhySysDesc :: [Sentence] -> LabelledContent -> [Contents] -> PDSub
   -- | Goals.
   Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
@@ -189,7 +191,7 @@ data SCSSub where
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveRationale c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
   --FIXME: Work in Progress ^
   -- | Properties of a correct solution.
@@ -240,7 +242,7 @@ newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 -- ** Values of Auxiliary Constants Section
 
 -- | Values of Auxiliary Constants section.
-data AuxConstntSec = AuxConsProg CI [ConstQDef]
+newtype AuxConstntSec = AuxConsProg [ConstQDef]
 
 -- ** Appendix Section
 
@@ -294,15 +296,14 @@ instance Multiplate DLPlate where
     ds Bibliography = pure Bibliography
 
     res (RefProg c x) = pure $ RefProg c x
-    intro (IntroProg s1 s2 progs) = IntroProg s1 s2 <$>
-      traverse (introSub p) progs
+    intro (IntroProg s1 s2s progs) = IntroProg s1 s2s <$> traverse (introSub p) progs
     intro' (IPurpose s) = pure $ IPurpose s
     intro' (IScope s) = pure $ IScope s
     intro' (IChar s1 s2 s3) = pure $ IChar s1 s2 s3
-    intro' (IOrgSec c sect s2) = pure $ IOrgSec c sect s2
+    intro' (IOrgSec s1) = pure $ IOrgSec s1
     stk (StkhldrProg progs) = StkhldrProg <$> traverse (stkSub p) progs
-    stk' (Client c s) = pure $ Client c s
-    stk' (Cstmr c) = pure (Cstmr c)
+    stk' (Client s) = pure $ Client s
+    stk' Cstmr = pure Cstmr
     gs (GSDProg x) = GSDProg <$> traverse (gsdSub p) x
     gs' (SysCntxt c) = pure $ SysCntxt c
     gs' (UsrChars c) = pure $ UsrChars c
@@ -313,7 +314,7 @@ instance Multiplate DLPlate where
     pd (PDProg s sect progs) = PDProg s sect <$> traverse (pdSub p) progs
     pd' (TermsAndDefs s cs) = pure $ TermsAndDefs s cs
     pd' (Goals s ci) = pure $ Goals s ci
-    pd' (PhySysDesc nm s lc c) = pure $ PhySysDesc nm s lc c
+    pd' (PhySysDesc s lc c) = pure $ PhySysDesc s lc c
     sc (Assumptions c) = pure (Assumptions c)
     sc (TMs s f t) = pure $ TMs s f t
     sc (GDs s f g d) = pure $ GDs s f g d
@@ -328,7 +329,7 @@ instance Multiplate DLPlate where
     ucp (UCsProg c) = pure $ UCsProg c
     ts (TraceabilityProg progs) = pure $ TraceabilityProg progs
     es (OffShelfSolnsProg contents) = pure $ OffShelfSolnsProg contents
-    acs (AuxConsProg ci qdef) = pure $ AuxConsProg ci qdef
+    acs (AuxConsProg qdef) = pure $ AuxConsProg qdef
     aps (AppndxProg con) = pure $ AppndxProg con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
     (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)

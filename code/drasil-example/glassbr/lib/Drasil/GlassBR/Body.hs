@@ -2,17 +2,17 @@ module Drasil.GlassBR.Body (mkSRS, si) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (organization, variable)
-import Language.Drasil.Document
+import Language.Drasil hiding (variable)
+import Language.Drasil.Document hiding (organization)
 import qualified Language.Drasil.Development as D
 
 import Drasil.Database (ChunkDB)
 import Drasil.SRS hiding (constants)
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (reference, assumpt, inModel)
+import qualified Drasil.SRS.Concepts as SRS (reference, assumpt)
 import Language.Drasil.Chunk.Concept.NamedCombinators
-import Language.Drasil.Code (Mod(..), asVC)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (projAbrvS)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -38,17 +38,18 @@ import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
-import Drasil.GlassBR.MetaConcepts (progName)
-import Drasil.GlassBR.ModuleDefs (allMods, implVars)
+import Drasil.GlassBR.MetaConcepts (projName)
+import Drasil.GlassBR.ModuleDefs (implVars)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (constants, constrained, inputs, outputs,
   specParamVals, glassTypes, lateralLoad, loadTypes, pbTol, probBr, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, symbols)
+import Drasil.GlassBR.Units (units)
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName
+si = mkSmithEtAlICO projName
   [nikitha, spencerSmith] [purp] [background] [scope] []
   tMods [] GB.dataDefs iMods
   inputs outputs constrained constants symbolsWCodeSymbols
@@ -58,23 +59,22 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab progName)
-      (short progName)
-    [IPurpose $ purpDoc progName Verbose,
+    IntroProg (startIntro software blstRskInvWGlassSlab) []
+    [IPurpose (StdPurp Verbose),
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec M.dataDefn (SRS.inModel [] []) (Just orgOfDocIntroEnd)],
+     IOrgSec (Just orgOfDocIntroEnd)],
   StkhldrSec $
     StkhldrProg
-      [Client progName $ D.toSent (phraseNP (a_ company))
+      [Client $ D.toSent (phraseNP (a_ company))
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (fullName mCampidelli),
-      Cstmr progName],
+      Cstmr],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
       [SSDProblem $ PDProg purp [termsAndDesc]
-        [ PhySysDesc progName physSystParts physSystFig []
+        [ PhySysDesc physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -93,7 +93,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg progName auxiliaryConstants,
+  AuxConstntSec $ AuxConsProg auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
 
@@ -110,19 +110,15 @@ ideaDicts :: [IdeaDict]
 ideaDicts =
   [lateralLoad, materialProprty] ++ con'
 
-cis :: [CI]
-cis = progName : cis'
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = distance : concepts ++ softwarecon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbolsWCodeSymbols ideaDicts cis conceptChunks []
-  GB.dataDefs iMods [] tMods concIns citations labCon
+symbMap = withCommonKnowledge projName allRefs symbolsWCodeSymbols ideaDicts cis'
+  conceptChunks units GB.dataDefs iMods [] tMods concIns citations labCon
 
 symbolsWCodeSymbols :: [DefinedQuantityDict]
-symbolsWCodeSymbols = map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  ++ implVars ++ symbols
+symbolsWCodeSymbols = implVars ++ symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -167,15 +163,15 @@ auxiliaryConstants = assumptionConstants ++ specParamVals
 
 {--INTRODUCTION--}
 
-startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
-startIntro prgm _ sysName = foldlSent [
+startIntro :: (NamedIdea n) => n -> Sentence -> Sentence
+startIntro prgm _ = foldlSent [
   atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+
   S "itself" `S.and_` S "also potentially from the secondary" +:+
   S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+.
   purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_`
   S "from a small fertilizer truck bomb." +:+
-  S "The document describes the program called", short sysName,
+  S "The document describes the program called", projAbrvS projName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "GlassBR")]
 
@@ -222,7 +218,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", (sParen (short progName) !.),
+   phrase softwareSys, S "itself", (sParen (projAbrvS projName) !.),
    S "Arrows are used to show the data flow between the" +:+ D.toSent (phraseNP (system
    `andIts` environment))]
 
@@ -251,7 +247,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+  projAbrvS projName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $

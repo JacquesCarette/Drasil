@@ -21,6 +21,8 @@ import Language.Drasil.Document (Document)
 import Language.Drasil.Printers (HTMLGenOptions (..), Notation (Engineering),
   genHTML, renderHTML, genericCSS, piSys, makeDocument)
 
+import Drasil.System (HasProjectName(..))
+
 data DrasilWebsite = DW
   { _sm :: SystemMeta,
     _indexDoc :: Document
@@ -30,6 +32,9 @@ makeLenses ''DrasilWebsite
 
 instance HasSystemMeta DrasilWebsite where
   systemMeta = sm
+
+instance HasProjectName DrasilWebsite where
+  projectName = systemMeta . projectName
 
 mkDrasilWebsite :: SystemMeta -> Document -> DrasilWebsite
 mkDrasilWebsite = DW

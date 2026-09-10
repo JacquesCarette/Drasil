@@ -2,7 +2,7 @@
 -- and write to files. See stable/gooltest for more details on what is generated through this.
 module FileTests (fileTestsOO, fileTestsProc) where
 
-import Drasil.GOOL (Block, MS, OOProg, BodySym(..), BlockSym(..), TypeSym(..),
+import Drasil.GOOL (MS, OOProg, BodySym(..), BlockSym(..), TypeSym(..),
   DeclStatement(..), PrintConsole(..), FileHandling(..), PrintFile(..),
   ReadFile(..), ControlStatement(..), VariableSym(var), Literal(..),
   VariableValue(..), Comparison(..), List(..), MethodSym(..), ScopeSym(..))
@@ -14,14 +14,14 @@ import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO
-  :: (OOProg r vis stmt mthd stvr attch prg)
+  :: (OOProg r vis stmt mthd stvr attch prg file mod bod block)
   => OO.GSProgram r prg
 fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | Creates a program in GProc to test reading and writing to files.
 fileTestsProc
-  :: (ProcProg r vis stmt mthd prg)
+  :: (ProcProg r vis stmt mthd prg file mod bod block)
   => GProc.GSProgram r prg
 fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
   "FileTests" [] [fileTestMethod])]
@@ -29,17 +29,19 @@ fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
 fileTestMethod
   ::
-    ( Literal r
+    ( BlockSym r block stmt
+    , BodySym r bod block
+    , Literal r
     , VariableValue r
     , Comparison r
     , List r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
+    , DeclStatement r stmt bod
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
-    , MethodSym r vis stmt mthd
+    , MethodSym r vis mthd bod
     )
   => MS (r mthd)
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
@@ -47,16 +49,17 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 -- | Generates functions that write to the file.
 writeStory
   ::
-    ( Literal r
+    ( BlockSym r block stmt
+    , Literal r
     , VariableValue r
     , Comparison r
-    , DeclStatement r stmt
-    , ControlStatement r stmt
+    , DeclStatement r stmt bod
+    , ControlStatement r stmt bod
     , FileHandling r stmt
     , PrintFile r stmt
     , ReadFile r stmt
     )
-  => MS (r Block)
+  => MS (r block)
 writeStory = block [
   varDec (var "fileToWrite" outfile) mainFn,
 
@@ -86,15 +89,16 @@ readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
 -- what was given in 'writeStory'.
 goodBye
   ::
-    ( Comparison r
+    ( BlockSym r block stmt
+    , Comparison r
     , Literal r
     , VariableValue r
     , List r
-    , ControlStatement r stmt
+    , ControlStatement r stmt bod
     , PrintConsole r stmt
     , FileHandling r stmt
     )
-  => MS (r Block)
+  => MS (r block)
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)),
   assert (listSize (valueOf (var "fileContents" (listType string))) ?> litInt 0)

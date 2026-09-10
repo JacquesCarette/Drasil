@@ -1,10 +1,9 @@
 {-# Language TupleSections #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
--- representation of information, to something more informative.
--- Over time, we'll want to have a cleaner separation, but doing that
--- all at once would break too much for too long.  So we start here
--- instead.
+-- representation of information, to something more informative. Over time,
+-- we'll want to have a cleaner separation, but doing that all at once would
+-- break too much for too long. So we start here instead.
 module Drasil.SRS.DocumentLanguage (mkDoc) where
 
 -- General Haskell
@@ -25,7 +24,7 @@ import Language.Drasil.Development (shortdep)
 import Drasil.Database (ChunkDB, insertAll, UID, HasUID(..), invert)
 import Drasil.Database.SearchTools (TermAbbr, shortForm, termResolve')
 
-import Drasil.System (HasSystemMeta(..))
+import Drasil.System (HasSystemMeta(..), HasProjectName(..), projTitleS, ProjectName)
 import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS, HasSmithEtAlSRS(..))
 import Drasil.SRS.GetChunks (resolveAllVars)
 
@@ -56,7 +55,7 @@ import Drasil.SRS.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
 import qualified Drasil.SRS.Concepts as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
-  tOfAbbAcc)
+  tOfAbbAcc, inModel)
 import qualified Drasil.SRS.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.SRS.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -80,7 +79,7 @@ import Drasil.SRS.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Creates a document from a 'System', a document description ('SRSDecl'), and
 -- a title combinator.
-mkDoc :: SmithEtAlSRS -> SRSDecl -> (CI -> CI -> Sentence) -> (Document, SmithEtAlSRS)
+mkDoc :: SmithEtAlSRS -> SRSDecl -> (Sentence -> Sentence -> Sentence) -> (Document, SmithEtAlSRS)
 mkDoc si srsDecl headingComb =
   let dd = mkDocDesc si srsDecl
       -- /Pre-generate/ the SRS artifact. It is missing content involving
@@ -95,7 +94,7 @@ mkDoc si srsDecl headingComb =
       -- Now, the /real generation/ of the SRS artifact can begin, with the
       -- 'Reference' map now full (so 'Reference' references can resolve to
       -- 'Reference's) and the true list of bibliography entries known.
-      heading = srs `headingComb` (si' ^. sysName)
+      heading = titleize srs `headingComb` projTitleS (si ^. projectName)
       authorsList = foldlList Comma List $ map (S . fullName) $ si ^. authors
       toc = findToC srsDecl
       dd' = mkDocDesc si' srsDecl
@@ -162,9 +161,9 @@ mkSections si dd mbib = map (either renderRefSec id) partialRender
     render :: DocSection -> Section
     render TableOfContents      = mkToC dd
     render (IntroSec is)        = mkIntroSec si is
-    render (StkhldrSec sts)     = mkStkhldrSec sts
+    render (StkhldrSec sts)     = mkStkhldrSec (si ^. projName) sts
     render (SSDSec ss)          = mkSSDSec si ss
-    render (AuxConstntSec acs)  = mkAuxConsSec acs
+    render (AuxConstntSec acs)  = mkAuxConsSec (si ^. projName) acs
     render Bibliography         = mkBib $ fromMaybe [] mbib
     render (GSDSec gs')         = mkGSDSec gs'
     render (ReqrmntSec r)       = mkReqrmntSec r
@@ -191,7 +190,7 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 mkRefSec :: SmithEtAlSRS -> DocDesc -> RefSec -> [Section] -> Section
 mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
   where
-    sysNameUID = si ^. sysName . uid
+    projNameUID = si ^. projName . uid
     db = si ^. systemdb
 
     mkSubRef :: RefTab -> Section
@@ -210,11 +209,11 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map mkSubRef l)
 
     mkSubRef TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations sysNameUID renderedSecs db]
+        [LlC $ tableAbbAccGen $ collectDocumentAbbreviations [projNameUID] renderedSecs db]
         []
 
-collectDocumentAbbreviations :: UID -> [Section] -> ChunkDB -> [TermAbbr]
-collectDocumentAbbreviations sysNameUID renderedSecs cdb =
+collectDocumentAbbreviations :: [UID] -> [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations rms renderedSecs cdb =
   filter (isJust . shortForm) allTerms
   where
     -- Terms found in the document using the list of `Sentence`s extracted from
@@ -225,7 +224,7 @@ collectDocumentAbbreviations sysNameUID renderedSecs cdb =
     missingFromDocHACK = map (^. uid) [assumption, dataDefn, genDefn, goalStmt,
       inModel, requirement, thModel, refName, refBy]
     -- Filter out the system name and duplicates
-    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ [sysNameUID]
+    filtered = nub (foundInDoc ++ missingFromDocHACK) \\ rms
     allTerms = map (termResolve' cdb) filtered
 
 -- | Helper for creating the table of symbols.
@@ -249,26 +248,27 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SmithEtAlSRS -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn l $ map mkSubIntro l
+mkIntroSec si (IntroProg probIntro extraInfo l) =
+  Intro.introductionSection probIntro si extraInfo l $ map mkSubIntro l
   where
+    im = SRS.inModel [] []
     mkSubIntro :: IntroSub -> Section
-    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro (IPurpose intro) = Intro.purposeOfDoc si intro
     mkSubIntro (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro (IChar assumed topic asset) =
-      Intro.charIntRdrF (si ^. sysName) assumed topic asset (SRS.userChar [] [])
-    mkSubIntro (IOrgSec b s t) = Intro.orgSec b s t
+      Intro.charIntRdrF (si ^. projName) assumed topic asset (SRS.userChar [] [])
+    mkSubIntro (IOrgSec t) = Intro.orgSec inModel im t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders
 
 -- | Helper for making the Stakeholders section.
-mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec :: ProjectName -> StkhldrSec -> Section
+mkStkhldrSec progN (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
-    mkSubs (Client kWrd details) = Stk.tClientF kWrd details
-    mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
+    mkSubs (Client details) = Stk.tClientF progN details
+    mkSubs Cstmr            = Stk.tCustomerF progN
 
 -- ** General System Description
 
@@ -294,20 +294,20 @@ mkSSDSec si (SSDProg l) =
 
 -- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SmithEtAlSRS -> ProblemDescription -> Section
-mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
+mkSSDProb si (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
-        mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+        mkSubPD (PhySysDesc parts dif extra) = SSD.physSystDesc (si ^. projName) parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SmithEtAlSRS -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. sysName) SSD.imStub] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (si ^. projName) SSD.imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: SmithEtAlSRS -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (si' ^. sysName) $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
+      SSD.thModF (si' ^. projName) $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
       SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
       where f e = LlC (ddefn fields si' e) : maybeToList (derivation e)
@@ -384,8 +384,8 @@ mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 -- ** Auxiliary Constants
 
 -- | Helper for making the Values of Auxiliary Constants section.
-mkAuxConsSec :: AuxConstntSec -> Section
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
+mkAuxConsSec :: ProjectName -> AuxConstntSec -> Section
+mkAuxConsSec c (AuxConsProg listOfCons) = AC.valsOfAuxConstantsF c $ sortBySymbol listOfCons
 
 -- ** References
 

@@ -6,7 +6,7 @@ module Data.Drasil.Concepts.Math (
 
 -- General Drasil
 import Drasil.Database (mkUid)
-import Language.Drasil hiding (number, norm, matrix, Sentence(P, S, (:+:)))
+import Language.Drasil hiding (norm, matrix, Sentence(P, S, (:+:)))
 import qualified Language.Drasil as D
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Language.Drasil.Development (NPStruct(P, S, (:-:)))

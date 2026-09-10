@@ -7,7 +7,7 @@ module Drasil.GOOL.Renderers (
 
 import Drasil.FileHandling.Legacy (indent)
 
-import Drasil.Shared.InterfaceCommon (Body, Variable, Value, UnRepr(..),
+import Drasil.Shared.InterfaceCommon (Variable, Value, UnRepr(..),
   VariableElim(..))
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(..),
   VisibilityElim(..), ValueElim(..), ParamElim)
@@ -29,7 +29,7 @@ renderParam
 renderParam v = renderType (variableType v) <+> variable v
 
 renderMethod
-  :: ( RC.BodyElim r
+  :: ( RC.BodyElim r bod
      , ParamElim r
      , PermElim r attch
      , UnRepr r TypeData
@@ -40,7 +40,7 @@ renderMethod
   -> r attch
   -> r TypeData
   -> [r ParamData]
-  -> r Body
+  -> r bod
   -> Doc
 renderMethod n s p t ps b = vcat [
   visibility s <+> perm p <+> renderType t <+> text n <>

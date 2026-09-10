@@ -21,7 +21,7 @@ import qualified Data.List.NonEmpty as NE
 import Data.Drasil.Constraints (gtZeroConstr)
 import qualified Data.Drasil.Quantities.Physics as QP (position, velocity,
   acceleration, energy, force, fOfGravity, time)
-import Data.Drasil.Quantities.Physics (gravitationalConst, gravitationalConstValue)
+import Data.Drasil.Quantities.Physics (gravitationalConstValue)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SI_Units (metre, kilogram, second)
 import Data.Drasil.Units.Physics (velU, accelU)
@@ -38,10 +38,9 @@ symbols = [mass_1, mass_2, xPos_1, yPos_1, xPos_2, yPos_2,
   xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
   xPos_1_0, yPos_1_0, xPos_2_0, yPos_2_0,
   xVel_1_0, yVel_1_0, xVel_2_0, yVel_2_0,
-  tFinal, sepDist,
-  massMin, massMax, rMax, vMax, tMax]
+  tFinal, sepDist]
   ++ [QP.velocity, QP.position, QP.acceleration, QP.force,
-     QP.fOfGravity, QP.time, QP.energy, gravitationalConst, QPP.mass]
+     QP.fOfGravity, QP.time, QP.energy, QPP.mass]
   ++ [index, numbBodies, dqdWr bssStateVar]
   ++ map dqdWr constants
 

@@ -5,14 +5,12 @@ import Language.Drasil
 import Language.Drasil.Document
 import Drasil.SRS hiding (genDefns)
 import Drasil.Generator (withCommonKnowledge)
-import qualified Drasil.SRS.Concepts as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
-import Data.Drasil.Concepts.Theory (dataDefn)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
@@ -23,7 +21,7 @@ import Drasil.PDController.Concepts (acronyms, pidC, termDefs, defs,
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
-import Drasil.PDController.MetaConcepts (progName)
+import Drasil.PDController.MetaConcepts (projName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
@@ -45,10 +43,11 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase progName)
-         [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
+       IntroProg introPara []
+         [IPurpose (CustomPurp [[introPurposeOfDoc]]),
+          IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec dataDefn (SRS.inModel [] []) (Just orgSecEnd)],
+          IOrgSec (Just orgSecEnd)],
      GSDSec $
        GSDProg
          [SysCntxt
@@ -65,7 +64,7 @@ mkSRS
               -- alternative definitions for use in the `Terminology and
               -- Definitions` section.
               [TermsAndDefs Nothing defs,
-               PhySysDesc progName sysParts sysFigure [],
+               PhySysDesc sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
@@ -83,7 +82,7 @@ mkSRS
 
 si :: SmithEtAlSRS
 si = mkSmithEtAlICO
-  progName [naveen]
+  projName [naveen]
   [purp] [background] [scope] [motivation]
   theoreticalModels genDefns dataDefinitions instanceModels
   inputs outputs inpConstrained pidConstants allSymbols
@@ -111,9 +110,6 @@ orgSecEnd = foldlSent [
     titleize ode, sParen (short ode), S "that models the", phrase pidC
   ]
 
-cis :: [CI]
-cis = progName : acronyms
-
 conceptChunks :: [ConceptChunk]
 conceptChunks = physicalcon ++ [linear, angular] ++ termDefs
 
@@ -123,9 +119,9 @@ allSymbols = physicscon ++ symbols ++
   map dqdWr pidConstants
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs allSymbols [] cis conceptChunks []
-  dataDefinitions instanceModels genDefns theoreticalModels conceptInstances
-  citations labelledContent'
+symbMap = withCommonKnowledge projName allRefs allSymbols [] acronyms
+  conceptChunks [] dataDefinitions instanceModels genDefns theoreticalModels
+  conceptInstances citations labelledContent'
 
 labelledContent' :: [LabelledContent]
 labelledContent' = labelledContent ++ funcReqsTables

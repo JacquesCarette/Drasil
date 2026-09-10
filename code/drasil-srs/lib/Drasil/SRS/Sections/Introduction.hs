@@ -1,16 +1,18 @@
 -- | Defines functions used in creating an introduction section.
 module Drasil.SRS.Sections.Introduction (orgSec, introductionSection,
-  purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
+  purposeOfDoc, scopeOfRequirements, charIntRdrF) where
 
+import Control.Lens ((^.))
 import Data.Maybe (maybeToList)
 
 -- Generic Drasil
-import Language.Drasil hiding (organization)
-import Language.Drasil.Document
+import Language.Drasil
+import Language.Drasil.Document hiding (organization)
 import Language.Drasil.Chunk.Concept.NamedCombinators (andThe, the)
 import Drasil.SRS.DocumentLanguage.Definitions(Verbosity(..))
 import qualified Language.Drasil.Development as D
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.System (ProjectName, HasSystemMeta(projName), projAbrvS)
 
 -- Vocabulary
 import Drasil.Metadata.Citations (parnasClements1986, smithEtAl2007,
@@ -27,8 +29,9 @@ import Drasil.Metadata.Software.Products (sciCompS)
 -- Other docLang
 import qualified Drasil.SRS.Concepts as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
-import Drasil.SRS.DocumentLanguage.Core (IntroSub(..))
+import Drasil.SRS.DocumentLanguage.Core (IntroSub(..), PurposeDescription(..))
 import Drasil.SRS.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
+import Drasil.SRS.SmithEtAlSRS (SmithEtAlSRS)
 
 -----------------------
 --     Constants     --
@@ -77,60 +80,56 @@ introSubToSentence IOrgSec {} = [S.the_ofThe (phrase organization) (phrase docum
 -- | Constructor for the Introduction section. In order, the parameters are:
 --
 --     * problemIntroduction - 'Sentence' introducing the specific example problem.
---     * programDefinition  - 'Sentence' definition of the specific example.
+--     * programDefinition  - 'SmithEtAlSRS' definition of the specific example.
+--     * extraInfo          - List of extra 'Sentence's to include in the overview paragraph.
 --     * introSubs          - List of IntroSub describing what subsections exist.
 --     * subSections        - List of subsections for this section.
-introductionSection :: Sentence -> Sentence -> [IntroSub] -> [Section] -> Section
-introductionSection EmptyS              programDefinition introSubs = SRS.intro
+introductionSection :: Sentence -> SmithEtAlSRS -> [Sentence] -> [IntroSub] -> [Section] -> Section
+introductionSection EmptyS              programDefinition extraInfo introSubs = SRS.intro
   [mkParagraph $ emptySectSentSing [problemIntro],
-  overviewParagraph programDefinition introSubs]
-introductionSection problemIntroduction programDefinition introSubs = SRS.intro
-  [mkParagraph problemIntroduction, overviewParagraph programDefinition introSubs]
+  overviewParagraph programDefinition extraInfo introSubs]
+introductionSection problemIntroduction programDefinition extraInfo introSubs = SRS.intro
+  [mkParagraph problemIntroduction, overviewParagraph programDefinition extraInfo introSubs]
 
 -- | Constructor for the overview paragraph for the Introduction.
--- Takes the definition of the specific example being generated ('Sentence')
--- and the list of IntroSub to dynamically generate the roadmap.
-overviewParagraph :: Sentence -> [IntroSub] -> Contents
-overviewParagraph programDefinition introSubs =
+-- Takes the definition of the specific example being generated ('Sentence'),
+-- additional information ('[Sentence]'), and the list of IntroSub to dynamically generate the roadmap.
+overviewParagraph :: SmithEtAlSRS -> [Sentence] -> [IntroSub] -> Contents
+overviewParagraph si extraInfo introSubs =
   let subsectionsSentence = introductionSubsections introSubs
       -- Build the sentence ending based on whether there are subsections
       endingSentence = case subsectionsSentence of
         EmptyS -> phrase document  -- No subsections, end with just "document"
         _      -> phrase document :+: subsectionsSentence  -- Has subsections, add them
-  in foldlSP [S "The following", phrase section_,
-     S "provides an overview of the", introduceAbb srs, S "for" +:+.
-     programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
-     S "of this", endingSentence]
+  in foldlSP ([S "The following", phrase section_,
+    S "provides an overview of the", introduceAbb srs, S "for" +:+. projAbrvS (si ^. projName)]
+    ++ extraInfo ++
+    [S "This", phrase section_, S "explains the", phrase purpose, S "of this", endingSentence])
 
 -- | Constructor for Purpose of Document section that each example controls.
-purpDocPara1 :: CI -> Sentence
+purpDocPara1 :: ProjectName -> Sentence
 purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
-  S "record the", plural requirement, S "of" +:+. short proName,
+  S "record the", plural requirement, S "of" +:+. projAb,
   atStart' goal `sC` plural assumption `sC` plural thModel `sC`
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
-  S "basis of" +:+. short proName, S "With the exception of",
+  S "basis of" +:+. projAb, S "With the exception of",
   namedRef (SRS.sysCon [] []) (plural systemConstraint) `sC` S "this",
   short srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"]
-
--- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
--- Verbosity controls if the 'developmentProcessParagraph' is added or not.
-purpDoc :: CI -> Verbosity -> [Sentence]
-purpDoc proName Verbose = [purpDocPara1 proName, developmentProcessParagraph]
-purpDoc proName Succinct = [purpDocPara1 proName]
+  where
+    projAb = projAbrvS proName
 
 -- | Constructor for Purpose of Document subsection. Takes a list of 'Sentence's that:
 --
 --     * Given one element: explains the purpose of the specific example.
 --     * Given two elements: explains the purpose of the specific example and the development process.
 --     * Otherwise: Uses the default 'developmentProcessParagraph'.
-purposeOfDoc :: [Sentence] -> Section
-purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc [mkParagraph purposeOfProgram] []
-purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc
-  [mkParagraph purposeOfProgram, mkParagraph developmentProcess] []
-purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
+purposeOfDoc :: SmithEtAlSRS -> PurposeDescription -> Section
+purposeOfDoc srd (StdPurp Succinct) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. projName] []
+purposeOfDoc srd (StdPurp Verbose) = SRS.prpsOfDoc [mkParagraph $ purpDocPara1 $ srd ^. projName, mkParagraph developmentProcessParagraph] []
+purposeOfDoc _   (CustomPurp ss) = SRS.prpsOfDoc (map (mkParagraph . foldlSent_) ss) []
 
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
@@ -139,10 +138,11 @@ scopeOfRequirements EmptyS = SRS.scpOfReq [mkParagraph $ emptySectSentPlu [requi
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
   [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 
--- | Constructor for characteristics of the intended reader subsection.
--- Takes the program name ('Idea'), assumed knowledge ('Sentence's), topic-related subjects ('Sentence's),
--- knowledge assets ('Sentence's), and references ('Section').
-charIntRdrF :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
+-- | Constructor for characteristics of the intended reader subsection. Takes
+-- the program name ('ProjectName'), assumed knowledge ('Sentence's),
+-- topic-related subjects ('Sentence's), knowledge assets ('Sentence's), and
+-- references ('Section').
+charIntRdrF :: ProjectName -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> Section
 charIntRdrF progName assumed topic asset r =
   SRS.charOfIR (intReaderIntro progName assumed topic asset r) []
@@ -154,7 +154,7 @@ charIntRdrF progName assumed topic asset r =
 --     * topic-related subjects that the reader should understand,
 --     * subjects that would be an asset if the reader understood them,
 --     * reference to User Characteristics section.
-intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
+intReaderIntro :: ProjectName -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
 intReaderIntro _ [] [] [] _ =
   [foldlSP [S "Reviewers of this", phrase documentation,
@@ -163,7 +163,7 @@ intReaderIntro progName assumed topic asset sectionRef =
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent,
-  D.toSent (atStartNP' (the user)) `S.of_` short progName, S "can have a lower level" `S.of_`
+  D.toSent (atStartNP' (the user)) `S.of_` projAbrvS progName, S "can have a lower level" `S.of_`
   S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of

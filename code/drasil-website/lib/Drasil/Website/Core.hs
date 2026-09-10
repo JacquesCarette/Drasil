@@ -15,13 +15,11 @@ import Drasil.Data.Formats.HTML (HTMLRenderOptions (..))
 import Prettyprinter (Doc)
 
 import Drasil.FileHandling (file, ps)
-import Drasil.System (HasSystemMeta (..), SystemMeta, ToFiles (..))
+import Drasil.System (HasSystemMeta (..), SystemMeta, ToFiles (..), HasProjectName(..))
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Document (Document)
 import Language.Drasil.Printers (HTMLGenOptions (..), Notation (Engineering),
   genHTML, renderHTML, genericCSS, piSys, makeDocument)
-
-import Drasil.System (HasProjectName(..))
 
 data DrasilWebsite = DW
   { _sm :: SystemMeta,

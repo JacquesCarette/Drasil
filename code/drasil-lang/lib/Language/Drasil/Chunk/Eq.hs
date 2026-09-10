@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.Eq (
   ConstQDef, SimpleQDef, ModelQDef
 ) where
 
-import Control.Lens ((^.), view, to, makeLenses)
+import Control.Lens ((^.), view, makeLenses)
 import Drasil.Database (UID, HasUID(..), HasChunkRefs(..), IsChunk, mkUid)
 import qualified Data.Set as Set
 
@@ -22,7 +22,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Definition(defn), Quantity,
   Express(express), Concept)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs),
-  dqdWr, quant, quantNoUnit, quant', quantNoUnit', quantAU)
+  quant, quantNoUnit, quant', quantNoUnit', quantAU)
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
 import Language.Drasil.Expr.Class (ExprC(apply, sy, ($=)))
@@ -61,7 +61,7 @@ instance HasChunkRefs (QDefinition e) where
 instance HasUID          (QDefinition e) where uid = uu
 instance NamedIdea       (QDefinition e) where term = qua . term
 instance Idea            (QDefinition e) where getA = getA . (^. qua)
-instance DefinesQuantity (QDefinition e) where defLhs = qua . to dqdWr
+instance DefinesQuantity (QDefinition e) where defLhs = qua
 instance HasSpace        (QDefinition e) where typ = qua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qua)
 instance Definition      (QDefinition e) where defn = qua . defn

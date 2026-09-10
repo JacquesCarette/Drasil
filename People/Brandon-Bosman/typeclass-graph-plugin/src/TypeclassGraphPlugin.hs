@@ -1,3 +1,12 @@
+{-
+Brandon's typeclass graph plugin.
+Modifications to stack needed to make it work:
+- In `drasil-gool/package.yaml`:
+  - Add `typeclass-graph-plugin` to `dependencies`
+  - Add `-fplugin=TypeclassGraphPlugin` to `ghc-options`
+- In `stack.yaml`, add `../People/Brandon-Bosman/typeclass-graph-plugin` to `extra-deps`
+-}
+
 module TypeclassGraphPlugin (plugin) where
 
 import Prelude hiding ((<>))

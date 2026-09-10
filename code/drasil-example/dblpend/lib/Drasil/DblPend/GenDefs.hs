@@ -25,7 +25,6 @@ import Drasil.DblPend.Unitals (lenRod_1, xVel_1, xVel_2,
     xForce_1, yForce_1, xForce_2, yForce_2)
 import Drasil.DblPend.Concepts (horizontalPos,
     verticalPos, horizontalVel, verticalVel, firstObject, secondObject)
-import Control.Lens ((^.))
 
 genDefns :: [GenDefn]
 genDefns = [velXGD_1, velYGD_1, velXGD_2, velYGD_2, accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2,
@@ -224,7 +223,7 @@ xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant xForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.forceExpr,
                     mkDefiningExpr "xForceWithAngle1"
                       EmptyS E.xForceWithAngle_1]
 
@@ -242,7 +241,7 @@ yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant yForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.forceExpr,
                     mkDefiningExpr "yForceWithAngle1"
                       EmptyS E.yForceWithAngle_1]
 
@@ -260,7 +259,7 @@ xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant xForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.forceExpr,
                     mkDefiningExpr "xForceWithAngle2"
                       EmptyS E.xForceWithAngle_2]
 
@@ -278,7 +277,7 @@ yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant yForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
-                      EmptyS $ express $ forceGQD ^. defnExpr,
+                      EmptyS E.forceExpr,
                     mkDefiningExpr "yForceWithAngle2"
                       EmptyS E.yForceWithAngle_2]
 

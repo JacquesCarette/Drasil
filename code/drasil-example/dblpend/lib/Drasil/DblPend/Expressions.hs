@@ -1,4 +1,5 @@
 module Drasil.DblPend.Expressions (
+  forceExpr,
   velXExpr_2, velYExpr_2, velXExpr_1, velYExpr_1,
   accelXExpr_1, accelYExpr_1, accelXExpr_2, accelYExpr_2,
   xForceWithAngle_1, yForceWithAngle_1, xForceWithAngle_2, yForceWithAngle_2,
@@ -9,12 +10,18 @@ module Drasil.DblPend.Expressions (
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
-import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude)
+import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude,
+  acceleration)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+
 import Drasil.DblPend.DataDefs (positionXEqn_1)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   xVel_1, yVel_1, xAccel_1, yAccel_1, angularAccel_1, angularAccel_2,
   tension_1, tension_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2)
+
+forceExpr :: PExpr
+forceExpr = vScale (sy mass) (sy acceleration)
 
 -- Velocity X/Y First Object
 velXExpr_1, velYExpr_1 :: PExpr

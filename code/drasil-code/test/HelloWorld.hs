@@ -3,7 +3,7 @@
 module HelloWorld (helloWorldOO, helloWorldProc) where
 
 import Drasil.GOOL (Class, SVariable, CS, MS, OOProg, BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), listSlice, TypeSym(..), OOTypeSym(..),
+  bodyStatements, oneLiner, BlockSym(..), listSlice, listLast, TypeSym(..), OOTypeSym(..),
   MultiStatement(multi), AssignStatement(..), (&=), DeclStatement(..),
   PrintConsole(..), ReadConsole(..), StringStatement(..), CommentStatement(..),
   ControlStatement(..), VariableSym(..), OOVariableSym(..), SelfSym(..),
@@ -125,6 +125,8 @@ helloInitVariables = block [comment "Initializing variables",
   listAppend (valueOf myOtherList) (litDouble 2.5),
   varDec (var "e" double) mainFn,
   var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
+  printStr "Last element of myOtherList: ",
+  printLn $ listLast (valueOf myOtherList),
   listSet (valueOf myOtherList) (litInt 1) (litDouble 17.4),
   listDec 7 (var "myName" (listType string)) mainFn,
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),

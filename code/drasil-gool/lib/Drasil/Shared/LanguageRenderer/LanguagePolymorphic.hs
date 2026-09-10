@@ -115,6 +115,7 @@ smartAdd v1 v2 = do
   v2' <- v2
   case (RC.valueInt v1', RC.valueInt v2') of
     (Just i1, Just i2) -> litInt (i1 + i2)
+    (_, Just 0)        -> v1
     (_, Just i2) | i2 < 0 -> v1 #- litInt (negate i2)
     _                  -> v1 #+ v2
 
@@ -126,6 +127,7 @@ smartSub v1 v2 = do
   v2' <- v2
   case (RC.valueInt v1', RC.valueInt v2') of
     (Just i1, Just i2) -> litInt (i1 - i2)
+    (_, Just 0)        -> v1
     _                  -> v1 #- v2
 
 equalOp :: (Monad r) => VSOp r
@@ -396,7 +398,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++)
     (bodyStatements [prFn (IC.listAccess v (IC.valueOf i)), prStrFn ", "]),
   ifNoElse [(IC.listSize v ?> IC.litInt 0, oneLiner $
-    prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))],
+    prFn (IC.listLast v))],
   prLnFn "]"]
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int

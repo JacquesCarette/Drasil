@@ -55,6 +55,8 @@ public class HelloWorld {
         myOtherList.Add(2.5);
         double e;
         e = myOtherList[1];
+        Console.Write("Last element of myOtherList: ");
+        Console.WriteLine(myOtherList[myOtherList.Count - 1]);
         myOtherList[1] = 17.4;
         List<string> myName = new List<string>(7);
         myName = new List<string>("Brooks Mac".Split(' '));

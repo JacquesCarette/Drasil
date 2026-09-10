@@ -34,6 +34,7 @@ library:
   - drasil-lang
   - drasil-printers
   - drasil-srs
+  - drasil-system
   - drasil-theory
   source-dirs: lib
 

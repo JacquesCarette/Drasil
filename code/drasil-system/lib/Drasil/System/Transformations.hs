@@ -6,13 +6,14 @@ module Drasil.System.Transformations
 where
 
 import Drasil.FileHandling (FileLayout)
-import Drasil.System.Core (HasSystemMeta (..))
+import Drasil.System.Core (HasSystemMeta(..))
+import Drasil.System.ProjectName (HasProjectName(..))
 
 -- | The goal of our systems is to be abstractions about human-readable software
 -- artifacts. An instance of this typeclass ('ToFiles') defines a software
 -- generator that explains how said abstractions can be made /fully concrete/
 -- (i.e., made into concrete software artifacts).
-class (HasSystemMeta sys) => ToFiles sys opts | opts -> sys where
+class (HasSystemMeta sys, HasProjectName sys) => ToFiles sys opts | opts -> sys where
   toFiles ::
     -- | The system.
     sys ->

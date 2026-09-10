@@ -10,6 +10,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.SRS.Concepts as SRS
+import Theory.Drasil (TheoryModel)
+import Drasil.System (projAbrvS, projTitleS)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics, problem,
@@ -44,12 +46,10 @@ import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.LabelledContent (figLaunch, sysCtxFig1, labelledContent)
-import Drasil.Projectile.MetaConcepts (progName)
+import Drasil.Projectile.MetaConcepts (projName)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
-
-import Theory.Drasil (TheoryModel)
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -105,7 +105,7 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   phrase program, S "to solve and model these types of" +:+. plural problem,
   S "Common", plural example `S.of_` D.toSent (phraseNP (combineNINI projectile motion)),
   S "include" +:+. foldlList Comma List projectileExamples,
-  S "The document describes the program called", phrase progName,
+  S "The document describes the program called", projTitleS projName,
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
   namedRef externalLinkRef (S "Projectile")]
 scope = foldlSent_ [D.toSent $ phraseNP (NP.the (analysis `ofA` twoD)),
@@ -124,7 +124,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 si :: SmithEtAlSRS
-si = mkSmithEtAlICO progName
+si = mkSmithEtAlICO projName
   [samCrawford, brooks, spencerSmith]
   [purp] [background] [scope] [motivation]
   tMods genDefns dataDefs iMods
@@ -149,17 +149,15 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
-cis :: [CI]
-cis = [progName]
-
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   [mass] ++ defs ++ [distance, motion, gravity, collision, rectilinear,
   positionVec]
 
 symbMap :: ChunkDB
-symbMap = withCommonKnowledge allRefs symbols ideaDicts cis conceptChunks [] dataDefs
-  iMods genDefns tMods concIns citations labelledContent'
+symbMap = withCommonKnowledge projName allRefs symbols ideaDicts []
+  conceptChunks [] dataDefs iMods genDefns tMods concIns citations
+  labelledContent'
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -188,7 +186,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` D.toSent (phraseNP (the user)), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself" +:+. sParen (short progName),
+   phrase softwareSys, S "itself" +:+. sParen (projAbrvS projName),
    S "Arrows are used to show the data flow between the", D.toSent $ phraseNP (system
    `andIts` environment)]
 
@@ -201,7 +199,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", D.toSent $ phraseNP (p
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = map foldlSent [[S "Provide initial", D.toSent $ pluralNP (condition `ofThePS`
   physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
-  phrase progName `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
+  projTitleS projName `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
   [S "Ensure that consistent units" `S.are` S "used for",
    D.toSent $ pluralNP (combineNINI input_ Doc.variable)],
   [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section]))
@@ -217,7 +215,7 @@ sysCtxSysResp = map foldlSent [[S "Detect data type mismatch" `sC` S "such as a 
 
 sysCtxResp :: [Sentence]
 sysCtxResp = map (\x -> x +:+ S "Responsibilities")
-  [titleize user, short progName]
+  [titleize user, projAbrvS projName]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -229,7 +227,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
+  [S "The", phrase endUser `S.of_` projAbrvS projName,
    S "should have an understanding of",
    phrase highSchoolPhysics `S.and_` phrase highSchoolCalculus]
 

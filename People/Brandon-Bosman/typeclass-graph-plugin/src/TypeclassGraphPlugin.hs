@@ -24,7 +24,7 @@ inspectClasses _ _ gblEnv = do
       classGraph = map (\cls -> (cls, superClasses cls)) classes
       baseClasses = filter (classDependsOnTyConName "TypeData") classes
       output = (unlines ((map printNode classGraph) ++ (map printBaseNode baseClasses)))
-  liftIO $ appendFile ("./facts.pl") output
+  liftIO $ appendFile ("../../People/Brandon-Bosman/typeclass-graph-plugin/facts.pl") output
   pure gblEnv
 
 printNode :: (Class, [TyCon]) -> String

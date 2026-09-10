@@ -11,7 +11,6 @@ desktop.ini
 
 # Drasil/Haskell
 *.cabal
-!typeclass-graph-plugin.cabal
 .cabal-sandbox
 .hsenv
 .stack-work
@@ -75,3 +74,10 @@ code/website
 *.lol
 *.equ
 *.code
+
+# Brandon :)
+!People/Brandon-Bosman/**/typeclass-graph-plugin.cabal
+People/Brandon-Bosman/**/typeclass-graph-plugin/dist-newstyle/
+People/Brandon-Bosman**/typeclass-graph-plugin/facts.pl
+People/Brandon-Bosman**/typeclass-graph-plugin/graph.dot
+People/Brandon-Bosman/**/typeclass-graph-plugin/graph.svg

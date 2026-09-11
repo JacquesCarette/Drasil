@@ -310,7 +310,7 @@ extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 class (FuncAppStatement r stmt, OOVariableSym r) => OOFuncAppStatement r stmt where
   selfInOutCall :: InOutCall r stmt
 
-class (OOFunctionSym r) => ObserverPattern r stmt | r -> stmt where
+class ObserverPattern r stmt | r -> stmt where
   notifyObservers :: VS (r FuncData) -> VS (r TypeData) -> MS (r stmt)
 
 observerListName :: Label

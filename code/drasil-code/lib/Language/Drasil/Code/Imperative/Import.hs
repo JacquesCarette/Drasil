@@ -88,12 +88,14 @@ value
     ( Argument r
     , OO.Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -203,10 +205,12 @@ mkVal
     ( Argument r
     , OO.Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -411,11 +415,13 @@ convExpr
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , OO.Literal r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -518,11 +524,13 @@ convCall
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , OO.Literal r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -732,11 +740,13 @@ convStmt
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , OO.Literal r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -873,8 +883,10 @@ readData
     , Comparison r
     , NumericExpression r
     , SelfSym r
+    , OOVariableSym r
     , VariableValue r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , ListStatement r stmt

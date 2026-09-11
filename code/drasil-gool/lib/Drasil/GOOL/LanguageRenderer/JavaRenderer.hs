@@ -1016,11 +1016,14 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getCodeType $ variableType v)
 
-jOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
+jOpenFileR
+  :: (OOTypeSym r, OOValueExpression r)
+  => SValue r -> VS (r TypeData) -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (OOValueExpression r) => SValue r -> VS (r TypeData) ->
-  SValue r -> SValue r
+jOpenFileWorA
+  :: (OOTypeSym r, OOValueExpression r)
+  => SValue r -> VS (r TypeData) -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
 

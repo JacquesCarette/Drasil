@@ -47,15 +47,15 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt,
   CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
   OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
-  NumericExpression r, InternalValueExp r, OOValueExpression r, Array r, List r,
-  ListStatement r stmt, Reference r, Set r, FunctionSym r, OOFunctionSym r,
-  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
-  MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
-  AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
-  ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
-  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
-  DeclStatement r stmt bod, OODeclStatement r stmt, AssignStatement r stmt,
-  FuncAppStatement r stmt, OOFuncAppStatement r stmt,
+  NumericExpression r, InternalValueExp r, ValueExpression r,
+  OOValueExpression r, Array r, List r, ListStatement r stmt, Reference r, Set r,
+  FunctionSym r, OOFunctionSym r, ParameterSym r, VariableValue r, ScopeSym r,
+  BinderSym r, InternalList r block, MethodSym r vis mthd bod,
+  OOMethodSym r vis mthd attch bod, AttachmentSym r attch, VisibilitySym r vis,
+  StateVarSym r vis stvr attch, ClassSym r mthd stvr, TypeElim r, VariableElim r,
+  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
+  CommentStatement r stmt, DeclStatement r stmt bod, OODeclStatement r stmt,
+  AssignStatement r stmt, FuncAppStatement r stmt, OOFuncAppStatement r stmt,
   ControlStatement r stmt bod, StringStatement r stmt, PrintConsole r stmt,
   ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
   ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
@@ -218,7 +218,7 @@ instanceVarSelf
 instanceVarSelf = instanceVarAccess (valueOf self)
 
 -- for values that can include expressions
-class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
+class OOValueExpression r where
   newObjMixedArgs         ::            MixedCtorCall r
   extNewObjMixedArgs      :: Library -> MixedCtorCall r
   libNewObjMixedArgs      :: Library -> MixedCtorCall r

@@ -40,10 +40,12 @@ genAllInputCalls
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -99,10 +101,12 @@ genConstraintCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -126,10 +130,12 @@ genCalcCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -155,10 +161,12 @@ genOutputCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -182,10 +190,12 @@ genFuncCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r

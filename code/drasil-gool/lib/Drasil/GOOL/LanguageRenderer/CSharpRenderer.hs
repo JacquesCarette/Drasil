@@ -23,9 +23,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  OOValueExpression(..), selfMethodCall, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
+  StateVarSym(..), AttachmentSym(..), OOValueSym, OOValueExpression(..),
+  selfMethodCall, newObj, InternalValueExp(..), objMethodCall,
+  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -319,8 +319,6 @@ instance MathConstant CSharpCode where
 
 instance VariableValue CSharpCode where
   valueOf = G.valueOf
-
-instance OOVariableValue CSharpCode
 
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList

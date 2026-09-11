@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   ParameterSym(..), MethodSym(..), convScope, BinderElim(..), (&=))
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, Class, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
   OOValueExpression(..), selfMethodCall, InternalValueExp(..), objMethodCall,
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -322,8 +322,6 @@ instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => VariableValue (p CppSrcCode CppHdrCode) where
   valueOf = pair1 valueOf valueOf
-
-instance (Pair p) => OOVariableValue (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => CommandLineArgs (p CppSrcCode CppHdrCode) where
   arg n = on2StateValues pair (arg n) (arg n)
@@ -1249,8 +1247,6 @@ instance MathConstant CppSrcCode where
 instance VariableValue CppSrcCode where
   valueOf = G.valueOf
 
-instance OOVariableValue CppSrcCode
-
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = mkStateVal argvType (text argv)
@@ -1944,8 +1940,6 @@ instance MathConstant CppHdrCode where
 
 instance VariableValue CppHdrCode where
   valueOf = G.valueOf
-
-instance OOVariableValue CppHdrCode
 
 instance CommandLineArgs CppHdrCode where
   arg n = G.arg (litInt $ n+1) argsList

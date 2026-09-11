@@ -23,11 +23,10 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOVariableValue,
-  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
-  OOValueExpression(..), selfMethodCall, OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..))
+  StateVarSym(..), AttachmentSym(..), OOValueSym, InternalValueExp(..),
+  extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..), OOValueExpression(..),
+  selfMethodCall, OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -308,8 +307,6 @@ instance MathConstant PythonCode where
 
 instance VariableValue PythonCode where
   valueOf = G.valueOf
-
-instance OOVariableValue PythonCode
 
 instance CommandLineArgs PythonCode where
   arg n = G.arg (litInt $ n+1) argsList

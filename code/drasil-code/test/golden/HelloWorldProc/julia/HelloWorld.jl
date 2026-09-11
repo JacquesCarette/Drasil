@@ -59,6 +59,20 @@ println(boringList)
 global s = Set([4, 7, 5])
 @assert in(7, s) "Set s should contain 7"
 
+# Set operation and lambda tests
+global s = push!(s, 10)
+global s = delete!(s, 7)
+global s = union!(s, Set([20, 30]))
+print("Set after operations: ")
+print("{ ")
+for set_i1 in s
+    print(set_i1)
+    print(" ")
+end
+println("}")
+global myLambda = x -> x * 2.0
+println("Lambda defined successfully")
+
 # List slicing tests
 # Create variables for list slices
 global mySlicedList = Float64[]

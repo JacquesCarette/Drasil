@@ -108,7 +108,7 @@ class ClassSym r mthd stvr | r -> mthd stvr where
 
 type Initializers r = [(SVariable r, SValue r)]
 
-class (AttachmentSym r attch) => OOMethodSym r vis mthd attch bod | r -> vis mthd bod where
+class OOMethodSym r vis mthd attch bod | r -> vis mthd attch bod where
   method      :: Label -> r vis -> r attch -> VS (r TypeData) ->
     [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
   getMethod   :: SVariable r -> MS (r mthd)
@@ -120,12 +120,20 @@ class (AttachmentSym r attch) => OOMethodSym r vis mthd attch bod | r -> vis mth
   docInOutMethod :: Label -> r vis -> r attch -> DocInOutFunc r mthd bod
 
 privMethod
-  :: (OOMethodSym r vis mthd attch bod, VisibilitySym r vis)
+  ::
+    ( OOMethodSym r vis mthd attch bod
+    , AttachmentSym r attch
+    , VisibilitySym r vis
+    )
   => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 privMethod n = method n private instanceLevel
 
 pubMethod
-  :: (OOMethodSym r vis mthd attch bod, VisibilitySym r vis)
+  ::
+    ( OOMethodSym r vis mthd attch bod
+    , AttachmentSym r attch
+    , VisibilitySym r vis
+    )
   => Label -> VS (r TypeData) -> [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
 pubMethod n = method n public instanceLevel
 

@@ -34,6 +34,7 @@ helperClass
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , AttachmentSym r attch
     , VisibilitySym r vis
     , StateVarSym r vis stvr attch
     , ClassSym r mthd stvr
@@ -64,6 +65,7 @@ printNumMethod
     ( BlockSym r block stmt
     , BodySym r bod block
     , OOMethodSym r vis mthd attch bod
+    , AttachmentSym r attch
     , VisibilitySym r vis
     , PrintConsole r stmt
     , SelfSym r

@@ -25,11 +25,11 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, MS, VS, TypeSym(..), VariableValue(..),
-  ValueStatement(valStmt), DeclStatement(..), convType, convTypeOO, TypeData,
-  FuncAppStatement, TypeElim, VariableElim, Argument, Set, ValueExpression,
-  Comparison, BooleanExpression, MathConstant, List, SelfSym, OOFuncAppStatement,
-  InternalValueExp, Literal, OOValueExpression)
+import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOVariableSym,
+  VariableValue(..), ValueStatement(valStmt), DeclStatement(..), convType,
+  convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableElim, Argument, Set,
+  ValueExpression, Comparison, BooleanExpression, MathConstant, List, SelfSym,
+  OOFuncAppStatement, InternalValueExp, Literal, OOValueExpression)
 import Drasil.GProc (NativeVector, Reference, NumericExpression)
 
 -- | Generates calls to all of the input-related functions. First is the call to
@@ -51,6 +51,7 @@ genAllInputCalls
     , Reference r
     , Set r
     , ValueStatement r stmt
+    , FuncAppStatement r stmt
     , OOFuncAppStatement r stmt
     , TypeElim r
     , VariableElim r
@@ -64,7 +65,14 @@ genAllInputCalls = do
 
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall
-  :: (VariableValue r, SelfSym r, OOFuncAppStatement r stmt, VariableElim r)
+  ::
+    ( OOVariableSym r
+    , VariableValue r
+    , SelfSym r
+    , FuncAppStatement r stmt
+    , OOFuncAppStatement r stmt
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 genInputCall = do
   giName <- genICName GetInput
@@ -72,7 +80,14 @@ genInputCall = do
 
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall
-  :: (VariableValue r, SelfSym r, OOFuncAppStatement r stmt, VariableElim r)
+  ::
+    ( OOVariableSym r
+    , VariableValue r
+    , SelfSym r
+    , FuncAppStatement r stmt
+    , OOFuncAppStatement r stmt
+    , VariableElim r
+    )
   => GenState (Maybe (MS (r stmt)))
 genDerivedCall = do
   dvName <- genICName DerivedValuesFn
@@ -197,7 +212,14 @@ genFuncCall n t funcPs = do
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
 genInOutCall
-  :: (VariableValue r, SelfSym r, OOFuncAppStatement r stmt, VariableElim r)
+  ::
+    ( OOVariableSym r
+    , VariableValue r
+    , SelfSym r
+    , FuncAppStatement r stmt
+    , OOFuncAppStatement r stmt
+    , VariableElim r
+    )
   => Name
   -> GenState [CodeVarChunk]
   -> GenState [CodeVarChunk]

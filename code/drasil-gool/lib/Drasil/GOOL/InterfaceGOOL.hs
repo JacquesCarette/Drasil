@@ -55,10 +55,10 @@ class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt
   ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
   MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
   DeclStatement r stmt bod, OODeclStatement r stmt, AssignStatement r stmt,
-  OOFuncAppStatement r stmt, ControlStatement r stmt bod, StringStatement r stmt,
-  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
-  ReadFile r stmt, ModuleSym r mod mthd, FileSym r file mod,
-  ProgramSym r prg file
+  FuncAppStatement r stmt, OOFuncAppStatement r stmt,
+  ControlStatement r stmt bod, StringStatement r stmt, PrintConsole r stmt,
+  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
   ) => OOProg r vis stmt mthd stvr attch prg file mod bod block
 
 type Program = ProgData
@@ -309,7 +309,7 @@ extObjDecNewNoParams :: (OODeclStatement r stmt) => Library -> SVariable r ->
   r ScopeData -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 
-class (FuncAppStatement r stmt, OOVariableSym r) => OOFuncAppStatement r stmt where
+class OOFuncAppStatement r stmt | r -> stmt where
   selfInOutCall :: InOutCall r stmt
 
 class ObserverPattern r stmt | r -> stmt where

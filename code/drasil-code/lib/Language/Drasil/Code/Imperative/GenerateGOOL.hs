@@ -177,8 +177,14 @@ ctorCall m t = fCall (\cm args nargs -> if m /= cm then
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 
 -- | Logic similar to 'fApp', but for In/Out calls.
-fAppInOut :: (OOFuncAppStatement r stmt) => Name -> Name -> [SValue r] ->
-  [SVariable r] -> [SVariable r] -> GenState (MS (r stmt))
+fAppInOut
+  :: (FuncAppStatement r stmt, OOFuncAppStatement r stmt)
+  => Name
+  -> Name
+  -> [SValue r]
+  -> [SVariable r]
+  -> [SVariable r]
+  -> GenState (MS (r stmt))
 fAppInOut m n ins outs both = do
   g <- get
   let cm = currentModule g

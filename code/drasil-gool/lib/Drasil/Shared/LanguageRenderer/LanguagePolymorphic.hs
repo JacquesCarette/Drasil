@@ -28,7 +28,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
   VariableValue, BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
-  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
+  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -572,7 +572,8 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
 
 initStmts
   ::
-    ( VariableValue r
+    ( OOVariableSym r
+    , VariableValue r
     , SelfSym r
     , AssignStatement r stmt
     , BlockSym r block stmt

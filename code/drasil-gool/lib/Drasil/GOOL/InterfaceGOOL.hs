@@ -208,12 +208,13 @@ class (VariableSym r, OOTypeSym r) => OOVariableSym r where
 infixl 9 $->
 ($->) = instanceVarAccess
 
-class (OOVariableSym r) => SelfSym r where
+class SelfSym r where
   -- | `self` keyword
   self              :: SVariable r
 
 -- | Given a variable `v`, creates `self.v`
-instanceVarSelf   :: (SelfSym r, VariableValue r) => SVariable r -> SVariable r
+instanceVarSelf
+  :: (OOVariableSym r, SelfSym r, VariableValue r) => SVariable r -> SVariable r
 instanceVarSelf = instanceVarAccess (valueOf self)
 
 -- for values that can include expressions

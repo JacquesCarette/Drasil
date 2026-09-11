@@ -11,7 +11,7 @@ module Language.Drasil.Document.SentenceCombinators (
   -- | See Reference-related Functions as well.
   addPercent, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
-  chWithUnit, unitInParen, unitSym, phraseWithUnit, fterms, eqN, eqnWSource,
+  chWithUnit, introduceVar, unitSym, phraseWithUnit, fterms, eqN, eqnWSource,
   -- * List-related Functions
   bulletFlat, bulletNested, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, refineChain,
@@ -147,17 +147,21 @@ bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 unitSym :: MayHaveUnit a => a -> Sentence
 unitSym = maybe EmptyS (Sy . usymb) . getUnit
 
--- | Formats a unit in parentheses. Outputs "(unit)", or 'EmptyS' if no unit exists.
-unitInParen :: MayHaveUnit a => a -> Sentence
-unitInParen x = maybe EmptyS (sParen . Sy . usymb) (getUnit x)
-
--- | Outputs "ch x (unit of x)". For introducing a quantity with its symbol and unit.
+-- | Outputs "ch x (unit of x)", or just "ch x" if no unit exists.
+-- For introducing a quantity with its symbol and unit.
 chWithUnit :: (Quantity a, MayHaveUnit a) => a -> Sentence
-chWithUnit x = ch x +:+ unitInParen x
+chWithUnit x = maybe (ch x) (\u -> ch x +:+ sParen (Sy (usymb u))) (getUnit x)
 
--- | Outputs "phrase x (unit of x)". For introducing a concept with its name and unit.
+-- | Outputs "phrase x (unit of x)", or just "phrase x" if no unit exists.
+-- For introducing a concept with its name and unit.
 phraseWithUnit :: (NamedIdea a, MayHaveUnit a) => a -> Sentence
-phraseWithUnit x = phrase x +:+ unitInParen x
+phraseWithUnit x = maybe (phrase x) (\u -> phrase x +:+ sParen (Sy (usymb u))) (getUnit x)
+
+-- | Outputs "phrase x, ch x, (unit of x)", or "phrase x, ch x" if no unit exists.
+-- For introducing a variable by its name, symbol, and unit together (e.g. the first
+-- time a variable is mentioned in a document).
+introduceVar :: (NamedIdea a, Quantity a, MayHaveUnit a) => a -> Sentence
+introduceVar x = maybe (phrase x `sC` ch x) (\u -> phrase x `sC` ch x `sC` sParen (Sy (usymb u))) (getUnit x)
 
 -- | Converts lists of simple 'ItemType's into a list which may be used
 -- in 'Contents' but is not directly referable.

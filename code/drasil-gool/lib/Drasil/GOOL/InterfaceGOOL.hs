@@ -54,10 +54,11 @@ class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt
   AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
   ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
   MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
-  OODeclStatement r stmt bod, AssignStatement r stmt, OOFuncAppStatement r stmt,
-  ControlStatement r stmt bod, StringStatement r stmt, PrintConsole r stmt,
-  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
-  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
+  DeclStatement r stmt bod, OODeclStatement r stmt, AssignStatement r stmt,
+  OOFuncAppStatement r stmt, ControlStatement r stmt bod, StringStatement r stmt,
+  PrintConsole r stmt, ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt,
+  ReadFile r stmt, ModuleSym r mod mthd, FileSym r file mod,
+  ProgramSym r prg file
   ) => OOProg r vis stmt mthd stvr attch prg file mod bod block
 
 type Program = ProgData
@@ -290,7 +291,7 @@ classMethodCallNoParams :: (InternalValueExp r) => VS (r TypeData) -> VS (r Type
   Label -> SValue r
 classMethodCallNoParams t c f = classMethodCall t c f []
 
-class (DeclStatement r stmt bod, OOVariableSym r) => OODeclStatement r stmt bod where
+class OODeclStatement r stmt | r -> stmt where
   objDecDef    :: SVariable r -> r ScopeData -> SValue r -> MS (r stmt)
   -- Parameters: variable to store the object, scope of the variable,
   --             constructor arguments.  Object type is not needed,
@@ -299,11 +300,11 @@ class (DeclStatement r stmt bod, OOVariableSym r) => OODeclStatement r stmt bod 
   extObjDecNew :: Library -> SVariable r -> r ScopeData -> [SValue r]
     -> MS (r stmt)
 
-objDecNewNoParams :: (OODeclStatement r stmt bod) => SVariable r -> r ScopeData
+objDecNewNoParams :: (OODeclStatement r stmt) => SVariable r -> r ScopeData
   -> MS (r stmt)
 objDecNewNoParams v tp = objDecNew v tp []
 
-extObjDecNewNoParams :: (OODeclStatement r stmt bod) => Library -> SVariable r ->
+extObjDecNewNoParams :: (OODeclStatement r stmt) => Library -> SVariable r ->
   r ScopeData -> MS (r stmt)
 extObjDecNewNoParams l v tp = extObjDecNew l v tp []
 

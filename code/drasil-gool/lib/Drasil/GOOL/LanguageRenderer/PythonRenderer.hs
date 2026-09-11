@@ -531,7 +531,7 @@ instance DeclStatement PythonCode (Doc, Terminator) Body where
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
-instance OODeclStatement PythonCode (Doc, Terminator) Body where
+instance OODeclStatement PythonCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do

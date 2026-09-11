@@ -457,8 +457,8 @@ instance (G.OOVariableSym r) => G.OOVariableSym (LoggingFor r) where
   extClassVarAccess = liftLogging G.extClassVarAccess
   instanceVarAccess = liftLogging G.instanceVarAccess
 
-instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt bod) =>
-    G.OODeclStatement (LoggingFor r) stmt bod where
+instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt) =>
+    G.OODeclStatement (LoggingFor r) stmt where
   objDecDef = liftLogging G.objDecDef
   objDecNew = liftLogging G.objDecNew
   extObjDecNew = liftLogging G.extObjDecNew

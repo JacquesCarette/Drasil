@@ -144,7 +144,8 @@ getInputDecl
     , Reference r
     , Set r
     , MultiStatement r stmt
-    , OODeclStatement r stmt bod
+    , DeclStatement r stmt bod
+    , OODeclStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -199,7 +200,8 @@ initConsts
     , Reference r
     , Set r
     , MultiStatement r stmt
-    , OODeclStatement r stmt bod
+    , DeclStatement r stmt bod
+    , OODeclStatement r stmt
     , TypeElim r
     , VariableElim r
     )

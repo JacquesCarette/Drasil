@@ -547,7 +547,7 @@ instance DeclStatement JavaCode (Doc, Terminator) Body where
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 
-instance OODeclStatement JavaCode (Doc, Terminator) Body where
+instance OODeclStatement JavaCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew

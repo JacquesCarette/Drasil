@@ -869,7 +869,8 @@ readData
     , ListStatement r stmt
     , Reference r
     , OO.Set r
-    , OODeclStatement r stmt bod
+    , DeclStatement r stmt bod
+    , OODeclStatement r stmt
     , ControlStatement r stmt bod
     , StringStatement r stmt
     , FileHandling r stmt
@@ -898,7 +899,8 @@ readData ddef = do
             , VariableValue r
             , List r
             , ListStatement r stmt
-            , OODeclStatement r stmt bod
+            , DeclStatement r stmt bod
+            , OODeclStatement r stmt
             , ControlStatement r stmt bod
             , StringStatement r stmt
             , ReadFile r stmt
@@ -932,7 +934,8 @@ readData ddef = do
             ( SelfSym r
             , VariableValue r
             , ListStatement r stmt
-            , OODeclStatement r stmt bod
+            , DeclStatement r stmt bod
+            , OODeclStatement r stmt
             , StringStatement r stmt
             , VariableElim r
             )
@@ -946,13 +949,13 @@ readData ddef = do
             (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps
-          :: (OODeclStatement r stmt bod)
+          :: (OOTypeSym r, DeclStatement r stmt bod, OODeclStatement r stmt)
           => Maybe String -> [DataItem] -> r ScopeData -> [GenState (MS (r stmt))]
         clearTemps Nothing    _  _   = []
         clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
         clearTemp
-          :: (OODeclStatement r stmt bod)
+          :: (OOTypeSym r, DeclStatement r stmt bod, OODeclStatement r stmt)
           => String -> DataItem -> r ScopeData -> GenState (MS (r stmt))
         clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
           (innerType $ convTypeOO t)) scp []) (codeType v)

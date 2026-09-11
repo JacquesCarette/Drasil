@@ -160,7 +160,7 @@ phraseWithUnit x = maybe (phrase x) (\u -> phrase x +:+ sParen (Sy (usymb u))) (
 -- | Outputs "phrase x, ch x, (unit of x)", or "phrase x, ch x" if no unit exists.
 -- For introducing a variable by its name, symbol, and unit together (e.g. the first
 -- time a variable is mentioned in a document).
-introduceVar :: (NamedIdea a, Quantity a, MayHaveUnit a) => a -> Sentence
+introduceVar :: (Quantity a, MayHaveUnit a) => a -> Sentence
 introduceVar x = maybe (phrase x `sC` ch x) (\u -> phrase x `sC` ch x `sC` sParen (Sy (usymb u))) (getUnit x)
 
 -- | Converts lists of simple 'ItemType's into a list which may be used

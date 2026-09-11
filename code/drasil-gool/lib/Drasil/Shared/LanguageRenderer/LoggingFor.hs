@@ -476,8 +476,6 @@ instance (G.OOValueExpression r) => G.OOValueExpression (LoggingFor r) where
 instance (G.SelfSym r) => G.SelfSym (LoggingFor r) where
   self = liftLogging G.self
 
-instance (G.OOVariableValue r) => G.OOVariableValue (LoggingFor r)
-
 instance (G.OOFunctionSym r) => G.OOFunctionSym (LoggingFor r) where
   func = liftLogging G.func
   objAccess = liftLogging G.objAccess

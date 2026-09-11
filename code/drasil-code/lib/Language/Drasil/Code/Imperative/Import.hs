@@ -50,7 +50,7 @@ import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, SVariable, SValue, Class, CSStateVar, NamedArgs,
   Initializers, OOProg, CS, FS, MS, VS, AttachmentSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), VariableElim(..),
+  BlockSym(..), TypeSym(..), OOTypeSym(..), VariableSym(..), VariableElim(..),
   VariableValue(..), ScopeSym(..), ScopeData, OOVariableSym(..), SelfSym(..),
   instanceVarSelf, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
@@ -61,7 +61,7 @@ import Drasil.GOOL (Label, SVariable, SValue, Class, CSStateVar, NamedArgs,
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, VisibilityTag(..),
   CodeType(..), onStateValue, TypeData, ParamData, TypeElim, OODeclStatement,
-  OOVariableValue, MathConstant, Argument, PrintFile, BodySym, InternalValueExp)
+  MathConstant, Argument, PrintFile, BodySym, InternalValueExp)
 import qualified Drasil.GOOL as OO (CodeType(List, Array), Set(..), Literal)
 import Drasil.GProc (ProcProg, NativeVector(..))
 import Drasil.System (systemdb)
@@ -858,11 +858,11 @@ readData
     , Argument r
     , OO.Literal r
     , MathConstant r
-    , OOVariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
     , SelfSym r
+    , VariableValue r
     , InternalValueExp r
     , OOValueExpression r
     , List r
@@ -894,7 +894,8 @@ readData ddef = do
             ( BlockSym r block stmt
             , BodySym r bod block
             , OO.Literal r
-            , OOVariableValue r
+            , SelfSym r
+            , VariableValue r
             , List r
             , ListStatement r stmt
             , OODeclStatement r stmt bod
@@ -928,7 +929,8 @@ readData ddef = do
         ---------------
         lineData
           ::
-            ( OOVariableValue r
+            ( SelfSym r
+            , VariableValue r
             , ListStatement r stmt
             , OODeclStatement r stmt bod
             , StringStatement r stmt
@@ -956,13 +958,13 @@ readData ddef = do
           (innerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps
-          :: (ListStatement r stmt, OOVariableValue r)
+          :: (ListStatement r stmt, VariableValue r, OOTypeSym r)
           => Maybe String -> [DataItem] -> [GenState (MS (r stmt))]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp
-          :: (ListStatement r stmt, OOVariableValue r)
+          :: (ListStatement r stmt, VariableValue r, OOTypeSym r)
           => String -> DataItem -> GenState (MS (r stmt))
         appendTemp sfx v = fmap (\t -> listAppend
           (valueOf $ var (codeName v) (convTypeOO t))

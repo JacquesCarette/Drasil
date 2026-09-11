@@ -8,16 +8,16 @@ module Drasil.GOOL.InterfaceGOOL (
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
-  OOValueSym, OOVariableValue, OOValueExpression(..), selfMethodCall, newObj,
-  extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..), InternalValueExp(..),
-  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
-  objMethodCallNoParams, classMethodCall, classMethodCallNamedArgs,
-  classMethodCallMixedArgs, classMethodCallNoParams, OOMethodSym(..), privMethod,
-  pubMethod, initializer, nonInitConstructor, StateVarSym(..), privDVar, pubDVar,
-  pubSVar, AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess,
-  ObserverPattern(..), observerListName, initObserverList, addObserver,
-  StrategyPattern(..), convTypeOO
+  OOValueSym, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
+  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
+  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  classMethodCall, classMethodCallNamedArgs, classMethodCallMixedArgs,
+  classMethodCallNoParams, OOMethodSym(..), privMethod, pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
+  AttachmentSym(..), OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..),
+  observerListName, initObserverList, addObserver, StrategyPattern(..),
+  convTypeOO
   ) where
 
 import Drasil.Shared.InterfaceCommon (
@@ -45,11 +45,11 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
 class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt,
-  CommandLineArgs r, Literal r, MathConstant r, OOVariableValue r,
-  BooleanExpression r, Comparison r, NumericExpression r, InternalValueExp r,
-  OOValueExpression r, Array r, List r, ListStatement r stmt, Reference r, Set r,
-  OOFunctionSym r, ParameterSym r, VariableValue r, ScopeSym r, BinderSym r,
-  InternalList r block, MethodSym r vis mthd bod,
+  CommandLineArgs r, Literal r, MathConstant r, VariableValue r, OOVariableSym r,
+  SelfSym r, BooleanExpression r, Comparison r, NumericExpression r,
+  InternalValueExp r, OOValueExpression r, Array r, List r, ListStatement r stmt,
+  Reference r, Set r, OOFunctionSym r, ParameterSym r, VariableValue r,
+  ScopeSym r, BinderSym r, InternalList r block, MethodSym r vis mthd bod,
   OOMethodSym r vis mthd attch bod, ClassSym r vis mthd stvr attch, TypeElim r,
   VariableElim r, EmptyStatement r stmt, MultiStatement r stmt,
   ValueStatement r stmt, CommentStatement r stmt, OODeclStatement r stmt bod,
@@ -200,8 +200,6 @@ class (OOVariableSym r) => SelfSym r where
 instanceVarSelf   :: (SelfSym r, VariableValue r) => SVariable r -> SVariable r
 instanceVarSelf = instanceVarAccess (valueOf self)
 
-class (VariableValue r, OOVariableSym r, SelfSym r) => OOVariableValue r
-
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
   newObjMixedArgs         ::            MixedCtorCall r
@@ -309,7 +307,7 @@ initObserverList
 initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver
-  :: (OOVariableValue r, List r, ListStatement r stmt)
+  :: (VariableValue r, List r, ListStatement r stmt)
   => SValue r -> MS (r stmt)
 addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
@@ -327,7 +325,8 @@ class (FunctionSym r) => OOFunctionSym r where
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (OOVariableValue r, OOFunctionSym r) => VS (r FuncData) -> SValue r
+selfAccess
+  :: (VariableValue r, SelfSym r, OOFunctionSym r) => VS (r FuncData) -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r, VariableSym r) => GetSet r where

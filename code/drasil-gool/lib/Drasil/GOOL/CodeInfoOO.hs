@@ -16,7 +16,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym, OOVariableValue,
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
   OOValueExpression(..), InternalValueExp(..), OOFunctionSym(..), GetSet(..),
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
@@ -160,8 +160,6 @@ instance MathConstant CodeInfoOO where
 
 instance VariableValue CodeInfoOO where
   valueOf _ = return $ error "[valueOf] The return value of this isn't used, and the thunk shouldn't fire."
-
-instance OOVariableValue CodeInfoOO
 
 instance CommandLineArgs CodeInfoOO where
   arg       _ = return $ error "[arg] The return value of this isn't used, and the thunk shouldn't fire."

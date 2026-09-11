@@ -4,8 +4,8 @@ module GOOL.Observer (observer, observerName, printNum, x) where
 import Drasil.GOOL (SVariable, Class, OOProg, CS, FS, MS, FileSym(..),
   AttachmentSym(..), BodySym, BlockSym, oneLiner, TypeSym(..), PrintConsole(..),
   VariableSym(..), SelfSym(..), instanceVarSelf, Literal(..), VariableValue(..),
-  OOVariableValue, VisibilitySym(..), OOMethodSym(..), initializer,
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  VisibilitySym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -38,7 +38,8 @@ helperClass
     , OOMethodSym r vis mthd attch bod
     , PrintConsole r stmt
     , Literal r
-    , OOVariableValue r
+    , SelfSym r
+    , VariableValue r
     )
   => CS (r Class)
 helperClass = buildClass Nothing [stateVar public instanceLevel x]
@@ -63,7 +64,8 @@ printNumMethod
     , OOMethodSym r vis mthd attch bod
     , VisibilitySym r vis
     , PrintConsole r stmt
-    , OOVariableValue r
+    , SelfSym r
+    , VariableValue r
     )
   => MS (r mthd)
 printNumMethod = method printNum public instanceLevel void [] $

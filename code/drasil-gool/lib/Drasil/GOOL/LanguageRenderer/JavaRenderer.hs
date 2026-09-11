@@ -24,7 +24,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
+  OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
   InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
@@ -319,8 +319,6 @@ instance MathConstant JavaCode where
 
 instance VariableValue JavaCode where
   valueOf = G.valueOf
-
-instance OOVariableValue JavaCode
 
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList

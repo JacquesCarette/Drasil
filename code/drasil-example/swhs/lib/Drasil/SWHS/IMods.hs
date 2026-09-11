@@ -78,8 +78,8 @@ balWtrDesc = map foldlSent [
    eS (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", short ode, S "applies as long as the", phrase water `S.is` EmptyS `S.in_`
    phrase liquid, S "form" `sC` eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))),
-   unitInParen tempW, S "where", eS (exactDbl 0), unitInParen tempW `S.and_`
-   eS (exactDbl 100), unitInParen tempW `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
+   sParen (unitSym tempW), S "where", eS (exactDbl 0), sParen (unitSym tempW) `S.and_`
+   eS (exactDbl 100), sParen (unitSym tempW) `S.are` D.toSent (pluralNP (NP.the ((melting `and_`
    boilPt) `of_PSNPNI` water))) `sC` S "respectively",
    fromSources [assumpWAL, assumpAPT]]]
 
@@ -291,8 +291,8 @@ htWtrNotes :: [Sentence]
 htWtrNotes = map foldlSent [
   [S "The above", phrase equation `S.is` S "derived using", refS sensHtE],
   [D.toSent (atStartNP (NP.the (change `in_`temp))) `S.isThe` S "difference between the",
-   phrase temp, S "at", phrase time, ch time, unitInParen tInitMelt `sC`
-  ch tempW `S.andThe` phrase tempInit `sC` chWithUnit tempInit],
+   phrase temp, S "at", phrase time, ch time, sParen (unitSym tInitMelt) `sC`
+  ch tempW `S.andThe` introduceVar tempInit],
   [S "This", phrase equation, S "applies as long as",
    eS (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))) :+:
   unitSym tempW, sParen $ refS assumpWAL `sC` refS assumpAPT]]
@@ -331,16 +331,16 @@ htPCMNotes = map foldlSent [
   [ch pcmE, S "for the", phrase solid, short phsChgMtrl `S.is` S "found using",
    refS sensHtE `S.for` phrase sensHeat :+: S "ing, with",
    D.toSent (phraseNP (heatCapSpec `the_ofThe` solid)), short phsChgMtrl `sC` chWithUnit htCapSP `S.andThe` phrase change `S.inThe`
-   short phsChgMtrl, phrase temp, S "from the", phraseWithUnit tempInit],
+   short phsChgMtrl, phrase temp, S "from the", introduceVar tempInit],
   [ch pcmE, S "for the melted", short phsChgMtrl, sParen (eS (sy tempPCM $> sy pcmInitMltE)),
    S "is found using", refS sensHtE `S.for` D.toSent (phraseNP (sensHeat `ofThe` liquid)),
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
   [D.toSent (atStartNP (the energy)), S "required to melt all" `S.ofThe` short phsChgMtrl `S.is`
-   eS (sy htFusion $* sy pcmMass), unitInParen pcmInitMltE,
+   eS (sy htFusion $* sy pcmMass), sParen (unitSym pcmInitMltE),
    fromSource ddHtFusion],
   [D.toSent (atStartNP (NP.the (change `in_` temp))) `S.is` eS (sy tempPCM $- sy tempMeltP),
-   unitInParen tempMeltP],
+   sParen (unitSym tempMeltP)],
   [ch pcmE, S "during", phrase melting `S.ofThe` short phsChgMtrl `S.is` S "found using the",
    phrase energy, S "required at", S "instant" +:+
    phrase melting `S.the_ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",

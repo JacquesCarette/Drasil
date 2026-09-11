@@ -131,11 +131,13 @@ indexOf
   => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
-contains :: (IG.OOFunctionSym r) => Label -> SValue r -> SValue r -> SValue r
+contains
+  :: (IC.FunctionSym r, IG.OOFunctionSym r)
+  => Label -> SValue r -> SValue r -> SValue r
 contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 containsInt
-  :: (Comparison r, IG.OOFunctionSym r)
+  :: (Comparison r, IC.FunctionSym r, IG.OOFunctionSym r)
   => Label -> Label -> SValue r -> SValue r -> SValue r
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
@@ -323,11 +325,11 @@ call' _ l o n t ps ns = call empty l o n t ps ns
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l
 
-listSizeFunc :: (IG.OOFunctionSym r) => VS (r FuncData)
+listSizeFunc :: (IC.FunctionSym r, IG.OOFunctionSym r) => VS (r FuncData)
 listSizeFunc = IG.func "size" IC.int []
 
 listAccessFunc'
-  :: (IG.OOFunctionSym r, TypeElim r)
+  :: (IC.FunctionSym r, IG.OOFunctionSym r, TypeElim r)
   => Label -> VS (r TypeData) -> SValue r -> VS (r FuncData)
 listAccessFunc' f t i = IG.func f t [intValue i]
 

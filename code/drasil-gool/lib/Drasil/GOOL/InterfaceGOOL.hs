@@ -25,15 +25,15 @@ import Drasil.Shared.InterfaceCommon (
   Label, Library, SVariable, SValue, NamedArgs, MixedCtorCall, PosCall,
   PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  BodySym(body), BlockSym, TypeSym(..), FunctionSym, MethodSym(..),
-  VariableSym(var), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
-  Array, List(listSize), ListStatement(listAdd), listOf, EmptyStatement,
-  MultiStatement, ValueStatement, AssignStatement, DeclStatement(listDecDef),
-  FuncAppStatement, VisibilitySym(..), Argument, BooleanExpression,
-  CommandLineArgs, CommentStatement, Comparison, ControlStatement, PrintConsole,
-  ReadConsole, FileHandling, PrintFile, ReadFile, Literal, MathConstant,
-  NumericExpression, ParameterSym, Reference, Set, StringStatement, convType,
-  UnRepr, ScopeSym, BinderSym, InternalList, TypeElim, VariableElim)
+  BodySym(body), BlockSym, TypeSym(..), FunctionSym, MethodSym(..), VariableSym(var),
+  ValueSym(valueType), VariableValue(valueOf), ValueExpression, Array,
+  List(listSize), ListStatement(listAdd), listOf, EmptyStatement, MultiStatement,
+  ValueStatement, AssignStatement, DeclStatement(listDecDef), FuncAppStatement,
+  VisibilitySym(..), Argument, BooleanExpression, CommandLineArgs,
+  CommentStatement, Comparison, ControlStatement, PrintConsole, ReadConsole,
+  FileHandling, PrintFile, ReadFile, Literal, MathConstant, NumericExpression,
+  ParameterSym, Reference, Set, StringStatement, convType, UnRepr, ScopeSym,
+  BinderSym, InternalList, TypeElim, VariableElim)
 
 import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.Helpers (onStateValue)
@@ -48,8 +48,8 @@ class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt
   CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
   OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
   NumericExpression r, InternalValueExp r, OOValueExpression r, Array r, List r,
-  ListStatement r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
-  VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
+  ListStatement r stmt, Reference r, Set r, FunctionSym r, OOFunctionSym r,
+  ParameterSym r, VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
   MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
   AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
   ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
@@ -332,7 +332,7 @@ class (VariableSym r) => StrategyPattern r bod block | r -> bod block where
   runStrategy :: Label -> [(Label, MS (r bod))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MS (r block)
 
-class (FunctionSym r) => OOFunctionSym r where
+class OOFunctionSym r where
   func :: Label -> VS (r TypeData) -> [SValue r] -> VS (r FuncData)
   objAccess :: SValue r -> VS (r FuncData) -> SValue r
 

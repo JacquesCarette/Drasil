@@ -295,7 +295,9 @@ get
   => SValue r -> SVariable r -> SValue r
 get v vToGet = v $. RO.getFunc vToGet
 
-set :: (RO.InternalGetSet r, IG.OOFunctionSym r) => SValue r -> SVariable r -> SValue r -> SValue r
+set
+  :: (RO.InternalGetSet r, IC.FunctionSym r, IG.OOFunctionSym r)
+  => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this

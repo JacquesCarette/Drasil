@@ -6,12 +6,12 @@ module Language.Drasil.Development (
   -- * NounPhrase
   , NounPhrase(phraseNP, pluralNP)
   -- * NounPhrase.Core
-  , NPStruct(S, (:+:), (:-:), P)
+  , NPStructG(S, (:+:), (:-:), P), NPStruct
   -- Sentence.Extract
   , sdep, shortdep, lnames, lnames'
 ) where
 
 import Language.Drasil.Development.Sentence (toSent)
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NounPhrase(..))
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct(..))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct, NPStructG(..))
 import Language.Drasil.Sentence (sdep, shortdep, lnames, lnames')

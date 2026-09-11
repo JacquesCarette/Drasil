@@ -15,7 +15,7 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase (
   compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1,
   surroundNPStruct,
   -- * Re-exported Types
-  CapitalizationRule(..), PluralRule(..), NPStruct(..)
+  CapitalizationRuleG(..), CapitalizationRule, PluralRule(..), NPStructG(..), NPStruct
   ) where
 
 import Data.Char (isLatin1, isLetter, toLower, toUpper)

@@ -32,15 +32,15 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators (
   -- ** Other Combinators
   with, parensNP,
   -- re-exports
-  NPStruct((:+:), S, P)
+  NPStructG((:+:), S, P), NPStruct
 ) where
 
 import Language.Drasil.NaturalLanguage.English.NounPhrase
     ( NP,
-      CapitalizationRule(CapWords, CapFirst, CapNothing),
+      CapitalizationRuleG(CapWords, CapFirst, CapNothing),
       NounPhrase(phraseNP, pluralNP),
       nounPhrase'', surroundNPStruct)
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct((:+:),S,P))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct, NPStructG((:+:),S,P))
 
 --Maybe move these to a separate Drasil.NounPhrase section
 -- | Helper function that places a 'String' in between two 'NP's. Plural case is

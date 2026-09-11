@@ -547,7 +547,7 @@ instance DeclStatement JavaCode (Doc, Terminator) Body where
   constDecDef = jConstDecDef
   funcDecDef = jFuncDecDef
 
-instance OODeclStatement JavaCode (Doc, Terminator) Body where
+instance OODeclStatement JavaCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -713,7 +713,7 @@ instance StateVarSym JavaCode Doc Doc Doc where
 instance StateVarElim JavaCode StateVar where
   stateVar = unJC
 
-instance ClassSym JavaCode Doc MethodData StateVar Doc where
+instance ClassSym JavaCode MethodData StateVar where
   buildClass = G.buildClass
   extraClass = jExtraClass
   implementingClass = G.implementingClass
@@ -1016,11 +1016,14 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getCodeType $ variableType v)
 
-jOpenFileR :: (OOValueExpression r) => SValue r -> VS (r TypeData) -> SValue r
+jOpenFileR
+  :: (OOTypeSym r, OOValueExpression r)
+  => SValue r -> VS (r TypeData) -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (OOValueExpression r) => SValue r -> VS (r TypeData) ->
-  SValue r -> SValue r
+jOpenFileWorA
+  :: (OOTypeSym r, OOValueExpression r)
+  => SValue r -> VS (r TypeData) -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t
   [newObj jFileWriterType [newObj jFileType [n], wa]]
 

@@ -33,7 +33,7 @@ obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (OOValueExpression r) => SValue r
+newObserver :: (OOTypeSym r, OOValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.

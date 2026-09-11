@@ -324,7 +324,7 @@ instance DeclStatement CodeInfoOO () () where
     _ <- bod
     return $ return $ error "[funcDecDef] The return value of this isn't used, and the thunk shouldn't fire."
 
-instance OODeclStatement CodeInfoOO () () where
+instance OODeclStatement CodeInfoOO () where
   objDecDef            _ _ = zoom lensMStoVS . execute1
   objDecNew            _ _ = zoom lensMStoVS . executeListErr
   extObjDecNew       _ _ _ = zoom lensMStoVS . executeListErr
@@ -479,7 +479,7 @@ instance StateVarSym CodeInfoOO () () () where
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfoOO () () () () where
+instance ClassSym CodeInfoOO () () where
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms

@@ -550,7 +550,7 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) B
   funcDecDef v scp ps = pairValListVal (`funcDecDef` pfst scp)
     (`funcDecDef` psnd scp) (zoom lensMStoVS v) (map (zoom lensMStoVS) ps)
 
-instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) Body where
+instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) (Doc, Terminator) where
   objDecDef o scp v = pair2 (`objDecDef` pfst scp) (`objDecDef` psnd scp)
     (zoom lensMStoVS o) (zoom lensMStoVS v)
   objDecNew vr scp vs = pair1Val1List (`objDecNew` pfst scp)
@@ -777,8 +777,7 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode)
 instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) StateVarData where
   stateVar v = RC.stateVar $ pfst v
 
-instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode)
-    (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
+instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) MethodData StateVarData where
   buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
@@ -1481,7 +1480,7 @@ instance DeclStatement CppSrcCode (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef = cppFuncDecDef
 
-instance OODeclStatement CppSrcCode (Doc, Terminator) Body where
+instance OODeclStatement CppSrcCode (Doc, Terminator) where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1676,7 +1675,7 @@ instance StateVarSym CppSrcCode (Doc, VisibilityTag) StateVarData AttachmentData
 instance StateVarElim CppSrcCode StateVarData where
   stateVar = stVar . unCPPSC
 
-instance ClassSym CppSrcCode (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
+instance ClassSym CppSrcCode MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass
@@ -2142,7 +2141,7 @@ instance DeclStatement CppHdrCode (Doc, Terminator) Body where
   constDecDef = CG.constDecDef
   funcDecDef _ _ _ _ = emptyStmt
 
-instance OODeclStatement CppHdrCode (Doc, Terminator) Body where
+instance OODeclStatement CppHdrCode (Doc, Terminator) where
   objDecDef _ _ _ = emptyStmt
   objDecNew _ _ _ = emptyStmt
   extObjDecNew _ _ _ _ = emptyStmt
@@ -2310,7 +2309,7 @@ instance StateVarSym CppHdrCode (Doc, VisibilityTag) StateVarData AttachmentData
 instance StateVarElim CppHdrCode StateVarData where
   stateVar = stVar . unCPPHC
 
-instance ClassSym CppHdrCode (Doc, VisibilityTag) MethodData StateVarData AttachmentData where
+instance ClassSym CppHdrCode MethodData StateVarData where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

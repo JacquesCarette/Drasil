@@ -27,7 +27,7 @@ import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
 import Drasil.GOOL (SVariable, SValue, CS, FS, MS, CSStateVar, Class, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
   TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData, Literal(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  OOVariableSym, VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), List(..), ListStatement(..),
   EmptyStatement(emptyStmt), MultiStatement(multi), ValueStatement,
   AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
@@ -133,18 +133,21 @@ getInputDecl
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
     , Set r
     , MultiStatement r stmt
-    , OODeclStatement r stmt bod
+    , DeclStatement r stmt bod
+    , OODeclStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -187,6 +190,7 @@ initConsts
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -194,12 +198,14 @@ initConsts
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
     , Set r
     , MultiStatement r stmt
-    , OODeclStatement r stmt bod
+    , DeclStatement r stmt bod
+    , OODeclStatement r stmt
     , TypeElim r
     , VariableElim r
     )
@@ -254,8 +260,14 @@ genInputMod = do
 -- Either generates a declare-define statement for a regular state variable
 -- (if user chose 'Var'),
 -- or a declare-define statement for a constant variable (if user chose 'Const').
-constVarFunc :: (StateVarSym r vis stvr attch) => ConstantRepr ->
-  (SVariable r -> SValue r -> CSStateVar r stvr)
+constVarFunc
+  ::
+    ( AttachmentSym r attch
+    , VisibilitySym r vis
+    , StateVarSym r vis stvr attch
+    )
+  => ConstantRepr
+  -> (SVariable r -> SValue r -> CSStateVar r stvr)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 
@@ -389,6 +401,7 @@ sfwrCBody
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -396,6 +409,7 @@ sfwrCBody
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -420,6 +434,7 @@ physCBody
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -427,6 +442,7 @@ physCBody
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -452,11 +468,13 @@ chooseConstr
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
     , Comparison r
     , NumericExpression r
+    , ValueExpression r
     , SelfSym r
     , InternalValueExp r
     , OOValueExpression r
@@ -495,6 +513,7 @@ constrWarn
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -502,6 +521,7 @@ constrWarn
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -528,6 +548,7 @@ constrExc
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -535,6 +556,7 @@ constrExc
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -556,6 +578,7 @@ constrVarDec
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -563,6 +586,7 @@ constrVarDec
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -585,6 +609,7 @@ constraintViolatedMsg
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -592,6 +617,7 @@ constraintViolatedMsg
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -615,6 +641,7 @@ printConstraint
   ::
     ( Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -622,6 +649,7 @@ printConstraint
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -638,6 +666,7 @@ printConstraint v c = do
         ::
           ( Argument r
           , MathConstant r
+          , OOVariableSym r
           , VariableValue r
           , Literal r
           , BooleanExpression r
@@ -645,6 +674,7 @@ printConstraint v c = do
           , NumericExpression r
           , SelfSym r
           , InternalValueExp r
+          , ValueExpression r
           , OOValueExpression r
           , List r
           , Reference r
@@ -815,6 +845,7 @@ genCalcBlock
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -822,6 +853,7 @@ genCalcBlock
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r
@@ -848,6 +880,7 @@ genCaseBlock
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOVariableSym r
     , VariableValue r
     , Literal r
     , BooleanExpression r
@@ -855,6 +888,7 @@ genCaseBlock
     , NumericExpression r
     , SelfSym r
     , InternalValueExp r
+    , ValueExpression r
     , OOValueExpression r
     , List r
     , Reference r

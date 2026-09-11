@@ -28,7 +28,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Variable,
   VariableValue, BlockSym, BodySym)
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Drasil.GOOL.InterfaceGOOL (Class, Initializers, CSStateVar, newObj,
-  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym)
+  objMethodCallNoParams, ($.), AttachmentSym(..), SelfSym, OOVariableSym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG
 import Drasil.Shared.RendererClassesCommon (InternalVarElim(variableBind),
   RenderValue(valFromData), RenderFunction(funcFromData),
@@ -295,7 +295,9 @@ get
   => SValue r -> SVariable r -> SValue r
 get v vToGet = v $. RO.getFunc vToGet
 
-set :: (RO.InternalGetSet r, IG.OOFunctionSym r) => SValue r -> SVariable r -> SValue r -> SValue r
+set
+  :: (RO.InternalGetSet r, IC.FunctionSym r, IG.OOFunctionSym r)
+  => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. RO.setFunc (onStateValue valueType v) vToSet toVal
 
 -- TODO [Brandon Bosman, 06/10/2026]: Figure out what to do with this
@@ -570,7 +572,8 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> method (setterName $ variableName
 
 initStmts
   ::
-    ( VariableValue r
+    ( OOVariableSym r
+    , VariableValue r
     , SelfSym r
     , AssignStatement r stmt
     , BlockSym r block stmt

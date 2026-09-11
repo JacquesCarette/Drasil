@@ -696,7 +696,7 @@ instance StateVarSym PythonCode Doc Doc AttachmentData where
 instance StateVarElim PythonCode StateVar where
   stateVar = unPC
 
-instance ClassSym PythonCode Doc MethodData StateVar AttachmentData where
+instance ClassSym PythonCode MethodData StateVar where
   buildClass par sVars cstrs = if length cstrs <= 1
                                   then G.buildClass par sVars cstrs
                                   else error pyMultCstrsError

@@ -500,7 +500,7 @@ instance (G.StateVarSym r vis stvr attch) => G.StateVarSym (LoggingFor r) vis st
   stateVarDef = liftLogging G.stateVarDef
   constVar = liftLogging G.constVar
 
-instance (G.ClassSym r vis mthd stvr attch) => G.ClassSym (LoggingFor r) vis mthd stvr attch where
+instance (G.ClassSym r mthd stvr) => G.ClassSym (LoggingFor r) mthd stvr where
   buildClass = liftLogging G.buildClass
   extraClass = liftLogging G.extraClass
   implementingClass = liftLogging G.implementingClass

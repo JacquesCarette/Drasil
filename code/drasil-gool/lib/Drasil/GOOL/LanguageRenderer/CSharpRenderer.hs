@@ -684,7 +684,7 @@ instance StateVarSym CSharpCode Doc StateVar Doc where
 instance StateVarElim CSharpCode StateVar where
   stateVar = unCSC
 
-instance ClassSym CSharpCode Doc MethodData StateVar Doc where
+instance ClassSym CSharpCode MethodData StateVar where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

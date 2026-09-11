@@ -11,7 +11,7 @@ import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue, MethodSym
 import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOVariableSym, SelfSym, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym,
-  OOMethodSym, ClassSym)
+  OOMethodSym, StateVarSym, ClassSym)
 import Drasil.Shared.AST (AttachmentTag, TypeData, ParamData, FuncData)
 import Drasil.Shared.State (FS, CS, VS, MS)
 
@@ -20,13 +20,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
 class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
-  IG.OOMethodSym r vis mthd attch bod, IG.ClassSym r vis mthd stvr attch,
-  IG.ModuleSym r mod mthd, IG.FileSym r file mod, IG.InternalValueExp r,
-  IG.GetSet r, IG.ObserverPattern r stmt, IG.StrategyPattern r bod block,
-  IG.OOVariableSym r, IG.SelfSym r, IG.OOValueExpression r,
-  RenderClass r vis mthd stvr, ClassElim r, RenderFile r file mod,
-  InternalGetSet r, OORenderMethod r vis mthd attch bod, RenderMod r mod,
-  ModuleElim r mod, StateVarElim r stvr, PermElim r attch
+  IG.OOMethodSym r vis mthd attch bod, IG.StateVarSym r vis stvr attch,
+  IG.ClassSym r mthd stvr, IG.ModuleSym r mod mthd,
+  IG.FileSym r file mod, IG.InternalValueExp r, IG.GetSet r,
+  IG.ObserverPattern r stmt, IG.StrategyPattern r bod block, IG.OOVariableSym r,
+  IG.SelfSym r, IG.OOValueExpression r, RenderClass r vis mthd stvr, ClassElim r,
+  RenderFile r file mod, InternalGetSet r, OORenderMethod r vis mthd attch bod,
+  RenderMod r mod, ModuleElim r mod, StateVarElim r stvr, PermElim r attch
   ) => OORenderSym r vis stmt mthd stvr attch file mod bod block
 
 -- OO-Only Typeclasses --

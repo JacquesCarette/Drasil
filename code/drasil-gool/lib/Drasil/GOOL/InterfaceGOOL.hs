@@ -50,13 +50,13 @@ class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt
   InternalValueExp r, OOValueExpression r, Array r, List r, ListStatement r stmt,
   Reference r, Set r, OOFunctionSym r, ParameterSym r, VariableValue r,
   ScopeSym r, BinderSym r, InternalList r block, MethodSym r vis mthd bod,
-  OOMethodSym r vis mthd attch bod, ClassSym r vis mthd stvr attch, TypeElim r,
-  VariableElim r, EmptyStatement r stmt, MultiStatement r stmt,
-  ValueStatement r stmt, CommentStatement r stmt, OODeclStatement r stmt bod,
-  AssignStatement r stmt, OOFuncAppStatement r stmt, ControlStatement r stmt bod,
-  StringStatement r stmt, PrintConsole r stmt, ReadConsole r stmt,
-  FileHandling r stmt, PrintFile r stmt, ReadFile r stmt, ModuleSym r mod mthd,
-  FileSym r file mod, ProgramSym r prg file
+  OOMethodSym r vis mthd attch bod, StateVarSym r vis stvr attch,
+  ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
+  OODeclStatement r stmt bod, AssignStatement r stmt, OOFuncAppStatement r stmt,
+  ControlStatement r stmt bod, StringStatement r stmt, PrintConsole r stmt,
+  ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
+  ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
   ) => OOProg r vis stmt mthd stvr attch prg file mod bod block
 
 type Program = ProgData
@@ -89,7 +89,7 @@ class ModuleSym r mod mthd | r -> mod mthd where
 type Class = Doc
 
 -- | Class for representing an OO class.
-class (StateVarSym r vis stvr attch) => ClassSym r vis mthd stvr attch | r -> mthd where
+class ClassSym r mthd stvr | r -> mthd stvr where
   -- | Main external method for creating a class.
   -- Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r stvr] -> [MS (r mthd)] ->

@@ -725,7 +725,7 @@ instance StateVarSym SwiftCode Doc Doc Doc where
 instance StateVarElim SwiftCode StateVar where
   stateVar = unSC
 
-instance ClassSym SwiftCode Doc MethodData StateVar Doc where
+instance ClassSym SwiftCode MethodData StateVar where
   buildClass = G.buildClass
   extraClass = CP.extraClass
   implementingClass = G.implementingClass

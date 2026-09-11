@@ -34,6 +34,7 @@ helperClass
   ::
     ( BlockSym r block stmt
     , BodySym r bod block
+    , VisibilitySym r vis
     , StateVarSym r vis stvr attch
     , ClassSym r mthd stvr
     , OOMethodSym r vis mthd attch bod

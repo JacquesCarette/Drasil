@@ -254,8 +254,14 @@ genInputMod = do
 -- Either generates a declare-define statement for a regular state variable
 -- (if user chose 'Var'),
 -- or a declare-define statement for a constant variable (if user chose 'Const').
-constVarFunc :: (StateVarSym r vis stvr attch) => ConstantRepr ->
-  (SVariable r -> SValue r -> CSStateVar r stvr)
+constVarFunc
+  ::
+    ( AttachmentSym r attch
+    , VisibilitySym r vis
+    , StateVarSym r vis stvr attch
+    )
+  => ConstantRepr
+  -> (SVariable r -> SValue r -> CSStateVar r stvr)
 constVarFunc Var = stateVarDef public instanceLevel
 constVarFunc Const = constVar public
 

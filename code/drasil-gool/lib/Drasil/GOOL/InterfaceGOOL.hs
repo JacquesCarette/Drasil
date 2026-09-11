@@ -45,12 +45,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Wrapper typeclass that bundles everything essential
 -- for generating an object-oriented program.
 class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt,
-  CommandLineArgs r, Literal r, MathConstant r, VariableValue r, OOVariableSym r,
-  SelfSym r, BooleanExpression r, Comparison r, NumericExpression r,
-  InternalValueExp r, OOValueExpression r, Array r, List r, ListStatement r stmt,
-  Reference r, Set r, OOFunctionSym r, ParameterSym r, VariableValue r,
-  ScopeSym r, BinderSym r, InternalList r block, MethodSym r vis mthd bod,
-  OOMethodSym r vis mthd attch bod, StateVarSym r vis stvr attch,
+  CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
+  OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
+  NumericExpression r, InternalValueExp r, OOValueExpression r, Array r, List r,
+  ListStatement r stmt, Reference r, Set r, OOFunctionSym r, ParameterSym r,
+  VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
+  MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
+  AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
   ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
   MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
   OODeclStatement r stmt bod, AssignStatement r stmt, OOFuncAppStatement r stmt,
@@ -145,7 +146,7 @@ type CSStateVar r stvr = CS (r stvr)
 -- Used when creating a class, to hold extra information about `Attachment`
 -- and `Visibility`.
 -- Usually 'Doc' is used for the representation.
-class (VisibilitySym r vis, AttachmentSym r attch, VariableSym r) => StateVarSym r vis stvr attch | r -> stvr where
+class StateVarSym r vis stvr attch | r -> vis stvr attch where
   -- | Given a visibility, attachment, and variable, represent the declaration
   -- of a state variable with no initial value.
   stateVar :: r vis -> r attch -> SVariable r -> CSStateVar r stvr
@@ -156,13 +157,19 @@ class (VisibilitySym r vis, AttachmentSym r attch, VariableSym r) => StateVarSym
   -- a state constant with the given value.
   constVar :: r vis ->  SVariable r -> SValue r -> CSStateVar r stvr
 
-privDVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
+privDVar
+  :: (AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch)
+  => SVariable r -> CSStateVar r stvr
 privDVar = stateVar private instanceLevel
 
-pubDVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
+pubDVar
+  :: (AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch)
+  => SVariable r -> CSStateVar r stvr
 pubDVar = stateVar public instanceLevel
 
-pubSVar :: (StateVarSym r vis stvr attch) => SVariable r -> CSStateVar r stvr
+pubSVar
+  :: (AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch)
+  => SVariable r -> CSStateVar r stvr
 pubSVar = stateVar public classLevel
 
 -- | Used to differentiate whether a member is attached to the class or the instance

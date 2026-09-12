@@ -3,6 +3,7 @@ module Spec.Drasil.Data.Formats (formatsTest) where
 import Spec.Drasil.Data.Formats.CSV (csvTests)
 import Spec.Drasil.Data.Formats.JSON (jsonTests)
 import Spec.Drasil.Data.Formats.HTML (htmlTests)
+import Spec.Drasil.Data.Formats.MD (mdTests)
 
 import Test.Tasty (TestTree, testGroup)
 
@@ -12,5 +13,6 @@ formatsTest =
     "Drasil.Data.Formats"
     [ csvTests,
       jsonTests,
-      htmlTests
+      htmlTests,
+      mdTests
     ]

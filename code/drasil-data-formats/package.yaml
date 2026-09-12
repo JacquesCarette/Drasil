@@ -32,6 +32,7 @@ library:
   - Drasil.Data.Formats.CSV
   - Drasil.Data.Formats.JSON
   - Drasil.Data.Formats.HTML
+  - Drasil.Data.Formats.MD
 
 tests:
   drasil-data-formats-test:

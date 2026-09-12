@@ -10,15 +10,14 @@ module Drasil.Website.Core
 where
 
 import Control.Lens (makeLenses, (^.))
-import qualified Data.Map.Strict as M
-import Drasil.Data.Formats.HTML (HTMLRenderOptions (..))
+import Drasil.Data.Formats.HTML (defaultHTMLRO)
 import Prettyprinter (Doc)
 
 import Drasil.FileHandling (file, ps)
 import Drasil.System (HasSystemMeta (..), SystemMeta, ToFiles (..), HasProjectName(..))
 import Language.Drasil (Stage (Equational))
 import Language.Drasil.Document (Document)
-import Language.Drasil.Printers (HTMLGenOptions (..), Notation (Engineering),
+import Language.Drasil.Printers (defaultHTMLGO, Notation (Engineering),
   genHTML, renderHTML, genericCSS, piSys, makeDocument)
 
 data DrasilWebsite = DW
@@ -61,7 +60,5 @@ instance ToFiles DrasilWebsite DrasilWebsiteGenOptions where
       pd = makeDocument printSetting $ dw ^. indexDoc
 
       -- 2. Transform the TDL into HTML.
-      html = genHTML
-        (HTMLGO "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js")
-        "index" pd
-      renderedHTML = renderHTML (HTMLRO M.empty 2) html
+      html = genHTML defaultHTMLGO "index" pd
+      renderedHTML = renderHTML defaultHTMLRO html

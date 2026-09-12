@@ -3,6 +3,7 @@
 module Drasil.Data.Formats.HTML.Render (
   renderHTML,
   HTMLRenderOptions (..),
+  defaultHTMLRO,
 ) where
 
 import qualified Data.Map as M
@@ -23,6 +24,10 @@ data HTMLRenderOptions = HTMLRO
     -- | The number of spaces to use for each level of indentation.
     indentationSize :: Int
   }
+
+-- | Default 'HTMLRenderOptions' with standard indentation and no custom tags.
+defaultHTMLRO :: HTMLRenderOptions
+defaultHTMLRO = HTMLRO M.empty 2
 
 -- | Render 'HTML' to a 'Doc'
 renderHTML :: HTMLRenderOptions -> HTML -> Doc ann
@@ -65,7 +70,7 @@ renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (map ren
   where
     renderDItem (DTerm iAttrs ch) = renderLine opt "dt" iAttrs ch
     renderDItem (DDetails iAttrs ch) = renderBlockInline opt "dd" iAttrs ch
-renderBody opt (Table attr rows) = wrapBlock opt "table" attr (map renderRow rows)
+renderBody opt (Table attrs rows) = wrapBlock opt "table" attrs (map renderRow rows)
   where
     renderRow (Row attrs cells) = wrapBlock opt "tr" attrs (map renderCell cells)
     renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch

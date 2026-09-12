@@ -19,7 +19,7 @@ import Language.Drasil.Printing.AST (
   Fence (Abs, Curly, Norm, Paren), Ops (..),
   )
 import Drasil.Data.Formats.HTML (
-  Attr (..), Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..),
+  attr, class_, Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..),
   customTag, HLevel(..)
   )
 import qualified Drasil.Data.Formats.HTML as HTML (Format (Bold), HTMLBody(Div))
@@ -45,7 +45,7 @@ specToHTML :: Spec -> [HTMLBody]
 specToHTML (E e) = [TextFormat Emphasis [] (exprToHTML e)]
 specToHTML (a :+: b) = specToHTML a ++ specToHTML b
 specToHTML (S s) = [RawText (T.pack s)]
-specToHTML (Tooltip t s) = [TextFormat Span [Attr "title" (printSpec t)] (specToHTML s)]
+specToHTML (Tooltip t s) = [TextFormat Span [attr "title" (printSpec t)] (specToHTML s)]
 specToHTML (Sp s) = [RawText (T.pack $ specialToString s)]
 specToHTML HARDNL = [Custom (customTag "br") [] []]
 specToHTML (Ref Internal r a) = [Anchor (T.pack $ "#" ++ r) [] (specToHTML a)]
@@ -82,7 +82,7 @@ exprToHTML e =
 specialToString :: Special -> String
 specialToString Circle = "°"
 
--- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
+-- | Referring to 'fence' (for parenthesis and brackets). Either opened or closed.
 data OpenClose = Open | Close
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
@@ -163,5 +163,5 @@ ed = RawText " ed., "
 editedBy = RawText "Edited by "
 
 articleTitle, author :: [HTMLBody] -> HTMLBody
-articleTitle t = HTML.Div [Attr "class" "title"] [Heading H1 [] t]
-author a       = HTML.Div [Attr "class" "author"] [Heading H2 [] a]
+articleTitle t = HTML.Div [class_ "title"] [Heading H1 [] t]
+author a       = HTML.Div [class_ "author"] [Heading H2 [] a]

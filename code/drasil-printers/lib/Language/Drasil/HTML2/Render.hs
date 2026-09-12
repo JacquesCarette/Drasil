@@ -1,8 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
-
 -- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML.Print.html).
 module Language.Drasil.HTML2.Render(
-  genHTML, HTMLGenOptions(..),
+  genHTML, HTMLGenOptions(..), defaultHTMLGO,
   renderHTML
 ) where
 
@@ -20,13 +19,18 @@ import Language.Drasil.HTML2.Citation (printBib)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML, articleTitle, author)
 import Language.Drasil.Markdown.Print (printMath)
 
-import Drasil.Data.Formats.JSON (JSON(..), renderJSON, jsonRenderOpts, JSONStyle(Pretty))
+import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts,
+  JSONStyle(..), JSON(..))
 import Drasil.Data.Formats.HTML hiding (Title, Row, Bold, ListType, Ordered,
   Unordered, span, Paragraph, Table, List, Figure)
 import qualified Drasil.Data.Formats.HTML as HTML
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
 newtype HTMLGenOptions = HTMLGO {mathJaxSrc :: String}
+
+-- | Default 'HTMLGenOptions' using the standard MathJax CDN URL.
+defaultHTMLGO :: HTMLGenOptions
+defaultHTMLGO = HTMLGO "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 
 -- | Generate an HTML document from a Drasil 'Document'.
 --   Arguments: Rendering options, Bib rendering options, CSS file name, `Document` to be rendered
@@ -36,12 +40,12 @@ genHTML rOpts fn (Document t a c) = HTML heads bodies
     heads =
       [ stylesheet (T.pack fn),
         HTML.Title (printSpec t),
-        Meta [Attr "charset" "utf-8"],
+        Meta [attr "charset" "utf-8"],
         inlineScript mathJaxScript,
         externalScript
           (T.pack $ mathJaxSrc rOpts)
-          [ Attr "id" "MathJax-script",
-            Attr "async" ""
+          [ id_ "MathJax-script",
+            attr "async" ""
           ]
       ]
     bodies =
@@ -73,11 +77,11 @@ loToHTML _ (EqnBlock contents) =
 loToHTML rOpts (HDiv ts layoutObs l) =
   let idAttr = case l of
                  EmptyS -> []
-                 _      -> [Attr "id" (printSpec l)]
-      classAttr =  ([Attr "class" (T.unwords $ map T.pack ts) | not (null ts)])
+                 _      -> [id_ (printSpec l)]
+      classAttr =  ([class_ (T.unwords $ map T.pack ts) | not (null ts)])
       attrs = idAttr ++ classAttr
   in [Section attrs (concatMap (loToHTML rOpts) layoutObs)]
-loToHTML _ (Paragraph contents) = [HTML.Paragraph [Attr "class" "paragraph"] (specToHTML contents)]
+loToHTML _ (Paragraph contents) = [HTML.Paragraph [class_ "paragraph"] (specToHTML contents)]
 loToHTML _ (Table ts rows r b t) = makeTableHTML ts rows r b t
 loToHTML rOpts (Definition ssPs l) = makeDefnHTML rOpts ssPs l
 loToHTML _ (Header n contents _) =
@@ -93,10 +97,10 @@ loToHTML _ (Header n contents _) =
     toHLevel _ = H6
 loToHTML _ (List t) = [buildListHtml t]
 loToHTML _ (Figure r c f wp) =
-  [HTML.Div [Attr "id" (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
+  [HTML.Div [id_ (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
   where
-    attrs = [Attr "width" (T.pack $ show wp ++ "%") | wp /= 100]
-    captionText = maybe "" printSpec c
+    attrs = [attr "width" (T.pack $ show wp ++ "%") | wp /= 100]
+    captionText = maybe mempty printSpec c
 loToHTML _ (Bib bib) = [printBib bib]
 loToHTML _ Graph {} = []
 loToHTML _ Cell {} = []
@@ -104,48 +108,48 @@ loToHTML _ CodeBlock {} = []
 
 -- | Generates an HTML table, called by 'printLO'.
 makeTableHTML :: [String] -> [[Spec]] -> Spec -> Bool -> Spec -> [HTMLBody]
-makeTableHTML _ [] _ _ _ = error "No table to print (see PrintHTML)"
+makeTableHTML _ [] _ _ _ = error "No table to print (see Language.Drasil.HTML2.Render)"
 makeTableHTML ts (l : lls) r b t =
   if b
     then [HTML.Div wrapperAttrs [tableNode, captionNode]]
     else [HTML.Div wrapperAttrs [tableNode]]
   where
-    attrs = [Attr "class" (T.unwords $ map T.pack ts)]
+    attrs = [class_ (T.unwords $ map T.pack ts)]
     headerRow = HTML.Row [] (map (THeader [] . specToHTML) l)
     dataRows = map (HTML.Row [] . map (TData [] . specToHTML)) lls
     tableNode = HTML.Table attrs (headerRow : dataRows)
-    captionNode = HTML.Paragraph [Attr "class" "caption"] (specToHTML t)
-    wrapperAttrs = [Attr "id" (printSpec r)]
+    captionNode = HTML.Paragraph [class_ "caption"] (specToHTML t)
+    wrapperAttrs = [id_ (printSpec r)]
 
 -- | Generates definition tables.
 makeDefnHTML :: HTMLGenOptions -> [(String, [LayoutObj])] -> Spec -> [HTMLBody]
 makeDefnHTML _ [] _ = error "Empty definition"
 makeDefnHTML rOpts ps l =
-  let attrs = [Attr "id" (printSpec l), Attr "class" "defn-table"]
-      refRow = HTML.Row [] [THeader [] [RawText "Refname"], TData []
+  let attrs = [id_ (printSpec l), class_ "defn-table"]
+      refRow = HTML.Row [] [THeader [] [rawText "Refname"], TData []
         [TextFormat HTML.Bold [] (specToHTML l)]]
-      dataRows = map ( \(f, d) -> HTML.Row [] [THeader [] [RawText (T.pack f)],
+      dataRows = map ( \(f, d) -> HTML.Row [] [THeader [] [rawText' f],
         TData [] (concatMap (loToHTML rOpts) d)]) ps
    in [HTML.Table attrs (refRow : dataRows)]
 
 -- | Generates lists in HTML.
-buildListHtml :: ListType -> HTMLBody -- FIXME: ref id's should be folded into the li
-buildListHtml (Simple items) = HTML.Div [Attr "class" "list"] $
+buildListHtml :: ListType -> HTMLBody
+buildListHtml (Simple items) = HTML.Div [class_ "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mbIdAttr l)
-  (specToHTML b ++ [RawText ": "] ++ itemToHTML e)) items
-buildListHtml (Desc items) = HTML.Div [Attr "class" "list"] $
+  (specToHTML b ++ [rawText ": "] ++ itemToHTML e)) items
+buildListHtml (Desc items) = HTML.Div [class_ "list"] $
   map (\(b, e, l) -> HTML.Paragraph (mbIdAttr l)
-  ([TextFormat HTML.Bold [] (specToHTML b), RawText ": "] ++ itemToHTML e)) items
-buildListHtml (Ordered items) = HTML.List HTML.Ordered [Attr "class" "list"] $
+  ([TextFormat HTML.Bold [] (specToHTML b), rawText ": "] ++ itemToHTML e)) items
+buildListHtml (Ordered items) = HTML.List HTML.Ordered [class_ "list"] $
   map (\(i, l) -> LItem (mbIdAttr l) (itemToHTML i)) items
-buildListHtml (Unordered items) = HTML.List HTML.Unordered [Attr "class" "list"] $
+buildListHtml (Unordered items) = HTML.List HTML.Unordered [class_ "list"] $
   map (\(i, l) -> LItem (mbIdAttr l) (itemToHTML i)) items
-buildListHtml (Definitions items) = HTML.List HTML.Unordered [Attr "class" "hide-list-style-no-indent"] $
-  map (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b ++ [RawText " is the "] ++ itemToHTML e)) items
+buildListHtml (Definitions items) = HTML.List HTML.Unordered [class_ "hide-list-style-no-indent"] $
+  map (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b ++ [rawText " is the "] ++ itemToHTML e)) items
 
--- | Convert @Maybe Spec@s int ID `Attr`s if the `Spec` exists.
+-- | Convert @Maybe Spec@s into ID `Attr`s if the `Spec` exists.
 mbIdAttr :: Maybe Spec -> [Attr]
-mbIdAttr = maybe [] (\x -> [Attr "id" $ printSpec x])
+mbIdAttr = maybe [] (\x -> [id_ $ printSpec x])
 
 -- | Generates list items.
 itemToHTML :: ItemType -> [HTMLBody]

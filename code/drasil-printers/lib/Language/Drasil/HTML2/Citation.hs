@@ -9,52 +9,38 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.List (sortBy)
 
-import Language.Drasil.HTML2.Spec (
-  specToHTML, printSpec, colon, period, comma, vol, pg, pp, no, ed, editedBy
-  )
-
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', numList)
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Document (CitationKind(..))
+import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), emphasis,
+  Format(..), rawText', id_, class_)
 
+import Language.Drasil.HTML2.Spec (specToHTML, printSpec, colon, period, comma,
+  vol, pg, pp, no, ed, editedBy)
 import Language.Drasil.Printing.AST (Spec(S))
-import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
-  Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
-  Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
-  Citation(Cite), BibRef)
+import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
 import Language.Drasil.Printing.Helpers (paren, sufxer, sufxPrint)
-
-import Drasil.Data.Formats.HTML (
-  HTMLBody(..), DItem(..), Attr(..), emphasis, Format(Emphasis)
-  )
-import qualified Drasil.Data.Formats.HTML as HTML (Format(..))
 
 -- | Makes a bilbliography for the document.
 printBib :: BibRef -> HTMLBody
 printBib bib =
-  DescriptionList [Attr "class" "reference-list"] (concatMap renderCitation bib)
+  DescriptionList [class_ "reference-list"] (concatMap renderCitation bib)
   where
     renderCitation :: Citation -> [DItem]
     renderCitation cite@(Cite e _ _) =
       let (termDoc, detailsDoc) = renderCite cite
-          termHTML = [RawText "[", TextFormat HTML.Bold [] termDoc, RawText "]"]
-       in [DTerm [Attr "id" (T.pack e)] termHTML, DDetails [] detailsDoc]
+          termHTML = [RawText "[", TextFormat Bold [] termDoc, RawText "]"]
+       in [DTerm [id_ $ T.pack e] termHTML, DDetails [] detailsDoc]
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: Citation -> ([HTMLBody], [HTMLBody])
-renderCite (Cite e Book cfs)      = ([RawText $ T.pack e],
-  renderF cfs useStyleBk    ++ [RawText (T.pack $ sufxPrint cfs)])
-renderCite (Cite e Article cfs)   = ([RawText $ T.pack e],
-  renderF cfs useStyleArtcl ++ [RawText (T.pack $ sufxPrint cfs)])
-renderCite (Cite e MThesis cfs)   = ([RawText $ T.pack e],
-  renderF cfs useStyleBk    ++ [RawText (T.pack $ sufxPrint cfs)])
-renderCite (Cite e PhDThesis cfs) = ([RawText $ T.pack e],
-  renderF cfs useStyleBk    ++ [RawText (T.pack $ sufxPrint cfs)])
-renderCite (Cite e Misc cfs)      = ([RawText $ T.pack e],
-  renderF cfs useStyleBk)
-renderCite (Cite e _ cfs)         = ([RawText $ T.pack e],
-  renderF cfs useStyleArtcl) --FIXME: Properly render these later.
+renderCite (Cite e Book cfs)      = ([rawText' e], renderF cfs useStyleBk    ++ [rawText' $ sufxPrint cfs])
+renderCite (Cite e Article cfs)   = ([rawText' e], renderF cfs useStyleArtcl ++ [rawText' $ sufxPrint cfs])
+renderCite (Cite e MThesis cfs)   = ([rawText' e], renderF cfs useStyleBk    ++ [rawText' $ sufxPrint cfs])
+renderCite (Cite e PhDThesis cfs) = ([rawText' e], renderF cfs useStyleBk    ++ [rawText' $ sufxPrint cfs])
+renderCite (Cite e Misc cfs)      = ([rawText' e], renderF cfs useStyleBk)
+renderCite (Cite e _ cfs)         = ([rawText' e], renderF cfs useStyleArtcl)
 
 -- | Generates fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> [HTMLBody])) -> [HTMLBody]
@@ -123,19 +109,19 @@ useStyleArtcl Chicago = artclChicago
 -- | Cite books in MLA format.
 bookMLA :: CiteField -> [HTMLBody]
 bookMLA (Address   s) = specToHTML s ++ [colon]
-bookMLA (Edition   s) = [RawText (T.pack (show s ++ sufxer s)), ed]
+bookMLA (Edition   s) = [rawText' (show s ++ sufxer s), ed]
 bookMLA (Series    s) = TextFormat Emphasis [] (specToHTML s) : [period]
 bookMLA (Title     s) = TextFormat Emphasis [] (specToHTML s) : [period] --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume    s) = [vol, RawText (T.pack (show s)), comma]
+bookMLA (Volume    s) = [vol, rawText' (show s), comma]
 bookMLA (Publisher s) = specToHTML s ++ [comma]
 bookMLA (Author    p) = specToHTML (rendPeople' p) ++ [period]
-bookMLA (Year      y) = [RawText (T.pack (show y)), period]
+bookMLA (Year      y) = [rawText' (show y), period]
 bookMLA (BookTitle s) = TextFormat Emphasis [] (specToHTML s) : [period]
 bookMLA (Journal   s) = TextFormat Emphasis [] (specToHTML s) : [comma]
-bookMLA (Pages   [p]) = [pg, RawText (T.pack (show p)), period]
+bookMLA (Pages   [p]) = [pg, rawText' (show p), period]
 bookMLA (Pages     p) = [pp, foldPages p, period]
 bookMLA (Note      s) = specToHTML s
-bookMLA (Number    n) = [no, RawText (T.pack (show n)), comma]
+bookMLA (Number    n) = [no, rawText' (show n), comma]
 bookMLA (School    s) = specToHTML s ++ [comma]
 bookMLA (HowPublished (Verb s)) = specToHTML s ++ [comma]
 bookMLA (HowPublished (URL s)) = [Anchor (printSpec s) [] (specToHTML s), period]
@@ -143,20 +129,20 @@ bookMLA (Editor       p) = [editedBy, foldPeople p, comma]
 bookMLA (Chapter      _) = []
 bookMLA (Institution  i) = specToHTML i ++ [comma]
 bookMLA (Organization i) = specToHTML i ++ [comma]
-bookMLA (Month        m) = [RawText (T.pack (show m)), comma]
+bookMLA (Month        m) = [rawText' (show m), comma]
 bookMLA (Type         t) = specToHTML t ++ [comma]
 
 -- | Cite books in APA format.
-bookAPA :: CiteField -> [HTMLBody] --FIXME: year needs to come after author in APA
-bookAPA (Author   p) = specToHTML (rendPeople rendPersLFM' p) --L.APA uses initals rather than full name
-bookAPA (Year     y) = [RawText (T.pack (paren $ show y)), period] --APA puts "()" around the year
+bookAPA :: CiteField -> [HTMLBody] -- FIXME: year needs to come after author in APA
+bookAPA (Author   p) = specToHTML (rendPeople rendPersLFM' p) --L.APA uses initials rather than full name
+bookAPA (Year     y) = [rawText' (paren $ show y), period] --APA puts "()" around the year
 bookAPA (Pages    p) = [foldPages p, period]
 bookAPA (Editor   p) = [foldPeople p, RawText " (Ed.)", period]
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
 -- | Cite books in Chicago format.
 bookChicago :: CiteField -> [HTMLBody]
-bookChicago (Author   p) = specToHTML (rendPeople rendPersLFM'' p) -- APA uses middle initals rather than full name
+bookChicago (Author   p) = specToHTML (rendPeople rendPersLFM'' p) -- APA uses middle initials rather than full name
 bookChicago (Pages    p) = [foldPages p, period]
 bookChicago (Editor   p) = [foldPeople p, RawText (toPlural p " ed"), period]
 bookChicago i = bookMLA i --Most items are rendered the same as MLA
@@ -178,7 +164,7 @@ artclAPA i           = bookAPA i
 -- | Cite articles in Chicago format.
 artclChicago :: CiteField -> [HTMLBody]
 artclChicago i@(Title    _)  = artclMLA i
-artclChicago (Volume     n)  = [RawText (T.pack (show n)), comma]
+artclChicago (Volume     n)  = [rawText' (show n), comma]
 artclChicago (Number      n) = [RawText ("no. " <> T.pack (show n))]
 artclChicago i@(Year     _)  = bookAPA i
 artclChicago i = bookChicago i
@@ -197,11 +183,11 @@ rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPers
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> HTMLBody
-foldPages = RawText . T.pack . foldlList . numList "–"
+foldPages = rawText' . foldlList . numList "–"
 
 -- | Organize a list of people.
 foldPeople :: People -> HTMLBody
-foldPeople p = RawText . foldlList $ map (T.pack . fullName) p
+foldPeople p = rawText' . foldlList $ map fullName p
 
 -- | Organize a list of Strings, separated by commas and inserting "and" before the last item.
 foldlList :: (IsString a, Semigroup a) => [a] -> a

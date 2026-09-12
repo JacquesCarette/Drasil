@@ -13,8 +13,8 @@ import Numeric (showEFloat)
 
 import Language.Drasil (Special (..))
 import qualified Language.Drasil.Printing.AST as AST (Fonts(..))
-import Language.Drasil.Printing.AST (Expr(..), LinkType(..), OverSymb(..),
-  Spacing(..), Spec(..), Fence(..), Ops(..))
+import Language.Drasil.Printing.AST (Expr(..), Fence(..), LinkType(..), Ops(..),
+  OverSymb(..), Spacing(..), Spec(..))
 import Drasil.Data.Formats.HTML (attr, class_, Format(..), HTMLBody(..),
   customTag, HLevel(..))
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
@@ -47,7 +47,7 @@ specToHTML (Ref (Cite2 EmptyS) r a) = [Anchor (T.pack $ "#" ++ r) [] (specToHTML
 specToHTML (Ref (Cite2 n) r a) = Anchor (T.pack $ "#" ++ r) [] (specToHTML a) : specToHTML n
 specToHTML (Ref External r a) = [Anchor (T.pack r) [] (specToHTML a)]
 specToHTML EmptyS = []
-specToHTML (Quote q) = [RawText "\""] ++ specToHTML q ++ [RawText "\""]
+specToHTML (Quote q) = ["\""] ++ specToHTML q ++ ["\""]
 
 -- | Generates expressions in the HTML document (called by multiple functions).
 exprToHTML :: Expr -> [HTMLBody]
@@ -60,13 +60,13 @@ exprToHTML (Label s) = [RawText (T.pack s)]
 exprToHTML (Spec s) = [RawText (T.pack $ specialToString s)]
 exprToHTML (Sub e) = [TextFormat Subscript [] (exprToHTML e)]
 exprToHTML (Sup e) = [TextFormat Superscript [] (exprToHTML e)]
-exprToHTML (Over Hat s) = exprToHTML s ++ [RawText "̂"]
+exprToHTML (Over Hat s) = exprToHTML s ++ ["̂"]
 exprToHTML (MO o) = [RawText (pOps o)]
 exprToHTML (Fenced l r e) =
   [RawText (fence Open l)] ++ exprToHTML e ++ [RawText (fence Close r)]
 exprToHTML (Font AST.Bold e) = [TextFormat Bold [] (exprToHTML e)]
 exprToHTML (Font AST.Emph e) = [TextFormat Emphasis [] (exprToHTML e)]
-exprToHTML (Spc Thin) = [RawText " "]
+exprToHTML (Spc Thin) = [" "]
 -- Uses TeX for Mathjax for all other exprs
 exprToHTML e =
   [RawText $ T.pack $ show $ mjDelimDisp $ printMath $ TeX.pExpr e]
@@ -146,15 +146,15 @@ pOps SContains = " in "
 pOps SUnion = " and "
 
 colon, period, comma, vol, pg, pp, no, ed, editedBy :: HTMLBody
-colon = RawText ": "
-period = RawText ". "
-comma = RawText ", "
-vol = RawText "vol. "
-pg = RawText "pg. "
-pp = RawText "pp. "
-no = RawText "no. "
-ed = RawText " ed., "
-editedBy = RawText "Edited by "
+colon = ": "
+period = ". "
+comma = ", "
+vol = "vol. "
+pg = "pg. "
+pp = "pp. "
+no = "no. "
+ed = " ed., "
+editedBy = "Edited by "
 
 articleTitle, author :: [HTMLBody] -> HTMLBody
 articleTitle t = Div [class_ "title"] [Heading H1 [] t]

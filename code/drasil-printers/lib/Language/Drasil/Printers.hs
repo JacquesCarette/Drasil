@@ -4,7 +4,7 @@ module Language.Drasil.Printers (
   -- * HTML
   -- ** Printer
   , genHTML
-  , HTMLGenOptions(..), renderHTML
+  , HTMLGenOptions(..), defaultHTMLGO, renderHTML
   -- ** CSS
   , genericCSS
   -- * Plain
@@ -25,7 +25,7 @@ module Language.Drasil.Printers (
 ) where
 
 import Language.Drasil.HTML2.CSS (genericCSS)
-import Language.Drasil.HTML2.Render (HTMLGenOptions (..),
+import Language.Drasil.HTML2.Render (HTMLGenOptions (..), defaultHTMLGO,
   renderHTML, genHTML)
 import Language.Drasil.JSON.Print (genJupyterLessonPlan, genJupyterSRS)
 import Language.Drasil.Markdown.Print (genMDBook)

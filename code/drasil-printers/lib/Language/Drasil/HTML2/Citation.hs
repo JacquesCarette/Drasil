@@ -179,7 +179,7 @@ rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-util
 -- | Generate a list of people (of form FirstName LastName).
 rendPeople' :: People -> Spec
 rendPeople' []     = S "N.a." -- "No authors given"
-rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++  [rendPersL (last people)]
+rendPeople' people = S . foldlList $ map rendPersLFM (init people) ++ [rendPersL (last people)]
 
 -- | Organize a list of pages.
 foldPages :: [Int] -> HTMLBody

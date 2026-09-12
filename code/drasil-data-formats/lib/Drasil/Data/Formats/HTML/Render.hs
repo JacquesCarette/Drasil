@@ -72,7 +72,7 @@ renderBody opt (DescriptionList attrs items) = wrapBlock opt "dl" attrs (map ren
     renderDItem (DDetails iAttrs ch) = renderBlockInline opt "dd" iAttrs ch
 renderBody opt (Table attrs rows) = wrapBlock opt "table" attrs (map renderRow rows)
   where
-    renderRow (Row attrs cells) = wrapBlock opt "tr" attrs (map renderCell cells)
+    renderRow (Row rAttrs cells) = wrapBlock opt "tr" rAttrs (map renderCell cells)
     renderCell (THeader cAttrs ch) = renderLine opt "th" cAttrs ch
     renderCell (TData cAttrs ch) = renderLine opt "td" cAttrs ch
 renderBody opt (Figure attrs ch) = renderBlock opt "figure" attrs ch

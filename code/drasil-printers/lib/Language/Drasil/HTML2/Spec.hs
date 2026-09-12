@@ -12,17 +12,11 @@ import qualified Data.Text as T (pack)
 import Numeric (showEFloat)
 
 import Language.Drasil (Special (..))
-import Language.Drasil.Printing.AST (
-  Expr (..), Fonts (Bold, Emph), LinkType (Cite2, External, Internal),
-  OverSymb (Hat), Spacing (Thin), Spec
-  (E, EmptyS, HARDNL, Quote, Ref, S, Sp, Tooltip, (:+:)),
-  Fence (Abs, Curly, Norm, Paren), Ops (..),
-  )
-import Drasil.Data.Formats.HTML (
-  attr, class_, Format (Emphasis, Span, Subscript, Superscript), HTMLBody (..),
-  customTag, HLevel(..)
-  )
-import qualified Drasil.Data.Formats.HTML as HTML (Format (Bold), HTMLBody(Div))
+import qualified Language.Drasil.Printing.AST as AST (Fonts(..))
+import Language.Drasil.Printing.AST (Expr(..), LinkType(..), OverSymb(..),
+  Spacing(..), Spec(..), Fence(..), Ops(..))
+import Drasil.Data.Formats.HTML (attr, class_, Format(..), HTMLBody(..),
+  customTag, HLevel(..))
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
 import Language.Drasil.Markdown.Print (printMath)
 
@@ -70,8 +64,8 @@ exprToHTML (Over Hat s) = exprToHTML s ++ [RawText "̂"]
 exprToHTML (MO o) = [RawText (pOps o)]
 exprToHTML (Fenced l r e) =
   [RawText (fence Open l)] ++ exprToHTML e ++ [RawText (fence Close r)]
-exprToHTML (Font Bold e) = [TextFormat HTML.Bold [] (exprToHTML e)]
-exprToHTML (Font Emph e) = [TextFormat Emphasis [] (exprToHTML e)]
+exprToHTML (Font AST.Bold e) = [TextFormat Bold [] (exprToHTML e)]
+exprToHTML (Font AST.Emph e) = [TextFormat Emphasis [] (exprToHTML e)]
 exprToHTML (Spc Thin) = [RawText " "]
 -- Uses TeX for Mathjax for all other exprs
 exprToHTML e =
@@ -163,5 +157,5 @@ ed = RawText " ed., "
 editedBy = RawText "Edited by "
 
 articleTitle, author :: [HTMLBody] -> HTMLBody
-articleTitle t = HTML.Div [class_ "title"] [Heading H1 [] t]
-author a       = HTML.Div [class_ "author"] [Heading H2 [] a]
+articleTitle t = Div [class_ "title"] [Heading H1 [] t]
+author a       = Div [class_ "author"] [Heading H2 [] a]

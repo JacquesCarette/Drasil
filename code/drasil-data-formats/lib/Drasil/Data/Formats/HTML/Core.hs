@@ -1,10 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 module Drasil.Data.Formats.HTML.Core
   ( -- * HTML
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
+    -- ** AST
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), Attr(..),
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
-    Attr(..), bold, emphasis, subscript, superscript, span, figureImage,
-    inlineScript, externalScript, stylesheet
+    -- * Smart Constructors
+    attr, id_, class_, rawText, rawText', customTag, bold, emphasis, subscript, superscript,
+    span, figureImage, inlineScript, externalScript, stylesheet
   )
 where
 
@@ -114,7 +117,23 @@ isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar
     isAsciiLetter c = isAsciiLower c || isAsciiUpper c
     isAllowedChar c = isAsciiLetter c || isDigit c || c == '-'
 
--- | Smart Constructors
+-- * Smart Constructors
+
+attr :: Text -> Text -> Attr
+attr = Attr
+
+id_ :: Text -> Attr
+id_ = attr "id"
+
+class_ :: Text -> Attr
+class_ = attr "class"
+
+rawText :: Text -> HTMLBody
+rawText = RawText
+
+rawText' :: String -> HTMLBody
+rawText' = RawText . T.pack
+
 bold :: [Attr] -> Text -> HTMLBody
 bold attrs txt = TextFormat Bold attrs [RawText txt]
 
@@ -142,8 +161,8 @@ inlineScript = Script []
 
 -- | Creates an external script. Requires a source file/URL and allows optional attributes.
 externalScript :: File -> [Attr] -> HTMLHead
-externalScript src attrs = Script (Attr "src" src : Attr "type" "text/javascript" : attrs) ""
+externalScript src attrs = Script (attr "src" src : attr "type" "text/javascript" : attrs) mempty
 
 -- | Create the link to the CSS file
 stylesheet :: Text -> HTMLHead
-stylesheet css = Link "stylesheet" (css <> ".css") [Attr "type" "text/css"]
+stylesheet css = Link "stylesheet" (css <> ".css") [attr "type" "text/css"]

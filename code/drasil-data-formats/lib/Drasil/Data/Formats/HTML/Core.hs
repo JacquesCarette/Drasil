@@ -12,6 +12,7 @@ module Drasil.Data.Formats.HTML.Core
 where
 
 import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
+import Data.String (IsString(..))
 import Data.Text (Text)
 import qualified Data.Text as T
 import Prelude hiding (span)
@@ -51,6 +52,9 @@ data HTMLBody
   | Custom CustomTag [Attr] [HTMLBody]
   | Comment Text
   deriving (Show, Eq)
+
+instance IsString HTMLBody where
+  fromString = RawText . T.pack
 
 -- TODO: Support more tags
 -- https://www.w3schools.com/tags/default.asp
@@ -132,7 +136,7 @@ rawText :: Text -> HTMLBody
 rawText = RawText
 
 rawText' :: String -> HTMLBody
-rawText' = RawText . T.pack
+rawText' = fromString
 
 bold :: [Attr] -> Text -> HTMLBody
 bold attrs txt = TextFormat Bold attrs [RawText txt]

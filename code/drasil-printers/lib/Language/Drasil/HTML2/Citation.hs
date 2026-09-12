@@ -30,7 +30,7 @@ printBib bib =
     renderCitation :: Citation -> [DItem]
     renderCitation cite@(Cite e _ _) =
       let (termDoc, detailsDoc) = renderCite cite
-          termHTML = [RawText "[", TextFormat Bold [] termDoc, RawText "]"]
+          termHTML = ["[", TextFormat Bold [] termDoc, "]"]
        in [DTerm [id_ $ T.pack e] termHTML, DDetails [] detailsDoc]
 
 -- | For when we add other things to reference like website, newspaper
@@ -137,7 +137,7 @@ bookAPA :: CiteField -> [HTMLBody] -- FIXME: year needs to come after author in 
 bookAPA (Author   p) = specToHTML (rendPeople rendPersLFM' p) --L.APA uses initials rather than full name
 bookAPA (Year     y) = [rawText' (paren $ show y), period] --APA puts "()" around the year
 bookAPA (Pages    p) = [foldPages p, period]
-bookAPA (Editor   p) = [foldPeople p, RawText " (Ed.)", period]
+bookAPA (Editor   p) = [foldPeople p, " (Ed.)", period]
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
 -- | Cite books in Chicago format.
@@ -151,12 +151,12 @@ bookChicago i = bookMLA i --Most items are rendered the same as MLA
 
 -- | Cite articles in MLA format.
 artclMLA :: CiteField -> [HTMLBody]
-artclMLA (Title s) = [RawText "\""] <> specToHTML s <> [RawText ".\" "]
+artclMLA (Title s) = ["\""] <> specToHTML s <> [".\" "]
 artclMLA i         = bookMLA i
 
 -- | Cite articles in APA format.
 artclAPA :: CiteField -> [HTMLBody]
-artclAPA (Title  s)  = specToHTML s <> [RawText ". "]
+artclAPA (Title  s)  = specToHTML s <> [". "]
 artclAPA (Volume n)  = [emphasis [] (T.pack (show n))]
 artclAPA (Number  n) = [RawText (", (" <> T.pack (show n) <> ") ")]
 artclAPA i           = bookAPA i

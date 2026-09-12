@@ -123,7 +123,7 @@ makeDefnHTML :: HTMLGenOptions -> [(String, [AST.LayoutObj])] -> AST.Spec -> [HT
 makeDefnHTML _ [] _ = error "Empty definition"
 makeDefnHTML rOpts ps l =
   let attrs = [id_ (printSpec l), class_ "defn-table"]
-      refRow = Row [] [THeader [] [rawText "Refname"], TData []
+      refRow = Row [] [THeader [] ["Refname"], TData []
         [TextFormat Bold [] (specToHTML l)]]
       dataRows = map ( \(f, d) -> Row [] [THeader [] [rawText' f],
         TData [] (concatMap (loToHTML rOpts) d)]) ps
@@ -133,16 +133,16 @@ makeDefnHTML rOpts ps l =
 buildListHtml :: AST.ListType -> HTMLBody
 buildListHtml (AST.Simple items) = Div [class_ "list"] $
   map (\(b, e, l) -> Paragraph (mbIdAttr l)
-  (specToHTML b ++ [rawText ": "] ++ itemToHTML e)) items
+  (specToHTML b ++ [": "] ++ itemToHTML e)) items
 buildListHtml (AST.Desc items) = Div [class_ "list"] $
   map (\(b, e, l) -> Paragraph (mbIdAttr l)
-  ([TextFormat Bold [] (specToHTML b), rawText ": "] ++ itemToHTML e)) items
+  ([TextFormat Bold [] (specToHTML b), ": "] ++ itemToHTML e)) items
 buildListHtml (AST.Ordered items) = List Ordered [class_ "list"] $
   map (\(i, l) -> LItem (mbIdAttr l) (itemToHTML i)) items
 buildListHtml (AST.Unordered items) = List Unordered [class_ "list"] $
   map (\(i, l) -> LItem (mbIdAttr l) (itemToHTML i)) items
 buildListHtml (AST.Definitions items) = List Unordered [class_ "hide-list-style-no-indent"] $
-  map (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b ++ [rawText " is the "] ++ itemToHTML e)) items
+  map (\(b, e, l) -> LItem (mbIdAttr l) (specToHTML b ++ [" is the "] ++ itemToHTML e)) items
 
 -- | Convert @Maybe Spec@s into ID `Attr`s if the `Spec` exists.
 mbIdAttr :: Maybe AST.Spec -> [Attr]

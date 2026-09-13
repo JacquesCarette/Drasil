@@ -75,4 +75,4 @@ maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
+portable = mkPortableNFR "portable" "Portability"

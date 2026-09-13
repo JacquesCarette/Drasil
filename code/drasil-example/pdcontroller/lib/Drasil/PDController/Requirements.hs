@@ -55,7 +55,7 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [portability, security, maintainability, verifiability]
 
 portability :: ConceptInstance
-portability = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"
+portability = mkPortableNFR "portable" "Portability"
 
 security :: ConceptInstance
 security = mkSecurityNFR "security" "Security"

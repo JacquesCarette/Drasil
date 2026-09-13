@@ -9,6 +9,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Extras (num2Text, paren)
 import Data.List (sortBy)
+import Data.List.Extras (foldle1)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', numList)
@@ -36,12 +37,15 @@ printBib bib =
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: Citation -> ([HTMLBody], [HTMLBody])
-renderCite (Cite e Book cfs)      = ([rawText' e], renderF cfs useStyleBk    ++ [rawText' $ sufxPrint cfs])
-renderCite (Cite e Article cfs)   = ([rawText' e], renderF cfs useStyleArtcl ++ [rawText' $ sufxPrint cfs])
-renderCite (Cite e MThesis cfs)   = ([rawText' e], renderF cfs useStyleBk    ++ [rawText' $ sufxPrint cfs])
-renderCite (Cite e PhDThesis cfs) = ([rawText' e], renderF cfs useStyleBk    ++ [rawText' $ sufxPrint cfs])
-renderCite (Cite e Misc cfs)      = ([rawText' e], renderF cfs useStyleBk)
-renderCite (Cite e _ cfs)         = ([rawText' e], renderF cfs useStyleArtcl)
+renderCite (Cite e kind cfs) = ([rawText' e], renderF cfs style ++ sufx)
+  where
+    (style, sufx) = case kind of
+      Article   -> (useStyleArtcl, [rawText' $ sufxPrint cfs])
+      Book      -> (useStyleBk,    [rawText' $ sufxPrint cfs])
+      MThesis   -> (useStyleBk,    [rawText' $ sufxPrint cfs])
+      PhDThesis -> (useStyleBk,    [rawText' $ sufxPrint cfs])
+      Misc      -> (useStyleBk,    [])
+      _         -> (useStyleArtcl, [])
 
 -- | Generates fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> [HTMLBody])) -> [HTMLBody]
@@ -195,13 +199,6 @@ foldlList :: (IsString a, Semigroup a) => [a] -> a
 foldlList []    = ""
 foldlList [a,b] = a <> " and " <> b
 foldlList lst   = foldle1 (\a b -> a <> ", " <> b) (\a b -> a <> ", and " <> b) lst
-
--- | Similar to foldl, but applies a function to two arguments at a time.
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
-foldle1 _ _ [x]      = x
-foldle1 _ g [x,y]    = g x y
-foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
 -- | Generate a person's last name.
 rendPersL :: Person -> String

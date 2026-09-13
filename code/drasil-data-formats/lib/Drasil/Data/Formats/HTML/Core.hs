@@ -6,8 +6,8 @@ module Drasil.Data.Formats.HTML.Core
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), Attr(..),
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
     -- * Smart Constructors
-    attr, id_, class_, rawText, rawText', customTag, bold, emphasis, subscript, superscript,
-    span, figureImage, inlineScript, externalScript, stylesheet
+    attr, id_, class_, classes_, classes', rawText, rawText', customTag, bold, emphasis, subscript, superscript,
+    span, toHLevel, figureImage, inlineScript, externalScript, stylesheet
   )
 where
 
@@ -73,7 +73,16 @@ data Format = Bold | Emphasis | Subscript | Superscript | Span
 
 -- | Heading level
 data HLevel = H1 | H2 | H3 | H4 | H5 | H6
-  deriving (Show, Eq)
+  deriving (Show, Eq, Enum, Bounded)
+
+-- | Converts a 0-indexed integer to a heading level (capped at H6).
+toHLevel :: Int -> HLevel
+toHLevel 0 = H1
+toHLevel 1 = H2
+toHLevel 2 = H3
+toHLevel 3 = H4
+toHLevel 4 = H5
+toHLevel _ = H6
 
 -- | List type
 data ListType = Ordered | Unordered
@@ -132,26 +141,30 @@ id_ = attr "id"
 class_ :: Text -> Attr
 class_ = attr "class"
 
+-- | Creates a class attribute from a list of classes.
+classes_ :: [Text] -> Attr
+classes_ = class_ . T.unwords
+
+-- | Creates a class attribute from a list of class names as 'String's.
+classes' :: [String] -> Attr
+classes' = classes_ . map T.pack
+
 rawText :: Text -> HTMLBody
 rawText = RawText
 
 rawText' :: String -> HTMLBody
 rawText' = fromString
 
-bold :: [Attr] -> Text -> HTMLBody
-bold attrs txt = TextFormat Bold attrs [RawText txt]
+-- | Helper for formatting text.
+textFormat :: Format -> [Attr] -> Text -> HTMLBody
+textFormat fmt attrs txt = TextFormat fmt attrs [RawText txt]
 
-emphasis :: [Attr] -> Text -> HTMLBody
-emphasis attrs txt = TextFormat Emphasis attrs [RawText txt]
-
-subscript :: [Attr] -> Text -> HTMLBody
-subscript attrs txt = TextFormat Subscript attrs [RawText txt]
-
-superscript :: [Attr] -> Text -> HTMLBody
-superscript attrs txt = TextFormat Superscript attrs [RawText txt]
-
-span :: [Attr] -> Text -> HTMLBody
-span attrs txt = TextFormat Span attrs [RawText txt]
+bold, emphasis, subscript, superscript, span :: [Attr] -> Text -> HTMLBody
+bold = textFormat Bold
+emphasis = textFormat Emphasis
+subscript = textFormat Subscript
+superscript = textFormat Superscript
+span = textFormat Span
 
 -- | Creates a figure containing an image and a caption.
 -- The provided attributes are applied to the Figure

@@ -7,20 +7,21 @@ module Language.Drasil.HTML2.Citation (
 import Data.String (IsString)
 import Data.Text (Text)
 import qualified Data.Text as T
+import Data.Text.Extras (num2Text, paren)
 import Data.List (sortBy)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', numList)
+import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.Document (CitationKind(..))
-import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), emphasis,
-  Format(..), rawText', id_, class_)
+  Format(..), rawText, rawText', id_, class_)
 
 import Language.Drasil.HTML2.Spec (specToHTML, printSpec, colon, period, comma,
   vol, pg, pp, no, ed, editedBy)
 import Language.Drasil.Printing.AST (Spec(S))
 import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
-import Language.Drasil.Printing.Helpers (paren, sufxer, sufxPrint)
+import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)
 
 -- | Makes a bilbliography for the document.
 printBib :: BibRef -> HTMLBody
@@ -109,19 +110,19 @@ useStyleArtcl Chicago = artclChicago
 -- | Cite books in MLA format.
 bookMLA :: CiteField -> [HTMLBody]
 bookMLA (Address   s) = specToHTML s ++ [colon]
-bookMLA (Edition   s) = [rawText' (show s ++ sufxer s), ed]
+bookMLA (Edition   s) = [rawText $ num2Text s, rawText' $ sufxer s, ed]
 bookMLA (Series    s) = TextFormat Emphasis [] (specToHTML s) : [period]
 bookMLA (Title     s) = TextFormat Emphasis [] (specToHTML s) : [period] --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume    s) = [vol, rawText' (show s), comma]
+bookMLA (Volume    s) = [vol, rawText $ num2Text s, comma]
 bookMLA (Publisher s) = specToHTML s ++ [comma]
 bookMLA (Author    p) = specToHTML (rendPeople' p) ++ [period]
-bookMLA (Year      y) = [rawText' (show y), period]
+bookMLA (Year      y) = [rawText $ num2Text y, period]
 bookMLA (BookTitle s) = TextFormat Emphasis [] (specToHTML s) : [period]
 bookMLA (Journal   s) = TextFormat Emphasis [] (specToHTML s) : [comma]
-bookMLA (Pages   [p]) = [pg, rawText' (show p), period]
+bookMLA (Pages   [p]) = [pg, rawText $ num2Text p, period]
 bookMLA (Pages     p) = [pp, foldPages p, period]
 bookMLA (Note      s) = specToHTML s
-bookMLA (Number    n) = [no, rawText' (show n), comma]
+bookMLA (Number    n) = [no, rawText $ num2Text n, comma]
 bookMLA (School    s) = specToHTML s ++ [comma]
 bookMLA (HowPublished (Verb s)) = specToHTML s ++ [comma]
 bookMLA (HowPublished (URL s)) = [Anchor (printSpec s) [] (specToHTML s), period]
@@ -135,7 +136,7 @@ bookMLA (Type         t) = specToHTML t ++ [comma]
 -- | Cite books in APA format.
 bookAPA :: CiteField -> [HTMLBody] -- FIXME: year needs to come after author in APA
 bookAPA (Author   p) = specToHTML (rendPeople rendPersLFM' p) --L.APA uses initials rather than full name
-bookAPA (Year     y) = [rawText' (paren $ show y), period] --APA puts "()" around the year
+bookAPA (Year     y) = [rawText $ paren $ num2Text y, period] --APA puts "()" around the year
 bookAPA (Pages    p) = [foldPages p, period]
 bookAPA (Editor   p) = [foldPeople p, " (Ed.)", period]
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
@@ -157,15 +158,15 @@ artclMLA i         = bookMLA i
 -- | Cite articles in APA format.
 artclAPA :: CiteField -> [HTMLBody]
 artclAPA (Title  s)  = specToHTML s <> [". "]
-artclAPA (Volume n)  = [emphasis [] (T.pack (show n))]
-artclAPA (Number  n) = [RawText (", (" <> T.pack (show n) <> ") ")]
+artclAPA (Volume n)  = [emphasis [] $ num2Text n]
+artclAPA (Number  n) = [RawText $ ", (" <> num2Text n <> ") "]
 artclAPA i           = bookAPA i
 
 -- | Cite articles in Chicago format.
 artclChicago :: CiteField -> [HTMLBody]
 artclChicago i@(Title    _)  = artclMLA i
 artclChicago (Volume     n)  = [rawText' (show n), comma]
-artclChicago (Number      n) = [RawText ("no. " <> T.pack (show n))]
+artclChicago (Number      n) = ["no. ", RawText $ num2Text n]
 artclChicago i@(Year     _)  = bookAPA i
 artclChicago i = bookChicago i
 

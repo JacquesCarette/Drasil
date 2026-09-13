@@ -17,6 +17,8 @@ extra-source-files: []
 dependencies:
 - base >= 4.7 && < 5
 - containers
+- text
+- text-show
 
 ghc-options:
 - -Wall
@@ -28,3 +30,4 @@ library:
   exposed-modules:
   - Utils.Drasil
   - Data.List.Extras
+  - Data.Text.Extras

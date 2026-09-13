@@ -7,27 +7,25 @@ module Language.Drasil.HTML2.Render(
 
 import Data.Text (Text)
 import qualified Data.Text as T
+import Data.Text.Extras (num2Text)
 
-import qualified Language.Drasil.Printing.AST as AST
-import qualified Language.Drasil.Printing.LayoutObj as AST
-import Language.Drasil.Printing.Helpers (sqbrac)
-
-import qualified Language.Drasil.TeX.Print as TeX (spec)
+import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts, JSONStyle(..), JSON(..))
+import Drasil.Data.Formats.HTML
 
 import Language.Drasil.HTML2.Citation (printBib)
+import Language.Drasil.HTML2.MathJax (mathJax3Url, blockEqn)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML, articleTitle, author)
+import qualified Language.Drasil.Printing.AST as AST
+import qualified Language.Drasil.Printing.LayoutObj as AST
+import qualified Language.Drasil.TeX.Print as TeX (spec)
 import Language.Drasil.Markdown.Print (printMath)
-
-import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts,
-  JSONStyle(..), JSON(..))
-import Drasil.Data.Formats.HTML
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
 newtype HTMLGenOptions = HTMLGO {mathJaxSrc :: String}
 
 -- | Default 'HTMLGenOptions' using the standard MathJax CDN URL.
 defaultHTMLGO :: HTMLGenOptions
-defaultHTMLGO = HTMLGO "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+defaultHTMLGO = HTMLGO mathJax3Url
 
 -- | Generate an HTML document from a Drasil 'Document'.
 --   Arguments: Rendering options, Bib rendering options, CSS file name, `Document` to be rendered
@@ -66,11 +64,8 @@ mathJaxScript = "MathJax = " <> configJSON <> ";"
 
 -- | Transforms layout objects ('LayoutObj's) into HTML.
 loToHTML :: HTMLGenOptions -> AST.LayoutObj -> [HTMLBody]
--- Creates delimeters to be used for mathjax displayed equations
--- Latex print sets up a \begin{displaymath} environment instead of this
 loToHTML _ (AST.EqnBlock contents) =
-  [RawText ( T.pack ("\\" <> sqbrac ( show (printMath $ TeX.spec contents) <> "\\")))]
--- Non-mathjax
+  [RawText $ blockEqn $ T.pack $ show $ printMath $ TeX.spec contents]
 loToHTML rOpts (AST.HDiv ts layoutObs l) =
   let idAttr = case l of
                  AST.EmptyS -> []
@@ -96,7 +91,7 @@ loToHTML _ (AST.List t) = [buildListHtml t]
 loToHTML _ (AST.Figure r c f wp) =
   [Div [id_ (printSpec r)] [figureImage [] attrs (T.pack f) captionText ("Figure: " <> captionText)]]
   where
-    attrs = [attr "width" (T.pack $ show wp ++ "%") | wp /= 100]
+    attrs = [attr "width" (num2Text wp <> "%") | wp /= 100]
     captionText = maybe mempty printSpec c
 loToHTML _ (AST.Bib bib) = [printBib bib]
 loToHTML _ AST.Graph {} = []

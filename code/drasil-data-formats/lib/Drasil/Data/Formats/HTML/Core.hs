@@ -6,8 +6,9 @@ module Drasil.Data.Formats.HTML.Core
     HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), Attr(..),
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
     -- * Smart Constructors
-    attr, id_, class_, classes_, classes', rawText, rawText', customTag, bold, emphasis, subscript, superscript,
-    span, toHLevel, figureImage, inlineScript, externalScript, stylesheet
+    attr, id_, class_, rawText, rawText', customTag,
+    bold, bold_, emphasis, emphasis_, subscript, subscript_, superscript, superscript_,
+    span, span_, toHLevel, figureImage, inlineScript, externalScript, stylesheet
   )
 where
 
@@ -75,6 +76,8 @@ data Format = Bold | Emphasis | Subscript | Superscript | Span
 data HLevel = H1 | H2 | H3 | H4 | H5 | H6
   deriving (Show, Eq, Enum, Bounded)
 
+-- * Conversions
+
 -- | Converts a 0-indexed integer to a heading level (capped at H6).
 toHLevel :: Int -> HLevel
 toHLevel 0 = H1
@@ -121,7 +124,7 @@ data TagType = Standard | Void
 customTag :: Text -> CustomTag
 customTag t
   | isSanitary t = CT t
-  | otherwise = error "Bad custom tag name"
+  | otherwise = error $ "Bad custom tag name: " <> T.unpack t
 
 isSanitary :: Text -> Bool
 isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar t
@@ -132,39 +135,45 @@ isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar
 
 -- * Smart Constructors
 
+-- | Creates a generic HTML attribute from a key and value.
 attr :: Text -> Text -> Attr
 attr = Attr
 
+-- | Creates an id attribute.
 id_ :: Text -> Attr
 id_ = attr "id"
 
-class_ :: Text -> Attr
-class_ = attr "class"
+-- | Creates a class attribute from a list of class names.
+class_ :: [Text] -> Attr
+class_ = attr "class" . T.unwords
 
--- | Creates a class attribute from a list of classes.
-classes_ :: [Text] -> Attr
-classes_ = class_ . T.unwords
-
--- | Creates a class attribute from a list of class names as 'String's.
-classes' :: [String] -> Attr
-classes' = classes_ . map T.pack
-
+-- | Wraps 'Text' into a 'RawText' 'HTMLBody'.
 rawText :: Text -> HTMLBody
 rawText = RawText
 
+-- | Wraps a 'String' into a 'RawText' 'HTMLBody'.
 rawText' :: String -> HTMLBody
 rawText' = fromString
 
--- | Helper for formatting text.
+-- | Internal: Helper for formatting text.
 textFormat :: Format -> [Attr] -> Text -> HTMLBody
 textFormat fmt attrs txt = TextFormat fmt attrs [RawText txt]
 
+-- | Smart constructors for formatting text with custom attributes.
 bold, emphasis, subscript, superscript, span :: [Attr] -> Text -> HTMLBody
 bold = textFormat Bold
 emphasis = textFormat Emphasis
 subscript = textFormat Subscript
 superscript = textFormat Superscript
 span = textFormat Span
+
+-- | Smart constructors for formatting HTML elements with no extra attributes.
+bold_, emphasis_, subscript_, superscript_, span_ :: [HTMLBody] -> HTMLBody
+bold_ = TextFormat Bold []
+emphasis_ = TextFormat Emphasis []
+subscript_ = TextFormat Subscript []
+superscript_ = TextFormat Superscript []
+span_ = TextFormat Span []
 
 -- | Creates a figure containing an image and a caption.
 -- The provided attributes are applied to the Figure

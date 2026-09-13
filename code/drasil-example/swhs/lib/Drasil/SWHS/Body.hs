@@ -104,25 +104,25 @@ mkSRS = [TableOfContents,
     IntroProg (introStart +:+ introStartSWHS) [extraInfoSent]
     [IPurpose (StdPurp Verbose),
      IScope scope,
-     IChar [] charsOfReader [],
+     iChar charsOfReader,
      IOrgSec (Just orgDocEnd)
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc projName, LlC sysCntxtFig, sysCntxtRespIntro projName, systContRespBullets projName]
     , UsrChars [userChars projName]
-    , SystCons [] []
+    , systCons []
     ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg purp []
+      [ SSDProblem $ pdProg purp
         [ TermsAndDefs Nothing terms
-        , PhySysDesc physSystParts figTank []
+        , phySysDesc physSystParts figTank
         , Goals goalInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , tms (Label : stdFields)
+        , gds ([Label, Units] ++ stdFields) ShowDerivation
+        , dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints dataConTail inputConstraints
         , CorrSolnPpties outputConstraints propsDeriv

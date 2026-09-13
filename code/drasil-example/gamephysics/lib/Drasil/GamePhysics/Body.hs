@@ -48,28 +48,28 @@ import Drasil.GamePhysics.GenDefs (generalDefns)
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro []
+  IntroSec $ introProg para1_introduction_intro
   [IPurpose (StdPurp Verbose),
    IScope scope,
-   IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
+   iChar [S "rigid body dynamics", phrase highSchoolCalculus],
    IOrgSec Nothing],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-    UsrChars [userCharacteristicsIntro], SystCons [] []],
+    UsrChars [userCharacteristicsIntro], systCons []],
    SSDSec $ SSDProg
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ pdProg probDescIntro
         [ TermsAndDefs Nothing terms
         , Goals [S "the kinematic" +:+ plural property `sC` S "and" +:+ plural QP.force +:+
                  sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
                  S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , tms (Label : stdFields)
+        , gds ([Label, Units] ++ stdFields) ShowDerivation
+        , dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inputConstraints
-        , CorrSolnPpties outputConstraints []
+        , corrSolnPpties outputConstraints
         ]
       ],
     ReqrmntSec $ ReqsProg [

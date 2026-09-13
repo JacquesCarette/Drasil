@@ -60,31 +60,31 @@ mkSRS = [TableOfContents,
       , TAandA
       ],
   IntroSec $
-    IntroProg justification []
+    introProg justification
       [ IPurpose (StdPurp Verbose)
       , IScope scope
-      , IChar [] charsOfReader []
+      , iChar charsOfReader
       , IOrgSec Nothing],
   GSDSec $
       GSDProg
         [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
         , UsrChars [userCharacteristicsIntro]
-        , SystCons [] []],
+        , systCons []],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg purp []
+      [ SSDProblem $ pdProg purp
         [ TermsAndDefs Nothing terms
-        , PhySysDesc physSystParts figLaunch []
+        , phySysDesc physSystParts figLaunch
         , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile,
                   S "geometric layout" `S.the_ofThe` phrase launcher `S.and_` phrase target]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , tms (Label : stdFields)
+        , gds ([Label, Units] ++ stdFields) ShowDerivation
+        , dds ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , ims ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
-        , CorrSolnPpties outConstraints []
+        , corrSolnPpties outConstraints
         ]
       ],
   ReqrmntSec $

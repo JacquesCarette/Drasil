@@ -31,34 +31,34 @@ mkSRS = [TableOfContents,
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
     ],
   IntroSec $
-  IntroProg EmptyS []
+  introProg EmptyS
     [ IPurpose (StdPurp Verbose),
       IScope EmptyS,
-      IChar [] [] [],
+      iChar [],
       IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
       [ SysCntxt [],
         UsrChars [],
-        SystCons [] []
+        systCons []
         ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg EmptyS []                --  This adds a is used to define the problem your system will solve
+      [ SSDProblem $ pdProg EmptyS                --  This adds a is used to define the problem your system will solve
       [ TermsAndDefs Nothing ([] :: [ConceptChunk])   -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
+      , phySysDesc [] figTemp -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals []
       ] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] []
-        , GDs [] [] HideDerivation
-        , DDs [] [Label, Symbol, Units, DefiningEquation, Description Verbose IncludeUnits] HideDerivation
-        , IMs [] [] HideDerivation
+        , tms []
+        , gds [] HideDerivation
+        , dds [Label, Symbol, Units, DefiningEquation, Description Verbose IncludeUnits] HideDerivation
+        , ims [] HideDerivation
         , Constraints EmptyS ([] :: [UncertQ])
-        , CorrSolnPpties ([] :: [UncertQ]) []
+        , corrSolnPpties ([] :: [UncertQ])
 
         ]
       ],

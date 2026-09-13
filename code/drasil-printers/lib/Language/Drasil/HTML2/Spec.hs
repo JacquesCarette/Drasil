@@ -7,9 +7,9 @@ module Language.Drasil.HTML2.Spec (
 ) where
 
 import Text.PrettyPrint as PLegacy (text)
-import Data.Text (Text)
 import qualified Data.Text as T (pack)
-import Numeric (showEFloat)
+import Data.Text (Text)
+import Data.Text.Extras (num2Text)
 
 import Language.Drasil (Special (..))
 import qualified Language.Drasil.Printing.AST as AST
@@ -48,12 +48,12 @@ specToHTML (AST.Quote q) = ["\""] ++ specToHTML q ++ ["\""]
 
 -- | Generates expressions in the HTML document (called by multiple functions).
 exprToHTML :: AST.Expr -> [HTMLBody]
-exprToHTML (AST.Dbl d) = [RawText (T.pack $ showEFloat Nothing d "")]
-exprToHTML (AST.Int i) = [RawText (T.pack $ show i)]
+exprToHTML (AST.Dbl d) = [RawText $ num2Text d]
+exprToHTML (AST.Int i) = [RawText $ num2Text i]
 exprToHTML (AST.Str s) = [RawText $ "\"" <> T.pack s <> "\""]
 exprToHTML (AST.Row l) = concatMap exprToHTML l
-exprToHTML (AST.Ident s) = [RawText (T.pack s)]
-exprToHTML (AST.Label s) = [RawText (T.pack s)]
+exprToHTML (AST.Ident s) = [rawText' s]
+exprToHTML (AST.Label s) = [rawText' s]
 exprToHTML (AST.Spec s) = [RawText (T.pack $ specialToString s)]
 exprToHTML (AST.Sub e) = [TextFormat Subscript [] (exprToHTML e)]
 exprToHTML (AST.Sup e) = [TextFormat Superscript [] (exprToHTML e)]

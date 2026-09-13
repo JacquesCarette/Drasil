@@ -7,7 +7,9 @@ module Drasil.SRS.DocumentLanguage.Core (
   DerivationDisplay(..), Emphasis(..), GSDSub(..), IntroSub(..), LFunc(..),
   Literature(..), RefTab(..), StkhldrSub(..), TConvention(..), TSIntro(..),
   TUIntro(..), TraceConfig(..), DLPlate(..), getTraceConfigUID,
-  PurposeDescription(..)
+  PurposeDescription(..),
+  -- * Smart Constructors
+  introProg, iChar, systCons
 ) where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
@@ -248,6 +250,21 @@ newtype AuxConstntSec = AuxConsProg [ConstQDef]
 
 -- | Appendix section.
 newtype AppndxSec = AppndxProg [Contents]
+
+-- * Smart Constructors
+
+-- | 'IntroProg' without the optional, extra paragraph.
+introProg :: Sentence -> [IntroSub] -> IntroSec
+introProg s = IntroProg s []
+
+-- | 'IChar' where only the topics the reader is assumed to be familiar with
+-- are given.
+iChar :: [Sentence] -> IntroSub
+iChar ts = IChar [] ts []
+
+-- | 'SystCons' without any related 'Section's.
+systCons :: [Contents] -> GSDSub
+systCons cs = SystCons cs []
 
 -- * Multiplate Definition and Type
 

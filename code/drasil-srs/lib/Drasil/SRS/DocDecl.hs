@@ -7,6 +7,7 @@
 module Drasil.SRS.DocDecl (
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..), PDSub(..),
   ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..), SolChSpec(..),
+  pdProg, phySysDesc, tms, gds, dds, ims, corrSolnPpties,
   mkDocDesc
 ) where
 
@@ -107,6 +108,36 @@ data ReqsSub where
   FReqsSub    :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
+
+-- * Smart Constructors
+
+-- | 'PDProg' without any related 'Section's.
+pdProg :: Sentence -> [PDSub] -> ProblemDescription
+pdProg s = PDProg s []
+
+-- | 'PhySysDesc' without any extra 'Contents'.
+phySysDesc :: [Sentence] -> LabelledContent -> PDSub
+phySysDesc ss lc = PhySysDesc ss lc []
+
+-- | 'TMs' without an introduction.
+tms :: Fields -> SCSSub
+tms = TMs []
+
+-- | 'GDs' without an introduction.
+gds :: Fields -> DL.DerivationDisplay -> SCSSub
+gds = GDs []
+
+-- | 'DDs' without an introduction.
+dds :: Fields -> DL.DerivationDisplay -> SCSSub
+dds = DDs []
+
+-- | 'IMs' without an introduction.
+ims :: Fields -> DL.DerivationDisplay -> SCSSub
+ims = IMs []
+
+-- | 'CorrSolnPpties' without any extra 'Contents'.
+corrSolnPpties :: (Quantity c, Constrained c) => [c] -> SCSSub
+corrSolnPpties cs = CorrSolnPpties cs []
 
 -- * Functions
 

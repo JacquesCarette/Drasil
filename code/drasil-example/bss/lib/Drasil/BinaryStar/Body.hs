@@ -44,31 +44,31 @@ mkSRS = [TableOfContents,
     , TAandA
     ],
   IntroSec $
-  IntroProg introBlurb []
+  introProg introBlurb
     [ IPurpose (StdPurp Verbose),
       IScope scope,
-      IChar [] charsOfReader [],
+      iChar charsOfReader,
       IOrgSec Nothing
     ],
   GSDSec $
     GSDProg
       [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
         UsrChars [usrCharsIntro],
-        SystCons [] []
+        systCons []
         ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ pdProg probDescIntro
       [ TermsAndDefs Nothing ccsFortermsAndDefsTbl
-      , PhySysDesc physSystParts figBSS []
+      , phySysDesc physSystParts figBSS
       , Goals goalsInputs
       ]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) HideDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) HideDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
+        , tms (Label : stdFields)
+        , gds ([Label, Units] ++ stdFields) HideDerivation
+        , dds ([Label, Symbol, Units] ++ stdFields) HideDerivation
+        , ims ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints corrSolnProps
         ]

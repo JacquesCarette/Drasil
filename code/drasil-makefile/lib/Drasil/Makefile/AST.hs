@@ -1,5 +1,5 @@
 -- | Defines a Makefile abstract syntax tree.
-module Drasil.Makefile.Make.AST (
+module Drasil.Makefile.AST (
   -- * Types
   Makefile(..), Type(..), Rule(..), Command(..), CommandOpts(..), Annotation,
   Target, Dependencies,
@@ -7,7 +7,7 @@ module Drasil.Makefile.Make.AST (
   mkMakefile, mkFile, mkRule, mkCheckedCommand, mkCommand
 ) where
 
-import Drasil.Makefile.Make.MakeString (MakeString)
+import Drasil.Makefile.MakeString (MakeString)
 
 -- * Types
 

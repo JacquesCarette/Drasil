@@ -6,7 +6,6 @@ module Language.Drasil.HTML2.Spec (
   articleTitle, author
 ) where
 
-import Text.PrettyPrint as PLegacy (text)
 import qualified Data.Text as T (pack)
 import Data.Text (Text)
 import Data.Text.Extras (num2Text)
@@ -14,6 +13,7 @@ import Data.Text.Extras (num2Text)
 import Language.Drasil (Special (..))
 import qualified Language.Drasil.Printing.AST as AST
 import Drasil.Data.Formats.HTML
+import Language.Drasil.HTML2.MathJax (inlineEqn)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
 import Language.Drasil.Markdown.Print (printMath)
 
@@ -66,9 +66,7 @@ exprToHTML (AST.Font AST.Emph e) = [TextFormat Emphasis [] (exprToHTML e)]
 exprToHTML (AST.Spc AST.Thin) = [" "]
 -- Uses TeX for Mathjax for all other exprs
 exprToHTML e =
-  [RawText $ T.pack $ show $ mjDelimDisp $ printMath $ TeX.pExpr e]
-  where
-    mjDelimDisp d = PLegacy.text "\\(" <> d <> PLegacy.text "\\)"
+  [RawText $ inlineEqn $ T.pack $ show $ printMath $ TeX.pExpr e]
 
 specialToString :: Special -> String
 specialToString Circle = "°"

@@ -10,7 +10,7 @@ import Data.Text.Extras (wrap)
 
 import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts, JSONStyle(..), JSON(..))
 
-mathJax3Url :: String
+mathJax3Url :: Text
 mathJax3Url = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
 
 -- | Variable to include MathJax in our HTML files so we can render equations in LaTeX.

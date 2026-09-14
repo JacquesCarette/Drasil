@@ -345,7 +345,7 @@ selfAccess
   :: (VariableValue r, SelfSym r, OOFunctionSym r) => VS (r FuncData) -> SValue r
 selfAccess = objAccess (valueOf self)
 
-class (ValueSym r, VariableSym r) => GetSet r where
+class GetSet r where
   get :: SValue r -> SVariable r -> SValue r
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 

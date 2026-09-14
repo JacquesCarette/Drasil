@@ -33,7 +33,8 @@ data SecCons = Sub Section
 -- and a shortname ('Reference').
 data Section = Section
              { tle  :: Title
-             , cons :: [SecCons]
+             , prelimCont :: [Contents]
+             , subSecs :: [Section]
              , _lab :: Reference
              }
 makeLenses ''Section
@@ -54,9 +55,9 @@ instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference information of a 'Section'.
 instance Referable Section where
   refAdd     = getAdd . getRefAdd . view lab
-  renderRef (Section _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
+  renderRef (Section _ _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
-instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
+instance HasRefAddress Section where getRefAdd (Section _ _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.
@@ -140,10 +141,11 @@ mkRawLC rc r = llcc (r ^. uid) (getRefAdd r) (shortname r) rc
 -- data types. Over time, the types should no longer be exported, and
 -- only these used.
 
--- | Smart constructor for creating 'Section's with a title ('Sentence'), introductory contents
--- (ie. paragraphs, tables, etc.), a list of subsections, and a shortname ('Reference').
+-- | Smart constructor for creating 'Section's with a title ('Sentence'),
+-- introductory contents (ie. paragraphs, tables, etc.), a list of subsections,
+-- and a shortname ('Reference').
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-section title intro secs = Section title (map Con intro ++ map Sub secs)
+section = Section
 
 -- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width. Defaults to 'WithCaption'.
 fig :: Lbl -> Filepath -> RawContent

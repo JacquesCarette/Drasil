@@ -17,7 +17,7 @@ import Language.Drasil.Document.Citation.Core (Citation, BibRef)
 import Language.Drasil.Document.Citation.Components (compareAuthYearTitle)
 import Language.Drasil.Document.Core (RawContent(..), ListTuple, ItemType(..),
   ListType(..), HasContents(..))
-import Language.Drasil.Document.Sections (Section(Section), SecCons(..))
+import Language.Drasil.Document.Sections (Section(Section))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.Sentence (lnames, Sentence(..), eS, eS')
 
@@ -85,12 +85,7 @@ extractSents' = concatMap extractSents
 
 -- | Extracts 'Sentence's from a 'Section'.
 getSec :: Section -> [Sentence]
-getSec (Section t sc _ ) = t : concatMap getSecCon sc
-
--- | Extracts 'Sentence's from section contents.
-getSecCon :: SecCons -> [Sentence]
-getSecCon (Sub s) = getSec s
-getSecCon (Con c) = extractSents c
+getSec (Section t pcs ssc _ ) = t : (concatMap extractSents pcs ++ concatMap getSec ssc)
 
 -- | Extract bibliography entries from generated sections. This version extracts
 -- from fully expanded Sections, capturing citations that are only created

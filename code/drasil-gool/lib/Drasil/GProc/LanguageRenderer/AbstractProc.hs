@@ -117,6 +117,11 @@ funcDecDef v scp ps b = do
   mkStmtNoEnd $ RC.method f
 
 function
-  :: (RP.ProcRenderMethod r vis mthd bod) => Label -> r vis -> VS (r TypeData) ->
-  [MS (r ParamData)] -> MS (r bod) -> MS (r mthd)
+  :: (RC.MethodTypeSym r, RP.ProcRenderMethod r vis mthd bod)
+  => Label
+  -> r vis
+  -> VS (r TypeData)
+  -> [MS (r ParamData)]
+  -> MS (r bod)
+  -> MS (r mthd)
 function n s t = RP.intFunc False n s (RC.mType t)

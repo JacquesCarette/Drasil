@@ -18,7 +18,8 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..)
 
 class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
   IP.ModuleSym r mod mthd, IP.FileSym r file mod, RenderFile r file mod,
-  RenderMod r mod, ModuleElim r mod, ProcRenderMethod r vis mthd bod
+  RenderMod r mod, ModuleElim r mod, RenderMethod r mthd,
+  ProcRenderMethod r vis mthd bod
   ) => ProcRenderSym r vis stmt mthd file mod bod block
 -- Procedural-Only Typeclasses --
 
@@ -40,7 +41,7 @@ class RenderMod r mod | r -> mod where
 class ModuleElim r mod | r -> mod where
   module' :: r mod -> Doc
 
-class (RenderMethod r mthd) => ProcRenderMethod r vis mthd bod | r -> vis bod where
+class ProcRenderMethod r vis mthd bod | r -> vis bod where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
   intFunc     :: Bool -> Label -> r vis -> MS (r TypeData) ->

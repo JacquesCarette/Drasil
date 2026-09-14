@@ -5,7 +5,6 @@ module Language.Drasil.HTML2.Render(
   renderHTML
 ) where
 
-import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Extras (num2Text)
 

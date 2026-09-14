@@ -7,6 +7,7 @@ module Language.Drasil.HTML2.MathJax (
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Extras (wrap)
+
 import Drasil.Data.Formats.JSON (renderJSON, jsonRenderOpts, JSONStyle(..), JSON(..))
 
 mathJax3Url :: String

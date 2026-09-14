@@ -159,7 +159,7 @@ rawText' = fromString
 textFormat :: Format -> [Attr] -> Text -> HTMLBody
 textFormat fmt attrs txt = TextFormat fmt attrs [RawText txt]
 
--- | Smart constructors for formatting text with custom attributes.
+-- | Smart constructors for formatting text.
 bold, emphasis, subscript, superscript, span :: [Attr] -> Text -> HTMLBody
 bold = textFormat Bold
 emphasis = textFormat Emphasis
@@ -167,16 +167,19 @@ subscript = textFormat Subscript
 superscript = textFormat Superscript
 span = textFormat Span
 
--- | Smart constructors for formatting HTML elements with no extra attributes.
-bold_, emphasis_, subscript_, superscript_, span_ :: [HTMLBody] -> HTMLBody
+-- | Smart constructors for formatting HTML elements.
+bold_, emphasis_, subscript_, superscript_ :: [HTMLBody] -> HTMLBody
 bold_ = TextFormat Bold []
 emphasis_ = TextFormat Emphasis []
 subscript_ = TextFormat Subscript []
 superscript_ = TextFormat Superscript []
-span_ = TextFormat Span []
 
--- | Creates a figure containing an image and a caption.
--- The provided attributes are applied to the Figure
+-- | Smart constructors for 'span' elements.
+span_ :: [Attr] -> [HTMLBody] -> HTMLBody
+span_ = TextFormat Span
+
+-- | Creates a figure containing an image and a caption. The provided attributes
+-- are applied to the Figure
 figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
 figureImage attrsFig attrsImg src altText captionTxt =
   Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]
@@ -185,7 +188,8 @@ figureImage attrsFig attrsImg src altText captionTxt =
 inlineScript :: Text -> HTMLHead
 inlineScript = Script []
 
--- | Creates an external script. Requires a source file/URL and allows optional attributes.
+-- | Creates an external script. Requires a source file/URL and allows optional
+-- attributes.
 externalScript :: File -> [Attr] -> HTMLHead
 externalScript src attrs = Script (attr "src" src : attr "type" "text/javascript" : attrs) mempty
 

@@ -27,16 +27,16 @@ import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation,
 import Drasil.GOOL (SVariable, SValue, CS, FS, MS, CSStateVar, Class, OOProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), AttachmentSym(..),
   TypeSym(..), VariableSym(..), ScopeSym(..), ScopeData, Literal(..),
-  OOVariableSym, VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), List(..), ListStatement(..),
-  EmptyStatement(emptyStmt), MultiStatement(multi), ValueStatement,
-  AssignStatement(..), DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, PrintConsole(..), FileHandling(..), PrintFile(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
-  StateVarSym(..), pubDVar, convType, convTypeOO, VisibilityTag(..), TypeElim,
-  VariableElim, Set, Reference, Argument, ValueExpression, MathConstant, Array,
-  StringStatement, FuncAppStatement, SelfSym, InternalValueExp,
-  OOValueExpression)
+  OOTypeSym, OOVariableSym, VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
+  ListStatement(..), EmptyStatement(emptyStmt), MultiStatement(multi),
+  ValueStatement, AssignStatement(..), DeclStatement(..), OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, PrintConsole(..), FileHandling(..),
+  PrintFile(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
+  MethodSym(..), StateVarSym(..), pubDVar, convType, convTypeOO,
+  VisibilityTag(..), TypeElim, VariableElim, Set, Reference, Argument,
+  ValueExpression, MathConstant, Array, StringStatement, FuncAppStatement,
+  SelfSym, InternalValueExp, OOValueExpression)
 import Drasil.GProc (ProcProg, NativeVector, ReadFile)
 
 import Drasil.Code.CodeExpr.Development
@@ -133,6 +133,7 @@ getInputDecl
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -190,6 +191,7 @@ initConsts
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -401,6 +403,7 @@ sfwrCBody
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -434,6 +437,7 @@ physCBody
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -468,6 +472,7 @@ chooseConstr
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -513,6 +518,7 @@ constrWarn
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -548,6 +554,7 @@ constrExc
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -578,6 +585,7 @@ constrVarDec
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -609,6 +617,7 @@ constraintViolatedMsg
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -641,6 +650,7 @@ printConstraint
   ::
     ( Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -666,6 +676,7 @@ printConstraint v c = do
         ::
           ( Argument r
           , MathConstant r
+          , OOTypeSym r
           , OOVariableSym r
           , VariableValue r
           , Literal r
@@ -845,6 +856,7 @@ genCalcBlock
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r
@@ -880,6 +892,7 @@ genCaseBlock
     , BodySym r bod block
     , Argument r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , Literal r

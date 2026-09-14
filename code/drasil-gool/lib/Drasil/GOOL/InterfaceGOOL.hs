@@ -46,7 +46,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- for generating an object-oriented program.
 class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt,
   CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
-  OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
+  OOTypeSym r, OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
   NumericExpression r, InternalValueExp r, ValueExpression r,
   OOValueExpression r, Array r, List r, ListStatement r stmt, Reference r, Set r,
   FunctionSym r, OOFunctionSym r, ParameterSym r, VariableValue r, ScopeSym r,
@@ -191,7 +191,7 @@ class (TypeSym r) => OOTypeSym r where
 
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
-class (VariableSym r, OOTypeSym r) => OOVariableSym r where
+class OOVariableSym r where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
   classVar          :: Label -> VS (r TypeData) -> SVariable r
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)

@@ -2,13 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="SWHS_SRS.css" type="text/css">
-<<<<<<< HEAD
-    <title>
-      Software Requirements Specification for Solar Water Heating Systems incorporating PCM
-    </title>
-=======
-    <title>Software Requirements Specification for Solar Water Heating Systems Incorporating PCM</title>
->>>>>>> 4563d6f3e (Remove `foldRaw`, split `.helpers` and adjustments to the names)
+    <title>Software Requirements Specification for Solar Water Heating Systems incorporating PCM</title>
     <meta charset="utf-8">
     <script>
       MathJax = {
@@ -773,41 +767,15 @@
           <span title="Solar Water Heating Systems incorporating PCM">SWHS</span> is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
         </p>
         <ul class="list">
-<<<<<<< HEAD
-          <li>
-            User Responsibilities:<ul class="list">
-              <li>
-                Provide the input data to the system, ensuring no errors in the data entry
-              </li>
-              <li>
-                Take care that consistent units are used for input variables
-              </li>
-            </ul>
-          </li>
-          <li>
-            <span title="Solar Water Heating Systems incorporating PCM">SWHS</span> Responsibilities:<ul class="list">
-              <li>
-                Detect data type mismatch, such as a string of characters instead of a floating point number
-              </li>
-              <li>
-                Determine if the inputs satisfy the required physical and software constraints
-              </li>
-              <li>
-                Calculate the required outputs
-              </li>
-            </ul>
-          </li>
-=======
           <li>User Responsibilities:<ul class="list">
             <li>Provide the input data to the system, ensuring no errors in the data entry</li>
             <li>Take care that consistent units are used for input variables</li>
           </ul></li>
-          <li><span title="solar water heating system">SWHS</span> Responsibilities:<ul class="list">
+          <li><span title="Solar Water Heating Systems incorporating PCM">SWHS</span> Responsibilities:<ul class="list">
             <li>Detect data type mismatch, such as a string of characters instead of a floating point number</li>
             <li>Determine if the inputs satisfy the required physical and software constraints</li>
             <li>Calculate the required outputs</li>
           </ul></li>
->>>>>>> 4563d6f3e (Remove `foldRaw`, split `.helpers` and adjustments to the names)
         </ul>
       </section>
       <section id="Sec:UserChars" class="subsection">
@@ -1233,7 +1201,7 @@
             </p>
             \[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
             <p class="paragraph">
-              Using the fact that <em>ρ</em>=<em>m</em>&#x2F;<em>V</em>, Equation (2) can be written as:
+              Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
             </p>
             \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
           </section>
@@ -1952,7 +1920,7 @@
             </p>
             \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
             <p class="paragraph">
-              Factoring the negative sign out of the second term of the right-hand side (<span title="right-hand side">RHS</span>) of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> &#x2F; <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
+              Factoring the negative sign out of the second term of the right-hand side (<span title="right-hand side">RHS</span>) of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
             </p>
             \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
             <p class="paragraph">
@@ -2070,7 +2038,7 @@
               Equation (4) applies for the solid <span title="phase change material">PCM</span>. In the case where all of the <span title="phase change material">PCM</span> is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the <span title="phase change material">PCM</span> with melting is assumed to be negligible (<a href="#assumpVCMPN">A:Volume-Change-Melting-PCM-Negligible</a>).
             </p>
             <p class="paragraph">
-              In the case where <em>T<sub>P</sub> = T<sub>melt</sub><sup>P</sup></em> and not all of the <span title="phase change material">PCM</span> is melted, the temperature of the phase change material does not change. Therefore, d <em>T<sub>P</sub></em> &#x2F; d <em>t</em> = 0.
+              In the case where <em>T<sub>P</sub> = T<sub>melt</sub><sup>P</sup></em> and not all of the <span title="phase change material">PCM</span> is melted, the temperature of the phase change material does not change. Therefore, d <em>T<sub>P</sub></em> / d <em>t</em> = 0.
             </p>
             <p class="paragraph">
               This derivation does not consider the boiling of the <span title="phase change material">PCM</span>, as the PCM is assumed to either be in a solid state or a liquid state (<a href="#assumpNGSP">A:No-Gaseous-State-PCM</a>).
@@ -5669,7 +5637,7 @@
         </dd>
         <dt id="lightstone2012">[<b>lightstone2012</b>]</dt>
         <dd>
-          Lightstone, Marilyn. <em>Derivation of tank&#x2F;pcm model</em>. 2012. From Marilyn Lightstone&#39;s Personal Notes
+          Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone&#39;s Personal Notes
         </dd>
         <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
         <dd>
@@ -5677,7 +5645,7 @@
         </dd>
         <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
         <dd>
-          Smith, W. Spencer and Koothoor, Nirmitha. &quot;A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.&quot; <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http:&#x2F;&#x2F;www.sciencedirect.com&#x2F;science&#x2F;article&#x2F;pii&#x2F;S1738573315002582</a>. pp. 404–418. 
+          Smith, W. Spencer and Koothoor, Nirmitha. &quot;A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.&quot; <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418. 
         </dd>
         <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
         <dd>
@@ -5685,7 +5653,7 @@
         </dd>
         <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
         <dd>
-          Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https:&#x2F;&#x2F;doi.org&#x2F;10.1007&#x2F;s11155-006-9020-7</a>. pp. 83–107. 
+          Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. &quot;Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.&quot; <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83–107. 
         </dd>
       </dl>
     </section>

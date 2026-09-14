@@ -6,7 +6,7 @@
 module Drasil.Database.UID (
     UID
   , HasUID(uid)
-  , mkUid, nsUid, (+++), (+++.), (+++!)
+  , mkUid, nsUid, (+++), (+++.), (+++!), (+++!!)
   , showUID
 ) where
 
@@ -68,6 +68,13 @@ a +++! b
   | s ^. namespace /= t ^. namespace = error $ show s ++ " and " ++ show t ++ " are not in the same namespace"
   | null (s ^. baseName) || null (t ^. baseName) = error $ show s ++ " and " ++ show t ++ " UIDs must be non-zero length"
   | otherwise = s +++. (t ^. baseName)
+  where
+    s = a ^. uid
+    t = b ^. uid
+
+-- Hack for combinators, ignores namespace
+(+++!!) :: (HasUID a, HasUID b) => a -> b -> UID
+a +++!! b = mkUid (s ^.baseName  ++ t ^. baseName)
   where
     s = a ^. uid
     t = b ^. uid

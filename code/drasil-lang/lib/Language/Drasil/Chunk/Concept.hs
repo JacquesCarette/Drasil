@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Concept (
 
 import Control.Lens ((^.))
 
-import Drasil.Database (HasUID(uid), UID)
+import Drasil.Database (HasUID(uid), UID, nsUid)
 
 import Language.Drasil.Classes (Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict))
@@ -16,6 +16,10 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.NamedIdea (NamedIdea (..), Idea (..))
 import Language.Drasil.NaturalLanguage.English.NounPhrase (NP)
 import qualified Language.Drasil.Classes as D (defn)
+
+conceptNs :: UID -> UID
+conceptNs = id
+-- conceptNs = nsUid "concept"
 
 -- FIXME: There should only be two smart constructors ultimately for
 -- `ConceptChunk`s. One with an abbreviation, the other without. In other words,
@@ -34,7 +38,7 @@ cncpt :: Concept dom =>
   String ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt u trm defn accAbbr = ConDict u trm (Just accAbbr) defn . map (^. uid)
+cncpt u trm defn accAbbr = ConDict (conceptNs u) trm (Just accAbbr) defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt' :: Concept dom =>
@@ -46,7 +50,7 @@ cncpt' :: Concept dom =>
   Sentence ->
   -- | The domain the 'term' belongs to.
   [dom] -> ConceptChunk
-cncpt' u trm defn = ConDict u trm Nothing defn . map (^. uid)
+cncpt' u trm defn = ConDict (conceptNs u) trm Nothing defn . map (^. uid)
 
 -- | Construct a 'ConceptChunk'.
 cncpt'' ::
@@ -58,7 +62,7 @@ cncpt'' ::
   Sentence ->
   -- | The term's abbreviation.
   String -> ConceptChunk
-cncpt'' u trm defn accAbbr = cncpt u trm defn accAbbr ([] :: [ConceptChunk])
+cncpt'' u trm defn accAbbr = cncpt (conceptNs u) trm defn accAbbr ([] :: [ConceptChunk])
 
 -- | Construct a 'ConceptChunk'.
 cncpt''' ::
@@ -68,7 +72,7 @@ cncpt''' ::
   NP ->
   -- | The definition of the 'term'
   Sentence -> ConceptChunk
-cncpt''' u trm defn = ConDict u trm Nothing defn []
+cncpt''' u trm defn = ConDict (conceptNs u) trm Nothing defn []
 
 {-# DEPRECATED cw
   "Chunk down-casting is strongly discouraged. If you want to construct a `ConceptChunk`, use one of its normal constructors." #-}

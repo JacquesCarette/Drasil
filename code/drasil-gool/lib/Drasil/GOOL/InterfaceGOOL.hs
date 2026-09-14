@@ -330,7 +330,7 @@ addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (VariableSym r) => StrategyPattern r bod block | r -> bod block where
+class StrategyPattern r bod block | r -> bod block where
   runStrategy :: Label -> [(Label, MS (r bod))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MS (r block)
 

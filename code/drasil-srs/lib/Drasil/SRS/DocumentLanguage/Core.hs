@@ -120,7 +120,9 @@ data IntroSub where
   -- | Organises the section.
   IOrgSec  :: Maybe Sentence -> IntroSub
 
-data PurposeDescription = StdPurp Verbosity | CustomPurp [[Sentence]]
+-- | How to describe the purpose of the system: either with the standard blurb
+-- (at the given 'Verbosity') or with custom paragraphs.
+data PurposeDescription = StdPurp Verbosity | CustomPurp [Paragraph]
 
 -- ** Stakeholders Section
 

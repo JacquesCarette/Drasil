@@ -46,8 +46,8 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- for generating an object-oriented program.
 class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt,
   CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
-  OOTypeSym r, OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
-  NumericExpression r, InternalValueExp r, ValueExpression r,
+  TypeSym r, OOTypeSym r, OOVariableSym r, SelfSym r, BooleanExpression r,
+  Comparison r, NumericExpression r, InternalValueExp r, ValueExpression r,
   OOValueExpression r, Array r, List r, ListStatement r stmt, Reference r, Set r,
   FunctionSym r, OOFunctionSym r, ParameterSym r, VariableValue r, ScopeSym r,
   BinderSym r, InternalList r block, MethodSym r vis mthd bod,
@@ -186,7 +186,7 @@ class AttachmentSym r attch | r -> attch where
   classLevel  :: r attch
   instanceLevel :: r attch
 
-class (TypeSym r) => OOTypeSym r where
+class OOTypeSym r where
   obj :: ClassName -> VS (r TypeData)
 
 class OOVariableSym r where
@@ -348,7 +348,7 @@ class (ValueSym r, VariableSym r) => GetSet r where
   get :: SValue r -> SVariable r -> SValue r
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
-convTypeOO :: (OOTypeSym r) => CodeType -> VS (r TypeData)
+convTypeOO :: (TypeSym r, OOTypeSym r) => CodeType -> VS (r TypeData)
 convTypeOO (Object n) = obj n
 convTypeOO (Reference t) = referenceType (convTypeOO t)
 convTypeOO t = convType t

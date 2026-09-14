@@ -466,8 +466,6 @@ instance (DeclStatement (LoggingFor r) stmt bod, G.OODeclStatement r stmt) =>
 instance (G.OOFuncAppStatement r stmt) => G.OOFuncAppStatement (LoggingFor r) stmt where
   selfInOutCall = liftLogging G.selfInOutCall
 
-instance (G.OOValueSym r) => G.OOValueSym (LoggingFor r) where
-
 instance (G.OOValueExpression r) => G.OOValueExpression (LoggingFor r) where
   newObjMixedArgs = liftLogging G.newObjMixedArgs
   extNewObjMixedArgs = liftLogging G.extNewObjMixedArgs

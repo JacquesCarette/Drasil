@@ -25,7 +25,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOVariableSym,
+import Drasil.GOOL (SValue, MS, VS, TypeSym(..), OOTypeSym, OOVariableSym,
   VariableValue(..), ValueStatement(valStmt), DeclStatement(..), convType,
   convTypeOO, TypeData, FuncAppStatement, TypeElim, VariableElim, Argument, Set,
   ValueExpression, Comparison, BooleanExpression, MathConstant, List, SelfSym,
@@ -40,6 +40,7 @@ genAllInputCalls
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -68,7 +69,8 @@ genAllInputCalls = do
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall
   ::
-    ( OOVariableSym r
+    ( OOTypeSym r
+    , OOVariableSym r
     , VariableValue r
     , SelfSym r
     , FuncAppStatement r stmt
@@ -83,7 +85,8 @@ genInputCall = do
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall
   ::
-    ( OOVariableSym r
+    ( OOTypeSym r
+    , OOVariableSym r
     , VariableValue r
     , SelfSym r
     , FuncAppStatement r stmt
@@ -101,6 +104,7 @@ genConstraintCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -130,6 +134,7 @@ genCalcCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -161,6 +166,7 @@ genOutputCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -190,6 +196,7 @@ genFuncCall
     ( Argument r
     , Literal r
     , MathConstant r
+    , OOTypeSym r
     , OOVariableSym r
     , VariableValue r
     , BooleanExpression r
@@ -223,7 +230,8 @@ genFuncCall n t funcPs = do
 -- function.
 genInOutCall
   ::
-    ( OOVariableSym r
+    ( OOTypeSym r
+    , OOVariableSym r
     , VariableValue r
     , SelfSym r
     , FuncAppStatement r stmt

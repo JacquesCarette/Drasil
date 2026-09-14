@@ -1,6 +1,6 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
 module Language.Drasil.TeX.Print (genTeX, pExpr, pUnit, spec, fence,
-  OpenClose(..), pMatrix, cases) where
+  OpenClose(..), pMatrix, cases, printMath) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
@@ -564,3 +564,7 @@ bibTeXMonth L.Dec = S "dec"
 -- | Helper that lifts something showable into a 'Spec'.
 wrapS :: Show a => a -> Spec
 wrapS = S . show
+
+-- | Render a LaTeX D in a math context.
+printMath :: D -> TP.Doc
+printMath = (`runPrint` Math) . toMath

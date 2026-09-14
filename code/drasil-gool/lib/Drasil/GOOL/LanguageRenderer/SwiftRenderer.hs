@@ -24,12 +24,11 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, Variable,
   BinderElim(..), MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, OOValueExpression(..),
-  selfMethodCall, newObj, InternalValueExp(..), objMethodCall,
-  objMethodCallMixedArgs, objMethodCallNamedArgs, objMethodCallNoParams,
-  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
-  OOMethodSym(..), Initializers, convTypeOO)
+  StateVarSym(..), AttachmentSym(..), OOValueExpression(..), selfMethodCall,
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs,
+  objMethodCallNamedArgs, objMethodCallNoParams, OOFunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..), OOMethodSym(..), Initializers, convTypeOO)
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), BodyElim, RenderBlock(..), BlockElim, RenderType(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -296,8 +295,6 @@ instance RenderVariable SwiftCode where
 
 instance ValueSym SwiftCode where
   valueType = onCodeValue valType
-
-instance OOValueSym SwiftCode
 
 instance Argument SwiftCode where
   pointerArg = swiftArgVal

@@ -16,10 +16,9 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), VSBinder, Variable, Value,
   VisibilitySym(..), BinderSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..),
-  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueSym,
-  OOValueExpression(..), InternalValueExp(..), OOFunctionSym(..), GetSet(..),
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..))
+  SelfSym(..), AttachmentSym(..), StateVarSym(..), OOValueExpression(..),
+  InternalValueExp(..), OOFunctionSym(..), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
 import Drasil.Shared.AST (qualName, td, ScopeData, ScopeTag(..), sd, bindFormD)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
@@ -137,8 +136,6 @@ instance VariableElim CodeInfoOO where
 
 instance ValueSym CodeInfoOO where
   valueType _ = return $ error "[valueType] The return value of this isn't used, and the thunk shouldn't fire."
-
-instance OOValueSym CodeInfoOO
 
 instance Argument CodeInfoOO where
   pointerArg = id

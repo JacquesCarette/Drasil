@@ -23,8 +23,8 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Library, Body, Block,
   ScopeSym(..), ParameterSym(..), BinderSym(..), BinderElim(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, StateVar, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), SelfSym(..),
-  StateVarSym(..), AttachmentSym(..), OOValueSym, InternalValueExp(..),
-  extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..), OOValueExpression(..),
+  StateVarSym(..), AttachmentSym(..), InternalValueExp(..), extNewObj,
+  objMethodCall, OOFunctionSym(..), GetSet(..), OOValueExpression(..),
   selfMethodCall, OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..), OOMethodSym(..))
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -284,8 +284,6 @@ instance RenderVariable PythonCode where
 
 instance ValueSym PythonCode where
   valueType = onCodeValue valType
-
-instance OOValueSym PythonCode
 
 instance Argument PythonCode where
   pointerArg = id

@@ -8,8 +8,8 @@ module Drasil.GOOL.InterfaceGOOL (
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
-  OOValueSym, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
-  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOValueExpression(..), selfMethodCall, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   classMethodCall, classMethodCallNamedArgs, classMethodCallMixedArgs,
@@ -188,8 +188,6 @@ class AttachmentSym r attch | r -> attch where
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VS (r TypeData)
-
-class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class OOVariableSym r where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)

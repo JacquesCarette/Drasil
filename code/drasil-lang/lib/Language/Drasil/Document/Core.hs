@@ -66,7 +66,7 @@ data HasCaption = NoCaption | WithCaption
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
     Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
-  | Paragraph Sentence                       -- ^ Paragraphs are just sentences.
+  | Para Sentence                            -- ^ Paragraphs are just sentences.
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
@@ -138,7 +138,7 @@ prependLabel EqnBlock{}     = prepend "EqnB"
 prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
-prependLabel Paragraph{}    = prepend "Par" -- error "Shouldn't reference paragraphs"
+prependLabel Para{}         = prepend "Par" -- error "Shouldn't reference paragraphs"
 prependLabel Bib{}          = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

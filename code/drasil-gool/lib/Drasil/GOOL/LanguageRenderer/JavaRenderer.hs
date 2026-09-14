@@ -23,7 +23,7 @@ import Drasil.Shared.InterfaceCommon (UnRepr(..), Label, Body, Block, SVariable,
   ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (Class, StateVar, CSStateVar, OOProg,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..), OOValueSym,
+  OOVariableSym(..), SelfSym(..), StateVarSym(..), AttachmentSym(..),
   OOValueExpression(..), objMethodCall, selfMethodCall, newObj,
   InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
@@ -292,8 +292,6 @@ instance RenderVariable JavaCode where
 
 instance ValueSym JavaCode where
   valueType = onCodeValue valType
-
-instance OOValueSym JavaCode
 
 instance Argument JavaCode where
   pointerArg = id
@@ -1093,10 +1091,15 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
-jDocInOut :: (RenderMethod r mthd) => ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd)) -> String ->
-  [(String, SVariable r)] -> [(String, SVariable r)] ->
-  [(String, SVariable r)] -> MS (r Body) -> MS (r mthd)
+jDocInOut
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r Body) -> MS (r mthd))
+  -> String
+  -> [(String, SVariable r)]
+  -> [(String, SVariable r)]
+  -> [(String, SVariable r)]
+  -> MS (r Body)
+  -> MS (r mthd)
 jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) []
   (f (map snd is) [] [] b)
 jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is)

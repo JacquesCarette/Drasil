@@ -95,8 +95,9 @@ constructor
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
-doxFunc :: (RenderMethod r mthd) => String -> [String] -> Maybe String ->
-  MS (r mthd) -> MS (r mthd)
+doxFunc
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 doxFunc = docFunc functionDox
 
 doxClass :: (RG.RenderClass r vis mthd stvr) => String -> CS (r Class) -> CS (r Class)
@@ -142,7 +143,7 @@ containsInt
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 discardFileLine
-  :: (IG.InternalValueExp r, ValueStatement r stmt)
+  :: (TypeSym r, IG.InternalValueExp r, ValueStatement r stmt)
   => Label -> SValue r -> MS (r stmt)
 discardFileLine n f = valStmt $ objMethodCallNoParams IC.string f n
 
@@ -278,6 +279,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction
   :: ( AttachmentSym r attch
+     , MethodTypeSym r
      , OORenderMethod r vis mthd attch bod
      , IC.ParameterSym r
      , UnRepr r TypeData
@@ -342,7 +344,7 @@ string :: (Monad r) => VS (r TypeData)
 string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
-  :: (RenderMethod r mthd)
+  :: (BlockCommentSym r, RenderMethod r mthd)
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
   -> String
   -> [(String, SVariable r)]
@@ -390,7 +392,8 @@ setDec f vl v scp = do
   mkStmt (RC.statement vd <> f sz)
 
 setMethodCall
-  :: (IG.InternalValueExp r) => Label -> SValue r ->  SValue r -> SValue r
+  :: (ValueSym r, IG.InternalValueExp r)
+  => Label -> SValue r ->  SValue r -> SValue r
 setMethodCall n a b = objMethodCall (innerType $ onStateValue valueType a) a n [b]
 
 destructorError :: String -> String
@@ -570,7 +573,7 @@ inOutFunc f ins outs both b = f
   where rets = both ++ outs
 
 docInOutFunc'
-  :: (RenderMethod r mthd)
+  :: (BlockCommentSym r, RenderMethod r mthd)
   => FuncDocRenderer
   -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
   -> String

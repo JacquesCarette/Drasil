@@ -8,8 +8,8 @@ module Drasil.GOOL.InterfaceGOOL (
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), SelfSym(..), instanceVarSelf,
-  OOValueSym, OOValueExpression(..), selfMethodCall, newObj, extNewObj,
-  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOValueExpression(..), selfMethodCall, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   classMethodCall, classMethodCallNamedArgs, classMethodCallMixedArgs,
@@ -46,16 +46,17 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- for generating an object-oriented program.
 class (UnRepr r TypeData, Argument r, BodySym r bod block, BlockSym r block stmt,
   CommandLineArgs r, Literal r, MathConstant r, VariableValue r, VariableSym r,
-  OOVariableSym r, SelfSym r, BooleanExpression r, Comparison r,
-  NumericExpression r, InternalValueExp r, ValueExpression r,
-  OOValueExpression r, Array r, List r, ListStatement r stmt, Reference r, Set r,
-  FunctionSym r, OOFunctionSym r, ParameterSym r, VariableValue r, ScopeSym r,
-  BinderSym r, InternalList r block, MethodSym r vis mthd bod,
-  OOMethodSym r vis mthd attch bod, AttachmentSym r attch, VisibilitySym r vis,
-  StateVarSym r vis stvr attch, ClassSym r mthd stvr, TypeElim r, VariableElim r,
-  EmptyStatement r stmt, MultiStatement r stmt, ValueStatement r stmt,
-  CommentStatement r stmt, DeclStatement r stmt bod, OODeclStatement r stmt,
-  AssignStatement r stmt, FuncAppStatement r stmt, OOFuncAppStatement r stmt,
+  TypeSym r, OOTypeSym r, OOVariableSym r, SelfSym r, BooleanExpression r,
+  Comparison r, NumericExpression r, ValueSym r, InternalValueExp r,
+  ValueExpression r, OOValueExpression r, Array r, List r, ListStatement r stmt,
+  Reference r, Set r, FunctionSym r, OOFunctionSym r, ParameterSym r,
+  VariableValue r, ScopeSym r, BinderSym r, InternalList r block,
+  MethodSym r vis mthd bod, OOMethodSym r vis mthd attch bod,
+  AttachmentSym r attch, VisibilitySym r vis, StateVarSym r vis stvr attch,
+  ClassSym r mthd stvr, TypeElim r, VariableElim r, EmptyStatement r stmt,
+  MultiStatement r stmt, ValueStatement r stmt, CommentStatement r stmt,
+  DeclStatement r stmt bod, OODeclStatement r stmt, AssignStatement r stmt,
+  FuncAppStatement r stmt, OOFuncAppStatement r stmt,
   ControlStatement r stmt bod, StringStatement r stmt, PrintConsole r stmt,
   ReadConsole r stmt, FileHandling r stmt, PrintFile r stmt, ReadFile r stmt,
   ModuleSym r mod mthd, FileSym r file mod, ProgramSym r prg file
@@ -186,12 +187,10 @@ class AttachmentSym r attch | r -> attch where
   classLevel  :: r attch
   instanceLevel :: r attch
 
-class (TypeSym r) => OOTypeSym r where
+class OOTypeSym r where
   obj :: ClassName -> VS (r TypeData)
 
-class (ValueSym r, OOTypeSym r) => OOValueSym r
-
-class (VariableSym r, OOTypeSym r) => OOVariableSym r where
+class OOVariableSym r where
   -- | A class-level variable, separate from its class (i.e. `v`, not `C.v`)
   classVar          :: Label -> VS (r TypeData) -> SVariable r
   -- | A class-level constant, separate from its class (i.e. `v`, not `C.v`)
@@ -237,7 +236,7 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 
 -- TODO [Brandon Bosman, 07/22/2026]: Give this a better name
 -- | A class for representing method calls, both instance- and class-level
-class (ValueSym r) => InternalValueExp r where
+class InternalValueExp r where
   -- TODO [Brandon Bosman, 07/22/2026]: rename this to `instanceMethodCallMixedArgs'`
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of
@@ -330,7 +329,7 @@ addObserver o = listAdd obsList lastelem o
   where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
-class (VariableSym r) => StrategyPattern r bod block | r -> bod block where
+class StrategyPattern r bod block | r -> bod block where
   runStrategy :: Label -> [(Label, MS (r bod))] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MS (r block)
 
@@ -346,11 +345,11 @@ selfAccess
   :: (VariableValue r, SelfSym r, OOFunctionSym r) => VS (r FuncData) -> SValue r
 selfAccess = objAccess (valueOf self)
 
-class (ValueSym r, VariableSym r) => GetSet r where
+class GetSet r where
   get :: SValue r -> SVariable r -> SValue r
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
-convTypeOO :: (OOTypeSym r) => CodeType -> VS (r TypeData)
+convTypeOO :: (TypeSym r, OOTypeSym r) => CodeType -> VS (r TypeData)
 convTypeOO (Object n) = obj n
 convTypeOO (Reference t) = referenceType (convTypeOO t)
 convTypeOO t = convType t

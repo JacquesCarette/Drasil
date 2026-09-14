@@ -3,7 +3,8 @@
 module Language.Drasil.Document.Core (
   Contents(..), ListType(..), ItemType(..), RawContent(..),
   ListTuple, MaxWidthPercent, HasContents(..), LabelledContent(..),
-  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title
+  UnlabelledContent(..), HasCaption(..), Lbl, Filepath, Author, Title,
+  Paragraph
 ) where
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
@@ -46,6 +47,10 @@ type Height   = Float
 type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. For use in lists.
 type Filepath = String
 type Lbl      = Sentence  -- ^ Label.
+
+-- | A paragraph is a group of 'Sentence's that are folded into one when
+-- rendered.
+type Paragraph = [Sentence]
 
 -- * Contents
 

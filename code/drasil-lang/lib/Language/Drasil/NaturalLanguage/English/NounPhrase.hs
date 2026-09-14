@@ -15,7 +15,9 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase (
   compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1,
   surroundNPStruct,
   -- * Re-exported Types
-  CapitalizationRuleG(..), CapitalizationRule, PluralRule(..), NPStructG(..), NPStruct
+  CapitalizationRuleG(..), CapitalizationRule, PluralRule(..), NPStruct,
+  -- * Re-exported Smart Constructors
+  npS, npP, (.-.), (.+.)
   ) where
 
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
@@ -53,13 +55,13 @@ type PluralString   = String
 -- are 'CapFirst' for sentence case and 'CapWords' for title case.
 -- Also accepts a 'Phrase' where the capitalization case may be specified.
 instance NounPhrase NP where
-  phraseNP (ProperNoun n _)           = S n
-  phraseNP (CommonNoun n _ _)         = S n
+  phraseNP (ProperNoun n _)           = SC n
+  phraseNP (CommonNoun n _ _)         = SC n
   phraseNP (Phrase n _ _ _)           = n
   pluralNP n@(ProperNoun _ p)         = sPlur (phraseNP n) p
   pluralNP n@(CommonNoun _ p _)       = sPlur (phraseNP n) p
   pluralNP (Phrase _ p _ _)           = p
-  sentenceCase   (ProperNoun n _)   _ = S n
+  sentenceCase   (ProperNoun n _)   _ = SC n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r _)   f = cap (f n) r
   titleCase n@ProperNoun {}         _ = phraseNP n
@@ -130,11 +132,11 @@ cnIrr = CommonNoun
 -- | Creates a 'NP' with a given singular and plural form (as 'String's) that capitalizes the first
 -- letter of the first word for sentence case.
 nounPhrase :: String -> PluralString -> NP
-nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords
+nounPhrase s p = Phrase (SC s) (SC p) CapFirst CapWords
 
 -- | Similar to 'nounPhrase', but takes a specified capitalization rule for the sentence case.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
-nounPhrase' s p c = Phrase (S s) (S p) c CapWords
+nounPhrase' s p c = Phrase (SC s) (SC p) c CapWords
 
 -- | Custom noun phrase constructor that takes a singular form ('NPStruct), plural form ('NPStruct),
 -- sentence case capitalization rule, and title case capitalization rule.
@@ -144,7 +146,7 @@ nounPhrase'' = Phrase
 -- | For things that should not be pluralized (or are self-plural). Works like 'nounPhrase', but with
 -- only the first argument.
 nounPhraseSP :: String -> NP
-nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
+nounPhraseSP s = Phrase (SC s) (SC s) CapFirst CapWords
 
 -- | Similar to nounPhrase, except it only accepts one 'NPStruct.
 -- Plural case is just 'AddS'.
@@ -158,13 +160,13 @@ nounPhraseSent s = Phrase s (sPlur s AddS) CapFirst CapWords
 -- "system constraint" and plural "system constraints".
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase
-  (phraseNP t1 :+: phraseNP t2) (phraseNP t1 :+: pluralNP t2) CapFirst CapWords
+  (phraseNP t1 :+!: phraseNP t2) (phraseNP t1 :+!: pluralNP t2) CapFirst CapWords
 
 -- | Similar to 'compoundPhrase', but the sentence case is the same
 -- as the title case ('CapWords').
 compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
-  (phraseNP t1 :+: phraseNP t2) (phraseNP t1 :+: pluralNP t2) CapWords CapWords
+  (phraseNP t1 :+!: phraseNP t2) (phraseNP t1 :+!: pluralNP t2) CapWords CapWords
 
 -- | Similar to 'compoundPhrase'', but accepts two functions that will be used to
 -- construct the plural form. For example,
@@ -172,7 +174,7 @@ compoundPhrase' t1 t2 = Phrase
 -- form "systems constraint".
 compoundPhrase'' :: (NP -> NPStruct) -> (NP -> NPStruct) -> NP -> NP -> NP
 compoundPhrase'' f1 f2 t1 t2 = Phrase
-  (phraseNP t1 :+: phraseNP t2) (f1 t1 :+: f2 t2) CapWords CapWords
+  (phraseNP t1 :+!: phraseNP t2) (f1 t1 :+!: f2 t2) CapWords CapWords
 
 --More primes might not be wanted but fixes two issues
 -- pluralization problem with software requirements specification (Documentation.hs)
@@ -181,7 +183,7 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 -- to the first term of both singular and pluralcases (eg. short or plural).
 compoundPhrase''' :: (NP -> NPStruct) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase
-  (f1 t1 :+: phraseNP t2) (f1 t1 :+: pluralNP t2) CapFirst CapWords
+  (f1 t1 :+!: phraseNP t2) (f1 t1 :+!: pluralNP t2) CapFirst CapWords
 
 --For Data.Drasil.Documentation
 -- | Similar to 'compoundPhrase', but pluralizes the first 'NP' for both singular and plural cases.
@@ -206,44 +208,44 @@ titleizeNP' n = titleCase n pluralNP
 -- DO NOT EXPORT --
 -- | Pluralization helper function.
 sPlur :: NPStruct -> PluralRule -> NPStruct
-sPlur (S s) AddS = S (s ++ "s")
-sPlur (S s) AddE = S (s ++ "e")
-sPlur s@(S _) AddES = sPlur (sPlur s AddE) AddS
-sPlur s@(S _) SelfPlur = s
-sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
-sPlur (a :+: b) pt = a :+: sPlur b pt
-sPlur (a :-: b) pt = a :-: sPlur b pt
-sPlur a _ = S "MISSING PLURAL FOR:" :+: a
+sPlur (SC s) AddS = SC (s ++ "s")
+sPlur (SC s) AddE = SC (s ++ "e")
+sPlur s@(SC _) AddES = sPlur (sPlur s AddE) AddS
+sPlur s@(SC _) SelfPlur = s
+sPlur (SC sts) (IrregPlur f) = SC $ f sts --Custom pluralization
+sPlur (a :+!: b) pt = a :+!: sPlur b pt
+sPlur (a :-!: b) pt = a :-!: sPlur b pt
+sPlur a _ = SC "MISSING PLURAL FOR:" :+!: a
 
 -- | Capitalization helper function given a noun phrase.
 cap :: NPStruct -> CapitalizationRule -> NPStruct
 cap _ (Replace s) = s
 cap s CapNothing = s
-cap (S [])     CapFirst = S [] -- ignore this
-cap (S (s:ss)) CapFirst = S (toUpper s : ss)
-cap (S s)      CapWords = capString s capFirstWord capWords
-cap (P symb :+: x) CapFirst = P symb :+: x -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
-cap (P symb :+: x) CapWords = P symb :+: x -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
-cap (s1 :+: s2) CapWords = cap s1 CapWords :+: capTail s2
-cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
-cap (P symb :-: x) CapFirst = P symb :-: x -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
-cap (P symb :-: x) CapWords = P symb :-: x -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
-cap (s1 :-: s2) CapWords = cap s1 CapWords :-: capTail s2
-cap (s1 :-: s2) CapFirst = cap s1 CapFirst :-: s2
-cap (P p) _ = P p
+cap (SC [])     CapFirst = SC [] -- ignore this
+cap (SC (s:ss)) CapFirst = SC (toUpper s : ss)
+cap (SC s)      CapWords = capString s capFirstWord capWords
+cap (PC symb :+!: x) CapFirst = PC symb :+!: x -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
+cap (PC symb :+!: x) CapWords = PC symb :+!: x -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
+cap (s1 :+!: s2) CapWords = cap s1 CapWords :+!: capTail s2
+cap (s1 :+!: s2) CapFirst = cap s1 CapFirst :+!: s2
+cap (PC symb :-!: x) CapFirst = PC symb :-!: x -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
+cap (PC symb :-!: x) CapWords = PC symb :-!: x -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
+cap (s1 :-!: s2) CapWords = cap s1 CapWords :-!: capTail s2
+cap (s1 :-!: s2) CapFirst = cap s1 CapFirst :-!: s2
+cap (PC p) _ = PC p
 
 -- | Helper for 'cap' and for capitalizing the end of a 'NPStruct (assumes 'CapWords').
 capTail :: NPStruct -> NPStruct
-capTail (S s) = capString s capWords capWords
-capTail (P symb :+: b) = P symb :+: b
-capTail (a :+: b) = capTail a :+: capTail b
-capTail (P symb :-: b) = P symb :-: b
-capTail (a :-: b) = capTail a :-: capTail b
-capTail (P p) = P p
+capTail (SC s) = capString s capWords capWords
+capTail (PC symb :+!: b) = PC symb :+!: b
+capTail (a :+!: b) = capTail a :+!: capTail b
+capTail (PC symb :-!: b) = PC symb :-!: b
+capTail (a :-!: b) = capTail a :-!: capTail b
+capTail (PC p) = PC p
 
 -- | Helper for capitalizing a string.
 capString :: String -> (String -> String) -> (String -> String) -> NPStruct
-capString s f g = S . findHyph g . unwords $ process (words s)
+capString s f g = SC . findHyph g . unwords $ process (words s)
   where
     process (x:xs) = f x : map g xs
     process []     = []
@@ -279,7 +281,7 @@ doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
   "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com
 
 surroundNPStruct :: String -> String -> NPStruct -> NPStruct
-surroundNPStruct l r (S s)       = S $ l ++ s ++ r
-surroundNPStruct l r (s1 :+: s2) = surroundNPStruct l "" s1 :+: surroundNPStruct "" r s2
-surroundNPStruct l r (s1 :-: s2) = surroundNPStruct l "" s1 :-: surroundNPStruct "" r s2
-surroundNPStruct l r (P p)       = S l :-: P p :-: S r
+surroundNPStruct l r (SC s)       = SC $ l ++ s ++ r
+surroundNPStruct l r (s1 :+!: s2) = surroundNPStruct l "" s1 :+!: surroundNPStruct "" r s2
+surroundNPStruct l r (s1 :-!: s2) = surroundNPStruct l "" s1 :-!: surroundNPStruct "" r s2
+surroundNPStruct l r (PC p)       = SC l :-!: PC p :-!: SC r

@@ -25,14 +25,14 @@ import Language.Drasil.Sentence ((+:+), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
 import qualified Language.Drasil.Sentence as S
 import qualified Language.Drasil.NaturalLanguage.English.NounPhrase as NP
-import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct, NPStructG(..))
+import Language.Drasil.NaturalLanguage.English.NounPhrase.Core (NPStruct, NPStructG(SC, PC, (:-!:), (:+!:)))
 
 -- | Translate from NPStruct to Sentence
 toSent :: NPStruct -> S.Sentence
-toSent (S s) = S.S s
-toSent (s1 :-: s2) = toSent s1 S.:+: toSent s2 -- no space between noun phases
-toSent (s1 :+: s2) = toSent s1 S.+:+ toSent s2 -- insert space between noun phrases
-toSent (P p) = S.P p
+toSent (SC s) = S.S s
+toSent (s1 :-!: s2) = toSent s1 S.:+: toSent s2 -- no space between noun phases
+toSent (s1 :+!: s2) = toSent s1 S.+:+ toSent s2 -- insert space between noun phrases
+toSent (PC p) = S.P p
 
 -- | Get short form (if it exists), else get term of an 'Idea'.
 -- Uses the UID of the 'Idea' in a 'Ch' Sentence constructor to get the short

@@ -32,7 +32,7 @@ import Drasil.SRS.DocumentLanguage.Definitions (helpToRefField, TraceViewCat)
 -- | Generalized traceability matrix introduction: appends references to the traceability matrices in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the four tables generally found in this section (in order of being mentioned).
 traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
-traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
+traceMIntro refs trailings = UlC $ ulcc $ Para $ foldlSent [phrase purpose
         `S.the_ofTheC` plural traceyMatrix, S "is to provide easy", plural reference,
         S "on what has to be additionally modified if a certain",
         phrase component, S "is changed. Every time a", phrase component,

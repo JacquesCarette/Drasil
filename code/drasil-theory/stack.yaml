@@ -31,6 +31,7 @@ resolver: lts-24.51
 packages:
 - .
 - ../drasil-database
+- ../drasil-document-writing
 - ../drasil-lang
 - ../drasil-metadata
 - ../drasil-utils

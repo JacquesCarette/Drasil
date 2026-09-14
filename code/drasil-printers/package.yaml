@@ -24,6 +24,7 @@ dependencies:
 - filepath
 - directory
 - drasil-data-formats
+- drasil-document-writing
 - drasil-database
 - drasil-file-handling
 - drasil-lang

@@ -23,23 +23,18 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (transpose)
 
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk)
-import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(..))
-import Language.Drasil.Classes (HasUnitSymbol(..), Quantity, Concept, Definition(..))
-import Language.Drasil.Development.Sentence (short, atStart, titleize, phrase, plural)
-import Language.Drasil.Document.Labels (Referable)
-import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.Sentence (Sentence(S, Percent, (:+:), Sy, EmptyS), eS,
-  ch, sParen, sDash, (+:+), sC, (+:+.), (!.), (+:), capSent)
-import Language.Drasil.Sentence.Fold (foldlList, SepType(Comma), FoldType(List), foldlSent)
-import Language.Drasil.Sentence.Generators (fterms)
-import Language.Drasil.Document.ShortName (HasShortName(..))
+import Language.Drasil (ConceptChunk, DefinesQuantity(defLhs), NamedIdea(..),
+  MayHaveUnit(..), HasUnitSymbol(..), Quantity, Concept, Definition(..),
+  ModelExpr, Sentence(S, Percent, (:+:), Sy, EmptyS), eS, ch, sParen, sDash,
+  (+:+), sC, (+:+.), (!.), (+:), capSent, foldlList, SepType(Comma),
+  FoldType(List), foldlSent, fterms, short, atStart, titleize, phrase, plural)
+import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
+
 import Language.Drasil.Document.Core (ItemType(..), ListType(Bullet))
+import Language.Drasil.Document.Labels (Referable)
+import Language.Drasil.Document.ShortName (HasShortName(..))
 import Language.Drasil.Document.Reference (refS, namedRef)
 import Language.Drasil.Document.Sections (Section)
-import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
 
 -- Ideally this would create a reference to the equation too.
 -- Doesn't use equation concept so utils doesn't depend on data

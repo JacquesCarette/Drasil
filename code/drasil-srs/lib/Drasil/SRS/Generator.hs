@@ -7,17 +7,17 @@ module Drasil.SRS.Generator (
 
 import Prelude hiding (id)
 import Control.Lens ((^.))
-
 import Drasil.FileHandling (FileLayout, directory, file, ps)
 import Language.Drasil (Stage(Equational))
 import Language.Drasil.Document (Document(..), checkToC)
-import Language.Drasil.Printers (genericCSS, genHTML, genTeX,
+import Language.Drasil.Printers (genericCSS, genHTML, renderHTML, genTeX,
   genMDBook, Notation(Engineering), piSys, PrintingInformation,
-  genJupyterSRS, makeDocument, makeProject)
+  genJupyterSRS, makeDocument, makeProject, defaultHTMLGO)
 import Drasil.Makefile ((+:+), makeS, mkCheckedCommand, mkCommand,
   mkFreeVar, mkFile, mkRule, mkMakefile, printMakefile)
 import Drasil.Metadata (watermark)
 import Drasil.System (systemdb)
+import Drasil.Data.Formats.HTML (defaultHTMLRO)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.SRS.DocDecl (SRSDecl)
@@ -57,7 +57,10 @@ prntDoc d pinfo _ MDBook =
 prntDoc d pinfo fn Jupyter =
   [file [ps|{fn}.ipynb|] $ genJupyterSRS $ makeDocument pinfo d]
 prntDoc d pinfo fn HTML =
-  [ file [ps|{fn}.html|] $ genHTML fn $ makeDocument pinfo d,
+  [ file [ps|{fn}.html|]
+      $ renderHTML defaultHTMLRO
+      $ genHTML defaultHTMLGO fn
+      $ makeDocument pinfo d,
     file [ps|{fn}.css|] genericCSS
   ]
 prntDoc d@(Document _ _ st _) pinfo fn TeX =

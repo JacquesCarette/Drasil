@@ -1,12 +1,18 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Drasil.Data.Formats.HTML.Core
   ( -- * HTML
-    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), customTag,
+    -- ** AST
+    HTML(..), HTMLBody(..), HTMLHead(..), TagType(..), CustomTag(..), Attr(..),
     Format(..), HLevel(..), Row(..), Cell(..), LItem(..), DItem(..), ListType(..),
-    Attr(..), bold, emphasis, subscript, superscript, span, figureImage
+    -- * Smart Constructors
+    attr, id_, class_, rawText, rawText', customTag, bold, emphasis, subscript, superscript,
+    span, figureImage, inlineScript, externalScript, stylesheet
   )
 where
 
 import Data.Char (isAsciiLower, isAsciiUpper, isDigit)
+import Data.String (IsString(..))
 import Data.Text (Text)
 import qualified Data.Text as T
 import Prelude hiding (span)
@@ -35,6 +41,7 @@ data HTMLBody
   | TextFormat Format [Attr] [HTMLBody]
   | Heading HLevel [Attr] [HTMLBody]
   | List ListType [Attr] [LItem]
+  | Section [Attr] [HTMLBody]
   | Table [Attr] [Row]
   | DescriptionList [Attr] [DItem]
   | Anchor URL [Attr] [HTMLBody]
@@ -45,6 +52,9 @@ data HTMLBody
   | Custom CustomTag [Attr] [HTMLBody]
   | Comment Text
   deriving (Show, Eq)
+
+instance IsString HTMLBody where
+  fromString = RawText . T.pack
 
 -- TODO: Support more tags
 -- https://www.w3schools.com/tags/default.asp
@@ -111,7 +121,23 @@ isSanitary t = not (T.null t) && isAsciiLetter (T.head t) && T.all isAllowedChar
     isAsciiLetter c = isAsciiLower c || isAsciiUpper c
     isAllowedChar c = isAsciiLetter c || isDigit c || c == '-'
 
--- | Smart Constructors
+-- * Smart Constructors
+
+attr :: Text -> Text -> Attr
+attr = Attr
+
+id_ :: Text -> Attr
+id_ = attr "id"
+
+class_ :: Text -> Attr
+class_ = attr "class"
+
+rawText :: Text -> HTMLBody
+rawText = RawText
+
+rawText' :: String -> HTMLBody
+rawText' = fromString
+
 bold :: [Attr] -> Text -> HTMLBody
 bold attrs txt = TextFormat Bold attrs [RawText txt]
 
@@ -129,6 +155,18 @@ span attrs txt = TextFormat Span attrs [RawText txt]
 
 -- | Creates a figure containing an image and a caption.
 -- The provided attributes are applied to the Figure
-figureImage :: [Attr] -> File -> Text -> Text -> HTMLBody
-figureImage attrs src altText captionTxt =
-  Figure attrs [Img src altText [], FigCaption [] [RawText captionTxt]]
+figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
+figureImage attrsFig attrsImg src altText captionTxt =
+  Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]
+
+-- | Creates an inline script. Does not allow any attributes.
+inlineScript :: Text -> HTMLHead
+inlineScript = Script []
+
+-- | Creates an external script. Requires a source file/URL and allows optional attributes.
+externalScript :: File -> [Attr] -> HTMLHead
+externalScript src attrs = Script (attr "src" src : attr "type" "text/javascript" : attrs) mempty
+
+-- | Create the link to the CSS file
+stylesheet :: Text -> HTMLHead
+stylesheet css = Link "stylesheet" (css <> ".css") [attr "type" "text/css"]

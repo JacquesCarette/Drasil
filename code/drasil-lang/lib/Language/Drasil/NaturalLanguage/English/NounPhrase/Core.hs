@@ -5,7 +5,9 @@ module Language.Drasil.NaturalLanguage.English.NounPhrase.Core (
   NPG(..), NP,
   PluralFormG, PluralForm,
   PluralRule(..),
-  NPStructG(S,(:-:),(:+:),P), NPStruct
+  NPStructG(SC, PC, (:-!:), (:+!:)), NPStruct,
+  -- | smart constructors
+  npS, npP, (.-.), (.+.)
 ) where
 
 import Drasil.Database (HasChunkRefs(..))
@@ -14,18 +16,36 @@ import Language.Drasil.Symbol (Symbol)
 
 -- | Essentially a subset of 'Sentence' that contains only the parts
 -- that make sense for a NounPhrase
+-- use smart constructor here instead 's', 'p', '.-.', '.+.'
 data NPStructG a =
-    S String
-  | NPStructG a :-: NPStructG a -- no space
-  | NPStructG a :+: NPStructG a -- a space
-  | P a
+    SC String
+  | NPStructG a :-!: NPStructG a -- no space
+  | NPStructG a :+!: NPStructG a -- a space
+  | PC a
 
 -- | Synonym for 'NPStructG' filled with a 'Symbol' the version
 -- used outside the file.
 type NPStruct = NPStructG Symbol
 
+-- | smart constructor for a literal string
+npS :: String -> NPStructG a
+npS = SC
+
+-- | smart constructor for a literal string
+npP :: a -> NPStructG a
+npP = PC
+
+-- | smart constructor: join two 'NPStructG's with a space in between
+(.+.) :: NPStructG a -> NPStructG a -> NPStructG a
+(.+.) = (:+!:)
+
+-- | smart constructor: join two 'NPStructG's with no space in between
+(.-.) :: NPStructG a -> NPStructG a -> NPStructG a
+(.-.) = (:-!:)
+
 -- | Synonym for 'NPStructG' typically used for plural forms.
 type PluralFormG a = NPStructG a
+
 -- | 'PluralFormG' filled with a 'Symbol' the version used outside the file.
 type PluralForm = PluralFormG Symbol
 

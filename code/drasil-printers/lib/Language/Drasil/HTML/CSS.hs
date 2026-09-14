@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 -- | Defines functions to create accompanying .css files for HTML generators.
-module Language.Drasil.HTML2.CSS (
+module Language.Drasil.HTML.CSS (
   genericCSS
 ) where
 

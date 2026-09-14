@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Language.Drasil.HTML2.Spec (
+module Language.Drasil.HTML.Spec (
   printSpec, specToHTML
 ) where
 
@@ -12,7 +12,7 @@ import Language.Drasil (Special (..))
 import qualified Language.Drasil.Printing.AST as AST
 import Drasil.Data.Formats.HTML (attr, bold_, customTag, emphasis_, rawText',
   subscript_, superscript_, CustomTag, HTMLBody(..), span_)
-import Language.Drasil.HTML2.MathJax (inlineEqn)
+import Language.Drasil.HTML.MathJax (inlineEqn)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, printMath)
 
 -- | Transforms the Sentences ('Spec's) into Text

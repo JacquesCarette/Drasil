@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Language.Drasil.HTML2.MathJax (
+module Language.Drasil.HTML.MathJax (
   mathJax3Url, mathJaxScript,
   inlineEqn, blockEqn
 ) where

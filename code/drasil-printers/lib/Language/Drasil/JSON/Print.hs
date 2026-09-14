@@ -15,22 +15,21 @@ import Drasil.Data.Formats.JSON (JSON(..), JSONRenderOptions, JSONStyle(..),
 import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
-import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
-  Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
+  Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External),
+  Fence(Curly, Paren, Abs, Norm))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
-import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
-import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
-  htmlBibFormatter)
+import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine,
- tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
- markdownCell, codeCell)
+ tr, td, th, bold, em, image, li, pa, ba, table, refwrap, refID, reflink,
+ reflinkInfo, reflinkURI, mkDiv, markdownCell, codeCell)
 
 pretty :: JSONRenderOptions
 pretty = jsonRenderOpts (Pretty 2)
@@ -201,6 +200,18 @@ pOps SRemove    = " - "
 pOps SContains  = " in "
 pOps SUnion     = " and "
 
+-- | Referring to 'fence' (for parenthesis and brackets). Either opened or closed.
+data OpenClose = Open | Close
+
+-- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
+fence :: OpenClose -> Fence -> String
+fence Open  Paren = "("
+fence Close Paren = ")"
+fence Open  Curly = "{"
+fence Close Curly = "}"
+fence _     Abs   = "|"
+fence _     Norm  = "||"
+
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Doc
 makeTable [] _      = error "No table to print"
@@ -246,8 +257,6 @@ makeList (Desc items) bl       = vcat $
   map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
 makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
 makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
---makeList (Definitions items) _ = ul ["hide-list-style-no-indent"] $ vcat $
-  --map (\(b,e,l) -> li $ mlref l $ quote(pSpec b <> text " is the" <+> sItem e)) items
 makeList (Definitions items) _ = vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
 
 -- | Helper for setting up references
@@ -258,8 +267,6 @@ mlref = maybe id $ refwrap . pSpec
 pItem :: ItemType ->  Bool -> Doc
 pItem (Flat s)     b = (if b then text " - " else text "- ") <> pSpec s
 pItem (Nested s l) _ = vcat [text "- " <> pSpec s, makeList l True]
-  --where listIndent = strBreak "\"" (show $ makeList l)
---indent <> text "\"- " <> pSpec s <> text "\\n\","
 
 sItem :: ItemType -> Doc
 sItem (Flat s)     = pSpec s
@@ -273,7 +280,18 @@ makeFigure r c f wp = refID r $$ image f c wp
 makeRefList :: Doc -> Doc -> Doc -> Doc
 makeRefList a l i = refID l $$ i <> text ": " <> a
 
+-- | JSON specific bib rendering functions
+jsonBibFormatter :: BibFormatter
+jsonBibFormatter = BibFormatter {
+  emph = em,
+  spec = pSpecBib
+}
+
+pSpecBib :: Spec -> Doc
+pSpecBib (Ref External r a) = text ("<a href=\"" ++ r ++ "\">") <> pSpecBib a <> text "</a>"
+pSpecBib s                  = pSpec s
+
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite htmlBibFormatter)
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite jsonBibFormatter)

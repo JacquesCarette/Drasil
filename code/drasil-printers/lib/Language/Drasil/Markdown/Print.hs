@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
+module Language.Drasil.Markdown.Print (genMDBook) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
@@ -13,13 +13,14 @@ import qualified Prettyprinter as PNew (Doc)
 import System.FilePath (takeFileName)
 import Text.PrettyPrint hiding (Str)
 
+import Language.Drasil (Special(Circle), checkValidStr)
 import Drasil.Data.Formats.CSV (DoubleQuotationPolicy(..), csvRenderOpts,
   mkCSV, renderCSV)
 import Drasil.FileHandling (FileLayout, file, directory, ps)
 
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip), Label,
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip, Sp, S), Label,
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold),
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
@@ -27,8 +28,7 @@ import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
   hat, hyph, dot, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (Project(Project),
   LayoutObj(..), Filename, RefMap, File(File))
-import Language.Drasil.HTML.Helpers(BibFormatter(..))
-import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
+import Language.Drasil.Markdown.Citation (BibFormatter(..), renderCite)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv,
   em, h, h', centeredDivId)
@@ -163,7 +163,13 @@ pSpec rm (Ref (Cite2 EmptyS) r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 n)      r a) = reflinkInfo rm r (pSpec rm a) (pSpec rm n)
 pSpec rm (Ref External       r a) = reflinkURI  (text r) (pSpec rm a)
 pSpec rm (Quote q) = doubleQuotes $ pSpec rm q
-pSpec _ s          = HTML.pSpec s
+pSpec _ (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
+  where
+    invalid = ['<', '>']
+    escapeChars '&' = "\\&"
+    escapeChars c = [c]
+pSpec _ (Sp Circle) = text "&deg;"
+pSpec _ EmptyS      = text ""
 
 -----------------------------------------------------------------
 -------------------- EXPRESSION PRINTING ------------------------
@@ -374,4 +380,4 @@ makeRefList a l i = divTag l $^$ (i <> text ": " <> a)
 makeBib :: RefMap -> BibRef -> Doc
 makeBib rm = vsep .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (HTML.renderCite (mdBibFormatter rm))
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite (mdBibFormatter rm))

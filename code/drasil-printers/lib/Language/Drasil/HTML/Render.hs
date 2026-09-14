@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
--- | Defines all functions needed to print HTML files. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.HTML2.Render.html).
-module Language.Drasil.HTML2.Render(
+module Language.Drasil.HTML.Render(
   genHTML, HTMLGenOptions(..), defaultHTMLGO,
   renderHTML
 ) where
@@ -11,9 +10,9 @@ import Data.Text.Extras (num2Text)
 
 import Drasil.Data.Formats.HTML
 
-import Language.Drasil.HTML2.Citation (printBib)
-import Language.Drasil.HTML2.MathJax (mathJax3Url, mathJaxScript, blockEqn)
-import Language.Drasil.HTML2.Spec (printSpec, specToHTML)
+import Language.Drasil.HTML.Citation (printBib)
+import Language.Drasil.HTML.MathJax (mathJax3Url, mathJaxScript, blockEqn)
+import Language.Drasil.HTML.Spec (printSpec, specToHTML)
 import qualified Language.Drasil.Printing.AST as AST
 import qualified Language.Drasil.Printing.LayoutObj as AST
 import qualified Language.Drasil.TeX.Print as TeX (spec, printMath)
@@ -83,7 +82,7 @@ loToHTML _ AST.CodeBlock {} = []
 
 -- | Internal: Generates an HTML table, called by 'loToHTML'.
 makeTableHTML :: [String] -> [[AST.Spec]] -> AST.Spec -> Bool -> AST.Spec -> [HTMLBody]
-makeTableHTML _ [] _ _ _ = error "No table to print (see Language.Drasil.HTML2.Render)"
+makeTableHTML _ [] _ _ _ = error "No table to print (see Language.Drasil.HTML.Render)"
 makeTableHTML ts (l : lls) r b t = [Div wrapperAttrs $ tableNode : [captionNode | b]]
   where
     attrs = [class_ (map T.pack ts)]

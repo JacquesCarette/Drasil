@@ -10,7 +10,8 @@ import Data.Text.Extras (num2Text)
 
 import Language.Drasil (Special (..))
 import qualified Language.Drasil.Printing.AST as AST
-import Drasil.Data.Formats.HTML
+import Drasil.Data.Formats.HTML (attr, bold_, customTag, emphasis_, rawText',
+  subscript_, superscript_, CustomTag, HTMLBody(..), span_)
 import Language.Drasil.HTML2.MathJax (inlineEqn)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr)
 import Language.Drasil.Markdown.Print (printMath)
@@ -34,7 +35,7 @@ specToHTML :: AST.Spec -> [HTMLBody]
 specToHTML (AST.E e) = [emphasis_ (exprToHTML e)]
 specToHTML (a AST.:+: b) = specToHTML a ++ specToHTML b
 specToHTML (AST.S s) = [RawText (T.pack s)]
-specToHTML (AST.Tooltip t s) = [TextFormat Span [attr "title" (printSpec t)] (specToHTML s)]
+specToHTML (AST.Tooltip t s) = [span_ [attr "title" (printSpec t)] (specToHTML s)]
 specToHTML (AST.Sp s) = [RawText (T.pack $ specialToString s)]
 specToHTML AST.HARDNL = [Custom brTag [] []]
 specToHTML (AST.Ref refType r a) = case refType of

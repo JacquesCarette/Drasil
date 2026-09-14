@@ -10,8 +10,9 @@ module Drasil.Website.Core
 where
 
 import Control.Lens (makeLenses, (^.))
-import Drasil.Data.Formats.HTML (defaultHTMLRO)
 import Prettyprinter (Doc)
+
+import Drasil.Data.Formats.HTML (defaultHTMLRO)
 import Drasil.FileHandling (file, ps)
 import Drasil.System (HasProjectName (..), HasSystemMeta (..), SystemMeta, ToFiles (..))
 import Language.Drasil (Stage (Equational))

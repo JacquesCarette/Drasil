@@ -15,6 +15,7 @@ import qualified Language.Drasil.NaturalLanguage.English.NounPhrase.Combinators 
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force)
 import Language.Drasil.Document (definedIn'')
+import Data.Drasil.Equations.Defining.Physics qualified as E
 
 -- local
 import Drasil.DblPend.DataDefs
@@ -223,7 +224,7 @@ xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant xForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
-                      EmptyS E.forceExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "xForceWithAngle1"
                       EmptyS E.xForceWithAngle_1]
 
@@ -241,7 +242,7 @@ yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant yForce_1 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
-                      EmptyS E.forceExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "yForceWithAngle1"
                       EmptyS E.yForceWithAngle_1]
 
@@ -259,7 +260,7 @@ xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant xForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
-                      EmptyS E.forceExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "xForceWithAngle2"
                       EmptyS E.xForceWithAngle_2]
 
@@ -277,7 +278,7 @@ yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant yForce_2 EmptyS defns
     where defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"
-                      EmptyS E.forceExpr,
+                      EmptyS E.newtonSLEqn,
                     mkDefiningExpr "yForceWithAngle2"
                       EmptyS E.yForceWithAngle_2]
 

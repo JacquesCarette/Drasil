@@ -15,7 +15,7 @@ import qualified Data.Set as Set
 
 import Language.Drasil.Document.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
-  LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
+  LabelledContent(LblC), HasCaption(..), RawContent(Figure, Para),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent)
 import Language.Drasil.Document.Labels (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
@@ -120,7 +120,7 @@ ulcc = UnlblC
 ---------------------------------------------------------------------------
 -- | Smart constructor that wraps 'UnlabelledContent' into 'Contents'.
 mkParagraph :: Sentence -> Contents
-mkParagraph x = UlC $ ulcc $ Paragraph x
+mkParagraph x = UlC $ ulcc $ Para x
 
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
 -- Takes a Reference to extract UID, LblType, and ShortName for the labelled content.

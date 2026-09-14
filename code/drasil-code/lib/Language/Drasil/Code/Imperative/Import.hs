@@ -1173,6 +1173,8 @@ publicFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , ParameterSym r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1198,6 +1200,8 @@ privateFuncProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , ParameterSym r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1225,6 +1229,7 @@ genMethodProc
   ::
     ( OO.Literal r
     , VariableValue r
+    , ParameterSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1267,6 +1272,8 @@ genFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , ParameterSym r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , ValueStatement r stmt
     , DeclStatement r stmt bod
@@ -1313,6 +1320,8 @@ genModFuncsProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , ParameterSym r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , ValueStatement r stmt
     , DeclStatement r stmt bod
@@ -1726,6 +1735,8 @@ genDataFuncProc
     , NumericExpression r
     , ValueExpression r
     , VariableValue r
+    , ParameterSym r
+    , VisibilitySym r vis
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
     , StringStatement r stmt
@@ -1756,6 +1767,7 @@ publicInOutFuncProc
     , BodySym r bod block
     , OO.Literal r
     , VariableValue r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt
@@ -1778,6 +1790,7 @@ privateInOutFuncProc
     , BodySym r bod block
     , OO.Literal r
     , VariableValue r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , FileHandling r stmt

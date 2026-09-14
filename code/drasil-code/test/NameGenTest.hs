@@ -29,6 +29,8 @@ helper
     , Comparison r
     , List r
     , InternalList r block
+    , ParameterSym r
+    , VisibilitySym r vis
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
     , MethodSym r vis mthd bod

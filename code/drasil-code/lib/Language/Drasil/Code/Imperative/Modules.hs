@@ -33,7 +33,7 @@ import Drasil.GOOL (SVariable, SValue, CS, FS, MS, CSStateVar, Class, OOProg,
   ValueStatement, AssignStatement(..), DeclStatement(..), OODeclStatement(..),
   objDecNewNoParams, extObjDecNewNoParams, PrintConsole(..), FileHandling(..),
   PrintFile(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  MethodSym(..), StateVarSym(..), pubDVar, convType, convTypeOO,
+  ParameterSym, MethodSym(..), StateVarSym(..), pubDVar, convType, convTypeOO,
   VisibilityTag(..), TypeElim, VariableElim, Set, Reference, Argument,
   ValueExpression, MathConstant, Array, StringStatement, FuncAppStatement,
   SelfSym, InternalValueExp, OOValueExpression)
@@ -1173,6 +1173,8 @@ genCalcFuncProc
     , ListStatement r stmt
     , Reference r
     , Set r
+    , ParameterSym r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , ValueStatement r stmt
     , DeclStatement r stmt bod
@@ -1308,6 +1310,7 @@ genInputFormatProc
     , Comparison r
     , NumericExpression r
     , ValueExpression r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
@@ -1343,6 +1346,7 @@ genInputFormatProc s = do
           , Comparison r
           , NumericExpression r
           , ValueExpression r
+          , VisibilitySym r vis
           , MultiStatement r stmt
           , DeclStatement r stmt bod
           , ControlStatement r stmt bod
@@ -1387,6 +1391,7 @@ genInputDerivedProc
     , List r
     , Reference r
     , Set r
+    , VisibilitySym r vis
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , AssignStatement r stmt
@@ -1423,6 +1428,7 @@ genInputDerivedProc s = do
           , List r
           , Reference r
           , Set r
+          , VisibilitySym r vis
           , MultiStatement r stmt
           , DeclStatement r stmt bod
           , AssignStatement r stmt
@@ -1462,6 +1468,8 @@ genInputConstraintsProc
     , Reference r
     , Set r
     , List r
+    , ParameterSym r
+    , VisibilitySym r vis
     , EmptyStatement r stmt
     , MultiStatement r stmt
     , DeclStatement r stmt bod
@@ -1496,6 +1504,8 @@ genInputConstraintsProc s = do
           , Reference r
           , Set r
           , List r
+          , ParameterSym r
+          , VisibilitySym r vis
           , EmptyStatement r stmt
           , MultiStatement r stmt
           , DeclStatement r stmt bod
@@ -1806,6 +1816,8 @@ genOutputFormatProc
     , List r
     , Reference r
     , Set r
+    , VisibilitySym r vis
+    , ParameterSym r
     , MultiStatement r stmt
     , DeclStatement r stmt bod
     , ControlStatement r stmt bod
@@ -1835,6 +1847,8 @@ genOutputFormatProc = do
           , List r
           , Reference r
           , Set r
+          , VisibilitySym r vis
+          , ParameterSym r
           , MultiStatement r stmt
           , DeclStatement r stmt bod
           , ControlStatement r stmt bod

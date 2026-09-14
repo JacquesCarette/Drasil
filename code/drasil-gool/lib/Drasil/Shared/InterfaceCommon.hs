@@ -577,7 +577,7 @@ type DocInOutFunc r mthd bod = String -> [(String, SVariable r)] ->
 
 -- | A class for representing functions/methods.
 -- Usually 'MethodData' is used for the representation.
-class (ParameterSym r, VisibilitySym r vis) => MethodSym r vis mthd bod | r -> mthd bod
+class MethodSym r vis mthd bod | r -> vis mthd bod
   where
   docMain :: MS (r bod) -> MS (r mthd)
 

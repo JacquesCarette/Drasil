@@ -32,6 +32,8 @@ doubleAndAdd
     , Literal r
     , VariableValue r
     , NumericExpression r
+    , ParameterSym r
+    , VisibilitySym r vis
     , DeclStatement r stmt bod
     , AssignStatement r stmt
     , ControlStatement r stmt bod

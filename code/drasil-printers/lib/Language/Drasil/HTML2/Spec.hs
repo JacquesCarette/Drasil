@@ -31,7 +31,7 @@ printSpec (AST.Tooltip _ s) = printSpec s
 
 -- | Transforms the Sentences ('Spec's) into HTML (called by 'loToHTML').
 specToHTML :: AST.Spec -> [HTMLBody]
--- Non-mathjax
+-- Non-MathJax
 specToHTML (AST.E e) = [emphasis_ (exprToHTML e)]
 specToHTML (a AST.:+: b) = specToHTML a ++ specToHTML b
 specToHTML (AST.S s) = [RawText (T.pack s)]
@@ -66,7 +66,7 @@ exprToHTML (AST.Fenced l r e) =
 exprToHTML (AST.Font AST.Bold e) = [bold_ (exprToHTML e)]
 exprToHTML (AST.Font AST.Emph e) = [emphasis_ (exprToHTML e)]
 exprToHTML (AST.Spc AST.Thin) = [" "]
--- Uses TeX for Mathjax for all other exprs
+-- Uses TeX for MathJax for all other exprs
 exprToHTML e =
   [RawText $ inlineEqn $ T.pack $ show $ printMath $ TeX.pExpr e]
 
@@ -92,7 +92,7 @@ fence _ AST.Norm = "||"
 
 -- | Internal: Converts expression operators into HTML characters (Text format).
 pOps :: AST.Ops -> Text
-pOps AST.IsIn = " ⋲ "
+pOps AST.IsIn = " ∈ "
 pOps AST.Integer = "ℤ"
 pOps AST.Rational = "ℚ"
 pOps AST.Real = "ℝ"

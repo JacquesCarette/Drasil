@@ -178,8 +178,8 @@ superscript_ = TextFormat Superscript []
 span_ :: [Attr] -> [HTMLBody] -> HTMLBody
 span_ = TextFormat Span
 
--- | Creates a figure containing an image and a caption. The provided attributes
--- are applied to the Figure
+-- | Creates a figure containing an image and a caption. The first list of
+-- attributes is applied to the figure; the second is applied to the image.
 figureImage :: [Attr] -> [Attr] -> File -> Text -> Text -> HTMLBody
 figureImage attrsFig attrsImg src altText captionTxt =
   Figure attrsFig [Img src altText attrsImg, FigCaption [] [RawText captionTxt]]
@@ -193,6 +193,6 @@ inlineScript = Script []
 externalScript :: File -> [Attr] -> HTMLHead
 externalScript src attrs = Script (attr "src" src : attr "type" "text/javascript" : attrs) mempty
 
--- | Create the link to the CSS file
+-- | Create the link to the CSS file.
 stylesheet :: Text -> HTMLHead
 stylesheet css = Link "stylesheet" (css <> ".css") [attr "type" "text/css"]

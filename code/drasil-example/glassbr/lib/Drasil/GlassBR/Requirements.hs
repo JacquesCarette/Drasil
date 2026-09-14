@@ -121,4 +121,4 @@ maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
-portable = mkPortableNFR "portable" "Portablity"
+portable = mkPortableNFR "portable" "Portability"

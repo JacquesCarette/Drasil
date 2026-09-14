@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
   quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
-import Drasil.Metadata.Concepts.Computation (algorithm)
+import Drasil.Metadata.Concepts.Computation (algorithm, defaultOSs)
 import Drasil.Metadata.Domains (compScience)
 
 absTolerance, relTolerance:: ConceptChunk
@@ -24,7 +24,8 @@ relTolerance = cncpt''' (mkUid "relTolerance") (cn' "Relative tolerance")
 -- | Collects all computing-related named chunks (not concept-level yet).
 compcon :: [IdeaDict]
 compcon = [application, computer, structure, dataStruct, dataType,
-  inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
+  inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy,
+  computerApp] ++ defaultOSs
 
 application, computer, structure :: IdeaDict
 os :: CI

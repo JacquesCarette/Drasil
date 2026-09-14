@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print (genMDBook, pSpec, printMath) where
+module Language.Drasil.Markdown.Print (genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
@@ -35,8 +35,8 @@ import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
 import Language.Drasil.TeX.Helpers (commandD, command2D, mkEnv)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText,
-  hpunctuate)
+import Language.Drasil.TeX.Print (printMath)
+import Language.Drasil.TeX.Monad (D, toText, hpunctuate)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -203,10 +203,6 @@ pExpr e              = printMath $ TeX.pExpr e
 -- | Print an expression to a LaTeX D
 pExpr' :: Expr -> D
 pExpr' = pure . pExpr
-
--- | Helper for rendering a D from LaTeX print
-printMath :: D -> Doc
-printMath = (`runPrint` Math) . toMath
 
 -- | LaTeX newline command
 lnl :: Doc

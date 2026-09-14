@@ -13,13 +13,12 @@ import qualified Language.Drasil.Printing.AST as AST
 import Drasil.Data.Formats.HTML (attr, bold_, customTag, emphasis_, rawText',
   subscript_, superscript_, CustomTag, HTMLBody(..), span_)
 import Language.Drasil.HTML2.MathJax (inlineEqn)
-import qualified Language.Drasil.TeX.Print as TeX (pExpr)
-import Language.Drasil.Markdown.Print (printMath)
+import qualified Language.Drasil.TeX.Print as TeX (pExpr, printMath)
 
 -- | Transforms the Sentences ('Spec's) into Text
 printSpec :: AST.Spec -> Text
 printSpec (AST.S s) = T.pack s
-printSpec (AST.E e) = T.pack $ show $ printMath $ TeX.pExpr e -- TODO: Remove `show` once LaTeX render is using Prettyprinter
+printSpec (AST.E e) = T.pack $ show $ TeX.printMath $ TeX.pExpr e -- TODO: Remove `show` once LaTeX render is using Prettyprinter
 printSpec (a AST.:+: b) = printSpec a <> printSpec b
 printSpec AST.HARDNL = " "
 printSpec (AST.Sp s) = T.pack $ specialToString s
@@ -68,7 +67,7 @@ exprToHTML (AST.Font AST.Emph e) = [emphasis_ (exprToHTML e)]
 exprToHTML (AST.Spc AST.Thin) = [" "]
 -- Uses TeX for MathJax for all other exprs
 exprToHTML e =
-  [RawText $ inlineEqn $ T.pack $ show $ printMath $ TeX.pExpr e]
+  [RawText $ inlineEqn $ T.pack $ show $ TeX.printMath $ TeX.pExpr e]
 
 -- | Internal: Break tag for hard newlines.
 brTag :: CustomTag

@@ -16,8 +16,7 @@ import Language.Drasil.HTML2.MathJax (mathJax3Url, mathJaxScript, blockEqn)
 import Language.Drasil.HTML2.Spec (printSpec, specToHTML)
 import qualified Language.Drasil.Printing.AST as AST
 import qualified Language.Drasil.Printing.LayoutObj as AST
-import qualified Language.Drasil.TeX.Print as TeX (spec)
-import Language.Drasil.Markdown.Print (printMath)
+import qualified Language.Drasil.TeX.Print as TeX (spec, printMath)
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
 newtype HTMLGenOptions = HTMLGO {mathJaxSrc :: Text}
@@ -59,7 +58,7 @@ author a = Div [class_ ["author"]] [Heading H2 [] a]
 -- | Internal: Transforms layout objects ('LayoutObj's) into HTML.
 loToHTML :: HTMLGenOptions -> AST.LayoutObj -> [HTMLBody]
 loToHTML _ (AST.EqnBlock contents) =
-  [RawText $ blockEqn $ T.pack $ show $ printMath $ TeX.spec contents]
+  [RawText $ blockEqn $ T.pack $ show $ TeX.printMath $ TeX.spec contents]
 loToHTML rOpts (AST.HDiv ts layoutObs l) =
   let classAttr = [class_ (map T.pack ts) | not (null ts)]
       attrs = specToIdAttr l ++ classAttr

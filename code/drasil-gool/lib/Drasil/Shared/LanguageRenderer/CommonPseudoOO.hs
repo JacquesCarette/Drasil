@@ -278,6 +278,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction
   :: ( AttachmentSym r attch
+     , MethodTypeSym r
      , OORenderMethod r vis mthd attch bod
      , IC.ParameterSym r
      , UnRepr r TypeData

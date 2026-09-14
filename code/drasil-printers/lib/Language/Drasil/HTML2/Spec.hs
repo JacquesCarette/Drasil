@@ -10,8 +10,8 @@ import Data.Text.Extras (num2Text)
 
 import Language.Drasil (Special (..))
 import qualified Language.Drasil.Printing.AST as AST
-import Drasil.Data.Formats.HTML (attr, bold_, customTag, emphasis_, rawText',
-  subscript_, superscript_, CustomTag, HTMLBody(..), span_)
+import Drasil.Data.Formats.HTML (attr, bold_, emphasis_, rawText',
+  subscript_, superscript_, HTMLBody(..), span_)
 import Language.Drasil.HTML2.MathJax (inlineEqn)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, printMath)
 
@@ -20,7 +20,6 @@ printSpec :: AST.Spec -> Text
 printSpec (AST.S s) = T.pack s
 printSpec (AST.E e) = T.pack $ show $ TeX.printMath $ TeX.pExpr e -- TODO: Remove `show` once LaTeX render is using Prettyprinter
 printSpec (a AST.:+: b) = printSpec a <> printSpec b
-printSpec AST.HARDNL = " "
 printSpec (AST.Sp s) = T.pack $ specialToString s
 printSpec (AST.Ref (AST.Cite2 n) _ a) = printSpec a <> " " <> printSpec n
 printSpec (AST.Ref _ _ a) = printSpec a
@@ -36,7 +35,6 @@ specToHTML (a AST.:+: b) = specToHTML a ++ specToHTML b
 specToHTML (AST.S s) = [RawText (T.pack s)]
 specToHTML (AST.Tooltip t s) = [span_ [attr "title" (printSpec t)] (specToHTML s)]
 specToHTML (AST.Sp s) = [RawText (T.pack $ specialToString s)]
-specToHTML AST.HARDNL = [Custom brTag [] []]
 specToHTML (AST.Ref refType r a) = case refType of
   AST.Internal         -> [internalRef]
   AST.Cite2 AST.EmptyS -> [internalRef]
@@ -68,10 +66,6 @@ exprToHTML (AST.Spc AST.Thin) = [" "]
 -- Uses TeX for MathJax for all other exprs
 exprToHTML e =
   [RawText $ inlineEqn $ T.pack $ show $ TeX.printMath $ TeX.pExpr e]
-
--- | Internal: Break tag for hard newlines.
-brTag :: CustomTag
-brTag = customTag "br"
 
 -- | Internal: Converts a 'Special' symbol to its String representation.
 specialToString :: Special -> String

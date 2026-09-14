@@ -22,7 +22,7 @@ import Language.Drasil.Printing.AST (Spec(S))
 import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
 import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)
 
--- | Makes a bilbliography for the document.
+-- | Makes a bibliography for the document.
 printBib :: BibRef -> HTMLBody
 printBib bib =
   DescriptionList [class_ ["reference-list"]] (concatMap renderCitation bib)
@@ -209,5 +209,5 @@ rendPersL =
 
 -- | Internal: Adds an 's' if there is more than one person in a list.
 toPlural :: People -> Text -> Text
-toPlural (_:_) str = str <> "s"
-toPlural _     str = str
+toPlural (_:_:_) str = str <> "s"
+toPlural _       str = str

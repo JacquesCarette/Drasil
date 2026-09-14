@@ -77,7 +77,7 @@ renderHead _ (Link relation file attrs) =
   angles ("link" <> renderAttrs (Attr "rel" relation : Attr "href" file : attrs))
 renderHead _ (Title txt) = wrapLine "title" [] [pretty (escapeHTMLText txt)]
 renderHead _ (Meta attrs) = angles ("meta" <> renderAttrs attrs)
-renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt]
+renderHead opt (Script attrs txt) = wrapBlock opt "script" attrs [pretty txt | not (T.null txt)]
 
 -- | Internal: Render 'body' elements
 renderBody :: HTMLRenderOptions -> HTMLBody -> Doc ann

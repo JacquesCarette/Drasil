@@ -5,6 +5,7 @@ module Language.Drasil.HTML2.Render(
   renderHTML
 ) where
 
+import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Extras (num2Text)
 
@@ -19,7 +20,7 @@ import qualified Language.Drasil.TeX.Print as TeX (spec)
 import Language.Drasil.Markdown.Print (printMath)
 
 -- | Options for converting layout objects ('LayoutObj's) into HTML AST
-newtype HTMLGenOptions = HTMLGO {mathJaxSrc :: String}
+newtype HTMLGenOptions = HTMLGO {mathJaxSrc :: Text}
 
 -- | Default 'HTMLGenOptions' using the standard MathJax CDN URL.
 defaultHTMLGO :: HTMLGenOptions
@@ -36,7 +37,7 @@ genHTML rOpts fn (AST.Document t a c) = HTML heads bodies
         Meta [attr "charset" "utf-8"],
         inlineScript mathJaxScript,
         externalScript
-          (T.pack $ mathJaxSrc rOpts)
+          (mathJaxSrc rOpts)
           [ id_ "MathJax-script",
             attr "async" ""
           ]

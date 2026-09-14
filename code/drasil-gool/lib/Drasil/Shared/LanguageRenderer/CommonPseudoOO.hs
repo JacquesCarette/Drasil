@@ -95,8 +95,9 @@ constructor
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public instanceLevel (RG.construct c) ps (RC.multiBody [initStmts is, b]))
 
-doxFunc :: (RenderMethod r mthd) => String -> [String] -> Maybe String ->
-  MS (r mthd) -> MS (r mthd)
+doxFunc
+  :: (BlockCommentSym r, RenderMethod r mthd)
+  => String -> [String] -> Maybe String -> MS (r mthd) -> MS (r mthd)
 doxFunc = docFunc functionDox
 
 doxClass :: (RG.RenderClass r vis mthd stvr) => String -> CS (r Class) -> CS (r Class)
@@ -343,7 +344,7 @@ string :: (Monad r) => VS (r TypeData)
 string = typeFromData String stringRender (text stringRender)
 
 docInOutFunc
-  :: (RenderMethod r mthd)
+  :: (BlockCommentSym r, RenderMethod r mthd)
   => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
   -> String
   -> [(String, SVariable r)]
@@ -572,7 +573,7 @@ inOutFunc f ins outs both b = f
   where rets = both ++ outs
 
 docInOutFunc'
-  :: (RenderMethod r mthd)
+  :: (BlockCommentSym r, RenderMethod r mthd)
   => FuncDocRenderer
   -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MS (r bod) -> MS (r mthd))
   -> String

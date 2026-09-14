@@ -72,7 +72,7 @@ correct :: ConceptInstance
 correct = mkCorrectNFR "correct" "Correctness"
 
 portable :: ConceptInstance
-portable = mkPortableNFR "portable" ["Linux", "Mac OSX", "Windows"] "Portability"
+portable = mkPortableNFR "portable" "Portability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"

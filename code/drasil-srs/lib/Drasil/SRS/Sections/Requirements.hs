@@ -25,7 +25,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.Development as D
 import Theory.Drasil (HasOutput(output))
-import Utils.Drasil (stringList)
 import Data.List.Extras (mkTable)
 
 -- Vocabulary
@@ -33,6 +32,7 @@ import Drasil.Metadata.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
   software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis,
   likelyChg)
+import Drasil.Metadata.Concepts.Computation (defaultOSs)
 import Drasil.Metadata.Concepts.Math (unit_)
 
 -- Other docLang
@@ -107,13 +107,11 @@ mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   S "assuming the same development resources are available"
   ]) lbl nonFuncReqDom
 
--- | Common Non-Functional Requirement for Portability.
-mkPortableNFR :: String -> [String] -> String -> ConceptInstance
-mkPortableNFR _ [] _ = error "No operating systems specified; cannot create a requirement."
-mkPortableNFR refAddress [os] lbl = cic refAddress (S $ "The code shall be portable to " ++ os) lbl nonFuncReqDom
-mkPortableNFR refAddress osList lbl = cic refAddress (foldlSent [
+-- | Common Non-Functional Requirement for Portability, targeting 'defaultOSs'.
+mkPortableNFR :: String -> String -> ConceptInstance
+mkPortableNFR refAddress lbl = cic refAddress (foldlSent [
   S "The code shall be portable to multiple environments, particularly",
-  S $ stringList osList
+  foldlList Comma List $ map phrase defaultOSs
   ]) lbl nonFuncReqDom
 
 -- | Common Non-Functional Requirement for Correctness.

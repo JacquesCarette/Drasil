@@ -24,4 +24,4 @@ Maintainability: If a likely change is made to the finished software, it will ta
 
 <div id="portable"></div>
 
-Portablity: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
+Portability: The code shall be portable to multiple environments, particularly Windows, macOS, and Linux.

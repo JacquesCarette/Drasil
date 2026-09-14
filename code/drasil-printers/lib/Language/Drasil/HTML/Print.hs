@@ -14,10 +14,9 @@ import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', special, checkValidStr, numList)
+  rendPersLFM'', Special(Circle), checkValidStr, numList)
 import Language.Drasil.Document (CitationKind(..))
 
-import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, reflinkInfo, reflinkURI, BibFormatter(..))
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
@@ -40,7 +39,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Sp s)             = text $ unPH $ special s
+pSpec (Sp Circle)         = text "&deg;"
 pSpec (Ref External r a) = reflinkURI r $ pSpec a
 pSpec EmptyS             = text "" -- Expected in the output
 pSpec (Quote q)          = doubleQuotes $ pSpec q

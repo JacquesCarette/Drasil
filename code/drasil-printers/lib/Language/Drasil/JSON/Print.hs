@@ -12,7 +12,7 @@ import qualified Prettyprinter as PNew (Doc)
 
 import Drasil.Data.Formats.JSON (JSON(..), JSONRenderOptions, JSONStyle(..),
   jsonRenderOpts, renderJSON)
-import Language.Drasil (checkValidStr, RenderSpecial(..))
+import Language.Drasil (checkValidStr, Special(Circle))
 import Language.Drasil.Document (MaxWidthPercent)
 
 import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
@@ -27,7 +27,6 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
 import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
   htmlBibFormatter)
-import Language.Drasil.HTML.Monad (unPH)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv,
@@ -109,7 +108,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s 
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Tooltip _ s) = pSpec s
-pSpec (Sp s)    = text $ unPH $ special s
+pSpec (Sp Circle) = text "&deg;"
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
@@ -131,7 +130,7 @@ pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Set l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ special s
+pExpr (Spec Circle)  = text "&deg;"
 pExpr (Sub e)        = unders <> pExpr e
 pExpr (Sup e)        = hat <> pExpr e
 pExpr (Over Hat s)   = pExpr s <> text "&#770;"

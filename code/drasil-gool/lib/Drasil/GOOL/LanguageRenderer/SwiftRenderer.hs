@@ -964,7 +964,8 @@ swiftCast t' v' = do
   unwrap $ mkStateVal (pure t) (R.castObj (renderType t) (RC.value v))
 
 swiftIndexFunc
-  :: (InternalValueExp r, VariableSym r) => SValue r -> SValue r -> SValue r
+  :: (ValueSym r, InternalValueExp r, VariableSym r)
+  => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
   let t = pure $ valueType v
@@ -981,7 +982,8 @@ swiftStrideFunc beg end step = let t = listType int
   in cast t (funcAppNamedArgs swiftStride t
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
-swiftMapFunc :: (InternalValueExp r) => SValue r -> SValue r -> SValue r
+swiftMapFunc
+  :: (ValueSym r, InternalValueExp r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftWriteFunc :: SValue SwiftCode -> SValue SwiftCode -> SValue SwiftCode

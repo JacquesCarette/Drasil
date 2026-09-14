@@ -8,7 +8,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.Shared.InterfaceCommon (Label, Block, SVariable, SValue, TypeSym,
-  MethodSym, VariableSym, VisibilitySym)
+  MethodSym, ValueSym, VariableSym, VisibilitySym)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (Class, CSStateVar,
   OOTypeSym, OOVariableSym, SelfSym, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), GetSet(..), ObserverPattern(..), StrategyPattern(..), ModuleSym,
@@ -24,7 +24,7 @@ class (CommonRenderSym r vis stmt mthd bod block, MethodSym r vis mthd bod,
   IG.OOMethodSym r vis mthd attch bod, VisibilitySym r vis,
   IG.AttachmentSym r attch, IG.StateVarSym r vis stvr attch,
   IG.ClassSym r mthd stvr, IG.ModuleSym r mod mthd, IG.FileSym r file mod,
-  IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
+  ValueSym r, IG.InternalValueExp r, IG.GetSet r, IG.ObserverPattern r stmt,
   IG.StrategyPattern r bod block, VariableSym r, TypeSym r, IG.OOTypeSym r,
   IG.OOVariableSym r, IG.SelfSym r, IG.OOValueExpression r,
   RenderClass r vis mthd stvr, ClassElim r, RenderFile r file mod,

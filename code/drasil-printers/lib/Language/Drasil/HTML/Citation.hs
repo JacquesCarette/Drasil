@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Language.Drasil.HTML2.Citation (
+module Language.Drasil.HTML.Citation (
   printBib
 ) where
 
@@ -17,7 +17,7 @@ import Language.Drasil.Document (CitationKind(..))
 import Drasil.Data.Formats.HTML (HTMLBody(..), DItem(..), bold_, emphasis_,
   rawText, rawText', id_, class_)
 
-import Language.Drasil.HTML2.Spec (specToHTML, printSpec)
+import Language.Drasil.HTML.Spec (specToHTML, printSpec)
 import Language.Drasil.Printing.AST (Spec(S))
 import Language.Drasil.Printing.Citation (CiteField(..), HP(..), Citation(..), BibRef)
 import Language.Drasil.Printing.Helpers (sufxer, sufxPrint)

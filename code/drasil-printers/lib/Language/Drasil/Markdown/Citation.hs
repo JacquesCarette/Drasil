@@ -1,68 +1,38 @@
-module Language.Drasil.HTML.Print(
+-- | Defines citation rendering functions for Markdown (and Jupyter).
+module Language.Drasil.Markdown.Citation (
+  -- * Types
+  BibFormatter(..),
   -- * Citation Renderer
-  renderCite,
-  -- * HTML Bib Formatter
-  htmlBibFormatter,
-  -- * HTML Spec Printing
-  pSpec,
-  -- * Term Fencing Helpers
-  OpenClose(Open, Close),
-  fence) where
+  renderCite
+) where
 
 import Prelude hiding ((<>))
 import Data.List (sortBy)
-import Text.PrettyPrint hiding (Str)
+import Text.PrettyPrint (Doc, text, (<>), doubleQuotes, hsep)
+import Utils.Drasil (foldlList)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
-  rendPersLFM'', Special(Circle), checkValidStr, numList)
+  rendPersLFM'', numList)
 import Language.Drasil.Document (CitationKind(..))
-
-import Language.Drasil.HTML.Helpers (em, reflinkInfo, reflinkURI, BibFormatter(..))
-
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
-import Language.Drasil.Printing.AST (Fence(Curly, Paren, Abs, Norm),
-  Spec(Quote, EmptyS, Ref, Sp, S, (:+:)), LinkType(External))
+import Language.Drasil.Printing.AST (Spec(S, Ref), LinkType(External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
   Citation(Cite))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
 
--- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
-data OpenClose = Open | Close
-
--- | Renders the Sentences ('Spec's) in the HTML body.
-pSpec :: Spec -> Doc
-pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
-  where
-    invalid = ['<', '>']
-    escapeChars '&' = "\\&"
-    escapeChars c = [c]
-pSpec (Sp Circle)         = text "&deg;"
-pSpec (Ref External r a) = reflinkURI r $ pSpec a
-pSpec EmptyS             = text "" -- Expected in the output
-pSpec (Quote q)          = doubleQuotes $ pSpec q
-
--- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
-fence :: OpenClose -> Fence -> String
-fence Open  Paren = "("
-fence Close Paren = ")"
-fence Open  Curly = "{"
-fence Close Curly = "}"
-fence _     Abs   = "|"
-fence _     Norm  = "||"
-
----------------------
---HTML bibliography--
----------------------
-
--- | HTML specific bib rendering functions
-htmlBibFormatter :: BibFormatter
-htmlBibFormatter = BibFormatter {
-  emph = em,
-  spec = pSpec
+-- | Data type that carries functions that vary for bib printing
+data BibFormatter = BibFormatter {
+  -- | Emphasis (italics) rendering
+  emph :: Doc -> Doc,
+  -- | Spec rendering
+  spec :: Spec -> Doc
 }
+
+-- | Internal emphasis wrapper for citations.
+em :: Doc -> Doc
+em d = text "<em>" <> d <> text "</em>"
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: BibFormatter -> Citation -> (Doc, Doc)
@@ -147,8 +117,6 @@ bookMLA _ (Volume    s) = comm $ text $ "vol. " ++ show s
 bookMLA f (Publisher s) = comm $ spec f s
 bookMLA f (Author    p) = dot $ spec f (rendPeople' p)
 bookMLA _ (Year      y) = dot $ text $ show y
---bookMLA _ (Date    d m y) = dot $ unwords [show d, show m, show y]
---bookMLA f (URLdate d m y) = "Web. " ++ bookMLA f (Date d m y) sm
 bookMLA f (BookTitle s) = dot $ emph f $ spec f s
 bookMLA f (Journal   s) = comm $ emph f $ spec f s
 bookMLA _ (Pages   [p]) = dot $ text $ "pg. " ++ show p
@@ -156,8 +124,6 @@ bookMLA _ (Pages     p) = dot $ text "pp. " <> foldPages p
 bookMLA f (Note      s) = spec f s
 bookMLA _ (Number    n) = comm $ text ("no. " ++ show n)
 bookMLA f (School    s) = comm $ spec f s
---bookMLA _ (Thesis     t)  = comm $ show t
---bookMLA f (URL        s)  = dot $ spec f s
 bookMLA f (HowPublished (Verb s))      = comm $ spec f s
 bookMLA f (HowPublished (URL l@(S s))) = dot  $ spec f $ Ref External s l
 bookMLA f (HowPublished (URL s))       = dot  $ spec f s
@@ -172,8 +138,6 @@ bookMLA f (Type         t) = comm $ spec f t
 bookAPA :: BibFormatter -> CiteField -> Doc --FIXME: year needs to come after author in APA
 bookAPA f (Author   p) = spec f (rendPeople rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA _ (Year     y) = dot $ text $ paren $ show y --APA puts "()" around the year
---bookAPA _ (Date _ _ y) = bookAPA (Year y) --LAPA doesn't care about the day or month
---bookAPA _ (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA _ (Pages    p) = dot $ foldPages p
 bookAPA _ (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
 bookAPA f i = bookMLA f i --Most items are rendered the same as MLA
@@ -204,7 +168,6 @@ artclChicago f i@(Title    _) = artclMLA f i
 artclChicago _ (Volume     n) = comm $ text $ show n
 artclChicago _ (Number      n) = text $ "no. " ++ show n
 artclChicago f i@(Year     _) = bookAPA f i
---artclChicago f i@(Date _ _ _) = bookAPA f i
 artclChicago f i = bookChicago f i
 
 -- PEOPLE RENDERING --
@@ -225,19 +188,6 @@ foldPages = text . foldlList . numList "&ndash;"
 -- | Organize a list of people.
 foldPeople :: People -> Doc
 foldPeople p = text . foldlList $ map fullName p
-
--- | Organize a list of Strings, separated by commas and inserting "and" before the last item.
-foldlList :: [String] -> String
-foldlList []    = ""
-foldlList [a,b] = a ++ " and " ++ b
-foldlList lst   = foldle1 (\a b -> a ++ ", " ++ b) (\a b -> a ++ ", and " ++ b) lst
-
--- | Similar to foldl, but applies a function to two arguments at a time.
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
-foldle1 _ _ [x]      = x
-foldle1 _ g [x,y]    = g x y
-foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
 -- | Renders a person's last name.
 rendPersL :: Person -> String

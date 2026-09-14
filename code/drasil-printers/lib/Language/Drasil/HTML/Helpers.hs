@@ -3,11 +3,11 @@ module Language.Drasil.HTML.Helpers (
   -- * Types
   BibFormatter(..), Variation(..),
   -- * Tag Wrappers
-  th, bold, em, sub, sup, spanTag', img,
+  th, bold, em, img,
   -- * Wrapping Combinators
   wrap', wrapGen', wrapInside, tagL, tagR,
   -- * References
-  reflink, reflinkInfo, reflinkURI
+  reflinkInfo, reflinkURI
 ) where
 import Prelude hiding ((<>))
 import Data.List (intersperse)
@@ -33,13 +33,12 @@ img :: [(String, Doc)] -> Doc
 img = wrapInside "img"
 
 -- | HTML attribute selector.
-data Variation = Class | Id | Align | Title deriving Eq
+data Variation = Class | Id | Align deriving Eq
 
 instance Show Variation where
   show Class = "class"
   show Id    = "id"
   show Align = "align"
-  show Title = "title"
 
 -- | General wrapper function and formats the document space with 'hcat'.
 wrap' :: String -> [String] -> Doc -> Doc
@@ -75,10 +74,6 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
   where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
 
--- | Helper for setting up links to references.
-reflink :: String -> Doc -> Doc
-reflink rf txt = text ("<a href=\"#" ++ rf ++ "\">") <> txt <> text "</a>"
-
 -- | Helper for setting up links to references with additional information.
 reflinkInfo :: String -> Doc -> Doc -> Doc
 reflinkInfo rf txt info = text ("<a href=\"#" ++ rf ++ "\">") <> txt <> text "</a>" <+> info
@@ -88,20 +83,11 @@ reflinkURI :: String -> Doc -> Doc
 reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 
 
-em, sup, sub, bold :: Doc -> Doc
+em, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.
 em = wrap' "em" []
--- | Superscript tag.
-sup = wrap' "sup" []
--- | Subscript tag.
-sub = wrap' "sub" []
 -- | Bold tag.
 bold = wrap' "b" []
-
-
--- | Span tag wrapper with a title attribute.
-spanTag' :: Doc -> Doc -> Doc
-spanTag' t = wrapGen' hcat Title "span" t [""]
 
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc

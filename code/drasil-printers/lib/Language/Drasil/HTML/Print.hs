@@ -12,29 +12,22 @@ module Language.Drasil.HTML.Print(
 import Prelude hiding ((<>))
 import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
-import Numeric (showEFloat)
 
 import Language.Drasil (People, Person, fullName, rendPersLFM, rendPersLFM',
   rendPersLFM'', special, checkValidStr, numList)
 import Language.Drasil.Document (CitationKind(..))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (bold, em, reflink, reflinkInfo, reflinkURI,
-  spanTag', sub, sup, BibFormatter(..))
+import Language.Drasil.HTML.Helpers (em, reflinkInfo, reflinkURI, BibFormatter(..))
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.AST (Fence(Curly, Paren, Abs, Norm),
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
-  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat),
-  LinkType(Internal, Cite2, External))
+  Spec(Quote, EmptyS, Ref, Sp, S, (:+:)), LinkType(External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb),
   Citation(Cite))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
-
-import qualified Language.Drasil.TeX.Print as TeX (pExpr, printMath)
-import Language.Drasil.TeX.Monad (toMath)
 
 -- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
 data OpenClose = Open | Close
@@ -45,118 +38,18 @@ data OpenClose = Open | Close
 
 -- | Renders the Sentences ('Spec's) in the HTML body.
 pSpec :: Spec -> Doc
--- Non-mathjax
-pSpec (E e)  = em $ pExpr e
--- Latex based math for expressions and units
--- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
--- pSpec (Sy s)    = printMath $ TeX.pUnit s
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Tooltip t s) = spanTag' (pSpec t) (pSpec s)
-pSpec (Sp s)    = text $ unPH $ special s
-pSpec HARDNL    = text "<br />"
-pSpec (Ref Internal r a)       = reflink     r $ pSpec a
-pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
-pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n) -- no difference for citations?
-pSpec (Ref External r a)       = reflinkURI  r $ pSpec a
-pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = doubleQuotes $ pSpec q
---pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
---pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
+pSpec (Sp s)             = text $ unPH $ special s
+pSpec (Ref External r a) = reflinkURI r $ pSpec a
+pSpec EmptyS             = text "" -- Expected in the output
+pSpec (Quote q)          = doubleQuotes $ pSpec q
 
------------------------------------------------------------------
-------------------BEGIN EXPRESSION PRINTING----------------------
------------------------------------------------------------------
 
--- | Renders expressions in the HTML document (called by multiple functions).
-pExpr :: Expr -> Doc
-pExpr (Dbl d)        = text $ showEFloat Nothing d ""
-pExpr (Int i)        = text $ show i
-pExpr (Str s)        = doubleQuotes $ text s
-pExpr (Row l)        = hcat $ map pExpr l
-pExpr (Ident s)      = text s
-pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ special s
---pExpr (Gr g)         = unPH $ greek g
-pExpr (Sub e)        = sub $ pExpr e
-pExpr (Sup e)        = sup $ pExpr e
-pExpr (Over Hat s)   = pExpr s <> text "&#770;"
-pExpr (MO o)         = text $ pOps o
-pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
-pExpr (Font Bold e)  = bold $ pExpr e
-pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
-pExpr (Spc Thin)     = text "&#8239;"
--- Uses TeX for Mathjax for all other exprs
-pExpr e              = mjDelimDisp $ TeX.printMath $ toMath $ TeX.pExpr e
-  where mjDelimDisp d = text "\\(" <> d <> text "\\)"
--- Non-mathjax
-{-
-pExpr (Sqrt e)       = text "&radic;(" <> pExpr e <> text ")"
-pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
-pExpr (Case ps)      = cases ps pExpr
-pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
--}
-
--- | Converts expression operators into HTML characters.
-pOps :: Ops -> String
-pOps IsIn       = "&thinsp;&isin;&thinsp;"
-pOps Integer    = "&#8484;"
-pOps Rational   = "&#8474;"
-pOps Real       = "&#8477;"
-pOps Natural    = "&#8469;"
-pOps Boolean    = "&#120121;"
-pOps Comma      = ","
-pOps Prime      = "&prime;"
-pOps Log        = "log"
-pOps Ln         = "ln"
-pOps Sin        = "sin"
-pOps Cos        = "cos"
-pOps Tan        = "tan"
-pOps Sec        = "sec"
-pOps Csc        = "csc"
-pOps Cot        = "cot"
-pOps Arcsin     = "arcsin"
-pOps Arccos     = "arccos"
-pOps Arctan     = "arctan"
-pOps Not        = "&not;"
-pOps Dim        = "dim"
-pOps Exp        = "e"
-pOps Neg        = "&minus;"
-pOps Cross      = "&#10799;"
-pOps VAdd       = "&plus;"
-pOps VSub       = "&minus;"
-pOps Dot        = "&sdot;"
-pOps Scale      = "&#8239;" -- same as Mul
-pOps Eq         = " = " -- with spaces?
-pOps NEq        = "&ne;"
-pOps Lt         = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-pOps Gt         = "&thinsp;&gt;&thinsp;"
-pOps LEq        = "&thinsp;&le;&thinsp;"
-pOps GEq        = "&thinsp;&ge;&thinsp;"
-pOps Impl       = " &rArr; "
-pOps Iff        = " &hArr; "
-pOps Subt       = "&minus;"
-pOps And        = " &and; "
-pOps Or         = " &or; "
-pOps Add        = "&plus;"
-pOps Mul        = "&#8239;"
-pOps Summ       = "&sum;"
-pOps Inte       = "&int;"
-pOps Prod       = "&prod;"
-pOps Point      = "."
-pOps Perc       = "%"
-pOps LArrow     = " &larr; "
-pOps RArrow     = " &rarr; "
-pOps ForAll     = " &forall; "
-pOps Partial    = "&part;"
-pOps SAdd       = " + "
-pOps SRemove    = " - "
-pOps SContains  = " in "
-pOps SUnion     = " and "
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String
